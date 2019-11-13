@@ -40,21 +40,18 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 
 * [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html)
 * [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
-* TODO: Neuron installation 
+* [Neuron Repository Package Manager Configurations](.docs/guide-repo-config.md)
+* [Neuron Runtime Getting Started](.docs/getting-started-neuron-rtd.md)
 
-Using one of the supported frameworks:
+# Start Using one of the supported frameworks:
 
-* [Getting Started with Tensorflow and AWS Neuron](https://quip-amazon.com/52iNAJrZgZPe)
-* [Getting Started: MXNet-Neuron](https://quip-amazon.com/JCw4AYinp0ve)
-* [Getting started with Keras and AWS Neuron](https://quip-amazon.com/OIiFAM6hCEyo)
+* [Tensorflow and AWS Neuron](https://quip-amazon.com/52iNAJrZgZPe)
+* [MXNet-Neuron](https://quip-amazon.com/JCw4AYinp0ve)
 
-* Getting started with Pytorch and Neuron
 
-Getting started with a Neuron:
-
-* [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](https://quip-amazon.com/OtKfA3NkbaO7)
-* TODO Getting started: Neuron profiling
-* [Getting started with Neuron Compiler](https://quip-amazon.com/u4lvAHIB6OSB)
+# Copmpiling and Profiling:
+* [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
+* [Getting started with Neuron Compiler]()
 
 
 
