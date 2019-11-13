@@ -17,7 +17,6 @@ Steps Overview:
     1. It is recommended to use C5.4xlarge or larger. For this example we will use a C5.4xlarge
     2. If you would like to compile and infer on the same machine, please select Inf1.6xlarge
 3. Select and start an INF1 instance of your choice if not compiling and inferencing on  the same instance;
-    1. see [LINK]
 
 ## Step 2: Install Neuron
 
