@@ -28,15 +28,14 @@ Steps Overview:
 
 1. Modify pip repository configurations to point to the Neuron repository.
 ```
-    sudo tee /etc/pip.conf > /dev/null <<EOF
-        [global]
-        extra-index-url = https://pip.repos.neuron.amazonaws.com
-        EOF
+sudo tee /etc/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
  ```
 2. Setup a new Python 3.6 environment with either Virtualenv or Conda:
  ``` 
 #Example setup for virtualenv:
- sudo apt-get -y install virtualenv
  virtualenv --python=python3.6 test_env_p36
  source test_env_p36/bin/activate
         
@@ -146,9 +145,9 @@ print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 5. Unzip the mode, download the example image and run the inference:
 
 ```
-`>`` unzip resnet50_neuron.zip
-> curl ``-``O https``:``//raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg`
-`>`` python run_inference``.``py``
+> unzip resnet50_neuron.zip
+> curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
+> python run_inference.py
 
 [('n02123045', 'tabby', 0.6956522), ('n02127052', 'lynx', 0.120923914), ('n02123159', 'tiger_cat', 0.08831522), ('n02124075', 'Egyptian_cat', 0.06453805), ('n02128757', 'snow_leopard', 0.0087466035)]`
 ```
