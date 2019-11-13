@@ -72,29 +72,8 @@ sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
 
-### PIP 
-
-```
-sudo tee /etc/pip.conf > /dev/null <<EOF
-[global]
-extra-index-url = https://pip.repos.neuron.amazonaws.com
-EOF
-```
-
-### Conda
-
-```
-conda config --add channels https://conda.repos.neuron.amazonaws.com
-
-conda install mxnet-neuron
-conda install tensorflow-neuron
-conda install torch-neuron
-```
-
 ## Step3 : Configure Neuron-RTD
 
-### Single Neuron-RTD for all INferntia devices present
+### Single Neuron-RTD for all Inferntia devices present
 
 The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired.
-
-
