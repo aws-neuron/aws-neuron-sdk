@@ -28,22 +28,28 @@ On the instance you are going to use for compilation, you must have both the Neu
 Steps Overview:
 
 1. Modify pip repository configurations to point to the Neuron repository.
-    1. sudo tee /etc/pip.conf > /dev/null <<EOF
+```
+    sudo tee /etc/pip.conf > /dev/null <<EOF
         [global]
         extra-index-url = https://pip.repos.neuron.amazonaws.com
         EOF
+ ```
 2. Setup a new Python 3.6 environment with either Virtualenv or Conda:
-    1. #Example setup for virtualenv:
-        sudo apt-get -y install virtualenv
-        virtualenv --python=python3.6 test_env_p36
-        source test_env_p36/bin/activate
+ ``` 
+#Example setup for virtualenv:
+ sudo apt-get -y install virtualenv
+ virtualenv --python=python3.6 test_env_p36
+ source test_env_p36/bin/activate
         
-        #Example setup for conda environment:
-        conda create -q -y -n test_env_p36 python=3.6
-        source activate test_env_p36
+ #Example setup for conda environment:
+ conda create -q -y -n test_env_p36 python=3.6
+ source activate test_env_p36
+```
 3. Install TensorFlow-Neuron and Neuron Compiler
-    1. pip install neuron-cc
-        pip install tensorflow-neuron
+```
+ pip install neuron-cc
+ pip install tensorflow-neuron
+```
 
 ### Inference Instance: Install Tensorflow-Neuron and Neuron-Runtime
 
