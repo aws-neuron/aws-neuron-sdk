@@ -22,7 +22,7 @@ Since ML models constantly evolve, we’ve designed AWS Neuron to give builders 
 
 Once a model is trained to the required accuracy, the model should be compiled to an optimized binary form , referred to as a Neuron Executable File Format (NEFF), which is in turn loaded by the Neuron runtime to execute inference input requests on Inferentia chips. The compilation step may be performed on any EC2 instance or on premises. We recommend using a high-performance compute server of choice (C/M/R/Z instance types), for the fastest compile times and ease-of-use with a prebuilt DLAMI (TODO: add link).  Developers can also install Neuron in their own environments; this approach may work well for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet.
 
-### deployment 
+### Deployment 
 
 AWS Neuron provides developers flexibility to deploy their inference workloads, and optimize for both bandwidth and low-latency, to meet specific application constraints. Utilizing the large on-chip cache built in the Inferentia devices, developers can leverage the Neuron Core Pipeline capability, and store all of the entire model directly cache for maximum memory efficiency. For increased cache capacity, the model can also be split across multiple chips, utilizing a high-speed chip to chip interconnect. Once deployed, Neuron Core Pipeline appears as one Neuron virtual device to the framework/application This allows developers to guarantee best-in-class latency, while maintaining high throughput.
 
@@ -31,8 +31,8 @@ Another option available for builders, is to allocate different models to a Neur
 
 ### Profiling and debugging
 
-Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a tensorboard plugin you can inspect and profile graphs execution. For more details refer to: TODO LINK
-‘
+Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a tensorboard plugin you can inspect and profile graphs execution. For more details refer to: [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
+
 
 # Getting started
 
