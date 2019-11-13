@@ -97,7 +97,7 @@ tfn.saved_model.simple_save(
 shutil.make_archive(modeldir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
 
-1. Run the compilation. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
+2. Run the compilation. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 
 ```
 > python compile_resnet50.py
@@ -110,14 +110,14 @@ INFO:tensorflow:Number of operations placed on Neuron runtime: 554
 ...
 ```
 
-1. If not compiling and inferring on the same instance, copy the artifact to the inference server:
+3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 
 ```
 scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ubuntu@<instance DNS>:~/  # Ubuntu
 scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
 ```
 
-1. On the Inf1, create a inference Python script named infer_resnet50.py with the following content:
+4. On the Inf1, create a inference Python script named infer_resnet50.py with the following content:
 
 ```
 import os
@@ -144,7 +144,7 @@ infa_rslts = predictor_inferentia(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-1. Unzip the mode, download the example image and run the inference:
+5. Unzip the mode, download the example image and run the inference:
 
 ```
 `>`` unzip resnet50_neuron.zip
