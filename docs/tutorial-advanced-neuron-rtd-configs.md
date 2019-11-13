@@ -9,7 +9,7 @@
 
 ## Step1: Prerequisite
 
-[Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance]
+[Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
 
 ## Step2 : Configure Neuron-RTD
 
