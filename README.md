@@ -40,18 +40,18 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 
 * [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html)
 * [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
-* [Neuron Repository Package Manager Configurations](.docs/guide-repo-config.md)
-* [Neuron Runtime Getting Started](.docs/getting-started-neuron-rtd.md)
+* [Neuron Repository Package Manager Configurations](./docs/guide-repo-config.md)
+* [Neuron Runtime Getting Started](./docs/getting-started-neuron-rtd.md)
 
 # Start Using one of the supported frameworks:
 
-* [Tensorflow and AWS Neuron](https://quip-amazon.com/52iNAJrZgZPe)
-* [MXNet-Neuron](https://quip-amazon.com/JCw4AYinp0ve)
+* [Tensorflow and AWS Neuron](./docs/tutorial-tensorflow-neuron-compile-infer.md)
+* [MXNet-Neuron](./docs/tutorial-mxnet-neuron-compile-infer.md)
 
 
-# Copmpiling and Profiling:
+# Debugging and Profiling:
 * [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
-* [Getting started with Neuron Compiler]()
+
 
 
 
