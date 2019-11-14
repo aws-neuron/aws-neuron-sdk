@@ -1,20 +1,18 @@
-# Tutorial: Using MXnet-Neuron and the Neuron Compiler
+# Tutorial: Using MXNet-Neuron and the Neuron Compiler
 
-Neuron supports both Python Module and Symbol APIs and the C predict API. Using the Symbol API, users would load checkpoint as usual, then target Inferentia by setting context to mx.Neuron(). Users can optionally compile the graph before the normal binding and inference steps.
-
-The following quick start example uses the Module API.
+Neuron supports both Python Module and Symbol APIs and the C predict API. The following quick start example uses the Symbol API.
 
 ## Steps Overview:
 
 1. Launch an EC2 instance for compilation and/or Inference
 2. Install Neuron for Compiler and Runtime execution
 3. Run Example
-    1. Compile 
+    1. Compile
     2. Execute Inference on Inf1
 
 ## Step 1: Launch EC2 Instances
 
-A typical workflow with the Neuron SDK will be for a previously trained ML model to be compiled on a compilation server and then the artifacts distributed to the (fleet of) inf1 instances for execution. Neuron enables Tensorflow to be used for all of these steps.
+A typical workflow with the Neuron SDK will be for a previously trained ML model to be compiled on a compilation server and then the artifacts distributed to the (fleet of) inf1 instances for execution. Neuron enables MXNet to be used for all of these steps.
 Steps Overview:
 
 1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html
@@ -27,113 +25,141 @@ Steps Overview:
 
 ### Compiler Instance: Install Neuron Compiler and MXnet-Neuron
 
-On the instance you are going to use for compilation, you must have both the Neuron Compiler and the Tensorflow-Neuron installed. (The inference instance must have the Tensorflow-Neuron and the Neuron Runtime installed.)
+On the instance you are going to use for compilation, you must have both the Neuron Compiler and the MXNet-Neuron installed. (The inference instance must have the MXNet-Neuron and the Neuron Runtime installed.)
 Steps Overview:
 
-1. Modify pip repository configurations to point to the Neuron repository.
+#### Using Virtualenv:
 
+1. Install virtualenv:
+```bash
+ sudo apt-get update 
+ sudo apt-get -y install virtualenv
 ```
- sudo tee /etc/pip.conf > /dev/null <<EOF
-    [global]
-     extra-index-url = https://pip.repos.neuron.amazonaws.com
-      EOF
+2. Setup a new Python 3.6 environment:
+```bash
+ virtualenv --python=python3.6 test_env_p36
+ source test_env_p36/bin/activate
 ```
-
-2. Setup a new Python 3.6 environment with either Virtualenv or Conda:
-
+3. Modify Pip repository configurations to point to the Neuron repository.
+```bash	
+ tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
+ [global]
+ extra-index-url = https://pip.repos.neuron.amazonaws.com
+ EOF
 ```
-#Example setup for virtualenv:
-sudo apt-get -y install virtualenv
-virtualenv --python=python3.6 test_env_p36
-source test_env_p36/bin/activate
-       
-#Example setup for conda environment:
-conda create -q -y -n test_env_p36 python=3.6
-source activate test_env_p36
-```
-
-3. Install TensorFlow-Neuron and Neuron Compiler
-
-```
-pip install neuron-cc
-pip install mxnet-neuron
+4. Install MxNet-Neuron and Neuron Compiler
+```bash
+ pip install neuron-cc[mxnet]
+ pip install mxnet-neuron
 ```
 
-### Inference Instance: Install Tensorflow-Neuron and Neuron-Runtime
+#### Using Conda:
+1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
+```bash
+ cd /tmp
+ curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
+ echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 Miniconda3-4.7.12.1-Linux-x86_64.sh" | sha256sum --check
+ bash Miniconda3-4.7.12.1-Linux-x86_64.sh
+ ...
+ source ~/.bashrc
+```
+2. Setup a new Python3.6 environment:
+```bash
+ conda create -q -y -n test_env_p36 python=3.6
+ source activate test_env_p36
+```
+3. Modify Pip repository configurations to point to the Neuron repository.
+```bash	
+ tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
+ [global]
+ extra-index-url = https://pip.repos.neuron.amazonaws.com
+ EOF
+```
+4. Install MxNet-Neuron and Neuron Compiler
+```bash
+ pip install neuron-cc[mxnet]
+ pip install mxnet-neuron
+```
 
-1. same as above to install Mxnet-Neuron
-2. to install Runtime, see [This link](https://github.com/aws/aws-neuron-sdk/blob/master/docs/getting-started-neuron-rtd.md)
+### Inference Instance: Install MXNet-Neuron and Neuron-Runtime
+
+1. Same as above to install MXNet-Neuron
+2. To install Runtime, see [This link](https://github.com/aws/aws-neuron-sdk/blob/master/docs/getting-started-neuron-rtd.md)
 
 ## Step 3: Run Example
 
-### Compile on a compute server with Neuron MXNet installed:
+1. Create a file `compile_resnet50.py` and run it:
+```python
+ import mxnet as mx
+ import numpy as np
 
-```
-import mxnet as mx
-#load imageimg = mx.image.imread(fname)
+ path='http://data.mxnet.io/models/imagenet/'
+ [mx.test_utils.download(path+'resnet/50-layers/resnet-50-0000.params'),
+  mx.test_utils.download(path+'resnet/50-layers/resnet-50-symbol.json'),
+  mx.test_utils.download(path+'synset.txt')]
 
-#-------Standard MXNet checkpoint load -----------
-sym, args, aux = mx.model.load_checkpoint('checkpoint', 0)
+ sym, args, aux = mx.model.load_checkpoint('resnet-50', 0)
 
-#------- Compile and set Inferentia context -----------
-sym, args, aux, cnt = mx.contrib.inferentia.compile(sym, args, aux, data=img)
-ctx = mx.infa()
+ # Compile for Inferentia using Neuron
+ inputs = { "data" : mx.nd.ones([1,3,224,224], name='data', dtype='float32') }
 
-#-------Standard MXNet Module instantiation code-----------
-mod = mx.mod.Module(symbol=sym, context=ctx, label_names=None)
-#save compiled model
-mod.save_checkpoint('compiled_checkpoint',0)`
-```
+ sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs)
 
-Now save the compiled file to your desired distribution repository, in this case, S3:
-
-```
-aws s3 cp --recursive compiled_check_point s3://my_bucket/compiled_check_point
+ #save compiled model
+ mx.model.save_checkpoint("compiled_resnet50", 0, sym, args, aux)
 ```
 
-Note: this step can be combined via the Neuron_mx_compile wrapper script:
-
-```
-Neuron_mx_compile --in_model_uri_prefix "s3://my_bucket/checkpoint" --epoch_number 0
-                  --out_model_uri_prefix "s3://my_bucket/compiled_checkpoint" --input_shapes {"x":[1,224,224,3]} # can also be numpy file instead of shape tuple`
-```
-
-### Download from S3 and execute inference on Inf1:
-
-```
-aws s3 cp --recursive s3://my_bucket/compiled_checkpoint_1 compiled_checkpoint
+2. If not compiling and inferring on the same instance, copy the artifact to the inference server (use ec2-user as user for AML2):
+```bash
+ scp -i <PEM key file>  compiled_resnet50-0000.params ubuntu@<instance DNS>:~/  # Ubuntu
+ scp -i <PEM key file>  compiled_resnet50-symbol.json ubuntu@<instance DNS>:~/  # Ubuntu
 ```
 
-Within Python session with Neuron MXNet, import compiled model and execute inference as usual:
+3. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+```python
+ import mxnet as mx
+ import numpy as np
 
+ path='http://data.mxnet.io/models/imagenet/'
+ [mx.test_utils.download(path+'resnet/50-layers/resnet-50-0000.params'),
+  mx.test_utils.download(path+'resnet/50-layers/resnet-50-symbol.json'),
+  mx.test_utils.download(path+'synset.txt')]
+
+ fname = mx.test_utils.download('https://github.com/dmlc/web-data/blob/master/mxnet/doc/tutorials/python/predict_image/cat.jpg?raw=true')
+ img = mx.image.imread(fname)# convert into format (batch, RGB, width, height)
+ img = mx.image.imresize(img, 224, 224) # resize
+ img = img.transpose((2, 0, 1)) # Channel first
+ img = img.expand_dims(axis=0) # batchify
+ img = img.astype(dtype='float32')
+
+ sym, args, aux = mx.model.load_checkpoint('compiled_resnet50', 0)
+ softmax = mx.nd.random_normal(shape=(1,))
+ args['softmax_label'] = softmax
+ args['data'] = img
+
+ # Inferentia context
+ ctx = mx.neuron()
+
+ exe = sym.bind(ctx=ctx, args=args, aux_states=aux, grad_req='null')
+
+ with open('synset.txt', 'r') as f:
+       labels = [l.rstrip() for l in f]
+
+ exe.forward(data=img)
+ prob = exe.outputs[0].asnumpy()# print the top-5
+ prob = np.squeeze(prob)
+ a = np.argsort(prob)[::-1]
+ for i in a[0:5]:
+       print('probability=%f, class=%s' %(prob[i], labels[i]))
 ```
-import mxnet as mx
-#load imageimg = mx.image.imread(fname)
-#-------Standard MXNet checkpoint load -----------
-sym, args, aux = mx.model.load_checkpoint('compiled_checkpoint', 0)
-#------- Compile and set Inferentia context -----------ctx = mx.infa()
-#-------Standard MXNet Module instantiation code-----------mod = mx.mod.Module(symbol=sym, context=ctx, label_names=None)#-------Standard MXNet inference code-----------
-mod.bind(for_training=False, data_shapes=[('data', (1,3,224,224))],
-     label_shapes=mod._label_shapes)
-mod.set_params(arg_params, aux_params, allow_missing=True)
 
-mod.forward(Batch([img]))prob = mod.get_outputs()[0].asnumpy()
+4. Run the script to see inference results:
+```bash
+ python infer_resnet50.py
+
+ probability=0.379626, class=n02119789 kit fox, Vulpes macrotis
+ probability=0.290867, class=n02119022 red fox, Vulpes vulpes
+ probability=0.034885, class=n02124075 Egyptian cat
+ probability=0.028950, class=n02085620 Chihuahua
+ probability=0.027466, class=n02120505 grey fox, gray fox, Urocyon cinereoargenteus
 ```
-
-### Alternate : Model Server
-
-An MXNet Model Server can be used to serve the compile model after the check point is converted to MXNet archive. Users should use the MMS Management API documented here (https://github.com/awslabs/mxnet-model-server/blob/master/docs/management_api.md#register-a-model). Invoking MMS without the Management API will result in the creation of 1 MMS worker per vCPU or GPU which is undesirable for most Inferentia use cases.
-
-```
-# Add files needed for MXNet archive (model signature and assets)# Here we use SqueezeNet example
-aws s3 cp s3://model-server/model_archive_1.0/examples/squeezenet_v1.1/synset.txt compiled_checkpoint
-aws s3 cp s3://model-server/model_archive_1.0/examples/squeezenet_v1.1/signature.json compiled_checkpoint# Create the compiled MXNet archive
-
-model-archiver --model-name resnet --model-path compiled_checkpoint --handler mxnet_vision_service:handle
-
-# Serve the model using MMS Management API# This example creates 1 initial MMS worker synchronously
-curl -v -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=https%3A%2F%2Fs3.amazonaws.com%2Fmodel-server%2Fmodel_archive_1.0%2Fsqueezenet_v1.1.mar"
-```
-
-To dive deeper, consult the [Neuron MXNet API Getting Started guide]()
-

@@ -1,34 +1,29 @@
 # Tutorial: Advanced Configurations for Neuron-RTD on an Inf1 instance
 
-##  Steps Overview:
+This doc provides steps to configure to start one or more Neuron-RTD to manage different workloads.
 
-1. Prerequisite
-2. Select your deployment configuration. Examples given here:
-    1. Single Neuron-RTD for all present Inferentia devices in the instance
-    2. 4 x Inferentia with 1 Neuron-RTD per Inferentia
-
-## Step1: Prerequisite
+# Prerequisite
 
 [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
 
-## Step2 : Configure Neuron-RTD
+# Single Neuron-RTD
 
-### Single Neuron-RTD for all INferntia devices present
+The default configuration sets up a single Neuron-RTD daemon for all present Inferentia devices in the instance.
+With the default configuration:
+1. Runtime API server listens on a single UDS endpoint `unix:/run/neuron.sock`
+2. A single runtime daemon(multi threaded) handles all the inference requests.
 
-The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired:
+# Multiple Neuron-RTD
+Multiple runtime daemon might be preferred in some cases for isolation or for load balancing.
+The following steps explains configuring 4 Neuron-RTD on a inf1.6xl instance and let each daemon to manage 1 Inferentia device.
+When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint(UDS or TCP port) and logical device id it should manage.
 
-### Single Neuron-RTD per Inferentia in an instance with 4 Inferentia (6xl):
 
-Steps Overview:
+### Identify logical IDs of Inferentia devices
+Use `neuron-ls` to enumerate the set of Inferentia chips in the system.
 
-Step 1: stop the current Neuron-rtd
-Step2: use the Neuron utility neuron-ls to enumerate the set of Inferentia chips in the system 
-Step3: create a configuration file for each Neuron-rtd you wish to launch, with the  1 or more  Inferentia chips desired to be mapped to that Neuron-rtd instance, and the listening port for it.
-
-Find the Logical ID for each Inferentia:
-
-```
-     >/opt/aws/neuron/bin/neuron-ls
+```bash
+/opt/aws/neuron/bin/neuron-ls
 +--------------+---------+--------+-----------+-----------+---------+------+------+
 |   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   |   DMA   | EAST | WEST |
 |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
@@ -43,17 +38,14 @@ Find the Logical ID for each Inferentia:
 +--------------+---------+--------+-----------+-----------+---------+------+------+ 
 ```
 
-```
+neuron-rtd can manage one or more devices. Select contigous Inferentia devices to be managed by a single neuron-rtd. 
+In this 
 
-```
+### Create configuration file for each instance
+Create a configuration file for each Neuron-rtd you wish to launch, with the  1 or more  Inferentia chips desired to be mapped to that Neuron-rtd instance, and the listening port for it.
 
-
-Stop Neuron-RTD and create configuration files for each desired Neuron-RTD(must be in json format):
-
-```
->sudo systemctl stop neuron-rtd
-
->sudo tee /opt/aws/neuron/bin/nrtd0.json > /dev/null << EOF
+```bash
+sudo tee /opt/aws/neuron/bin/nrtd0.json > /dev/null << EOF
 {
 "name": "nrtd0",
 "server_port": "unix:/run/neuron.sock0",
@@ -61,7 +53,7 @@ Stop Neuron-RTD and create configuration files for each desired Neuron-RTD(must 
 }
 EOF
 
->sudo tee /opt/aws/neuron/bin/nrtd1.json > /dev/null << EOF
+sudo tee /opt/aws/neuron/bin/nrtd1.json > /dev/null << EOF
 {
 "name": "nrtd1",
 "server_port": "unix:/run/neuron.sock1",
@@ -69,7 +61,7 @@ EOF
 }
 EOF
 
->sudo tee /opt/aws/neuron/bin/nrtd2.json > /dev/null << EOF
+sudo tee /opt/aws/neuron/bin/nrtd2.json > /dev/null << EOF
 {
 "name": "nrtd2",
 "server_port": "unix:/run/neuron.sock2",
@@ -91,19 +83,24 @@ sudo chmod 755 /opt/aws/neuron/bin/nrtd2.json
 sudo chmod 755 /opt/aws/neuron/bin/nrtd3.json
 ```
 
-Start the services:
-
+### Start the services
+#### Stop the default service
+```bash
+sudo systemctl stop neuron-rtd
 ```
->sudo systemctl start neuron-rtd@nrtd0
->sudo systemctl start neuron-rtd@nrtd1
->sudo systemctl start neuron-rtd@nrtd2
->sudo systemctl start neuron-rtd@nrtd3
+
+#### Start the new services
+```bash
+sudo systemctl start neuron-rtd@nrtd0
+sudo systemctl start neuron-rtd@nrtd1
+sudo systemctl start neuron-rtd@nrtd2
+sudo systemctl start neuron-rtd@nrtd3
 ```
 
 Verify the services are up and running. This example shows one of the Neuron-RTD daemons (Neuron-RTD0):
 
-```
->sudo systemctl status neuron-rtd@nrtd0
+```bash
+sudo systemctl status neuron-rtd@nrtd0
 ● neuron-rtd@nrtd0.service - Neuron Runtime Daemon nrtd0
    Loaded: loaded (/lib/systemd/system/neuron-rtd@.service; disabled; vendor preset: enabled)
    Active: active (running) since Wed 2019-11-13 00:24:25 UTC; 8s ago
@@ -124,5 +121,3 @@ Nov 13 00:24:25 ip-10-1-255-226 neuron-rtd[32446]: nrtd[32446]: [NRTD:RunServer]
 Nov 13 00:24:25 ip-10-1-255-226 nrtd[32446]: [NRTD:RunServer] Server listening on unix:/run/neuron.sock0
 lines 1-18/18 (END)
 ```
-
-
