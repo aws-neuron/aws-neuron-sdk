@@ -36,5 +36,5 @@ The compiled graph can be saved using the MXNet save_checkpoint and served using
 The following is an example usage of the compilation, with default compilation arguments:
 
 ```python
-sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, data=img)
+sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs={'data' : img})
 ```

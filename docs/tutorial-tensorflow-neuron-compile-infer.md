@@ -28,7 +28,7 @@ On the instance you are going to use for compilation, you must have both the Neu
 
 1. Install virtualenv:
 ```bash
- sudo apt-get update 
+ sudo apt-get update
  sudo apt-get -y install virtualenv
 ```
 2. Setup a new Python 3.6 environment:
@@ -37,7 +37,7 @@ On the instance you are going to use for compilation, you must have both the Neu
  source test_env_p36/bin/activate
 ```
 3. Modify Pip repository configurations to point to the Neuron repository.
-```bash	
+```bash
  tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
  [global]
  extra-index-url = https://pip.repos.neuron.amazonaws.com
@@ -66,7 +66,7 @@ On the instance you are going to use for compilation, you must have both the Neu
 ```
 
 3. Modify Pip repository configurations to point to the Neuron repository.
-```bash	
+```bash
  tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
  [global]
  extra-index-url = https://pip.repos.neuron.amazonaws.com
@@ -108,7 +108,7 @@ In this example, we compile the Keras ResNet50 model and export it as a SavedMod
  modeldir = os.path.join(WORKSPACE, 'resnet50_neuron')
  shutil.rmtree(modeldir, ignore_errors=True)
 
- # Instantiate Keras ResNet50 model 
+ # Instantiate Keras ResNet50 model
  keras.backend.set_learning_phase(0)
  model = ResNet50(weights='imagenet')
 
@@ -123,7 +123,7 @@ In this example, we compile the Keras ResNet50 model and export it as a SavedMod
  # Prepare SavedModel for uploading to Inf1 instance
  shutil.make_archive(modeldir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
-2. Run the compilation. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
+2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 ```bash
  python compile_resnet50.py
 
@@ -172,6 +172,6 @@ In this example, we compile the Keras ResNet50 model and export it as a SavedMod
  curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
  pip install pillow # Necessary for loading images
  python infer_resnet50.py
- 
+
  [('n02123045', 'tabby', 0.6956522), ('n02127052', 'lynx', 0.120923914), ('n02123159', 'tiger_cat', 0.08831522), ('n02124075', 'Egyptian_cat', 0.06453805), ('n02128757', 'snow_leopard', 0.0087466035)]
 ```

@@ -32,7 +32,7 @@ Steps Overview:
 
 1. Install virtualenv:
 ```bash
- sudo apt-get update 
+ sudo apt-get update
  sudo apt-get -y install virtualenv
 ```
 2. Setup a new Python 3.6 environment:
@@ -41,7 +41,7 @@ Steps Overview:
  source test_env_p36/bin/activate
 ```
 3. Modify Pip repository configurations to point to the Neuron repository.
-```bash	
+```bash
  tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
  [global]
  extra-index-url = https://pip.repos.neuron.amazonaws.com
@@ -69,7 +69,7 @@ Steps Overview:
  source activate test_env_p36
 ```
 3. Modify Pip repository configurations to point to the Neuron repository.
-```bash	
+```bash
  tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
  [global]
  extra-index-url = https://pip.repos.neuron.amazonaws.com
@@ -88,7 +88,7 @@ Steps Overview:
 
 ## Step 3: Run Example
 
-1. Create a file `compile_resnet50.py` and run it:
+1. Create a file `compile_resnet50.py` and run it (compilation will take a few minutes on c5.4xlarge):
 ```python
  import mxnet as mx
  import numpy as np
