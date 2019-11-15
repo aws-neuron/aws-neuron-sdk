@@ -105,23 +105,27 @@ In this example, we compile the Keras ResNet50 model and export it as a SavedMod
  os.makedirs(WORKSPACE, exist_ok=True)
 
  # Prepare export directory (old one removed)
- modeldir = os.path.join(WORKSPACE, 'resnet50_neuron')
- shutil.rmtree(modeldir, ignore_errors=True)
+ model_dir = os.path.join(WORKSPACE, 'resnet50')
+ compiled_model_dir = os.path.join(WORKSPACE, 'resnet50_neuron')
+ shutil.rmtree(model_dir, ignore_errors=True)
+ shutil.rmtree(compiled_model_dir, ignore_errors=True)
 
  # Instantiate Keras ResNet50 model
  keras.backend.set_learning_phase(0)
  model = ResNet50(weights='imagenet')
 
- # Compile and export SavedModel
- tfn.saved_model.simple_save(
-    sess               = keras.backend.get_session(),
-    export_dir         = modeldir,
+ # Export SavedModel
+ tf.saved_model.simple_save(
+    session            = keras.backend.get_session(),
+    export_dir         = model_dir,
     inputs             = {'input': model.inputs[0]},
-    outputs            = {'output': model.outputs[0]},
-    batch_size         = 1)
+    outputs            = {'output': model.outputs[0]})
+
+ # Compile using Neuron
+ tfn.saved_model.compile(model_dir, compiled_model_dir)    
 
  # Prepare SavedModel for uploading to Inf1 instance
- shutil.make_archive(modeldir, 'zip', WORKSPACE, 'resnet50_neuron')
+ shutil.make_archive(model_dir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
 2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 ```bash
