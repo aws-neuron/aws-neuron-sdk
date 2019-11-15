@@ -125,7 +125,7 @@ In this example, we compile the Keras ResNet50 model and export it as a SavedMod
  tfn.saved_model.compile(model_dir, compiled_model_dir)    
 
  # Prepare SavedModel for uploading to Inf1 instance
- shutil.make_archive(model_dir, 'zip', WORKSPACE, 'resnet50_neuron')
+ shutil.make_archive(compiled_model_dir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
 2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 ```bash
