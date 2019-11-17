@@ -1,6 +1,6 @@
 # Getting Started: TensorBoard-Neuron
 
-This guide is for developers who want to better understand how their model runs on Neuron devices.
+This guide is for developers who want to better understand how their model runs on Neuron MLAs.
 
 TensorBoard-Neuron is adapted to provide useful information related to Neuron devices, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
 
@@ -24,64 +24,38 @@ Additionally, if you would like to profile your model (see below), you will also
 $ sudo apt install aws-neuron-tools
 ```
 
-## Collecting and post-processing inference traces
 
-### Using a supported framework
 
-When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will automatically be collected and dumped to the directory defined by the NEURON_PROFILE environment variable if set.  There should be at least three files: one compiled model (.neff), one profile session file (.ntff) per inference, and one TensorFlow GraphDef protobuf file (.pb).
+## Profile the network and collect inference traces
 
-After collecting the profile data, launch TensorBoard-Neuron with the special flag “--run_neuron_profile" to analyze the raw data and generate the output files before starting the server.
+When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable. 
 
-```
-$ export NEURON_PROFILE=/some/output/directory
+1. Set NEURON_PROFILE environment variable .
+2. export NEURON_PROFILE=/some/output/directory
+3. Run inference through the framework.  See the tutorials for each framework for more info.
 
-*** Run inference through the framework ***
 
-$ tensorboard_neuron --logdir /path/to/logdir --run_neuron_profile
-```
-
-### Standalone
-
-Analysis of raw profile data can also be done without the help of the frameworks.  However, you will need to collect the data by yourself.  See the “neuron-cli” tool as an example of how to do this.
-
-Then, we will need to analyze this data with the profiler.  You will need the NEFF (your compiled model), the NTFF (the collected profile data), your desired output directory, and the TensorFlow GraphDef of your model.
-
-Finally, launch TensorBoard-Neuron with the logdir set to the output directory specified above.
-
-```
-*** Run inference and collect profile data ***
-
-$ neuron-profile analyze \
---neff-path /path/to/neff \
---session-file /path/to/ntff \
---output-dir /path/to/logdir \
---graph-file=/path/to/graphdef
-
-$ tensorboard_neuron --logdir /path/to/logdir
-```
 
 ## Visualizing data with TensorBoard-Neuron
 
-To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory with the generated profile data.  See the Collecting and post-processing inference traces section for more info.
+To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory where TensorFlow logs are generated. 
 
 ```
-tensorboard_neuron --logdir /path/to/logdir
+$ tensorboard_neuron --logdir /path/to/logdir --run_neuron_profile
 ```
 
-Optionally, you can specify the host and port.  By default, TensorBoard-Neuron will be launched at “localhost:6006,” but adding the  "--host"  and  "--port" flag will change this to whatever you wish.
+By default, TensorBoard-Neuron will be launched at “localhost:6006,” by specifying "--host" and "--port" option the URL can be changed.
 
-Open your favorite browser and enter the host and port if specified above; otherwise, simply go to the default “localhost:6006” instead.
+Now, in a browser visit [localhost:6006](http://localhost:6006/) to view the visualization or and enter the host and port if specified above.
 
 
 ## How to: Check Neuron compatibility
 
-TensorBoard-Neuron can help you visualize which operators are supported on Neuron devices.
+TensorBoard-Neuron can visualize which operators are supported on Neuron devices. All Neuron compatible operators would run MLA and other operators would run on CPU.
 
-### Step 1: Generate the files
+### Step 1: Generate the EVENT files
 
-If you have already run an inference and collected the profile artifacts, see the above section the Collecting and post-processing inference traces to generate the TensorBoard-Neuron files.
-
-Otherwise, please use the TensorFlow APIs to create the event file.  See the sample Python code snippet below for TensorFlow:
+Use the TensorFlow APIs to create the event file.  See the sample Python code snippet below for TensorFlow:
 
 ```
 import tensorflow as tf
@@ -103,7 +77,7 @@ fw.flush()
 
 See the above section Visualizing data with TensorBoard-Neuron.
 
-### Step 3: select “Neuron MLA Compatibility“
+### Step 3: Select “Neuron MLA Compatibility“
 
 In the navigation pane on the left, under the “Color” section, select “Neuron MLA Compatibility.”
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.18.17%20PM.png)
@@ -119,27 +93,25 @@ After successfully analyzing the profiled run on a Neuron device, you can launch
 
 ### Step 1: Generate the Files
 
-This step requires Neuron tools in order to work.  See the above section Collecting and post-processing inference traces to generate the TensorBoard-Neuron files.
+This step requires Neuron tools in order to work.
 
 ### Step 2: Launch Tensorboard-Neuron and navigate to the webpage
 
 See the above section Visualizing data with TensorBoard-Neuron
 
-### Step 3: select the “Neuron_profile” tag
+### Step 3: Select the “Neuron_profile” tag
 
 The “neuron_profile” tag contains timing information regarding the inference you profiled.
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.32.13%20PM.png)
 
-### Step 4: select “Compute Time”
+### Step 4: Select “Compute Time”
 
 In the navigation pane on the left, under the “Color” section, select “Compute time.”
-
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.32.46%20PM.png)
 
 ### Step 5: View time taken by various layers
 
 This view will show time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used.  Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
-
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2011.09.58%20AM.png)
 
 ## How to: View detailed profile using the Neuron Profile plugin
@@ -148,7 +120,7 @@ To get a better understanding of the profile, you can check out the Neuron Profi
 
 ### step 1: Generate the files
 
-This step requires Neuron tools in order to work.  See the above section Collecting and post-processing inference traces to generate the TensorBoard-Neuron files.
+This step requires Neuron tools in order to work.
 
 ### Step 2: Launch Tensorboard-Neuron and navigate to the webpage
 
@@ -162,7 +134,7 @@ On the navigation bar at the top of the page, there will be a list of active plu
 
 The plugin may take a while to register on first load.  If this tab does not show initially, please refresh the page.
 
-### Step 4a: the profile overview
+### Step 4a: The profile overview
 
 The first page you will land on in the Neuron Profile plugin is the overview page.  It contains various information regarding the inference.
 
@@ -198,7 +170,7 @@ Please note that this tool can only be used in Chrome browsers.
 
 ## How to: Debug an inference
 
-To make use of the Debugger plugin, you must specify your desired output tensors before creating the saved model.  See [Step 1: Get a TensorFlow SavedModel that runs on Inferentia: Getting Started: TensorFlow-Neuron](LINK) for how to create the saved model.  Essentially, adding these tensors to the “outputs” dictionary will allow you to view them in the debugger later on.
+To make use of the Debugger plugin, you must specify your desired output tensors before creating the saved model.  See [Step 1: Get a TensorFlow SavedModel that runs on Inferentia: Getting Started: TensorFlow-Neuron](https://quip-amazon.com/YfzHAvSCaVKx#IKH9CAMPc7K) for how to create the saved model.  Essentially, adding these tensors to the “outputs” dictionary will allow you to view them in the debugger later on.
 
 Please note that this feature is currently only available for TensorFlow users.
 
@@ -211,8 +183,6 @@ $ tensorboard_neuron --logdir /path/to/logdir --debugger_port PORT
 ```
 
 where PORT is your desired port number.
-
-See the above section Visualizing data with TensorBoard-Neuron for more details.
 
 ### Step 2: Modify and run your inference script
 
@@ -247,7 +217,7 @@ In the “Runtime Node List” on the left, there will be a list of operators an
 
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.45.32%20AM.png)
 
-### step 5: execute inference
+### step 5: Execute inference
 
 On the bottom left of the page, there will be a “Continue...” button that will resume the inference execution.  As the graph is executed, output tensors will be saved for later viewing.
 
