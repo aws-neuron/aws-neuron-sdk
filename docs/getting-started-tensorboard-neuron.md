@@ -1,8 +1,6 @@
 # Getting Started: TensorBoard-Neuron
 
-This guide is for developers who want to better understand how their model runs on Neuron MLAs.
-
-TensorBoard-Neuron is adapted to provide useful information related to Neuron devices, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
+This guide is for developers who want to profile how their model runs on Neuron cores. TensorBoard-Neuron is adapted to provide useful information, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
 
 ## Installation
 
@@ -30,9 +28,9 @@ $ sudo apt install aws-neuron-tools
 
 When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable. 
 
-1. Set NEURON_PROFILE environment variable .
+1. Set NEURON_PROFILE environment variable 
 2. export NEURON_PROFILE=/some/output/directory
-3. Run inference through the framework.  See the tutorials for each framework for more info.
+3. Run inference through the framework.  See the tutorials for each framework for more info
 
 
 
@@ -51,7 +49,7 @@ Now, in a browser visit [localhost:6006](http://localhost:6006/) to view the vis
 
 ## How to: Check Neuron compatibility
 
-TensorBoard-Neuron can visualize which operators are supported on Neuron devices. All Neuron compatible operators would run MLA and other operators would run on CPU.
+TensorBoard-Neuron can visualize which operators are supported by Neuron. All Neuron compatible operators would run in hardware and other operators would run on CPU.
 
 ### Step 1: Generate the EVENT files
 
@@ -87,9 +85,9 @@ In the navigation pane on the left, under the “Color” section, select “Neu
 Now, the graph should be colored red and/or green.  Green indicates that an operator that is compatible with Neuron devices, while red indicates that the operator is currently not supported.  If there are unsupported operators, all of these operators’ names will be listed under the “Incompatible Operations” section.
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.15.17%20PM.png)
 
-## How to: Visualize graphs run on a Neuron device
+## How to: Visualize graphs run on Neuron
 
-After successfully analyzing the profiled run on a Neuron device, you can launch TensorBoard-Neuron to view the graph and see how much time each operator is taking.
+After successfully analyzing the profiled run on Neuron, you can launch TensorBoard-Neuron to view the graph and see how much time each operator is taking.
 
 ### Step 1: Generate the Files
 
@@ -111,7 +109,7 @@ In the navigation pane on the left, under the “Color” section, select “Com
 
 ### Step 5: View time taken by various layers
 
-This view will show time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used.  Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
+This view will show the time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used. Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2011.09.58%20AM.png)
 
 ## How to: View detailed profile using the Neuron Profile plugin
@@ -225,7 +223,7 @@ On the bottom left of the page, there will be a “Continue...” button that wi
 
 ### Step 6: View tensors
 
-At the bottom of the page, there will be a“Tensor Value Overview” section that shows a summary of all the output tensors that were selected as watchpoints in Step 4.
+At the bottom of the page, there will be a “Tensor Value Overview” section that shows a summary of all the output tensors that were selected as watchpoints in Step 4.
 
 ![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.47.32%20AM.png)
 
