@@ -1,5 +1,7 @@
 # Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance
 
+In this getting started guide you will learn how to install Neuron into your own AMI of choice. To use a pre-built Deep Learning AMI, which includes all of the needed Neuron packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html
+
 ##  Steps Overview:
 
 1. Launch an EC2 Inf1 Instance
@@ -10,7 +12,7 @@
 
 Steps Overview: 
 
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html
+1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. 
 2. Select an Inf1 instance size of your choice (see https://aws.amazon.com/ec2/instance-types/)
 
 ## Step 2: Install Neuron-RTD
@@ -76,4 +78,4 @@ sudo yum install aws-neuron-tools
 
 ### Single Neuron-RTD for all Inferntia devices present
 
-The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired.
+The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired. More details in TODO
