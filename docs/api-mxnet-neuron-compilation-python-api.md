@@ -1,6 +1,6 @@
 # MXNet-Neuron Compilation Python API
 
-The MXNet-Neuron Compilation Python API provides user a method to compile model graph for execution on Inferentia. It is available as a method in a Neuron module in MXNet's contribution space.
+The MXNet-Neuron compilation Python API provides a method to compile model graph for execution on Inferentia. It is available as a method in a Neuron module in MXNet's contribution space.
 
 ## Method
 
@@ -8,11 +8,11 @@ The MXNet-Neuron Compilation Python API provides user a method to compile model 
 
 ## Description
 
-Within the graph or subgraph, the compile method selects and send Neuron-supported operations to Neuron-Compiler for compilation and saves the compiled artifacts in the graph.  More on Neuron-Compiler can be found here: [link].
+Within the graph or subgraph, the compile method selects and sends Neuron-supported operations to Neuron-Compiler for compilation and saves the compiled artifacts in the graph.  
 
-The “`num-neuroncores`” option directs compiler to limit compiled graph to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an N1 instance. See performance tuning application note [link] for more information.
+The “`num-neuroncores`” option directs compiler to limit compiled graph to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an Inf1 instance. See performance tuning application note [link]TODO for more information.
 
-Please note that compiling for more than the number of available NeuronCores will work during compilation but result in resource error during inference.
+Please note that compiling for more than the number of available NeuronCores will work during compilation but result in resource error during inference operation.
 
 The compiled graph can be saved using the MXNet save_checkpoint and served using MXNet Model Serving.
 
