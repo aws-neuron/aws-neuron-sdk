@@ -4,9 +4,9 @@ Each of the package managers (apt, yum, pip, conda) must be configured for each 
 
 This guide provides an overview of the settings for each variant and shows example use for Neuron packages.
 
-## DLAMI
+## AWS Deep Learning AMIs (DLAMI) or Deep Learning Containers Images
 
-Already built in.
+Neuron is already built in.
 
 ## UBUNTU 16
 
