@@ -1,22 +1,22 @@
 # Tutorial: Advanced Configurations for Neuron-RTD on an Inf1 instance
 
-This doc provides steps to configure to start one or more Neuron-RTD to manage different workloads.
+This doc provides steps to configure one or more Neuron-RTD to manage different workloads within the same instance.
 
-# Prerequisite
+# Prerequisites
 
 [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
 
 # Single Neuron-RTD
 
-The default configuration sets up a single Neuron-RTD daemon for all present Inferentia devices in the instance.
+The default configuration sets up a single Neuron-RTD daemon for all present Neuron devices in the instance.
 With the default configuration:
 1. Runtime API server listens on a single UDS endpoint `unix:/run/neuron.sock`
 2. A single runtime daemon(multi threaded) handles all the inference requests.
 
 # Multiple Neuron-RTD
 Multiple runtime daemon might be preferred in some cases for isolation or for load balancing.
-The following steps explains configuring 4 Neuron-RTD on a inf1.6xl instance and let each daemon to manage 1 Inferentia device.
-When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint(UDS or TCP port) and logical device id it should manage.
+The following steps explains configuring 4 Neuron-RTD on a Inf1.6xl instance and let each daemon to manage 1 Neuron device.
+When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint (UDP or TCP port) and logical device id it should manage.
 
 
 ### Identify logical IDs of Inferentia devices
@@ -39,10 +39,9 @@ Use `neuron-ls` to enumerate the set of Inferentia chips in the system.
 ```
 
 neuron-rtd can manage one or more devices. Select contigous Inferentia devices to be managed by a single neuron-rtd. 
-In this 
 
-### Create configuration file for each instance
-Create a configuration file for each Neuron-rtd you wish to launch, with the  1 or more  Inferentia chips desired to be mapped to that Neuron-rtd instance, and the listening port for it.
+### Create a configuration file for each instance
+Create a configuration file for each Neuron-rtd you wish to launch, with one or more Inferentia chips desired to be mapped to that Neuron-rtd instance, and the listening port for it.
 
 ```bash
 sudo tee /opt/aws/neuron/bin/nrtd0.json > /dev/null << EOF
