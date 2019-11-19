@@ -18,17 +18,14 @@ This will configure 1 Neuron-RTD per Inferentia and place each into its own Dock
 Steps Overview:
 
 Step 1: install the container package  and the tools package
-Step 2: enable the oci hooks
-Step 3: setup docker json config
-Step 4: run the containers
 
-Install container support:
 
 ```bash
 sudo apt-get install aws-neuron-runtime-base
 ```
 
-Add oci hooks:
+
+Step 2: enable the oci hooks
 
 ```bash
 sudo apt install -y golang && \
@@ -39,6 +36,9 @@ sudo apt install -y golang && \
         make build && \
         sudo cp /tmp/oci-add-hooks/oci-add-hooks /usr/local/bin/
 ```
+
+
+Step 3: setup docker json config
 
 Install dockerIO:
 
@@ -83,6 +83,10 @@ https://hub.docker.com/
 For more examples and ideas, visit:
 https://docs.docker.com/get-started/
 ```
+
+
+
+Step 4: run the containers
 
 Create a container that holds Neuron-RTD and any other services (like an ML framework such as Tensorflow). This example creates a dockerfile for this:
 
