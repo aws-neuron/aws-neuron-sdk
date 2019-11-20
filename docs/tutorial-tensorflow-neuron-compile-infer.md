@@ -8,15 +8,17 @@
 
 ## Step 1: Launch EC2 Instance(s)
 
-A typical workflow with the Neuron SDK will be for a previously trained ML model to be compiled on a compilation server and then the artifacts distributed to the (fleet of) inf1 instances for execution. Neuron enables TensorFlow to be used for all of these steps.
+A typical workflow with the Neuron SDK will be for a previously trained ML model to be compiled on a compilation server and then the artifacts distributed to Inf1 instances for execution. Neuron enables TensorFlow to be used for all of these steps.
 
 Steps Overview:
 
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html
+1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
+
 2. Select and start an EC2 instance of your choice (see https://aws.amazon.com/ec2/instance-types/) to compile
-    1. It is recommended to use C5.4xlarge or larger. For this example we will use a C5.4xlarge
-    2. If you would like to compile and infer on the same machine, please select Inf1.6xlarge
-3. Select and start an INF1 instance of your choice if not compiling and inferencing on  the same instance.
+    1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
+    2. If you would like to compile and infer on the same machine, please select inf1.6xlarge
+    
+3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
 
 ## Step 2: Install Neuron
 
