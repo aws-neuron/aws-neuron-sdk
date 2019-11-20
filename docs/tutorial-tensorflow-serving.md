@@ -35,9 +35,7 @@ tensorflow_model_server_neuron --model_name=resnet50_inf1 \
     --model_base_path=/home/ubuntu/resnet50_inf1/ --port=8500
 ```
 
-The compiled model is staged in Inferentia by Neuron to prepare for inference. If the saved model is uncompiled (export first flow), the framework would call Neuron compiler to do the compilation before staging.
-
-If the precompiled saved model contains a graph with compiled NeuronOps and therefore must be served using the model server that is compatible with the TensorFlow generating the Saved Model.
+The compiled model is staged in Inferentia DRAM by the server to prepare for inference.
 
 Now, user can run inferences via GRPC from the following client code:
 
