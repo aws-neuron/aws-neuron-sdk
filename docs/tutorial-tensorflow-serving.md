@@ -1,6 +1,6 @@
 # Neuron TensorFlow Serving
 
-TensorFlow Serving is a serving system that allows customers to scale-up inference across a network. Neuron TensorFlow Serving uses the same API as normal TensorFlow Serving. The only differences are that the saved model must be compiled for Inferentia and the entry point is a different binary named `tensorflow_model_server_neuron`. The binary is found at `/usr/local/bin/tensorflow_model_server_neuron` and is pre-installed in the DL AMI or installed with APT/YUM tensorflow-model-server-neuron package (see installation instruction here [link]).
+TensorFlow Serving is a serving system that allows customers to scale-up inference across a network. Neuron TensorFlow Serving uses the same API as normal TensorFlow Serving. The only differences are that the saved model must be compiled for Inferentia and the entry point is a different binary named `tensorflow_model_server_neuron`. The binary is found at `/usr/local/bin/tensorflow_model_server_neuron` and is pre-installed in the DLAMI or installed with APT/YUM tensorflow-model-server-neuron package (see installation instruction here [link]TODO).
 
 ## Export and Compile Saved Model
 
@@ -35,9 +35,9 @@ tensorflow_model_server_neuron --model_name=resnet50_inf1 \
     --model_base_path=/home/ubuntu/resnet50_inf1/ --port=8500
 ```
 
-The compiled model is staged in Inferentia DRAM by the server to prepare for inference. If the saved model is uncompiled (export first flow), the server would call Neuron compiler to do the compilation before staging.
+The compiled model is staged in Inferentia by Neuron to prepare for inference. If the saved model is uncompiled (export first flow), the framework would call Neuron compiler to do the compilation before staging.
 
-If the saved model was precompiled contains a graph with compiled NeuronOps and therefore must be served using the model server that is compatible with the TensorFlow generating the Saved Model.
+If the precompiled saved model contains a graph with compiled NeuronOps and therefore must be served using the model server that is compatible with the TensorFlow generating the Saved Model.
 
 Now, user can run inferences via GRPC from the following client code:
 
