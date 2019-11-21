@@ -20,6 +20,7 @@ wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
+apt-get install tensorflow-model-server-neuron
 ```
 
 ## UBUNTU 18
@@ -34,6 +35,7 @@ wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
+apt-get install tensorflow-model-server-neuron
 ```
 
 ## RPM (AmazonLinux, Centos)
@@ -49,6 +51,7 @@ EOF
 sudo rpm --import https://yum.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
+sudo yum install tensorflow-model-server-neuron
 ```
 
 ## PIP
