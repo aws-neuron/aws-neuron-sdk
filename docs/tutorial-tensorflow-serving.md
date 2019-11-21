@@ -49,7 +49,8 @@ tensorflow_model_server_neuron --model_name=resnet50_inf1 \
 
 The compiled model is staged in Inferentia DRAM by the server to prepare for inference.
 
-Now, user can run inferences via GRPC from the following client code:
+## Generate inference requests to the model server
+Now run inferences via GRPC as shown in the following sample client code:
 
 ```python
 import numpy as np
