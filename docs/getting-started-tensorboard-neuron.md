@@ -1,6 +1,8 @@
 # Getting Started: TensorBoard-Neuron
 
-This guide is for developers who want to profile how their model runs on Neuron cores. TensorBoard-Neuron is adapted to provide useful information, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
+This guide is for developers who want to better understand how their model runs on Neuron Cores.
+
+TensorBoard-Neuron is adapted to provide useful information related to Neuron devices, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
 
 ## Installation
 
@@ -28,9 +30,11 @@ $ sudo apt install aws-neuron-tools
 
 When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable. 
 
-1. Set NEURON_PROFILE environment variable 
+The steps to do this:
+
+1. Set NEURON_PROFILE environment variable .
 2. export NEURON_PROFILE=/some/output/directory
-3. Run inference through the framework.  See the tutorials for each framework for more info
+3. Run inference through the framework.  See the tutorials for each framework for more info.
 
 
 
@@ -49,7 +53,7 @@ Now, in a browser visit [localhost:6006](http://localhost:6006/) to view the vis
 
 ## How to: Check Neuron compatibility
 
-TensorBoard-Neuron can visualize which operators are supported by Neuron. All Neuron compatible operators would run in hardware and other operators would run on CPU.
+TensorBoard-Neuron can visualize which operators are supported on Neuron devices. All Neuron compatible operators would run on Neuron Cores and other operators would run on CPU.
 
 ### Step 1: Generate the EVENT files
 
@@ -75,19 +79,17 @@ fw.flush()
 
 See the above section Visualizing data with TensorBoard-Neuron.
 
-### Step 3: Select “Neuron MLA Compatibility“
+### Step 3: select “Neuron Compatibility“
 
-In the navigation pane on the left, under the “Color” section, select “Neuron MLA Compatibility.”
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.18.17%20PM.png)
-
+In the navigation pane on the left, under the “Color” section, select “Neuron Compatibility.”
+![image](/images/tb-img1.png)
 ### Step 4: View compatible operators
 
 Now, the graph should be colored red and/or green.  Green indicates that an operator that is compatible with Neuron devices, while red indicates that the operator is currently not supported.  If there are unsupported operators, all of these operators’ names will be listed under the “Incompatible Operations” section.
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.15.17%20PM.png)
+![image](/images/tb-img2.png)
+## How to: Visualize graphs run on a Neuron device
 
-## How to: Visualize graphs run on Neuron
-
-After successfully analyzing the profiled run on Neuron, you can launch TensorBoard-Neuron to view the graph and see how much time each operator is taking.
+After successfully analyzing the profiled run on a Neuron device, you can launch TensorBoard-Neuron to view the graph and see how much time each operator is taking.
 
 ### Step 1: Generate the Files
 
@@ -97,21 +99,18 @@ This step requires Neuron tools in order to work.
 
 See the above section Visualizing data with TensorBoard-Neuron
 
-### Step 3: Select the “Neuron_profile” tag
+### Step 3: select the “Neuron_profile” tag
 
 The “neuron_profile” tag contains timing information regarding the inference you profiled.
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.32.13%20PM.png)
-
-### Step 4: Select “Compute Time”
+![image](/images/tb-img3.png)
+### Step 4: select “Compute Time”
 
 In the navigation pane on the left, under the “Color” section, select “Compute time.”
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%202.32.46%20PM.png)
-
+![image](/images/tb-img4.png)
 ### Step 5: View time taken by various layers
 
-This view will show the time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used. Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2011.09.58%20AM.png)
-
+This view will show time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used.  Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
+![image](/images/tb-img5.png)
 ## How to: View detailed profile using the Neuron Profile plugin
 
 To get a better understanding of the profile, you can check out the Neuron Profile plugin.  Here, you will find more information on the inference, including an overview, a list of the most time-consuming operators (op profile tool), and an execution timeline view (Chrome trace).
@@ -127,22 +126,17 @@ See the above section Visualizing data with TensorBoard-Neuron
 ### Step 3: Select the “Neuron Profile” plugin
 
 On the navigation bar at the top of the page, there will be a list of active plugins.  In this case, you will need to use the “Neuron Profile” plugin.
+![image](/images/tb-img6.png)The plugin may take a while to register on first load.  If this tab does not show initially, please refresh the page.
 
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%203.22.54%20PM.png)
-
-The plugin may take a while to register on first load.  If this tab does not show initially, please refresh the page.
-
-### Step 4a: The profile overview
+### Step 4a: the profile overview
 
 The first page you will land on in the Neuron Profile plugin is the overview page.  It contains various information regarding the inference.
+![image](/images/tb-img7.png)
+In the “Performance Summary” section, you will see execution stats, such as the total execution time, the average layer execution time, and the utilization of NeuronMatrix Units.
 
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%203.05.41%20PM.png)
+The “Neuron Time Graph” shows how long a portion of the graph (a NeuronOp) took to execute.
 
-In the “Performance Summary” section, you will see execution stats, such as the total execution time, the average layer execution time, and the utilization of Neuron MLA Matrix Units.
-
-The “Neuron MLA Time Graph” shows how long a portion of the graph (a NeuronOp) took to execute.
-
-The “Top TensorFlow operations executed on Neuron MLA” sections gives a quick summary of the most time-consuming operators that were executed on the device.
+The “Top TensorFlow operations executed on Neuron Cores” sections gives a quick summary of the most time-consuming operators that were executed on the device.
 
 “Run Environment” shows the information on devices used during this inference.
 
@@ -153,8 +147,7 @@ Finally, the “Recommendation for Next Steps” section gives helpful pointers 
 In the “Tools” dropdown menu, select “op_profile.”
 
 The “op profile” tool displays the percentage of overall time taken for each operator, sorted by the most expensive operators at the top.  It gives a better understanding of where the bottlenecks in a model may be.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%203.16.37%20PM.png)
+![image](/images/tb-img8.png)
 
 ### Step 4c: Chrome trace
 
@@ -163,8 +156,7 @@ In the “Tools” dropdown menu, select “trace_viewer.”
 For developers wanting to better understand the timeline of the inference, the Chrome trace view is the tool for you.  It shows the history of execution organized by the operator names.
 
 Please note that this tool can only be used in Chrome browsers.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%203.20.11%20PM.png)
+![image](/images/tb-img9.png)
 
 ## How to: Debug an inference
 
@@ -206,27 +198,20 @@ After adding these modifications, run the script to begin inference.  The execut
 ### Step 3: Select the “debugger” plugin
 
 On the navigation bar at the top of the page, there will be a list of active plugins.  In this case, you will need to use the “Debugger” plugin.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-11%20at%205.05.06%20PM.png)
-
+![image](/images/tb-img10.png)
 ### Step 4: Enable watchpoints
 
 In the “Runtime Node List” on the left, there will be a list of operators and a checkbox next to each.  Select all of the operators that you would like the view the tensor output of.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.45.32%20AM.png)
-
-### step 5: Execute inference
+![image](/images/tb-img11.png)
+### step 5: execute inference
 
 On the bottom left of the page, there will be a “Continue...” button that will resume the inference execution.  As the graph is executed, output tensors will be saved for later viewing.
 
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.46.14%20AM.png)
+![image](/images/tb-img12.png)
 
 ### Step 6: View tensors
 
-At the bottom of the page, there will be a “Tensor Value Overview” section that shows a summary of all the output tensors that were selected as watchpoints in Step 4.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.47.32%20AM.png)
-
+At the bottom of the page, there will be a“Tensor Value Overview” section that shows a summary of all the output tensors that were selected as watchpoints in Step 4.
+![image](/images/tb-img13.png)
 To view more specific information on a tensor, you can click on a tensor’s value.  You may also hover over the bar in the “Health Pill” column for a more detailed summary of values.
-
-![image](https://github.com/aws/aws-neuron-sdk/blob/master/docs/images/Screen%20Shot%202019-11-12%20at%2010.48.15%20AM.png)
+![image](/images/tb-img14.png)
