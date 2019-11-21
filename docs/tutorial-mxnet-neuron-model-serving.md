@@ -33,8 +33,7 @@ inputs['data'] = mx.nd.zeros([1,3,224,224], dtype='float32')
 inputs['prob_label'] = mx.nd.zeros([1,1000], dtype='float32')
 
 # compile graph to inferentia target
-compile_args = {'num-neuroncores' : 1}
-compile_args['excl_node_names'] = ['drop9']
+compile_args = {'excl_node_names' : ['drop9']}
 csym, cargs, cauxs = neuron.compile(sym, args, auxs, inputs, **compile_args)
 
 # save compiled model
