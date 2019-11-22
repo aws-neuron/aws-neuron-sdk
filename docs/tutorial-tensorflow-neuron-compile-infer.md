@@ -93,7 +93,7 @@ Steps Overview:
 2. Run inference on Inf1 with an example input.
 
 
-1. Create a python script named `compile_resnet50.py` with the following content:
+Step 1. Create a python script named `compile_resnet50.py` with the following content:
 ```python
  import os
  import time
@@ -131,7 +131,7 @@ Steps Overview:
  # Prepare SavedModel for uploading to Inf1 instance
  shutil.make_archive(compiled_model_dir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
-2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
+Step 2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 ```bash
  python compile_resnet50.py
 
@@ -143,12 +143,12 @@ Steps Overview:
  ...
 ```
 
-3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
+Step 3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 ```bash
  scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ubuntu@<instance DNS>:~/  # Ubuntu
  scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
 ```
-4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+Step 4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
  import os
  import numpy as np
@@ -174,7 +174,7 @@ Steps Overview:
  print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-5. Unzip the mode, download the example image and run the inference:
+Step 5. Unzip the mode, download the example image and run the inference:
 ```bash
  unzip resnet50_neuron.zip
  curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
