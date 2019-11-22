@@ -86,9 +86,11 @@ On the instance you are going to use for compilation, you must have both the Neu
 1. Same as above to install Tensorflow Neuron.
 2. To install Runtime, see [This link](./getting-started-neuron-rtd.md).
 
-## Step 3: Example
+## Step 3: Run Example
 
-In this example, we compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models. Then we run inference on Inf1 with an example input.
+Steps Overview:
+1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models. 
+2. Run inference on Inf1 with an example input.
 
 
 1. Create a python script named `compile_resnet50.py` with the following content:
