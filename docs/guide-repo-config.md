@@ -4,38 +4,36 @@ Each of the package managers (apt, yum, pip, conda) must be configured for each 
 
 This guide provides an overview of the settings for each variant and shows example use for Neuron packages.
 
-## AWS Deep Learning AMIs (DLAMI) or Deep Learning Containers Images
+## DLAMI
 
-Neuron is already built in.
+Already built in.
 
 ## UBUNTU 16
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-deb https://apt.repos.neuron.amazonzaws.com xenial main
+deb https://apt.repos.neuron.amazonaws.com xenial main
 EOF
 
-wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
  
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
-apt-get install tensorflow-model-server-neuron
 ```
 
 ## UBUNTU 18
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-deb https://apt.repos.neuron.amazonzaws.com bionic main
+deb https://apt.repos.neuron.amazonaws.com bionic main
 EOF
 
-wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
  
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
-apt-get install tensorflow-model-server-neuron
 ```
 
 ## RPM (AmazonLinux, Centos)
@@ -44,14 +42,13 @@ apt-get install tensorflow-model-server-neuron
 sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
 [neuron]
 name=Neuron YUM Repository
-baseurl=https://yum.repos.neuron.amazonzaws.com
+baseurl=https://yum.repos.neuron.amazonaws.com
 enabled=1
 EOF
 
-sudo rpm --import https://yum.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
-sudo yum install tensorflow-model-server-neuron
 ```
 
 ## PIP
@@ -59,7 +56,7 @@ sudo yum install tensorflow-model-server-neuron
 ```bash
 sudo tee /etc/pip.conf > /dev/null <<EOF
 [global]
-extra-index-url = https://pip.repos.neuron.amazonzaws.com 
+extra-index-url = https://pip.repos.neuron.amazonaws.com 
 EOF
 ```
 
@@ -81,7 +78,7 @@ pip install mxnet-neuron
 ## Conda
 
 ```bash
-conda config --add channels https://conda.repos.neuron.amazonzaws.com
+conda config --add channels https://conda.repos.neuron.amazonaws.com
 
 conda install mxnet-neuron
 conda install tensorflow-neuron
