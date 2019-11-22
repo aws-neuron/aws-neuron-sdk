@@ -1,44 +1,56 @@
-# Tutorial: Container Configurations for Neuron-RTD on an Inf1 instance 
+# Tutorial: Container Configurations for Neuron-RTD on an Inf1 instance
 
-##  Steps Overview:
+##  Prerequisite
+   1 x Inferentia with 1 x Docker containers (1 for each Neuron-RTD, 1 Neuron-RTD per Inferentia)
 
-1. Prerequisite
-2. 4 x Inferentia with 4 x Docker containers (1 for each Neuron-RTD, 1 Neuron-RTD per Inferentia)
+  [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
 
-## Step1: Prerequisite
+  [Neuron TensorFlow Serving](./tutorial-tensorflow-serving.md)
 
-[Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
+## Introduction
 
-## Step2 : Configure Neuron-RTD
+In previous tutorials, we have used tensorflow serving to compile a model
+and run inferences. To do that, Neuron Runtime Daemon (Neuron-RTD) would
+be running in the background as a service, and tensorflow serving would
+use default socket to interact with neuron-rtd.
 
-### 4 X Neuron-RTD in Docker Containers:
+For containerized application, it is recommended that the neuron-rtd
+container is used. It is also recommended that framework-serving is ran
+in its own container. This is because neuron-rtd requires higher privileges
+as shown below.
 
-This will configure 1 Neuron-RTD per Inferentia and place each into its own Docker container. 
+Both containers are made available over ECR repositories and can be used
+directly. Customers may also build their own using neuron packages.
 
-Steps Overview:
+Neuron-rtd container: [480188351710.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest]()
 
-Step 1: install the container package  and the tools package
+DL framework containers:  [https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html]()
 
+
+##  Steps:
+
+This will configure 1 Neuron-RTD per Inferentia and place each into its own Docker container.
+
+#### Step 1: install host base package
 
 ```bash
 sudo apt-get install aws-neuron-runtime-base
 ```
 
-
-Step 2: enable the oci hooks
+#### Step 2: Install oci-add-hooks depdency
 
 ```bash
 sudo apt install -y golang && \
-        go get github.com/joeshaw/json-lossless && \
-        cd /tmp/ && \
-        git clone https://github.com/awslabs/oci-add-hooks && \
-        cd /tmp/oci-add-hooks && \
-        make build && \
-        sudo cp /tmp/oci-add-hooks/oci-add-hooks /usr/local/bin/
+    go get github.com/joeshaw/json-lossless && \
+    cd /tmp/ && \
+    git clone https://github.com/awslabs/oci-add-hooks && \
+    cd /tmp/oci-add-hooks && \
+    make build && \
+    sudo cp /tmp/oci-add-hooks/oci-add-hooks /usr/local/bin/
 ```
 
 
-Step 3: setup docker json config
+#### Step 3: Setup Docker to use oci-neuron runtime.
 
 Install dockerIO:
 
@@ -85,10 +97,72 @@ https://docs.docker.com/get-started/
 ```
 
 
+#### Step 4: Run neuron-rtd container:
 
-Step 4: run the containers
+You can choose to build your own neuron-rtd image as shown in Appendix A, or just use:
+480188351710.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
 
-Create a container that holds Neuron-RTD and any other services (like an ML framework such as Tensorflow). This example creates a dockerfile for this:
+Run neuron-rtd. A volume must be mounted to :/sock where neuron-rtd will open a UDS socket. Framework can interact with runtime using this socket.
+
+```bash
+$(aws --profile kaena ecr get-login --no-include-email --region us-east-1 --registry-ids 480188351710)
+docker pull 480188351710.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
+docker tag 480188351710.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest neuron-rtd
+mkdir /tmp/neuron_rtd_sock/
+docker run --env AWS_MLA_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
+```
+
+
+#### Step 5: Run framework serving image:
+
+Run tensorflow serving DLC image:
+Guide:
+[Neuron TensorFlow Serving](./tutorial-tensorflow-serving.md)
+
+An image can be acquired from:
+https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html
+It will be something like:
+763104351884.dkr.ecr.<region>.amazonaws.com/tensorflow-inference-inf:1.15.0-inf-py36-ubuntu16.04
+
+
+Assuming a compiled saved model was stored in s3://my_magical_bucket/my_magical_model/
+
+```bash
+
+$(aws --profile kaena ecr get-login --no-include-email --region us-east-1 --registry-ids 763104351884)
+git pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference-inf:1.15.0-inf-py36-ubuntu16.04
+git tag 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference-inf:1.15.0-inf-py36-ubuntu16.04 tensorflow-inference-inf
+# Note: the neuron-rtd socket directory must be mounted and pointed at using environment variable. 
+#       Tensorflow serving will use that socket to talk to Neuron-rtd
+# Note: Tensorflow servi
+docker run --env NEURON_RTD_ADDRES=/sock/neuron.sock -v /tmp/neuron_rtd_sock/:/sock -p 9000:9000 -p 8500:8500 tensorflow-inference-inf \
+    /usr/bin/tensorflow_model_server
+    --port=9000 \
+    --rest_api_port=8500
+    --model_name=my_magical_model_name \
+    --model_base_path=s3://my_magical_bucket/my_magical_model
+
+
+```
+
+P.S. You can run multiple instances of the model serving containers to run 
+more models and fully utilize the instance.
+
+
+
+#### Step 6: Verify by running an inference!
+
+```bash
+
+```
+
+## Appendix A: Optional: building your own neuron-rtd image
+
+
+You can choose to build your own neuron-rtd image using the following example dockerfile, or just use:
+480188351710.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
+
+To create your own:
 
 ```bash
 # stop all other krtd if they have been previously setup or run:
@@ -135,7 +209,7 @@ Now start and verify that the container will start and that the desired Inferent
 Run neuron-ls in the container to verify device whitelisting works as expected:
 
 ```bash
-docker run --env AWS_MLA_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/sock:/sock neuron-test neuron-ls
+docker run --env AWS_MLA_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN  neuron-test neuron-ls
 ```
 Expected result:
 ```
@@ -144,13 +218,6 @@ Expected result:
 |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
 +--------------+---------+--------+-----------+-----------+---------+------+------+
 | 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |      12 |    0 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+ 
++--------------+---------+--------+-----------+-----------+---------+------+------+
 
 ```
-
-Run neuron-rtd. A volume must be mounted to :/sock where neuron-rtd will open a UDS socket. Framework can interact with runtime using this socket.
-
-```bash
-docker run --env AWS_MLA_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/sock:/sock neuron-test
-```
-
