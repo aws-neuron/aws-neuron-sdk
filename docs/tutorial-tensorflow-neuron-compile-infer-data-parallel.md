@@ -7,7 +7,7 @@
 3. Run example
 
 ## Step 1-3
-These steps are the same as [link](./docs/ref). The final step to create the inference script - step 3.4 is replaced with this:
+These steps are the same as [link](./tutorial-tensorflow-neuron-compile-infer.md). The final step to create the inference script - step 3.4 is replaced with this:
 
 3.4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
