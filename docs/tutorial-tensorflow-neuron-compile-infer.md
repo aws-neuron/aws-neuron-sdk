@@ -12,13 +12,13 @@ A typical workflow with the Neuron SDK will be for a previously trained ML model
 
 Steps Overview:
 
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
+1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
 
-2. Select and start an EC2 instance of your choice (see https://aws.amazon.com/ec2/instance-types/) to compile
+1.2. Select and start an EC2 instance of your choice (see https://aws.amazon.com/ec2/instance-types/) to compile
     1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
     2. If you would like to compile and infer on the same machine, please select inf1.6xlarge
     
-3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
+1.3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
 
 ## Step 2: Install Neuron
 
@@ -93,7 +93,7 @@ Steps Overview:
 2. Run inference on Inf1 with an example input.
 
 
-Step 1. Create a python script named `compile_resnet50.py` with the following content:
+3.1. Create a python script named `compile_resnet50.py` with the following content:
 ```python
  import os
  import time
@@ -131,7 +131,7 @@ Step 1. Create a python script named `compile_resnet50.py` with the following co
  # Prepare SavedModel for uploading to Inf1 instance
  shutil.make_archive(compiled_model_dir, 'zip', WORKSPACE, 'resnet50_neuron')
 ```
-Step 2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
+3.2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped at `ws_resnet50/resnet50_neuron.zip`:
 ```bash
  python compile_resnet50.py
 
@@ -143,12 +143,12 @@ Step 2. Run the compilation, which will take a few minutes on c5.4xlarge. The Sa
  ...
 ```
 
-Step 3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
+3.3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 ```bash
  scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ubuntu@<instance DNS>:~/  # Ubuntu
  scp -i <PEM key file>  ws_resnet50/resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
 ```
-Step 4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+3.4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
  import os
  import numpy as np
@@ -174,7 +174,7 @@ Step 4. On the Inf1, create a inference Python script named `infer_resnet50.py` 
  print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-Step 5. Unzip the mode, download the example image and run the inference:
+3.5. Unzip the mode, download the example image and run the inference:
 ```bash
  unzip resnet50_neuron.zip
  curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
