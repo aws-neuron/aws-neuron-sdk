@@ -6,12 +6,12 @@ To identify number of Inferentia devices in a given instance use the `neuron-ls`
 
 ```
 $ neuron-ls
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   |   DMA   | EAST | WEST |
-|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |      12 |    0 |    0 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+
 ```
 
 The above output is taken Inf1.xlarge instance.
@@ -26,13 +26,13 @@ Neuron framework layer would automatically create a default NeuronCore Group.
 To view list of available NCGs the following command can be used.
 ```
 $ neuron-cli list-ncg
-MLA count 1 NC count 4
-+-------+-----------------+----------+-----------------+----------------+
-| NCG ID| VNC START INDEX | NC COUNT | MLA START INDEX | NC START INDEX |
-+-------+-----------------+----------+-----------------+----------------+
-|     1 |               0 |        1 |               0 |              0 |
-|     2 |               1 |        1 |               0 |              1 |
-|     3 |               2 |        2 |               0 |              2 |
+Device 1 NC count 4
++-------+----------+--------------------+----------------+
+| NCG ID| NC COUNT | DEVICE START INDEX | NC START INDEX |
++-------+----------+--------------------+----------------+
+|     1 |        1 |                  0 |              0 |
+|     2 |        1 |                  0 |              1 |
+|     3 |        2 |                  0 |              2 |
 +-------+-----------------+----------+-----------------+----------------+
 ```
 

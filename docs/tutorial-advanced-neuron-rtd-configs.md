@@ -24,18 +24,18 @@ Use `neuron-ls` to enumerate the set of Inferentia chips in the system.
 
 ```bash
 /opt/aws/neuron/bin/neuron-ls
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   |   DMA   | EAST | WEST |
-|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |      12 |    0 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+ 
-| 0000:00:1e.0 |       1 |      4 | 4096 MB   | 4096 MB   |      12 |    1 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+ 
-| 0000:00:1d.0 |       2 |      4 | 4096 MB   | 4096 MB   |      12 |    1 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+ 
-| 0000:00:1c.0 |       3 |      4 | 4096 MB   | 4096 MB   |      12 |    1 |    0 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+ 
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    1 |
++--------------+---------+--------+-----------+-----------+------+------+ 
+| 0000:00:1e.0 |       1 |      4 | 4096 MB   | 4096 MB   |    1 |    1 |
++--------------+---------+--------+-----------+-----------+------+------+ 
+| 0000:00:1d.0 |       2 |      4 | 4096 MB   | 4096 MB   |    1 |    1 |
++--------------+---------+--------+-----------+-----------+------+------+ 
+| 0000:00:1c.0 |       3 |      4 | 4096 MB   | 4096 MB   |    1 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+ 
 ```
 
 neuron-rtd can manage one or more devices. Select contigous Inferentia devices to be managed by a single neuron-rtd. 
@@ -48,7 +48,7 @@ sudo tee /opt/aws/neuron/bin/nrtd0.json > /dev/null << EOF
 {
 "name": "nrtd0",
 "server_port": "unix:/run/neuron.sock0",
-"infa_devices": [0]
+"devices": [0]
 }
 EOF
 
@@ -56,7 +56,7 @@ sudo tee /opt/aws/neuron/bin/nrtd1.json > /dev/null << EOF
 {
 "name": "nrtd1",
 "server_port": "unix:/run/neuron.sock1",
-"infa_devices": [1]
+"devices": [1]
 }
 EOF
 
@@ -64,7 +64,7 @@ sudo tee /opt/aws/neuron/bin/nrtd2.json > /dev/null << EOF
 {
 "name": "nrtd2",
 "server_port": "unix:/run/neuron.sock2",
-"infa_devices": [2]
+"devices": [2]
 }
 EOF
 
@@ -72,7 +72,7 @@ EOF
 {
 "name": "nrtd3",
 "server_port": "unix:/run/neuron.sock3",
-"infa_devices": [3]
+"devices": [3]
 }
 EOF
 
