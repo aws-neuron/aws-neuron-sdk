@@ -58,6 +58,7 @@ import grpc
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.applications.resnet50 import decode_predictions
 from tensorflow_serving.apis import predict_pb2
 from tensorflow_serving.apis import prediction_service_pb2_grpc
 
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     request = predict_pb2.PredictRequest()
     request.model_spec.name = 'resnet50_inf1'
     request.inputs['input'].CopyFrom(
-        tf.contrib.util.make_tensor_proto(img_array, img_array=data.shape))
+        tf.contrib.util.make_tensor_proto(img_array, shape=img_array.shape))
     result = stub.Predict(request)
     prediction = tf.make_ndarray(result.outputs['output'])
     print(decode_predictions(prediction))
