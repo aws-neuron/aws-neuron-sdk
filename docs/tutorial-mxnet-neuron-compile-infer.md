@@ -32,53 +32,53 @@ Steps Overview:
 
 1. Install virtualenv:
 ```bash
- sudo apt-get update
- sudo apt-get -y install virtualenv
+sudo apt-get update
+sudo apt-get -y install virtualenv
 ```
 2. Setup a new Python 3.6 environment:
 ```bash
- virtualenv --python=python3.6 test_env_p36
- source test_env_p36/bin/activate
+virtualenv --python=python3.6 test_env_p36
+source test_env_p36/bin/activate
 ```
 3. Modify Pip repository configurations to point to the Neuron repository.
 ```bash
- tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
- [global]
- extra-index-url = https://pip.repos.neuron.amazonaws.com
- EOF
+tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
 ```
 4. Install MxNet-Neuron and Neuron Compiler
 ```bash
- pip install neuron-cc[mxnet]
- pip install mxnet-neuron
+pip install neuron-cc[mxnet]
+pip install mxnet-neuron
 ```
 
 #### Using Conda:
 1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
 ```bash
- cd /tmp
- curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
- echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 Miniconda3-4.7.12.1-Linux-x86_64.sh" | sha256sum --check
- bash Miniconda3-4.7.12.1-Linux-x86_64.sh
- ...
- source ~/.bashrc
+cd /tmp
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
+echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 Miniconda3-4.7.12.1-Linux-x86_64.sh" | sha256sum --check
+bash Miniconda3-4.7.12.1-Linux-x86_64.sh
+...
+source ~/.bashrc
 ```
 2. Setup a new Python3.6 environment:
 ```bash
- conda create -q -y -n test_env_p36 python=3.6
- source activate test_env_p36
+conda create -q -y -n test_env_p36 python=3.6
+source activate test_env_p36
 ```
 3. Modify Pip repository configurations to point to the Neuron repository.
 ```bash
- tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
- [global]
- extra-index-url = https://pip.repos.neuron.amazonaws.com
- EOF
+tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
 ```
 4. Install MxNet-Neuron and Neuron Compiler
 ```bash
- pip install neuron-cc[mxnet]
- pip install mxnet-neuron
+pip install neuron-cc[mxnet]
+pip install mxnet-neuron
 ```
 
 ### Inference Instance: Install MXNet-Neuron and Neuron-Runtime
@@ -92,6 +92,7 @@ Steps Overview:
 ```python
 import mxnet as mx
 import numpy as np
+
 path='http://data.mxnet.io/models/imagenet/'
 mx.test_utils.download(path+'resnet/50-layers/resnet-50-0000.params')
 mx.test_utils.download(path+'resnet/50-layers/resnet-50-symbol.json')
@@ -131,7 +132,7 @@ softmax = mx.nd.random_normal(shape=(1,))
 args['softmax_label'] = softmax
 args['data'] = img
 
- # Inferentia context
+# Inferentia context
 ctx = mx.neuron()
 
 exe = sym.bind(ctx=ctx, args=args, aux_states=aux, grad_req='null')

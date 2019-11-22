@@ -17,7 +17,7 @@ Steps Overview:
 1.2. Select and start an EC2 instance of your choice (see https://aws.amazon.com/ec2/instance-types/) to compile
     1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
     2. If you would like to compile and infer on the same machine, please select inf1.6xlarge
-    
+
 1.3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
 
 ## Step 2: Install Neuron
@@ -89,9 +89,8 @@ pip install tensorflow-neuron
 ## Step 3: Run Example
 
 Steps Overview:
-1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models. 
+1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
 2. Run inference on Inf1 with an example input.
-
 
 3.1. Create a python script named `compile_resnet50.py` with the following content:
 ```python
@@ -131,7 +130,7 @@ tfn.saved_model.compile(model_dir, compiled_model_dir)
  # Prepare SavedModel for uploading to Inf1 instance
 shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
 ```
-3.2. Run the compilation, which will take a few minutes on c5.4xlarge. The SavedModel is zipped as `resnet50_neuron.zip` in local directory:
+3.2. Run the compilation script, which will take a few minutes on c5.4xlarge. At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.zip` in local directory:
 ```bash
 python compile_resnet50.py
 ```
@@ -157,21 +156,21 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
 
- # Create input from image
+# Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
 img_arr = image.img_to_array(img_sgl)
 img_arr2 = np.expand_dims(img_arr, axis=0)
 img_arr3 = resnet50.preprocess_input(img_arr2)
 
- # Load model
+# Load model
 COMPILED_MODEL_DIR = './resnet50_neuron/'
 predictor_inferentia = tf.contrib.predictor.from_saved_model(COMPILED_MODEL_DIR)
 
- # Run inference
+# Run inference
 model_feed_dict={'input': img_arr3}
 infa_rslts = predictor_inferentia(model_feed_dict);
 
- # Display results
+# Display results
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
