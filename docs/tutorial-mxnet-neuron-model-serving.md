@@ -1,18 +1,22 @@
 # Tutorial: MXNet-Neuron Model Serving
 
-The Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/mxnet-model-server/tree/master/examples/mxnet_vision. Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed [link to Tutorial MXNet] and Neuron RTD is running with default settings (see Getting Started guide[TODO ADD LINK]) .
+The Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/mxnet-model-server/tree/master/examples/mxnet_vision.
+
+Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed (see https://github.com/aws/aws-neuron-sdk/blob/master/docs/tutorial-mxnet-neuron-compile-infer.md#step-2-install-neuron) and Neuron RTD is running with default settings (see https://github.com/aws/aws-neuron-sdk/blob/master/docs/getting-started-neuron-rtd.md) .
 
 
-1. First, install mxnet-model-server, download the example code, and download the pre-trained SqueezeNet model:
+1. First, install Java runtime and mxnet-model-server and download the example code:
 
 ```bash
 cd ~/
+# sudo yum -y install -q jre # for AML2
+sudo apt-get install -y -q default-jre  # for Ubuntu
 pip install mxnet-model-server
 git clone https://github.com/awslabs/mxnet-model-server
 cd ~/mxnet-model-server/examples/mxnet_vision
 ```
 
-2. Compile model to Inferentia target by saving the following Python script to compile_resnet50.py and run “`python compile_resnet50.py`”
+2. Compile ResNet50 model to Inferentia target by saving the following Python script to compile_resnet50.py and run “`python compile_resnet50.py`”
 
 ```python
 import mxnet as mx
