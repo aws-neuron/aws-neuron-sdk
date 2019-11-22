@@ -1,6 +1,6 @@
-# Neuron Data Parallel TensorFlow Serving
+# Using NeuronCore Group with TensorFlow Serving
 
-TensorFlow Serving is a serving system that allows customers to scale-up inference across a network. Neuron TensorFlow Serving uses the same API as normal TensorFlow Serving. The only differences are that the saved model must be compiled for Inferentia and the entry point is a different binary named `tensorflow_model_server_neuron`. The binary is found at `/usr/local/bin/tensorflow_model_server_neuron` and is pre-installed in the DLAMI or installed with APT/YUM tensorflow-model-server-neuron package.
+TensorFlow serving allows customers to scale-up inference workloads across a network. Neuron TensorFlow Serving uses the same API as normal TensorFlow Serving with two differences: (a) the saved model must be compiled for Inferentia and (b) the entry point is a different binary named `tensorflow_model_server_neuron`. The binary is found at `/usr/local/bin/tensorflow_model_server_neuron` and is pre-installed in the DLAMI or installed with APT/YUM tensorflow-model-server-neuron package.
 
 ## Installing tensorflow model server
 The configuration of your version of Linux will determine the correct settings - see this [link](./guide-repo-config.md).
@@ -36,7 +36,6 @@ neuron_modeldir = "/home/ubuntu/resnet50_inf1/1"
 tf.neuron.saved_model.compile(modeldir, neuron_modeldir, batch_size=1)
 ```
 
-After model is exported to saved model, user can serve the model by following instructions below.
 
 ## Serving Saved Model
 
