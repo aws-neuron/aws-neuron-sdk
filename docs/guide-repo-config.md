@@ -93,7 +93,6 @@ conda config --add channels https://conda.repos.neuron.amazonzaws.com
 
 conda install mxnet-neuron
 conda install tensorflow-neuron
-conda install torch-neuron
 ```
 
 To verify the packages before install (using tensorflow-neuron as an example):
