@@ -22,7 +22,7 @@ as shown below.
 Both containers are made available over ECR repositories and can be used
 directly. Customers may also build their own using neuron packages.
 
-Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest]()
+Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest]()
 
 DL framework containers:  [https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html]()
 
@@ -103,14 +103,14 @@ https://docs.docker.com/get-started/
 #### Step 4: Run neuron-rtd container:
 
 You can choose to build your own neuron-rtd image as shown in Appendix A, or just use:
-790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
+790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest
 
 Run neuron-rtd. A volume must be mounted to :/sock where neuron-rtd will open a UDS socket. Framework can interact with runtime using this socket.
 
 ```bash
 $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 790709498068)
-docker pull 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
-docker tag 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest neuron-rtd
+docker pull 790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest
+docker tag 790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest neuron-rtd
 mkdir /tmp/neuron_rtd_sock/
 docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
 ```
@@ -168,10 +168,10 @@ ENV MODEL_BASE_PATH=/models \
 
 RUN echo $'[neuron] \n\
 name=Neuron YUM Repository \n\
-baseurl=https://yum.repos.neuron.amazonaws.com \n\
+baseurl=https://yum.repos.neuron.amazonzaws.com \n\
 enabled=1' > /etc/yum.repos.d/neuron.repo
 
-RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+RUN rpm --import https://yum.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
 RUN yum install -y tensorflow-model-server-neuron
 RUN mkdir -p $MODEL_BASE_PATH
@@ -189,7 +189,7 @@ docker build . -t tensorflow-model-server-neuron
 
 
 You can choose to build your own neuron-rtd image using the following example dockerfile, or just use:
-790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
+790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest
 
 To create your own, use the following example dockerfile:
 
@@ -202,10 +202,10 @@ FROM amazonlinux:2
 
 RUN echo $'[neuron] \n\
 name=Neuron YUM Repository \n\
-baseurl=https://yum.repos.neuron.amazonaws.com \n\
+baseurl=https://yum.repos.neuron.amazonzaws.com \n\
 enabled=1' > /etc/yum.repos.d/neuron.repo
 
-RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+RUN rpm --import https://yum.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
 RUN yum install -y aws-neuron-tools
 RUN yum install -y aws-neuron-runtime
