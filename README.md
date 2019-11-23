@@ -53,7 +53,7 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 * [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer.md)
 * [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer-data-parallel.md)
 * [Tutorial: MXNet-Neuron and Neuron Compiler](./docs/tutorial-mxnet-neuron-compile-infer.md)
-* [Guide: MXNet-Neuron Python API](./docs/api-mxnet-neuron-compilation-python-api.md)
+* [Reference: MXNet-Neuron Python API](./docs/api-mxnet-neuron-compilation-python-api.md)
 * [Tutorial: MXNet-Neuron Model Server](./docs/tutorial-mxnet-neuron-model-serving.md)
 * [Tutorial: Tensorflow Model Server](./docs/tutorial-tensorflow-serving.md)
 * [Tutorial: Data Parallel Tensorflow Model Server](./docs/tutorial-tensorflow-serving-data-parallel.md) 
