@@ -57,6 +57,8 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 * [Tutorial: MXNet-Neuron Model Server](./docs/tutorial-mxnet-neuron-model-serving.md)
 * [Tutorial: Tensorflow Model Server](./docs/tutorial-tensorflow-serving.md)
 * [Tutorial: Data Parallel Tensorflow Model Server](./docs/tutorial-tensorflow-serving-data-parallel.md) 
+* [Tutorial: MXNet Configurations of NeuronCore Groups](./docs/tutorial-mxnet-neuroncore-groups.md
+)
 
 
 ## Debugging, Profiling and other tools:
