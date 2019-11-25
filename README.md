@@ -50,16 +50,20 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 
 ## Start Using one of the supported frameworks:
 
+### TensorFlow-Neuron:
 * [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer.md)
 * [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer-data-parallel.md)
+* [Reference: TensorFlow-Neuron Compilation API](./docs/api-tensorflow-neuron-compilation-python-api.md)
+* [Tutorial: Tensorflow Model Server](./docs/tutorial-tensorflow-serving.md)
+* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tutorial-tensorflow-serving-data-parallel.md) 
+
+
+### MXNet-Neuron:
 * [Tutorial: MXNet-Neuron and Neuron Compiler](./docs/tutorial-mxnet-neuron-compile-infer.md)
 * [Reference: MXNet-Neuron Python API](./docs/api-mxnet-neuron-compilation-python-api.md)
 * [Tutorial: MXNet-Neuron Model Server](./docs/tutorial-mxnet-neuron-model-serving.md)
-* [Tutorial: Tensorflow Model Server](./docs/tutorial-tensorflow-serving.md)
-* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tutorial-tensorflow-serving-data-parallel.md) 
 * [Tutorial: MXNet Configurations of NeuronCore Groups](./docs/tutorial-mxnet-neuroncore-groups.md
 )
-
 
 ## Debugging, Profiling and other tools:
 * [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
