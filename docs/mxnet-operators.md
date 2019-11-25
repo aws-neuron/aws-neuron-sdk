@@ -20,14 +20,14 @@
  * SliceChannel
  * Softmax
  * UpSampling
- * __add_scalar__
- * __div_scalar__
- * __mul_scalar__
- * __pow_scalar__
- * __rdiv_scalar__
- * __rpow_scalar__
- * __rsub_scalar__
- * __sub_scalar__
+ * \__add_scalar__
+ * \__div_scalar__
+ * \__mul_scalar__
+ * \__pow_scalar__
+ * \__rdiv_scalar__
+ * \__rpow_scalar__
+ * \__rsub_scalar__
+ * \__sub_scalar__
  * _arange
  * _copy
  * _div_scalar
