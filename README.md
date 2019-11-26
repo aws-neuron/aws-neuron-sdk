@@ -20,7 +20,7 @@ Since Neuron is pre-integrated with popular frameworks, it can be easily incorpo
 
 Since ML models constantly evolve, we’ve designed AWS Neuron to give builders of ML solutions a future-proof development environment, utilizing an ahead-of-time compiler that ensures Neuron will optimally utilize the hardware when new operators and neural-net models are developed.
 
-Once a model is trained to the required accuracy, the model should be compiled to an optimized binary form, referred to as a Neuron Executable File Format (NEFF), which is in turn loaded by the Neuron runtime to execute inference input requests on Inferentia chips. The compilation step may be performed on any EC2 instance or on-premises. We recommend using a high-performance compute server of choice (C/M/R/Z instance types), for the fastest compile times and ease-of-use with a prebuilt DLAMI. Developers can also install Neuron in their own environments; this approach may work well for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet. More details [here](./docs/getting-started-neuron-rtd.md)
+Once a model is trained to the required accuracy, the model should be compiled to an optimized binary form, referred to as a Neuron Executable File Format (NEFF), which is in turn loaded by the Neuron runtime to execute inference input requests on Inferentia chips. The compilation step may be performed on any EC2 instance or on-premises. We recommend using a high-performance compute server of choice (C/M/R/Z instance types), for the fastest compile times and ease-of-use with a prebuilt DLAMI. Developers can also install Neuron in their own environments; this approach may work well for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet. More details [here](./docs/neuron-runtime/getting-started.md)
 
 ### Deployment 
 
@@ -31,7 +31,7 @@ Neuron also enables developers to assign different models to separate NeuronCore
 
 ### Profiling and debugging
 
-Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a tensorboard plugin you can inspect and profile graphs execution. For more details refer to: [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
+Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a tensorboard plugin you can inspect and profile graphs execution. For more details refer to: [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
 
 
 # Getting started and More Information:
@@ -65,31 +65,31 @@ conda update tensorflow-neuron
 
 
 ## Neuron Runtime
-* [Neuron Runtime Getting Started](./docs/getting-started-neuron-rtd.md)
-* [Tutorial: Advanced Neuron Runtime Configurations](./docs/tutorial-advanced-neuron-rtd-configs.md)
-* [Tutorial: Container Configurations for Neuron Runtime](./docs/tutorial-containers-neuron-rtd.md)
+* [Neuron Runtime Getting Started](./docs/neuron-runtime/getting-started.md)
+* [Tutorial: Advanced Neuron Runtime Configurations](./docs/neuron-runtime/tutorial-advanced-configs.md)
+* [Tutorial: Container Configurations for Neuron Runtime](./docs/neuron-runtime/tutorial-containers.md)
 
 
 ## Start Using one of the supported frameworks:
 
 ### TensorFlow-Neuron:
-* [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer.md)
-* [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tutorial-tensorflow-neuron-compile-infer-data-parallel.md)
-* [Reference: TensorFlow-Neuron Compilation API](./docs/api-tensorflow-neuron-compilation-python-api.md)
-* [Tutorial: Tensorflow Model Server](./docs/tutorial-tensorflow-serving.md)
-* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tutorial-tensorflow-serving-data-parallel.md) 
-* [Appendix: Supported Operators](./docs/tensorflow-operators.md)
+* [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-compile-infer.md)
+* [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-tensorflow-neuron-compile-infer-data-parallel.md)
+* [Reference: TensorFlow-Neuron Compilation API](./docs/tensorflow-neuron/api-compilation-python-api.md)
+* [Tutorial: Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving.md)
+* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving-data-parallel.md) 
+* [Appendix: Supported Operators](./docs/tensorflow-neuron/tensorflow-operators.md)
 
 ### MXNet-Neuron:
-* [Tutorial: MXNet-Neuron and Neuron Compiler](./docs/tutorial-mxnet-neuron-compile-infer.md)
-* [Reference: MXNet-Neuron Python API](./docs/api-mxnet-neuron-compilation-python-api.md)
-* [Tutorial: MXNet-Neuron Model Server](./docs/tutorial-mxnet-neuron-model-serving.md)
-* [Tutorial: MXNet Configurations of NeuronCore Groups](./docs/tutorial-mxnet-neuroncore-groups.md)
-* [Appendix: Supported Operators](./docs/mxnet-operators.md)
+* [Tutorial: MXNet-Neuron and Neuron Compiler](./docs/mxnet-neuron/tutorial-compile-infer.md)
+* [Reference: MXNet-Neuron Python API](./docs/mxnet-neuron/api-compilation-python-api.md)
+* [Tutorial: MXNet-Neuron Model Server](./docs/mxnet-neuron/tutorial-model-serving.md)
+* [Tutorial: MXNet Configurations of NeuronCore Groups](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
+* [Appendix: Supported Operators](./docs/mxnet-neuron/mxnet-operators.md)
 
 ## Debugging, Profiling and other tools:
-* [Getting started: Neuron Tensorboard profiling](./docs/getting-started-tensorboard-neuron.md)
-* [Tutorial: Neuron utilities](./docs/tutorial-advanced-neuron-operational-tools.md)
+* [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
+* [Tutorial: Neuron utilities](./docs/neuron-tools/tutorial-neuron-tools.md)
 
 
 
