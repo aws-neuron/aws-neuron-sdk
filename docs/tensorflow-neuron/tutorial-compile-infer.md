@@ -1,22 +1,20 @@
-# Tutorial: Using TensorFlow-Neuron and the Neuron Compiler with Resnet50
+# Tutorial: Using Neuron to run Resnet50 inference
 
 ## Steps Overview:
 
-1. Launch an EC2 instance for compilation  and/or Infernence
+1. Launch an EC2 instance for compilation and/or Infernence
 2. Install Neuron for Compiler and Runtime execution
 3. Run example
 
 ## Step 1: Launch EC2 Instance(s)
 
-A typical workflow with the Neuron SDK will be for a previously trained ML model to be compiled on a compilation server and then the artifacts distributed to Inf1 instances for execution. Neuron enables TensorFlow to be used for all of these steps.
-
-Steps Overview:
+A typical workflow with the Neuron SDK will be to compile a trained ML model on a compilation server and then the distribute the artifacts to Inf1 instances for execution.
 
 1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
 
-1.2. Select and start an EC2 instance of your choice (see https://aws.amazon.com/ec2/instance-types/) to compile
+1.2. Select and start an EC2 instance of your choice to compile
     1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
-    2. If you would like to compile and infer on the same machine, please select inf1.6xlarge
+    2. If you would like to compile and run inference on the same machine, please select inf1.6xlarge or larger
 
 1.3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
 
@@ -86,7 +84,7 @@ pip install tensorflow-neuron
 1. Same as above to install Tensorflow Neuron.
 2. To install Runtime, see [This link](./getting-started-neuron-rtd.md).
 
-## Step 3: Run Example
+## Step 3: Run Inference
 
 Steps Overview:
 1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
