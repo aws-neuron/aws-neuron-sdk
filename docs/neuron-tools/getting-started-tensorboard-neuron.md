@@ -82,11 +82,11 @@ See the above section Visualizing data with TensorBoard-Neuron.
 ### Step 3: select “Neuron Compatibility“
 
 In the navigation pane on the left, under the “Color” section, select “Neuron Compatibility.”
-![image](../docs/images/tb-img1.png)
+![image](../images/tb-img1.png)
 ### Step 4: View compatible operators
 
 Now, the graph should be colored red and/or green.  Green indicates that an operator that is compatible with Neuron devices, while red indicates that the operator is currently not supported.  If there are unsupported operators, all of these operators’ names will be listed under the “Incompatible Operations” section.
-![image](../docs/images/tb-img2.png)
+![image](../images/tb-img2.png)
 ## How to: Visualize graphs run on a Neuron device
 
 After successfully analyzing the profiled run on a Neuron device, you can launch TensorBoard-Neuron to view the graph and see how much time each operator is taking.
@@ -102,11 +102,11 @@ See the above section Visualizing data with TensorBoard-Neuron
 ### Step 3: select the “Neuron_profile” tag
 
 The “neuron_profile” tag contains timing information regarding the inference you profiled.
-![image](../docs/images/tb-img3.png)
+![image](../images/tb-img3.png)
 ### Step 4: select “Compute Time”
 
 In the navigation pane on the left, under the “Color” section, select “Compute time.”
-![image](../docs/images/tb-img4.png)
+![image](../images/tb-img4.png)
 ### Step 5: View time taken by various layers
 
 This view will show time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used.  Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
@@ -126,12 +126,12 @@ See the above section Visualizing data with TensorBoard-Neuron
 ### Step 3: Select the “Neuron Profile” plugin
 
 On the navigation bar at the top of the page, there will be a list of active plugins.  In this case, you will need to use the “Neuron Profile” plugin.
-![image](../docs/images/tb-img6.png)The plugin may take a while to register on first load.  If this tab does not show initially, please refresh the page.
+![image](../images/tb-img6.png)The plugin may take a while to register on first load.  If this tab does not show initially, please refresh the page.
 
 ### Step 4a: the profile overview
 
 The first page you will land on in the Neuron Profile plugin is the overview page.  It contains various information regarding the inference.
-![image](../docs/images/tb-img7.png)
+![image](../images/tb-img7.png)
 In the “Performance Summary” section, you will see execution stats, such as the total execution time, the average layer execution time, and the utilization of NeuronMatrix Units.
 
 The “Neuron Time Graph” shows how long a portion of the graph (a NeuronOp) took to execute.
@@ -147,7 +147,7 @@ Finally, the “Recommendation for Next Steps” section gives helpful pointers 
 In the “Tools” dropdown menu, select “op_profile.”
 
 The “op profile” tool displays the percentage of overall time taken for each operator, sorted by the most expensive operators at the top.  It gives a better understanding of where the bottlenecks in a model may be.
-![image](../docs/images/tb-img8.png)
+![image](../images/tb-img8.png)
 
 ### Step 4c: Chrome trace
 
@@ -156,7 +156,7 @@ In the “Tools” dropdown menu, select “trace_viewer.”
 For developers wanting to better understand the timeline of the inference, the Chrome trace view is the tool for you.  It shows the history of execution organized by the operator names.
 
 Please note that this tool can only be used in Chrome browsers.
-![image](../docs/images/tb-img9.png)
+![image](../images/tb-img9.png)
 
 ## How to: Debug an inference
 
@@ -198,20 +198,20 @@ After adding these modifications, run the script to begin inference.  The execut
 ### Step 3: Select the “debugger” plugin
 
 On the navigation bar at the top of the page, there will be a list of active plugins.  In this case, you will need to use the “Debugger” plugin.
-![image](../docs/images/tb-img10.png)
+![image](../images/tb-img10.png)
 ### Step 4: Enable watchpoints
 
 In the “Runtime Node List” on the left, there will be a list of operators and a checkbox next to each.  Select all of the operators that you would like the view the tensor output of.
-![image](../docs/images/tb-img11.png)
+![image](../images/tb-img11.png)
 ### step 5: execute inference
 
 On the bottom left of the page, there will be a “Continue...” button that will resume the inference execution.  As the graph is executed, output tensors will be saved for later viewing.
 
-![image](../docs/images/tb-img12.png)
+![image](../images/tb-img12.png)
 
 ### Step 6: View tensors
 
 At the bottom of the page, there will be a“Tensor Value Overview” section that shows a summary of all the output tensors that were selected as watchpoints in Step 4.
-![image](../docs/images/tb-img13.png)
+![image](../images/tb-img13.png)
 To view more specific information on a tensor, you can click on a tensor’s value.  You may also hover over the bar in the “Health Pill” column for a more detailed summary of values.
-![image](../docs/images/tb-img14.png)
+![image](../images/tb-img14.png)
