@@ -1,8 +1,8 @@
-# User Guide: Configuring Linux for Repository Updates
+# User Guide: Configuring Linux for repository updates
 
-Each of the package managers (apt, yum, pip, conda) must be configured for each of the repositories so updates and installation can be done from them. Each Linux variant is slightly different.
+The following package managers: apt, yum, pip, and conda must be configured so updates and installation can be done from them. Each Linux variant is slightly different.
 
-This guide provides an overview of the settings for each variant and shows example use for Neuron packages.
+This short reference guide provides the needed settings for each variant and shows an example for Neuron packages.
 
 ## AWS Deep Learning AMIs (DLAMI) or Deep Learning Containers Images
 
