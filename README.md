@@ -66,7 +66,6 @@ conda update tensorflow-neuron
 
 ## Neuron Runtime
 * [Neuron Runtime Getting Started](./docs/neuron-runtime/getting-started.md)
-* [Tutorial: Advanced Neuron Runtime Configurations](./docs/neuron-runtime/tutorial-advanced-configs.md)
 * [Tutorial: Container Configurations for Neuron Runtime](./docs/neuron-runtime/tutorial-containers.md)
 
 
