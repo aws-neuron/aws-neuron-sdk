@@ -36,40 +36,45 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
 
 # Getting started and more information:
 
+## Installing Neuron
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. To use AMI/Containers these documents may help.
 
-## DLAMI
+### DLAMI
 
 * [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html)
 
-When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. It is suggested strongly that the yum/apt repos are updated and the conda packages are updated:
+When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. We strongly suggest that you update the repos and the conda packages as a first step after running the DLAMI:
 
-### Ubuntu:
+#### Ubuntu:
 ```bash
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
-### Amazon Linux:
+#### Amazon Linux:
 ```bash
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
-### Conda: 
+#### Conda: 
 
 ```bash
 conda update mxnet-neuron
 conda update tensorflow-neuron
 ```
-## DL Containers
+### DL Containers
 Inferentia support for * [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. You can configure ECS to run on Inf1 by following these instructions [TODO](./).
 
-## Install Neuron in your own AMI
+### Install Neuron in your own AMI
 You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-configuring-linux-for-repository-updates) if you already have an environment you'd like to continue using, or planning on running inference without a framework.
+
+
 
 ## Neuron Runtime
 * [Neuron Runtime Getting Started](./docs/neuron-runtime/readme.md)
 * [Tutorial: Container Configurations for Neuron Runtime](./docs/neuron-runtime/tutorial-containers.md)
+
+
 
 
 ## Start using one of the supported frameworks:
@@ -78,6 +83,7 @@ TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md)
  
 
 MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides useful pointers to install and use Neuron from within the MXNet framework.
+
 
 
 ## Debugging, profiling and other tools:
