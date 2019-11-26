@@ -22,7 +22,7 @@ A typical workflow with the Neuron SDK will be to compile a trained ML model on 
 
 ### Compiler Instance: Install Neuron Compiler and TensorFlow-Neuron
 
-On the instance you are going to use for compilation, you must have both the Neuron Compiler and the Tensorflow-Neuron installed. (The inference instance must have the Tensorflow-Neuron and the Neuron Runtime installed.)
+On the instance you are going to use for compilation, you must have both the Neuron compiler and the Tensorflow-Neuron installed. (The inference instance must have the Tensorflow-Neuron and the Neuron Runtime installed.)
 
 #### Using Virtualenv:
 
@@ -82,7 +82,7 @@ pip install tensorflow-neuron
 ### Inference Instance: Install Tensorflow-Neuron and Neuron-Runtime
 
 1. Same as above to install Tensorflow Neuron.
-2. To install Runtime, see [This link](./getting-started-neuron-rtd.md).
+2. To install Runtime, refer to the [getting started](./../neuron-runtime/readme.md) runtime guide.
 
 ## Step 3: Run Inference
 
