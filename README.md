@@ -71,20 +71,17 @@ conda update tensorflow-neuron
 
 ## Start Using one of the supported frameworks:
 
-### TensorFlow-Neuron:
-* [Tutorial: Using Neuron to run Resnet50 inference](./docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md)
-* [Reference: TensorFlow-Neuron Compilation API](./docs/tensorflow-neuron/api-compilation-python-api.md)
-* [Tutorial: Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving.md)
-* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving-NeuronCore-Group.md) 
-* [Appendix: Supported Operators](./docs/tensorflow-neuron/tensorflow-operators.md)
+TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md) provides useful pointers to install and use Neuron from within the TensorFlow framework.
+ 
 
-### MXNet-Neuron:
+MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides useful pointers to install and use Neuron from within the MXNet framework.
+ 
 * [Tutorial: MXNet-Neuron and Neuron Compiler](./docs/mxnet-neuron/tutorial-compile-infer.md)
 * [Reference: MXNet-Neuron Python API](./docs/mxnet-neuron/api-compilation-python-api.md)
 * [Tutorial: MXNet-Neuron Model Server](./docs/mxnet-neuron/tutorial-model-serving.md)
 * [Tutorial: MXNet Configurations of NeuronCore Groups](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
 * [Appendix: Supported Operators](./docs/mxnet-neuron/mxnet-operators.md)
+
 
 ## Debugging, Profiling and other tools:
 * [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
