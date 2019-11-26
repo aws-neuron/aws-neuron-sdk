@@ -81,16 +81,18 @@ sudo yum install aws-neuron-tools
 The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired. 
 
 
+#Common workflows
+
 The following section provides steps to configure one or more Neuron-RTD to manage different workloads within the same instance.
 
-# Single Neuron-RTD
+## Single Neuron-RTD
 
 The default configuration sets up a single Neuron-RTD daemon for all present Neuron devices in the instance.
 With the default configuration:
 1. Runtime API server listens on a single UDS endpoint `unix:/run/neuron.sock`
 2. A single runtime daemon(multi threaded) handles all the inference requests.
 
-# Multiple Neuron-RTD
+## Multiple Neuron-RTD
 Multiple runtime daemon might be preferred in some cases for isolation or for load balancing.
 The following steps explains configuring 4 Neuron-RTD on a Inf1.6xl instance and let each daemon to manage 1 Neuron device.
 When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint (UDP or TCP port) and logical device id it should manage.
