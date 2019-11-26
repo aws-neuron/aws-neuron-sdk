@@ -38,6 +38,8 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
 
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. To use AMI/Containers these documents may help.
 
+## DLAMI
+
 * [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html)
 
 When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. It is suggested strongly that the yum/apt repos are updated and the conda packages are updated:
@@ -59,11 +61,11 @@ sudo yum install aws-neuron-tools
 conda update mxnet-neuron
 conda update tensorflow-neuron
 ```
+## DL Containers
+Inferentia support for * [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. You can configure ECS to run on Inf1 by following these instructions [TODO](./).
 
-* [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
-* [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-configuring-linux-for-repository-updates)
-
-
+## Install Neuron in your own AMI
+You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-configuring-linux-for-repository-updates) if you already have an environment you'd like to continue using, or planning on running inference without a framework.
 
 ## Neuron Runtime
 * [Neuron Runtime Getting Started](./docs/neuron-runtime/readme.md)
