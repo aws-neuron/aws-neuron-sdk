@@ -1,4 +1,4 @@
-## Appendix: Supported MxNet Operators
+## Appendix: Supported Neuron MXNet operators
 
 *The follow list contains operators that are candidates for optimization by the AWS Neuron SDK.*
 
