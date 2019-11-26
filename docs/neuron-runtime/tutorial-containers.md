@@ -3,7 +3,7 @@
 ##  Prerequisite
    1 x Inferentia with 1 x Docker containers (1 for each Neuron-RTD, 1 Neuron-RTD per Inferentia)
 
-  [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./getting-started-neuron-rtd.md)
+  [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./readme.md)
 
   Appendix A: building your own tensorflow-model-server-neuron image
 
