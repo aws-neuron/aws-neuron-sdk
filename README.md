@@ -12,7 +12,7 @@ AWS Neuron is a software development kit (SDK) enabling high-performance deep le
 Neuron is pre-integrated into popular machine learning frameworks like TensorFlow, MXNet and Pytorch to provide a seamless training-to-inference workflow. It includes a compiler, runtime library, as well as debug and profiling utilities with a TensorBoard plugin for visualization. In most cases developers will only have to change a few lines of code to use Neuron from within a framework. Developers can integrate Neuron to their own custom frameworks/environments as well.
 
 
-### Neuron Developer Flow
+### Neuron developer flow
 
 Since Neuron is pre-integrated with popular frameworks, it can be easily incorporated into modern applications to provide high-performance inference predictions. Neuron is built to enable the above steps to be done from within an ML framework with the addition of the compilation step and load the model. Neuron allows customers to keep training in 32-bit floating point for best accuracy and auto-convert the 32-bit trained model to run at speed of 16-bit using bfloat16 model.
 
@@ -34,7 +34,7 @@ Neuron also enables developers to assign different models to separate NeuronCore
 Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a tensorboard plugin you can inspect and profile graphs execution. For more details refer to: [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
 
 
-# Getting started and More Information:
+# Getting started and more information:
 
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. To use AMI/Containers these documents may help.
 
@@ -69,7 +69,7 @@ conda update tensorflow-neuron
 * [Tutorial: Container Configurations for Neuron Runtime](./docs/neuron-runtime/tutorial-containers.md)
 
 
-## Start Using one of the supported frameworks:
+## Start using one of the supported frameworks:
 
 TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md) provides useful pointers to install and use Neuron from within the TensorFlow framework.
  
@@ -77,7 +77,7 @@ TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md)
 MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides useful pointers to install and use Neuron from within the MXNet framework.
 
 
-## Debugging, Profiling and other tools:
+## Debugging, profiling and other tools:
 * [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
 * [Tutorial: Neuron utilities](./docs/neuron-tools/tutorial-neuron-tools.md)
 
