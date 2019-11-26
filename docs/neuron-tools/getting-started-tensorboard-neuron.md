@@ -110,7 +110,7 @@ In the navigation pane on the left, under the “Color” section, select “Com
 ### Step 5: View time taken by various layers
 
 This view will show time taken by each layer and will be colored according to how much relative time the layer took to compute.  A lighter shade of red means that a relatively small portion of compute time was spent in this layer, while a darker red shows that more compute time was used.  Some layers may also be blank, which indicates that these layers may have been optimized out to improve inference performance.  Clicking on a node will show the compute time, if available.
-![image](../docs/images/tb-img5.png)
+![image](../images/tb-img5.png)
 ## How to: View detailed profile using the Neuron Profile plugin
 
 To get a better understanding of the profile, you can check out the Neuron Profile plugin.  Here, you will find more information on the inference, including an overview, a list of the most time-consuming operators (op profile tool), and an execution timeline view (Chrome trace).
