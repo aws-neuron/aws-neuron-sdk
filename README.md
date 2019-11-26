@@ -74,10 +74,10 @@ conda update tensorflow-neuron
 
 ### TensorFlow-Neuron:
 * [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-tensorflow-neuron-compile-infer-data-parallel.md)
+* [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md)
 * [Reference: TensorFlow-Neuron Compilation API](./docs/tensorflow-neuron/api-compilation-python-api.md)
 * [Tutorial: Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving.md)
-* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving-data-parallel.md) 
+* [Tutorial: Data Parallel Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving-NeuronCore-Group.md) 
 * [Appendix: Supported Operators](./docs/tensorflow-neuron/tensorflow-operators.md)
 
 ### MXNet-Neuron:
