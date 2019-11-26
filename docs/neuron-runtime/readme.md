@@ -1,4 +1,4 @@
-# Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance
+# Getting started:  Installing and Configuring Neuron-RTD
 
 In this getting started guide you will learn how to install Neuron into your own AMI of choice. To use a pre-built Deep Learning AMI, which includes all of the needed Neuron packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html
 
