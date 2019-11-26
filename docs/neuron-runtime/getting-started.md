@@ -81,7 +81,7 @@ sudo yum install aws-neuron-tools
 The default configuration sets up a single Neuron-RTD daemon for all present Inferentias in the instance. This can be modified if desired by configuring additional Neuron-RTD mappings to each set of Inferentia chips desired. 
 
 
-#Common workflows
+# Common workflows
 
 The following section provides steps to configure one or more Neuron-RTD to manage different workloads within the same instance.
 
