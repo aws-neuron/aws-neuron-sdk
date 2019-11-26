@@ -1,4 +1,4 @@
-# Tutorial: Enabling NeuronCore Group with 4 NeuronCores 
+# Tutorial: Configuring NeuronCore Groups
 In this tutorial you will learn how to enable a NeuronCore group running TensorFlow Resnet-50 model 
 
 ## Steps Overview:
