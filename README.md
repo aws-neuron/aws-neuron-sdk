@@ -42,6 +42,28 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 * [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
 * [Neuron Repository Package Manager Configurations](./docs/guide-repo-config.md)
 
+## DLAMI 
+When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. It is suggested strongly that the yum/apt repos are updated and the conda packages are updated:
+
+### Ubuntu:
+```bash
+sudo apt-get update
+sudo apt-get install aws-neuron-runtime
+sudo apt-get install aws-neuron-tools
+```
+### Amazon Linux:
+```bash
+sudo yum install aws-neuron-runtime
+sudo yum install aws-neuron-tools
+```
+### Conda: 
+
+```bash
+conda update mxnet-neuron
+conda update tensorflow-neuron
+```
+
+
 ## Neuron Runtime
 * [Neuron Runtime Getting Started](./docs/getting-started-neuron-rtd.md)
 * [Tutorial: Advanced Neuron Runtime Configurations](./docs/tutorial-advanced-neuron-rtd-configs.md)
