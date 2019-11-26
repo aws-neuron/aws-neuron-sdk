@@ -39,10 +39,7 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. To use AMI/Containers these documents may help.
 
 * [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html)
-* [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
-* [Neuron Repository Package Manager Configurations](./docs/guide-repo-config.md)
 
-## DLAMI 
 When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. It is suggested strongly that the yum/apt repos are updated and the conda packages are updated:
 
 ### Ubuntu:
@@ -62,6 +59,10 @@ sudo yum install aws-neuron-tools
 conda update mxnet-neuron
 conda update tensorflow-neuron
 ```
+
+* [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html)
+* [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-configuring-linux-for-repository-updates)
+
 
 
 ## Neuron Runtime
