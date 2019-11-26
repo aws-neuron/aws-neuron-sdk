@@ -72,7 +72,7 @@ conda update tensorflow-neuron
 ## Start Using one of the supported frameworks:
 
 ### TensorFlow-Neuron:
-* [Tutorial: Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-compile-infer.md)
+* [Tutorial: Using Neuron to run Resnet50 inference](./docs/tensorflow-neuron/tutorial-compile-infer.md)
 * [Tutorial: Data Parallel Tensorflow-Neuron and Neuron Compiler](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md)
 * [Reference: TensorFlow-Neuron Compilation API](./docs/tensorflow-neuron/api-compilation-python-api.md)
 * [Tutorial: Tensorflow Model Server](./docs/tensorflow-neuron/tutorial-tensorflow-serving.md)
