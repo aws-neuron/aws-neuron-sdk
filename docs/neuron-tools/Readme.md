@@ -22,7 +22,7 @@ The last two columns shows the connection to any other inferentia devices; since
 
 # Neuron Groups
 Multiple NeuronCores(NC) can be combined to form a NeuronCore Group (NCG).
-Neuron framework layer would automatically create a default NeuronCore Group.
+Neuron framework layer will automatically create a default NeuronCore Group.
 To view list of available NCGs the following command can be used.
 ```
 $ neuron-cli list-ncg
