@@ -86,7 +86,7 @@ pip install mxnet-neuron
 ### Inference Instance: Install MXNet-Neuron and Neuron-Runtime
 
 1. Same as above to install MXNet-Neuron
-2. To install Runtime, see [This link](https://github.com/aws/aws-neuron-sdk/blob/master/docs/getting-started-neuron-rtd.md)
+2. To install Runtime, see [getting started](./../neuron-runtime/readme.md) runtime document.
 
 ## Step 3: Run Example
 
