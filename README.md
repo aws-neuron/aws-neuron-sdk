@@ -86,7 +86,7 @@ MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides usef
 
 ## Debugging, profiling and other tools:
 * [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
-* [Tutorial: Neuron utilities](./docs/neuron-tools/tutorial-neuron-tools.md)
+* [Neuron utilities](./docs/neuron-tools/Readme.md)
 
 
 
