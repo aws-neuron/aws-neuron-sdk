@@ -8,3 +8,5 @@ Neuron runtime takes compiled models, also reffered to as Neuron Executable File
 The Neuron runtime is prebuilt is the AWS DLAMI, but developers can also install it in their own environments, which can be custom AMIs or containers. 
 
 Neuron runtime provides developers with the ability to control where is their model deployed to, and how the inferences are executed in the system. For example, using runtime commands developers can assign different models to separate NeuronCore Groups in a flexible and scalable way. This allows to run the same or multiple models in parallel. With NeuronCore Groups developers can maximize the hardware utilization by controlling the NeuronCore compute resources allocated to each NeuronCore Group to ensure it fits their specific application requirements.
+
+To get started read the Neuron runtime [Getting started](./nrt_start.md) guide, and to learn how to integrate it with containers, please refer to [configuring Neuron containers](./tutorial-containers.md) tutorial. 
