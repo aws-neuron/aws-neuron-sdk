@@ -58,11 +58,10 @@ neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --num-ne
 
 ## Options
 
-** ```<file names> ```**
+**```<file names> ```**
 Input containing model specification. The number of arguments required varies between frameworks:
 
-
-* **TENSORFLOW: **A local filename or URI of a Tensorflow Frozen GraphDef (.pb); or the name of a local directory containing a Tensorflow SavedModel.
+* **TENSORFLOW** A local filename or URI of a Tensorflow Frozen GraphDef (.pb); or the name of a local directory containing a Tensorflow SavedModel.
     
     See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/framework/graph.proto for the associated .proto schema for Tensorflow Frozen GraphDefs. See https://www.tensorflow.org/guide/saved_model for more information on the SavedModel format.
 * **MXNET** - List of local filenames or URIs where input architecture .json file and parameter .param file are stored. These contains information related to the architecture of your graph and associated parameters, respectively.
@@ -79,7 +78,7 @@ Compile for the given number of neuron cores so as to leverage Neuron Core Pipel
 **--output** (string) (default “out.neff”)
 Filename where compilation output (NEFF archive) will be recorded.
 
-**--io-config **(string) 
+**--io-config**(string) 
 Configuration containing the names and shape of input and output tensors.
 
 The io-config can be specified as a local filename, a URI, or a string containing the io-config itself.
@@ -108,6 +107,7 @@ Logs at levels “warn”, “error”, and “fatal” will be written to STDER
 ## EXIT STATUS
 
 **0** - Compilation succeeded
+
 **>0** - An error occurred during compilation.
 
 # neuron-cc list-operators
