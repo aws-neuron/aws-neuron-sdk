@@ -126,7 +126,7 @@ Returns a newline ('\n') separated list of operators supported by the AWS Infere
 * ** MXNET ** - Operator names will be formatted according to the value passed to the associated NNVM_REGISTER_OP(operator_name) macro. 
     
     See http://mxnet.incubator.apache.org/versions/master/faq/new_op.html for more details regarding operator registration in MxNet.
-* ** ONNX ** - 
+
 
 ## Example
 
