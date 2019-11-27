@@ -1,12 +1,10 @@
-# Reference Guide: Neuron Compiler CLI Options
+# Reference Guide: Neuron compiler CLI 
 
-This document defines the command line interface to the Neuron Compiler. The common use case is for 
-neuron-cc to be used from within the integrated framework (ie Tensorflow-neuron for example) and thus 
-these options are passed from the framework to neuron-cc. In some cases, using neuron-cc on the 
-command line may be desirable. Similarly, it is possible to supply these options to the framework as 
-options to be passed through to the compiler. See the individual framework guides for the correct syntax.
+This document describes the command line interface of the Neuron compiler. This reference is not relevant for applications that run neuron-cc from within a machine learning framework (Tensorflow-neuron for example) since these options are passed from the framework to neuron-cc. 
 
-The synopsis for each command shows its parameters and their usage. Optional parameters are shown in square brackets.
+Using neuron-cc on the command line may be desirable for applications that do not use a framework, or customize existing frameworks. It is also possible to supply CLI commands to the framework as options to be passed through to the compiler. 
+
+The synopsis for each command shows its parameters and their usage. Optional parameters are shown in square brackets. See the individual framework guides for the correct syntax. 
 
 
 ## Synopsis
@@ -19,6 +17,7 @@ neuron-cc [options] <command> [parameters]
 neuron-cc <command> --help for information on a specific command. 
 ```
 
+
 ## Common Options
 
 ```
@@ -29,6 +28,7 @@ neuron-cc <command> --help for information on a specific command.
 * INFO
 * WARN
 * ERROR
+
 
 ## Available Commands
 
