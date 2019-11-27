@@ -1,4 +1,4 @@
-# Neuron SDK readme
+# AWS Neuron  
 
 ## Table of Contents
 
