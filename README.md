@@ -71,7 +71,7 @@ You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-
 
 
 ## Using Neuron Runtime
-* [Neuron Runtime Getting Started](./docs/neuron-runtime/readme.md)
+* [Neuron Runtime Getting Started](./docs/neuron-runtime/nrt_start.md)
 * [Tutorial: Container Configurations for Neuron Runtime](./docs/neuron-runtime/tutorial-containers.md)
 
 
