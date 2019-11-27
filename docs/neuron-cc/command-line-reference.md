@@ -58,7 +58,7 @@ neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --num-ne
 
 ## Options
 
-** <file names> **
+** ```<file names> ```**
 Input containing model specification. The number of arguments required varies between frameworks:
 
 
@@ -111,7 +111,7 @@ Logs at levels “warn”, “error”, and “fatal” will be written to STDER
 **>0** - An error occurred during compilation.
 * * *
 
-# neuron-cc list-operators \
+# neuron-cc list-operators
 
 neuron-cc list-operators --framework <value>
 
@@ -120,14 +120,14 @@ neuron-cc list-operators --framework <value>
 Returns a newline ('\n') separated list of operators supported by the AWS Inferentia Neural Network Accelerator.
 
 
-* **TENSORFLOW** - Operators will be formatted according to the value passed to the associated REGISTER_OP(“OperatorName”) macro. 
+* ** TENSORFLOW ** - Operators will be formatted according to the value passed to the associated REGISTER_OP(“OperatorName”) macro. 
     
     See https://www.tensorflow.org/guide/extend/op#define_the_ops_interface for more information regarding operator registration in TensorFlow.
     
-* **MXNET** - Operator names will be formatted according to the value passed to the associated NNVM_REGISTER_OP(operator_name) macro. 
+* ** MXNET ** - Operator names will be formatted according to the value passed to the associated NNVM_REGISTER_OP(operator_name) macro. 
     
     See http://mxnet.incubator.apache.org/versions/master/faq/new_op.html for more details regarding operator registration in MxNet.
-* **ONNX** - 
+* ** ONNX ** - 
 
 ## EXAMPLE
 
