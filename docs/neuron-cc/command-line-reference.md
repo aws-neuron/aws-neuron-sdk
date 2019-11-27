@@ -151,6 +151,7 @@ Returns a newline ('\n') separated list of operators supported by the AWS Infere
 
 EXIT STATUS
 **0** - Call succeeded
-**>0** - An error occurred
+
+**> 0** - An error occurred
 
 
