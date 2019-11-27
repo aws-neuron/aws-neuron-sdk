@@ -58,7 +58,7 @@ neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --num-ne
 
 ## Options
 
-** <file names>
+** <file names> **
 Input containing model specification. The number of arguments required varies between frameworks:
 
 
