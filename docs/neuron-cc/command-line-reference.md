@@ -114,7 +114,7 @@ Logs at levels “warn”, “error”, and “fatal” will be written to STDER
 
 neuron-cc list-operators --framework <value>
 
-## DESCRIPTION
+## Description
 
 Returns a newline ('\n') separated list of operators supported by the AWS Inferentia Neural Network Accelerator.
 
@@ -128,14 +128,17 @@ Returns a newline ('\n') separated list of operators supported by the AWS Infere
     See http://mxnet.incubator.apache.org/versions/master/faq/new_op.html for more details regarding operator registration in MxNet.
 * ** ONNX ** - 
 
-## EXAMPLE
+## Example
 
->> neuron-cc list-operators —framework TENSORFLOW
+```
+neuron-cc list-operators —framework TENSORFLOW
 AddN
 AdjustContrastv2
 CheckNumbers
+::::::
+```
 
-## OPTIONS
+## Options
 
 **--framework** (string)
 Framework in which the operators were registered.  
