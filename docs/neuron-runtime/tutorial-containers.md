@@ -1,35 +1,21 @@
-# Tutorial: Container Configurations for Neuron-RTD on an Inf1 instance
-
-##  Prerequisite
-   1 x Inferentia with 1 x Docker containers (1 for each Neuron-RTD, 1 Neuron-RTD per Inferentia)
-
-  [Getting started:  Installing and Configuring Neuron-RTD on an Inf1 instance](./readme.md)
-
-  Appendix A: building your own tensorflow-model-server-neuron image
+# Tutorial: Container Configurations for Neuron-RTD
 
 ## Introduction
 
-In previous tutorials, we have used tensorflow serving to compile a model
-and run inferences. To do that, Neuron Runtime Daemon (Neuron-RTD) would
-be running in the background as a service, and tensorflow serving would
-use default socket to interact with neuron-rtd.
+In other tutorials, we used tensorflow serving to compile a model and run inference. To do that, Neuron runtime daemon (Neuron-RTD) would be running in the background as a service, and TensorFlow serving would use a default socket to interact with neuron-rtd.
 
-For containerized application, it is recommended that the neuron-rtd
-container is used. It is also recommended that framework-serving is ran
-in its own container. This is because neuron-rtd requires higher privileges
-as shown below.
+For containerized applications, it is recommended to use the neuron-rtd container. It is also recommended that framework-serving is ran in its own container because neuron-rtd requires higher privileges.
 
-Both containers are made available over ECR repositories and can be used
-directly. Customers may also build their own using neuron packages.
+Both containers are made available over ECR repositories and can be used directly. Customers may also build their own using Neuron packages.
 
-Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest]()
+[Neuron-rtd container](790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest)
 
-DL framework containers:  [https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html]()
+[DL framework containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html)
 
 
 ##  Steps:
 
-This will configure 1 Neuron-RTD per Inferentia and place each into its own Docker container.
+This example will configure a single Neuron-RTD per Inferentia and place each into its own Docker container.
 
 #### Step 1: install host base package
 
@@ -37,7 +23,7 @@ This will configure 1 Neuron-RTD per Inferentia and place each into its own Dock
 sudo apt-get install aws-neuron-runtime-base
 ```
 
-#### Step 2: Install oci-add-hooks depdency
+#### Step 2: install oci-add-hooks depdency
 
 ```bash
 sudo apt install -y golang && \
@@ -51,7 +37,7 @@ sudo apt install -y golang && \
 ```
 
 
-#### Step 3: Setup Docker to use oci-neuron runtime.
+#### Step 3: setup Docker to use oci-neuron runtime.
 
 Install dockerIO:
 
@@ -60,8 +46,7 @@ sudo apt install -y docker.io
 sudo usermod -aG docker $USER
 ```
 
-Logout and log back in to refresh membership.
-
+Logout and log back in to refresh membership. 
 Place daemon.json Docker configuration file in default location. This file specifies oci-add-hooks as default docker runtime:
 
 ```bash
@@ -100,10 +85,9 @@ https://docs.docker.com/get-started/
 ```
 
 
-#### Step 4: Run neuron-rtd container:
+#### Step 4: run neuron-rtd container:
 
-You can choose to build your own neuron-rtd image as shown in Appendix A, or just use:
-790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest
+You can choose to build your own neuron-rtd image as shown in Appendix A, or just use: 790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest
 
 Run neuron-rtd. A volume must be mounted to :/sock where neuron-rtd will open a UDS socket. Framework can interact with runtime using this socket.
 
@@ -116,11 +100,11 @@ docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/neur
 ```
 
 
-#### Step 5: Run framework serving image:
+#### Step 5: run framework serving image:
 
 Run tensorflow-model-server-neuron image:
 Guide:
-[Neuron TensorFlow Serving](./tutorial-tensorflow-serving.md)
+[Neuron TensorFlow Serving](./../tensorflow-neuron/tutorial-tensorflow-serving.md)
 
 In this step, we will use tensorflow-model-server-neuron image built in appendix A.
 
@@ -145,6 +129,8 @@ more models and fully utilize the instance.
 
 
 #### Step 6: Verify by running an inference!
+
+
 
 ## Appendix A: building your own tensorflow-model-server-neuron image
 
@@ -185,7 +171,7 @@ docker build . -t tensorflow-model-server-neuron
 ```
 
 
-## Appendix B: Optional: building your own neuron-rtd image
+## Appendix B: building your own neuron-rtd image
 
 
 You can choose to build your own neuron-rtd image using the following example dockerfile, or just use:
