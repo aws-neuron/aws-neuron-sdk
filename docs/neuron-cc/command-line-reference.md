@@ -109,7 +109,6 @@ Logs at levels “warn”, “error”, and “fatal” will be written to STDER
 
 **0** - Compilation succeeded
 **>0** - An error occurred during compilation.
-* * *
 
 # neuron-cc list-operators
 
@@ -149,7 +148,6 @@ Returns a newline ('\n') separated list of operators supported by the AWS Infere
 
 ## EXIT STATUS
 
-EXIT STATUS
 **0** - Call succeeded
 
 **> 0** - An error occurred
