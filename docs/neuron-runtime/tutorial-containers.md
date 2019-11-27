@@ -8,7 +8,7 @@ For containerized applications, it is recommended to use the neuron-rtd containe
 
 Both containers are made available over ECR repositories and can be used directly. Customers may also build their own using Neuron packages.
 
-[Neuron-rtd container](790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest)
+Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonzaws.com/neuron-rtd:latest]()
 
 [DL framework containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html)
 
