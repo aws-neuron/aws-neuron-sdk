@@ -26,7 +26,7 @@ install and use Neuron to compile and deploy your models to Inf1 instances to ru
 <a name="general"></a>
 ## General Neuron FAQs
 
-**Q: What ML models types and operators are supported by AWS Neuron? **
+**Q: What ML models types and operators are supported by AWS Neuron?**
 
 AWS Neuron includes a compiler that converts your trained machine learning model to Inferentia specific operators for execution. The Neuron compiler supports many commonly used machine learning models such as single shot detector (SSD) and ResNet for image recognition/classification, and Transformer and BERT for natural language processing and translation. Neuron operator support can be found in the release notes folder, and we plan to continue and grow the operator scope to allow data scientists to create new novel operator types to be supported by Inferentia. 
 
