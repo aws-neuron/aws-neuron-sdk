@@ -1,4 +1,4 @@
-# AWS Neuron: Frequently Asked Questions (WIP)
+# AWS Neuron: Frequently Asked Questions 
 
 [Getting Started FAQs](#getting-started)
 
