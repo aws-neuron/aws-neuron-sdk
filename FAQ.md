@@ -51,9 +51,6 @@ TODO For full details on TensorFlow interface support, please refer:  http://git
 TODO For full details on MXnet interface support, please refer:  http://github.com/aws/aws-mla/kaena/docs/mxnet_flow_interfaces.md.
 
 
-**Q: Performance is not what I expect it to be, what's the next step?**
-TODO
-
 **Q: How do I take advantage of Inferentia’s NeuronCore Pipeline capability to lower latency?**
 
 Inf1 instances with multiple Inferentia chips, such as Inf1.6xlarge or Inf1.24xlarge, support a fast chip-to-chip interconnect. Using the Neuron Processing Pipeline capability, you can split your model and load it to local cache memory across multiple chips. The Neuron compiler uses ahead-of-time (AOT) compilation technique to analyze the input model and compile it to fit across the on-chip memory of single or multiple Inferentia chips. Doing so enables the NeuronCores to have high-speed access to models and not require access to off-chip memory, keeping latency bounded while increasing the overall inference throughput. For more details, read the [TODO]().
@@ -99,8 +96,6 @@ TODO
 
 By default, a single runtime process will manage all assigned Inferentias, including running the Neuron Core Pipeline mode. In some cases, user can configure multiple KRT processes each managing a fraction of assigned Inferentias. TODO 
 
-**Q: How can I  debug / profile my inference request?**
-TODO
 
 **Q: Where can I get logging and other telemetry information?**
 TODO
@@ -119,7 +114,16 @@ TODO
 **Q: How can I take advantage of multiple TPBs and run multiple inferences in parallel?**
 TODO
 
+
+<a name="troubleshooting"></a>
+## Troubleshooting FAQs
+
+**Q: Performance is not what I expect it to be, what's the next step?**
+TODO
+
 **Q: do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
 TODO
 
+**Q: How can I  debug / profile my inference request?**
+TODO
 
