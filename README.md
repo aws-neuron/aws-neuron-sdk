@@ -1,3 +1,5 @@
+![neuron](./misc/images/Site-Merch_Neuron-ML-SDK_Editorial.png)
+
 # AWS Neuron  
 
 ## Table of Contents
