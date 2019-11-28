@@ -16,9 +16,10 @@
 
 **Q: How can I get started?**
 
-For customers who use popular frameworks like Tensorflow, MXNet and PyTorch AWS DLAMI or AWS DL Container 
-integrate the frameworks with Neuron, allowing execution of inferences from within the framework. A guide to help you get 
-started with frameworks is available at [TODO](). I you wish to deploy without a framework, you can install Neuron using pip 
+You can start your workflow by building and training your model in one of the popular ML frameworks using GPU compute instances such as P3 or P3dn. Once the model is trained to your required accuracy, you can use the ML framework’s API to invoke Neuron, a software development kit for Inferentia, to compile the model for execution on Inferentia, load it in to Inferentia’s memory and then execute inference calls. In order to get started quickly, you can use AWS Deep Learning AMIs (https://aws.amazon.com/machine-learning/amis/) that come pre-installed with ML frameworks and the Neuron SDK. For a fully managed experience you will be able to use Amazon SageMaker which will enable you to seamlessly deploy your trained models on Inf1 instances. 
+
+For customers who use popular frameworks like Tensorflow, MXNet and PyTorch a guide to help you get started with frameworks 
+is available at [TODO](). I you wish to deploy without a framework, you can install Neuron using pip 
 install and use Neuron to compile and deploy your models to Inf1 instances to run inference. More details on using Neuron without a framework are here [TODO]().
 
 
