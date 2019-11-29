@@ -68,8 +68,18 @@ sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
+## Step 3: Configure nr_hugepages
 
-## Step3 : Configure Neuron-RTD
+vm.nr_hugepages is a system wide configuration for managing huge size pages in memory in addition to the standard 4KB page size. This configuration is important for the Neuron Runtime because it's used for the input feature map and output feature map of all models. Run the following command to see the vm.nr_hugepages setting for your instance:
+
+```bash
+grep HugePages_Total /proc/meminfo | awk {'print $2'}
+```
+
+To adjust the number of hugepages used by the Neuron Runtime, update neuron-rtd.config paramter: num_hugepages_per_device; The default number is 128 2MB pages per Inferentia. Increase to the desired number, then restart neuron-rtd service. Make sure to update OS settings to have that many pages available as well.
+
+
+## Step 4: Configure Neuron-RTD
 You can choose your Neuron-RTD mode, either select to run a single instance of the Neuron runtime, or mutiple instances which may be desired to provide your application capabilities like isolation or load balancing.
 
 
