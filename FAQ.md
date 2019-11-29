@@ -88,6 +88,8 @@ The compiler and runtime are committed to maintaining compatibility for major ve
 **Q: I have a NEFF binary, how can I tell which compiler version generated it?**
 TODO
 
+**Q: How long does it take to compile?**
+TODO
 
 <a name="runtime"></a>
 ## Neuron runtime FAQs
