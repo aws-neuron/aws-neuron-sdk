@@ -15,4 +15,4 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 * [Tutorial: NeuronCore Groups with Tensorflow Model Server](./tutorial-tensorflow-serving-NeuronCore-Group.md) 
 
 * [Reference: TensorFlow-Neuron Compilation API](./api-compilation-python-api.md)
-* [Appendix: Supported Operators](./tensorflow-operators.md)
+* [Supported Operators](../../release-notes)
