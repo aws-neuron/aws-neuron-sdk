@@ -14,7 +14,7 @@ conda package mxnet-neuron=1.5.1.1.0.1260.0_1.0.298.0
 
 conta package tensorflow-neuron=1.15.0.1.0.663.0_1.0.298.0
 
-aws-neuron-runtime-base1.0.3657.0
+aws-neuron-runtime-base=1.0.3657.0
 
 aws-neuron-runtime=1.0.4109.0
 
