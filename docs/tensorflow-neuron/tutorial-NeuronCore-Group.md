@@ -1,5 +1,8 @@
 # Tutorial: Configuring NeuronCore Groups
-The NEURONCORE_GROUP_SIZES environment variable provides control over the hardware utilization mode of Neuron-integrated TensorFlow. By default, TensorFlow-Neuron will choose the optimal utilization mode based on model metadata, but in some cases manually setting NEURONCORE_GROUP_SIZES can provide additional performance benefits.
+
+A NeuronCore Group is a set of NeuronCores that are used to load and run compiled models. At any time, one model will be running in a NeuronCoreGroup. By changing to a different sized NeuonCoreGroup and then creating several of these NeuronCoreGroups, a user may create independent and parallel models running in the Inferentia. Additonally: within a NeuronCoreGroup, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another. By default, a single NeuronCoreGroup is created by Neuron Runtime that contains all 4 NeuronCores in an Inferentia. In this default case, when models are loaded to that default NeuronCoreGroup, only 1 will be running at any time. By configuring multiple NeuronCoreGroups as shown in this tutorial, multiple models may be made to run simultaenously.
+
+The NEURONCORE_GROUP_SIZES environment variable provides user control over this in Neuron-integrated TensorFlow. By default, TensorFlow-Neuron will choose the optimal utilization mode based on model metadata, but in some cases manually setting NEURONCORE_GROUP_SIZES can provide additional performance benefits.
 
 In this tutorial you will learn how to enable a NeuronCore group running TensorFlow Resnet-50 model
 
