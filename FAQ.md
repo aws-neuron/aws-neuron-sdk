@@ -81,6 +81,9 @@ The compiler compiles the input graph for a single NeuronCore by default.  Using
 **Q: Which operators does Neuron support?**
 TODO
 
+**Q: Any operators that Neuron doesn't support?**
+Models with control-flow and dynamic shapes are not supported. You will need to partition the model using the framework prior to compilation.TODO
+
 **Q: Will I need to recompile again if I updated runtime/driver version?**
 TODO
 The compiler and runtime are committed to maintaining compatibility for major version releases with each other. The versoning is defined as major.minor, with compatibility for all versions with the same major number. If the versions mismatch, an error notification is logged and the load will fail. This will then require the model to be recompiled.
