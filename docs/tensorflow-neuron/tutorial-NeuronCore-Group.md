@@ -62,7 +62,7 @@ By default, one Python process with tensorflow-neuron or one tensorflow_model_se
 
 When there is a need to allocate more Inferentia compute into a single process, the following example shows the usage:
 
-```
+```python
 # Run 16 ResNet50 models on inf1.6xlarge
 import os
 from concurrent import futures
@@ -102,13 +102,13 @@ As we mentioned in Scenario 1, each tensorflow-neuron/tensorflow_model_server_ne
 
 To circumvent this, we can set NEURONCORE_GROUP_SIZES=1, and execute 16 concurrent tensorflow-neuron processes, as demonstrated in the following example
 
-```
+```bash
 # infer16.sh -- run 16 Python processes with TensorFlow-Neuron
 export NEURONCORE_GROUP_SIZES=1
 for i in {1..16}; do python infer.py & done
 ```
 
-```
+```python
 # infer.py -- one Python process with TensorFlow-Neuron
 import os
 import numpy as np
