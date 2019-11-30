@@ -4,8 +4,8 @@
 
 ## Supported Operating Systems:
 
-Amazon Linux2
-Ubunut 16
+Amazon Linux 2
+Ubuntu 16
 Ubuntu 18
 
 ## Versions of Neuron packages included:
@@ -46,9 +46,8 @@ sudo yum install tensorflow-model-server-neuron
 
 *  Conda:
 ```bash
+source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
+source activate aws_neuron_tensorflow_p36
 conda update tensorflow-neuron
 ```
-
-
-

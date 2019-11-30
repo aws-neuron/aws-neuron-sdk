@@ -4,14 +4,19 @@ This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision s
 
 Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed (see [MXNet Tutorial](./tutorial-mxnet-neuron-compile-infer.md#step-2-install-neuron) ) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
 
+If using DLAMI and aws_neuron_mxnet_p36 environment, you can skip the installation part in the first step below.
 
-1. First, install Java runtime and mxnet-model-server and download the example code:
+1. First, install Java runtime and mxnet-model-server:
 
 ```bash
 cd ~/
 # sudo yum -y install -q jre # for AML2
 sudo apt-get install -y -q default-jre  # for Ubuntu
 pip install mxnet-model-server
+```
+
+Download the example code:
+```bash
 git clone https://github.com/awslabs/mxnet-model-server
 cd ~/mxnet-model-server/examples/mxnet_vision
 ```
@@ -97,9 +102,9 @@ model-archiver --force --model-name resnet-50_compiled --model-path mxnet_vision
 
 ```bash
 cd ~/mxnet-model-server/
-mxnet-model-server --start --model-store examples > /dev/null
+mxnet-model-server --start --model-store examples
 # Pipe to log file if you want to keep a log of MMS
-curl -v -X POST "http://localhost:8081/models?initial_workers=1&response_timeout=600&synchronous=true&url=resnet-50_compiled.mar"
+curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=4&synchronous=true&url=resnet-50_compiled.mar"
 sleep 10 # allow sufficient time to load model
 ```
 

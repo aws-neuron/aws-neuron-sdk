@@ -2,7 +2,9 @@
 
 TensorFlow Serving is a serving system that allows customers to scale-up inference across a network. Neuron TensorFlow Serving uses the same API as normal TensorFlow Serving. The only differences are that the saved model must be compiled for Inferentia and the entry point is a different binary named `tensorflow_model_server_neuron`. The binary is found at `/usr/local/bin/tensorflow_model_server_neuron` and is pre-installed in the DLAMI or installed with APT/YUM tensorflow-model-server-neuron package.
 
-## Installing tensorflow model server
+If using DLAMI and aws_neuron_tensorflow_p36 environment, you can skip the installation step below.
+
+## Install TensorFlow Model Server and Serving API
 The configuration of your version of Linux will determine the correct settings - see this [link](./guide-repo-config.md).
 
 Then ensure you install using either apt-get or yum:
@@ -12,6 +14,11 @@ sudo apt-get install tensorflow-model-server-neuron
 or
 ```bash
 sudo yum install tensorflow-model-server-neuron
+```
+
+Also, you would need TensorFlow Serving API (use --no-deps to prevent installation of regular tensorflow):
+```bash
+pip install --no-deps tensorflow_serving_api==1.15
 ```
 
 ## Export and Compile Saved Model

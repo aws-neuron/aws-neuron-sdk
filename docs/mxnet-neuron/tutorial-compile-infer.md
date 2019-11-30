@@ -25,6 +25,8 @@ Steps Overview:
 
 ## Step 2: Install Neuron
 
+If using DLAMI and aws_neuron_mxnet_p36 environment, you can skip to Step 3.
+
 ### Compiler Instance: Install Neuron Compiler and MXnet-Neuron
 
 On the instance you are going to use for compilation, you must have both the Neuron Compiler and the MXNet-Neuron installed. (The inference instance must have the MXNet-Neuron and the Neuron Runtime installed.)
@@ -32,7 +34,7 @@ Steps Overview:
 
 #### Using Virtualenv:
 
-1. Install virtualenv:
+1. Install virtualenv if needed:
 ```bash
 sudo apt-get update
 sudo apt-get -y install virtualenv
@@ -56,7 +58,7 @@ pip install mxnet-neuron
 ```
 
 #### Using Conda:
-1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
+1. Install Conda if needed (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
 ```bash
 cd /tmp
 curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
