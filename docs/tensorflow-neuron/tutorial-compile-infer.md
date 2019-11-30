@@ -26,7 +26,7 @@ On the instance you are going to use for compilation, you must have both the Neu
 
 #### Using Virtualenv:
 
-1. Install virtualenv:
+1. Install virtualenv if needed:
 ```bash
 sudo apt-get update
 sudo apt-get -y install virtualenv

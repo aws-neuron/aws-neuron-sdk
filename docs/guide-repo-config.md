@@ -16,7 +16,7 @@ deb https://apt.repos.neuron.amazonzaws.com xenial main
 EOF
 
 wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
- 
+
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
@@ -30,7 +30,7 @@ deb https://apt.repos.neuron.amazonzaws.com bionic main
 EOF
 
 wget -qO - https://apt.repos.neuron.amazonzaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
- 
+
 sudo apt-get update
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
@@ -56,7 +56,7 @@ sudo yum install aws-neuron-tools
 ```bash
 sudo tee /etc/pip.conf > /dev/null <<EOF
 [global]
-extra-index-url = https://pip.repos.neuron.amazonzaws.com 
+extra-index-url = https://pip.repos.neuron.amazonzaws.com
 EOF
 ```
 
@@ -77,11 +77,16 @@ gpg --verify neuron_cc-1.0.4680.0%2B5844509397-cp35-cp35m-linux_x86_64.whl.asc n
 pip install neuron-cc
 pip install tensorflow-neuron
 ```
+### Tensorflow Model Serving
+
+```bash
+sudo apt-get install tensorflow-model-server-neuron
+pip install tensorflow_serving_api
+```
 
 ### MXNet
 
 ```bash
-pip install mxnet-model-server
 pip install neuron-cc
 pip install mxnet-neuron
 ```

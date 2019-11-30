@@ -2,7 +2,7 @@
 
 The Neuron compilation API for TensorFlow enables compilation of saved model to an Inferentia target.
 
-## Method 
+## Method
 
 `tensorflow.neuron.saved_model.compile`
 
@@ -29,6 +29,12 @@ The compiled graph can be exported to saved model and served using TensorFlow Se
 ## Returns
 
 * Dictionary with operator counts before/after optimization.
+* Operator count statistics are displayed to show original count, post-optimization count, and the number placed on Neuron runtime. For example:
+```
+INFO:tensorflow:Number of operations in TensorFlow session: 3978
+INFO:tensorflow:Number of operations after tf.neuron optimizations: 555
+INFO:tensorflow:Number of operations placed on Neuron runtime: 554
+```
 
 ## Example Usage
 
@@ -40,6 +46,3 @@ compiled_saved_model_path = "<compiled saved model path>"
 shutil.rmtree(compiled_saved_model_path, ignore_errors=True)
 tfn.saved_model.compile(saved_model_path, compiled_saved_model_path)
 ```
-
-
-
