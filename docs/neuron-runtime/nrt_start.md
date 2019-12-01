@@ -70,13 +70,32 @@ sudo yum install aws-neuron-tools
 ```
 ## Step 3: Configure nr_hugepages
 
-vm.nr_hugepages is a system wide configuration for managing huge size pages in memory in addition to the standard 4KB page size. This configuration is important for the Neuron Runtime because it's used for the input feature map and output feature map of all models. Run the following command to see the vm.nr_hugepages setting for your instance:
+Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers for all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of 2MB hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
 
-```bash
+```
+hugepages=128
+```
+
+Alternatively, 2MB hugepages could be allocated after boot by invoking the following command:
+
+```
+sudo sysctl -w vm.nr_hugepages=128
+```
+
+To make the changes persist across reboots add the following to /etc/sysctl.conf
+
+```
+vm.nr_hugepages=128
+```
+
+Run the following command to see the number of 2MB hugepages setting for your instance:
+
+```
 grep HugePages_Total /proc/meminfo | awk {'print $2'}
 ```
 
-To adjust the number of hugepages used by the Neuron Runtime, update neuron-rtd.config paramter: num_hugepages_per_device; The default number is 128 2MB pages per Inferentia. Increase to the desired number, then restart neuron-rtd service. Make sure to update OS settings to have that many pages available as well.
+To adjust the number of hugepages used by the Neuron Runtime, update **/opt/aws/neuron/config/neuron-rtd.config** parameter: **num_hugepages_per_device**; The default number is 128 2MB pages per Inferentia. Increase to the desired number, then restart neuron-rtd service. Make sure the OS has at least that many hugepages available before restarting Neuron Runtime.
+
 
 
 ## Step 4: Configure Neuron-RTD
