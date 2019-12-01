@@ -64,11 +64,11 @@ $ neuron-top
 neuron-top - 2019-11-13 23:57:08
 NN Models: 3 total, 2 running
 Number of VNCs tracked: 2
-0000:00:1f.0 Utilizations: Neuron core0 0.00, Neuron core1 0.00, Neuron core2 0, Neuron core3 0,
-DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   MLA Mem     Neuron core %
-10003       1         0          0000:00:1f.0:0   384        135660544   0.00
-10001       3         0          0000:00:1f.0:0   384        67633152    0.00
-10002       1         0          0000:00:1f.0:1   384        135660544   0.00
+0000:00:1f.0 Utilizations: Neuron core0 0.00, Neuron core1 0.00, Neuron core2 0.00, Neuron core3 0.00,
+DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem     Neuron core %
+10003       1         0          0000:00:1f.0:0   384        135660544      0.00
+10001       3         0          0000:00:1f.0:0   384        67633152       0.00
+10002       1         0          0000:00:1f.0:1   384        135660544      0.00
 ```
 
 TODO describe VNC
