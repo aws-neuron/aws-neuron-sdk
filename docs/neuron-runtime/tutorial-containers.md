@@ -4,9 +4,9 @@
 
 In other tutorials, we used tensorflow serving to compile a model and run inference. To do that, Neuron runtime daemon (Neuron-RTD) would be running in the background as a service, and TensorFlow serving would use a default socket to interact with neuron-rtd.
 
-For containerized applications, it is recommended to use the neuron-rtd container. It is also recommended that framework-serving is ran in its own container because neuron-rtd requires higher privileges.
+For containerized applications, it is recommended to use the neuron-rtd container. It is also recommended that framework-serving is ran in its own container because neuron-rtd requires higher privileges, which may not be desired for application code.
 
-Both containers are made available over ECR repositories and can be used directly. Customers may also build their own using Neuron packages.
+Neuron-rtd container is available over ECR repositories and can be used directly. Customers may also build their own using Neuron packages. Guidance on building your own custom framework serving container is outlined in Appendix A.
 
 Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest]()
 
@@ -17,10 +17,15 @@ Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:l
 
 This example will configure a single Neuron-RTD per Inferentia and place each into its own Docker container.
 
-#### Step 1: install host base package
+#### Step 1: install/upgrade host base package
 
 ```bash
 sudo apt-get install aws-neuron-runtime-base
+```
+
+Stop neuron-rtd service if running
+```bash
+sudo service neuron-rtd stop
 ```
 
 #### Step 2: install oci-add-hooks depdency
@@ -96,7 +101,7 @@ $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 7907094
 docker pull 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
 docker tag 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest neuron-rtd
 mkdir /tmp/neuron_rtd_sock/
-docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
+docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
 ```
 
 
@@ -218,7 +223,7 @@ Now start and verify that the container will start and that the desired Inferent
 Run neuron-ls in the container to verify device whitelisting works as expected:
 
 ```bash
-docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN  neuron-test neuron-ls
+docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK  neuron-test neuron-ls
 ```
 Expected result:
 ```
