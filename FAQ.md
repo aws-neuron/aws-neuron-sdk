@@ -16,9 +16,9 @@
 
 **Q: How can I get started?**
 
-You can start your workflow by building and training your model in one of the popular ML frameworks using GPU compute instances such as P3 or P3dn. Once the model is trained to your required accuracy, you can use the ML framework’s API to invoke Neuron, a software development kit for Inferentia, to compile the model for execution on Inferentia, load it in to Inferentia’s memory and then execute inference calls. In order to get started quickly, you can use AWS Deep Learning AMIs (https://aws.amazon.com/machine-learning/amis/) that come pre-installed with ML frameworks and the Neuron SDK. For a fully managed experience you will be able to use Amazon SageMaker which will enable you to seamlessly deploy your trained models on Inf1 instances. 
+You can start your workflow by training your model in one of the popular ML frameworks using EC2 GPU instances such as P3 or P3dn, or alternativelly download a pre-training model. Once the model is trained to your required accuracy, you can use the ML frameworks' API to invoke Neuron, the software development kit for Inferentia, to re-target(compile) the model for execution on Inferentia. The later step could be done once, and the developer doesnt need to do it as long as the model is not changing. Once compiler, the Inferentia binary can be loaded into one or more Inferentia, and can service inference calls. In order to get started quickly, you can use AWS Deep Learning AMIs (https://aws.amazon.com/machine-learning/amis/) that come pre-installed with ML frameworks and the Neuron SDK. For a fully managed experience, you will be able to use Amazon SageMaker which will enable you to seamlessly deploy your trained models on Inf1 instances. 
 
-For customers who use popular frameworks like Tensorflow, MXNet and PyTorch a guide to help you get started with frameworks 
+For customers who use popular frameworks like Tensorflow, MXNet and PyTorch, a guide to help you get started with frameworks 
 is available at [TODO](). I you wish to deploy without a framework, you can install Neuron using pip 
 install and use Neuron to compile and deploy your models to Inf1 instances to run inference. More details on using Neuron without a framework are here [TODO]().
 
@@ -27,21 +27,19 @@ install and use Neuron to compile and deploy your models to Inf1 instances to ru
 
 The decision as to which Inf instance size to use is based upon the application and the performance/cost targets and may differ for each workload. To assist, the Neuron compiler provides guidance on expected latency and throughput for various Inf1 instance sizes, and TensorBoard profiling will show actual results when executed on a given instance. A guide to this process is available here: [TODO]()
 
+Ultimately, developers have the chance to try out all the Inf1 instace sizes (which can be low cost and quick in a cloud environent), with their specific models, and choose the right instance for them. 
+
 
 <a name="general"></a>
 ## General Neuron FAQs
 
 **Q: What ML models types and operators are supported by AWS Neuron?**
 
-AWS Neuron includes a compiler that converts your trained machine learning model to Inferentia specific operators for execution. The Neuron compiler supports many commonly used machine learning models such as single shot detector (SSD) and ResNet for image recognition/classification, and Transformer and BERT for natural language processing and translation. Neuron supported operator list can be found in the release notes folders. We will continue to grow the list based on customer feedback, to allow data scientists to create new novel operator types to be supported by Inferentia. 
+AWS Neuron includes a compiler that converts your trained machine learning model to Inferentia specific operators for execution. The Neuron compiler supports many commonly used machine learning models such as single shot detector (SSD) and ResNet for object detection and image recognition, and Transformer and BERT for natural language processing and translation. Neuron supported operator list can be found in the release notes folders. AWS will continue to grow the list based on customer feedback, to allow ML developer to create new novel operator types to be supported by Inferentia. 
 
 **Q: Why is a compiler needed and how do I use it?**
 
-The Neuron compiler converts from a neural net graph consisting of operators like convolution and pool into a specific set of 
-instructions that can be executed using the unique instruction-set of Inferentia.  The formats of these input graphs may be 
-from TensorFlow or MXNet or ONNX.  The output from the compiler is the specific instructions for Inferentia encapsulated 
-into a binary form, referred to as a Neuron Executable File Format (NEFF). NEFF contains a combination of these instructions, 
-the weights and parameters of the pre-trained model and additional meta-data needed by the runtime. 
+The Neuron compiler converts from a framework level operators like convolution and pooling into the unique instruction-set of Inferentia, build the schedule for execution these instructions, and convers the model parameters into format that Inferentia can consume.  The supported input formats include TensorFlow, PyTorch, MXNet, or ONNX.  The output from the compiler is Inferentia program binary, referred to as a Neuron Executable File Format (NEFF). NEFF contains a combination of these binary instructions, the model parameters, and additional meta-data needed by the runtime. 
 
 **Q: I am using a ML framework today – what will change for me to use this?**
 
