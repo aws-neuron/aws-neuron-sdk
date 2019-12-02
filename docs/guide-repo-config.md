@@ -67,8 +67,8 @@ curl https://pip.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | 
 pip download --no-deps neuron-cc
 # The above shows you the name of the package downloaded
 # Use it in the following command
-wget https://pip.repos.neuron.amazonaws.com/neuron-cc/neuron_cc-<YOUR VERSION HERE FROM ABOVE PACKAGE>.whl.asc
-gpg --verify neuron_cc-<YOUR VERSON HERE FROM ABOVE PACKAGE>.whl.asc neuron_cc-<YOUR VERSION HERE>.whl
+wget https://pip.repos.neuron.amazonaws.com/neuron-cc/neuron_cc-<VERSION FROM FILE>.whl.asc
+gpg --verify neuron_cc-<VERSION FROM FILE>.whl.asc neuron_cc-<VERSION FROM FILE>.whl
 ```
 
 ### Tensorflow
