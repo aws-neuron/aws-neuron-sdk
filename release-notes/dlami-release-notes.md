@@ -32,14 +32,14 @@ Please update all packages to most recent release:
 
 ```bash
 sudo apt-get update
-sudo apt-get install aws-neuron-runtime
+sudo apt-get install aws-neuron-runtime aws-neuron-runtime-base
 sudo apt-get install aws-neuron-tools
 sudo apt-get install tensorflow-model-server-neuron
 ```
 
 *  Amazon Linux:
 ```bash
-sudo yum install aws-neuron-runtime
+sudo yum install aws-neuron-runtime aws-neuron-runtime-base
 sudo yum install aws-neuron-tools
 sudo yum install tensorflow-model-server-neuron
 ```
