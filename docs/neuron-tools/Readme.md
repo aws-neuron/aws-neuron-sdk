@@ -73,3 +73,6 @@ DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem     Neur
 
 TODO describe VNC
 TODO change output with example that shows utilization
+
+# Gather Debuggingg information
+Please see [Neuron Gathterinfo](./tutorial-neuron-gatherinfo.md)
