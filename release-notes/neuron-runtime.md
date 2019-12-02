@@ -4,6 +4,8 @@ This document lists the current release notes for AWS Neuron Runtime.  Neuron Ru
 
 # [neuron-runtime-1.0.4492.0]
 
+Date: 12/1/2019
+
 ## Major New Features
 
 N/A
@@ -35,7 +37,7 @@ The following issues have been resolved:
 
 # [neuron-runtime-1.0.4109.0]
 
-***Date:  11/25/2019***
+Date:  11/25/2019
 
 ## Summary
 
