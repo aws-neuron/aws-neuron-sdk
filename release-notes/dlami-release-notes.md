@@ -26,6 +26,8 @@ tensorflow-model-server-neuron=1.15.0.1.0.663.0
 
 ## Known Issues
 
+In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36), a wrong numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2" before "conda update tensorflow-neuron".
+
 Please update all packages to most recent release:
 
 *  Ubuntu:
@@ -49,5 +51,6 @@ sudo yum install tensorflow-model-server-neuron
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
 source activate aws_neuron_tensorflow_p36
+conda install numpy=1.17.2
 conda update tensorflow-neuron
 ```
