@@ -50,6 +50,9 @@ sudo yum install tensorflow-model-server-neuron
 ```bash
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
+```
+
+```bash
 source activate aws_neuron_tensorflow_p36
 conda install numpy=1.17.2
 conda update tensorflow-neuron
