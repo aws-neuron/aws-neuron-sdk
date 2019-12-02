@@ -109,7 +109,7 @@ curl https://conda.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB 
 conda search tensorflow-neuron
 
 # Use the version/build number above to download the package and the signature
-wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0-py36_0.tar.bz2
-wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0-py36_0.tar.bz2.asc
-gpg --verify tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0-py36_0.tar.bz2.asc tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0-py36_0.tar.bz2
+wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
+wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc
+gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
 ```
