@@ -71,6 +71,8 @@ MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides usef
 * [Getting started: Neuron Tensorboard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
 * [Neuron utilities](./docs/neuron-tools/Readme.md)
 
+## Application Notes
+* [Application Notes Readme](./appnotes/README.md)
 
 
 
