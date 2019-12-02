@@ -60,7 +60,7 @@ extra-index-url = https://pip.repos.neuron.amazonaws.com
 EOF
 ```
 
-To verify the packages before install (using neuron-cc as an example):
+**Optional:** To verify the packages before install (using neuron-cc as an example):
 
 ```bash
 curl https://pip.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
