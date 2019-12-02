@@ -45,6 +45,8 @@ To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL contai
 
 Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. 
 
+NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
+
 ### DL Containers
 Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. You can configure ECS to run on Inf1 by following these instructions [TODO](./).
 
