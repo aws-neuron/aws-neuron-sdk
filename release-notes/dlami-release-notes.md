@@ -4,9 +4,9 @@
 
 ## Supported Operating Systems:
 
-Amazon Linux 2
-Ubuntu 16
-Ubuntu 18
+* Amazon Linux 2
+* Ubuntu 16
+* Ubuntu 18
 
 ## Versions of Neuron packages included:
 
