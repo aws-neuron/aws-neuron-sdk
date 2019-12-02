@@ -54,7 +54,7 @@ You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-
 
 
 ## Using Neuron Runtime
-* [Neuron Runtime Readme](./docs/neuron-runtime/readme.md)
+* [Neuron Runtime Readme](./docs/neuron-runtime/README.md)
 
 
 
