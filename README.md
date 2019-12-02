@@ -72,7 +72,7 @@ MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides usef
 * [Neuron utilities](./docs/neuron-tools/Readme.md)
 
 ## Application Notes
-* [Application Notes Readme](./appnotes/README.md)
+* [Application Notes Readme](./docs/appnotes/README.md)
 
 
 
