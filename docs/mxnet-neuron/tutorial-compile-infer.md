@@ -74,11 +74,11 @@ mx.test_utils.download(path+'resnet/50-layers/resnet-50-0000.params')
 mx.test_utils.download(path+'resnet/50-layers/resnet-50-symbol.json')
 sym, args, aux = mx.model.load_checkpoint('resnet-50', 0)
 
- # Compile for Inferentia using Neuron
+# Compile for Inferentia using Neuron
 inputs = { "data" : mx.nd.ones([1,3,224,224], name='data', dtype='float32') }
 sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs)
 
- #save compiled model
+#save compiled model
 mx.model.save_checkpoint("resnet-50_compiled", 0, sym, args, aux)
 ```
 

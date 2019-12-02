@@ -142,7 +142,7 @@ infa_rslts = predictor_inferentia(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-3.5. Unzip the mode, download the example image and run the inference:
+3.5. Unzip the model, download the example image and run the inference:
 ```bash
 unzip resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
