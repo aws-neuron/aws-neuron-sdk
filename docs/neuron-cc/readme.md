@@ -19,7 +19,7 @@ and run them at speed of 16-bit using BFloat16 model, using our FP32 to BF16 aut
 The Neuron compiler is most often used within an integrated framework, such as Tensorflow-Neuron. From that framework, 
 ML models are sent to the compiler and the results then sent back. This compile step will often be done on a compiler server 
 during the build steps. The resulting compiler artifacts - a NEFF (Neuron Executable File Format) - can then be loaded into an Inferntia
-using the Neuron Runtime. If being doen from an integrated framework, the NEFF is actually encapsulated inside a saved version of that model
+using the Neuron Runtime. If being done from an integrated framework, the NEFF is actually encapsulated inside a saved version of that model
 that the framework can use. Once compiled, the execution of the model on an Inf1 instance  will also typically be done from 
 within the integrated framework: the ML model will be executed from the framework, with the sections of the ML model that we compiled for 
 acceleration being executed on the Inferentia via the Neuron Runtime.
