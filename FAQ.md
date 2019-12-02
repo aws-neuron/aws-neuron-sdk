@@ -23,11 +23,11 @@ is available at [TODO](). I you wish to deploy without a framework, you can inst
 install and use Neuron to compile and deploy your models to Inf1 instances to run inference. More details on using Neuron without a framework are here [TODO]().
 
 
-**Q: How would I select which Inf1 instance to use?**
+**Q: How do I select which Inf1 instance to use?**
 
-The decision as to which Inf instance size to use is based upon the application and the performance/cost targets and may differ for each workload. To assist, the Neuron compiler provides guidance on expected latency and throughput for various Inf1 instance sizes, and TensorBoard profiling will show actual results when executed on a given instance. A guide to this process is available here: [TODO]()
+The decision as to which Inf1 instance size to use is based upon the application and the performance/cost targets and may differ for each workload. To assist, the Neuron compiler provides guidance on expected performance for various Inf1 instance sizes, and TensorBoard profiling will show actual results when executed on a given instance. A guide to this process is available here: [TODO]()
 
-Ultimately, AWS encourages developers try out all the Inf1 instance sizes (which can be done at low cost and quickly in a cloud environment), with their specific models, and choose the right instance for them.
+Ultimately, AWS encourages developers try out all the Inf1 instance sizes (which can be done at low cost and quickly in the cloud environment), with their specific models, and choose the right instance for them.
 
 
 <a name="general"></a>
@@ -35,11 +35,11 @@ Ultimately, AWS encourages developers try out all the Inf1 instance sizes (which
 
 **Q: What ML models types and operators are supported by AWS Neuron?**
 
-AWS Neuron includes a compiler that converts your trained machine learning model to Inferentia binary code for execution. The Neuron compiler supports many commonly used machine learning models such as single shot detector (SSD) and ResNet for object detection and image recognition, and Transformer and BERT for natural language processing and translation. Neuron list of supported ML operators and supported inputs are in [release notes](./RELEASE_NOTES.md). AWS continues to grow the list based on customers' feedback. 
+AWS Neuron includes a compiler that converts your trained machine learning model to Inferentia binary object for execution. The Neuron compiler supports many commonly used machine learning models such as single shot detector (SSD) and ResNet for object detection and image recognition, and Transformer and BERT for natural language processing and translation. Neuron list of supported ML operators and supported inputs are in [release notes](./RELEASE_NOTES.md)(TODO check link). AWS continues to grow the list based on customers' feedback. 
 
 **Q: Why is a compiler needed, and how do I use it?**
 
-The Neuron compiler converts from a framework level Neural Network graph, with operators like convolution and pooling, into the hardware-specific instruction set of Inferentia, build the schedule for execution these instructions, and convers the model parameters into format that Inferentia can consume.  The supported input formats include TensorFlow, PyTorch, MXNet, or ONNX. The output from the compiler is Inferentia program binary, referred to as a Neuron Executable File Format (NEFF). NEFF contains a combination of these binary code, the model parameters, and additional meta-data needed by the runtime and profiler. 
+The Neuron compiler converts from a framework level Neural Network graph, with operators like convolution and pooling, into the hardware-specific instruction set of Inferentia, build the schedule for execution these instructions, and convers the model parameters into format that Inferentia can consume.  The supported input formats include TensorFlow, PyTorch, MXNet, or ONNX. The output from the compiler is a Neuron Executable File Format (NEFF) artifact. NEFF contains a combination of binary code, the model parameters, and additional meta-data needed by the runtime and profiler. 
 
 **Q: I am using a ML framework today – what will change for me to use this?**
 
@@ -50,9 +50,9 @@ TODO [A guide to compile and deploy inference models using TensorFlow interface 
 TODO [A guide to compile and deploy inference models using MXNet interface support](http://github.com/aws/aws-neuron-sdk/docs/mxnet-neuron/readme.md)
 
 
-**Q: What is Inferentia's NeuronCore Pipeline ? and How do I take advantage of it?**
+**Q: What is a NeuronCore Pipeline ? and How do I take advantage of it?**
 
-Inferentia NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple Inferentia accelerators, to take advantage of the large on-chip cache, that would typically increase throughput and reduce latency at low batch size. Inf1 instances with multiple Inferentia accelerators, such as Inf1.6xlarge or Inf1.24xlarge, support NeuronCore Pipeline thanks to fast chip-to-chip interconnect. 
+A NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple Inferentia accelerators, to take advantage of the large on-chip cache, that would typically increase throughput and reduce latency at low batch size. Inf1 instances with multiple Inferentia accelerators, such as inf1.6xlarge or inf1.24xlarge, support NeuronCore Pipeline thanks to fast chip-to-chip interconnect. 
 
 Developers can choose to use NeuronCore Pipeline mode during compile stage, with an opt-in flag. [NeuronCore Pipeline guide](TODO) provides further details. 
 
@@ -66,7 +66,7 @@ Yes. Models format can  be imported into Tensorflow, either as a standard model-
 
 **Q: Where can I compile to Neuron?** 
 
-The one-time compilation step from the standard Framework-level model to Inferentia binary may be performed on any EC2 instance or on-premises. 
+The one-time compilation step from the standard framework-level model to Inferentia binary may be performed on any EC2 instance or on-premises. 
 
 We recommend using a high-performance compute server of choice (C5 or z1d instance types), for the fastest compile times and 
 ease-of-use with a prebuilt [DLAMI](. Developers can also install Neuron in their own environments; this approach may work well 
@@ -75,7 +75,7 @@ training fleet, with the NEFF files being distributed by a configuration managem
 
 **Q: My current Neural Network is based on FP32, how can I use it with Neuron?**
 
-Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8 (coming soon). It is common for Neural Networks to be trained in FP32, in which case the trained graph needs to be converted to one of these data types for execution on Inferentia. Neuron can compile and execute FP32 neural nets by automatically converting them to BFloat16. Given an input using FP32, the compiler output will ensure that the executed graph can accept input inference requests in FP32. 
+Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It is common for Neural Networks to be trained in FP32, in which case the trained graph needs to be converted to one of these data types for execution on Inferentia. Neuron can compile and execute FP32 neural nets by automatically converting them to BFloat16. Given an input using FP32, the compiler output will ensure that the executed graph can accept input inference requests in FP32. 
 
 **Q: What are some of the important compiler defaults I should be aware of?**
 TODO
