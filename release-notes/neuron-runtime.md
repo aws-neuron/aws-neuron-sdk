@@ -23,7 +23,8 @@ The following issues have been resolved:
 ## Known Issues and Limitations
 
 * A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
-    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following instructions here: https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages***.***  Requires a restart of the runtime daemon and a possible change to system-wide configs.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here:](../docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) 
+    (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
 * Neuron-RTD does not return verbose error messages when a model load or an inference fails.  Detailed error messages are only available in syslog.
     * Workaround: manually search syslog file for Neuron-RTD error messages.
 * Neuron-RTD takes 6 minutes to start on Inf1.24xl instance.
