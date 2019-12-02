@@ -53,8 +53,9 @@ Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/lat
 You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-configuring-linux-for-repository-updates) if you already have an environment you'd like to continue using, or planning on running inference without a framework.
 
 
-## Using Neuron Runtime
+## Using Neuron 
 * [Neuron Runtime Readme](./docs/neuron-runtime/README.md)
+* [Neuron Compiler Readme](./docs/neuron-cc/readme.md)
 
 
 
