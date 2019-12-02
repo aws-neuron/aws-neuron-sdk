@@ -100,7 +100,7 @@ conda install mxnet-neuron
 conda install tensorflow-neuron
 ```
 
-To verify the packages before install (using tensorflow-neuron as an example):
+**Optional** To verify the packages before install (using tensorflow-neuron as an example):
 
 ```bash
 curl https://conda.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
