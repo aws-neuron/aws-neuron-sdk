@@ -176,7 +176,7 @@ EOF
 }
 EOF
 
-sudo chmod 755 /opt/aws/neuron/bin/nrdt0.json
+sudo chmod 755 /opt/aws/neuron/bin/nrtd0.json
 sudo chmod 755 /opt/aws/neuron/bin/nrtd1.json
 sudo chmod 755 /opt/aws/neuron/bin/nrtd2.json
 sudo chmod 755 /opt/aws/neuron/bin/nrtd3.json
