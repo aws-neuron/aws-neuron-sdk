@@ -7,7 +7,7 @@ The tool enables developers to gather compiler and inference/runtime logs. Addit
 
 ### Steps Overview:
 
-1. Obtain a copy of neuron-gatherinfo.py from TODO<insert github link>
+1. Obtain a copy of neuron-gatherinfo.py from [Here](../../src/neuron-gatherinfo/)
 2. Install into a location in your $PATH or into a location from where you can launch the script
 3. Use with compile and/or runtime environments
 
