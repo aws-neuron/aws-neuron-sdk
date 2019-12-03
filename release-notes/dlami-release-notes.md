@@ -37,9 +37,23 @@ tensorflow-model-server-neuron-1.15.0.1.0.663.0
 sudo yum makecache
 ```
 
-Please update all packages to most recent release:
+* Base DLAMI: the package 'wrapt' may cause an error. In this case an error like this will occur:
 
-*  Ubuntu:
+```
+ERROR: Cannot uninstall 'wrapt'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
+```
+
+To resolve this: execute:
+
+```bash
+python3 -m pip install wrapt --ignore-installed
+python3 -m pip install tensorflow-neuron
+```
+
+
+* It is stongly suggested to update all packages to most recent release:
+
+###  Ubuntu:
 
 ```bash
 sudo apt-get update
@@ -48,14 +62,14 @@ sudo apt-get install aws-neuron-tools
 sudo apt-get install tensorflow-model-server-neuron
 ```
 
-*  Amazon Linux:
+###  Amazon Linux:
 ```bash
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 sudo yum install tensorflow-model-server-neuron
 ```
 
-*  Conda:
+### Conda:
 ```bash
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
