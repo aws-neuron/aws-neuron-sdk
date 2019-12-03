@@ -31,13 +31,13 @@ A typical workflow with the Neuron SDK will be to compile a trained ML model on 
 On the compilation-instance, install both Neuron Compiler and TensorFlow-Neuron.
 2.1. Install virtualenv if needed:
 
-```bash
+```
 # Ubuntu
 sudo apt-get update
 sudo apt-get -y install virtualenv
 ```
 
-```bash
+```
 # Amazon Linux 2
 sudo yum update
 sudo yum install -y python3
@@ -47,27 +47,27 @@ pip3 install --user virtualenv
 2.2. Setup a new Python 3.6 environment:
 
 
-```bash
+```
 virtualenv --python=python3.6 test_env_p36source test_env_p36/bin/activate
 ```
 
 2.3. Modify Pip repository configurations to point to the Neuron repository.
 
 
-```bash
+```
 tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF[global]extra-index-url = https://pip.repos.neuron.amazonaws.comEOF
 ```
 
 2.4. Install TensorFlow-Neuron and Neuron Compiler
 
 
-```bash
+```
 pip install tensorflow-neuron
 ```
 
 
 
-```bash
+```
 # can be skipped on inference-only instance
 pip install neuron-cc[tensorflow]
 ```
@@ -78,7 +78,7 @@ pip install neuron-cc[tensorflow]
 3.1. Create a python script named `compile_resnet50.py` with the following content:
 
 
-```python
+```
 import osimport timeimport shutilimport tensorflow as tfimport tensorflow.neuron as tfnimport tensorflow.compat.v1.keras as kerasfrom tensorflow.keras.applications.resnet50 import ResNet50from tensorflow.keras.applications.resnet50 import preprocess_input
 
  # Create a workspaceWORKSPACE = './ws_resnet50'
@@ -111,7 +111,7 @@ shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
 3.2. Run the compilation script, which will take a few minutes on c5.4xlarge. At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.zip` in local directory:
 
 
-```python
+```
 python compile_resnet50.py
 `...
 INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc
@@ -125,7 +125,7 @@ INFO:tensorflow:Successfully converted ./ws_resnet50/resnet50 to ./ws_resnet50/r
 3.3. If not compiling and deploying on the same instance, copy the artifact to the inference server:
 
 
-```bash
+```
 scp -i <PEM key file> ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # if using Ubuntu-based AMIscp -i <PEM key file> ./resnet50_neuron
 .zip ec2-user@<instance DNS>:~/ # if using AML2-based AMI
 ```
@@ -147,7 +147,7 @@ scp -i <PEM key file> ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # if using 
 5.1. On the deployment-instance, create a inference Python script named `infer_resnet50.py` with the following content:
 
 
-```python
+```
 import osimport timeimport numpy as npimport tensorflow as tffrom tensorflow.keras.preprocessing import imagefrom tensorflow.keras.applications import resnet50
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
@@ -164,7 +164,7 @@ infa_rslts = predictor_inferentia(model_feed_dict);# Display resultsprint(resnet
 5.2. Unzip the mode, download the example image and run the inference:
 
 
-```bash
+```
 unzip resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
 pip install pillow # Necessary for loading images
