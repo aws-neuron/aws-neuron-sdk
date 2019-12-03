@@ -40,16 +40,16 @@ The Neuron compiler converts from a framework level Neural Network graph, with o
 The likely (but not only) workflow for developers is a hand-off of pre-trained model to large scale of inference fleet.
 To use Inferentia and Inf1 instances, the developer need to perform one-time compilation of the pre-trained model to generate NEFF, and use this as the inference model in fleet of Inf1 instances.
 
-[TensorFlow interface support](.docs/tensorflow-neuron/readme.md)
+[TensorFlow interface support](./docs/tensorflow-neuron/readme.md)
 
 [MXNet interface support](./docs/mxnet-neuron/readme.md)
 
 
 **Q: What is a NeuronCore Pipeline ? and How do I take advantage of it?**
 
-A NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple Inferentia accelerators, to take advantage of the large on-chip cache, that would typically increase throughput and reduce latency at low batch size. Inf1 instances with multiple Inferentia accelerators, such as inf1.6xlarge or inf1.24xlarge, support NeuronCore Pipeline thanks to fast chip-to-chip interconnect. 
+A NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple Inferentia accelerators, to take advantage of the large on-chip cache that will typically increase throughput and reduce latency at low batch size. Inf1 instances with multiple Inferentia accelerators, such as inf1.6xlarge or inf1.24xlarge, support NeuronCore Pipeline thanks to the fast chip-to-chip interconnect. 
 
-Developers can choose to use NeuronCore Pipeline mode during compile stage, with an opt-in flag. [NeuronCore Pipeline guide](TODO) provides further details. 
+Developers can choose to use NeuronCore Pipeline mode during compile stage, with an opt-in flag. [Neuron Compiler](./docs/neuron-cc/readme.md) provides further details. 
 
 **Q: Can I use TensorFlow networks from tfhub.dev as-is ? if not, what should I do?**
 
@@ -127,7 +127,7 @@ Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutori
 We have Applicaiton Notes coming - check our [App Note](./docs/appnotes/README.md) repo for updates!
 
 **Q: do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
-errors like this wil be logged and can be foudn as show [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
+Errors like this wil be logged and can be found as shown [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: How can I  debug / profile my inference request?**
 See [Neuron Tensorboard](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
