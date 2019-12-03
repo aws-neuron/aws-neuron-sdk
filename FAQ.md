@@ -40,8 +40,9 @@ The Neuron compiler converts from a framework level Neural Network graph, with o
 The likely (but not only) workflow for developers is a hand-off of pre-trained model to large scale of inference fleet.
 To use Inferentia and Inf1 instances, the developer need to perform one-time compilation of the pre-trained model to generate NEFF, and use this as the inference model in fleet of Inf1 instances.
 
-[A guide to compile and deploy inference models using TensorFlow interface support](.docs/tensorflow-neuron/readme.md)
-[A guide to compile and deploy inference models using MXNet interface support](./docs/mxnet-neuron/readme.md)
+[TensorFlow interface support](.docs/tensorflow-neuron/readme.md)
+
+[MXNet interface support](./docs/mxnet-neuron/readme.md)
 
 
 **Q: What is a NeuronCore Pipeline ? and How do I take advantage of it?**
@@ -81,14 +82,14 @@ The compiler compiles the input graph for a single NeuronCore by default.  Using
 * [Neuron-cc ONNX Operators](./release-notes/neuron-cc-ops-onnx.md)
 
 **Q: Any operators that Neuron doesn't support?**
-Models with control-flow and dynamic shapes are not supported. You will need to partition the model using the framework prior to compilation. See the [Neuron compiler](./docs/neuron-cc/README.md). 
+Models with control-flow and dynamic shapes are not supported. You will need to partition the model using the framework prior to compilation. See the [Neuron compiler](./docs/neuron-cc/readme.md). 
 
 **Q: Will I need to recompile again if I updated runtime/driver version?**
 
 The compiler and runtime are committed to maintaining compatibility for major version releases with each other. The versoning is defined as major.minor, with compatibility for all versions with the same major number. If the versions mismatch, an error notification is logged and the load will fail. This will then require the model to be recompiled.
 
 **Q: I have a NEFF binary, how can I tell which compiler version generated it?**
-TODO
+We will bring a utility out to help with this soon.
 
 **Q: How long does it take to compile?**
 It depends on the model and its size and complexity, but this is general a few minutes. 
@@ -105,28 +106,28 @@ By default, a single runtime process will manage all assigned Inferentias, inclu
 See this document on how to collect logs [Neuron log collector](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: What about RedHat or other versions of Linux?**
-TODO
+We dont officially support it yet. 
 
 **Q: What about Windows?**
 
 Windows is not supported at this time.
 
 **Q: How can I use Kaena in a container based environment? Does Kaena work with ECS and EKS?**
-TODO
+ECS and EKS support is coming soon. Containers can be configured as shown [here](./docs/neuron-runtime/tutorial-containers.md)
 
 
 **Q: How can I take advantage of multiple TPBs and run multiple inferences in parallel?**
-ECS and EKS support is coming soon. Containers can be configure as shown [here](./docs/neuron-runtime/tutorial-containers.md)
+Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md) as well as for MXnet  [here](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
 
 
 <a name="troubleshooting"></a>
 ## Troubleshooting FAQs
 
 **Q: Performance is not what I expect it to be, what's the next step?**
-TODO
+We have Applicaiton Notes coming - check our [App Note](./docs/appnotes/README.md) repo for updates!
 
 **Q: do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
-TODO
+errors like this wil be logged and can be foudn as show [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: How can I  debug / profile my inference request?**
 See [Neuron Tensorboard](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
