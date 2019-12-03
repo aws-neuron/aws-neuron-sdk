@@ -8,8 +8,6 @@ Operator support for each input format is provided directly from the compiler:
 neuron-cc --list-operators --framwork {TENSORFLOW | MXNET | ONNX}
 ```
 
- as well as [Release Notes](./)
-
 # [1.0.5301.0]
 
 Date 12/1/2019
