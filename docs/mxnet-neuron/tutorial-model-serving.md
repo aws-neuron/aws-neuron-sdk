@@ -2,7 +2,7 @@
 
 This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/mxnet-model-server/tree/master/examples/mxnet_vision.
 
-Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed (see [MXNet Tutorial](./tutorial-mxnet-neuron-compile-infer.md#step-2-install-neuron) ) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
+Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed (see [MXNet Tutorial](./tutorial-compile-infer.md)) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
 
 If using DLAMI and aws_neuron_mxnet_p36 environment, you can skip the installation part in the first step below.
 
@@ -104,7 +104,7 @@ model-archiver --force --model-name resnet-50_compiled --model-path mxnet_vision
 cd ~/mxnet-model-server/
 mxnet-model-server --start --model-store examples
 # Pipe to log file if you want to keep a log of MMS
-curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=4&synchronous=true&url=resnet-50_compiled.mar"
+curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=1&synchronous=true&url=resnet-50_compiled.mar"
 sleep 10 # allow sufficient time to load model
 ```
 

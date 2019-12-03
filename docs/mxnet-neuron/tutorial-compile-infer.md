@@ -34,8 +34,15 @@ Steps Overview:
 
 1. Install virtualenv if needed:
 ```bash
+# Ubuntu
 sudo apt-get update
 sudo apt-get -y install virtualenv
+```
+```bash
+# Amazon Linux 2
+sudo yum update
+sudo yum install -y python3
+pip3 install --user virtualenv
 ```
 2. Setup a new Python 3.6 environment:
 ```bash
@@ -58,11 +65,12 @@ pip install mxnet-neuron
 ### Inference Instance: Install MXNet-Neuron and Neuron-Runtime
 
 1. Same as above to install MXNet-Neuron
-2. To install Runtime, see [getting started](./../neuron-runtime/readme.md) runtime document.
+2. To install Runtime, see [Getting started: Installing and Configuring Neuron-RTD](./../neuron-runtime/nrt_start.md).
 
 ## Step 3: Run Example
 
-1. Create a file `compile_resnet50.py` and run it (compilation will take a few minutes on c5.4xlarge; the files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory):
+1. Create a file `compile_resnet50.py` with the content below and run it using `python compile_resnet50.py`. Compilation will take a few minutes on c5.4xlarge. At the end of compilation, the files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory.
+
 ```python
 import mxnet as mx
 import numpy as np
