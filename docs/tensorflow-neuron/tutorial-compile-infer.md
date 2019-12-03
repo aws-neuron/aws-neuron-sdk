@@ -1,27 +1,28 @@
-# Tutorial: Using Neuron to run Resnet50 inference
+# Tutorial: Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)
 
 ## Steps Overview:
 
-1. Launch an EC2 instance for compilation and/or Infernence
-2. Install Neuron for Compiler and Runtime execution
-3. Compile on compilation server
-4. Execute inference on Inf1
+1. Launch an EC2 Compilation Instance (recommended instance: c5.4xlarge)
+2. Install TensorFlow-Neuron and Neuron-Compiler on the Compilation Instance
+3. Compile the compute-graph on the compilation-instance, and copy the artifacts into the deployment-instance
+4. Install TensorFlow-Neuron and Neuron-Runtime on Deployment Instance
+5. Deploy inferences inference on the Deployment Instance (Inf1)
 
 ## Step 1: Launch EC2 Instance(s)
 
-A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation server and then distribute the artifacts to a fleet of Inf1 instances for execution. Neuron enables TensorFlow to be used for all of these steps.
+A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation instance and then distribute the artifacts to a fleet of deployment instances, for execution. Neuron enables TensorFlow to be used for all of these steps.
 
 1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
 
 1.2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
   * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
-  * If you would like to compile and infer on the same machine, please select inf1.6xlarge.
+  * Users may choose to compile and deploy on the same instance, in which case it is recommend to use an inf1.6xlarge instance or larger.
 
-1.3. Select and launch an Inf1 instance of your choice if not compiling and inferencing on the same instance. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+1.3. Select and launch a deployment (Inf1) instance of your choice (if not compiling and inferencing on the same instance). Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
-## Step 2: Install Neuron Compiler and TensorFlow-Neuron On Compilation Instance
+## Step 2: Compilation Instance Installations
 
-If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.
+**If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  TensorFlow-Neuron.
 
@@ -58,9 +59,9 @@ pip install tensorflow-neuron
 pip install neuron-cc[tensorflow]
 ```
 
-## Step 3: Compile on Compilation Server
+## Step 3: Compile on Compilation Instance
 
-A trained model must be compiled to Inferentia target before it can run on Inferentia.
+A trained model must be compiled to Inferentia target before it can be deployed on Inferentia instances.
 In this step we compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
 
 3.1. Create a python script named `compile_resnet50.py` with the following content:
@@ -106,22 +107,23 @@ shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
 python compile_resnet50.py
 ```
 ```
- ...
-INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc; log file is at /home/ubuntu/ws_resnet50/workdir/neuron_op_d6f098c01c780733/graph_def.neuron-cc.log
-INFO:tensorflow:Number of operations in TensorFlow session: 3978
-INFO:tensorflow:Number of operations after tf.neuron optimizations: 555
+...
+INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc
+INFO:tensorflow:Number of operations in TensorFlow session: 4638
+INFO:tensorflow:Number of operations after tf.neuron optimizations: 556
 INFO:tensorflow:Number of operations placed on Neuron runtime: 554
+INFO:tensorflow:Successfully converted ./ws_resnet50/resnet50 to ./ws_resnet50/
 ...
 ```
 3.3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 ```bash
-scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # Ubuntu
-scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
+scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # if Ubuntu-based AMI
+scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if using AML2-based AMI
 ```
 
-## Step 4: Install TensorFlow-Neuron and Neuron Runtime on Inference Instance
+## Step 4: Deployment Instance Installations
 
-If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.
+**If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime
 
