@@ -1,6 +1,8 @@
 # Tutorial: MXNet Configurations for NeuronCore Groups
 
-To further subdivide the pool of NeuronCores controled by a Neuron-RTD, specify the NeuronCore Groups within that pool using the environment variable `NEURONCORE_GROUP_SIZES`  set to list of group sizes. The consecutive NeuronCore groups will be created by Neuron-RTD and be available for use to map the models.
+A NeuronCore Group is a set of NeuronCores that are used to load and run compiled models. At any time, one model will be running in a NeuronCore Group. By changing to a different sized NeuronCore Group and then creating several of these NeuronCore Groups, a user may create independent and parallel models running in the Inferentia. Additionally, within a NeuronCore Group, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another.
+
+To explicitly specify the NeuronCore Groups, set environment variable `NEURONCORE_GROUP_SIZES` to a list of group sizes. The consecutive NeuronCore groups will be created by Neuron-RTD and be available for user to map the models.
 
 Note that to map a model to a group, the model must be compiled to fit within the group size. To limit the number of NeuronCores during compilation, use compiler_args dictionary with field “--num-neuroncores“ set to the group size:
 
@@ -8,6 +10,12 @@ Note that to map a model to a group, the model must be compiled to fit within th
 compile_args = {'--num-neuroncores' : 2}
 sym, args, auxs = neuron.compile(sym, args, auxs, inputs, **compile_args)
 ```
+
+Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed along with Neuron Compiler (see [MXNet Tutorial](./tutorial-compile-infer.md)) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
+
+## Compile Model
+
+Model must be compiled to Inferentia target before it can run on Inferentia.
 
 Create compile_resnet50.py with `--num-neuroncores` set to 2 and run it. The files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory:
 
@@ -30,13 +38,17 @@ mx.model.save_checkpoint("resnet-50_compiled", 0, sym, args, aux)
 
 ```
 
+## Run Inference
+
 During inference, to subdivide the pool of one Inferentia into groups of 1, 2, and 1 NeuronCores, specify `NEURONCORE_GROUP_SIZES` as follows:
 
 ```bash
 NEURONCORE_GROUP_SIZES='[1,2,1]' <launch process>`
 ```
 
-Within the framework, the model can be mapped to group using  `ctx=mx.neuron(N)` context where N is the group index within the `NEURONCORE_GROUP_SIZES` list. Create infer_resnet50.py with the following content:
+Within the framework, the model can be mapped to group using  `ctx=mx.neuron(N)` context where N is the group index within the `NEURONCORE_GROUP_SIZES` list.
+
+Create infer_resnet50.py with the following content:
 
 ```python
 import mxnet as mx
