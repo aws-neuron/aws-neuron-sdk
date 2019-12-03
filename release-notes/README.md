@@ -9,13 +9,13 @@ This structure is shown below, with each also linking to the release notes for t
 
 ## [DLAMI](./dlami-release-notes.md)
 
-+ ### [Conda Tensorflow](./conda-tensorflow-neuron.md)
++ ### [Conda Tensorflow](./conda/conda-tensorflow-neuron.md)
 
 + + #### [Tensorflow-Neuron](./tensorflow-neuron.md)
 + + #### [Neuron-CC](./neuron-cc.md)
 + + #### [TensorBoard-neuron](./tensorboard-neuron.md)
 
-+ ### [Conda MXNet](./conda-mxnet-neuron.md)
++ ### [Conda MXNet](./conda/conda-mxnet-neuron.md)
 
 + + #### [MXNet-neuron](./mxnet-neuron.md)
 + + #### [Neuron-CC](./neuron-cc.md)
@@ -23,6 +23,7 @@ This structure is shown below, with each also linking to the release notes for t
 + ### [Tensorflow-Model-Server-Neuron](./tensorflow-modelserver-neuron.md)
 + ### [Neuron-Runtime](./neuron-runtime.md)
 + ### [Neuron-Tools](./neuron-tools.md)
+
 
 ## [Neuron-CC](./neuron-cc.md)
 ## [Neuron-Runtime](./neuron-runtime.md)
