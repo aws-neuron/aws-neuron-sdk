@@ -13,11 +13,14 @@ Neuron supports both Python module and Symbol APIs and the C predict API. The fo
 
 A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation server and then distribute the artifacts to a fleet of Inf1 instances for execution. Neuron enables MXNet to be used for all of these steps.
 
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
-2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
-    * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
-    * If you would like to compile and infer on the same machine, please select inf1.6xlarge.
-3. Select and launch an Inf1 instance of your choice to run the compiled model. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
+
+1.2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+
+  * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
+  * If you would like to compile and infer on the same machine, please select inf1.6xlarge.
+
+1.3. Select and launch an Inf1 instance of your choice to run the compiled model. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
 ## Step 2: Install Neuron Compiler and MXNet-Neuron On Compilation Instance
 
@@ -60,7 +63,7 @@ pip install neuron-cc[mxnet]
 
 ## Step 3: Compile on Compilation Server
 
-Model must be compiled to Inferentia target before it can run on Inferentia.
+A trained model must be compiled to Inferentia target before it can run on Inferentia. In this step we compile a pre-trained ResNet50 and export it as a compiled MXNet checkpoint.
 
 3.1. Create a file `compile_resnet50.py` with the content below and run it using `python compile_resnet50.py`. Compilation will take a few minutes on c5.4xlarge. At the end of compilation, the files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory.
 
@@ -91,13 +94,17 @@ scp -i <PEM key file>  resnet-50_compiled-symbol.json ubuntu@<instance DNS>:~/  
 
 If using DLAMI, activate aws_neuron_mxnet_p36 environment and skip this step.
 
+On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime.
+
 4.1. Follow Step 2 above to install MXNet-Neuron.
  * Install neuron-cc if compilation on inference instance is desired (see notes above on recommended Inf1 sizes for compilation)
  * Skip neuron-cc if compilation is not done on inference instance
 
-4.2. To install Runtime, see [Getting started: Installing and Configuring Neuron-RTD](./../neuron-runtime/nrt_start.md).
+4.2. To install Neuron Runtime, see [Getting started: Installing and Configuring Neuron-RTD](./../neuron-runtime/nrt_start.md).
 
 ## Step 5: Execute inference on Inf1
+
+In this step we run inference on Inf1 using the model compiled in Step 3.
 
 5.1. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
