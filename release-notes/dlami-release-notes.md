@@ -26,9 +26,9 @@ tensorflow-model-server-neuron-1.15.0.1.0.663.0
 
 ## Known Issues
 
-In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36), an incorrect numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron".
+* In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36), an incorrect numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron".
 
-When doing pip install in aws_neuron_tensorflow_p36 environment, you will see the following warning. This can be ignored: "neuron-cc <version> has requirement numpy<=1.17.2,>=1.13.3, but you'll have numpy 1.17.4 which is incompatible.""
+* When doing pip install in aws_neuron_tensorflow_p36 environment, you will see the following warning. This can be ignored: "neuron-cc <version> has requirement numpy<=1.17.2,>=1.13.3, but you'll have numpy 1.17.4 which is incompatible.""
 
 Please update all packages to most recent release:
 
