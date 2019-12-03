@@ -8,6 +8,13 @@ Operator support for each input format is provided directly from the compiler:
 neuron-cc --list-operators --framwork {TENSORFLOW | MXNET | ONNX}
 ```
 
+and
+
+* [Neuron-cc Tensorflow Operators](./neuron-cc-ops-tensorflow.md)
+* [Neuron-cc MXNet Operators](./neuron-cc-ops-mxnet.md)
+* [Neuron-cc ONNX Operators](./neuron-cc-onnx.md)
+
+
 # [1.0.5301.0]
 
 Date 12/1/2019
