@@ -41,7 +41,7 @@ Please update to the latest conda package release.
 source activate <conda environment>
 conda update tensorflow-neuron
 ```
-In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36) of DLAMI v26.0, an incorrect numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron". (See [DLAMI Release Notes](./dlami-release-notes.md)).
+In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36) of DLAMI v26.0, the installed numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron". (See [DLAMI Release Notes](./dlami-release-notes.md)).
 
 ```bash
 source activate aws_neuron_tensorflow_p36
