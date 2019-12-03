@@ -51,6 +51,10 @@ A NeuronCore Pipeline is a unique technique to shard a specific Neural Network a
 
 Developers can choose to use NeuronCore Pipeline mode during compile stage, with an opt-in flag. [Neuron Compiler](./docs/neuron-cc/readme.md) provides further details. 
 
+**Q: NeuronCores, NeuronCore Groups and NeuronCore Pipelines: What do they do?**
+
+NeuronCores are the engines inside an Inferentia. Each has 4 of them. An ML Model runs on these. A NeuronCore Group is a way to put these together so you can assign models and have the Neuron Runtime dynamically switch between them. If you want to run mutliple modles in parallel, you can assign models to different NeuronCore Groups. A model compiled to use multiple NeuronCores in a NeuronCorePipeline can be assigned to a NeuronCore Group with enough NeuronCores to load it. Finally - it is also possible for sets of Inferentia devices to be mapped to seprate Neuron Runtimes, in which case all of these can be done separately. The documents in the [docs](../docs) folder has informaiton and examples for all of this.
+
 **Q: Can I use TensorFlow networks from tfhub.dev as-is ? if not, what should I do?**
 
 Yes. Models format can  be imported into Tensorflow, either as a standard model-server, in which case it appears as a simple command line utility, or via the Python based Tensorflow environment.  The primary additional step needed is to compile the model into Inferentia NEFF format. 
