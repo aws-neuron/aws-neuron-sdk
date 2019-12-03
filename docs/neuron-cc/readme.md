@@ -4,7 +4,7 @@ The Neuron Compiler is an Ahead-of-Time (AoT) compiler that accepts Machine Lear
 
 The Neuron compiler analyzes the user-provided compute-graph, and performs various optimizations such as loop-fusion, tensorization, scheduling, and memory management, which significantly improves inference throughput and memory usage.
 
-AoT compilation requires that dynamic tensor shapes (dimension sizes) of all tensors in the compute-graph are known at compilation time, in order for the compiler to make sound decisions. If any shape cannot be determined at compile time.
+AoT compilation requires that dynamic tensor shapes (dimension sizes) of all tensors in the compute-graph are known at compilation time, in order for the compiler to make sound decisions. If any shape cannot be determined at compile time compilation will fail.
 
 It is common for developers to train in FP32, for avoiding the challenges of low-precision training (e.g. loss-scaling, etc). However, during inference, developers typically look for the most cost-effective target. In order to address these two requirements, Neuron supports auto-conversion, which takes FP32 models as input, and then runs them at speed of 16-bit using BFloat16 model, using our FP32 to BF16 auto conversion.
 The Neuron compiler is most often used within an integrated framework, such as Tensorflow-Neuron. From that framework, 
