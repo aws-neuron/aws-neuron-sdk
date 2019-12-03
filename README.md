@@ -51,7 +51,7 @@ Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/lates
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
 
 ### DL Containers
-Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. You can configure ECS to run on Inf1 by following these instructions [TODO](./).
+Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. 
 
 
 ### Install Neuron in your own AMI
