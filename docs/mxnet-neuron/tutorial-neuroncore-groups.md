@@ -9,7 +9,7 @@ compile_args = {'--num-neuroncores' : 2}
 sym, args, auxs = neuron.compile(sym, args, auxs, inputs, **compile_args)
 ```
 
-Following this example: [MXNet tutorial](./tutorial-mxnet-neuron-compile-infer.md), create compile_resnet50.py with `--num-neuroncores` set to 2 and run it:
+Create compile_resnet50.py with `--num-neuroncores` set to 2 and run it. The files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory:
 
 ```python
 import mxnet as mx
@@ -33,10 +33,10 @@ mx.model.save_checkpoint("resnet-50_compiled", 0, sym, args, aux)
 During inference, to subdivide the pool of one Inferentia into groups of 1, 2, and 1 NeuronCores, specify `NEURONCORE_GROUP_SIZES` as follows:
 
 ```bash
-`NEURONCORE_GROUP_SIZES``='[1,2,1]' <launch process>`
+NEURONCORE_GROUP_SIZES='[1,2,1]' <launch process>`
 ```
 
-Within the framework, the model can be mapped to group using  `ctx=mx.neuron(N)` context where N is the group index within the `NEURONCORE_GROUP_SIZES` list. Following the example here,  [MXNet Tutorial](./tutorial-mxnet-neuron-compile-infer.md) , create infer_resnet50.py with the following content:
+Within the framework, the model can be mapped to group using  `ctx=mx.neuron(N)` context where N is the group index within the `NEURONCORE_GROUP_SIZES` list. Create infer_resnet50.py with the following content:
 
 ```python
 import mxnet as mx
@@ -46,7 +46,7 @@ path='http://data.mxnet.io/models/imagenet/'
 mx.test_utils.download(path+'synset.txt')
 
 fname = mx.test_utils.download('https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg?raw=true')
-img = mx.image.imread(fname)# convert into format (batch, RGB, width, height)
+img = mx.image.imread(fname) # convert into format (batch, RGB, width, height)
 img = mx.image.imresize(img, 224, 224) # resize
 img = img.transpose((2, 0, 1)) # Channel first
 img = img.expand_dims(axis=0) # batchify
@@ -76,13 +76,24 @@ for i in a[0:5]:
 Run the script to see inference results using NeuronCore group 1:
 
 ```bash
-`NEURONCORE_GROUP_SIZES``=``'[1,2,1]'`` `python infer_resnet50.py
+NEURONCORE_GROUP_SIZES='[1,2,1]' python infer_resnet50.py
 ```
 
 ```bash
-probability=0.642454, class=n02123045 tabby, tabby cat
-probability=0.189407, class=n02123159 tiger cat
-probability=0.100798, class=n02124075 Egyptian cat
-probability=0.030649, class=n02127052 lynx, catamount
-probability=0.016278, class=n02129604 tiger, Panthera tigris
+probability=0.646784, class=n02123045 tabby, tabby cat
+probability=0.185307, class=n02123159 tiger cat
+probability=0.099188, class=n02124075 Egyptian cat
+probability=0.032201, class=n02127052 lynx, catamount
+probability=0.016192, class=n02129604 tiger, Panthera tigris
+```
+
+If not enough NeuronCores are provided, an error message will be displayed:
+
+```bash
+NEURONCORE_GROUP_SIZES='[1,1,1]' python infer_resnet50.py
+```
+
+```bash
+...
+mxnet.base.MXNetError: [04:01:39] src/operator/subgraph/neuron/./neuron_util.h:541: Check failed: rsp.status().code() == 0: Failed load model with Neuron-RTD Error. Neuron-RTD Status Code: 9, details: ""
 ```

@@ -59,8 +59,8 @@ conda update tensorflow-neuron
 
 * When using the Conda DLAMI, use the above conda commands to update packages, not pip.
 
-* When doing ```conda update aws_neuron_tensorflow``` in the aws_neuron_tensorflow_p36 environment, you will see the following warning which can be ignored: "neuron-cc <version> has requirement numpy<=1.17.2,>=1.13.3, but you'll have numpy 1.17.4 which is incompatible.""
-  
+* When doing ```conda update aws_neuron_tensorflow``` in the aws_neuron_tensorflow_p36 environment or when using pip install, you will see the following warning which can be ignored: "neuron-cc <version> has requirement numpy<=1.17.2,>=1.13.3, but you'll have numpy 1.17.4 which is incompatible.""
+
 * Customers experiencing 404 errors from https://yum.repos.neuron.amazonaws.com during yum updates will need to remake their yum HTTP caches as shown in the code below this bullet.  It's also encouraged to configure the Neuron repository for immediate metadata expiration to avoid the 404 errors in the future as shown here: [Repo Config Guide](../docs/guide-repo-config.md)
 
 ```bash

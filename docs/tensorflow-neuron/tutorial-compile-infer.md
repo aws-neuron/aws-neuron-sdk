@@ -27,16 +27,16 @@ On the instance you are going to use for compilation, you must have both the Neu
 #### Using Virtualenv:
 
 1. Install virtualenv:
-On Ubuntu:
 ```bash
+# Ubuntu
 sudo apt-get update
 sudo apt-get -y install virtualenv
 ```
-On Amazon Linux:
 ```bash
+# Amazon Linux 2
 sudo yum update
-sudo yum install python3 pip3
-sudo pip3 install virtualenv
+sudo yum install -y python3
+pip3 install --user virtualenv
 ```
 2. Setup a new Python 3.6 environment:
 ```bash
@@ -50,36 +50,6 @@ tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
 extra-index-url = https://pip.repos.neuron.amazonaws.com
 EOF
 ```
-4. Install TensorFlow-Neuron and Neuron Compiler
-```bash
-pip install neuron-cc[tensorflow]
-pip install tensorflow-neuron
-```
-
-#### Using Conda:
-1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
-```bash
-cd /tmp
-curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
-echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 Miniconda3-4.7.12.1-Linux-x86_64.sh" | sha256sum --check
-bash Miniconda3-4.7.12.1-Linux-x86_64.sh
-...
-source ~/.bashrc
-```
-2. Setup a new Python3.6 environment:
-```bash
-conda create -q -y -n test_env_p36 python=3.6
-source activate test_env_p36
-```
-
-3. Modify Pip repository configurations to point to the Neuron repository.
-```bash
-tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
-[global]
-extra-index-url = https://pip.repos.neuron.amazonaws.com
-EOF
-```
-
 4. Install TensorFlow-Neuron and Neuron Compiler
 ```bash
 pip install neuron-cc[tensorflow]

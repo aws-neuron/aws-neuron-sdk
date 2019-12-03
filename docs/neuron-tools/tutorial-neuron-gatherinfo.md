@@ -1,6 +1,6 @@
 # Tutorial: Using Neuron GatherInfo Tool to collect debug and support information
 
-The Neuron GatherInfo tool  `neuron-gatherinfo.py`  can assist in automating the collection and packaging of information from Neuron SDK tools that is useful to both user and AWS for issue resolution. The tool gathers log files and other system information. If being used to supply that info to AWS, the tool will redact proprietary and confidential information. 
+The Neuron GatherInfo tool  `neuron-gatherinfo.py`  can assist in automating the collection and packaging of information from Neuron SDK tools that is useful to both user and AWS for issue resolution. The tool gathers log files and other system information. If being used to supply that info to AWS, the tool will redact proprietary and confidential information.
 The GatherInfo tool is supplied in source code form - available here: [Neuron Gatherinfo](../../src/neuron-gatherinfo)
 
 The tool enables developers to gather compiler and inference/runtime logs. Additionally, the common usage is from within one of the supported ML frameworks that have been integrated with Neuron, and information can be captured from those compile/runtime environments using the frameworks.
@@ -26,12 +26,14 @@ tfn.saved_model.compile(model_dir, compiled_model_dir, compiler_args=['--verbose
 
 ```
 import os
+import mxnet as mx
+...
 os.environ['SUBGRAPH_INFO'] = '1'
 compile_args = { '--verbose' : 2, '--pipeline' : 'compile', 'flags' : ['SaveTemps'] }
-csym, cargs, cauxs = neuron.compile(sym, args, auxs, inputs, **compile_args)
+csym, cargs, cauxs = mx.contrib.neuron.compile(sym, args, auxs, inputs, **compile_args)
 ```
 
-### Step 2: Run neuron-gatherinfo.py to gather information to share 
+### Step 2: Run neuron-gatherinfo.py to gather information to share
 
 The output result will be a tar.gz file.
 
@@ -39,9 +41,9 @@ The output result will be a tar.gz file.
 
 ### Step 1: EXECUTE  inference steps for your workload with increased verbosity or debug levels
 
-In the case of runtime information, the tool **neuron-dump.py** is used by **neuron-gatherinfo.py **to gather that information. Make sure that you have the neuron tools package (aws-neuron-tools) installed. 
+In the case of runtime information, the tool **neuron-dump.py** is used by **neuron-gatherinfo.py **to gather that information. Make sure that you have the neuron tools package (aws-neuron-tools) installed.
 
-### Step 2: Run neuron-gatherinfo.py to gather information to share 
+### Step 2: Run neuron-gatherinfo.py to gather information to share
 
 The output result will be a tar.gz file.
 
@@ -58,7 +60,7 @@ usage: neuron-gatherinfo.py [-h] [--additionalfileordir ADDFLDIR] [-c CCDIR]
     Usage: /home/user/bin/neuron-gatherinfo.py [options]
     This program is used to gather information from this system for analysis
     and debugging
-    
+
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -99,8 +101,8 @@ optional arguments:
   -v, --verbose         Verbose mode displays commands executed and any
                         additional information which may be useful in
                         debugging the tool itself
-           
-           
+
+
 ```
 
 # Examples
@@ -165,5 +167,3 @@ Running cmd: neuron-ls and capturing output in file: /home/user/tutorials-3/comp
 
 
 ```
-
-

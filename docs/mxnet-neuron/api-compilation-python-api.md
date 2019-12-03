@@ -4,6 +4,7 @@ The MXNet-Neuron compilation Python API provides a method to compile model graph
 
 ## Method
 
+`import mxnet as mx`
 `mx.contrib.neuron.compile(sym, args, aux, inputs, **compile_args)`
 
 ## Description
@@ -20,7 +21,7 @@ Options can be passed to Neuron compiler via the compile function. For example, 
 * **args** - args/params dictionary loaded from params file
 * **aux** - aux/params dictionary loaded from params file
 * **inputs** - a dictionary with key/value mappings for input name to input numpy arrays
-* **kwargs** (optional) - a dictionary with key/value mappings for Neuron compiler options. For example, use `compile_args={'--num-neuroncores' : 4}` to set number of NeuronCores per subgraph to 4.
+* **kwargs** (optional) - a dictionary with key/value mappings for Neuron compiler options. For example, to limit the number of NeuronCores per subgraph, use `compile_args={'--num-neuroncores' : N}` where N is an integer. Additional compiler flags can be passed using `'flags' : [<flags>]` where <flags> are comma separated list of strings. See [](../neuron-tools/tutorial-neuron-gatherinfo.md) for example of passing debug flags to compiler.
 
 ## Returns
 
@@ -28,13 +29,18 @@ Options can be passed to Neuron compiler via the compile function. For example, 
 * **args** - modified args/params
 * **auxs** - modified aux/params
 
-## Example Usage
+## Example Usage: Compilation
 
 The following is an example usage of the compilation, with default compilation arguments:
 
 ```python
+import mxnet as mx
+...
 sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs={'data' : img})
 ```
+
+## Example Usage: Extract Compilation Statistics
+
 To extract operation counts, insert the following code after compile step (assume csym is the compiled MXNet symbol):
 
 ```python
