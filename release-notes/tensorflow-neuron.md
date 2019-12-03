@@ -29,7 +29,7 @@ Date:  11/25/2019
 
 ## Summary
 
-This version is available only in released DLAMI v26.0. Please [update](https://github.com/aws/aws-neuron-sdk/blob/master/release-notes/dlami-release-notes.md#known-issues) to latest version.
+This version is available only in released DLAMI v26.0. Please [update](./dlami-release-notes.md#known-issues) to latest version.
 
 ## Major New Features
 
@@ -47,6 +47,3 @@ The following models have successfully run on neuron-inferentia systems
 4. Inception-V2/V3/V4
 
 ## Other Notes
-
-
-

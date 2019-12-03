@@ -29,8 +29,6 @@ mxnet-neuron-1.5.1.1.0.1260.0
 Please update to the latest conda package:
 
 ```
+source activate <conda environment>
 conda update mxnet-neuron
 ```
-
-
-
