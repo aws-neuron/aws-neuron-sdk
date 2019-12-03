@@ -30,7 +30,8 @@ tensorflow-model-server-neuron-1.15.0.1.0.663.0
 
 * When doing pip install in aws_neuron_tensorflow_p36 environment, you will see the following warning. This can be ignored: "neuron-cc <version> has requirement numpy<=1.17.2,>=1.13.3, but you'll have numpy 1.17.4 which is incompatible.""
   
-* Customers experiencing 404 errors from https://yum.repos.neuron.amazonaws.com during yum updates will need to remake their yum HTTP caches.  It's also encouraged to configure the Neuron repository for immediate metadata expiration to avoid the 404 errors in the future.  Details on configuring the Neuron yum repository are found here: https://github.com/aws/aws-neuron-sdk/blob/master/docs/guide-repo-config.md
+* Customers experiencing 404 errors from https://yum.repos.neuron.amazonaws.com during yum updates will need to remake their yum HTTP caches as shown in the code below this bullet.  It's also encouraged to configure the Neuron repository for immediate metadata expiration to avoid the 404 errors in the future as shown here: [Repo Config Guide](../docs/guide-repo-config.md)
+
 ```bash
 # refresh yum HTTP cache:
 sudo yum makecache
