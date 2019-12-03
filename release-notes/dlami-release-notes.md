@@ -53,7 +53,7 @@ python3 -m pip install tensorflow-neuron
 
 * It is stongly suggested to update all packages to most recent release:
 
-###  Ubuntu:
+###  Base DLAMI on Ubuntu:
 
 ```bash
 sudo apt-get update
@@ -62,14 +62,14 @@ sudo apt-get install aws-neuron-tools
 sudo apt-get install tensorflow-model-server-neuron
 ```
 
-###  Amazon Linux:
+###  Base DLAMI on Amazon Linux:
 ```bash
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 sudo yum install tensorflow-model-server-neuron
 ```
 
-### Conda:
+### Conda DLAMI:
 ```bash
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
