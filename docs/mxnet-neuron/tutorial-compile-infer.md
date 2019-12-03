@@ -5,9 +5,10 @@ Neuron supports both Python module and Symbol APIs and the C predict API. The fo
 ## Steps Overview:
 
 1. Launch an EC2 instance for compilation and/or inference
-2. Install Neuron for compilation and runtime execution
+2. Install MXNet-Neuron and Neuron Compiler On Compilation Instance
 3. Compile on compilation server
-4. Execute inference on Inf1
+4. Install MXNet-Neuron and Neuron Runtime on Inference Instance
+5. Execute inference on Inf1
 
 ## Step 1: Launch EC2 Instances
 
@@ -22,9 +23,9 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 1.3. Select and launch an Inf1 instance of your choice to run the compiled model. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
-## Step 2: Install Neuron Compiler and MXNet-Neuron On Compilation Instance
+## Step 2: Install MXNet-Neuron and Neuron Compiler On Compilation Instance
 
-If using DLAMI, activate aws_neuron_mxnet_p36 environment and skip this step.
+If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36`) and skip this step.
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  MXNet-Neuron.
 
@@ -90,9 +91,9 @@ scp -i <PEM key file>  resnet-50_compiled-0000.params ubuntu@<instance DNS>:~/  
 scp -i <PEM key file>  resnet-50_compiled-symbol.json ubuntu@<instance DNS>:~/  # Ubuntu
 ```
 
-## Step 4: Install MXNet-Neuron and Neuron-Runtime on Inference Instance
+## Step 4: Install MXNet-Neuron and Neuron Runtime on Inference Instance
 
-If using DLAMI, activate aws_neuron_mxnet_p36 environment and skip this step.
+If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36`) and skip this step.
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime.
 

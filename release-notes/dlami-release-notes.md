@@ -55,7 +55,7 @@ conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
 ```
 
-* In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36), an incorrect numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron".
+* In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36), the installed numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron".
 
 * When using the Conda DLAMI, use the above conda commands to update packages, not pip.
 

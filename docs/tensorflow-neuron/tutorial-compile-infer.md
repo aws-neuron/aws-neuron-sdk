@@ -20,6 +20,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 1.3. Select and launch a deployment (Inf1) instance of your choice (if not compiling and inferencing on the same instance). Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
+
 ## Step 2: Compilation Instance Installations
 
 **If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
@@ -59,7 +60,9 @@ pip install tensorflow-neuron
 pip install neuron-cc[tensorflow]
 ```
 
+
 ## Step 3: Compile on Compilation Instance
+
 
 A trained model must be compiled to Inferentia target before it can be deployed on Inferentia instances.
 In this step we compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
@@ -123,6 +126,7 @@ scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if us
 
 ## Step 4: Deployment Instance Installations
 
+
 **If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime
@@ -133,7 +137,7 @@ On the instance you are going to use for inference, install TensorFlow-Neuron an
 
 4.2. To install Neuron Runtime, see [Getting started: Installing and Configuring Neuron-RTD](./../neuron-runtime/nrt_start.md).
 
-## Step 5: Execute inference on Inf1
+## Step 5: Deploy
 
 In this step we run inference on Inf1 using the model compiled in Step 3.
 
