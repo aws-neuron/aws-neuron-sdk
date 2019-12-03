@@ -7,28 +7,28 @@ The Neuron SDK release notes follow a similar structure, with the core improveme
 This structure is shown below, with each also linking to the release notes for that package itself as well as showing the consitutuent included packages:
 
 
-## [DLAMI](./dlami-release-notes.md)
+## [DLAMI Release Notes](./dlami-release-notes.md)
 
-+ ### [Conda Tensorflow](./conda/conda-tensorflow-neuron.md)
++ ### [Conda Tensorflow Release Notes](./conda/conda-tensorflow-neuron.md)
 
-  + #### [Tensorflow-Neuron](./tensorflow-neuron.md)
-  + #### [Neuron-CC](./neuron-cc.md)
-  + #### [TensorBoard-neuron](./tensorboard-neuron.md)
+  + #### [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
+  + #### [Neuron-CC Release Notes](./neuron-cc.md)
+  + #### [TensorBoard-neuron Release Notes](./tensorboard-neuron.md)
 
-+ ### [Conda MXNet](./conda/conda-mxnet-neuron.md)
++ ### [Conda MXNet Release Notes](./conda/conda-mxnet-neuron.md)
 
-  + #### [MXNet-neuron](./mxnet-neuron.md)
-  + #### [Neuron-CC](./neuron-cc.md)
+  + #### [MXNet-neuron Release Notes](./mxnet-neuron.md)
+  + #### [Neuron-CC Release Notes](./neuron-cc.md)
 
-+ ### [Tensorflow-Model-Server-Neuron](./tensorflow-modelserver-neuron.md)
-+ ### [Neuron-Runtime](./neuron-runtime.md)
-+ ### [Neuron-Tools](./neuron-tools.md)
++ ### [Tensorflow-Model-Server-Neuron Release Notes](./tensorflow-modelserver-neuron.md)
++ ### [Neuron-Runtime Release Notes](./neuron-runtime.md)
++ ### [Neuron-Tools Release Notes](./neuron-tools.md)
 
 
-## [Neuron-CC](./neuron-cc.md)
-## [Neuron-Runtime](./neuron-runtime.md)
-## [Neuron-Tools](./neuron-tools.md)
-## [MXNet-Neuron](./neuron-cc.md)
-## [Tensorflow-Neuron](./tensorflow-neuron.md)
-## [Tensorboard-Neuron](./tensorboard-neuron.md)
+## [Neuron-CC Release Notes](./neuron-cc.md)
+## [Neuron-Runtime Release Notes](./neuron-runtime.md)
+## [Neuron-Tools Release Notes](./neuron-tools.md)
+## [MXNet-Neuron Release Notes](./neuron-cc.md)
+## [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
+## [Tensorboard-Neuron Release Notes](./tensorboard-neuron.md)
 
