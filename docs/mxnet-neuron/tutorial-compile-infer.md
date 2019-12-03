@@ -19,7 +19,7 @@ A typical workflow with the Neuron SDK will be for a trained ML model to be comp
 2. Select and start an EC2 instance of your choice to compile
     1. It is recommended to use C5.4xlarge or larger. For this example we will use a C5.4xlarge
     2. If you would like to compile and infer on the same machine, please select Inf1.6xlarge
-3. Select and start an Inf1 instance of your choice to run the compiled model you sdtaretd in step 2.2 to run the compiled model.
+3. Select and start an Inf1 instance of your choice to run the compiled model you started in step 2.2 to run the compiled model.
 
 ## Step 2: Install Neuron
 
