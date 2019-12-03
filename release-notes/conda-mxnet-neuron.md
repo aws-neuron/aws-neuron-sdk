@@ -9,6 +9,7 @@ Date 12/1/2019
 ## Included Neuron Packages
 
 neuron-cc-1.0.5301.0
+
 mxnet-neuron-1.5.1.1.0.1325.0
 
 ## Known Issues and Limitations
@@ -22,6 +23,7 @@ This version is only available from the release DLAMI v26.0
 ## Included Neuron Packages
 
 neuron-cc-1.0.4680.0
+
 mxnet-neuron-1.5.1.1.0.1260.0
 
 ## Known Issues and Limitations
