@@ -39,7 +39,7 @@ modeldir = "./resnet50/1"
 tf.saved_model.simple_save(sess, modeldir, inputs, outputs)
 
 # compile the model for Inferentia
-neuron_modeldir = "/home/ubuntu/resnet50_inf1/1"
+neuron_modeldir = "./resnet50_inf1/1"
 tf.neuron.saved_model.compile(modeldir, neuron_modeldir, batch_size=1)
 ```
 
@@ -52,7 +52,7 @@ User can now serve the saved model with the tensorflow_model_server_neuron binar
 export NEURONCORE_GROUP_SIZES=1  # important to set this environment variable before launching model servers
 for i in {0..3}; do
     tensorflow_model_server_neuron --model_name=resnet50_inf1 \
-        --model_base_path=/home/ubuntu/resnet50_inf1/ --port=8500
+        --model_base_path=$(pwd)/resnet50_inf1/ --port=8500
 done
 ```
 
