@@ -71,8 +71,6 @@ DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem     Neur
 10002       1         0          0000:00:1f.0:1   384        135660544      0.00
 ```
 
-TODO describe VNC
-TODO change output with example that shows utilization
 
 # Gather Debugging information
 Please see [Neuron Gatherinfo](./tutorial-neuron-gatherinfo.md)
