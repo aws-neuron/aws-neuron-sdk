@@ -17,7 +17,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
     * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
     * If you would like to compile and infer on the same machine, please select inf1.6xlarge.
-3. Select and launch an Inf1 instance of your choice if not compiling and inferencing on the same instance. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+3. Select and launch an Inf1 instance of your choice to run the compiled model. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
 ## Step 2: Install Neuron Compiler and MXNet-Neuron On Compilation Instance
 
