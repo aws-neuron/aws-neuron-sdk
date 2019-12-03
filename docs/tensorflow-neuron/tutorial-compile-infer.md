@@ -4,29 +4,26 @@
 
 1. Launch an EC2 instance for compilation and/or Infernence
 2. Install Neuron for Compiler and Runtime execution
-3. Run example
+3. Compile on compilation server
+4. Execute inference on Inf1
 
 ## Step 1: Launch EC2 Instance(s)
 
-A typical workflow with the Neuron SDK will be to compile a trained ML model on a compilation server and then the distribute the artifacts to Inf1 instances for execution.
+A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation server and then distribute the artifacts to a fleet of Inf1 instances for execution. Neuron enables TensorFlow to be used for all of these steps.
 
-1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
+1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
+2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+    * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
+    * If you would like to compile and infer on the same machine, please select inf1.6xlarge.
+3. Select and launch an Inf1 instance of your choice if not compiling and inferencing on the same instance. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 
-1.2. Select and start an EC2 instance of your choice to compile
-    1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
-    2. If you would like to compile and run inference on the same machine, please select inf1.6xlarge or larger
+## Step 2: Install Neuron Compiler and TensorFlow-Neuron On Compilation Instance
 
-1.3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
+If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.
 
-## Step 2: Install Neuron
+On the instance you are going to use for compilation, install both Neuron Compiler and  TensorFlow-Neuron.
 
-### Compiler Instance: Install Neuron Compiler and TensorFlow-Neuron
-
-On the instance you are going to use for compilation, you must have both the Neuron compiler and the Tensorflow-Neuron installed. (The inference instance must have the Tensorflow-Neuron and the Neuron Runtime installed.)
-
-#### Using Virtualenv:
-
-1. Install virtualenv:
+2.1. Install virtualenv if needed:
 ```bash
 # Ubuntu
 sudo apt-get update
@@ -38,30 +35,28 @@ sudo yum update
 sudo yum install -y python3
 pip3 install --user virtualenv
 ```
-2. Setup a new Python 3.6 environment:
+2.2. Setup a new Python 3.6 environment:
 ```bash
 virtualenv --python=python3.6 test_env_p36
 source test_env_p36/bin/activate
 ```
-3. Modify Pip repository configurations to point to the Neuron repository.
+2.3. Modify Pip repository configurations to point to the Neuron repository.
 ```bash
 tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
 [global]
 extra-index-url = https://pip.repos.neuron.amazonaws.com
 EOF
 ```
-4. Install TensorFlow-Neuron and Neuron Compiler
+2.4. Install TensorFlow-Neuron and Neuron Compiler
 ```bash
-pip install neuron-cc[tensorflow]
 pip install tensorflow-neuron
 ```
+```bash
+# can be skipped on inference-only instance
+pip install neuron-cc[tensorflow]
+```
 
-### Inference Instance: Install Tensorflow-Neuron and Neuron-Runtime
-
-1. Same as above to install Tensorflow Neuron.
-2. To install Runtime, refer to the [getting started](./../neuron-runtime/readme.md) runtime guide.
-
-## Step 3: Run Inference
+## Step 3: Compile on Compilation Server
 
 Steps Overview:
 1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
@@ -117,13 +112,25 @@ INFO:tensorflow:Number of operations after tf.neuron optimizations: 555
 INFO:tensorflow:Number of operations placed on Neuron runtime: 554
 ...
 ```
-
 3.3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 ```bash
 scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # Ubuntu
 scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
 ```
-3.4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+
+## Step 4: Install TensorFlow-Neuron and Neuron-Runtime on Inference Instance
+
+If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.
+
+4.1. Follow Step 2 above to install TensorFlow-Neuron.
+ * Install neuron-cc if compilation on inference instance is desired (see notes above on recommended Inf1 sizes for compilation)
+ * Skip neuron-cc if compilation is not done on inference instance
+
+4.2. To install Runtime, see [Getting started: Installing and Configuring Neuron-RTD](./../neuron-runtime/nrt_start.md).
+
+## Step 5: Execute inference on Inf1
+
+5.1. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
 import os
 import time
@@ -150,7 +157,7 @@ infa_rslts = predictor_inferentia(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-3.5. Unzip the mode, download the example image and run the inference:
+5.2. Unzip the mode, download the example image and run the inference:
 ```bash
 unzip resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg

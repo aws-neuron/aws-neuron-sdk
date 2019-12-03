@@ -1,10 +1,10 @@
 # Tutorial: Configuring NeuronCore Groups
 
-A NeuronCore Group is a set of NeuronCores that are used to load and run compiled models. At any time, one model will be running in a NeuronCoreGroup. By changing to a different sized NeuonCoreGroup and then creating several of these NeuronCoreGroups, a user may create independent and parallel models running in the Inferentia. Additonally: within a NeuronCoreGroup, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another. By default, a single NeuronCoreGroup is created by Neuron Runtime that contains all 4 NeuronCores in an Inferentia. In this default case, when models are loaded to that default NeuronCoreGroup, only 1 will be running at any time. By configuring multiple NeuronCoreGroups as shown in this tutorial, multiple models may be made to run simultaenously.
+A NeuronCore Group is a set of NeuronCores that are used to load and run compiled models. At any time, one model will be running in a NeuronCore Group. By changing to a different sized NeuronCore Group and then creating several of these NeuronCore Groups, a user may create independent and parallel models running in the Inferentia. Additionally, within a NeuronCore Group, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another. By default, a single NeuronCoreGroup is created by Neuron Runtime that contains all four NeuronCores in an Inferentia. In this default case, when models are loaded to that default NeuronCore Group, only one will be running at any time. By configuring multiple NeuronCore Groups as shown in this tutorial, multiple models may be made to run simultaneously.
 
-The NEURONCORE_GROUP_SIZES environment variable provides user control over this in Neuron-integrated TensorFlow. By default, TensorFlow-Neuron will choose the optimal utilization mode based on model metadata, but in some cases manually setting NEURONCORE_GROUP_SIZES can provide additional performance benefits.
+The NEURONCORE_GROUP_SIZES environment variable provides user control over the grouping of NeuronCores in Neuron-integrated TensorFlow. By default, TensorFlow-Neuron will choose the optimal utilization mode based on model metadata, but in some cases manually setting NEURONCORE_GROUP_SIZES can provide additional performance benefits.
 
-In this tutorial you will learn how to enable a NeuronCore group running TensorFlow Resnet-50 model
+In this tutorial you will learn how to enable a NeuronCore Group running TensorFlow Resnet-50 model.
 
 ## Steps Overview:
 
@@ -61,7 +61,7 @@ python infer_resnet50.py
 
 Scenario 1: allow tensorflow-neuron to utilize more than one Inferentia on inf1.6xlarge and inf1.24xlarge instance sizes.
 
-By default, one Python process with tensorflow-neuron or one tensorflow_model_server_neuron process tries to allocate all NeuronCores in an Inferentia from the Neuron Runtime Daemon. To utilize multiple Inferentias, the recommended parallelization mode is process-level parallelization, as it bypasses the overhead of Python and tensorflow_model_server_neuron resource handling as well as Python’s global interpreter lock (GIL). Note that TensorFlow’s session.run function actually does not hold the GIL. 
+By default, one Python process with tensorflow-neuron or one tensorflow_model_server_neuron process tries to allocate all NeuronCores in an Inferentia from the Neuron Runtime Daemon. To utilize multiple Inferentias, the recommended parallelization mode is process-level parallelization, as it bypasses the overhead of Python and tensorflow_model_server_neuron resource handling as well as Python’s global interpreter lock (GIL). Note that TensorFlow’s session.run function actually does not hold the GIL.
 
 When there is a need to allocate more Inferentia compute into a single process, the following example shows the usage:
 
@@ -133,8 +133,3 @@ result_list = [predictor(feed) for feed in model_feed_dict_list]
 
 # inference results can be found in result_list
 ```
-
-
-
-
-

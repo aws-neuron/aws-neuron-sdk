@@ -2,9 +2,9 @@
 
 This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/mxnet-model-server/tree/master/examples/mxnet_vision.
 
-Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed (see [MXNet Tutorial](./tutorial-compile-infer.md)) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
+Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed along with Neuron Compiler (see [MXNet Tutorial](./tutorial-compile-infer.md)) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
 
-If using DLAMI and aws_neuron_mxnet_p36 environment, you can skip the installation part in the first step below.
+If using DLAMI, you can activate the environment aws_neuron_mxnet_p36 and skip the installation part in the first step below.
 
 1. First, install Java runtime and mxnet-model-server:
 
@@ -91,14 +91,14 @@ Also, comment out unnecessary data copy for model_input in `mxnet_model_service.
 #model_input = [item.as_in_context(self.mxnet_ctx) for item in model_input]
 ```
 
-6. Package the model with model-archiver
+6. Package the model with model-archiver:
 
 ```bash
 cd ~/mxnet-model-server/examples
 model-archiver --force --model-name resnet-50_compiled --model-path mxnet_vision --handler mxnet_vision_service:handle
 ```
 
-7. Start MXNet Model Server (MMS) and load model using RESTful API. The number of workers should be less than or equal number of NeuronCores divided by the number of NeuronCores required by model (<link to API>). Please ensure that Neuron RTD is running with default settings (see Getting Started guide):
+7. Start MXNet Model Server (MMS) and load model using RESTful API. Please ensure that Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md)):
 
 ```bash
 cd ~/mxnet-model-server/
@@ -107,6 +107,8 @@ mxnet-model-server --start --model-store examples
 curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=1&synchronous=true&url=resnet-50_compiled.mar"
 sleep 10 # allow sufficient time to load model
 ```
+
+Each worker requires NeuronCore Group that can accommodate the compiled model. Additional workers can be added by increasing max_workers configuration as long as there are enough NeuronCores available. Use `neuron-cli list-ncg` to see NeuronCore Groups being created.
 
 8. Test inference using an example image:
 
