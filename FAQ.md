@@ -81,9 +81,9 @@ Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It 
 The compiler compiles the input graph for a single NeuronCore by default.  Using the The “`num-neuroncores`” option directs compiler to direct compiled graph to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an instance. See performance tuning application note [link](.) for more information (TODO). 
 
 **Q: Which operators does Neuron support?**
-* [Neuron-cc Tensorflow Operators](./release-notes/neuron-cc-ops-tensorflow.md)
-* [Neuron-cc MXNet Operators](./release-notes/neuron-cc-ops-mxnet.md)
-* [Neuron-cc ONNX Operators](./release-notes/neuron-cc-ops-onnx.md)
+* [Neuron-cc Tensorflow Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.md)
+* [Neuron-cc MXNet Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.md)
+* [Neuron-cc ONNX Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-onnx.md)
 
 **Q: Any operators that Neuron doesn't support?**
 Models with control-flow and dynamic shapes are not supported. You will need to partition the model using the framework prior to compilation. See the [Neuron compiler](./docs/neuron-cc/readme.md). 
