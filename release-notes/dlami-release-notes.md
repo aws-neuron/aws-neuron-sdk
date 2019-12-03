@@ -30,7 +30,7 @@ tensorflow-model-server-neuron-1.15.0.1.0.663.0
 
 * It is stongly suggested to update all packages to most recent release:
 
-###  Base DLAMI on Ubuntu:
+###  Base and Conda DLAMI on Ubuntu:
 
 ```bash
 sudo apt-get update
@@ -39,7 +39,7 @@ sudo apt-get install aws-neuron-tools
 sudo apt-get install tensorflow-model-server-neuron
 ```
 
-###  Base DLAMI on Amazon Linux:
+###  Base and Conda DLAMI on Amazon Linux:
 ```bash
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
