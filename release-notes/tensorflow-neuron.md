@@ -19,6 +19,26 @@ Date: 12/1/2019
 
 * When compiling a large model, may encounter “terminate called after throwing an instance of 'std::bad_alloc'”. Solution: run compilation on c5.4xlarge instance type or larger.
 
+* The pip package ```wrapt``` may have a conflicting version in some installations. This is seen when this error occurs:
+
+```bash
+ERROR: Cannot uninstall 'wrapt'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
+```
+
+to solve this, you can update wrapt to the newer version:
+
+```bash
+conda update wrapt
+python3 -m pip install tensorflow-neuron
+```
+
+or
+
+```bash
+python3 -m pip install wrapt --ignore-installed
+python3 -m pip install tensorflow-neuron
+```
+
 ## Other Notes
 
 
