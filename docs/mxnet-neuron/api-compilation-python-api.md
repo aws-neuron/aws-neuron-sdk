@@ -4,6 +4,7 @@ The MXNet-Neuron compilation Python API provides a method to compile model graph
 
 ## Method
 
+`import mxnet as mx`
 `mx.contrib.neuron.compile(sym, args, aux, inputs, **compile_args)`
 
 ## Description
@@ -28,13 +29,18 @@ Options can be passed to Neuron compiler via the compile function. For example, 
 * **args** - modified args/params
 * **auxs** - modified aux/params
 
-## Example Usage
+## Example Usage: Compilation
 
 The following is an example usage of the compilation, with default compilation arguments:
 
 ```python
+import mxnet as mx
+...
 sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs={'data' : img})
 ```
+
+## Example Usage: Extract Compilation Statistics
+
 To extract operation counts, insert the following code after compile step (assume csym is the compiled MXNet symbol):
 
 ```python

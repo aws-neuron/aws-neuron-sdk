@@ -62,7 +62,7 @@ pip install mxnet-neuron
 
 ## Step 3: Run Example
 
-1. Create a file `compile_resnet50.py` and run it (compilation will take a few minutes on c5.4xlarge):
+1. Create a file `compile_resnet50.py` and run it (compilation will take a few minutes on c5.4xlarge; the files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory):
 ```python
 import mxnet as mx
 import numpy as np
