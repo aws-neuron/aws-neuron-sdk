@@ -1,46 +1,42 @@
-# Tutorial: Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)
+# Tutorial: Using Neuron to run Resnet50 inference
 
 ## Steps Overview:
 
-1. Launch an EC2 compilation-instance (recommended instance: c5.4xl), and an deployment instance
-2. Install Neuron compiler on the compilation-instace
-3. Compile the compute-graph on the compilation-instance, and copy the compilation artifacts to the deployment-instance
-4. Deploy: run inferences on the deployment-instance
+1. Launch an EC2 instance for compilation and/or Infernence
+2. Install Neuron for Compiler and Runtime execution
+3. Run example
 
 ## Step 1: Launch EC2 Instance(s)
 
-A typical workflow with the Neuron SDK will be to compile a trained ML model on a compilation-instance and then to distribute the artifacts to Inf1 deployment-instances, for execution.
+A typical workflow with the Neuron SDK will be to compile a trained ML model on a compilation server and then the distribute the artifacts to Inf1 instances for execution.
 
-1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, or Amazon Linux 2 based. A pre-built Deep Learning AMI is also available, which includes all of the needed packages (see https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html).
+1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. If you use the pre-built Deep Learning AMI, you can skip to Step 3 below.
 
-**Note:** If you choose to use Deep Learning AMI (recommended for getting started), you may skip to Step 3 below. Make sure to activate the environment of choice, e.g.
-```bash
-ubuntu:~$ source activate aws_neuron_tensorflow_p36
-(aws_neuron_tensorflow_p36) ubuntu:~$ 
-```
+1.2. Select and start an EC2 instance of your choice to compile
+    1. It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge
+    2. If you would like to compile and run inference on the same machine, please select inf1.6xlarge or larger
 
-1.2. Select and start an EC2 compilation-instance
-    1. For this example, we will use c5.4xlarge
-    2. Users may choose the compile and deploy on the same instance, in which case we recommend using Inf1.6xlarge or larger
+1.3. Select and start an Inf1 instance of your choice if not compiling and inferencing on the same instance.
 
-1.3. Select and start a deployment-instance of your choice (if not compiling and inferencing on the same instance).
-    1. For this example, we will use Inf1.xl
+## Step 2: Install Neuron
 
-## Step 2: Installations
+### Compiler Instance: Install Neuron Compiler and TensorFlow-Neuron
 
-### Compilation-Instance: Install Neuron Compiler and TensorFlow-Neuron
-
-Note: this step is only required if you are not using Deep Learning AMI.
-
-On the compilation-instance, install Neuron-compiler and Tensorflow-Neuron.
-On the deployment-instance, install Neuron-runtime and Tensorflow-Neuron.
+On the instance you are going to use for compilation, you must have both the Neuron compiler and the Tensorflow-Neuron installed. (The inference instance must have the Tensorflow-Neuron and the Neuron Runtime installed.)
 
 #### Using Virtualenv:
 
-1. Install virtualenv if needed:
+1. Install virtualenv:
+On Ubuntu:
 ```bash
 sudo apt-get update
 sudo apt-get -y install virtualenv
+```
+On Amazon Linux:
+```bash
+sudo yum update
+sudo yum install python3 pip3
+sudo pip3 install virtualenv
 ```
 2. Setup a new Python 3.6 environment:
 ```bash
@@ -60,14 +56,48 @@ pip install neuron-cc[tensorflow]
 pip install tensorflow-neuron
 ```
 
-### Deployment-Instance: Install Tensorflow-Neuron and Neuron-Runtime
+#### Using Conda:
+1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/):
+```bash
+cd /tmp
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
+echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 Miniconda3-4.7.12.1-Linux-x86_64.sh" | sha256sum --check
+bash Miniconda3-4.7.12.1-Linux-x86_64.sh
+...
+source ~/.bashrc
+```
+2. Setup a new Python3.6 environment:
+```bash
+conda create -q -y -n test_env_p36 python=3.6
+source activate test_env_p36
+```
+
+3. Modify Pip repository configurations to point to the Neuron repository.
+```bash
+tee $CONDA_PREFIX/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
+```
+
+4. Install TensorFlow-Neuron and Neuron Compiler
+```bash
+pip install neuron-cc[tensorflow]
+pip install tensorflow-neuron
+```
+
+### Inference Instance: Install Tensorflow-Neuron and Neuron-Runtime
 
 1. Same as above to install Tensorflow Neuron.
-2. To install Runtime, refer to the [getting started](./../neuron-runtime/nrt_start.md) runtime guide.
+2. To install Runtime, refer to the [getting started](./../neuron-runtime/readme.md) runtime guide.
 
-## Step 3: Compile
+## Step 3: Run Inference
 
-3.1. Create a python script named `compile_resnet50.py` to compile ResNet-50. Example given below:
+Steps Overview:
+1. Compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
+2. Run inference on Inf1 with an example input.
+
+3.1. Create a python script named `compile_resnet50.py` with the following content:
 ```python
 import os
 import time
@@ -105,33 +135,28 @@ tfn.saved_model.compile(model_dir, compiled_model_dir)
  # Prepare SavedModel for uploading to Inf1 instance
 shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
 ```
-
-3.2. Run the compilation script (can take a few minutes). At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.zip` in local directory:
+3.2. Run the compilation script, which will take a few minutes on c5.4xlarge. At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.zip` in local directory:
 ```bash
 python compile_resnet50.py
 ```
 ```
-...
-This function will only be available through the v1 compatibility library as tf.compat.v1.saved_model.loader.load or tf.compat.v1.saved_model.load. There will be a new function for importing SavedModels in Tensorflow 2.0.
-INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc
-INFO:tensorflow:Number of operations in TensorFlow session: 4638
-INFO:tensorflow:Number of operations after tf.neuron optimizations: 556
+ ...
+INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc; log file is at /home/ubuntu/ws_resnet50/workdir/neuron_op_d6f098c01c780733/graph_def.neuron-cc.log
+INFO:tensorflow:Number of operations in TensorFlow session: 3978
+INFO:tensorflow:Number of operations after tf.neuron optimizations: 555
 INFO:tensorflow:Number of operations placed on Neuron runtime: 554
-INFO:tensorflow:Successfully converted ./ws_resnet50/resnet50 to ./ws_resnet50/resnet50_neuron
 ...
 ```
 
 3.3. If not compiling and inferring on the same instance, copy the artifact to the inference server:
 ```bash
-scp -i <PEM key file>  ./resnet50_neuron.zip   ubuntu@<instance DNS>:~/ # is using Ubuntu-based AMI
-scp -i <PEM key file>  ./resnet50_neuron.zip   ec2-user@<instance DNS>:~/  # if using AML2-based AMI
+scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # Ubuntu
+scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # AML2
 ```
-
-## Step 4: Deploy
-
-4.1. On the deployment-instance (Inf1), create an inference Python script named `infer_resnet50.py` with the following content:
+3.4. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
 import os
+import time
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
@@ -155,7 +180,7 @@ infa_rslts = predictor_inferentia(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-4.2. Unzip the model, download the example image and run the inference:
+3.5. Unzip the mode, download the example image and run the inference:
 ```bash
 unzip resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg

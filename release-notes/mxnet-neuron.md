@@ -1,6 +1,6 @@
 # MXNet-Neuron Release Notes
 
-This document lists the release notes for MXNet-Neuron framework. 
+This document lists the release notes for MXNet-Neuron framework.
 
 # [1.5.1.1.0.1325.0]
 
@@ -25,7 +25,7 @@ Date:  11/25/2019
 
 ## Summary
 
-This version is available only in released DLAMI v26.0. Please [update](https://github.com/aws/aws-neuron-sdk/blob/master/release-notes/dlami-release-notes.md#known-issues) to latest version.
+This version is available only in released DLAMI v26.0. Please [update](./dlami-release-notes.md#known-issues) to latest version.
 
 ## Major new features
 
@@ -50,5 +50,3 @@ The following models have successfully run on neuron-inferentia systems
 5. WaveRNN
 
 ## Other Notes
-
-

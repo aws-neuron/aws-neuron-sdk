@@ -125,7 +125,8 @@ for i in a[0:5]:
 4. Run the script to see inference results:
 ```bash
 python infer_resnet50.py
-
+```
+```bash
 probability=0.642454, class=n02123045 tabby, tabby cat
 probability=0.189407, class=n02123159 tiger cat
 probability=0.100798, class=n02124075 Egyptian cat

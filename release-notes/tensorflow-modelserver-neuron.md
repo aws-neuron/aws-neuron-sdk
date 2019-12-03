@@ -24,7 +24,7 @@ Date 11/29/2019
 
 ## Summary
 
-This version is available only in released DLAMI v26.0. See TensorFlow-Neuron Release Notes. Please [update](https://github.com/aws/aws-neuron-sdk/blob/master/release-notes/dlami-release-notes.md#known-issues) to latest version.
+This version is available only in released DLAMI v26.0. See TensorFlow-Neuron Release Notes. Please [update](./dlami-release-notes.md#known-issues) to latest version.
 
 ## Major New Features
 
@@ -33,5 +33,3 @@ This version is available only in released DLAMI v26.0. See TensorFlow-Neuron Re
 ## Known Issues and Limitations
 
 ## Other Notes
-
-
