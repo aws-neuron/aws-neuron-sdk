@@ -5,7 +5,7 @@ TensorFlow serving allows customers to scale-up inference workloads across a net
 If using DLAMI and aws_neuron_tensorflow_p36 environment, you can skip the installation step below.
 
 ## Install TensorFlow Model Server and Serving API
-The configuration of your version of Linux will determine the correct settings - see this [link](./guide-repo-config.md).
+The configuration of your version of Linux will determine the correct settings - see this [link](../guide-repo-config.md).
 
 Then ensure you install using either apt-get or yum:
 ```bash
