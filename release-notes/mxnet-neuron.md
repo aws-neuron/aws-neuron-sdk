@@ -44,6 +44,12 @@ This version is available only in released DLAMI v26.0. Please [update](./dlami-
   * Workaround: When runtime fails due to unavailable resources, manually restart neuron-rtd
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
   * Workaround: run “/opt/aws/neuron/bin/neuron-cli reset“ to clear Neuron RTD states after model is unloaded and server is shut down. This unloads all models and remove all created NeuronCore Groups.
+* Issue: MXNet 1.5.1 may return inconsistent node names for some operators when they are the primary outputs of a Neuron subgraph. This causes failures during inference.
+  * Workaround : Use the `excl_node_names` compilation option to change the partitioning of the graph during compile so that these nodes are not the primary output of a neuron subgraph. See [MXNet-Neuron Compilation API](../docs/mxnet-neuron/api-compilation-python-api.md)
+  ```python
+  compile_args = { 'excl_node_names': ["node_name_to_exclude"] }
+  ```
+
 
 ### Models Supported
 

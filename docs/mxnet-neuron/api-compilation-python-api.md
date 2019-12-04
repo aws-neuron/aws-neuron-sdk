@@ -21,7 +21,10 @@ Options can be passed to Neuron compiler via the compile function. For example, 
 * **args** - args/params dictionary loaded from params file
 * **aux** - aux/params dictionary loaded from params file
 * **inputs** - a dictionary with key/value mappings for input name to input numpy arrays
-* **kwargs** (optional) - a dictionary with key/value mappings for Neuron compiler options. For example, to limit the number of NeuronCores per subgraph, use `compile_args={'--num-neuroncores' : N}` where N is an integer. Additional compiler flags can be passed using `'flags' : [<flags>]` where <flags> are comma separated list of strings. See [](../neuron-tools/tutorial-neuron-gatherinfo.md) for example of passing debug flags to compiler.
+* **kwargs** (optional) - a dictionary with key/value mappings for MXNet-Neuron compilation and Neuron Compiler options.
+  * For example, to limit the number of NeuronCores per subgraph, use `compile_args={'--num-neuroncores' : N}` where N is an integer representing the maximum number of NeuronCores per subgraph.
+  * Additional compiler flags can be passed using `'flags' : [<flags>]` where <flags> is a comma separated list of strings. See [Neuron GatherInfo Tool](../neuron-tools/tutorial-neuron-gatherinfo.md) for example of passing debug flags to compiler.
+  * Advanced option to exclude node names: `compile_args={'excl_node_names' : [<node names>]}` where <node names> is a comma separated list of node name strings.
 
 ## Returns
 
