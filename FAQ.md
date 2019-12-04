@@ -116,7 +116,7 @@ We dont officially support it yet.
 
 Windows is not supported at this time.
 
-**Q: How can I use Kaena in a container based environment? Does Kaena work with ECS and EKS?**
+**Q: How can I use Neuron in a container based environment? Does Neuron work with ECS and EKS?**
 ECS and EKS support is coming soon. Containers can be configured as shown [here](./docs/neuron-runtime/tutorial-containers.md)
 
 
@@ -130,7 +130,7 @@ Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutori
 **Q: Performance is not what I expect it to be, what's the next step?**
 We have Applicaiton Notes coming - check our [App Note](./docs/appnotes/README.md) repo for updates!
 
-**Q: do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
+**Q: Do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
 Errors like this wil be logged and can be found as shown [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: How can I  debug / profile my inference request?**
