@@ -154,7 +154,14 @@ On the instance you are going to use for inference, install TensorFlow-Neuron an
 
 In this step we run inference on Inf1 using the model compiled in Step 3.
 
-5.1. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+5.1. Unzip the compiled model package from Step 3, download the example image, and install pillow module for inference:
+```bash
+unzip resnet50_neuron.zip
+curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
+pip install pillow # Necessary for loading images
+```
+
+5.2. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 ```python
 import os
 import time
@@ -162,6 +169,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
+
+tf.keras.backend.set_image_data_format('channels_last')
 
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
@@ -181,11 +190,8 @@ infa_rslts = predictor_inferentia(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
 ```
 
-5.2. Unzip the compiled model package from Step 3, download the example image and run the inference:
+5.3. Run the inference:
 ```bash
-unzip resnet50_neuron.zip
-curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
-pip install pillow # Necessary for loading images
 python infer_resnet50.py
 ```
 ```
