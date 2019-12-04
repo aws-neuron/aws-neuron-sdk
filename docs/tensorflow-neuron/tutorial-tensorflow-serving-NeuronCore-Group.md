@@ -29,6 +29,7 @@ The following example shows graph construction followed by the addition of Neuro
 import tensorflow as tf
 
 tf.keras.backend.set_learning_phase(0)
+tf.keras.backend.set_image_data_format('channels_last')
 model = tf.keras.applications.ResNet50(weights='imagenet')
 sess = tf.keras.backend.get_session()
 inputs = {'input': model.inputs[0]}
@@ -69,6 +70,8 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow_serving.apis import predict_pb2
 from tensorflow_serving.apis import prediction_service_pb2_grpc
+
+tf.keras.backend.set_image_data_format('channels_last')
 
 if __name__ == '__main__':
     channel = grpc.insecure_channel('localhost:8500')
