@@ -29,13 +29,13 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  MXNet-Neuron.
 
-2.1. Install virtualenv if needed:
+2.1. Install Python3 virtual environment module if needed:
 
 If using Ubuntu AMI:
 ```bash
 # Ubuntu
 sudo apt-get update
-sudo apt-get -y install virtualenv
+sudo apt-get install -y python3-venv
 ```
 Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
 
@@ -49,12 +49,12 @@ If using Amazon Linux 2 AMI:
 # Amazon Linux 2
 sudo yum update
 sudo yum install -y python3
-pip3 install --user virtualenv
 ```
-2.2. Setup a new Python 3.6 environment:
+2.2. Setup a new Python virtual environment:
 ```bash
-virtualenv --python=python3.6 test_env_p36
-source test_env_p36/bin/activate
+python3 -m venv test_venv
+source test_venv/bin/activate
+pip install -U pip
 ```
 2.3. Modify Pip repository configurations to point to the Neuron repository.
 ```bash
