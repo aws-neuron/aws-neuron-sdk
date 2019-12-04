@@ -33,7 +33,7 @@ AWS Neuron includes a compiler that converts your trained machine learning model
 
 **Q: Why is a compiler needed, and how do I use it?**
 
-The Neuron compiler converts from a framework level Neural Network graph, with operators like convolution and pooling, into the hardware-specific instruction set of Inferentia, build the schedule for execution these instructions, and convers the model parameters into format that Inferentia can consume.  The supported input formats include TensorFlow, PyTorch, MXNet, or ONNX. The output from the compiler is a Neuron Executable File Format (NEFF) artifact. NEFF contains a combination of binary code, the model parameters, and additional meta-data needed by the runtime and profiler. 
+The Neuron compiler converts from a framework level Neural Network graph, with operators like convolution and pooling, into the hardware-specific instruction set of Inferentia, build the schedule for execution these instructions, and convers the model parameters into format that Inferentia can consume.  The supported input formats include TensorFlow, PyTorch (shortly), MXNet, or ONNX. The output from the compiler is a Neuron Executable File Format (NEFF) artifact. NEFF contains a combination of binary code, the model parameters, and additional meta-data needed by the runtime and profiler. 
 
 **Q: I am using a ML framework today – what will change for me to use this?**
 
@@ -96,14 +96,14 @@ The compiler and runtime are committed to maintaining compatibility for major ve
 We will bring a utility out to help with this soon.
 
 **Q: How long does it take to compile?**
-It depends on the model and its size and complexity, but this is general a few minutes. 
+It depends on the model and its size and complexity, but this is generally a few minutes. 
 
 <a name="runtime"></a>
 ## Neuron runtime FAQs
 
 **Q: How does Neuron connect to all the Inferentia chips in an Inf1 instance?**
 
-By default, a single runtime process will manage all assigned Inferentias, including running the Neuron Core Pipeline mode. In some cases, user can configure multiple KRT processes each managing a fraction of assigned Inferentias. See [Neuron Runtime](./docs/neuron-runtime/README.md 
+By default, a single runtime process will manage all assigned Inferentias, including running the Neuron Core Pipeline mode. In some cases, user can configure multiple KRT processes each managing a fraction of assigned Inferentias. See [Neuron Runtime](./docs/neuron-runtime/README.md) 
 
 
 **Q: Where can I get logging and other telemetry information?**
