@@ -23,16 +23,25 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Compilation Instance Installations
 
-**If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
+**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_mxnet_p36`  command) and skip this step.**
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  TensorFlow-Neuron.
 
 2.1. Install virtualenv if needed:
+
+If using Ubuntu AMI:
 ```bash
 # Ubuntu
 sudo apt-get update
 sudo apt-get -y install virtualenv
 ```
+Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
+
+```bash
+E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+```
+If using Amazon Linux 2 AMI:
 ```bash
 # Amazon Linux 2
 sudo yum update
@@ -60,9 +69,12 @@ pip install tensorflow-neuron
 pip install neuron-cc[tensorflow]
 ```
 
+Please ignore the following error displayed during installation:
+```bash
+ERROR: tensorflow-serving-api 1.15.0 requires tensorflow~=1.15.0, which is not installed.
+```
 
 ## Step 3: Compile on Compilation Instance
-
 
 A trained model must be compiled to Inferentia target before it can be deployed on Inferentia instances.
 In this step we compile the Keras ResNet50 model and export it as a SavedModel which is an interchange format for TensorFlow models.
@@ -78,31 +90,33 @@ import tensorflow.compat.v1.keras as keras
 from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
- # Create a workspace
+# Create a workspace
 WORKSPACE = './ws_resnet50'
 os.makedirs(WORKSPACE, exist_ok=True)
 
- # Prepare export directory (old one removed)
+# Prepare export directory (old one removed)
 model_dir = os.path.join(WORKSPACE, 'resnet50')
 compiled_model_dir = os.path.join(WORKSPACE, 'resnet50_neuron')
 shutil.rmtree(model_dir, ignore_errors=True)
 shutil.rmtree(compiled_model_dir, ignore_errors=True)
 
- # Instantiate Keras ResNet50 model
+# Instantiate Keras ResNet50 model
 keras.backend.set_learning_phase(0)
+keras.backend.set_image_data_format('channels_last')
+
 model = ResNet50(weights='imagenet')
 
- # Export SavedModel
+# Export SavedModel
 tf.saved_model.simple_save(
     session            = keras.backend.get_session(),
     export_dir         = model_dir,
     inputs             = {'input': model.inputs[0]},
     outputs            = {'output': model.outputs[0]})
 
- # Compile using Neuron
+# Compile using Neuron
 tfn.saved_model.compile(model_dir, compiled_model_dir)    
 
- # Prepare SavedModel for uploading to Inf1 instance
+# Prepare SavedModel for uploading to Inf1 instance
 shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
 ```
 3.2. Run the compilation script, which will take a few minutes on c5.4xlarge. At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.zip` in local directory:
@@ -126,8 +140,7 @@ scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if us
 
 ## Step 4: Deployment Instance Installations
 
-
-**If using DLAMI, activate aws_neuron_tensorflow_p36 environment and skip this step.**
+**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_mxnet_p36`  command) and skip this step.**
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime
 

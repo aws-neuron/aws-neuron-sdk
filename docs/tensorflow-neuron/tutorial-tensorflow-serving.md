@@ -29,6 +29,7 @@ The following example shows graph construction followed by the addition of Neuro
 import tensorflow as tf
 
 tf.keras.backend.set_learning_phase(0)
+tf.keras.backend.set_image_data_format('channels_last')
 model = tf.keras.applications.ResNet50(weights='imagenet')
 sess = tf.keras.backend.get_session()
 inputs = {'input': model.inputs[0]}

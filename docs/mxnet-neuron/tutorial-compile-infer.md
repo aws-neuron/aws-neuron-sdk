@@ -25,16 +25,26 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Install MXNet-Neuron and Neuron Compiler On Compilation Instance
 
-If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36`) and skip this step.
+**If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36` command) and skip this step.**
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  MXNet-Neuron.
 
 2.1. Install virtualenv if needed:
+
+If using Ubuntu AMI:
 ```bash
 # Ubuntu
 sudo apt-get update
 sudo apt-get -y install virtualenv
 ```
+Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
+
+```bash
+E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+```
+
+If using Amazon Linux 2 AMI:
 ```bash
 # Amazon Linux 2
 sudo yum update
@@ -93,7 +103,7 @@ scp -i <PEM key file>  resnet-50_compiled-symbol.json ubuntu@<instance DNS>:~/  
 
 ## Step 4: Install MXNet-Neuron and Neuron Runtime on Inference Instance
 
-If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36`) and skip this step.
+**If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36` command) and skip this step.**
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime.
 

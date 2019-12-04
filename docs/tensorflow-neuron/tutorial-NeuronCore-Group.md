@@ -24,6 +24,8 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
 
+tf.keras.backend.set_image_data_format('channels_last')
+
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
 img_arr = image.img_to_array(img_sgl)
