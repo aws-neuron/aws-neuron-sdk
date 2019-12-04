@@ -69,7 +69,7 @@ pip install mxnet-neuron
 ```
 ```bash
 # can be skipped on inference-only instance
-pip install neuron-cc[mxnet]
+pip install neuron-cc
 ```
 
 ## Step 3: Compile on Compilation Server

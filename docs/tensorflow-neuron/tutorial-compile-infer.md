@@ -156,7 +156,7 @@ In this step we run inference on Inf1 using the model compiled in Step 3.
 
 5.1. Unzip the compiled model package from Step 3, download the example image, and install pillow module for inference:
 ```bash
-unzip resnet50_neuron.zip
+unzip -o resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
 pip install pillow # Necessary for loading images
 ```
