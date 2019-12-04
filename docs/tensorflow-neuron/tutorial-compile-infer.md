@@ -66,7 +66,7 @@ pip install tensorflow-neuron
 ```
 ```bash
 # can be skipped on inference-only instance
-pip install neuron-cc[tensorflow]
+pip install neuron-cc
 ```
 
 Please ignore the following error displayed during installation:
