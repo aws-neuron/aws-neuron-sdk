@@ -23,7 +23,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Compilation Instance Installations
 
-**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_mxnet_p36`  command) and skip this step.**
+**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_tensorflow_p36`  command) and skip this step.**
 
 On the instance you are going to use for compilation, install both Neuron Compiler and  TensorFlow-Neuron.
 
@@ -141,7 +141,7 @@ scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if us
 
 ## Step 4: Deployment Instance Installations
 
-**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_mxnet_p36`  command) and skip this step.**
+**If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_tensorflow_p36`  command) and skip this step.**
 
 On the instance you are going to use for inference, install TensorFlow-Neuron and Neuron Runtime
 
