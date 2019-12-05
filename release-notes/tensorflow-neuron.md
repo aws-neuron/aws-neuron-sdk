@@ -67,3 +67,8 @@ The following models have successfully run on neuron-inferentia systems
 4. Inception-V2/V3/V4
 
 ## Other Notes
+
+* Python versions supported:
+ * 3.5, 3.6, 3.7
+* Linux distribution supported:
+ * Ubuntu 16, Ubuntu 18, Amazon Linux 2
