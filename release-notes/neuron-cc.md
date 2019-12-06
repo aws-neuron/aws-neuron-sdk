@@ -68,7 +68,7 @@ N/A, this is the first release.
 4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release.
 5. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
 6. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performacne degradation. 
-7. **Primary inputs in Neuron Pipeline mode** When a neural network is executed in Neuron Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
+7. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
 
 ## Other Notes
 
