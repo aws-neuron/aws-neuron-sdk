@@ -73,13 +73,13 @@ Framework in which the model was trained.
 Valid values: TENSORFLOW | MXNET | ONNX
 
 **--num-neuroncores** (int) (default 1)
-Compile for the given number of neuron cores so as to leverage Neuron Core Pipeline mode.
+Compile for the given number of neuron cores so as to leverage NeuronCore Pipeline mode.
 
 **--output** (string) (default “out.neff”)
 Filename where compilation output (NEFF archive) will be recorded.
 
 **--io-config**(string) 
-Configuration containing the names and shape of input and output tensors.
+Configuration containing the names and shapes of input and output tensors.
 
 The io-config can be specified as a local filename, a URI, or a string containing the io-config itself.
 
@@ -118,7 +118,7 @@ neuron-cc list-operators --framework <value>
 
 ## Description
 
-Returns a newline ('\n') separated list of operators supported by the AWS Inferentia Neural Network Accelerator.
+Returns a newline ('\n') separated list of operators supported by the NeuronCore.
 
 
 * **TENSORFLOW** - Operators will be formatted according to the value passed to the associated REGISTER_OP(“OperatorName”) macro. 
@@ -149,7 +149,7 @@ Valid values: TENSORFLOW | MXNET | ONNX
 
 ## STDOUT
 
-Returns a newline ('\n') separated list of operators supported by the AWS Inferentia Neural Network Accelerator.
+Returns a newline ('\n') separated list of operators supported by the NeuronCore.
 
 ## EXIT STATUS
 
