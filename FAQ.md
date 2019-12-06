@@ -47,13 +47,13 @@ To use Inferentia and Inf1 instances, the developer need to perform one-time com
 
 **Q: What is a NeuronCore Pipeline ? and How do I take advantage of it?**
 
-A NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple Inferentia accelerators, to take advantage of the large on-chip cache that will typically increase throughput and reduce latency at low batch size. Inf1 instances with multiple Inferentia accelerators, such as inf1.6xlarge or inf1.24xlarge, support NeuronCore Pipeline thanks to the fast chip-to-chip interconnect. 
+A NeuronCore Pipeline is a unique technique to shard a specific Neural Network across multiple NeuronCores, to take advantage of the large on-chip cache that will typically increase throughput and reduce latency at low batch sizes. All Inf1 instances support it, and the Inf1 instances with multiple Inferentia accelerators, such as inf1.6xlarge or inf1.24xlarge support it thanks to the fast chip-to-chip interconnect. 
 
 Developers can choose to use NeuronCore Pipeline mode during compile stage, with an opt-in flag. [Neuron Compiler](./docs/neuron-cc/readme.md) provides further details. 
 
 **Q: NeuronCores, NeuronCore Groups and NeuronCore Pipelines: What do they do?**
 
-NeuronCores are the engines inside an Inferentia. Each has 4 of them. An ML Model runs on these. A NeuronCore Group is a way to put these together so you can assign models and have the Neuron Runtime dynamically switch between them. If you want to run mutliple models in parallel, you can assign models to different NeuronCore Groups. A model compiled to use multiple NeuronCores in a NeuronCorePipeline can be assigned to a NeuronCore Group with enough NeuronCores to load it. Finally - it is also possible for sets of Inferentia devices to be mapped to separate Neuron Runtimes, in which case all of these can be done separately. The documents in the [docs](./docs) folder has information and examples for all of this.
+Each Inferentia chip has four compute engines called NeuronCores. A NeuronCore Group is a way to aggregate NeuronCores to improve hardware utilization and assign models with the right compute sizing for a specific application. If you want to run mutliple models in parallel, you can assign different models to separate NeuronCore Groups. A model compiled to use multiple NeuronCores in a NeuronCorePipeline can be assigned to a NeuronCore Group with enough NeuronCores to load it. Finally- it is also possible for sets of Inferentia devices to be mapped to separate Neuron Runtimes. The documents in the [docs](./docs) folder has more information and examples.
 
 **Q: Can I use TensorFlow networks from tfhub.dev as-is ? if not, what should I do?**
 
@@ -65,12 +65,10 @@ Yes. Models format can  be imported into Tensorflow, either as a standard model-
 
 **Q: Where can I compile to Neuron?** 
 
-The one-time compilation step from the standard framework-level model to Inferentia binary may be performed on any EC2 instance or on-premises. 
+The one-time compilation step from the standard framework-level model to Inferentia binary may be performed on any EC2 instance or even on-premises. 
 
 We recommend using a high-performance compute server of choice (C5 or z1d instance types), for the fastest compile times and 
-ease-of-use with a prebuilt [DLAMI](https://aws.amazon.com/machine-learning/amis/). Developers can also install Neuron in their own environments; this approach may work well 
-for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the 
-training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet.
+ease of use with a prebuilt [DLAMI](https://aws.amazon.com/machine-learning/amis/). Developers can also install Neuron in their own environments; this approach may work well for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet.
 
 **Q: My current Neural Network is based on FP32, how can I use it with Neuron?**
 
@@ -85,6 +83,9 @@ The compiler compiles the input graph for a single NeuronCore by default.  Using
 * [Neuron-cc MXNet Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-onnx.md)
 
+
+If your model contains operators missing from the above list, please post a message on the Neuron developer forum to let us know.
+
 **Q: Any operators that Neuron doesn't support?**
 Models with control-flow and dynamic shapes are not supported. You will need to partition the model using the framework prior to compilation. See the [Neuron compiler](./docs/neuron-cc/readme.md). 
 
@@ -96,18 +97,18 @@ The compiler and runtime are committed to maintaining compatibility for major ve
 We will bring a utility out to help with this soon.
 
 **Q: How long does it take to compile?**
-It depends on the model and its size and complexity, but this is generally a few minutes. 
+It depends on the model and its size and complexity, but this generally takes a few minutes. 
 
 <a name="runtime"></a>
 ## Neuron runtime FAQs
 
 **Q: How does Neuron connect to all the Inferentia chips in an Inf1 instance?**
 
-By default, a single runtime process will manage all assigned Inferentias, including running the Neuron Core Pipeline mode. In some cases, user can configure multiple KRT processes each managing a fraction of assigned Inferentias. See [Neuron Runtime](./docs/neuron-runtime/README.md) 
+By default, a single runtime process will manage all assigned Inferentias, including running the Neuron Core Pipeline mode. if needed, you can configure multiple KRT processes each managing a separate group of Inferentia chips. For more details please refer to [Neuron Runtime readme](./docs/neuron-runtime/README.md) 
 
 
 **Q: Where can I get logging and other telemetry information?**
-See this document on how to collect logs [Neuron log collector](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
+See this document on how to collect logs: [Neuron log collector](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: What about RedHat or other versions of Linux?**
 We dont officially support it yet. 
@@ -120,7 +121,7 @@ Windows is not supported at this time.
 ECS and EKS support is coming soon. Containers can be configured as shown [here](./docs/neuron-runtime/tutorial-containers.md)
 
 
-**Q: How can I take advantage of multiple TPBs and run multiple inferences in parallel?**
+**Q: How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?**
 Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md) as well as for MXnet  [here](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
 
 
@@ -130,7 +131,7 @@ Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutori
 **Q: Performance is not what I expect it to be, what's the next step?**
 We have Applicaiton Notes coming - check our [App Note](./docs/appnotes/README.md) repo for updates!
 
-**Q: Do I need to worry about size of model and size of inferentia memory ? what problems can i expect to have?**
+**Q: Do I need to worry about size of model and size of inferentia memory? what problems can I expect to have?**
 Errors like this wil be logged and can be found as shown [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
 
 **Q: How can I  debug / profile my inference request?**
