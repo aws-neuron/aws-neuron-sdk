@@ -7,8 +7,8 @@ In this getting started guide you will learn how to install Neuron runtime, and 
 
 Steps Overview: 
 
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. 
-2. Select an Inf1 instance size of your choice (see https://aws.amazon.com/ec2/instance-types/)
+1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, or Amazon Linux 2 based. 
+2. Select an Inf1 instance size of your choice (see https://aws.amazon.com/ec2/instance-types/inf1/)
 
 ## Step 2: Install Neuron-RTD
 
@@ -70,7 +70,7 @@ sudo yum install aws-neuron-tools
 ```
 ## Step 3: Configure nr_hugepages
 
-Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers for all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of 2MB hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
+Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers of all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of 2MB hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
 
 ```
 hugepages=128
@@ -103,7 +103,6 @@ You can choose your Neuron-RTD mode, either select to run a single instance of t
 
 
 ### Single Neuron-RTD
-
 The default configuration sets up a single Neuron-RTD daemon for all present Neuron devices in the instance.
 With the default configuration:
 1. Runtime API server listens on a single UDS endpoint `unix:/run/neuron.sock`
@@ -112,14 +111,15 @@ With the default configuration:
 
 ### Multiple Neuron-RTD
 Multiple runtime daemon might be preferred in some cases for isolation or for load balancing.
-The following steps explains configuring 4 Neuron-RTD on a Inf1.6xl instance and let each daemon to manage 1 Neuron device.
+The following steps explains configuring four Neuron-RTD on an inf1.6xl instance and let each daemon to manage 1 Neuron device. 
+
 When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint (UDP or TCP port) and logical device id it should manage.
 
 
 ## Useful commands
 
 ### Identify logical IDs of Inferentia devices
-Use `neuron-ls` to enumerate the set of Inferentia chips in the system.
+Use `neuron-ls` to enumerate the set of Inferentia chips avaliable in the system.
 
 ```bash
 /opt/aws/neuron/bin/neuron-ls
