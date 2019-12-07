@@ -2,7 +2,7 @@
 
 # Identifying Inferentia devices
 
-To identify number of Inferentia devices in a given instance use the `neuron-ls`.
+To identify number of Inferentia devices in a given instance use the `neuron-ls` command.
 
 ```
 $ neuron-ls
@@ -14,13 +14,13 @@ $ neuron-ls
 +--------------+---------+--------+-----------+-----------+------+------+
 ```
 
-The above output is taken Inf1.xlarge instance.
-The first column shows the PCI Bus Device Function ID.
-The second column shows logical ID assigned to the device. This logical ID is used during multiple Neuron-rtd configuration.
-The third columns shows the number of NeuronCores in the inferentia device.
-The last two columns shows the connection to any other inferentia devices; since this is a single inferentia device, those are empty.
+The above output is taken from an Inf1.xlarge instance.
+The first column shows the PCI Bus Device Function (BDF) ID.
+The second column shows logical ID assigned to the device. This logical ID is used during Neuron-rtd configuration.
+The third column shows the number of NeuronCores in the inferentia device.
+The last two columns show the connection to any other inferentia devices; since this is a single inferentia device, those are empty.
 
-# Neuron Groups
+# NeuronCore Groups
 Multiple NeuronCores(NC) can be combined to form a NeuronCore Group (NCG).
 Neuron framework layer will automatically create a default NeuronCore Group.
 To view list of available NCGs the following command can be used.
@@ -36,14 +36,13 @@ Device 1 NC count 4
 +-------+-----------------+----------+-----------------+----------------+
 ```
 
-If for some reason, need to delete the framework created NCGs `neuron-cli destroy-ncg` can be used.
+If there is a need to delete the framework created NCGs the `neuron-cli destroy-ncg` command can be used.
 
 # Listing Models
-Models can be loaded into a NCG.
-Multiple models can be loaded into a single NCG but only one can be in STARTED state at a given moment.
-Inference can be done only on the models with STARTED state.
+Multiple models can be loaded into a single NCG but only one can be in STARTED state at any given moment.
+Inference can be done only on the models with a STARTED state.
 
-To view all the models `neuron-cli list-model` can be used.
+The `neuron-cli list-model` command should be used to view all the models.
 ```
 $ neuron-cli list-model
 Found 3 models
@@ -52,13 +51,14 @@ Found 3 models
 10002 MODEL_STATUS_STARTED 1
 ```
 
-In the above output 10001 and 10002 are unique identifier for models loaded in Neuron device.
+In the above output 10001 and 10002 are unique identifiers for models loaded in a Neuron device.
 
-To start/stop/unload a model `neuron-cli start/stop/unload` command can be used.
+The command `neuron-cli start/stop/unload` can be used to start/stop/unload a model.
 
 # View Resource Usage
 Each model loaded consumes different amount of memory (host and device), NeuronCore and CPU usage.
-This usage can be viewed by using neuron-top.
+The `neuron-top` command can be used to biew the memory usage.
+
 ```
 $ neuron-top
 neuron-top - 2019-11-13 23:57:08
@@ -73,4 +73,4 @@ DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem     Neur
 
 
 # Gather Debugging information
-Please see [Neuron Gatherinfo](./tutorial-neuron-gatherinfo.md)
+Please refer to [Neuron Gatherinfo](./tutorial-neuron-gatherinfo.md)
