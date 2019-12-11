@@ -16,6 +16,8 @@ Date 12/1/2019
   * [RESOLVED: Compiler flags can be passed to compiler during compile call using “flags” option followed by a list of flags.]
 * ~~Issue: Advanced CPU fallback option is a way to attempt to improve the number of operators on Inferentia. The default is currently set to on, which may cause failures.~~
   * [RESOLVED: This option is now off by default.]
+* ~~Issue: When a model needs hardware resources (memory/neuron-cores) which cannot be allocated, the runtime daemon fails to load the model and enters an unstable state.~~
+  * [RESOLVED: see [Neuron Runtime 1.0.4492.0 release notes](./neuron-runtime.md)]
 
 ## Known Issues and Limitations
 
