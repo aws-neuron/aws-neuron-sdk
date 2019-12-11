@@ -1,4 +1,4 @@
-# Neuron Tools Release Notes
+# Neuron Tools release notes
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
@@ -12,8 +12,8 @@ Date:  12/1/2019
 
 ## Resolved Issues
 
-* ~~neuron-top may take longer to start and refresh when numerous models are loaded.~~ [RESOLVED]
-* ~~neuron-top may crash when trying to calculate the utilization of the devices.~~ [RESOLVED]
+* neuron-top may take longer to start and refresh when numerous models are loaded
+* neuron-top may crash when trying to calculate the utilization of the devices
 
 ## Known Issues and Limitations
 
