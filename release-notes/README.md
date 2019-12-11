@@ -32,3 +32,13 @@ This structure is shown below, with each also linking to the release notes for t
 ## [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
 ## [Tensorboard-Neuron Release Notes](./tensorboard-neuron.md)
 
+## Important to know: 
+1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp/bf16, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
+
+2. Computer-vision object detection and segmentation models are not yet supported.
+
+3. INT8 data type is not currently supported by the Neuron compiler.
+
+4. Neuron does not support TensorFlow 2.
+
+5. PyTorch support is coming soon, contact us at aws-neuron-support@amazon.com for more information.

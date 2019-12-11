@@ -1,4 +1,4 @@
-# Neuron Runtime Release Notes
+# Neuron runtime release notes
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
 
@@ -14,13 +14,13 @@ N/A
 
 The following issues have been resolved:
 
-* ~~Neuron-RTD fails to initialize all NeuronCores on Inf1.24xl Inferentia instances.~~ [RESOLVED]
-* ~~On some instances neuron-discovery requires packages (pciutils)~~ [RESOLVED]
-* ~~An inference request might timeout or return a failure when a NeuronCore Pipeline model is loaded on any instance larger than Inf1.xl or Inf1.2xla~~  [RESOLVED]
-* ~~Loading of a model fails when NeuronCore Pipeline inputs are consumed by NeuronCores beyond the first 4 NeuronCores used by the model.~~  [RESOLVED]
-* ~~Neuron-RTD logging to stdout does not work~~  [RESOLVED]
-* ~~Incorrect DMA descriptors validation.  While loading a model; descriptors are allowed to point beyond allocated address ranges.  This could cause the model load failure or produce incorrect numerical results.~~  [RESOLVED]
-* ~~NeuronCore statistics are read incorrectly~~  [RESOLVED]
+* Neuron-RTD fails to initialize all NeuronCores on Inf1.24xl Inferentia instances
+* On some instances neuron-discovery requires packages (pciutils)
+* An inference request might timeout or return a failure when a NeuronCore Pipeline model is loaded on any instance larger than Inf1.xl or Inf1.2xla
+* Loading of a model fails when NeuronCore Pipeline inputs are consumed by NeuronCores beyond the first 4 NeuronCores used by the model
+* Neuron-RTD logging to stdout does not work
+* Incorrect DMA descriptors validation.  While loading a model; descriptors are allowed to point beyond allocated address ranges.  This could cause the model load failure or produce incorrect numerical results
+* NeuronCore statistics are read incorrectly
 
 ## Known Issues and Limitations
 

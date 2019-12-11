@@ -12,10 +12,9 @@ Date 12/1/2019
 
 ## Resolved Issues
 
-* ~~Issue: Compiler flags cannot be passed to compiler during compile call.~~
-  * [RESOLVED: Compiler flags can be passed to compiler during compile call using “flags” option followed by a list of flags.]
-* ~~Issue: Advanced CPU fallback option is a way to attempt to improve the number of operators on Inferentia. The default is currently set to on, which may cause failures.~~
-  * [RESOLVED: This option is now off by default.]
+* Issue: Compiler flags cannot be passed to compiler during compile call. The fix: compiler flags can be passed to compiler during compile call using “flags” option followed by a list of flags.
+
+* Issue: Advanced CPU fallback option is a way to attempt to improve the number of operators on Inferentia. The default is currently set to on, which may cause failures. The fix: This option is now off by default.
 
 ## Known Issues and Limitations
 
