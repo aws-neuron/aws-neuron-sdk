@@ -28,7 +28,7 @@ This structure is shown below, with each also linking to the release notes for t
 ## [Neuron-CC Release Notes](./neuron-cc.md)
 ## [Neuron-Runtime Release Notes](./neuron-runtime.md)
 ## [Neuron-Tools Release Notes](./neuron-tools.md)
-## [MXNet-Neuron Release Notes](./neuron-cc.md)
+## [MXNet-Neuron Release Notes](./mxnet-neuron.md)
 ## [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
 ## [Tensorboard-Neuron Release Notes](./tensorboard-neuron.md)
 
