@@ -32,7 +32,7 @@ Date 12/1/2019
 * Improved performance of batched inference for convolutional networks
 * Fixed MatMult column size 1
 * Fixed bf16 constant loading
-* Fixed Conv2D tile accumulation 
+* Fixed Conv2D tile accumulation
 
 ## Known Issues and Limitations
 
@@ -40,12 +40,31 @@ See Previous releases. Resolved issues are shown in Resolved Issues.
 
 ## Other Notes
 
+Please install g++ on AMIs without g++ pre-installed (i.e. server AMIs):
+
+```bash
+# Ubuntu
+sudo apt-get install -y g++
+```
+
+```bash
+# Amazon Linux
+sudo yum nstall -y gcc-c++
+```
+
+Supported Python versions:
+  * 3.5, 3.6, 3.7
+
+Supported Linux distributions:
+  * Ubuntu 16, Ubuntu 18, Amazon Linux 2
+
+
 ### Dependencies
 
-* dmlc_nnvm-1.0.1328.0 
-* dmlc_topi-1.0.1328.0 
-* dmlc_tvm-1.0.1328.0 
-* inferentia_hwm-1.0.674.0 
+* dmlc_nnvm-1.0.1328.0
+* dmlc_topi-1.0.1328.0
+* dmlc_tvm-1.0.1328.0
+* inferentia_hwm-1.0.674.0
 * islpy-2018.2
 
 # [1.0.4680.0]
@@ -67,7 +86,7 @@ N/A, this is the first release.
 3. **Data layout**  The Neuron compiler supports multiple data layout format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will require Neuron to insert additional _*transpose*_ operations, causing a degradation in performance.
 4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release.
 5. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
-6. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performacne degradation. 
+6. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performacne degradation.
 7. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
 
 ## Other Notes
@@ -79,5 +98,3 @@ N/A, this is the first release.
 * tvm: dmlc_tvm-1.0.1219.0
 * hwm: inferentia_hwm-1.0.602.0
 * islpy: islpy-2018.2+aws2018.x.73.0
-
-

@@ -33,7 +33,7 @@ If using Ubuntu AMI:
 ```bash
 # Ubuntu
 sudo apt-get update
-sudo apt-get install -y python3-venv
+sudo apt-get install -y python3-venv g++
 ```
 Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
 
@@ -46,7 +46,7 @@ If using Amazon Linux 2 AMI:
 ```bash
 # Amazon Linux 2
 sudo yum update
-sudo yum install -y python3
+sudo yum install -y python3 gcc-c++
 ```
 2.2. Setup a new Python virtual environment:
 ```bash
