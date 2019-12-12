@@ -64,7 +64,6 @@ You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-
 * [Neuron Compiler Readme](./docs/neuron-cc/readme.md)
 
 
-
 ## Start using one of the supported frameworks:
 
 TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md) provides useful pointers to install and use Neuron from within the TensorFlow framework.
@@ -76,6 +75,9 @@ MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides usef
 ## Debugging, profiling and other tools:
 * [Getting started: Neuron TensorBoard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
 * [Neuron utilities](./docs/neuron-tools/Readme.md)
+
+## Support
+If none of the github and online resources have an answer to your question, try posting on the AWS Neuron [support forum](https://forums.aws.amazon.com/forum.jspa?forumID=355). 
 
 ## Application Notes
 * [Application Notes Readme](./docs/appnotes/README.md)
