@@ -18,7 +18,7 @@ For this demo, a C5.4xlarge EC2 instance for compiling the BERT Model and an INF
 
 Instructions to launch and update Neuron Software can be found here :
 * [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Getting Started with Neuron-Runtime] (../../../docs/neuron-runtime/nrt_start.md)
+* [Getting Started with Neuron-Runtime](../../../docs/neuron-runtime/nrt_start.md)
 
 
 ## Compiling BERT Large for Inf1
@@ -34,7 +34,7 @@ conda activate aws_neuron_tensorflow_p36
 
 ### Download BERT Large and create a saved model
 
-This demo uses the public version of BERT located * [here](https://github.com/google-research/bert). On your c5 machine, download and converts it into a saved model using steps outlined in public BERT docs * [here](https://github.com/google-research/bert/issues/146) into a directory named bert-saved-model.
+This demo uses the public version of BERT located [here](https://github.com/google-research/bert). On your c5 machine, download and converts it into a saved model using steps outlined in public BERT documentation [here](https://github.com/google-research/bert/issues/146) into a directory named bert-saved-model.
 
 ### Compile saved model for Inferentia
 
