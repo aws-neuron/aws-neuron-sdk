@@ -18,7 +18,7 @@ mxnet-neuron-1.5.1.1.0.1325.0
 
 Date:  11/25/2019
 
-This version is only available from the release DLAMI v26.0
+This version is only available from the release DLAMI v26.0. Please [update](../dlami-release-notes.md#known-issues) to latest version.
 
 ## Included Neuron Packages
 
@@ -30,7 +30,13 @@ mxnet-neuron-1.5.1.1.0.1260.0
 
 Please update to the latest conda package:
 
-```
+```bash
 source activate <conda environment>
+conda update mxnet-neuron
+```
+
+For example, on Conda DLAMI:
+```bash
+source activate aws_neuron_tensorflow_p36
 conda update mxnet-neuron
 ```
