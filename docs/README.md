@@ -10,4 +10,4 @@ Since you can use Neuron in a variety of ways, we arranged the documents in fold
 * [Neuron Tools](./neuron-tools/Readme.md)
 * [MXNet Neuron](./mxnet-neuron/readme.md)
 * [TensorFlow Neuron](./tensorflow-neuron/readme.md)
-* [Pytorch Neuron](./pytorch-neuron/README.md)
+* [PyTorch Neuron](./pytorch-neuron/README.md)
