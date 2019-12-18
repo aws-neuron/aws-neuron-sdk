@@ -42,6 +42,9 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
 * [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](./docs/tensorflow-neuron/tutorial-compile-infer.md)
 * Hands-on Neuron lab [Deep Learning Inference with Amazon EC2 Inf1 Instance](https://github.com/awshlabs/reinvent19Inf1Lab)
 
+## Neuron roadmap
+The AWS Neuron feature roadmap provides visibility onto what we are working on in terms of functional and performance in the near future. We invite you to view the roadmap [here](roadmap-readme.md).
+
 ## Installing Neuron
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. 
 
