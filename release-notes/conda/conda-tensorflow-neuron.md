@@ -23,7 +23,7 @@ tensorboard-neuron-1.15.0.1.0.306.0
 
 Date:  11/25/2019
 
-This version is only available from the release DLAMI v26.0. Please [update](https://github.com/aws/aws-neuron-sdk/blob/master/release-notes/dlami-release-notes.md#known-issues) to latest version.
+This version is only available from the release DLAMI v26.0. Please [update](../dlami-release-notes.md#known-issues) to latest version.
 
 ## Included Neuron Packages
 
@@ -41,7 +41,7 @@ Please update to the latest conda package release.
 source activate <conda environment>
 conda update tensorflow-neuron
 ```
-In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36) of DLAMI v26.0, the installed numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron". (See [DLAMI Release Notes](./dlami-release-notes.md)).
+In TensorFlow-Neuron conda environment (aws_neuron_tensorflow_p36) of DLAMI v26.0, the installed numpy version prevents update to latest conda package version. Please do "conda install numpy=1.17.2 --yes --quiet" before "conda update tensorflow-neuron". (See [DLAMI Release Notes](../dlami-release-notes.md)).
 
 ```bash
 source activate aws_neuron_tensorflow_p36
