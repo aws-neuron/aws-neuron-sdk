@@ -8,17 +8,17 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
 2. Compiling Neuron compatible BERT Large for Inferentia
    a. Create Neuron compatible saved model 
    b. Compile saved model for Inferentia
-3. Running the inference demo
-   a. Launching the BERT demo server
-   b. Sending async requests to server
+3. Run the inference demo
+   a. Launch the BERT demo server
+   b. Send async requests to server
 
 ## Launch EC2 instances and update Neuron software
 
 For this demo, we will use a c5.4xlarge EC2 instance for compiling the BERT Model and an Inf1.2xlarge instance for running the demo itself. For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI. After starting the instance please make sure you update the Neuron software to the latest version before continuing with this demo.
 
 Instructions to launch and update Neuron Software can be found here :
-* [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Getting Started with Neuron-Runtime](../../../docs/neuron-runtime/nrt_start.md)
+* [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](../../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
+* [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md)
 
 
 ## Compiling Neuron compatible BERT Large for Inferentia
@@ -34,6 +34,7 @@ conda activate aws_neuron_tensorflow_p36
 ### Create Neuron compatible saved model
 The Neuron compatible implementation of BERT Large is defined in [bert_model.py](./bert_model.py). Download the weights from the public version of BERT located [here](https://github.com/google-research/bert). Use the Neuron compatible BERT Large implementation and public BERT Large weights to generate a saved model using steps outlined in public BERT documentation [here](https://github.com/google-research/bert/issues/146). Save this into a directory named bert-saved-model.
 
+
 ### Compile saved model for Inferentia
 In the same conda environment and directory containing your bert-saved-model, run the following script :
 
@@ -41,13 +42,13 @@ In the same conda environment and directory containing your bert-saved-model, ru
 bert_model.py --input_saved_model ./bert-saved-model/ --output_saved_model ./bert_saved_model_neuron --crude_gelu
 ```
 
-This compiles BERT large for an input size of 128 and batch size of 4. The compilation output is stored in bert_saved_model_neuron. Move this to your Inf1 instances for inferencing.
+This compiles BERT large for an input size of 128 and batch size of 4. The compilation output is stored in bert_saved_model_neuron. Move this to your Inf1 instance for inferencing.
 
 ## Running the inference demo
 NOTE : Please make sure you update the Neuron software to the latest version before continuing with this demo.
 
 ### Launching the BERT demo server
-On your Inf1.2xlarge, activate the updated conda environment for tensorflow-neuron :
+On your inf1.2xlarge, activate the updated conda environment for tensorflow-neuron :
 
 ```
 conda activate aws_neuron_tensorflow_p36

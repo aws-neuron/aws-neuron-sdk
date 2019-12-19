@@ -1,5 +1,7 @@
 # DLAMI with Neuron Release Notes
 
+For more information about using Neuron with Conda and Base DLAMI, please see https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
+
 # [DLAMI v26.0]
 
 ## Supported Operating Systems:
@@ -24,11 +26,9 @@ aws-neuron-tools-1.0.3657.0
 
 tensorflow-model-server-neuron-1.15.0.1.0.663.0
 
-
-
 ## Known Issues
 
-* It is stongly suggested to update all packages to most recent release:
+* It is strongly encouraged to update all packages to most recent release. If using Conda environments, please use "conda update" instead of "pip install" within the respective environment:
 
 ###  Base and Conda DLAMI on Ubuntu:
 
@@ -47,6 +47,7 @@ sudo yum install tensorflow-model-server-neuron
 ```
 
 ### Conda DLAMI:
+
 ```bash
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
@@ -68,15 +69,17 @@ conda update tensorflow-neuron
 sudo yum makecache
 ```
 
-* Base DLAMI: the package 'wrapt' may cause an error. In this case an error like this will occur:
+* If using Base DLAMI and installing tensorflow-neuron outside of Conda or virtual environment, the package 'wrapt' may cause an error during installation using Pip. In this case an error like this will occur:
 
 ```
 ERROR: Cannot uninstall 'wrapt'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
 ```
 
-To resolve this: execute:
+To resolve this, execute:
 
 ```bash
 python3 -m pip install wrapt --ignore-installed
 python3 -m pip install tensorflow-neuron
 ```
+
+For more information, please see [TensorFlow-Neuron Release Notes](./tensorflow-neuron.md#known-issues-and-limitations).

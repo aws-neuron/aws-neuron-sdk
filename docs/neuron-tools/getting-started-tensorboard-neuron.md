@@ -32,15 +32,21 @@ When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data 
 
 The steps to do this:
 
-1. Set NEURON_PROFILE environment variable .
-2. export NEURON_PROFILE=/some/output/directory
-3. Run inference through the framework.  See the tutorials for each framework for more info.
+* Set NEURON_PROFILE environment variable, e.g.:
+
+```
+export NEURON_PROFILE=/some/output/directory
+```
+
+NOTE: this directory must exist before you move on to the next step.  Otherwise, profile data will not be emitted.
+  
+*  Run inference through the framework.  See the tutorials for each framework for more info.
 
 
 
 ## Visualizing data with TensorBoard-Neuron
 
-To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory where TensorFlow logs are generated. 
+To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory where TensorFlow logs are generated.  (Note that this "logdir" is *not* the same as the NEURON_PROFILE directory that you set during inference, and in fact, depending on your configuration you may not have any tensorflow logs.  For this step, NEURON_PROFILE still needs to be set to the same directory you used during your inference run.  `tensorboard_neuron` will process the neuron profile data from this directory at startup.)
 
 ```
 $ tensorboard_neuron --logdir /path/to/logdir --run_neuron_profile
