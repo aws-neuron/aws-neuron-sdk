@@ -11,8 +11,8 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 ## Getting started 
 * [Tutorial: Using Neuron to run Resnet50 inference](./tutorial-compile-infer.md)
 * [Tutorial: Using NeuronCore Groups](./tutorial-NeuronCore-Group.md)
-* [Tutorial: Tensorflow Model Server](./tutorial-tensorflow-serving.md)
-* [Tutorial: NeuronCore Groups with Tensorflow Model Server](./tutorial-tensorflow-serving-NeuronCore-Group.md) 
+* [Tutorial: TensorFlow Serving](./tutorial-tensorflow-serving.md)
+* [Tutorial: NeuronCore Groups with TensorFlow Serving](./tutorial-tensorflow-serving-NeuronCore-Group.md) 
 
 * [Reference: TensorFlow-Neuron Compilation API](./api-compilation-python-api.md)
 * [Supported Operators](../../release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.md )

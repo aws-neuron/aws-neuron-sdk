@@ -25,18 +25,18 @@ Date: 12/1/2019
 ERROR: Cannot uninstall 'wrapt'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
 ```
 
-to solve this, you can update wrapt to the newer version:
-
-```bash
-conda update wrapt
-python3 -m pip install tensorflow-neuron
-```
-
-or
+To solve this, you can update wrapt to the newer version:
 
 ```bash
 python3 -m pip install wrapt --ignore-installed
 python3 -m pip install tensorflow-neuron
+```
+
+Within a Conda environment:
+
+```bash
+conda update wrapt
+conda update tensorflow-neuron
 ```
 
 ## Other Notes

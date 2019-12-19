@@ -6,8 +6,8 @@ setuptools.setup(
     name='bert-demo',
     version='2019.12.13',
     description='BERT Client-Server Demo',
-    author='Haichen Li',
-    author_email='lhaiche@amazon.com',
+    author='Amazon AWS',
+    author_email='aws-neuron-support@amazon.com',
     license='BSD',
     classifiers=[
         'Development Status :: 1 - Planning',

@@ -18,6 +18,9 @@ Date 12/1/2019
 
 ## Known Issues and Limitations
 
+* Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
+  * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+  
 ## Other Notes
 
 # [1.5.1.1.0.1260.0]
@@ -39,10 +42,8 @@ This version is available only in released DLAMI v26.0. Please [update](./dlami-
   * Workaround: explicitly turn it off by setting compile option op_by_op_compiler_retry to 0.
 * Issue: Temporary files are put in current directory when debug is enabled.
   * Workaround: create a separate work directory and run the process from within the work directory
-* Issue: When a model needs hardware resources (memory/neuron-cores) which cannot be allocated, the runtime daemon fails to load the model and enters an unstable state.
-  * Workaround: When runtime fails due to unavailable resources, manually restart neuron-rtd
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
-  * Workaround: run “/opt/aws/neuron/bin/neuron-cli reset“ to clear Neuron RTD states after model is unloaded and server is shut down. This unloads all models and remove all created NeuronCore Groups.
+  * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
 * Issue: MXNet 1.5.1 may return inconsistent node names for some operators when they are the primary outputs of a Neuron subgraph. This causes failures during inference.
   * Workaround : Use the `excl_node_names` compilation option to change the partitioning of the graph during compile so that these nodes are not the primary output of a neuron subgraph. See [MXNet-Neuron Compilation API](../docs/mxnet-neuron/api-compilation-python-api.md)
   ```python
