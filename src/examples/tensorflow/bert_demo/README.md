@@ -24,11 +24,11 @@ Instructions to launch and update Neuron Software can be found here :
 ## Compiling Neuron compatible BERT Large for Inferentia
 NOTE : Please make sure you update the Neuron software to the latest version before continuing with this demo.
 
-Connect to you c5.4xlarge instance and run the following commands to activate the tensorflow neuron environment.
+Connect to your c5.4xlarge instance and run the following commands to activate the tensorflow neuron environment.
 
 ```
 conda activate aws_neuron_tensorflow_p36
-
+conda update tensorflow-neuron
 ```
 
 ### Create Neuron compatible saved model
