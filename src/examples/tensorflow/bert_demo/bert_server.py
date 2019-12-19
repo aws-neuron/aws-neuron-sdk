@@ -1,4 +1,3 @@
-#!/usr/bin/env conda run -n my_env python
 # coding=utf-8
 
 """ Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.

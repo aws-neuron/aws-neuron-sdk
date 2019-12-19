@@ -39,7 +39,7 @@ Place the saved model in a directory named "bert-saved-model" and proceed to the
 In the same conda environment and directory containing your bert-saved-model, run the following script :
 
 ```
-bert_model.py --input_saved_model ./bert-saved-model/ --output_saved_model ./bert_saved_model_neuron --crude_gelu
+python bert_model.py --input_saved_model ./bert-saved-model/ --output_saved_model ./bert_saved_model_neuron --crude_gelu
 ```
 
 This compiles BERT large for an input size of 128 and batch size of 4. The compilation output is stored in bert_saved_model_neuron. Move this to your Inf1 instances for inferencing. The bert_model.py script encapsulates all the steps necessary for this. For details on what is done by bert_model.py please refer to Appendix 1.
@@ -57,7 +57,7 @@ conda activate aws_neuron_tensorflow_p36
 
 Then launch the BERT demo server :
 ```
-bert_server.py --dir <directory_path_of_bert_saved_model_neuron> --parallel 4
+python bert_server.py --dir <directory_path_of_bert_saved_model_neuron> --parallel 4
 ```
 This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single Inferentia device. For each of the 4 models, the BERT demo server opportunistically stiches together asynchronous requests into batch 4 requests. When there are insufficient pending requests, the server creates dummy requests for batching.
 
@@ -68,7 +68,7 @@ On the same Inf1.2xlarge instance, launch a separate linux terminal. From there 
 
 ```
 conda activate aws_neuron_tensorflow_p36
-for i in {1..48}; do bert_client.py --cycle 128 & done
+for i in {1..48}; do python bert_client.py --cycle 128 & done
 ```
 
 This spins up 48 clients, each of which sends 128 inference requests. The expected performance is about 200 inferences/second for a single instance of Inf1.2xlarge.
