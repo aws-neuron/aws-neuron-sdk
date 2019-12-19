@@ -17,8 +17,8 @@ This demo shows how to compile BERT Large for AWS Neuron, run it on an inf1.2xla
 For this demo, a C5.4xlarge EC2 instance for compiling the BERT Model and an inf1.2xlarge instance for running the demo itself. For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI. After starting the instance please make sure you update the Neuron software to the latest version before continuing with this demo.
 
 Instructions to launch and update Neuron Software can be found here :
-* [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Getting Started with Neuron-Runtime](../../../docs/neuron-runtime/nrt_start.md)
+* [Getting Started with TensorFlow-Neuron (ResNet-50 Tutorial)](../../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
+* [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md)
 
 
 ## Compiling BERT Large for Inf1
