@@ -52,6 +52,7 @@ On your inf1.2xlarge, activate the updated conda environment for tensorflow-neur
 
 ```
 conda activate aws_neuron_tensorflow_p36
+conda update tensorflow-neuron
 
 ```
 
