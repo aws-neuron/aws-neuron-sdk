@@ -28,7 +28,6 @@ Connect to you c5.4xlarge instance and run the following commands to activate th
 
 ```
 conda activate aws_neuron_tensorflow_p36
-
 ```
 
 ### Create saved model from open source BERT Large
@@ -54,14 +53,13 @@ On your inf1.2xlarge, activate the updated conda environment for tensorflow-neur
 
 ```
 conda activate aws_neuron_tensorflow_p36
-
 ```
 
 Then launch the BERT demo server :
 ```
 bert_server.py --dir <directory_path_of_bert_saved_model_neuron> --parallel 4
 ```
-This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single Inferentia device. For each of the 4 models, the BERT demo server opportunistically stiches together asynchronous requests into batch 4 requests. When there are insufficient pending, requests the server creates dummy requests for batching.
+This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single Inferentia device. For each of the 4 models, the BERT demo server opportunistically stiches together asynchronous requests into batch 4 requests. When there are insufficient pending requests, the server creates dummy requests for batching.
 
 Wait for the bert_server to finish loading the BERT models to Inferentia memory. When it is ready to accept requests it will print the inferences per second once every second. This reflects the number of real inferences only. Dummy requests created for batching are not credited to inferentia performance.
 
@@ -92,6 +90,3 @@ The Neuron compatible implementation of BERT Large is functionally equivalent to
 2. Training only ops were removed
 3. Some ops were reimplemented ops
 4. Embedding ops were manually partitioned to CPU
-
-
-
