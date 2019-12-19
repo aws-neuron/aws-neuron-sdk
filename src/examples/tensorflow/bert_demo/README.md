@@ -4,7 +4,7 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
 
 ## Table of Contents
 
-1. Launch EC2 instanceas and update Neuron software
+1. Launch EC2 instances and update Neuron software
 2. Compiling Neuron compatible BERT Large for Inferentia
    a. Create saved model from open source BERT Large
    b. Compile model using Neuron compatible BERT Large
