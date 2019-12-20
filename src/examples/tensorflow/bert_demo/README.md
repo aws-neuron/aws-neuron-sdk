@@ -4,7 +4,7 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
 
 ## Table of Contents
 
-1. Launch EC2 instances and update Neuron software
+1. Launch EC2 instances 
 2. Compiling Neuron compatible BERT Large for Inferentia
    * Create saved model from open source BERT Large
    * Compile model using Neuron compatible BERT Large for Inferentia
@@ -22,12 +22,13 @@ Instructions to launch and update Neuron Software can be found here :
 
 
 ## Compiling Neuron compatible BERT Large for Inferentia
-NOTE : Please make sure you update the Neuron software to the latest version before continuing with this demo.
 
-Connect to you c5.4xlarge instance and run the following commands to activate the tensorflow neuron environment.
+Connect to you c5.4xlarge instance and run the following commands to activate the tensorflow neuron environment and update it.
 
 ```
 conda activate aws_neuron_tensorflow_p36
+conda update tensorflow-neuron
+conda install neuron-cc
 ```
 
 ### Create saved model from open source BERT Large
@@ -53,7 +54,10 @@ On your inf1.2xlarge, activate the updated conda environment for tensorflow-neur
 
 ```
 conda activate aws_neuron_tensorflow_p36
+conda update tensorflow-neuron
 ```
+
+After that update the Neuron runtime for Ubuntu 18 as per instructions [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-2-install-neuron-rtd).
 
 Then launch the BERT demo server :
 ```
@@ -86,7 +90,7 @@ The changes needed for a Neuron compatible BERT implementation is given in Appen
 ## Appendix 2 :
 The Neuron compatible implementation of BERT Large is functionally equivalent to the open source version when used for inference. However, the detailed implementation does differ and here are the list of changes :
 
-1. Auto BF16/FP16 precision
+1. Data Type : 
 2. Training only ops were removed
 3. Some ops were reimplemented ops
 4. Embedding ops were manually partitioned to CPU
