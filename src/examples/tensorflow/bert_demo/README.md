@@ -47,7 +47,6 @@ This compiles BERT large for an input size of 128 and batch size of 4. The compi
 
 
 ## Running the inference demo
-NOTE : Please make sure you update the Neuron software to the latest version before continuing with this demo.
 
 ### Launching the BERT demo server
 On your inf1.2xlarge, activate the updated conda environment for tensorflow-neuron :
@@ -57,7 +56,7 @@ conda activate aws_neuron_tensorflow_p36
 conda update tensorflow-neuron
 ```
 
-After that update the Neuron runtime for Ubuntu 18 as per instructions [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-2-install-neuron-rtd).
+After that, update the Neuron runtime for Ubuntu 18 as per instructions [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-2-install-neuron-rtd).
 
 Then launch the BERT demo server :
 ```
@@ -90,7 +89,7 @@ The changes needed for a Neuron compatible BERT implementation is given in Appen
 ## Appendix 2 :
 The Neuron compatible implementation of BERT Large is functionally equivalent to the open source version when used for inference. However, the detailed implementation does differ and here are the list of changes :
 
-1. Data Type : 
-2. Training only ops were removed
-3. Some ops were reimplemented ops
-4. Embedding ops were manually partitioned to CPU
+1. Data Type Casting : If the original BERT an FP32 model, bert_model.py contains manually defined cast operators to enable mixed-precision. FP16 is used for multi-head attention and fully-connected layers, and fp32 everywhere else. This will be automated in a future release.
+2. Remove Unused Operators: A model typically contains training operators that are not used in inference, including a subset of the reshape operators. Those operators do not affect inference functionality and have been removed.
+3. Reimplementation of Selected Operators : A number of operators (mainly mask operators), has been reimplemented to bypass a known compiler issue. This will be fixed in a planned future release. 
+4. Manually Partition Embedding Ops to CPU : The embedding portion of BERT has been partitioned manually to a subgraph that is executed on the host CPU, without noticable performance impact. In near future, we plan to implement this through compiler auto-partitioning without the need for user intervention.
