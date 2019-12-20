@@ -83,6 +83,7 @@ The bert_model.py script does a few things :
 2. Extract BERT Large weights from the saved model pointed to by --input_saved_model and associates it with the Neuron compatible implementation
 3. Invoke Tensorflow-Neuron compile to compile this model for Inferentia using the newly associated weights
 4. Finally, the compiled model is saved into the location given by --output_saved_model
+
 The changes needed for a Neuron compatible BERT implementation is given in Appendix 2.
 
 
