@@ -10,7 +10,7 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
    * Compile model using Neuron compatible BERT Large for Inferentia
 3. Running the inference demo
    * Launching the BERT demo server
-   * Sending async requests to server
+   * Sending requests to server from multiple clients
 
 ## Launch EC2 instances and update Neuron software
 
@@ -61,7 +61,7 @@ This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single I
 
 Wait for the bert_server to finish loading the BERT models to Inferentia memory. When it is ready to accept requests it will print the inferences per second once every second. This reflects the number of real inferences only. Dummy requests created for batching are not credited to inferentia performance.
 
-### Sending async requests to server
+### Sending requests to server from multiple clients
 On the same Inf1.2xlarge instance and test_venv virtual environment, launch a separate linux terminal. From there execute the following commands from the bert_demo directory :
 
 ```
