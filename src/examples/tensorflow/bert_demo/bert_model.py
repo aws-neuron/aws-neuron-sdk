@@ -135,7 +135,7 @@ class NeuronBERTMRPC:
         self.crude_gelu = crude_gelu
         sess.close()
 
-    @fuse(compiler_args=['--fp32-cast', 'off', '--topdown'], timeout=360000)
+    @fuse(compiler_args=['--fp32-cast', 'matmult', '--topdown'], timeout=360000)
     def encoder(self, tensor, bias_tensor):
         tensor = tf.reshape(tensor, [self.batch_size * self.seq_len, self.hid_size])
         for layer_id in range(24):
