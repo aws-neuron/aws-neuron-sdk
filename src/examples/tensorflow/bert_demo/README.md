@@ -31,7 +31,7 @@ We used publicly available instructions to generate a saved model for open sourc
 Place the saved model in a directory named "bert-saved-model" under the bert_demo directory and proceed to the next section.
 
 ### Compile model using Neuron compatible BERT Large for Inferentia
-In the same virtual environment and directory containing your bert-saved-model-neuron and bert_demo scripts, run the following :
+In the same conda environment and directory containing your bert-saved-model-neuron and bert_demo scripts, run the following :
 
 ```
 python bert_model.py --input_saved_model ./bert-saved-model/ --output_saved_model ./bert-saved-model-neuron --crude_gelu
@@ -50,16 +50,18 @@ conda update tensorflow-neuron
 ```
 
 ### Launching the BERT demo server
-Copy the compiled model (bert_saved_model_neuron) from your c5.4xlarge to your Inf1.2xlarge instance. Place the model in the same directory as the bert_demo scripts. Then launch the BERT demo server :
+Copy the compiled model (bert_saved_model_neuron) from your c5.4xlarge to your Inf1.2xlarge instance. Place the model in the same directory as the bert_demo scripts. Then from the same conda environment launch the BERT demo server :
+
 ```
 python bert_server.py --dir bert-saved-model-neuron --parallel 4
 ```
+
 This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single Inferentia device. For each of the 4 models, the BERT demo server opportunistically stiches together asynchronous requests into batch 4 requests. When there are insufficient pending requests, the server creates dummy requests for batching.
 
 Wait for the bert_server to finish loading the BERT models to Inferentia memory. When it is ready to accept requests it will print the inferences per second once every second. This reflects the number of real inferences only. Dummy requests created for batching are not credited to inferentia performance.
 
 ### Sending requests to server from multiple clients
-On the same Inf1.2xlarge instance and test_venv virtual environment, launch a separate linux terminal. From there execute the following commands from the bert_demo directory :
+On the same Inf1.2xlarge instance and conda environment, launch a separate linux terminal. From there execute the following commands from the bert_demo directory :
 
 ```
 source activate aws_neuron_tensorflow_p36
