@@ -24,7 +24,7 @@ Instructions to install and update Neuron software can be found here :
 
 
 ## Compiling Neuron compatible BERT Large for Inferentia
-Connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc as per documentation in [Getting Started with TensorFlow-Neuron]. After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done skip the next step, otherwise activate your virtual environment as follows :
+Connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc as per documentation in [Getting Started with TensorFlow-Neuron]. After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done, otherwise activate your virtual environment as follows :
 
 ```
 source ~/test_venv/bin/activate
@@ -46,7 +46,7 @@ This compiles BERT large for an input size of 128 and batch size of 4. The compi
 
 
 ## Running the inference demo
-Connect to your Inf1.2xlarge instance and update tensorflow-neuron and neuron-cc as per documentation in [Getting Started with TensorFlow-Neuron] and [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md). After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done skip the next step, otherwise activate your virtual environment as follows :
+Connect to your Inf1.2xlarge instance and update tensorflow-neuron and neuron-cc as per documentation in [Getting Started with TensorFlow-Neuron] and [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md). After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done, otherwise activate your virtual environment as follows :
 
 ```
 source ~/test_venv/bin/activate
