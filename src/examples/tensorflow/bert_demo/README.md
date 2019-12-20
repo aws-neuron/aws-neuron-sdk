@@ -61,7 +61,7 @@ This loads 4 BERT Large models, one into each of the 4 NeuronCores in a single I
 Wait for the bert_server to finish loading the BERT models to Inferentia memory. When it is ready to accept requests it will print the inferences per second once every second. This reflects the number of real inferences only. Dummy requests created for batching are not credited to inferentia performance.
 
 ### Sending requests to server from multiple clients
-On the same Inf1.2xlarge instance and conda environment, launch a separate linux terminal. From there execute the following commands from the bert_demo directory :
+On the same Inf1.2xlarge instance, launch a separate linux terminal. From the bert_demo directory execute the following commands :
 
 ```
 source activate aws_neuron_tensorflow_p36
