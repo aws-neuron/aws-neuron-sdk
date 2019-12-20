@@ -12,22 +12,17 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
    * Launching the BERT demo server
    * Sending requests to server from multiple clients
 
-## Launch EC2 instances and update Neuron software
+## Launch EC2 instances
 
 For this demo, we will use a c5.4xlarge EC2 instance for compiling the BERT Model and an Inf1.2xlarge instance for running the demo itself. For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI (DLAMI). After starting the instance please make sure you update the Neuron software to the latest version before continuing with this demo.
 
-NOTE : We are using a DLAMI instance but will not be using the conda environment from DLAMI. Please use the test_venv setup described in the following documents instead.
-
-Instructions to install and update Neuron software can be found here :
-* [Getting Started with TensorFlow-Neuron](../../../../docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md)
-
-
 ## Compiling Neuron compatible BERT Large for Inferentia
-Connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc as per documentation in [Getting Started with TensorFlow-Neuron]. After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done, otherwise activate your virtual environment as follows :
+Connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc
 
 ```
-source ~/test_venv/bin/activate
+source activate aws_neuron_tensorflow_p36
+conda install numpy=1.17.2 --yes --quiet
+conda update tensorflow-neuron
 ```
 
 ### Create saved model from open source BERT Large
@@ -46,10 +41,12 @@ This compiles BERT large for an input size of 128 and batch size of 4. The compi
 
 
 ## Running the inference demo
-Connect to your Inf1.2xlarge instance and update tensorflow-neuron, aws-neuron-runtime and aws-neuron-tools as per documentation in [Getting Started with TensorFlow-Neuron] and [Getting Started with Neuron-Runtime](../../../../docs/neuron-runtime/nrt_start.md). After completing the update process you will be in the test_venv virtual environment. If that is true nothing needs to be done, otherwise activate your virtual environment as follows :
+Connect to your Inf1.2xlarge instance and update tensorflow-neuron, aws-neuron-runtime and aws-neuron-tools :
 
 ```
-source ~/test_venv/bin/activate
+source activate aws_neuron_tensorflow_p36
+conda install numpy=1.17.2 --yes --quiet
+conda update tensorflow-neuron
 ```
 
 ### Launching the BERT demo server
@@ -65,7 +62,7 @@ Wait for the bert_server to finish loading the BERT models to Inferentia memory.
 On the same Inf1.2xlarge instance and test_venv virtual environment, launch a separate linux terminal. From there execute the following commands from the bert_demo directory :
 
 ```
-source ~/test_venv/bin/activate
+source activate aws_neuron_tensorflow_p36
 for i in {1..48}; do python bert_client.py --cycle 128 & done
 ```
 
