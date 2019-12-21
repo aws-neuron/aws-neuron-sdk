@@ -4,6 +4,8 @@ This document lists the current release notes for AWS Neuron Runtime.  Neuron Ru
 
 # [1.0.4751.0]
 
+Date: 12/20/2019
+
 ## Major New Features
 
 N/A
