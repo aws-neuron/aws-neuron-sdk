@@ -2,6 +2,14 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
+# [1.5.1.1.0.1349.0]
+
+Date 12/20/2019
+
+## Summary
+
+No major changes or fixes. Released with other Neuron packages.
+
 # [1.5.1.1.0.1325.0]
 
 Date 12/1/2019
