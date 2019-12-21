@@ -26,7 +26,7 @@ conda update tensorflow-neuron
 ```
 
 ### Create saved model from open source BERT Large
-We used publicly available instructions to generate a saved model for open source BERT Large using MRPC weights. The implementation and weights can be found [here](https://github.com/google-research/bert). The instructions for creating the saved model can be found in [this](https://github.com/google-research/bert/issues/146) publicly available document. 
+We used publicly available instructions to generate a saved model for open source BERT Large using MRPC weights. The implementation and weights can be found [here](https://github.com/google-research/bert#sentence-and-sentence-pair-classification-tasks).Save the fine-tuned MRPC model as a saved model as described here [this](https://github.com/google-research/bert/issues/146#issuecomment-441168098).
 
 Place the saved model in a directory named "bert-saved-model" under the bert_demo directory and proceed to the next section.
 
