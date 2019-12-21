@@ -71,8 +71,9 @@ You can [Install Neuron in your own AMI](./docs/guide-repo-config.md#user-guide-
 
 TensorFlow-Neuron [TensorFlow-Neuron readme](./docs/tensorflow-neuron/readme.md) provides useful pointers to install and use Neuron from within the TensorFlow framework.
  
-
 MXNet-Neuron [MXNet-Neuron readme ](./docs/mxnet-neuron/readme.md) provides useful pointers to install and use Neuron from within the MXNet framework.
+
+Pytorch-Neuron [Pytorch-Neuron readme ](./docs/pytorch-neuron/README.md) provides useful pointers to install and use Neuron from within the Pytorch framework
 
 
 ## Debugging, profiling and other tools:
