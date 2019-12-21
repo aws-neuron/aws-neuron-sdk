@@ -4,6 +4,8 @@ This documents lists the release notes for AWS Neuron tools. Neuron tools are us
 
 # [1.0.4587.0]
 
+Date: 12/20/2019
+
 ## Summary
 
 Minor bug fixes to neuron-top and neuron-ls.
