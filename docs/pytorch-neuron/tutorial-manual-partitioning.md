@@ -66,7 +66,7 @@ cd notebook_tutorial
 Run the following command to fetch the notebook into the current directory:
 
 ```bash
-curl -O https://github.com/awsrjh/aws-neuron-sdk/blob/master/src/pytorch/resnet50_partition.ipynb
+curl -O https://github.com/aws/aws-neuron-sdk/blob/master/src/pytorch/resnet50_partition.ipynb
 ```
 
 
