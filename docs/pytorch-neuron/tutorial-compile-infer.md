@@ -1,0 +1,260 @@
+# Tutorial: Getting started with torch-neuron (resnet-50 tutorial)
+
+## Steps Overview:
+
+1. Launch an EC2 compilation instance (recommended instance: c5.4xlarge or larger)
+2. Install Torch-Neuron and Neuron-Compiler on the Compilation Instance
+3. Compile the compute-graph on the compilation-instance, and copy the artifacts into the deployment-instance
+4. Install Torch-Neuron and Neuron-Runtime on Inf1  (deployment Instance)
+5. Run inference on the Inf1 instance
+
+## Step 1: Launch EC2 compilation instance
+
+A typical workflow with the Neuron SDK will be to compile trained ML models on a general compute instance (the compilation instance), and then distribute the artifacts to a fleet of Inf1 instances (the deployment instances) for inference execution. Neuron enables PyTorch for both of these steps.
+
+1.1. Select an AMI of your choice. This may be may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based on the Deep Learning AMI (DLAMI).  
+
+1.2. Select and launch an EC2 instance
+
+* A c5.4xlarge or larger is recommended. For this example we will use a c5.4xlarge.
+* Users may choose to compile and deploy on the same instance, in which case an inf1.6xlarge instance or larger is recommended.  If you choose “launch instance” and search for “neuron” in the AWS EC2 console you will see a short list of the DLAMI images to select from.
+
+## Step 2: Compilation instance installations
+
+Install both Neuron Compiler and Torch-Neuron on the compilation instance.
+
+2.1. Install Python3 virtual environment module if needed:
+
+If using an Ubuntu DLAMI:
+
+```
+# Ubuntu
+sudo apt-get update
+sudo apt-get install -y python3-venv g++
+```
+
+Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
+
+```
+E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+```
+
+If using Amazon Linux 2 DLAMI:
+
+```
+# Amazon Linux 2
+sudo yum update
+sudo yum install -y python3 gcc-c++
+```
+
+2.2. Create a tutorial folder and cd into it
+
+```
+mkdir -p tutorial
+cd tutorial
+```
+
+2.3. Setup a new Python virtual environment:
+
+```
+python3 -m venv test_venv
+source test_venv/bin/activate
+pip install -U pip
+```
+
+2.4. Modify Pip repository configurations to point to the Neuron repository.
+
+```
+tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
+```
+
+2.5. Install Torch-Neuron and Neuron Compiler
+
+```
+pip install torch-neuron
+```
+
+```
+# Install compiler.  
+# NOTE: please make sure tensorflow option is provided; this is not necessary for inference-only purposes.
+pip install neuron-cc[tensorflow]
+```
+
+2.6 Install torchvision for the pretrained resnet50 model (we use no-deps here because we already have Neuron version of torch installed through torch-neuron)
+
+```
+pip install pillow
+
+# We use the --no-deps here to prevent torchvision installing standard torch
+pip install torchvision --no-deps
+```
+
+## Step 3: Compile on compilation instance
+
+A trained model must be compiled to Inferentia target before it can be deployed on Inf1 instances. In this step we compile the torchvision ResNet50 model and export it as a SavedModel which is in the torchscript format for PyTorch models.
+
+3.1. Create a python script named `trace_resnet50.py` with the following content:
+
+```
+import torch
+import numpy as np
+import os
+from urllib import request
+
+from torchvision import models, transforms, datasets
+
+import torch_neuron
+
+## Create an image directory containing a small kitten
+os.makedirs("./images", exist_ok=True)
+request.urlretrieve("https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg",
+                    "./images/kitten_small.jpg")
+
+## Import our image and normalize it into a tensor
+normalize = transforms.Normalize(
+ mean=[0.485, 0.456, 0.406],
+ std=[0.229, 0.224, 0.225])
+
+eval_dataset = datasets.ImageFolder(
+ os.path.dirname('./'),
+ transforms.Compose([
+ transforms.Resize([224, 224]),
+ transforms.ToTensor(),
+ normalize,
+ ])
+)
+
+image, _ = eval_dataset[0]
+image = torch.tensor(image.numpy()[np.newaxis, ...])
+
+## Load a pretrained ResNet50 model 
+model = models.resnet50(pretrained=True)
+
+## Tell the model we are using it for evaluation (not training)
+model.eval()
+
+model_neuron = torch.neuron.trace(model, example_inputs=[image])
+
+model_neuron.save( "resnet50_neuron.pt" )
+```
+
+
+3.2. Run the compilation script, which will take a few minutes on c5.4xlarge. At the end of script execution, the compiled SavedModel is zipped as `resnet50_neuron.pt`  in local directory:
+
+```
+python trace_resnet50.py
+```
+
+You should see:
+
+```
+INFO:Neuron:compiling module ResNet with neuron-cc
+```
+
+3.3 **WARNING**:  If you run the inference script below on you CPU instance you will get output, but see this warning:
+
+```
+[E neuron_op_impl.cpp:53] Warning: Tensor output are *** NOT CALCULATED *** during CPU 
+execution and only indicate tensor shape
+```
+
+This is an artifact of the way we trace a model on your compile instance.  **Do not perform inference with a neuron traced model on a non neuron supported instance, results will not be calculated.**
+
+3.4. If not compiling and inferring on the same instance, copy the compiled artifacts to the inference server:
+
+```
+scp -i <PEM key file>  ./resnet50_neuron.pt ubuntu@<instance DNS>:~/ # if Ubuntu-based AMI
+scp -i <PEM key file>  ./resnet50_neuron.pt ec2-user@<instance DNS>:~/  # if using AML2-based AMI
+```
+
+## Step 4: Deployment Instance Installations
+
+On the instance you are going to use for inference, install Torch-Neuron and Neuron Runtime
+
+4.1. Follow Step 2 above to install Torch-Neuron.
+
+* Install neuron-cc[tensorflow] if compilation on inference instance is desired (see notes above on recommended Inf1 sizes for compilation)
+* Skip neuron-cc if compilation is not done on inference instance
+
+4.2. Install the Neuron Runtime using instructions from [Getting started: Installing and Configuring Neuron-RTD](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md).
+
+
+## Step 5: Run inference
+
+In this step we run inference on inf1 instances using the model compiled in Step 3.
+
+5.1. On the inf1, create a inference Python script named `infer_resnet50.py` with the following content:
+
+
+```
+import os
+import time
+import torch
+import torch_neuron
+import json
+import numpy as np
+
+from urllib import request
+
+from torchvision import models, transforms, datasets
+
+## Create an image directory containing a small kitten
+os.makedirs("./images", exist_ok=True)
+request.urlretrieve("https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg",
+                    "./images/kitten_small.jpg")
+
+
+## Fetch labels to output the top classifications
+request.urlretrieve("https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json","imagenet_class_index.json")
+idx2label = []
+
+with open("imagenet_class_index.json", "r") as read_file:
+    `class_idx `**`=`**` json`**`.`**`load``(``read_file``)`
+    idx2label = [class_idx[str(k)][1] for k in range(len(class_idx))]
+
+## Import a sample image and normalize it into a tensor
+normalize = transforms.Normalize(
+    mean=[0.485, 0.456, 0.406],
+    std=[0.229, 0.224, 0.225])
+
+eval_dataset = datasets.ImageFolder(
+    os.path.dirname("./"),
+    transforms.Compose([
+    transforms.Resize([224, 224]),
+    transforms.ToTensor(),
+    normalize,
+    ])
+)
+
+image, _ = eval_dataset[0]
+image = torch.tensor(image.numpy()[np.newaxis, ...])
+
+## Load model
+model_neuron = torch.jit.load( 'resnet50_neuron.pt' )
+
+## Predict
+results = model_neuron( image )
+
+# Get the top 5 results
+top5_idx = results[0].sort()[1][-5:]
+
+# Lookup and print the top 5 labels
+top5_labels = [idx2label[idx] for idx in top5_idx]
+
+print("Top 5 labels:\n {}".format(top5_labels) )
+```
+
+
+5.2. Run the inference:
+
+```
+['tiger', 'lynx', 'tiger_cat', 'Egyptian_cat', 'tabby']
+```
+
+## Step 6: Terminate instances
+
+Don’t forget to terminate your instances (compile and inference) from the AWS console so that you don’t continue paying for them once you are done

@@ -2,6 +2,24 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
+# [1.0.4587.0]
+
+## Summary
+
+Minor bug fixes to neuron-top and neuron-ls.
+
+## Major New Features
+
+## Resolved Issues
+
+* neuron-top: now shows model name and uuid to help distinguish which model is consuming resources.  Previously only showed model id.
+* neuron-ls: lists device memory size correctly in MB
+
+## Known Issues and Limitations
+
+## Other Notes
+
+
 # [1.0.4250.0]
 
 Date:  12/1/2019
