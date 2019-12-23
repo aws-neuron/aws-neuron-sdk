@@ -14,6 +14,40 @@ The supported operators are also listed here:
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
+# [neuron_cc-1.0.5939.0]
+
+Date 12/20/2019
+
+## Summary
+
+Bug fixes and some performance enhancement for NeuronCore Pipeline.
+
+## Major New Features
+
+## Resolved Issues
+
+* Fixed pipeline execution on more than 10 NeuronCores
+* Improved NeuronCores Pipeline execution by improving data exchange efficiency between NeuronCores
+* Added warning for unaligned memory access
+* Fixed handling of cast on input fp32 tensor
+* Improved handling of data layouts and transpose
+* Improved dead-code elimination
+* Improved efficiency of compute engine synchronization
+* Improved efficiency of data transfers within the Neuron code
+
+## Known issues and limitations
+
+See previous releases. Some tutorials show use of specific compiler options and flags, these are needed to help provide guidance to the compiler to acheive best performance in specific cases. Please do not use in cases other than as shown in the specific tutorial as results may not be defined. These options should be considered experimental and will be removed over time. 
+
+## Other Notes
+
+Dependencies
+dmlc_nnvm-1.0.1416.0 
+dmlc_topi-1.0.1416.0 
+dmlc_tvm-1.0.1416.0 
+inferentia_hwm-1.0.720.0 
+islpy-2018.2
+
 
 # [1.0.5301.0]
 
