@@ -2,6 +2,23 @@
 
 This document lists the release notes for the TensorFlow-Neuron package.
 
+# [1.15.0.1.0.803.0]
+
+Date: 12/20/2019
+
+## Summary
+
+## Major New Features
+
+## Resolved Issues
+
+* Improved handling of  `tf.neuron.saved_model.compile`  arguments
+
+## Known Issues and Limitations
+
+## Other Notes
+
+
 # [1.15.0.1.0.749.0]
 
 Date: 12/1/2019
