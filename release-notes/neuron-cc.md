@@ -14,7 +14,7 @@ The supported operators are also listed here:
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
-# [neuron_cc-1.0.5939.0]
+# [1.0.5939.0]
 
 Date 12/20/2019
 
