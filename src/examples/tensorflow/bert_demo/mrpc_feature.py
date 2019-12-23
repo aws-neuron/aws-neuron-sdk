@@ -18,7 +18,7 @@ import os
 import csv
 import time
 import numpy as np
-from bert_demo import tokenization
+import tokenization
 
 
 class InputExample(object):

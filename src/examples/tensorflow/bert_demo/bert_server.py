@@ -1,4 +1,3 @@
-#!/usr/bin/env conda run -n my_env python
 # coding=utf-8
 
 """ Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -20,11 +19,11 @@ from threading import Lock
 import grpc
 import numpy as np
 import tensorflow as tf
-from bert_demo import mrpc_feature
-from bert_demo import tokenization
-from bert_demo import mrpc_pb2
+import mrpc_feature
+import tokenization
+import mrpc_pb2
 sys.path.append(os.path.dirname(__file__))
-from bert_demo import mrpc_pb2_grpc
+import mrpc_pb2_grpc
 
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24

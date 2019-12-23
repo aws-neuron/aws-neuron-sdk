@@ -1,4 +1,3 @@
-#!/usr/bin/env conda run -n my_env python
 # coding=utf-8
 
 """ Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -12,10 +11,10 @@ import argparse
 import random
 import time
 import grpc
-from bert_demo import mrpc_pb2
+import mrpc_pb2
 sys.path.append(os.path.dirname(__file__))
-from bert_demo import mrpc_pb2_grpc
-from bert_demo import mrpc_feature
+import mrpc_pb2_grpc
+import mrpc_feature
 
 
 def client():
