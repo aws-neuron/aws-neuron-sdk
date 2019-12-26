@@ -31,12 +31,15 @@ def main():
     segment_ids = bert.segment_ids
     with tf.Session(graph=tf.Graph()) as sess:
         input_ids_ph_shape = input_ids.shape.as_list()
+        input_ids_ph_shape[0] = None
         input_ids_ph = tf.placeholder(input_ids.dtype, input_ids_ph_shape, name='input_ids')
 
         input_mask_ph_shape = input_mask.shape.as_list()
+        input_mask_ph_shape[0] = None
         input_mask_ph = tf.placeholder(input_mask.dtype, input_mask_ph_shape, name='input_mask')
 
         segment_ids_ph_shape = segment_ids.shape.as_list()
+        segment_ids_ph_shape[0] = None
         segment_ids_ph = tf.placeholder(segment_ids.dtype, segment_ids_ph_shape, name='segment_ids')
 
         dummy_reshapes = []
