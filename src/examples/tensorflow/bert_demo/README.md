@@ -27,7 +27,7 @@ For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI (DL
 First connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc
 
 ### Update compilation EC2 instance
-Update to the latest neuron software by running the following.
+Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
@@ -36,7 +36,7 @@ conda update tensorflow-neuron
 ```
 
 ### Compile open source BERT Large saved model using Neuron compatible BERT Large implementation
-Neuron software works with tensorflow saved models. Users should bring their own saved model for a BERT Large saved model for this section. This demo will run inference for the BERT MRPC task and the saved model should be finetuned for MRPC. Users who need additional help to finetune their model for MRPC or to create a saved model can refer to Appendix 1(below). 
+Neuron software works with tensorflow saved models. Users should bring their own BERT Large saved model for this section. This demo will run inference for the MRPC task and the saved model should be finetuned for MRPC. Users who need additional help to finetune their model for MRPC or to create a saved model can refer to [Appendix 1](https://github.com/HahTK/aws-neuron-sdk/tree/master/src/examples/tensorflow/bert_demo#appendix-1-). 
 
 In the same conda environment and directory bert_demo scripts, run the following :
 
@@ -45,13 +45,15 @@ export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel/"
 python bert_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --crude_gelu
 ```
 
-This compiles BERT Large pointed to by $BERT_LARGE_SAVED_MODEL for an input size of 128 and batch size of 4. The compilation output is stored in bert-saved-model-neuron. Move this to your inf1 instance for inferencing. The bert_model.py script encapsulates all the steps necessary for this process. For details on what is done by bert_model.py please refer to Appendix 2.
+This compiles BERT Large pointed to by $BERT_LARGE_SAVED_MODEL for an input size of 128 and batch size of 4. The compilation output is stored in bert-saved-model-neuron. Copy this to your inf1 instance for inferencing. 
+
+The bert_model.py script encapsulates all the steps necessary for this process. For details on what is done by bert_model.py please refer to [Appendix 2](https://github.com/HahTK/aws-neuron-sdk/tree/master/src/examples/tensorflow/bert_demo#appendix-2-).
 
 ## Running the inference demo
-Connect to your inf1.2xlarge instance and update tensorflow-neuron, aws-neuron-runtime and aws-neuron-tools :
+Connect to your inf1.2xlarge instance and update tensorflow-neuron, aws-neuron-runtime and aws-neuron-tools.
 
 ### Update inference EC2 instance
-Update to the latest neuron software by running the following.
+Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
@@ -104,7 +106,7 @@ The a saved model will be created in ./bert-saved-model-neuron. You may use this
 For BERT, we currently augment the standard Neuron compilation process for performance tuning. In the future, we intend to automate this tuning process. This would allow users to use the standard Neuron compilation process, which requires only a one line change in user source code. This is as described [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-compile-infer.md#step-3-compile-on-compilation-instance).
 
 The augmented Neuron compilation process is encapsulated by the bert_model.py script, which performs the following things :
-1. Define a Neuron compatible implementation of BERT Large. For inference, this is functionally equivalent to the open source BERT Large. The changes needed to create a Neuron compatible BERT implementation is described in Appendix 3.
+1. Define a Neuron compatible implementation of BERT Large. For inference, this is functionally equivalent to the open source BERT Large. The changes needed to create a Neuron compatible BERT implementation is described in [Appendix 3](https://github.com/HahTK/aws-neuron-sdk/tree/master/src/examples/tensorflow/bert_demo#appendix-3-).
 2. Extract BERT Large weights from the open source saved model pointed to by --input_saved_model and associates it with the Neuron compatible model
 3. Invoke Tensorflow-Neuron to compile the Neuron compatible model for Inferentia using the newly associated weights
 4. Finally, the compiled model is saved into the location given by --output_saved_model
