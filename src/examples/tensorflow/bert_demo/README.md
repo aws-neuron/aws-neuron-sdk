@@ -94,7 +94,7 @@ Then from the bert_demo directory run the following :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-export BERT_REPO="/path/to/cloned/bert/repo/directory"
+export BERT_REPO_DIR="/path/to/cloned/bert/repo/directory"
 export GLUE_DIR="/path/to/glue/data/directory"
 export BERT_BASE_DIR="/path/to/pre-trained/bert-large/checkpoint/directory"
 ./tune_save.sh
