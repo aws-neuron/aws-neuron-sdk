@@ -20,6 +20,7 @@ This demo assumes users are familiar with AWS in general.
 For this demo, launch two EC2 instances :
    * a c5.4xlarge EC2 instance for compiling the BERT Model and 
    * an inf1.2xlarge instance for running inference 
+
 For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI (DLAMI).
 
 ## Compiling Neuron compatible BERT Large for Inferentia
