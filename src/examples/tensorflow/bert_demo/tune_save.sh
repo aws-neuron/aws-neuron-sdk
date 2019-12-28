@@ -28,6 +28,4 @@ python run_classifier.py \
   --output_dir=$BERT_REPO_DIR/MRPC_finetune
 
 popd
-cp -rf $BERT_REPO_DIR/bert-saved-model ./
-
 
