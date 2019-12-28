@@ -100,7 +100,7 @@ export BERT_BASE_DIR="/path/to/pre-trained/bert-large/checkpoint/directory"
 ./tune_save.sh
 ```
 
-The a saved model will be created in ./bert-saved-model-neuron. You may use this saved model to continue with the rest of the demo. 
+The a saved model will be created in $BERT_REPO_DIR/bert-saved-model/<random number>/. Use this saved model to continue with the rest of the demo. 
 
 ## Appendix 2 :
 For BERT, we currently augment the standard Neuron compilation process for performance tuning. In the future, we intend to automate this tuning process. This would allow users to use the standard Neuron compilation process, which requires only a one line change in user source code. This is as described [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-compile-infer.md#step-3-compile-on-compilation-instance).
