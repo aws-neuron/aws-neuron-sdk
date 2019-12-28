@@ -41,7 +41,7 @@ Neuron software works with tensorflow saved models. Users should bring their own
 In the same conda environment and directory bert_demo scripts, run the following :
 
 ```bash
-export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel/"
+export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel"
 python bert_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --crude_gelu
 ```
 
