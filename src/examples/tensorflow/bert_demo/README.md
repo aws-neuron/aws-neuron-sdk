@@ -83,7 +83,7 @@ for i in {1..48}; do python bert_client.py --cycle 128 & done
 This spins up 48 clients, each of which sends 128 inference requests. The expected performance is about 200 inferences/second for a single instance of inf1.2xlarge.
 
 ## Appendix 1 :
-Users who need help finetuning BERT Large for MRPC may and creating a saved model may follow the instructions here.
+Users who need help finetuning BERT Large for MRPC and creating a saved model may follow the instructions here.
 
 Connect to the c5.4xlarge compilation EC2 instance you started above and download these three items : 
 1. clone [this](https://github.com/google-research/bert) github repo. Then edit run_classifier.py as described [here](https://github.com/google-research/bert/issues/146#issuecomment-569138476). We may ignore the changes described for run_squad.py.  
