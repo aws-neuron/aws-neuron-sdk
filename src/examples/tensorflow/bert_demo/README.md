@@ -41,7 +41,7 @@ Neuron software works with tensorflow saved models. Users should bring their own
 In the same conda environment and directory bert_demo scripts, run the following :
 
 ```bash
-export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel/"
+export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel"
 python bert_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --crude_gelu
 ```
 
@@ -83,7 +83,7 @@ for i in {1..48}; do python bert_client.py --cycle 128 & done
 This spins up 48 clients, each of which sends 128 inference requests. The expected performance is about 200 inferences/second for a single instance of inf1.2xlarge.
 
 ## Appendix 1 :
-Users who need help finetuning BERT Large for MRPC may and creating a saved model may follow the instructions here.
+Users who need help finetuning BERT Large for MRPC and creating a saved model may follow the instructions here.
 
 Connect to the c5.4xlarge compilation EC2 instance you started above and download these three items : 
 1. clone [this](https://github.com/google-research/bert) github repo. Then edit run_classifier.py as described [here](https://github.com/google-research/bert/issues/146#issuecomment-569138476). We may ignore the changes described for run_squad.py.  
@@ -100,7 +100,7 @@ export BERT_BASE_DIR="/path/to/pre-trained/bert-large/checkpoint/directory"
 ./tune_save.sh
 ```
 
-The a saved model will be created in ./bert-saved-model-neuron. You may use this saved model to continue with the rest of the demo. 
+The a saved model will be created in $BERT_REPO_DIR/bert-saved-model/<random number>/. Use this saved model to continue with the rest of the demo. 
 
 ## Appendix 2 :
 For BERT, we currently augment the standard Neuron compilation process for performance tuning. In the future, we intend to automate this tuning process. This would allow users to use the standard Neuron compilation process, which requires only a one line change in user source code. This is as described [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-compile-infer.md#step-3-compile-on-compilation-instance).
