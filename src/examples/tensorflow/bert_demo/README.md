@@ -86,9 +86,40 @@ This spins up 48 clients, each of which sends 128 inference requests. The expect
 Users who need help finetuning BERT Large for MRPC and creating a saved model may follow the instructions here.
 
 Connect to the c5.4xlarge compilation EC2 instance you started above and download these three items : 
-1. clone [this](https://github.com/google-research/bert) github repo. Then edit run_classifier.py as described [here](https://github.com/google-research/bert/issues/146#issuecomment-569138476). We may ignore the changes described for run_squad.py.  
+1. clone [this](https://github.com/google-research/bert) github repo. 
 2. download GLUE data as described [here](https://github.com/google-research/bert#sentence-and-sentence-pair-classification-tasks). Do not run the finetuning command.
 3. download a desired pre-trained BERT Large checkpoint from [here](https://github.com/google-research/bert#pre-trained-models). This is the model we will fine tune. 
+
+Next edit run_classifier.py in the cloned bert repo to apply the patch described in the following git diff. 
+
+```
+diff --git a/run_classifier.py b/run_classifier.py
+index 817b147..c9426bc 100644
+--- a/run_classifier.py
++++ b/run_classifier.py
+@@ -955,6 +955,18 @@ def main(_):
+         drop_remainder=predict_drop_remainder)
+ 
+     result = estimator.predict(input_fn=predict_input_fn)
++    features = {
++        "input_ids": tf.placeholder(shape=[None, FLAGS.max_seq_length], dtype=tf.int32, name='input_ids'),
++        "input_mask": tf.placeholder(shape=[None, FLAGS.max_seq_length], dtype=tf.int32, name='input_mask'),
++        "segment_ids": tf.placeholder(shape=[None, FLAGS.max_seq_length], dtype=tf.int32, name='segment_ids'),
++        "label_ids": tf.placeholder(shape=[None], dtype=tf.int32, name='label_ids'),
++        "is_real_example": tf.placeholder(shape=[None], dtype=tf.int32, name='is_real_example'),
++    }
++    serving_input_fn = tf.estimator.export.build_raw_serving_input_receiver_fn(features)
++    estimator._export_to_tpu = False  ## !!important to add this
++    estimator.export_saved_model(
++        export_dir_base='./bert_classifier_saved_model',
++        serving_input_receiver_fn=serving_input_fn)
+ 
+     output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
+     with tf.gfile.GFile(output_predict_file, "w") as writer:
+```
+
+NOTE : Users who are interested may refer to this [link](https://github.com/google-research/bert/issues/146#issuecomment-569138476) for additional background information on the patch but it is not necessart for running this demo.
+
 
 Then from the bert_demo directory run the following :
 
