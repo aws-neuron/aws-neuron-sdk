@@ -118,7 +118,7 @@ index 817b147..c9426bc 100644
      with tf.gfile.GFile(output_predict_file, "w") as writer:
 ```
 
-NOTE : Users who are interested may refer to this [link](https://github.com/google-research/bert/issues/146#issuecomment-569138476) for additional background information on the patch but it is not necessart for running this demo.
+NOTE : Users who are interested may refer to this [link](https://github.com/google-research/bert/issues/146#issuecomment-569138476) for additional background information on the patch but it is not necessary for running this demo.
 
 
 Then from the bert_demo directory run the following :
