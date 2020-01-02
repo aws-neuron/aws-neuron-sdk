@@ -68,7 +68,7 @@ Copy the compiled model (bert-saved-model-neuron) from your c5.4xlarge to your i
 python bert_server.py --dir bert-saved-model-neuron --parallel 4
 ```
 
-This loads 4 BERT-Large models, one into each of the 4 NeuronCores found in a single Inferentia device. For each of the 4 models, the BERT-Large demo server opportunistically stitches together asynchronous requests into batch 4 requests. When there are insufficient pending requests, the server creates dummy requests for batching.
+This loads 4 BERT-Large models, one into each of the 4 NeuronCores found in an inf1.2xlarge instance. For each of the 4 models, the BERT-Large demo server opportunistically stitches together asynchronous requests into batch 4 requests. When there are insufficient pending requests, the server creates dummy requests for batching.
 
 Wait for the bert_server to finish loading the BERT-Large models to Inferentia memory. When it is ready to accept requests it will print the inferences per second once every second. This reflects the number of real inferences only. Dummy requests created for batching are not credited to inferentia performance.
 
