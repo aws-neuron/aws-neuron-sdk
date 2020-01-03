@@ -80,7 +80,7 @@ pip install neuron-cc[tensorflow]
 2.5 Install torchvision for the pretrained resnet50 model (we use no-deps here because we already have Neuron version of torch installed through torch-neuron)
 
 ```bash
-pip install pillow
+pip install pillow==6.2.2
 
 # We use the --no-deps here to prevent torchvision installing standard torch
 pip install torchvision --no-deps
