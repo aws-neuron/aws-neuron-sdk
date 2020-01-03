@@ -41,6 +41,7 @@ sudo apt-get install tensorflow-model-server-neuron
 
 ###  Base and Conda DLAMI on Amazon Linux:
 ```bash
+sudo yum install aws-neuron-runtime-base
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 sudo yum install tensorflow-model-server-neuron
