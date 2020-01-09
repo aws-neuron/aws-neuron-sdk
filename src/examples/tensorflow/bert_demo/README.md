@@ -14,7 +14,7 @@ To enable a performant BERT model on Inferentia, we must use a Neuron compatible
 
 ## Launch EC2 instances
 
-For this demo, we will use a c5.4xlarge EC2 instance for compiling the BERT Model and an Inf1.2xlarge instance for running the demo itself. For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI (DLAMI). After starting the instance please make sure you update the Neuron software to the latest version before continuing with this demo.
+For this demo, we will use a c5.4xlarge EC2 instance for compiling the BERT Model and an Inf1.2xlarge instance for running the demo itself. For both of these instances choose the latest an Ubuntu 18 Deep Learning AMI (DLAMI). After starting the instance please make sure you update the Neuron software to the latest version before continuing with this demo. See the [DLAMI Release Notes](https://github.com/aws/aws-neuron-sdk/blob/master/release-notes/dlami-release-notes.md#base-and-conda-dlami-on-ubuntu) for more information on updating Neuron software.
 
 ## Compiling Neuron compatible BERT Large for Inferentia
 Connect to your c5.4xlarge instance and update tensorflow-neuron and neuron-cc
