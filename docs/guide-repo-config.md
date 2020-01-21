@@ -72,13 +72,13 @@ wget https://pip.repos.neuron.amazonaws.com/neuron-cc/neuron_cc-<VERSION FROM FI
 gpg --verify neuron_cc-<VERSION FROM FILE>.whl.asc neuron_cc-<VERSION FROM FILE>.whl
 ```
 
-### Tensorflow
+### TensorFlow
 
 ```bash
 pip install neuron-cc
 pip install tensorflow-neuron
 ```
-### Tensorflow Model Serving
+### TensorFlow Model Serving
 
 ```bash
 sudo apt-get install tensorflow-model-server-neuron

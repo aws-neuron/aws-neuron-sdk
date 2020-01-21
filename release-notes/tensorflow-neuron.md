@@ -66,7 +66,7 @@ Date:  11/25/2019
 
 ## Summary
 
-This version is available only in released DLAMI v26.0. Please [update](./dlami-release-notes.md#known-issues) to latest version.
+This version is available only in released DLAMI v26.0 and is based on TensorFlow version 1.15.0. Please [update](./dlami-release-notes.md#known-issues) to latest version.
 
 ## Major New Features
 

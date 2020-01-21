@@ -1,6 +1,6 @@
 # Reference Guide: Neuron compiler CLI 
 
-This document describes the command line interface of the Neuron compiler. This reference is not relevant for applications that run neuron-cc from within a machine learning framework (Tensorflow-neuron for example) since these options are passed from the framework to neuron-cc. 
+This document describes the command line interface of the Neuron compiler. This reference is not relevant for applications that run neuron-cc from within a machine learning framework (TensorFlow-Neuron for example) since these options are passed from the framework to neuron-cc. 
 
 Using neuron-cc on the command line may be desirable for applications that do not use a framework, or customize existing frameworks. It is also possible to supply CLI commands to the framework as options to be passed through to the compiler. 
 
@@ -61,9 +61,9 @@ neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --num-ne
 **```<file names> ```**
 Input containing model specification. The number of arguments required varies between frameworks:
 
-* **TENSORFLOW** A local filename or URI of a Tensorflow Frozen GraphDef (.pb); or the name of a local directory containing a Tensorflow SavedModel.
+* **TENSORFLOW** A local filename or URI of a TensorFlow Frozen GraphDef (.pb); or the name of a local directory containing a TensorFlow SavedModel.
     
-    See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/framework/graph.proto for the associated .proto schema for Tensorflow Frozen GraphDefs. See https://www.tensorflow.org/guide/saved_model for more information on the SavedModel format.
+    See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/framework/graph.proto for the associated .proto schema for TensorFlow Frozen GraphDefs. See https://www.tensorflow.org/guide/saved_model for more information on the SavedModel format.
 * **MXNET** - List of local filenames or URIs where input architecture .json file and parameter .param file are stored. These contains information related to the architecture of your graph and associated parameters, respectively.
 * **ONNX** - A local filename or URI for a ONNX model.
 
