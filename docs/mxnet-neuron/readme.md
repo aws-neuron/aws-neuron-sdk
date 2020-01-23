@@ -20,3 +20,5 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 * [Reference: MXNet-Neuron compilation python API](./api-compilation-python-api.md)
 
 * [MXNet Neuron supported operators](../../release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.md)
+
+* [Release Notes](../../release-notes/mxnet-neuron.md )

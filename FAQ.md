@@ -14,8 +14,8 @@
 
 You can start your workflow by training your model in one of the popular ML frameworks using EC2 GPU instances such as P3 or P3dn, or alternativelly download a pre-training model. Once the model is trained to your required accuracy, you can use the ML frameworks' API to invoke Neuron, the software development kit for Inferentia, to re-target(compile) the model for execution on Inferentia. This latter step is done once and the developer doesnt need to redo it as long as the model is not changing. Once compiled, the Inferentia binary can be loaded into one or more Inferentia, and can service inference calls. In order to get started quickly, you can use [AWS Deep Learning AMIs](https://aws.amazon.com/machine-learning/amis/) that come pre-installed with ML frameworks and the Neuron SDK. For a fully managed experience, you will soon be able to use Amazon SageMaker which will enable you to seamlessly deploy your trained models on Inf1 instances. 
 
-For customers who use popular frameworks like Tensorflow, MXNet and PyTorch, a guide to help you get started with frameworks 
-is available at [MXNet Neuron](./docs/mxnet-neuron/readme.md) and  [Tensorflow Neuron](./docs/tensorflow-neuron/readme.md) and [Pytorch Neuron](./docs/pytorch-neuron/README.md). 
+For customers who use popular frameworks like TensorFlow, MXNet and PyTorch, a guide to help you get started with frameworks 
+is available at [MXNet Neuron](./docs/mxnet-neuron/readme.md) and  [TensorFlow Neuron](./docs/tensorflow-neuron/readme.md) and [Pytorch Neuron](./docs/pytorch-neuron/README.md). 
 
 **Q: How do I select which Inf1 instance to use?**
 
@@ -57,7 +57,7 @@ Each Inferentia chip has four compute engines called NeuronCores. A NeuronCore G
 
 **Q: Can I use TensorFlow networks from tfhub.dev as-is ? if not, what should I do?**
 
-Yes. Models format can  be imported into Tensorflow, either as a standard model-server, in which case it appears as a simple command line utility, or via the Python based Tensorflow environment.  The primary additional step needed is to compile the model into Inferentia NEFF format. 
+Yes. Models format can  be imported into TensorFlow, either as a standard model-server, in which case it appears as a simple command line utility, or via the Python based TensorFlow environment.  The primary additional step needed is to compile the model into Inferentia NEFF format. 
 
 
 <a name="compiler"></a>
@@ -79,7 +79,7 @@ Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It 
 The compiler compiles the input graph for a single NeuronCore by default.  Using the The “`num-neuroncores`” option directs compiler to direct compiled graph to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an instance. See performance tuning application note [link](.) for more information (TODO). 
 
 **Q: Which operators does Neuron support?**
-* [Neuron-cc Tensorflow Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.md)
+* [Neuron-cc TensorFlow Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.md)
 * [Neuron-cc MXNet Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-onnx.md)
 
@@ -122,7 +122,7 @@ ECS and EKS support is coming soon. Containers can be configured as shown [here]
 
 
 **Q: How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?**
-Examples of this for Tensorflow are found [here](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md) as well as for MXnet  [here](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
+Examples of this for TensorFlow are found [here](./docs/tensorflow-neuron/tutorial-NeuronCore-Group.md) as well as for MXNet  [here](./docs/mxnet-neuron/tutorial-neuroncore-groups.md)
 
 
 <a name="troubleshooting"></a>

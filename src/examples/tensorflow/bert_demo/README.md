@@ -2,7 +2,7 @@
 
 To enable a performant BERT model on Inferentia, we must use a Neuron compatible BERT implementation. 
 
-This demo shows a Neuron compatible BERT-Large implementation that is functionally equivalent to open source BERT-Large. This demo uses Tensorflow-Neuron, BERT-Large weights fine tuned for MRPC and also shows the performance achieved by the inf1 instance. 
+This demo shows a Neuron compatible BERT-Large implementation that is functionally equivalent to open source BERT-Large. This demo uses TensorFlow-Neuron, BERT-Large weights fine tuned for MRPC and also shows the performance achieved by the inf1 instance. 
 
 ## Table of Contents
 
@@ -139,7 +139,7 @@ For all BERT variants, we currently need to augment the standard Neuron compilat
 The augmented Neuron compilation process is encapsulated by the bert_model.py script, which performs the following things :
 1. Define a Neuron compatible implementation of BERT-Large. For inference, this is functionally equivalent to the open source BERT-Large. The changes needed to create a Neuron compatible BERT-Large implementation is described in [Appendix 3](./README.md#appendix-3-).
 2. Extract BERT-Large weights from the open source saved model pointed to by --input_saved_model and associates it with the Neuron compatible model
-3. Invoke Tensorflow-Neuron to compile the Neuron compatible model for Inferentia using the newly associated weights
+3. Invoke TensorFlow-Neuron to compile the Neuron compatible model for Inferentia using the newly associated weights
 4. Finally, the compiled model is saved into the location given by --output_saved_model
 
 ## Appendix 3 :

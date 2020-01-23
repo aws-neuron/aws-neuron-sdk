@@ -34,15 +34,15 @@ Profiler support is not provided in this initial release and will be available i
 
 ### Automated partitioning
 
-Automatic partitioning of graphs into supported and non-supported operations is not currently supported.  A tutorial is available to provide guidance on how to manually parition a model graph. Please see (LINK)
+Automatic partitioning of graphs into supported and non-supported operations is not currently supported.  A tutorial is available to provide guidance on how to manually parition a model graph. Please see [Manual partitioning of Resnet50 in a Jupyter Notebook](../docs/pytorch-neuron/tutorial-manual-partitioning.md) 
 
 ### PyTorch dependency
 
-Currently PyTorch support depends on a neuron specific version of PyTorch v1.3.1.  Future revisions will add support for 1.4 and future releases.
+Currently PyTorch support depends on a Neuron specific version of PyTorch v1.3.1.  Future revisions will add support for 1.4 and future releases.
 
 ### Trace behavior
 
-In order to trace a model it must be in evaluation mode.  For examples please see <link to API documentation>
+In order to trace a model it must be in evaluation mode.  For examples please see [Using Neuron to run Resnet50 inference](../docs/pytorch-neuron/tutorial-compile-infer.md)
 
 ### Six pip package is required
 

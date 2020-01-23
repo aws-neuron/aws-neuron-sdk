@@ -10,7 +10,7 @@ neuron-cc --list-operators --framwork {TENSORFLOW | MXNET | ONNX}
 
 The supported operators are also listed here:
 
-* [Neuron-cc Tensorflow Operators](./neuron-cc-ops/neuron-cc-ops-tensorflow.md)
+* [Neuron-cc TensorFlow Operators](./neuron-cc-ops/neuron-cc-ops-tensorflow.md)
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
