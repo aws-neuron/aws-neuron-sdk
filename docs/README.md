@@ -4,7 +4,7 @@ The documents in these folders provide general guidance to using Neuron SDK via 
 
 Since you can use Neuron in a variety of ways, we arranged the documents in folders that represent the different interface points for Neuron SDK users.
 
-* [App Notes](./appnotes/README.md)
+* [Tech Notes](./technotes/README.md)
 * [Neuron Runtime](./neuron-runtime/README.md)
 * [Neuron Compiler](./neuron-cc/readme.md)
 * [Neuron Tools](./neuron-tools/Readme.md)
