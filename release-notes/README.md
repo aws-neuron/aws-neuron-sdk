@@ -13,12 +13,18 @@ This structure is shown below, with each also linking to the release notes for t
 
   + #### [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
   + #### [Neuron-CC Release Notes](./neuron-cc.md)
-  + #### [TensorBoard-neuron Release Notes](./tensorboard-neuron.md)
+  + #### [TensorBoard-Neuron Release Notes](./tensorboard-neuron.md)
 
 + ### [Conda MXNet Release Notes](./conda/conda-mxnet-neuron.md)
 
-  + #### [MXNet-neuron Release Notes](./mxnet-neuron.md)
+  + #### [MXNet-Neuron Release Notes](./mxnet-neuron.md)
   + #### [Neuron-CC Release Notes](./neuron-cc.md)
+  
++ ### [Conda Torch Release Notes](./conda/conda-torch-neuron.md)
+
+  + #### [Torch-Neuron Release Notes](./torch-neuron.md)
+  + #### [Neuron-CC Release Notes](./neuron-cc.md)
+
 
 + ### [Tensorflow-Model-Server-Neuron Release Notes](./tensorflow-modelserver-neuron.md)
 + ### [Neuron-Runtime Release Notes](./neuron-runtime.md)
@@ -31,7 +37,7 @@ This structure is shown below, with each also linking to the release notes for t
 ## [MXNet-Neuron Release Notes](./mxnet-neuron.md)
 ## [Tensorflow-Neuron Release Notes](./tensorflow-neuron.md)
 ## [Tensorboard-Neuron Release Notes](./tensorboard-neuron.md)
-## [Torch Neuron Release Notes](./torch-neuron.md)
+## [Torch-Neuron Release Notes](./torch-neuron.md)
 
 ## Important to know: 
 1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp/bf16, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.

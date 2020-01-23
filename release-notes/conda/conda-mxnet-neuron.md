@@ -2,6 +2,17 @@
 
 This document lists the release notes for the Neuron Conda-MxNet package.
 
+# [1.5.1.1.0.1401.0_1.0.737.0]
+
+Date 1/27/2020
+
+## Included Neuron Packages
+
+neuron-cc-1.0.6801.0
+
+mxnet-neuron-1.5.1.1.0.1401.0
+
+
 # [1.5.1.1.0.1349.0_1.0.611.0]
 
 Date 12/20/2019

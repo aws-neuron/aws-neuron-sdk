@@ -1,5 +1,12 @@
 # Supported operators [ONNX]
 
+### Neuron Compiler Release [1.0.6801]
+
+Added support for the following operators:
+```
+Abs
+```
+
 ### Neuron Compiler Release [1.0.5301]
 
 no changes

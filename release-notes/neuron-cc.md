@@ -1,18 +1,60 @@
 # Neuron Compiler Release Notes
 
-This document lists the release notes for AWS Neuron compiler. The neuron compiler is an ahead-of-time compiler that ensures Neuron will optimally utilize the Inferentia devices.
+This document lists the release notes for AWS Neuron compiler. The Neuron Compiler is an ahead-of-time compiler that ensures Neuron will optimally utilize the Inferentia chips.
 
-Operator-support for each input format is provided directly from the compiler:
+Operator-support for each input format is provided directly from the compiler. By default, the operators _supported_ by inferentia are listed. For a list that includes runtime-CPU executed operators, use '--list all'
 
 ```
-neuron-cc --list-operators --framwork {TENSORFLOW | MXNET | ONNX}
+neuron-cc list-operators --framework {TENSORFLOW | MXNET | ONNX} [--list {all|supported}]
 ```
 
-The supported operators are also listed here:
+```
+Please use "pip install --upgrade neuron-cc" to update the package
+```
 
-* [Neuron-cc Tensorflow Operators](./neuron-cc-ops/neuron-cc-ops-tensorflow.md)
-* [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
-* [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
+# [1.0.6801.0]
+
+Date 1/27/2020
+
+## Summary
+
+Bug fixes and some performance enhancement related to data movement for BERT-type neural networks.
+
+## Major New Features
+
+None
+
+## Resolved Issues
+
+* Improved throughput for operators processed in the Neuron Runtime CPU. As an example: execution of 4 single NeuronCore NEFF models of resnet50 v2 float16 batch = 5 in parallel on an inf1.1xlarge sped up by 30%.
+* Corrected shape handling in Gather(TensorFlow)/Take(MXNet) operators that are processed by the Neuron Runtime in the Neuron Runtime vCPU, which resolves a possible crash in Neuron Compiler when compiling models with these operators with some shapes.
+* Added support for Tensorflow *OneHot* operator (as a Neuron Runtime CPU operator).
+* Added more internal checking for compiler correctness with newly defined error messages for this case.
+```
+      “Internal ERROR: Data race between Op1 'Name1(...) [...]' and Op2 'Name2(...) [...]'”
+```
+* Fixed out-of-memory issue introduced in 1.0.5939.0 such that some large models (BERT) compiled on instances with insufficient host memory would cause the runtime to crash with an invalid NEFF. This is actually a compiler error, but due to addtional script layers wrappering this in the [BERT demo](../src/examples/tensorflow/bert_demo/README.md), this would have likely been seen as a runtime error like this:
+
+```bash
+2020-01-09 13:40:26.002594: E tensorflow/core/framework/op_segment.cc:54] Create kernel failed: Invalid argument: neff is invalid
+2020-01-09 13:40:26.002637: E tensorflow/core/common_runtime/executor.cc:642] Executor failed to create kernel. Invalid argument: neff is invalid
+[[{{node bert/NeuronOp}}]]
+```
+
+## Known issues and limitations
+
+See previous releases. Some tutorials show use of specific compiler options and flags, these are needed to help provide guidance to the compiler to acheive best performance in specific cases. Please do not use in cases other than as shown in the specific tutorial as results may not be defined. These options should be considered experimental and will be removed over time. 
+
+## Other Notes
+
+### Dependencies
+```
+dmlc_nnvm-1.0.1619.0
+dmlc_topi-1.0.1619.0
+dmlc_tvm-1.0.1619.0
+inferentia_hwm-1.0.839.0
+islpy-2018.2
+```
 
 # [1.0.5939.0]
 

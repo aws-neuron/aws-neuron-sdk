@@ -54,7 +54,7 @@ sudo yum install -y python3 gcc-c++
 ```bash
 python3 -m venv test_venv
 source test_venv/bin/activate
-pip install -U pip
+pip install -U pip==19.3.1
 ```
 2.3. Modify Pip repository configurations to point to the Neuron repository.
 ```bash

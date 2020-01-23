@@ -1,5 +1,22 @@
 # PyTorch Neuron release notes
 
+# [1.0.672.0]
+
+Date: 1/27/2020
+
+## Summary
+
+## Major new features
+
+## Resolved issues
+
+* Python 3.5 and Python 3.7 are now supported.
+
+## Known issues and limitations
+
+## Other Notes
+
+
 # [1.0.627.0]
 
 Date: 12/20/2019

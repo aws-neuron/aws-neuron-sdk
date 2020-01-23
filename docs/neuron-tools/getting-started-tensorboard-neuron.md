@@ -2,7 +2,7 @@
 
 This guide is for developers who want to better understand how their model runs on Neuron Cores.
 
-TensorBoard-Neuron is adapted to provide useful information related to Neuron devices, such as compatibility and profiling.  It also preserves TensorBoard’s Debugger plugin, which may be useful in finding numerical mismatches.
+TensorBoard-Neuron is adapted to provide useful information related to Neuron devices, such as compatibility and profiling.  It also preserves TensorBoard’s existing features, including the Debugger plugin, which may be useful in finding numerical mismatches.
 
 ## Installation
 
@@ -23,6 +23,21 @@ Additionally, if you would like to profile your model (see below), you will also
 ```
 $ sudo apt install aws-neuron-tools
 ```
+
+Note: TensorBoard does not need to be installed to use TensorBoard-Neuron, and should be replaced with TensorBoard-Neuron if already installed.
+```
+$ pip uninstall tensorboard
+$ pip install tensorboard-neuron
+```
+
+OR
+
+```
+$ pip install tensorboard-neuron --force-reinstall
+```
+
+If TensorBoard-Neuron is not properly installed, the added functionalities for AWS Neuron may not work.
+For example, errors such as `tensorboard: error: unrecognized arguments: --run_neuron_profile` may occur when attempting to profile an inference.
 
 
 
@@ -46,7 +61,7 @@ NOTE: this directory must exist before you move on to the next step.  Otherwise,
 
 ## Visualizing data with TensorBoard-Neuron
 
-To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory where TensorFlow logs are generated.  (Note that this "logdir" is *not* the same as the NEURON_PROFILE directory that you set during inference, and in fact, depending on your configuration you may not have any tensorflow logs.  For this step, NEURON_PROFILE still needs to be set to the same directory you used during your inference run.  `tensorboard_neuron` will process the neuron profile data from this directory at startup.)
+To view data in TensorBoard-Neuron, run the command below, where “logdir” is the directory where TensorFlow logs are kept.  This logdir may or may not have any existing logs, or may not even exist yet.  AWS Neuron will populate this directory when using the `--run_neuron_profile` option.  (Note that this "logdir" is *not* the same as the NEURON_PROFILE directory that you set during inference, and in fact, depending on your configuration you may not have any tensorflow logs.  For this step, NEURON_PROFILE still needs to be set to the same directory you used during your inference run.  `tensorboard_neuron` will process the neuron profile data from the NEURON_PROFILE directory at startup.)
 
 ```
 $ tensorboard_neuron --logdir /path/to/logdir --run_neuron_profile
