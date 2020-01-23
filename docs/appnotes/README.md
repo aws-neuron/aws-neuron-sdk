@@ -1,4 +1,4 @@
-# Neuron Application Notes
+# Neuron Technical Notes
 
 * [Data Types](./data-types.md) 
 * [NeuronCore Batching](./neuroncore-batching.md) 
