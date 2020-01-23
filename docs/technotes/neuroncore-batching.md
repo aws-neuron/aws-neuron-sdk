@@ -31,8 +31,24 @@ tfn.saved_model.compile("rn50_fp16",
                         compiler_args=compiler_args)
 ```
 
+At runtime, the following TensorFlow code snippet shows that the model can accept inference requests with arbitrary batch size:
+
+```
+import tensorflow as tf
+import tensorflow.neuron as tfn
+
+predictor = tf.contrib.predictor.from_saved_model("rn50_fp16_compiled/1")
+rt_batch_sz_list = [1, 4, 7, 8, 1024]
+for rt_batch_sz in rt_batch_sz_list:
+    example_input = np.zeros([rt_batch_sz,224,224,3], dtype='float16')
+    model_feed_dict = {'input_1:0': example_input}
+    result = predictor(model_feed_dict)
+```
+
 
 **Note1**: Currently, a know Neuron compiler issue may sometime lead to compilation error for large batch-sizes that don’t fit the on-chip memory. This limitation is being addressed and will be fixed in future releases of the compiler.
 Additionally, compiler experimental flags are currently required, as shown in the code snippet above. This will be deprecated (set by default) in future releases.
 
 **Note2**: To enable dynamic batching in TensorFlow, user should set an experimental argument `dynamic_batch_size=True` in `tfn.saved_model.compile` as shown in example above. This will be deprecated (set by default) in future releases.
+
+
