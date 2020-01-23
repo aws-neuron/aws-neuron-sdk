@@ -1,6 +1,6 @@
 # Batching
 
-Batching refers to the process of grouping multiple inference requests together, and processing them as a group. This enables Neuron to better amortize the cost of reading weights from the external memory (i.e. read weights from the memory once, and use them in multiple calculations), and thus improve the overall hardware efficiency. Batching is typically used as an optimization knob, to optimize throughput at the expense of higher latency.
+Batching refers to the process of grouping multiple inference requests together, and processing them as a group. This enables Neuron to better amortize the cost of reading weights from the external memory (i.e. read weights from the memory once, and use them in multiple calculations), and thus improve the overall hardware efficiency. Batching is typically used for optimizing throughput at the expense of latency.
 
 The concept of batched inference is illustrated below, with a NeuronCore performing batched computation of a 3 layer computation graph with a batch-size of 4. The NeuronCore reads weights from the external memory, and then perform the corresponding computations for all 4 inference-requests, thus better amortizing the cost of reading the weights from the memory. 
 ![Image:](./images/NeuronCoreBatching.png)
