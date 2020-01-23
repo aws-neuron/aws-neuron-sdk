@@ -1,9 +1,6 @@
 # NeuronCore Pipeline
 
-NeuronCore Pipeline refers to the process of sharding a compute-graph across multiple NeuronCores,
-caching the model parameters on each core on-chip memory, and then streaming inference requests across the cores
-in a pipelined manner. This enables users to optimize for both throughput and latency, as it enables the NeuronCores to
-process neural-networks with locally cached data and avoid the high cost of accessing external memory.
+NeuronCore Pipeline refers to the process of sharding a compute-graph across multiple NeuronCores, caching the model parameters on each core’s on-chip memory, and then streaming inference requests across the cores in a pipeline manner. Based on the number of NeuronCores, the model might get seamlessly sharded across up-to 16 Inferentia devices (i.e. 64 NeuronCores). This enables users to optimize for both throughput and latency, as it enables the NeuronCores to process neural-networks with locally cached data and avoid the high cost of accessing external memory.
 
 
 ![Image:](./images/NeuronCorePipelining.png)
