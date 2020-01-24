@@ -49,7 +49,6 @@ for rt_batch_sz in rt_batch_sz_list:
 ```
 
 
-**Note1**: Currently, a known Neuron compiler issue may sometime lead to compilation error for large batch-sizes. This limitation is being addressed and will be fixed in future releases of the compiler.
-Additionally, compiler experimental flags are currently required, as shown in the code snippet above. These will be deprecated (set by default) in future Neuron releases.
+**Note1**: Currently, a known Neuron compiler issue may sometime lead to a compilation error for large batch-sizes. This limitation is being addressed and will be fixed in a future releases of the compiler. Additionally, compiler experimental flags are currently required, as shown in the code snippet above. These will be deprecated (set by default) in future Neuron releases.
 
 **Note2**: To enable dynamic batching in TensorFlow, user should set an experimental argument `dynamic_batch_size=True` in `tfn.saved_model.compile` as shown in example above. This will be deprecated (set by default) in future Neuron releases.
