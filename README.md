@@ -25,7 +25,7 @@ Once a model is trained to the required accuracy, the model should be compiled t
 We know ML models constantly evolve, so we’ve designed Neuron to give builders a future-proof development environment, utilizing an ahead-of-time compiler that ensures Neuron will optimally utilize the hardware when new operators and neural-net models are developed.
 
 
-### Deployment 
+### Performance optimizations
 
 Neuron provides developers with various performance optimization options. Two of the most widely used ones are Batching and NeuronCore-Pipeline. Both techniques aim to keep the data close to the compute engines to improve hardware itilization, but achieve that in different ways. In batching it is achieved by loading the data into an on-chip cache and reusing it multiple times for multiple different model-inputs, while in pipelining this is achieved by caching all model parameters into the on-chip cache across multiple NeuronCores and streaming the calculation across them. For more details on the NueronCore Pipeline checkout the appnote [here](./docs/technotes/neuroncore-pipeline.md), and for more details on Neuron Batching, please read the appnote [here](./docs/technotes/neuroncore-batching.md).
 
