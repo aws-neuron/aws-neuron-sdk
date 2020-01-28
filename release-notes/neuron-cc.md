@@ -2,11 +2,17 @@
 
 This document lists the release notes for AWS Neuron compiler. The Neuron Compiler is an ahead-of-time compiler that ensures Neuron will optimally utilize the Inferentia chips.
 
-Operator-support for each input format is provided directly from the compiler. By default, the operators _supported_ by inferentia are listed. For a list that includes runtime-CPU executed operators, use '--list all'
+Operator-support for each input format is provided directly from the compiler. 
 
 ```
-neuron-cc list-operators --framework {TENSORFLOW | MXNET | ONNX} [--list {all|supported}]
+neuron-cc list-operators --framework {TENSORFLOW | MXNET | ONNX}
 ```
+
+The supported operators are also listed here:
+* [Neuron-cc TensorFlow Operators](./neuron-cc-ops/neuron-cc-ops-tensorflow.md)
+* [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
+* [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
+
 
 ```
 Please use "pip install --upgrade neuron-cc" to update the package
@@ -83,12 +89,12 @@ See previous releases. Some tutorials show use of specific compiler options and 
 
 ## Other Notes
 
-Dependencies
-dmlc_nnvm-1.0.1416.0 
-dmlc_topi-1.0.1416.0 
-dmlc_tvm-1.0.1416.0 
-inferentia_hwm-1.0.720.0 
-islpy-2018.2
+### Dependencies
+* dmlc_nnvm-1.0.1416.0 
+* dmlc_topi-1.0.1416.0 
+* dmlc_tvm-1.0.1416.0 
+* inferentia_hwm-1.0.720.0 
+* islpy-2018.2
 
 
 # [1.0.5301.0]
