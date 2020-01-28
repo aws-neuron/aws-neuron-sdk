@@ -53,7 +53,6 @@ TensorBoard-Neuron is included under the `tensorflow-neuron` conda package.
 $ conda update tensorflow-neuron
 ```
 
-
 ## Profile the network and collect inference traces
 
 When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable. 
