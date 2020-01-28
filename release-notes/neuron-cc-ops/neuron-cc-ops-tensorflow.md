@@ -1,8 +1,17 @@
 # Supported operators [TensorFlow]
 
+
+### Neuron Compiler Release [1.0.6801]
+
+No changes
+
+### Neuron Compiler Release [1.0.5939]
+
+No changes
+
 ### Neuron Compiler Release [1.0.5301]
 
-no changes
+No changes
 
 ### Neuron Compiler Release [1.0.4680.0]
 

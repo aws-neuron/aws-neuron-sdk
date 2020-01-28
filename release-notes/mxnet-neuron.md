@@ -2,6 +2,56 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
+# [1.5.1.1.0.1401.0]
+
+Date 1/27/2020
+
+## Summary
+
+No major changes or fixes. 
+
+## Major New Features
+
+## Resolved Issues
+
+## Known Issues and Limitations
+
+* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name. This breaks all existing released versions. The Error looks like: 
+
+```
+Looking in indexes: https://pypi.org/simple, https://pip.repos.neuron.amazonaws.com
+ERROR: Could not find a version that satisfies the requirement mxnet-neuron (from versions: none)
+ERROR: No matching distribution found for mxnet-neuron
+```
+   * Work around:  install the older version of pip using "pip install pip==19.3.1".
+ 
+ * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
+   * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+ 
+
+## Other Notes
+
+# [1.5.1.1.0.1325.0]
+
+Date 12/1/2019
+
+## Summary
+
+## Major New Features
+
+## Resolved Issues
+
+* Issue: Compiler flags cannot be passed to compiler during compile call. The fix: compiler flags can be passed to compiler during compile call using “flags” option followed by a list of flags.
+
+* Issue: Advanced CPU fallback option is a way to attempt to improve the number of operators on Inferentia. The default is currently set to on, which may cause failures. The fix: This option is now off by default.
+
+## Known Issues and Limitations
+
+* Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
+  * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+  
+## Other Notes
+
 # [1.5.1.1.0.1349.0]
 
 Date 12/20/2019

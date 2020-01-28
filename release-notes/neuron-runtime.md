@@ -2,6 +2,36 @@
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
 
+# [1.0.5236.0]
+
+Date: 1/27/2020
+
+## Major New Features
+
+N/A
+
+## Improvements
+
+* Improved neuron-rtd startup time on inf1.6xl and inf1.24xl.  Neuron-rtd startup now takes the same amount of time on all instance sizes. 
+* Improved inference latency for Neural Networks that fully execute on Inferentia (have no on-CPU nodes).  The exact latency improvement is network dependent and is estimated to be 50-100us per inference. 
+* Neural Network load GRPC returns descriptive error message when the load fails.
+* Changed default behavior of neuron-rtd to drop elevated privileges after runtime initialization.  During initialization elevated priveleges are necessary to allow bus enumeration and shared memory with frameworks.
+* Error log is automatically displayed on the console if the installation of aws-neuron-runtime fails.
+
+## Resolved Issues
+
+* minor bug fixes
+
+## Known Issues and Limitations
+
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+* Neuron-RTD does not return verbose error messages when an inference fails. Detailed error messages are only available in syslog.
+    * Workaround: manually search syslog file for Neuron-RTD error messages.
+
+
+
+
 # [1.0.4751.0]
 
 Date: 12/20/2019

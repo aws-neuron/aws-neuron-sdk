@@ -174,9 +174,9 @@ from urllib import request
 from torchvision import models, transforms, datasets
 
 ## Create an image directory containing a small kitten
-os.makedirs("./images", exist_ok=True)
+os.makedirs("./torch_neuron_test/images", exist_ok=True)
 request.urlretrieve("https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg",
-                    "./images/kitten_small.jpg")
+                    "./torch_neuron_test/images/kitten_small.jpg")
 
 
 ## Fetch labels to output the top classifications
@@ -193,7 +193,7 @@ normalize = transforms.Normalize(
     std=[0.229, 0.224, 0.225])
 
 eval_dataset = datasets.ImageFolder(
-    os.path.dirname("./"),
+    os.path.dirname("./torch_neuron_test/"),
     transforms.Compose([
     transforms.Resize([224, 224]),
     transforms.ToTensor(),

@@ -2,6 +2,32 @@
 
 This document lists the release notes for the TensorFlow-Neuron package.
 
+# [1.15.0.1.0.997.0]
+
+Date: 1/27/2020
+
+## Summary
+
+## Major New Features
+
+* Added support for NCHW pooling operators in tfn.saved_model.compile.
+
+## Resolved Issues
+
+* Fixed GRPC transient status error issue.
+* Fixed a graph partitioner issue with control inputs.
+
+## Known Issues and Limitations
+* Issue: When compiling a large model, may encounter.  
+```
+terminate called after throwing an instance of 'std::bad_alloc'
+```
+Solution: run compilation on c5.4xlarge instance type or larger.
+
+## Other Notes
+
+
+
 # [1.15.0.1.0.803.0]
 
 Date: 12/20/2019

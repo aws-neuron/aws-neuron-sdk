@@ -92,6 +92,13 @@ pip install neuron-cc
 pip install mxnet-neuron
 ```
 
+### PyTorch
+
+```bash
+pip install neuron-cc[tensorflow]
+pip install torch-neuron
+```
+
 ## Conda
 
 ```bash
@@ -99,6 +106,7 @@ conda config --add channels https://conda.repos.neuron.amazonaws.com
 
 conda install mxnet-neuron
 conda install tensorflow-neuron
+conda install torch-neuron
 ```
 
 **Optional** To verify the packages before install (using tensorflow-neuron as an example):
