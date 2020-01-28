@@ -6,7 +6,7 @@ This release brings significant throughput improvements to running inference on 
 We continue to work on new features and improving performance further, to stay up to date follow this repository, and watch the [AWS Neuron developer forum](https://forums.aws.amazon.com/forum.jspa?forumID=355).
 
 ## Important to know: 
-1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp/bf16, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
+1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp16/32, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
 
 2. Computer-vision object detection and segmentation models are not yet supported.
 
