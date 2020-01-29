@@ -1,8 +1,6 @@
 # Running BERT-Large with AWS Neuron
 
-To enable a performant BERT model on Inferentia, we must use a Neuron compatible BERT implementation. 
-
-This demo shows a Neuron compatible BERT-Large implementation that is functionally equivalent to open source BERT-Large. This demo uses TensorFlow-Neuron, BERT-Large weights fine tuned for MRPC and also shows the performance achieved by the inf1 instance. 
+This demo shows a Neuron compatible BERT-Large implementation that is functionally equivalent to open source BERT-Large model. This demo uses TensorFlow-Neuron, BERT-Large weights fine tuned for MRPC and also shows the performance achieved by the inf1 instance. 
 
 ## Table of Contents
 
