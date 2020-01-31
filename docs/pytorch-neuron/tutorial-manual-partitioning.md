@@ -9,7 +9,7 @@
 5. Start Jupyter and select the correct conda environment
 6. Execute the Notebook to compile a partitioned compute graph
 
-These steps will allow you to setup an environment for running Jupyter Notebooks, and in particular the tutorial on manual partitioning using Neuron for PyTorch, and access it via your notebook or desktop
+These steps will allow you to setup an environment for running Jupyter Notebooks, and in particular the tutorial on manual partitioning using Neuron for PyTorch, and access it via your notebook.
 
 ## Step 1: Launch EC2 compilation instance
 
@@ -17,9 +17,9 @@ Using the AWS console, select a Deep Learning AMI (DLAMI) of your choice, which 
 
 ## Step 2: Connecting to your instance
 
-For this tutorial we will use a Jupyter notebook that runs via a browser on port 8888 by default.  For simplicity we will use ssh port forwarding from your laptop or desktop to the instance.
+For this tutorial we will use a Jupyter notebook that runs via a browser on port 8888 by default.  For simplicity we will use ssh port forwarding from your machine to the instance.
 
-The regular ssh instructions look like:
+The regular ssh instructions is:
 
 ```
 ssh -i "<pem file>" <user>@<instance DNS name>
@@ -30,18 +30,18 @@ On an Ubuntu image the user will be ubuntu@, while on AL2 you should use ec2-use
 We will modify this base for to use:
 
 ```
-ssh -i "<pem file>" user@<instance DNS name> -L 8888:127.0.0.1:8888
+ssh -i "<pem file>" <user>@<instance DNS name> -L 8888:127.0.0.1:8888
 ```
 
-This additional argument forwards connections to port 8888 on your laptop or desktop to the new inf1 instance.
+This additional argument forwards connections to port 8888 on your machine to the new inf1 instance.
 
-Now: ssh to the Inf1 instance you started now
+Now: ssh to the Inf1 instance
 
-## Step 3: Set up the Neuron runtime conda environment & create a tutorial directory
+## Step 3: Set up the Neuron Runtime conda environment & create a tutorial directory
 
 1) Install the neuron runtime using these instruction:  [Getting started: Installing and Configuring Neuron-RTD](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md).
 
-2) Set up our own conda environment ahead of launching 
+2) Set up your own conda environment ahead of launching 
 
 ```
 echo ". /home/ubuntu/anaconda3/etc/profile.d/conda.sh" >> ~/.bashrc
@@ -61,7 +61,7 @@ mkdir -p notebook_tutorial
 cd notebook_tutorial
 ```
 
-## Step 4: Fetch the notebook from github
+## Step 4: Fetch the notebook from GitHub
 
 Run the following command to fetch the notebook into the current directory:
 
@@ -107,9 +107,9 @@ You should see logging in your ssh session similar to::
 
 If you copy and paste the link that looks like `http://localhost:8888/?token=f9ad4086afd3c91f33d5587781f9fd8143b4cafbbf121a16&token=f9ad4086afd3c91f33d5587781f9fd8143b4cafbbf121a16` into your local browser the Notebook navigation pane should pop up.  
 
-This works because ssh is forwarding you local port 8888 through to the inf1 instance port 8888 where the notebook is running.  Note that our new conda environment is visible as “kernel” with the “conda_” prefix (highlighted)
+This works because ssh is forwarding you local port 8888 through to the Inf1 instance port 8888 where the notebook is running.  Note that our new conda environment is visible as “kernel” with the “conda_” prefix (highlighted)
 
-## Step 6: Start the notebook & select the correct kernel:
+## Step 6: Start the notebook & select the correct kernel
 
 1) In notebook browser select “[resnet50_partition.ipynb](http://localhost:8888/notebooks/resnet50_partition.ipynb)“
 2) This will pop up a new tab.  In that tab use the menus:
@@ -120,4 +120,4 @@ Kernel → Change Kernel → Environment (conda_my_notebook_env)
 
 ## Step 7: Terminate your instance
 
-Terminate your instance through the AWS console to avoid ongoing charges
+When done, don' forget to terminate your instance through the AWS console to avoid ongoing charges
