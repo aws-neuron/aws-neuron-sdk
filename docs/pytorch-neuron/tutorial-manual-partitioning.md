@@ -120,4 +120,4 @@ Kernel → Change Kernel → Environment (conda_my_notebook_env)
 
 ## Step 7: Terminate your instance
 
-When done, don' forget to terminate your instance through the AWS console to avoid ongoing charges
+When done, don't forget to terminate your instance through the AWS console to avoid ongoing charges
