@@ -22,4 +22,4 @@ tfn.saved_model.compile("rn50_fp16",
                         compiler_args = ['--static-weights', '--num-neuroncores', '16'])
 ```
 
-**Note: **Currently, experimental flag ‘—static-weights’ is required as shown in the example to enable caching of weights on the device. This would help increase performance by decreasing weight fetch time. This limitation will be removed in the future release.
+* Note: currently, experimental flag ‘—static-weights’ is required as shown in the example to enable caching of weights on the device. This would help increase performance by decreasing weight fetch time. This limitation will be removed in the future release.
