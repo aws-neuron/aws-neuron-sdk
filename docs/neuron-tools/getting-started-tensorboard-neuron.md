@@ -6,7 +6,15 @@ TensorBoard-Neuron is adapted to provide useful information related to Neuron de
 
 ## Installation
 
+Note: on DLAMI v26.0, please do `conda install numpy=1.17.2 --yes --quiet` before following the Conda installation instructions, as the installed numpy version prevents the update.  See [DLAMI Release Notes](../../release-notes/dlami-release-notes.md) for more info.
+
+This section assumes the Neuron repos have been configured as shown here: [Repo Config Guide](../guide-repo-config.md)
+
 By default, TensorBoard-Neuron will be installed when you install TensorFlow-Neuron.
+
+If using Conda, there is no standalone package for `tensorboard-neuron` at this time, it is currently packaged together in the `tensorflow-neuron` conda package.
+
+### Pip
 
 ```
 $ pip install tensorflow-neuron
@@ -39,7 +47,11 @@ $ pip install tensorboard-neuron --force-reinstall
 If TensorBoard-Neuron is not properly installed, the added functionalities for AWS Neuron may not work.
 For example, errors such as `tensorboard: error: unrecognized arguments: --run_neuron_profile` may occur when attempting to profile an inference.
 
-
+### Conda
+TensorBoard-Neuron is included under the `tensorflow-neuron` conda package.
+```
+$ conda update tensorflow-neuron
+```
 
 ## Profile the network and collect inference traces
 
