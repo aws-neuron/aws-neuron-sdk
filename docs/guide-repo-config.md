@@ -85,6 +85,13 @@ sudo apt-get install tensorflow-model-server-neuron
 pip install tensorflow_serving_api
 ```
 
+### TensorBoard
+```bash
+pip install tensorboard-neuron
+```
+* Installing `tensorflow-neuron` will automatically install `tensorboard-neuron` as a dependency
+* To verify `tensorboard-neuron` is installed correctly, do `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
+
 ### MXNet
 
 ```bash
@@ -122,3 +129,4 @@ wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSIO
 wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc
 gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
 ```
+* Note: The `tensorflow-neuron` conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` package at this time.
