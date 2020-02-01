@@ -16,7 +16,7 @@ Ubuntu 18
 
 conda package mxnet-neuron-1.5.1.1.0.1260.0_1.0.298.0
 
-conta package tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0
+conda package tensorflow-neuron-1.15.0.1.0.663.0_1.0.298.0
 
 aws-neuron-runtime-base-1.0.3657.0
 
@@ -77,11 +77,13 @@ sudo yum makecache
 ERROR: Cannot uninstall 'wrapt'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
 ```
 
-To resolve this, execute:
+* * To resolve this, execute:
 
 ```bash
 python3 -m pip install wrapt --ignore-installed
 python3 -m pip install tensorflow-neuron
 ```
+
+* The `tensorflow-neuron` conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` package at this time.
 
 For more information, please see [TensorFlow-Neuron Release Notes](./tensorflow-neuron.md#known-issues-and-limitations).
