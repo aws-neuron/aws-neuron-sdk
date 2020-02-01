@@ -22,8 +22,6 @@ Since Neuron is pre-integrated with popular frameworks, it can be easily incorpo
 
 Once a model is trained to the required accuracy, the model should be compiled to an optimized binary form, referred to as a Neuron Executable File Format (NEFF), which is in turn loaded by the Neuron runtime to execute inference input requests on the Inferentia chips. The compilation step may be performed on any EC2 instance or on-premises. We recommend using a high-performance compute server of choice (example EC2 C/M/R/Z instance types), for the fastest compile times and ease-of-use with a prebuilt DLAMI. Developers can also install Neuron in their own environments; this approach may work well for example when building a large fleet for inference, allowing the model creation, training and compilation to be done in the training fleet, with the NEFF files being distributed by a configuration management application to the inference fleet. 
 
-Compilation is invoked from neuron extension to the ML frameworks, called Framework Adaptation Layer or FAL. FAL partitions the model using the supported operator list (neuron-cc --list_operators) into multiple subgraph. Each subgraph is compiled into neff model and the full network graph with neff and remaining framework-executed operators are saved. Compiler optimizes and partiotions the subgraph and chooses the best execution target (cpu or inferentia core) for each operator based on the operator arguments, tensor data type, size, and shape.
-
 We know ML models constantly evolve, so we’ve designed Neuron to give builders a future-proof development environment, utilizing an ahead-of-time compiler that ensures Neuron will optimally utilize the hardware when new operators and neural-net models are developed.
 
 
