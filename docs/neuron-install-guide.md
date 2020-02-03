@@ -1,12 +1,7 @@
 # User Guide: Configuring Linux for repository updates
 
-The following package managers: apt, yum, pip, and conda must be configured so updates and installation can be done from them. Each Linux variant is slightly different.
+Nueron is using standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps. 
 
-This short reference guide provides the needed settings for each variant and shows an example for Neuron packages.
-
-## AWS Deep Learning AMIs (DLAMI) or Deep Learning Containers Images
-
-Neuron is already built in.
 
 ## UBUNTU 16
 
@@ -130,3 +125,8 @@ wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSIO
 gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
 ```
 * Note: The `tensorflow-neuron` conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` package at this time.
+
+## DLAMI
+Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. 
+
+NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.

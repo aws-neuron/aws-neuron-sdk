@@ -1,10 +1,8 @@
 # Neuron Compiler
 
-The Neuron Compiler is an Ahead-of-Time (AoT) compiler that accepts Machine Learning Models in various formats (TensorFlow, MXNet, PyTorch, ONNX) and converts and optimizes them to run on AWS Inferentia chips.
+The Neuron Compiler is an Ahead-of-Time (AoT) compiler that accepts Machine Learning models in various formats (TensorFlow, MXNet, PyTorch, ONNX) and optimizes them to run on AWS Inferentia chips.
 
-The Neuron compiler analyzes the user-provided compute-graph, and performs various optimizations such as loop-fusion, tensorization, scheduling, and memory management, which significantly improves inference throughput and memory usage.
-
-AoT compilation requires that dynamic tensor shapes (dimension sizes) of all tensors in the compute-graph are known at compilation time, in order for the compiler to make informed decisions. If any shape cannot be determined at compile time compilation will fail.
+AoT compilation requires that dynamic tensor shapes (dimension sizes) of all tensors in the compute-graph are known at compilation time, in order for the compiler to make informed decisions. Models compilation with shapes that cannot be determined at compile time will fail.
 
 It is common for developers to train models in FP32 to avoid the challenges of low-precision training (e.g. loss-scaling, etc). However, during inference, developers typically look for the most cost-effective method. In order to address these two requirements, Neuron supports FP32 auto-casting, which takes trained FP32 models as input, and then runs them at speed of 16-bit using BFloat16 model, using Neuron's FP32 to BF16 auto conversion.
 

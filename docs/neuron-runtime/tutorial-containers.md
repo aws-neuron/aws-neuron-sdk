@@ -10,8 +10,6 @@ Neuron-rtd container is available over ECR repositories and can be used directly
 
 Neuron-rtd container: [790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest]()
 
-[DL framework containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-images.html)
-
 
 ##  Steps:
 

@@ -1,18 +1,14 @@
 # Getting started:  Installing and Configuring Neuron-RTD
 
-In this getting started guide you will learn how to install Neuron runtime, and configure it for inference. If you'd like to install the Neuron runtime into your own AMI of choice please start with Step 1. If you plan to use a pre-built Deep Learning AMI (recommended) follow these instructions: https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html. Using DLAMI is recommended as it comes pre-installed with all of the needed Neuron packages. When using DLAMI, you can start with step 3 below.
+In this getting started guide you will learn how to install Neuron runtime, and configure it for inference. 
 
 
 ## Step 1: Launch an Inf1 Instance
 
-Steps Overview: 
-
-1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, or Amazon Linux 2 based. 
+1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, or Amazon Linux 2 based. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details. 
 2. Select an Inf1 instance size of your choice (see https://aws.amazon.com/ec2/instance-types/inf1/)
 
 ## Step 2: Install Neuron-RTD
-
-Steps Overview:
 
 1. Modify yum/apt repository configurations to point to the Neuron repository.
 2. Install Neuron-RTD
@@ -70,7 +66,7 @@ sudo yum install aws-neuron-tools
 ```
 ## Step 3: Configure nr_hugepages
 
-Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers of all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of 2MB hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
+Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers of all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of  hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
 
 ```
 hugepages=128

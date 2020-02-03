@@ -13,11 +13,11 @@ These steps will allow you to setup an environment for running Jupyter Notebooks
 
 ## Step 1: Launch EC2 compilation instance
 
-Using the AWS console, select a Deep Learning AMI (DLAMI) of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. For this tutorial we use an inf1.xlarge instance, you may want to experiment with a larger instance.
+Select an AMI of your choice. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details. For this tutorial we use an inf1.xlarge instance, you may want to experiment with a larger instance.
 
 ## Step 2: Connecting to your instance
 
-For this tutorial we will use a Jupyter notebook that runs via a browser on port 8888 by default.  For simplicity we will use ssh port forwarding from your machine to the instance.
+In this tutorial we use a Jupyter notebook that runs via a browser on port 8888 by default.  For simplicity we will use ssh port forwarding from your machine to the instance.
 
 The regular ssh instructions is:
 
@@ -39,7 +39,7 @@ Now: ssh to the Inf1 instance
 
 ## Step 3: Set up the Neuron Runtime conda environment & create a tutorial directory
 
-1) Install the neuron runtime using these instruction:  [Getting started: Installing and Configuring Neuron-RTD](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md).
+1) Install the neuron runtime using these instruction:  [Getting started: Installing and Configuring Neuron-RTD](../neuron-runtime/nrt_start.md).
 
 2) Set up your own conda environment ahead of launching 
 

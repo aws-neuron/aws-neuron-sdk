@@ -12,20 +12,20 @@
 
 A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation instance and then distribute the artifacts to a fleet of deployment instances, for execution. Neuron enables TensorFlow to be used for all of these steps.
 
-1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
+1.1. Select an AMI of your choice. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details.
 
-1.2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+1.2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instance launch instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
   * It is recommended to use c5.4xlarge or larger. For this example we will use a c5.4xlarge.
   * Users may choose to compile and deploy on the same instance, in which case it is recommend to use an inf1.6xlarge instance or larger.
 
-1.3. Select and launch a deployment (Inf1) instance of your choice (if not compiling and inferencing on the same instance). Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
+1.3. Select and launch a deployment (Inf1) instance of your choice. 
 
 
 ## Step 2: Compilation Instance Installations
 
 **If using DLAMI, activate pre-installed TensorFlow-Neuron environment (using `source activate aws_neuron_tensorflow_p36`  command) and skip this step.**
 
-On the instance you are going to use for compilation, install both Neuron Compiler and  TensorFlow-Neuron.
+On the instance you are going to use for compilation, install both Neuron Compiler and TensorFlow-Neuron.
 
 2.1. Install Python3 virtual environment module if needed:
 
