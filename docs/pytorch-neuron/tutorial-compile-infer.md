@@ -19,6 +19,8 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 * A c5.4xlarge or larger is recommended. For this example we will use a c5.4xlarge.
 * Users may choose to compile and deploy on the same instance, in which case an inf1.6xlarge instance or larger is recommended.  If you choose “launch instance” and search for “neuron” in the AWS EC2 console you will see a short list of the DLAMI images to select from.
 
+1.3. Select and launch a deployment (Inf1) instance of your choice (if not compiling and inferencing on the same instance). Launch an instance by following EC2 instructions.
+
 ## Step 2: Compilation instance installations
 
 Install both Neuron Compiler and Torch-Neuron on the compilation instance.
