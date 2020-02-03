@@ -11,14 +11,19 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 
 ## Getting started 
 
-* [Tutorial: Using MXNet-Neuron](./tutorial-compile-infer.md)
+### Tutorials
 
-* [Tutorial: MXNet-Neuron model serving](./tutorial-model-serving.md)
+* [Using MXNet-Neuron](./tutorial-compile-infer.md)
 
-* [Tutorial: Using NeuronCore Groups with MXNet](./tutorial-neuroncore-groups.md)
+* [MXNet-Neuron model serving](./tutorial-model-serving.md)
 
-* [Reference: MXNet-Neuron compilation python API](./api-compilation-python-api.md)
+* [Using NeuronCore Groups with MXNet](./tutorial-neuroncore-groups.md)
+
+### Reference manuals
+
+* [MXNet-Neuron compilation python API](./api-compilation-python-api.md)
 
 * [MXNet Neuron supported operators](../../release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.md)
 
+### Release notes
 * [Release Notes](../../release-notes/mxnet-neuron.md )

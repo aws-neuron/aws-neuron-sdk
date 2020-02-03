@@ -9,7 +9,7 @@ Since you can use Neuron in a variety of ways, we arranged the documents in fold
 * [TensorFlow Neuron](./tensorflow-neuron/readme.md)
 * [PyTorch Neuron](./pytorch-neuron/README.md)
 
-## Neuron components 
+## Neuron applications 
 * [Neuron Compiler](./neuron-cc/readme.md)
 * [Neuron Runtime](./neuron-runtime/README.md)
 * [Neuron Tools](./neuron-tools/Readme.md)

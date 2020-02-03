@@ -130,3 +130,8 @@ gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow
 Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. 
 
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
+
+### DL Containers
+For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./docs/neuron-runtime/tutorial-containers.md).
+Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. 
+
