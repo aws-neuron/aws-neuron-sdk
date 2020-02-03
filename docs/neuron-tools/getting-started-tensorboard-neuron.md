@@ -8,7 +8,7 @@ TensorBoard-Neuron is adapted to provide useful information related to Neuron de
 
 Note: on DLAMI v26.0, please do `conda install numpy=1.17.2 --yes --quiet` before following the Conda installation instructions, as the installed numpy version prevents the update.  See [DLAMI Release Notes](../../release-notes/dlami-release-notes.md) for more info.
 
-This section assumes the Neuron repos have been configured as shown here: [Repo Config Guide](../guide-repo-config.md)
+This section assumes the Neuron repos have been configured as shown here: [Neuron installation guide](../neuron-install-guide.md)
 
 By default, TensorBoard-Neuron will be installed when you install TensorFlow-Neuron.
 
