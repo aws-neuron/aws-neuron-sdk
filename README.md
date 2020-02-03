@@ -87,7 +87,7 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
 If none of the github and online resources have an answer to your question, checkout the AWS Neuron [support forum](https://forums.aws.amazon.com/forum.jspa?forumID=355). 
 
 ## Application Notes
-* [Application Notes Readme](./docs/appnotes/README.md)
+* [Application Notes Readme](./release-notes/README.md)
 
 
 
