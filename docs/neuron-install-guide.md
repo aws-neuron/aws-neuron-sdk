@@ -54,6 +54,8 @@ sudo tee /etc/pip.conf > /dev/null <<EOF
 [global]
 extra-index-url = https://pip.repos.neuron.amazonaws.com
 EOF
+
+pip install -U pip==19.3.1
 ```
 
 **Optional:** To verify the packages before install (using neuron-cc as an example):
