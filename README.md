@@ -84,8 +84,8 @@ Pytorch-Neuron [Pytorch-Neuron readme ](./docs/pytorch-neuron/README.md) provide
 ## Support
 If none of the github and online resources have an answer to your question, try posting on the AWS Neuron [support forum](https://forums.aws.amazon.com/forum.jspa?forumID=355). 
 
-## Application Notes
-* [Application Notes Readme](./docs/appnotes/README.md)
+## Application and Technical Notes
+* [Tech Notes Readme](./docs/technotes/README.md)
 
 
 
