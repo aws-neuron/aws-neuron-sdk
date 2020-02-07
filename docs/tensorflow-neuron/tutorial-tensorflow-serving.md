@@ -5,7 +5,7 @@ TensorFlow Serving is a serving system that allows customers to scale-up inferen
 If using DLAMI and aws_neuron_tensorflow_p36 environment, you can skip the installation step below.
 
 ## Install TensorFlow Model Server and Serving API
-The configuration of your version of Linux will determine the correct settings - see this [link](./guide-repo-config.md).
+Follow the steps in the [Neuron installation guide](./neuron-install-guide.md).
 
 Then ensure you install using either apt-get or yum:
 ```bash

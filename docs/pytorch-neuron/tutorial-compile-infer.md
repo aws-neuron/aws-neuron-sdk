@@ -3,21 +3,23 @@
 ## Steps Overview:
 
 1. Launch an EC2 compilation instance (recommended instance: c5.4xlarge or larger)
-2. Install Torch-Neuron and Neuron-Compiler on the Compilation Instance
+2. Install Torch-Neuron and Neuron-Compiler on the compilation instance
 3. Compile the compute-graph on the compilation-instance, and copy the artifacts into the deployment-instance
-4. Install Torch-Neuron and Neuron-Runtime on Inf1  (deployment Instance)
+4. Install Torch-Neuron and Neuron-Runtime on an Inf1 instance (deployment Instance)
 5. Run inference on the Inf1 instance
 
 ## Step 1: Launch EC2 compilation instance
 
 A typical workflow with the Neuron SDK will be to compile trained ML models on a general compute instance (the compilation instance), and then distribute the artifacts to a fleet of Inf1 instances (the deployment instances) for inference execution. Neuron enables PyTorch for both of these steps.
 
-1.1. Select an AMI of your choice. This may be may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based on the Deep Learning AMI (DLAMI).  
+1.1. Select an AMI of your choice. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details.
 
 1.2. Select and launch an EC2 instance
 
 * A c5.4xlarge or larger is recommended. For this example we will use a c5.4xlarge.
-* Users may choose to compile and deploy on the same instance, in which case an inf1.6xlarge instance or larger is recommended.  If you choose “launch instance” and search for “neuron” in the AWS EC2 console you will see a short list of the DLAMI images to select from.
+* Users may choose to compile and deploy on the same instance, in which case an inf1.6xlarge instance or larger is recommended.  If you choose “launch instance” and search for “neuron” in the AWS EC2 console you will see a short list of  DLAMI images to select from. If you choose a DLAMI, make sure to check the Neuron version installed, and upgrade as needed.
+
+1.3. Select and launch a deployment (Inf1) instance of your choice (if not compiling and inferencing on the same instance). Launch an instance by following EC2 instructions.
 
 ## Step 2: Compilation instance installations
 

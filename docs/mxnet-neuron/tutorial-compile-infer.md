@@ -1,20 +1,20 @@
 # Tutorial: Using MXNet-Neuron
 
-Neuron supports both Python module and Symbol APIs and the C predict API. The following quick start example uses the Symbol API.
+Neuron supports Python module, Symbol APIs and the C predict API. The following quick start example uses the Symbol API.
 
 ## Steps Overview:
 
-1. Launch an EC2 instance for compilation and/or inference
-2. Install MXNet-Neuron and Neuron Compiler On Compilation Instance
+1. Launch an EC2 instance for compilation and inference
+2. Install MXNet-Neuron and Neuron Compiler on a compilation instance
 3. Compile on compilation server
-4. Install MXNet-Neuron and Neuron Runtime on Inference Instance
+4. Install MXNet-Neuron and Neuron Runtime on inference instance
 5. Execute inference on Inf1
 
 ## Step 1: Launch EC2 Instances
 
 A typical workflow with the Neuron SDK will be to compile trained ML models on a compilation server and then distribute the artifacts to a fleet of Inf1 instances for execution. Neuron enables MXNet to be used for all of these steps.
 
-1.1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, Amazon Linux 2 based. To use a pre-built Deep Learning AMI, which includes all of the needed packages, see [Launching and Configuring a DLAMI](https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html)
+1.1. Select an AMI of your choice. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details.
 
 1.2. Select and launch an EC2 instance of your choice to compile. Launch an instance by following [EC2 instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance).
 

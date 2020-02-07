@@ -1,6 +1,6 @@
 # Reference Guide: Neuron compiler CLI 
 
-This document describes the command line interface of the Neuron compiler. This reference is not relevant for applications that run neuron-cc from within a machine learning framework (TensorFlow-Neuron for example) since these options are passed from the framework to neuron-cc. 
+This document describes the command line interface of the Neuron compiler. This reference is not relevant for applications that run neuron-cc from within a machine learning framework (TensorFlow-Neuron for example) since these options are passed from the framework directly to neuron-cc. 
 
 Using neuron-cc on the command line may be desirable for applications that do not use a framework, or customize existing frameworks. It is also possible to supply CLI commands to the framework as options to be passed through to the compiler. 
 
