@@ -1,6 +1,6 @@
 # User Guide: Configuring Linux for repository updates
 
-Nueron is using standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps. 
+Nueron is using standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps.
 
 
 ## UBUNTU 16
@@ -129,11 +129,10 @@ gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow
 * Note: The `tensorflow-neuron` conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` package at this time.
 
 ## DLAMI
-Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it. 
+Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it.
 
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
 
 ### DL Containers
 For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./docs/neuron-runtime/tutorial-containers.md).
-Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon. 
-
+Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon.

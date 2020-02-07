@@ -55,7 +55,7 @@ $ conda update tensorflow-neuron
 
 ## Profile the network and collect inference traces
 
-When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable. 
+When using TensorFlow-Neuron, MXNet-Neuron, or PyTorch-Neuron, raw profile data will be collected if NEURON_PROFILE environment variable is set. The raw profile is dumped into the directory pointed by NEURON_PROFILE environment variable.
 
 The steps to do this:
 
@@ -66,7 +66,7 @@ export NEURON_PROFILE=/some/output/directory
 ```
 
 NOTE: this directory must exist before you move on to the next step.  Otherwise, profile data will not be emitted.
-  
+
 *  Run inference through the framework.  See the tutorials for each framework for more info.
 
 
@@ -99,11 +99,11 @@ your_graph_file = '/path/to/graph/file'
 your_graph_def = tf.GraphDef()
 with open(your_graph_file, 'rb') as f:
     graph_def.ParseFromString(f.read())
-    
+
 your_graph = tf.Graph()
 with your_graph.as_default():
     tf.import_graph_def(your_graph_def, name='')
-    
+
 fw = tf.summary.FileWriter(graph=yourgraph, logdir='/path/to/logdir'
 fw.flush()
 ```
@@ -222,7 +222,7 @@ DEBUG_SERVER_ADDRESS = 'localhost:7000'
 
 sess = tf_debug.TensorBoardDebugWrapperSession(
             sess, DEBUG_SERVER_ADDRESS)
-            
+
 # run inference using the wrapped session
 ```
 
