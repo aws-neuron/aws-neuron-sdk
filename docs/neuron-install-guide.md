@@ -13,6 +13,7 @@ EOF
 wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
 
 sudo apt-get update
+sudo apt-get install aws-neuron-runtime-base
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
@@ -27,6 +28,7 @@ EOF
 wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
 
 sudo apt-get update
+sudo apt-get install aws-neuron-runtime-base
 sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
@@ -43,6 +45,7 @@ metadata_expire=0
 EOF
 
 sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+sudo yum install aws-neuron-runtime-base
 sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
