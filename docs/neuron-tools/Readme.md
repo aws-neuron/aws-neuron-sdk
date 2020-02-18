@@ -61,16 +61,27 @@ The `neuron-top` command can be used to biew the memory usage.
 
 ```
 $ neuron-top
-neuron-top - 2019-11-13 23:57:08
-NN Models: 3 total, 2 running
-Number of VNCs tracked: 2
-0000:00:1f.0 Utilizations: Neuron core0 0.00, Neuron core1 0.00, Neuron core2 0.00, Neuron core3 0.00,
-DLR Model   Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem     Neuron core %
-10003       1         0          0000:00:1f.0:0   384        135660544      0.00
-10001       3         0          0000:00:1f.0:0   384        67633152       0.00
-10002       1         0          0000:00:1f.0:1   384        135660544      0.00
-```
+neuron-top - 2020-02-12 23:03:15
+NN Models: 2 total, 2 running
+Number of VNCs tracked: 16
 
+0000:00:1c.0 Utilizations: Neuron core0 0.00%, Neuron core1 0.00%, Neuron core2 0.00%, Neuron core3 0.00%,
+0000:00:1e.0 Utilizations: Neuron core0 0.00%, Neuron core1 0.00%, Neuron core2 0.00%, Neuron core3 0.00%,
+
+Model ID   Model Name                                                      UUID                               Node ID   Subgraph   Exec. Unit       Host Mem   Device Mem   Neuron core %
+10018      1.0.6801.0-/home/ubuntu/benchmarking/compiler_workdir/rn50      d12cf238420d11ea8e270afe835c0a32   3         0          0000:00:1e.0:0   33554816   135290880    0.00
+10017      1.0.6801.0-/home/ubuntu/benchmarking/compiler_workdir/rn50      d12cf238420d11ea8e270afe835c0a32   3         0          0000:00:1c.0:0   33554816   135290880    0.00
+
+```
+In the above output:
+- Model ID      ->  Unique Identifier for models loaded in the Neuron device
+- Model Name    ->  Neuron Compiler Version-compiler work directory/User defined model name
+- Node ID       ->  For Internal use only
+- UUID          ->  Unique Id assigned by the Neuron Compiler for a Model
+- Exec. Unit    ->  BDF of Neuron Device followed by the Neuron Core ID, b:d:f.NC
+- Host Mem      ->  Host memory consumed by the Model in bytes
+- Device Mem    ->  Neuron Device memory consumed by the Model in bytes
+- Neuron Core % -> utilization % of the neuron core (If there are no active inferences this value should be 0)
 
 # Gather Debugging information
 Please refer to [Neuron Gatherinfo](./tutorial-neuron-gatherinfo.md)
