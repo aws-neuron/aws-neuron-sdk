@@ -54,7 +54,7 @@ conda activate my_notebook_env
 pip install torch-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install neuron-cc[tensorflow] --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install pillow==6.2.2
-pip install torchvision --no-deps
+pip install torchvision==0.4.2 --no-deps
 pip install jupyter
 
 mkdir -p notebook_tutorial
