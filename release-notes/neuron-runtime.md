@@ -2,32 +2,6 @@
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
 
-# [1.0.5691.0]
-
-Date: 2/21/2020
-
-## Major New Features
-
-N/A
-
-## Improvements
-
-* GRPC streaming has been introduced in all Neuron forks of ML frameworks to decrease inference latency. FIXME. Need to quantify the improvements.
-
-* Staging of FMAPs in TDRAM instead of host is now possible. FIXME: Need to quantify the improvements.
-
-* Direct copy of IFMAP from client shared memory to Inferentia (removed one intermediate copy to Runtime memory). This will improve the average latency of inferences. [FIXME. Need to quantify improvement]
-
-## Resolved Issues
-
-* Return more meaningful messages when inference fails. This makes the messages more visible. Note: These messages continue to be sent to syslog as always.
-
-* A few other minor bug fixes
-
-## Known Issues and Limitations
-
-* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
-    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
 
 # [1.0.5236.0]
 
