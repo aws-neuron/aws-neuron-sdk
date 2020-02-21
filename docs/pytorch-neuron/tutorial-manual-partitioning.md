@@ -54,7 +54,7 @@ conda activate my_notebook_env
 pip install torch-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install neuron-cc[tensorflow] --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install pillow==6.2.2
-pip install torchvision --no-deps
+pip install torchvision==0.4.2 --no-deps
 pip install jupyter
 
 mkdir -p notebook_tutorial
@@ -66,7 +66,7 @@ cd notebook_tutorial
 Run the following command to fetch the notebook into the current directory:
 
 ```bash
-curl -O https://github.com/aws/aws-neuron-sdk/blob/master/src/pytorch/resnet50_partition.ipynb
+curl -O https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/pytorch/resnet50_partition.ipynb
 ```
 
 
@@ -121,3 +121,17 @@ Kernel → Change Kernel → Environment (conda_my_notebook_env)
 ## Step 7: Terminate your instance
 
 When done, don't forget to terminate your instance through the AWS console to avoid ongoing charges
+
+## Troubleshooting
+
+If your jupyter notebook does not start please try the following:
+
+```
+mv ~/.jupyter ~/.jupyter.old
+mkdir -p ~/.jupyter
+echo "c.NotebookApp.iopub_data_rate_limit = 10000000000" > ~/.jupyter/jupyter_notebook_config.py
+
+conda install nb_conda_kernels
+
+jupyter notebook
+```
