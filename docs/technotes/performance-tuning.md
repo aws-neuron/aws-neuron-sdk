@@ -29,9 +29,9 @@ import tensorflow.neuron as tfn
 batch_size = 5
 example_input = np.zeros([batch_size,224,224,3], dtype='float16')
 
-# Note: users should temporarily also use the following compilation flags when batch
-# size is larger than 1.
-# These flags will be deprecated (enabled by default) in the future.
+# Note: Users should temporarily use the following compilation flags when
+# batch size is larger than 1. These flags are only applicable to CNNs
+# (ResNet50 and similar models) and will be deprecated in the future.
 compiler_args = ['--batching_en', '--rematerialization_en', '--spill_dis',
                  '--sb_size', str((batch_size + 6)*10),
                  '--enable-replication', 'True']
@@ -45,9 +45,9 @@ tfn.saved_model.compile("rn50_fp16",
 
 **Note 1:** Users should temporarily use the following compilation flags when batch size is larger than 1: `--batching_en --rematerialization_en --spill_dis --sb_size <(batch_size + 6)*10> --enable-replication=True`. These flags are only applicable to CNNs (ResNet50 and similar models) and will be deprecated in the future.
 
-**Note 2:** Depending on the neural network size, Neuron will have a maximum batch size that works optimally on Inferentia. If a non-supported batch size is used, an internal compiler error message will be displayed (see the troubleshooting section below).
+**Note 2:** Depending on the neural network size, Neuron will have a maximum batch size that works optimally on Inferentia. Currently, FP16 ResNet50 is supported up to batch 5 only. Additionally, ResNet50 with FP32 input is limited to batch 1 only. These limitations are being addressed and will be fixed in a future releases of the compiler.  If a unsupported batch size is used, an internal compiler error message will be displayed (see [Known Issues](#known-issues) section below).
 
-## **Compiling for pipeline optimization**
+## Compiling for pipeline optimization
 
 With NeuronCore Pipeline mode, Neuron stores the model parameters onto the Inferentias' local caches, and streams the inference requests across the available NeuronCores, as specified by the `--num-neuroncores` compiler argument. For example, to compile the model to fit pipeline size of four Inferentia devices (16 NeuronCores) avaliable in the inf1.6xlarge instance size:
 
@@ -64,7 +64,7 @@ tfn.saved_model.compile("rn50_fp16",
 ```
 
 
-**Note:** If static weights flag is set and there is not enough NeuronCore cache memory to support fully-cached weights, the compiler will emit an internal compiler error message. To address such an error, users could use a larger NeuronCore Group (larger instance size). See the troubleshooting section below for more details.
+**Note:** If static weights flag is set and there is not enough NeuronCore cache memory to support fully-cached weights, the compiler will emit an internal compiler error message. To address such an error, users could use a larger NeuronCore Group (larger instance size). See [Known Issues](#known-issues) section below for more details.
 
 
 ## Model-serving inference optimizations
@@ -281,11 +281,11 @@ Throughput values collected:
 Compiled batch size 5, user batch size 50, throughput stats (images/sec): max=6550 p99=6550 p50=6400, avg latency 251.6603 sec/user-batch
 ```
 
-## Troubleshooting
+## Known Issues
 
 ### Unable to compile with batch and num NeuronCores combination
 
-For some combination of batch and number of NeuronCores setting, you may see an internal compiler error as below. Please see the sweep result above for Neuron 1/27/20 release. Furthermore, if using auto-casting to bfloat16 from FP32 network and batch size is larger than 1 would result in the same error. These issues will be addressed in a future Neuron release.
+For some combination of batch and number of NeuronCores setting, you may see an internal compiler error as below. Please see the sweep result above for Neuron 1/27/20 release. Furthermore, if using auto-casting to bfloat16 from FP32 network and batch size is larger than 1 would result in the same error.
 
 ```bash
 INFO:tensorflow:fusing subgraph neuron_op_a73aed4b95ca5d5b with neuron-cc; log file is at /home/ubuntu/keras_fp16_benchmarking_db/compiler_workdir/neuron_op_a73aed4b95ca5d5b/graph_def.neuron-cc.log
