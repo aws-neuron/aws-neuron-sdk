@@ -85,7 +85,7 @@ pip install neuron-cc[tensorflow]
 pip install pillow==6.2.2
 
 # We use the --no-deps here to prevent torchvision installing standard torch
-pip install torchvision --no-deps
+pip install torchvision==0.4.2 --no-deps
 ```
 
 ## Step 3: Compile on compilation instance
