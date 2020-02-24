@@ -118,7 +118,7 @@ We dont officially support it yet.
 Windows is not supported at this time.
 
 **Q: How can I use Neuron in a container based environment? Does Neuron work with ECS and EKS?**
-ECS and EKS support is coming soon. Containers can be configured as shown [here](./docs/neuron-runtime/tutorial-containers.md)
+ECS and EKS support is coming soon. Containers can be configured as shown [here](./docs/neuron-container-tools/README.md)
 
 
 **Q: How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?**

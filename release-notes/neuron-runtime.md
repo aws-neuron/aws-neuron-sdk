@@ -2,6 +2,7 @@
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
 
+
 # [1.0.5236.0]
 
 Date: 1/27/2020

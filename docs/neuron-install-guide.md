@@ -137,5 +137,5 @@ Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/lates
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
 
 ### DL Containers
-For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./docs/neuron-runtime/tutorial-containers.md).
+For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./neuron-container-tools/README.md).
 Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon.
