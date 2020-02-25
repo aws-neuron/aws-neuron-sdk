@@ -49,6 +49,8 @@ Neuron provides developers with various performance optimization options. Two of
 
 Another capability, called NeuronCore Groups allows developers to assign different models to separate NeuronCores, and run the same or multiple models in parallel. NeuronCore Groups may be useful for increasing accuracy through majority-vote, or when different models need to run as a pipeline. For more details please read more [here](../docs/tensorflow-neuron/tutorial-NeuronCore-Group.md).
 
+A walkthrough for ResNet-50 using Tensorflow can be found [here](./docs/technotes/performance-tuning.md)
+
 
 ## Installing Neuron
 To use Neuron you can use a pre-built Amazon Machine Images (DLAMI) or DL containers or install Neuron software on your own instances. To ensure you have the latest Neuron version we recommend to either install it on your own instance, or to check for the installed version when using DLAMI or DL containers.
