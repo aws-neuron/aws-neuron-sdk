@@ -1,5 +1,19 @@
 # TensorBoard-Neuron Release Notes
 
+# [1.15.0.1.0.366.0]
+
+Date 02/27/2019
+
+## Summary
+
+Reduced load times and fixed crashes when loading large models for visualization.
+
+## Resolved Issues
+
+* Enable large attribute filtering by default
+* Reduced load time for graphs with attributes larger than 1 KB
+* Fixed a fail to load graphs with many large attributes totaling more than 1 GB in size
+
 # [1.15.0.1.0.315.0]
 
 Date 12/20/2019

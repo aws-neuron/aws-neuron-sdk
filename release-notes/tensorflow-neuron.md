@@ -2,6 +2,31 @@
 
 This document lists the release notes for the TensorFlow-Neuron package.
 
+# [1.15.0.1.0.1240.0]
+
+Date: 2/27/2020
+
+## Summary
+
+## Major New Features
+
+* Enabled runtime memory optimizations by default to improve inference performance, specifically in cases with large input/output tensors
+* tfn.saved_model.compile now displays warning message instead of "successfully compiled" if less than 30% of operators are mapped to Inferentia
+* Improve error messages. Runtime failure error messages are now more descriptive and also provide instructions to restart neuron-rtd when necessary.
+
+## Resolved Issues
+
+
+## Known Issues and Limitations
+* Issue: When compiling a large model, may encounter.  
+```
+terminate called after throwing an instance of 'std::bad_alloc'
+```
+Solution: run compilation on c5.4xlarge instance type or larger.
+
+## Other Notes
+
+
 # [1.15.0.1.0.997.0]
 
 Date: 1/27/2020
