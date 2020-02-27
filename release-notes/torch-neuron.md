@@ -1,5 +1,23 @@
 # PyTorch Neuron release notes
 
+This document lists the release notes for the Pytorch-Neuron package.
+
+# [1.0.763.0]
+
+Date: 2/27/2020
+
+## Summary
+
+Added Neuron Compiler support for a number of previously unsupported PyTorch operators. Please see [Neuron-cc PyTorch Operators](./neuron-cc-ops/neuron-cc-ops-pytorch.md) for the complete list of operators.
+
+## Major new features
+
+* None
+
+## Resolved issues
+
+* None
+
 # [1.0.672.0]
 
 Date: 1/27/2020
