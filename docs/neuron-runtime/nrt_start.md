@@ -164,7 +164,7 @@ sudo tee /opt/aws/neuron/bin/nrtd2.json > /dev/null << EOF
 }
 EOF
 
->sudo tee /opt/aws/neuron/bin/nrtd3.json > /dev/null << EOF
+sudo tee /opt/aws/neuron/bin/nrtd3.json > /dev/null << EOF
 {
 "name": "nrtd3",
 "server_port": "unix:/run/neuron.sock3",
