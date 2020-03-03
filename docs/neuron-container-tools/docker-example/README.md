@@ -34,7 +34,7 @@ Run assuming a compiled saved model was stored in s3://<my-bucket>/my_model/
 
 # Note: the neuron-rtd socket directory must be mounted and pointed at using environment variable.
 #       TensorFlow serving will use that socket to talk to Neuron-rtd
-docker run --env NEURON_RTD_ADDRESS=/sock/neuron.sock \
+docker run --env NEURON_RTD_ADDRESS=unix:/sock/neuron.sock \
            -v /tmp/neuron_rtd_sock/:/sock \
            -p 8501:8501 \
            -p 8500:8500 \
