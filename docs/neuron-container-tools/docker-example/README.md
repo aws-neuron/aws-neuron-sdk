@@ -26,7 +26,7 @@ docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IP
 
 #### Step 2: Start application (tensorflow serving) container:
 
-Build tensorflow-model-server-neuron image using provided example dockerfile [./Dockerfile.tf-serving]
+Build tensorflow-model-server-neuron image using provided example dockerfile [Dockerfile.tf-serving](./Dockerfile.tf-serving).
 
 Run assuming a compiled saved model was stored in s3://<my-bucket>/my_model/
 
