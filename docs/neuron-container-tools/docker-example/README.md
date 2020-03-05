@@ -5,7 +5,7 @@ With this example you will learn how to run a Neuron application using docker co
 
 ## Prerequisites:
 
-* Please ensure the steps from the guide on [Neuron TensorFlow Serving](./../tensorflow-neuron/tutorial-tensorflow-serving.md) were completed successfully before continuing.
+* Please ensure the steps from the guide on [Neuron TensorFlow Serving](./../../tensorflow-neuron/tutorial-tensorflow-serving.md) were completed successfully before continuing.
 
 ## Steps:
 #### Step 1: Start neuron-rtd container:
@@ -46,5 +46,5 @@ docker run --env NEURON_RTD_ADDRESS=unix:/sock/neuron.sock \
 ```
 
 #### Step 3: Verify by running an inference!
-As shown in [Neuron TensorFlow Serving](./../tensorflow-neuron/tutorial-tensorflow-serving.md)
+As shown in [Neuron TensorFlow Serving](./../../tensorflow-neuron/tutorial-tensorflow-serving.md)
 
