@@ -20,13 +20,12 @@ docker run --env AWS_NEURON_VISIBLE_DEVICES="0" neuron-test neuron-ls
 ```
 Would produce the following output:
 ```
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   |   DMA   | EAST | WEST |
-|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |      12 |    0 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+
 ```
 
 ##  Steps:
@@ -40,8 +39,14 @@ Then, install the aws-neuron-runtime-base package.
 sudo apt-get install aws-neuron-runtime-base
 ```
 
+#### Step 2: Make sure that the neuron-rtd service is not running
+If neuron-rtd is running on the host, stop the neuron-rtd service before starting the containerized neuron-rtd. This is needed to allow assignment of devices to containers:
 
-#### Step 2: install oci-add-hooks dependency 
+```bash
+sudo service neuron-rtd stop
+```
+
+#### Step 3: install oci-add-hooks dependency 
 
 [oci-add-hooks](https://github.com/awslabs/oci-add-hooks) is an OCI runtime with the sole purpose of injecting OCI prestart, poststart, and poststop hooks into a container config.json before passing along to an OCI compatable runtime.
 oci-add-hooks is used to inject a hook that exposes Inferentia devices to the container.
@@ -57,7 +62,7 @@ sudo apt install -y golang && \
 ```
 
 
-#### Step 3: setup Docker to use oci-neuron OCI runtime.
+#### Step 4: setup Docker to use oci-neuron OCI runtime.
 oci-neuron is a script representing OCI compatible runtime. It wraps oci-add-hooks, which wraps runc. In this step, we configure docker to point at oci-neuron OCI runtime.
 Install dockerIO:
 
@@ -118,11 +123,11 @@ docker run --env AWS_NEURON_VISIBLE_DEVICES="0"  neuron-test neuron-ls
 ```
 Expected result:
 ```
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   |   DMA   | EAST | WEST |
-|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 | ENGINES |      |      |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
-| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |      12 |    0 |    1 |
-+--------------+---------+--------+-----------+-----------+---------+------+------+
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+
 
 ```

@@ -19,8 +19,9 @@ open a UDS socket. The application can interact with runtime using this socket.
 $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 790709498068)
 docker pull 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
 docker tag 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest neuron-rtd
-mkdir /tmp/neuron_rtd_sock/
-docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
+mkdir /tmp/neuron_rtd_sock
+chmod o+rwx /tmp/neuron_rtd_sock
+docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock -it neuron-rtd
 ```
 
 
