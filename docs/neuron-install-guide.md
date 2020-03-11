@@ -1,9 +1,10 @@
 # User Guide: Configuring Linux for repository updates
 
-Nueron is using standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps.
+Neuron uses standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps.
 
-
-## UBUNTU 16
+## Ubuntu 16
+<details><summary>Steps</summary>
+<p>
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -18,7 +19,13 @@ sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
 
-## UBUNTU 18
+</p>
+</details>
+
+## Ubuntu 18
+
+<details><summary>Steps</summary>
+<p>
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -33,7 +40,13 @@ sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
 
-## RPM (AmazonLinux, Centos)
+</p>
+</details>
+
+## Amazon Linux, Centos, RHEL
+
+<details><summary>Steps</summary>
+<p>
 
 ```bash
 sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
@@ -50,8 +63,16 @@ sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
 
-## PIP
+</p>
+</details>
 
+## Setup Framework integrations and Compiler
+
+We provide our framework integrations and neuron-cc using pip and Conda.
+
+### PIP
+
+Setup the Neuron pip repository:
 ```bash
 sudo tee /etc/pip.conf > /dev/null <<EOF
 [global]
@@ -61,7 +82,9 @@ EOF
 pip install -U pip==19.3.1
 ```
 
-**Optional:** To verify the packages before install (using neuron-cc as an example):
+<details><summary><b>Optional:</b> To verify the packages before install (using neuron-cc as an example)
+</summary>
+<p>
 
 ```bash
 curl https://pip.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
@@ -72,41 +95,45 @@ wget https://pip.repos.neuron.amazonaws.com/neuron-cc/neuron_cc-<VERSION FROM FI
 gpg --verify neuron_cc-<VERSION FROM FILE>.whl.asc neuron_cc-<VERSION FROM FILE>.whl
 ```
 
-### TensorFlow
+</p>
+</details>
+
+
+#### TensorFlow
 
 ```bash
 pip install neuron-cc
 pip install tensorflow-neuron
 ```
-### TensorFlow Model Serving
+#### TensorFlow Model Serving
 
 ```bash
 sudo apt-get install tensorflow-model-server-neuron
 pip install tensorflow_serving_api
 ```
 
-### TensorBoard
+#### TensorBoard
 ```bash
 pip install tensorboard-neuron
 ```
 * Installing `tensorflow-neuron` will automatically install `tensorboard-neuron` as a dependency
 * To verify `tensorboard-neuron` is installed correctly, do `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
 
-### MXNet
+#### MXNet
 
 ```bash
 pip install neuron-cc
 pip install mxnet-neuron
 ```
 
-### PyTorch
+#### PyTorch
 
 ```bash
 pip install neuron-cc[tensorflow]
 pip install torch-neuron
 ```
 
-## Conda
+### Conda
 
 ```bash
 conda config --add channels https://conda.repos.neuron.amazonaws.com
@@ -116,7 +143,9 @@ conda install tensorflow-neuron
 conda install torch-neuron
 ```
 
-**Optional** To verify the packages before install (using tensorflow-neuron as an example):
+<details><summary><b>Optional:</b> To verify the packages before install (using tensorflow-neuron as an example)
+</summary>
+<p>
 
 ```bash
 curl https://conda.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
@@ -129,13 +158,17 @@ wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSIO
 wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc
 gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
 ```
+</p>
+
 * Note: The `tensorflow-neuron` conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` package at this time.
 
-## DLAMI
+</details>
+
+## AWS Deep Learning AMI
 Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it.
 
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
 
-### DL Containers
+## DL Containers
 For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./neuron-container-tools/README.md).
 Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon.
