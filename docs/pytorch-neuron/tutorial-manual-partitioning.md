@@ -1,5 +1,8 @@
 # Tutorial: Manual partitioning in a Jupyter notebook
 
+## Introduction
+Currently AWS Neuron SDK's PyTorch operator support is limited. If your PyTorch model contains operators that are not yet supported, you may still run the model's most computationally expensive part on Inferentia, and run other operators with regular PyTorch kernels. This guide shows an example on how to generate a PyTorch deployable format (TorchScript) that is consisted of both AWS Neuron accelerated operators and regular PyTorch operators.
+
 ## Steps Overview:
 
 1. Launch an EC2 compilation instance running the DLAMI (recommended instance: c5.4xlarge or stronger)
