@@ -1,6 +1,6 @@
 # Reference: PyTorch-Neuron trace python API
 
-The PyTorch-Neuron trace Python API provides a method to generate pytorch models for execution on Inferentia, which can be serialized as torchscript.  It is analogous to torch.jit.trace function in PyTorch
+The PyTorch-Neuron trace Python API provides a method to generate PyTorch models for execution on Inferentia, which can be serialized as TorchScript.  It is analogous to torch.jit.trace function in PyTorch
 
 ## Method
 
@@ -12,7 +12,7 @@ torch.neuron.trace(model, example_inputs, compiler_args)
 
 ## Description
 
-The torch.neuron.trace method sends Neuron-supported operations to the Neuron-Compiler for compilation and embeds compiled artifacts in a torch script graph. 
+The torch.neuron.trace method sends Neuron-supported operations to the Neuron-Compiler for compilation and embeds compiled artifacts in a TorchScript graph.
 
 Compilation can be done on any EC2 machine with sufficient memory and compute resources. c5.4xlarge or larger is recommended.
 
@@ -102,4 +102,3 @@ model.eval()
 model_neuron = torch.neuron.trace(model, example_inputs=[image])
 model_neuron.save("resnet50_neuron.pt")
 ```
-

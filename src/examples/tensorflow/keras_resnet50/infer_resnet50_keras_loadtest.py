@@ -38,7 +38,7 @@ NUM_LOOPS_PER_THREAD = 100
 COMPILED_MODEL_DIR = "./rn50_fp16_compiled_b" + str(args.batch_size) + "_nc" + str(args.num_neuroncores) + "/1"
 
 # Ensure there's enough buffer capacity to hold in-flight requests in runtime
-NUM_INFERS_IN_FLIGHT = args.num_neuroncores + 1
+NUM_INFERS_IN_FLIGHT = args.num_neuroncores + 3
 os.environ['NEURON_MAX_NUM_INFERS'] = str(NUM_INFERS_IN_FLIGHT)
 
 num_groups = avail_neuroncores // args.num_neuroncores
