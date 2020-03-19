@@ -106,11 +106,9 @@ def main():
             sess.run(probabilities)
         except:
             pass
-        attr_val = attr_value_pb2.AttrValue(s=b'')
         neuron_op = [op for op in sess.graph.get_operations() if op.type == 'NeuronOp'][0]
         if not neuron_op.get_attr('executable'):
             raise AttributeError('Neuron executable (neff) is empty. Please check neuron-cc is installed and working properly (`pip install neuron-cc` to install neuron-cc).')
-        neuron_op._set_attr('graph_def', attr_val)
         tf.saved_model.simple_save(sess, args.output_saved_model, inputs, outputs)
 
 
