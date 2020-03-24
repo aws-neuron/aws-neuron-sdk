@@ -3,8 +3,6 @@
 Neuron uses standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to applicable Linux section for detailed configuration steps.
 
 ## Ubuntu 16
-<details><summary>Steps</summary>
-<p>
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -19,13 +17,7 @@ sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
 
-</p>
-</details>
-
 ## Ubuntu 18
-
-<details><summary>Steps</summary>
-<p>
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -40,13 +32,7 @@ sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
 
-</p>
-</details>
-
 ## Amazon Linux, Centos, RHEL
-
-<details><summary>Steps</summary>
-<p>
 
 ```bash
 sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
@@ -63,16 +49,14 @@ sudo yum install aws-neuron-runtime
 sudo yum install aws-neuron-tools
 ```
 
-</p>
-</details>
-
 ## Setup Framework integrations and Compiler
 
 We provide our framework integrations and neuron-cc using pip and Conda.
 
 ### PIP
 
-Setup the Neuron pip repository first and then proceed to install :
+Setup the Neuron pip repository first and then proceed to install the framework integrations you need:
+
 ```bash
 sudo tee /etc/pip.conf > /dev/null <<EOF
 [global]
@@ -113,11 +97,15 @@ pip install tensorflow_serving_api
 ```
 
 #### TensorBoard
+
 ```bash
 pip install tensorboard-neuron
 ```
-* Installing `tensorflow-neuron` will automatically install `tensorboard-neuron` as a dependency
-* To verify `tensorboard-neuron` is installed correctly, do `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
+
+> *NOTE:* Installing `tensorflow-neuron` will automatically install `tensorboard-neuron` as a dependency
+
+
+> To verify `tensorboard-neuron` is installed correctly, run `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
 
 #### MXNet
 
