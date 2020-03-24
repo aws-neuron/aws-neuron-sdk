@@ -72,7 +72,7 @@ ease of use with a prebuilt [DLAMI](https://aws.amazon.com/machine-learning/amis
 
 **Q: My current Neural Network is based on FP32, how can I use it with Neuron?**
 
-Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It is common for Neural Networks to be trained in FP32, in which case the trained graph needs to be converted to one of these data types for execution on Inferentia. Neuron can compile and execute FP32 neural nets by automatically converting them to BFloat16. Given an input using FP32, the compiler output will ensure that the executed graph can accept input inference requests in FP32. Also see this [App Note](./docs/appnotes/data-types.md).
+Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It is common for Neural Networks to be trained in FP32, in which case the trained graph needs to be converted to one of these data types for execution on Inferentia. Neuron can compile and execute FP32 neural nets by automatically converting them to BFloat16. Given an input using FP32, the compiler output will ensure that the executed graph can accept input inference requests in FP32. Also see this [App Note](./docs/technotes/data-types.md).
 
 **Q: What are some of the important compiler defaults I should be aware of?**
 
@@ -129,7 +129,7 @@ Examples of this for TensorFlow are found [here](./docs/tensorflow-neuron/tutori
 ## Troubleshooting FAQs
 
 **Q: Performance is not what I expect it to be, what's the next step?**
-We have Applicaiton Notes coming - check our [App Note](./docs/appnotes/README.md) repo for updates!
+Please check our [Tech Notes](./docs/appnotes/README.md) section on performance tuning and other notes on how to use pipelining and batching to improve performance!
 
 **Q: Do I need to worry about size of model and size of inferentia memory? what problems can I expect to have?**
 Errors like this wil be logged and can be found as shown [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
