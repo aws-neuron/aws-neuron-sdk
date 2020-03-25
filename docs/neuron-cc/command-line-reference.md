@@ -21,7 +21,7 @@ neuron-cc <command> --help for information on a specific command.
 ## Common Options
 
 ```
---log-level (string) (default “INFO”) 
+--verbose (string) (default “WARN”) 
 ``` 
 
 * DEBUG
