@@ -80,7 +80,7 @@ for i in {1..48}; do python bert_client.py --cycle 128 & done
 
 This spins up 48 clients, each of which sends 128 inference requests. The expected performance is about 200 inferences/second for a single instance of inf1.2xlarge.
 
-## Appendix 1 :
+## Appendix 1
 Users who need help finetuning BERT-Large for MRPC and creating a saved model may follow the instructions here.
 
 Connect to the c5.4xlarge compilation EC2 instance you started above and download these three items : 
@@ -131,7 +131,7 @@ export BERT_BASE_DIR="/path/to/pre-trained/bert-large/checkpoint/directory"
 
 The a saved model will be created in $BERT_REPO_DIR/bert-saved-model/_random_number_/. Where, _random_number_ is a random number generated for every run. Use this saved model to continue with the rest of the demo. 
 
-## Appendix 2 :
+## Appendix 2
 For all BERT variants, we currently need to augment the standard Neuron compilation process for performance tuning. In the future, we intend to automate this tuning process. This would allow users to use the standard Neuron compilation process, which requires only a one line change in user source code. The standard compilation process is described [here](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-compile-infer.md#step-3-compile-on-compilation-instance).
 
 The augmented Neuron compilation process is encapsulated by the bert_model.py script, which performs the following things :
@@ -140,7 +140,7 @@ The augmented Neuron compilation process is encapsulated by the bert_model.py sc
 3. Invoke TensorFlow-Neuron to compile the Neuron compatible model for Inferentia using the newly associated weights
 4. Finally, the compiled model is saved into the location given by --output_saved_model
 
-## Appendix 3 :
+## Appendix 3
 The Neuron compatible implementation of BERT-Large is functionally equivalent to the open source version when used for inference. However, the detailed implementation does differ and here are the list of changes :
 
 1. Data Type Casting : If the original BERT-Large an FP32 model, bert_model.py contains manually defined cast operators to enable mixed-precision. FP16 is used for multi-head attention and fully-connected layers, and fp32 everywhere else. This will be automated in a future release.
