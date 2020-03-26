@@ -2,6 +2,29 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
+# [1.0.6554.0]
+
+Date: 3/26/2020
+
+## Summary
+
+Fixed the issue where neuron-top was negatively impacting inference throughput.
+
+## Major New Features
+
+N/A
+
+## Resolved Issues
+
+* neuron-top no longer has a measurable impact on inference throughput regardless of instance size.
+  * This version of neuron-top requires Neuron Runtime version 1.0.6222.0 or newer. Backwards compatibility will be fixed in the next release.
+* neuron-top now correctly shows when a model is unloaded.
+
+## Known Issues and Limitations
+
+* neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+
 # [1.0.5832.0]
 
 Date: 2/27/2020

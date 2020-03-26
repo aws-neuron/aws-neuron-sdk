@@ -1,8 +1,25 @@
 # TensorBoard-Neuron Release Notes
 
+# [1.15.0.1.0.392.0]
+
+Date 3/26/2020
+
+## Summary
+Added ability to view CPU node latency in the Graphs plugin and the Neuron Profile plugins.
+
+## Major New Features
+
+* Added an aggregate view in addition to the current Neuron subgraph view for both the Graphs plugin and the Neuron Profile plugin.
+ * When visualizing a graph executed on a Neuron device, CPU node latencies are available when coloring the graph by "Compute time" using the "neuron_profile" tag.
+ * The Neuron Profile plugin now has an overview page to compare time spent on Neuron device versus on CPU.
+
+## Other Notes
+
+* Requires Neuron-RTD config option "enable_node_profiling" to be set to "true"
+
 # [1.15.0.1.0.366.0]
 
-Date 02/27/2019
+Date 02/27/2020
 
 ## Summary
 
