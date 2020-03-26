@@ -2,6 +2,23 @@
 
 This document lists the release notes for the TensorFlow-Neuron package.
 
+# [1.15.0.1.0.1333.0]
+
+Date: 3/26/2020
+
+## Summary
+
+## Major New Features
+
+* Improved performance between Tensorflow to Neuron runtime. 
+
+
+## Resolved Issues
+* Fixed a bug in Neuron runtime adaptor operator's shape function when dynamic batch size inference is enabled
+* Framework method (tensorflow.neuron.saved-model.compile) improved handling of compiler timeout termination by letting it clean up before exiting.
+
+## Known Issues and limitations
+
 # [1.15.0.1.0.1240.0]
 
 Date: 2/27/2020

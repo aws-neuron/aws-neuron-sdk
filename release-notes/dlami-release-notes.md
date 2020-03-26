@@ -2,15 +2,18 @@
 
 For more information about using Neuron with Conda and Base DLAMI, please see https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
-# [DLAMI v26.0]
 
-## Supported Operating Systems:
+NOTE: It is strongly encouraged to update all packages to most recent release. If using Conda environments, please use "conda update" instead of "pip install" within the respective environment:
+
+# Supported Operating Systems:
 
 Amazon Linux 2
 
 Ubuntu 16
 
 Ubuntu 18
+
+# [DLAMI v26.0]
 
 ## Versions of Neuron packages included:
 
@@ -28,7 +31,7 @@ tensorflow-model-server-neuron-1.15.0.1.0.663.0
 
 ## Known Issues
 
-* It is strongly encouraged to update all packages to most recent release. If using Conda environments, please use "conda update" instead of "pip install" within the respective environment:
+## Installation Guidelines
 
 ###  Base and Conda DLAMI on Ubuntu:
 

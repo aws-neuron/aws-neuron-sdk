@@ -1,6 +1,22 @@
 # Neuron Release Notes
 
 
+## Mar 26, 2020 Release
+
+This release supports a variant of the SSD object detection network, a SSD inference demo is available [here](../src/examples/tensorflow/ssd300_demo) 
+
+This release also enhances our Tensorboard support to enable CPU-node visibility. 
+
+Refer to the detailed release notes for more information for each neuron component. 
+
+## Important to know: 
+1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp16/32, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
+
+2. INT8 data type is not currently supported by the Neuron compiler.
+
+3. Neuron does not support TensorFlow 2 or PyTorch 1.4.0.
+
+
 ## Feb 27, 2020 Release
 
 This release improves performance throughput by up to 10%, for example ResNet-50 on inf1.xlarge has increased from 1800 img/sec to 2040 img/sec, Neuron logs include more detailed messages and various bug fixes. Refer to the detailed release notes for more details.

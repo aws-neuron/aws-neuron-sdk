@@ -1,0 +1,8 @@
+neuron-cc
+numpy<=1.17.2
+tensorflow-neuron<2.0
+torch>=1.0,<2.0
+torchvision<1.0
+pillow<8.0
+matplotlib<4.0
+Cython<0.29
