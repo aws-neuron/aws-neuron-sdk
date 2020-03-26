@@ -2,7 +2,19 @@
 
 This document lists the release notes for the Neuron Conda-TensorFlow package.
 
-# [1.15.0.1.0.1240.0-1.0.918.0]
+# [1.15.0.1.0.1333.0_2.0.63.0]
+
+Date 3/26/2020
+
+## Included Neuron Packages
+
+neuron-cc-1.0.9410.0
+
+tensorflow_neuron-1.15.0.1.0.1333.0
+
+tensorboard_neuron-1.15.0.1.0.392.0
+
+# [1.15.0.1.0.1240.0_1.0.918.0]
 
 Date 2/27/2020
 

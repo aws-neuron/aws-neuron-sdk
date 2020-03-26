@@ -2,6 +2,24 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
+# [1.5.1.1.0.1596.0]
+
+Date 3/26/2020
+
+## Summary
+
+No major changes or fixes
+
+## Major New Features
+
+
+## Resolved Issues
+
+## Known Issues and Limitations
+
+## Other Notes
+
+
 # [1.5.1.1.0.1498.0]
 
 Date 2/27/2020

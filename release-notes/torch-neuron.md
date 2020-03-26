@@ -2,6 +2,19 @@
 
 This document lists the release notes for the Pytorch-Neuron package.
 
+# [1.0.825.0]
+
+Date: 3/26/2020
+
+## Summary
+
+## Major New Features
+
+## Resolved Issues
+
+## Known Issues and limitations
+
+
 # [1.0.763.0]
 
 Date: 2/27/2020
