@@ -17,7 +17,7 @@ pip install multi-model-server
 
 Download the example code:
 ```bash
-git clone https://github.com/awslabs/
+git clone https://github.com/awslabs/multi-model-server
 cd ~/multi-model-server/examples/mxnet_vision
 ```
 
