@@ -25,52 +25,9 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Install MXNet-Neuron and Neuron Compiler On Compilation Instance
 
-**If using DLAMI, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36` command) and skip this step.**
+If using Conda DLAMI version 26 and up, activate pre-installed MXNet-Neuron environment (using `source activate aws_neuron_mxnet_p36`  command). Please update Neuron by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md).
 
-On the instance you are going to use for compilation, install both Neuron Compiler and  MXNet-Neuron.
-
-2.1. Install Python3 virtual environment module if needed:
-
-If using Ubuntu AMI:
-```bash
-# Ubuntu
-sudo apt-get update
-sudo apt-get install -y python3-venv g++
-```
-Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
-
-```bash
-E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
-E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
-```
-
-If using Amazon Linux 2 AMI:
-```bash
-# Amazon Linux 2
-sudo yum update
-sudo yum install -y python3 gcc-c++
-```
-2.2. Setup a new Python virtual environment:
-```bash
-python3 -m venv test_venv
-source test_venv/bin/activate
-pip install -U pip==19.3.1
-```
-2.3. Modify Pip repository configurations to point to the Neuron repository.
-```bash
-tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
-[global]
-extra-index-url = https://pip.repos.neuron.amazonaws.com
-EOF
-```
-2.4. Install MXNet-Neuron and Neuron Compiler
-```bash
-pip install mxnet-neuron
-```
-```bash
-# can be skipped on inference-only instance
-pip install neuron-cc
-```
+To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install MXNet-Neuron (mxnet-neuron) and Neuron Compiler (neuron-cc) packages.
 
 ## Step 3: Compile on Compilation Server
 
