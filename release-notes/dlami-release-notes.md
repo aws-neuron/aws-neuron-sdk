@@ -2,6 +2,73 @@
 
 For more information about using Neuron with Conda and Base DLAMI, please see https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
+# [DLAMI v27.0]
+
+This DLAMI release incorporates all content in the releases for Neuron up to and including the Feb 27, 2020 SDK release set.
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.0.1498.0_1.0.918.0
+
+conda package tensorflow-neuron-1.15.0.1.0.1240.0_1.0.918.0
+
+conda package torch-neuron-1.3.0.1.0.90.0_1.0.918.0
+
+aws-neuron-runtime-base-1.0.5832.0
+
+aws-neuron-runtime-1.0.5795.0
+
+aws-neuron-tools-1.0.5832.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1240.0
+
+## Resolved issues
+
+* To update Conda package in Conda DLAMI v27.0 and up, simply do "conda update tensorflow-neuron" within Conda environment aws_neuron_tensorflow_p36. There's no need to install Numpy version 1.17.2 as in DLAMI v26.0.
+
+## Updating
+
+* It is strongly encouraged to update all packages to most recent release. If using Conda environments, please use "conda update" instead of "pip install" within the respective environment:
+
+###  Base and Conda DLAMI on Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install aws-neuron-runtime-base
+sudo apt-get install aws-neuron-runtime
+sudo apt-get install aws-neuron-tools
+sudo apt-get install tensorflow-model-server-neuron
+```
+
+###  Base and Conda DLAMI on Amazon Linux:
+```bash
+sudo yum install aws-neuron-runtime-base
+sudo yum install aws-neuron-runtime
+sudo yum install aws-neuron-tools
+sudo yum install tensorflow-model-server-neuron
+```
+
+### Conda DLAMI:
+
+```bash
+# MXNet-Neuron Conda environment
+source activate aws_neuron_mxnet_p36
+conda update mxnet-neuron
+```
+
+```bash
+# TensorFlow-Neuron Conda environment
+source activate aws_neuron_tensorflow_p36
+conda update tensorflow-neuron
+```
+
+```bash
+# PyTorch-Neuron Conda environment
+source activate aws_neuron_pytorch_p36
+conda update torch-neuron
+```
+
+# [DLAMI v26.0]
 
 NOTE: It is strongly encouraged to update all packages to most recent release. If using Conda environments, please use "conda update" instead of "pip install" within the respective environment:
 
@@ -12,8 +79,6 @@ Amazon Linux 2
 Ubuntu 16
 
 Ubuntu 18
-
-# [DLAMI v26.0]
 
 ## Versions of Neuron packages included:
 
@@ -54,8 +119,13 @@ sudo yum install tensorflow-model-server-neuron
 ### Conda DLAMI:
 
 ```bash
+# MXNet-Neuron Conda environment
 source activate aws_neuron_mxnet_p36
 conda update mxnet-neuron
+```
+
+```bash
+# TensorFlow-Neuron Conda environment (DLAMI v26)
 source activate aws_neuron_tensorflow_p36
 conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
