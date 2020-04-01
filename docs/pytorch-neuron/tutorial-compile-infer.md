@@ -36,7 +36,7 @@ pip install torchvision==0.4.2 --no-deps
 
 ## Step 3: Compile on compilation instance
 
-A trained model must be compiled to Inferentia target before it can be deployed on Inf1 instances. In this step we compile the torchvision ResNet50 model and export it as a SavedModel which is in the torchscript format for PyTorch models.
+A trained model must be compiled to Inferentia target before it can be deployed on Inf1 instances. In this step we compile the torchvision ResNet50 model and export it as a saved TorchScript module.
 
 3.1. Create a python script named `trace_resnet50.py` with the following content:
 
@@ -109,7 +109,7 @@ In this step we run inference on Inf1 instances using the model compiled in Step
 5.1. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 
 
-```bash
+```python
 import os
 import time
 import torch
