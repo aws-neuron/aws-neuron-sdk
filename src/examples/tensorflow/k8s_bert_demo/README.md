@@ -12,7 +12,7 @@ This tutorial uses BERT model as a teaching example on how to deploy an inferenc
    
 #### Step 1: Build an example tensorflow serving container
 
-Use the following dockerfile: [tensorflow-model-server-neuron Dockerfile]([./../../../../docs/Dockerfile.tf-serving)
+Use the following dockerfile: [tensorflow-model-server-neuron Dockerfile](../../../../docs/neuron-container-tools/docker-example/Dockerfile.tf-serving)
 ```bash
 docker build . -f Dockerfile.tf-serving  -t tf-serving-ctr
 ```

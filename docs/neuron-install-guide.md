@@ -4,7 +4,7 @@ Neuron is using standard package managers (apt, yum, pip, and conda) to install 
 
 Neuron supports Python versions 3.5, 3.6, and 3.7.
 
-## UBUNTU 16
+## Ubuntu 16
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -25,7 +25,7 @@ E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporari
 E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
 ```
 
-## UBUNTU 18
+## Ubuntu 18
 
 ```bash
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -46,7 +46,7 @@ E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporari
 E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
 ```
 
-## RPM (AmazonLinux, Centos)
+## Amazon Linux, Centos, RHEL
 
 ```bash
 sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
@@ -95,7 +95,9 @@ extra-index-url = https://pip.repos.neuron.amazonaws.com
 EOF
 ```
 
-**Optional:** To verify the packages before install (using neuron-cc as an example):
+<details><summary><b>Optional:</b> To verify the packages before install (using neuron-cc as an example)
+</summary>
+<p>
 
 ```bash
 curl https://pip.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
@@ -105,6 +107,10 @@ pip download --no-deps neuron-cc
 wget https://pip.repos.neuron.amazonaws.com/neuron-cc/neuron_cc-<VERSION FROM FILE>.whl.asc
 gpg --verify neuron_cc-<VERSION FROM FILE>.whl.asc neuron_cc-<VERSION FROM FILE>.whl
 ```
+
+</p>
+</details>
+
 
 The following Pip installation commands assume you are using a virtual Python environment (see above for instructions on how to setup a virtual Python environment). If not using virtual Python environment, please switch 'pip' with 'pip3' as appropriate for your Python environment.
 
@@ -132,8 +138,9 @@ pip install tensorflow_serving_api
 ```bash
 pip install tensorboard-neuron
 ```
+
 * Installing `tensorflow-neuron` will automatically install `tensorboard-neuron` as a dependency
-* To verify `tensorboard-neuron` is installed correctly, do `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
+* To verify `tensorboard-neuron` is installed correctly, run `tensorboard_neuron -h | grep run_neuron_profile`. If nothing is shown, please retry installation with the `--force-reinstall` option.
 
 ### MXNet
 
@@ -174,7 +181,9 @@ conda install torch-neuron
 NOTE 1: The framework Conda packages already include `neuron-cc` packages for compilation so there's no need to install them separately.
 NOTE 2: The `tensorflow-neuron` Conda package comes with TensorBoard-Neuron.  There is no standalone `tensorboard-neuron` Conda package at this time.
 
-**Optional** To verify the packages before install (using tensorflow-neuron as an example):
+<details><summary><b>Optional:</b> To verify the packages before install (using tensorflow-neuron as an example)
+</summary>
+<p>
 
 ```bash
 curl https://conda.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | gpg --import
@@ -187,12 +196,14 @@ wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSIO
 wget https://conda.repos.neuron.amazonaws.com/linux-64/tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc
 gpg --verify tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2.asc tensorflow-neuron-<VERSION FROM FILE>-py36_0.tar.bz2
 ```
+</p>
+</details>
 
-## DLAMI
+## AWS Deep Learning AMI
 Refer to the [AWS DLAMI Getting Started](https://docs.aws.amazon.com/dlami/latest/devguide/gs.html) guide to learn how to use the DLAMI with Neuron. When first using a released DLAMI, there may be additional updates to the Neuron packages installed in it.
 
 NOTE: Only DLAMI versions 26.0 and newer have Neuron support included.
 
-### DL Containers
+## DL Containers
 For containerized applications, it is recommended to use the neuron-rtd container, more details [here](./neuron-container-tools/README.md).
 Inferentia support for [AWS DL Containers](https://docs.aws.amazon.com/dlami/latest/devguide/deep-learning-containers-ec2.html) is coming soon.

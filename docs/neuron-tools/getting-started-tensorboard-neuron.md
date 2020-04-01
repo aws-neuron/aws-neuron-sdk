@@ -193,7 +193,7 @@ Please note that this tool can only be used in Chrome browsers.
 
 ## How to: Debug an inference
 
-To make use of the Debugger plugin, you must specify your desired output tensors before creating the saved model.  See [Step 1: Get a TensorFlow SavedModel that runs on Inferentia: Getting Started: TensorFlow-Neuron](/docs/tensorflow-neuron/tutorial-tensorflow-serving.md) for how to create the saved model.  Essentially, adding these tensors to the “outputs” dictionary will allow you to view them in the debugger later on.
+To make use of the Debugger plugin, you must specify your desired output tensors before creating the saved model.  See [Step 1: Get a TensorFlow SavedModel that runs on Inferentia: Getting Started: TensorFlow-Neuron](../tensorflow-neuron/tutorial-tensorflow-serving.md) for how to create the saved model.  Essentially, adding these tensors to the “outputs” dictionary will allow you to view them in the debugger later on.
 
 Please note that this feature is currently only available for TensorFlow users.
 
