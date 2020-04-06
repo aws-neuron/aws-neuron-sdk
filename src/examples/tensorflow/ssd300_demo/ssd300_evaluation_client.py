@@ -39,7 +39,7 @@ def main():
     if not args.disable_version_check:
         try:
             tfsn_info = subprocess.check_output(['apt', 'list', 'tensorflow-model-server-neuron'])
-            start_marker = b',now '
+            start_marker = b'now '
             start = tfsn_info.find(start_marker)
             end = tfsn_info.find(b' all')
             tfn_version = tfsn_info[start+len(start_marker):end].decode()
