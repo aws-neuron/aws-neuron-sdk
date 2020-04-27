@@ -129,7 +129,7 @@ Examples of this for TensorFlow are found [here](./docs/tensorflow-neuron/tutori
 ## Troubleshooting FAQs
 
 **Q: Performance is not what I expect it to be, what's the next step?**
-Please check our [Tech Notes](./docs/appnotes/README.md) section on performance tuning and other notes on how to use pipelining and batching to improve performance!
+Please check our [Tech Notes](./docs/technotes/README.md) section on performance tuning and other notes on how to use pipelining and batching to improve performance!
 
 **Q: Do I need to worry about size of model and size of inferentia memory? what problems can I expect to have?**
 Errors like this wil be logged and can be found as shown [here](./docs/neuron-tools/tutorial-neuron-gatherinfo.md)
