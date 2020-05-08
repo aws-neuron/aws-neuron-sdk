@@ -137,7 +137,7 @@ Write down the S3 location and terminate you P3 instance.
 
 For this task we’ll use a c5n.4xlarge instance.  Since we’ll spend time moving files to and from S3 the extra network bandwidth is useful.
 
-We’ll do a BERT sanity test and make sure the results are sane.  We’ll also run through the manual segmentation of the model using a Jupyter notebook. The process of compiling our model can take some time, so we use a cheaper CPU only instance for this step, with plenty of main memory. **DO check if can use C5 with enough DRAM?**
+We’ll do a BERT sanity test and make sure the results are sane.  We’ll also run through the manual segmentation of the model using a Jupyter notebook. The process of compiling our model can take some time, so we use a cheaper CPU only instance for this step, with plenty of main memory.
 
 ### STEP 1: Start a c5n.4xlarge instance
 
@@ -184,6 +184,7 @@ pip install neuron-cc[tensorflow]
 pip install torch-neuron
 pip install transformers
 pip install ipykernel
+pip install boto3
 
 # Replace juptyer configuration
 mv ~/.jupyter ~/.jupyter.old
