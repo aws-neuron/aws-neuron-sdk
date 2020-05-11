@@ -23,63 +23,9 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Compilation instance installations
 
-Install both Neuron Compiler and Torch-Neuron on the compilation instance.
+If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update Neuron by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md).
 
-2.1. Install Python3 virtual environment module if needed:
-
-If using an Ubuntu:
-
-```bash
-# Ubuntu
-sudo apt-get update
-sudo apt-get install -y python3-venv g++
-```
-
-Note: If you see the following errors during apt-get install, please wait a minute or so for background updates to finish and retry apt-get install:
-
-```bash
-E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
-E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
-```
-
-If using Amazon Linux 2:
-
-```bash
-# Amazon Linux 2
-sudo yum update
-sudo yum install -y python3 gcc-c++
-```
-
-2.2. Setup a new Python virtual environment:
-
-```bash
-python3 -m venv test_venv
-source test_venv/bin/activate
-pip install -U pip
-```
-
-2.3. Modify Pip repository configurations to point to the Neuron repository.
-
-```bash
-tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
-[global]
-extra-index-url = https://pip.repos.neuron.amazonaws.com
-EOF
-```
-
-2.4. Install Torch-Neuron and Neuron Compiler
-
-```bash
-pip install torch-neuron
-```
-
-```bash
-# Install compiler.  
-# NOTE: please make sure tensorflow option is provided; this is not necessary for inference-only purposes.
-pip install neuron-cc[tensorflow]
-```
-
-2.5 Install torchvision for the pretrained resnet50 model (we use no-deps here because we already have Neuron version of torch installed through torch-neuron)
+To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron)
 
 ```bash
 pip install pillow==6.2.2
@@ -90,7 +36,7 @@ pip install torchvision==0.4.2 --no-deps
 
 ## Step 3: Compile on compilation instance
 
-A trained model must be compiled to Inferentia target before it can be deployed on Inf1 instances. In this step we compile the torchvision ResNet50 model and export it as a SavedModel which is in the torchscript format for PyTorch models.
+A trained model must be compiled to Inferentia target before it can be deployed on Inf1 instances. In this step we compile the torchvision ResNet50 model and export it as a saved TorchScript module.
 
 3.1. Create a python script named `trace_resnet50.py` with the following content:
 
@@ -163,7 +109,7 @@ In this step we run inference on Inf1 instances using the model compiled in Step
 5.1. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:
 
 
-```bash
+```python
 import os
 import time
 import torch

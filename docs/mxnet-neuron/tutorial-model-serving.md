@@ -1,24 +1,24 @@
 # Tutorial: MXNet-Neuron Model Serving
 
-This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/mxnet-model-server/tree/master/examples/mxnet_vision.
+This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet vision service example which uses pretrained squeezenet to perform image classification: https://github.com/awslabs/multi-model-server/tree/master/examples/mxnet_vision.
 
 Before starting this example, please ensure that Neuron-optimized MXNet version mxnet-neuron is installed along with Neuron Compiler (see [MXNet Tutorial](./tutorial-compile-infer.md)) and Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md) ).
 
 If using DLAMI, you can activate the environment aws_neuron_mxnet_p36 and skip the installation part in the first step below.
 
-1. First, install Java runtime and mxnet-model-server:
+1. First, install Java runtime and multi-model-server:
 
 ```bash
 cd ~/
 # sudo yum -y install -q jre # for AML2
 sudo apt-get install -y -q default-jre  # for Ubuntu
-pip install mxnet-model-server
+pip install multi-model-server
 ```
 
 Download the example code:
 ```bash
-git clone https://github.com/awslabs/mxnet-model-server
-cd ~/mxnet-model-server/examples/mxnet_vision
+git clone https://github.com/awslabs/multi-model-server
+cd ~/multi-model-server/examples/mxnet_vision
 ```
 
 2. Compile ResNet50 model to Inferentia target by saving the following Python script to compile_resnet50.py and run “`python compile_resnet50.py`”
@@ -94,15 +94,15 @@ Also, comment out unnecessary data copy for model_input in `mxnet_model_service.
 6. Package the model with model-archiver:
 
 ```bash
-cd ~/mxnet-model-server/examples
+cd ~/multi-model-server/examples
 model-archiver --force --model-name resnet-50_compiled --model-path mxnet_vision --handler mxnet_vision_service:handle
 ```
 
 7. Start MXNet Model Server (MMS) and load model using RESTful API. Please ensure that Neuron RTD is running with default settings (see [Neuron Runtime getting started](./../neuron-runtime/nrt_start.md)):
 
 ```bash
-cd ~/mxnet-model-server/
-mxnet-model-server --start --model-store examples
+cd ~/multi-model-server/
+multi-model-server --start --model-store examples
 # Pipe to log file if you want to keep a log of MMS
 curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=1&synchronous=true&url=resnet-50_compiled.mar"
 sleep 10 # allow sufficient time to load model
@@ -113,7 +113,7 @@ Each worker requires NeuronCore Group that can accommodate the compiled model. A
 8. Test inference using an example image:
 
 ```bash
-curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
+curl -O https://raw.githubusercontent.com/awslabs/multi-model-server/master/docs/images/kitten_small.jpg
 curl -X POST http://127.0.0.1:8080/predictions/resnet-50_compiled -T kitten_small.jpg
 ```
 
@@ -149,7 +149,7 @@ You will see the following output:
 ```bash
 curl -X DELETE http://127.0.0.1:8081/models/resnet-50_compiled
 
-mxnet-model-server --stop
+multi-model-server --stop
 
 /opt/aws/neuron/bin/neuron-cli reset
 ```

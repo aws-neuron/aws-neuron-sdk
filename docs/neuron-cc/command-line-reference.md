@@ -21,7 +21,7 @@ neuron-cc <command> --help for information on a specific command.
 ## Common Options
 
 ```
---log-level (string) (default “INFO”) 
+--verbose (string) (default “WARN”) 
 ``` 
 
 * DEBUG
@@ -127,7 +127,8 @@ Returns a newline ('\n') separated list of operators supported by the NeuronCore
     
 * **MXNET** - Operator names will be formatted according to the value passed to the associated NNVM_REGISTER_OP(operator_name) macro. 
     
-    See http://mxnet.incubator.apache.org/versions/master/faq/new_op.html for more details regarding operator registration in MxNet.
+    See https://mxnet.apache.org/api/faq/new_op for more details regarding operator registration in MxNet.
+    
 * **ONNX** - ONNX model.
 
 ## Example

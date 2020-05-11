@@ -8,7 +8,7 @@ It is deployed to a cluster as a daemon set using the provided: [k8s-neuron-devi
 This tutorial will go through deploying the daemon set and running an example application. 
 
 #### Prerequisite:
- * [Docker environment setup for Neuron](./tutorial-containers.md): to setup Docker support on worker nodes.
+ * [Docker environment setup for Neuron](./tutorial-docker.md): to setup Docker support on worker nodes.
  * Inf1 instances as worker nodes with attached roles allowing:
    * ECR read access policy to retrieve container images from ECR: ***arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly***
 

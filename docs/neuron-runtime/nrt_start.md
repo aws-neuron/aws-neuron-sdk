@@ -36,7 +36,7 @@ sudo apt-get install aws-neuron-runtime
 sudo apt-get install aws-neuron-tools
 ```
 
-**UBUNTU 18**
+### UBUNTU 18
 
 ```
 sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
@@ -164,7 +164,7 @@ sudo tee /opt/aws/neuron/bin/nrtd2.json > /dev/null << EOF
 }
 EOF
 
->sudo tee /opt/aws/neuron/bin/nrtd3.json > /dev/null << EOF
+sudo tee /opt/aws/neuron/bin/nrtd3.json > /dev/null << EOF
 {
 "name": "nrtd3",
 "server_port": "unix:/run/neuron.sock3",

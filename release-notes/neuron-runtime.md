@@ -2,6 +2,57 @@
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
 
+# [1.0.6222.0]
+
+Date: 3/26/2020
+
+## Major New Features
+
+N/A
+
+## Improvements
+
+* Inferentia memory utilization has improved, allowing larger number of Neural Networks to be loaded simultaneously.  The increased capacity could be up to 25% depending on the networks.
+* Added an API to read performance counters for a single Neuron Core.  Used internally by neuron-top, which comes with the aws-neuron-tools package.
+* Added Neural Network caching.  Caching of previously loaded Neural Networks in host memory can significantly speed up (up to 10x) the subsequent loading of the same networks, for example when using multiple Neuron Cores in data-parallel mode.
+
+## Resolved Issues
+
+* Occassional neuron-rt service crashes when service was being shutdown.
+
+## Known Issues and Limitations
+
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  For example, 
+. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+
+
+# [1.0.5795.0]
+
+Date: 2/27/2020
+
+## Major New Features
+
+* Added API to unload all models available via "neuron-cli reset".
+
+## Improvements
+
+* Neural Network Load and Neural Network Infer interfaces return descriptive error messages on failure.
+* Throughput of Neural Networks running in NeuronCore Pipeline mode has improved by 10-50% (network dependent) by reducing contention among NeuronCores. 
+* Improved CPU utilization of neuron-rt daemon by completely removing one polling thread from neuron-rt. 
+
+## Resolved Issues
+
+* Neural Networks containing CPU partitions only do not load correctly.
+* Insufficient logging makes it hard to identify Neural Network loading failure when multiple networks are loaded in parallel.
+
+
+## Known Issues and Limitations
+
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  For example, 
+. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+
 
 # [1.0.5236.0]
 

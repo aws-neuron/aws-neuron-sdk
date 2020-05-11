@@ -2,6 +2,44 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
+# [1.5.1.1.0.1596.0]
+
+Date 3/26/2020
+
+## Summary
+
+No major changes or fixes
+
+## Major New Features
+
+
+## Resolved Issues
+
+## Known Issues and Limitations
+
+## Other Notes
+
+
+# [1.5.1.1.0.1498.0]
+
+Date 2/27/2020
+
+## Summary
+
+No major changes or fixes. 
+
+## Major New Features
+
+## Resolved Issues
+
+The issue(s) below are resolved:
+* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name.
+
+## Known Issues and Limitations
+
+
+## Other Notes
+
 # [1.5.1.1.0.1401.0]
 
 Date 1/27/2020
@@ -13,20 +51,19 @@ No major changes or fixes.
 ## Major New Features
 
 ## Resolved Issues
+* The following issue is resolved when the latest multi-model-server with version >= 1.1.0 is used with MXNet-Neuron. You would still need to use "`/opt/aws/neuron/bin/neuron-cli reset`" to clear all Neuron RTD states after multi-model-server is exited:
+  * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
 
 ## Known Issues and Limitations
 
-* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name. This breaks all existing released versions. The Error looks like: 
-
+* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name. This breaks all existing released versions. The error looks like: 
 ```
 Looking in indexes: https://pypi.org/simple, https://pip.repos.neuron.amazonaws.com
 ERROR: Could not find a version that satisfies the requirement mxnet-neuron (from versions: none)
 ERROR: No matching distribution found for mxnet-neuron
 ```
-   * Work around:  install the older version of pip using "pip install pip==19.3.1".
- 
- * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
-   * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+  * Work around:  install the older version of pip using "pip install pip==19.3.1".
+
  
 
 ## Other Notes
