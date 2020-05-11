@@ -148,7 +148,7 @@ Repeat the steps in Stage 1 → STEP 1: Start a P3 instance, but instead if a p3
 1. In your browser, navigate to Instance → Instance in the Left hand pane of the AWS EC2 console.  Once the instance is started right click connect and select “Connect” to see the PEM and DNS name to use for this instance
 2. From you laptop or desktop:
 
-`ssh -i <my pem file> ubuntu@<my DNS name> ** -L 8888:127.0.0.1:8888**`
+`ssh -i <my pem file> ubuntu@<my DNS name> **-L 8888:127.0.0.1:8888**`
 
 You can find the appropriate information in the angle braces from the AWS EC2 instance console .  The last part does port forwarding.  This will allow you to connect to a Jupyter notebook on the instance from your laptop or desktop.
 
