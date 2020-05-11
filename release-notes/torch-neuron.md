@@ -2,6 +2,23 @@
 
 This document lists the release notes for the Pytorch-Neuron package.
 
+## Known Issues and Limitations - Updated 5/11/2020
+
+# [1.0.1001.0]
+
+Date: 5/11/2020
+
+## Summary
+Additional PyTorch operator support and improved support for model saving and reloading.
+
+## Major New Features
+* Added Neuron Compiler support for a number of previously unsupported PyTorch operators. Please see [Neuron-cc PyTorch Operators](./neuron-cc-ops/neuron-cc-ops-pytorch.md) for the complete list of operators.
+* Add support for torch.neuron.trace on models which have previously been saved using torch.jit.save and then reloaded.
+
+## Resolved Issues
+
+## Known Issues and Limitations
+
 # [1.0.825.0]
 
 Date: 3/26/2020
@@ -69,7 +86,7 @@ Note that we are currently using a TensorFlow as an intermediate format to pass 
 The following models have successfully run on neuron-inferentia systems
 
 1. SqueezeNet
-2. ResNet50 
+2. ResNet50
 3. Wide ResNet50
 
 ### Pytorch Serving
@@ -82,7 +99,7 @@ Profiler support is not provided in this initial release and will be available i
 
 ### Automated partitioning
 
-Automatic partitioning of graphs into supported and non-supported operations is not currently supported.  A tutorial is available to provide guidance on how to manually parition a model graph. Please see [Manual partitioning of Resnet50 in a Jupyter Notebook](../docs/pytorch-neuron/tutorial-manual-partitioning.md) 
+Automatic partitioning of graphs into supported and non-supported operations is not currently supported.  A tutorial is available to provide guidance on how to manually parition a model graph. Please see [Manual partitioning of Resnet50 in a Jupyter Notebook](../docs/pytorch-neuron/tutorial-manual-partitioning.md)
 
 ### PyTorch dependency
 
@@ -100,14 +117,14 @@ The Six package is required for the torch-neuron runtime, but it is not modeled 
 
 If the num-neuroncores options is used the number of cores must be manually set in the calling shell environment variable for compilation and inference.
 
-For example: Using the keyword argument  compiler_args=['—num-neuroncores', '4'] in the trace call, requires NEURONCORE_GROUP_SIZES=4 to be set in the environment at compile time and runtime 
+For example: Using the keyword argument  compiler_args=['—num-neuroncores', '4'] in the trace call, requires NEURONCORE_GROUP_SIZES=4 to be set in the environment at compile time and runtime
 
 ### CPU execution
 
 At compilation time a constant output is generated for the purposes of tracing.  Running inference on a non neuron instance will generate incorrect results.  This must not be used.  The following error message is generated to stderr:
 
 ```
-Warning: Tensor output are ** NOT CALCULATED ** during CPU execution and only 
+Warning: Tensor output are ** NOT CALCULATED ** during CPU execution and only
 indicate tensor shape
 ```
 
@@ -119,5 +136,3 @@ indicate tensor shape
     * DLAMI Conda 26.0 and beyond running on Ubuntu 16, Ubuntu 18, Amazon Linux 2 (using Python 3.6 Conda environments)
     * Other AMIs based on Ubuntu 16, 18
     * For Amazon Linux 2 please install Conda and use Python 3.6 Conda environment
-
-

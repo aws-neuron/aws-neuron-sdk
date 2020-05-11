@@ -2,6 +2,33 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
+# Known Issues 5/11/2020
+ 
+* Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
+  * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+
+# [1.5.1.1.0.1900.0]
+
+Date 5/11/2020
+
+## Summary
+
+Improved support for shared-memory communication with Neuron-Runtime.
+
+## Major New Features
+* Added support for the BERT-Base model (base: L-12 H-768 A-12), max sequence length 64 and batch size of 8.
+* Improved security for usage of shared-memory for data transfer between framework and Neuron-Runtime
+* Improved allocation and cleanup of shared-memory resource
+* Improved container support by automatic falling back to GRPC data transfer if shared-memory cannot be allocated by Neuron-Runtime
+
+## Resolved Issues
+* User is unable to allocate Neuron-Runtime shared-memory resource when using MXNet-Neuron in a container to communicate with Neuron-Runtime in another container. This is resolved by automatic falling back to GRPC data transfer if shared-memory cannot be allocated by Neuron-Runtime.
+* Fixed issue where some large models could not be loaded on inferentia.
+
+## Known Issues and Limitations
+
+## Other Notes
+
 # [1.5.1.1.0.1596.0]
 
 Date 3/26/2020
@@ -26,7 +53,7 @@ Date 2/27/2020
 
 ## Summary
 
-No major changes or fixes. 
+No major changes or fixes.
 
 ## Major New Features
 
@@ -37,6 +64,7 @@ The issue(s) below are resolved:
 
 ## Known Issues and Limitations
 
+* User is unable to allocate Neuron-Runtime shared-memory resource when using MXNet-Neuron in a container to communicate with Neuron-Runtime in another container. To work-around, please set environment variable NEURON_RTD_USE_SHM to 0.
 
 ## Other Notes
 
@@ -46,7 +74,7 @@ Date 1/27/2020
 
 ## Summary
 
-No major changes or fixes. 
+No major changes or fixes.
 
 ## Major New Features
 
@@ -56,7 +84,7 @@ No major changes or fixes.
 
 ## Known Issues and Limitations
 
-* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name. This breaks all existing released versions. The error looks like: 
+* Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip wheel which has py2.py3 in the wheel name. This breaks all existing released versions. The error looks like:
 ```
 Looking in indexes: https://pypi.org/simple, https://pip.repos.neuron.amazonaws.com
 ERROR: Could not find a version that satisfies the requirement mxnet-neuron (from versions: none)
@@ -64,7 +92,7 @@ ERROR: No matching distribution found for mxnet-neuron
 ```
   * Work around:  install the older version of pip using "pip install pip==19.3.1".
 
- 
+
 
 ## Other Notes
 
@@ -86,7 +114,7 @@ Date 12/1/2019
 
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
   * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
-  
+
 ## Other Notes
 
 # [1.5.1.1.0.1349.0]
@@ -115,7 +143,7 @@ Date 12/1/2019
 
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server and previous workaround "`/opt/aws/neuron/bin/neuron-cli reset`" is unable to clear all Neuron RTD states.
   * Workaround: run “`sudo systemctl restart neuron-rtd`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
-  
+
 ## Other Notes
 
 # [1.5.1.1.0.1260.0]

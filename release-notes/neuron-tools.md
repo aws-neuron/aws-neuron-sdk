@@ -2,6 +2,40 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
+# Known Issues and Limitations 5/11/2020
+
+* neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+
+# [1.0.8131.0]
+
+Date: 5/11/2020
+
+## Summary
+
+## Major New Features
+
+* All tools now support use of an environment variable (NEURON_RTD_ADDRESS) to specify the runtime address or by explicitly specifying the address with the -a flag.  Not specifying an address will continue to rely on default address set during installation.  
+* When run as root, neuron-ls output will now include runtime details (address, pid, and version).
+```
+$ sudo neuron-ls
++--------------+---------+--------+-----------+-----------+------+------+-----------------------+---------+---------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |        RUNTIME        | RUNTIME | RUNTIME |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |        ADDRESS        |   PID   | VERSION |
++--------------+---------+--------+-----------+-----------+------+------+-----------------------+---------+---------+
+| 0000:00:1c.0 |       0 |      4 | 4096 MB   | 4096 MB   |    1 |    0 | unix:/run/neuron.sock |    8871 | 1.0.x.x |
+| 0000:00:1d.0 |       1 |      4 | 4096 MB   | 4096 MB   |    1 |    1 | unix:/run/neuron.sock |    8871 | 1.0.x.x |
+| 0000:00:1e.0 |       2 |      4 | 4096 MB   | 4096 MB   |    1 |    1 | unix:/run/neuron.sock |    8871 | 1.0.x.x |
+| 0000:00:1f.0 |       3 |      4 | 4096 MB   | 4096 MB   |    0 |    1 | unix:/run/neuron.sock |    8871 | 1.0.x.x |
++--------------+---------+--------+-----------+-----------+------+------+-----------------------+---------+---------+
+```
+
+## Resolved Issues
+* Backwards compatibility of neuron-top with older versions of Neuron Runtime is now restored.
+
+## Known Issues and Limitations
+* neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
 # [1.0.6554.0]
 
 Date: 3/26/2020

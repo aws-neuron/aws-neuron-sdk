@@ -6,8 +6,26 @@ Current operator lists may be generated with these commands inside python:
 import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
+### PyTorch Neuron Release [1.0.1001.0]
 
+Added
 
+```
+aten::detach
+aten::floor
+aten::gelu
+aten::pow
+aten::sigmoid
+aten::split
+```
+
+Removed ( Reasons given alongside )
+
+```
+aten::embedding (does not meet performance criteria)
+aten::erf (error function does not meet accuracy criteria)
+aten::tf_dtype_from_torch (internal support function, not an operator)
+```
 ### PyTorch Neuron Release [1.0.825.0]
 
 ### PyTorch Neuron Release [1.0.763.0]

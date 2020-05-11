@@ -7,6 +7,9 @@
 
 import os
 import argparse
+import shlex
+import pkg_resources
+from distutils.version import LooseVersion
 import numpy as np
 import tensorflow as tf
 from tensorflow.neuron import fuse
@@ -21,11 +24,34 @@ def main():
     parser.add_argument('--batch_size', type=int, default=4)
     parser.add_argument('--sequence_length', type=int, default=128)
     parser.add_argument('--crude_gelu', action='store_true')
+    parser.add_argument('--aggressive_optimizations', action='store_true')
     args = parser.parse_args()
     if os.path.exists(args.output_saved_model):
         raise OSError('output_saved_model {} already exists'.format(args.output_saved_model))
     dtype = tf.float16 if args.dtype == 'float16' else tf.float32
-    bert = NeuronBERTMRPC(args.input_saved_model, dtype=dtype, batch_size=args.batch_size, seq_len=args.sequence_length, crude_gelu=args.crude_gelu)
+    if args.aggressive_optimizations:
+        ncc_version = LooseVersion(pkg_resources.get_distribution('neuron-cc').version)
+            if ncc_version < LooseVersion('1.0.12000.0'):
+                raise RuntimeError('--aggressive_optimizations can only be enabled with neuron-cc>=1.0.12000.0')
+        args.crude_gelu = True
+    bert = NeuronBERTMRPC(
+        args.input_saved_model,
+        dtype=dtype,
+        batch_size=args.batch_size,
+        seq_len=args.sequence_length,
+        crude_gelu=args.crude_gelu,
+        aggressive_fp16_cast=args.aggressive_optimizations,
+    )
+
+    aggr_args = [
+        '--tensor-layout-heuristics=spatial-locality',
+        '--enable-experimental-tensorized-scheduler',
+        '--fp32-cast', 'matmult-fp16',
+    ]
+    compiler_args = aggr_args if args.aggressive_optimizations else ['--fp32-cast', 'matmult', '--topdown']
+    fuser = fuse(compiler_args=compiler_args, timeout=360000)
+    bert.encoder = fuser(bert.encoder)
+
     input_ids = bert.input_ids
     input_mask = bert.input_mask
     segment_ids = bert.segment_ids
@@ -64,7 +90,7 @@ def main():
             bias_tensor = 1.0 - bias_tensor
             bias_tensor = bias_tensor * -10000.0
             bias_tensor = tf.cast(bias_tensor, bert.dtype)
-        tensor = bert.layer_norm(input_tensor, 'embeddings')
+        tensor = bert.layer_norm(input_tensor, 'embeddings', force_float32=True)
 
         tensor = tf.reshape(tensor, [bert.batch_size, bert.seq_len, bert.hid_size])
         dummy_reshapes.append(tensor)
@@ -114,12 +140,12 @@ def main():
 
 class NeuronBERTMRPC:
 
-    def __init__(self, bert_saved_model, dtype=tf.float16, batch_size=4, seq_len=128, crude_gelu=False):
+    def __init__(self, bert_saved_model, dtype=tf.float16, batch_size=4, seq_len=128, crude_gelu=False, aggressive_fp16_cast=False):
         predictor = tf.contrib.predictor.from_saved_model(bert_saved_model)
         sess = predictor.session
-        self.input_ids = sess.graph.get_tensor_by_name('input_ids:0')
-        self.input_mask = sess.graph.get_tensor_by_name('input_mask:0')
-        self.segment_ids = sess.graph.get_tensor_by_name('segment_ids:0')
+        self.input_ids = predictor.feed_tensors['input_ids']
+        self.input_mask = predictor.feed_tensors['input_mask']
+        self.segment_ids = predictor.feed_tensors['segment_ids']
         weights_dict = {}
         for op in sess.graph.get_operations():
             if op.type == 'Const':
@@ -137,9 +163,9 @@ class NeuronBERTMRPC:
         self.head_size = self.hid_size // self.num_heads
         self.eps = self.weights_dict['bert/encoder/layer_0/attention/output/LayerNorm/batchnorm/add/y:0']
         self.crude_gelu = crude_gelu
+        self.layer_norm_dtype = tf.float16 if aggressive_fp16_cast else tf.float32
         sess.close()
 
-    @fuse(compiler_args=['--fp32-cast', 'matmult', '--topdown'], timeout=360000)
     def encoder(self, tensor, bias_tensor):
         tensor = tf.reshape(tensor, [self.batch_size * self.seq_len, self.hid_size])
         for layer_id in range(24):
@@ -200,16 +226,16 @@ class NeuronBERTMRPC:
             output_tensor = tf.add(input_tensor, unnorm_output)
         return output_tensor
 
-    def layer_norm(self, input_tensor, layer_name):
-        gamma = np.float32(self.weights_dict['bert/{}/LayerNorm/gamma:0'.format(layer_name)])
-        beta = np.float32(self.weights_dict['bert/{}/LayerNorm/beta:0'.format(layer_name)])
+    def layer_norm(self, input_tensor, layer_name, force_float32=False):
+        dtype = tf.float32 if force_float32 else self.layer_norm_dtype
+        gamma = dtype.as_numpy_dtype(self.weights_dict['bert/{}/LayerNorm/gamma:0'.format(layer_name)])
+        beta = dtype.as_numpy_dtype(self.weights_dict['bert/{}/LayerNorm/beta:0'.format(layer_name)])
         with tf.name_scope('bert/{}/LayerNorm'.format(layer_name)):
-            input_tensor = tf.cast(input_tensor, tf.float32)
-            factor = np.float32(1.0 / self.hid_size)
-            mean = tf.multiply(tf.reduce_sum(input_tensor, axis=[-1], keepdims=True), factor, name='mean')
+            input_tensor = tf.cast(input_tensor, dtype)
+            mean = tf.reduce_mean(input_tensor, axis=[-1], keepdims=True, name='mean')
             residuals = tf.subtract(input_tensor, mean, name='residuals')
-            var = tf.multiply(tf.reduce_sum(residuals * residuals, axis=[-1], keepdims=True), factor, name='var')
-            rsqrt = tf.rsqrt(var + np.float32(self.eps))
+            var = tf.reduce_mean(residuals * residuals, axis=[-1], keepdims=True, name='var')
+            rsqrt = tf.rsqrt(var + dtype.as_numpy_dtype(self.eps))
             norm_output = tf.multiply(residuals, rsqrt, name='normalized')
             output_tensor = norm_output * gamma + beta
             output_tensor = tf.cast(output_tensor, self.dtype)
