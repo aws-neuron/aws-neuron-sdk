@@ -31,8 +31,8 @@ def main():
     dtype = tf.float16 if args.dtype == 'float16' else tf.float32
     if args.aggressive_optimizations:
         ncc_version = LooseVersion(pkg_resources.get_distribution('neuron-cc').version)
-            if ncc_version < LooseVersion('1.0.12000.0'):
-                raise RuntimeError('--aggressive_optimizations can only be enabled with neuron-cc>=1.0.12000.0')
+        if ncc_version < LooseVersion('1.0.12000.0'):
+            raise RuntimeError('--aggressive_optimizations can only be enabled with neuron-cc>=1.0.12000.0')
         args.crude_gelu = True
     bert = NeuronBERTMRPC(
         args.input_saved_model,
