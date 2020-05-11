@@ -19,6 +19,8 @@ Neuron is integrated into MXNet, and provides you with a familiar environment to
 
 * [Using NeuronCore Groups with MXNet](./tutorial-neuroncore-groups.md)
 
+* [BERT-Large tutorial (Jupyter Notebook)](../../src/examples/mxnet/bert_mxnet.ipynb)
+
 ### Reference manuals
 
 * [MXNet-Neuron compilation python API](./api-compilation-python-api.md)

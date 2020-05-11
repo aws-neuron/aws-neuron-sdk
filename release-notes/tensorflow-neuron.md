@@ -2,6 +2,31 @@
 
 This document lists the release notes for the TensorFlow-Neuron package.
 
+
+# Known Issues and Limitations - updated 5/11/2020
+
+* Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
+```terminate called after throwing an instance of 'std::bad_alloc'```
+Solution: run compilation on a c5.4xlarge instance type or larger.
+
+# [1.15.2.1.0.1572.0]
+
+Date: 5/11/2020
+
+## Summary
+This version contains some bug fixes and new features.
+
+## Major New Features
+
+* Tensorflow-Neuron is now built on TensorFlow 1.15.2 instead of TensorFlow 1.15.0
+
+
+## Resolved Issues
+* Fixed a bug that caused Neuron runtime resources to not all be released when a tensorflow-neuron process terminated with in-flight inferences
+* Inference timeout value set at compile time is now correctly recognized at runtime
+
+## Known Issues and limitations
+
 # [1.15.0.1.0.1333.0]
 
 Date: 3/26/2020
@@ -10,7 +35,7 @@ Date: 3/26/2020
 
 ## Major New Features
 
-* Improved performance between Tensorflow to Neuron runtime. 
+* Improved performance between Tensorflow to Neuron runtime.
 
 
 ## Resolved Issues
@@ -125,8 +150,6 @@ conda update tensorflow-neuron
 ```
 
 ## Other Notes
-
-
 
 # [1.15.0.1.0.663.0]
 

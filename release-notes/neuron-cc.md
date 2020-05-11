@@ -10,20 +10,54 @@ neuron-cc list-operators --framework {TENSORFLOW | MXNET | ONNX}
 
 The supported operators are also listed here:
 * [Neuron-cc TensorFlow Operators](./neuron-cc-ops/neuron-cc-ops-tensorflow.md)
+* [Neuron-cc PyTorch Operators](./neuron-cc-ops/neuron-cc-ops-pytorch.md)
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
-* [Neuron-cc PyTorch Operators](./neuron-cc-ops/neuron-cc-ops-pytorch.md)
 
+## Known issues and limitations - updated 05/11/2020
 
-## Known issues and limitations - updated March 26, 2020
-
-1. **Control flow** Inferentia has a limited support for control flow. In general, Neuron can only support control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
+1. **Control flow** Neuron only supports control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
 2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize. As a result, we limit CNN models (e.g. ResNet) to have an input size of up to 480x480 fp16/32, batch size=4; LSTM models (e.g. GNMT) are limited to a time step limit of up to 900; MLP models (like BERT) are limited up to sequence-length=128, batch=8.
 3. **Data layout**  The Neuron compiler supports multiple data layout format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will require Neuron to insert additional _*transpose*_ operations, causing a degradation in performance.
-4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release except for modified SSD-300.
-5. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
-6. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performacne degradation.
-7. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
+4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release except for SSD-300, more support is coming in future releases.
+5. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performacne degradation.
+6. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
+7. On Ubuntu16, ResNet50 FP32 batch 1 compilation fails when "--batch_en" is used. On Ubuntu 18, this is not an issue.
+8. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
+
+# [1.0.12696.0]
+
+Date 5/11/2020
+
+## Summary
+
+Bug fixes and some functional and performance improvements to several neural networks.  
+
+## Major New Features
+
+- This version supports compilation of unmodified Tensorflow BERT with batch size 1, 4, 6 for input sequence 128.
+- Improved Tensorflow BERT batch 4 sequence 128 performance to 45% of the accelerator peak (from 34%).
+- Support for MXNET BERT base batch 8 compilation
+- Support for TF Resnet152 batch 2 compilation
+- Most compiler messages are migrated from cout to logging mechanisms with verbosity control
+
+## Resolved Issues
+- Fixed failure to compile unmodified Tensorflow BERT model for small batches
+- Fixed run-to-run-variability in OneHot operator implementation
+- Robustness improvements for ParallelWavenet and transformer decoder networks
+
+
+## Other Notes
+
+### Dependencies
+```
+dmlc_nnvm==1.0.2356.0
+dmlc_topi==1.0.2356.0
+dmlc_tvm==1.0.2356.0
+inferentia_hwm==1.0.1294.0
+islpy==2018.2
+```
+
 
 # [1.0.9410.0]
 

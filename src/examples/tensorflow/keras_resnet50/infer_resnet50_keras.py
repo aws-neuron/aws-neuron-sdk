@@ -29,23 +29,22 @@ def pb_to_saved_model(pb_path, input_names, output_names, model_dir):
         outputs = {name: sess.graph.get_tensor_by_name(ts_name) for name, ts_name in output_names.items()}
         tf.saved_model.simple_save(sess, model_dir, inputs, outputs)
 
-COMPILED_MODEL_DIR = './rn50_fp16'
-shutil.rmtree(COMPILED_MODEL_DIR, ignore_errors=True)
+SAVED_MODEL_DIR = './rn50_fp16'
+shutil.rmtree(SAVED_MODEL_DIR, ignore_errors=True)
 input_tname="{}:0".format(args.input)
 output_tname="{}:0".format(args.output)
-pb_to_saved_model(args.graph, {input_tname : input_tname}, {output_tname : output_tname}, COMPILED_MODEL_DIR)
+pb_to_saved_model(args.graph, {input_tname : input_tname}, {output_tname : output_tname}, SAVED_MODEL_DIR)
 
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
 img_arr = image.img_to_array(img_sgl)
 img_arr2 = np.expand_dims(img_arr, axis=0)
-#img_arr3 = resnet50.preprocess_input(np.repeat(img_arr2, 5, axis=0))
 img_arr3 = resnet50.preprocess_input(np.repeat(img_arr2, 1, axis=0))
 
 # Load model
-predictor_inferentia = tf.contrib.predictor.from_saved_model(COMPILED_MODEL_DIR)
+predictor_host = tf.contrib.predictor.from_saved_model(SAVED_MODEL_DIR)
 
 # Run inference
 model_feed_dict={'input_1:0': img_arr3}
-infa_rslts = predictor_inferentia(model_feed_dict);
+infa_rslts = predictor_host(model_feed_dict);
 print(resnet50.decode_predictions(infa_rslts[output_tname], top=5)[0])

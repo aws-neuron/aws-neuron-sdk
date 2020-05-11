@@ -1,5 +1,18 @@
 # TensorBoard-Neuron Release Notes
 
+
+# [1.15.0.1.0.466.0]
+
+Date 5/11/2020
+
+## Summary
+Fix potential installation issue when installing both tensorboard and tensorboard-neuron.
+
+## Resolved Issues
+* Added tensorboard as a dependency in tensorboard-neuron.  This prevents the issue of overwriting tensorboard-neuron features when tensorboard is installed after tensorboard-neuron.
+
+## Other Notes
+
 # [1.15.0.1.0.392.0]
 
 Date 3/26/2020

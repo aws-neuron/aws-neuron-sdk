@@ -1,6 +1,24 @@
 # Neuron Release Notes
 
 
+## May 11, 2020 Release
+
+This release provides additional throughput improvements to running inference on a variety of models; for example BERTlarge throughput has improved by an additional 35% compared to the previous release and with peak thoughput of 360 seq/second on inf1.xlarge (more details [here](./../src/examples/tensorflow/bert_demo/README.md)).
+
+In addition to the performance boost, this release adds PyTorch, and MXNet framework support for BERT models, as well as expands container support in preparation to an upcoming EKS launch.
+
+We continue to work on new features and improving performance further, to stay up to date follow this repository and our [Neuron roadmap](https://github.com/aws/aws-neuron-sdk/projects/2).
+
+Refer to the detailed release notes for more information for each Neuron component. 
+
+## Important to know: 
+1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). As a result, we limit the sizes of CNN models like ResNet to have an input size limit of 480x480 fp16/32, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
+
+2. INT8 data type is not currently supported by the Neuron compiler.
+
+3. Neuron does not support TensorFlow 2 or PyTorch 1.4.0.
+
+
 ## Mar 26, 2020 Release
 
 This release supports a variant of the SSD object detection network, a SSD inference demo is available [here](../src/examples/tensorflow/ssd300_demo) 

@@ -1,6 +1,29 @@
 # Neuron runtime release notes
 
-This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. It runs on Ubuntu(16/18) and Amazon Linux 2.
+This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. Details on the configuration and use is availble in [docs/neuron-runtime/.](../docs/neuron-runtime/nrt_start.md)
+
+# [1.0.6905.0]
+
+Date: 5/11/2020
+
+## Major New Features
+
+N/A
+
+## Improvements
+
+* A new API for unloading all loaded Neural Networks and for freeing all Inferentia resources.  The API is used by ML frameworks in cases when an ML application needs to be restarted to bring Inferentias to their initial state.
+* Improved inference error handling and improved verbosity of error notifications.
+* Internal changes aimed to improve performance optimization work and debuggability.
+
+## Resolved Issues
+* Latency of Neural Networks loading had degraded in 1.0.6222.0 release.  The issue has been resolved.
+
+## Known Issues and Limitations
+
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+
 
 # [1.0.6222.0]
 
@@ -22,8 +45,7 @@ N/A
 
 ## Known Issues and Limitations
 
-* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  For example, 
-. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.
     * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
 
 
@@ -49,8 +71,7 @@ Date: 2/27/2020
 
 ## Known Issues and Limitations
 
-* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  For example, 
-. A manual reconfiguration and Neuron-RTD restart is required for increasing the amount of huge memory pages available to Neuron-RTD.
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.
     * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
 
 

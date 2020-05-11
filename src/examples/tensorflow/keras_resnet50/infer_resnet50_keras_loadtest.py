@@ -12,6 +12,7 @@ import statistics
 import argparse
 import requests
 import tensorflow as tf
+import tensorflow.neuron
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
 
@@ -115,7 +116,7 @@ def current_throughput():
     print("Throughput values collected:")
     print(throughput_stats)
     avg_latency = tot_latency / ( (NUM_LOOPS_PER_THREAD-1) * num_threads) * 1000
-    print("\nCompiled batch size {}, user batch size {}, throughput stats (images/sec): max={} p99={} p50={}, avg latency {:0.4f} sec/user-batch\n".format(args.batch_size, USER_BATCH_SIZE, max(throughput_stats), 
+    print("\nCompiled batch size {}, user batch size {}, throughput stats (images/sec): max={} p99={} p50={}, avg latency {:0.4f} msec/user-batch\n".format(args.batch_size, USER_BATCH_SIZE, max(throughput_stats),
                                                             int(np.percentile(throughput_stats, 99)), 
                                                             int(np.percentile(throughput_stats, 50)),
                                                             avg_latency))  
