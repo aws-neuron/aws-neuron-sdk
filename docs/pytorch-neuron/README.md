@@ -13,6 +13,7 @@ Neuron is integrated into PyTorch, and provides you with a familiar environment 
 ### Tutorials
 * [Using Neuron to run Resnet50 inference](./tutorial-compile-infer.md)
 * [Manual partitioning of Resnet50 in a Jupyter Notebook](./tutorial-manual-partitioning.md) 
+* [BERT Large Tutorial](../../src/examples/pytorch/bert_tutorial/bert_large_mrpc_tutorial.md)
 
 ### Reference manuals
 * [PyTorch-Neuron Compilation API](./api-compilation-python-api.md)

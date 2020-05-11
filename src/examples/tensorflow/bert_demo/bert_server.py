@@ -16,6 +16,8 @@ from concurrent import futures
 import multiprocessing
 from multiprocessing.dummy import Pool
 from threading import Lock
+import pkg_resources
+from distutils.version import LooseVersion
 import grpc
 import numpy as np
 import tensorflow as tf
@@ -31,10 +33,21 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 class BERTService(mrpc_pb2_grpc.mrpcServicer):
 
-    def __init__(self, model_path, parallel, batch_size, bootstrap, vocab_txt):
-        config = tf.ConfigProto(inter_op_parallelism_threads=parallel, intra_op_parallelism_threads=1)
-        os.environ['NEURONCORE_GROUP_SIZES'] = ','.join('1' for _ in range(parallel))
-        self.predictor_list = [tf.contrib.predictor.from_saved_model(model_path, config=config) for _ in range(parallel)]
+    def __init__(self, model_path, parallel, batch_size, bootstrap, vocab_txt, num_thread_per_predictor=2):
+        num_queues = parallel * num_thread_per_predictor
+        config = tf.ConfigProto(inter_op_parallelism_threads=num_queues, intra_op_parallelism_threads=1)
+        tfn_version = LooseVersion(pkg_resources.get_distribution('tensorflow-neuron').version)
+        if tfn_version >= LooseVersion('1.15.0.1.0.1333.0'):
+            neuroncore_group_sizes = '{}x1'.format(parallel)
+            predictor = tf.contrib.predictor.from_saved_model(model_path, config=config)
+            self.predictor_list = [predictor for _ in range(num_queues)]
+        else:
+            neuroncore_group_sizes = ','.join('1' for _ in range(parallel))
+            predictor_list = [tf.contrib.predictor.from_saved_model(model_path, config=config) for _ in range(parallel)]
+            self.predictor_list = []
+            for pred in predictor_list:
+                self.predictor_list.extend(pred for _ in range(num_thread_per_predictor))
+        os.environ['NEURONCORE_GROUP_SIZES'] = neuroncore_group_sizes
         if self.predictor_list[0].feed_tensors['input_ids'].shape.is_fully_defined():
             self.batch_size = self.predictor_list[0].feed_tensors['input_ids'].shape.as_list()[0]
         else:
@@ -50,7 +63,7 @@ class BERTService(mrpc_pb2_grpc.mrpcServicer):
         self.max_len_latency_list = 1000
         self.iid_lock = Lock()
         if bootstrap:
-            self.request_queue_list = [collections.deque() for _ in range(parallel)]
+            self.request_queue_list = [collections.deque() for _ in self.predictor_list]
             eval_data_path = os.path.join(os.path.dirname(__file__), 'glue_mrpc_dev.tsv')
             tsv = mrpc_feature.read_tsv(eval_data_path)
             for request_queue in self.request_queue_list:
@@ -65,7 +78,7 @@ class BERTService(mrpc_pb2_grpc.mrpcServicer):
                     }
                     request_queue.append((batch_feeds, batch_labels))
         else:
-            self.request_queue_list = [[] for _ in range(parallel)]
+            self.request_queue_list = [[] for _ in self.predictor_list]
         self.result_map = {}
         self.alive = True
         dummy_feed = {
@@ -181,12 +194,13 @@ def serve():
     parser.add_argument('--port', default=60061, help='gRPC port')
     parser.add_argument('--dir', required=True, help='TensorFlow SavedModel dir')
     parser.add_argument('--parallel', type=int, default=4, help='Number of predictors')
+    parser.add_argument('--thread', type=int, default=2, help='Number of threads used by each predictor')
     parser.add_argument('--batch', type=int, default=4, help='Batch size')
     parser.add_argument('--bootstrap', action='store_true',
                         help='Server loads a dataset and run inference itself')
     args = parser.parse_args()
     vocab_txt = os.path.join(os.path.dirname(__file__), 'uncased_L-24_H-1024_A-16.vocab.txt')
-    bert_service = BERTService(args.dir, args.parallel, args.batch, args.bootstrap, vocab_txt)
+    bert_service = BERTService(args.dir, args.parallel, args.batch, args.bootstrap, vocab_txt, args.thread)
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=128),
         options=[('grpc.max_send_message_length', -1),
@@ -195,7 +209,7 @@ def serve():
     server.add_insecure_port('[::]:{}'.format(args.port))
     server.start()
     try:
-        pool = Pool(args.parallel + 1)  # +1 for bert_service.current_throughput
+        pool = Pool(len(bert_service.predictor_list) + 1)  # +1 for bert_service.current_throughput
         if args.bootstrap:
             monitor_func = bert_service.current_throughput_accuracy
             process_func = bert_service.process_input_bootstrap
@@ -206,7 +220,7 @@ def serve():
         if args.parallel == 1:
             process_func(0)
         else:
-            for idx in range(args.parallel):
+            for idx in range(len(bert_service.predictor_list)):
                 pool.apply_async(process_func, (idx,))
         pool.close()
         time.sleep(_ONE_DAY_IN_SECONDS)

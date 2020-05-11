@@ -4,7 +4,7 @@
 Customers that use Kubernetes can conveniently integrate Inf1 instances into their workflows.
 
 A device plugin is provided which advertises Inferentia devices as a system hardware resource.
-It is deployed to a cluster as a daemon set using the provided: [k8s-neuron-device-plugin.yml](./k8s-neuron-device-plugin.yml)
+It is deployed to a cluster as a daemon set using the provided: [k8s-neuron-device-plugin.yml](./k8s-neuron-device-plugin.yml).
 This tutorial will go through deploying the daemon set and running an example application. 
 
 #### Prerequisite:
@@ -40,22 +40,22 @@ neuron-device-plugin-daemonset   1         1         1       1            1     
 
 
 You can now require Inferentia devices in a k8s manifest as in the following example. The number of 
-Inferentia devices can be adjusted using the *aws.amazon.com/infa* resource. 
-The runtime expects 128 2-MB pages per inferentia device by default, therefore, *hugepages-2Mi* has to be set to 256 * number of Inferentia devices.
+Inferentia devices can be adjusted using the *aws.amazon.com/neuron* resource. 
+The runtime expects 128 2-MB pages per inferentia device, therefore, *hugepages-2Mi* has to be set to 256 * number of Inferentia devices.
 ```
         resources:
           limits:
             hugepages-2Mi: 256Mi
-            aws.amazon.com/infa: 1
+            aws.amazon.com/neuron: 1
           requests:
             memory: 1024Mi
 ```
 
 
 #### Step 2: Optional: Deploy an application requiring Inferentia resource
-The following tutorial is meant to serve as an example on using k8s with Inferentia.
+The [Deploy BERT as a k8s service](./../../src/examples/tensorflow/k8s_bert_demo/README.md) tutorial provides an example how to  use k8s with Inferentia.
 
-[Deploy BERT as a k8s service](./../../src/examples/tensorflow/k8s_bert_demo/README.md)
+
 
 
 

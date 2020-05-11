@@ -95,6 +95,6 @@ spec:
           resources:
             limits:
               hugepages-2Mi: 256Mi    # configure to 256 * desired number of Inferentia devices.
-              aws.amazon.com/infa: 1  # desired number of Inferentia devices.
+              aws.amazon.com/neuron: 1  # desired number of Inferentia devices.
             requests:
               memory: 1024Mi          # Desired amount of memory. Should be larger than hugepages-2Mi limit.

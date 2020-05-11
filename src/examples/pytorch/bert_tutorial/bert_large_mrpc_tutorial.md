@@ -4,13 +4,13 @@
 
 BERT (Bidirectional Encoder Representations from Transformers) is a Google Research project published in 2018 (https://arxiv.org/abs/1810.04805).  BERT has a number of practical applications, it can be used for question answering, sequence prediction and sequence classification amongst other tasks.
 
-This tutorial is using Jupyter notebooks to adapt the large BERT model from https://github.com/huggingface/transformers, for the purpose of classifying sentences as having similar or dissimilar meaning, based on the MRPC corpus. You can find more here from Hugging Face: https://github.com/huggingface/transformers#fine-tuning-bert-model-on-the-mrpc-classification-task
+This tutorial is using Jupyter notebooks to adapt the BERTlarge model from https://github.com/huggingface/transformers, for the purpose of classifying sentences as having similar or dissimilar meaning, based on the MRPC corpus. You can find more here from Hugging Face: https://github.com/huggingface/transformers#fine-tuning-bert-model-on-the-mrpc-classification-task
 
-In this tutorial we will use a p3.16xlarge instance for adapting the model, a c5n.4xl for compilation and an inf1.2xlarge for running inference with the model.  The aim is to demonstrate the process of adapting a model, manually partitioning a graph in PyTorch, how to compile and how to measure performance.   
+In this tutorial we will use a p3.16xlarge instance for adapting the model, a c5n.4xl for compilation and an inf1.2xlarge for running inference with the model.  The aim is to demonstrate the process of adapting a model, manually partitioning a graph in PyTorch, compile, deploy and measure performance.   
 
-In this tutorial we’ll also leverage the AWS Deep Learning AMI. This tutorial assumes you know how to configure your AWS CLI (https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html), which is required for the notebooks to run.
+In this tutorial we’ll use the AWS Deep Learning AMI. This tutorial assumes you know how to configure your [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html), which is required for the notebooks to run.
 
-The tutorial assumes you are operating in us-east-1. It is possible to run in other regions, but you will need to choose a region where inf1 is supported, and modify the setup script for MRPC or the training notebook where your S3 bucket is created. 
+The tutorial assumes you are operating in us-east-1. It is possible to run in other regions where inf1 is supported, and modify the setup script for MRPC or the training notebook where your S3 bucket is created. 
 
 ## Steps Overview:
 
