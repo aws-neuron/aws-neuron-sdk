@@ -264,7 +264,7 @@ sudo apt update
 
 # After you have just started your instance you may need to wait
 # a few minutes while dpkg is locked
-`sudo apt upgrade`
+sudo apt upgrade
 
 # Working directory
 mkdir bert_mrpc
@@ -297,7 +297,7 @@ echo "c.NotebookApp.iopub_data_rate_limit = 10000000000" > ~/.jupyter/jupyter_no
 sudo chmod -R a+wx /usr/local/share/jupyter/kernels/
 python -m ipykernel install --name torch_test
 
-`# Pull the PyTorch BERT inferene notebook for neuron (test URL)`
+# Pull the PyTorch BERT inferene notebook for neuron (test URL)
 wget -O neuron_bert_mrpc_benchmark.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_benchmark.ipynb
 
 # Pull test file (test URL)
