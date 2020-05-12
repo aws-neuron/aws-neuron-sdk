@@ -259,7 +259,7 @@ Repeat the steps in Stage 2: → STEP 2: SSH to your instance with port forwardi
 The following steps assume that you set the environment for 
 
 ```
-`# Make sure we are up to date`
+# Make sure we are up to date
 sudo apt update
 
 # After you have just started your instance you may need to wait
