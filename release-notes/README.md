@@ -1,5 +1,19 @@
 # Neuron Release Notes
 
+## May 15, 2020 Release
+Point fix an error related to installation of the Neuron Runtime Base package.  The prior release fails to successfully start Neuron Discovery when the Neuron Runtime package is not also installed.  This scenario of running Neuron Discovery alone is critical to users of Neuron in container environments.  
+
+Please update the aws-neuron-runtime-base package:
+```
+# Ubuntu 18 or 16:
+sudo apt-get update
+sudo apt-get install aws-neuron-runtime-base
+
+# Amazon Linux, Centos, RHEL
+sudo yum update
+sudo yum install aws-neuron-runtime-base
+```
+
 
 ## May 11, 2020 Release
 
