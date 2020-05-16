@@ -2,9 +2,34 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 5/11/2020
+# Known Issues and Limitations 5/15/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+# [1.0.8550.0]
+
+Date: 5/15/2020
+
+## Summary
+* Point fix for installation and startup errors of neuron-discovery service in the aws-neuron-runtime-base package.
+
+Please update to aws-neuron-runtime-base package version 1.0.7173 or newer:
+```
+# Ubuntu 18 or 16:
+sudo apt-get update
+sudo apt-get install aws-neuron-runtime-base
+
+# Amazon Linux, Centos, RHEL
+sudo yum update
+sudo yum install aws-neuron-runtime-base
+```
+
+## Major New Features
+* None
+
+## Resolved Issues
+* Installation of aws-neuron-runtime-base version 1.0.7044 fails to successfully move service files into the service folder.  Release of aws-neuron-runtime-base version 1.0.7173 fixes this installation issue.
+* Added a dependency on the networking service in the neuron-discovery service to avoid potential for discovery to start before networking.  If networking starts first, neuron-discovery will fail to start.  
 
 
 # [1.0.8131.0]
