@@ -174,9 +174,7 @@ nrtd[nnnnn]: ....  Attempt to preallocate 128 hugetlb pages failed!
 
 ##### How To Fix?
 
-Detailed information on how to configure the number of hugepages on an instance is documented [here](./nrt_start.md#step-3-configure-nr_hugepages).  If you're hitting this issue due to your AMI being built on an instance that has less Inferntias than the target it's lauched on, there's two ways to fix the issue.  Either update the configuration of the AMI to be specific to the Inf1 instance type, or create a script to set the number of hugepages at boot.  The scripted approach is currently part of the DLAMI if you need an example to follow.  Please see further instruction on how to configure the number of hugepages [here](./nrt_start.md#step-3-configure-nr_hugepages).
-
-TODO: provide a script.
+Detailed information on how to configure the number of hugepages on an instance is documented [here](./nrt_start.md#step-3-configure-nr_hugepages).  If you're hitting this issue due to your AMI being built on an instance that has fewer Inferentias than the target it's lauched on, there are two ways to fix the issue.  Either update the configuration of the AMI to be specific to the Inf1 instance type, or create a script to set the number of hugepages at boot.  The scripted approach is currently part of the DLAMI if you need an example to follow.  Please see further instruction on how to configure the number of hugepages [here](./nrt_start.md#step-3-configure-nr_hugepages).
 
 ### Incorrect User privileges
 
