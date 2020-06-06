@@ -107,14 +107,12 @@ With the default configuration:
 
 ### Multiple Neuron-RTD
 Multiple runtime daemon might be preferred in some cases for isolation or for load balancing.
-The following steps explains configuring four Neuron-RTD on an inf1.6xl instance and let each daemon to manage 1 Neuron device. 
 
 When configuring multiple Neuron-RTD, a configuration file needs to be created to specify the API server endpoint (UDP or TCP port) and logical device id it should manage.
 
+The following steps explains configuring four Neuron-RTD on an inf1.6xl instance and let each daemon to manage 1 Neuron device.
 
-## Useful commands
-
-### Identify logical IDs of Inferentia devices
+#### Identify logical IDs of Inferentia devices
 Use `neuron-ls` to enumerate the set of Inferentia chips avaliable in the system.
 
 ```bash
@@ -136,7 +134,7 @@ Use `neuron-ls` to enumerate the set of Inferentia chips avaliable in the system
 neuron-rtd can manage one or more devices. Select contigous Inferentia devices to be managed by a single neuron-rtd. 
 
 
-### Create a configuration file for each instance
+#### Create a configuration file for each instance
 Create a configuration file for each Neuron-rtd you wish to launch, with one or more Inferentia chips desired to be mapped to that Neuron-rtd instance, and the listening port for it.
 
 ```bash
@@ -179,13 +177,13 @@ sudo chmod 755 /opt/aws/neuron/bin/nrtd3.json
 ```
 
 
-### Start the services
-#### Stop the default service
+#### Start the services
+##### Stop the default service
 ```bash
 sudo systemctl stop neuron-rtd
 ```
 
-#### Start the new services
+##### Start the new services
 ```bash
 sudo systemctl start neuron-rtd@nrtd0
 sudo systemctl start neuron-rtd@nrtd1
