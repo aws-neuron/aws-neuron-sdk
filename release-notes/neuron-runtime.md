@@ -1,6 +1,17 @@
-# Neuron runtime release notes
+# Neuron Runtime Release Notes
 
 This document lists the current release notes for AWS Neuron Runtime.  Neuron Runtime software manages runtime aspects of executing inferences on Inferentia chips. Details on the configuration and use is availble in [docs/neuron-runtime/.](../docs/neuron-runtime/nrt_start.md)
+
+### NEFF Support Table:
+
+Use this table to determine the version of Runtime that will support the version of NEFF you are using.  NEFF version is determined by the version of the Neuron Compiler.
+
+| NEFF Version | Runtime Version Range | Notes                                   |
+| ---- | ------------- | --------------------------------------------- |
+| 0.6  | <= 1.0.6905.0 |  |
+| 1.0  | 1.0.6905.0    | Starting support for 1.0 NEFFs |
+
+---
 
 # [1.0.6905.0]
 
@@ -8,7 +19,7 @@ Date: 5/11/2020
 
 ## Major New Features
 
-N/A
+* Support is added for NEFF 1.0.
 
 ## Improvements
 
@@ -23,6 +34,9 @@ N/A
 
 * A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.
     * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+
+
+
 
 
 # [1.0.6222.0]
@@ -208,7 +222,7 @@ consumed by one or more NeuronCores, depending on a model.  If a model requires 
 * A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.  A manual reconfiguration and Neuron-RTD restart is required for 
 increasing the amount of huge memory pages available to Neuron-RTD.
     * Workarounds: manually increase the amount of huge memory pages available to Neuron runtime by [following the instructions here:](../docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) 
-    ** This requires a restart of the runtime daemon.
+      ** This requires a restart of the runtime daemon.
 * Neuron-RTD does not return verbose error messages when a model load or an inference fails.  Detailed error messages are only available in syslog.
     * Workarounds: manually search syslog file for Neuron-RTD error messages.
 
