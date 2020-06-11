@@ -2,10 +2,28 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
-# Known Issues 5/11/2020
+# Known Issues 6/11/2020
  
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
   * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+
+# [1.5.1.1.0.2033.0]
+
+Date 6/11/2020
+
+## Summary
+
+* Added support for profiling during inference
+
+## Major New Features
+
+* Profiling can now be enabled by specifying the profiling work directory using NEURON_PROFILE environment variable during inference. For an example of using profiling, see [Getting Started](../docs/neuron-tools/getting-started-tensorboard-neuron.md). (Note that graph view of MXNet graph is not available via TensorBoard).
+
+## Resolved Issues
+
+## Known Issues and Limitations
+
+## Other Notes
 
 # [1.5.1.1.0.1900.0]
 
