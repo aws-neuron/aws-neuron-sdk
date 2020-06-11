@@ -2,6 +2,43 @@
 
 For more information about using Neuron with Conda and Base DLAMI, please see https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
+# [DLAMI v29.0]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.0.1498.0_1.0.918.0
+
+conda package tensorflow-neuron-1.15.0.1.0.1240.0_1.0.918.0
+
+conda package torch-neuron-1.3.0.1.0.170.0_2.0.349.0
+
+aws-neuron-runtime-base-1.0.7173.0
+
+aws-neuron-runtime-1.0.6905.0
+
+aws-neuron-tools-1.0.8550.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1572.0
+
+# [DLAMI v28.0]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.0.1498.0_1.0.918.0
+
+conda package tensorflow-neuron-1.15.0.1.0.1240.0_1.0.918.0
+
+conda package torch-neuron-1.3.0.1.0.90.0_1.0.918.0
+
+aws-neuron-runtime-base-1.0.6554.0
+
+aws-neuron-runtime-1.0.6222.0
+
+aws-neuron-tools-1.0.6554.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1333.0
+
+
 # [DLAMI v27.0]
 
 This DLAMI release incorporates all content in the releases for Neuron up to and including the Feb 27, 2020 SDK release set.
