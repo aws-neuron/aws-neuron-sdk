@@ -32,7 +32,7 @@ If you haven't read it already, please familiarize yourself with our [getting st
 
 ## Runtime installation failed
 
-There's a few reasons this might occur.  Here's a list of things to double check on:
+There are a few reasons this might occur.  Here's a list of things to double check on:
 
 #### 1. Supported OS
 
@@ -111,7 +111,7 @@ aws-neuron-runtime/unknown 1.0.3978.0 amd64
 aws-neuron-runtime-base/unknown 1.0.3438.0 amd64
 ```
 
-2. If there is a known issue with a version, we will captured it in the release notes and/or create an issue in our GitHub repo.  Please check the [release notes](../../release-notes/neuron-runtime.md) for more details on the version you're running or installing.
+2. If there is a known issue with a version, we will capture it in the release notes and/or create an issue in our GitHub repo.  Please check the [release notes](../../release-notes/neuron-runtime.md) for more details on the version you're running or installing.
 
 
 
@@ -174,7 +174,7 @@ nrtd[nnnnn]: ....  Attempt to preallocate 128 hugetlb pages failed!
 
 ##### How To Fix?
 
-Detailed information on how to configure the number of hugepages on an instance is documented [here](./nrt_start.md#step-3-configure-nr_hugepages).  If you're hitting this issue due to your AMI being built on an instance that has fewer Inferentias than the target it's lauched on, there are two ways to fix the issue.  Either update the configuration of the AMI to be specific to the Inf1 instance type, or create a script to set the number of hugepages at boot.  The scripted approach is currently part of the DLAMI if you need an example to follow.  Please see further instruction on how to configure the number of hugepages [here](./nrt_start.md#step-3-configure-nr_hugepages).
+Detailed information on how to configure the number of hugepages on an instance is documented [here](./nrt_start.md#step-3-configure-nr_hugepages).  If you're hitting this issue due to your AMI being built on an instance that has fewer Inferentias than the target it's launched on, there are two ways to fix the issue.  Either update the configuration of the AMI to be specific to the Inf1 instance type, or create a script to set the number of hugepages at boot.  The scripted approach is currently part of the DLAMI if you need an example to follow.  Please see further instruction on how to configure the number of hugepages [here](./nrt_start.md#step-3-configure-nr_hugepages).
 
 ### Incorrect User privileges
 
@@ -358,7 +358,7 @@ Ensure your application is only inferring against models that are running on the
 
 ### Bad or incorrect inputs
 
-NEFF contains information of the number of input feature maps required by the model.  If inputs to the model don't match the expected number/size of the input, inferene will fail.
+NEFF contains information of the number of input feature maps required by the model.  If inputs to the model don't match the expected number/size of the input, inference will fail.
 
 ##### What Went Wrong?
 

@@ -8,10 +8,34 @@ Use this table to determine the version of Runtime that will support the version
 
 | NEFF Version | Runtime Version Range | Notes                                   |
 | ---- | ------------- | --------------------------------------------- |
-| 0.6  | <= 1.0.6905.0 |  |
-| 1.0  | 1.0.6905.0    | Starting support for 1.0 NEFFs |
+| 0.6  | * | All versions of RT support NEFF 0.6 |
+| 1.0  | >= 1.0.6905.0 | Starting support for 1.0 NEFFs |
 
 ---
+
+# [1.0.7865.0]
+
+Date: 6/11/2020
+
+## Major New Features
+
+* n/a
+
+## Improvements
+
+* Improved Neuron device memory allocation to accommodate Neural Networks that operate on large tensors.
+* Log the version of the NEFF file during Neural Network load to aid troubleshooting.
+
+## Resolved Issues
+
+* An inference request with missing IFMAP tensors is allowed to execute and produces undefined results.
+* neuron-rtd service is not stopped and is not removed when aws-neuron-runtime package is uninstalled.
+
+## Known Issues and Limitations
+
+* A model might fail to load due to insufficient number of huge memory pages made available to Neuron-RTD.
+    * Workaround: manually increase the amount of huge memory pages available to Neuron runtime by following the [instructions here.](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md#step-3-configure-nr_hugepages) (Requires a restart of the runtime daemon and a possible change to system-wide configs.)
+
 
 # [1.0.6905.0]
 
