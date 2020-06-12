@@ -6,6 +6,11 @@ Current operator lists may be generated with these commands inside python:
 import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
+
+### PyTorch Neuron Release [1.0.1168.0]
+
+Added ``` aten::ScalarImplicit ```
+
 ### PyTorch Neuron Release [1.0.1001.0]
 
 Added

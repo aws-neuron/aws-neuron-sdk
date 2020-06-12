@@ -174,8 +174,15 @@ source activate test_conda_env
 # Add Neuron Conda channel to Conda environment
 conda config --env --add channels https://conda.repos.neuron.amazonaws.com
 
+# Install one of frameworks in the newly created conda environment
+
+# If you are installing MXNet-Neuron plus Neuron-Compiler
 conda install mxnet-neuron
+
+# If you are installing TensorFlow-Neuron plus Neuron-Compiler
 conda install tensorflow-neuron
+
+# If you are installing PyTorch-Neuron plus Neuron-Compiler
 conda install torch-neuron
 ```
 NOTE 1: The framework Conda packages already include `neuron-cc` packages for compilation so there's no need to install them separately.

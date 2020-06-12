@@ -6,6 +6,16 @@ This document lists the release notes for MXNet-Neuron framework.
  
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
   * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
+  
+# [1.5.1.1.0.2033.0]
+
+Date 6/11/2020
+
+## Summary
+
+## Major New Features
+
+## Resolved Issues
 
 # [1.5.1.1.0.1900.0]
 

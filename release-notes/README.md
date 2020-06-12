@@ -1,5 +1,24 @@
 # Neuron Release Notes
 
+## Jun 11, 2020 Release
+
+This Neuron release provides support for the recent launch of EKS for Inf1 instance types and numerous other improvements.  More details about how to use EKS with the Neuron SDK can be found in AWS documentation [here](https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html).
+
+This release adds initial support for OpenPose PoseNet for images with resolutions upto 400x400. This release also adds a '-O2' option to the Neuron Compiler. '-O2' can help with handling of large tensor inputs.  
+
+In addition the Neuron Compiler increments the version of the compiled artifacts, called "NEFF", to version 1.0. Neuron Runtime versions earlier than the 1.0.6095.0 release in May 2020 will not be able to execute NEFFs compiled from this release forward. Please see [Neuron Runtime Release Notes](./neuron-runtime.md#neff-support-table) for compatibility.
+
+Stay up to date on future improvements and new features by following the [Neuron SDK Roadmap](https://github.com/aws/aws-neuron-sdk/projects/2).
+
+Refer to the detailed release notes for more information on each Neuron component. 
+
+## Important to know: 
+1. Size of neural network. The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize for. The size of neural network is influenced by a number of factors including: a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). Using the Neuron Compiler '-O2' option can help with handling of large tensor inputs for some models. If not used, Neuron limits the size of CNN models like ResNet to an input size of 480x480 fp16/32, batch size=4; LSTM models like GNMT to have a time step limit of 900; MLP models like BERT to have input size limit of sequence length=128, batch=8.
+
+2. INT8 data type is not currently supported by the Neuron compiler.
+
+3. Neuron does not support TensorFlow 2 or PyTorch 1.4.0.
+
 ## May 15, 2020 Release
 Point fix an error related to installation of the Neuron Runtime Base package.  The prior release fails to successfully start Neuron Discovery when the Neuron Runtime package is not also installed.  This scenario of running Neuron Discovery alone is critical to users of Neuron in container environments.  
 
