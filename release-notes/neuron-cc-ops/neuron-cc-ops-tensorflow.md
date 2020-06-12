@@ -1,5 +1,13 @@
 # Supported operators [TensorFlow]
 
+### Neuron Compiler Release [1.0.15275]
+
+Added ```Neg```
+
+Removed ```Log``` 
+(was inadvertently advertised as supported)
+
+
 ### Neuron Compiler Release [1.0.12696]
 
 No changes

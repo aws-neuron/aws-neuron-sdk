@@ -2,9 +2,42 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 5/15/2020
+# Known Issues and Limitations 06/11/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+# [1.0.9043.0]
+
+Date: 06/11/2020
+
+## Summary
+* Enhancements to neuron-cli to improve loading of large models
+* Fix aws-neuron-runtime-base uninstall to cleanup all the relevant files
+* Migrated neuron-discovery service to use IMDSv2 to query instance type
+
+## Major New Features
+* Added new commandline options to **neuron-cli** to improve the performance on loading large models
+    #### --ncg-id \<value>
+    
+    Legal values for ncg-id:
+
+    * "-1": runtime will create the NCG (default)
+    * "0": NCG will be created by neuron-cli
+    * ">=1": Model will be loaded to the NCG id specified
+
+    
+    
+    During model load, neuron-cli parses the NEFF file for parameters needed to create an NCG. The runtime will parse the same NEFF file a second time during the load.  Allowing the runtime to create the NCG reduces load time by skipping the redundant parse in neuron-cli.
+    
+    
+    
+    #### --enable-direct-file-load
+    By default, neuron-cli loads models into its own memory and streams the model to the Neuron Runtime using GRPC.  When the '--enable-direct-file-load' flag is passed, the load operation will skip the copy and only pass the filepath of the model to the Neuron Runtime.  This saves time and memory during model loads.
+
+
+## Resolved Issues
+* None
+
 
 # [1.0.8550.0]
 

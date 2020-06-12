@@ -3,11 +3,29 @@
 This document lists the release notes for the TensorFlow-Neuron package.
 
 
-# Known Issues and Limitations - updated 5/11/2020
+# Known Issues and Limitations - updated 6/11/2020
 
 * Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
 ```terminate called after throwing an instance of 'std::bad_alloc'```
 Solution: run compilation on a c5.4xlarge instance type or larger.
+
+# [1.15.2.1.0.1796.0]
+
+Date 6/11/2020
+
+## Summary
+
+This version contains a few bug fixes.
+
+## Major New Features
+
+## Resolved Issues
+
+1. Fixed a bug related with device placement. Now models with device information hardcoded to GPU can be successfully compiled with ```tfn.saved_model.compile```
+2. Fixed a bug in ```tfn.saved_model.compile``` that causes models containing Reshape operators not functioning correctly when it is compiled with ```dynamic_batch_size=True```
+3. Fixed a bug in ```tfn.saved_model.compile``` that causes models containing Table related operators to initialize incorrectly after compilation.
+
+## Known Issues and limitations
 
 # [1.15.2.1.0.1572.0]
 

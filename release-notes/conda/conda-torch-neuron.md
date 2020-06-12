@@ -4,7 +4,19 @@ This document lists the release notes for the Neuron Conda-Pytorch package.
 
 ### [Conda Tensorflow Release Notes](../tensorflow-neuron.md)
 
-# [1.3.0.1.0.170.0_2.0.349.0]
+# [1.3.0.1.0.215.0-2.0.633.0]
+
+Date 6/11/2020
+
+## Included Neuron Packages
+
+[neuron-cc-1.0.15275.0](../neuron-cc.md)
+
+[torch_neuron-1.0.1168.0](../torch-neuron.md)
+
+torch_neuron_base-1.3.0.1.0.215.0
+
+# [1.3.0.1.0.170.0-2.0.349.0]
 
 Date 5/11/2020
 
@@ -28,7 +40,7 @@ Date 3/26/2020
 
 torch_neuron_base-1.3.0.1.0.90.0
 
-# [1.3.0.1.0.90.0_1.0.918.0]
+# [1.3.0.1.0.90.0-1.0.918.0]
 
 Date: 2/27/2020
 
@@ -45,7 +57,7 @@ torch_neuron_base-1.3.0.1.0.90.0
 
 ### [Conda Tensorflow Release Notes](../tensorflow-neuron.md)
 
-# [1.3.0.1.0.41.0_1.0.737.0]
+# [1.3.0.1.0.41.0-1.0.737.0]
 
 Date: 1/27/2020
 
