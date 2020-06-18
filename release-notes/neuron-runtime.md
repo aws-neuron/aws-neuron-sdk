@@ -13,6 +13,22 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.8032.0]
+
+Date: 6/18/2020
+
+## Major New Features
+
+* n/a
+
+## Improvements
+
+* n/a
+
+## Resolved Issues
+
+*  In the earlier version yum downgrade aws-neuron-runtime removed the neuron-rtd service unit files. This resulted in neuron-rtd start failures. This version fixes the package downgrade issues.
+
 # [1.0.7865.0]
 
 Date: 6/11/2020

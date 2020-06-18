@@ -1,5 +1,19 @@
 # Neuron Release Notes
 
+
+## June 18, 2020 Release
+Point fix an error related to yum downgrade of the Neuron Runtime packages.  The prior release fails to successfully downgrade Neuron Runtime Base package and Neuron Runtime package when using Yum on Amazon Linux 2.
+
+
+Please update both packages on AL2:
+```
+# Amazon Linux 2
+sudo yum update
+sudo yum install aws-neuron-runtime-base
+sudo yum install aws-neuron-runtime
+```
+
+
 ## Jun 11, 2020 Release
 
 This Neuron release provides support for the recent launch of EKS for Inf1 instance types and numerous other improvements.  More details about how to use EKS with the Neuron SDK can be found in AWS documentation [here](https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html).
