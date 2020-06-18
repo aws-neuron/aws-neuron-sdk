@@ -27,7 +27,16 @@ Date: 6/18/2020
 
 ## Resolved Issues
 
-*  In the earlier version yum downgrade aws-neuron-runtime removed the neuron-rtd service unit files. This resulted in neuron-rtd start failures. This version fixes the package downgrade issues.
+*  In the versions of aws-neuron-runtime-base and aws-neuron-runtime, yum downgrade/update removed the service unit files. This results in neuron-discovery and neuron-rtd start failures.
+
+Please update the Neuron Runtime ingredients on AL2 by first removing the old package and installing the latest:
+```
+# Amazon Linux 2
+sudo yum remove aws-neuron-runtime-base
+sudo yum remove aws-neuron-runtime
+sudo yum install aws-neuron-runtime-base
+sudo yum install aws-neuron-runtime
+```
 
 # [1.0.7865.0]
 

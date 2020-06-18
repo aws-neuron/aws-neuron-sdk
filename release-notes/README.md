@@ -2,13 +2,14 @@
 
 
 ## June 18, 2020 Release
-Point fix an error related to yum downgrade of the Neuron Runtime packages.  The prior release fails to successfully downgrade Neuron Runtime Base package and Neuron Runtime package when using Yum on Amazon Linux 2.
+Point fix an error related to yum downgrade/update of Neuron Runtime packages.  The prior release fails to successfully downgrade/update Neuron Runtime Base package and Neuron Runtime package when using Yum on Amazon Linux 2.
 
 
-Please update both packages on AL2:
+Please remove and then install both packages on AL2 using these commands:
 ```
 # Amazon Linux 2
-sudo yum update
+sudo yum remove aws-neuron-runtime-base
+sudo yum remove aws-neuron-runtime
 sudo yum install aws-neuron-runtime-base
 sudo yum install aws-neuron-runtime
 ```
