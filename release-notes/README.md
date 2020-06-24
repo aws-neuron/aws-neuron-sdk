@@ -21,7 +21,7 @@ This Neuron release provides support for the recent launch of EKS for Inf1 insta
 
 This release adds initial support for OpenPose PoseNet for images with resolutions upto 400x400. This release also adds a '-O2' option to the Neuron Compiler. '-O2' can help with handling of large tensor inputs.  
 
-In addition the Neuron Compiler increments the version of the compiled artifacts, called "NEFF", to version 1.0. Neuron Runtime versions earlier than the 1.0.6095.0 release in May 2020 will not be able to execute NEFFs compiled from this release forward. Please see [Neuron Runtime Release Notes](./neuron-runtime.md#neff-support-table) for compatibility.
+In addition the Neuron Compiler increments the version of the compiled artifacts, called "NEFF", to version 1.0. Neuron Runtime versions earlier than the 1.0.6905.0 release in May 2020 will not be able to execute NEFFs compiled from this release forward. Please see [Neuron Runtime Release Notes](./neuron-runtime.md#neff-support-table) for compatibility.
 
 Stay up to date on future improvements and new features by following the [Neuron SDK Roadmap](https://github.com/aws/aws-neuron-sdk/projects/2).
 
