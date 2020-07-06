@@ -19,7 +19,9 @@ sudo yum install aws-neuron-runtime
 
 This Neuron release provides support for the recent launch of EKS for Inf1 instance types and numerous other improvements.  More details about how to use EKS with the Neuron SDK can be found in AWS documentation [here](https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html).
 
-This release adds initial support for OpenPose PoseNet for images with resolutions upto 400x400. This release also adds a '-O2' option to the Neuron Compiler. '-O2' can help with handling of large tensor inputs.  
+This release adds initial support for OpenPose PoseNet for images with resolutions upto 400x400. 
+
+This release also adds a '-O2' option to the Neuron Compiler. '-O2' can help with handling of large tensor inputs.  
 
 In addition the Neuron Compiler increments the version of the compiled artifacts, called "NEFF", to version 1.0. Neuron Runtime versions earlier than the 1.0.6905.0 release in May 2020 will not be able to execute NEFFs compiled from this release forward. Please see [Neuron Runtime Release Notes](./neuron-runtime.md#neff-support-table) for compatibility.
 
