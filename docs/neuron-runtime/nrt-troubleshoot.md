@@ -24,7 +24,7 @@ If you haven't read it already, please familiarize yourself with our [getting st
 
 [Getting Started Guide](./nrt_start.md)
 
-[Error Codes](#error-codes)
+[Error Codes](./nrt-return-codes.md)
 
 ---
 
@@ -422,30 +422,4 @@ Error Code: 5
 Report issue to Neuron by posting the relevant details on GitHub [issues](https://github.com/aws/aws-neuron-sdk/issues).
 
 ---
-
-
-### Error codes
-
-Non-exhaustive list of errors returned by the Neuron Runtime.  We've only captured the returns that are most relevant to debug.  When these errors occur, an entry is logged to syslog and most ML framework clients will surface the error code with a specific message from the runtime.
-
-| Code | Error                | Most likely explanation(s)                                   |
-| ---- | -------------------- | ------------------------------------------------------------ |
-| 2    | Invalid              | The NEFF provided or inference requested is invalid in some way.  Either incomplete, corrupt, missing, or has a mismatch between model and input tensor name/size. |
-| 4    | Resource             | Not enough of something we needed; usually memory on the host, memory in the device, or NeuronCores. |
-| 5    | Timeout              | Something went sideways during inference and breached our expected threshold for a response. |
-| 6    | Hardware Error       | ?!?!  Most likely a GRPC call failed.  If you suspect a real hardware problem, please let us know asap. |
-| 7    | Queue full           | Requests for inference have exceeded our capacity to service them.  Tapping the breaks. |
-| 8    | Failed state         | An inference was submitted for a model that is in Failed state.  The model encountered unrecoverable error and cannot be used |
-| 9    | Resource NC          | Specifically, there's not enough NCs to service the request  |
-| 10   | Unsupported Version  | This runtime doesn't support that version of a compiled NN, also known as a NEFF.  The error message provided will be explicit in this case. |
-| 1002 | Bad input            | Invalid input has been submitted to infer, e.g. missing some of the input tensors, incorrect input tensor sizes |
-| 1003 | Numerical errors     | Inference is completed, but numerical errors were reported while executing the inference, e.g. NaN |
-| 1004 | Non-numerical errors | Inference is completed, but non-numerical errors were reported while executing the inference, e.g. event double-clear. |
-
-
-
-
-
-
-
 
