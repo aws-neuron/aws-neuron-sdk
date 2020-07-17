@@ -13,6 +13,24 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.8444.0]
+
+Date: 07/16/2020
+
+## Major New Features
+* n/a
+
+## Improvements
+* Improved performance of the Neural Networks with large input tensors.
+
+## Resolved Issues
+* neuron-rtd crashes when “Unload All” API is called multiple times.
+* In some cases neuron-compiler optimizes access to the input tensors. Because of this optimization inference requests fail with an error message indicating the mismatch between expected and supplied number of input tensors.
+* In some cases NEFF can use more DMA rings than is supported by neuron-rtd.  A Neural Network load fails to load with an error message indicating the failure to allocate a DMA ring.
+
+## Other Notes
+* Renamed and combined Neuron device memory errors counters.  Four counters - ddr0_ecc_corr, ddr0_ecc_uncorr, ddr1_ecc_corr, ddr1_ecc_uncorr were combined into two counters - mem_ecc_corr and mem_ecc_uncorr.
+
 # [1.0.8032.0]
 
 Date: 6/18/2020

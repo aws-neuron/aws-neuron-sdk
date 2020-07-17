@@ -69,7 +69,7 @@ conda activate my_notebook_env
 
 pip install mxnet-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install neuron-cc --extra-index-url=https://pip.repos.neuron.amazonaws.com
-pip install wget os shutil sys jupyter
+pip install wget jupyter
 
 mkdir -p notebook_tutorial
 cd notebook_tutorial
@@ -88,6 +88,12 @@ wget -O bert_mxnet.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/ma
 From your ssh prompt run
 
 ```
+# lets clear the old config
+mv ~/.jupyter ~/.jupyter.old
+mkdir -p ~/.jupyter
+echo "c.NotebookApp.iopub_data_rate_limit = 10000000000" > ~/.jupyter/jupyter_notebook_config.py
+
+#Start jupyter
 jupyter notebook
 ```
 
@@ -123,4 +129,20 @@ This works because ssh is forwarding you local port 8888 through to the Inf1 ins
 ## Step 7: Terminate your instance
 
 When done, don't forget to terminate your instance through the AWS console to avoid ongoing charges
+
+## Appendix
+
+* Try installing environment_kernels, if you see the following error while launching Jupyter notebook: 
+
+```
+[C 06:39:39.153 NotebookApp] Bad config encountered during initialization: 
+[C 06:39:39.153 NotebookApp] The 'kernel_spec_manager_class' trait of <notebook.notebookapp.NotebookApp object at 0x7f21309035c0> instance must be a type, but 'environment_kernels.EnvironmentKernelSpecManager' could not be imported
+```
+
+* If you do not see your conda enviroment in jupyter kernel list, try installing the kernel manually:
+
+```
+python -m ipykernel install --user --name my_notebook_env --display-name "Python (my_notebook_env)"
+```
+
 

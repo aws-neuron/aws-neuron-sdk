@@ -2,21 +2,27 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
-# Known Issues 6/11/2020
+# Known Issues 07/16/2020
  
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
   * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
   
-# [1.5.1.1.0.2033.0]
+# [1.5.1.1.0.2093.0]
 
-Date 6/11/2020
+Date 07/16/2020
 
 ## Summary
+
+This release contains a few bug fixes and user experience improvements.
 
 ## Major New Features
 
 ## Resolved Issues
 
+* User can specify NEURONCORE_GROUP_SIZES without brackets (for example, "1,1,1,1"), as can be done in TensorFlow-Neuron and PyTorch-Neuron.
+* Fixed a memory leak when inferring neuron subgraph properties
+* Fixed a bug dealing with multi-input subgraphs
+  
 # [1.5.1.1.0.2033.0]
 
 Date 6/11/2020
