@@ -1,5 +1,13 @@
 # Neuron Release Notes
 
+## July 16, 2020 Release
+This release of Neuron SDK adds support for the OpenPose (posenet) Neural Network. An example of using Openpose for end to end inference is available [here](../src/examples/tensorflow/openpose_demo/).
+  
+A new PyTorch auto-partitioner feature now automatically builds a Neuron specific graph representation of PyTorch models. The key benefit of this feature is automatic partitioning the model graph to run the supported operators on the NeuronCores and the rest on the host. PyTorch auto-partitioner is enabled by default with ability to disable if a manual partition is needed. More details [here](torch-neuron.md). The release also includes various bug fixes and increased operator support. 
+
+## Important to know: 
+1. This update moves the supported version for PyTorch to the current release (PyTorch 1.5.1)
+2. This release supports Python 3.7 Conda packages in addition to Python 3.6 Conda packages
 
 ## June 18, 2020 Release
 Point fix an error related to yum downgrade/update of Neuron Runtime packages.  The prior release fails to successfully downgrade/update Neuron Runtime Base package and Neuron Runtime package when using Yum on Amazon Linux 2.

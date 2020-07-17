@@ -7,6 +7,43 @@ import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
 
+### PyTorch Neuron Release [1.0.1386.0]
+
+Added the following instructions. Please note, primitives are included in this list from this release.
+```
+aten::ceil
+aten::clamp
+aten::eq
+aten::exp
+aten::expand_as
+aten::flip
+aten::full_like
+aten::ge
+aten::gt
+aten::log2
+aten::log_softmax
+aten::max
+aten::neg
+aten::relu
+aten::rsqrt
+aten::scalarImplicit
+aten::sqrt
+aten::squeeze
+aten::stack
+aten::sub
+aten::sum
+aten::true_divide
+aten::upsample_nearest2d
+prim::Constant
+prim::GetAttr
+prim::ImplicitTensorToNum
+prim::ListConstruct
+prim::ListUnpack
+prim::NumToTensor
+prim::TupleConstruct
+prim::TupleUnpack
+```
+
 ### PyTorch Neuron Release [1.0.1168.0]
 
 Added ``` aten::ScalarImplicit ```

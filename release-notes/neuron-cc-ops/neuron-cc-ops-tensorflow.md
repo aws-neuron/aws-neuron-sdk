@@ -1,5 +1,14 @@
 # Supported operators [TensorFlow]
 
+### Neuron Compiler Release [1.0.16764]
+
+Added ```
+LogSoftmax
+Neg
+ResizeBilinear
+ResizeNearestNeighbor
+```
+
 ### Neuron Compiler Release [1.0.15275]
 
 Added ```Neg```

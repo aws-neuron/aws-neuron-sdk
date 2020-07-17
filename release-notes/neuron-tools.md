@@ -2,13 +2,13 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 06/18/2020
+# Known Issues and Limitations 07/16/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
 
-# [1.0.9171.0]
+# [1.0.9700.0]
 
-Date: 6/18/2020
+Date: 07/16/2020
 
 ## Major New Features
 
@@ -16,20 +16,11 @@ Date: 6/18/2020
 
 ## Improvements
 
-* n/a
+* neuron-ls now supports JSON output format through a new command line option --json-output.
 
 ## Resolved Issues
 
-*  In the versions of aws-neuron-runtime-base and aws-neuron-runtime, yum downgrade/update removed the service unit files. This results in neuron-discovery and neuron-rtd start failures. 
-
-Please update the Neuron Runtime ingredients on AL2 by first removing the old package and installing the latest:
-```
-# Amazon Linux 2
-sudo yum remove aws-neuron-runtime-base
-sudo yum remove aws-neuron-runtime
-sudo yum install aws-neuron-runtime-base
-sudo yum install aws-neuron-runtime
-```
+* n/a
 
 
 # [1.0.9043.0]

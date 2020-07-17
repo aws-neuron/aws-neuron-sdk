@@ -4,6 +4,20 @@ This document lists the release notes for the Neuron Conda-Pytorch package.
 
 ### [Conda Tensorflow Release Notes](../tensorflow-neuron.md)
 
+# [1.5.1.1.0.251.0_2.0.783.0]
+
+Date: 07/16/2020
+
+Now supporting Python 3.7 Conda packages in addition to Python 3.6 Conda packages.
+
+## Included Neuron Packages
+
+[neuron-cc-1.0.16861.0](../neuron-cc.md)
+
+[torch_neuron-1.0.1386.0](../torch-neuron.md)
+
+torch_neuron_base-1.5.1.1.0.251.0
+
 # [1.3.0.1.0.215.0-2.0.633.0]
 
 Date 6/11/2020

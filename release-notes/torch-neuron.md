@@ -2,7 +2,24 @@
 
 This document lists the release notes for the Pytorch-Neuron package.
 
-## Known Issues and Limitations - Updated 6/11/2020
+## Known Issues and Limitations - Updated 07/16/2020
+The following are not torch-neuron limitations, but may impact models you can successfully torch.neuron.trace 
+* The current torchvision version has dropped support for Python 3.5
+* The current HuggingFace transformers version has dropped support for Python 3.5
+
+# [1.0.1373.0]
+
+Date: 07/16/2020
+
+## Summary
+This release adds auto-partitioning, model analysis and PyTorch 1.5.1 support, along with a number of new operators
+
+## Major New Features
+* Support for Pytorch 1.5.1 
+* Introduce an automated operator device placement mechanism in torch.neuron.trace to run sub-graphs that contain operators that are not supported by the neuron compiler in native PyTorch. This new mechanism is on by default and can be turned off by adding argument fallback=False to the compiler arguments.
+* Model analysis to find supported and unsupported operators in a model
+
+## Resolved Issues
 
 # [1.0.1168.0]
 

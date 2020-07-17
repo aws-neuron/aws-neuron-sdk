@@ -3,11 +3,33 @@
 This document lists the release notes for the TensorFlow-Neuron package.
 
 
-# Known Issues and Limitations - updated 6/11/2020
+# Known Issues and Limitations - updated 07/16/2020
 
 * Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
 ```terminate called after throwing an instance of 'std::bad_alloc'```
 Solution: run compilation on a c5.4xlarge instance type or larger.
+
+# [1.15.3.1.0.1891.0]
+
+Date: 07/16/2020
+
+## Summary
+
+This version contains a few bug fixes and user experience improvements.
+
+## Dependency change
+
+1. Bump tensorflow base package version number to 1.15.3
+2. Add `tensorflow >= 1.15.0, < 1.16.0` as an installation dependency so that packages depending on tensorflow can be installed together with tensorflow-neuron without error
+
+## New Features
+
+1. `tensorflow-neuron` now displays a summary of model performance when profiling is enable by setting environment variable `NEURON_PROFILE`
+
+## Resolved Issues
+
+1. Environment variable `NEURON_PROFILE` can now be set to a non-existing path which will be automatically created
+2. Fixed a bug in `tfn.saved_model.compile` that causes compilation failure when `dynamic_batch_size=True` is specified on a SavedModel with unknown rank inputs.
 
 # [1.15.2.1.0.1796.0]
 
