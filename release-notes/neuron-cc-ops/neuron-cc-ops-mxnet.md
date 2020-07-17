@@ -1,5 +1,9 @@
 # Supported operators [MXNet]
 
+### Neuron Compiler Release [1.0.16861.0]
+
+Removed ```log``` (Was erroneously reported as added in previous release. )
+
 ### Neuron Compiler Release [1.0.15275]
 
 Added ```log```

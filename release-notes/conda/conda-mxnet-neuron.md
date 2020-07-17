@@ -2,6 +2,18 @@
 
 This document lists the release notes for the Neuron Conda-MxNet package.
 
+# [1.5.1.1.0.2093.0-2.0.579.0]
+
+Date: 07/16/2020
+
+Now supporting Python 3.7 Conda packages in addition to Python 3.6 Conda packages.
+
+## Included Neuron Packages
+
+neuron_cc-1.0.16861.0
+
+mxnet_neuron-1.5.1.1.0.2093.0
+
 # [1.5.1.1.0.2033.0-2.0.489.0]
 
 Date: 06/11/2020

@@ -14,7 +14,7 @@ The supported operators are also listed here:
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
-## Known issues and limitations - updated 06/11/2020
+## Known issues and limitations - updated 07/16/2020
 
 1. **Control flow** Neuron only supports control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
 2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize. As a result, we limit CNN models (e.g. ResNet) to have an input size of up to 480x480 fp16/32, batch size=4; LSTM models (e.g. GNMT) are limited to a time step limit of up to 900; MLP models (like BERT) are limited up to sequence-length=128, batch=8.
@@ -25,6 +25,30 @@ The supported operators are also listed here:
 7. On Ubuntu16, ResNet50 FP32 batch 1 compilation fails when "--batch_en" is used. On Ubuntu 18, this is not an issue.
 8. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
 9. The new manually-selected option "-O2" may help address some of these limitations in some cases.
+
+
+
+# [1.0.16861.0]
+
+Date 7/16/2020
+
+## Summary
+
+This release has some bug fixes and some functional and performance improvements to support compilation of several neural networks.
+
+## Major New Features
+This release
+* Supports compilation of PoseNet, tested for images of specific resolutions upto 736.
+* Update the -O2 with a new memory allocator to reduce spilling to DRAM
+* Improved performance of the '-O2' on BERT base, and openpose pose network.
+
+## Resolved Issues
+* Resolved compilation error in Vgg16 batch 1
+
+
+## Other Notes
+- Some versions of Inception network may fail to compile in Tensorflow on Ubuntu 16 in conda environment. The symptom is neuron-cc backend data race error. As a workaround use Ubuntu 18, Amazon Linux 2, or virtual env, or use neuron-cc with flag -O2.
+
 
 # [1.0.15275.0]
 
