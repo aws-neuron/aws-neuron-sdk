@@ -11,6 +11,7 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 ## Getting started 
 ### Tutorials 
 * [Using Neuron to run Resnet50 inference](./tutorial-compile-infer.md)
+* [Using Neuron to run OpenPose inference](../../src/examples/tensorflow/openpose_demo/)
 * [Using Neuron to run BERT-Large inference](../../src/examples/tensorflow/bert_demo/README.md)
 * [Using NeuronCore Groups](./tutorial-NeuronCore-Group.md)
 * [TensorFlow Serving](./tutorial-tensorflow-serving.md)
