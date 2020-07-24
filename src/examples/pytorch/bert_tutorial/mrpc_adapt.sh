@@ -35,12 +35,10 @@ pushd .
 cd $TRANSFORMER_DIR
 
 python -m torch.distributed.launch --nproc_per_node 8 ./examples/text-classification/run_glue.py   \
-    --model_type bert \
     --model_name_or_path bert-large-uncased-whole-word-masking \
     --task_name MRPC \
     --do_train   \
     --do_eval   \
-    --do_lower_case   \
     --data_dir $GLUE_DIR/MRPC/   \
     --max_seq_length 128   \
     --per_gpu_eval_batch_size=8   \
