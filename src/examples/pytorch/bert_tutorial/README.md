@@ -6,9 +6,9 @@ BERT (Bidirectional Encoder Representations from Transformers) is a Google Resea
 
 This tutorial is using Jupyter notebooks to adapt the BERTlarge model from https://github.com/huggingface/transformers, for the purpose of classifying sentences as having similar or dissimilar meaning, based on the MRPC corpus. You can find more here from Hugging Face: https://github.com/huggingface/transformers#fine-tuning-bert-model-on-the-mrpc-classification-task
 
-**Note that automatic partitioning is now released**, you use the auto-partitioner on BERT as described [in this Jupyter notebook](tutorial_pretrained_bert.ipynb)
+**Note that automatic partitioning is now released**, you use the auto-partitioner on BERT as described [in this Jupyter notebook](tutorial_pretrained_bert.ipynb).  If you are going to be doing manual partitioning it is important to execute the steps in this guide and not run the notebook without the appropriate installation steps
 
-In this tutorial we will use a p3.16xlarge instance for adapting the model, a c5n.4xl for compilation and an inf1.2xlarge for running inference with the model.  The aim is to demonstrate the process of adapting a model, manually partitioning a graph in PyTorch, compile, deploy and measure performance.   
+In this tutorial we will use a p3.16xlarge instance for adapting the model (optional), a c5n.4xl for compilation and an inf1.2xlarge for running inference with the model.  The aim is to demonstrate the process of adapting a model, manually partitioning a graph in PyTorch, compile, deploy and measure performance.   
 
 In this tutorial we’ll use the AWS Deep Learning AMI. This tutorial assumes you know how to configure your [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html), which is required for the notebooks to run.
 
