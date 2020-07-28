@@ -4,9 +4,11 @@
 
 BERT (Bidirectional Encoder Representations from Transformers) is a Google Research project published in 2018 (https://arxiv.org/abs/1810.04805).  BERT has a number of practical applications, it can be used for question answering, sequence prediction and sequence classification amongst other tasks.
 
-This tutorial is using Jupyter notebooks to adapt the BERTlarge model from https://github.com/huggingface/transformers, for the purpose of classifying sentences as having similar or dissimilar meaning, based on the MRPC corpus. You can find more here from Hugging Face: https://github.com/huggingface/transformers#fine-tuning-bert-model-on-the-mrpc-classification-task
+**Note that automatic partitioning is now released**, you use the auto-partitioner on BERT as described [in this Jupyter notebook](tutorial_pretrained_bert.ipynb).  This should be the normal way of compiling BERT, is much easier and should be as performant!  
 
-**Note that automatic partitioning is now released**, you use the auto-partitioner on BERT as described [in this Jupyter notebook](tutorial_pretrained_bert.ipynb).  If you are going to be doing manual partitioning it is important to execute the steps in this guide and not run the notebook without the appropriate installation steps
+If you are going to be doing manual partitioning it is important to execute the steps in this guide and not run the notebook without the appropriate installation steps below.  This is intended for advanced users who find that the automated partitioning does not perform, and who need more control.
+
+This tutorial is using Jupyter notebooks to adapt the BERTlarge model from https://github.com/huggingface/transformers, for the purpose of classifying sentences as having similar or dissimilar meaning, based on the MRPC corpus. You can find more here from Hugging Face: https://github.com/huggingface/transformers#fine-tuning-bert-model-on-the-mrpc-classification-task
 
 In this tutorial we will use a p3.16xlarge instance for adapting the model (optional), a c5n.4xl for compilation and an inf1.2xlarge for running inference with the model.  The aim is to demonstrate the process of adapting a model, manually partitioning a graph in PyTorch, compile, deploy and measure performance.   
 
