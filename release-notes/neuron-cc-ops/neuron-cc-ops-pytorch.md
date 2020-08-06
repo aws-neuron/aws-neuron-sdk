@@ -7,6 +7,10 @@ import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
 
+
+### PyTorch Neuron Release [1.0.1522.0]
+* No change
+
 ### PyTorch Neuron Release [1.0.1386.0]
 
 Added the following instructions. Please note, primitives are included in this list from this release.
