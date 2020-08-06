@@ -13,6 +13,21 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.8813.0]
+
+Date: 08/05/2020
+
+## Summary
+Patching a bug from prior versions that could lead to crashes under load.
+
+## Major New Features
+* n/a
+
+## Resolved Issues
+* Fixed a race condition in the runtime that was leading to crashes in some cases of load testing.  
+
+
+
 # [1.0.8444.0]
 
 Date: 07/16/2020

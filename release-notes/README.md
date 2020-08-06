@@ -1,5 +1,8 @@
 # Neuron Release Notes
 
+## August 4, 2020 Release
+Bug fix for a latent issue caused by a race condition in Neuron Runtime leading to possible crashes. The crash was observed under stress load conditons.  All customers are encouraged to update the latest Neuron Runtime package (aws-neuron-runtime), version 1.0.8813.0 or newer.  Other Neuron packages are being updated as well, but are to be considered non-critical updates.
+
 ## July 16, 2020 Release
 This release of Neuron SDK adds support for the OpenPose (posenet) Neural Network. An example of using Openpose for end to end inference is available [here](../src/examples/tensorflow/openpose_demo/).
   
