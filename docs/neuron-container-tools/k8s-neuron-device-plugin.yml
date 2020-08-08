@@ -17,6 +17,7 @@ spec:
       labels:
         name: neuron-device-plugin-ds
     spec:
+      serviceAccount: neuron-device-plugin
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -49,18 +50,33 @@ spec:
                       - inf1.6xlarge
                       - inf1.24xlarge
       containers:
-        - image: 790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin:1.0.9043.0
-          imagePullPolicy: Always
-          name: k8s-neuron-device-plugin-ctr
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
-          volumeMounts:
-            - name: device-plugin
-              mountPath: /var/lib/kubelet/device-plugins
+        #Device Plugin containers are available both in us-east and us-west ecr
+        #repos
+      - image: 790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin:latest
+        imagePullPolicy: Always
+        name: neuron-device-plugin
+        env:
+        - name: KUBECONFIG
+          value: /etc/kubernetes/kubelet.conf
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+          - name: device-plugin
+            mountPath: /var/lib/kubelet/device-plugins
+          - name: infa-map
+            mountPath: /run
       volumes:
         - name: device-plugin
           hostPath:
             path: /var/lib/kubelet/device-plugins
+        - name: infa-map
+          hostPath:
+            path: /run
+
 

@@ -7,6 +7,12 @@ import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
 
+### PyTorch Neuron Release [1.0.1532.0]
+Added:
+```
+aten::ones
+```
+
 
 ### PyTorch Neuron Release [1.0.1522.0]
 * No change
