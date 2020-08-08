@@ -1,5 +1,11 @@
 # Neuron Release Notes
 
+## August 7, 2020 Release
+This release of the Neuron SDK delivers performance enhancements for the BERT Base model. Sequence lengths including  128, 256 and 512 were found to have best performance at batch size 6, 3 and 1 respectively using publically available versions of both Pytorch and Tensorflow-based models. The compiler option "-O2" was used in all cases. 
+
+A new Kubernetes scheduler extension is included in this release to improve pod scheduling on inf1.6xlarge and inf1.24xlarge instance sizes.  Details on how the scheduler works and how to apply the scheduler can be found [here](../docs/neuron-container-tools/k8s-neuron-scheduler.md).
+
+
 ## August 4, 2020 Release
 Bug fix for a latent issue caused by a race condition in Neuron Runtime leading to possible crashes. The crash was observed under stress load conditons.  All customers are encouraged to update the latest Neuron Runtime package (aws-neuron-runtime), version 1.0.8813.0 or newer.  Other Neuron packages are being updated as well, but are to be considered non-critical updates.
 

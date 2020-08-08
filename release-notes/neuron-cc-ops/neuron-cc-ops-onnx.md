@@ -1,6 +1,10 @@
 # Supported operators [ONNX]
 
 
+### Neuron Compiler Release [1.0.18001]
+
+No changes
+
 ### Neuron Compiler Release [1.0.17937]
 
 No changes
