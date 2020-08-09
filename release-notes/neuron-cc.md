@@ -14,7 +14,7 @@ The supported operators are also listed here:
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
-## Known issues and limitations - updated 08/07/2020
+## Known issues and limitations - updated 08/08/2020
 
 1. **Control flow** Neuron only supports control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
 2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize. As a result, we limit CNN models (e.g. ResNet) to have an input size of up to 480x480 fp16/32, batch size=4; LSTM models (e.g. GNMT) are limited to a time step limit of up to 900; MLP models (like BERT) are limited up to sequence-length=128, batch=8. Note: this size limitation on input tensors has been removed by using the "-O2" option - which will be made the default in an upcoming release.
@@ -30,7 +30,7 @@ The supported operators are also listed here:
 
 # [1.0.18001.0]
 
-Date 8/07/2020
+Date 8/08/2020
 
 ## Summary
 

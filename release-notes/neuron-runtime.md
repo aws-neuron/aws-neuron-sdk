@@ -15,7 +15,7 @@ Use this table to determine the version of Runtime that will support the version
 
 # [1.0.8896.0]
 
-Date: 08/07/2020
+Date: 08/08/2020
 
 ## Summary
 Bug fix only.

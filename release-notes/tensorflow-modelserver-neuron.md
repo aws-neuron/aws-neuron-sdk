@@ -5,7 +5,7 @@ This document lists the release notes for the TensorFlow-Model-Server-Neuron pac
 
 # [1.15.0.1.0.1965.0]
 
-Date: 08/07/2020
+Date: 08/08/2020
 
 ## Summary
 

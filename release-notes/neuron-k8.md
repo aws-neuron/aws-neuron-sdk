@@ -11,11 +11,10 @@ aws ecr list-images --registry-id 790709498068 --repository-name  neuron-device-
 aws ecr list-images --registry-id 790709498068 --repository-name  neuron-scheduler --region us-west-2
 ```
 
----
 
 # [1.0.11000.0]
 
-Date: 08/07/2020
+Date: 08/08/2020
 
 ## Summary
 First release of the Neuron K8 Scheduler extension.
