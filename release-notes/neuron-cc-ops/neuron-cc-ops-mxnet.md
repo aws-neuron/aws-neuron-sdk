@@ -1,5 +1,11 @@
 # Supported operators [MXNet]
 
+
+### Neuron Compiler Release [1.0.18001.0]
+
+No changes
+
+
 ### Neuron Compiler Release [1.0.17937.0]
 
 No changes
