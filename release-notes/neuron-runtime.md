@@ -13,6 +13,20 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.8896.0]
+
+Date: 08/08/2020
+
+## Summary
+Bug fix only.
+
+## Major New Features
+* n/a
+
+## Resolved Issues
+* Fixed a crash in neuron-rtd when multiple clients attempt to load models at the same time.
+
+
 # [1.0.8813.0]
 
 Date: 08/05/2020
