@@ -31,7 +31,7 @@ To install in your own AMI, please see [Neuron Install Guide](../neuron-install-
 pip install pillow==6.2.2
 
 # We use the --no-deps here to prevent torchvision installing standard torch
-pip install torchvision==0.4.2 --no-deps
+pip install torchvision==0.6.1 --no-deps
 ```
 
 ## Step 3: Compile on compilation instance
@@ -54,7 +54,7 @@ model = models.resnet50(pretrained=True)
 
 ## Tell the model we are using it for evaluation (not training)
 model.eval()
-model_neuron = torch.neuron.trace(model, example_inputs=[image])
+model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
 
 ## Export to saved model
 model_neuron.save("resnet50_neuron.pt")
