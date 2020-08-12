@@ -41,6 +41,7 @@ pip install pip setuptools --upgrade
 pip install -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install pycocotools==2.0.0
 pip install tensorflow-serving-api==1.15.0 --no-deps
+pip install tensorflow-neuron --force --no-deps --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 2. Clone NVIDIA's DeepLearningExamples repo that contains PyTorch SSD300.
