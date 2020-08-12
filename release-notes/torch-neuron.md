@@ -24,7 +24,7 @@ Date: 08/05/2020
 Various minor improvements.  
 
 
-# [1.0.1373.0]
+# [1.0.1386.0]
 
 Date: 07/16/2020
 
