@@ -16,12 +16,10 @@ For this demo, launch one inf1.xlarge EC2 instance. We recommend using the lates
 
 Please configure your ubuntu16/ubuntu18/yum repo following the steps in the [Neuron installation guide](../../../../docs/neuron-install-guide.md) in order to install `tensorflow-model-server-neuron`.
 
-Update to the latest neuron software by executing the following commands :
+Activate the `aws_neuron_tensorflow_p36` conda environment by executing the following command:
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-conda install numpy=1.17.2 --yes --quiet
-conda update tensorflow-neuron
 ```
 
 ## Generating Neuron compatible SSD300 TensorFlow SavedModel
@@ -38,9 +36,8 @@ sudo apt update
 sudo apt install g++ python3-dev unzip
 sudo apt install tensorflow-model-server-neuron
 pip install pip setuptools --upgrade
-pip install -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install -U -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install pycocotools==2.0.0
-pip install tensorflow-serving-api==1.15.0 --no-deps
 ```
 
 2. Clone NVIDIA's DeepLearningExamples repo that contains PyTorch SSD300.
