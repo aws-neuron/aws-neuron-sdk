@@ -1,5 +1,8 @@
 # Neuron Release Notes
 
+## August 19, 2020 Release
+Bug fix for an error reporting issue with the Neuron Runtime.  Previous versions of the runtime were only reporting uncorrectable errors on half of the dram per Inferentia.  Other Neuron packages are not changed.
+
 ## August 8, 2020 Release
 This release of the Neuron SDK delivers performance enhancements for the BERT Base model. Sequence lengths including  128, 256 and 512 were found to have best performance at batch size 6, 3 and 1 respectively using publically available versions of both Pytorch (1.5.x) and Tensorflow-based (1.15.x) models. The compiler option "-O2" was used in all cases. 
 

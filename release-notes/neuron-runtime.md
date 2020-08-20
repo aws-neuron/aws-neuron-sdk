@@ -13,6 +13,20 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.9197.0]
+
+Date: 08/19/2020
+
+## Summary
+Bug fix only.
+
+## Major New Features
+* n/a
+
+## Resolved Issues
+* get-hw-counters API was returning ECC error counters for only one half of the Inferentia DRAM.
+
+
 # [1.0.8896.0]
 
 Date: 08/08/2020
