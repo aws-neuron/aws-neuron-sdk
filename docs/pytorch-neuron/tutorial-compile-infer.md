@@ -23,7 +23,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Compilation instance installations
 
-If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](https://github.com/aws/private-aws-neuron-sdk-staging/blob/1.8.0/release-notes/dlami-release-notes.md#conda-dlami).
+If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
 
 To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron)
 
