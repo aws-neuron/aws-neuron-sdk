@@ -108,10 +108,7 @@ def tf_bbox_view(detection_feed, modules, ndim):
     return tensor
 
 
-compiler_args = ['--enable-replication', 'True']
-neuroncc_looseversion = LooseVersion(pkg_resources.get_distribution('neuron-cc').version)
-if neuroncc_looseversion > LooseVersion('1.0.9210.0'):
-    compiler_args.append('--tensorizer-options=--disable-inline-cast')
+compiler_args = ['-O2']
 @tfn.fuse(input_shapes=[[1, 300, 300, 3]], output_shapes=[[1, 38, 38, 1024]], dynamic_batch_size=True, compiler_args=compiler_args)
 def tf_feature_extractor(input_tensor, resnet):
     with tf.name_scope('FeatureExtractor'):
@@ -298,7 +295,7 @@ def main():
 
     if not args.disable_version_check:
         neuroncc_version = LooseVersion(pkg_resources.get_distribution('neuron-cc').version)
-        if neuroncc_version < LooseVersion('1.0.5939') or (LooseVersion('1.0.8300') < neuroncc_version and neuroncc_version <= LooseVersion('1.0.9220')):
+        if neuroncc_version < LooseVersion('1.0.18000'):
             raise RuntimeError(
                 'neuron-cc version {} is too low for this demo. Please upgrade '
                 'by "pip install -U neuron-cc --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(neuroncc_version))
