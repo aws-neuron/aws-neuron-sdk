@@ -11,6 +11,13 @@ aws ecr list-images --registry-id 790709498068 --repository-name  neuron-device-
 aws ecr list-images --registry-id 790709498068 --repository-name  neuron-scheduler --region us-west-2
 ```
 
+To Pull the Images from ECR:
+```
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 790709498068.dkr.ecr.us-west-2.amazonaws.com
+docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
+docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
+```
+
 
 # [1.0.11000.0]
 
