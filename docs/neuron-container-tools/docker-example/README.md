@@ -16,7 +16,7 @@ Run neuron-rtd container as shown below. A volume must be mounted to :/sock wher
 open a UDS socket. The application can interact with runtime using this socket.
 
 ```bash
-$(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 790709498068)
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 790709498068.dkr.ecr.us-east-1.amazonaws.com
 docker pull 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
 docker tag 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest neuron-rtd
 mkdir /tmp/neuron_rtd_sock
