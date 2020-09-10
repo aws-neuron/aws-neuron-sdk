@@ -71,7 +71,7 @@ This converts PyTorch SSD300 model and checkpoint to a Neuron-compatible TensorF
 tensorflow_model_server_neuron --model_base_path=$(pwd)/ssd300_tf_neuron &
 ```
 
-7. In client, evaluate the Neuron-compatible TensorFlow SavedModel for both accuracy and performance. Note that this client by default assumes a `tensorflow-model-server-neuron` listening at `localhost:8500`. On inf1.xlarge, the expected throughput is 83 images/second once the server is fully warmed up, and the expected mean average precision (mAP) is 0.253.
+7. In client, evaluate the Neuron-compatible TensorFlow SavedModel for both accuracy and performance. Note that this client by default assumes a `tensorflow-model-server-neuron` listening at `localhost:8500`. On inf1.xlarge, the expected throughput is 100 images/second once the server is fully warmed up, and the expected mean average precision (mAP) is 0.253.
 
 ```bash
 python ssd300_evaluation_client.py --val2017=./val2017 --instances_val2017_json=./annotations/instances_val2017.json
