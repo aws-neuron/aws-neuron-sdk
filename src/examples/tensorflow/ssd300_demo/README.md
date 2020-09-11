@@ -38,7 +38,7 @@ sudo apt update
 sudo apt install g++ python3-dev unzip
 sudo apt install tensorflow-model-server-neuron
 pip install pip setuptools --upgrade
-pip install -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install -U -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install pycocotools==2.0.0
 pip install tensorflow-serving-api==1.15.0 --no-deps
 ```
