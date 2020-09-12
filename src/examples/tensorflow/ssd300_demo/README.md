@@ -38,7 +38,9 @@ pip install -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.ama
 2. Clone NVIDIA's DeepLearningExamples repo that contains PyTorch SSD300.
 ```bash
 git clone https://github.com/NVIDIA/DeepLearningExamples.git
-( cd DeepLearningExamples && git checkout a644350589f9abc91b203f73e686a50f5d6f3e96 )
+cd DeepLearningExamples
+git checkout a644350589f9abc91b203f73e686a50f5d6f3e96
+cd ..
 ```
 
 3. Download PyTorch SSD300 checkpoint file.
