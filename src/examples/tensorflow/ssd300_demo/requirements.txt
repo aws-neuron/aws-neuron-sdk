@@ -7,3 +7,5 @@ torchvision<1.0
 pillow<8.0
 matplotlib<4.0
 Cython<0.29
+pycocotools==2.0.1
+tensorflow-serving-api==1.15.0
