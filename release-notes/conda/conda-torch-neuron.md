@@ -2,7 +2,20 @@
 
 This document lists the release notes for the Neuron Conda-Pytorch package.
 
-### [Conda Tensorflow Release Notes](../tensorflow-neuron.md)
+## Known Issues
+
+When TorchVision is updated to version >= 0.5, running Neuron compilation would crash with "Segmentation fault (core dumped)" error. This issue is resolved with version <> of Conda PyTorch Neuron package.
+
+
+# []
+
+Date:
+
+## Included Neuron Packages
+
+## Resolved Issues
+
+When TorchVision is updated to version >= 0.5, running Neuron compilation would crash with "Segmentation fault (core dumped)" error.
 
 
 # [1.5.1.1.0.298.0_2.0.880.0]
