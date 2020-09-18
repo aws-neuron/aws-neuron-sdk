@@ -4,21 +4,6 @@ This document lists the release notes for the Neuron Conda-Pytorch package.
 
 ### [Conda Tensorflow Release Notes](../tensorflow-neuron.md)
 
-# []
-
-Date:
-
-## Known Issue:
-
-Due to changes to Torch-Neuron Conda package content in this release, updating from current Torch-Neuron conda environment has no effect. Instead please do the following to update:
-
-conda uninstall torch-neuron
-conda install torch-neuron
-
-## Included Neuron Packages
-
-[neuron-cc-1.0.18001.0](../neuron-cc.md)
-[torch_neuron-1.0.1532.0](../torch-neuron.md)
 
 # [1.5.1.1.0.298.0_2.0.880.0]
 
