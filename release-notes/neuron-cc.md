@@ -17,7 +17,7 @@ The supported operators are also listed here:
 ## Known issues and limitations - updated 08/08/2020
 
 1. **Control flow** Neuron only supports control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
-2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The current Neuron compiler release has a limitation in terms of the size of neural network it could effectively optimize. As a result, we limit CNN models (e.g. ResNet) to have an input size of up to 480x480 fp16/32, batch size=4; LSTM models (e.g. GNMT) are limited to a time step limit of up to 900.
+2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The Neuron compiler has relaxed many limitations on these input sizes. As sizes grow in the combination of tensors and batch sizes, compile time can grow and other issues may arise. Please contact us for help.
 3. **Data layout**  The Neuron compiler supports multiple data layout format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will require Neuron to insert additional _*transpose*_ operations, causing a degradation in performance.
 4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release except for SSD-300, yolo v3,4. More support is coming in future releases.
 5. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performance degradation.
@@ -32,11 +32,13 @@ Date 9/16/2020
 
 ## Summary
 
-Various performance improvements - both compilation time and inference speed of object recognition models.
+Various performance improvements - both compilation time and inference speed of object recognition models. CHange to default -O2 options.
 
 ## Major New Features
 
 Improved inference performance of yolo v3, v4, SSD300, as well as BERT models with Gelu lowered to Erf.
+
+Modifed such that -O2 is now the default behavior and does not need to be specified.
 
 ## Resolved Issues
 
