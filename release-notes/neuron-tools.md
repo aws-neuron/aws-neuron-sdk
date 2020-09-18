@@ -12,7 +12,7 @@ Date: 09/18/2020
 
 ## Major New Features
 
-* Beta release of **neuron-monitor** for streaming metric information about inference execution from your inf1.  We provided a sample script for connecting neuron-monitor output directly into CloudWatch.  Usage of the new tool is a simple one-liner: 
+Beta release of **neuron-monitor** for streaming metric information about inference execution from your inf1.  We provided a sample script for connecting neuron-monitor output directly into CloudWatch.  Usage of the new tool is a simple one-liner: 
 
 ```
 neuron-monitor | neuron-monitor-cloudwatch.py --namespace neuron_monitor_test --region us-west-2
