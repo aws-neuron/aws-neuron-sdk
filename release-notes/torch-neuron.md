@@ -8,6 +8,15 @@ The following are not torch-neuron limitations, but may impact models you can su
 * The current HuggingFace transformers version has dropped support for Python 3.5
 * There are known issues when customer use a mixture of conda and pip packages.  We strongly recommend that you install aws neuron conda packages if you are using a conda environment, and use the pip installation if you are working in a base python environment (or a native python virtual environment) as recommended in our installation notes [here](../docs/neuron-install-guide.md#neuron-conda-packages)
 
+# [1.0.1720.0]
+
+Date: 09/18/2020
+
+## Summary
+* Various minor improvements to the Pytorch autopartitioner feature
+* Support for the operators aten::constant_pad_nd, aten::meshgrid
+* Improved performance on various torchvision models.  Of note are resnet50 and vgg16
+
 # [1.0.1532.0]
 
 Date: 08/08/2020
