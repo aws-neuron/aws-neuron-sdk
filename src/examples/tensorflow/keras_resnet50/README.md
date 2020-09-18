@@ -37,7 +37,7 @@ Convert full graph to FP16 (resnet50_fp16_keras_opt.pb will be generated):
 python fp32tofp16.py  --graph resnet50_fp32_keras_opt.pb --out_graph resnet50_fp16_keras_opt.pb
 ```
 
-Run the compilation script sweep_all to sweep through various batch sizes up to 5 and several NeuronCore Group sizes up to 16. The script calls the compilation script pb2sm_compile.py which tries to perform compilation with static-weights and falls back to no static-weights if compilation fails. This step takes about 80 minutes on `c5.4xlarge`.
+Run the compilation script sweep_all to sweep through various batch sizes up to 5 and several NeuronCore Group sizes up to 16. The script calls the compilation script pb2sm_compile.py which tries to perform compilation with static-weights and falls back to no static-weights if compilation fails. Some error messages are expected due to known issues (see Known Issues section below). This step takes about 80 minutes on `c5.4xlarge`.
 
 ```bash
 rm -f *.zip
