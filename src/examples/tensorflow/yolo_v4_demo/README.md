@@ -1,3 +1,6 @@
+## Working with YOLO v4 using AWS Neuron SDK
+AWS Neuron SDK is now supporting YOLO v4! Take a look at [`evaluate.ipynb`](https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/tensorflow/yolo_v4_demo/evaluate.ipynb) which contains necessary steps for compiling and evaluating a tensorflow YOLO v4 model on AWS Inferentia.
+
 ## Optimizing image pre-processing and post-processing for object detection models
 
 End-to-end object detection pipelines usually contain image pre-post-processing operators that cannot run efficiently on Inferentia. DecodeJPEG and NonMaxSuppression are typical examples. In practice, we may simply place these operators on CPU using the AWS Neuron machine learning framework integration. However, Inferentia is such a high performance machine learning accelerator that, once the model successfully compiles and runs, these simple pre-post-processing operators can become the new performance bottleneck! In this tutorial, we explain some commonly used tensorflow techniques for optimizing the performance of these pre-post-processing operators so that we can fully unleash the potential of Inferentia.
