@@ -1,5 +1,6 @@
 ## Working with YOLO v4 using AWS Neuron SDK
-AWS Neuron SDK is now supporting YOLO v4! Take a look at [`evaluate.ipynb`](https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/tensorflow/yolo_v4_demo/evaluate.ipynb) which contains necessary steps for compiling and evaluating a tensorflow YOLO v4 model on AWS Inferentia.
+The [`evaluate.ipynb`](https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/tensorflow/yolo_v4_demo/evaluate.ipynb) notebook contains an example on how to take an open source YOLO v4 models, and run it on AWS Inferentia.
+
 
 ## Optimizing image pre-processing and post-processing for object detection models
 
