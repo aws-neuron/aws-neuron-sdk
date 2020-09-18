@@ -1,15 +1,19 @@
-# neuron-monitor beta User Guide
+# User Guide for Neuron Monitor *(BETA)*
+
+WARNING: This tool is currently in "Beta".  We will remove the beta label and make gaurantees to not remove or rename the metrics without adequate warning asap.
+
+---
 
 **neuron-monitor** collects metrics and stats from the Neuron runtimes running on the system and streams the collected data to ```stdout``` in ```JSON``` format.
 
-These metrics and stats are organized into ***metric groups*** which can be configured by providing a configuration file as described in the [Using neuron-monitor](#using-neuron-monitor) section.
+These metrics and stats are organized into ***metric groups*** which can be configured by providing a configuration file as described in [Using neuron-monitor](#using-neuron-monitor).
 
-As detailed in the [Execution model](#execution-model) section, **neuron-monitor** will:
+When running, **neuron-monitor** will: 
 
-* collect the data for the metric groups which, based on the elapsed time since their last update, need to be updated
-* take the newly collected data and consolidate it into a large report
-* serialize that report to JSON and stream it to stdout from where it can be consumed by other tools - an example of such a tool is provided in the form of the [neuron-monitor Cloudwatch example](#companion-scripts) and is installed in `/opt/aws/neuron/bin/neuron-monitor-cloudwatch.py`
-* wait until at least one ***metric group*** needs to be collected and repeat this flow
+* Collect the data for the metric groups which, based on the elapsed time since their last update, need to be updated
+* Take the newly collected data and consolidate it into a large report
+* Serialize that report to JSON and stream it to stdout from where it can be consumed by other tools - an example of such a tool is provided in the form of the [neuron-monitor Cloudwatch example](#companion-scripts) and is installed in `/opt/aws/neuron/bin/neuron-monitor-cloudwatch.py`
+* Wait until at least one ***metric group*** needs to be collected and repeat this flow
 
 
 ## Using neuron-monitor
