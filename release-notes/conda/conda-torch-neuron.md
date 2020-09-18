@@ -12,8 +12,10 @@ Date:
 
 Due to changes to Torch-Neuron Conda package content in this release, updating from current Torch-Neuron conda environment has no effect. Instead please do the following to update:
 
+```bash
 conda uninstall torch-neuron
 conda install torch-neuron
+```
 
 ## Included Neuron Packages
 
