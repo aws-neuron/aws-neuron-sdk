@@ -8,7 +8,7 @@ This documents lists the release notes for AWS Neuron tools. Neuron tools are us
 
 # [1.0.11054.0]
 
-Date: 09/18/2020
+Date: 09/21/2020
 
 ## Major New Features
 
