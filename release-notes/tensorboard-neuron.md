@@ -1,6 +1,6 @@
 # TensorBoard-Neuron Release Notes
 
-# Known Issues and Limitations - updated 08/08/2020
+# Known Issues and Limitations - updated 09/21/2020
 * Issue: The Chrome trace view in the Neuron Profile plugin may not work due to some APIs being deprecated in Chrome 80+ (see https://github.com/tensorflow/tensorboard/issues/3209).  Solution:
 	1. Find the specific run that you would like to view the Chrome trace for.
 	2. Go to `<tensorboard url>/data/plugin/neuron_profile/data?host=&run=<run>&tag=trace_viewer` and save the chrome trace data.  By default the tensorboard url is `localhost:6006`.  For example, if the run you want to view is `node3/1590687636`, go to `http://localhost:6006/data/plugin/neuron_profile/data?host=&run=node3%2F1590687636&tag=trace_viewer`.
