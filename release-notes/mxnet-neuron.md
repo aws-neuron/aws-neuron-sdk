@@ -8,7 +8,7 @@ This document lists the release notes for MXNet-Neuron framework.
   * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
   
 
-# []
+# [1.5.1.1.1.52.0]
 
 Date 09/21/2020
 
