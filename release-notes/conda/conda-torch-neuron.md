@@ -16,7 +16,7 @@ When TorchVision is updated to version >= 0.5, running Neuron compilation would 
 ## Known Issues
 
 - When TorchVision is updated to version >= 0.5, running Neuron compilation would crash with "Segmentation fault (core dumped)" error. This issue is resolved with version <> of Conda PyTorch Neuron package.
-- When running PyTorch script in latest Torch-Neuron conda environment, you may see errors "AttributeError: module 'numpy' has no attribute 'integer'" and "ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'". This is due to older version of numpy. Please update numpy to version 1.18 using the command "conda update numpy=1.18".  
+- When running PyTorch script in latest Torch-Neuron conda environment, you may see errors "AttributeError: module 'numpy' has no attribute 'integer'" and "ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'". This is due to older version of numpy. Please update numpy to version 1.18 using the command "conda install --force numpy=1.18.1".  
 - Due to changes to Torch-Neuron Conda package content in this release, updating from current Torch-Neuron conda environment has no effect. Instead please do the following to update:
 ```bash
 conda install --force torch-neuron=1.5.1.1.0.1721.0
