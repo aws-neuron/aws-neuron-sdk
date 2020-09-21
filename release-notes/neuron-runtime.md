@@ -15,7 +15,7 @@ Use this table to determine the version of Runtime that will support the version
 
 # [1.0.9592.0]
 
-Date: 09/18/2020
+Date: 09/21/2020
 
 ## Major New Features
 * n/a
