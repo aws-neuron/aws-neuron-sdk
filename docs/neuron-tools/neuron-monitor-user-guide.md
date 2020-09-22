@@ -1,6 +1,6 @@
 # User Guide for Neuron Monitor *(BETA)*
 
-WARNING: This tool is currently in "Beta".  We will remove the beta label and make gaurantees to not remove or rename the metrics without adequate warning asap.
+WARNING: This tool is currently in "Beta".  Metric organization and naming might change during the Beta period.
 
 ---
 
