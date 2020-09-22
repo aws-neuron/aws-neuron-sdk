@@ -36,7 +36,7 @@ Compiler optimization '-O2' option is now enabled by default.
 
 ## Major New Features
 
-Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300, VGG16. BERT models were improved by an additional 10%.
+Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300. BERT models were improved by an additional 10%.
 
 Modifed such that -O2 is now the default behavior and does not need to be specified. Note: some tutorials still explicitly specify "-O2". These will be modified in forthcoming updates.
 
