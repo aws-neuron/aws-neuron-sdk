@@ -21,7 +21,7 @@ Date: 09/21/2020
 * n/a
 
 ## Improvements
-* The “handshake” API can be used between a framework, such as TensorFlow, and neuron-rtd.  The API establishes a unique “session-id” (see the next item) and facilities version exchange between a framework and neuron-rtd.  Version information is used to improve logging and troubleshooting. 
+* The “handshake” API can be used between a framework, such as TensorFlow, and neuron-rtd.  The API establishes a unique “session-id” (see the next item) and facilitates version exchange between a framework and neuron-rtd.  Version information is used to improve logging and troubleshooting. 
 * The API for neural networks loading and for shared memory allocation have been enhanced to allow an optional “session id” to be passed in load/allocate requests.  Session ids are used to associate a framework process with the networks and the shared memory segments used by the process.  Neuron-rtd can optionally monitor framework processes and automatically unload all neural networks loaded by the process and free its shared memory when the process terminates.
 
 ## Resolved Issues
