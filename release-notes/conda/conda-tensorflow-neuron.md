@@ -9,7 +9,7 @@ When running TensorFlow script in latest TensorFlow-Neuron conda environment, yo
 
 # [1.15.3.1.0.2043.0_2.0.894.0]
 
-Date: 09/21/2020
+Date: 09/22/2020
 
 ## Included Neuron Packages
 
