@@ -3,11 +3,15 @@
 This document lists the release notes for the Neuron Conda-Pytorch package.
 
 
-# [1.5.1.1.0.1735.0_2.0.1012.0]
+# [1.5.1.1.0.1721.0_2.0.1017.0]
 
 Date: 09/21/2020
 
 ## Included Neuron Packages
+
+[neuron-cc-1.0.20600.0](../neuron-cc.md)
+
+[torch_neuron-1.0.1721.0](../torch-neuron.md)
 
 ## Resolved Issues
 
