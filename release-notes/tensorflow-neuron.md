@@ -3,7 +3,7 @@
 This document lists the release notes for the TensorFlow-Neuron package.
 
 
-# Known Issues and Limitations - updated 09/21/2020
+# Known Issues and Limitations - updated 09/22/2020
 
 * Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
 ```terminate called after throwing an instance of 'std::bad_alloc'```
@@ -11,7 +11,7 @@ Solution: run compilation on a c5.4xlarge instance type or larger.
 
 # [1.15.3.1.0.2043.0]
 
-Date: 09/21/2020
+Date: 09/22/2020
 
 ## Summary
 
