@@ -138,3 +138,9 @@ conda install nb_conda_kernels
 
 jupyter notebook
 ```
+
+If your jupyter conda environment is not correctly installed - try the following:
+
+```
+python -m ipykernel install --user --name my_notebook_env --display-name "Python (my_notebook_env)"
+```
