@@ -24,7 +24,6 @@ The supported operators are also listed here:
 6. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
 7. On Ubuntu16, ResNet50 FP32 batch 1 compilation fails when "--batch_en" is used. On Ubuntu 18, this is not an issue.
 8. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
-9. The new manually-selected option "-O2" may help address some of these limitations in some cases.
 
 # [1.8.0]
 
@@ -32,18 +31,15 @@ Date 9/16/2020
 
 ## Summary
 
-Various performance improvements - both compilation time and inference speed of object recognition models. CHange to default -O2 options.
+Various performance improvements - both compilation time and inference speed of object recognition models. Change to default -O2.
 
 ## Major New Features
 
-Improved inference performance of yolo v3, v4, SSD300, as well as BERT models with Gelu lowered to Erf.
+Improved inference performance of yolo v3, v4, SSD300, as well as BERT models by 10%.
 
 Modifed such that -O2 is now the default behavior and does not need to be specified.
 
 ## Resolved Issues
-
-Enabled optimized compilation -O2 by default. 
-In rare cases when you want to preserve backward compatibility try -O legacy which is temporary.
 
 Sped up compilation of large models that were taking hours to sub-40 minute.
 
