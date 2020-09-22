@@ -16,34 +16,31 @@ For this demo, launch one inf1.xlarge EC2 instance. We recommend using the lates
 
 Please configure your ubuntu16/ubuntu18/yum repo following the steps in the [Neuron installation guide](../../../../docs/neuron-install-guide.md) in order to install `tensorflow-model-server-neuron`.
 
-Activate the `aws_neuron_tensorflow_p36` conda environment by executing the following command:
-
-```bash
-source activate aws_neuron_tensorflow_p36
-```
-
 ## Generating Neuron compatible SSD300 TensorFlow SavedModel
 First connect to your inf1.xlarge instance
 
 ### Compile open source PyTorch SSD300 model and checkpoint into Neuron compatible SSD300 TensorFlow SavedModel
 
-In the same conda environment and directory ssd300_demo, run the following:
+In the same directory ssd300_demo, run the following:
 
-1. Install dependencies
+1. Create venv and install dependencies
 
 ```bash
 sudo apt update
-sudo apt install g++ python3-dev unzip
+sudo apt install g++ python3-dev python3-venv unzip
 sudo apt install tensorflow-model-server-neuron
+python3 -m venv env
+source ./env/bin/activate
 pip install pip setuptools --upgrade
-pip install -U -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
-pip install pycocotools==2.0.0
+pip install -r ./requirements.txt --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 2. Clone NVIDIA's DeepLearningExamples repo that contains PyTorch SSD300.
 ```bash
 git clone https://github.com/NVIDIA/DeepLearningExamples.git
-( cd DeepLearningExamples && git checkout a644350589f9abc91b203f73e686a50f5d6f3e96 )
+cd DeepLearningExamples
+git checkout a644350589f9abc91b203f73e686a50f5d6f3e96
+cd ..
 ```
 
 3. Download PyTorch SSD300 checkpoint file.
@@ -71,7 +68,7 @@ This converts PyTorch SSD300 model and checkpoint to a Neuron-compatible TensorF
 tensorflow_model_server_neuron --model_base_path=$(pwd)/ssd300_tf_neuron &
 ```
 
-7. In client, evaluate the Neuron-compatible TensorFlow SavedModel for both accuracy and performance. Note that this client by default assumes a `tensorflow-model-server-neuron` listening at `localhost:8500`. On inf1.xlarge, the expected throughput is 83 images/second once the server is fully warmed up, and the expected mean average precision (mAP) is 0.253.
+7. In client, evaluate the Neuron-compatible TensorFlow SavedModel for both accuracy and performance. Note that this client by default assumes a `tensorflow-model-server-neuron` listening at `localhost:8500`. On inf1.xlarge, the expected throughput is 100 images/second once the server is fully warmed up, and the expected mean average precision (mAP) is 0.253.
 
 ```bash
 python ssd300_evaluation_client.py --val2017=./val2017 --instances_val2017_json=./annotations/instances_val2017.json

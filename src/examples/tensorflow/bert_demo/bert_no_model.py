@@ -10,9 +10,6 @@ def main():
     parser.add_argument('--output_saved_model', required=True, help='Output SavedModel that runs on Inferentia')
     parser.add_argument('--batch_size', type=int, default=1)
     args = parser.parse_args()
-    compiler_args = [
-        '--enable-experimental-tensorized-scheduler',
-    ]
     pred = tf.contrib.predictor.from_saved_model(args.input_saved_model)
     no_fuse_ops = [op.name for op in pred.graph.get_operations()]
 
@@ -33,7 +30,6 @@ def main():
     compilation_result = tfn.saved_model.compile(
         args.input_saved_model, args.output_saved_model,
         batch_size=args.batch_size,
-        compiler_args=compiler_args,
         no_fuse_ops=no_fuse_ops,
         force_fuse_ops=force_fuse_ops,
     )
