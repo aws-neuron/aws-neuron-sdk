@@ -8,7 +8,7 @@ The following are not torch-neuron limitations, but may impact models you can su
 * The current HuggingFace transformers version has dropped support for Python 3.5
 * There are known issues when customer use a mixture of conda and pip packages.  We strongly recommend that you install aws neuron conda packages if you are using a conda environment, and use the pip installation if you are working in a base python environment (or a native python virtual environment) as recommended in our installation notes [here](../docs/neuron-install-guide.md#neuron-conda-packages)
 
-# [1.0.1720.0]
+# [1.0.1721.0]
 
 Date: 09/21/2020
 
