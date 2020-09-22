@@ -19,7 +19,7 @@ docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
 ```
 # [1.1.17.0]
 
-Date: 09/18/2020
+Date: 09/22/2020
 
 ## Summary
 Minor internal enhancements.
