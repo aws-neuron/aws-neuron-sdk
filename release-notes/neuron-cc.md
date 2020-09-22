@@ -25,7 +25,7 @@ The supported operators are also listed here:
 7. On Ubuntu16, ResNet50 FP32 batch 1 compilation fails when "--batch_en" is used. On Ubuntu 18, this is not an issue.
 8. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
 
-# [1.8.0]
+# [1.0.20600.0]
 
 Date 9/21/2020
 
@@ -38,7 +38,7 @@ Compiler optimization '-O2' option is now enabled by default.
 
 Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300. BERT models where improved by an additional 10%.
 
-Modifed such that -O2 is now the default behavior and does not need to be specified.
+Modifed such that -O2 is now the default behavior and does not need to be specified. Note: some tutorials still explicitly specify "-O2". These will be modified in forthcoming updates.
 
 ## Resolved Issues
 
