@@ -1,8 +1,8 @@
 # Neuron Tools
 
-# Identifying Inferentia devices
+# Identifying Neuron Devices
 
-To identify number of Inferentia devices in a given instance use the `neuron-ls` command.
+To identify number of Neuron Devices in a given instance use the `neuron-ls` command.
 
 ```
 $ neuron-ls
@@ -20,11 +20,11 @@ $ neuron-ls
 The above output is taken from an Inf1.6xlarge instance.
 - PCI BDF           ->  PCI Bus Device Function (BDF) ID of the device.
 - LOGICAL ID        ->  Logical ID assigned to the device. This id can be used when configuring multiple runtime to use different devices.
-- NEURON CORES      ->  Number of Neuron Cores present in the accelarator.
-- CONNECTED TO      ->  Shows other acclearators connected to this accelarator through PCIe link. (Only connected devices can be used in a neuron core group(NCG) configuration.)
-- RUNTIME ADDRESS   ->  Shows address of runtime process using this device.
-- RUNTIME PID       ->  Shows process id of runtime process using this device.
-- RUNTIME VERSION   ->  Shows version of runtime process using this device.
+- NEURON CORES      ->  Number of NeuronCores present in the NeuronDevice.
+- CONNECTED TO      ->  Shows other NeuronDevices connected to this NeuronDevice. (Only connected devices can be used in a neuron core group(NCG) configuration.)
+- RUNTIME ADDRESS   ->  Shows address of runtime process using this NeuronDevice.
+- RUNTIME PID       ->  Shows process id of runtime process using this NeuronDevice.
+- RUNTIME VERSION   ->  Shows version of runtime process using this NeuronDevice.
 
 # NeuronCore Groups
 Multiple NeuronCores(NC) can be combined to form a NeuronCore Group (NCG).
@@ -44,14 +44,14 @@ Found 4 NCG's
 +--------+----------+--------------------+----------------+
 ```
 The above examples shows there are 4 NCG created on the system with the following grouping
-NCG1: Device0:(Core0, Core1)
-NCG2: Device0:(Core2, Core3), Device1:(Core0, Core1)
-NCG3: Device1:(Core2, Core3), Device2:(Core0)
-NCG2: Device1:(Core1)
+NCG ID 1: Device0:(Core0, Core1)
+NCG ID 2: Device0:(Core2, Core3), Device1:(Core0, Core1)
+NCG ID 3: Device1:(Core2, Core3), Device2:(Core0)
+NCG ID 2: Device1:(Core1)
 
 # Listing Models
-Multiple models can be loaded into a single NCG but only one can be in STARTED state at any given moment.
-Inference can be done only on the models with a STARTED state.
+Multiple models can be loaded into a single NCG but only one can be in READY state at any given moment.
+Inference can be performed only on the models in the READY state.
 
 The `neuron-cli list-model` command should be used to view all the models.
 ```
@@ -71,12 +71,12 @@ $ neuron-cli list-model
 
 - UUID          ->  UUID generated for this model during compile time.
 - MODEL ID      ->  Neuron runtime identifier for this model.
-- MODEL STATUS  ->  READY   = The model is loaded on to the accelerator and active on the core. (Inference can be done only on models with READY state)
-                    STANDBY = The model is loaded on to the accelerator but another model is currently active on the core. (A model switch is needed to start inference)
+- MODEL STATUS  ->  READY   = The model is loaded on to the NeuronDevice and active on the NeuronCore. (Inference can be done only on models with READY state)
+                    STANDBY = The model is loaded on to the NeuronDevice but another model is currently active on the NeuronCore. (A model switch is needed to start inference)
 
 # View Resource Usage
 Each model loaded consumes different amount of memory (host and device), NeuronCore and CPU usage.
-The `neuron-top` command can be used to biew the memory usage.
+The `neuron-top` command can be used to view the memory and NeuronCore usage.
 
 ```
 $ neuron-top
@@ -100,7 +100,7 @@ In the above output:
 - Exec. Unit    ->  BDF of Neuron Device followed by the Neuron Core ID, b:d:f.NC
 - Host Mem      ->  Host memory consumed by the Model in bytes
 - Device Mem    ->  Neuron Device memory consumed by the Model in bytes
-- Neuron Core % ->  Utilization % of the neuron core (If there are no active inferences this value should be 0)
+- Neuron Core % ->  Utilization % of the neuron core at sample time.  If there are no active inferences this value will be 0.
 
 # Gather Debugging information
 Please refer to [Neuron Gatherinfo](./tutorial-neuron-gatherinfo.md)
