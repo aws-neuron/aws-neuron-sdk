@@ -19,9 +19,9 @@ $ neuron-ls
 
 The above output is taken from an Inf1.6xlarge instance.
 - PCI BDF           ->  PCI Bus Device Function (BDF) ID of the device.
-- LOGICAL ID        ->  Logical ID assigned to the device. This id can be used when configuring multiple runtime to use different devices.
+- LOGICAL ID        ->  Logical ID assigned to the NeuronDevice. This id can be used when configuring multiple runtimes to use different NeuronDevices.
 - NEURON CORES      ->  Number of NeuronCores present in the NeuronDevice.
-- CONNECTED TO      ->  Shows other NeuronDevices connected to this NeuronDevice. (Only connected devices can be used in a neuron core group(NCG) configuration.)
+- CONNECTED TO      ->  Shows other NeuronDevices connected to this NeuronDevice. 
 - RUNTIME ADDRESS   ->  Shows address of runtime process using this NeuronDevice.
 - RUNTIME PID       ->  Shows process id of runtime process using this NeuronDevice.
 - RUNTIME VERSION   ->  Shows version of runtime process using this NeuronDevice.
@@ -43,15 +43,15 @@ Found 4 NCG's
 |      4 |        1 |                  2 |              1 |
 +--------+----------+--------------------+----------------+
 ```
-The above examples shows there are 4 NCG created on the system with the following grouping
+The above examples shows there are 4 NCGs created on the system with the following grouping
 NCG ID 1: Device0:(Core0, Core1)
 NCG ID 2: Device0:(Core2, Core3), Device1:(Core0, Core1)
 NCG ID 3: Device1:(Core2, Core3), Device2:(Core0)
 NCG ID 2: Device1:(Core1)
 
 # Listing Models
-Multiple models can be loaded into a single NCG but only one can be in READY state at any given moment.
-Inference can be performed only on the models in the READY state.
+Multiple models can be loaded into a single NCG, but only one can be in READY state at any given moment.
+Inference can be performed only on models in the READY state.
 
 The `neuron-cli list-model` command should be used to view all the models.
 ```
@@ -70,12 +70,12 @@ $ neuron-cli list-model
 ```
 
 - UUID          ->  UUID generated for this model during compile time.
-- MODEL ID      ->  Neuron runtime identifier for this model.
+- MODEL ID      ->  Neuron Runtime identifier for this model.
 - MODEL STATUS  ->  READY   = The model is loaded on to the NeuronDevice and active on the NeuronCore. (Inference can be done only on models with READY state)
                     STANDBY = The model is loaded on to the NeuronDevice but another model is currently active on the NeuronCore. (A model switch is needed to start inference)
 
 # View Resource Usage
-Each model loaded consumes different amount of memory (host and device), NeuronCore and CPU usage.
+Each model loaded consumes a different amount of memory (host and device), NeuronCore and CPU usage.
 The `neuron-top` command can be used to view the memory and NeuronCore usage.
 
 ```
@@ -93,13 +93,13 @@ Model ID   Model Name                                                      UUID 
 
 ```
 In the above output:
-- Model ID      ->  Unique Identifier for models loaded in the Neuron device
+- Model ID      ->  Unique Identifier for models loaded in the NeuronDevice
 - Model Name    ->  Neuron Compiler Version-compiler work directory/User defined model name
 - Node ID       ->  For Internal use only
 - UUID          ->  Unique Id assigned by the Neuron Compiler for a Model
 - Exec. Unit    ->  BDF of Neuron Device followed by the Neuron Core ID, b:d:f.NC
 - Host Mem      ->  Host memory consumed by the Model in bytes
-- Device Mem    ->  Neuron Device memory consumed by the Model in bytes
+- Device Mem    ->  NeuronDevice memory consumed by the Model in bytes
 - Neuron Core % ->  Utilization % of the neuron core at sample time.  If there are no active inferences this value will be 0.
 
 # Gather Debugging information
