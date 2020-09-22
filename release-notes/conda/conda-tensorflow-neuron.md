@@ -2,6 +2,27 @@
 
 This document lists the release notes for the Neuron Conda-TensorFlow package.
 
+# Known Issues
+
+When running TensorFlow script in latest TensorFlow-Neuron conda environment (1.15.3.1.0.2043.0_2.0.894.0), you may see errors "AttributeError: module 'numpy' has no attribute 'integer'" and "ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'". This is due to older version of numpy. Please update numpy to version 1.18 using the command "conda update numpy".
+
+
+# [1.15.3.1.0.2043.0_2.0.894.0]
+
+Date: 09/22/2020
+
+## Included Neuron Packages
+
+neuron_cc-1.0.20600.0
+
+tensorboard_neuron-1.15.0.1.0.600.0
+
+tensorflow_neuron-1.15.3.1.0.2043.0
+
+## Known Issues
+
+When running TensorFlow script in latest TensorFlow-Neuron conda environment, you may see errors "AttributeError: module 'numpy' has no attribute 'integer'" and "ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'". This is due to older version of numpy. Please update numpy to version 1.18 using the command "conda update numpy".
+
 
 # [1.15.3.1.0.1965.0_2.0.778.0]
 
@@ -14,7 +35,6 @@ neuron_cc-1.0.18001.0
 tensorboard_neuron-1.15.0.1.0.570.0
 
 tensorflow_neuron-1.15.3.1.0.1965.0
-
 
 
 

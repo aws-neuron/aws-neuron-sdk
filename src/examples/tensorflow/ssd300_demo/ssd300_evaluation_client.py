@@ -34,7 +34,6 @@ def main():
     parser.add_argument('--num_threads', type=int, default=4, help='Number of threads')
     parser.add_argument('--throughput_interval', type=int, default=10, help='Interval for counting throughput')
     parser.add_argument('--save_results', default=None)
-    parser.add_argument('--disable_version_check', action='store_true')
     args = parser.parse_args()
     if not args.disable_version_check:
         try:

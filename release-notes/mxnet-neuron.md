@@ -2,11 +2,26 @@
 
 This document lists the release notes for MXNet-Neuron framework.
 
-# Known Issues 08/08/2020
+# Known Issues 09/22/2020
  
 * Issue: MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server.
   * Workaround: run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down.
   
+
+# [1.5.1.1.1.52.0]
+
+Date 09/22/2020
+
+## Summary
+Various minor improvements.
+
+## Major New Features
+
+## Resolved Issues
+
+* Issue: When first importing MXNet into python process and subprocess call is invoked, user may get an OSError exception "OSError: [Errno 14] Bad address" during subprocess call (see https://github.com/apache/incubator-mxnet/issues/13875 for more details). This issue is fixed with a mitigation patch from MXNet for Open-MP fork race conditions.
+   * Workaround for earlier versions: Export KMP_INIT_AT_FORK=false before running python process.
+
 
 # [1.5.1.1.1.1.0]
 

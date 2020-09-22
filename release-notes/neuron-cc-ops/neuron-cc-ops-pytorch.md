@@ -7,6 +7,13 @@ import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
 
+### PyTorch Neuron Release [1.0.1720.00]
+Added:
+```
+aten::constant_pad_nd
+aten::meshgrid
+```
+
 ### PyTorch Neuron Release [1.0.1532.0]
 Added:
 ```

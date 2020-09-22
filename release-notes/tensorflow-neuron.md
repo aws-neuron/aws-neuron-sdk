@@ -3,11 +3,24 @@
 This document lists the release notes for the TensorFlow-Neuron package.
 
 
-# Known Issues and Limitations - updated 08/08/2020
+# Known Issues and Limitations - updated 09/22/2020
 
 * Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
 ```terminate called after throwing an instance of 'std::bad_alloc'```
 Solution: run compilation on a c5.4xlarge instance type or larger.
+
+# [1.15.3.1.0.2043.0]
+
+Date: 09/22/2020
+
+## Summary
+
+1. tensorflow-neuron now automatically enables data parallel mode on four cores in one Inferentia. In `tensorflow-model-server-neuron`, most models can now fully utilize four cores automatically. In Python tensorflow, running threaded inference using `>=4` Python threads in the same tensorflow Session lead to full utilization of four cores.
+2. tensorflow-neuron now tries to enable dynamic batch size automatically for a limited number of models, such as ResNet50.
+3. Improved logging during `tfn.saved_model.compile` to display input/output information about subgraphs that are going to be compiled by `neuron-cc`.
+
+
+
 
 
 # [1.15.3.1.0.1965.0]

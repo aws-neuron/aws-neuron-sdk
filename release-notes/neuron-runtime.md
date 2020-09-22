@@ -13,6 +13,24 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.0.9592.0]
+
+Date: 09/22/2020
+
+## Major New Features
+* n/a
+
+## Improvements
+* The “handshake” API can be used between a framework, such as TensorFlow, and neuron-rtd.  The API establishes a unique “session-id” (see the next item) and facilitates version exchange between a framework and neuron-rtd.  Version information is used to improve logging and troubleshooting. 
+* The API for neural networks loading and for shared memory allocation have been enhanced to allow an optional “session id” to be passed in load/allocate requests.  Session ids are used to associate a framework process with the networks and the shared memory segments used by the process.  Neuron-rtd can optionally monitor framework processes and automatically unload all neural networks loaded by the process and free its shared memory when the process terminates.
+
+## Resolved Issues
+* querying Neuron statistics could cause neuron-rtd to crash
+* SRAM parity errors are not reported
+* Under stress “queue full” error can be returned when submitting an inference request even when neuron-rtd has room for one more request
+
+
+
 # [1.0.9197.0]
 
 Date: 08/19/2020

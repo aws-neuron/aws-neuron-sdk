@@ -2,9 +2,32 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 08/19/2020
+# Known Issues and Limitations 09/22/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+# [1.0.11054.0]
+
+Date: 09/22/2020
+
+## Major New Features
+
+Beta release of **neuron-monitor** for streaming metric information about inference execution from your inf1.  We provided a sample script for connecting neuron-monitor output directly into CloudWatch.  Usage of the new tool is a simple one-liner: 
+
+```
+neuron-monitor | neuron-monitor-cloudwatch.py --namespace neuron_monitor_test --region us-west-2
+```
+
+More details on how to use **neuron-monitor** can be found in the [User Guide](../docs/neuron-tools/neuron-monitor-user-guide.md).
+
+## Improvements
+
+* neuron-ls now shows connected devices as a list.  This information can be used when creating a neuron core group.
+
+
+## Resolved Issues
+
+* n/a
 
 
 # [1.0.10616.0]

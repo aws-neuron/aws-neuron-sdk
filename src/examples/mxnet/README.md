@@ -18,9 +18,9 @@ These steps will allow you to setup an environment for running Jupyter Notebooks
 
 * Launch an EC2 Inf1 instance running the DLAMI (recommended instance: Inf1.2xlarge)
 * Connect using ssh and local port forwarding
-* Setup a conda environment for the notebook to use as a kernel
+* Setup a virtual environment for the notebook to use as a kernel
 * Fetch the notebook from github
-* Start Jupyter and select the correct conda environment
+* Start Jupyter and select the correct python virtual environment
 * Execute the Notebook to compile a partitioned compute graph
 
 ## Step 1: Launch EC2 instance
@@ -46,10 +46,11 @@ On an Ubuntu AMI the user will be ubuntu@, while on an AL2 the user will be ec2-
 This additional argument forwards connections to port 8888 on your machine to the new Inf1 instance.
 Now: ssh to the Inf1 instance
 
-## Step 3: Set up the Neuron Runtime conda environment & create a tutorial directory
+## Step 3: Set up the Neuron Runtime environment & create a tutorial directory
 
-* Install the neuron runtime using these instructions: [Getting started: Installing and Configuring Neuron-RTD](../../../docs/neuron-runtime/nrt_start.md).
-* Make sure the environment is up-to-date:
+If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
+
+To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron). In this tutorial we will use a python virtual environment. 
 
 ```
 # Make sure we are up to date
@@ -57,20 +58,30 @@ sudo apt update
 sudo apt upgrade
 ```
 
-* Set up your own conda environment ahead of launching
-
+Setup a new Python virtual environment:
 ```
-echo ". /home/ubuntu/anaconda3/etc/profile.d/conda.sh" >> ~/.bashrc
-source ~/.bashrc
-conda activate
+python3 -m venv test_venv
+source test_venv/bin/activate
+pip install -U pip
+```
 
-conda create --name my_notebook_env python=3.6 -y
-conda activate my_notebook_env
+Modify Pip repository configurations to point to the Neuron repository:
+```
+tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
+[global]
+extra-index-url = https://pip.repos.neuron.amazonaws.com
+EOF
+```
 
-pip install mxnet-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com
-pip install neuron-cc --extra-index-url=https://pip.repos.neuron.amazonaws.com
+Install neuron packages:
+```
+pip install mxnet-neuron
+pip install neuron-cc
 pip install wget jupyter
+```
 
+Create a work directory:
+```
 mkdir -p notebook_tutorial
 cd notebook_tutorial
 ```

@@ -130,7 +130,6 @@ def tf_feature_extractor(input_tensor, resnet):
     return tensor
 
 
-@tfn.fuse(input_shapes=[[1, 38, 38, 1024]], output_shapes=[[1, 4, 8732], [1, 81, 8732]], dynamic_batch_size=True)
 def tf_box_predictor(tensor, ssd300_torch):
     with tf.name_scope('BoxPredictor'):
         detection_feed = [tensor]
@@ -150,6 +149,7 @@ def tf_box_predictor(tensor, ssd300_torch):
     return loc, conf
 
 
+@tfn.fuse(batch_size=1, dynamic_batch_size=True, compiler_args=['-O2'])
 def tf_ssd300(input_tensor, ssd300_torch):
     with tf.name_scope('SSD300'):
         tensor = tf_feature_extractor(input_tensor, ssd300_torch.feature_extractor.feature_extractor)
@@ -303,7 +303,7 @@ def main():
                 'neuron-cc version {} is too low for this demo. Please upgrade '
                 'by "pip install -U neuron-cc --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(neuroncc_version))
         tfn_version = LooseVersion(pkg_resources.get_distribution('tensorflow-neuron').version)
-        if tfn_version < LooseVersion('1.15.0.1.0.1333.0'):
+        if tfn_version < LooseVersion('1.15.3.1.0.1900.0'):
             raise RuntimeError(
                 'tensorflow-neuron version {} is too low for this demo. Please upgrade '
                 'by "pip install -U tensorflow-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(tfn_version))
