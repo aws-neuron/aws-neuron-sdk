@@ -1,6 +1,6 @@
 # Neuron Release Notes
 
-## September 21, 2020 Release
+## September 22, 2020 Release
 This release improves performance of YOLO v3 and v4, VGG16, SSD300, and BERT.  As part of these improvements, Neuron Compiler doesn’t require any special compilation flags for most models. Details on how to use the prior optimizations are outlined in the neuron-cc [release notes](./neuron-cc.md).  
 
 The release also improves operational deployments of large scale inference applications, with a session management agent incorporated into all supported ML Frameworks. A new Neuron Tool called neuron-monitor, will stream inference metrics helpful with monitoring one or more instances of Neuron Runtime.  Sample script for connecting neuron-monitor to your CloudWatch metrics is provided as well.  Read more about using neuron-monitor [here](../docs/neuron-tools/neuron-monitor-user-guide.md).
