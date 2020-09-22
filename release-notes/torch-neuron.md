@@ -2,7 +2,7 @@
 
 This document lists the release notes for the Pytorch-Neuron package.
 
-## Known Issues and Limitations - Updated 08/08/2020
+## Known Issues and Limitations - Updated 09/21/2020
 The following are not torch-neuron limitations, but may impact models you can successfully torch.neuron.trace 
 * The current torchvision version has dropped support for Python 3.5
 * The current HuggingFace transformers version has dropped support for Python 3.5
@@ -10,7 +10,7 @@ The following are not torch-neuron limitations, but may impact models you can su
 
 # [1.0.1720.0]
 
-Date: 09/18/2020
+Date: 09/21/2020
 
 ## Summary
 * Various minor improvements to the Pytorch autopartitioner feature
