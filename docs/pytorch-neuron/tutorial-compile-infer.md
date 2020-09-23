@@ -23,15 +23,15 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 ## Step 2: Compilation instance installations
 
-If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update Neuron by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md).
+If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
 
-To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron)
+To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron)
 
 ```bash
 pip install pillow==6.2.2
 
 # We use the --no-deps here to prevent torchvision installing standard torch
-pip install torchvision==0.4.2 --no-deps
+pip install torchvision==0.6.1 --no-deps
 ```
 
 ## Step 3: Compile on compilation instance
@@ -54,7 +54,7 @@ model = models.resnet50(pretrained=True)
 
 ## Tell the model we are using it for evaluation (not training)
 model.eval()
-model_neuron = torch.neuron.trace(model, example_inputs=[image])
+model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
 
 ## Export to saved model
 model_neuron.save("resnet50_neuron.pt")
