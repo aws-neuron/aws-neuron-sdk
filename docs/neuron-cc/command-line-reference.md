@@ -73,7 +73,7 @@ Framework in which the model was trained.
 Valid values: TENSORFLOW | MXNET | ONNX
 
 **--num-neuroncores** (int) (default 1)
-Compile for the given number of neuron cores so as to leverage NeuronCore Pipeline mode. **NOTE: This is not used to define the number of Neuron Cores to be used in a data paralel deployment (ie the same model on multiple Neuron Cores). THat is a runtime/framework configuraiton choice.** 
+Compile for the given number of neuron cores so as to leverage NeuronCore Pipeline mode. **NOTE: This is not used to define the number of Neuron Cores to be used in a data parallel deployment (ie the same model on multiple Neuron Cores). That is a runtime/framework configuration choice.** 
 
 **--output** (string) (default “out.neff”)
 Filename where compilation output (NEFF archive) will be recorded.
