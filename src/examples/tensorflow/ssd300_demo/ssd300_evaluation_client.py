@@ -35,25 +35,6 @@ def main():
     parser.add_argument('--throughput_interval', type=int, default=10, help='Interval for counting throughput')
     parser.add_argument('--save_results', default=None)
     args = parser.parse_args()
-    if not args.disable_version_check:
-        try:
-            tfsn_info = subprocess.check_output(['apt', 'list', 'tensorflow-model-server-neuron'])
-            start_marker = b',now '
-            start = tfsn_info.find(start_marker)
-            end = tfsn_info.find(b' all')
-            tfn_version = tfsn_info[start+len(start_marker):end].decode()
-        except FileNotFoundError:
-            tfsn_info = subprocess.check_output(['yum', 'info', 'tensorflow-model-server-neuron'])
-            for line in tfsn_info.split(b'\n'):
-                if line.startswith(b'Version'):
-                    start_marker = b': '
-                    start = line.find(start_marker)
-                    tfn_version = line[start+len(start_marker):].decode()
-                    break
-        if LooseVersion(tfn_version) < LooseVersion('1.15.0.1.0.1333.0'):
-            raise RuntimeError(
-                'tensorflow-model-server-neuron version {} is too low for this demo. Please upgrade '
-                'by "sudo apt-get install tensorflow-model-server-neuron"'.format(tfn_version))
 
     channel = grpc.insecure_channel(args.server_address)
     stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
