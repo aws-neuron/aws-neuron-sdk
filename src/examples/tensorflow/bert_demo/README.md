@@ -29,10 +29,12 @@ Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
+conda update numpy
 ```
 Note: if your tensorflow-neuron version on the inference instance is lower than 1.15.0.1.0.1333.0, you will need to run this demo on inf1.2xlarge instead of inf1.xlarge.
+
+Note: When running TensorFlow script in latest TensorFlow-Neuron conda environment (1.15.3.1.0.2043.0_2.0.894.0), you may see errors "AttributeError: module 'numpy' has no attribute 'integer'" and "ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'". This is due to older version of numpy. Please update numpy to version 1.18 using the command "conda update numpy".
 
 ### Compile open source BERT-Large saved model using Neuron compatible BERT-Large implementation
 Neuron software works with tensorflow saved models. Users should bring their own BERT-Large saved model for this section. This demo will run inference for the MRPC task and the saved model should be fine tuned for MRPC. Users who need additional help to fine-tune the model for MRPC or to create a saved model can refer to [Appendix 1](#appendix1). 
@@ -56,8 +58,8 @@ Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
+conda update numpy
 ```
 
 ### Launching the BERT-Large demo server
