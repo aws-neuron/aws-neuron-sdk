@@ -29,8 +29,8 @@ Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
+conda update numpy
 ```
 Note: if your tensorflow-neuron version on the inference instance is lower than 1.15.0.1.0.1333.0, you will need to run this demo on inf1.2xlarge instead of inf1.xlarge.
 
@@ -56,8 +56,8 @@ Update to the latest neuron software by executing the following commands :
 
 ```bash
 source activate aws_neuron_tensorflow_p36
-conda install numpy=1.17.2 --yes --quiet
 conda update tensorflow-neuron
+conda update numpy
 ```
 
 ### Launching the BERT-Large demo server

@@ -11,6 +11,7 @@ Many thanks to https://github.com/ildoonet/tf-pose-estimation for providing pret
 2. Activate `aws_neuron_tensorflow_p36` conda environment (or your own virtual/conda environment) and upgrade AWS Neuron packages to latest.
     1. `source activate aws_neuron_tensorflow_p36`
     2. `conda update tensorflow-neuron`
+    3. `conda update numpy`
 3. Download tensorflow pose net frozen graph.
     1. `wget -c --tries=2 $( wget -q -O - http://www.mediafire.com/file/qlzzr20mpocnpa3/graph_opt.pb | grep -o 'http*://download[^"]*' | tail -n 1 ) -O graph_opt.pb`
 4. Compile the pose net frozen graph into AWS Neuron compatible form. Network input image resolution is adjustable with argument `--net_resolution` (e. g., `--net_resolution=656x368`). The compiled model can accept arbitrary batch size input at runtime.
