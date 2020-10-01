@@ -9,7 +9,7 @@
 Neuron is integrated into TensorFlow, and provides you with a familiar environment to run inference using Inferentia based instances.
 
 ## Getting started 
-### Tutorials 
+### Tutorials and Examples
 
 #### Computer Vision
 * [ResNet50 inference](./tutorial-compile-infer.md)
