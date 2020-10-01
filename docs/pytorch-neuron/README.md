@@ -12,7 +12,7 @@ Neuron is integrated into PyTorch, and provides you with a familiar environment 
 
 ### Tutorials and Examples
 #### Computer Vision
-* [Resnet50 inference](./tutorial-compile-infer.md)
+* [Getting started with torch-neuron, with Resnet50 example](./tutorial-compile-infer.md)
 * [Manual partitioning of Resnet50 in a Jupyter Notebook](./tutorial-manual-partitioning.md) 
 
 #### Natural Language Processing
