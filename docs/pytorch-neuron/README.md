@@ -10,9 +10,8 @@ Neuron is integrated into PyTorch, and provides you with a familiar environment 
 
 ## Getting started 
 
-### Tutorials and Examples
-#### Computer Vision
-* [Getting started with torch-neuron, with Resnet50 example](./tutorial-compile-infer.md)
+### Tutorials
+* [Get started, using Neuron to run Resnet50 inference](../../src/pytorch/getting_started.md)
 * [Manual partitioning of Resnet50 in a Jupyter Notebook](./tutorial-manual-partitioning.md) 
 
 #### Natural Language Processing

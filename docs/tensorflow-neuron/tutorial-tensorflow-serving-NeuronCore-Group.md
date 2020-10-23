@@ -19,6 +19,12 @@ Also, you would need TensorFlow Serving API (use --no-deps to prevent installati
 pip install --no-deps tensorflow_serving_api==1.15
 ```
 
+For the example image preprocessing using Keras preprocessing, the Python Imaging Library Pillow is required:
+
+```
+pip install pillow
+```
+
 ## Export and Compile Saved Model
 
 The following example shows graph construction followed by the addition of Neuron compilation step before exporting to saved model.

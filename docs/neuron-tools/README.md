@@ -6,22 +6,23 @@ To identify number of Neuron Devices in a given instance use the `neuron-ls` com
 
 ```
 $ neuron-ls
-+--------------+---------+--------+--------+--------------+-----------------------+---------+---------+
-|   PCI BDF    | LOGICAL | NEURON | MEMORY | CONNECTED TO |        RUNTIME        | RUNTIME | RUNTIME |
-|              |   ID    | CORES  |        |              |        ADDRESS        |   PID   | VERSION |
-+--------------+---------+--------+--------+--------------+-----------------------+---------+---------+
-| 0000:00:1c.0 |       0 |      4 | 8 GB   | [1]          | unix:/run/neuron.sock |   17902 | 1.0.x.x |
-| 0000:00:1d.0 |       1 |      4 | 8 GB   | [0 2]        | unix:/run/neuron.sock |   17902 | 1.0.x.x |
-| 0000:00:1e.0 |       2 |      4 | 8 GB   | [1 3]        | unix:/run/neuron.sock |   17902 | 1.0.x.x |
-| 0000:00:1f.0 |       3 |      4 | 8 GB   | [2]          | unix:/run/neuron.sock |   17902 | 1.0.x.x |
-+--------------+---------+--------+--------+--------------+-----------------------+---------+---------+
++--------+--------+--------+-----------+--------------+---------+---------+---------+
+| NEURON | NEURON | NEURON | CONNECTED |     PCI      | RUNTIME | RUNTIME | RUNTIME |
+| DEVICE | CORES  | MEMORY |  DEVICES  |     BDF      | ADDRESS |   PID   | VERSION |
++--------+--------+--------+-----------+--------------+---------+---------+---------+
+| 0      | 4      | 8 GB   | 1         | 0000:00:1c.0 | NA      | 12410   | NA      |
+| 1      | 4      | 8 GB   | 2, 0      | 0000:00:1d.0 | NA      | 12410   | NA      |
+| 2      | 4      | 8 GB   | 3, 1      | 0000:00:1e.0 | NA      | 12410   | NA      |
+| 3      | 4      | 8 GB   | 2         | 0000:00:1f.0 | NA      | 12410   | NA      |
++--------+--------+--------+-----------+--------------+---------+---------+---------+
 ```
 
 The above output is taken from an Inf1.6xlarge instance.
-- PCI BDF           ->  PCI Bus Device Function (BDF) ID of the device.
-- LOGICAL ID        ->  Logical ID assigned to the NeuronDevice. This id can be used when configuring multiple runtimes to use different NeuronDevices.
+- NEURON DEVICE     ->  Logical ID assigned to the NeuronDevice. This id can be used when configuring multiple runtimes to use different NeuronDevices.
 - NEURON CORES      ->  Number of NeuronCores present in the NeuronDevice.
-- CONNECTED TO      ->  Shows other NeuronDevices connected to this NeuronDevice. 
+- NEURON MEMORY     ->  Amount DRAM memory in NeuronDevice.
+- CONNECTED DEVICES ->  Shows other NeuronDevices connected to this NeuronDevice. 
+- PCI BDF           ->  PCI Bus Device Function (BDF) ID of the device.
 - RUNTIME ADDRESS   ->  Shows address of runtime process using this NeuronDevice.
 - RUNTIME PID       ->  Shows process id of runtime process using this NeuronDevice.
 - RUNTIME VERSION   ->  Shows version of runtime process using this NeuronDevice.
