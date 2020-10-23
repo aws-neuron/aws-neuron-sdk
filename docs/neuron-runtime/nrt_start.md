@@ -3,98 +3,13 @@
 In this getting started guide you will learn how to install Neuron runtime, and configure it for inference. 
 
 
-## Step 1: Launch an Inf1 Instance
+## Step 1: Launch an Inf1 Instance and Install runtime packages
 
 1. Select an AMI of your choice, which may be Ubuntu 16.x, Ubuntu 18.x, or Amazon Linux 2 based. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details. 
 2. Select an Inf1 instance size of your choice (see https://aws.amazon.com/ec2/instance-types/inf1/)
+3. Install the following packages `aws-neuron-dkms aws-neuron-runtime-base aws-neuron-runtime aws-neuron-tools`. Refer to the [Neuron installation guide](../neuron-install-guide.md) for details. 
 
-## Step 2: Install Neuron-RTD
-
-1. Modify yum/apt repository configurations to point to the Neuron repository.
-2. Install Neuron-RTD
-
-### Modify yum/apt repository configurations to point to the Neuron repository.
-
-
-To know your ubuntu version, type this grep cmd. It should be an 18.* or 16.*
-
-```
-grep -iw version /etc/os-release
-```
-
-### UBUNTU 16
-
-```
-sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-deb https://apt.repos.neuron.amazonaws.com xenial main
-EOF
-
-wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
- 
-sudo apt-get update
-sudo apt-get install aws-neuron-runtime
-sudo apt-get install aws-neuron-tools
-```
-
-### UBUNTU 18
-
-```
-sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-deb https://apt.repos.neuron.amazonaws.com bionic main
-EOF
-
-wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
- 
-sudo apt-get update
-sudo apt-get install aws-neuron-runtime
-sudo apt-get install aws-neuron-tools
-```
-
-### RPM (AmazonLinux, Centos)
-
-```
-sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
-[neuron]
-name=Neuron YUM Repository
-baseurl=https://yum.repos.neuron.amazonaws.com
-enabled=1
-EOF
-
-sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
-sudo yum install aws-neuron-runtime
-sudo yum install aws-neuron-tools
-```
-## Step 3: Configure nr_hugepages
-
-Neuron Runtime uses 2MB hugepages for the input feature map buffers and the output feature map buffers of all loaded models.  By default Neuron Runtime uses 128 2MB hugepages per Inferentia.  Hugepages is a system wide resource.  The allocation of  hugepages should be done at boot time or as soon as possible after boot.  To allocate at boot time, pass **hugepages** option to the kernel, for example, to allocate 128 2MB hugepages use as a linux boot param:
-
-```
-hugepages=128
-```
-
-Alternatively, 2MB hugepages could be allocated after boot by invoking the following command:
-
-```
-sudo sysctl -w vm.nr_hugepages=128
-```
-
-To make the changes persist across reboots add the following to /etc/sysctl.conf
-
-```
-vm.nr_hugepages=128
-```
-
-Run the following command to see the number of 2MB hugepages setting for your instance:
-
-```
-grep HugePages_Total /proc/meminfo | awk {'print $2'}
-```
-
-To adjust the number of hugepages used by the Neuron Runtime, update **/opt/aws/neuron/config/neuron-rtd.config** parameter: **num_hugepages_per_device**; The default number is 128 2MB pages per Inferentia. Increase to the desired number, then restart neuron-rtd service. Make sure the OS has at least that many hugepages available before restarting Neuron Runtime.
-
-
-
-## Step 4: Configure Neuron-RTD
+## Step 2: Configure Neuron-RTD
 You can choose your Neuron-RTD mode, either select to run a single instance of the Neuron runtime, or mutiple instances which may be desired to provide your application capabilities like isolation or load balancing.
 
 
@@ -117,18 +32,15 @@ Use `neuron-ls` to enumerate the set of Inferentia chips avaliable in the system
 
 ```bash
 /opt/aws/neuron/bin/neuron-ls
-+--------------+---------+--------+-----------+-----------+------+------+
-|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
-|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
-+--------------+---------+--------+-----------+-----------+------+------+
-| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    1 |
-+--------------+---------+--------+-----------+-----------+------+------+ 
-| 0000:00:1e.0 |       1 |      4 | 4096 MB   | 4096 MB   |    1 |    1 |
-+--------------+---------+--------+-----------+-----------+------+------+ 
-| 0000:00:1d.0 |       2 |      4 | 4096 MB   | 4096 MB   |    1 |    1 |
-+--------------+---------+--------+-----------+-----------+------+------+ 
-| 0000:00:1c.0 |       3 |      4 | 4096 MB   | 4096 MB   |    1 |    0 |
-+--------------+---------+--------+-----------+-----------+------+------+ 
++--------+--------+--------+-----------+--------------+---------+---------+---------+
+| NEURON | NEURON | NEURON | CONNECTED |     PCI      | RUNTIME | RUNTIME | RUNTIME |
+| DEVICE | CORES  | MEMORY |  DEVICES  |     BDF      | ADDRESS |   PID   | VERSION |
++--------+--------+--------+-----------+--------------+---------+---------+---------+
+| 0      | 4      | 8 GB   | 1         | 0000:00:1c.0 | NA      | 12410   | NA      |
+| 1      | 4      | 8 GB   | 2, 0      | 0000:00:1d.0 | NA      | 12410   | NA      |
+| 2      | 4      | 8 GB   | 3, 1      | 0000:00:1e.0 | NA      | 12410   | NA      |
+| 3      | 4      | 8 GB   | 2         | 0000:00:1f.0 | NA      | 12410   | NA      |
++--------+--------+--------+-----------+--------------+---------+---------+---------+
 ```
 
 neuron-rtd can manage one or more devices. Select contigous Inferentia devices to be managed by a single neuron-rtd. 

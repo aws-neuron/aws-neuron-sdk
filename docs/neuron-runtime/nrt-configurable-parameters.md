@@ -7,10 +7,6 @@ This guide provides an overview of the different parameters available to configu
 
 These parameters are defined in neuron-rtd.config and affect global runtime configuration. Note that Neuron runtime must be restarted after changes to the configuration file for them to take effect.
 
-### Hugepage Allocation
-
-The number of 2MB hugepages allocated to each Inferentia device can be configured by giving an integer value to the `num_hugepages_per_device` field. The default value on installation is 128.
-
 ### Model Directory Caching:
 
 One of the most time consuming stages in model loading is the unpackaging of the NEFF file to a temporary directory for the runtime to digest. To mitigate this cost for repeated loads of the same model, caching can be turned on by giving an integer value to the `model_cache_count` field in neuron-rtd.config to set a threshold on the number of unpacked model directories that the runtime can keep around. Keyed based on NEFF UUID, the runtime will check for an existing mapping to a cached directory and reuse it if found. The cache employs simple LRU eviction when full.
@@ -41,11 +37,3 @@ Interface queue size can be adjusted for each model by passing an integer value 
 Inference inputs can be configured to be staged in either host or device memory prior to starting an inference by passing a boolean flag to the `io_data_host` parameter. A value of true stages the data in host memory, while false stages the data in the device. Bandwidth is much higher from the device than the host to the chip, so staging on the device can be beneficial for models with large input loads that would otherwise cause a bottleneck during transfer. Note that this does introduce an extra step during inference posting to transfer the input to the device, so it may negatively affect single-inference latency. This option is most useful when paired with concurrent, pipelined inferences (with an appropriate `ninfer` value) so that inference execution in hardware can hide the extra overhead of staging.
 
 A global default can be specified in the config file with the `io_dma_data_host` flag. Default value on installation is false.
-
-
-### Input in hugetlb:
-
-As an extension of staging inputs in device memory, the application can further improve performance by placing inputs in pinned hugepages and communicating the location to the runtime. This feature is configurable on a per-model basis by passing in a boolean flag to the `fmap_in_huge_tlb` parameter. Doing so allows the runtime to transfer the input to device memory directly without having to pre-prepare it. Note that this only optimizes the last step of input transfer to device, so this flag will only take effect when `io_data_host` is false.
-
-Note that this option is not globally configurable through the config file and will always default to false. It must be explicitly turned on during model load.
-

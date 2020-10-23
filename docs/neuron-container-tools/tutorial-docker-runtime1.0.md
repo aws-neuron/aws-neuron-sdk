@@ -1,6 +1,4 @@
-# Tutorial: Docker environment setup for Neuron
-
-This tutorial is for neuron runtime 1.1 and above. For older versions of neuron < 1.1, refer the following guide [docs/neuron-container-tools/tutorial-docker-runtime1.0.md](tutorial-docker-runtime1.0.md)
+# Tutorial: Docker environment setup for Neuron Runtime 1.0
 
 ## Introduction
 
@@ -8,23 +6,26 @@ A Neuron application can be deployed using docker containers. This tutorial
 describes how to configure docker to expose Inferentia devices to containers.  
 
 Once the environment is setup, a container can be started with 
---device=/dev/neuron# to specify desired set of Inferentia devices to be exposed to the container. 
-To find out the available neuron devices on your instance, use the command `ls /dev/neuron*`.
-
+*AWS_NEURON_VISIBLE_DEVICES* environment variable to specify desired set 
+of Inferentia devices to be exposed to the container. AWS_NEURON_VISIBLE_DEVICES 
+is a set of contiguous comma-seperated inferentia logical ids. To find out the 
+available logical ids on your instance, run the neuron-ls tool.
+For example, on inf1.6xlarge instance with 4 inferentia devices, you may 
+set AWS_NEURON_VISIBLE_DEVICES="2,3" to expose the last two devices to a 
+container.
 When running neuron-ls inside a container, you will only see the set of exposed Inferentias.
 For example:
 ```bash
-docker run --device=/dev/neuron0 neuron-test neuron-ls
+docker run --env AWS_NEURON_VISIBLE_DEVICES="0" neuron-test neuron-ls
 ```
 Would produce the following output:
 ```
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
-| NEURON | NEURON | NEURON | CONNECTED |     PCI      | RUNTIME | RUNTIME | RUNTIME |
-| DEVICE | CORES  | MEMORY |  DEVICES  |     BDF      | ADDRESS |   PID   | VERSION |
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
-| 0      | 4      | 8 GB   | 1         | 0000:00:1c.0 | NA      | 6       |  NA     |
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
-
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+
 ```
 
 ##  Steps:
@@ -36,12 +37,6 @@ Follow the [Neuron Install Guide](../neuron-install-guide.md) to setup access to
 Then, install the aws-neuron-runtime-base package. 
 ```bash
 sudo apt-get install aws-neuron-runtime-base
-```
-aws-neuron-runtime-base has a dependency with aws-neuron-dkms. Make sure that aws-neuron-dkms is installed by running 
-the following cmd.
-```bash
-ls /dev/neuron*
-should display the neuron device nodes based on the instance type. (example: 4 nodes incase of inf1.6xl)
 ```
 
 #### Step 2: Make sure that the neuron-rtd service is not running
@@ -124,15 +119,15 @@ docker build . -f Dockerfile.neuron-rtd -t neuron-test
 
 Then run:
 ```bash
-docker run --device=/dev/neuron0  neuron-test neuron-ls
+docker run --env AWS_NEURON_VISIBLE_DEVICES="0"  neuron-test neuron-ls
 ```
 Expected result:
 ```
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
-| NEURON | NEURON | NEURON | CONNECTED |     PCI      | RUNTIME | RUNTIME | RUNTIME |
-| DEVICE | CORES  | MEMORY |  DEVICES  |     BDF      | ADDRESS |   PID   | VERSION |
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
-| 0      | 4      | 8 GB   | 1         | 0000:00:1c.0 | NA      | 6       |  NA     |
-+--------+--------+--------+-----------+--------------+---------+---------+---------+
++--------------+---------+--------+-----------+-----------+------+------+
+|   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+|              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
++--------------+---------+--------+-----------+-----------+------+------+
+| 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
++--------------+---------+--------+-----------+-----------+------+------+
 
 ```

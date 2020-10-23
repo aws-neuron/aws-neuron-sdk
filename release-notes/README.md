@@ -1,5 +1,12 @@
 # Neuron Release Notes
 
+## October 22, 2020 Release
+
+This release adds a Neuron kernel mode driver (KMD). The Neuron KMD simplifies Neuron Runtime deployments by removing the need for elevated privileges, improves memory management by removing the need for huge pages configuration, and eliminates the need for running neuron-rtd as a sidecar container. Documentation throughout the repo has been updated to reflect the new support. The new Neuron KMD is backwards compatible with prior versions of Neuron ML Frameworks and Compilers - no changes are required to existing application code.
+
+More details in the Neuron Runtime release notes [here](./neuron-runtime.md).
+
+
 ## September 22, 2020 Release
 
 This release improves performance of YOLO v3 and v4, VGG16, SSD300, and BERT.  As part of these improvements, Neuron Compiler doesn’t require any special compilation flags for most models. Details on how to use the prior optimizations are outlined in the neuron-cc [release notes](./neuron-cc.md).  

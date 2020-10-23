@@ -2,7 +2,7 @@
 
 ## Overview
 
-Neuron Runtime (referred to as RT in this document) is a user space process for controlling Neuron devices present in EC2 Inf1 instance types.  Depending on the configuration, a single instance of the RT controls anywhere from one Neuron device to all Neuron devices available on one instance. Each Neuron device contains four NeuronCores, which means four NeuronCores are the lowest level of granularity for dividing NeuronCores among multiple instances of the RT.
+Neuron Runtime (referred to as RT in this document) is a user space process for controlling Neuron devices present in EC2 Inf1 instance types.  Depending on the configuration, a single instance of the RT controls anywhere from one Neuron device to all Neuron devices available on one instance. Each Neuron device contains four NeuronCores, which means four NeuronCores are the lowest level of granularity for dividing NeuronCores among multiple instances of the RT. RT uses a kernel mode driver(aws-neuron-dkms) to communicate to the accelerator.
 
 The RT provides an interface for loading of compiled Neural Networks and for the execution of inference requests against the loaded Neural Networks.  In addition to the inference execution interface the RT provides interfaces for monitoring hardware health and performance, for profiling the inference performance and for collecting Neural Networks execution statistics.
 
@@ -42,33 +42,11 @@ Mar 19 23:43:23 ip-172-31-12-231 nrtd[13388]: [NRTD:RunServer] Server listening 
 
 Figure 1 shows an an example of a typical Neuron deployment. In this example a single RT daemon is managing all four Neuron devices on an inf1.6xlarge instance.  The RT provides Neural Network loading and running inferences services for the TensorFlow application.  The application communicates with the RT using gRPC interface via the Neuron Plugin embedded in TensorFlow. 
 
-## Neuron discovery service
-
-Neuron-discovery is a companion service installed as part of the aws-neuron-runtime-base package that runs at system boot time.  The discovery service identifies all Inferentia devices present on an instance and discovers the physical topology of Neuron devices, i.e. the physical order in which the Neuron devices are connected to one another inside the server.
-
-The discovery service runs for a short period during instance boot time and shuts down once all Neuron devices and their topology have been discovered.  The service generates the map file: **/run/infa-map.json **describing Neuron devices and their connections to one another. 
-
-```
-ubuntu@ip-172-31-12-231:~$ systemctl status neuron-discovery
-● neuron-discovery.service - MLA device discovery service
-   Loaded: loaded (/lib/systemd/system/neuron-discovery.service; enabled; vendor preset: enabled)
-   Active: active (exited) since Wed 2020-03-18 21:57:17 UTC; 1 day 2h ago
- Main PID: 26694 (code=exited, status=0/SUCCESS)
-    Tasks: 0 (limit: 4915)
-   CGroup: /system.slice/neuron-discovery.service
-
-Mar 18 21:57:17 ip-172-31-12-231 neuron-discovery[26701]: [DISCOVERY:discover_topology] Setting inferentia logical Id : 0
-Mar 18 21:57:17 ip-172-31-12-231 neuron-discovery[26701]: [DISCOVERY:discover_topology] Device 0 is ready
-Mar 18 21:57:17 ip-172-31-12-231 neuron-discovery[26701]: [DISCOVERY:discover_topology] Dev 0 logical Id: 0
-Mar 18 21:57:17 ip-172-31-12-231 neuron-discovery[26701]: 2020/03/18 21:57:17 Discovery succeeded!!
-```
-
-
-By default, all Neuron devices are managed by a single RT, **/run/infa-map.json** file is read by the RT during startup. 
+By default, all Neuron devices are managed by a single RT as shown below. 
 ![Image:](./img/neuron-rt-discovery.png)
 ### Figure 2. Physical topology
 
-Figure 2 shows a physical topology of inf1.6xlarge with four Neuron devices connected by East/West PCIe links.  “neuron-ls” displays the output of the Neuron Discovery service - the order in which Neuron devices are connected.
+Figure 2 shows a physical topology of inf1.6xlarge with four Neuron devices connected by East/West PCIe links.  “neuron-ls” reads the Neuron driver and displays the order in which Neuron devices are connected.
 
 ## RT command line options
 
@@ -89,13 +67,11 @@ neuron-rtd -t <neuron PCI BDF> [ -t <neuron PCI BDF> ..] [-g <server:port>] [-c 
 
 ## RT service file
 
-Both the Neuron Runtime and Neuron Discovery are running as systemd services.  Service configuration files are installed under **/etc/systemd/system/multi-user.target.wants**
+Neuron Runtime systemd service configuration files are installed under **/etc/systemd/system/multi-user.target.wants**
 
 ```
 ubuntu@ip-172-31-12-231:~$ ls /etc/systemd/system/multi-user.target.wants/neuron-rtd.service
 /etc/systemd/system/multi-user.target.wants/neuron-rtd.service
-ubuntu@ip-172-31-12-231:~$ ls /etc/systemd/system/multi-user.target.wants/neuron-discovery.service
-/etc/systemd/system/multi-user.target.wants/neuron-discovery.service
 ubuntu@ip-172-31-12-231:~$
 ```
 
@@ -242,71 +218,3 @@ For Neural Networks with large IFMAPs or OFMAPs, gRPC with shared memory could b
 Shared memory could be used independently for either or both IFMAPs and OFMAPs.
 
 Currently, Neuron Plugin always uses shared memory for both IFMAPs and OFMAPs.
-
-## Hugepages allocation
-
-The RT requires a number of 2MB hugepages to operate, which are reserved at startup.  The hugepages are reserved from the pool of hugepages available on the host.  If the required amount of hugepages is not available the RT fails to start.  Syslog errors indicates how many hugepages were requested and how many were available.  For example:
-
-```
-Apr 2 23:56:57 ip-172-31-12-231 nrtd[22209]: [TDRV:hugetlb_cache_init] Failed to mmap huge page 257 out of requested 512
-Apr 2 23:56:57 ip-172-31-12-231 nrtd[22209]: [TDRV:tdrv_init] Attempt to preallocate 512 hugetlb pages failed, required 512 pages per device
-```
-
-
-Required amount of hugepages is per a Neuron device and is specified in the RT configuration file.  By default the RT reserves 128 hugepages, the total of 256MB, per a Neuron device.
-
-Hugepages are used for:
-
-* Placing network input tensors (IFMAPs) and output tensors (OFMAPs) in the host memory
-* Temporary buffers while loading Neural Networks on Neuron devices
-* Notification buffers that are used to monitor inference execution and for performance measurements.
-
-Hugepages reserved by the RT are used (allocated) during Neural Network load operation.  If the number of reserved hugepages is not sufficient the load operation will fail.
-
-**When does the number of hugepages need to be increased?  **When Neural Network load fails and the failure indicates insufficient amount of hugepages.  The largest consumers of hugepages are IFMAPs and OFMAPs when they are placed in host memory (this is the default configuration controlled by **io_data_host** configuration parameter).  Every loaded network consumes roughly: 
-
-```
-(<total size of all IFMAPs> + <total size of all OFMAPs>) * <max number of pipelined inference requests>
-```
-
-Note that multiple Neural Networks can be loaded on Neuron devices at the same time.  Each of the loaded networks allocates its own set of IFMAPs and OFMAPs at load time.  The total amount of hugepages required is determined by the sum of hugepage requirement of each loaded network.
-
-When a network has large IFMAPs or OFMAPs or when a large number of pipelined requests needs to be supported the number of hugepages might need to be increased.  The concept of inference pipelining is described here [Inference pipelining](#inference-pipelining)
-Also, the number of hugepages might need to be increased if a large number of networks is going to be loaded on Neuron devices at the same time. 
-
-**When can the number of hugepages be decreased?  **Instance** **DRAM allocated for hugepages is not available for applications that are not using hugepages.  Also, hugepages reserved by RT are not available to other applications such as DPDK based applications.  When using Neural Networks with small IFMAPs and OFMAPs and the small number of pipelined inferences both the system wide hugepage allocation and RT hugepage reservation can be reduced.
-
-**How to change hugepage configuration? **There are two places where hugepages are configured:
-First, the system wide number of allocated hugepages.
-
-```
-ubuntu@ip-172-31-12-231:~$ sudo sysctl vm.nr_hugepages // to show
-vm.nr_hugepages = 128
-ubuntu@ip-172-31-12-231:~$ sudo sysctl -w vm.nr_hugepages=256 // to change
-vm.nr_hugepages = 256
-```
-
-To make the configuration persist after reboot modify **/etc/sysctl.conf** file
-
-```
-ubuntu@ip-172-31-12-231:~$ tail /etc/sysctl.conf
-...
-#Appended by the Neuron startup script
-#Configure the number of hugepages for Neuron use.
-vm.nr_hugepages=128
-```
-
-Second, modify the RT configuration and restart RT daemon.  The configuration specifies the number of hugepages reserved per a Neuron device.  For example, if the RT is managing four Neuron devices in the default configuration shown here the RT will reserve 128 * 4 = 512 hugepages.
-
-```
-ubuntu@ip-172-31-12-231:~$ cat /opt/aws/neuron/config/neuron-rtd.config
-{
-  ...
-  "init_config" : {
-    "num_hugepages_per_device": 128,
-    ...
-  }
-}
-
-```
-
