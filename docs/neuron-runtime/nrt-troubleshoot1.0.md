@@ -1,6 +1,6 @@
 # Troubleshooting Neuron Runtime
 
-This document aims to provide more information on how to fix issues you might encounter while using the Neuron Runtime 1.1 or above. For each issue we will provide an explanation of what happened and what can potentially correct the issue. For older versions of runtime(1.0.9592.0 and below) please see [runtime 1.0 troubleshooting](./nrt-troubleshoot1.0.md)). 
+This document aims to provide more information on how to fix issues you might encounter while using the Neuron Runtime. For each issue we will provide an explanation of what happened and what can potentially correct the issue. 
 
 If you haven't read it already, please familiarize yourself with our [getting started](./nrt_start.md) documentation and usage examples.  If your issue is still not resolved or you have a more nuanced problem, contact us via [issues](https://github.com/aws/aws-neuron-sdk/issues) posted to this repo, the [AWS Neuron developer forum](https://forums.aws.amazon.com/forum.jspa?forumID=355), or through AWS support.
 
@@ -32,69 +32,103 @@ If you haven't read it already, please familiarize yourself with our [getting st
 
 ## Runtime installation failed
 
-Refer to the [Neuron installation guide](../neuron-install-guide.md) for details. 
+There are a few reasons this might occur.  Here's a list of things to double check on:
+
+#### 1. Supported OS
+
+Ensure you're attempting installation on a supported operating system.  Neuron SDK currently supports Ubuntu 16, Ubuntu 18, and Amazon Linux 2.
+
+#### 2. Check configuration of Neuron repos
+
+1. Does the yum/apt repository configuration point to the correct Neuron repository?
+
+* Amazon Linux 2:
+
+```bash
+sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
+[neuron]
+name=Neuron YUM Repository
+baseurl=https://yum.repos.neuron.amazonaws.com
+enabled=1
+EOF
+```
+
+* Ubuntu 16:
+
+```bash
+sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+deb https://apt.repos.neuron.amazonaws.com xenial main
+EOF
+```
+
+* Ubuntu 18:
+
+```bash
+sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+deb https://apt.repos.neuron.amazonaws.com bionic main
+EOF
+```
+
+2. Is the public key registered?
+
+- Amazon Linux 2:
+
+```bash
+sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+```
+
+- Ubuntu 16, Ubuntu 18
+
+```bash
+wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+```
+
+3. Package list is updated?
+
+- Ubuntu 16, Ubuntu 18
+
+```bash
+sudo apt-get update
+```
+
+#### 3. Check the package version
+
+1. What version is attempting to be installed?
+
+- Amazon Linux, CentOS
+
+```bash
+sudo yum list | grep aws-neuron-runtime
+aws-neuron-runtime.x86_64              1.0.3978.0-1                  neuron     
+aws-neuron-runtime-base.x86_64         1.0.3438.0-1                  neuron
+```
+
+- Ubuntu 16, Ubuntu 18
+
+```bash
+sudo apt list | grep aws-neuron-runtime
+aws-neuron-runtime/unknown 1.0.3978.0 amd64
+aws-neuron-runtime-base/unknown 1.0.3438.0 amd64
+```
+
+2. If there is a known issue with a version, we will capture it in the release notes and/or create an issue in our GitHub repo.  Please check the [release notes](../../release-notes/neuron-runtime.md) for more details on the version you're running or installing.
+
+
+
+#### 4. neuron-rtd or neuron-discovery failed to start during installation
+
+See [Neuron Runtime services fail to start](#neuron-services-fail-to-start) for more help.  The components are likely installed at this point, but you're experiencing a problem related to the startup, which is attempted during install.
 
 ---
 
 
 
-## Neuron Runtime service fails to start
+## Neuron Runtime services fail to start
 
-If the neuron-rtd service is failing to start, you may be experiencing failure due to (1) a conflict with another instance of neuron-rtd, (2) neuron driver(aws-neuron-dkms) package is not installed.
+There are two different runtime services, neuron-rtd and neuron-discovery, that are needed for correct functionality of an Inf1 instance.  If neuron-discovery is failing, you might have a system configuration issue. Try running on a different instance and if the problem persists contact us via [issues](https://github.com/aws/aws-neuron-sdk/issues), the [AWS Neuron developer forum](https://forums.aws.amazon.com/forum.jspa?forumID=355), or through AWS support.
 
+If the neuron-rtd service is failing to start, you may be experiencing failure due to (1) a conflict with another instance of neuron-rtd, (2) insufficient number of hugepages allocated by the OS, or (3) a lack of system privileges needed to start the service.  Read on for more details on each scenario.
 
-### Neuron Driver is not installed
-
-##### What Went Wrong?
-Neuron Runtime requires Neuron Driver(aws-neuron-dkms) to access inf1 devices.
-If the driver is not installed then Neuron Runtime service wont start.
-
-##### How To Find Out?
-`systemctl status` command can be used to check whether neuron-rtd is active or not.
-If Neuron Driver is not installed then output would look similar to the following
-```
-$ sudo systemctl status neuron-rtd
-● neuron-rtd.service - Neuron Runtime Daemon
-   Loaded: loaded (/lib/systemd/system/neuron-rtd.service; enabled; vendor preset: enabled)
-   Active: inactive (dead) since Wed 2020-10-14 16:28:18 UTC; 1 day 8h ago
-Condition: start condition failed at Fri 2020-10-16 01:08:31 UTC; 4s ago
-           └─ ConditionPathExistsGlob=/dev/neuron* was not met
- Main PID: 27911 (code=killed, signal=TERM)
-```
-
-##### How To Fix?
-
-Please follow the installation steps in [Neuron installation guide](../neuron-install-guide.md) to install `aws-neuron-dkms` package and then restart runtime using `sudo systemctl restart neuron-rtd` command.
-
-
-### Neuron Driver installation fails
-
-##### What Went Wrong?
-aws-neuron-dkms is a driver pacakge which needs to be compiled during installation.
-The compilation requires kernel headers for the instance's kernel.
-`uname -r` can be used to find kernel version in the instance.
-In some cases, the installed kernel headers might be newer than the instance's kernel itself.
-
-##### How To Find Out?
-Please look at the aws-neuron-dkms installation log for message like the following:
-```
-Building for 4.14.193-149.317.amzn2.x86_64
-Module build for kernel 4.14.193-149.317.amzn2.x86_64 was skipped since the
-kernel headers for this kernel does not seem to be installed.
-```
-If installation log is not available, check whether the module is loaded.
-
-```
-$ lsmod | grep neuron
-```
-If the above has no output then that means `aws-neuron-dkms` installation is failed.
-
-
-##### How To Fix?
-1. Uninstall aws-neuron-dkms `sudo apt remove aws-neuron-dkms` or `sudo yum remove aws-neuron-dkms`
-2. Install kernel headers for the current kernel `sudo apt install -y linux-headers-$(uname -r)` or `sudo yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)`
-3. Install aws-neuron-dkms `sudo apt install aws-neuron-dkms` or `sudo yum install aws-neuron-dkms`
-4. Restart runtime using `sudo systemctl restart neuron-rtd` command.
 
 
 ### Another Instance of Runtime is Running
@@ -103,11 +137,12 @@ If the above has no output then that means `aws-neuron-dkms` installation is fai
 
 A new instance of neuron-rtd cannot start if another neuron-rtd is already running and bound to the same Neuron devices.  Please read on for how to detect this scenario, but if you're having trouble configuring two or more runtimes on the same Inf1 instance, see detailed config instructions [here](./nrt_start.md#multiple-neuron-rtd).
 
+##### How To Find Out?
 
 Check for error messages in syslog similar to:
 
 ```bash
-Oct 16 01:07:00 xxxxxxxx kernel: [ 7638.723761] neuron:ncdev_device_init: device inuse by pid:9428
+nrtd[nnnnn]: .... Failed to lock MLA. File /run/infa/infa-0000:00:1f.0.json is locked
 ```
 
 ##### How To Fix?
@@ -118,6 +153,52 @@ Terminate the current neuron-rtd that is already running before starting the new
 sudo systemctl stop neuron-rtd
 ```
 
+
+
+### Insufficient amount of hugepages available for the Runtime
+
+##### What Went Wrong?
+
+Runtime requires 128 2MB hugepages per Inferentia.  If you have less than this, the neuron-rtd service is going to fail to start and emit errors to the syslog indicating it failed due to hugetlb allocation.  
+
+The most common cause of this error is reuse of an AMI built on an instance type with less Inferentias than the instance type it was later launched on.  For example, if you built an AMI with aws-neuron-runtime using an inf1.xlarge, but then used the same AMI on an inf1.6xlarge, neuron-rtd would fail because the original hugepage setting was created for a single Neuron device.
+
+##### How To Find Out?
+
+Check for error messages in syslog similar to:
+
+```bash
+nrtd[nnnnn]: ....  Failed to mmap with hugetlb
+nrtd[nnnnn]: ....  Attempt to preallocate 128 hugetlb pages failed!
+```
+
+##### How To Fix?
+
+Detailed information on how to configure the number of hugepages on an instance is documented [here](./nrt_start.md#step-3-configure-nr_hugepages).  If you're hitting this issue due to your AMI being built on an instance that has less Inferntias than the target it's lauched on, there's two ways to fix the issue.  Either update the configuration of the AMI to be specific to the Inf1 instance type, or create a script to set the number of hugepages at boot.  The scripted approach is currently part of the DLAMI if you need an example to follow.  Please see further instruction on how to configure the number of hugepages [here](./nrt_start.md#step-3-configure-nr_hugepages).
+
+TODO: provide a script.
+
+### Incorrect User privileges
+
+Trying to start Runtime without being root/sudo results in an authentication password request.
+
+```bash
+$ systemctl start neuron-rtd
+==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+Authentication is required to start 'Neuron-rtd.service'.
+Authenticating as: Ubuntu (ubuntu)
+Password:
+```
+
+This will fail due to lack of root privileges needed for system memory allocations.  The neuron-rtd needs the CAP_SYS_ADMIN capability, but will drop all elevated capabilities immediately following the memory allocations.
+
+##### What Went Wrong?
+
+Runtime was attempted to be started as a non-root user.
+
+##### How To Fix?
+
+Ensure neuron-rtd is always started as sudo or root.
 
 ----
 
@@ -220,14 +301,15 @@ Loading the NEFF requires more host or Inferentia resources (usually memory on t
 Check for error messages in syslog similar to:
 
 ```
-kernel: [XXXXX] neuron:mc_alloc: device mempool [0:0] total 1073741568 occupied 960539030 needed 1272 available 768
+nrtd[nnnn]:.... Failed to allocate buffer in MLA DRAM for 
+nrtd[nnnn]:.... Failed to alloc hugetlb
 ```
 
 Error Code: 4
 
 ##### How To Fix?
 
-As the error is contextual to what's going on with your instance, the exact next step is unclear. Try unloading some of the loaded models which will free up device DRAM space.  If this is still a problem, moving to a larger Inf1 instance size with additional NeuronCores may help.
+As the error is contextual to what's going on with your instance, the exact next step is unclear.  Here are some ideas on what might help free up space.  Start by unloading some of the loaded models.  If this is not the issue, you may need to increase the number of huge pages on the instance (instructions for this are [here](./nrt_start.md#step-3-configure-nr_hugepages)).  If you're still stuck, moving to a larger Inf1 instance size may provide the additional resources needed.
 
 ### Insufficient number of NeuronCores available to load a NEFF
 
@@ -340,4 +422,3 @@ Error Code: 5
 Report issue to Neuron by posting the relevant details on GitHub [issues](https://github.com/aws/aws-neuron-sdk/issues).
 
 ---
-

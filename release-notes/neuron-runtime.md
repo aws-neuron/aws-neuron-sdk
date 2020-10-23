@@ -13,6 +13,23 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.1.1402.0]
+
+Date: 10/22/2020
+
+## Major New Features
+This release introduces Neuron Kernel Mode Driver (KMD) as a new package aws-neuron-dkms. Neuron KMD removes the following requirments for Neuron Runtime:
+  * Passing of CAP_SYS_ADMIN to Neuron Runtime.
+  * User management of huge page system resources
+  * Execution of Neuron Runtime in a “sidecar” container.  
+  
+This packages is required for regular operation of Neuron Runtime; hence it is marked as dependency for `aws-neuron-runtime-base` see [install guide](../docs/neuron-install-guide.md) for detailed installation steps.
+
+
+## Resolved Issues
+* NEFF is container of files. When NEFF is generated on some host the content files permissions are inherited causing NEFF load failure in the inf1 instances. Fixed it by removing file permissions before loading it.
+
+
 # [1.0.9592.0]
 
 Date: 09/22/2020

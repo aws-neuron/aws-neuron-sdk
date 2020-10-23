@@ -17,6 +17,15 @@ aws ecr get-login-password --region us-west-2 | docker login --username AWS --pa
 docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
 docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
 ```
+# [1.1.23.0]
+
+Date: 10/22/2020
+
+## Summary
+Support added for use with Neuron Runtime 1.1.  More details in the Neuron Runtime release notes [here](./neuron-runtime.md).
+
+
+
 # [1.1.17.0]
 
 Date: 09/22/2020

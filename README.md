@@ -85,7 +85,7 @@ Neuron github provides detailed tutorials for each of the supported frameworks, 
 Neuron includes a set of tools and capabilities to help developers monitor and optimize their Neuron based inference applications. Neuron tools can be incorporated into scripts to automate Neuron devices operation and health monitoring, and include discover and usage utilities, data-path profiling tools, and visualization utilities. Using a TensorBoard plugin you can inspect and profile graphs execution.
 
 * [Getting started: Neuron TensorBoard profiling](./docs/neuron-tools/getting-started-tensorboard-neuron.md)
-* [Neuron utilities](./docs/neuron-tools/Readme.md)
+* [Neuron utilities](./docs/neuron-tools/README.md)
 
 ## Support
 If none of the github and online resources have an answer to your question, checkout the AWS Neuron [support forum](https://forums.aws.amazon.com/forum.jspa?forumID=355).

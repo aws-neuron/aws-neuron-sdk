@@ -1,10 +1,32 @@
-# Neuron Tools release notes
+# Neuron Tools Release Notes
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 09/22/2020
+# Known Issues and Limitations 10/22/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+
+# [1.1.228.0]
+
+Date: 10/22/2020
+
+## Major New Features
+
+* n/a
+
+## Improvements
+
+* All the tools now use nd0:nc0 to identify NeuronDevice and NeuronCore instead of bdf.
+* `neuron-cli list-model` now shows NCG Id for each loaded model.
+* `neuron-top` columns are reordered to show usage details first.
+* `neuron-top` shows weights in human readable format(MB, GB).
+
+## Resolved Issues
+
+* `neuron-top` now correctly shows NC usage if multiple models are loaded onto the same NC.
+
+
 
 # [1.0.11054.0]
 
