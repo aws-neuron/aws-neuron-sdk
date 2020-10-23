@@ -72,7 +72,7 @@ Neuron github provides detailed tutorials for each of the supported frameworks, 
 
 ### Run ResNet50 inference examples
 * [Using TensorFlow](./docs/tensorflow-neuron/tutorial-compile-infer.md)
-* [Using PyTorch](./docs/pytorch-neuron/tutorial-compile-infer.md)
+* [Using PyTorch](./src/pytorch/getting_started.md)
 * [Using MXNet](./docs/mxnet-neuron/tutorial-compile-infer.md)
 * Hands-on Neuron lab [Inference with Amazon EC2 Inf1 Instance](https://github.com/awshlabs/reinvent19Inf1Lab)
 
