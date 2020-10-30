@@ -22,7 +22,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 1.1. Select an AMI of your choice. 
 
-Refer to the [Neuron installation guide](../neuron-install-guide.md) for details.
+Refer to the [Neuron installation guide](../../docs/neuron-install-guide.md) for details.
 
 1.2. Select and launch an EC2 instance
 
