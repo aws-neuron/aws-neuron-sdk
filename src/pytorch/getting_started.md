@@ -22,7 +22,7 @@ A typical workflow with the Neuron SDK will be to compile trained ML models on a
 
 1.1. Select an AMI of your choice. 
 
-Refer to the [Neuron installation guide](../neuron-install-guide.md) for details.
+Refer to the [Neuron installation guide](../../docs/neuron-install-guide.md) for details.
 
 1.2. Select and launch an EC2 instance
 
@@ -35,7 +35,7 @@ Refer to the [Neuron installation guide](../neuron-install-guide.md) for details
 
 If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
 
-To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron packages. 
+To install in your own AMI, please see [Neuron Install Guide](../../docs/neuron-install-guide.md) to setup virtual environment and install Torch-Neuron packages. 
 
 ## Step 3: Compile on compilation instance
 
@@ -137,7 +137,7 @@ On the instance you are going to use for inference, install Torch-Neuron and Neu
 * Install neuron-cc[tensorflow] if compilation on inference instance is desired (see notes above on recommended Inf1 sizes for compilation)
 * Skip neuron-cc if compilation is not done on inference instance
 
-4.2. Install the Neuron Runtime using instructions from [Getting started: Installing and Configuring Neuron-RTD](https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-runtime/nrt_start.md).
+4.2. Install the Neuron Runtime using instructions from [Getting started: Installing and Configuring Neuron-RTD](../../docs/neuron-runtime/nrt_start.md).
 
 ## Step 5: Run inference
 
