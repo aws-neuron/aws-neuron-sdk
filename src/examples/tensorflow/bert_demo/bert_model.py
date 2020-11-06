@@ -45,7 +45,6 @@ def main():
 
     aggr_args = [
         '--tensor-layout-heuristics=spatial-locality',
-        '--enable-experimental-tensorized-scheduler',
         '--fp32-cast', 'matmult-fp16',
     ]
     compiler_args = aggr_args if args.aggressive_optimizations else ['--fp32-cast', 'matmult', '--topdown']
