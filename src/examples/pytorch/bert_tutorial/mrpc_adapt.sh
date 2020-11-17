@@ -34,8 +34,9 @@ echo "Adapting for MRPC ..."
 pushd .
 cd $TRANSFORMER_DIR
 
-python -m torch.distributed.launch --nproc_per_node 8 ./examples/text-classification/run_glue.py   \
+python -m torch.distributed.launch --nproc_per_node 8 ./examples/run_glue.py   \
     --model_name_or_path bert-large-uncased-whole-word-masking \
+    --model_type bert \
     --task_name MRPC \
     --do_train   \
     --do_eval   \

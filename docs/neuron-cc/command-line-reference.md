@@ -39,7 +39,7 @@ neuron-cc <command> --help for information on a specific command.
 # neuron-cc compile
 
 ```
-neuron-cc compile <file names> --framework <value> --io-config <value> [--num-neuroncores <value>] [--output <value>]
+neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--output <value>]
 ```
 
 ## Description
@@ -53,7 +53,7 @@ neuron-cc compile test_graph_tfmatmul.pb --framework TENSORFLOW --io-config test
 ```
 
 ```
-neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --num-neuroncores 2 --output out.infa —debug
+neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --neuroncore-pipeline-cores 2 --output out.infa —debug
 ```
 
 ## Options
@@ -72,8 +72,12 @@ Framework in which the model was trained.
 
 Valid values: TENSORFLOW | MXNET | ONNX
 
-**--num-neuroncores** (int) (default 1)
-Compile for the given number of neuron cores so as to leverage NeuronCore Pipeline mode. **NOTE: This is not used to define the number of Neuron Cores to be used in a data parallel deployment (ie the same model on multiple Neuron Cores). That is a runtime/framework configuration choice.** 
+**--neuroncore-pipeline-cores** (int) (default 1)
+Number of neuron cores to be used in "NeuronCore
+Pipeline" mode. This is different from data parallel
+deployment (same model on multiple neuron cores).
+Refer to Runtime/Framework documentation for data
+parallel deployment options.
 
 **--output** (string) (default “out.neff”)
 Filename where compilation output (NEFF archive) will be recorded.

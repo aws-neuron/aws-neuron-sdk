@@ -13,7 +13,9 @@ Within the graph or subgraph, the compile method selects and sends Neuron-suppor
 
 The compiled graph can be saved using the MXNet save_checkpoint and served using MXNet Model Serving. Please see [MXNet-Neuron Model Serving](./tutorial-model-serving.md) for more information about exporting to saved model and serving using MXNet Model Serving.
 
-Options can be passed to Neuron compiler via the compile function. For example, the “`--num-neuroncores`” option directs Neuron compiler to compile each subgraph to fit in the specified number of NeuronCores. This number can be less than the total available NeuronCores on an Inf1 instance. See [Neuron Compiler CLI](../neuron-cc/command-line-reference.md) for more information about compiler options.
+Options can be passed to Neuron compiler via the compile function. For example, the “`--neuroncore-pipeline-cores`” option directs Neuron compiler to compile each subgraph to fit in the specified number of NeuronCores. This number can be less than the total available NeuronCores on an Inf1 instance. See [Neuron Compiler CLI](../neuron-cc/command-line-reference.md) for more information about compiler options.
+
+NOTE: NDArray and Gluon APIs is not supported in MXNet-Neuron.
 
 ## Arguments
 
@@ -22,7 +24,7 @@ Options can be passed to Neuron compiler via the compile function. For example, 
 * **aux** - aux/params dictionary loaded from params file
 * **inputs** - a dictionary with key/value mappings for input name to input numpy arrays
 * **kwargs** (optional) - a dictionary with key/value mappings for MXNet-Neuron compilation and Neuron Compiler options.
-  * For example, to limit the number of NeuronCores per subgraph, use `compile_args={'--num-neuroncores' : N}` where N is an integer representing the maximum number of NeuronCores per subgraph.
+  * For example, to limit the number of NeuronCores per subgraph, use `compile_args={'--neuroncore-pipeline-cores' : N}` where N is an integer representing the maximum number of NeuronCores per subgraph.
   * Additional compiler flags can be passed using `'flags' : [<flags>]` where <flags> is a comma separated list of strings. See [Neuron GatherInfo Tool](../neuron-tools/tutorial-neuron-gatherinfo.md) for example of passing debug flags to compiler.
   * Advanced option to exclude node names: `compile_args={'excl_node_names' : [<node names>]}` where <node names> is a comma separated list of node name strings.
 

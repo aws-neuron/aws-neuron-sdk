@@ -13,6 +13,19 @@ Use this table to determine the version of Runtime that will support the version
 
 ---
 
+# [1.2.5.0]
+
+Date: 11/17/2020
+
+## Major New Features
+* Removed limitations on intermediate tensors in networks compiled for NeuronCore Pipeline. Previously, NeuronCores executing the pipeline could pass their outputs no further then to the NeuronCores on the same or the next Inferetia on an instance. This limitation is removed and a NeuronCore can now pass its outputs to any other NeuronCore in the NeuronCore Pipeline. This feature allows for deeper pipelines utilizing more NeuronCores that can result in better performance.
+
+
+## Resolved Issues
+* Reloading Neuron Kernel Mode Driver causes memory leak
+* Memory pool initialization can reference NULL pointer in case of a failure.
+* A network fails to load on Inferetia with “Incorrect number of inputs” error.  In some cases the Neuron Compiler could determine that a network input is a constant.  The compiler then optimizes the input away to improve the performance.  This action could create a mismatch between the inputs to the network submitted by a framework and the inputs expected by Inferentia causing errors during load.
+
 # [1.1.1402.0]
 
 Date: 10/22/2020

@@ -11,7 +11,7 @@ echo "" > full_sweep_results.txt
 results=()
 for b in $(seq 1 5); do 
     for i in 1 2 4 8 12 16; do 
-        python pb2sm_compile.py --batch_size=$b --num_neuroncores=$i | tee -a full_sweep.log;
+        python pb2sm_compile.py --batch_size=$b --neuroncore-pipeline-cores=$i | tee -a full_sweep.log;
         results[$b]+=", "`tail -1 full_sweep.log`
     done
 done

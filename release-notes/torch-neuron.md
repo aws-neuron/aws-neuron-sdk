@@ -2,11 +2,24 @@
 
 This document lists the release notes for the Pytorch-Neuron package.
 
-## Known Issues and Limitations - Updated 09/22/2020
+## Known Issues and Limitations - Updated 11/17/2020
 The following are not torch-neuron limitations, but may impact models you can successfully torch.neuron.trace 
-* The current torchvision version has dropped support for Python 3.5
-* The current HuggingFace transformers version has dropped support for Python 3.5
+* Torchvision has dropped support for Python 3.5
+* HuggingFace transformers has dropped support for Python 3.5
 * There are known issues when customer use a mixture of conda and pip packages.  We strongly recommend that you install aws neuron conda packages if you are using a conda environment, and use the pip installation if you are working in a base python environment (or a native python virtual environment) as recommended in our installation notes [here](../docs/neuron-install-guide.md#neuron-conda-packages)
+* When using the most recent DLAMI and 'aws_neuron_pytorch_p36' you may see lower performance than expected in https://github.com/aws/aws-neuron-sdk/blob/master/src/pytorch/getting_started.md.  This issue will be corrected in the v37 DLAMI release.
+* aten::max only correctly implements the simplest versions of that operator, the variants that return a tuple with arg max now return NotImplementedError during compilation
+
+# [1.0.1978.0]
+
+Date: 11/17/2020
+
+## Summary
+* Fixed bugs in comparison operators, and added remaining variantes (eq, ne, gt, ge, lt, le)
+* Added support for prim::PythonOp - note that this must be run on CPU and not Neuron.  We recommend you replace this code with PyTorch operators if possible
+* Support for a series of new operators.  Please see [Neuron-cc PyTorch Operators](./neuron-cc-ops/neuron-cc-ops-pytorch.md) for the complete list of operators.
+* Performance improvements to the runtime library
+* Correction of a runtime library bug which caused models with large tensors to generate incorrect results in some cases
 
 # [1.0.1721.0]
 

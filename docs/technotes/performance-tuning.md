@@ -49,13 +49,13 @@ tfn.saved_model.compile("rn50_fp16",
 
 ## Compiling for pipeline optimization
 
-With NeuronCore Pipeline mode, Neuron stores the model parameters onto the Inferentias' local caches, and streams the inference requests across the available NeuronCores, as specified by the `--num-neuroncores` compiler argument. For example, to compile the model to fit pipeline size of four Inferentia devices (16 NeuronCores) avaliable in the inf1.6xlarge instance size:
+With NeuronCore Pipeline mode, Neuron stores the model parameters onto the Inferentias' local caches, and streams the inference requests across the available NeuronCores, as specified by the `--neuroncore-pipeline-cores` compiler argument. For example, to compile the model to fit pipeline size of four Inferentia devices (16 NeuronCores) avaliable in the inf1.6xlarge instance size:
 
 ```python
 import numpy as np
 import tensorflow.neuron as tfn
 
-compiler_args = ['--static-weights', '--num-neuroncores', '16']
+compiler_args = ['--neuroncore-pipeline-cores', '16']
 example_input = np.zeros([1,224,224,3], dtype='float16')
 tfn.saved_model.compile("rn50_fp16",
                         "rn50_fp16_compiled/1",
@@ -77,7 +77,7 @@ Both of methods can be applied together if that shows improvement in performance
 
 By default, the framework sets the number of outstanding inference requests to the total number of NeuronCores plus three. This can be changed by setting the NEURON_MAX_NUM_INFERS environment variable. For example, if the compiled model includes some CPU partitions (as when Neuron compiler decided some operations are more efficient to execute on CPU), the number of threads should be increased to account for the additional compute performed on the CPU. Note that the available instance host memory size should be taken into consideration to avoid out-of-memory errors. As above, you need to experiment in order to find the right optimization settings for your application.
 
-**Note:** By default the framework allocates NeuronCore Group size to match the size of the compiled model. The size of the model is the number of NeuronCores limit passed to compiler during compilation (`--num-neuroncores` option). For more information see [Tutorial TensorFlow-Neuron NeuronCore Groups](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-NeuronCore-Group.md).
+**Note:** By default the framework allocates NeuronCore Group size to match the size of the compiled model. The size of the model is the number of NeuronCores limit passed to compiler during compilation (`--neuroncore-pipeline-cores` option). For more information see [Tutorial TensorFlow-Neuron NeuronCore Groups](https://github.com/aws/aws-neuron-sdk/blob/master/docs/tensorflow-neuron/tutorial-NeuronCore-Group.md).
 
 ## Other considerations
 

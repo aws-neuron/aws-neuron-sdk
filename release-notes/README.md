@@ -1,5 +1,13 @@
 # Neuron Release Notes
 
+## November 17, 2020
+
+This release improves NeuronCore Pipeline performance. For example, running BERT Small, batch=4, seqlen=32 using 4 Neuron Cores, results in throughput of up to 7000 sequences per second and P99 latency of 3ms using Tensorflow Serving.
+
+Neuron tools updated the NeuronCore utilization metric to include all inf1 compute engines and DMAs. Added a new neuron-monitor example that connects to Grafana via Prometheus. We've added a new sample script which exports most of neuron-monitor's metrics to a Prometheus monitoring server. Additionally, we also provided a sample Grafana dashboard. More details [here](./neuron-tools.md).
+
+ONNX support is limited and from this version onwards we are not planning to add any additional capabilities to ONNX. We recommend running models in TensorFlow, PyTorch or MXNet for best performance and support.
+
 ## October 22, 2020 Release
 
 This release adds a Neuron kernel mode driver (KMD). The Neuron KMD simplifies Neuron Runtime deployments by removing the need for elevated privileges, improves memory management by removing the need for huge pages configuration, and eliminates the need for running neuron-rtd as a sidecar container. Documentation throughout the repo has been updated to reflect the new support. The new Neuron KMD is backwards compatible with prior versions of Neuron ML Frameworks and Compilers - no changes are required to existing application code.

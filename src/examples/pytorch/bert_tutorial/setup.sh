@@ -68,7 +68,7 @@ echo "Get Transformers ..."
 if [ -d "transformers" ]; then
     echo "Directory 'transformers' already exists, not downloading from github"
 else
-    git clone https://github.com/huggingface/transformers
+    git clone --branch v2.8.0 https://github.com/huggingface/transformers
     if [ -d "transformers" ]; then
         echo "GIT clone of transformers succeeded"
     else
@@ -94,11 +94,11 @@ else
     return 1
 fi
 
-echo "Install PyTorch 1.3.1 ..."
-if [[ $(pip install torch==1.3.1) ]]; then
-    echo "Successfully installed torch 1.3.1"
+echo "Install PyTorch 1.5.1 ..."
+if [[ $(pip install torch==1.5.1) ]]; then
+    echo "Successfully installed torch 1.5.1"
 else
-    echo "Failed to install torch 1.3.1"
+    echo "Failed to install torch 1.5.1"
     return 1
 fi
 
