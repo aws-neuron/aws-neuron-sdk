@@ -14,16 +14,36 @@ The supported operators are also listed here:
 * [Neuron-cc MXNet Operators](./neuron-cc-ops/neuron-cc-ops-mxnet.md)
 * [Neuron-cc ONNX Operators](./neuron-cc-ops/neuron-cc-ops-onnx.md)
 
-## Known issues and limitations - updated 09/22/2020
+## Known issues and limitations - updated 11/17/2020
 
-1. **Control flow** Neuron only supports control flow operators which are static at compile time, i.e. static length RNN, top-k, sort, ...
-2. **Size of neural network** The size of neural network is influenced by a) type of neural network (CNN, LSTM, MLP) , b) number of layers, c) sizes of input (dimension of the tensors, batch size, ...). The Neuron compiler has relaxed many limitations on these input sizes. As sizes grow in the combination of tensors and batch sizes, compile time can grow and other issues may arise. Please contact us for help.
-3. **Data layout**  The Neuron compiler supports multiple data layout format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will require Neuron to insert additional _*transpose*_ operations, causing a degradation in performance.
-4. **Object detection models** Computer-vision object detection and segmentation models are not supported by the current release except for SSD-300, YOLO v3, YOLO v4. More support is coming in future releases.
-5. **Tensor residency** When a sub-graph that is executed on the host is communicating with a sub-graph that is executing on Neuron cores, tensors are copied via the communication queues between the host and Inferentia memory for each inference, which may result in end-to-end performance degradation.
-6. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
-7. On Ubuntu16, ResNet50 FP32 batch 1 compilation fails when "--batch_en" is used. On Ubuntu 18, this is not an issue.
-8. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
+1. **Control flow** Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
+2. **Data layout**  The Neuron compiler supports multiple data layout format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will require Neuron to insert additional _*transpose*_ operations, causing a degradation in performance.
+3. **Object detection models** SSD-300, YOLO v3, YOLO v4 are supported. More support is coming in future releases for RCNN-based models.
+4. **Primary inputs in NeuronCore Pipeline mode** When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
+7. **Reduce data type** INT8 data type is not currently supported by the Neuron compiler.
+8. **ONNX support** Support for ONNX models is limited. If generated from other frameworks then please use the native model directly.
+9. **NeuronCore Pipeline:** NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance. Currently there is a known issue with a compiler crash on batch size 32 using BERT-Base, sequence length=128, --neuroncore-pipeline-cores = 16, but this is not the optimal setting for that model.
+
+# [1.0.24045.0]
+
+Date 11/17/2020
+
+## Summary
+
+Improved performance for pipelined execution (NeuronCore Pipeline). 
+
+## Major New Features
+
+* NeuronCore Pipeline: improved partitioning to enable better static weights loading to cache.
+
+
+## Resolved Issues
+
+* --static-weights : No longer needed. As this is shown in some examples, please remove the option since the compiler now performs this auto-detection by default.
+
+* --num-neuroncores renamed to --neuroncore-pipeline-cores. The prior option form is still functional (backwards compatible) and will be removed in future releases.
+
+* --batching_en: Resolved compilation failure of ResNet50 FP32 batch 1 on Ubuntu16 when "--batching_en" was used. 
 
 # [1.0.20600.0]
 
@@ -32,17 +52,17 @@ Date 9/22/2020
 ## Summary
 
 Various performance improvements - both compilation time and inference speed of object recognition models. 
-Compiler optimization '-O2' option is now enabled by default.
+* Compiler optimization '-O2' option is now enabled by default.
 
 ## Major New Features
 
-Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300. BERT models were improved by an additional 10%.
+* Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300. BERT models were improved by an additional 10%.
 
-Modifed such that -O2 is now the default behavior and does not need to be specified. Note: some tutorials still explicitly specify "-O2". These will be modified in forthcoming updates.
+* Modifed such that -O2 is now the default behavior and does not need to be specified. Note: some tutorials still explicitly specify "-O2". These will be modified in forthcoming updates.
 
 ## Resolved Issues
 
-Sped up compilation of large models that were taking hours to sub-40 minute.
+* Sped up compilation of large models that were taking hours to sub-40 minute.
 
 
 
@@ -56,7 +76,7 @@ Various performance improvements.
 
 ## Major New Features
 
-Improved performance of BERT base with -O2
+* Improved performance of BERT base with -O2
 
 ## Resolved Issues
 

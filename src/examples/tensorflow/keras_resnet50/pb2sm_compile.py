@@ -15,7 +15,7 @@ tf.keras.backend.set_image_data_format('channels_last')
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('--batch_size', type=int, default=5, choices=range(1, 6), help='Input data batch size for compilation of model')
-arg_parser.add_argument('--num_neuroncores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
+arg_parser.add_argument('--neuroncore-pipeline-cores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
 args = arg_parser.parse_args()
 
 def pb_to_saved_model(pb_path, input_names, output_names, model_dir):
@@ -35,17 +35,16 @@ pb_to_saved_model("resnet50_fp16_keras_opt.pb", {"input_1:0": "input_1:0"}, {"pr
 
 batch_size = args.batch_size
 img_arr = np.zeros([batch_size, 224, 224, 3], dtype='float16')
-compiled_saved_model_dir = saved_model_dir + "_compiled_b" + str(batch_size) + "_nc" + str(args.num_neuroncores)
+compiled_saved_model_dir = saved_model_dir + "_compiled_b" + str(batch_size) + "_nc" + str(args.neuroncore_pipeline_cores)
 shutil.rmtree(compiled_saved_model_dir + "/1", ignore_errors=True)
 
-print("\n*** Batch size {}, num NeuronCores {} (input shape: {}, saved model dir: {}) ***\n".format(batch_size, args.num_neuroncores, img_arr.shape, compiled_saved_model_dir))
+print("\n*** Batch size {}, num NeuronCores {} (input shape: {}, saved model dir: {}) ***\n".format(batch_size, args.neuroncore_pipeline_cores, img_arr.shape, compiled_saved_model_dir))
 compiler_args = ['--batching_en', '--rematerialization_en', '--spill_dis',
                  '--sb_size', str((batch_size + 6)*10), 
                  '--enable-replication', 'True',
-                 '--num-neuroncores', str(args.num_neuroncores)]
+                 '--neuroncore-pipeline-cores', str(args.neuroncore_pipeline_cores)]
 static_weights = False
-if args.num_neuroncores >= 8:
-    compiler_args.append('--static-weights')
+if args.neuroncore_pipeline_cores >= 8:
     static_weights = True
 
 shutil.rmtree('compiler_workdir', ignore_errors=True)

@@ -17,6 +17,14 @@ aws ecr get-login-password --region us-west-2 | docker login --username AWS --pa
 docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
 docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
 ```
+# [1.2.0.0]
+
+Date: 11/17/2020
+
+## Summary
+Minor internal enhancements.
+
+
 # [1.1.23.0]
 
 Date: 10/22/2020

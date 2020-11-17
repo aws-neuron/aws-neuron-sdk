@@ -33,9 +33,9 @@ Refer to the [Neuron installation guide](../../docs/neuron-install-guide.md) for
 
 ## Step 2: Compilation instance installations
 
-If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
+If using Conda DLAMI, ensure you use the latest version, you can activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36` command). 
 
-To install in your own AMI, please see [Neuron Install Guide](../../docs/neuron-install-guide.md) to setup virtual environment and install Torch-Neuron packages. 
+To install in your own AMI, please see [Neuron Install Guide](../../docs/neuron-install-guide.md) to setup virtual environment and install the latest Torch-Neuron packages. 
 
 ## Step 3: Compile on compilation instance
 
@@ -76,7 +76,9 @@ torch.neuron.analyze_model( model, example_inputs=[image] )
 
 ## Now compile the model - with logging set to "info" we will see
 ## what compiles for Neuron, and if there are any fallbacks
-model_neuron = torch.neuron.trace(model, example_inputs=[image])
+## Note: The "-O2" setting is default in recent releases, but may be needed for DLAMI
+##       and older installed environments
+model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
 
 ## Export to saved model
 model_neuron.save("resnet50_neuron.pt")
@@ -445,9 +447,10 @@ Here we use a batch size of 5 - but you can use any value, or test multiple.  Ch
 ```python
 import torch
 import numpy as np
-import osimport torch_neuron
-from torchvision 
-import models
+import os
+import torch_neuron
+from torchvision import models
+import logging
 
 ## Enable logging so we can see any important warnings
 logger = logging.getLogger('Neuron')
@@ -469,7 +472,9 @@ analyze_results = torch.neuron.analyze_model( model, example_inputs=[image] )
 print(analyze_results)
 
 ## Now compile the model
-model_neuron = torch.neuron.trace(model, example_inputs=[image])
+## Note: The "-O2" setting is default in recent releases, but may be needed for DLAMI
+##       and older installed environments
+model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
 
 ## Export to saved model
 model_neuron.save("resnet50_neuron_b{}.pt".format(batch_size))

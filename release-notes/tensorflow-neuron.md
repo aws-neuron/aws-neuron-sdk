@@ -3,11 +3,33 @@
 This document lists the release notes for the TensorFlow-Neuron package.
 
 
-# Known Issues and Limitations - updated 09/22/2020
+# Known Issues and Limitations - updated 11/17/2020
 
 * Issue: When compiling large models, user might run out of memory and encounter this fatal error. 
-```terminate called after throwing an instance of 'std::bad_alloc'```
+```
+terminate called after throwing an instance of 'std::bad_alloc'
+```
 Solution: run compilation on a c5.4xlarge instance type or larger.
+* Issue: When upgrading `tensorflow-neuron` with `pip install tensorflow-neuron --upgrade`,
+the following error message may appear, which is caused by `pip` version being too low.
+```
+  Could not find a version that satisfies the requirement tensorflow<1.16.0,>=1.15.0 (from tensorflow-neuron)
+```
+Solution: run a `pip install pip --upgrade` before upgrading `tensorflow-neuron`.
+
+
+# [1.15.4.1.0.2168.0]
+
+Date: 11/17/2020
+
+## Summary
+
+1. tensorflow-neuron is now a plugin package that can be used together with tensorflow~=1.15.0 built with `GLIBCXX_USE_CXX11_ABI=0`.
+2. Improved logging during `tfn.saved_model.compile` to display `neuron-cc` logging file path,
+which is useful for tracking `neuron-cc` compilation progress.
+3. Small performance improvement by utilizing shared memory more efficiently.
+
+
 
 # [1.15.3.1.0.2043.0]
 

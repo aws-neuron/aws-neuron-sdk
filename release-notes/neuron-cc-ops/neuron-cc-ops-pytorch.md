@@ -7,6 +7,28 @@ import torch.neuron
 print(*torch.neuron.get_supported_operations(), sep='\n')
 ```
 
+### PyTorch Neuron Release [1.0.24045.0]
+Added:
+```
+ aten::__and__
+ aten::bmm
+ aten::clone
+ aten::expand_as
+ aten::fill_
+ aten::floor_divide
+ aten::full
+ aten::hardtanh
+ aten::hardtanh_
+ aten::le
+ aten::leaky_relu
+ aten::lt
+ aten::mean
+ aten::ne
+ aten::softplus
+ aten::unbind
+ aten::upsample_bilinear2d
+```
+
 ### PyTorch Neuron Release [1.0.1720.00]
 Added:
 ```

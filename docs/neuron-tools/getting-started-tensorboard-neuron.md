@@ -95,16 +95,16 @@ Use the TensorFlow APIs to create the event file.  See the sample Python code sn
 ```
 import tensorflow as tf
 
-your_graph_file = '/path/to/graph/file'
-your_graph_def = tf.GraphDef()
-with open(your_graph_file, 'rb') as f:
+graph_file = '/path/to/graph_def.pb' # Change path here
+graph_def = tf.GraphDef()
+with open(graph_file, 'rb') as f:
     graph_def.ParseFromString(f.read())
 
-your_graph = tf.Graph()
-with your_graph.as_default():
-    tf.import_graph_def(your_graph_def, name='')
+graph = tf.Graph()
+with graph.as_default():
+    tf.import_graph_def(graph_def, name='')
 
-fw = tf.summary.FileWriter(graph=yourgraph, logdir='/path/to/logdir'
+fw = tf.summary.FileWriter(graph=graph, logdir='/path/to/logdir') # Change logdir here
 fw.flush()
 ```
 

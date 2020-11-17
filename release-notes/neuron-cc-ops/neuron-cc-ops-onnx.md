@@ -1,5 +1,8 @@
 # Supported operators [ONNX]
 
+### Neuron Compiler Release [1.0.24045.0]
+
+Added ```Abs```
 
 ### Neuron Compiler Release [1.0.18001]
 

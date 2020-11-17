@@ -1,6 +1,11 @@
 # Supported operators [MXNet]
 
 
+### Neuron Compiler Release [1.0.24045.0]
+
+Added ```_contrib_div_sqrt_dim```, ```broadcast_axis```
+
+
 ### Neuron Compiler Release [1.0.18001.0]
 
 No changes

@@ -76,7 +76,7 @@ Inferentia chips support FP16, BFloat16 mixed-precision data-types and INT8. It 
 
 **Q: What are some of the important compiler defaults I should be aware of?**
 
-The compiler compiles the input graph for a single NeuronCore by default.  Using the The “`num-neuroncores`” option directs compiler to direct compiled graph to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an instance. See performance tuning application note [link](.) for more information (TODO). 
+The compiler compiles the input graph for a single NeuronCore by default.  Using the The “`neuroncore-pipeline-cores`” option directs the compiler to partition so as to run on a specified number of NeuronCores. This number can be less than the total available NeuronCores on an instance. See performance tuning application note [link](./docs/technotes/performance-tuning.md) for more information. 
 
 **Q: Which operators does Neuron support?**
 * [Neuron-cc TensorFlow Operators](./release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.md)

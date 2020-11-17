@@ -1,5 +1,9 @@
 # Running SSD300 with AWS Neuron
 
+*Update 11/16: The model checkpoint link
+https://api.ngc.nvidia.com/v2/models/nvidia/ssdpyt_fp32/versions/1/files/nvidia_ssdpyt_fp32_20190225.pt
+is currently broken and the AWS Neuron team is working on providing an alternative source.*
+
 This demo shows a Neuron compatible SSD300 implementation that is functionally equivalent to open source SSD300 model. This demo uses TensorFlow-Neuron, PyTorch SSD300 model and checkpoint (https://pytorch.org/hub/nvidia_deeplearningexamples_ssd/) and also shows the performance achieved by the Inf1 instance. 
 
 ## Table of Contents
