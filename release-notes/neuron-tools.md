@@ -15,7 +15,7 @@ Date: 11/17/2020
 ## Major New Features
 
 * **neuron-monitor** now provides system-wide memory usage statistics. Many JSON field names have been updated. We've added a new sample script which exports most of **neuron-monitor**'s metrics to a [Prometheus](https://prometheus.io/) monitoring server.
- Additionally, we also provided a [sample Grafana dashboard](../docs/neuron-tools/neuron-monitor-grafana.json) - in JSON format - which can be imported to a [Grafana](https://grafana.com/) instance via its [web interface](https://grafana.com/docs/grafana/latest/dashboards/export-import/#importing-a-dashboard). This dashboard can then
+ Additionally, we also provided a [sample Grafana dashboard](../src/examples/neuron-monitor/neuron-monitor-grafana.json) - in JSON format - which can be imported to a [Grafana](https://grafana.com/) instance via its [web interface](https://grafana.com/docs/grafana/latest/dashboards/export-import/#importing-a-dashboard). This dashboard can then
  present the metric data made available to Prometheus by **neuron-monitor**.
  More details on how to use **neuron-monitor** with this new feature can be found in the [User Guide](../docs/neuron-tools/neuron-monitor-user-guide.md).
 
