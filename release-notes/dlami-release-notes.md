@@ -2,6 +2,121 @@
 
 For more information about using Neuron with Conda and Base DLAMI, please see https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
+# [DLAMI v36]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0
+
+conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0
+
+conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
+
+aws-neuron-dkms-1.1
+
+aws-neuron-runtime-base-1.1.1.0
+
+aws-neuron-runtime-1.1.1402.0
+
+aws-neuron-tools-1.1.228.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.2043.0
+
+
+# [DLAMI v35]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0
+
+conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0
+
+conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
+
+aws-neuron-runtime-base-1.0.8126.0
+
+aws-neuron-runtime-1.0.9592.0
+
+aws-neuron-tools-1.0.11054.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.2043.0
+
+# [DLAMI v34]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.1.1.0_2.0.651.0
+
+conda package tensorflow-neuron-1.15.3.1.0.1965.0_2.0.778.0
+
+conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
+
+aws-neuron-runtime-base-1.0.7803.0
+
+aws-neuron-runtime-1.0.9197.0
+
+aws-neuron-tools-1.0.10616.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1965.0
+
+
+# [DLAMI v33]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.1.1.0_2.0.651.0
+
+conda package tensorflow-neuron-1.15.3.1.0.1965.0_2.0.778.0
+
+conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
+
+aws-neuron-runtime-base-1.0.7803.0
+
+aws-neuron-runtime-1.0.8896.0
+
+aws-neuron-tools-1.0.10272.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1965.0
+
+
+# [DLAMI v32]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.0.2101.0_2.0.631.0
+
+conda package tensorflow-neuron-1.15.3.1.0.1953.0_2.0.769.0
+
+conda package torch-neuron-1.5.1.1.0.258.0_2.0.871.0
+
+aws-neuron-runtime-base-1.0.7618.0
+
+aws-neuron-runtime-1.0.8813.0
+
+aws-neuron-tools-1.0.10182.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1953.0
+
+
+# [DLAMI v31]
+
+## Versions of Neuron packages included:
+
+conda package mxnet-neuron-1.5.1.1.0.2093.0_2.0.579.0
+
+conda package tensorflow-neuron-1.15.3.1.0.1891.0_2.0.706.0
+
+conda package torch-neuron-1.5.1.1.0.251.0_2.0.783.0
+
+aws-neuron-runtime-base-1.0.7395.0
+
+aws-neuron-runtime-1.0.8032.0
+
+aws-neuron-tools-1.0.9171.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.1796.0
+
+
 # [DLAMI v30.1 (Amazon Linux 2)]
 
 ## Versions of Neuron packages included:
@@ -11,8 +126,6 @@ conda package mxnet-neuron-1.5.1.1.0.2033.0_2.0.489.0
 conda package tensorflow-neuron-1.15.2.1.0.1796.0_2.0.593.0
 
 conda package torch-neuron-1.3.0.1.0.215.0_2.0.633.0
-
-aws-neuron-k8-plugin-1.0.9171.0
 
 aws-neuron-runtime-base-1.0.7395.0
 
@@ -31,8 +144,6 @@ conda package mxnet-neuron-1.5.1.1.0.2033.0_2.0.489.0
 conda package tensorflow-neuron-1.15.2.1.0.1796.0_2.0.593.0
 
 conda package torch-neuron-1.3.0.1.0.215.0_2.0.633.0
-
-aws-neuron-k8-plugin-1.0.9171.0
 
 aws-neuron-runtime-base-1.0.7295.0
 

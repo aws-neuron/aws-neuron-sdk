@@ -1,5 +1,11 @@
 # Supported operators [TensorFlow]
 
+
+### Neuron Compiler Release [1.0.24045.0]
+
+Added ```FloorDiv```, ```Softplus```, ```Unstack```
+
+
 ### Neuron Compiler Release [1.0.18001]
 
 No changes

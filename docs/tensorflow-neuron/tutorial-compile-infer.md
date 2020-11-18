@@ -66,7 +66,7 @@ tf.saved_model.simple_save(
     outputs            = {'output': model.outputs[0]})
 
 # Compile using Neuron
-tfn.saved_model.compile(model_dir, compiled_model_dir)    
+tfn.saved_model.compile(model_dir, compiled_model_dir)
 
 # Prepare SavedModel for uploading to Inf1 instance
 shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
@@ -110,7 +110,7 @@ In this step we run inference on Inf1 using the model compiled in Step 3.
 ```bash
 unzip -o resnet50_neuron.zip
 curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
-pip install pillow # Necessary for loading images
+pip install pillow "h5py<3.0.0" # Necessary for loading images
 ```
 
 5.2. On the Inf1, create a inference Python script named `infer_resnet50.py` with the following content:

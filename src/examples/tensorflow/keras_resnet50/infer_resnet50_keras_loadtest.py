@@ -20,7 +20,7 @@ tf.keras.backend.set_image_data_format('channels_last')
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('--batch_size', type=int, default=5, choices=range(1, 6), help='Batch size of model as it was compiled')
-arg_parser.add_argument('--num_neuroncores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
+arg_parser.add_argument('--neuroncore-pipeline-cores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
 args = arg_parser.parse_args()
 
 instance_type = requests.get('http://169.254.169.254/latest/meta-data/instance-type').text
@@ -36,14 +36,14 @@ avail_neuroncores = avail_neuroncores_dict.get(instance_type, 0)
 
 USER_BATCH_SIZE = 10 * args.batch_size
 NUM_LOOPS_PER_THREAD = 100
-COMPILED_MODEL_DIR = "./rn50_fp16_compiled_b" + str(args.batch_size) + "_nc" + str(args.num_neuroncores) + "/1"
+COMPILED_MODEL_DIR = "./rn50_fp16_compiled_b" + str(args.batch_size) + "_nc" + str(args.neuroncore_pipeline_cores) + "/1"
 
 # Ensure there's enough buffer capacity to hold in-flight requests in runtime
-NUM_INFERS_IN_FLIGHT = args.num_neuroncores + 3
+NUM_INFERS_IN_FLIGHT = args.neuroncore_pipeline_cores + 3
 os.environ['NEURON_MAX_NUM_INFERS'] = str(NUM_INFERS_IN_FLIGHT)
 
-num_groups = avail_neuroncores // args.num_neuroncores
-group_sizes = [str(args.num_neuroncores)] * num_groups
+num_groups = avail_neuroncores // args.neuroncore_pipeline_cores
+group_sizes = [str(args.neuroncore_pipeline_cores)] * num_groups
 os.environ['NEURONCORE_GROUP_SIZES'] = ','.join(group_sizes)
 
 # Create input from image
@@ -53,7 +53,7 @@ img_arr2 = np.expand_dims(img_arr, axis=0)
 img_arr3 = resnet50.preprocess_input(np.repeat(img_arr2, USER_BATCH_SIZE, axis=0))
 
 # Load model
-NUM_THREADS_PER_PREDICTOR = args.num_neuroncores + 1
+NUM_THREADS_PER_PREDICTOR = args.neuroncore_pipeline_cores + 1
 pred_list = [tf.contrib.predictor.from_saved_model(COMPILED_MODEL_DIR) for _ in range(num_groups)]
 pred_list = pred_list * NUM_THREADS_PER_PREDICTOR
 num_threads = len(pred_list)
@@ -122,7 +122,7 @@ def current_throughput():
                                                             avg_latency))  
 
 
-print("\n*** Compiled batch size {}, user batch size {}, num NeuronCores {} (input shape: {}, saved model dir: {}) ***\n".format(args.batch_size, USER_BATCH_SIZE, args.num_neuroncores, img_arr3.shape, COMPILED_MODEL_DIR))
+print("\n*** Compiled batch size {}, user batch size {}, num NeuronCores {} (input shape: {}, saved model dir: {}) ***\n".format(args.batch_size, USER_BATCH_SIZE, args.neuroncore_pipeline_cores, img_arr3.shape, COMPILED_MODEL_DIR))
 
 # Run inference
 model_feed_dict={'input_1:0': img_arr3}

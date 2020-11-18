@@ -2,9 +2,29 @@
 
 This documents lists the release notes for AWS Neuron tools. Neuron tools are used for debugging, profiling and gathering inferentia system information.
 
-# Known Issues and Limitations 10/22/2020
+# Known Issues and Limitations 11/17/2020
 
 * neuron-top has a visible screen stutter as the number of loaded models increases above 40. This is only a visual issue with no impact on performance. The issue is caused by the re rendering the UI on screen refresh. We will fix this in a future release.
+
+
+
+# [1.2.7.0]
+
+Date: 11/17/2020
+
+## Major New Features
+
+* **neuron-monitor** now provides system-wide memory usage statistics. Many JSON field names have been updated. We've added a new sample script which exports most of **neuron-monitor**'s metrics to a [Prometheus](https://prometheus.io/) monitoring server.
+ Additionally, we also provided a [sample Grafana dashboard](../docs/neuron-tools/neuron-monitor-grafana.json) - in JSON format - which can be imported to a [Grafana](https://grafana.com/) instance via its [web interface](https://grafana.com/docs/grafana/latest/dashboards/export-import/#importing-a-dashboard). This dashboard can then
+ present the metric data made available to Prometheus by **neuron-monitor**.
+ More details on how to use **neuron-monitor** with this new feature can be found in the [User Guide](../docs/neuron-tools/neuron-monitor-user-guide.md).
+
+* Neuron tools updated the NeuronCore utilization metric to include all inf1 compute engines and DMAs. The new metric definition is more comprehensive and provides a better representation of execution efficiency.
+
+## Resolved Issues
+
+* Fixed a memory leak in **neuron-monitor** when attempting to connect to the GRPC address of a Neuron Runtime which is not running.
+
 
 
 # [1.1.228.0]

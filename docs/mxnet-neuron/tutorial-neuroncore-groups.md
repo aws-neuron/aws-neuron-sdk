@@ -4,10 +4,10 @@ A NeuronCore Group is a set of NeuronCores that are used to load and run compile
 
 To explicitly specify the NeuronCore Groups, set environment variable `NEURONCORE_GROUP_SIZES` to a list of group sizes. The consecutive NeuronCore groups will be created by Neuron-RTD and be available to map the models to.
 
-Note that in order to map a model to a group, the model must be compiled to fit within the group size. To limit the number of NeuronCores during compilation, use compiler_args dictionary with field “--num-neuroncores“ set to the group size:
+Note that in order to map a model to a group, the model must be compiled to fit within the group size. To limit the number of NeuronCores during compilation, use compiler_args dictionary with field “--neuroncore-pipeline-cores“ set to the group size:
 
 ```
-compile_args = {'--num-neuroncores' : 2}
+compile_args = {'--neuroncore-pipeline-cores' : 2}
 sym, args, auxs = neuron.compile(sym, args, auxs, inputs, **compile_args)
 ```
 
@@ -17,7 +17,7 @@ Before starting this example, please ensure that mxnet-neuron is installed along
 
 Model must be compiled to Inferentia target before it can be used on Inferentia.
 
-Create compile_resnet50.py with `--num-neuroncores` set to 2 and run it. The files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory:
+Create compile_resnet50.py with `--neuroncore-pipeline-cores` set to 2 and run it. The files `resnet-50_compiled-0000.params` and `resnet-50_compiled-symbol.json` will be created in local directory:
 
 ```python
 import mxnet as mx
@@ -30,7 +30,7 @@ sym, args, aux = mx.model.load_checkpoint('resnet-50', 0)
 
 # Compile for Inferentia using Neuron, fit to NeuronCore group size of 2
 inputs = { "data" : mx.nd.ones([1,3,224,224], name='data', dtype='float32') }
-compile_args = {'--num-neuroncores' : 2}
+compile_args = {'--neuroncore-pipeline-cores' : 2}
 sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs, **compile_args)
 
 #save compiled model
