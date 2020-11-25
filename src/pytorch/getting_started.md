@@ -317,13 +317,12 @@ class NeuronSimpleDataParallel():
         running = {self.executor.submit(
             self.models[idx], *args_per_core[idx]): idx for idx in range(self.num_neuron_cores)}
 
-        results = []
+        results = [None] * self.num_neuron_cores
 
         for future in futures.as_completed(running):
-            running[future]
+            idx = running[future]
 
-            # Expect a tuple of tensors - convert to a list of tensors
-            results.append(future.result())
+            results[idx] = future.result()
 
         # Remove zero dimensional tensors (unsqueeze)
         # Iterate results per core
