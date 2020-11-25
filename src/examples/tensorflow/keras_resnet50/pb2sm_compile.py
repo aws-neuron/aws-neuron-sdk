@@ -16,6 +16,7 @@ tf.keras.backend.set_image_data_format('channels_last')
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('--batch_size', type=int, default=5, choices=range(1, 6), help='Input data batch size for compilation of model')
 arg_parser.add_argument('--neuroncore-pipeline-cores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
+arg_parser.add_argument('--debug_args', type=str, default="", help='Optional Compiler debug args')
 args = arg_parser.parse_args()
 
 def pb_to_saved_model(pb_path, input_names, output_names, model_dir):
@@ -43,6 +44,8 @@ compiler_args = ['--batching_en', '--rematerialization_en', '--spill_dis',
                  '--sb_size', str((batch_size + 6)*10), 
                  '--enable-replication', 'True',
                  '--neuroncore-pipeline-cores', str(args.neuroncore_pipeline_cores)]
+compiler_args.extend(args.debug_args.split(" "))
+
 static_weights = False
 if args.neuroncore_pipeline_cores >= 8:
     static_weights = True
