@@ -17,7 +17,7 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('--batch_size', type=int, default=5, choices=range(1, 6), help='Input data batch size for compilation of model')
 arg_parser.add_argument('--neuroncore-pipeline-cores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
 arg_parser.add_argument('--debug_args', type=str, default="", help='Optional Compiler debug args')
-arg_parser.add_argument('--workdir', type=str, default="compiler_workdir", help='Compiler workdirectory')
+arg_parser.add_argument('--workdir', type=str, default="compiler_workdir", help='Compiler work directory')
 
 args = arg_parser.parse_args()
 
