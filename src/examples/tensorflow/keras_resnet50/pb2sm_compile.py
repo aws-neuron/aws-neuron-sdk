@@ -46,7 +46,8 @@ compiler_args = ['--batching_en', '--rematerialization_en', '--spill_dis',
                  '--sb_size', str((batch_size + 6)*10), 
                  '--enable-replication', 'True',
                  '--neuroncore-pipeline-cores', str(args.neuroncore_pipeline_cores)]
-compiler_args.extend(args.debug_args.split(" "))
+if args.debug_args:
+    compiler_args.extend(args.debug_args.split(" "))
 
 static_weights = False
 if args.neuroncore_pipeline_cores >= 8:
