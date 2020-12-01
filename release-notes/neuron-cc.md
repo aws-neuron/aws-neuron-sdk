@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Neuron Compiler Release Notes
 
 This document lists the release notes for AWS Neuron compiler. The Neuron Compiler is an ahead-of-time compiler that ensures Neuron will optimally utilize the Inferentia chips.

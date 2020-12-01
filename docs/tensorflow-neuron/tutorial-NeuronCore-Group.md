@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Tutorial: Configuring NeuronCore Groups
 
 A NeuronCore Group is a set of NeuronCores that are used to load and run a compiled model. At any point in time, only one model will be running in a NeuronCore Group. Within a NeuronCore Group, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another.

@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 ## Neuron K8 Scheduler Extension
 This document describes how the Neuron K8 scheduler extension works and how to use it in your cluster.  The scheduler is required for scheduling pods that require more than one Neuron device resource.  Please use this scheduler when working with inf1.6xlarge and inf1.24xlarge. 
 

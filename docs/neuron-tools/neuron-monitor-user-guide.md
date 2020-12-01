@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # User Guide for Neuron Monitor *(BETA)*
 
 WARNING: This tool is currently in "Beta".  Metric organization and naming might change during the Beta period.

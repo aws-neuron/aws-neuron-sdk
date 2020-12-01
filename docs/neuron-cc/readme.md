@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Neuron Compiler
 
 The Neuron Compiler is an Ahead-of-Time (AoT) compiler that accepts Machine Learning models in various formats (TensorFlow, MXNet, PyTorch, ONNX) and optimizes them to run on AWS Inferentia chips.

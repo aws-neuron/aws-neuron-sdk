@@ -1,0 +1,29 @@
+# Example neuron-rtd dockerfile.
+
+# To build:
+#    docker build . -f Dockerfile.neuron-rtd -t neuron-rtd
+
+# Note: the container must start with CAP_SYS_ADMIN + CAP_IPC_LOCK capabilities in order
+# to map the memory needed from the Infernetia devices. These capabilities will
+# be dropped following initialization.
+
+# i.e. To start the container with required capabilities:
+#   docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
+
+
+FROM amazonlinux:2
+
+RUN echo $'[neuron] \n\
+name=Neuron YUM Repository \n\
+baseurl=https://yum.repos.neuron.amazonaws.com \n\
+enabled=1' > /etc/yum.repos.d/neuron.repo
+
+RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+
+RUN yum install -y aws-neuron-tools
+RUN yum install -y aws-neuron-runtime
+RUN yum install -y tar gzip
+
+ENV PATH="/opt/aws/neuron/bin:${PATH}"
+
+CMD neuron-rtd -g unix:/sock/neuron.sock --log-console

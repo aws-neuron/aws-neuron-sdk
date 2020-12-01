@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Tutorial: Using Neuron GatherInfo Tool to collect debug and support information
 
 The Neuron GatherInfo tool  `neuron-gatherinfo.py`  can assist in automating the collection and packaging of information from Neuron SDK tools that is useful to both user and AWS for issue resolution. The tool gathers log files and other system information. If being used to supply that info to AWS, the tool will redact proprietary and confidential information.

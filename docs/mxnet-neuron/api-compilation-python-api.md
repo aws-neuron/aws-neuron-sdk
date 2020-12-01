@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Reference: MXNet-Neuron Compilation Python API
 
 The MXNet-Neuron compilation Python API provides a method to compile model graph for execution on Inferentia.

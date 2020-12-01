@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Reference: TensorFlow-Neuron Compilation API
 
 The Neuron compilation API for TensorFlow enables compilation of saved model to an Inferentia target.

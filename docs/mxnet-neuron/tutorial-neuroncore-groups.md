@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Tutorial: MXNet Configurations for NeuronCore Groups
 
 A NeuronCore Group is a set of NeuronCores that are used to load and run compiled models with one-to-one mapping; At any time, one model will be running in a NeuronCore Group. With NeuronCore groups a user may load independent models in parallel to execute. Additionally, within a NeuronCore Group, loaded models can be dynamically started and stopped, allowing for dynamic context switching from one model to another.
