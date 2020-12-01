@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Troubleshooting Neuron Runtime
 
 This document aims to provide more information on how to fix issues you might encounter while using the Neuron Runtime. For each issue we will provide an explanation of what happened and what can potentially correct the issue. 

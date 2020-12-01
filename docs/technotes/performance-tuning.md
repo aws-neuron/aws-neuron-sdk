@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Application Note: Performance Tuning
 
 This guide is intended to provide the reader with an in-depth understanding on how to optimize neural network performance on Inferentia for both throughput and latency. For simplicity, the guide uses TensorFlow and ResNet-50 model as a teaching example to learn how choosing between different compile-time optimizations (e.g. Batching and NeuronCore Pipeline), as well as model-serving optimizations (e.g. multi-threading and dynamic-batching) improves inference performance.

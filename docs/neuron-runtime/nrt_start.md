@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Getting started:  Installing and Configuring Neuron-RTD
 
 In this getting started guide you will learn how to install Neuron runtime, and configure it for inference. 

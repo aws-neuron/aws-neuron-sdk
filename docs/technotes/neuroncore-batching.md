@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Tech Note: Batching
 
 Batching refers to the process of grouping multiple inference requests together and processing them as a group. Batching is typically used as an optimization for throughput at the expense of higher latency. Batching is usually implemented on a layer-by-layer basis, which allows for each set of weights in a given layer to be reused for each inference in the batch before needing to retrieve additional new weights. This enables Neuron to better amortize the cost of reading weights from the external memory (i.e. read weights from the memory once, and use them in multiple calculations), and thus improve the overall hardware efficiency.
