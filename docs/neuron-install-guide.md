@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # User Guide: Configuring Linux for repository updates
 
 Neuron is using standard package managers (apt, yum, pip, and conda) to install and keep updates current. Please refer to the applicable Linux section for detailed configuration steps.

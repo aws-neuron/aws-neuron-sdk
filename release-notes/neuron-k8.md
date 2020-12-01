@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Neuron K8 Release Notes
 
 This document lists the current release notes for AWS Neuron Kubernetes (k8) components.  Neuron K8 components include a device plugin and a scheduler extension to assist with deployment and management of inf1 nodes within Kubernetes clusters.  Both components are offered as pre-built containers in ECR ready for deployment.  

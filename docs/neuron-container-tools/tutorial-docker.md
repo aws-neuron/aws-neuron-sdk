@@ -1,3 +1,15 @@
+</br>
+</br>
+
+Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
+
+**Please note this file will be deprecated.**
+
+</br>
+</br>
+
+
+
 # Tutorial: Docker environment setup for Neuron
 
 This tutorial is for neuron runtime 1.1 and above. For older versions of neuron < 1.1, refer the following guide [docs/neuron-container-tools/tutorial-docker-runtime1.0.md](tutorial-docker-runtime1.0.md)
