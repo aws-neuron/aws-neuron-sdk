@@ -16,7 +16,7 @@ Date: 11/17/2020
 Included Neuron Packages
 ------------------------
 
-neuron_cc-1.0.23977.0
+neuron_cc-1.0.24045.0
 
 tensorboard_neuron-1.15.0.1.0.615.0
 

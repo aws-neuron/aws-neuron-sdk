@@ -16,7 +16,7 @@ Date: 11/17/2020
 Included Neuron Packages
 ------------------------
 
-neuron_cc-1.0.23977.0
+neuron_cc-1.0.24045.0
 
 mxnet_neuron-1.5.1.1.1.88.0
 
