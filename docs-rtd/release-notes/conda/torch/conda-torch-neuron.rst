@@ -14,7 +14,8 @@ Known Issues (updated 11/17/2020)
    package using "conda update torch-neuron" command. To use the latest
    PyTorch-Neuron Conda package, please create a new Conda environment
    and install PyTorch-Neuron Conda package there using "conda install
-   -c https://conda.repos.neuron.amazonaws.com torch-neuron".
+   -c https://conda.repos.neuron.amazonaws.com torch-neuron". This issue
+   is fixed in Conda DLAMI v37.
 
 -  Conda environment aws_neuron_pytorch_p36 of Conda DLAMI v30 to v35
    can be updated using the following commands:
@@ -34,9 +35,15 @@ Date: 11/17/2020
 Included Neuron Packages
 ------------------------
 
+<<<<<<< HEAD
+:ref:`neuron-cc-1.0.24045.0 <neuron-cc-rn>`
+
+:ref:`torch_neuron-1.5.1.1.0.1978.0 <pytorch-neuron-rn>`
+=======
 :ref:`neuron-cc-1.0.23977.0 <neuron-cc-rn>`
 
 :ref:`orch_neuron-1.5.1.1.0.1978.0 <pytorch-neuron-rn>`
+>>>>>>> 63d6900... Moves documentation to ReadTheDocs (#114)
 
 
 Known Issues
@@ -47,7 +54,12 @@ Known Issues
    package using "conda update torch-neuron" command. To use the latest
    PyTorch-Neuron Conda package, please create a new Conda environment
    and install PyTorch-Neuron Conda package there using "conda install
+<<<<<<< HEAD
+   -c https://conda.repos.neuron.amazonaws.com torch-neuron". This issue
+   is fixed in Conda DLAMI v37.
+=======
    -c https://conda.repos.neuron.amazonaws.com torch-neuron".
+>>>>>>> 63d6900... Moves documentation to ReadTheDocs (#114)
 
 -  Conda environment aws_neuron_pytorch_p36 of Conda DLAMI v30 to v35
    can be updated using the following commands:

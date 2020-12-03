@@ -9,17 +9,54 @@ https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
 .. _dlami-v301-amazon-linux-2:
 
+[DLAMI v37]
+===========
+
+Resolved Issues
+---------------
+
+- Conda DLAMI v36 aws_neuron_pytorch_p36 environment has old versions of compiler and framework (https://github.com/aws/aws-neuron-sdk/issues/205)
+
+- Unable to update Conda DLAMI v36 aws_neuron_pytorch_p36 environments (https://github.com/aws/aws-neuron-sdk/issues/206)
+
+Versions of Neuron packages included:
+-------------------------------------
+
+conda package mxnet-neuron-1.5.1.1.1.88.0 (includes neuron_cc-1.0.24045.0)
+
+conda package tensorflow-neuron-1.15.4.1.0.2168.0 (includes neuron_cc-1.0.24045.0)
+
+conda package torch-neuron-1.5.1.1.0.1978.0 (includes neuron_cc-1.0.24045.0)
+
+aws-neuron-dkms-1.2
+
+aws-neuron-runtime-base-1.2.0.0
+
+aws-neuron-runtime-1.2.5.0
+
+aws-neuron-tools-1.2.7.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.2168.0
+
 [DLAMI v36]
 ===========
 
 Versions of Neuron packages included:
 -------------------------------------
 
+<<<<<<< HEAD
+conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0 (includes neuron_cc-1.0.20600.0)
+
+conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0 (includes neuron_cc-1.0.20600.0)
+
+conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0 (includes neuron-cc-1.0.18001.0)
+=======
 conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0
 
 conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0
 
 conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
+>>>>>>> 63d6900... Moves documentation to ReadTheDocs (#114)
 
 aws-neuron-dkms-1.1
 
