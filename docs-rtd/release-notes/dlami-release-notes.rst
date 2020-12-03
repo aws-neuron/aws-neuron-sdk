@@ -44,19 +44,11 @@ tensorflow-model-server-neuron-1.15.0.1.0.2168.0
 Versions of Neuron packages included:
 -------------------------------------
 
-<<<<<<< HEAD
 conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0 (includes neuron_cc-1.0.20600.0)
 
 conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0 (includes neuron_cc-1.0.20600.0)
 
 conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0 (includes neuron-cc-1.0.18001.0)
-=======
-conda package mxnet-neuron-1.5.1.1.1.52.0_2.0.757.0
-
-conda package tensorflow-neuron-1.15.3.1.0.2043.0_2.0.894.0
-
-conda package torch-neuron-1.5.1.1.0.298.0_2.0.880.0
->>>>>>> 63d6900... Moves documentation to ReadTheDocs (#114)
 
 aws-neuron-dkms-1.1
 
