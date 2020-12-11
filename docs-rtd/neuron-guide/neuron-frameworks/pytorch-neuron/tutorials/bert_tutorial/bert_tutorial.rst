@@ -11,8 +11,8 @@ applications, it can be used for question answering, sequence prediction
 and sequence classification amongst other tasks.
 
 **Note that automatic partitioning is now released!**. Use the
-auto-partitioner on BERT as described :pytorch-neuron-src:`in this Jupyter
-notebook <bert_tutorial/tutorial_pretrained_bert.ipynb>`. Use of the
+auto-partitioner on BERT as described :ref:`in this Jupyter
+notebook </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`. Use of the
 auto-partitioner is the normal way to compile BERT with PyTorch Neuron.
 It's not only easier, but also expected to be performant!
 
@@ -167,8 +167,8 @@ done upload the adapted model to the newly created bucket.
    cd bert_mrpc
 
    # Fetch scripts which run commands from the Hugging Face tutorial
-   wget -O setup.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/setup.sh
-   wget -O mrpc_adapt.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/mrpc_adapt.sh
+   wget -O setup.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/setup.sh
+   wget -O mrpc_adapt.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/mrpc_adapt.sh
 
    ## Set my S3 bucket prefix
    S3_BUCKET_PREFIX="inferentia-test"
@@ -308,7 +308,7 @@ The following steps assume that you set the environment for
    python -m ipykernel install --name torch_compile
 
    # Fetch the jupyter notbook from github
-   wget -O neuron_bert_mrpc_tutorial.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_tutorial.ipynb
+   wget -O neuron_bert_mrpc_tutorial.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_tutorial.ipynb
    # Start a juptyer note book
    jupyter notebook
 
@@ -434,10 +434,10 @@ The following steps assume that you set the environment for
    python -m ipykernel install --name torch_test
 
    # Pull the PyTorch BERT inferene notebook for neuron (test URL)
-   wget -O neuron_bert_mrpc_benchmark.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_benchmark.ipynb
+   wget -O neuron_bert_mrpc_benchmark.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_benchmark.ipynb
 
    # Pull test file (test URL)
-   wget -O glue_mrpc_dev.tsv https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/glue_mrpc_dev.tsv
+   wget -O glue_mrpc_dev.tsv https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/glue_mrpc_dev.tsv
 
    # Start a juptyer note book
    jupyter notebook

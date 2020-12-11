@@ -135,7 +135,8 @@ directory:
 
 ::
 
-   wget -O bert_mxnet.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/mxnet/bert_mxnet.ipynb
+   wget -O bert_mxnet.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/mxnet/bert_mxnet.ipynb
+
 
 Step 5: Start Jupyter
 ---------------------
