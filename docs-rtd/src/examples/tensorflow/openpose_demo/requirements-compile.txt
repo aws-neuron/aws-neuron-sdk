@@ -1,0 +1,2 @@
+tensorflow-neuron
+neuron-cc>=1.0.16861.0
