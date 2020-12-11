@@ -20,8 +20,7 @@ you can successfully torch.neuron.trace
    native python virtual environment) as recommended in our installation
    notes at :ref:`neuron-install-conda-packages`
    -  When using the most recent DLAMI and 'aws_neuron_pytorch_p36' you may
-   see lower performance than expected in
-   https://github.com/aws/aws-neuron-sdk/blob/master/src/pytorch/getting_started.md.
+   see lower performance than expected in :ref:`pytorch-getting-started`.
    This issue will be corrected in the v37 DLAMI release.
 -  aten::max only correctly implements the simplest versions of that
    operator, the variants that return a tuple with arg max now return

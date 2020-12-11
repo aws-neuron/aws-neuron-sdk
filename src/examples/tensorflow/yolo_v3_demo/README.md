@@ -10,18 +10,6 @@ Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.co
 
 
 
-</br>
-</br>
-
-Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
-
-**Please note this file will be deprecated.**
-
-</br>
-</br>
-
-
-
 ## Working with YOLO v3 using AWS Neuron SDK
 The [`evaluate.ipynb`](https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/tensorflow/yolo_v3_demo/evaluate.ipynb) notebook contains an example on how to take an open source YOLO v3 models, and run it on AWS Inferentia.
 

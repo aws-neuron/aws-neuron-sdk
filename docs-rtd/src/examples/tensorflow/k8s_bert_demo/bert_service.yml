@@ -1,0 +1,100 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: inf-k8s-test
+  labels:
+    app: inf-k8s-test
+spec:
+  ports:
+    - name: http-tf-serving
+      port: 8500
+      targetPort: 8500
+    - name: grpc-tf-serving
+      port: 9000
+      targetPort: 9000
+  selector:
+    app: inf-k8s-test
+    role: master
+  type: ClusterIP
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: inf-k8s-test
+  labels:
+    app: inf-k8s-test
+    role: master
+spec:
+  replicas: 1 # Number of desired replicas. Increase to desired number.
+  selector:
+    matchLabels:
+      app: inf-k8s-test
+      role: master
+  template:
+    metadata:
+      labels:
+        app: inf-k8s-test
+        role: master
+    spec:
+      volumes:
+        - name: sock
+          emptyDir: {}
+      containers:
+        - name: inf-k8s-test
+          image: tf-serving-ctr
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh","-c"]
+
+          # Pull model from s3, then start tensorflow_model_server_neuron with the model.
+          args:
+            - "aws s3 sync s3://<your-bert-bucket>/bert /tmp/bert && \
+           tensorflow_model_server_neuron --port=9000 --rest_api_port=8500 --model_name=bert_mrpc_hc_gelus_b4_l24_0926_02 --model_base_path=/tmp//bert/"
+
+          # Open grpc and rest API ports
+          ports:
+            - containerPort: 8500
+            - containerPort: 9000
+
+          # Informs tensorflow_model_server_neuron of UDS socket location
+          env:
+            - name: NEURON_RTD_ADDRESS
+              value: unix:/sock/neuron.sock
+
+          # Arbitrary resource requirements
+          resources:
+            limits:
+              cpu: 4
+              memory: 4Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi
+
+          # Shared volume mount, for UDS socket
+          volumeMounts:
+            - name: sock
+              mountPath: /sock
+
+        # Neuron-rtd container
+        - name: neuron-rtd
+          image: 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest # neuron-rtd image.
+          imagePullPolicy: IfNotPresent
+
+          # Neuron-rtd required capabilities
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - IPC_LOCK
+
+          # Shared volume mount, for UDS socket
+          volumeMounts:
+            - name: sock
+              mountPath: /sock
+
+          resources:
+            limits:
+              hugepages-2Mi: 256Mi    # configure to 256 * desired number of Inferentia devices.
+              aws.amazon.com/neuron: 1  # desired number of Inferentia devices.
+            requests:
+              memory: 1024Mi          # Desired amount of memory. Should be larger than hugepages-2Mi limit.

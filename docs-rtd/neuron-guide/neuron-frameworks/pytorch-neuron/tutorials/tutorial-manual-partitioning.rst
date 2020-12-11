@@ -87,7 +87,7 @@ directory:
 
 .. code:: bash
 
-   curl -O https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs/ml_frameworks/pytorch-neuron/tutorials/resnet50_partition.ipynb
+   curl -O https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/resnet50_partition.ipynb
 
 Step 5: Start Jupyter and connect in your browser:
 --------------------------------------------------
