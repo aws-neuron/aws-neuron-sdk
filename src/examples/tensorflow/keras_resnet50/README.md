@@ -10,18 +10,6 @@ Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.co
 
 
 
-</br>
-</br>
-
-Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.com/](https://awsdocs-neuron.readthedocs-hosted.com/)** 
-
-**Please note this file will be deprecated.**
-
-</br>
-</br>
-
-
-
 ## ResNet-50 optimization example
 
 The following example shows how to compile a FP16 ResNet50 network using various batching parameters to find the optimal solution. For this tutorial, please use an `inf1.6xlarge` instance, which has 16 NeuronCores.

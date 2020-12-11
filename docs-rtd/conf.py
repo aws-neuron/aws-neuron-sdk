@@ -46,10 +46,11 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-#exclude_patterns = []
-exclude_patterns = ['_build', '**.ipynb_checkpoints',
-                    'neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/*.ipynb',
-                    'neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/bert_tutorial/*.ipynb']
+exclude_patterns = ['_build','**.ipynb_checkpoints']
+
+
+# nbsphinx_allow_errors = True
+nbsphinx_execute = 'never'
 
 html_logo = 'images/Site-Merch_Neuron-ML-SDK_Editorial.jpg'
 
