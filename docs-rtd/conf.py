@@ -12,14 +12,14 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join('.','..', '../docs-rtd', '../src/examples')))
+sys.path.append(os.path.abspath("./_ext"))
 
 # get environment variables
 
 env_project_name = os.environ.get('GIT_PROJECT_NAME')
 env_branch_name = os.environ.get('GIT_BRANCH_NAME')
 
-
+html_extra_path = ['../src']
 
 
 # -- Project information -----------------------------------------------------
@@ -38,7 +38,7 @@ master_doc = 'index'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinxcontrib.contentui','nbsphinx','sphinx.ext.extlinks']
+extensions = ['sphinxcontrib.contentui','nbsphinx','sphinx.ext.extlinks','symlink']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
