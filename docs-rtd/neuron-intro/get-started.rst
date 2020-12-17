@@ -19,6 +19,13 @@ a fleet of inf1 instances **(deployment instance)** , for execution and deployme
 |image|
 
 
+
+.. note::
+
+  `AWS Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/index.html>`_ is 
+  the recommended AMI to use with Neuron SDK.
+
+
 .. _compilation-instance:
 
 Compilation Instance
@@ -33,12 +40,6 @@ for compilation and deployment it is recommend to use an inf1.6xlarge instance o
 #. `Launch compilation instance with DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html>`_ , see :ref:`dlami` for more information, If you choose other AMI `launch EC2 instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_ and choose your AMI of choice.
 #. :ref:`Install Neuron SDK <neuron-install-guide>`
 
-.. note::
-
-  `AWS Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/index.html>`_ is 
-  the recommended AMI to use with Neuron SDK.
-
-
 .. _deployment-instance:
 
 Deployment Instance
@@ -49,11 +50,6 @@ chosen to deploy and execute the user trained model.
 
 #. `Launch inf1 instance with DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html>`_ , see :ref:`dlami` for more information, If you choose other AMI `launch an inf1 instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_ and choose your AMI of choice.
 #. :ref:`Install Neuron SDK <neuron-install-guide>`
-
-.. note::
-
-  `AWS Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/index.html>`_ is 
-  the recommended AMI to use with Neuron SDK.
 
 
 Start with ML Framework
