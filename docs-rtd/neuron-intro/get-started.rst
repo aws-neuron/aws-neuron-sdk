@@ -7,78 +7,109 @@ This Getting Started Guide provides the beginning point to
 start developing and deploying your ML inference applications, whether
 you are a first time user or if you are looking for specific topic documentation.
 
-First time user
----------------
+.. _setup-neuron-env:
 
-If you are a first-time-user, the following steps are
-recommended to get started with Neuron:
+Setup Neuron environment
+-----------------------
 
-#. Run your first Neuron ML application by following the instructions in
-   one of the following Getting Started tutorials to get familiar with
-   Neuron development flow of your ML framework of choice:
+A typical workflow with the Neuron SDK will be to compile trained ML models on
+a compute instance **(compilation instance)** and then distribute the artifacts to
+a fleet of inf1 instances **(deployment instance)** , for execution and deployment.
 
-   -  :ref:`tensorflow-resnet50`
-   -  :ref:`pytorch-resnet50`
-   -  :ref:`mxnet-resnet50`
-
-#. Get familiar with Neuron fundamentals and tools:
-
-   -  Learn :ref:`neuron-fundamentals` : such as
-      :ref:`neuron-data-types`, :ref:`neuron-batching` and
-      :ref:`neuroncore-pipeline`,  which will help
-      you utilize Neuron to develop a highly optimized ML application.
-   -  Get familiar with :ref:`neuron-cc`,\ :ref:`neuron-runtime` and
-      :ref:`neuron-tools` by reviewing the overview sections and reading about
-      the supported features and capabilities of
-      the Neuron Compiler, Runtime and Tools.
-
-#. Deploy Neuron ML applications at scale by learning how to tune,
-   optimize and deploy your ML application by following the
-   instructions of one of the HowTo guides at
-   :ref:`deploy-ml-application`.
+|image|
 
 
-Navigate documentation
-----------------------
+.. _compilation-instance:
 
-Tutorials
-~~~~~~~~~
+Compilation Instance
+~~~~~~~~~~~~~~~~~~~~~
 
-Explore more Tutorials and examples here:
+It is recommended to choose c5.4xlarge or larger for compilation instance, however the
+user can choose to compile and deploy on the same instance, when choosing the same instance
+for compilation and deployment it is recommend to use an inf1.6xlarge instance or larger.
 
--  :ref:`tensorflow-tutorials`
--  :ref:`pytorch-tutorials`
--  :ref:`mxnet-tutorials`
--  :ref:`Neuron Containers Tutorials and Examples <containers-tutorials>`
 
-ML Frameworks
-~~~~~~~~~~~~~
 
-You can find Neuron supported ML Frameworks here:
+#. `Launch compilation instance with DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html>`_ , see :ref:`dlami` for more information, If you choose other AMI `launch EC2 instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_ and choose your AMI of choice.
+#. :ref:`Install Neuron SDK <neuron-install-guide>`
 
--  :ref:`tensorflow-neuron`
--  :ref:`neuron-pytorch`
--  :ref:`neuron-mxnet`
+.. note::
 
-ML Inference Models
+  `AWS Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/index.html>`_ is 
+  the recommended AMI to use with Neuron SDK.
+
+
+.. _deployment-instance:
+
+Deployment Instance
 ~~~~~~~~~~~~~~~~~~~
 
-You can find ML Inference model tutorials here:
+Deployment instance is the `inf1 instance <https://aws.amazon.com/ec2/instance-types/inf1/>`_ 
+chosen to deploy and execute the user trained model.
 
--  Computer Vision
+#. `Launch inf1 instance with DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/launch-config.html>`_ , see :ref:`dlami` for more information, If you choose other AMI `launch an inf1 instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_ and choose your AMI of choice.
+#. :ref:`Install Neuron SDK <neuron-install-guide>`
 
-   -  :ref:`Tensor Flow <tensorflow-computervision>`
-   -  :ref:`PyTorch <pytorch-computervision>`
-   -  :ref:`MXNet <mxnet-computervision>`
+.. note::
 
--  Natural Language Processing
+  `AWS Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/index.html>`_ is 
+  the recommended AMI to use with Neuron SDK.
 
-   -  :ref:`Tensor Flow <tensorflow-nlp>`
-   -  :ref:`PyTorch <pytorch-nlp>`
-   -  :ref:`MXNet <mxnet-nlp>`
+
+Start with ML Framework
+-----------------------
+
+Start with PyTorch
+~~~~~~~~~~~~~~~~~~
+
+#. :ref:`install-neuron-pytorch`
+#. Run :ref:`pytorch-getting-started`
+#. Visit :ref:`neuron-pytorch` for more resources.
+
+Start with Tensorflow
+~~~~~~~~~~~~~~~~~~~~~
+
+#. :ref:`install-neuron-tensorflow`
+#. Run :ref:`tensorflow-getting-started`
+#. Visit :ref:`tensorflow-neuron` for more resources.
+
+Start with MXNet
+~~~~~~~~~~~~~~~~
+
+#. :ref:`install-neuron-mxnet`
+#. Run :ref:`mxnet-resnet50`
+#. Visit :ref:`neuron-mxnet` for more resources.
+
+Run Tutorials & Examples
+------------------------
+
+ML Framework
+~~~~~~~~~~~~
+
+  -  :ref:`tensorflow-tutorials`
+
+  -  :ref:`pytorch-tutorials`
+
+  -  :ref:`mxnet-tutorials`
+
+Containers
+~~~~~~~~~~
+
+  - :ref:`Containers Tutorials <containers-tutorials>`
+
+
+Learn Neuron Fundamentals
+-------------------------
+
+Get familiar with Neuron fundamentals and tools:
+
+-  Learn :ref:`neuron-fundamentals` : such as :ref:`neuron-data-types`, :ref:`neuron-batching` and :ref:`neuroncore-pipeline`,  which will help you utilize Neuron to develop a highly optimized ML application.
+
+-  Get familiar with :ref:`neuron-cc`,\ :ref:`neuron-runtime` and :ref:`neuron-tools` by reviewing the overview sections and reading about the supported features and capabilities of the Neuron Compiler, Runtime and Tools.
+
 
 Performance optimization
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 The following steps are recommended for you to build highly optimized
 Neuron applications:
@@ -95,32 +126,5 @@ Neuron applications:
 #. Learn how to optimize your application by reviewing the HowTo guides
    at :ref:`performance-optimization` .
 
-Container Support
-~~~~~~~~~~~~~~~~~~
 
-Visit :ref:`neuron-containers` for more information about Neuron
-suport for containers and more :ref:`containers-tutorials`.
-
-
-.. _install-neuron:
-
-Installing Neuron
------------------
-
-To use Neuron, you can use a pre-built Amazon Machine Images
-(the Deep Learning AMI - DLAMI), use the pre built DL containers or install
-Neuron software into your own instances and AMIs. To
-ensure you have the latest Neuron version we recommend to either install
-it on your own instance, or to check for the installed version when
-using DLAMI or DL containers.
-
-Follow :ref:`neuron-install-guide` if you already have an environment
-you'd like to continue using.
-
-
-.. toctree::
-   :maxdepth: 1
-
-   neuron-install-guide
-   dlami
-   dlcontainers
+.. |image| image:: /images/devflow.png
