@@ -41,6 +41,7 @@ forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`__.
    :caption: Introduction
 
    neuron-intro/get-started
+   neuron-intro/neuron-install-guide
    faq
    Roadmap <neuron-intro/roadmap-readme>
    release-notes/index
