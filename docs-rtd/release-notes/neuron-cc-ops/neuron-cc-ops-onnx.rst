@@ -3,6 +3,10 @@
 Supported operators [ONNX]
 ==========================
 
+To see a list of supported operators for ONNX, run the following command:
+
+``neuron-cc list-operators --framework ONNX``
+
 .. _neuron-compiler-release-10240450:
 
 Neuron Compiler Release [1.0.24045.0]

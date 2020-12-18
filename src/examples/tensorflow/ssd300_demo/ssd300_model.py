@@ -144,7 +144,7 @@ def tf_box_predictor(tensor, ssd300_torch):
     return loc, conf
 
 
-@tfn.fuse(batch_size=1, dynamic_batch_size=True, compiler_args=['-O2'])
+@tfn.fuse(batch_size=1, dynamic_batch_size=True)
 def tf_ssd300(input_tensor, ssd300_torch):
     with tf.name_scope('SSD300'):
         tensor = tf_feature_extractor(input_tensor, ssd300_torch.feature_extractor.feature_extractor)

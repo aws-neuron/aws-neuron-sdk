@@ -25,3 +25,11 @@ PyTorch Tutorials
    :caption: Natural Language Processing
 
    bert_tutorial/bert_tutorial
+
+.. _pytorch-utilize-neuron
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Utilizing Neuron capabilities
+
+   torchserve/tutorial-torchserve

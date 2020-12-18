@@ -42,9 +42,15 @@ installation of regular tensorflow):
 For the example image preprocessing using Keras preprocessing, the
 Python Imaging Library Pillow is required:
 
-::
+.. code:: bash
 
    pip install pillow
+   
+To workaround h5py issue https://github.com/aws/aws-neuron-sdk/issues/220:
+
+.. code:: bash
+
+   pip install "h5py<3.0.0"
 
 
 Export and Compile Saved Model

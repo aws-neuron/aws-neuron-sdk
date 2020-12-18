@@ -38,7 +38,7 @@ def main():
         no_fuse_ops = preprocessing_ops.union({'Openpose/concat_stage7'})
         infer_graph = tfn.graph_util.inference_graph_from_session(
             sess, shape_feed_dict={'image:0': [1, dim_h, dim_w, 3]}, output_tensors=['Openpose/concat_stage7:0'],
-            no_fuse_ops=no_fuse_ops, compiler_args=['-O2'], dynamic_batch_size=True,
+            no_fuse_ops=no_fuse_ops, dynamic_batch_size=True,
         )
     with open(args.output_pb_path, 'wb') as f:
         f.write(infer_graph.as_graph_def().SerializeToString())

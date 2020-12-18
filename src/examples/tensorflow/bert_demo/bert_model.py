@@ -8,8 +8,6 @@
 import os
 import argparse
 import shlex
-import pkg_resources
-from distutils.version import LooseVersion
 import numpy as np
 import tensorflow as tf
 from tensorflow.neuron import fuse
@@ -30,9 +28,6 @@ def main():
         raise OSError('output_saved_model {} already exists'.format(args.output_saved_model))
     dtype = tf.float16 if args.dtype == 'float16' else tf.float32
     if args.aggressive_optimizations:
-        ncc_version = LooseVersion(pkg_resources.get_distribution('neuron-cc').version)
-        if ncc_version < LooseVersion('1.0.12000.0'):
-            raise RuntimeError('--aggressive_optimizations can only be enabled with neuron-cc>=1.0.12000.0')
         args.crude_gelu = True
     bert = NeuronBERTMRPC(
         args.input_saved_model,
@@ -43,12 +38,7 @@ def main():
         aggressive_fp16_cast=args.aggressive_optimizations,
     )
 
-    aggr_args = [
-        '--tensor-layout-heuristics=spatial-locality',
-        '--fp32-cast', 'matmult-fp16',
-    ]
-    compiler_args = aggr_args if args.aggressive_optimizations else ['--fp32-cast', 'matmult', '--topdown']
-    fuser = fuse(compiler_args=compiler_args, timeout=360000)
+    fuser = fuse(compiler_args=['--fp32-cast', 'matmult'], timeout=360000)
     bert.encoder = fuser(bert.encoder)
 
     input_ids = bert.input_ids

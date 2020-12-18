@@ -112,13 +112,8 @@ NeuronCores) avaliable in the inf1.6xlarge instance size:
                            model_feed_dict={'input_1:0': example_input },
                            compiler_args=compiler_args)
 
-.. note::
-
-   If static weights flag is set and there is not enough NeuronCore
-   cache memory to support fully-cached weights, the compiler will emit
-   an internal compiler error message. To address such an error, users
-   could use a larger NeuronCore Group (larger instance size). See
-   `Known Issues <#known-issues>`__ section below for more details.
+The minimum number of NeuronCores needed to run a compiled model can be
+found using Neuron Check Model tool. Please see :ref:`neuron_check_model`.
 
 Model-serving inference optimizations
 -------------------------------------

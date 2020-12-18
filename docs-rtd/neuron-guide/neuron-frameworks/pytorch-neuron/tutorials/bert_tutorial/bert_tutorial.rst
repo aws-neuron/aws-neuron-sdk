@@ -174,7 +174,7 @@ done upload the adapted model to the newly created bucket.
    S3_BUCKET_PREFIX="inferentia-test"
 
    ## Run the setup script and adaptation script
-   # Setup downloads the public data and 
+   # Setup downloads the public data and
    . ./setup.sh $S3_BUCKET_PREFIX && . ./mrpc_adapt.sh
 
 These scripts have been tested for DLAMI release 26 on a p3.16xlarge. If
@@ -331,7 +331,7 @@ copy and paste into your browser:
    [I 16:01:45.492 NotebookApp] http://localhost:8888/?token=3f92904e6140a10a5415ab66c67cf5b4bdd72168fcd0fda9
    [I 16:01:45.492 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
    [W 16:01:45.492 NotebookApp] No web browser found: could not locate runnable browser.
-   [C 16:01:45.492 NotebookApp] 
+   [C 16:01:45.492 NotebookApp]
 
     Copy/paste this URL into your browser when you connect for the first time,
     to login with a token:
@@ -460,7 +460,7 @@ displayed a URL for you to copy and paste into your browser:
    [I 22:46:56.605 NotebookApp] http://localhost:8888/?token=caa0213f9af6f161a83d1b1ca21d5faa70ea2f30ba5a02ab
    [I 22:46:56.605 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
    [W 22:46:56.605 NotebookApp] No web browser found: could not locate runnable browser.
-   [C 22:46:56.605 NotebookApp] 
+   [C 22:46:56.605 NotebookApp]
 
     Copy/paste this URL into your browser when you connect for the first time,
     to login with a token:

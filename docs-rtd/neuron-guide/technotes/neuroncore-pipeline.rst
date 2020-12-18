@@ -55,11 +55,4 @@ Pipeline for 16 NeuronCores (instance size inf1.6xlarge).
                            model_feed_dict={'input_1:0' : example_input },
                            compiler_args = ['--neuroncore-pipeline-cores', '16'])
 
-.. note::
-
-   Currently, experimental flag ‘—static-weights’ is required as shown
-   in the example to enable caching of weights on the device. This would
-   help increase performance by decreasing weight fetch time. The flag
-   will be enabled by default in a future release.
-
 .. |Image:| image:: ./images/NeuronCorePipelining.png
