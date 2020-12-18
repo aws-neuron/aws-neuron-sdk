@@ -28,8 +28,8 @@ a fleet of inf1 instances **(deployment instance)** , for execution and deployme
 
 .. _compilation-instance:
 
-Compilation Instance
-~~~~~~~~~~~~~~~~~~~~~
+Step 1 - Compilation Instance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is recommended to choose c5.4xlarge or larger for compilation instance, however the
 user can choose to compile and deploy on the same instance, when choosing the same instance
@@ -42,8 +42,8 @@ for compilation and deployment it is recommend to use an inf1.6xlarge instance o
 
 .. _deployment-instance:
 
-Deployment Instance
-~~~~~~~~~~~~~~~~~~~
+Step 2 - Deployment Instance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Deployment instance is the `inf1 instance <https://aws.amazon.com/ec2/instance-types/inf1/>`_ 
 chosen to deploy and execute the user trained model.

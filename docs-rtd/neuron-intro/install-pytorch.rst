@@ -18,7 +18,7 @@ guide to learn how to use the DLAMI with Neuron.
 .. _pytorch-ubuntu-dlami:
 
 
-Ubuntu DLAMI
+Ubuntu 16,18 DLAMI
 --------------------
 
 Update Packages:
@@ -34,7 +34,7 @@ Activate Neuron PyTorch
 
 .. _pytorch-al2-dlami:
 
-Amazon Linux DLAMI
+Amazon Linux2 DLAMI
 ----------------------------
 
 Update Packages:
@@ -90,7 +90,7 @@ Install PyTorch
 
 .. _pytorch-conda:
 
-Ubuntu or Amazon Linux AMI (via Conda)
+Ubuntu or Amazon Linux2 AMI (via Conda)
 ---------------------------------------
 
 .. include:: /neuron-intro/install-templates/conda-install.rst
