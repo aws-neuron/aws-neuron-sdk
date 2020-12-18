@@ -3,6 +3,11 @@
 Supported operators [MXNet]
 ===========================
 
+To see a list of supported operators for MXNet, run the following command:
+
+``neuron-cc list-operators --framework MXNET``
+
+
 .. _neuron-compiler-release-10240450:
 
 Neuron Compiler Release [1.0.24045.0]

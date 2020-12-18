@@ -26,6 +26,24 @@ NEFF Version Runtime Version Range Notes
 
 --------------
 
+.. _1310:
+
+[1.3.1.0]
+=========
+
+Date: 12/23/2020
+
+Improvements
+------------
+
+-  Model load time has been improved.  The model loading speed up could be up to 50% depending on the size of the model.
+
+Resolved Issues
+---------------
+
+-  Incorrect error code returned when a model fails to load due to the lack of resources.
+-  Restarting Neuron Runtime causes a memory leak in the Neuron kernel module.
+
 
 .. _1250:
 

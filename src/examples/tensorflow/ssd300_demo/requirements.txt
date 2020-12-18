@@ -1,6 +1,7 @@
 neuron-cc
 numpy<=1.17.2
 tensorflow-neuron<2.0
+tensorflow-serving-api==1.15.0
 torch>=1.0,<2.0
 torchvision<1.0
 pillow<8.0

@@ -50,6 +50,12 @@ setup virtual environment and install TensorFlow-Neuron
 
 .. _tensorflow-resnet50-compile-on-compilation-instance:
 
+To workaround h5py issue https://github.com/aws/aws-neuron-sdk/issues/220:
+
+.. code:: bash
+
+   pip install "h5py<3.0.0"
+
 Step 3: Compile on Compilation Instance
 ---------------------------------------
 
@@ -96,7 +102,7 @@ following content:
        outputs            = {'output': model.outputs[0]})
 
    # Compile using Neuron
-   tfn.saved_model.compile(model_dir, compiled_model_dir)    
+   tfn.saved_model.compile(model_dir, compiled_model_dir)
 
    # Prepare SavedModel for uploading to Inf1 instance
    shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
@@ -126,6 +132,9 @@ artifact to the inference server:
 
    scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # if Ubuntu-based AMI
    scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if using AML2-based AMI
+
+3.4. To check the supported operations for the uncompiled model or information
+on Neuron subgraphs for the compiled model, please see :ref:`neuron_check_model`.
 
 Step 4: Deployment Instance Installations
 -----------------------------------------

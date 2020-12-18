@@ -31,6 +31,18 @@ To Pull the Images from ECR:
    docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
    docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
 
+.. _1320:
+
+[1.3.2.0]
+=========
+
+Date: 12/23/2020
+
+Summary
+-------
+
+Minor internal enhancements.
+
 .. _1200:
 
 [1.2.0.0]

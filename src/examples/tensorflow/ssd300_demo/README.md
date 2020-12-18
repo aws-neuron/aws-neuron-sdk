@@ -26,7 +26,7 @@ This demo shows a Neuron compatible SSD300 implementation that is functionally e
 3. Evaluate the generated SSD300 TensorFlow SavedModel for both accuracy and performance
    * Running threaded inference through the COCO 2017 validation dataset
 
-## Launch EC2 instances and update tensorflow-neuron and neuron-cc
+## Launch EC2 instances and activate conda environment
 
 For this demo, launch one inf1.xlarge EC2 instance. We recommend using the latest Ubuntu 18 Deep Learning AMI (DLAMI).
 

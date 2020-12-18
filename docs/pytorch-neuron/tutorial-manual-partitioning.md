@@ -12,6 +12,9 @@ Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.co
 
 # Tutorial: Manual partitioning in a Jupyter notebook
 
+## Introduction
+Neuron PyTorch operator support will continue to grow with future releases. If your PyTorch model contains operators that are not yet supported, you may still run the model's most computationally expensive part on Inferentia, and run other operators with regular PyTorch kernels. This guide shows an example on how to generate a PyTorch deployable format (TorchScript) that consists AWS Neuron accelerated operators and regular PyTorch operators.
+
 ## Steps Overview:
 
 1. Launch an EC2 compilation instance running the DLAMI (recommended instance: c5.4xlarge or stronger)
@@ -146,4 +149,10 @@ echo "c.NotebookApp.iopub_data_rate_limit = 10000000000" > ~/.jupyter/jupyter_no
 conda install nb_conda_kernels
 
 jupyter notebook
+```
+
+If your jupyter conda environment is not correctly installed - try the following:
+
+```
+python -m ipykernel install --user --name my_notebook_env --display-name "Python (my_notebook_env)"
 ```
