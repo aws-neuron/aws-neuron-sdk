@@ -17,7 +17,7 @@ updates current, Neuron SDK is suppotred in `DLAMI with Conda <https://docs.aws.
 
 .. note::
 
-   Only Ubuntu 16,18 and Amazon Linux2 DLAMI is supported (Amazon Linux is not supported)
+   Only Ubuntu 16,18 and Amazon Linux2 DLAMI are supported (Amazon Linux is not supported)
 
    Only DLAMI versions 26.0 and newer have Neuron support included.
 
