@@ -282,6 +282,9 @@ sudo apt update
 # a few minutes while dpkg is locked
 sudo apt upgrade
 
+# Clear the hardware of any prior state
+neuron-cli reset
+
 # Working directory
 mkdir bert_mrpc
 cd bert_mrpc

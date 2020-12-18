@@ -80,7 +80,7 @@ are reproduced :ref:`here </src/examples/pytorch/getting_started_compile.ipynb>`
 
 .. code:: bash
 
-   pip install torchvision==0.6.1
+   pip install torchvision==0.8.2
 
 3.2. Create a python script named ``trace_resnet50.py`` with the
 following content:
@@ -107,13 +107,12 @@ following content:
    model.eval()
 
    ## Analyze the model - this will show operator support and operator count
-   torch.neuron.analyze_model( model, example_inputs=[image] )
+   torch.neuron.analyze_model(model, example_inputs=[image])
 
    ## Now compile the model - with logging set to "info" we will see
    ## what compiles for Neuron, and if there are any fallbacks
-   ## Note: The "-O2" setting is default in recent releases, but may be needed for DLAMI
-   ##       and older installed environments
-   model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
+   ## (If using DLAMI v36 or older, please add option "compiler_args='-O2'" to the trace command)
+   model_neuron = torch.neuron.trace(model, example_inputs=[image])
 
    ## Export to saved model
    model_neuron.save("resnet50_neuron.pt")

@@ -116,7 +116,8 @@ Users who need help finetuning BERT-Large for MRPC and creating a saved model ma
 
 Connect to the c5.4xlarge compilation EC2 instance you started above and download these three items : 
 1. clone [this](https://github.com/google-research/bert) github repo. 
-2. download GLUE data as described [here](https://github.com/google-research/bert#sentence-and-sentence-pair-classification-tasks). Do not run the finetuning command.
+2. download GLUE data by running the following command:
+``` python download_mrpc_data.py ```
 3. download a desired pre-trained BERT-Large checkpoint from [here](https://github.com/google-research/bert#pre-trained-models). This is the model we will fine tune. 
 
 Next edit run_classifier.py in the cloned bert repo to apply the patch described in the following git diff. 

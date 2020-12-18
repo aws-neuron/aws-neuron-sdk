@@ -1,6 +1,19 @@
 Neuron Release Notes
 ====================
 
+December 23, 2020 Release
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This release introduces a PyTorch 1.7 based torch-neuron package as a part of the Neuron SDK. Support for PyTorch model serving with TorchServe 0.2 is added and will be demonstrated with a tutorial. This release also provides an example tutorial for PyTorch based Yolo v4 model for Inferentia. 
+
+To aid visibility into compiler activity, the Neuron-extended Frameworks TensorFlow and PyTorch will display a new compilation status indicator that prints a dot (.) every 20 seconds to the console as compilation is executing. 
+
+Important to know:
+------------------
+
+1. This update continues to support the torch-neuron version of PyTorch 1.5.1 for backwards compatibility.
+
+
 November 17, 2020 Release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 

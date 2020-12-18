@@ -12,5 +12,6 @@ Neuron includes a set of tools and capabilities to help developers monitor and o
    Basic tools <basic>
    Neuron TensorBoard <getting-started-tensorboard-neuron>
    Neuron Monitor <neuron-monitor-user-guide>
+   Neuron Check Model <tutorial-neuron-check-model>
    Gather Debug info <tutorial-neuron-gatherinfo>
    rn

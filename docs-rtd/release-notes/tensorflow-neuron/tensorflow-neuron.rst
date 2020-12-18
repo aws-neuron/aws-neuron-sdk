@@ -7,7 +7,7 @@ This document lists the release notes for the TensorFlow-Neuron package.
 
 .. _tf-known-issues-and-limitations:
 
-Known Issues and Limitations - updated 11/17/2020
+Known Issues and Limitations - updated 12/23/2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  Issue: When compiling large models, user might run out of memory and
@@ -29,6 +29,31 @@ Solution: run compilation on a c5.4xlarge instance type or larger.
 
 Solution: run a ``pip install pip --upgrade`` before upgrading
 ``tensorflow-neuron``.
+
+-  Issue: Some Keras routines throws the following error:
+
+::
+
+   AttributeError: 'str' object has no attribute 'decode'.
+
+Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+
+.. _11541130:
+
+[1.15.4.1.1.3.0]
+^^^^^^^^^^^^^^^^
+
+Date: 12/23/2020
+
+Summary
+-------
+
+1. Improved logging during `tfn.saved_model.compile` to display `neuron-cc` compilation progress.
+
+2. Small performance improvement in some edge cases by optimizing the NeuronCore-executable assignment mechanism.
+
+
+
 
 .. _11541021680:
 

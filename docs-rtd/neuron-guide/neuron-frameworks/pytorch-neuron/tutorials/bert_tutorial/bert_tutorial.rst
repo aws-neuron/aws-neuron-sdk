@@ -167,14 +167,14 @@ done upload the adapted model to the newly created bucket.
    cd bert_mrpc
 
    # Fetch scripts which run commands from the Hugging Face tutorial
-   wget -O setup.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/setup.sh
-   wget -O mrpc_adapt.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/mrpc_adapt.sh
+   wget -O setup.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/setup.sh
+   wget -O mrpc_adapt.sh https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/mrpc_adapt.sh
 
    ## Set my S3 bucket prefix
    S3_BUCKET_PREFIX="inferentia-test"
 
    ## Run the setup script and adaptation script
-   # Setup downloads the public data and 
+   # Setup downloads the public data and
    . ./setup.sh $S3_BUCKET_PREFIX && . ./mrpc_adapt.sh
 
 These scripts have been tested for DLAMI release 26 on a p3.16xlarge. If
@@ -308,7 +308,7 @@ The following steps assume that you set the environment for
    python -m ipykernel install --name torch_compile
 
    # Fetch the jupyter notbook from github
-   wget -O neuron_bert_mrpc_tutorial.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_tutorial.ipynb
+   wget -O neuron_bert_mrpc_tutorial.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_tutorial.ipynb
    # Start a juptyer note book
    jupyter notebook
 
@@ -331,7 +331,7 @@ copy and paste into your browser:
    [I 16:01:45.492 NotebookApp] http://localhost:8888/?token=3f92904e6140a10a5415ab66c67cf5b4bdd72168fcd0fda9
    [I 16:01:45.492 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
    [W 16:01:45.492 NotebookApp] No web browser found: could not locate runnable browser.
-   [C 16:01:45.492 NotebookApp] 
+   [C 16:01:45.492 NotebookApp]
 
     Copy/paste this URL into your browser when you connect for the first time,
     to login with a token:
@@ -434,10 +434,10 @@ The following steps assume that you set the environment for
    python -m ipykernel install --name torch_test
 
    # Pull the PyTorch BERT inferene notebook for neuron (test URL)
-   wget -O neuron_bert_mrpc_benchmark.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_benchmark.ipynb
+   wget -O neuron_bert_mrpc_benchmark.ipynb https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/neuron_bert_mrpc_benchmark.ipynb
 
    # Pull test file (test URL)
-   wget -O glue_mrpc_dev.tsv https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/docs-rtd/src/examples/pytorch/bert_tutorial/glue_mrpc_dev.tsv
+   wget -O glue_mrpc_dev.tsv https://raw.githubusercontent.com/aws/aws-neuron-sdk/master/src/examples/pytorch/bert_tutorial/glue_mrpc_dev.tsv
 
    # Start a juptyer note book
    jupyter notebook
@@ -460,7 +460,7 @@ displayed a URL for you to copy and paste into your browser:
    [I 22:46:56.605 NotebookApp] http://localhost:8888/?token=caa0213f9af6f161a83d1b1ca21d5faa70ea2f30ba5a02ab
    [I 22:46:56.605 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
    [W 22:46:56.605 NotebookApp] No web browser found: could not locate runnable browser.
-   [C 22:46:56.605 NotebookApp] 
+   [C 22:46:56.605 NotebookApp]
 
     Copy/paste this URL into your browser when you connect for the first time,
     to login with a token:

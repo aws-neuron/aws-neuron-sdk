@@ -89,6 +89,9 @@ artifact to the inference server (use ec2-user as user for AML2):
    scp -i <PEM key file>  resnet-50_compiled-0000.params ubuntu@<instance DNS>:~/  # Ubuntu
    scp -i <PEM key file>  resnet-50_compiled-symbol.json ubuntu@<instance DNS>:~/  # Ubuntu
 
+3.3. To check the supported operations for the uncompiled model or information
+on Neuron subgraphs for the compiled model, please see :ref:`neuron_check_model`.
+
 Step 4: Install MXNet-Neuron and Neuron Runtime on Inference Instance
 ---------------------------------------------------------------------
 
