@@ -17,7 +17,7 @@ guide to learn how to use the DLAMI with Neuron.
 
 .. _tensorflow-ubuntu-dlami:
 
-Ubuntu DLAMI
+Ubuntu 16,18 DLAMI
 ------------------
 
 Update Packages:
@@ -33,7 +33,7 @@ Activate Neuron Tensorflow
 
 .. _tensorflow-al2-dlami:
 
-Amazon Linux DLAMI
+Amazon Linux2 DLAMI
 --------------------------
 
 Update Packages
@@ -89,7 +89,7 @@ Install TensorFlow
 
 .. _tensorflow-conda:
 
-Ubuntu or Amazon Linux AMI (via Conda)
+Ubuntu or Amazon Linux2 AMI (via Conda)
 --------------------------------------
 
 .. include:: /neuron-intro/install-templates/conda-install.rst
