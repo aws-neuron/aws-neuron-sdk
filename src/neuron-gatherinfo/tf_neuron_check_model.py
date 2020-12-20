@@ -6,7 +6,7 @@ import argparse
 import subprocess
 from collections import Counter
  
-class tf_neuron_parser:
+class neuron_parser:
   def __init__(self):
     self.parser = argparse.ArgumentParser()
     self.parser.add_argument('model_path', type=str, help='a TensorFlow SavedModel directory (currently supporting TensorFlow v1 SaveModel only).')
@@ -17,10 +17,10 @@ class tf_neuron_parser:
     self.total_pipeline_cores = 0
     self.min_required_pipeline_cores = 0
     path = self.parser_args.model_path
-    if os.path.isdir(path):
-      self.load_tensorflow_model(path)
-    elif os.path.exists(path + '-symbol.json'):
+    if os.path.exists(path + '-symbol.json'):
       self.load_mxnet_model(path)
+    elif os.path.isdir(path):
+      self.load_tensorflow_model(path)
     else:
       raise RuntimeError('Cannot determine framework type from model path argument.')
     self.supported = self.get_neuron_supported()
@@ -212,5 +212,5 @@ class tf_neuron_parser:
       self.print_neuron_support_stats()
  
 if __name__=='__main__':
-  toolkit = tf_neuron_parser()
+  toolkit = neuron_parser()
   toolkit.run()
