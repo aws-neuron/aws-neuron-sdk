@@ -80,7 +80,7 @@ are reproduced :ref:`here </src/examples/pytorch/getting_started_compile.ipynb>`
 
 .. code:: bash
 
-   pip install torchvision==0.6.1
+   pip install torchvision==0.8.2
 
 3.2. Create a python script named ``trace_resnet50.py`` with the
 following content:

@@ -12,6 +12,18 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+PyTorch Neuron Release [1.1.7.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added:
+
+::
+
+   aten::_shape_as_tensor
+   aten::chunk
+   aten::empty
+   aten::masked_fill
+
 .. _pytorch-neuron-release-10240450:
 
 PyTorch Neuron Release [1.0.24045.0]

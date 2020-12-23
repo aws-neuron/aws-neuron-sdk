@@ -5,7 +5,7 @@ PyTorch Neuron release notes
 
 This document lists the release notes for the Pytorch-Neuron package.
 
-Known Issues and Limitations - Updated 11/17/2020
+Known Issues and Limitations - Updated 12/23/2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -25,6 +25,23 @@ you can successfully torch.neuron.trace
 -  aten::max only correctly implements the simplest versions of that
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
+-  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 mathced the torch==1.7.1 release
+
+
+[1.1.7.0]
+^^^^^^^^^^^^
+
+Date: 12/23/2020
+
+Summary
+-------
+
+-  torch.neuron.trace behavior will now throw a RuntimeError in the case that no operators are compiled for neuron hardware
+-  torch.neuron.trace will now display compilation progress indicators (dots) as default behavior (neuron-cc must updated to the December release to greater to see this feature)
+-  Added new operator support. Please see :ref:`neuron-cc-ops-pytorch` for the complete list of operators.
+-  Extended the BERT pretrained tutorial to demonstrate execution on multiple cores and batch modification, updated the tutorial to accomodate changes in the Hugging Face Transformers code for version 4.0
+-  Added a tutorial for torch-serve which extends the BERT tutorial
+-  Added support for PyTorch 1.7
 
 .. _neuron-torch-1019780:
 

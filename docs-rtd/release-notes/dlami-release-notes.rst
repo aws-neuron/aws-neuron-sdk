@@ -7,7 +7,30 @@ For more information about using Neuron with Conda and Base DLAMI,
 please see
 https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
 
-.. _dlami-v301-amazon-linux-2:
+[DLAMI v38]
+===========
+
+Resolved Issues
+---------------
+
+Versions of Neuron packages included:
+-------------------------------------
+
+conda package mxnet-neuron-1.5.1.1.1.88.0 (includes neuron_cc-1.0.24045.0)
+
+conda package tensorflow-neuron-1.15.4.1.0.2168.0 (includes neuron_cc-1.0.24045.0)
+
+conda package torch-neuron-1.5.1.1.0.1978.0 (includes neuron_cc-1.0.24045.0)
+
+aws-neuron-dkms-1.2
+
+aws-neuron-runtime-base-1.2.0.0
+
+aws-neuron-runtime-1.2.5.0
+
+aws-neuron-tools-1.2.7.0
+
+tensorflow-model-server-neuron-1.15.0.1.0.2168.0
 
 [DLAMI v37]
 ===========
@@ -174,6 +197,8 @@ tensorflow-model-server-neuron-1.15.0.1.0.1796.0
 
 [DLAMI v30.1 (Amazon Linux 2)]
 ==============================
+
+.. _dlami-v301-amazon-linux-2:
 
 Versions of Neuron packages included:
 -------------------------------------

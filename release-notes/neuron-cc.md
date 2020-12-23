@@ -36,6 +36,28 @@ The supported operators are also listed here:
 8. **ONNX support** Support for ONNX models is limited. If generated from other frameworks then please use the native model directly.
 9. **NeuronCore Pipeline:** NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance. Currently there is a known issue with a compiler crash on batch size 32 using BERT-Base, sequence length=128, --neuroncore-pipeline-cores = 16, but this is not the optimal setting for that model.
 
+# [1.0.X.0]
+
+Date 12/22/2020
+
+## Summary
+
+Added suport for PyTorch Yolo V4, a new Framework-visible progress bar and improved inference performance.  We continue to streamline the compiler usabilty by removing the need for options passed to control behavior. We are aiming to remove the need for such options entirely. Some tutorials have been updated to reflect this, but Resnet50 remains in need of these options to acheive maximum performance. Other useability improvements have been added, such as the compiler progress bar. As always, please let us know if there are other areas that we can improve. 
+
+## Major New Features
+
+* Pytorch Yolo V4 is now supported.
+
+* Added a compiler progress bar when compilation is invoked from the Framework. This allows the user to see that progress continues as compilation proceeds, which is useful when compilation takes several minutes.
+
+
+## Resolved Issues
+
+* Fixed type inference for special cases of Conv2D.
+
+* Improved inference performance of Tensorflow BERT base seq 256 batch 3 by 10%. 
+
+
 # [1.0.24045.0]
 
 Date 11/17/2020
