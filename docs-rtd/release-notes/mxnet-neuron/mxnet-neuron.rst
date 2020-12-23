@@ -4,7 +4,7 @@ MXNet-Neuron Release Notes
 This document lists the release notes for MXNet-Neuron framework.
 
 [1.5.1.1.2.1.0]
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Date 12/23/2020
 
