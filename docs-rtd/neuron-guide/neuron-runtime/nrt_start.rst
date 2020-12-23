@@ -21,7 +21,7 @@ Step 2: Configure Neuron-RTD
 ----------------------------
 
 You can choose your Neuron-RTD mode, either select to run a single
-instance of the Neuron runtime, or mutiple instances which may be
+instance of the Neuron runtime, or multiple instances which may be
 desired to provide your application capabilities like isolation or load
 balancing.
 
@@ -51,10 +51,10 @@ device id it should manage.
 The following steps explains configuring four Neuron-RTD on an inf1.6xl
 instance and let each daemon to manage 1 Neuron device.
 
-Identify logical IDs of Inferentia devices
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Identify logical IDs of Neuron Devices
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Use ``neuron-ls`` to enumerate the set of Inferentia chips avaliable in
+Use ``neuron-ls`` to enumerate the set of Neuron Devices avaliable in
 the system.
 
 .. code:: bash
@@ -70,7 +70,7 @@ the system.
    | 3      | 4      | 8 GB   | 2         | 0000:00:1f.0 | NA      | 12410   | NA      |
    +--------+--------+--------+-----------+--------------+---------+---------+---------+
 
-neuron-rtd can manage one or more devices. Select contigous Inferentia
+neuron-rtd can manage one or more devices. Select contiguous Neuron
 devices to be managed by a single neuron-rtd.
 
 .. _create-conf-file-for-each-instance:
@@ -79,7 +79,7 @@ Create a configuration file for each instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create a configuration file for each Neuron-rtd you wish to launch, with
-one or more Inferentia chips desired to be mapped to that Neuron-rtd
+one or more Neuron Devices desired to be mapped to that Neuron-rtd
 instance, and the listening port for it.
 
 .. code:: bash
@@ -166,3 +166,13 @@ Neuron-RTD daemons (Neuron-RTD0):
    Nov 13 00:24:25 ip-10-1-255-226 neuron-rtd[32446]: nrtd[32446]: [NRTD:RunServer] Server listening on unix:/run/neuron.sock0
    Nov 13 00:24:25 ip-10-1-255-226 nrtd[32446]: [NRTD:RunServer] Server listening on unix:/run/neuron.sock0
    lines 1-18/18 (END)
+
+Using the Neuron-RTD services with ML Frameworks
+''''''''''''''''''''''''''''''''''''''''''''''''
+
+When multiple Neuron-RTD instances are launched with user configurations as described in previous sections, NEURON_RTD_ADDRESS environment variable setting is required to use the framework. To use a particular Neuron-RTD instance with a framework, set the environment variable NEURON_RTD_ADDRESS to the socket address of the Neuron-RTD instance. For example, to run a framework process with nrtd2 in the example above, do:
+.. code:: bash
+
+   NEURON_RTD_ADDRESS=unix:/run/neuron.sock2 python <framework script>
+
+When a single Neuron-RTD instance is launched with default configuration, no special environment variable setting is required to use the framework.
