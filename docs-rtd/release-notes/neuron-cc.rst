@@ -63,14 +63,14 @@ Date 12/23/2020
 Summary
 -------
 
-Added suport for PyTorch Yolo V4, a new Framework-visible progress bar and improved inference performance. We continue to streamline the compiler usabilty by removing the need for options passed to control behavior. We are aiming to remove the need for such options entirely. Some tutorials have been updated to reflect this, but Resnet50 remains in need of these options to acheive maximum performance. Other useability improvements have been added, such as the compiler progress bar. As always, please let us know if there are other areas that we can improve.
+Added suport for PyTorch Yolo V4, a new Framework-visible progress bar and improved inference performance. We continue to streamline the compiler usability by removing the need for options passed to control behavior. We are aiming to remove the need for such options entirely. Some tutorials have been updated to reflect this, but Resnet50 remains in need of these options to achieve maximum performance. Other useability improvements have been added, such as the compiler progress bar. As always, please let us know if there are other areas that we can improve.
 
 
 Major New Features
 ------------------
 - Pytorch Yolo V4 is now supported.
 
-- Added a compiler progress bar when compilation is invoked from the Framework. This allows the user to see that progress continues as compilation proceeds, which is useful when compilation takes several minutes.
+- Added a compiler progress bar when compilation is invoked from the Framework. This allows the user to see that progress continues as compilation proceeds, which is useful when compilation takes several minutes. A dot is printed every 20 seconds.
 
 - Improved inference performance of Tensorflow BERT base seq 256 batch 3 by 10% .
 
