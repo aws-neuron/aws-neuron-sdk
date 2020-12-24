@@ -11,6 +11,14 @@ Known Issues and Limitations - Updated 12/23/2020
 The following are not torch-neuron limitations, but may impact models
 you can successfully torch.neuron.trace
 
+-  If you attempt to import torch.neuron from Python 3.5 you will see this error in 1.1.7.0 - please use Python 3.6 or greater:
+.. code-block:: 
+
+   File "/tmp/install_test_env/lib/python3.5/site-packages/torch_neuron/__init__.py", line 29
+      f'Invalid dependency version torch=={torch.__version__}. '
+                                                             ^  
+   SyntaxError: invalid syntax
+
 -  Torchvision has dropped support for Python 3.5
 -  HuggingFace transformers has dropped support for Python 3.5
 -  There are known issues when customer use a mixture of conda and pip
@@ -36,6 +44,7 @@ Date: 12/23/2020
 Summary
 -------
 
+-  We are dropping support for Python 3.5 in this release
 -  torch.neuron.trace behavior will now throw a RuntimeError in the case that no operators are compiled for neuron hardware
 -  torch.neuron.trace will now display compilation progress indicators (dots) as default behavior (neuron-cc must updated to the December release to greater to see this feature)
 -  Added new operator support. Please see :ref:`neuron-cc-ops-pytorch` for the complete list of operators.
