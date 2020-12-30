@@ -23,3 +23,6 @@
 
         # Example: Install latest torch-neuron compatible with PyTorch 1.5
         conda install torch-neuron=1.5
+
+        # Example: Install latest torch-neuron compatible with PyTorch 1.7
+        conda install torch-neuron=1.7
