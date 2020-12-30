@@ -12,7 +12,9 @@ Important to know:
 ------------------
 
 1. This update continues to support the torch-neuron version of PyTorch 1.5.1 for backwards compatibility.
-
+2. As Python 3.5 reached end-of-life in October 2020, and many packages including TorchVision and Transformers have
+stopped support for Python 3.5, we will begin to stop supporting Python 3.5 for frameworks, starting with
+PyTorch-Neuron version :ref:`neuron-torch-11170` in this release. You can continue to use older versions with Python 3.5.
 
 November 17, 2020 Release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
