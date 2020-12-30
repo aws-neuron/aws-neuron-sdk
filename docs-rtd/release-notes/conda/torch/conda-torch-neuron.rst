@@ -18,6 +18,24 @@ neuron-cc-1.1.7.0
 
 torch_neuron-1.7.1.1.1.7.0
 
+Known Issues
+------------
+
+When enabling profiling using NEURON_PROFILE=<directory> environment variable for inference within a PyTorch-Neuron
+Conda environment (such as the DLAMI aws_neuron_pytorch_p36 environment), running inference would result in segmentation
+fault (https://github.com/aws/aws-neuron-sdk/issues/230). The workaround is to reinstall the PyTorch package of the
+same version as installed. For example, if the installed PyTorch version is 1.7.1, please do:
+
+.. code:: bash
+
+    pip install --no-deps --force-reinstall torch==1.7.1
+
+Similarly, if the installed PyTorch version is 1.5.1,
+
+.. code:: bash
+
+    pip install --no-deps --force-reinstall torch==1.5.1
+
 [1.5.1.1.1.7.0]
 ^^^^^^^^^^^^^^^
 
