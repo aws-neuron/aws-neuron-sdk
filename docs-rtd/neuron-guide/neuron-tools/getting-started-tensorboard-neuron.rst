@@ -14,6 +14,12 @@ may be useful in finding numerical mismatches.
 Installation
 ------------
 
+.. warning::
+
+  When profiling with PyTorch in a conda environment please re-install 
+  the correct version of torch as a workaround for https://github.com/aws/aws-neuron-sdk/issues/230.  See issue for details.
+
+
 Note: on DLAMI v26.0, please do
 ``conda install numpy=1.17.2 --yes --quiet`` before following the Conda
 installation instructions, as the installed numpy version prevents the
