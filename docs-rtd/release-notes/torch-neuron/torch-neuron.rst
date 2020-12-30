@@ -35,9 +35,10 @@ you can successfully torch.neuron.trace
    NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 mathced the torch==1.7.1 release
 
+.. _neuron-torch-11170:
 
 [1.1.7.0]
-^^^^^^^^^^^^
+^^^^^^^^^
 
 Date: 12/23/2020
 
