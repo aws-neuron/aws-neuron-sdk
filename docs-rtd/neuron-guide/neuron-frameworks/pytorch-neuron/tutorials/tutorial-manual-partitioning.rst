@@ -29,8 +29,9 @@ Step 2: Connecting to your instance
 -----------------------------------
 
 In this tutorial we use a :ref:`Jupyter notebook </src/examples/pytorch/resnet50_partition.ipynb>` that runs via a browser on
-port 8888 by default. For simplicity we will use ssh port forwarding
-from your machine to the instance.
+port 8888 by default, :download:`view notebook source </src/examples/pytorch/resnet50_partition.ipynb>`.
+
+For simplicity we will use ssh port forwarding from your machine to the instance.
 
 The regular ssh instructions is:
 
