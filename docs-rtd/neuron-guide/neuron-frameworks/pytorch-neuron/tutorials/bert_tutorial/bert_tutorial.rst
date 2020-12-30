@@ -1,3 +1,5 @@
+.. _pytorch-bert-tutorial:
+
 Adapting, Partitioning and Benchmarking PyTorch BERT
 ====================================================
 
@@ -10,10 +12,13 @@ Google Research project published in 2018
 applications, it can be used for question answering, sequence prediction
 and sequence classification amongst other tasks.
 
-**Note that automatic partitioning is now released!**. Use the
-auto-partitioner on BERT as described :ref:`in this Jupyter
-notebook </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`. Use of the
-auto-partitioner is the normal way to compile BERT with PyTorch Neuron.
+**Note that automatic partitioning is now released!**. 
+
+Use the auto-partitioner on BERT as described :ref:`in this Jupyter
+notebook </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` , 
+:download:`view notebook source </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`  . 
+
+Use of the auto-partitioner is the normal way to compile BERT with PyTorch Neuron.
 It's not only easier, but also expected to be performant!
 
 If you are going to perform manual partitioning, it is important to

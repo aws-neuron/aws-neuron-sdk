@@ -3,33 +3,34 @@
 PyTorch Tutorials
 ====================
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Getting Started
+Getting Started
+---------------
 
-   getting_started
-   tutorial-manual-partitioning
+- :ref:`pytorch-getting-started`
+- :ref:`pytorch-manual-partitioning-jn-tutorial`
 
 .. _pytorch-computervision:
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Computer Vision
+Computer Vision
+---------------
    
-   tutorial-compile-infer   
+- :ref:`pytorch-getting-started`
+- :ref:`/src/examples/pytorch/yolo_v4_tutorial/compile_evaluate.ipynb` :download:`view notebook source </src/examples/pytorch/yolo_v4_tutorial/compile_evaluate.ipynb>`
+
 
 .. _pytorch-nlp:
 
+Natural Language Processing
+---------------------------
+
+- :ref:`pytorch-bert-tutorial`
+
+.. _pytorch-utilize-neuron:
+
+Utilizing Neuron capabilities
+-----------------------------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Natural Language Processing
 
-   bert_tutorial/bert_tutorial
-
-.. _pytorch-utilize-neuron
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Utilizing Neuron capabilities
-
-   torchserve/tutorial-torchserve
+- :ref:`pytorch-tutorial-torchserve`

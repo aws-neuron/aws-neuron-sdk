@@ -74,7 +74,7 @@ deployed on Inf1 instances. In this step we compile the torchvision
 ResNet50 model and export it as a saved TorchScript module.
 
 If you are familiar with running Jupyter notebooks these compile steps
-are reproduced :ref:`here </src/examples/pytorch/getting_started_compile.ipynb>`
+are reproduced :ref:`in this notebook </src/examples/pytorch/getting_started_compile.ipynb>` , :download:`view notebook source </src/examples/pytorch/getting_started_compile.ipynb>` 
 
 3.1. Install torchvision
 
