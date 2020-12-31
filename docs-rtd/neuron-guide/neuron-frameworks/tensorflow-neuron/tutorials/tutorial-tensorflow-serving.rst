@@ -62,6 +62,7 @@ of Neuron compilation step before exporting to saved model.
 .. code:: python
 
    import tensorflow as tf
+   import tensorflow.neuron
 
    tf.keras.backend.set_learning_phase(0)
    tf.keras.backend.set_image_data_format('channels_last')
