@@ -176,5 +176,3 @@ You will see the following output:
    curl -X DELETE http://127.0.0.1:8081/models/resnet-50_compiled
 
    multi-model-server --stop
-
-   /opt/aws/neuron/bin/neuron-cli reset

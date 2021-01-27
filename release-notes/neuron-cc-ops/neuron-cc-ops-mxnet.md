@@ -12,6 +12,27 @@ Please view our documentation at **[https://awsdocs-neuron.readthedocs-hosted.co
 
 # Supported operators [MXNet]
 
+### Neuron Compiler Release 1.12.0 [XXX]
+Added
+```
+ Deconvolution
+ LayerNorm
+ Pad
+ SwapAxis
+ _contrib_arange_like
+ _contrib_interleaved_matmul_encdec_qk
+ _contrib_interleaved_matmul_encdec_valatt
+ _contrib_interleaved_matmul_selfatt_qk
+ _contrib_interleaved_matmul_selfatt_valatt
+ arctan
+ broadcast_like
+ cos
+ erf
+ pad
+ sin
+ slice_axis
+
+```
 
 ### Neuron Compiler Release [1.0.24045.0]
 
@@ -61,6 +82,9 @@ no changes
 no changes
 
 ### Neuron Compiler Release [1.0.4680.0]
+Initial
+
+### The current list
 
 ```
 Activation
@@ -69,10 +93,13 @@ Cast
 Concat
 Convolution
 Convolution_v1
+Deconvolution
 Dropout
 Flatten
 FullyConnected
+LayerNorm
 LeakyReLU
+Pad
 Pooling
 Pooling_v1
 RNN
@@ -80,6 +107,7 @@ Reshape
 SequenceMask
 SliceChannel
 Softmax
+SwapAxis
 UpSampling
 __add_scalar__
 __div_scalar__
@@ -90,6 +118,12 @@ __rpow_scalar__
 __rsub_scalar__
 __sub_scalar__
 _arange
+_contrib_arange_like
+_contrib_div_sqrt_dim
+_contrib_interleaved_matmul_encdec_qk
+_contrib_interleaved_matmul_encdec_valatt
+_contrib_interleaved_matmul_selfatt_qk
+_contrib_interleaved_matmul_selfatt_valatt
 _copy
 _div_scalar
 _equal_scalar
@@ -112,14 +146,17 @@ _rdiv_scalar
 _rminus_scalar
 _rnn_param_concat
 _zeros
+arctan
 batch_dot
 broadcast_add
+broadcast_axis
 broadcast_div
 broadcast_equal
 broadcast_greater
 broadcast_greater_equal
 broadcast_lesser
 broadcast_lesser_equal
+broadcast_like
 broadcast_maximum
 broadcast_minimum
 broadcast_mod
@@ -129,10 +166,12 @@ broadcast_sub
 ceil
 clip
 concat
+cos
 elemwise_add
 elemwise_div
 elemwise_mul
 elemwise_sub
+erf
 exp
 expand_dims
 flatten
@@ -145,6 +184,7 @@ mean
 min
 negative
 ones_like
+pad
 relu
 repeat
 reshape
@@ -152,7 +192,9 @@ reshape_like
 reverse
 rsqrt
 sigmoid
+sin
 slice
+slice_axis
 slice_like
 softmax
 split
@@ -166,6 +208,8 @@ tile
 transpose
 where
 zeros_like
+
+
 ```
 
 
