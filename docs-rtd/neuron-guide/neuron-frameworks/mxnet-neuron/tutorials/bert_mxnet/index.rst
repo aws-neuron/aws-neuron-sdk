@@ -78,16 +78,13 @@ Step 3: Set up the Neuron Runtime environment & create a tutorial directory
 ---------------------------------------------------------------------------
 
 If using Conda DLAMI version 27 and up, activate pre-installed
-PyTorch-Neuron environment (using
-``source activate aws_neuron_pytorch_p36`` command). Please update
-PyTorch-Neuron environment by following update steps in :ref:`dlami-release-notes-conda-dlami`.
+MXNet-Neuron environment (using
+``source activate aws_neuron_mxnet_p36`` command). Please update
+MXNet-Neuron environment by following update steps in :ref:`dlami-release-notes-conda-dlami`.
 
 To install in your own AMI, please see :ref:`neuron-install-guide` to setup virtual environment and
-install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc)
-packages. Also, please install pillow and torchvision for the pretrained
-resnet50 model (we use no-deps for torchvision because we already have
-Neuron version of torch installed through torch-neuron). In this
-tutorial we will use a python virtual environment.
+install MXNet-Neuron (mxnet-neuron) and Neuron Compiler (neuron-cc)
+packages. In this tutorial we will use a python virtual environment.
 
 ::
 
