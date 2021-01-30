@@ -6,7 +6,7 @@ PyTorch Neuron release notes
 This document lists the release notes for the Pytorch-Neuron package.
 
 Known Issues and Limitations - Updated 1/30/2021
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
 you can successfully torch.neuron.trace
@@ -29,7 +29,7 @@ you can successfully torch.neuron.trace
 .. _neuron-torch-1230:
 
 [1.7.1.1.2.3.0]
-^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Date: 1/30/2021
 
