@@ -52,6 +52,7 @@ Known issues and limitations - updated 01/30/2020
    known issue with a compiler crash on batch size 32 using BERT-Base,
    sequence length=128, --neuroncore-pipeline-cores = 16, but this is
    not the optimal setting for that model.
+8. **Conv2d operator:** It is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
 
 [1.2.2.0]
 ^^^^^^^^^
