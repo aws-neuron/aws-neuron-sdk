@@ -3,7 +3,7 @@
 Supported operators [TensorFlow]
 ================================
 
-Neuron Compiler Release 1.12.0 [XXXX]
+Neuron Compiler Release [1.2.2.0]
 
 Added
 
