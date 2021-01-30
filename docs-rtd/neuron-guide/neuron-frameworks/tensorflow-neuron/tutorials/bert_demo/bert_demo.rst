@@ -47,7 +47,7 @@ inf1.2xlarge instead of inf1.xlarge.
 Compile open source BERT-Large saved model using Neuron compatible BERT-Large implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Neuron software works with tensorflow saved models. Users should bring
+Neuron software works with TensorFlow saved models. Users should bring
 their own BERT-Large saved model for this section. This demo will run
 inference for the MRPC task and the saved model should be fine tuned for
 MRPC. Users who need additional help to fine-tune the model for MRPC or
@@ -58,6 +58,8 @@ following :
 
 .. code:: bash
 
+   git clone https://github.com/aws/aws-neuron-sdk
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel"
    python bert_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --batch_size=6 --aggressive_optimizations
 
@@ -99,6 +101,7 @@ BERT-Large demo server :
 .. code:: bash
 
    sudo systemctl restart neuron-rtd
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    python bert_server.py --dir bert-saved-model-neuron --batch 6 --parallel 4
 
 This loads 4 BERT-Large models, one into each of the 4 NeuronCores found
@@ -123,6 +126,7 @@ bert_demo directory execute the following commands :
 .. code:: bash
 
    source activate aws_neuron_tensorflow_p36
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    for i in {1..96}; do python bert_client.py --cycle 128 & done
 
 This spins up 96 clients, each of which sends 128 inference requests.
@@ -153,6 +157,7 @@ Example usage is shown below:
 .. code:: bash
 
    export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel"
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    python bert_no_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --batch_size=1
 
 .. _bert-tensorflow-demo-appendix1:
@@ -213,6 +218,7 @@ Then from the bert_demo directory run the following :
 .. code:: bash
 
    source activate aws_neuron_tensorflow_p36
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    export BERT_REPO_DIR="/path/to/cloned/bert/repo/directory"
    export GLUE_DIR="/path/to/glue/data/directory"
    export BERT_BASE_DIR="/path/to/pre-trained/bert-large/checkpoint/directory"
