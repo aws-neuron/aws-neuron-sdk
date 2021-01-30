@@ -54,7 +54,8 @@ Known issues and limitations - updated 01/30/2020
    not the optimal setting for that model.
 8. **Special cases of Conv2D** The Conv2D operator is mapped to Inferentia cores except when it is too large (more than 1.7 M Inferential compute array tiles) and in specific cases of depth-wise, group, padded, and dilated convolution (when stride and dilation do not match padding or when input and output channels do not match groups or when output channels are not multiple of the number of groups). 
 
-# [1.2.2.0]
+[1.2.2.0]
+^^^^^^^^^
 
 Date 1/30/2021
 
