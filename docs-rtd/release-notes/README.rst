@@ -8,10 +8,6 @@ This release continues to improves the NeuronCore Pipeline performance for BERT 
 
 This release also adds operator support and performance improvements for the PyTorch based DistilBert model for sequence classification.
 
-Important to know:
-------------------
-
-
 
 December 23, 2020 Release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
