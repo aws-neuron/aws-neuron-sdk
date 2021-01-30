@@ -59,24 +59,27 @@ Known issues and limitations - updated 01/30/2020
 
 Date 1/30/2021
 
-## Summary
+Summary
+-------
 
 Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline. 
 
-## Major New Features
+Major New Features
+------------------
 
-* The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
+- The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
 
-* A number of new operators is now supported on Inferentia, see the full lists :ref:`neuron-cc-ops-tensorflow`
+- A number of new operators is now supported on Inferentia, see the full lists :ref:`neuron-cc-ops-tensorflow`
  and :ref:`neuron-cc-ops-mxnet`
 
-* Improved inference performance on yolov4 BERT base sequence 64 (on 16 pipelined cores) and openpose 184.
+- Improved inference performance on yolov4 BERT base sequence 64 (on 16 pipelined cores) and openpose 184.
 
-## Resolved Issues
+Resolved Issues
+---------------
 
-* Corrected a random failure to compile Resnet50 batch 5
+- Corrected a random failure to compile Resnet50 batch 5
 
-* Corrected numerical inaccuracy in RSQRT and related operators for tensors with very large values ( > 1e20)
+- Corrected numerical inaccuracy in RSQRT and related operators for tensors with very large values ( > 1e20)
 
 
 
