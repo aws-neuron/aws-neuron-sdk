@@ -25,6 +25,19 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 --------------
+.. _1430:
+
+[1.4.3.0]
+=========
+
+Date: 01/30/2020
+
+Improvements
+------------
+
+-  Model load time has been improved by approximately 10% after changing runtime to avoid disk access.
+-  Improved return code when invalid/incomplete neffs are passed to runtime.
+
 
 .. _1310:
 

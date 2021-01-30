@@ -1,6 +1,18 @@
 Neuron Release Notes
 ====================
 
+January 30, 2021 Release
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This release continues to improves the NeuronCore Pipeline performance for BERT models. For example, running BERT Base with the the neuroncore-pipeline-cores compile option, at batch=3, seqlen=32 using 16 Neuron Cores, results in throughput of up to  5340 sequences per second and P99 latency of 9ms using Tensorflow Serving. 
+
+This release also adds operator support and performance improvements for the PyTorch based DistilBert model for sequence classification.
+
+Important to know:
+------------------
+
+
+
 December 23, 2020 Release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 

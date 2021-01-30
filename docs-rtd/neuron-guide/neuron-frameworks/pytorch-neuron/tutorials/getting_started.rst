@@ -535,6 +535,7 @@ use any value, or test multiple. Changes in orange
 
    ## Now compile the model
    ## (If using DLAMI v36 or older, please add option "compiler_args='-O2'" to the trace command)
+
    model_neuron = torch.neuron.trace(model, example_inputs=[image])   
 
    ## Export to saved model

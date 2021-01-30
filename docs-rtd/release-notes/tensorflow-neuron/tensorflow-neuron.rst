@@ -38,6 +38,25 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
+.. _11551220:
+
+[1.15.5.1.2.2.0]
+^^^^^^^^^^^^^^^^
+
+Date: 01/30/2021
+
+Summary
+-------
+
+1. Bug fixes and internal refactor.
+
+2. Bump tensorflow base package version to 1.15.5.
+
+3. Introduced a new argument ``convert_constants_to_variables`` to the compilation API ``tfn.saved_model.compile``. Setting it to ``True`` can address the issue of large constants consuming too much memory in the tensorflow runtime.
+
+
+
+
 .. _11541130:
 
 [1.15.4.1.1.3.0]
