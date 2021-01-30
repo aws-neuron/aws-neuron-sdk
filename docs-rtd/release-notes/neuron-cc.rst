@@ -52,7 +52,6 @@ Known issues and limitations - updated 01/30/2020
    known issue with a compiler crash on batch size 32 using BERT-Base,
    sequence length=128, --neuroncore-pipeline-cores = 16, but this is
    not the optimal setting for that model.
-8. **Special cases of Conv2D** The Conv2D operator is mapped to Inferentia cores except when it is too large (more than 1.7 M Inferential compute array tiles) and in specific cases of depth-wise, group, padded, and dilated convolution (when stride and dilation do not match padding or when input and output channels do not match groups or when output channels are not multiple of the number of groups). 
 
 [1.2.2.0]
 ^^^^^^^^^
@@ -61,19 +60,20 @@ Date 1/30/2021
 
 ## Summary
 
-Added suport for several new operators for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores. 
+Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline. 
 
 ## Major New Features
 
 * The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
 
-* A large number of new operators is now supported on Inferentia, see the full list in neuron-cc-ops-tensorflow.rst, neuron-cc-ops-mxnet.rst
+* A number of new operators is now supported on Inferentia, see the full lists :ref:`neuron-cc-ops-tensorflow`
+ and :ref:`neuron-cc-ops-mxnet`
 
-* Improved inference performance by 10% on the following models: prosotron encoder, yolov4, BERT base sequence 64 (on 16 pipelined cores), and openpose 184.
+* Improved inference performance on yolov4 BERT base sequence 64 (on 16 pipelined cores) and openpose 184.
 
 ## Resolved Issues
 
-* Corrected a random failure to compile Resnet50 batch 5 when using -O legacy
+* Corrected a random failure to compile Resnet50 batch 5
 
 * Corrected numerical inaccuracy in RSQRT and related operators for tensors with very large values ( > 1e20)
 
