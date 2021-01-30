@@ -2,7 +2,7 @@ Neuron Release Notes
 ====================
 
 January 30, 2021 Release
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This release continues to improves the NeuronCore Pipeline performance for BERT models. For example, running BERT Base with the the neuroncore-pipeline-cores compile option, at batch=3, seqlen=32 using 16 Neuron Cores, results in throughput of up to  5340 sequences per second and P99 latency of 9ms using Tensorflow Serving. 
 
