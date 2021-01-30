@@ -6,7 +6,7 @@ PyTorch-Neuron Conda Package Release notes
 This document lists the release notes for the Neuron Conda-Pytorch
 package.
 
-[1.7.1.1.3.0]
+[1.7.1.1.2.3.0]
 ^^^^^^^^^^^^^^^
 Date: 1/30/2021
 
