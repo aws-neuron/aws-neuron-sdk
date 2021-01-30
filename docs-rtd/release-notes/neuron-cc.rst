@@ -26,7 +26,7 @@ ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 12/23/2020
+Known issues and limitations - updated 01/30/2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. **Control flow** Neuron only supports control flow operators which
@@ -52,8 +52,39 @@ Known issues and limitations - updated 12/23/2020
    known issue with a compiler crash on batch size 32 using BERT-Base,
    sequence length=128, --neuroncore-pipeline-cores = 16, but this is
    not the optimal setting for that model.
+8. **Conv2d operator** is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
 
-.. _1170:
+[1.2.2.0]
+^^^^^^^^^
+
+Date 1/30/2021
+
+Summary
+-------
+
+Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline. 
+
+Major New Features
+------------------
+
+- The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
+
+- A number of new operators is now supported on Inferentia, see the full lists :ref:`neuron-cc-ops-tensorflow`
+ and :ref:`neuron-cc-ops-mxnet`
+
+- Improved inference performance on yolov4 BERT base sequence 64 (on 16 pipelined cores) and openpose 184.
+
+Resolved Issues
+---------------
+
+- Corrected a random failure to compile Resnet50 batch 5
+
+- Corrected numerical inaccuracy in RSQRT and related operators for tensors with very large values ( > 1e20)
+
+
+
+
+
 
 [1.1.7.0]
 ^^^^^^^^^

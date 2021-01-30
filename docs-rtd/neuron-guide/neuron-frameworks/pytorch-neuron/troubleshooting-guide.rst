@@ -1,6 +1,17 @@
 Troubleshooting Guide for Torch-Neuron
 ======================================
 
+General Torch-Neuron issues
+---------------------------
+
+If you see an error about "Unknown builtin op: neuron::forward_1" like below, please ensure that import line "import torch_neuron" (to register the Neuron custom operation) is in the inference script before using torch.jit.load.
+
+::
+
+   Unknown builtin op: neuron::forward_1.
+   Could not find any similar ops to neuron::forward_1. This op may not exist or may not be currently supported in TorchScript.
+
+
 TorchVision related issues
 --------------------------
 

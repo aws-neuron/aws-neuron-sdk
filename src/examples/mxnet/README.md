@@ -62,7 +62,7 @@ Now: ssh to the Inf1 instance
 
 If using Conda DLAMI version 27 and up, activate pre-installed PyTorch-Neuron environment (using `source activate aws_neuron_pytorch_p36`  command). Please update PyTorch-Neuron environment by following update steps in [DLAMI release notes](../../release-notes/dlami-release-notes.md#conda-dlami).
 
-To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron). In this tutorial we will use a python virtual environment. 
+To install in your own AMI, please see [Neuron Install Guide](../neuron-install-guide.md) to setup virtual environment and install Torch-Neuron (torch-neuron) and Neuron Compiler (neuron-cc) packages. Also, please install pillow and torchvision for the pretrained resnet50 model (we use no-deps for torchvision because we already have Neuron version of torch installed through torch-neuron). In this tutorial we will use a python virtual environment.
 
 ```
 # Make sure we are up to date

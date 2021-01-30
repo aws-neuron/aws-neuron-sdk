@@ -3,6 +3,26 @@
 Supported operators [MXNet]
 ===========================
 
+::
+
+ Deconvolution
+ LayerNorm
+ Pad
+ SwapAxis
+ _contrib_arange_like
+ _contrib_interleaved_matmul_encdec_qk
+ _contrib_interleaved_matmul_encdec_valatt
+ _contrib_interleaved_matmul_selfatt_qk
+ _contrib_interleaved_matmul_selfatt_valatt
+ arctan
+ broadcast_like
+ cos
+ erf
+ pad
+ sin
+ slice_axis
+
+
 To see a list of supported operators for MXNet, run the following command:
 
 ``neuron-cc list-operators --framework MXNET``

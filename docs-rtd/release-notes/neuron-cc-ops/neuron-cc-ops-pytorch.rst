@@ -12,6 +12,20 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+.. _pytorch-neuron-release-1230:
+
+PyTorch Neuron Release [1.2.3.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added:
+
+::
+
+   aten::silu
+   aten::zeros_like
+
+.. _pytorch-neuron-release-1170:
+
 PyTorch Neuron Release [1.1.7.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

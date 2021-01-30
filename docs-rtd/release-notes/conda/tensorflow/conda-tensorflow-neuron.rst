@@ -6,6 +6,21 @@ Conda-TensorFlow Release Notes
 This document lists the release notes for the Neuron Conda-TensorFlow
 package.
 
+[1.15.5.1.2.2.0]
+^^^^^^^^^^^^^^^^
+
+Date: 1/30/2021
+
+Included Neuron Packages
+------------------------
+
+neuron_cc-1.2.2.0
+
+tensorboard_neuron-1.15.0.1.2.0.0
+
+tensorflow_neuron-1.15.5.1.2.2.0
+
+
 [1.15.4.1.1.3.0]
 ^^^^^^^^^^^^^^^^
 

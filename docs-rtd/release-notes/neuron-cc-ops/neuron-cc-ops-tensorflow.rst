@@ -3,6 +3,39 @@
 Supported operators [TensorFlow]
 ================================
 
+Neuron Compiler Release [1.2.2.0]
+
+Added
+
+::
+
+ AdjustContrastv2
+ AdjustSaturation
+ BroadcastTo
+ Cholesky
+ Conv2DBackpropInput
+ Conv3D
+ CropAndResize
+ FloorDiv
+ HSVToRGB
+ InvertPermutation
+ L2Loss
+ Log1p
+ MatrixBandPart
+ MatrixDiag
+ MatrixSetDiag
+ MatrixTriangularSolve
+ MaxPool3D
+ MirrorPad
+ RGBToHSV
+ Range
+ SoftmaxCrossEntropyWithLogits
+ SquaredDifference
+ StopGradient
+ Unpack
+ UnsortedSegmentSum
+
+
 To see a list of supported operators for TensorFlow, run the following command:
 
 ``neuron-cc list-operators --framework TENSORFLOW``

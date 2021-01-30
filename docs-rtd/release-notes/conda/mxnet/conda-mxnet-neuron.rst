@@ -6,6 +6,24 @@ Conda-MXNet Release Notes
 This document lists the release notes for the Neuron Conda-MxNet
 package.
 
+[1.5.1.1.3.2.0]
+^^^^^^^^^^^^^^^
+
+Date: 1/30/2021
+
+Included Neuron Packages
+------------------------
+
+neuron_cc-1.2.2.0
+
+mxnet_neuron-1.5.1.1.3.2.0
+
+Known Issues
+------------
+
+- Issue: Running "conda update mxnet-neuron" in Conda DLAMI v37 and v38 would result in environment updates only but not update to the MXNet-Neuron Conda package.
+   - Workaround: Running the same command "conda update mxnet-neuron" a second time would result in update to the MXNet-Neuron Conda package.
+
 [1.5.1.1.2.1.0]
 ^^^^^^^^^^^^^^^
 
@@ -21,11 +39,8 @@ mxnet_neuron-1.5.1.1.2.1.0
 Known Issues
 ------------
 
-- Issue: Running "conda update mxnet-neuron" in Conda DLAMI v37 and v38 would result in environment updates only but not
-update to the MXNet-Neuron Conda package.
-
-- Workaround: Running the same command "conda update mxnet-neuron" a second time would result in update to the
-MXNet-Neuron Conda package.
+- Issue: Running "conda update mxnet-neuron" in Conda DLAMI v37 and v38 would result in environment updates only but not update to the MXNet-Neuron Conda package.
+   - Workaround: Running the same command "conda update mxnet-neuron" a second time would result in update to the MXNet-Neuron Conda package.
 
 [1.5.1.1.1.88.0]
 ^^^^^^^^^^^^^^^^
