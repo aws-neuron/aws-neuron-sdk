@@ -6,6 +6,40 @@ PyTorch-Neuron Conda Package Release notes
 This document lists the release notes for the Neuron Conda-Pytorch
 package.
 
+[1.7.1.1.3.0]
+^^^^^^^^^^^^^^^
+Date: 1/30/2021
+
+Included Neuron Packages
+------------------------
+
+neuron-cc-1.2.2.0
+
+torch_neuron-1.7.1.1.2.3.0
+
+Resolved Issues
+---------------
+
+Resolved the segmentation fault when enabling profiling using NEURON_PROFILE=<directory> environment variable for inference within a PyTorch-Neuron Conda environment (https://github.com/aws/aws-neuron-sdk/issues/230). This fix will be available in the next DLAMI release.
+
+
+[1.5.1.1.2.1.0]
+^^^^^^^^^^^^^^^
+Date: 1/30/2021
+
+Included Neuron Packages
+------------------------
+
+neuron-cc-1.2.1.0
+
+torch_neuron-1.5.1.1.2.1.0
+
+Resolved Issues
+---------------
+
+Resolved the segmentation fault when enabling profiling using NEURON_PROFILE=<directory> environment variable for inference within a PyTorch-Neuron Conda environment (https://github.com/aws/aws-neuron-sdk/issues/230). This fix will be available in the next DLAMI release.
+
+
 [1.7.1.1.1.7.0]
 ^^^^^^^^^^^^^^^
 

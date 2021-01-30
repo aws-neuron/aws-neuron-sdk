@@ -59,7 +59,7 @@ Prepare a new Python virtual environment with the necessary Neuron and TorchServ
   $ . env/bin/activate
   $ pip install -U pip
   $ pip install torch-neuron 'neuron-cc[tensorflow]' --extra-index-url=https://pip.repos.neuron.amazonaws.com
-  $ pip install transformers==4.0.0 torchserve==0.2.0 torch-model-archiver==0.2.0
+  $ pip install transformers==4.2.0 torchserve==0.3.0 torch-model-archiver==0.3.0
 
 Install the system requirements for TorchServe.
 
@@ -90,7 +90,7 @@ Verify that TorchServe is now available.
 
 ::
 
-  TorchServe Version is 0.2.0
+  TorchServe Version is 0.3.0
 
 
 

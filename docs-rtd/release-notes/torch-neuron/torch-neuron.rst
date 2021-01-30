@@ -5,7 +5,7 @@ PyTorch Neuron release notes
 
 This document lists the release notes for the Pytorch-Neuron package.
 
-Known Issues and Limitations - Updated 12/23/2020
+Known Issues and Limitations - Updated 1/30/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -21,19 +21,23 @@ you can successfully torch.neuron.trace
 
 -  Torchvision has dropped support for Python 3.5
 -  HuggingFace transformers has dropped support for Python 3.5
--  There are known issues when customer use a mixture of conda and pip
-   packages. We strongly recommend that you install aws neuron conda
-   packages if you are using a conda environment, and use the pip
-   installation if you are working in a base python environment (or a
-   native python virtual environment) as recommended in our installation
-   notes at :ref:`neuron-install-conda-packages`
-   -  When using the most recent DLAMI and 'aws_neuron_pytorch_p36' you may
-   see lower performance than expected in :ref:`pytorch-getting-started`.
-   This issue will be corrected in the v37 DLAMI release.
 -  aten::max only correctly implements the simplest versions of that
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
--  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 mathced the torch==1.7.1 release
+-  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+.. _neuron-torch-1230:
+
+[1.7.1.1.2.3.0]
+^^^^^^^^^
+
+Date: 1/30/2021
+
+Summary
+-------
+
+-  Made changes to allow models with -inf scalar constants to correctly compile
+-  Added new operator support. Please see :ref:`neuron-cc-ops-pytorch` for the complete list of operators.
 
 .. _neuron-torch-11170:
 

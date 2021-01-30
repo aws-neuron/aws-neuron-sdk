@@ -15,7 +15,7 @@ Computer Vision
 ---------------
    
 - :ref:`pytorch-getting-started`
-- :ref:`/src/examples/pytorch/yolo_v4_tutorial/compile_evaluate.ipynb` :download:`view notebook source </src/examples/pytorch/yolo_v4_tutorial/compile_evaluate.ipynb>`
+- :ref:`/src/examples/pytorch/yolo_v4.ipynb` :download:`view notebook source </src/examples/pytorch/yolo_v4.ipynb>`
 
 
 .. _pytorch-nlp:

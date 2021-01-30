@@ -534,9 +534,8 @@ use any value, or test multiple. Changes in orange
    print(analyze_results)
 
    ## Now compile the model
-   ## Note: The "-O2" setting is default in recent releases, but may be needed for DLAMI
-   ##       and older installed environments
-   model_neuron = torch.neuron.trace(model, example_inputs=[image], compiler_args="-O2")
+   ## (If using DLAMI v36 or older, please add option "compiler_args='-O2'" to the trace command)
+   model_neuron = torch.neuron.trace(model, example_inputs=[image])
 
    ## Export to saved model
    model_neuron.save("resnet50_neuron_b{}.pt".format(batch_size))
