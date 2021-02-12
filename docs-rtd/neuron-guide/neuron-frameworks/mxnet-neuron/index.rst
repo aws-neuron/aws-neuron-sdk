@@ -11,4 +11,5 @@ Neuron is integrated into MXNet, and provides you with a familiar environment to
 
    Tutorials <tutorials/index>
    Reference manuals <refman>
+   troubleshooting-guide
    rn
