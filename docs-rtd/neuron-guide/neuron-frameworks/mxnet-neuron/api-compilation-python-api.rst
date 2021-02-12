@@ -32,6 +32,10 @@ This number can be less than the total available NeuronCores on an Inf1
 instance. See :ref:`neuron-compiler-cli-reference` for more information
 about compiler options.
 
+For debugging compilation, use SUBGRAPH_INFO=1 environment setting before
+calling the compilation script. The extract subgraphs are preserved as hidden
+files in the run directory. For more information, see :ref:`neuron_gatherinfo`
+
 Arguments
 ---------
 
