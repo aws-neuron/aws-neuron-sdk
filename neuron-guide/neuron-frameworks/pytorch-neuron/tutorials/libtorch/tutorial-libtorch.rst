@@ -30,7 +30,7 @@ This tutorial is divided into the following parts:
 Setup the Enviornment
 -----------------------------------------
 
-Please launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance.
+Launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance.
 
 .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
@@ -43,11 +43,11 @@ Run the Tutorial
 Complete the `HuggingFace Pretrained BERT Tutorial <https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`_. You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
 
 
-Open a shell on the instance you prepared earlier. Download and extract the tutorial archive.
+Open a shell on the instance you prepared earlier. Right-click and copy :download:`this link address to the tutorial archive<./libtorch_demo.tar.gz>`.
 
 .. code:: bash
 
-  $ wget https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/libtorch/libtorch_demo.tar.gz
+  $ wget <paste archive URL>
   $ tar xvf libtorch_demo.tar.gz
 
 Your directoy tree should now look like this:
@@ -188,4 +188,4 @@ Finally, run the example app directly to benchmark the BERT model.
 Clean up your instance/s
 ------------------------
 
-After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, please follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
+After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
