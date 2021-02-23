@@ -1,6 +1,6 @@
 import os, tarfile
 
-def archive_handler(app, exception):
+def archive_handler(app):
     old_cwd = os.getcwd()
     libtorch = 'neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/libtorch'
     src_name = 'libtorch_demo'
@@ -19,7 +19,7 @@ def archive_handler(app, exception):
     os.chdir(old_cwd)
 
 def setup(app):
-    app.connect('build-finished', archive_handler)
+    app.connect('builder-inited', archive_handler)
 
     return {
         'version': '1.0',
