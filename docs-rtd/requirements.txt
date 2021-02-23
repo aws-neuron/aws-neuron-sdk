@@ -1,5 +1,0 @@
-sphinx
-sphinx-rtd-theme
-sphinxcontrib.contentui
-nbsphinx
-
