@@ -7,8 +7,6 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Getting Started
 
-   tutorial-manual-partitioning
-   
 .. _pytorch-computervision:
 
 .. toctree::
@@ -25,6 +23,7 @@ PyTorch Tutorials
    :caption: Natural Language Processing
 
    bert_tutorial/bert_tutorial
+   libtorch/tutorial-libtorch
 
 .. _pytorch-utilize-neuron:
 
