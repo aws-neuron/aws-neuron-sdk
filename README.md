@@ -1,4 +1,4 @@
-![neuron](./docs-rtd/images/Site-Merch_Neuron-ML-SDK_Editorial.png)
+![neuron](./images/Site-Merch_Neuron-ML-SDK_Editorial.png)
 
 # AWS Neuron  
 
