@@ -2,11 +2,11 @@ import os, tarfile
 
 def archive_handler(app):
     old_cwd = os.getcwd()
-    libtorch = 'neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/libtorch'
-    src_name = 'libtorch_demo'
-    archive_name = src_name + '.tar.gz'
+    src_dir = 'src'
+    libtorch_dir = 'libtorch_demo'
+    archive_name = libtorch_dir + '.tar.gz'
 
-    os.chdir(libtorch)
+    os.chdir(src_dir)
 
     try:
         os.remove(archive_name)
@@ -14,7 +14,7 @@ def archive_handler(app):
         pass
 
     with tarfile.open(archive_name, 'w:gz') as tar:
-        tar.add(src_name)
+        tar.add(libtorch_dir)
 
     os.chdir(old_cwd)
 

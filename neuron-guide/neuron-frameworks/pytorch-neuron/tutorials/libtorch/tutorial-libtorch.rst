@@ -15,7 +15,7 @@ This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/ins
 
 .. note::
 
-  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
+  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same :ref:`EC2 Developer Flow Setup <ec2-then-ec2-devflow>` using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
 
 This tutorial is divided into the following parts:
 
@@ -43,14 +43,14 @@ Run the Tutorial
 Complete the `HuggingFace Pretrained BERT Tutorial <https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`_. You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
 
 
-Open a shell on the instance you prepared earlier. Right-click and copy :download:`this link address to the tutorial archive<./libtorch_demo.tar.gz>`.
+Open a shell on the instance you prepared earlier. Right-click and copy :download:`this link address to the tutorial archive</src/libtorch_demo.tar.gz>`.
 
 .. code:: bash
 
   $ wget <paste archive URL>
   $ tar xvf libtorch_demo.tar.gz
 
-Your directoy tree should now look like this:
+Your directory tree should now look like this:
 
 ::
 
@@ -87,11 +87,17 @@ Copy the compiled model from Step 2 into the new ``libtorch_demo`` directory.
 This tutorial uses the `HuggingFace Tokenizers <https://github.com/huggingface/tokenizers>`_ library implemented in Rust.
 Install Cargo, the package manager for the Rust programming language.
 
-.. code:: bash
 
-  $ sudo apt install -y cargo
+ +----------------------------------+----------------------------------+
+ | Ubuntu                           | AL2                              |
+ +----------------------------------+----------------------------------+
+ | .. code-block:: bash             | .. code-block:: bash             |
+ |                                  |                                  |
+ |    $ sudo apt install -y cargo   |    $ sudo yum install -y cargo   |
+ +----------------------------------+----------------------------------+
 
-Verify you are using a compatible version of Python.
+
+Verify you have Python 3 installed.
 
 .. code:: bash
 
