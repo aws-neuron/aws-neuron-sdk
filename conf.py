@@ -75,11 +75,11 @@ projecttree = project_name+'/tree/'+branch_name
 #projecttree = "private-aws-neuron-sdk-staging/tree/aws-maen-rtd"
 
 extlinks = {
-            'mxnet-neuron': ('https://github.com/aws/'+projectblob+'/docs-rtd/neuron-guide/neuron-frameworks/mxnet-neuron/%s', '')
-            ,'pytorch-neuron': ('https://github.com/aws/'+projectblob+'/docs-rtd/neuron-guide/neuron-frameworks/pytorch-neuron/%s', '')
-            ,'tensorflow-neuron': ('https://github.com/aws/'+projectblob+'/docs-rtd/neuron-guide/neuron-frameworks/tensorflow-neuron/%s', '')
-            ,'neuron-deploy': ('https://github.com/aws/'+projectblob+'/docs-rtd/neuron-deploy/%s', '')
-            ,'neuron-tools-tree': ('https://github.com/aws/'+projecttree+'/docs-rtd/neuron-guide/neuron-tools/%s', '')
+            'mxnet-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/mxnet-neuron/%s', '')
+            ,'pytorch-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/pytorch-neuron/%s', '')
+            ,'tensorflow-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/tensorflow-neuron/%s', '')
+            ,'neuron-deploy': ('https://github.com/aws/'+projectblob+'/neuron-deploy/%s', '')
+            ,'neuron-tools-tree': ('https://github.com/aws/'+projecttree+'/neuron-guide/neuron-tools/%s', '')
             ,'mxnet-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/mxnet/%s', '')
             ,'pytorch-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/pytorch/%s', '')
             ,'tensorflow-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/tensorflow/%s', '')

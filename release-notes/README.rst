@@ -8,6 +8,17 @@ Neuron Release Notes
    :depth: 1
 
 
+.. _2-24-2021-rn:
+
+February 24, 2021 Release (Patch)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This release updates all Neuron packages and libraries in response to the Python Secutity issue CVE-2021-3177 as described here: https://nvd.nist.gov/vuln/detail/CVE-2021-3177. This vulnerability potentially exists in multiple versions of Python including 3.5, 3.6, 3.7. Python is used by various components of Neuron, including the Neuron compiler as well as Machine Learning frameworks including TensorFlow, PyTorch and MXNet. It is recommended that the Python interpreters used in any AMIs and containers used with Neuron are also updated. 
+
+Python 3.5 reached `end-of-life <https://devguide.python.org/devcycle/?highlight=python%203.5%20end%20of%20life#end-of-life-branches>`_, from this release Neuron packages will not support Python 3.5.
+Users should upgrade to latest DLAMI or upgrade to a newer Python versions if they are using other AMI.
+
+
 January 30, 2021 Release
 ^^^^^^^^^^^^^^^^^^^^^^^^
 

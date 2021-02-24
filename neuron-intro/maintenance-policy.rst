@@ -83,11 +83,11 @@ The life-cycle for Dependency Software version consists of 4 phases, but there m
   
   During the maintenance phase, AWS limits Dependency Software version to address critical bug fixes and security issues only. There is no minimum Maintenance period.
 
-  This phase is optional and AWS will reserve the right to skip it for specific  SDK Dependency Software products.
+  This phase is optional and AWS will reserve the right to skip it for specific Dependency Software products.
 
 - **End-of-Support (Phase 4)**
   
-  When an SDK reaches end-of support, it will no longer receive updates or releases. Previously published releases will continue to be available via Conda or Pip packages. Use of an SDK which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the new major version.
+  When a Dependency Software version reaches end-of support, it will no longer receive updates or releases. Previously published releases will continue to be available via Conda or Pip packages. Use of an SDK which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the new major version.
 
   When a Dependency Software version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Dependency Software versions will continue to be available via Neuron SDK Conda or Pip packages.
 

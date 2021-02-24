@@ -35,7 +35,7 @@ ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 01/30/2020
+Known issues and limitations - updated 02/24/2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. **Control flow** Neuron only supports control flow operators which
@@ -62,6 +62,16 @@ Known issues and limitations - updated 01/30/2020
    sequence length=128, --neuroncore-pipeline-cores = 16, but this is
    not the optimal setting for that model.
 8. **Conv2d operator** is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
+
+[1.2.7.0]
+^^^^^^^^^
+
+Date 2/24/2021
+
+Summary
+-------
+
+Fix for CVE-2021-3177.
 
 [1.2.2.0]
 ^^^^^^^^^
