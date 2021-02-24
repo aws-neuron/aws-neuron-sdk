@@ -5,6 +5,13 @@ TensorFlow Tutorials
 
 .. _tensorflow-computervision:
 
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Getting Started
+
+   openpose_demo/openpose_demo
+
 .. toctree::
    :maxdepth: 1
    :caption: Computer Vision
@@ -12,10 +19,8 @@ TensorFlow Tutorials
    tutorial-tensorflow-compile-infer
    yolo_v4_demo/yolo_v4_demo
    yolo_v3_demo/yolo_v3_demo
-   ssd300_demo/ssd300_demo
-   openpose_demo/openpose_demo
+   ssd300_demo/ssd300_demo   
    keras_resnet50/keras_resnet50
-   openpose
 
 .. _tensorflow-nlp:
 

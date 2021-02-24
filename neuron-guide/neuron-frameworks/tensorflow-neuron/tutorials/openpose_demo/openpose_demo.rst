@@ -48,7 +48,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
   cd aws-neuron-sdk/src/examples/tensorflow/openpose_demo
   
 
-The Jupyter notebook is available as a file with the name :ref:`openpose.ipynb </src/examples/tensorflow/openpose_demo/openpose.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name  :tensorflow-neuron-src:`openpose.ipynb <openpose_demo/openpose.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**

@@ -13,13 +13,26 @@ information.
 
 
 
-Known Issues and Limitations 01/30/2020
+Known Issues and Limitations 02/24/2020
 =======================================
 
 -  neuron-top has a visible screen stutter as the number of loaded
    models increases above 40. This is only a visual issue with no impact
    on performance. The issue is caused by the re rendering the UI on
    screen refresh. We will fix this in a future release.
+
+.. _1480:
+
+[1.4.8.0]
+=========
+
+Date: 02/24/2020
+
+Resolved Issues
+---------------
+
+-  Fix for CVE-2021-3177.
+
 
 .. _1420:
 

@@ -7,7 +7,7 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Getting Started
 
-   tutorial-manual-partitioning
+   resnet50
    
 .. _pytorch-computervision:
 
@@ -15,7 +15,6 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Computer Vision
 
-   resnet50
    /src/examples/pytorch/yolo_v4
 
 .. _pytorch-nlp:

@@ -50,7 +50,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
   cd aws-neuron-sdk/src/examples/pytorch
   
 
-The Jupyter notebook is available as a file with the name :ref:`resnet50.ipynb </src/examples/pytorch/resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`resnet50.ipynb <resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**

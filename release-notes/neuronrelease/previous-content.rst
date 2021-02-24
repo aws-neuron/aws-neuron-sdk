@@ -56,7 +56,7 @@ Dependency Software Supported Versions
      - * Python 3.6
        * Python 3.7
      - 
-     - * Python 3.5 (3/2021)
+     - 
    * - Neuron Conda Packages
      - * Conda-PyTorch 1.5.1, Conda-PyTorch 1.7.1, 
      
