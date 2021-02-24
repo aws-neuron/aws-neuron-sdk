@@ -1,3 +1,6 @@
+# This file creates a downloadable archive from src/libtorch_demo.
+# You can modify or add additional archive_handler functions here to create additional archives.
+
 import os, tarfile
 
 def archive_handler(app):
