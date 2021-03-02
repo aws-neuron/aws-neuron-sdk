@@ -48,7 +48,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
   cd aws-neuron-sdk/src/examples/pytorch
 
 
-The Jupyter notebook is available as a file with the name :ref:`tutorial_pretrained_bert.ipynb </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`tutorial_pretrained_bert.ipynb <bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**
