@@ -23,7 +23,7 @@ PyTorch Tutorials
    :caption: Natural Language Processing
 
    bert_tutorial/bert_tutorial
-   libtorch/tutorial-libtorch
+   tutorial-libtorch
 
 .. _pytorch-utilize-neuron:
 

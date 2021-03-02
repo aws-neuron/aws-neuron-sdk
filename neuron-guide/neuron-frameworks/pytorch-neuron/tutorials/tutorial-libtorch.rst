@@ -11,7 +11,7 @@ LibTorch C++ Tutorial
 Overview
 --------
 
-This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Amazon Inferentia hardware and the Neuron SDK. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
+This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
 .. note::
 
@@ -20,9 +20,9 @@ This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/ins
 This tutorial is divided into the following parts:
 
 * :ref:`libtorch-setup` - Steps needed to setup the compilation and deployment environments that will enable you to run this tutorial. In this tutorial, a single inf1 instance will provide both the compilation and deployment enviroments.
-* :ref:`libtorch-run` - Follow the steps to compile and run the example app.
-* :ref:`libtorch-benchmark` - Benchmark the compiled model.
-* :ref:`libtorch-cleanup` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
+* :ref:`libtorch-run` - Steps needed to compile and run the example app.
+* :ref:`libtorch-benchmark` - Steps needed to benchmark the model.
+* :ref:`libtorch-cleanup` - Steps needed to cleanup instance used for this tutorial.
 
 
 .. _libtorch-setup:
@@ -30,7 +30,7 @@ This tutorial is divided into the following parts:
 Setup the Enviornment
 -----------------------------------------
 
-Launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance.
+Launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance running the DLAMI.
 
 .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
@@ -40,10 +40,33 @@ Launch Inf1 instance by following the below steps, and make sure to choose an in
 Run the Tutorial
 ----------------
 
-Complete the `HuggingFace Pretrained BERT Tutorial <https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`_. You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
+After connecting to the instance from the terminal, clone the Neuron Github repository to the EC2 instance and then change the working directory to the tutorial directory:
+
+.. code:: bash
+
+  git clone https://github.com/aws/aws-neuron-sdk.git
+  cd aws-neuron-sdk/src/examples/pytorch
 
 
-Open a shell on the instance you prepared earlier. Right-click and copy :download:`this link address to the tutorial archive</src/libtorch_demo.tar.gz>`.
+The Jupyter notebook is available as a file with the name :ref:`tutorial_pretrained_bert.ipynb </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+
+
+* **Running tutorial from browser**
+
+  * First setup and launch the Jupyter notebook on your local browser by following instructions at :ref:`Running Jupyter Notebook Browser`
+  * Open the Jupyter notebook from the menu and follow the instructions
+
+
+You can also view the Jupyter notebook at:
+
+.. toctree::
+   :maxdepth: 1
+
+   /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
+
+
+You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
+Right-click and copy :download:`this link address to the tutorial archive</src/libtorch_demo.tar.gz>`.
 
 .. code:: bash
 
@@ -96,16 +119,6 @@ Install Cargo, the package manager for the Rust programming language.
  |    $ sudo apt install -y cargo   |    $ sudo yum install -y cargo   |
  +----------------------------------+----------------------------------+
 
-
-Verify you have Python 3 installed.
-
-.. code:: bash
-
-  $ python3 --version
-
-::
-
-  Python 3.7.6
 
 Run the setup script to download additional depdendencies and build the app. (This may take a few minutes to complete.)
 
