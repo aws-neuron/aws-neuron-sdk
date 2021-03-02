@@ -11,6 +11,21 @@ package.
    :depth: 1
    
 
+[1.15.5.1.2.8.0]
+^^^^^^^^^^^^^^^^
+
+Date: 2/24/2021
+
+Included Neuron Packages
+------------------------
+
+neuron_cc-1.2.7.0
+
+tensorboard_neuron-1.15.0.1.2.6.0
+
+tensorflow_neuron-1.15.5.1.2.8.0
+
+
 [1.15.5.1.2.2.0]
 ^^^^^^^^^^^^^^^^
 

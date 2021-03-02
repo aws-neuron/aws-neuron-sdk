@@ -7,13 +7,14 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Getting Started
 
+   resnet50
+
 .. _pytorch-computervision:
 
 .. toctree::
    :maxdepth: 1
    :caption: Computer Vision
 
-   resnet50
    /src/examples/pytorch/yolo_v4
 
 .. _pytorch-nlp:

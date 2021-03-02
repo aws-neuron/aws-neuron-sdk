@@ -22,21 +22,20 @@ More information about Deep Learning AMI (DLAMI) and other flows can be found in
 Deep Learning AMI (DLAMI)
 -------------------------
 
-Neuron packages are included in `AWS Deep Learning AMI (DLAMI) with Conda <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_  and `DLAMI <https://docs.aws.amazon.com/dlami/index.html>`_ is the recommended AMI to use with Neuron SDK. 
-Please check `The AWS Inferentia Chip With DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html>`_  for howto information.
-
-Deep Learning AMI (DLAMI) Versions Matrix
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. include:: /neuron-intro/dlami/dlami-neuron-matrix-table.rst
+Neuron packages are included as Conda packgaes in `AWS Deep Learning AMI (DLAMI) with Conda <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_, and `DLAMI <https://docs.aws.amazon.com/dlami/index.html>`_ is the recommended AMI to use with Neuron SDK. 
 
 
-For more information about Neuron support in DLAMI see :ref:`dlami-neuron-rn` .
+For more information about Neuron and DLAMI:
 
-.. note::
+.. toctree::
+   :maxdepth: 1
 
-   Only Ubuntu 16,18 and Amazon Linux2 DLAMI are supported (Amazon Linux is not supported)
+   /neuron-intro/dlami/dlami-neuron-matrix.rst
+   /neuron-intro/dlami/dlami-neuron-conda.rst
+   /release-notes/dlami-release-notes
 
+
+More information about DLAMI and Inferentia be found also at the `DLAMI Documentation <https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html>`_ .
 
 
 DL Containers

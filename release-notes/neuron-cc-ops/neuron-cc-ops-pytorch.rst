@@ -16,10 +16,16 @@ python:
    import torch.neuron
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
+.. _pytorch-neuron-release-12150:
 
-.. _pytorch-neuron-release-1220:
+PyTorch Neuron Release [1.2.15.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PyTorch Neuron Release [1.2.2.0]
+No change
+
+.. _pytorch-neuron-release-1230:
+
+PyTorch Neuron Release [1.2.3.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Added:
