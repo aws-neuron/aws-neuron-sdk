@@ -12,7 +12,7 @@ This document lists the release notes for the Pytorch-Neuron package.
  
 
 
-Known Issues and Limitations - Updated 2/24/2021
+Known Issues and Limitations - Updated 3/4/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -32,6 +32,18 @@ you can successfully torch.neuron.trace
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+.. _neuron-torch-12160:
+
+[1.7.1.1.2.16.0]
+^^^^^^^^^^^^^^^
+
+Date: 3/4/2021
+
+Summary
+-------
+
+-  Minor enhancements.
 
 .. _neuron-torch-12150:
 

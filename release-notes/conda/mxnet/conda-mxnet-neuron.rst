@@ -10,7 +10,26 @@ package.
 .. contents:: Table of Contents
    :local:
    :depth: 1
-   
+
+[1.5.1.1.3.8.0]
+^^^^^^^^^^^^^^^
+
+Date: 3/4/2021
+
+Included Neuron Packages
+------------------------
+
+neuron_cc-1.2.7.0
+
+mxnet_neuron-1.5.1.1.3.8.0
+
+Known Issues
+------------
+
+- Issue: Running "conda update mxnet-neuron" in Conda DLAMI v37 and v38 would result in environment updates only but not update to the MXNet-Neuron Conda package.
+   - Workaround: Running the same command "conda update mxnet-neuron" a second time would result in update to the MXNet-Neuron Conda package.
+
+
 [1.5.1.1.3.7.0]
 ^^^^^^^^^^^^^^^
 

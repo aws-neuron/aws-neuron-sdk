@@ -7,7 +7,7 @@ What's New
    :local:
    :depth: 2
 
-Current Release - Neuron v1.12.1 (Feb 24th 2021)
+Current Release - Neuron v1.12.2 (Mar 4th 2021)
 ------------------------------------------------
 
 .. list-table::
@@ -23,20 +23,15 @@ Current Release - Neuron v1.12.1 (Feb 24th 2021)
        
        * :ref:`neuron-release-content`
        
-     - * Fix for CVE-2021-3177
-       
-       * :ref:`End-Of-Support <2-24-2021-rn>` of Python 3.5
-       
-       * Change to `Neuron documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_ fully migrated off GitHub.
+     - * Bug fixes and minor enhancements.
          
    * - PyTorch
      - * :ref:`pytorch-neuron-rn`
       
        * :ref:`neuron-cc-ops-pytorch` 
        
-     - * Fix for CVE-2021-3177
+     - * Minor enhancements.
 
-       *  Updated Resnet-50 tutorial
    * - TensorFlow    
      - * :ref:`tensorflow-neuron-rn`
 
@@ -44,26 +39,26 @@ Current Release - Neuron v1.12.1 (Feb 24th 2021)
 
        * :ref:`tensorflow-modelserver-rn`
        
-     - * Fix for CVE-2021-3177
-       
-       * Updated OpenPose tutorial
+     - * Minor enhancements.
+
    * - MXNet
      - * :ref:`mxnet-neuron-rn`
 
        * :ref:`neuron-cc-ops-mxnet`
        
-     - * Fix for CVE-2021-3177 
+     - * Minor enhancements. 
+     
    * - Compiler              
      - * :ref:`neuron-cc-rn`
-     - * Fix for CVE-2021-3177
+     - * No change
    * - Runtime
      - * :ref:`neuron-runtime-release-notes`
-     - * Fix for CVE-2021-3177
+     - * Bug fixes and minor enhancements.
    * - Tools
      - * :ref:`neuron-tools-rn`
       
        * :ref:`neuron-tensorboard-rn`
-     - * Fix for CVE-2021-3177
+     - * Bug fixes and minor enhancements.
    * - DLAMI and Conda Packages
      - * :ref:`dlami-neuron-rn`
       
@@ -74,7 +69,7 @@ Current Release - Neuron v1.12.1 (Feb 24th 2021)
        * :ref:`conda-tensorflow-release-notes`
        
        * :ref:`conda-mxnet-release-notes`
-     - * Fix for CVE-2021-3177
+     - * DLAMI v41.0 available with Neuron v1.12.1.
 
 Previous Releases
 -----------------

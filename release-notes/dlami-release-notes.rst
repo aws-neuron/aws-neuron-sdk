@@ -11,6 +11,31 @@ https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
    :local:
    :depth: 1
 
+[DLAMI v41]
+===========
+
+Resolved Issues
+---------------
+
+Versions of Neuron packages included:
+-------------------------------------
+
+conda package mxnet-neuron-1.5.1.1.3.7.0 (includes neuron_cc-1.2.7.0)
+
+conda package tensorflow-neuron-1.15.5.1.2.8.0 (includes neuron_cc-1.2.7.0)
+
+conda package torch-neuron-1.7.1.1.2.15.0 (includes neuron_cc-1.2.7.0)
+
+aws-neuron-dkms-1.4.1.0.
+
+aws-neuron-runtime-base-1.4.2.0
+
+aws-neuron-runtime-1.4.3.0
+
+aws-neuron-tools-1.4.2.0
+
+tensorflow-model-server-neuron-1.15.0.1.2.8.0
+
 [DLAMI v40]
 ===========
 

@@ -8,7 +8,7 @@ Release Content
    :depth: 2
 
 
-Current Release - Neuron v1.12.1 (Feb 24th 2021)
+Current Release - Neuron v1.12.2 (Mar 4th 2021)
 ------------------------------------------------
 
 
@@ -70,13 +70,12 @@ Dependency Software Supported Versions
      - 
      - * Python 3.5 (2/24/2021)
    * - Neuron Conda Packages
-     - * torch-neuron 1.7.1.1.2.15.0 
+     - * torch-neuron 1.7.1.1.2.16.0 
      
-       * tensorflow-neuron 1.15.5.1.2.8.0
+       * tensorflow-neuron 1.15.5.1.2.9.0
 
-       * mxnet-neuron 1.5.1.1.3.7.0
+       * mxnet-neuron 1.5.1.1.3.8.0
        
-       * See https://conda.repos.neuron.amazonaws.com/
      - 
      - 
 
@@ -94,9 +93,9 @@ Neuron Packages
    * - Neuron Compiler
      - neuron-cc-1.2.7
    * - Neuron Runtime
-     - neuron-runtime-1.4.9
+     - neuron-runtime-1.4.12
    * - Neuron Tools
-     - neuron-tools-1.4.8
+     - neuron-tools-1.4.12
    * - Neuron Kernel module
      - neuron-dkms-1.4.5
    * - Neuron Kubernetes Plugin
