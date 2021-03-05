@@ -1,3 +1,74 @@
+Neuron v1.12.1 (Feb 24 2021)
+----------------------------
+
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Software 
+     - Details
+     - What's New
+   * - General 
+     - * :ref:`main-rn`
+       
+       * :ref:`neuron-release-content`
+       
+     - * Fix for CVE-2021-3177
+       
+       * :ref:`End-Of-Support <2-24-2021-rn>` of Python 3.5
+       
+       * Change to `Neuron documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_ fully migrated off GitHub.
+         
+   * - PyTorch
+     - * :ref:`pytorch-neuron-rn`
+      
+       * :ref:`neuron-cc-ops-pytorch` 
+       
+     - * Fix for CVE-2021-3177
+
+       *  Updated Resnet-50 tutorial
+   * - TensorFlow    
+     - * :ref:`tensorflow-neuron-rn`
+
+       * :ref:`neuron-cc-ops-tensorflow`
+
+       * :ref:`tensorflow-modelserver-rn`
+       
+     - * Fix for CVE-2021-3177
+       
+       * Updated OpenPose tutorial
+   * - MXNet
+     - * :ref:`mxnet-neuron-rn`
+
+       * :ref:`neuron-cc-ops-mxnet`
+       
+     - * Fix for CVE-2021-3177 
+   * - Compiler              
+     - * :ref:`neuron-cc-rn`
+     - * Fix for CVE-2021-3177
+   * - Runtime
+     - * :ref:`neuron-runtime-release-notes`
+     - * Fix for CVE-2021-3177
+   * - Tools
+     - * :ref:`neuron-tools-rn`
+      
+       * :ref:`neuron-tensorboard-rn`
+     - * Fix for CVE-2021-3177
+   * - DLAMI and Conda Packages
+     - * :ref:`dlami-neuron-rn`
+      
+       * :ref:`DLAMI and Neuron versions Matrix <dlami-neuron-matrix>`
+       
+       * :ref:`conda-pytorch-release-notes`
+       
+       * :ref:`conda-tensorflow-release-notes`
+       
+       * :ref:`conda-mxnet-release-notes`
+     - * Fix for CVE-2021-3177
+     
+
 Neuron v1.12.0 (Jan 30 2021)
 ----------------------------
 

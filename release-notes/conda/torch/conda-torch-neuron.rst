@@ -11,6 +11,22 @@ package.
    :local:
    :depth: 1
 
+[1.7.1.1.2.16.0]
+^^^^^^^^^^^^^^^
+Date: 3/4/2021
+
+Included Neuron Packages
+------------------------
+
+neuron-cc-1.2.7.0
+
+torch_neuron-1.7.1.1.2.16.0
+
+Resolved Issues
+---------------
+
+Minor internal improvements.
+
 [1.7.1.1.2.15.0]
 ^^^^^^^^^^^^^^^
 Date: 2/24/2021

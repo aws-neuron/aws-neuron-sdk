@@ -35,7 +35,7 @@ ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 02/24/2020
+Known issues and limitations - updated 03/04/2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. **Control flow** Neuron only supports control flow operators which
