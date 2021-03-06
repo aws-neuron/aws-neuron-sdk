@@ -1,4 +1,4 @@
-.. _pytorch-tutorial-torchserve:
+.. _pytorch-tutorials-torchserve:
 
 Tutorial: BERT TorchServe
 =========================
