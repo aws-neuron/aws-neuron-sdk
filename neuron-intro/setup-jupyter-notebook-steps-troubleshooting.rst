@@ -31,36 +31,23 @@ From your ssh prompt on the inf1 instance run
 
    jupyter notebook
 
-You should see logging in your ssh session similar to::
+You should see logging in your ssh session similar to:
 
 .. code:: bash
 
    [I 21:53:11.729 NotebookApp] Using EnvironmentKernelSpecManager...
-   
    [I 21:53:11.730 NotebookApp] Started periodic updates of the kernel list (every 3 minutes).
-   
    [I 21:53:11.867 NotebookApp] Loading IPython parallel extension
-   
    [I 21:53:11.884 NotebookApp] JupyterLab beta preview extension loaded from /home/ubuntu/anaconda3/lib/python3.6/site-packages/jupyterlab
-   
    [I 21:53:11.884 NotebookApp] JupyterLab application directory is /home/ubuntu/anaconda3/share/jupyter/lab
-   
    [I 21:53:12.002 NotebookApp] [nb_conda] enabled
-   
    [I 21:53:12.004 NotebookApp] Serving notebooks from local directory: /home/ubuntu/tutorial
-   
    [I 21:53:12.004 NotebookApp] 0 active kernels
-   
    [I 21:53:12.004 NotebookApp] The Jupyter Notebook is running at:
-   
    [I 21:53:12.004 NotebookApp] http://localhost:8888/?token=f9ad4086afd3c91f33d5587781f9fd8143b4cafbbf121a16
-   
    [I 21:53:12.004 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-   
    [W 21:53:12.004 NotebookApp] No web browser found: could not locate runnable browser.
-   
-   [C 21:53:12.004 NotebookApp]
-   
+
 
 Copy/paste this URL into your browser when you connect for the first
 time, to login with a token:

@@ -8,7 +8,7 @@ PyTorch Tutorials
    :caption: Getting Started
 
    resnet50
-   
+
 .. _pytorch-computervision:
 
 .. toctree::
@@ -24,6 +24,7 @@ PyTorch Tutorials
    :caption: Natural Language Processing
 
    bert_tutorial/bert_tutorial
+   tutorial-libtorch
 
 .. _pytorch-utilize-neuron:
 

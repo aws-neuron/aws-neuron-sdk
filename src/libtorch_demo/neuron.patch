@@ -1,0 +1,67 @@
+From 3f126613c47e4261d0e86520cb6e85c5713e2b15 Mon Sep 17 00:00:00 2001
+From: Stephen Dunn <stdun@amazon.com>
+Date: Tue, 26 Jan 2021 22:55:40 +0000
+Subject: [PATCH] Adds AWS Neuron native C++ interface
+
+---
+ tokenizers/Cargo.toml    |  1 +
+ tokenizers/src/lib.rs    |  2 ++
+ tokenizers/src/neuron.rs | 26 ++++++++++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 tokenizers/src/neuron.rs
+
+diff --git a/tokenizers/Cargo.toml b/tokenizers/Cargo.toml
+index c264f48..ade2c8c 100644
+--- a/tokenizers/Cargo.toml
++++ b/tokenizers/Cargo.toml
+@@ -19,6 +19,7 @@ exclude = [ "rust-toolchain", "target/*", "Cargo.lock", "benches/*.txt", "benche
+ name = "tokenizers"
+ path = "src/lib.rs"
+ bench = false
++crate-type = ["rlib", "cdylib"]
+
+ [[bin]]
+ name = "cli"
+diff --git a/tokenizers/src/lib.rs b/tokenizers/src/lib.rs
+index 41ad4ca..847b673 100644
+--- a/tokenizers/src/lib.rs
++++ b/tokenizers/src/lib.rs
+@@ -128,3 +128,5 @@ pub use tokenizer::*;
+
+ // Re-export also parallelism utils
+ pub use utils::parallelism;
++
++mod neuron;
+diff --git a/tokenizers/src/neuron.rs b/tokenizers/src/neuron.rs
+new file mode 100644
+index 0000000..6dd106d
+--- /dev/null
++++ b/tokenizers/src/neuron.rs
+@@ -0,0 +1,25 @@
++use crate::tokenizer::Tokenizer;
++use std::ffi::CStr;
++use std::os::raw::c_char;
++
++// cached tokenizer
++static mut TOKENIZER: Option<Tokenizer> = None;
++
++#[no_mangle]
++pub unsafe extern "C" fn remote_rust_encode(input_arr: *const c_char, output_arr: *mut u32, output_arr_len: u32) {
++    // load the pretrained tokenizer up if we haven't already
++    let tokenizer = TOKENIZER.get_or_insert_with(|| Tokenizer::from_file("./tokenizer.json").unwrap());
++
++    // convert input from C -> Rust
++    let cstr = CStr::from_ptr(input_arr);
++    let input = cstr.to_str().unwrap();
++
++    // tokenize raw text
++    let encoding = tokenizer.encode(input, false).unwrap();
++
++    // hand the output back to C across shared memory
++    let output = std::slice::from_raw_parts_mut(output_arr, output_arr_len as usize);
++    for (i, token) in &mut encoding.get_ids().to_vec().iter().enumerate() {
++        output[i] = *token;
++    }
++}
+--
+2.23.3
