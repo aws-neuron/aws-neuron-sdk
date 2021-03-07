@@ -1,0 +1,2 @@
+# The following do not need to be shared outside of staging:
+/.github/*
