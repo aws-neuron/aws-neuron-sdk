@@ -38,6 +38,7 @@ Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron 
    Neuron Compiler <neuron-guide/neuron-cc/index>
    Neuron Runtime <neuron-guide/neuron-runtime/index>
    Neuron Tools <neuron-guide/neuron-tools/index>
+   Containers <neuron-deploy/index>
    Application Notes <neuron-guide/appnotes>
    /neuron-intro/neuron-install-guide   
 
@@ -48,15 +49,3 @@ Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron 
    .. neuron-guide/neuron-frameworks/pytorch-neuron/index
    .. neuron-guide/neuron-frameworks/tensorflow-neuron/index
    .. neuron-guide/neuron-frameworks/mxnet-neuron/index
-
-
-.. _deploy-ml-application:
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Deploying ML Application
-   
-   neuron-deploy/index
-   neuron-deploy/tutorials
-   neuron-deploy/rn
-
