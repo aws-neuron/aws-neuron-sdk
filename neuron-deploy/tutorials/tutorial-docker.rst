@@ -39,27 +39,7 @@ Steps:
 This tutorial starts from a fresh Ubuntu Server 16.04 LTS AMI
 "ami-08bc77a2c7eb2b1da".
 
-Step 1: install aws-neuron-runtime-base package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Follow the :ref:`neuron-install-guide` to
-setup access to Neuron repos. Then, install the aws-neuron-runtime-base
-package.
-
-.. code:: bash
-
-   sudo apt-get install aws-neuron-runtime-base
-
-aws-neuron-runtime-base has a dependency with aws-neuron-dkms. Make sure
-that aws-neuron-dkms is installed by running the following cmd.
-
-.. code:: bash
-
-   ls /dev/neuron*
-   should display the neuron device nodes based on the instance type. (example: 4 nodes incase of inf1.6xl)
-
-
-Step 2: Make sure that the neuron-rtd service is not running
+Step 1: Make sure that the neuron-rtd service is not running
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If neuron-rtd is running on the host, stop the neuron-rtd service before
@@ -70,34 +50,8 @@ assignment of devices to containers:
 
    sudo service neuron-rtd stop
 
-Step 3: install oci-add-hooks dependency
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`oci-add-hooks <https://github.com/awslabs/oci-add-hooks>`__ is an OCI
-runtime with the sole purpose of injecting OCI prestart, poststart, and
-poststop hooks into a container config.json before passing along to an
-OCI compatable runtime. oci-add-hooks is used to inject a hook that
-exposes Inferentia devices to the container.
-
-.. code:: bash
-
-   sudo apt install -y golang && \
-       export GOPATH=$HOME/go && \
-       go get github.com/joeshaw/json-lossless && \
-       cd /tmp/ && \
-       git clone https://github.com/awslabs/oci-add-hooks && \
-       cd /tmp/oci-add-hooks && \
-       make build && \
-       sudo cp /tmp/oci-add-hooks/oci-add-hooks /usr/local/bin/
-
-.. _step-4-setup-docker-to-use-oci-neuron-oci-runtime:
-
-Step 4: setup Docker to use oci-neuron OCI runtime.
+Step 2: Install and run docker daemon
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-oci-neuron is a script representing OCI compatible runtime. It wraps
-oci-add-hooks, which wraps runc. In this step, we configure docker to
-point at oci-neuron OCI runtime. Install dockerIO:
 
 .. code:: bash
 
@@ -110,7 +64,6 @@ specifies oci-neuron as default docker runtime:
 
 .. code:: bash
 
-   sudo cp /opt/aws/neuron/share/docker-daemon.json /etc/docker/daemon.json
    sudo service docker restart
 
 If the docker restart command fails, make sure to check if the docker
@@ -149,6 +102,10 @@ Expected result:
    For more examples and ideas, visit:
    https://docs.docker.com/get-started/
 
+Step 3: Run Neuron Docker image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using DockerFile
+~~~~~~~~~~~~~~~~
 Build a docker image using provided dockerfile :ref:`neuron-runtime-dockerfile` and use to
 verify whitelisting:
 
@@ -172,3 +129,35 @@ Expected result:
    +--------+--------+--------+-----------+--------------+---------+---------+---------+
    | 0      | 4      | 8 GB   | 1         | 0000:00:1c.0 | NA      | 6       |  NA     |
    +--------+--------+--------+-----------+--------------+---------+---------+---------+
+
+Using DLC Neuron Image
+~~~~~~~~~~~~~~~~~~~~~~
+Login to DLC repo
+
+.. code:: bash
+
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 763104351884.dkr.ecr.us-east-1.amazonaws.com
+
+Pull the framework docker image. Images can be found `here <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-inference-containers>`_
+
+.. code:: bash
+
+        docker pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference-neuron:1.15.5-neuron-py37-ubuntu18.04
+
+Expected result for cmd ``docker images``
+
+::
+        
+       763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference-neuron 1.15.5-neuron-py37-ubuntu18.04  44c7584a6115 5 days ago 3.03GB
+
+Tag the docker image
+
+.. code:: bash
+
+        docker tag 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference-neuron:1.15.5-neuron-py37-ubuntu18.04 tf-dlc
+
+Run the docker -
+
+.. code:: bash
+
+        sudo docker run -it --name tf  -p 8500:8500 --device=/dev/neuron0 --net=host  --cap-add IPC_LOCK --mount type=bind,source=<saved_model_location>,target=/models/<model_name> -e -e MODEL_NAME=<model_name> tf-dlc

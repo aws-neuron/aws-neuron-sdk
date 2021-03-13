@@ -12,6 +12,3 @@ You can also choose one of the following combinations for compilation and deploy
 
    ec2-then-ec2-devflow
    neo-then-hosting-devflow
-   dlc-then-ec2-devflow
-   dlc-then-ecs-devflow
-   

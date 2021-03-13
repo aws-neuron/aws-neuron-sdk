@@ -23,8 +23,7 @@ A typical Neuron developer flow includes compilation phase and then deployment (
    /neuron-intro/devflows/neo-then-hosting-devflow
    /neuron-intro/devflows/dlc-then-ec2-devflow
    /neuron-intro/devflows/dlc-then-ecs-devflow
-   .. /neuron-intro/devflows/dlc-then-sm-hosting-devflow
-   .. /neuron-intro/devflows/dlc-then-eks-devflow 
+   /neuron-intro/devflows/dlc-then-eks-devflow
 
 
 
