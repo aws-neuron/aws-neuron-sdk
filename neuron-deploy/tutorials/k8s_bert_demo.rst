@@ -12,7 +12,7 @@ inference application using Kubernetes on the Inf1 instances.
 Prerequisite:
 ^^^^^^^^^^^^^
 
--  tutorial-k8s.md: to setup k8s support on your cluster.
+-  :ref: tutorial-k8s.md: to setup k8s support on your cluster.
 -  Inf1 instances as worker nodes with attached roles allowing:
 
    -  ECR read access policy to retrieve container images from ECR:
@@ -46,7 +46,7 @@ The following instructions assume that the saved model is in s3 bucket
 Step 3: Deploy *bert_service.yml*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Get a local copy of [./bert_service.yml]; inspect, modify; then, apply
+Get a local copy of [:download:`bert_service.yml <yml_files/bert_service.yml>`]; inspect, modify; then, apply
 to your cluster.
 
 The example service described in the manifest has two containers in a
