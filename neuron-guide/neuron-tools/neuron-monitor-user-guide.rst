@@ -22,8 +22,8 @@ When running, **neuron-monitor** will:
 -  Take the newly collected data and consolidate it into a large report
 -  Serialize that report to JSON and stream it to stdout from where it
    can be consumed by other tools - such as the sample
-   `neuron-monitor-cloudwatch.py <#neuron-monitor-cloudwatch.py>`__ and
-   `neuron-monitor-prometheus.py <#neuron-monitor-prometheus.py>`__
+   `neuron-monitor-cloudwatch.py <#neuron-monitor-cloudwatchpy>`__ and
+   `neuron-monitor-prometheus.py <#neuron-monitor-prometheuspy>`__
    scripts.
 -  Wait until at least one **metric group** needs to be collected and
    repeat this flow
@@ -142,7 +142,7 @@ System-wide metric groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :ref:`neuron-monitor-vcpu-usage` - system-wide vCPU usage
--  `"memory_info" <#memory_info>`__ - system-wide memory usage
+-  :ref:`neuron-monitor-memory-info` - system-wide memory usage
  
 
 Execution model
@@ -260,7 +260,7 @@ Neuron Runtime level metric groups
 
 .. _neuron-monitor-nc-counters:
 
-"neuroncore_counters"
+neuroncore_counters
 ~~~~~~~~~~~~~~~~~~~~~
 
 ::
@@ -500,7 +500,7 @@ hw_counters
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
 
-"neuron_runtime_vcpu_usage"
+neuron_runtime_vcpu_usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
@@ -530,7 +530,7 @@ System level metric groups
 
 .. _neuron-monitor-vcpu-usage:
 
-"vcpu_usage"
+vcpu_usage
 ~~~~~~~~~~~~
 
 ::
@@ -621,8 +621,8 @@ Companion scripts
 -----------------
 
 neuron-monitor is installed with two example Python companion script:
-`neuron-monitor-cloudwatch.py <#neuron-monitor-cloudwatch.py>`__ and
-`neuron-monitor-prometheus.py <#neuron-monitor-prometheus.py>`__.
+`neuron-monitor-cloudwatch.py <#neuron-monitor-cloudwatchpy>`__ and
+`neuron-monitor-prometheus.py <#neuron-monitor-prometheuspy>`__.
 
 .. _neuron-monitor-cloudwatchpy:
 
