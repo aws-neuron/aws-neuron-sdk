@@ -11,7 +11,7 @@ into their workflows.
 
 A device plugin is provided which advertises Inferentia devices as a
 system hardware resource. It is deployed to a cluster as a daemon set
-using the provided: :download:`k8s-neuron-device-plugin.yml </yml-files/k8s-neuron-device-plugin.yml>`  This
+using the provided: :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`  This
 tutorial will go through deploying the daemon set and running an example
 application.
 
