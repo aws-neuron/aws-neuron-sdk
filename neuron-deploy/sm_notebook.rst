@@ -1,7 +1,7 @@
 .. _sagemaker-notebook:
 
-Sagemaker Notebook
-==================
+Amazon Sagemaker Studio Notebooks
+=================================
 Introduction
 ------------
 Use of Neuron with Sagemaker Notebook can be simple to achieve by following this
@@ -13,4 +13,4 @@ Use of Neuron with Sagemaker Notebook can be simple to achieve by following this
 
 Debug Hints
 -----------
-Sagemaker endpoints have cloudwatch metrics. For more details please check `here <https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html>`_
+You can monitor Amazon Sagemaker with Amazon CloudWatch. For more details please check `here <https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html>`_

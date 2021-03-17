@@ -19,7 +19,7 @@ Description
    :alt: Neuron developer flow for DLC on ECS
    :align: middle
 
-You can use the Neuron version of the `AWS Deep Learning Containers <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ecs-tutorials-inference.html>`_ to run inference on Amazon Elastic Kubernetes Service (EKS). In this developer flow, you set up an EKS cluster with inf1 instances, create a Kubernetes manifest for your inference service and deploy it to your cluster. This developer flow assumes:
+You can use the Neuron version of the `AWS Deep Learning Containers <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ecs-tutorials-inference.html>`_ to run inference on Amazon Elastic Kubernetes Service (EKS). In this developer flow, you set up an EKS cluster with Inf1 instances, create a Kubernetes manifest for your inference service and deploy it to your cluster. This developer flow assumes:
 
 1. The model has already been compiled through :ref:`Compilation with Framework API on EC2 instance <ec2-then-ec2-devflow>` or through :ref:`Compilation with Sagemaker Neo <neo-then-hosting-devflow>`. 
 

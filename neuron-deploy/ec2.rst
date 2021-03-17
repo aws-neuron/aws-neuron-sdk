@@ -18,9 +18,9 @@ DLC Images
 
 Setup recommendations
 ---------------------
-    - The host Inf1 instance needs to have the aws-neuron-runtime-base and aws-neruon-dkms package installed.
-    - The DLC inference container runs the framework server (like tensorflow-model-server or torchserve) and also the neuron runtime that interacts with the neuron driver running in the host
-    - For more details to set up the container for running inferences, check the `tensorflow <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html#deep-learning-containers-ec2-tutorials-inference-tf>`_ or `pytorch <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html#deep-learning-containers-ec2-tutorials-inference-pytorch>`_. Make sure the appropriate framework container image is used.
+    - The EC2 Inf1 instance needs to have the aws-neuron-runtime-base and aws-neruon-dkms package installed.
+    - The DLC inference container runs the framework server (like tensorflow-model-server or TorchServe) and also the neuron runtime that interacts with the neuron driver running in the host.
+    - For more details on setting up the container, check the `tensorflow <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html#deep-learning-containers-ec2-tutorials-inference-tf>`_ or `pytorch <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html#deep-learning-containers-ec2-tutorials-inference-pytorch>`_. Make sure the appropriate framework container image is used.
 
 Debug Hints
 -----------
