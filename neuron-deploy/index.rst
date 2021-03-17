@@ -1,30 +1,26 @@
 .. _neuron-containers:
 
-Neuron Containers
-=================
+Containers
+==========
 
-Neuron provides tools to support deploying containarized applications to
-Inf1 instances.
+It is recommended to deploy Neuron inside a preconfigured `Deep
+Learning Container (DLC) <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/getting-started.html>`_ from AWS. Running Neuron inside a container on Inf1 requires Docker version 18 (or newer)
+and a base AMI with aws-neuron-runtime-base and aws-neuron-dkms installed. 
+It's possible to also use a Neuron container on any instance type without the base 
+and dkms package, but this is typically limited to compilation and development 
+when running on instances without a Inf1 Device (inferentia). DLC images for Neuron can be obtained from `here <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-inference-containers>`_.
 
-An containerized inference application would consist of two parts
 
-1. Application container: running the application such as
-   tensorflow-neuron or tensorflow-model-server-neuron.
-2. Neuron-rtd container: running neuron-rtd. This is a side-car
-   container that requires elevated privileges, in order for neuron-rtd
-   to access Inferentia devices. However, neuron-rtd drops all
-   capabilities after initialization, before opening a gRPC socket.
+Documentation is organized based on the target deployment environment
+and use case.  In most cases, it is recommended to use a preconfigured
+`Deep Learning Container <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/what-is-dlc.html>`_ from AWS.  Each DLC is pre-configured to have a recent
+version of Neuron components installed and is specific to the chosen ML Framework you want.
 
-We recommend the application and neuron-rtd to run in separate
-containers to prevent accidental privilege escalation of users
-application. In order for the application and neuron-rtd to communicate,
-a shared volume can be mounted to place a UDS socket. It is also
-possible to use port-forwarding.
+.. toctree::
+   :maxdepth: 1
 
-A neuron-rtd container is available over ECR repositories and can be
-used directly. Customers may also build their own using Neuron packages,
-as shown in :ref:`neuron-runtime-dockerfile`
-
-Official neuron-rtd container:
-790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest
+   container-deployment-flows
+   neuron-sdk-containers
+   Tutorials <tutorials/tutorials>
+   rn
 

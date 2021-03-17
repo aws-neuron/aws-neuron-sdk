@@ -7,11 +7,7 @@ Containers Tutorials & Examples
    :maxdepth: 1
    :caption: Tutorials
 
-   tutorial-docker
-   tutorial-docker-runtime1.0
-   tutorial-k8s
-   docker-example/index
-   k8s_bert_demo
+   k8s_rn50_demo
    k8s-neuron-scheduler
 
 .. toctree::

@@ -77,12 +77,12 @@ Neuron Components
 
 1. k8s-neuron-sheduler - scheduler extension that handles filter and
    bind request. ECR:
-   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-scheduler:latest
-2. k8s-neuron-scheduler-configmap.yml - ConfigMap to register scheduler
-   extension with Kube-scheduler
+   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-scheduler:latest. It is deployed to a cluster using the provided: :download:`k8s-neuron-scheduler.yml </src/k8/k8s-neuron-scheduler.yml>`
+2. :download:`k8s-neuron-scheduler-configmap.yml </src/k8/k8s-neuron-scheduler-configmap.yml>` - ConfigMap to register scheduler
+   extension with Kube-scheduler.
 3. k8s-neuron-device-plugin - manages neuron devices. ECR:
-   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-device-plugin:latest
-4. k8s-neuron-device-plugin-rbac.yml - configuration to enable
+   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-device-plugin:latest.It is deployed to a cluster using the provided: :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`
+4. :download:`k8s-neuron-device-plugin-rbac.yml </src/k8/k8s-neuron-device-plugin-rbac.yml>` - configuration to enable
    permissions for device plugin to update the node and Pod annotations
 
 Installation

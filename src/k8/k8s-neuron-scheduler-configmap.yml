@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+  policy.cfg: |
+    {
+      "kind": "Policy",
+      "apiVersion": "v1",
+      "extenders": [
+        {
+          "urlPrefix": "http://127.0.0.1:32700",
+          "filterVerb": "filter",
+          "bindVerb":   "bind",
+          "enableHttps": false,
+          "nodeCacheCapable": true,
+          "managedResources": [
+            {
+              "name": "aws.amazon.com/neuron",
+              "ignoredByScheduler": false
+            }
+          ],
+          "ignorable": false
+        }
+      ]
+    }
+kind: ConfigMap
+metadata:
+  name: scheduler-policy
+  namespace: kube-system

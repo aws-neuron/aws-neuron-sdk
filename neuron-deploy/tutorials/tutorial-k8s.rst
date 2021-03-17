@@ -1,3 +1,5 @@
+.. _tutorial-k8s-env-setup-for-neuron:
+
 Tutorial: Kubernetes environment setup for Neuron
 =================================================
 
@@ -9,15 +11,14 @@ into their workflows.
 
 A device plugin is provided which advertises Inferentia devices as a
 system hardware resource. It is deployed to a cluster as a daemon set
-using the provided: :download:`k8s-neuron-device-plugin.yml <../../docs/neuron-container-tools/k8s-neuron-device-plugin.yml>`  This
+using the provided: :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`  This
 tutorial will go through deploying the daemon set and running an example
 application.
 
 Prerequisite:
 ^^^^^^^^^^^^^
 
--  :ref:`tutorial-docker-env-setup-for-neuron`: to
-   setup Docker support on worker nodes.
+-  Working kubernetes cluster
 -  Inf1 instances as worker nodes with attached roles allowing:
 
    -  ECR read access policy to retrieve container images from ECR:
@@ -26,7 +27,7 @@ Prerequisite:
 Steps:
 ------
 
-This example will walk through running inferences against BERT model
+This example will walk through running inferences against RN50 model
 through a K8s service running on Inferentia.
 
 Step 1: Deploy the neuron device plugin:
@@ -57,15 +58,12 @@ Expected result:
 
 You can now require Inferentia devices in a k8s manifest as in the
 following example. The number of Inferentia devices can be adjusted
-using the *aws.amazon.com/neuron* resource. The runtime expects 128 2-MB
-pages per inferentia device, therefore, *hugepages-2Mi* has to be set to
-256 \* number of Inferentia devices.
+using the *aws.amazon.com/neuron* resource.
 
 ::
 
            resources:
              limits:
-               hugepages-2Mi: 256Mi
                aws.amazon.com/neuron: 1
              requests:
                memory: 1024Mi
@@ -73,5 +71,5 @@ pages per inferentia device, therefore, *hugepages-2Mi* has to be set to
 Step 2: Optional: Deploy an application requiring Inferentia resource
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The :ref:`example-deploy-bert-as-k8s-service`
+The :ref:`example-deploy-rn50-as-k8s-service`
 tutorial provides an example how to use k8s with Inferentia.

@@ -1,0 +1,11 @@
+.. _self-managed-kubernetes-service:
+
+Self Managed Kubernetes Service
+===============================
+Introduction
+------------
+Use of Neuron in containers on a Kubernetes cluster can be simple to achieve by following :ref:`tutorial-k8s-env-setup-for-neuron`
+
+Known Limitations
+-----------------
+Scheduling on k8s cluster requires contiguous neuron device-ids.  Neuron provides a scheduler extension to solve this problem for self-managed k8 clusters.  Read more about it here: :ref:`neuron-k8-scheduler-ext`.
