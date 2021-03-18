@@ -1,7 +1,7 @@
 .. _example-deploy-rn50-as-k8s-service:
 
-Example: Deploy Resnet50 as a k8s service
--------------------------------------
+Example: Deploy a TensorFlow Resnet50 model as a k8s service
+------------------------------------------------------------
 
 This tutorial uses Resnet50 model as a teaching example on how to deploy an
 inference application using Kubernetes on the Inf1 instances.
@@ -26,7 +26,7 @@ If you don’t already have a SavedModel, please follow the tutorial for `creati
 and upload the resulting SavedModel to S3\.
 
 ResNet-50 is a popular machine learning model used for image
-recognition tasks\. For more information about compiling Neuron models, see
+classification tasks\. For more information about compiling Neuron models, see
 `The AWS Inferentia Chip With DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html>`_
 in the AWS Deep Learning AMI Developer Guide\.
 
