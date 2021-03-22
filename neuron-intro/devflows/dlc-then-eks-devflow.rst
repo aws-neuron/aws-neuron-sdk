@@ -36,7 +36,7 @@ Setup Environment
 	Follow `these instruction <https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html>`_ to install *kubectl* in the same computer. *kubectl* is a command line tool for working with Kubernetes clusters.
 
 2. Create a Amazon EKS cluster:
-	Create a cluster with Inf1 Amazon EC2 instance nodes. You can replace *inf1.2xlarge* with any `Inf1 instance type <http://aws.amazon.com/ec2/instance-types/inf1/)>`_. *eksctl* detects that you are launching a node group with an Inf1 instance type and will start your nodes using one of the `Amazon EKS optimized accelerated Amazon Linux AMI <eks-linux-ami-versions.md#eks-gpu-ami-versions>`_.
+	Create a cluster with Inf1 Amazon EC2 instance nodes. You can replace *inf1.2xlarge* with any `Inf1 instance type <https://aws.amazon.com/ec2/instance-types/inf1>`_. *eksctl* detects that you are launching a node group with an Inf1 instance type and will start your nodes using one of the `Amazon EKS optimized accelerated Amazon Linux AMI <https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html#eks-gpu-ami-versions>`_.
 
 	.. code::
 
