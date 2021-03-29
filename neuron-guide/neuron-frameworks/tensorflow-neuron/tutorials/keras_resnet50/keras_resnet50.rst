@@ -1,7 +1,7 @@
-.. _keras_resnet50 Optimization Tutorial:
+.. _tensorflow-keras-resnet50::
 
-Tensorflow-Neuron 1.15.3 - keras_resnet50 Optimization Tutorial
-========================
+Tensorflow-Neuron 1.15 - Keras ResNet-50 Optimization Tutorial
+======================
 
 .. contents:: Table of Contents
    :local:
@@ -13,24 +13,28 @@ Overview
 In this tutorial we will compile and deploy keras_resnet50 model on an Inf1 instance.
 To enable faster environment setup, you will run the tutorial on an inf1.6xlarge instance
 to enable both compilation and deployment (inference) on the same instance.
-The following example shows how to compile a FP16 ResNet50 network using
+The following example shows how to compile a ResNet-50 network using
 various batching parameters to find the optimal solution.
 
-.. _keras_resnet50 Tutorial-env-setup:
+.. note::
+
+  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
+
+.. _tensorflow-keras_resnet50-env-setup:
 
 Setup The Environment
 ---------------------
 
-First step is to setup ``inf1.6xlarge`` for compilation as described in
-steps 1 and 2 of :ref:`tensorflow-resnet50`. In addition, install Neuron Runtime on Inf1
-following the steps here: :ref:`rtd-getting-started` Also, download the
-example source on ``inf1.6xlarge``:
+Launch Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
 
+.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
+
+.. _tensorflow-keras_resnet50-run-tutorial:
 
 Run The Tutorial
 ----------------
 
-After connecting to the instance from the terminal, clone the Neuron Github repository to the ``inf1.6xlarge`` instance and then change the working directory to the tutorial directory:
+After connecting to the instance from the terminal, clone the Neuron Github repository to the EC2 instance and then change the working directory to the tutorial directory:
 
 .. code:: bash
 
@@ -39,7 +43,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
 
 
 
-The Jupyter notebook is available as a file with the name :tensorflow-neuron-src:`keras_resnet50.ipynb <keras_resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name :tensorflow-neuron-src:keras_resnet50.ipynb `<keras_resnet50/keras_resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**
@@ -66,7 +70,7 @@ Known Issues
 ------------
 
 Unable to compile with batch and num NeuronCores combination
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 For some combination of batch and number of NeuronCores setting, you may
 see an internal compiler error as below. Please see the sweep result
@@ -79,7 +83,8 @@ in the same error.
    INFO:tensorflow:fusing subgraph neuron_op_a73aed4b95ca5d5b with neuron-cc; log file is at /home/ubuntu/keras_fp16_benchmarking_db/compiler_workdir/neuron_op_a73aed4b95ca5d5b/graph_def.neuron-cc.log
    WARNING:tensorflow:Failed to fuse subgraph neuron_op_a73aed4b95ca5d5b with '/home/ubuntu/test_venv/bin/neuron-cc compile /home/ubuntu/keras_fp16_benchmarking_db/compiler_workdir/neuron_op_a73aed4b95ca5d5b/graph_def.pb --framework TENSORFLOW --pipeline compile SaveTemps --output /home/ubuntu/keras_fp16_benchmarking_db/compiler_workdir/neuron_op_a73aed4b95ca5d5b/graph_def.neff --io-config "{\"inputs\": {\"input_10/_0:0\": [[6, 224, 224, 3], \"float16\"]}, \"outputs\": [\"probs/Softmax:0\"]}" --batching_en --rematerialization_en --sb_size 120 --spill_dis --enable-replication True'
    WARNING:tensorflow:neuron-cc error message:
-   WARNING:tensorflow:01/23/2020 01:15:40 AM ERROR [neuron-cc]: ***************************************************************
+   WARNING:tensorflow:01/23/2020 01:15:40 AM ERROR [neuron-cc]:
+   01/23/2020 01:15:40 AM ERROR [neuron-cc]: ***************************************************************
    01/23/2020 01:15:40 AM ERROR [neuron-cc]:  An Internal Compiler Error has occurred
    01/23/2020 01:15:40 AM ERROR [neuron-cc]: ***************************************************************
    01/23/2020 01:15:40 AM ERROR [neuron-cc]:
