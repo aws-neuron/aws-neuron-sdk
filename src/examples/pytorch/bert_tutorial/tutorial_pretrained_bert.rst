@@ -23,7 +23,7 @@ This tutorial is divided into the following parts:
  If you already have Inf1 environment ready, you can skip to :ref:`resnet50 Running the tutorial`.
 
 * :ref:`resnet50 Running the tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
-* :ref:`resnet50-cleanup-instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
+* :ref:`resnet50 cleanup instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
 
 .. _resnet50 Environment Setup:
 
@@ -65,7 +65,7 @@ You can also view the Jupyter notebook at:
 
    /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
 
-.. _resnet50-cleanup-instances:
+.. _resnet50 cleanup instances:
 
 Clean up your instance/s
 ------------------------
