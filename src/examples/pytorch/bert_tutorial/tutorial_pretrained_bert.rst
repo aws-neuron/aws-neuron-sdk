@@ -1,3 +1,5 @@
+.. pytorch-Pretrained-BERT:
+
 Compiling and Deploying HuggingFace Pretrained BERT
 ==========================
 
@@ -49,7 +51,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
   
 
 
-The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`tutorial_pretrained_bert.ipynb <tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`tutorial_pretrained_bert.ipynb <bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**
