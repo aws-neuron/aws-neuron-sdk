@@ -43,7 +43,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
 
 
 
-The Jupyter notebook is available as a file with the name :tensorflow-neuron-src:keras_resnet50.ipynb `<keras_resnet50/keras_resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+The Jupyter notebook is available as a file with the name :tensorflow-neuron-src:`keras_resnet50.ipynb <keras_resnet50/keras_resnet50.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
 
 
 * **Running tutorial from browser**
