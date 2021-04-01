@@ -24,8 +24,8 @@ inf1.6xlarge instance to enable both compilation and deployment (inference) on t
 
  If you already have Inf1 environment ready, you can skip to :ref:`pretrained bert Running the tutorial`.
 
-* :ref:`pretrained bert Running the tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
-* :ref:`pretrained bert cleanup instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
+* :ref:`pytorch-HuggingFace Pretrained BERT-run-tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
+* :ref:`pytorch-HuggingFace Pretrained BERT-cleanup-instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
 
 .. _pytorch-HuggingFace Pretrained BERT-env-setup:
 
