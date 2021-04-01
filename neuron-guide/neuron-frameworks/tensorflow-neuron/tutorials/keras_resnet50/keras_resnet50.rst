@@ -1,4 +1,4 @@
-.. _tensorflow-keras-resnet50::
+.. _tensorflow-keras-resnet50:
 
 Tensorflow-Neuron 1.15 - Keras ResNet-50 Optimization Tutorial
 ======================
@@ -10,22 +10,22 @@ Tensorflow-Neuron 1.15 - Keras ResNet-50 Optimization Tutorial
 Overview
 --------
 
-In this tutorial we will compile and deploy keras_resnet50 model on an Inf1 instance.
-To enable faster environment setup, you will run the tutorial on an inf1.6xlarge instance
+In this tutorial you will compile and deploy keras_resnet50 model on an Inf1 instance.
+To enable faster environment setup, you will run the tutorial on an Inf1.6xlarge instance
 to enable both compilation and deployment (inference) on the same instance.
 The following example shows how to compile a ResNet-50 network using
 various batching parameters to find the optimal solution.
 
 .. note::
 
-  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
+Model compilation can be executed on a compute instance (e.g. C5 instance) for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
 
 .. _tensorflow-keras_resnet50-env-setup:
 
 Setup The Environment
 ---------------------
 
-Launch Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
+Launch Inf1 instance by following the below steps, please make sure to choose an Inf1.6xlarge instance.
 
 .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
@@ -70,7 +70,7 @@ Known Issues
 ------------
 
 Unable to compile with batch and num NeuronCores combination
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For some combination of batch and number of NeuronCores setting, you may
 see an internal compiler error as below. Please see the sweep result
