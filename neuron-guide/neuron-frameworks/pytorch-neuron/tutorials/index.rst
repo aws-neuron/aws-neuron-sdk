@@ -23,7 +23,10 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Natural Language Processing
 
+<<<<<<< HEAD
    pretrained_bert_tutorial
+=======
+>>>>>>> master
    tutorial-libtorch
 
 .. _pytorch-utilize-neuron:
