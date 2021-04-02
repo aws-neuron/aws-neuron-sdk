@@ -1,6 +1,6 @@
 .. _pytorch-tutorials-HuggingFace Pretrained BERT:
 
-PyTorch 1.7 - HuggingFace Pretrained BERT Tutorial
+PyTorch - HuggingFace Pretrained BERT Tutorial
 ====================================
 
 .. contents:: Table of Contents
@@ -12,21 +12,14 @@ PyTorch 1.7 - HuggingFace Pretrained BERT Tutorial
 Overview
 --------
 
-In this tutorial we will compile and deploy HuggingFace Pretrained BERT model on an Inf1 instance. To enable faster enviroment setup, you will run the tutorial on an
-inf1.6xlarge instance to enable both compilation and deployment (inference) on the same instance.
-
+In this tutorial we will compile and deploy HuggingFace Pretrained BERT model on an Inf1 instance. To enable faster enviroment setup, you will run the tutorial on an inf1.6xlarge instance to enable both compilation and deployment (inference) on the same instance.
 
 .. note::
  
-  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
+  Model compilation can be executed on an inf1 instance. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
 
-* :ref:`pytorch-HuggingFace Pretrained BERT-env-setup`  - Steps needed to setup the compilation and deployment enviroments that will enable you to run this tutorial. In this tutorial a single inf1 instance will provide both the compilation and deployment enviroments.
-
- If you already have Inf1 environment ready, you can skip to :ref:`pretrained bert Running the tutorial`.
-
-* :ref:`pytorch-HuggingFace Pretrained BERT-run-tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
-* :ref:`pytorch-HuggingFace Pretrained BERT-cleanup-instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
-
+If you already have Inf1 environment ready, you can skip to :ref:`pretrained bert Running the tutorial`.
+ 
 .. _pytorch-HuggingFace Pretrained BERT-env-setup:
 
 Setup The Environment 
@@ -70,7 +63,7 @@ You can also view the Jupyter notebook at:
 
 .. _pytorch-HuggingFace Pretrained BERT-cleanup-instances:
 
-Clean up your instance/s
+Clean up your instance(s)
 ------------------------
 
-After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, please follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
+After you've finished with the instance(s) that you created for this tutorial, you should clean up by terminating the instance(s), please follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
