@@ -22,7 +22,7 @@ If you already have Inf1 environment ready, you can skip to :ref:`pytorch-Huggin
  
 .. _pytorch-HuggingFace Pretrained BERT-env-setup:
 
-Setup The Environment 
+Setup The Environments
 ---------------------
 
 Launch Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
