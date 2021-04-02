@@ -18,7 +18,7 @@ In this tutorial we will compile and deploy HuggingFace Pretrained BERT model on
  
   Model compilation can be executed on an inf1 instance. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
 
-If you already have Inf1 environment ready, you can skip to :ref:`pretrained bert Running the tutorial`.
+If you already have Inf1 environment ready, you can skip to :ref:`pytorch-HuggingFace Pretrained BERT-run-tutorial`.
  
 .. _pytorch-HuggingFace Pretrained BERT-env-setup:
 
