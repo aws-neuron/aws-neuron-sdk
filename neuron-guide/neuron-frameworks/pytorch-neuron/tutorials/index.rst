@@ -33,5 +33,5 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Utilizing Neuron Capabilities
 
-   torchserve/tutorial-torchserve
+   tutorial-torchserve
 

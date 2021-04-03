@@ -1,36 +1,64 @@
 .. _pytorch-tutorials-torchserve:
 
-Tutorial: BERT TorchServe
-=========================
+BERT TorchServe Tutorial
+========================
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 2
+
 
 Overview
 --------
 
-This tutorial demonstrates the use of TorchServe with Amazon Inferentia hardware and the Neuron SDK. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
+This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ with Neuron, the SDK for Amazon Inf1 instances. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
-Steps Overview:
----------------
+.. note::
 
-1. Launch an EC2 deployment instance
-2. Compile the model
-3. Prepare the environment
-4. Prepare TorchServe
-5. Launch the server
-6. Serve the model
-
-Step 1: Launch an EC2 deployment instance
------------------------------------------
-
-For this tutorial you'll need an Inf1 EC2 instance running the DLAMI. We used an inf1.xlarge and Ubuntu 18.04. If this is your first time launching an instance, you can follow the `EC2 instance launch instructions <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_. Additional information can be found in the :ref:`dlami-neuron-rn`.
+  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same :ref:`EC2 Developer Flow Setup <ec2-then-ec2-devflow>` using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
 
 
-Step 2: Compile the model
--------------------------------
+.. _torchserve-env:
 
-Complete the `HuggingFace Pretrained BERT Tutorial <https://github.com/aws/aws-neuron-sdk/blob/master/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>`_. You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
+Setup the Enviornment
+---------------------
 
-Step 3: Prepare the environment
--------------------------------
+Launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance.
+
+.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
+
+
+.. _torchserve-compile:
+
+Compile HuggingFace Pretrained BERT
+-----------------------------------
+
+After connecting to the instance from the terminal, clone the Neuron Github repository to the EC2 instance and then change the working directory to the tutorial directory:
+
+.. code:: bash
+
+  git clone https://github.com/aws/aws-neuron-sdk.git
+  cd aws-neuron-sdk/src/examples/pytorch
+
+
+The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`tutorial_pretrained_bert.ipynb <bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
+
+
+* **Running tutorial from browser**
+
+  * First setup and launch the Jupyter notebook on your local browser by following instructions at :ref:`Running Jupyter Notebook Browser`
+  * Open the Jupyter notebook from the menu and follow the instructions
+
+
+You can also view the Jupyter notebook at:
+
+.. toctree::
+   :maxdepth: 1
+
+   /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
+
+
+You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
 
 Open a shell on the instance you prepared earlier, create a new directory named ``torchserve``. Copy your compiled model from the previous tutorial into this new directory.
 
@@ -44,14 +72,6 @@ Open a shell on the instance you prepared earlier, create a new directory named 
   bert_neuron_b6.pt
 
 Prepare a new Python virtual environment with the necessary Neuron and TorchServe components. Use a virtual environment to keep (most of) the various tutorial components isolated from the rest of the system in a controlled way.
-
-.. code:: bash
-
-  $ python3 --version
-
-::
-
-  Python 3.7.6
 
 .. code:: bash
 
@@ -93,15 +113,16 @@ Verify that TorchServe is now available.
   TorchServe Version is 0.3.0
 
 
+.. _torchserve-setup:
 
-Step 4: Prepare TorchServe
---------------------------
+Setup TorchServe
+----------------
 
 During this tutorial you will need to download various files onto your instance. The simplest way to accomplish this is to paste the download links provided above each file into a ``wget`` command. (We don't provide the links directly because they are subject to change.) For example, right-click and copy the download link for ``config.json`` shown below.
 
-.. literalinclude:: config.json
+.. literalinclude:: /src/examples/pytorch/torchserve/config.json
     :language: JSON
-    :caption: :download:`config.json <config.json>`
+    :caption: :download:`config.json </src/torchserve/config.json>`
 
 
 Now execute the following in your shell:
@@ -117,9 +138,9 @@ Now execute the following in your shell:
 
 Download the `custom handler script <https://pytorch.org/serve/custom_service.html>`_ that will eventually respond to inference requests.
 
-.. literalinclude:: handler_bert.py
+.. literalinclude:: /src/examples/pytorch/torchserve/handler_bert.py
     :language: python
-    :caption: :download:`handler_bert.py <handler_bert.py>`
+    :caption: :download:`handler_bert.py </src/examples/pytorch/torchserve/handler_bert.py>`
     :linenos:
 
 Next, we need to associate the handler script with the compiled model using ``torch-model-archiver``. Run the following commands in your terminal:
@@ -152,22 +173,21 @@ This file is essentially an archive associated with a fixed version of your mode
 
   The version specified in the ``torch-model-archiver`` command can be appended to REST API requests to access a specific version of your model. For example, if your model was hosted locally on port 8080 and named "bert", the latest version of your model would be available at ``http://localhost:8080/predictions/bert``, while version 1.0 would be accessible at ``http://localhost:8080/predictions/bert/1.0``. We will see how to perform inference using this API in Step 6.
 
-Step 5: Launch the server
--------------------------
-
-5.1. Set the configuration
-
 Create a `custom config <https://pytorch.org/serve/configuration.html>`_ file to set some parameters. This file will be used to configure the server at launch when we run ``torchserve --start``.
 
-.. literalinclude:: torchserve.config
+.. literalinclude:: /src/examples/pytorch/torchserve/torchserve.config
     :language: properties
-    :caption: :download:`torchserve.config <torchserve.config>`
+    :caption: :download:`torchserve.config </src/examples/pytorch/torchserve/torchserve.config>`
 
 .. note::
 
   This will cause TorchServe to bind on all interfaces. For security in real-world applications, you’ll probably want to use port 8443 and `enable SSL <https://pytorch.org/serve/configuration.html#enable-ssl>`_.
 
-5.2. Launch TorchServe
+
+.. _torchserve-run:
+
+Run TorchServe
+--------------
 
 It's time to start the server. Typically we'd want to launch this in a separate console, but for this demo we’ll just redirect output to a file.
 
@@ -190,8 +210,6 @@ Verify that the server seems to have started okay.
 .. note::
 
   If you get an error when trying to ping the server, you may have tried before the server was fully launched. Check ``torchserve.log`` for details.
-
-5.3. Load the model
 
 Use the Management API to instruct TorchServe to load our model.
 
@@ -216,18 +234,13 @@ The ``MAX_BATCH_DELAY`` is a timeout value that determines how long to wait befo
 .. warning::
   If you attempt to load more models than NeuronCores available, one of two things will occur. Either the extra models will fit in device memory but performance will suffer, or you will encounter an error on your initial inference. You shouldn't set ``INITIAL_WORKERS`` above the number of NeuronCores. However, you may want to use fewer cores if you are using the :ref:`neuroncore-pipeline` feature.
 
-Step 6: Serve the model
------------------------
-
 It looks like everything is running successfully at this point, so it's time for an inference.
-
-6.1. Verify inference
 
 Create the ``infer_bert.py`` file below on your instance.
 
-.. literalinclude:: infer_bert.py
+.. literalinclude:: /src/examples/pytorch/torchserve/infer_bert.py
     :language: python
-    :caption: :download:`infer_bert.py <infer_bert.py>`
+    :caption: :download:`infer_bert.py </src/examples/pytorch/torchserve/infer_bert.py>`
     :linenos:
 
 This script will send a ``batch_size`` number of requests to our model. In this example, we are using a model that estimates the probability that one sentence is a paraphrase of another. The script sends positive examples in the first half of the batch and negative examples in the second half.
@@ -249,13 +262,17 @@ Execute the script in your terminal.
 
 We can see that the first three threads (0, 1, 2) all report ``paraphrase``, as expected. If we instead modify the script to send an incomplete batch and then wait for the timeout to expire, the excess padding results will be discarded.
 
-6.2. Benchmark throughput
+
+.. _torchserve-benchmark:
+
+Benchmark TorchServe
+--------------------
 
 We've seen how to perform a single batched inference, but how many inferences can we process per second? A separate upcoming tutorial will document performance tuning to maximize throughput. In the meantime, we can still perform a simple naïve stress test. The code below will spawn 64 worker threads, with each thread repeatedly sending a full batch of data to process. A separate thread will periodically print throughput and latency measurements.
 
-.. literalinclude:: benchmark_bert.py
+.. literalinclude:: /src/examples/pytorch/torchserve/benchmark_bert.py
     :language: python
-    :caption: :download:`benchmark_bert.py <benchmark_bert.py>`
+    :caption: :download:`benchmark_bert.py </src/examples/pytorch/torchserve/benchmark_bert.py>`
     :linenos:
 
 Run the benchmarking script.
@@ -299,3 +316,10 @@ Notice that about 50% of the available Inferentia compute power is utilized, but
 
 **Congratulations!** By now you should have successfully served a batched model over TorchServe.
 
+
+.. _torchserve-cleanup:
+
+Clean up your instance/s
+------------------------
+
+After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
