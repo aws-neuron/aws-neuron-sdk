@@ -3,27 +3,11 @@ import torch.neuron
 import os
 import sys
 import pandas as pd
-
-import shutil
-import boto3
-import botocore
-
-from urllib.parse import urlparse
-from urllib.parse import urlsplit
-
-from transformers import BertTokenizer
-from concurrent import futures
-
-import time
-import datetime
-from datetime import date
 import csv
-import boto3
-import botocore
+import math
+from collections import Counter
 
 import numpy as np
-import multiprocessing
-
 
 class BertTestDataset(torch.utils.data.Dataset):
     """Bert test dataset."""
@@ -83,19 +67,19 @@ class BertResults():
         self.inference_count = 0
         self.latency_array = []
         self.end_times = []
-        self.total_latency_parallel = 0.0
+        self.start_times = []
         self.batch_size = batch_size
         self.num_cores = num_cores
 
-    def add_result(self, correct_count, inference_count, latency_array, end_times, total_latency):
+    def add_result(self, correct_count, inference_count, latency_array, end_times, start_times):
         self.correct_count += correct_count
 
         self.inference_count += inference_count
         self.latency_array.extend(latency_array)
         self.end_times.extend(end_times)
-        self.total_latency_parallel += total_latency
+        self.start_times.extend(start_times)
 
-    def report(self, f, bins=10):
+    def report(self, f, window_size=1):
         assert(len(self.latency_array) != 0)
         p50_latency = np.percentile(self.latency_array, 50)
         p90_latency = np.percentile(self.latency_array, 90)
@@ -103,34 +87,34 @@ class BertResults():
         p99_latency = np.percentile(self.latency_array, 99)
         p100_latency = np.percentile(self.latency_array, 100)
 
-        if self.total_latency_parallel == 0.0:
-            self.total_latency_parallel = 1.0
 
-        # Take all of the end time-stamps and construct a time binned histogram
-        hist, bin_edges = np.histogram(self.end_times, bins=bins)
-
-        overall_throughput = self.inference_count / \
-            float(self.total_latency_parallel)
-
-        f.write("\n")
-        f.write("Histogram throughput (UTC times):\n")
-        f.write("===\n")
-        max_throughput = 0.0
-        for i in range(len(hist)):
-            delta = bin_edges[i+1] - bin_edges[i]
-            # Each datestamp is batch size inferences
-            throughput = self.batch_size * self.num_cores * hist[i] / delta
-            if throughput > max_throughput:
-                max_throughput = throughput
-            st1 = datetime.datetime.fromtimestamp(
-                bin_edges[i]).strftime('%H:%M:%S.%f')[:-3]
-            st2 = datetime.datetime.fromtimestamp(
-                bin_edges[i+1]).strftime('%H:%M:%S.%f')[:-3]
-            f.write("{} - {} => {} sentences/sec\n".format(st1, st2, int(throughput)))
+        def get_bucket(start, end):
+            bucketed_start = math.floor(start / window_size) * window_size
+            bucketed_end = math.ceil(end / window_size) * window_size
+            # The check is to make sure that we ignore timestamps that are larger than the window size
+            if bucketed_end - bucketed_start == window_size:
+                return bucketed_start
+            else:
+                return None
+            
+        # Divide the timestamps into different buckets
+        bucketed_timestamps = [get_bucket(start, end)
+                            for start, end in zip(self.start_times, self.end_times)]
+        # Count the values in each bucket
+        counted_buckets = Counter(
+            item for item in bucketed_timestamps if item is not None)
+        # Normalize each bucket
+        bucket_throughputs = [(key, value / window_size)
+                            for key, value in sorted(counted_buckets.items())]
+        
+        busy_throughputs = [value for _, value in bucket_throughputs]
+        max_throughput = max(busy_throughputs) * self.batch_size
+        avg_throughput = sum(busy_throughputs) * self.batch_size / len(busy_throughputs)
+        
         f.write("\n")
         f.write(
-            "Maximum throughput (histogram) = {} sentences/sec\n".format(int(max_throughput)))
-        f.write("Overall throughput (aggregate stats * parallel) = {} sentences/sec\n".format(int(overall_throughput)))
+            "Maximum throughput = {} sentences/sec\n".format(int(max_throughput)))
+        f.write("Average throughput = {} sentences/sec\n".format(int(avg_throughput)))
 
         f.write("\n")
         f.write("Latency Percentiles:\n")
