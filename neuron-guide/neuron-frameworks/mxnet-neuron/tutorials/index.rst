@@ -8,7 +8,7 @@ MXNet Tutorials
 .. toctree::
    :maxdepth: 1
    :caption: Computer Vision
-   
+
    tutorial-compile-infer
    tutorial-model-serving
 
@@ -27,4 +27,4 @@ MXNet Tutorials
    :caption: Utilizing Neuron capabilities
 
    tutorial-neuroncore-groups
-   
+
