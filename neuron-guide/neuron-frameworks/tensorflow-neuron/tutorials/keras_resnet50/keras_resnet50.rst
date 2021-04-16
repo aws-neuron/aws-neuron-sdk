@@ -14,7 +14,7 @@ In this tutorial you will compile and deploy keras_resnet50 model on an Inf1 ins
 To enable faster environment setup, you will run the tutorial on an Inf1.6xlarge instance
 to enable both compilation and deployment (inference) on the same instance.
 The following example shows how to compile a ResNet-50 network using
-various batching parameters to find the optimal solution.
+various batching parameters to find the configuration that gives the maximizes throughput.
 
 .. note::
 
