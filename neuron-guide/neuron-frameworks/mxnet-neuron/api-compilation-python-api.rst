@@ -57,7 +57,8 @@ Arguments
    -  Advanced option to exclude node names:
       ``compile_args={'excl_node_names' : [<node names>]}`` where is a
       comma separated list of node name strings.
-
+   -  work_dir:  relative or absolute path for storing params and jsons generated 
+      during compilation when SUBGRAPH_INFO=1.
 Returns
 -------
 
