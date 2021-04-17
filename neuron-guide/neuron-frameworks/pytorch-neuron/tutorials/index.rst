@@ -15,7 +15,7 @@ PyTorch Tutorials
    :maxdepth: 1
    :caption: Computer Vision
 
-   /src/examples/pytorch/yolo_v4
+   pytorch_yolov4_tutorial
 
 .. _pytorch-nlp:
 
