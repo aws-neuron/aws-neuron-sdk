@@ -16,7 +16,7 @@ TensorFlow Tutorials
    :maxdepth: 1
    :caption: Computer Vision
 
-   tutorial-tensorflow-compile-infer
+   tutorial-tensorflow-compile-infer   
    yolo_v4_demo/yolo_v4_demo
    yolo_v3_demo/yolo_v3_demo
    ssd300_demo/ssd300_demo   
