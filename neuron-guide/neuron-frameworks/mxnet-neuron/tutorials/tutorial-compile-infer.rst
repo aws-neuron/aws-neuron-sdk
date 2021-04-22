@@ -1,7 +1,7 @@
 .. _mxnet-ResNet50 Tutorial:
 
 Neuron Apache MXNet (Incubating)-ResNet50 Tutorial
-==========================
+==================================================
 
 .. contents:: Table of Contents
    :local:
