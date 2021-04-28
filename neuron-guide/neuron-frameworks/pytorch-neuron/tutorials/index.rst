@@ -34,4 +34,6 @@ PyTorch Tutorials
    :caption: Utilizing Neuron Capabilities
 
    tutorial-torchserve
+   neuroncore_pipeline_pytorch
+  
 
