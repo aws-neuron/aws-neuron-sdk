@@ -206,10 +206,9 @@ a single subgraph which will be executed by a NeuronCore Group.
 Debug
 ~~~~~
 
-You can examine both the pre-compiled model to determine what portions
-of the graph can be compiled to Inferentia and also the post-compiled
-model to view the compilation results using Tensorboard-Neuron. See
-:ref:`tensorboard-howto-check-compatibility`.
+You can examine the post-compiled model to view the compilation results
+using the Neuron plugin for TensorBoard.
+See :ref:`tensorboard-plugin-view-graph`.
 
 ResNet-50 optimization example
 ------------------------------

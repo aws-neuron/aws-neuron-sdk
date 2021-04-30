@@ -3,6 +3,7 @@
 * When choosing an Amazon Machine Image (AMI) make sure to select `Deep Learning AMI with Conda Options <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_. Please note that Neuron Conda packages are supported only in Ubuntu 16 DLAMI, Ubuntu 18 DLAMI and Amazon Linux2 DLAMI, Neuron Conda packages are not supported in Amazon Linux DLAMI.
 
 
+
 * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-connect-to-instance-linux>`_ to connect to the instance 
 
 .. note::

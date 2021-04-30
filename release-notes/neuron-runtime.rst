@@ -31,12 +31,26 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 --------------
+
+.. _14120:
+
+[1.4.17.0]
+=========
+
+Date: 04/30/2021
+
+Improvements
+------------
+
+-  Bug fixes and minor enhancements.
+
+
 .. _14120:
 
 [1.4.12.0]
 =========
 
-Date: 03/04/2020
+Date: 03/04/2021
 
 Improvements
 ------------
@@ -49,7 +63,7 @@ Improvements
 [1.4.9.0]
 =========
 
-Date: 02/24/2020
+Date: 02/24/2021
 
 Improvements
 ------------
@@ -62,7 +76,7 @@ Improvements
 [1.4.3.0]
 =========
 
-Date: 01/30/2020
+Date: 01/30/2021
 
 Improvements
 ------------

@@ -47,17 +47,25 @@ Step 1: Re-run the compile steps for your workload with increased verbosity or d
 
    tfn.saved_model.compile(model_dir, compiled_model_dir, compiler_args=['--verbose', '2', '--pipeline', 'compile',  'SaveTemps'], compiler_workdir='./compiler-workdir')
 
--  For MXNet-Neuron, add compiler arguments as shown below and run the
+-  For Neuron Apache MXNet (Incubating), add compiler arguments as shown below and run the
    compilation process from an empty workdir:
 
 ::
 
-   import os
    import mxnet as mx
+   import os
+
+   from packaging import version
+   mxnet_version = version.parse(mx.__version__)
+   if mxnet_version >= version.parse("1.8"):
+      import mx_neuron as neuron
+   else: 
+      from mxnet.contrib import neuron
+
    ...
    os.environ['SUBGRAPH_INFO'] = '1'
    compile_args = { '--verbose' : 2, '--pipeline' : 'compile', 'flags' : ['SaveTemps'] }
-   csym, cargs, cauxs = mx.contrib.neuron.compile(sym, args, auxs, inputs, **compile_args)
+   csym, cargs, cauxs = neuron.compile(sym, args, auxs, inputs=inputs, **compile_args)
 
 .. _step-2-run-neuron-gatherinfopy-to-gather-information-to-share:
 

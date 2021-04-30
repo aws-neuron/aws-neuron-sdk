@@ -2,7 +2,7 @@
 Welcome to AWS Neuron
 =====================
 
-AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and MXnet. With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
+AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (Incubating). With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
 
 Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron release.
 
@@ -23,11 +23,11 @@ Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron 
    /neuron-intro/get-started
    Start with PyTorch <neuron-guide/neuron-frameworks/pytorch-neuron/index>
    Start with TensorFlow <neuron-guide/neuron-frameworks/tensorflow-neuron/index>
-   Start with MXNet <neuron-guide/neuron-frameworks/mxnet-neuron/index>
+   Start with Apache MXNet (Incubating) <neuron-guide/neuron-frameworks/mxnet-neuron/index>
    Tutorials <neuron-intro/tutorials>
-   /release-notes/releasecontent
    /release-notes/index
-   neuron-intro/releaseinfo
+   /release-notes/releasecontent
+   /neuron-intro/releaseinfo
 
 .. toctree::
    :maxdepth: 1

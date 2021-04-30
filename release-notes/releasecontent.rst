@@ -3,18 +3,18 @@
 Release Content
 ===============
 
-.. contents:: Table of Contents
+.. contents::
    :local:
    :depth: 2
 
 
-Current Release - Neuron v1.12.2 (Mar 4th 2021)
+Current Release - Neuron v1.13.0 (Apr 30th 2021)
 ------------------------------------------------
 
 
 
-Machine Learning Frameworks Supported Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ML Frameworks supported versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :widths: auto
@@ -23,34 +23,23 @@ Machine Learning Frameworks Supported Versions
 
    * - Software
      - Supported
-     - Maintenance
-     - End Of Support
+
    * - PyTorch
      - * PyTorch 1.5
       
        * PyTorch 1.7
-     - 
-     - * PyTorch 1.3 (07/16/2020)
    * - TensorFlow
      - * TensorFlow 1.15
-     - 
-     - 
    * - TensorFlow Model Server
      - * TensorFlow Model Server 1.15
-     - 
-     -
-   * - MXNet
+   * - Apache MXNet (Incubating)
      - * MXNet 1.5
-     - 
-     -
+     
+       * MXNet 1.8
    * - TensorBoard
      - * TensorBoard 1.15
-     - 
-     -
-   * - ONNX
-     - * No
-     - 
-     - * Yes (11/17/2020)
+
+       * Neuron Plugin for TensorBoard 2.0.20.0
 
 Dependency Software Supported Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -62,22 +51,17 @@ Dependency Software Supported Versions
 
    * - Software
      - Supported
-     - Maintenance
-     - End Of Support
    * - Python
      - * Python 3.6
        * Python 3.7
-     - 
-     - * Python 3.5 (2/24/2021)
+       * Python 3.8 [Experimental]
    * - Neuron Conda Packages
-     - * torch-neuron 1.7.1.1.2.16.0 
+     - * torch-neuron-1.7.1.1.3.5.0 
      
-       * tensorflow-neuron 1.15.5.1.2.9.0
+       * tensorflow-neuron 1.15.5.1.3.3.0
 
-       * mxnet-neuron 1.5.1.1.3.8.0
+       * mxnet-neuron-1.5.1.1.4.4.0
        
-     - 
-     - 
 
 
 Neuron Packages
@@ -91,17 +75,17 @@ Neuron Packages
    * - Software
      - Included Versions
    * - Neuron Compiler
-     - neuron-cc-1.2.7
+     - neuron_cc-1.3.7
    * - Neuron Runtime
-     - neuron-runtime-1.4.12
+     - aws-neuron-runtime-1.4.17
    * - Neuron Tools
-     - neuron-tools-1.4.12
+     - aws-neuron-tools-1.5.6
    * - Neuron Kernel module
-     - neuron-dkms-1.4.5
+     - aws-neuron-dkms-1.4.9
    * - Neuron Kubernetes Plugin
-     - aws-neuron-k8-plugin-1.4.5
+     - aws-neuron-k8-plugin-1.5.3
    * - Neuron Kubernetes Scheduler
-     - aws-neuron-k8-scheduler-1.4.5
+     - aws-neuron-k8-scheduler-1.5.3
 
 
 See :ref:`neuron-maintenance-policy` for more information.

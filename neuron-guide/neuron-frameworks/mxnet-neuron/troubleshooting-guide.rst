@@ -1,7 +1,12 @@
 .. _mxnet_troubleshooting_guide:
 
-Troubleshooting Guide for MXNet-Neuron
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Troubleshooting Guide for Neuron Apache MXNet (Incubating)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 2
+
 
 Inference Runtime Error
 =======================
@@ -173,4 +178,23 @@ MXNet Model Server is not able to clean up Neuron RTD states after model is unlo
 
 The workaround is to run “`/opt/aws/neuron/bin/neuron-cli reset`“ to clear Neuron RTD states after all models are unloaded and server is shut down before restarting the model server.
 
+Pipeline mode is not able to execute inferences requests in parallel
+--------------------------------------------------------------------
 
+If you see that multiple executors in a neuron pipeline setup (one model compiled for more than one neuron-cores using `--neuroncore-pipeline-cores` option during compilation) are not running in parallel, please set the following MXNet's environment variables before inference to allow mxnet to execute the CPU ops in parallel. Otherwise it will be sequential and stall the executors.
+
+``MXNET_CPU_WORKER_NTHREADS`` is used to do that. (https://mxnet.apache.org/versions/1.7.0/api/faq/env_var). Setting its value to ``__subgraph_opt_neuroncore__`` in the compiled model json will ensure that all the executors (threads) can be run in parallel.
+
+
+Features only in MXNet-Neuron 1.5
+---------------------------------
+- Autoloop for Auto-regressive models
+- Shared memory for IFMaps transfer to neuron runtime (has higher performance compared to GRPC mode)
+- Neuron profiling using MXNet
+- Neuron context in MXNet to target models to specific cores
+- CPredict API 
+
+Features only in MXNet-Neuron 1.8
+---------------------------------
+- Gluon API support
+- ``experimental_set_device_id()`` API to target models to specific cores

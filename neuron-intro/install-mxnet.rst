@@ -1,7 +1,7 @@
 .. _install-neuron-mxnet:
 
-Install Neuron MXNet
-====================
+Install Neuron Apache MXNet (Incubating)
+=============================================
 
 .. _mxnet-pip-ubuntu:
 
@@ -46,7 +46,7 @@ Install MXNet
 
 .. _mxnet-conda:
 
-Ubuntu or Amazon Linux2 AMI (via Conda)
+Ubuntu or Amazon Linux2 AMI (via Conda) (only for MXNet 1.5)
 -----------------------------------
 
 .. include:: /neuron-intro/install-templates/conda-install.rst

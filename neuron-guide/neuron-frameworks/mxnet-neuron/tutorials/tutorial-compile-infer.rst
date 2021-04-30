@@ -21,7 +21,7 @@ If you already launched an Inf1 instance and have Neuron Mxnet DLAMI environment
 
 Instructions of how to setup Neuron Mxnet environment and run the tutorial as a Jupyter notebook are available in the next sections.
 
-Setup The Environment 
+Setup The Environment
 ---------------------
 
 Please launch Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
@@ -40,7 +40,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
 
   git clone https://github.com/aws/aws-neuron-sdk.git
   cd aws-neuron-sdk/src/examples/mxnet/resnet50
-  
+
 
 The Jupyter notebook is available as a file with the name  :mxnet-neuron-src:`resnet50.ipynb <resnet50/resnet50.ipynb>`, you can run the Jupyter notebook from a browser:
 
@@ -49,8 +49,8 @@ The Jupyter notebook is available as a file with the name  :mxnet-neuron-src:`re
 
   * First setup and launch the Jupyter notebook on your local browser by following instructions at :ref:`Running Jupyter Notebook Browser`
   * Open the Jupyter notebook from the menu and follow the instructions
-  
-  
+
+
 You can also view the Jupyter notebook at:
 
 .. toctree::

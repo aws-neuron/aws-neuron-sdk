@@ -11,6 +11,57 @@ https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia.html.
    :local:
    :depth: 1
 
+[DLAMI v43.0]
+===========
+
+Resolved Issues
+---------------
+
+Versions of Neuron packages included:
+-------------------------------------
+
+conda package mxnet-neuron-1.5.1.1.3.8.0 (includes neuron_cc-1.2.7.0)
+
+conda package tensorflow-neuron-1.15.5.1.2.9.0 (includes neuron_cc-1.2.7.0)
+
+conda package torch-neuron-1.7.1.1.2.16.0 (includes neuron_cc-1.2.7.0)
+
+aws-neuron-dkms-1.4.5.0.
+
+aws-neuron-runtime-base-1.4.8.0
+
+aws-neuron-runtime-1.4.12.0
+
+aws-neuron-tools-1.4.12.0
+
+tensorflow-model-server-neuron-1.15.0.1.2.9.0
+
+
+[DLAMI v42.2]
+===========
+
+Resolved Issues
+---------------
+
+Versions of Neuron packages included:
+-------------------------------------
+
+conda package mxnet-neuron-1.5.1.1.3.8.0 (includes neuron_cc-1.2.7.0)
+
+conda package tensorflow-neuron-1.15.5.1.2.9.0 (includes neuron_cc-1.2.7.0)
+
+conda package torch-neuron-1.7.1.1.2.16.0 (includes neuron_cc-1.2.7.0)
+
+aws-neuron-dkms-1.4.5.0.
+
+aws-neuron-runtime-base-1.4.8.0
+
+aws-neuron-runtime-1.4.12.0
+
+aws-neuron-tools-1.4.12.0
+
+tensorflow-model-server-neuron-1.15.0.1.2.9.0
+
 [DLAMI v41]
 ===========
 
@@ -587,8 +638,9 @@ Conda DLAMI:
    python3 -m pip install wrapt --ignore-installed
    python3 -m pip install tensorflow-neuron
 
--  The ``tensorflow-neuron`` conda package comes with
-   TensorBoard-Neuron. There is no standalone ``tensorboard-neuron``
-   package at this time.
+- The ``tensorflow-neuron`` conda package comes with:
+   - TensorBoard-Neuron for Neuron v1.12.2 release and earlier (``tensorflow-neuron<=1.15.5.1.2.9.0``)
+   - the Neuron plugin for TensorBoard for Neuron v1.13.0 release and later
+- There is no standalone ``tensorboard-neuron`` or ``tensorboard-plugin-neuron`` package at this time.
 
 For more information, please see :ref:`tf-known-issues-and-limitations`.

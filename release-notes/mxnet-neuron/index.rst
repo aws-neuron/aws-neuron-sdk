@@ -1,7 +1,7 @@
 .. mxnet-neuron-rn:
 
-MXNet Neuron Release Notes
-===============================
+Neuron Apache MXNet (Incubating) Release Notes
+==============================================
 
 .. toctree::
    :maxdepth: 1

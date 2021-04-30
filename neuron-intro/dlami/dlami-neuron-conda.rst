@@ -36,7 +36,7 @@ If the DLAMI doesn't include the latest Neuron Conda packages, update the Conda 
     conda update tensorflow-neuron
 
 
-* MXNet
+* Neuron Apache MXNet (Incubating)
 
  .. code::
 

@@ -7,6 +7,14 @@
      - Default Neuron version
      - How to upgrade to latest Neuron
 
+   * - v43.0 
+     - v1.12.2 (Mar 2021)
+     - see :ref:`neuron-conda-packages`
+
+   * - v42.2 
+     - v1.12.2 (Mar 2021)
+     - see :ref:`neuron-conda-packages`
+
    * - v41.0 
      - v1.12.1 (Feb 2021)
      - see :ref:`neuron-conda-packages`

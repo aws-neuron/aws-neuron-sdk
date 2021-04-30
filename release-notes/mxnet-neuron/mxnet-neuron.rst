@@ -1,15 +1,50 @@
 .. _mxnet-neuron-rn:
 
-MXNet-Neuron Release Notes
-==========================
+Neuron Apache MXNet (Incubating) Release Notes
+==============================================
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
 
 
 This document lists the release notes for MXNet-Neuron framework.
 
+[1.8.0.1.1.2.0]
+^^^^^^^^^^^^^^^
+
+Date 4/30/2021
+
+Summary
+-------
+
+Initial release of Apache MXNet (Incubating) 1.8 for Neuron
+
+Major New Features
+------------------
+
+- Gluon API and Neuron support for NLP BERT models
+
+- Neuron is now a plugin
+
+- Please note new API changes to support plugin mode: :ref:`ref-mxnet-neuron-compilation-python-api`
+
+Known Issues and Limitations
+----------------------------
+
+- Profiling is not yet available for this release.
+
+[1.5.1.1.4.4.0]
+^^^^^^^^^^^^^^^
+
+Date 4/30/2021
+
+Summary
+-------
+
+- Resolve an issue with Neuron profiling.
+
+Resolved Issues
+---------------
+
+- Issue: when Neuron profiling is enabled in MXNet-Neuron 1.5.1 (using NEURON_PROFILE=<dir>), and TensorBoard is used to read in the profiled data, user would see an error messsage "panic: runtime error: index out of range". This issue is resolved in this release.
 
 [1.5.1.1.3.8.0]
 ^^^^^^^^^^^^^^^

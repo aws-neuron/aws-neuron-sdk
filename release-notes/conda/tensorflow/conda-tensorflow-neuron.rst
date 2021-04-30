@@ -10,6 +10,21 @@ package.
    :local:
    :depth: 1
    
+[1.15.5.1.3.3.0]
+^^^^^^^^^^^^^^^^
+
+Date: 4/30/2021
+
+Included Neuron Packages
+------------------------
+
+neuron_cc-1.3.7.0
+
+tensorboard_plugin_neuron-2.0.29.0
+
+tensorflow_neuron-1.15.5.1.3.3.0
+
+
 [1.15.5.1.2.9.0]
 ^^^^^^^^^^^^^^^^
 

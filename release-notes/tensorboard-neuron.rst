@@ -1,13 +1,58 @@
 .. _neuron-tensorboard-rn:
 
 
-TensorBoard-Neuron Release Notes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron Plugin for TensorBoard Release Notes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 .. contents:: Table of Contents
    :local:
    :depth: 1
+
+
+Known Issues and Limitations - Updated 4/30/2021
+================================================
+
+The following are not limitations in the Neuron plugin, but may affect your ability to
+use TensorBoard.
+
+- In the DLAMI TensorFlow-Neuron Conda environment, attempting to run ``tensorboard``
+  with the existing version of tensorboard will fail.  Please update the tensorboard
+  version before installing the Neuron plugin by running ``pip install tensorboard --force-reinstall``.
+
+.. code-block::
+
+   Traceback (most recent call last):
+   File "/home/ubuntu/anaconda3/envs/aws_neuron_tensorflow_p36/bin/tensorboard", line 7, in <module>
+      from tensorflow.tensorboard.tensorboard import main
+   ModuleNotFoundError: No module named 'tensorflow.tensorboard'
+
+.. _2.0.29.0:
+
+[2.0.29.0]
+=========
+
+Date: 4/30/2021
+
+Summary
+-------
+
+- First release Neuron plugin for TensorBoard.  Check out it out here:
+  :ref:`neuron-plugin-tensorboard`.
+
+   - The Neuron plugin is now compatible with TensorBoard 2.0 and higher,
+     in addition to TensorBoard 1.15
+
+   - Provides a centralized place to better understand execution using
+     Neuron SDK.
+
+   - Continues support visualization for TensorFlow graphs, with support
+     for PyTorch and MXNet coming in future releases.
+
+- Neuron plugin for TensorBoard is supported for Neuron tools >= 1.5, which is first
+  introduced in Neuron v1.13.0 release
+- TensorBoard-Neuron is deprecated, and only supported for Neuron tools <= 1.4.12.0.
+  The final version, 1.4.12.0 is part of Neuron v1.12.2 release.
 
 
 .. _11501260:

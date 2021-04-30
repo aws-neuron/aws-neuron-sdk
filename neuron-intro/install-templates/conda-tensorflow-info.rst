@@ -1,8 +1,9 @@
 .. note::
 
    The ``tensorflow-neuron`` Conda package comes with
-   TensorBoard-Neuron. There is no standalone ``tensorboard-neuron``
-   Conda package at this time.
+   TensorBoard-Neuron (Neuron v1.12.2 and below) or the Neuron plugin for
+   TensorBoard (Neuron v1.13.0 and higher) . There is no standalone ``tensorboard-neuron``
+   or ``tensorboard-plugin-neuron`` Conda package at this time.
 
 .. note::
 

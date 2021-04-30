@@ -43,7 +43,7 @@ Setup Environment
     * Enable TensorFlow-Neuron Conda enviroment:
     .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
     
-    * Enable MXNet-Neuron Conda enviroment:
+    * Enable Neuron Conda enviroment for Apache MXNet (Incubating):
     .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
 
     To develop from a Jupyter notebook see :ref:`setup-jupyter-notebook-steps-troubleshooting`  
