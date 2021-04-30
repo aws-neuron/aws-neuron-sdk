@@ -23,14 +23,7 @@ Setup a new Python virtual environment:
    source test_venv/bin/activate
    pip install -U pip
 
-Modify Pip repository configurations to point to the Neuron repository:
-
-.. code:: bash
-
-   tee $VIRTUAL_ENV/pip.conf > /dev/null <<EOF
-   [global]
-   extra-index-url = https://pip.repos.neuron.amazonaws.com
-   EOF
+.. include:: /neuron-intro/install-templates/neuron-pip-setup.rst
 
 .. note::
 

@@ -7,6 +7,7 @@ Neuron Tools Tutorials
    :maxdepth: 1
 
    Neuron TensorBoard </neuron-guide/neuron-tools/getting-started-tensorboard-neuron>
+   Neuron Plugin for Tensorboard </neuron-guide/neuron-tools/getting-started-tensorboard-neuron-plugin>
    Neuron Monitor </neuron-guide/neuron-tools/neuron-monitor-user-guide>
    Neuron Check Model </neuron-guide/neuron-tools/tutorial-neuron-check-model>
    Gather Debug info </neuron-guide/neuron-tools/tutorial-neuron-gatherinfo>

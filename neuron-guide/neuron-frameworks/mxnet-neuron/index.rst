@@ -1,7 +1,7 @@
 .. _neuron-mxnet:
 
-MXNet Neuron
-============
+Neuron Apache MXNet (Incubating)
+================================
 
 Neuron is integrated into MXNet, and provides you with a familiar environment to run inference using Inferentia based instances.
 

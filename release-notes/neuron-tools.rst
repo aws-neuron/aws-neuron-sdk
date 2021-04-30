@@ -21,6 +21,25 @@ Known Issues and Limitations 03/04/2020
    on performance. The issue is caused by the re rendering the UI on
    screen refresh. We will fix this in a future release.
 
+.. _15060:
+
+[1.5.6.0]
+=========
+
+Date: 05/01/2021
+
+Major New Features
+------------------
+
+-  Neuron profiler improved to support an upcoming change to neff generation.
+
+Resolved Issues
+---------------
+
+-  Bug fixes and minor enhancements.
+
+
+
 .. _14120:
 
 [1.4.12.0]

@@ -3,9 +3,29 @@
 Supported operators [TensorFlow]
 ================================
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
+To see a list of supported operators for TensorFlow, run the following command:
+
+``neuron-cc list-operators --framework TENSORFLOW``
+
+
+
+.. _neuron-compiler-release-1300:
+
+Neuron Compiler Release [1.3.0.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+
+::
+
+ Abs
+ Cos
+ DepthwiseConv2dNative
+ Erf
+ Rank
+ Sin
+ Size
+
 
 .. _neuron-compiler-release-1270:
 
@@ -50,9 +70,6 @@ Added
  UnsortedSegmentSum
 
 
-To see a list of supported operators for TensorFlow, run the following command:
-
-``neuron-cc list-operators --framework TENSORFLOW``
 
 .. _neuron-compiler-release-10240450:
 

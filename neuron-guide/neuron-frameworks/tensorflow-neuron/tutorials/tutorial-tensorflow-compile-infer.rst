@@ -1,205 +1,67 @@
-.. _tensorflow-resnet50:
+.. _tensorflow-Resnet50:
 
-Getting Started with TensorFlow (ResNet50)
-==========================================
+Tensorflow-Resnet50 Tutorial
+============================
 
-Steps Overview:
----------------
+.. contents:: Table of Contents
+   :local:
+   :depth: 2
 
-1. Launch an EC2 Compilation Instance (recommended instance: c5.4xlarge)
-2. Install TensorFlow-Neuron and Neuron-Compiler on the Compilation
-   Instance
-3. Compile the compute-graph on the compilation-instance, and copy the
-   artifacts into the deployment-instance
-4. Install TensorFlow-Neuron and Neuron-Runtime on Deployment Instance
-5. Deploy inferences inference on the Deployment Instance (Inf1)
+Overview
+--------
 
-Step 1: Launch EC2 Instance(s)
-------------------------------
+In this tutorial we will compile and deploy Resnet50 model on an Inf1 instance. To enable faster enviroment setup, you will run the tutorial on an inf1.6xlarge instance to enable both compilation and deployment (inference) on the same instance.
 
-A typical workflow with the Neuron SDK will be to compile trained ML
-models on a compilation instance and then distribute the artifacts to a
-fleet of deployment instances, for execution. Neuron enables TensorFlow
-to be used for all of these steps.
+If you already launched an Inf1 instance and have Neuron Tensorflow DLAMI environment ready, tutorial is available as a Jupyter notebook at :mxnet-neuron-src:`resnet50.ipynb <tensorflow_resnet50/resnet50.ipynb>` and instructions can be viewed at
 
-1.1. Select an AMI of your choice. Refer to the
-:ref:`neuron-install-guide` for details.
+.. toctree::
+   :maxdepth: 1
 
-1.2. Select and launch an EC2 instance of your choice to compile. Launch
-an instance by following `EC2 instance launch
-instructions <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`__.
+   /src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb
 
--  It is recommended to use c5.4xlarge or larger. For this example we
-   will use a c5.4xlarge.
--  Users may choose to compile and deploy on the same instance, in which
-   case it is recommend to use an inf1.6xlarge instance or larger.
+Instructions of how to setup Neuron Tensorflow environment and run the tutorial as a Jupyter notebook are available in the next sections.
 
-1.3. Select and launch a deployment (Inf1) instance of your choice.
+Setup The Environment
+---------------------
 
-Step 2: Compilation Instance Installations
-------------------------------------------
+Please launch Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
 
-If using Conda DLAMI version 26 and up, activate pre-installed
-TensorFlow-Neuron environment (using
-``source activate aws_neuron_tensorflow_p36`` command). Please update
-Neuron by following update steps in :ref:`dlami-neuron-rn`.
+.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
-To install in your own AMI, please see :ref:`neuron-install-guide` to
-setup virtual environment and install TensorFlow-Neuron
-(tensorflow-neuron) and Neuron Compiler (neuron-cc) packages.
+.. _Resnet50 Running the tutorial:
 
-.. _tensorflow-resnet50-compile-on-compilation-instance:
+Run The Tutorial
+----------------
 
-Step 3: Compile on Compilation Instance
----------------------------------------
 
-A trained model must be compiled to Inferentia target before it can be
-deployed on Inferentia instances. In this step we compile the Keras
-ResNet50 model and export it as a SavedModel which is an interchange
-format for TensorFlow models.
+After connecting to the instance from the terminal, clone the Neuron Github repository to the EC2 instance and then change the working directory to the tutorial directory:
 
-3.1. Create a python script named ``compile_resnet50.py`` with the
-following content:
+.. code::
 
-.. code:: python
+  git clone https://github.com/aws/aws-neuron-sdk.git
+  cd aws-neuron-sdk/src/examples/tensorflow/tensorflow_resnet50
 
-   import os
-   import time
-   import shutil
-   import tensorflow as tf
-   import tensorflow.neuron as tfn
-   import tensorflow.compat.v1.keras as keras
-   from tensorflow.keras.applications.resnet50 import ResNet50
-   from tensorflow.keras.applications.resnet50 import preprocess_input
 
-   # Create a workspace
-   WORKSPACE = './ws_resnet50'
-   os.makedirs(WORKSPACE, exist_ok=True)
 
-   # Prepare export directory (old one removed)
-   model_dir = os.path.join(WORKSPACE, 'resnet50')
-   compiled_model_dir = os.path.join(WORKSPACE, 'resnet50_neuron')
-   shutil.rmtree(model_dir, ignore_errors=True)
-   shutil.rmtree(compiled_model_dir, ignore_errors=True)
+The Jupyter notebook is available as a file with the name  :tensorflow-neuron-src:`resnet50.ipynb <tensorflow_resnet50/resnet50.ipynb>` that you can run from browser:
 
-   # Instantiate Keras ResNet50 model
-   keras.backend.set_learning_phase(0)
-   keras.backend.set_image_data_format('channels_last')
 
-   model = ResNet50(weights='imagenet')
+* **Running tutorial from browser**
 
-   # Export SavedModel
-   tf.saved_model.simple_save(
-       session            = keras.backend.get_session(),
-       export_dir         = model_dir,
-       inputs             = {'input': model.inputs[0]},
-       outputs            = {'output': model.outputs[0]})
+  * First setup and launch the Jupyter notebook on your local browser by following instructions at :ref:`Running Jupyter Notebook Browser`
+  * Open the Jupyter notebook from the menu and follow the instructions
 
-   # Compile using Neuron
-   tfn.saved_model.compile(model_dir, compiled_model_dir)
 
-   # Prepare SavedModel for uploading to Inf1 instance
-   shutil.make_archive('./resnet50_neuron', 'zip', WORKSPACE, 'resnet50_neuron')
+You can also view the Jupyter notebook at:
 
-3.2. Run the compilation script, which will take a few minutes on
-c5.4xlarge. At the end of script execution, the compiled SavedModel is
-zipped as ``resnet50_neuron.zip`` in local directory:
+.. toctree::
+   :maxdepth: 1
 
-.. code:: bash
+   /src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb
 
-   python compile_resnet50.py
+.. _resnet50-cleanup-instances:
 
-::
+Clean up your instance/s
+------------------------
 
-   ...
-   INFO:tensorflow:fusing subgraph neuron_op_d6f098c01c780733 with neuron-cc
-   INFO:tensorflow:Number of operations in TensorFlow session: 4638
-   INFO:tensorflow:Number of operations after tf.neuron optimizations: 556
-   INFO:tensorflow:Number of operations placed on Neuron runtime: 554
-   INFO:tensorflow:Successfully converted ./ws_resnet50/resnet50 to ./ws_resnet50/
-   ...
-
-3.3. If not compiling and inferring on the same instance, copy the
-artifact to the inference server:
-
-.. code:: bash
-
-   scp -i <PEM key file>  ./resnet50_neuron.zip ubuntu@<instance DNS>:~/ # if Ubuntu-based AMI
-   scp -i <PEM key file>  ./resnet50_neuron.zip ec2-user@<instance DNS>:~/  # if using AML2-based AMI
-
-3.4. To check the supported operations for the uncompiled model or information
-on Neuron subgraphs for the compiled model, please see :ref:`neuron_check_model`.
-
-Step 4: Deployment Instance Installations
------------------------------------------
-
-**If using DLAMI, activate pre-installed TensorFlow-Neuron environment
-(using \``source activate aws_neuron_tensorflow_p36`\` command) and skip
-this step.**
-
-On the instance you are going to use for inference, install
-TensorFlow-Neuron and Neuron Runtime
-
-4.1. Follow Step 2 above to install TensorFlow-Neuron.
-
--  Install neuron-cc if compilation on inference instance is desired
-   (see notes above on recommended Inf1 sizes for compilation)
--  Skip neuron-cc if compilation is not done on inference instance
-
-4.2. To install Neuron Runtime, see :ref:`rtd-getting-started`.
-
-Step 5: Deploy
---------------
-
-In this step we run inference on Inf1 using the model compiled in Step
-3.
-
-5.1. Unzip the compiled model package from Step 3, download the example
-image, and install pillow module for inference:
-
-.. code:: bash
-
-   unzip -o resnet50_neuron.zip
-   curl -O https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg
-   pip install pillow  # Necessary for loading images
-
-5.2. On the Inf1, create a inference Python script named
-``infer_resnet50.py`` with the following content:
-
-.. code:: python
-
-   import os
-   import time
-   import numpy as np
-   import tensorflow as tf
-   from tensorflow.keras.preprocessing import image
-   from tensorflow.keras.applications import resnet50
-
-   tf.keras.backend.set_image_data_format('channels_last')
-
-   # Create input from image
-   img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
-   img_arr = image.img_to_array(img_sgl)
-   img_arr2 = np.expand_dims(img_arr, axis=0)
-   img_arr3 = resnet50.preprocess_input(img_arr2)
-
-   # Load model
-   COMPILED_MODEL_DIR = './resnet50_neuron/'
-   predictor_inferentia = tf.contrib.predictor.from_saved_model(COMPILED_MODEL_DIR)
-
-   # Run inference
-   model_feed_dict={'input': img_arr3}
-   infa_rslts = predictor_inferentia(model_feed_dict);
-
-   # Display results
-   print(resnet50.decode_predictions(infa_rslts["output"], top=5)[0])
-
-5.3. Run the inference:
-
-.. code:: bash
-
-   python infer_resnet50.py
-
-::
-
-   [('n02123045', 'tabby', 0.6956522), ('n02127052', 'lynx', 0.120923914), ('n02123159', 'tiger_cat', 0.08831522), ('n02124075', 'Egyptian_cat', 0.06453805), ('n02128757', 'snow_leopard', 0.0087466035)]
+After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, please follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.

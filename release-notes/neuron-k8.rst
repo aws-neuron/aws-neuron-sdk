@@ -3,10 +3,6 @@
 Neuron K8 Release Notes
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 2
-
 Introduction
 ============
 
@@ -38,12 +34,25 @@ To Pull the Images from ECR:
    docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
    docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
 
+.. _1530:
+
+[1.5.3.0]
+=========
+
+Date: 05/01/2021
+
+Summary
+-------
+
+Minor internal enhancements.
+
+
 .. _1410:
 
 [1.4.1.0]
 =========
 
-Date: 01/30/2020
+Date: 01/30/2021
 
 Summary
 -------

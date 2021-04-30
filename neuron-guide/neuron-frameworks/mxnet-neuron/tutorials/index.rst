@@ -1,7 +1,7 @@
 .. _mxnet-tutorials:
 
-MXNet Tutorials
-===============
+Neuron Apache MXNet (Incubating) Tutorials
+==========================================
 
 .. _mxnet-computervision:
 

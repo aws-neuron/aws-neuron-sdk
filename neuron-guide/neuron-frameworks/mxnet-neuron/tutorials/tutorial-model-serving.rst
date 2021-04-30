@@ -1,7 +1,7 @@
 .. _mxnet-neuron-model-serving:
 
-Tutorial: MXNet-Neuron Model Serving
-====================================
+Tutorial: Neuron Apache MXNet (Incubating) Model Serving
+=========================================================
 
 This Neuron MXNet Model Serving (MMS) example is adapted from the MXNet
 vision service example which uses pretrained squeezenet to perform image
@@ -38,9 +38,16 @@ Download the example code:
 
 .. code:: python
 
-   import mxnet as mx
-   from mxnet.contrib import neuron
+
+   from packaging import version
    import numpy as np
+   import mxnet as mx
+   
+   mxnet_version = version.parse(mx.__version__)
+   if mxnet_version >= version.parse("1.8"):
+      import mx_neuron as neuron
+   else: 
+      from mxnet.contrib import neuron
 
    path='http://data.mxnet.io/models/imagenet/'
    mx.test_utils.download(path+'resnet/50-layers/resnet-50-0000.params')
@@ -95,16 +102,26 @@ Download the example code:
 
    cp -r ../model_service_template/* .
 
-Edit ``mxnet_model_service.py`` and replace mx.cpu() context with
-mx.neuron() context:
+Edit ``mxnet_model_service.py`` to use the appropriate context. 
+
+- In case of MXNet 1.5, Neuron uses mx.neuron() context 
+- In case of MXNet 1.8, Neuron uses mx.cpu() context
+
+Make the following change:
 
 .. code:: bash
 
-   self.mxnet_ctx = mx.neuron()
+   from packaging import version
+   
+   mxnet_version = version.parse(mx.__version__)
+   if mxnet_version >= version.parse("1.8"):
+      import mx_neuron as neuron
+      self.mxnet_ctx = mx.cpu()
+   else: 
+      self.mxnet_ctx = mx.neuron()
 
 Also, comment out unnecessary data copy for model_input in
-``mxnet_model_service.py`` as NDArray/Gluon API is not supported in
-MXNet-Neuron:
+``mxnet_model_service.py``:
 
 .. code:: bash
 

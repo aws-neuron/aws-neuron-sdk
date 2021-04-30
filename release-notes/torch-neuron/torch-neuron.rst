@@ -6,24 +6,19 @@ PyTorch Neuron release notes
 This document lists the release notes for the Pytorch-Neuron package.
 
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
- 
 
-
-Known Issues and Limitations - Updated 3/4/2021
+Known Issues and Limitations - Updated 4/30/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
 you can successfully torch.neuron.trace
 
 -  If you attempt to import torch.neuron from Python 3.5 you will see this error in 1.1.7.0 - please use Python 3.6 or greater:
-.. code-block:: 
+.. code-block::
 
    File "/tmp/install_test_env/lib/python3.5/site-packages/torch_neuron/__init__.py", line 29
       f'Invalid dependency version torch=={torch.__version__}. '
-                                                             ^  
+                                                             ^
    SyntaxError: invalid syntax
 
 -  Torchvision has dropped support for Python 3.5
@@ -32,6 +27,21 @@ you can successfully torch.neuron.trace
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+.. _neuron-torch-1350:
+
+[1.7.1.1.3.5.0]
+^^^^^^^^^^^^^^^
+
+Date: 4/30/2021
+
+Summary
+-------
+
+- ResNext models now functional with new operator support
+- Yolov5 support refer to https://github.com/aws/aws-neuron-sdk/issues/253 note https://github.com/ultralytics/yolov5/pull/2953 which optimized YoloV5 for AWS Neuron
+- Convolution operator support has been extended to include most Conv1d and Conv3d variants
+- New operator support.  Please see :ref:`neuron-cc-ops-pytorch.rst` for the complete list of operators.
 
 .. _neuron-torch-12160:
 
@@ -411,7 +421,7 @@ Trace behavior
 --------------
 
 In order to trace a model it must be in evaluation mode. For examples
-please see :ref:`pytorch-getting-started`
+please see :ref:`pytorch-tutorials-resnet-50`
 
 Six pip package is required
 ---------------------------

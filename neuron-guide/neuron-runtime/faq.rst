@@ -35,5 +35,5 @@ Q: How can I take advantage of multiple NeuronCores to run multipleinferences in
 ------------------------------------------------------------------------------------------
 
 Examples of this for TensorFlow are found
-:ref:`here <tensorflow-tutorials>` as well as for MXNet
+:ref:`here <tensorflow-tutorials>`
 :ref:`here <mxnet-tutorials>`

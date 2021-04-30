@@ -1,13 +1,40 @@
 .. _neuron-cc-ops-mxnet:
 
-Supported operators [MXNet]
-===========================
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
+Supported operators [Neuron Apache MXNet (Incubating)]
+======================================================
+
+To see a list of supported operators for MXNet, run the following command:
+
+``neuron-cc list-operators --framework MXNET``
 
 
+
+.. _neuron-compiler-release-1300:
+
+Neuron Compiler Release [1.3.0.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No changes
+
+.. _neuron-compiler-release-1270:
+
+Neuron Compiler Release [1.2.7.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No changes
+
+.. _neuron-compiler-release-1220:
+
+Neuron Compiler Release [1.2.2.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No changes
+
+.. _neuron-compiler-release-1200:
+
+Neuron Compiler Release [1.2.0.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -28,25 +55,6 @@ Supported operators [MXNet]
  sin
  slice_axis
 
-
-To see a list of supported operators for MXNet, run the following command:
-
-``neuron-cc list-operators --framework MXNET``
-
-
-.. _neuron-compiler-release-1270:
-
-Neuron Compiler Release [1.2.7.0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-No changes
-
-.. _neuron-compiler-release-1220:
-
-Neuron Compiler Release [1.2.2.0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-No changes
 
 .. _neuron-compiler-release-10240450:
 

@@ -6,11 +6,6 @@ Reference: MXNet-Neuron Compilation Python API
 The MXNet-Neuron compilation Python API provides a method to compile
 model graph for execution on Inferentia.
 
-Method
-------
-
-``import mxnet as mx``
-``mx.contrib.neuron.compile(sym, args, aux, inputs, **compile_args)``
 
 Description
 -----------
@@ -35,6 +30,19 @@ about compiler options.
 For debugging compilation, use SUBGRAPH_INFO=1 environment setting before
 calling the compilation script. The extract subgraphs are preserved as hidden
 files in the run directory. For more information, see :ref:`neuron_gatherinfo`
+
+**MXNet 1.5**
+-------------
+
+Method
+------
+
+
+.. code:: python
+
+  from mxnet.contrib import neuron
+  neuron.compile(sym, args, aux, inputs, **compile_args)
+
 
 Arguments
 ---------
@@ -71,11 +79,80 @@ Example Usage: Compilation
 The following is an example usage of the compilation, with default
 compilation arguments:
 
+
 .. code:: python
 
-   import mxnet as mx
-   ...
-   sym, args, aux = mx.contrib.neuron.compile(sym, args, aux, inputs={'data' : img})
+  from mxnet.contrib import neuron
+  ...
+  neuron.compile(sym, args, aux, inputs={'data' : img})
+
+
+
+**MXNet 1.8**
+-------------
+
+
+Method
+------
+
+
+.. code:: python
+
+  import mx_neuron as neuron
+  neuron.compile(obj, args=None, aux=None, inputs=None, **compile_args)
+
+
+Arguments
+---------
+
+-  **obj** - Symbol object loaded from symbol.json file or gluon.HybridBlock object
+-  **args** (optional) - args/params dictionary loaded from params file. Only needed in case of Symbol object
+-  **aux** (optional) - aux/params dictionary loaded from params file. Only needed in case of Symbol object
+-  **inputs** - a dictionary with key/value mappings for input name to
+   input numpy arrays.
+-  **kwargs** (optional) - a dictionary with key/value mappings for
+   MXNet-Neuron compilation and Neuron Compiler options.
+
+   -  For example, to limit the number of NeuronCores per subgraph, use
+      ``compile_args={'--neuroncore-pipeline-cores' : N}`` where N is an integer
+      representing the maximum number of NeuronCores per subgraph.
+   -  Additional compiler flags can be passed using
+      ``'flags' : [<flags>]`` where is a comma separated list of
+      strings. See :ref:`neuron_gatherinfo` for example of passing debug
+      flags to compiler.
+   -  Advanced option to exclude node names:
+      ``compile_args={'excl_node_names' : [<node names>]}`` where is a
+      comma separated list of node name strings.
+
+Returns
+-------
+- **(sym, args, auxs)** - for symbol object as input. sym, args and auxs are new partitioned symbol, modified args/params and modified aux/params repectively.
+- **(obj)** - for gluon.HybridBlock object as input. obj is the parititioned and optimized gluon.Hybrid block object for Neuron backend.
+
+
+Example Usage: Compilation
+--------------------------
+
+The following is an example usage of the compilation, with default
+compilation arguments for symbol object:
+
+
+.. code:: python
+
+  import mx_neuron as neuron
+  ...  
+  neuron.compile(sym, args, aux, inputs={'data' : img})
+
+
+The following is an example usage of the compilation, with default
+compilation arguments for gluon.HybridBlock object (only supported in MXNet-Neuron 1.8):
+
+.. code:: python
+
+  import mx_neuron as neuron
+  ...  
+  neuron.compile(obj, inputs={'data' : img})
+
 
 Example Usage: Extract Compilation Statistics
 ---------------------------------------------

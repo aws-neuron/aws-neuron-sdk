@@ -29,13 +29,13 @@ Tensorflow: :ref:`neuron-cc-ops-tensorflow`
 
 Pytorch: :ref:`neuron-cc-ops-pytorch`
 
-MXNet: :ref:`neuron-cc-ops-mxnet`
+Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
 ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 03/04/2020
+Known issues and limitations - updated 03/04/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. **Control flow** Neuron only supports control flow operators which
@@ -62,6 +62,38 @@ Known issues and limitations - updated 03/04/2020
    sequence length=128, --neuroncore-pipeline-cores = 16, but this is
    not the optimal setting for that model.
 8. **Conv2d operator** is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
+
+[1.3.0.0]
+^^^^^^^^^
+
+Date 4/30/2021
+
+Summary
+-------
+
+- Performance improvements, new operators, and usability improvements.
+
+Major New Features
+------------------
+
+- Improved performance of batched CNN models like resnet50  with the default compiler options by 10%.
+
+- Improved performance of bert base sequence 128 batch 6 by upto 16%
+
+- Added support for group and depth wise convolution (with limited performance when the number of input channels is small).
+
+- Added more detailed debug names to support for tensorboard.
+
+
+Resolved Issues
+---------------
+
+- Corrected potential race condition in overwriting tiles of output tensors.
+
+- Fixed various issues in pipelined inference by enabling fine grain partitioning by default.
+
+
+
 
 [1.2.7.0]
 ^^^^^^^^^

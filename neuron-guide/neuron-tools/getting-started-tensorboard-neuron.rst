@@ -1,7 +1,12 @@
 .. _tensorboard-neuron:
 
-Getting Started: TensorBoard-Neuron
-===================================
+Getting Started: TensorBoard-Neuron (Deprecated)
+================================================
+
+.. warning::
+
+  TensorBoard-Neuron is deprecated and no longer compatible with Neuron tools version 1.5 and higher.
+  Please check out the Neuron plugin for TensorBoard here: :ref:`neuron-plugin-tensorboard`.
 
 This guide is for developers who want to better understand how their
 model runs on Neuron Cores.

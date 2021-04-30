@@ -3,9 +3,6 @@
 Supported operators [PyTorch]
 =============================
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
 
 
 Current operator lists may be generated with these commands inside
@@ -15,6 +12,20 @@ python:
 
    import torch.neuron
    print(*torch.neuron.get_supported_operations(), sep='\n')
+
+.. _pytorch-neuron-release-1350:
+
+PyTorch Neuron Release [1.3.5.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added:
+
+::
+   
+   aten::numel
+   aten::ones_like
+   aten::reciprocal
+   aten::topk
 
 .. _pytorch-neuron-release-12160:
 

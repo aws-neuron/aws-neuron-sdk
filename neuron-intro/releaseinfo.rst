@@ -4,9 +4,10 @@ Roadmap & Support
 .. toctree::
    :maxdepth: 1
 
-   /neuron-intro/maintenance-policy
-   /faq
+   
    Roadmap </neuron-intro/roadmap-readme>
+   /faq
    support
-
+   /neuron-intro/maintenance-policy
+   /release-notes/deprecation
 
