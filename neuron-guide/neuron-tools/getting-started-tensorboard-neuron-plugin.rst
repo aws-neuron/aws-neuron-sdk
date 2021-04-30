@@ -59,11 +59,11 @@ Compile the neural network
 3. Refer to the following guides on how to compile a graph using Neuron SDK.
 
 - TensorFlow-Neuron
-   - :ref:`tensorflow-resnet50-compile-on-compilation-instance`
+   - "Compile for Neuron" in `TensorFlow-Neuron Resnet50 Tutorial`_
 - PyTorch-Neuron:
    - "Compile model for Neuron" in `PyTorch-Neuron Resnet50 Tutorial`_
-- MXNet-Neuron:
-   - :ref:`mxnet-resnet50-compile-on-compilation-instance`
+- MXNet-Neuron
+   - "Compile model on Neuron" in `MXNet-Neuron Resnet50 Tutorial`_
 
 Enable profiling 
 -----------------
@@ -101,11 +101,11 @@ variable.  In this example, we will assume this directory is ``$HOME/profile``
 For more info on how to execute inference, refer to the following guides:
 
 - TensorFlow-Neuron
-   - :ref:`tensorflow-resnet50-execute-inference`
+   - "Deploy on Inferentia" in `TensorFlow-Neuron Resnet50 Tutorial`_
 - PyTorch-Neuron
    - "Run inference on Single Core" in `PyTorch-Neuron Resnet50 Tutorial`_
 - MXNet-Neuron
-   - :ref:`mxnet-resnet50-execute-inference`
+   - "Deploy on Inferentia" in `MXNet-Neuron Resnet50 Tutorial`_
 
 4.4. Check if profiling results were successfully saved.  In the directory
 pointed to by ``NEURON_PROFILE`` environment variable set in Step 4.1, there
@@ -338,6 +338,8 @@ spent moving data to and from NeuronCores will fall under ``(ND_ENGINE_LOAD)``.
   :height: 2826
   :width: 5341
   :scale: 10%
+.. _TensorFlow-Neuron Resnet50 Tutorial: ../../src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb
+.. _MXNet-Neuron Resnet50 Tutorial: ../../src/examples/mxnet/resnet50/resnet50.ipynb
 .. _PyTorch-Neuron Resnet50 Tutorial: ../../src/examples/pytorch/resnet50.ipynb
 .. |tensorboard_address| raw:: html
 
