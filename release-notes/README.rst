@@ -5,7 +5,7 @@ Neuron Release Notes
 
 .. _03-04-2021-rn:
 
-Neuron 1.13.0 (04/30/2021)
+Neuron 1.13.0 (05/01/2021)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This release introduces higher performance, updated framework support, new tutorials, and adding models and tools:

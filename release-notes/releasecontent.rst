@@ -8,7 +8,7 @@ Release Content
    :depth: 2
 
 
-Current Release - Neuron v1.13.0 (Apr 30th 2021)
+Current Release - Neuron v1.13.0 (May 1st 2021)
 ------------------------------------------------
 
 

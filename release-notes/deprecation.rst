@@ -13,7 +13,7 @@ Software deprecation
 End of support for Neuron Conda packages in Deep Learning AMI starting Neuron 1.14.0
 ------------------------------------------------------------------------------------
 
-04/30/2021 - Starting with Neuron SDK 1.14.0, we will no longer support conda packages to install Neuron SDK framework in DLAMI and we will no longer update conda packages used to install Neuron SDK framework (Neuron conda packages) with new versions.
+05/01/2021 - Starting with Neuron SDK 1.14.0, we will no longer support conda packages to install Neuron SDK framework in DLAMI and we will no longer update conda packages used to install Neuron SDK framework (Neuron conda packages) with new versions.
 
 Starting with Neuron SDK 1.14.0, pip packages (Neuron pip packages) will be used to install Neuron SDK framework in DLAMI conda environment. To upgrade Neuron SDK framework DLAMI users should use pip upgrade commands instead of conda update commands. Instructions are available in this blog and in Neuron SDK documentation (https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/neuron-install-guide.html#deep-learning-ami-dlami).
 
@@ -52,7 +52,7 @@ For more information please check the `blog <https://aws.amazon.com/blogs/develo
 End of support for Ubuntu 16 starting Neuron 1.14.0
 ---------------------------------------------------
 
-04/30/2021 - Ubuntu 16.04 entered end of life phase officially in April 2021 (see https://ubuntu.com/about/release-cycle) and will not receive any public software or security updates. Starting with Neuron SDK 1.14.0, Ubuntu 16 is no longer supported for Neuron, users who are using Ubuntu 16 are requested to migrate to Ubuntu18 or Amazon Linux 2.
+05/01/2021 - Ubuntu 16.04 entered end of life phase officially in April 2021 (see https://ubuntu.com/about/release-cycle) and will not receive any public software or security updates. Starting with Neuron SDK 1.14.0, Ubuntu 16 is no longer supported for Neuron, users who are using Ubuntu 16 are requested to migrate to Ubuntu18 or Amazon Linux 2.
 
 Customers who choose to upgrade libc on Ubuntu 16 to work with Neuron v1.13.0 (or higher versions) are highly discouraged from doing that since Ubuntu 16 will no longer receive public security updates.
 
@@ -61,7 +61,7 @@ Customers who choose to upgrade libc on Ubuntu 16 to work with Neuron v1.13.0 (o
 End of support for classic TensorBoard-Neuron starting Neuron 1.13.0 and introducing Neuron Plugin for TensorBoard 
 -------------------------------------------------------------------------------------------------------------------
 
-04/30/2021 - Starting with Neuron SDK 1.13.0, we are introducing :ref:`Neuron Plugin for TensorBoard <neuron-plugin-tensorboard>` and we will no longer support classic TensorBoard-Neuron. Users are required to migrate to Neuron Plugin for TensorBoard.
+05/01/2021 - Starting with Neuron SDK 1.13.0, we are introducing :ref:`Neuron Plugin for TensorBoard <neuron-plugin-tensorboard>` and we will no longer support classic TensorBoard-Neuron. Users are required to migrate to Neuron Plugin for TensorBoard.
 
 Starting with Neuron SDK 1.13.0, if you are using TensorFlow-Neuron within DLAMI Conda environment, attempting to run ``tensorboard`` with the existing version of TensorBoard will fail.  Please update the TensorBoard version before installing the Neuron plugin by running ``pip install TensorBoard --force-reinstall``, for installation instructions see :ref:`neuron-plugin-tensorboard`.
 
