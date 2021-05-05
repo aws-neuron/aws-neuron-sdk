@@ -31,6 +31,8 @@ Known Issues and Limitations
 
 - Profiling is not yet available for this release.
 
+- CPrdict API is not supported for this release.
+
 [1.5.1.1.4.4.0]
 ^^^^^^^^^^^^^^^
 
