@@ -12,7 +12,7 @@ Overview
 
 In this tutorial we will compile and deploy Resnet50 model on an Inf1 instance. To enable faster enviroment setup, you will run the tutorial on an inf1.6xlarge instance to enable both compilation and deployment (inference) on the same instance.
 
-If you already launched an Inf1 instance and have Neuron Tensorflow DLAMI environment ready, tutorial is available as a Jupyter notebook at :mxnet-neuron-src:`resnet50.ipynb <tensorflow_resnet50/resnet50.ipynb>` and instructions can be viewed at
+If you already launched an Inf1 instance and have Neuron Tensorflow DLAMI environment ready, tutorial is available as a Jupyter notebook at :tensorflow-neuron-src:`resnet50.ipynb <tensorflow_resnet50/resnet50.ipynb>` and instructions can be viewed at
 
 .. toctree::
    :maxdepth: 1
