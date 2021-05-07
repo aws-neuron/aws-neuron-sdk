@@ -22,9 +22,9 @@ This tutorial is divided into the following parts:
 
 * :ref:`resnet50 Environment Setup`  - Steps needed to setup the compilation and deployment enviroments that will enable you to run this tutorial. In this tutorial a single inf1 instance will provide both the compilation and deployment enviroments.
 
- If you already have Inf1 environment ready, you can skip to :ref:`resnet50 Running the tutorial`.
+ If you already have Inf1 environment ready, you can skip to :ref:`pytorch resnet50 Running the tutorial`.
 
-* :ref:`resnet50 Running the tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
+* :ref:`pytorch resnet50 Running the tutorial` - The tutorial is available as a Jupyter notebook. You have the option to run the tutorial as a Jupyter notebook or run the tutorial on the EC2 instance terminal as a script. This section will guide you into the two options. 
 * :ref:`resnet50-cleanup-instances` - After running the tutorial, make sure to cleanup instance/s used for this tutorial.
 
 .. _resnet50 Environment Setup:
@@ -36,7 +36,7 @@ Please launch Inf1 instance by following the below steps, please make sure to ch
 
 .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
-.. _resnet50 Running the tutorial:
+.. _pytorch resnet50 Running the tutorial:
 
 Run The Tutorial
 ----------------
