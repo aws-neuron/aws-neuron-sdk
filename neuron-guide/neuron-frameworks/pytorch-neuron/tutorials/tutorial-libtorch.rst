@@ -66,7 +66,7 @@ You can also view the Jupyter notebook at:
 
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
-Right-click and copy :download:`this link address to the tutorial archive</src/libtorch_demo.tar.gz>`.
+Right-click and copy :download:`this link address to the tutorial archive</src/examples/pytorch/libtorch_demo.tar.gz>`.
 
 .. code:: bash
 

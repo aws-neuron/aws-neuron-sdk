@@ -52,6 +52,10 @@ torch::jit::script::Module get_model(const std::string& filename)
 {
     torch::jit::script::Module model = torch::jit::load(filename);
 
+    // If you're using a model traced with torch-neuron >= 1.8, 
+    // the section below is no longer necessary. It was a workaround 
+    // for a runtime issue when loading identical copies of a model.
+
     // this next section adds a unique uuid to the graph, so that the neuron runtime
     // will load the graph multiple times instead of reusing a previously loaded copy
     auto graph = model.get_method("forward").function().graph();
@@ -75,5 +79,6 @@ torch::jit::script::Module get_model(const std::string& filename)
             }
         }
     }
+
     return model;
 }

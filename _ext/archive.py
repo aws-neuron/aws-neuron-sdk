@@ -5,7 +5,7 @@ import os, tarfile
 
 def archive_handler(app):
     old_cwd = os.getcwd()
-    src_dir = 'src'
+    src_dir = 'src/examples/pytorch'
     libtorch_dir = 'libtorch_demo'
     archive_name = libtorch_dir + '.tar.gz'
 
