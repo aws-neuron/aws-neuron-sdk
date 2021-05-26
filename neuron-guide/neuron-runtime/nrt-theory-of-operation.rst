@@ -184,12 +184,15 @@ This section will be updated in the future.
 RT gRPC
 -------
 
-All RT provided Neuron services are accessible via a gRPC interface.
+All RT provided Neuron services are accessible via a gRPC interface. 
 
 By default, the RT uses Unix Domain Socket gRPC endpoint:
 \**/run/neuron.sock. \*\* The endpoint can be changed by passing a -g
 command line option to neuron-rtd as explained in
 :ref:`rt-command-line-options`.
+
+Neuron RT gRPC interface ``.proto`` files are available at 
+`aws-neuron-runtime-proto <https://github.com/aws/aws-neuron-runtime-proto>`_ github repository. 
 
 NEFF (Neuron Executable File Format)
 ------------------------------------
