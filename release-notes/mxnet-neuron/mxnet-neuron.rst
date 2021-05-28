@@ -3,9 +3,27 @@
 Neuron Apache MXNet (Incubating) Release Notes
 ==============================================
 
-
-
 This document lists the release notes for MXNet-Neuron framework.
+
+Known Issues and Limitations - updated 5/28/2021
+-------------------------------------------------
+
+- CPredict API is not supported for MXNet 1.8 Neuron package.
+
+[1.8.0.1.2.1.0]
+^^^^^^^^^^^^^^^
+
+Date 5/28/2021
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.8 Neuron
+
+Resolved Issues
+---------------
+- Added support for Neuron profiler 
+
 
 [1.8.0.1.1.2.0]
 ^^^^^^^^^^^^^^^
@@ -26,12 +44,15 @@ Major New Features
 
 - Please note new API changes to support plugin mode: :ref:`ref-mxnet-neuron-compilation-python-api`
 
-Known Issues and Limitations
-----------------------------
+[1.5.1.1.4.x.x]
+^^^^^^^^^^^^^^^
 
-- Profiling is not yet available for this release.
+Date 5/28/2021
 
-- CPrdict API is not supported for this release.
+Summary
+-------
+
+- Minor enhancements.
 
 [1.5.1.1.4.4.0]
 ^^^^^^^^^^^^^^^
@@ -636,4 +657,4 @@ Other Notes
 
 -  Linux distribution supported:
 
-   -  Ubuntu 16, Ubuntu 18, Amazon Linux 2
+   -  Ubuntu 18, Amazon Linux 2

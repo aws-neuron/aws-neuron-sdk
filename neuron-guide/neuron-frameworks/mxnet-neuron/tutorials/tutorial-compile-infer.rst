@@ -62,5 +62,4 @@ You can also view the Jupyter notebook at:
 
 Clean up your instance/s
 ------------------------
-
 After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, please follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.

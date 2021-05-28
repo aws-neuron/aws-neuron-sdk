@@ -10,7 +10,7 @@ SDK Maintenance Policy
 Overview
 --------
 
-This document outlines the maintenance policy for AWS Neuron Software Development Kit (SDK) and its underlying dependencies. AWS regularly provides the Neuron SDK with updates that may contain support for new or updated APIs, new features, enhancements, bug fixes, security patches, or documentation updates. Updates may also address changes with dependencies, language runtimes, and operating systems. Neuron SDK releases are available as Conda and Pip Packages that can be installed within Amazon Machine Images (AMIs). 
+This document outlines the maintenance policy for AWS Neuron Software Development Kit (SDK) and its underlying dependencies. AWS regularly provides the Neuron SDK with updates that may contain support for new or updated APIs, new features, enhancements, bug fixes, security patches, or documentation updates. Updates may also address changes with dependencies, language runtimes, and operating systems. Neuron SDK releases are available as Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) and Pip Packages that can be installed within Amazon Machine Images (AMIs). 
 
 We recommend users to stay up-to-date with SDK releases to keep up with the latest features, security updates, and underlying dependencies. Continued use of an unsupported SDK version is not recommended and is done at the user’s discretion.
 
@@ -58,7 +58,7 @@ The life-cycle for Neuron SDK version consists of 3 phases, which are outlined b
 
 - **End-of-Support (Phase 3)**
   
-  When a Neuron SDK version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Neuron SDK versions will continue to be available via Conda or Pip packages.
+  When a Neuron SDK version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Neuron SDK versions will continue to be available via Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages.
   Use of an SDK version which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the latest Neuron SDK version.
 
 
@@ -87,9 +87,9 @@ The life-cycle for Dependency Software version consists of 4 phases, but there m
 
 - **End-of-Support (Phase 4)**
   
-  When a Dependency Software version reaches end-of support, it will no longer receive updates or releases. Previously published releases will continue to be available via Conda or Pip packages. Use of an SDK which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the new major version.
+  When a Dependency Software version reaches end-of support, it will no longer receive updates or releases. Previously published releases will continue to be available via Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages. Use of an SDK which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the new major version.
 
-  When a Dependency Software version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Dependency Software versions will continue to be available via Neuron SDK Conda or Pip packages.
+  When a Dependency Software version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Dependency Software versions will continue to be available via Neuron SDK Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages.
 
   Use of a Dependency Software version which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the latest Neuron SDK version that include the latest Dependency Software versions.
 

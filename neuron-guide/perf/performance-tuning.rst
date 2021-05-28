@@ -182,6 +182,10 @@ To selectively cast only inputs to MatMul and Conv operators, use option
 “\ ``--fp32-cast=matmult``\ “. This option may be required in certain
 networks such as BERT where additional accuracy is desired.
 
+The alternative casts provide trade off between dynamic range (bf16) and accuracy
+(fp16). The accuracy generally increases and performance decreases in order of all,
+matmult-bf16, matmult (due to more accurate transpose), matmult-fp16.
+
 .. note::
 
    this option is experimental and may cause compiler to crash; please

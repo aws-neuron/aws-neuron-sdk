@@ -35,33 +35,31 @@ ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 03/04/2021
+Known issues and limitations - updated 05/28/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. **Control flow** Neuron only supports control flow operators which
-   are static at compile time. For example static length RNN, top-k,
-   sort.
-2. **Data layout** The Neuron compiler supports multiple data layout
-   format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will
-   require Neuron to insert additional *transpose* operations, causing a
-   degradation in performance.
-3. **Object detection models** SSD-300, YOLO v3, YOLO v4 are supported.
-   More support is coming in future releases for RCNN-based models.
-4. **Primary inputs in NeuronCore Pipeline mode** When a neural network
-   is executed in NeuronCore Pipeline mode, only the first operator in a
-   neural network can receive primary inputs from the host.
-5. **Reduce data type** INT8 data type is not currently supported by the
-   Neuron compiler.
-6. **ONNX support** Support for ONNX models is limited. If generated
-   from other frameworks then please use the native model directly.
-7. **NeuronCore Pipeline:** NeuronCorePipeline mode provides low-latency
-   and high-throughput for small batch sizes. We recommend to start
-   testing with batch=1 and gradually increase batch size to fine tune
-   your model throughput and latency performance. Currently there is a
-   known issue with a compiler crash on batch size 32 using BERT-Base,
-   sequence length=128, --neuroncore-pipeline-cores = 16, but this is
-   not the optimal setting for that model.
-8. **Conv2d operator** is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
+* *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
+* *Data layout* The Neuron compiler supports multiple data layout format (NCHW, NHWC, …). Non-CNHW input/output data-layouts will require Neuron to insert additional transpose operations, causing a degradation in performance.
+* *Primary inputs in NeuronCore Pipeline mode* When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
+* *Reduce data type* INT8 data type is not currently supported by the Neuron compiler.
+* *NeuronCore Pipeline:* NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance.
+* *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
+
+[1.4.1.0]
+^^^^^^^^^
+
+Date 5/28/2021
+
+Summary
+-------
+
+- Performance improvements, and usability improvements.
+
+Major New Features
+------------------
+
+* Added uncompressed NEFF format for faster loading models prior inference. Enable it by –enable-fast-loading-neuron-binaries. Some cases of large models may be detrminentally impacted as it will not be compressed but many cases will benefit.
+* Corrected compilation error in specific arguments of ResizeBilinear operator
 
 [1.3.0.0]
 ^^^^^^^^^
@@ -314,6 +312,10 @@ Other Notes
    on Ubuntu 16 in conda environment. The symptom is neuron-cc backend
    data race error. As a workaround use Ubuntu 18, Amazon Linux 2, or
    virtual env, or use neuron-cc with flag -O2.
+
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Ubuntu 16 is no longer supported <eol-ubuntu16>`
 
 .. _neuron-cc-10152750:
 

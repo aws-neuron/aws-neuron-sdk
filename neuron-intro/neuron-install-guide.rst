@@ -31,7 +31,7 @@ For more information about Neuron and DLAMI:
    :maxdepth: 1
 
    /neuron-intro/dlami/dlami-neuron-matrix.rst
-   /neuron-intro/dlami/dlami-neuron-conda.rst
+   /neuron-intro/dlami/dlami-neuron-conda-pip.rst
    /release-notes/dlami-release-notes
 
 

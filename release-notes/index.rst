@@ -7,26 +7,26 @@ What's New
    :local:
    :depth: 2
    
-Main release notes
-------------------
+Neuron 1.14.0 (05/28/2021)
+--------------------------
 
-This release (Neuron 1.13.0) introduces higher performance , updated frameworks support, additional tutorials, and adding models and tools:
-
-* Additional compiler improvements boost performance up to 20% higher throughput compared to previous release across model types.
-* Improving usability for NLP models, with out-of-the-box 12x higher-throughput at 70% lower cost for Hugging Face Transformers pre-trained BERT Base models, see :ref:`pytorch-tutorials-neuroncore-pipeline-pytorch`.
-* Upgrade Apache MXNet (Incubating) to 1.8, where Neuron is now a plugin, see :ref:`mxnet-neuron-rn`.
-* PyTorch ResNext models now functional with new operator support, see :ref:`pytorch-neuron-rn`.
-* PyTorch Yolov5 support, see :ref:`pytorch-neuron-rn`.
-* MXNet (Incubating): Gluon API and Neuron support for NLP BERT models, see :ref:`mxnet-neuron-rn`.
-* PyTorch Convolution operator support has been extended to include most Conv1d and Conv3d variants, please see :ref:`neuron-cc-ops-pytorch`  for the complete list of operators.
-* First release of Neuron plugin for TensorBoard, see :ref:`neuron-tensorboard-rn`.
+This release (Neuron 1.14.0) introduces first release of Neuron PyTorch 1.8.1, tutorials update, performance enhancements and memory optimizations for Neuron PyTorch, Neuron TensorFlow and Neuron MXNet.
 
 
-**Software Deprecation**
+* Neuron PyTorch - First release of Neuron PyTorch 1.8.1.
+* Neuron PyTorch - Convolution operator support has been extended to include ConvTranspose2d variants.
+* Neuron PyTorch - Updated  tutorials to use Hugging Face Transformers 4.6.0.
+* Neuron PyTorch - Additional performance enhancements, memory optimizations, and bug fixes. see :ref:`pytorch-neuron-rn`.
+* Neuron Compiler - New feature  -  Uncompressed NEFF format for faster loading models prior inference. Enable it by –enable-fast-loading-neuron-binaries. Some cases of large models may be detrimentally  impacted as it will not be compressed but many cases will benefit.
+* Neuron Compiler - Additional performance enhancements, memory optimizations, and bug fixes, see :ref:`neuron-cc-rn`.
+* Neuron TensorFlow - Performance enhancements, memory optimizations, and bug fixes. see :ref:`tensorflow-neuron-rn`. 
+* Neuron MXNet - Enhancements and minor bug fixes (MXNet 1.8), see :ref:`mxnet-neuron-rn`.
+* Neuron Runtime - Performance enhancements, memory optimizations, and bug fixes. :ref:`neuron-runtime-release-notes`.
+* Neuron Tools - Minor bug fixes and enhancements.
+* Software Deprecation
 
-* :ref:`eol-conda-packages`
-* :ref:`eol-ubuntu16`
-* :ref:`eol-classic-tensorboard`
+    * End of support for Neuron Conda packages in Deep Learning AMI, users should use pip upgrade commands to upgrade to latest Neuron version in DLAMI, see `blog <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_.
+    * End of support for Ubuntu 16, see  `documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html>`_.
 
 
 Detailed release notes
@@ -40,11 +40,9 @@ Detailed release notes
    * - Software 
      - Details
       
-   * - Main     
+   * - General     
       
-     - * :ref:`main-rn`
-      
-       * :ref:`neuron-release-content`
+     - * :ref:`neuron-release-content`
       
        * :ref:`software-deprecation`
       
@@ -89,12 +87,7 @@ Detailed release notes
      - * :ref:`dlami-neuron-rn`
       
        * :ref:`DLAMI and Neuron versions Matrix <dlami-neuron-matrix>`
-      
-       * :ref:`conda-pytorch-release-notes`
-      
-       * :ref:`conda-tensorflow-release-notes`
-      
-       * :ref:`conda-mxnet-release-notes`
+
    * - Software Deprecation
    
      - * :ref:`software-deprecation`
@@ -106,5 +99,5 @@ Previous Releases
 .. toctree::
    :maxdepth: 1
 
-   neuronrelease/previous-rn
+   README
    

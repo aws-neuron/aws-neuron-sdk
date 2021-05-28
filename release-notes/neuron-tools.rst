@@ -21,6 +21,19 @@ Known Issues and Limitations 03/04/2020
    on performance. The issue is caused by the re rendering the UI on
    screen refresh. We will fix this in a future release.
 
+
+.. _1610:
+
+[1.6.1.0]
+=========
+
+Date: 05/28/2021
+
+Resolved Issues
+---------------
+
+-  Bug fixes and minor enhancements.
+
 .. _15060:
 
 [1.5.6.0]
