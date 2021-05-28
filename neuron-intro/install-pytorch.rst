@@ -5,8 +5,12 @@ Install Neuron PyTorch
 
 .. _pytorch-pip-ubuntu:
 
-Ubuntu 16,18 AMI (via Pip)
+Ubuntu 18 AMI (via Pip)
 ---------------------------
+
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Ubuntu 16 is no longer supported <eol-ubuntu16>`
 
 Configuring Linux for repository updates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -47,6 +51,10 @@ Install PyTorch
 
 Ubuntu or Amazon Linux2 AMI (via Conda)
 ---------------------------------------
+
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Neuron Conda packages in Deep Learning AMI are no longer supported<eol-conda-packages>`, for more information see `blog announcing the end of support for Neuron conda packages <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_ 
 
 .. include:: /neuron-intro/install-templates/conda-install.rst
 .. include:: /neuron-intro/install-templates/pytorch-conda-install.rst

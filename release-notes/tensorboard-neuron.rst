@@ -10,7 +10,7 @@ Neuron Plugin for TensorBoard Release Notes
    :depth: 1
 
 
-Known Issues and Limitations - Updated 4/30/2021
+Known Issues and Limitations - Updated 5/28/2021
 ================================================
 
 The following are not limitations in the Neuron plugin, but may affect your ability to
@@ -26,6 +26,18 @@ use TensorBoard.
    File "/home/ubuntu/anaconda3/envs/aws_neuron_tensorflow_p36/bin/tensorboard", line 7, in <module>
       from tensorflow.tensorboard.tensorboard import main
    ModuleNotFoundError: No module named 'tensorflow.tensorboard'
+
+.. _2.1.0.0:
+
+[2.1.0.0]
+=========
+
+Date: 5/28/2021
+
+Summary
+-------
+
+- No major changes or fixes. Released with other Neuron packages.
 
 .. _2.0.29.0:
 

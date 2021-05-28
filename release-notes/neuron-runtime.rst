@@ -27,10 +27,26 @@ of the Neuron Compiler.
 NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 0.6          \*                    All versions of RT support NEFF 0.6
-1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs
+1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs 
 ============ ===================== ===================================
 
 --------------
+
+.. _15100:
+
+[1.5.1.0]
+=========
+
+Date: 05/28/2021
+
+Improvements
+------------
+
+* Neuron driver now reserves memory to avoid memory allocation failure during bursty model loads.
+* Fixed memory corruption issue where application might quit unexpectedly.
+* General performance enhancements.
+
+
 
 .. _14120:
 

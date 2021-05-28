@@ -11,6 +11,7 @@ Neuron Apache MXNet (Incubating) Tutorials
 
    tutorial-compile-infer
    tutorial-model-serving
+   tutorial-gluon
 
 .. _mxnet-nlp:
 
@@ -19,6 +20,7 @@ Neuron Apache MXNet (Incubating) Tutorials
    :caption: Natural Language Processing
 
    bert_mxnet/index
+   tutorial-data-parallel
 
 .. _mxnet-utilize-neuron:
 

@@ -8,7 +8,7 @@ This document lists the release notes for the TensorFlow-Neuron package.
 
 .. _tf-known-issues-and-limitations:
 
-Known Issues and Limitations - updated 4/30/2021
+Known Issues and Limitations - updated 5/28/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  Issue: When compiling large models, user might run out of memory and
@@ -38,6 +38,25 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
    AttributeError: 'str' object has no attribute 'decode'.
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+
+.. _11551400:
+
+[1.15.5.1.4.0.0]
+^^^^^^^^^^^^^^^^
+
+Date: 05/28/2021
+
+Summary
+-------
+
+* Reduce the amount of input/output data movement during inference.
+* Improve parallelism for dynamic batch size inference by adopting a new sharding mechanism.
+* Reduce the amount of host memory usage during inference.
+* tfn.saved_model.compile now generates correct code when operator Split is used as output.
+* tfn.saved_model.compile now properly reads input tensor shape information from SignatureDef proto.
+* tfn.saved_model.compile now terminates properly when neuron-cc compiler argument is passed but there is no successful compilation.
+* Fix bug on some wrong internal tensor names when neuron-cc compiler crashes.
+* Other minor bug fixes.
 
 .. _11551330:
 
@@ -568,7 +587,7 @@ Other Notes
 
 -  Linux distribution supported:
 
-   -  Ubuntu 16, Ubuntu 18, Amazon Linux 2
+   -  Ubuntu 18, Amazon Linux 2
 
 
 

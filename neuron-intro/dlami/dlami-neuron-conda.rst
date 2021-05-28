@@ -1,5 +1,9 @@
 .. _neuron-conda-packages:
 
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Neuron Conda packages in Deep Learning AMI are no longer supported<eol-conda-packages>`, for more information see `blog announcing the end of support for Neuron conda packages <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_ 
+
 Deep Learning AMI (DLAMI) Neuron Conda Packages FAQ
 ===================================================
 
@@ -71,6 +75,9 @@ Starting with the DLAMI v26.0, the `Deep Learning AMI with Conda Options <https:
 
    Only Ubuntu 16,18 and Amazon Linux2 DLAMI are supported (Amazon Linux is not supported)   
 
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Ubuntu 16 is no longer supported <eol-ubuntu16>`
 
 What version of Neuron Conda packages are included in latest DLAMI version? 
 ----------------------------------------------------------------------------

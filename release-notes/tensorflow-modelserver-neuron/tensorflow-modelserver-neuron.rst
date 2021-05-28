@@ -6,6 +6,19 @@ TensorFlow-Model-Server-Neuron Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+.. _11501400:
+
+[1.15.0.1.4.0.0]
+^^^^^^^^^^^^^^^^
+
+Date: 05/24/2021
+
+Summary
+-------
+
+1. Remove SIGINT/SIGTERM handler and rely on mechnisms provided by Neuron runtime for resource cleanup.
+2. Uncap protobuf size limit.
+
 .. _11501330:
 
 [1.15.0.1.3.3.0]

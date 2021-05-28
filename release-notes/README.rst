@@ -1,7 +1,7 @@
 .. _main-rn:
 
-Neuron Release Notes
-====================
+Previous Neuron Release Notes
+=============================
 
 .. _03-04-2021-rn:
 

@@ -10,29 +10,36 @@ This document lists the current release notes for AWS Neuron Kubernetes
 (k8) components. Neuron K8 components include a device plugin and a
 scheduler extension to assist with deployment and management of inf1
 nodes within Kubernetes clusters. Both components are offered as
-pre-built containers in ECR ready for deployment.
+pre-built containers in Public ECR and ready for deployment.
 
 -  **Device Plugin:**
-   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-device-plugin:latest
+   public.ecr.aws/neuron/neuron-device-plugin:1.5.3.0
 -  **Neuron Scheduler:**
-   790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-scheduler:latest
+   public.ecr.aws/neuron/neuron-scheduler:1.5.3.0
 
 It's recommended to pin the version of the components used and to never
 use the "latest" tag. To get the list of image tags, please refer to
-these notes or pull from the ECR directy like so:
+these notes or check the image tags on the repo directly.
 
-::
-
-   aws ecr list-images --registry-id 790709498068 --repository-name  neuron-device-plugin --region us-west-2
-   aws ecr list-images --registry-id 790709498068 --repository-name  neuron-scheduler --region us-west-2
 
 To Pull the Images from ECR:
 
 ::
 
-   aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 790709498068.dkr.ecr.us-west-2.amazonaws.com
-   docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin
-   docker pull  790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler
+   docker pull  public.ecr.aws/neuron/neuron-device-plugin:1.5.3.0
+   docker pull  public.ecr.aws/neuron/neuron-scheduler:1.5.3.0
+
+.. _1610:
+
+[1.6.1.0]
+=========
+
+Date: 05/28/2021
+
+Summary
+-------
+
+Minor internal enhancements.
 
 .. _1530:
 

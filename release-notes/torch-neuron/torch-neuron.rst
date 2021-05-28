@@ -7,7 +7,7 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 4/30/2021
+Known Issues and Limitations - Updated 5/28/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -27,6 +27,37 @@ you can successfully torch.neuron.trace
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+
+.. _neuron-torch-1410:
+
+[1.8.1.1.4.1.0]
+^^^^^^^^^^^^^^^
+
+Date: 5/28/2021
+
+Summary
+-------
+
+* Added support for PyTorch 1.8.1
+
+    * Models compatibility
+
+        * Models compiled with previous versions of Neuron PyTorch (<1.8.1) are compatible with Neuron PyTorch 1.8.1.
+        * Models compiled with Neuron PyTorch 1.8.1 are not backward compatible with previous versions of Neuron PyTorch (<1.8.1) .
+        
+    * Updated  tutorials to use Hugging Face Transformers 4.6.0.
+    * Added a new set of forward operators (forward_v2) 
+    * Host memory allocation when loading the same model on multiple NeuronCores is significantly reduced
+    * Fixed an issue where models would not deallocate all memory within a python session after being garbage collected.
+    * Fixed a TorchScript/C++ issue where loading the same model multiple times would not use multiple NeuronCores by default.
+
+
+* Fixed logging to no longer configure the root logger.
+* Removed informative messages that were produced during compilations as warnings.  The number of warnings reduced significantly.
+* Convolution operator support has been extended to include ConvTranspose2d variants.
+* Reduce the amount of host memory usage during inference.
+
 
 .. _neuron-torch-1350:
 
@@ -466,8 +497,7 @@ Other notes
 
 -  Linux distribution supported:
 
-   -  DLAMI Conda 26.0 and beyond running on Ubuntu 16, Ubuntu 18,
-      Amazon Linux 2 (using Python 3.6 Conda environments)
-   -  Other AMIs based on Ubuntu 16, 18
+   -  DLAMI Ubuntu 18 and Amazon Linux 2 (using Python 3.6 Conda environments)
+   -  Other AMIs based on Ubuntu 18
    -  For Amazon Linux 2 please install Conda and use Python 3.6 Conda
       environment

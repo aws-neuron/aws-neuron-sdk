@@ -1,5 +1,9 @@
 .. _conda-pytorch-release-notes:
 
+.. warning::
+
+   :ref:`Starting with Neuron 1.14.0, Neuron Conda packages in Deep Learning AMI are no longer supported<eol-conda-packages>`, for more information see `blog annoucing the end of support for Neuron conda packages <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_ 
+   
 Conda-PyTorch Release notes
 ============================
 
