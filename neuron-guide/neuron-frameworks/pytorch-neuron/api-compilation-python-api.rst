@@ -97,7 +97,7 @@ Example Usage
 
 Example (tracing a function):
 
-::
+.. code-block:: python
 
    import torch
    import torch_neuron
@@ -111,9 +111,9 @@ Example (tracing a function):
    # `traced_foo` can now be run with the TorchScript interpreter or saved
    # and loaded in a Python-free environment
 
-Example (tracing an existing module)::
+Example (tracing an existing module):
 
-::
+.. code-block:: python
 
    import torch
    import torch_neuron
@@ -144,7 +144,7 @@ The following is an example usage of the compilation Python API, with
 default compilation arguments, using a pretrained torch.nn.Module (in
 this case :
 
-::
+.. code-block:: python
 
    import torch
    import torch_neuron
