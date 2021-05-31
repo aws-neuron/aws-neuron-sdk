@@ -1,12 +1,7 @@
 .. _neuron-monitor-ug:
 
-User Guide for Neuron Monitor *(BETA)*
-======================================
-
-WARNING: This tool is currently in "Beta". Metric organization and
-naming might change during the Beta period.
-
---------------
+User Guide for Neuron Monitor
+=============================
 
 **neuron-monitor** collects metrics and stats from the Neuron Runtimes
 running on the system and streams the collected data to ``stdout`` in
