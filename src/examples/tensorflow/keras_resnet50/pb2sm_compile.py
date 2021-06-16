@@ -42,10 +42,7 @@ compiled_saved_model_dir = saved_model_dir + "_compiled_b" + str(batch_size) + "
 shutil.rmtree(compiled_saved_model_dir + "/1", ignore_errors=True)
 
 print("\n*** Batch size {}, num NeuronCores {} (input shape: {}, saved model dir: {}) ***\n".format(batch_size, args.neuroncore_pipeline_cores, img_arr.shape, compiled_saved_model_dir))
-compiler_args = ['--batching_en', '--rematerialization_en', '--spill_dis',
-                 '--sb_size', str((batch_size + 6)*10), 
-                 '--enable-replication', 'True',
-                 '--neuroncore-pipeline-cores', str(args.neuroncore_pipeline_cores)]
+compiler_args = ['--neuroncore-pipeline-cores', str(args.neuroncore_pipeline_cores)]
 if args.debug_args:
     compiler_args.extend(args.debug_args.split(" "))
 
@@ -82,10 +79,10 @@ if perc_on_inf < 50:
         perc_on_inf = rslts['OnNeuronRatio'] * 100
         if perc_on_inf < 50:
             print("\nERROR: Retry compilation finished in {:.0f} seconds with less than 50% operations placed on Inferentia ({:.1f}%)\n".format(delta, perc_on_inf))
-        else:    
+        else:
             print("\nINFO: Retry compilation finished in {:.0f} seconds with {:.1f}% operations placed on Inferentia\n".format(delta, perc_on_inf))
             compile_success = True
-else:    
+else:
     print("\nINFO: Compilation finished in {:.0f} seconds with {:.1f}% operations placed on Inferentia\n".format(delta, perc_on_inf))
     compile_success = True
 
