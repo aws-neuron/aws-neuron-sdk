@@ -7,6 +7,7 @@ Tensorflow-Neuron 1.15 - Keras ResNet-50 Optimization Tutorial
    :local:
    :depth: 2
 
+
 Overview
 --------
 
@@ -16,9 +17,15 @@ to enable both compilation and deployment (inference) on the same instance.
 The following example shows how to compile a ResNet-50 network using
 various batching parameters to find the configuration that maximizes throughput.
 
-.. note::
+If you already launched an Inf1 instance and have Neuron <framework> DLAMI environment ready, tutorial is available as a Jupyter notebook at :tensorflow-neuron-src:`keras_resnet50.ipynb <keras_resnet50.ipynb>` and instructions can be viewed at:
 
-Model compilation can be executed on a compute instance (e.g. C5 instance) for later deployment. Follow the same EC2 Developer Flow Setup using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
+.. toctree::
+   :maxdepth: 1
+
+   /src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb
+
+Instructions of how to setup Neuron Tensorflow environment and run the tutorial as a Jupyter notebook are available in the next sections.
+
 
 .. _tensorflow-keras_resnet50-env-setup:
 
@@ -39,7 +46,7 @@ After connecting to the instance from the terminal, clone the Neuron Github repo
 .. code:: bash
 
    git clone https://github.com/aws/aws-neuron-sdk
-   cd ~/aws-neuron-sdk/src/examples/tensorflow/keras_resnet50/
+   cd ~/aws-neuron-sdk/src/examples/tensorflow/
 
 
 
