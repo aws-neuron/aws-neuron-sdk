@@ -95,6 +95,8 @@ Please follow the installation steps in :ref:`neuron-install-guide` to install `
 package and then restart runtime using
 ``sudo systemctl restart neuron-rtd`` command.
 
+.. _neuron-driver-installation-fails:
+
 Neuron Driver installation fails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
