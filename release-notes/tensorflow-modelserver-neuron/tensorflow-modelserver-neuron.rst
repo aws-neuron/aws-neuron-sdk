@@ -6,6 +6,20 @@ TensorFlow-Model-Server-Neuron Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+
+.. _11501510:
+
+[1.15.0.1.5.1.0]
+^^^^^^^^^^^^^^^^^^^
+
+Date: 07/02/2021
+
+Summary
+-------
+
+No change. See :ref:`tensorflow-neuron-release-notes` for related TensorFlow-Neuron release
+notes.
+
 .. _11501400:
 
 [1.15.0.1.4.0.0]

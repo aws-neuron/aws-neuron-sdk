@@ -7,7 +7,7 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 5/28/2021
+Known Issues and Limitations - Updated 07/02/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -27,6 +27,25 @@ you can successfully torch.neuron.trace
    operator, the variants that return a tuple with arg max now return
    NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+
+.. _neuron-torch-141x:
+
+[1.8.1.1.5.7.0]
+^^^^^^^^^^^^^^^
+
+Date: 07/02/2021
+
+Summary
+-------
+
+- Added support for dictionary outputs using ``strict=False`` flag. See
+  :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/troubleshooting-guide.rst`.
+- Updated ``aten::batch_norm`` to correctly implement the ``affine`` flag.
+- Added support for ``aten::erf`` and ``prim::DictConstruct``. See
+  :ref:`neuron-cc-ops-pytorch`.
+- Added dynamic batch support. See
+  :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`.
 
 
 .. _neuron-torch-1410:

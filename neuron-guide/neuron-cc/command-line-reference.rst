@@ -52,7 +52,7 @@ neuron-cc compile
 
 ::
 
-   neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--output <value>] [--enable-fast-loading-neuron-binaries]
+   neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--enable-fast-loading-neuron-binaries] [--enable-fast-context-switch] [--output <value>] 
 
 Description
 ~~~~~~~~~~~
@@ -141,6 +141,12 @@ Options
   output (NEFF archive) in uncompressed format which results
   in faster loading of the archive during inference.
 
+- ``--enable-fast-context-switch`` : Optimize for faster model switching 
+  rather than inference latency. This results in overall faster system
+  performance when your application switches between models frequently
+  on the same neuron core (or set of cores). The optimization 
+  triggered by this option for example defers loading some weight
+  constants until the start of inference.
 
 STDOUT
 ~~~~~~

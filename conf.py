@@ -37,7 +37,13 @@ master_doc = 'index'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinxcontrib.contentui','nbsphinx','sphinx.ext.extlinks','archive']
+extensions = [
+    'sphinxcontrib.contentui',
+    'nbsphinx',
+    'sphinx.ext.extlinks',
+    'archive',
+    'sphinx.ext.intersphinx',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -87,6 +93,11 @@ extlinks = {
             ,'neuron-monitor-src': ('https://github.com/aws/'+projectblob+'/src/examples/neuron-monitor/%s', '')      
             }
 
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'torch': ('https://pytorch.org/docs/master/', None),
+}
 
 # -- Options for HTML output -------------------------------------------------
 
