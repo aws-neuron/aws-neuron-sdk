@@ -8,6 +8,13 @@ To see a list of supported operators for MXNet, run the following command:
 
 ``neuron-cc list-operators --framework MXNET``
 
+.. _neuron-compiler-release-1410:
+
+Neuron Compiler Release [1.4.1.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No changes
+
 .. _neuron-compiler-release-1400:
 
 Neuron Compiler Release [1.4.0.0]

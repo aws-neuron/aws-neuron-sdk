@@ -8,7 +8,7 @@ Release Content
    :depth: 2
 
 
-Current Release - Neuron v1.14.0 (May 28th 2021)
+Current Release - Neuron v1.14.1 (July 2nd 2021)
 ------------------------------------------------
 
 
@@ -40,7 +40,7 @@ ML Frameworks supported versions
    * - TensorBoard
      - * TensorBoard 1.15
 
-       * Neuron Plugin for TensorBoard 2.0.20.0
+       * Neuron Plugin for TensorBoard 2.1.0.0
 
 Dependency Software Supported Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,11 +70,11 @@ Neuron Packages
    * - Software
      - Included Versions
    * - Neuron Compiler
-     - neuron_cc-1.4.1
+     - neuron_cc-1.5.5
    * - Neuron Runtime
-     - aws-neuron-runtime-1.5.0
+     - aws-neuron-runtime-1.6.4
    * - Neuron Tools
-     - aws-neuron-tools-1.6.0
+     - aws-neuron-tools-1.7.3
    * - Neuron Kernel module
      - aws-neuron-dkms-1.5.0
    * - Neuron Kubernetes Plugin

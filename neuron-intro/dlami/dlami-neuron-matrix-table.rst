@@ -6,6 +6,10 @@
    * - DLAMI version
      - Default Neuron version
      - How to upgrade to latest Neuron
+     
+   * - v46.0 
+     - v1.14.0 (May 2021)
+     - see :ref:`dlami-neuron-conda-env-pip-packages`
 
    * - v43.0 
      - v1.12.2 (Mar 2021)

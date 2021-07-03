@@ -5,10 +5,36 @@ Neuron Apache MXNet (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
-Known Issues and Limitations - updated 5/28/2021
--------------------------------------------------
+[1.5.1.1.6.1.0]
+^^^^^^^^^^^^^^^
 
-- CPredict API is not supported for MXNet 1.8 Neuron package.
+Date 07/02/2021
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
+
+[1.8.0.1.3.0.0]
+^^^^^^^^^^^^^^^
+
+Date 07/02/2021
+
+Summary
+-------
+
+Support for Autoloop, Cpredict API and minor bug fixes and enhancements for MXNet 1.8 Neuron.
+
+Major New Features
+------------------
+
+- Added support for Autoloop feature for MXNet 1.8 Neuron.
+
+Resolved Issues
+---------------
+
+- Added support for CPredict API.
+
 
 [1.8.0.1.2.1.0]
 ^^^^^^^^^^^^^^^

@@ -25,6 +25,7 @@ PyTorch Tutorials
 
    pretrained_bert_tutorial
    tutorial-libtorch
+   transformers-marianmt
 
 .. _pytorch-utilize-neuron:
 

@@ -8,7 +8,7 @@ This document lists the release notes for the TensorFlow-Neuron package.
 
 .. _tf-known-issues-and-limitations:
 
-Known Issues and Limitations - updated 5/28/2021
+Known Issues and Limitations - updated 07/02/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  Issue: When compiling large models, user might run out of memory and
@@ -38,6 +38,19 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
    AttributeError: 'str' object has no attribute 'decode'.
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+
+.. _11551510:
+
+[1.15.5.1.5.1.0]
+^^^^^^^^^^^^^^^^
+
+Date: 07/02/2021
+
+Summary
+-------
+
+* Bug fixes regarding scalar inputs/outputs.
+* Minor performance improvements when dynamic batch size is turned on or when model is small.
 
 .. _11551400:
 

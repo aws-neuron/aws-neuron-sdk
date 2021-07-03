@@ -35,7 +35,7 @@ ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 
-Known issues and limitations - updated 05/28/2021
+Known issues and limitations - updated 07/02/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
@@ -44,8 +44,30 @@ Known issues and limitations - updated 05/28/2021
 * *Reduce data type* INT8 data type is not currently supported by the Neuron compiler.
 * *NeuronCore Pipeline:* NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance.
 * *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
+* *Conv3d operator* performance is limited with small number of input chanels
 
-[1.4.1.0]
+[1.5.5.0]
+^^^^^^^^^
+
+Date 07/02/2021
+
+Summary
+-------
+
+- Robustness and performance improvements.
+
+Major New Features
+------------------
+
+* Added --enable-fast-context-switch to optimize for
+  faster model switching rather than inference latency.
+* Deprecated support for ONNX
+* Improved robustness of Conv3d
+* Corrected compilation error "too many instructions" in DLRM model
+
+
+
+[1.4.0.0]
 ^^^^^^^^^
 
 Date 5/28/2021

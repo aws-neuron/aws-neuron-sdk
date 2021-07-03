@@ -82,7 +82,7 @@ model, with a batch-size of 5:
 .. note::
 
    Depending on the neural network size, Neuron will have a maximum
-   batch size that works optimally on Inferentia. Currently, FP16
+   batch size that works optimally on Inferentia. Currently, float16
    ResNet50 is supported up to batch 5 only. Additionally, ResNet50 with
    FP32 input is limited to batch 1 only. These limitations are being
    addressed and will be fixed in a future releases of the compiler. If
@@ -166,34 +166,33 @@ Mixed Precision
 ~~~~~~~~~~~~~~~
 
 Reduced precision data-types are typically used to improve performance.
-In the example below, we convert all operations to FP16. Neuron also
+In the example below, we convert all operations to float16. Neuron also
 supports conversion to a mixed-precision graph, wherein only the weights
 and the data inputs to matrix multiplies and convolutions are converted
-to FP16, while the rest of the intermediate results are kept at FP32.
+to bfloat16, while the rest of the intermediate results are kept at float32.
 
-The Neuron compiler is able to automatically convert (also referred to
-as auto-cast) from FP32 model to bfloat16 for execution on Inferentia.
-While the larger (compared to fp16 model) size of input/output tensors
-being transferred to/from Inferentia may add some execution overhead,
-this feature will, in most cases, produce similar accuracy to FP32 and
-will not require to downcast or retrain models.
+By default the Neuron compiler automatically converts (also referred to
+as auto-cast) from float32 model to bfloat16 for execution on Inferentia.
+The automatic conversion preserves the float32 input and output tensors.
+This feature, in most cases, produces similar accuracy to float32 and
+does not require you to downcast or retrain models.
 
-To selectively cast only inputs to MatMul and Conv operators, use option
-“\ ``--fp32-cast=matmult``\ “. This option may be required in certain
+There are several --fp32-cast modes. To selectively cast only inputs to MatMul
+and Conv operators, use option
+ ``--fp32-cast=matmult``. This option may be required in certain
 networks such as BERT where additional accuracy is desired.
 
-The alternative casts provide trade off between dynamic range (bf16) and accuracy
-(fp16). The accuracy generally increases and performance decreases in order of all,
-matmult-bf16, matmult (due to more accurate transpose), matmult-fp16.
+The casts modes provide trade off between dynamic range (matmult-bf16)
+and accuracy (matmult-fp16). The accuracy generally increases and
+ performance decreases in order
+of all (the default), matmult-bf16, matmult (due to more accurate transpose),
+matmult-fp16.
 
-.. note::
-
-   this option is experimental and may cause compiler to crash; please
-   file issue to request further support.
-
-For a more efficient data transfer and use of Inferentia, using a
-pre-trained FP16 model is suggested. If not, it is also possible to use
-a pre-casting script to convert FP32 model to be used as FP16.
+The Neuron compiler preserves the input and output tensor types.
+For large tensors the float32 inputs/outputs being transferred to/from Inferentia
+may add some execution overhead. Therefore using a
+pre-trained float16 model is suggested for fastest performance. If not available,
+it is also possible to use a pre-casting script to convert float32 model to be used as float16.
 
 Operator support
 ~~~~~~~~~~~~~~~~

@@ -33,7 +33,7 @@ if [ ! -e "venv" ]; then
     python3 -m venv venv
     . venv/bin/activate
     pip install -U pip
-    pip install torch-neuron~=1.7 --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    pip install torch-neuron==1.7.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
     deactivate
 fi
 cp -f $(find ./venv -name libneuron_op.so) libtorch/lib/

@@ -3,8 +3,6 @@
 Supported operators [PyTorch]
 =============================
 
-
-
 Current operator lists may be generated with these commands inside
 python:
 
@@ -12,6 +10,27 @@ python:
 
    import torch.neuron
    print(*torch.neuron.get_supported_operations(), sep='\n')
+
+
+.. _pytorch-neuron-release-1570:
+
+PyTorch Neuron Release [1.5.7.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added:
+
+::
+
+    aten::erf
+    prim::DictConstruct
+
+
+.. _pytorch-neuron-release-1410:
+
+PyTorch Neuron Release [1.4.1.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No change
 
 .. _pytorch-neuron-release-1350:
 
