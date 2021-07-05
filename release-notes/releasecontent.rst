@@ -1,6 +1,6 @@
 .. _neuron-release-content:
 
-Release Content
+Release Details
 ===============
 
 .. contents::
