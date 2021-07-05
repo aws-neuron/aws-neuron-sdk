@@ -23,32 +23,32 @@ Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron 
    :maxdepth: 1
    :caption: Getting Started
 
-   /neuron-intro/get-started
-   Start with PyTorch <neuron-guide/neuron-frameworks/pytorch-neuron/index>
-   Start with TensorFlow <neuron-guide/neuron-frameworks/tensorflow-neuron/index>
-   Start with Apache MXNet (Incubating) <neuron-guide/neuron-frameworks/mxnet-neuron/index>
-   Tutorials <neuron-intro/tutorials>
-   /release-notes/index
-   /release-notes/releasecontent
-   /neuron-intro/releaseinfo
+   QuickStart </neuron-intro/get-started>
+   PyTorch </neuron-guide/neuron-frameworks/pytorch-neuron/index>
+   TensorFlow </neuron-guide/neuron-frameworks/tensorflow-neuron/index>
+   Apache MXNet (Incubating) </neuron-guide/neuron-frameworks/mxnet-neuron/index>
+   Tutorials </neuron-intro/tutorials>
+   What’s New </release-notes/index>
 
 .. toctree::
    :maxdepth: 1
    :caption: Learning Neuron
 
+   Neuron Features </neuron-guide/technotes/index>
    Neuron Developer Flows </neuron-intro/devflows/dev-flows>
-   neuron-guide/technotes/index
-   Neuron Compiler <neuron-guide/neuron-cc/index>
-   Neuron Runtime <neuron-guide/neuron-runtime/index>
-   Neuron Tools <neuron-guide/neuron-tools/index>
-   Containers <neuron-deploy/index>
-   Application Notes <neuron-guide/appnotes>
-   /neuron-intro/neuron-install-guide   
+   Containers </neuron-deploy/index>
+   Application Notes </neuron-guide/appnotes>
+   Neuron FAQ </faq>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Neuron Frameworks
-   
-   .. neuron-guide/neuron-frameworks/pytorch-neuron/index
-   .. neuron-guide/neuron-frameworks/tensorflow-neuron/index
-   .. neuron-guide/neuron-frameworks/mxnet-neuron/index
+   :caption: Neuron SDK
+
+   Setup </neuron-intro/neuron-install-guide>
+   Neuron Compiler </neuron-guide/neuron-cc/index>
+   Neuron Runtime </neuron-guide/neuron-runtime/index>
+   Neuron Tools </neuron-guide/neuron-tools/index> 
+   Release Details </release-notes/releasecontent>
+   Roadmap </neuron-intro/roadmap-readme>
+   Support </neuron-intro/releaseinfo>
+

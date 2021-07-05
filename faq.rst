@@ -1,10 +1,13 @@
-FAQ
-===
+Neuron FAQ
+==========
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Introduction
+   :maxdepth: 1
 
-   neuron-intro/FAQ
-   neuron-guide/neuron-cc/faq.rst
-   neuron-guide/neuron-runtime/faq.rst
+   General <neuron-intro/FAQ>
+   Getting Started <neuron-intro/getting-started-faq>
+   Troubleshooting <neuron-intro/trouble-shooting-faq>
+   Contributing Guidelines <neuron-intro/contributing-faq>   
+   Compiler <neuron-guide/neuron-cc/faq>
+   Runtime <neuron-guide/neuron-runtime/faq>
+   Roadmap <neuron-intro/roadmap-faq>
