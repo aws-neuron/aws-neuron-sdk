@@ -44,7 +44,7 @@ Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron 
    :maxdepth: 1
    :caption: Neuron SDK
 
-   Setup </neuron-intro/neuron-install-guide>
+   Setup Guide </neuron-intro/neuron-install-guide>
    Neuron Compiler </neuron-guide/neuron-cc/index>
    Neuron Runtime </neuron-guide/neuron-runtime/index>
    Neuron Tools </neuron-guide/neuron-tools/index> 
