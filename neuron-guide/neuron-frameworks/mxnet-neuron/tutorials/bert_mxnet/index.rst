@@ -1,3 +1,5 @@
+.. _mxnet-bert-tutorial:
+
 Tutorial: Apache MXNet (Incubating) BERT in a Jupyter notebook
 =====================================================================
 

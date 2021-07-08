@@ -13,56 +13,11 @@ Overview
 
 This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
-.. note::
 
-  Model compilation can be executed on a non-inf1 instance for later deployment. Follow the same :ref:`EC2 Developer Flow Setup <ec2-then-ec2-devflow>` using other instance families and leverage Amazon Simple Storage Service (S3) to share the compiled models between different instances.
-
-This tutorial is divided into the following parts:
-
-* :ref:`libtorch-setup` - Steps needed to setup the compilation and deployment environments that will enable you to run this tutorial. In this tutorial, a single inf1 instance will provide both the compilation and deployment enviroments.
-* :ref:`libtorch-run` - Steps needed to compile and run the example app.
-* :ref:`libtorch-benchmark` - Steps needed to benchmark the model.
-* :ref:`libtorch-cleanup` - Steps needed to cleanup instance used for this tutorial.
-
-
-.. _libtorch-setup:
-
-Setup the Enviornment
------------------------------------------
-
-Launch Inf1 instance by following the below steps, and make sure to choose an inf1.6xlarge instance running the DLAMI.
-
-.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
-
-
-.. _libtorch-run:
-
-Run the Tutorial
+Run the tutorial
 ----------------
 
-After connecting to the instance from the terminal, clone the Neuron Github repository to the EC2 instance and then change the working directory to the tutorial directory:
-
-.. code:: bash
-
-  git clone https://github.com/aws/aws-neuron-sdk.git
-  cd aws-neuron-sdk/src/examples/pytorch
-
-
-The Jupyter notebook is available as a file with the name :pytorch-neuron-src:`tutorial_pretrained_bert.ipynb <bert_tutorial/tutorial_pretrained_bert.ipynb>`, you can either run the Jupyter notebook from a browser or run it as a script from terminal:
-
-
-* **Running tutorial from browser**
-
-  * First setup and launch the Jupyter notebook on your local browser by following instructions at :ref:`Running Jupyter Notebook Browser`
-  * Open the Jupyter notebook from the menu and follow the instructions
-
-
-You can also view the Jupyter notebook at:
-
-.. toctree::
-   :maxdepth: 1
-
-   /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
+First run the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
 
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
@@ -204,7 +159,4 @@ Finally, run the example app directly to benchmark the BERT model.
 
 .. _libtorch-cleanup:
 
-Clean up your instance/s
-------------------------
 
-After you've finished with the instance/s that you created for this tutorial, you should clean up by terminating the instance/s, follow instructions at `Clean up your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-clean-up-your-instance>`_.
