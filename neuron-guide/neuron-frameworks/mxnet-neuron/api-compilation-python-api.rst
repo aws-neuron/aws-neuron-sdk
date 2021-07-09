@@ -1,7 +1,7 @@
 .. _ref-mxnet-neuron-compilation-python-api:
 
-Reference: MXNet-Neuron Compilation Python API
-==============================================
+Neuron Apache MXNet (Incubating) Compilation Python API
+=======================================================
 
 The MXNet-Neuron compilation Python API provides a method to compile
 model graph for execution on Inferentia.

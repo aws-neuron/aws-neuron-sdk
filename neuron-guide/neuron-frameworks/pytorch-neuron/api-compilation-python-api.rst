@@ -1,5 +1,5 @@
-Reference: PyTorch-Neuron trace python API
-==========================================
+PyTorch-Neuron trace python API
+================================
 
 The PyTorch-Neuron trace Python API provides a method to generate
 PyTorch models for execution on Inferentia, which can be serialized as

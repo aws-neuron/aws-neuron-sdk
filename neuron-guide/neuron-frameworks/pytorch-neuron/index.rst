@@ -11,6 +11,7 @@ Neuron is integrated into PyTorch, and provides you with a familiar environment 
 
    env-setup
    Tutorials <tutorials/index>
-   Reference manuals <refman>
+   api-compilation-python-api
+   /release-notes/neuron-cc-ops/neuron-cc-ops-pytorch
    troubleshooting-guide
    rn
