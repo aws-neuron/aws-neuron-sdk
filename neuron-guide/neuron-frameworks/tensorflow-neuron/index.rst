@@ -11,5 +11,6 @@ Neuron is integrated into TensorFlow, and provides you with a familiar environme
 
    env-setup
    Tutorials <tutorials/index>
-   Reference manuals <refman>
+   api-compilation-python-api
+   /release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow
    rn

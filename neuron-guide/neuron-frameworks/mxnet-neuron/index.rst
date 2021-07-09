@@ -11,6 +11,7 @@ Neuron is integrated into MXNet, and provides you with a familiar environment to
 
    env-setup
    Tutorials <tutorials/index>
-   Reference manuals <refman>
+   api-compilation-python-api
+   /release-notes/neuron-cc-ops/neuron-cc-ops-mxnet
    troubleshooting-guide
    rn
