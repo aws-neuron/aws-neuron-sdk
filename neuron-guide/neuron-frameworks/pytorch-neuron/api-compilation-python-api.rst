@@ -161,6 +161,36 @@ default compilation arguments, using a pretrained :class:`torch.nn.Module`:
     model_neuron = torch.neuron.trace(model, image)
 
 
+.. _compiling-models-with-kwargs:
+
+Compiling models with kwargs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example uses the :code:`strict=False` flag to compile a model with
+dictionary outputs.
+
+.. code-block:: python
+
+    import torch
+    import torch_neuron
+    import torch.nn as nn
+
+    class Model(nn.Module):
+        def __init__(self):
+            super(Model, self).__init__()
+            self.conv = nn.Conv2d(1, 1, 3)
+
+        def forward(self, x):
+            return {'conv': self.conv(x) + 1}
+
+    model = Model()
+    model.eval()
+
+    inputs = torch.rand(1, 1, 3, 3)
+
+    # use the strict=False kwarg to compile a model with dictionary outputs
+    neuron_forward = torch.neuron.trace(model, inputs, strict=False)
+
+
 Dynamic Batching
 ~~~~~~~~~~~~~~~~
 This example uses the optional :code:`dynamic_batch_size` option in order to
