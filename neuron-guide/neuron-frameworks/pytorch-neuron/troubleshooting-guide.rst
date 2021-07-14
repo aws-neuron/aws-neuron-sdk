@@ -183,27 +183,26 @@ Inferentia.
     loaded = torch.jit.load('model.pt')
 
 Alternatively, for usage scenarios in which the model configuration is static
-during inference, the dynamic flags can be hardcoded to in a wrapper to make
+during inference, the dynamic flags can be hardcoded in a wrapper to make
 the model torch-jit-traceable and enable compiling the entire model for Inferentia.
 In this example, we assume the :code:`add_offset` flag is always
 :code:`True` during inference, so we can hardcode this conditional path in the
-:code:`Outer` wrapper to remove the dynmaic behavior and compile the entire
+:code:`Static` wrapper to remove the dynmaic behavior and compile the entire
 model for Inferentia.
 
 .. code-block:: python
 
-    class Outer(nn.Module):
+    class Static(nn.Module):
         def __init__(self):
             super().__init__()
-            self.inner = Inner()
+            self.outer = Outer()
 
         def forward(self, x):
-            # Harcode `add_offset=True` path
-            base = self.inner(x)
-            return base + 1
+            # hardcode `add_offset=True`
+            output = self.outer(x, add_offset=True)
+            return output
 
-    model = Outer()
-    inputs = torch.rand(1, 1, 3, 3)
+    model = Static()
 
-    # We can now compile the entire model by hardcoding that `add_offset=True` in the Outer wrapper
+    # We can now compile the entire model because `add_offset=True` is hardcoded in the Static wrapper
     model_neuron = torch.neuron.trace(model, inputs)
