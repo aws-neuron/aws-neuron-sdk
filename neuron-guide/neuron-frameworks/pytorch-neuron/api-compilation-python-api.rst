@@ -163,10 +163,12 @@ default compilation arguments, using a pretrained :class:`torch.nn.Module`:
 
 .. _compiling-models-with-kwargs:
 
-Compiling models with kwargs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiling models with torch.jit.trace kwargs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This example uses the :code:`strict=False` flag to compile a model with
-dictionary outputs.
+dictionary outputs. Similarly, any other keyword argument of
+:func:`torch.jit.trace` can be passed directly to
+:func:`torch_neuron.trace` so that it is passed to the underlying trace call.
 
 .. code-block:: python
 
@@ -188,7 +190,8 @@ dictionary outputs.
     inputs = torch.rand(1, 1, 3, 3)
 
     # use the strict=False kwarg to compile a model with dictionary outputs
-    neuron_forward = torch.neuron.trace(model, inputs, strict=False)
+    # the model output format does not change
+    model_neuron = torch.neuron.trace(model, inputs, strict=False)
 
 
 Dynamic Batching
