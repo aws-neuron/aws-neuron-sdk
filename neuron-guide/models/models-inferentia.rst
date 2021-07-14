@@ -50,12 +50,12 @@ While many models perform very well with subgraphs running on CPU, especially if
 Variable input size
 ^^^^^^^^^^^^^^^^^^^
 
-With Neuron, the input size shape is fixed at compile time. If your application requires multiple input sizes, we recommend using padding or bucketing techniques.  Padding requires you to compile your models to the largest expected input size, and test your application performance. If performance is not within your targets, you can consider implementing a bucketing scheme. With bucketing, you compile your model to a few input size categories that represent the range of possible input sizes. with some applications, bucketing will help optimize compute utilization compared to padding, especially if small input sizes are more frequent than large input sizes. If the varying input dimension is the batch size.
+With Neuron, the input size shape is fixed at compile time. If your application requires multiple input sizes, we recommend using padding or bucketing techniques.  Padding requires you to compile your models to the largest expected input size, and test your application performance. If performance is not within your targets, you can consider implementing a bucketing scheme. With bucketing, you compile your model to a few input size categories that represent the range of possible input sizes. with some applications, bucketing will help optimize compute utilization compared to padding, especially if small input sizes are more frequent than large input sizes. If the varying input dimension is the batch size, dynamic batching can be used in TensorFlow-Neuron and PyTorch-Neuron to do inference using larger batch size than the compiled batch size, see :ref:`neuron-batching`.
 
 Control Flow
 ^^^^^^^^^^^^
 
-Models that contain control flow operators (see :ref:`pytorch-tutorials-marianmt`) may require specific handling to ensure successful compilation with Neuron.
+Models that contain control flow operators (see :ref:`/src/examples/pytorch/transformers-marianmt.ipynb`) may require specific handling to ensure successful compilation with Neuron.
 
 Dynamic shapes
 ^^^^^^^^^^^^^^
