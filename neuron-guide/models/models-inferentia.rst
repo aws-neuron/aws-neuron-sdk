@@ -22,12 +22,12 @@ Many popular models used in today’s leading AI applications run out-of-the box
 * Language Models: 
 
     * Transformers based Natural Language Processing/Understanding (NLP/NLU) such as `HuggingFace Transformers <https://huggingface.co/transformers/>`_ BERT, distilBERT, XLM-BERT, Roberta and BioBert. To get started with NLP models you can refer to Neuron :ref:`PyTorch <pytorch-nlp>`, :ref:`TensorFlow <tensorflow-nlp>` and :ref:`MXNet <mxnet-nlp>` NLP tutorials.
-    * Generative language models like :ref:`MarianMT <pytorch-tutorials-marianmt>`, Pegasus and Bart.
+    * Generative language models like :ref:`MarianMT </src/examples/pytorch/transformers-marianmt.ipynb>`, Pegasus and Bart.
     
 * Computer Vision Models
 
-    * Image classification models like :ref:`Resnet <tensorflow-Resnet50>`, Resnext and VGG
-    * Object detection models like Yolo :ref:`v3 <tensorflow-yolo_v3>`/:ref:`v4 <tensorflow-yolo4>` and v5, and :ref:`SSD <tensorflow-ssd300>`
+    * Image classification models like :ref:`Resnet </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`, Resnext and VGG
+    * Object detection models like Yolo :ref:`v3 </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>`/:ref:`v4 <tensorflow-yolo4>` and v5, and :ref:`SSD <tensorflow-ssd300>`
 
 * Recommender engines models that include Embeddings and MLP layers.
 
@@ -50,12 +50,12 @@ While many models perform very well with subgraphs running on CPU, especially if
 Variable input size
 ^^^^^^^^^^^^^^^^^^^
 
-With Neuron, the input size shape is fixed at compile time. If your application requires multiple input sizes, we recommend using padding or bucketing techniques.  Padding requires you to compile your models to the largest expected input size, and test your application performance. If performance is not within your targets, you can consider implementing a bucketing scheme. With bucketing, you compile your model to a few input size categories that represent the range of possible input sizes. with some applications, bucketing will help optimize compute utilization compared to padding, especially if small input sizes are more frequent than large input sizes. If the varying input dimension is the batch size.
+With Neuron, the input size shape is fixed at compile time. If your application requires multiple input sizes, we recommend using padding or bucketing techniques.  Padding requires you to compile your models to the largest expected input size, and test your application performance. If performance is not within your targets, you can consider implementing a bucketing scheme. With bucketing, you compile your model to a few input size categories that represent the range of possible input sizes. with some applications, bucketing will help optimize compute utilization compared to padding, especially if small input sizes are more frequent than large input sizes. If the varying input dimension is the batch size, dynamic batching can be used in TensorFlow-Neuron and PyTorch-Neuron to do inference using larger batch size than the compiled batch size, see :ref:`neuron-batching`.
 
 Control Flow
 ^^^^^^^^^^^^
 
-Models that contain control flow operators (see :ref:`pytorch-tutorials-marianmt`) may require specific handling to ensure successful compilation with Neuron.
+Models that contain control flow operators (see :ref:`/src/examples/pytorch/transformers-marianmt.ipynb`) may require specific handling to ensure successful compilation with Neuron.
 
 Dynamic shapes
 ^^^^^^^^^^^^^^
