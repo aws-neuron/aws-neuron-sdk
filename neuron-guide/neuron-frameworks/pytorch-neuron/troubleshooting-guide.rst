@@ -27,74 +27,151 @@ downgrade torchvision to version 0.6.1:
 torch.jit.trace issues
 ----------------------
 The :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`
-uses the :code:`torch.jit.trace` function in PyTorch to generate :code:`ScriptFunction`
-models for execution on Inferentia. Due to this, your exisiting PyTorch model must be
-torch-jit-traceable.
-
-Please visit https://pytorch.org/docs/stable/generated/torch.jit.trace.html
+uses the PyTorch :code:`torch.jit.trace` function to generate :code:`ScriptFunction`
+models for execution on Inferentia. Due to that, to execute your PyTorch model on
+Inferentia it must be torch-jit-traceable. Please visit https://pytorch.org/docs/stable/generated/torch.jit.trace.html
 to review the properties that a model must have to be torch-jit-traceable.
-The PyTorch-Neuron trace API accepts :code:`torch.jit.trace` :code:`**kwargs`,
-such as :code:`strict=False`.
+The PyTorch-Neuron trace API :code:`torch.neuron.trace` accepts :code:`**kwargs` for
+:code:`torch.jit.trace`. For example, you can use the :code:`strict=False` flag to
+:ref:`compile models with dictionary outputs <compiling-models-with-kwargs>`. If the outputs of your PyTorch model are
+not torch-jit-traceable, you can try modifying your underlying PyTorch model code to make it traceable.
+If it's not possible to change your model code, you can :ref:`write a wrapper around your model
+<wrapping-non-traceable-models>` that makes it torch-jit-traceable to compile
+it for Inferentia.
 
 
-Compiling models with outputs that are not torch-traceable
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Models that have non torch-traceable outputs can be "wrapped" to enable
-compilation for Inferentia. This process typically involves writing a wrapper
-that converts the model's output into a form that is torch-traceable, compiling
-the wrapped model for Inferentia using :code:`torch.neuron.trace()`, and
-then writing a second wrapper that converts the model's output back into the original
-form. The following is an example of wrapping a model with non-torch-traceable outputs
-to compile it for Inferentia:
+
+.. _wrapping-non-traceable-models:
+
+Compiling models with outputs that are not torch-jit-traceable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To enable compilation of models with non torch-jit-traceable outputs, you can use a technique that involves writing a wrapper that converts the model's output into a form that is torch-jit-traceable. You can then compile the wrapped model for Inferentia using :code:`torch.neuron.trace`.
+
+The following example uses a wrapper to compile a model with non torch-jit-traceable outputs. This model cannot be compiled for Inferentia in its current form because it outputs a list of tuples and
+tensors, which is not torch-jit-traceable.
 
 .. code-block:: python
 
-   import torch
-   import torch_neuron
-   import torch.nn as nn
+    import torch
+    import torch_neuron
+    import torch.nn as nn
+
+    class Model(nn.Module):
+        def __init__(self):
+            super(Model, self).__init__()
+            self.conv = nn.Conv2d(1, 1, 3)
+
+        def forward(self, x):
+            a = self.conv(x) + 1
+            b = self.conv(x) + 2
+            c = self.conv(x) + 3
+            # An output that is a list of tuples and tensors is not torch-traceable
+            return [(a, b), c]
+
+    model = Model()
+    model.eval()
+
+    inputs = torch.rand(1, 1, 3, 3)
+
+    print(model(inputs))
+
+    # Try to compile the model
+    model.traceable_model = torch.neuron.trace(model, inputs) # ERROR: This cannot be traced, we must change the output format
 
 
-   class NonTraceableModel(nn.Module):
-      def __init__(self):
-         super(NonTraceableModel, self).__init__()
-         self.conv = nn.Conv2d(1, 1, 3)
+To compile this model for Inferentia, we can write a wrapper around the model to convert its outputs into a tuple of tensors, which is torch-jit-traceable.
 
-      def forward(self, x):
-         a = self.conv(x) + 1
-         b = self.conv(x) + 2
-         c = self.conv(x) + 3
-         # An output that is a list of tuples and tensors is not torch-traceable
-         return [(a, b), c]
+.. code-block:: python
 
+    class NeuronCompatibilityWrapper(nn.Module):
+        def __init__(self):
+            super(NeuronCompatibilityWrapper, self).__init__()
+            self.model = Model()
 
-   class TraceableModel(nn.Module):
-      def __init__(self, non_traceable_model):
-         super(TraceableModel, self).__init__()
-         self.non_traceable_model = non_traceable_model
+        def forward(self, x):
+            out = self.model(x)
+            # An output that is a tuple of tuples and tensors is torch-jit-traceable
+            return tuple(out)
 
-      def forward(self, x):
-         out = self.non_traceable_model(x)
-         # An output that is a tuple of tuples and tensors is torch-traceable
-         return tuple(out)
+Now, we can successfully compile the model for Inferentia using the :code:`NeuronCompatibilityWrapper` wrapper as follows:
 
+.. code-block:: python
 
-   class NeuronModel(nn.Module):
-      def __init__(self, model):
-         super(NeuronModel, self).__init__()
-         self.traceable_model = TraceableModel(model)
+    model = NeuronCompatibilityWrapper()
+    model.eval()
 
-      def forward(self, x):
-         out = self.traceable_model(x)
-         # Return the output in the original format
-         return list(out)
+    # Compile the traceable wrapped model
+    model.traceable_model = torch.neuron.trace(model, inputs)
+
+    print(model(inputs))
 
 
-   non_traceable_model = NonTraceableModel()
+If the model's outputs must be in the original form, a second wrapper can be used to transform the outputs after compilation for Inferentia.
+The following example uses the :code:`OutputFormatWrapper` wrapper to convert the compiled model's output back into the original form of a list of tuples and tensors.
 
-   model = NeuronModel(non_traceable_model)
-   model.eval()
+.. code-block:: python
 
-   inputs = torch.rand(1, 1, 3, 3)
+    class OutputFormatWrapper(nn.Module):
+        def __init__(self):
+            super(OutputFormatWrapper, self).__init__()
+            self.traceable_model = NeuronCompatibilityWrapper()
 
-   # Compile the traceable wrapped model
-   model.traceable_model = torch.neuron.trace(model.traceable_model, inputs)
+        def forward(self, x):
+            out = self.traceable_model(x)
+            # Return the output in the original format of Model()
+            return list(out)
+
+    model = OutputFormatWrapper()
+    model.eval()
+
+    # Compile the traceable wrapped model
+    model.traceable_model = torch.neuron.trace(model.traceable_model, inputs)
+
+    print(model(inputs))
+
+
+Compiling a submodule in a model that is not torch-jit-traceable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following example shows how to compile a submodule that is part of a non torch-jit-traceable model. In this example, the top-level model :code:`Outer` uses a dynamic flag, which is not torch-jit-traceable. However, the submodule :code:`Inner` is torch-jit-traceable and can be compiled for Inferentia.
+
+.. code-block:: python
+
+    import torch
+    import torch_neuron
+    import torch.nn as nn
+
+    class Inner(nn.Module) :
+        def __init__(self):
+            super().__init__()
+            self.conv = nn.Conv2d(1, 1, 3)
+
+        def forward(self, x):
+            return self.conv(x) + 1
+
+
+    class Outer(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.inner = Inner()
+
+        def forward(self, x, add_offset: bool = False):
+            base = self.inner(x)
+            if add_offset:
+                return base + 1
+            return base
+
+    model = Outer()
+    inputs = torch.rand(1, 1, 3, 3)
+
+    # Compile the traceable wrapped submodule
+    model.inner = torch.neuron.trace(model.inner, inputs)
+    
+    # TorchScript the model for serialization
+    script = torch.jit.script(model)
+    torch.jit.save(script, 'model.pt')
+
+    loaded = torch.jit.load('model.pt')
+
+    print(loaded(inputs, True))
+    print(loaded(inputs, False))
