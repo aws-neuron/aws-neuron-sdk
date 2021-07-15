@@ -22,12 +22,12 @@ Many popular models used in today’s leading AI applications run out-of-the box
 * Language Models: 
 
     * Transformers based Natural Language Processing/Understanding (NLP/NLU) such as `HuggingFace Transformers <https://huggingface.co/transformers/>`_ BERT, distilBERT, XLM-BERT, Roberta and BioBert. To get started with NLP models you can refer to Neuron :ref:`PyTorch <pytorch-nlp>`, :ref:`TensorFlow <tensorflow-nlp>` and :ref:`MXNet <mxnet-nlp>` NLP tutorials.
-    * Generative language models like :ref:`MarianMT <pytorch-tutorials-marianmt>`, Pegasus and Bart.
+    * Generative language models like :ref:`MarianMT </src/examples/pytorch/transformers-marianmt.ipynb>`, Pegasus and Bart.
     
 * Computer Vision Models
 
-    * Image classification models like :ref:`Resnet <tensorflow-Resnet50>`, Resnext and VGG
-    * Object detection models like Yolo :ref:`v3 <tensorflow-yolo_v3>`/:ref:`v4 <tensorflow-yolo4>` and v5, and :ref:`SSD <tensorflow-ssd300>`
+    * Image classification models like :ref:`Resnet </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`, Resnext and VGG
+    * Object detection models like Yolo :ref:`v3 </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>`/:ref:`v4 <tensorflow-yolo4>` and v5, and :ref:`SSD <tensorflow-ssd300>`
 
 * Recommender engines models that include Embeddings and MLP layers.
 
