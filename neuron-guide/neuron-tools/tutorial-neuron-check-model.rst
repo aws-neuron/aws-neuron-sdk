@@ -7,7 +7,7 @@ Overview
 ========
 
 Neuron Check Model tool provides user with basic information about the compiled and uncompiled model's operations
-without the use of TensorBoard-Neuron. For additional visibility into the models, please see :ref:`tensorboard-neuron`.
+without the use of TensorBoard-Neuron. For additional visibility into the models, please see :ref:`neuron-plugin-tensorboard`.
 
 Neuron Check Model tool scans the user's uncompiled model and provides a table of the operations within the uncompiled
 model. By default, the table shows each operation type and number of instances of that type within model, and whether
