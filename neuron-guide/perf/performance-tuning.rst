@@ -13,7 +13,7 @@ multi-threading and dynamic-batching) improves inference performance.
 
 The following guides are considered prerequisites for this tutorial:
 
--  :ref:`tensorflow-resnet50`
+-  :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb`
 -  :ref:`tensorflow-serving-neurocore-group`
 -  :ref:`neuron-batching`
 -  :ref:`neuroncore-pipeline`
@@ -211,10 +211,10 @@ Debug
 
 You can examine the post-compiled model to view the compilation results
 using the Neuron plugin for TensorBoard.
-See :ref:`tensorboard-plugin-view-graph`.
+See :ref:`tensorboard-plugin-visualize-graph`.
 
 ResNet-50 optimization example
 ------------------------------
 
 For an example demonstrating the concepts described here, see
-:ref:`tensorflow-keras-resnet50`
+:ref:`/src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb`

@@ -177,7 +177,7 @@ July 16, 2020 Release
 
 This release of Neuron SDK adds support for the OpenPose (posenet)
 Neural Network. An example of using Openpose for end to end inference is
-available :ref:`tensorflow-openpose`.
+available :ref:`/src/examples/tensorflow/openpose_demo/openpose.ipynb`.
 
 A new PyTorch auto-partitioner feature now automatically builds a Neuron
 specific graph representation of PyTorch models. The key benefit of this

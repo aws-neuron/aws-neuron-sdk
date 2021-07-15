@@ -82,7 +82,7 @@ Neuron v1.12.1 (Feb 24 2021)
        
      - * Fix for CVE-2021-3177
        
-       * :ref:`End-Of-Support <2-24-2021-rn>` of Python 3.5
+       * :ref:`End-Of-Support <eol_pyton_3_5>` of Python 3.5
        
        * Change to `Neuron documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_ fully migrated off GitHub.
          

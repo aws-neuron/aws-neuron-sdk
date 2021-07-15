@@ -23,14 +23,14 @@ NeuronCores used by each subgraph. More information about NeuronCore pipeline ca
 printed below the subgraph information.
 
 Neuron Check Model tool is currently available for TensorFlow and MXNet. To check PT model, please use
-torch.neuron.analyze_model function as shown in PyTorch-Neuron Getting Started tutorial :ref:`pytorch-tutorials-resnet-50`
+torch.neuron.analyze_model function as shown in PyTorch-Neuron Getting Started tutorial :ref:`/src/examples/pytorch/resnet50.ipynb`
 
 TensorFlow-Neuron Check Model
 =============================
 
 The following example shows how to run TensorFlow-Neuron Check Model tool with TensorFlow ResNet50 tutorial.
 
-1. Start with the TensorFlow ResNet50 tutorial at :ref:`tensorflow-resnet50` and do the first three steps of the
+1. Start with the TensorFlow ResNet50 tutorial at :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb and do the first three steps of the
 tutorial. Please stay in the Python environment that you setup during the tutorial.
 
 2. Install needed tensorflow_hub package and download the tool:
@@ -179,7 +179,7 @@ MXNet-Neuron Check Model
 
 The following example shows how to run MXNet-Neuron Check Model tool with MXNet ResNet50 tutorial.
 
-1. Start with the MXNet ResNet50 tutorial at :ref:`mxnet-resnet50` and do the first three steps of the tutorial.
+1. Start with the MXNet ResNet50 tutorial at :ref:`/src/examples/mxnet/resnet50/resnet50.ipynb` and do the first three steps of the tutorial.
 Please stay in the Python environment that you setup during the tutorial.
 
 2. Download the tool:

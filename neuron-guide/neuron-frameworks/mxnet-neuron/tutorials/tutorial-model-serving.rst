@@ -10,7 +10,7 @@ https://github.com/awslabs/multi-model-server/tree/master/examples/mxnet_vision.
 
 Before starting this example, please ensure that Neuron-optimized MXNet
 version mxnet-neuron is installed along with Neuron Compiler (see
-:ref:`mxnet-resnet50`) and Neuron RTD is running with default settings
+:ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`) and Neuron RTD is running with default settings
 (see :ref:`rtd-getting-started`. ).
 
 If using DLAMI, you can activate the environment aws_neuron_mxnet_p36
