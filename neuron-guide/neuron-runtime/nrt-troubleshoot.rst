@@ -6,8 +6,7 @@ Troubleshooting Neuron Runtime
 This document aims to provide more information on how to fix issues you
 might encounter while using the Neuron Runtime 1.1 or above. For each
 issue we will provide an explanation of what happened and what can
-potentially correct the issue. For older versions of runtime(1.0.9592.0
-and below) please see :ref:`rtd-troubleshooting1.0`.
+potentially correct the issue.
 
 
 If you haven't read it already, please familiarize yourself with our

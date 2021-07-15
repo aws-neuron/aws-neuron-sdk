@@ -31,7 +31,6 @@ Pytorch: :ref:`neuron-cc-ops-pytorch`
 
 Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
-ONNX: :ref:`neuron-cc-ops-onnx`
 
 
 

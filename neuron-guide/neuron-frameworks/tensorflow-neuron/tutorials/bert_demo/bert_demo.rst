@@ -238,7 +238,7 @@ For all BERT variants, we currently need to augment the standard Neuron
 compilation process for performance tuning. In the future, we intend to
 automate this tuning process. This would allow users to use the standard
 Neuron compilation process, which requires only a one line change in
-user source code. The standard compilation process is described :ref:`tensorflow-resnet50-compile-on-compilation-instance`.
+user source code. The standard compilation process is described :ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`.
 
 The augmented Neuron compilation process is encapsulated by the
 bert_model.py script, which performs the following things :

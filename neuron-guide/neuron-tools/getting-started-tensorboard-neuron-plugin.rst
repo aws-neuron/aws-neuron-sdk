@@ -59,13 +59,13 @@ Compile the neural network
 3. Refer to the following guides on how to compile a graph using Neuron SDK.
 
 - TensorFlow-Neuron
-   - "Compile for Neuron" in `TensorFlow-Neuron Resnet50 Tutorial`_
+   - :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb`
 - PyTorch-Neuron:
    - "Compile model for Neuron" in `PyTorch-Neuron Resnet50 Tutorial`_
-- MXNet-Neuron
-   - "Compile model on Neuron" in `MXNet-Neuron Resnet50 Tutorial`_
+- MXNet-Neuron:
+   - :ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`
 
-Enable profiling 
+Enable profiling
 -----------------
 
 In this step, we enable Neuron profile data collection and collect results
@@ -101,11 +101,11 @@ variable.  In this example, we will assume this directory is ``$HOME/profile``
 For more info on how to execute inference, refer to the following guides:
 
 - TensorFlow-Neuron
-   - "Deploy on Inferentia" in `TensorFlow-Neuron Resnet50 Tutorial`_
+   - :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb`
 - PyTorch-Neuron
-   - "Run inference on Single Core" in `PyTorch-Neuron Resnet50 Tutorial`_
+   - "Run inference on Single Core" in :ref:`/src/examples/pytorch/resnet50.ipynb`
 - MXNet-Neuron
-   - "Deploy on Inferentia" in `MXNet-Neuron Resnet50 Tutorial`_
+   - :ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`
 
 4.4. Check if profiling results were successfully saved.  In the directory
 pointed to by ``NEURON_PROFILE`` environment variable set in Step 4.1, there
@@ -285,7 +285,7 @@ Get a breakdown of time spent per operator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The "Op Time Table" section shows the cycle count per operator, much like the "Compute time" coloring
-for graph visualization.  This table can be sorted by clicking the column names, and searched using the 
+for graph visualization.  This table can be sorted by clicking the column names, and searched using the
 provided text box in the top right corner. Due to Neuron compiler optimizations, some of the compute may
 not be associated with any specific operator and will be categorized as ``unknown``.  Additionally, time
 spent moving data to and from NeuronCores will fall under ``(ND_ENGINE_LOAD)``.
@@ -338,8 +338,6 @@ spent moving data to and from NeuronCores will fall under ``(ND_ENGINE_LOAD)``.
   :height: 2826
   :width: 5341
   :scale: 10%
-.. _TensorFlow-Neuron Resnet50 Tutorial: ../../src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb
-.. _MXNet-Neuron Resnet50 Tutorial: ../../src/examples/mxnet/resnet50/resnet50.ipynb
 .. _PyTorch-Neuron Resnet50 Tutorial: ../../src/examples/pytorch/resnet50.ipynb
 .. |tensorboard_address| raw:: html
 

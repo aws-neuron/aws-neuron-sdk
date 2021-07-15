@@ -110,7 +110,7 @@ Please do **not** create a public github issue.
 What is the licensing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-See the :ref:`license-documentation` and :ref:`license-summary-docs-samples` files
+See the `https://github.com/aws/aws-neuron-sdk/blob/master/LICENSE-DOCUMENTATION`_ and `https://github.com/aws/aws-neuron-sdk/blob/master/LICENSE-SUMMARY-DOCS-SAMPLES`_ files
 for our project's licensing. We will ask you to confirm the licensing of
 your contribution.
 
