@@ -70,7 +70,7 @@ Users who are using Neuron SDK releases before 1.13.0,  can find classic TensorB
 
 For more information see see :ref:`neuron-tensorboard-rn` and :ref:`neuron-plugin-tensorboard`.
 
-.. _eol_pyton_3_5:
+.. _eol_python_3_5:
 
 End of support for Python 3.5 
 -----------------------------
