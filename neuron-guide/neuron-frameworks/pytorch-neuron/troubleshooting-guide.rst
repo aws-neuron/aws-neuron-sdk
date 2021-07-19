@@ -29,18 +29,18 @@ torch.jit.trace issues
 The :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`
 uses the PyTorch :func:`torch.jit.trace` function to generate
 :class:`~torch.jit.ScriptModule` models for execution on Inferentia. Due to that,
-to execute your PyTorch model on Inferentia it must be torch-jit-traceable. Please
-visit :func:`torch.jit.trace` to review the properties that a model must have
-to be torch-jit-traceable. The PyTorch-Neuron trace API
-:func:`torch_neuron.trace` accepts :code:`**kwargs` for :func:`torch.jit.trace`.
-For example, you can use the :code:`strict=False` flag to
-:ref:`compile models with dictionary outputs <compiling-models-with-kwargs>`.
-If the outputs of your PyTorch model are not torch-jit-traceable, you can try
+to execute your PyTorch model on Inferentia it must be torch-jit-traceable,
+otherwise you need to make sure your model is torch-jit-traceable. You can try
 modifying your underlying PyTorch model code to make it traceable. If it's not
 possible to change your model code, you can :ref:`write a wrapper around your
 model <wrapping-non-traceable-models>` that makes it torch-jit-traceable to
 compile it for Inferentia.
 
+Please visit :func:`torch.jit.trace` to review the properties that a model must
+have to be torch-jit-traceable. The PyTorch-Neuron trace API
+:func:`torch_neuron.trace` accepts :code:`**kwargs` for :func:`torch.jit.trace`.
+For example, you can use the :code:`strict=False` flag to
+:ref:`compile models with dictionary outputs <compiling-models-with-kwargs>`.
 
 
 .. _wrapping-non-traceable-models:
