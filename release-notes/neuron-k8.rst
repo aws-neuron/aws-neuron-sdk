@@ -29,6 +29,19 @@ To Pull the Images from ECR:
    docker pull  public.ecr.aws/neuron/neuron-device-plugin:1.5.3.0
    docker pull  public.ecr.aws/neuron/neuron-scheduler:1.5.3.0
 
+
+.. _1670:
+
+[1.6.7.0]
+=========
+
+Date: 07/26/2021
+
+Summary
+-------
+
+Minor internal enhancements.
+
 .. _1600:
 
 [1.6.0.0]

@@ -22,6 +22,18 @@ Known Issues and Limitations
    screen refresh. We will fix this in a future release.
 
 
+.. _17100:
+
+[1.7.10.0]
+=========
+
+Date: 07/26/2021
+
+Resolved Issues
+---------------
+
+-  Bug fixes and minor enhancements.
+
 .. _1740:
 
 [1.7.4.0]
