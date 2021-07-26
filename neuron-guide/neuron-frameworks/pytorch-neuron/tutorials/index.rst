@@ -28,7 +28,7 @@ Computer Vision
    :hidden:
    
    /src/examples/pytorch/resnet50.ipynb
-   /src/examples/pytorch/yolo_v4.ipynb>
+   /src/examples/pytorch/yolo_v4.ipynb
 
 .. _pytorch-nlp:
 

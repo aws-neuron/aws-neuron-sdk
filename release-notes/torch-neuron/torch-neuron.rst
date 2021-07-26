@@ -91,7 +91,7 @@ Summary
 - ResNext models now functional with new operator support
 - Yolov5 support refer to https://github.com/aws/aws-neuron-sdk/issues/253 note https://github.com/ultralytics/yolov5/pull/2953 which optimized YoloV5 for AWS Neuron
 - Convolution operator support has been extended to include most Conv1d and Conv3d variants
-- New operator support.  Please see :ref:`neuron-cc-ops-pytorch.rst` for the complete list of operators.
+- New operator support.  Please see :ref:`neuron-cc-ops-pytorch` for the complete list of operators.
 
 .. _neuron-torch-12160:
 
@@ -471,7 +471,7 @@ Trace behavior
 --------------
 
 In order to trace a model it must be in evaluation mode. For examples
-please see :ref:`pytorch-tutorials-resnet-50`
+please see :ref:`/src/examples/pytorch/resnet50.ipynb`
 
 Six pip package is required
 ---------------------------
