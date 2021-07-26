@@ -3,7 +3,22 @@
 Previous Neuron Release Notes
 =============================
 
-.. _03-04-2021-rn:
+.. _07-02-2021-rn:
+
+Neuron 1.14.1 (07/02/2021)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This release (Neuron 1.14.1) , include bug fixes and minor enhancements:
+
+* Neuron PyTorch - This release adds “Dynamic Batching” feature support, see PyTorch-Neuron trace python API for more information, the release also add support for new operators and include additional bug fixes and minor enhancements, for more information see :ref:`pytorch-neuron-rn`.
+* Neuron TensorFlow - see :ref:`tensorflow-neuron-rn`.
+* Neuron MXNet - see :ref:`mxnet-neuron-rn`.
+* Neuron Compiler - see :ref:`neuron-cc-rn`.
+* Neuron Runtime - see :ref:`neuron-runtime-release-notes`.
+* Neuron Tools - see :ref:`neuron-tools-rn`.
+
+
+.. _05-28-2021-rn:
 
 Neuron 1.14.0 (05/28/2021)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

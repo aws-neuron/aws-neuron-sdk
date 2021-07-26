@@ -32,6 +32,21 @@ NEFF Version Runtime Version Range Notes
 
 --------------
 
+.. _16900:
+
+[1.6.9.0]
+=========
+
+Date: 07/26/2021
+
+Improvements
+------------
+
+* Bug fixes and minor enhancements.
+
+
+
+
 .. _16500:
 
 [1.6.5.0]
