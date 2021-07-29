@@ -6,6 +6,17 @@ TensorFlow-Model-Server-Neuron Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+.. _2511680:
+
+[2.5.1.1.6.8.0]
+^^^^^^^^^^^^^^^^^^^
+
+Date: 08/12/2021
+
+Summary
+-------
+
+TensorFlow 2.x - tensorflow-model-server-neuron now support TensorFlow 2.x,  tensorflow-model-server-neuron package versions 2.1.4, 2.2.2, 2.3.0, 2.4.1, and 2.5.1 support TensorFlow 2.x.
 
 .. _11501510:
 

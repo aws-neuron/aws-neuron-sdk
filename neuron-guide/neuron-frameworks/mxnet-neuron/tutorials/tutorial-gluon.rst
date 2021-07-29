@@ -41,7 +41,7 @@ it as a compiled MXNet checkpoint.
     block.hybridize() 
 
     # Compile for Inferentia using Neuron
-    inputs = { "data" : mx.nd.ones([1,3,224,224], name='data', dtype='float32') }
+    inputs = { "data" : mx.nd.ones([1,3,224,224], name='data', dtype='float32'), 'softmax_label' : mx.nd.ones([1], name='data', dtype='float32') }
     block = neuron.compile(block, inputs=inputs)
 
     #save compiled model
@@ -75,7 +75,7 @@ it as a compiled MXNet checkpoint.
     out = block(img, softmax).asnumpy()
 
     with open('synset.txt', 'r') as f:
-    labels = [l.rstrip() for l in f]
+        labels = [l.rstrip() for l in f]
 
     out = block(img, softmax).asnumpy()
 

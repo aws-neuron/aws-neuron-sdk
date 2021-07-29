@@ -38,13 +38,16 @@ Setup Environment
     To compile and run inference from the instance terminal, first enable the ML framework conda environment of your choice by running one of the following from the terminal:
 
     * Enable PyTorch-Neuron Conda enviroment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
+
+      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
     
     * Enable TensorFlow-Neuron Conda enviroment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
+
+      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
     
     * Enable Neuron Conda enviroment for Apache MXNet (Incubating):
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
+
+      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
 
     To develop from a Jupyter notebook see :ref:`setup-jupyter-notebook-steps-troubleshooting`  
 

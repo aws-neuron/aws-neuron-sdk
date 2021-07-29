@@ -1,9 +1,9 @@
 .. _tensorflow-ref-neuron-compile-api:
 
-TensorFlow-Neuron Compilation API
+TensorFlow-Neuron 1.x Compilation API
 ============================================
 
-The Neuron compilation API for TensorFlow enables compilation of saved
+The Neuron compilation API for TensorFlow 1.x enables compilation of saved
 model to an Inferentia target.
 
 Method

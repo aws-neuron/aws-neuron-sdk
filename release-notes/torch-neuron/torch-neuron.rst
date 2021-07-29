@@ -7,7 +7,7 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 07/02/2021
+Known Issues and Limitations - Updated 08/12/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
@@ -29,7 +29,20 @@ you can successfully torch.neuron.trace
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
 
-.. _neuron-torch-141x:
+.. _neuron-torch-xxxx:
+
+[1.8.1.1.5.21.0]
+^^^^^^^^^^^^^^^^
+
+Date: 08/12/2021
+
+Summary
+-------
+
+- Minor updates.
+
+
+.. _neuron-torch-1570:
 
 [1.8.1.1.5.7.0]
 ^^^^^^^^^^^^^^^

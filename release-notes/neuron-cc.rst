@@ -3,11 +3,6 @@
 Neuron Compiler Release Notes
 =============================
 
-.. contents:: Table of Contents
-   :local:
-   :depth: 1
-
-
 
 Introduction
 ^^^^^^^^^^^^
@@ -21,7 +16,7 @@ compiler.
 
 ::
 
-   neuron-cc list-operators --framework {TENSORFLOW | MXNET | ONNX}
+   neuron-cc list-operators --framework {TENSORFLOW | MXNET | XLA}
 
 The supported operators are also listed here:
 
@@ -34,16 +29,35 @@ Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
 
 
-Known issues and limitations - updated 07/02/2021
+Known issues and limitations - updated 08/12/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* *TensorFlow 2.x* - In this release supported operators are limited to BERT-like models, specifically no conv2d  or reduce-window operators are available.
+* The compiler’s list-operators command does not display the supported TF2.x operators yet.
 * *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
 * *Data layout* The Neuron compiler supports multiple data layout format (NCHW, NHWC, …). Non-CNHW input/output data-layouts will require Neuron to insert additional transpose operations, causing a degradation in performance.
 * *Primary inputs in NeuronCore Pipeline mode* When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
 * *Reduce data type* INT8 data type is not currently supported by the Neuron compiler.
 * *NeuronCore Pipeline:* NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance.
 * *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
-* *Conv3d operator* performance is limited with small number of input chanels
+* *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
+
+
+[1.6.13.0]
+^^^^^^^^^^
+
+Date 08/12/2021
+
+Major New Features
+------------------
+
+* TensorFlow 2.x  - First support of TensorFlow 2.x. The support is limited to operators in BERT-like models and was tested with Huggingface BERT small, base, large and DistillBert.
+
+Resolved issues
+---------------
+
+* Fixed compiler backend issue in Tensor_tensor argument distance, `github #269 <https://github.com/aws/aws-neuron-sdk/issues/269>`_
+
 
 [1.5.5.0]
 ^^^^^^^^^

@@ -12,7 +12,7 @@ Neuron Pip Packages within DLAMI Conda Environments FAQ
 How to update to latest Neuron packages in DLAMI Conda Environments?
 --------------------------------------------------------------------
 
-If the DLAMI Conda Environments donot include the latest Neuron packages, update the packages as follows:
+If the DLAMI Conda Environments do not include the latest Neuron packages, update the packages as follows:
 
 * To upgrade Neuron PyTorch:
 

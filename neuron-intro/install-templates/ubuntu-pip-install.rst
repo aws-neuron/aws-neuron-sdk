@@ -8,12 +8,14 @@
 
    wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
 
-   sudo apt-get update
-   sudo apt-get install linux-headers-$(uname -r)
-   sudo apt-get install aws-neuron-dkms
-   sudo apt-get install aws-neuron-runtime-base
-   sudo apt-get install aws-neuron-runtime
-   sudo apt-get install aws-neuron-tools
+   sudo apt-get update -y
+   sudo apt-get install linux-headers-$(uname -r) -y
+   sudo apt-get install aws-neuron-dkms -y
+   sudo apt-get install aws-neuron-runtime-base -y
+   sudo apt-get install aws-neuron-runtime -y
+   sudo apt-get install aws-neuron-tools -y
+
+   export PATH=/opt/aws/neuron/bin:$PATH
 
 .. note::
 

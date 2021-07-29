@@ -137,6 +137,11 @@ to the same directory as before.
 
    tensorboard --logdir results --run_neuron_profiler
 
+.. note::
+
+   If using TensorBoard >= 2.5, please use the ``--load_fast=false`` option when launching.
+   ``tensorboard --logdir results --run_neuron_profiler --load_fast=false``
+
 5.3. After you see the following message, TensorBoard is ready to use.  By default,
 TensorBoard will be launched at ``localhost:6006`` on the Deployment Instance.
 

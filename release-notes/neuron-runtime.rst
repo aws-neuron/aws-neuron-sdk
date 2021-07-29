@@ -28,9 +28,24 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 0.6          \*                    All versions of RT support NEFF 0.6
 1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs 
+2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
 --------------
+
+.. _16190:
+
+[1.6.19.0]
+=========
+
+Date: 08/12/2021
+
+Improvements
+------------
+
+* Minor updates.
+
+
 
 .. _16900:
 

@@ -8,8 +8,11 @@ This document lists the release notes for the TensorFlow-Neuron package.
 
 .. _tf-known-issues-and-limitations:
 
-Known Issues and Limitations - updated 07/02/2021
+Known Issues and Limitations - updated 08/12/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Support on serialized TensorFlow 2.x custom operators is currently limited. Serializing some operators registered from tensorflow-text through `TensorFlow Hub <https://tfhub.dev/>`_ is going to cause failure in tensorflow.neuron.trace.
+
 
 -  Issue: When compiling large models, user might run out of memory and
    encounter this fatal error.
@@ -38,6 +41,22 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
    AttributeError: 'str' object has no attribute 'decode'.
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+
+
+.. _2501680:
+
+[2.5.0.1.6.8.0]
+^^^^^^^^^^^^^^^^
+
+Date: 08/12/2021
+
+Summary
+-------
+
+* TensorFlow 2.x - First release of TensorFlow 2.x integration, Neuron support now TensorFlow versions 2.1.4, 2.2.3, 2.3.3, 2.4.2, and 2.5.0.
+
+* TensorFlow 2.x - New public API tensorflow.neuron.trace: trace a TensorFlow 2.x keras.Model or a Python callable that can be decorated by tf.function, and return an AWS-Neuron-optimized keras.Model that can execute on AWS Machine Learning Accelerators.
+ **Please note** that TensorFlow 1.x SavedModel compilation API tensorflow.neuron.saved_model.compile is not supported in tensorflow-neuron 2.x . It continues to function in tensorflow-neuron 1.15.x .
 
 .. _11551510:
 
