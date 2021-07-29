@@ -8,7 +8,8 @@ TensorFlow Tutorials Setup
 
 #. Set up a development environment:
     * Enable TensorFlow-Neuron Conda environment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
+    
+      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
 
 #. Run tutorial in Jupyter notebook:
     * Follow instruction at :ref:`Setup Jupyter notebook <setup-jupyter-notebook-steps-troubleshooting>` to:
