@@ -1,3 +1,5 @@
+.. _tf_whatsnew:
+
 What's New
 ==========
 
