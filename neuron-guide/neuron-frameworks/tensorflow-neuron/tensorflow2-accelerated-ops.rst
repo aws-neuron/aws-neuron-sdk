@@ -12,8 +12,6 @@ an automatic operator-device-placement mechanism that strives to maximize
 the execution efficiency of your deep learning models on AWS Machine Learning
 ASIC instances.
 
-The lists share many commonalities with `Available TensorFlow Ops on Google Cloud TPU <https://cloud.google.com/tpu/docs/tensorflow-ops>`_.
-
 Accelerated Python APIs
 --------------------------------
 +---------------+-----------------------------------+-----------------------------------------------------------+
@@ -191,3 +189,6 @@ Accelerated graph operators
     Tanh
     Transpose
     Unpack
+
+
+The lists share many commonalities with `Available TensorFlow Ops <https://cloud.google.com/tpu/docs/tensorflow-ops>`_. Portions of this page are modifications based on work created and `shared by Google <https://developers.google.com/terms/site-policies>`_ and used according to terms described in the `Creative Commons 4.0 Attribution License <https://creativecommons.org/licenses/by/4.0/>`_.

@@ -27,6 +27,19 @@ use TensorBoard.
       from tensorflow.tensorboard.tensorboard import main
    ModuleNotFoundError: No module named 'tensorflow.tensorboard'
 
+.. _2.1.2.0:
+
+[2.1.2.0]
+=========
+
+Date: 8/12/2021
+
+Summary
+-------
+
+- Adds support for Neuron Tensorflow 2.5+
+
+
 .. _2.1.0.0:
 
 [2.1.0.0]

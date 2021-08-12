@@ -36,10 +36,6 @@ Where can I find tutorials and examples ?
 
 :ref:`tensorflow-tutorials` is a great place to start with.
 
-Is XLA supported?
------------------
-
-No, the AWS Neuron TensorFlow 1.x integration project was done without reusing any component from Google’s XLA compiler project, and does not work with mechanisms such as XLA `JIT-clustering <https://www.tensorflow.org/xla/tutorials/autoclustering_xla>`_.
 
 How to debug or profile my model?
 -----------------------------

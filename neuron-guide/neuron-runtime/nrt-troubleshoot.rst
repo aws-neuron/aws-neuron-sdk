@@ -222,10 +222,10 @@ How to fix?
 Increase /tmp space by removing unused files or taking other measures to
 increase the available disk size under /tmp.
 
+.. _unsupported-neff-version:
+
 Unsupported NEFF Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. _what-went-wrong-4:
 
 What Went Wrong?
 ''''''''''''''''

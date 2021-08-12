@@ -8,12 +8,14 @@ To activate TensorFlow 2.x:
 
 .. code::
 
-  # As of DLAMI v48,  TF2.x Neuron conda environment is still not available
-  # To work with TF2.x Neuron , you need to clone DLAMI TF2.x conda environment
-  # and install TF2.x Neuron within the cloned environment
-  # Those instructions will change when DLAMI creates a TF2.x Neuron conda environment
-  conda create --name aws-neuron-tensorflow2_p37 --clone tensorflow2_p37
-  source activate aws-neuron-tensorflow2_p37
+  # Setup a new Python virtual environment
+  sudo apt-get install python3-venv
+  python3 -m venv neuron_tf2_env
+  source neuron_tf2_env/bin/activate
   pip install --upgrade pip
   pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
   pip install tensorflow-neuron[cc]
+  pip install ipykernel
+  python -m ipykernel install --user --name neuron_tf2 --display-name "Python (Neuron TensorFlow 2)"
+  pip install jupyter notebook
+  pip install environment_kernels

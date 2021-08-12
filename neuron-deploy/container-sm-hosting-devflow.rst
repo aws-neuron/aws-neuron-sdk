@@ -1,1 +1,1 @@
-.. include:: /neuron-intro/devflows/container-sm-hosting-devflow.rst
+.. include:: /neuron-intro/devflows/byoc-hosting-devflow.rst

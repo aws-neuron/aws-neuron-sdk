@@ -11,7 +11,7 @@ TensorFlow 2.x FAQ
 How do I get started with TensorFlow?
 -------------------------------------
 
-The easiest entry point is the tutorials offered by the AWS Neuron team. For beginners, the :ref:`HuggingFace Pipelines distilBERT Tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/huggingface_bert/huggingface_bert.html>` is a good place to start.
+The easiest entry point is the tutorials offered by the AWS Neuron team. For beginners, the :ref:`HuggingFace Pipelines distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
 
 What TensorFlow versions are supported by Neuron?
 -------------------------------------------------
@@ -92,19 +92,11 @@ The generated SavedModel './model_neuron_dir' can be loaded into tensorflow-mode
 Where can I find tutorials and examples ?
 -----------------------------------------
 
-:ref:`HuggingFace Pipelines distilBERT Tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/huggingface_bert/huggingface_bert.html>` is a good place to start.
+:ref:`HuggingFace Pipelines distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
 
-Is XLA supported?
------------------
-
-The AWS Neuron TensorFlow 2.x integration project reuses many useful components from Google’s XLA compiler project, but the builtin just-in-time XLA autoclustering mechanism does not yet work with AWS Neuron. Instead, we provide a new compilation API tfn.trace  in order to streamline the deployment of deep learning models and to support some historical tensorflow 2.x versions.
 
 How to debug or profile my model?
 ---------------------------------
 
-
-Do I need to change my model to fit with XLA operators?
--------------------------------------------------------
-
-Generally speaking, if your deep learning model is implemented in a way that is friendly to the native tensorflow XLA compiler (i. e., your model mostly involves the use of fixed-shape tensors and can significantly benefit from XLA CPU/GPU acceleration without triggering too many XLA recompilations), then there is a very good chance that your model will work out-of-box with tensorflow-neuron.
+:ref:`AWS Neuron TensorBoard integration <neuron-plugin-tensorboard>` provides visibility into what is happening inside of the Neuron runtime, and allows a more fine-grained (but also more hardware-awared) reasoning on where to improve the performance of machine learning applications.
 

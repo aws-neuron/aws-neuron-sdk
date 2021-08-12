@@ -43,6 +43,8 @@ extensions = [
     'sphinx.ext.extlinks',
     'archive',
     'sphinx.ext.intersphinx',
+    'sphinx_plotly_directive',
+    'df_tables',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -115,3 +117,7 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 #html_static_path = ['_static']
 
+plotly_include_source = False
+plotly_html_show_source_link = False
+plotly_html_show_formats = False
+plotly_include_directive_source = False

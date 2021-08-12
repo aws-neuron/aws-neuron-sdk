@@ -4,7 +4,7 @@ Neuron Data-Types
 =================
 
 Neuron enables developers to choose from multiple data-types. The
-supported data-types are FP32, FP16, BF16, and INT8. Developers can
+supported data-types are FP32, FP16, BF16. Developers can
 train their models on their platform of choice (e.g. EC2 P3 instances),
 and then easily move their trained models to EC2 Inf1 for execution.
 
@@ -28,7 +28,7 @@ loss-scaling during training). ML models are typically robust to FP32 to
 BF16 conversion, with minimal to no impact on accuracy. The conversion
 accuracy is model dependent; therefore, users are encouraged to
 benchmark the accuracy of the auto-converted model against the original
-FP32 trained model.
+FP32 trained model. The autoconversion can be further fine tuned by the --fp32 cast option as explained in :ref:`neuron-guide/perf/performance-tuning.rst`.
 
 When the compiler is supplied with an unmodified FP32 model input it
 will automaticaly compile the model to run as BF16 on Inferentia. During

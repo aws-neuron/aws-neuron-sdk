@@ -18,6 +18,8 @@ is currently broken and the AWS Neuron team is working on providing an alternati
 
 This demo shows a Neuron compatible SSD300 implementation that is functionally equivalent to open source SSD300 model. This demo uses TensorFlow-Neuron, PyTorch SSD300 model and checkpoint (https://pytorch.org/hub/nvidia_deeplearningexamples_ssd/) and also shows the performance achieved by the Inf1 instance. 
 
+## Note: this tutorial runs on tensorflow-neuron 1.x only
+
 ## Table of Contents
 
 1. Launch EC2 instance and update AWS Neuron SDK software
@@ -77,7 +79,7 @@ unzip ./annotations_trainval2017.zip
 python ssd300_model.py --torch_checkpoint=./nvidia_ssdpyt_fp32_20190225.pt --output_saved_model=./ssd300_tf_neuron/1
 ```
 
-This converts PyTorch SSD300 model and checkpoint to a Neuron-compatible TensorFlow SavedModel using tensorflow-neuron and neuron-cc. The compilation output is stored in `./ssd300_tf_neuron`.
+This converts PyTorch SSD300 model and checkpoint to a Neuron-compatible TensorFlow SavedModel using tensorflow-neuron<2 and neuron-cc. The compilation output is stored in `./ssd300_tf_neuron`.
 
 6. Launch the `tensorflow-model-server-neuron` gRPC server at default port 8500 in the background.
 ```bash

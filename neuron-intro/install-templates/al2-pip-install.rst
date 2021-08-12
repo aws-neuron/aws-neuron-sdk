@@ -13,11 +13,13 @@ are installed.
    EOF
 
    sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
-   sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r)
-   sudo yum install aws-neuron-dkms
-   sudo yum install aws-neuron-runtime-base
-   sudo yum install aws-neuron-runtime
-   sudo yum install aws-neuron-tools
+   sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+   sudo yum install aws-neuron-dkms -y
+   sudo yum install aws-neuron-runtime-base -y
+   sudo yum install aws-neuron-runtime -y
+   sudo yum install aws-neuron-tools -y
+
+   export PATH=/opt/aws/neuron/bin:$PATH
 
 .. note::
 

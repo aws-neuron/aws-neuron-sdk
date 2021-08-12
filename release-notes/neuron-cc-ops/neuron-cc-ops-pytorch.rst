@@ -12,6 +12,14 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+.. _pytorch-neuron-release-15210:
+
+PyTorch Neuron Release [1.5.21.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No change
+
+
 .. _pytorch-neuron-release-1570:
 
 PyTorch Neuron Release [1.5.7.0]

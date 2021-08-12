@@ -52,7 +52,7 @@ neuron-cc compile
 
 ::
 
-   neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--enable-fast-loading-neuron-binaries] [--enable-fast-context-switch] [--output <value>] 
+   neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--enable-fast-loading-neuron-binaries] [--enable-fast-context-switch] [--fp32-cast cast-method] [--output <value>] 
 
 Description
 ~~~~~~~~~~~
@@ -69,7 +69,10 @@ Examples
 
 ::
 
-   neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --neuroncore-pipeline-cores 2 --output out.infa —debug
+   neuron-cc compile lenet-symbol.json lenet-0001.params --framework MXNET --neuroncore-pipeline-cores 2 --output file.neff
+
+
+   neuron-cc compile bert-model.hlo --framework XLA  --output file.neff
 
 Options
 ~~~~~~~
@@ -99,6 +102,7 @@ Options
 
     - ``TENSORFLOW``
     - ``MXNET``
+    - ``XLA``
 
 - ``--neuroncore-pipeline-cores`` (int) (default=1): Number of neuron cores
   to be used in "NeuronCore Pipeline" mode. This is different from data
@@ -147,6 +151,9 @@ Options
   on the same neuron core (or set of cores). The optimization 
   triggered by this option for example defers loading some weight
   constants until the start of inference.
+
+- ``--fp32-cast`` : Refine the automatic casting of fp32 tensors.
+  See detailed description and trade offs in :ref:`neuron-guide/perf/performance-tuning.rst`.
 
 STDOUT
 ~~~~~~

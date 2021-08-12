@@ -22,7 +22,7 @@ More information about Deep Learning AMI (DLAMI) and other flows can be found in
 Deep Learning AMI (DLAMI)
 -------------------------
 
-Neuron packages are included as Conda packgaes in `AWS Deep Learning AMI (DLAMI) with Conda <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_, and `DLAMI <https://docs.aws.amazon.com/dlami/index.html>`_ is the recommended AMI to use with Neuron SDK. 
+Neuron packages are installed within Conda environments in `AWS Deep Learning AMI (DLAMI) with Conda <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_, and `DLAMI <https://docs.aws.amazon.com/dlami/index.html>`_ is the recommended AMI to use with Neuron SDK. 
 
 
 For more information about Neuron and DLAMI:
