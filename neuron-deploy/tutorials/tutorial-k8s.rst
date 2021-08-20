@@ -11,8 +11,11 @@ into their workflows.
 
 A device plugin is provided which advertises Inferentia devices as a
 system hardware resource. It is deployed to a cluster as a daemon set
-using the provided: :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`  This
-tutorial will go through deploying the daemon set and running an example
+using the provided: :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`
+:download:`k8s-neuron-device-plugin-rbac.yml </src/k8/k8s-neuron-device-plugin-rbac.yml>` - configuration to enable
+permissions for device plugin to update the node and Pod annotations
+
+This tutorial will go through deploying the daemon set and running an example
 application.
 
 Prerequisite:
@@ -23,6 +26,9 @@ Prerequisite:
 
    -  ECR read access policy to retrieve container images from ECR:
       **arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly**
+   -  Kubernetes **should** use **docker** as container runtime.
+   -  :ref:`tutorial-docker-environment-setup-for-neuron-runtime-10`: to install aws-neuron-runtime-base, install oci-add-hooks and setup docker to use oci-neuron OCI runtime
+   -  Kubernetes node object has instance-type set to inf1 types. For ex, ``"node.kubernetes.io/instance-type": "inf1.2xlarge"``
 
 Steps:
 ------
@@ -37,11 +43,12 @@ A device plugin exposes Inferentia to kubernetes as a resource. The
 device plugin container is provided through an ECR repo, pointed at in
 attached device plugin file.
 
-Run the following command:
+Run the following commands:
 
 .. code:: bash
 
-   kubectl apply -f https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-containers-tools/k8s-neuron-device-plugin.yml 
+   kubectl apply -f k8s-neuron-device-plugin-rbac.yml
+   kubectl apply -f k8s-neuron-device-plugin.yml
 
 Make sure that you see Neuron device plugin running successfully:
 
