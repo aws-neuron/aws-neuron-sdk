@@ -153,7 +153,7 @@ Options
   constants until the start of inference.
 
 - ``--fp32-cast`` : Refine the automatic casting of fp32 tensors.
-  See detailed description and trade offs in :ref:`neuron-guide/perf/performance-tuning.rst`.
+  See detailed description and trade offs in :ref:`/neuron-guide/perf/performance-tuning.rst`.
 
 STDOUT
 ~~~~~~
