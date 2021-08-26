@@ -80,13 +80,9 @@ inference requests with arbitrary batch size:
 .. note::
 
    Depending on the neural network size, Neuron will have a maximum
-   batch size that works optimally on Inferentia. Currently, FP16
-   ResNet50 is supported up to batch 5 only. Additionally, ResNet50 with
-   FP32 input is limited to smaller batches. These limitations are being
-   addressed and will be fixed in a future releases of the compiler. If
+   batch size that works optimally on Inferentia. If
    an unsupported batch size is used, an internal compiler error message
-   will be displayed (see `Known
-   Issues <./performance-tuning.md#known-issues>`__).
+   will be displayed.
    A simple way to explore optimal batch size for your specific model is to
    increment the batch size from 1 upward, one at a time, and test
    application performance.
