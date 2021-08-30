@@ -8,7 +8,7 @@ Release Details
    :depth: 2
 
 
-Current Release - Neuron v1.15.0 (August 12 2021)
+Current Release - Neuron v1.15.1 (August 30 2021)
 ------------------------------------------------
 
 
@@ -78,15 +78,15 @@ Neuron Packages
    * - Neuron Compiler
      - neuron_cc-1.6.13.0
    * - Neuron Runtime
-     - aws-neuron-runtime-1.6.19.0
+     - aws-neuron-runtime-1.6.24.0
    * - Neuron Tools
-     - aws-neuron-tools-1.7.20.0
+     - aws-neuron-tools-1.7.25.0
    * - Neuron Kernel module
-     - aws-neuron-dkms-2.0.450.0
+     - aws-neuron-dkms-2.1.5.0
    * - Neuron Kubernetes Plugin
-     - aws-neuron-k8-plugin-1.6.17.0
+     - aws-neuron-k8-plugin-1.6.22.0
    * - Neuron Kubernetes Scheduler
-     - aws-neuron-k8-scheduler-1.6.17.0
+     - aws-neuron-k8-scheduler-1.6.22.0
 
 
 See :ref:`neuron-maintenance-policy` for more information.
