@@ -22,6 +22,19 @@ Known Issues and Limitations
    screen refresh. We will fix this in a future release.
 
 
+.. _17250:
+
+[1.7.25.0]
+=========
+
+Date: 08/30/2021
+
+Resolved Issues
+---------------
+
+-  Minor updates.
+
+
 .. _17200:
 
 [1.7.20.0]

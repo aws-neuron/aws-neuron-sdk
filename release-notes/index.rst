@@ -7,6 +7,11 @@ What's New
    :local:
    :depth: 2
    
+Neuron 1.15.1 (08/30/2021)
+--------------------------
+
+Neuron 1.15.1 includes bug fixes for the aws-neuron-dkms package and several other bug fixes for related packages.
+
 Neuron 1.15.0 (08/12/2021)
 --------------------------
 

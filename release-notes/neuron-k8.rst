@@ -13,9 +13,9 @@ nodes within Kubernetes clusters. Both components are offered as
 pre-built containers in Public ECR and ready for deployment.
 
 -  **Device Plugin:**
-   public.ecr.aws/neuron/neuron-device-plugin:1.6.15.0
+   public.ecr.aws/neuron/neuron-device-plugin:1.6.22.0
 -  **Neuron Scheduler:**
-   public.ecr.aws/neuron/neuron-scheduler:1.6.15.0
+   public.ecr.aws/neuron/neuron-scheduler:1.6.22.0
 
 It's recommended to pin the version of the components used and to never
 use the "latest" tag. To get the list of image tags, please refer to
@@ -26,8 +26,21 @@ To Pull the Images from ECR:
 
 ::
 
-   docker pull  public.ecr.aws/neuron/neuron-device-plugin:1.6.15.0
-   docker pull  public.ecr.aws/neuron/neuron-scheduler:1.6.15.0
+   docker pull  public.ecr.aws/neuron/neuron-device-plugin:1.6.22.0
+   docker pull  public.ecr.aws/neuron/neuron-scheduler:1.6.22.0
+
+.. _1622:
+
+[1.6.22.0]
+=========
+
+Date: 08/30/2021
+
+Summary
+-------
+
+Minor updates.
+
 
 .. _1615:
 
