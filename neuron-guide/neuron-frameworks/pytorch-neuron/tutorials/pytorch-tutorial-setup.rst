@@ -7,7 +7,7 @@ PyTorch Quick Setup
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    * Enable PyTorch-Neuron Conda environment:
+    * Enable or install PyTorch-Neuron:
     .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
 
 #. Run tutorial in Jupyter notebook:

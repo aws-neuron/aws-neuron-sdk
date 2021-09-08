@@ -7,7 +7,7 @@ MXNet Quick Setup
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    * Enable MXNet-Neuron Conda environment:
+    * Enable or install MXNet-Neuron:
     .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
 
 #. Run tutorial in Jupyter notebook:
