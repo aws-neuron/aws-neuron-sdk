@@ -1,0 +1,5052 @@
+{
+  "repos": {
+    "whl": "https://pip.repos.neuron.amazonaws.com/",
+    "rpm": "https://yum.repos.neuron.amazonaws.com/",
+    "deb": "https://apt.repos.neuron.amazonaws.com/"
+  },
+  "manifest_date": "2021-09-22",
+  "manifest_version": "1.0.0",
+  "latest_release": {
+    "inf1": {
+      "version": "1.15.2"
+    }
+  },
+  "neuron_versions": {
+    "1.15.2": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.0.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": []
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.22.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.22.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.21.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.7.25.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.6.13.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.5.21.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.1.4.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.2.3.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.3.3.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.4.2.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.5.0.1.6.10.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.1.4.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.2.2.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.3.0.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.4.1.1.6.10.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.5.1.1.6.10.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.6.5.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.3.4.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.15.1": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.24.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.22.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.22.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.21.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.7.25.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.6.13.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.5.21.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.1.4.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.2.3.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.3.3.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.4.2.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.5.0.1.6.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.1.4.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.2.2.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.3.0.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.4.1.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.5.1.1.6.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.6.5.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.3.4.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.15.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.0.450.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.19.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.17.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.17.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.16.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.7.20.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.6.13.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.5.21.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.5.21.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.1.4.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.2.3.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.3.3.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.4.2.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "2.5.0.1.6.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.1.4.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.2.2.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.3.0.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.4.1.1.6.8.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                },
+                "2.5.1.1.6.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.6.5.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.3.4.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.14.2": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.0.386.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.6.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.7.10.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.5.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.5.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.5.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.6.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.3.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.14.1": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.7.4.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.5.12.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.5.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.5.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.5.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.6.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.3.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.14.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.6.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.4.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.4.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.4.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.4.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.8.1.1.4.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.4.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.1.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.4.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.5.1.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.2.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.13.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.17.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.5.6.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.3.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.3.5.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.3.5.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.3.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.3.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-plugin-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "2.0.29.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.3.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.4.4.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.1.1.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3-us-west-2.amazonaws.com/1.8.0/aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip3 install aws_mx_cu110-1.8.0-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.12.3": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.2.11.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.2.24.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.2.24.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.2.24.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.2.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.6.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.3.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.12.2": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.12.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.2.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.2.16.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.2.16.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.2.16.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.2.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.6.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.3.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.12.1": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.9.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.2.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.2.15.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.2.15.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.2.15.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.2.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.6.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.8.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.3.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.12.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.4.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.2.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.2.3.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.2.3.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.2.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.5.1.2.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.2.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.3.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.11.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.3.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.1.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.1.7.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.6.0.1.1.7.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                },
+                "1.7.1.1.1.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.4.1.1.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.1.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.1.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.2.1.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "1.10.0": {
+      "python_ver": [
+        "3.6"
+      ],
+      "instance_support": [
+        "inf1"
+      ],
+      "arch": [
+        "x86_64"
+      ],
+      "components": {
+        "driver": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-dkms": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.3.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin",
+                    "src"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.5.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-plugin": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-plugin": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "k8-scheduler": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-k8-scheduler": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "runtime-base": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-runtime-base": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.0.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-rtd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "framework": false,
+          "packages": {
+            "aws-neuron-tools": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.2.7.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "neuron-monitor",
+                    "neuron-cli",
+                    "neuron-top",
+                    "neuron-htop"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "compiler": {
+          "framework": false,
+          "packages": {
+            "neuron-cc": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.0.24045.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": "whl"
+                }
+              }
+            }
+          }
+        },
+        "pytorch": {
+          "framework": true,
+          "packages": {
+            "torch-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.0.1978.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "torch-neuron"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow": {
+          "framework": true,
+          "packages": {
+            "tensorflow-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.15.4.1.0.2168.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorboard": {
+          "framework": false,
+          "packages": {
+            "tensorboard-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.0.615.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tensorflow-model-server": {
+          "framework": false,
+          "packages": {
+            "tensorflow-model-server-neuron": {
+              "install_on_compute_instance": false,
+              "versions": {
+                "1.15.0.1.0.2168.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "deb",
+                    "rpm"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet-neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.1.88.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

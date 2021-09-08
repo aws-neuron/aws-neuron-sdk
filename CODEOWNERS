@@ -1,0 +1,25 @@
+# This file creates codeowners for the documentation. It will allow setting code reviewers for all Pull requests to merge to the master branch 
+# Each line is a file pattern followed by one or more owners.
+
+# Refernce guide - https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#example-[…]ners-file
+# Example - These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @global-owner1 and @global-owner2 will be requested for
+# review when someone opens a pull request.
+# *       @global-owner1 @global-owner2
+
+*       @aws-maens @aws-mesharma
+
+src/examples/mxnet/ @aws-rhsoln @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens
+neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws @nonatofabio @musunita @aws-rhsoln @aws-maens 
+
+src/examples/tensorflow/  @awshaichen @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen @aws-maens
+neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws @nonatofabio @musunita @awshaichen @aws-maens 
+
+
+src/examples/pytorch/ @jluntamazon @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens
+neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws @nonatofabio @musunita @jluntamazon @aws-maens 
+

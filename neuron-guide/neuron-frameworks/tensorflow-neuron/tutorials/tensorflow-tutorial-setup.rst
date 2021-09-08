@@ -1,13 +1,13 @@
 .. _tensorflow-tutorial-setup:
 
-TensorFlow Tutorials Setup
+TensorFlow Quick Setup
 =======================
 
 #. Launch an Inf1.6xlarge Instance:
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    * Enable TensorFlow-Neuron Conda environment:
+    * Enable or install TensorFlow-Neuron:
     
       .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
 

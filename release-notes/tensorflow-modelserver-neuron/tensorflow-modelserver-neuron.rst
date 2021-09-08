@@ -6,6 +6,18 @@ TensorFlow-Model-Server-Neuron Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+.. _25116100:
+
+[2.5.1.1.6.10.0]
+^^^^^^^^^^^^^^^^^^^
+
+Date: 09/22/2021
+
+Summary
+-------
+
+Bug fix on tensorflow-model-server-neuron 2.5.1.1.6.8.0 which can run into segmentation faults at model server launch time.
+
 .. _2511680:
 
 [2.5.1.1.6.8.0]

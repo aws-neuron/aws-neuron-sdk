@@ -7,3 +7,5 @@ nbsphinx
 plotly
 pandas
 ipython
+sphinx-tabs
+sphinxcontrib-programoutput

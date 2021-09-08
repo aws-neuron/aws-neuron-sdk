@@ -43,6 +43,18 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
+.. _25016100:
+
+[2.5.0.1.6.10.0]
+^^^^^^^^^^^^^^^^
+
+Date: 09/22/2021
+
+Summary
+-------
+
+No change.
+
 .. _2501680:
 
 [2.5.0.1.6.8.0]
