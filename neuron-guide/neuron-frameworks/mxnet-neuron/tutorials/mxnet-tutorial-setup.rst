@@ -1,6 +1,6 @@
 .. _mxnet-tutorial-setup:
 
-MXNet Tutorials Setup
+MXNet Quick Setup
 =======================
 
 #. Launch an Inf1.6xlarge Instance:

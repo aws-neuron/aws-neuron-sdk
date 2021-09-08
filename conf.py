@@ -45,6 +45,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx_plotly_directive',
     'df_tables',
+    'sphinx_tabs.tabs',
+    'sphinxcontrib.programoutput',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

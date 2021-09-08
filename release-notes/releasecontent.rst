@@ -13,40 +13,19 @@ Current Release - Neuron v1.15.1 (August 30 2021)
 
 
 
-ML Frameworks supported versions
+Release included packages
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=1.15.1
+
+See :ref:`neuron-maintenance-policy` for more information.
+
+Release supported frameworks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :widths: auto
-   :header-rows: 1
-   :align: left
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=1.15.1
 
-   * - Software
-     - Supported
-   * - PyTorch
-     - * PyTorch 1.5
-       * PyTorch 1.7
-       * PyTorch 1.8
-   * - TensorFlow
-     - * TensorFlow 1.15
-       * TensorFlow 2.1.4
-       * TensorFlow 2.2.3
-       * TensorFlow 2.3.3
-       * TensorFlow 2.4.2
-       * TensorFlow 2.5.0
-   * - TensorFlow Model Server
-     - * TensorFlow Model Server 1.15
-       * TensorFlow Model Server 2.1.4
-       * TensorFlow Model Server 2.2.3
-       * TensorFlow Model Server 2.3.3
-       * TensorFlow Model Server 2.4.2
-       * TensorFlow Model Server 2.5.0
-   * - Apache MXNet (Incubating)
-     - * MXNet 1.5
-       * MXNet 1.8
-   * - TensorBoard
-     - * TensorBoard 1.15
-       * Neuron Plugin for TensorBoard 2.1.0.0
+
 
 Dependency Software Supported Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -65,31 +44,6 @@ Dependency Software Supported Versions
        
 
 
-Neuron Packages
-^^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: auto
-   :header-rows: 1
-   :align: left
-
-   * - Software
-     - Included Versions
-   * - Neuron Compiler
-     - neuron_cc-1.6.13.0
-   * - Neuron Runtime
-     - aws-neuron-runtime-1.6.24.0
-   * - Neuron Tools
-     - aws-neuron-tools-1.7.25.0
-   * - Neuron Kernel module
-     - aws-neuron-dkms-2.1.5.0
-   * - Neuron Kubernetes Plugin
-     - aws-neuron-k8-plugin-1.6.22.0
-   * - Neuron Kubernetes Scheduler
-     - aws-neuron-k8-scheduler-1.6.22.0
-
-
-See :ref:`neuron-maintenance-policy` for more information.
 
 
 

@@ -1,6 +1,6 @@
 .. _tensorflow-tutorial-setup:
 
-TensorFlow Tutorials Setup
+TensorFlow Quick Setup
 =======================
 
 #. Launch an Inf1.6xlarge Instance:

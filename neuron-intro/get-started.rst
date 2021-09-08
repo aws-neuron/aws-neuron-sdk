@@ -13,7 +13,7 @@ A typical Neuron developer flow includes compilation phase and then deployment (
 
 To quickly start developing with Neuron:
 
-1. Setup your environment to compile and deploy on Inf1 instance/s:
+1. Setup your environment to compile and Deploy on AWS ML accelerator instance:
 
    * :ref:`ec2-then-ec2-setenv`
     

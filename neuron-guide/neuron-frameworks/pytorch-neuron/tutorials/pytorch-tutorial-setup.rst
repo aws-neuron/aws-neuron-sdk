@@ -1,6 +1,6 @@
 .. _pytorch-tutorial-setup:
 
-PyTorch Tutorials Setup
+PyTorch Quick Setup
 =======================
 
 #. Launch an Inf1.6xlarge Instance:
