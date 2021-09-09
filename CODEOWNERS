@@ -8,4 +8,20 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @kct22aws @nonatofabio @musunita 
+*       @aws-maens 
+
+src/examples  @kct22aws @nonatofabio @musunita
+
+src/examples/mxnet/ @aws-rhsoln
+neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln
+neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws @nonatofabio @musunita
+
+src/examples/tensorflow/  @awshaichen
+neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen
+neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws @nonatofabio @musunita
+
+
+src/examples/pytorch/ @jluntamazon
+neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon
+neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws @nonatofabio @musunita
+
