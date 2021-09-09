@@ -1,0 +1,11 @@
+# This file creates codeowners for the documentation. It will allow setting code reviewers for all Pull requests to merge to the master branch 
+# Each line is a file pattern followed by one or more owners.
+
+# Refernce guide - https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#example-[…]ners-file
+# Example - These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @global-owner1 and @global-owner2 will be requested for
+# review when someone opens a pull request.
+# *       @global-owner1 @global-owner2
+
+*       @aws-maens @kct22aws @nonatofabio @musunita 
