@@ -8,20 +8,18 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens 
+*       @aws-maens @aws-mesharma
 
-src/examples  @kct22aws @nonatofabio @musunita
+src/examples/mxnet/ @aws-rhsoln @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens
+neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws @nonatofabio @musunita @aws-rhsoln @aws-maens 
 
-src/examples/mxnet/ @aws-rhsoln
-neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln
-neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws @nonatofabio @musunita
-
-src/examples/tensorflow/  @awshaichen
-neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen
-neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws @nonatofabio @musunita
+src/examples/tensorflow/  @awshaichen @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen @aws-maens
+neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws @nonatofabio @musunita @awshaichen @aws-maens 
 
 
-src/examples/pytorch/ @jluntamazon
-neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon
-neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws @nonatofabio @musunita
+src/examples/pytorch/ @jluntamazon @nonatofabio @musunita @aws-maens
+neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens
+neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws @nonatofabio @musunita @jluntamazon @aws-maens 
 
