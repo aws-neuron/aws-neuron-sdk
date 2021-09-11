@@ -13,7 +13,7 @@ Please read through this document before submitting any issues or pull
 requests to ensure we have all the necessary information to effectively
 respond to your bug report or contribution.
 
-How to reporting Bugs/Feature Requests
+How to report Bugs/Feature Requests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We welcome you to use the GitHub issue tracker to report bugs or suggest
