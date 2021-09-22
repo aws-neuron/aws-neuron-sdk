@@ -6,7 +6,13 @@ What's New
 .. contents::
    :local:
    :depth: 2
-   
+
+Neuron 1.15.2 (09/22/2021)
+--------------------------
+
+Neuron 1.15.2 includes bug fixes for the tensorflow-model-server-neuron 2.5.1.1.6.8.0 package and several other bug fixes for tensorflow-neuron/tensorflow-model-server-neuron packages.
+
+
 Neuron 1.15.1 (08/30/2021)
 --------------------------
 
