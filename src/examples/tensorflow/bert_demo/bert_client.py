@@ -33,30 +33,32 @@ def client():
         eval_data_path = os.path.join(os.path.dirname(__file__), 'glue_mrpc_dev.tsv')
         tsv = mrpc_feature.read_tsv(eval_data_path)
     with grpc.insecure_channel('127.0.0.1:{}'.format(args.port)) as channel:
-        stub = mrpc_pb2_grpc.mrpcStub(channel)
-        num_correct = 0
-        very_start = time.time()
-        for _ in range(args.cycle):
-            if args.pair is None:
-                data = random.choice(tsv[1:])
-                text_pair.text_a = data[3].encode()
-                text_pair.text_b = data[4].encode()
-            start = time.time()
-            yes_no = stub.paraphrase(text_pair)
-            elapsed = time.time() - start
-            if data is None:
-                evaluation = ''
-            else:
-                if yes_no.prediction.decode() == data[0]:
-                    num_correct += 1
-                evaluation = 'correct, ' if yes_no.prediction.decode() == data[0] else 'incorrect, '
-            print('{} ({}latency {} s)'.format(yes_no.message.decode(), evaluation, elapsed))
-        if args.cycle > 1:
-            accuracy = num_correct / args.cycle
-            print('took {} s for {} cycles, accuracy {}'.format(time.time() - very_start, args.cycle, accuracy))
-            if args.save_accuracy is not None:
-                with open(args.save_accuracy, 'w') as f:
-                    f.write(str(accuracy))
+        with open('latencies.txt', 'a') as f:
+            stub = mrpc_pb2_grpc.mrpcStub(channel)
+            num_correct = 0
+            very_start = time.time()
+            for _ in range(args.cycle):
+                if args.pair is None:
+                    data = random.choice(tsv[1:])
+                    text_pair.text_a = data[3].encode()
+                    text_pair.text_b = data[4].encode()
+                start = time.time()
+                yes_no = stub.paraphrase(text_pair)
+                elapsed = time.time() - start
+                if data is None:
+                    evaluation = ''
+                else:
+                    if yes_no.prediction.decode() == data[0]:
+                        num_correct += 1
+                    evaluation = 'correct, ' if yes_no.prediction.decode() == data[0] else 'incorrect, '
+                print('{} ({}latency {} s)'.format(yes_no.message.decode(), evaluation, elapsed))
+                f.write(f'{elapsed}\n')
+            if args.cycle > 1:
+                accuracy = num_correct / args.cycle
+                print('took {} s for {} cycles, accuracy {}'.format(time.time() - very_start, args.cycle, accuracy))
+                if args.save_accuracy is not None:
+                    with open(args.save_accuracy, 'w') as f:
+                        f.write(str(accuracy))
 
 
 if __name__ == '__main__':
