@@ -16,6 +16,7 @@ sys.path.append(os.path.dirname(__file__))
 import mrpc_pb2_grpc
 import mrpc_feature
 
+latencies = []
 
 def client():
     parser = argparse.ArgumentParser()
@@ -51,6 +52,7 @@ def client():
                     num_correct += 1
                 evaluation = 'correct, ' if yes_no.prediction.decode() == data[0] else 'incorrect, '
             print('{} ({}latency {} s)'.format(yes_no.message.decode(), evaluation, elapsed))
+            latencies.append(elapsed)
         if args.cycle > 1:
             accuracy = num_correct / args.cycle
             print('took {} s for {} cycles, accuracy {}'.format(time.time() - very_start, args.cycle, accuracy))
@@ -58,6 +60,11 @@ def client():
                 with open(args.save_accuracy, 'w') as f:
                     f.write(str(accuracy))
 
+def write_latencies():
+    with open('latencies.txt', 'a') as f:
+        for l in latencies:
+            f.write(str(l) + '\n')
 
 if __name__ == '__main__':
     client()
+    write_latencies()

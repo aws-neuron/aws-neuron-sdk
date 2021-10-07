@@ -114,7 +114,8 @@ Wait for the bert_server to finish loading the BERT-Large models to
 Inferentia memory. When it is ready to accept requests it will print the
 inferences per second once every second. This reflects the number of
 real inferences only. Dummy requests created for batching are not
-credited to inferentia performance.
+credited to inferentia performance. Once the inferences are done you can send
+a keyboard interrupt to print out the average throughput of your run.
 
 Sending requests to server from multiple clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,8 +131,16 @@ bert_demo directory execute the following commands :
    for i in {1..96}; do python bert_client.py --cycle 128 & done
 
 This spins up 96 clients, each of which sends 128 inference requests.
-The expected performance is about 360 inferences/second for a single
-instance of inf1.xlarge.
+
+
+Printing latency metrics
+~~~~~~~~~~~~~~~~~~~~~~~~
+After all your requests have been sent to your server you can
+run the following command:
+
+.. code:: bash
+
+    python latency_printer.py
 
 .. _using-public-bert-savedmodels:
 
@@ -190,7 +199,7 @@ described in the following git diff.
    +++ b/run_classifier.py
    @@ -955,6 +955,18 @@ def main(_):
             drop_remainder=predict_drop_remainder)
-    
+
         result = estimator.predict(input_fn=predict_input_fn)
    +    features = {
    +        "input_ids": tf.placeholder(shape=[None, FLAGS.max_seq_length], dtype=tf.int32, name='input_ids'),
@@ -204,7 +213,7 @@ described in the following git diff.
    +    estimator.export_saved_model(
    +        export_dir_base='./bert_classifier_saved_model',
    +        serving_input_receiver_fn=serving_input_fn)
-    
+
         output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
         with tf.gfile.GFile(output_predict_file, "w") as writer:
 
