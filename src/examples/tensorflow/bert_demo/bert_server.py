@@ -30,6 +30,8 @@ import mrpc_pb2_grpc
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
+total_tpt = 0
+num_tpt = 0
 
 class BERTService(mrpc_pb2_grpc.mrpcServicer):
 
@@ -106,12 +108,17 @@ class BERTService(mrpc_pb2_grpc.mrpcServicer):
 
     def current_throughput(self):
         last_num_infer = self.num_infer
+        global total_tpt
+        global num_tpt
         while self.alive:
             current_num_infer = self.num_infer
             throughput = current_num_infer - last_num_infer
             self.throughput_list.append(throughput)
             print('current throughput {}'.format(throughput))
             last_num_infer = current_num_infer
+            if throughput != 0:
+                total_tpt += throughput
+                num_tpt += 1
             time.sleep(1)
 
     def current_throughput_accuracy(self):
@@ -121,6 +128,9 @@ class BERTService(mrpc_pb2_grpc.mrpcServicer):
             accuracy = 0.0 if self.num_infer == 0 else self.num_correct / self.num_infer
             print('current throughput {}, accuracy {}'.format(current_num_infer - last_num_infer, accuracy))
             last_num_infer = current_num_infer
+            if throughput != 0:
+                total_tpt += throughput
+                num_tpt += 1
             time.sleep(1)
 
     def paraphrase(self, text_pair, context):
@@ -233,3 +243,4 @@ def serve():
 
 if __name__ == '__main__':
     serve()
+    print(f'Average Throughput: {total_tpt/num_tpt}')

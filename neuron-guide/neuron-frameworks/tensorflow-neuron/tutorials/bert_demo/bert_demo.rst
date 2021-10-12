@@ -114,7 +114,8 @@ Wait for the bert_server to finish loading the BERT-Large models to
 Inferentia memory. When it is ready to accept requests it will print the
 inferences per second once every second. This reflects the number of
 real inferences only. Dummy requests created for batching are not
-credited to inferentia performance.
+credited to inferentia performance. Once the inferences are done you can send
+a keyboard interrupt to print out the average throughput of your run.
 
 Sending requests to server from multiple clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,8 +131,7 @@ bert_demo directory execute the following commands :
    for i in {1..96}; do python bert_client.py --cycle 128 & done
 
 This spins up 96 clients, each of which sends 128 inference requests.
-The expected performance is about 360 inferences/second for a single
-instance of inf1.xlarge.
+
 
 Printing latency metrics
 ~~~~~~~~~~~~~~~~~~~~~~~~
