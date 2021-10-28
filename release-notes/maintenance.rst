@@ -66,7 +66,8 @@ Yes, please see :ref:`neuron-ls-ug` or :ref:`neuron-monitor-ug`.
 Is there another tool that provide the same functionality as ``neuron-cli create-ncg``, ``neuron-cli destroy-ncg``, and ``neuron-cli list-ncg``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-No, these functionalities are no longer needed with *Neuron Runtime 2.x*,NeuronCore Groups (NCG) :ref:`is deprecated <eol-ncg>` and ``NEURONCORE_GROUP_SIZES`` environment variable :ref:`is in the process of being deprecated <eol-ncgs-env>`, Please start using ``NEURON_RT_VISIBLE_CORES`` instead. See :ref:`nrt-configuration` and :ref:`neuron-migrating-apps-neuron_1_16_0` 
+No, these functionalities are no longer needed with *Neuron Runtime 2.x*,NeuronCore Groups (NCG) :ref:`is deprecated <eol-ncg>` and ``NEURONCORE_GROUP_SIZES`` environment variable :ref:`is in the process of being deprecated <eol-ncgs-env>`, Please start using ``NEURON_RT_VISIBLE_CORES`` instead. See :ref:`nrt-configuration` and :ref:`neuron-migrating-apps-neuron-to-libnrt` 
+
 for more information.
 
 Is there another tool that provide the same functionality as ``neuron-cli reset``?
