@@ -1,15 +1,19 @@
 .. _tensorflow-neuron-rn:
 
-Tensorflow-Neuron Release Notes
-===============================
+Tensorflow-Neuron 1.x Release Notes
+===================================
+
+.. contents::
+   :local:
+   :depth: 1
 
 
-This document lists the release notes for the TensorFlow-Neuron package.
+This document lists the release notes for the TensorFlow-Neuron 1.x package.
 
 .. _tf-known-issues-and-limitations:
 
 Known Issues and Limitations - updated 08/12/2021
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Support on serialized TensorFlow 2.x custom operators is currently limited. Serializing some operators registered from tensorflow-text through `TensorFlow Hub <https://tfhub.dev/>`_ is going to cause failure in tensorflow.neuron.trace.
 
@@ -43,32 +47,33 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
-.. _25016100:
+Tensorflow-Neuron 1.x release [2.0.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[2.5.0.1.6.10.0]
-^^^^^^^^^^^^^^^^
+Date: 10/27/2021
 
-Date: 09/22/2021
+New in this release
+-------------------
 
-Summary
--------
+* TensorFlow Neuron 1.x now support Neuron Runtime 2.x (``libnrt.so`` shared library) only.
 
-No change.
+     .. important::
 
-.. _2501680:
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+           for proper functionality of the new runtime library.
+        -  Read :ref:`introduce-libnrt`
+           application note that describes :ref:`why are we making this
+           change <introduce-libnrt-why>` and
+           how :ref:`this change will affect the Neuron
+           SDK <introduce-libnrt-how-sdk>` in detail.
+        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+           migrate your application.
 
-[2.5.0.1.6.8.0]
-^^^^^^^^^^^^^^^^
+Resolved Issues
+---------------
 
-Date: 08/12/2021
-
-Summary
--------
-
-* TensorFlow 2.x - First release of TensorFlow 2.x integration, Neuron support now TensorFlow versions 2.1.4, 2.2.3, 2.3.3, 2.4.2, and 2.5.0.
-
-* TensorFlow 2.x - New public API tensorflow.neuron.trace: trace a TensorFlow 2.x keras.Model or a Python callable that can be decorated by tf.function, and return an AWS-Neuron-optimized keras.Model that can execute on AWS Machine Learning Accelerators.
- **Please note** that TensorFlow 1.x SavedModel compilation API tensorflow.neuron.saved_model.compile is not supported in tensorflow-neuron 2.x . It continues to function in tensorflow-neuron 1.15.x .
+* Fix neuron-cc argument handling bug when nothing can be compiled.
+* Fixing the support of cast operators applied after constants, by Introducing support of constant-folding pass before Neuron auto-mixed-precision.
 
 .. _11551510:
 
@@ -77,8 +82,8 @@ Summary
 
 Date: 07/02/2021
 
-Summary
--------
+New in this release
+-------------------
 
 * Bug fixes regarding scalar inputs/outputs.
 * Minor performance improvements when dynamic batch size is turned on or when model is small.
@@ -90,8 +95,8 @@ Summary
 
 Date: 05/28/2021
 
-Summary
--------
+New in this release
+-------------------
 
 * Reduce the amount of input/output data movement during inference.
 * Improve parallelism for dynamic batch size inference by adopting a new sharding mechanism.
@@ -109,8 +114,8 @@ Summary
 
 Date: 05/01/2021
 
-Summary
--------
+New in this release
+-------------------
 
 1. Minor enhancements.
 
@@ -121,8 +126,8 @@ Summary
 
 Date: 03/04/2021
 
-Summary
--------
+New in this release
+-------------------
 
 1. Minor enhancements.
 
@@ -134,8 +139,8 @@ Summary
 
 Date: 02/24/2021
 
-Summary
--------
+New in this release
+-------------------
 
 1. Fix for CVE-2021-3177.
 
@@ -147,8 +152,8 @@ Summary
 
 Date: 01/30/2021
 
-Summary
--------
+New in this release
+-------------------
 
 1. Bug fixes and internal refactor.
 
@@ -166,8 +171,8 @@ Summary
 
 Date: 12/23/2020
 
-Summary
--------
+New in this release
+-------------------
 
 1. Improved logging during `tfn.saved_model.compile` to display `neuron-cc` compilation progress.
 
@@ -183,8 +188,8 @@ Summary
 
 Date: 11/17/2020
 
-Summary
--------
+New in this release
+-------------------
 
 1. tensorflow-neuron is now a plugin package that can be used together
    with tensorflow~=1.15.0 built with ``GLIBCXX_USE_CXX11_ABI=0``.
@@ -204,8 +209,8 @@ Summary
 
 Date: 09/22/2020
 
-Summary
--------
+New in this release
+-------------------
 
 1. tensorflow-neuron now automatically enables data parallel mode on
    four cores in one Inferentia. In ``tensorflow-model-server-neuron``,
@@ -230,8 +235,8 @@ Date: 08/08/2020
 
 .. _summary-1:
 
-Summary
--------
+New in this release
+-------------------
 
 Various minor improvements.
 
@@ -244,8 +249,8 @@ Date: 08/05/2020
 
 .. _summary-2:
 
-Summary
--------
+New in this release
+-------------------
 
 Various minor improvements.
 
@@ -258,8 +263,8 @@ Date: 07/16/2020
 
 .. _summary-3:
 
-Summary
--------
+New in this release
+-------------------
 
 This version contains a few bug fixes and user experience improvements.
 
@@ -296,8 +301,8 @@ Date 6/11/2020
 
 .. _summary-4:
 
-Summary
--------
+New in this release
+-------------------
 
 This version contains a few bug fixes.
 
@@ -331,8 +336,8 @@ Date: 5/11/2020
 
 .. _summary-5:
 
-Summary
--------
+New in this release
+-------------------
 
 This version contains some bug fixes and new features.
 
@@ -368,8 +373,8 @@ Date: 3/26/2020
 
 .. _summary-6:
 
-Summary
--------
+New in this release
+-------------------
 
 .. _major-new-features-2:
 
@@ -403,8 +408,8 @@ Date: 2/27/2020
 
 .. _summary-7:
 
-Summary
--------
+New in this release
+-------------------
 
 .. _major-new-features-3:
 
@@ -450,8 +455,8 @@ Date: 1/27/2020
 
 .. _summary-8:
 
-Summary
--------
+New in this release
+-------------------
 
 .. _major-new-features-4:
 
@@ -495,8 +500,8 @@ Date: 12/20/2019
 
 .. _summary-9:
 
-Summary
--------
+New in this release
+-------------------
 
 .. _major-new-features-5:
 
@@ -529,8 +534,8 @@ Date: 12/1/2019
 
 .. _summary-10:
 
-Summary
--------
+New in this release
+-------------------
 
 .. _major-new-features-6:
 
@@ -590,8 +595,8 @@ Date: 11/25/2019
 
 .. _summary-11:
 
-Summary
--------
+New in this release
+-------------------
 
 This version is available only in released DLAMI v26.0 and is based on
 TensorFlow version 1.15.0. Please

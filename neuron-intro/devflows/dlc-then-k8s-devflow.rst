@@ -1,7 +1,7 @@
 .. _dlc-then-k8s-devflow:
 
-Deploy DLC on Kubernetes
-========================
+Deploy  Neuron Container on Kubernetes
+======================================
 
 .. contents:: Table of Contents
    :local:

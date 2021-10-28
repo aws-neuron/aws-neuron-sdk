@@ -30,7 +30,7 @@ TensorFlow-Neuron Check Model
 
 The following example shows how to run TensorFlow-Neuron Check Model tool with TensorFlow ResNet50 tutorial.
 
-1. Start with the TensorFlow ResNet50 tutorial at :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb and do the first three steps of the
+1. Start with the TensorFlow ResNet50 tutorial at :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb` and do the first three steps of the
 tutorial. Please stay in the Python environment that you setup during the tutorial.
 
 2. Install needed tensorflow_hub package and download the tool:

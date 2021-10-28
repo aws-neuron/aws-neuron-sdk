@@ -1,8 +1,8 @@
 .. _neuron-cc-ops-mxnet:
 
 
-Supported operators [Neuron Apache MXNet (Incubating)]
-======================================================
+Neuron Apache MXNet (Incubating) Supported operators
+====================================================
 
 To see a list of supported operators for MXNet, run the following command:
 

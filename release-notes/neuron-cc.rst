@@ -3,6 +3,9 @@
 Neuron Compiler Release Notes
 =============================
 
+.. contents::
+   :local:
+   :depth: 1
 
 Introduction
 ^^^^^^^^^^^^
@@ -24,23 +27,38 @@ Tensorflow: :ref:`neuron-cc-ops-tensorflow`
 
 Pytorch: :ref:`neuron-cc-ops-pytorch`
 
+XLA: :ref:`neuron-cc-ops-xla`
+
 Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
-
-
-
-Known issues and limitations - updated 08/12/2021
+Known issues and limitations - updated 10/27/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * *TensorFlow 2.x* - In this release supported operators are limited to BERT-like models, specifically no conv2d  or reduce-window operators are available.
-* The compiler’s list-operators command does not display the supported TF2.x operators yet.
 * *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
 * *Data layout* The Neuron compiler supports multiple data layout format (NCHW, NHWC, …). Non-CNHW input/output data-layouts will require Neuron to insert additional transpose operations, causing a degradation in performance.
 * *Primary inputs in NeuronCore Pipeline mode* When a neural network is executed in NeuronCore Pipeline mode, only the first operator in a neural network can receive primary inputs from the host.
 * *Reduce data type* INT8 data type is not currently supported by the Neuron compiler.
 * *NeuronCore Pipeline:* NeuronCorePipeline mode provides low-latency and high-throughput for small batch sizes. We recommend to start testing with batch=1 and gradually increase batch size to fine tune your model throughput and latency performance.
+* *Large input tensors* support varies by model. On some models the large input tensors (eg 1024x1024) may result in lower performance or exceeding hardware or compile-time limits, especially on models where the large input tensor is used by many downstream operators. Workarounds may include use of smaller batch, see
+  :ref:`neuron-batching`
 * *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
 * *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
+* FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
+
+
+Neuron Compiler release [1.7.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 10/27/2021
+
+
+New in this release
+-------------------
+
+* The compiler’s list-operators command can now display the supported TensorFlow 2.x operators.
+* Support added for new operators in TensorFlow 1.x -  ArgMax and ArgMin.
+* Introducing the ``–-fast-math`` option for better fine-tuning of accuracy/performance. See :ref:`mixed-precision`
 
 
 [1.6.13.0]
@@ -48,8 +66,8 @@ Known issues and limitations - updated 08/12/2021
 
 Date 08/12/2021
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 * TensorFlow 2.x  - First support of TensorFlow 2.x. The support is limited to operators in BERT-like models and was tested with Huggingface BERT small, base, large and DistillBert.
 
@@ -69,8 +87,8 @@ Summary
 
 - Robustness and performance improvements.
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 * Added --enable-fast-context-switch to optimize for
   faster model switching rather than inference latency.
@@ -90,8 +108,8 @@ Summary
 
 - Performance improvements, and usability improvements.
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 * Added uncompressed NEFF format for faster loading models prior inference. Enable it by –enable-fast-loading-neuron-binaries. Some cases of large models may be detrminentally impacted as it will not be compressed but many cases will benefit.
 * Corrected compilation error in specific arguments of ResizeBilinear operator
@@ -106,8 +124,8 @@ Summary
 
 - Performance improvements, new operators, and usability improvements.
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 - Improved performance of batched CNN models like resnet50  with the default compiler options by 10%.
 
@@ -148,8 +166,8 @@ Summary
 
 Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline. 
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 - The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
 
@@ -181,8 +199,8 @@ Summary
 Added suport for PyTorch Yolo V4, a new Framework-visible progress bar and improved inference performance. We continue to streamline the compiler usability by removing the need for options passed to control behavior. We are aiming to remove the need for such options entirely. Some tutorials have been updated to reflect this, but Resnet50 remains in need of these options to achieve maximum performance. Other useability improvements have been added, such as the compiler progress bar. As always, please let us know if there are other areas that we can improve.
 
 
-Major New Features
-------------------
+New in this release
+-------------------
 - Pytorch Yolo V4 is now supported.
 
 - Added a compiler progress bar when compilation is invoked from the Framework. This allows the user to see that progress continues as compilation proceeds, which is useful when compilation takes several minutes. A dot is printed every 20 seconds.
@@ -206,8 +224,8 @@ Summary
 
 Improved performance for pipelined execution (NeuronCore Pipeline).
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 -  NeuronCore Pipeline: improved partitioning to enable better static
    weights loading to cache.
@@ -244,8 +262,8 @@ speed of object recognition models.
 
 .. _major-new-features-1:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 -  Improved inference performance of YOLO v3, YOLO v4, VGG16, SSD300.
    BERT models were improved by an additional 10%.
@@ -279,8 +297,8 @@ Various performance improvements.
 
 .. _major-new-features-1:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 Improved performance of BERT base with -O2
 
@@ -322,8 +340,8 @@ improvements to support compilation of several neural networks.
 
 .. _major-new-features-2:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 This release
 
@@ -369,8 +387,8 @@ improvements to support compilation of several neural networks.
 
 .. _major-new-features-3:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 This release
 
@@ -422,8 +440,8 @@ neural networks.
 
 .. _major-new-features-4:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 -  This version supports compilation of unmodified Tensorflow BERT with
    batch size 1, 4, 6 for input sequence 128.
@@ -482,8 +500,8 @@ neural networks.
 
 .. _major-new-features-5:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 -  Support compilation of modified SSD-300
    (:ref:`tensorflow-ssd300`)
@@ -540,8 +558,8 @@ Bug fixes and minor performance improvements.
 
 .. _major-new-features-6:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 None
 
@@ -596,8 +614,8 @@ BERT-type neural networks.
 
 .. _major-new-features-7:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 None
 
@@ -682,8 +700,8 @@ Bug fixes and some performance enhancement for NeuronCore Pipeline.
 
 .. _major-new-features-8:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 .. _resolved-issues-8:
 
@@ -746,8 +764,8 @@ Summary
 
 .. _major-new-features-9:
 
-Major New Features
-------------------
+New in this release
+-------------------
 
 .. _resolved-issues-9:
 
@@ -816,8 +834,8 @@ Date: 11/25/2019
 
 .. _major-new-features-10:
 
-Major new features
-------------------
+New in this release
+-------------------
 
 N/A, this is the first release.
 

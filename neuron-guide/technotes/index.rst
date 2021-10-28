@@ -8,6 +8,5 @@ Neuron Technical and Application notes provide additional information that help 
 .. toctree::
    :maxdepth: 1
 
-   Neuron Data-Types <data-types>
    Neuron Batching <neuroncore-batching>
    NeuronCore Pipeline <neuroncore-pipeline>

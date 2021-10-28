@@ -1,7 +1,7 @@
 .. _neuron-plugin-tensorboard:
 
-Getting Started: Neuron Plugin for TensorBoard
-==============================================
+Neuron Plugin for TensorBoard
+=============================
 
 .. contents:: Table of Contents
   :local:
@@ -37,21 +37,9 @@ graphs executed on NeuronCores.
 Setup Environment
 -----------------
 
-1. Launch an Inf1 Instance:
-    .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
-  
-
-2. Set up a development environment:
-    To compile and run inference from the instance terminal, first enable the ML framework conda environment of your choice by running one of the following from the terminal:
-
-    * Enable PyTorch-Neuron Conda enviroment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
-    
-    * Enable TensorFlow-Neuron Conda enviroment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
-    
-    * Enable MXNet-Neuron Conda enviroment:
-    .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
+   * :ref:`pytorch-quickstart`
+   * :ref:`tensorflow-quickstart`
+   * :ref:`mxnet-quickstart`
 
 Compile the neural network
 --------------------------

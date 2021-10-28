@@ -1,82 +1,130 @@
-.. _rtd-config-param:
+.. _nrt-configuration:
 
-Neuron-RTD Configurable Parameters
-==================================
+Neuron Runtime Configuration
+============================
 
-This guide provides an overview of the different parameters available to
+Runtime is responsible of executing ML models on Neuron devices and it determines which NeuronCore will execute which model and how to execute it.
+User application should configure the Runtime to change the default behavior, Runtime can be configured through environmental variables,
+in most cases Neuron framework extensions will take care of the proper configuration in other cases the user may need to explicitly configure the runtime
+ to achieve the desired behavior.
+
+This guide provides an overview of the different environment variables available to
 configure Neuron runtime behavior.
 
-Global Runtime Configuration
-----------------------------
+.. list-table:: Environment Variables
+   :widths: 25 60 20 50 20
+   :header-rows: 1
 
-These parameters are defined in neuron-rtd.config and affect global
-runtime configuration. Note that Neuron runtime must be restarted after
-changes to the configuration file for them to take effect.
+   * - Name
+     - Description
+     - Type
+     - Expected Values
+     - Default Value
+   * - ``NEURON_RT_VISIBLE_CORES``
+     - Range of specific NeuronCores needed by the process
+     - Integer range (like 1-3)
+     - Any value or range between 0 to Max NeuronCore in the system.
+     - None
+   * - ``NEURON_RT_LOG_LOCATION``
+     - Runtime log location
+     - string
+     - console or syslog
+     - console
+   * - ``NEURON_RT_LOG_LEVEL``
+     - Runtime log verbose level
+     - string
+     - ERROR, WARNING, INFO, DEBUG, TRACE
+     - ERROR
+   * - ``NEURON_RT_EXEC_TIMEOUT``
+     - Timeout for execution in seconds
+     - Integer
+     - 0 to INT_MAX
+     - 2
+   * - ``NEURON_RT_VALIDATE_HASH``
+     - Validate NEFF contents before loading into accelerator
+     - Boolean
+     - TRUE or FALSE
+     - FALSE
 
-Model Directory Caching:
-~~~~~~~~~~~~~~~~~~~~~~~~
 
-One of the most time consuming stages in model loading is the
-unpackaging of the NEFF file to a temporary directory for the runtime to
-digest. To mitigate this cost for repeated loads of the same model,
-caching can be turned on by giving an integer value to the
-``model_cache_count`` field in neuron-rtd.config to set a threshold on
-the number of unpacked model directories that the runtime can keep
-around. Keyed based on NEFF UUID, the runtime will check for an existing
-mapping to a cached directory and reuse it if found. The cache employs
-simple LRU eviction when full.
+NeuronCore Allocation with NEURON_RT_VISIBLE_CORES
+--------------------------------------------------
 
-Per-Model GRPC Load Parameters:
--------------------------------
+.. important ::
 
-These are optional parameters that can accompany a model ``load()`` API
-call to set certain behaviors for that specific model. Note that some of
-these parameters can also have a default value configurable in
-neuron-rtd.config that will apply to every model that does not provide
-that parameter during ``load()``.
+  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
 
-Per-inference timeout:
-~~~~~~~~~~~~~~~~~~~~~~
 
-The maximum amount of time in seconds spent waiting for each inference
-to complete can be configured by passing an integer value to the
-``timeout`` parameter. If the timeout is reached, the runtime will
-immediately return TIMEOUT (error code 5) regardless of the eventual
-status of the inference.
+By default, Neuron Runtime initializes all the cores present in the system and reserves them for the current process.
 
-The default timeout value is 2 seconds. It can be modified in the
-neuron-rtd.config file.
+.. note ::
 
-Inference queue size:
-~~~~~~~~~~~~~~~~~~~~~
+  Once a NeuronCore is reserved for a process, it cant be used by another process at all, until the process reserving that NeuronCore dies.
 
-More then one inference request could be posted concurrently up to the
-inference queue size limit. Having inference requests in the queue
-allows the runtime to prepare the next set of inputs while the previous
-inference is running on the hardware thus increasing the overall
-throughput.
+For parallel processing, it is necessary multiple processes need to use different NeuronCores.
+For this purpose **``NEURON_RT_VISIBLE_CORES``** can be used which controls what NeuronCores the process would reserve.
+This variable takes a NeuronCore index or an inclusive range.
 
-Interface queue size can be adjusted for each model by passing an
-integer value to the 'ninfer' parameter. A global inference queue size
-default can be specified in the neuron-rtd.config file. The default
-value is 4.
+For example, if an application(myapp.py) requires one NeuronCore, then it can be started with
+``NEURON_RT_VISIBLE_CORES=0`` to use only NeuronCore 0. To do parallel processing, multiple process can be
+started(without any change to application) with different ``NEURON_RT_VISIBLE_CORES`` values.
+Here is an example which runs myapp.py on inf1.xl parallely by using different NeuronCores available.
 
-Input staging location:
-~~~~~~~~~~~~~~~~~~~~~~~
+::
 
-Inference inputs can be configured to be staged in either host or device
-memory prior to starting an inference by passing a boolean flag to the
-``io_data_host`` parameter. A value of true stages the data in host
-memory, while false stages the data in the device. Bandwidth is much
-higher from the device than the host to the chip, so staging on the
-device can be beneficial for models with large input loads that would
-otherwise cause a bottleneck during transfer. Note that this does
-introduce an extra step during inference posting to transfer the input
-to the device, so it may negatively affect single-inference latency.
-This option is most useful when paired with concurrent, pipelined
-inferences (with an appropriate ``ninfer`` value) so that inference
-execution in hardware can hide the extra overhead of staging.
+ NEURON_RT_VISIBLE_CORES=0 myapp.py
+ NEURON_RT_VISIBLE_CORES=1 myapp.py
+ NEURON_RT_VISIBLE_CORES=2 myapp.py
+ NEURON_RT_VISIBLE_CORES=3 myapp.py
 
-A global default can be specified in the config file with the
-``io_dma_data_host`` flag. Default value on installation is false.
 
+Another example, where myapp2.py requires 3 NeuronCores and being run on inf1.6xl.
+In the following example, the first instance of myapp2 would use NeuronCores 0, 1 and 2, then next instance would use 3, 4, and 4 and so on.
+
+::
+
+ NEURON_RT_VISIBLE_CORES=0-2 myapp2.py
+ NEURON_RT_VISIBLE_CORES=3-5 myapp2.py
+ NEURON_RT_VISIBLE_CORES=6-8 myapp2.py
+ NEURON_RT_VISIBLE_CORES=9-11 myapp2.py
+ NEURON_RT_VISIBLE_CORES=12-14 myapp2.py
+
+
+Notes
+~~~~~
+
+1. Number of NeuronCores in a inferentia device is 4
+2. Number of inferentia is depends on the instance size.
+3. The NeuronCore index in NEURON_RT_VISIBLE_CORES starts from 0 and ends at (number of NeuronDevices * number of NeuronCores) - 1.
+
+
+Logging and debug-ability
+-------------------------
+By default, Neuron Runtime logs to syslog with verbose level of *INFO* and only *ERROR* s are logged in console.
+The following code snippet shows ways to increase/decrease the log level.
+
+::
+
+ NEURON_RT_LOG_LEVEL=INFO myapp.py         # Sets the log level for syslog and console to INFO
+ NEURON_RT_LOG_LOCATION=console NEURON_RT_LOG_LEVEL=QUIET myapp.py    # Completely disables console logging.
+
+By default, Neuron Runtime expects the NeuronCore to complete execution of any model with in 2 seconds.
+If NeuronCore didnt complete the execution within 2 seconds then runtime would fail the execution with timeout error.
+Most of the models takes few milliseconds to complete so 2 seconds(2000 milliseconds) is more than adequate.
+However if your model is expected to run more than 2 seconds then you can increase the timeout with NEURON_RT_EXEC_TIMEOUT.
+
+::
+
+ NEURON_RT_EXEC_TIMEOUT=5 myapp.py       # increases the timeout to 5 seconds
+
+Checksum
+--------
+To execute a model(NEFF), Neuron Runtime needs to load the NEFF file into NeuronCore and run.
+Neuron Runtime provides a way to do checksum validation on each NEFF file while loading to validate the file is not corrupted.
+This option is off by default to avoid performance penalty during model load time(~50%).
+
+::
+
+ NEURON_RT_VALIDATE_HASH=true myapp1.py     # enables model checksum validation while loading
+ NEURON_RT_VALIDATE_HASH=false myapp2.py    # disables(default) model checksum validation while loading

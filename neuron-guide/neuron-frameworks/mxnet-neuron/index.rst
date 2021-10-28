@@ -31,7 +31,6 @@ User Guide
       /release-notes/neuron-cc-ops/neuron-cc-ops-mxnet
       troubleshooting-guide
 
-
 .. _mxnet-release-notes:
 
 Release notes

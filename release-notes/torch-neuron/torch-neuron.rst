@@ -3,12 +3,16 @@
 PyTorch Neuron release notes
 ============================
 
+.. contents::
+   :local:
+   :depth: 1
+
 This document lists the release notes for the Pytorch-Neuron package.
 
 
 
 Known Issues and Limitations - Updated 08/12/2021
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not torch-neuron limitations, but may impact models
 you can successfully torch.neuron.trace
@@ -29,7 +33,77 @@ you can successfully torch.neuron.trace
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
 
-.. _neuron-torch-xxxx:
+PyTorch Neuron release [2.0.318.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 10/27/2021
+
+New in this release
+-------------------
+
+-  PyTorch Neuron 1.x now support Neuron Runtime 2.x (``libnrt.so`` shared library) only.
+
+     .. important::
+
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+           for proper functionality of the new runtime library.
+        -  Read :ref:`introduce-libnrt`
+           application note that describes :ref:`why are we making this
+           change <introduce-libnrt-why>` and
+           how :ref:`this change will affect the Neuron
+           SDK <introduce-libnrt-how-sdk>` in detail.
+        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+           migrate your application.
+
+-  Introducing PyTorch 1.9.1 support (support for ``torch==1.9.1)``
+-  Added ``torch_neuron.DataParallel``, see ResNet-50 tutorial :ref:`[html] </src/examples/pytorch/resnet50.ipynb>` and
+   :ref:`torch-neuron-dataparallel-app-note` application note.
+-  Added support for tracing on GPUs
+-  Added support for ``ConvTranspose1d``
+-  Added support for new operators:
+
+   -  ``aten::empty_like``
+   -  ``aten::log``
+   -  ``aten::type_as``
+   -  ``aten::movedim``
+   -  ``aten::einsum``
+   -  ``aten::argmax``
+   -  ``aten::min``
+   -  ``aten::argmin``
+   -  ``aten::abs``
+   -  ``aten::cos``
+   -  ``aten::sin``
+   -  ``aten::linear``
+   -  ``aten::pixel_shuffle``
+   -  ``aten::group_norm``
+   -  ``aten::_weight_norm``
+
+-  Added ``torch_neuron.is_available()``
+
+
+Resolved Issues
+---------------
+
+-  Fixed a performance issue when using both the
+   ``dynamic_batch_size=True`` trace option and
+   ``--neuron-core-pipeline`` compiler option. Dynamic batching now uses
+   ``OpenMP`` to execute pipeline batches concurrently.
+-  Fixed ``torch_neuron.trace`` issues:
+
+   -  Fixed a failure when the same submodule was traced with multiple
+      inputs
+   -  Fixed a failure where some operations would fail to be called with
+      the correct arguments
+   -  Fixed a failure where custom operators (torch plugins) would cause
+      a trace failure
+
+-  Fixed variants of ``aten::upsample_bilinear2d`` when
+   ``scale_factor=1``
+-  Fixed variants of ``aten::expand`` using ``dim=-1``
+-  Fixed variants of ``aten::stack`` using multiple different input data
+   types
+-  Fixed variants of ``aten::max`` using indices outputs
+
 
 [1.8.1.1.5.21.0]
 ^^^^^^^^^^^^^^^^

@@ -9,9 +9,12 @@ classification:
 https://github.com/awslabs/multi-model-server/tree/master/examples/mxnet_vision.
 
 Before starting this example, please ensure that Neuron-optimized MXNet
-version mxnet-neuron is installed along with Neuron Compiler (see
-:ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`) and Neuron RTD is running with default settings
-(see :ref:`rtd-getting-started`. ).
+version mxnet-neuron is installed along with Neuron Compiler.
+
+Warning
+*******
+If you are using MXNet-1.5, please note that MXNet-1.5 entered maintenance mode and require Neuron Runtime 1.x, please see :ref:`maintenance_mxnet_1_5`.
+To setup development environment for MXNet-1.5 see installation instructions at :ref:`mxnet-setup`.
 
 If using DLAMI, you can activate the environment aws_neuron_mxnet_p36
 and skip the installation part in the first step below.
@@ -104,9 +107,6 @@ Download the example code:
 
 Edit ``mxnet_model_service.py`` to use the appropriate context. 
 
-- In case of MXNet 1.5, Neuron uses mx.neuron() context 
-- In case of MXNet 1.8, Neuron uses mx.cpu() context
-
 Make the following change:
 
 .. code:: bash
@@ -116,9 +116,13 @@ Make the following change:
    mxnet_version = version.parse(mx.__version__)
    if mxnet_version >= version.parse("1.8"):
       import mx_neuron as neuron
-      self.mxnet_ctx = mx.cpu()
-   else: 
-      self.mxnet_ctx = mx.neuron()
+   self.mxnet_ctx = mx.neuron()
+
+Comment out the existing context set:
+
+.. code:: bash
+
+   #self.mxnet_ctx = mx.cpu() if gpu_id is None else mx.gpu(gpu_id)
 
 Also, comment out unnecessary data copy for model_input in
 ``mxnet_model_service.py``:

@@ -1,7 +1,7 @@
 .. _dlc-then-ec2-devflow:
 
-Deploy DLC on EC2
-=================
+Deploy Neuron Container on EC2
+==============================
 
 .. contents:: Table of Contents
    :local:
@@ -26,12 +26,12 @@ Setup Environment
 -----------------
 
 1. Launch an Inf1 Instance
-	.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
+	.. include:: /neuron-intro/install-templates/launch-inf1-ami.rst
 
-	To deploy your container using a Jupyter Notebook see :ref:`setup-jupyter-notebook-steps-troubleshooting`  
+2. Once you have your EC2 environment set according to :ref:`tutorial-docker-env-setup`, you can build and run a Neuron container using the :ref:`how-to-build-neuron-container` section above.
 
-2. Deploy an inference container on your inf1 instance:
-	Follow the `Getting Started with Deep Learning Containers for Inference on EC2 <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html>`_. 
+.. [DLC specific flow, uncomment when DLC available] Follow the `Getting Started with Deep Learning Containers for Inference on EC2 <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ec2-tutorials-inference.html>`_ and use the appropriate DLC container.
+
 
 .. note:: 
 

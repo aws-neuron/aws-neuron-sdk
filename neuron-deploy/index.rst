@@ -16,11 +16,46 @@ and use case.  In most cases, it is recommended to use a preconfigured
 `Deep Learning Container <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/what-is-dlc.html>`_ from AWS.  Each DLC is pre-configured to have a recent
 version of Neuron components installed and is specific to the chosen ML Framework you want.
 
+
+Deploy a Neuron Container
+-------------------------
+
 .. toctree::
    :maxdepth: 1
 
-   container-deployment-flows
-   neuron-sdk-containers
-   Tutorials <tutorials/tutorials>
+   dlc-then-ec2-devflow
+   dlc-then-ecs-devflow
+   dlc-then-eks-devflow
+   container-sm-hosting-devflow
+
+
+.. _containers-tutorials:
+
+Tutorials
+---------
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/neuron-container
+   tutorials/tutorial-docker-env-setup
+   tutorials/k8s-neuron-scheduler
+
+Release Notes
+-------------
+
+.. toctree::
+   :maxdepth: 1
+
    rn
+
+Resources for Neuron Runtime 1.x Users
+--------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   v1/index
+
+
 

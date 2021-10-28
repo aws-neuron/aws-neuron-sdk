@@ -1,11 +1,25 @@
 .. _neuron-cc-ops-tensorflow:
 
-Supported operators [TensorFlow 1.x]
-====================================
+TensorFlow 1.x Supported operators
+==================================
 
 To see a list of supported operators for TensorFlow 1.x, run the following command:
 
 ``neuron-cc list-operators --framework TENSORFLOW``
+
+
+.. _neuron-compiler-release-1730:
+
+Neuron Compiler Release [1.7.3.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+
+::
+
+ ArgMax
+ ArgMin
+
 
 
 .. _neuron-compiler-release-16130:

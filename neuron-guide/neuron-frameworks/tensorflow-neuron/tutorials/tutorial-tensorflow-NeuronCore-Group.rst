@@ -3,6 +3,11 @@
 Tutorial: Configuring NeuronCore Groups
 =======================================
 
+.. important ::
+
+  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+
 A NeuronCore Group is a set of NeuronCores that are used to load and run
 a compiled model. At any point in time, only one model will be running
 in a NeuronCore Group. Within a NeuronCore Group, loaded models can be

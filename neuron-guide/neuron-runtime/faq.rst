@@ -5,38 +5,53 @@ Neuron runtime FAQ
    :local:
    :depth: 1
 
-How does Neuron connect to all the Inferentia chips in an Inf1 instance?
----------------------------------------------------------------------------
 
-By default, a single runtime process will manage all assigned
-Inferentias, including running the Neuron Core Pipeline mode. if needed,
-you can configure multiple KRT processes each managing a separate group
-of Inferentia chips. For more details please refer to
-:ref:`nrt-overview`
+Where can I find information about Neuron Runtime 2.x (``libnrt.so``)
+---------------------------------------------------------------------
 
-Where can I get logging and other telemetry information?
+See :ref:`introduce-libnrt` for detailed information about Neuron Runtime 2.x (``libnrt.so``).
+
+What will happen if I will upgrade Neuron Framework without upgrading latest kernel mode driver?
+------------------------------------------------------------------------------------------------
+
+Application start would fail with the following error message:
+.. code:: bash
+
+    2021-Aug-11 19:18:21.0661 24616:24616 ERROR   NRT:nrt_init      This runtime requires Neuron Driver version 2.0 or greater. Please upgrade aws-neuron-dkms package.
+
+
+Do I need to recompile my model to use the Runtime Library?
 -----------------------------------------------------------
+No. Runtime 2.x supports all the models compiled with Neuron Compiler 1.x.
 
-See this document on how to collect logs: :ref:`neuron_gatherinfo`
 
-What about RedHat or other versions of Linux?
-------------------------------------------------
+Do I need to change my application launch command?
+--------------------------------------------------
+No.
+
+How do I restart/start/stop the Neuron Runtime?
+-----------------------------------------------
+Since Neuron Runtime is a library, starting/stopping application would result in starting/stopping the Neuron Runtime.
+
+
+How do I know which runtimes are associated with which Neuron Device(s)?
+------------------------------------------------------------------------
+`neuron-ls` and `neuron-top` can be used to find out applications using Neuron Devices.
+
+
+What about RedHat or other versions of Linux and Windows?
+--------------------------------------------------------
 
 We dont officially support it yet.
 
-What about Windows?
-----------------------
-
-Windows is not supported at this time.
-
 How can I use Neuron in a container based environment? Does Neuron work with ECS and EKS?
---------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 ECS and EKS support is coming soon. Containers can be configured as
 shown :ref:`here <neuron-containers>`.
 
 How can I take advantage of multiple NeuronCores to run multipleinferences in parallel?
-------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
 Examples of this for TensorFlow are found
 :ref:`here <tensorflow-tutorials>`

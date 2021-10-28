@@ -1,3 +1,5 @@
+.. _torch_neuron_trace_api:
+
 PyTorch-Neuron trace python API
 ================================
 

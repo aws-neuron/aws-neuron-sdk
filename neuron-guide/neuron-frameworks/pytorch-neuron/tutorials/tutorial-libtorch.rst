@@ -140,13 +140,13 @@ Finally, run the example app directly to benchmark the BERT model.
 
 .. code:: bash
 
-  $ ./example-app bert_neuron_b6.pt
+  $ LD_LIBRARY_PATH="libtorch/lib:tokenizers_binding/lib" ./example-app bert_neuron_b6.pt
 
 ::
 
   Getting ready....
   Benchmarking....
-  Completed 4000 operations in 25 seconds => 960 pairs / second
+  Completed 4000 operations in 22 seconds => 1090.91 pairs / second
 
   ====================
   Summary information:

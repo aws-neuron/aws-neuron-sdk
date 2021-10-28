@@ -1,21 +1,37 @@
-To activate TensorFlow 1.x:
+.. tabs::
 
-.. code::
+   .. group-tab:: TensorFlow 2.5.1
 
-  source activate aws_neuron_tensorflow_p36
+      .. tabs::
 
-To activate TensorFlow 2.x:
+         .. group-tab:: Ubuntu DLAMI
 
-.. code::
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-  # Setup a new Python virtual environment
-  sudo apt-get install python3-venv
-  python3 -m venv neuron_tf2_env
-  source neuron_tf2_env/bin/activate
-  pip install --upgrade pip
-  pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-  pip install tensorflow-neuron[cc]
-  pip install ipykernel
-  python -m ipykernel install --user --name neuron_tf2 --display-name "Python (Neuron TensorFlow 2)"
-  pip install jupyter notebook
-  pip install environment_kernels
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=ubuntu
+
+         .. group-tab:: Amazon Linux DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=amazonlinux
+
+
+
+
+   .. group-tab:: TensorFlow 1.15.5
+
+      .. tabs::
+
+         .. group-tab:: Ubuntu DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-1.15.5
+
+         .. group-tab:: Amazon Linux DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-1.15.5    
+

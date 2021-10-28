@@ -7,13 +7,10 @@
 #include <torch/csrc/jit/passes/inliner.h>
 #include <ATen/ATen.h>
 
-std::string get_group_sizes_str(size_t num_neuron_cores, size_t cores_per_model)
+std::string get_visible_cores_str(size_t num_neuron_cores, size_t cores_per_model)
 {
     std::ostringstream oss;
-    for (int i = 0; i < num_neuron_cores; i++) {
-        oss << cores_per_model;
-        if (i+1 < num_neuron_cores) oss << ",";
-    }
+    oss << "0-" << ((num_neuron_cores * cores_per_model) - 1);
     return oss.str();
 }
 

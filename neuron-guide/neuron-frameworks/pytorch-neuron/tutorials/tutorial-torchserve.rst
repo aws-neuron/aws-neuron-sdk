@@ -259,25 +259,6 @@ Run the benchmarking script.
   pid 1984: current throughput 596.0, latency p50=0.107 p90=0.187
   ...
 
-Open ``neuron-top`` in another shell.
-
-.. code:: bash
-
-  $ neuron-top
-
-::
-
-  neuron-top - 19:17:58
-  Models: 4 loaded, 4 running. NeuronCores: 4 used.
-  0000:00:1f.0 Utilizations: NC0 52.69%, NC1 51.14%, NC2 50.54%, NC3 52.71%,
-  Model ID Device NeuronCore% Device Mem Host Mem Model Name
-  10073 nd0:nc2 50.54 171 MB 5 MB -/home/ubuntu/torchserve/bert_compile/57
-  10072 nd0:nc3 52.71 171 MB 5 MB -/home/ubuntu/torchserve/bert_compile/57
-  10071 nd0:nc1 51.14 171 MB 5 MB -/home/ubuntu/torchserve/bert_compile/57
-  10070 nd0:nc0 52.69 171 MB 5 MB -/home/ubuntu/torchserve/bert_compile/57
-
-Notice that about 50% of the available Inferentia compute power is utilized, but we are now CPU-constrained. (Increasing the number of benchmarking threads further won’t help.)
-
 **Congratulations!** By now you should have successfully served a batched model over TorchServe.
 
 

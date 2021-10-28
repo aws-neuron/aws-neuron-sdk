@@ -13,6 +13,10 @@ Overview:
 In this tutorial you will compile and deploy resnet-50 using the newly supported MXNet 1.8 and Gluon API
 on an Inf1 instance. This tutorial is only supported with MXNet 1.8.
 
+Setting up your environment
+---------
+To run this tutorial, please make sure you deactivate any existing MXNet conda environments you already using. Install MXNet 1.8 by following the instructions at `MXNet Setup Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/mxnet-setup/mxnet-install.html>`_. You would also need to change your kernel to use the correct Python environment setup earlier by clicking Kerenel->Change Kernel->Python (Neuron MXNet)
+
 Run The Tutorial
 ----------------
 

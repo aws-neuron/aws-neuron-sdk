@@ -1,12 +1,11 @@
 .. _ec2-then-ec2-devflow:
 
-
 Compile with Framework API and Deploy on EC2 Inf1
 =================================================
 
 .. contents:: Table of Contents
    :local:
-   :depth: 2
+   :depth: 3
 
    
 Description
@@ -30,25 +29,39 @@ You can use a single inf1 instance as a development environment to compile and d
 Setup Environment
 -----------------
 
-1. Launch an Inf1 Instance:
+1. Launch an Inf1 Instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
   
 
-2. Set up a development environment:
-    To compile and run inference from the instance terminal, first enable the ML framework Conda or Python environment of your choice by running one of the following from the terminal:
+2. Set up a development environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   
+Enable PyTorch-Neuron
+~~~~~~~~~~~~~~~~~~~~~
 
-    * Enable PyTorch-Neuron:
+.. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
 
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
-    
-    * Enable TensorFlow-Neuron:
+.. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
 
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
-    
-    * Enable Apache MXNet (Incubating):
+Enable TensorFlow-Neuron
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
+.. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
 
-    To develop from a Jupyter notebook see :ref:`setup-jupyter-notebook-steps-troubleshooting`  
+.. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
 
-    You can also run a Jupyter notebook as a script, first enable the ML framework Conda or Python environment of your choice and see :ref:`running-jupyter-notebook-as-script` for instructions. 
+Enable Apache MXNet (Incubating)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
+
+.. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
+
+3. Set up Jupyter notebook
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To develop from a Jupyter notebook see :ref:`setup-jupyter-notebook-steps-troubleshooting`  
+
+You can also run a Jupyter notebook as a script, first enable the ML framework Conda or Python environment of your choice and see :ref:`running-jupyter-notebook-as-script` for instructions. 

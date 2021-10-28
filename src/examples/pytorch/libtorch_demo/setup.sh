@@ -23,9 +23,9 @@ cp -f tokenizers_binding/tokenizer.json .
 
 # setup torch
 if [ ! -e "libtorch" ]; then
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.7.1%2Bcpu.zip
-    unzip libtorch-shared-with-deps-1.7.1+cpu.zip
-    rm libtorch-shared-with-deps-1.7.1+cpu.zip
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.9.1%2Bcpu.zip
+    unzip libtorch-shared-with-deps-1.9.1+cpu.zip
+    rm libtorch-shared-with-deps-1.9.1+cpu.zip
 fi
 
 # get libneuron_op.so and install into libtorch
@@ -33,10 +33,12 @@ if [ ! -e "venv" ]; then
     python3 -m venv venv
     . venv/bin/activate
     pip install -U pip
-    pip install torch-neuron==1.7.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    pip install torch-neuron==1.9.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
     deactivate
+    cp -f $(find ./venv -name libtorchneuron.so) libtorch/lib/
+    cp -f $(find ./venv -name libnrt.so) libtorch/lib/
+    cp -f $(find ./venv -name libnrt.so.1) libtorch/lib/
 fi
-cp -f $(find ./venv -name libneuron_op.so) libtorch/lib/
 
 # compile example app
 pushd example_app

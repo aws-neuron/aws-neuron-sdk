@@ -28,7 +28,7 @@ Setup Environment
 1. Create a Compilation Instance:
 	If using an **EC2 instance for compilation** you can use an Inf1 instance to compile and test a model. Follow these steps to launch an Inf1 instance:
 		
-		.. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
+		.. include:: /neuron-intro/install-templates/launch-inf1-ami.rst
 	
 
 	If using an **SageMaker Notebook for compilation**, follow the instructions in `Get Started with Notebook Instances <https://docs.aws.amazon.com/sagemaker/latest/dg/gs-setup-working-env.html>`_ to provision the environment. 
@@ -48,4 +48,4 @@ Setup Environment
     Make sure to add the **AmazonEC2ContainerRegistryPowerUser** role to your IAM role ARN, so you're able to build and push containers from your SageMaker Notebook instance.
 
     .. note::
-        You can use the Neuron version of the `AWS Deep Learning Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-inference-containers>`_ as base to build your own container images. Refer to the :ref:`neuron-containers` section of our documentation for more information.
+        The container image can be created using :ref:`how-to-build-neuron-container`.

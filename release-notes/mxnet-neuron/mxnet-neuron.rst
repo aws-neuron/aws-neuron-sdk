@@ -1,9 +1,60 @@
 .. _mxnet-neuron-rn:
 
-Neuron Apache MXNet (Incubating) Release Notes
+Apache MXNet Neuron (Incubating) Release Notes
 ==============================================
 
+.. contents::
+   :local:
+   :depth: 1
+
 This document lists the release notes for MXNet-Neuron framework.
+
+
+Apache MXNet Neuron release [1.8.0.2.0.271.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+New in this release
+-------------------
+
+-  MXNet Neuron 1.8 now support Neuron Runtime 2.x (``libnrt.so`` shared library) only.
+
+     .. important::
+
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+           for proper functionality of the new runtime library.
+        -  Read :ref:`introduce-libnrt`
+           application note that describes :ref:`why are we making this
+           change <introduce-libnrt-why>` and
+           how :ref:`this change will affect the Neuron
+           SDK <introduce-libnrt-how-sdk>` in detail.
+        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+           migrate your application.
+
+-  Introducing Flexible Execution Groups (FlexEG) feature. See :ref:`flexeg` application note.
+
+
+Resolved Issues
+---------------
+
+-  Fixed a bug that prevented compilation of gluon models with multiple
+   cpu and neuron nodes.
+-  Added more debug logic to help with profiling of model load timing.
+
+
+[1.5.1.1.7.0.0]
+^^^^^^^^^^^^^^^
+
+New in this release
+-------------------
+
+-  MXNet 1.5 enters maintenance mode. Please visit :ref:`maintenance_mxnet_1_5` for more
+   information.
+
+Resolved Issues
+---------------
+
+ -  Minor bug fixes.
+
 
 [1.5.1.1.6.5.0]
 ^^^^^^^^^^^^^^^

@@ -24,7 +24,7 @@ Computer Vision
 
 *  Tensorflow 1.x - OpenPose tutorial :ref:`[html] </src/examples/tensorflow/openpose_demo/openpose.ipynb>` :tensorflow-neuron-src:`[notebook] <openpose_demo/openpose.ipynb>`
 *  Tensorflow 1.x - ResNet-50 tutorial :ref:`[html] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>` :tensorflow-neuron-src:`[notebook] <tensorflow_resnet50/resnet50.ipynb>`
-*  Tensorflow 1.x - YOLOv4 tutorial :ref:`[html] <tensorflow-yolo4>`
+*  Tensorflow 1.x - YOLOv4 tutorial :ref:`[html] <tensorflow-yolo4>` :tensorflow-neuron-src:`[notebook] <yolo_v4_demo/evaluate.ipynb>`
 *  Tensorflow 1.x - YOLOv3 tutorial :ref:`[html] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>` :tensorflow-neuron-src:`[notebook] <yolo_v3_demo/yolo_v3.ipynb>`
 *  Tensorflow 1.x - SSD300 tutorial :ref:`[html] <tensorflow-ssd300>`
 *  Tensorflow 1.x - Keras ResNet-50 optimization tutorial :ref:`[html] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>` :tensorflow-neuron-src:`[notebook] <keras_resnet50/keras_resnet50.ipynb>`
@@ -62,8 +62,7 @@ Utilizing Neuron Capabilities
 -----------------------------
 
 *  Tensorflow 1.x - NeuronCore Groups tutorial :ref:`[html] <tensorflow-neurocore-group>`
-*  Tensorflow 1.x - TensorFlow Serving tutorial :ref:`[html] <tensorflow-serving>`
-*  Tensorflow 1.x - NeuronCore Groups with TensorFlow Serving tutorial :ref:`[html] <tensorflow-serving-neurocore-group>`
+*  Tensorflow 1.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
 
 .. toctree::
    :hidden:

@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     }
 
     // let runtime know we want M models / core for N cores (e.g. "1,1,1,1")
-    setenv("NEURONCORE_GROUP_SIZES", get_group_sizes_str(num_neuron_cores, cores_per_model).c_str(), true);
+    setenv("NEURON_RT_VISIBLE_CORES", get_visible_cores_str(num_neuron_cores, cores_per_model).c_str(), true);
 
     if (argc >= 3 && std::string("--sanity") == argv[2]) {
         return sanity_check(argv[1]);
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
     std::cout << "Getting ready" << std::flush;
 
     const auto input = get_input("This sentence is for benchmarking.", "For benchmarking, use this sentence.");
-    const auto batch = get_batch(std::vector(batch_size, input));
+    const auto batch = get_batch(std::vector<Input>(batch_size, input));
 
     std::condition_variable warmup_cv, ready_cv;
     std::atomic_size_t warmup_count(num_neuron_cores);

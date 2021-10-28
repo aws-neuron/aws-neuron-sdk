@@ -1,7 +1,7 @@
 .. _tensorflow-ref-neuron-accelerated-ops:
 
-Accelerated TensorFlow 2.x Python APIs and Graph Ops
-================================================================
+TensorFlow 2.x Accelerated Python APIs and Graph Ops
+====================================================
 
 This page lists TensorFlow 2.x Python APIs and graph operators that are
 accelerated by AWS Neuron. The lists are not exhaustive. TensorFlow 2.x Python

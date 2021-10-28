@@ -1,7 +1,7 @@
-.. _tensorflow-serving-neurocore-group:
+.. _tensorflow-serving-neuronrt-visible-cores:
 
-Using NeuronCore Group with TensorFlow Serving
-==============================================
+Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving
+=====================================================
 
 TensorFlow serving allows customers to scale-up inference workloads
 across a network. Neuron TensorFlow Serving uses the same API as normal
@@ -16,6 +16,9 @@ Install TensorFlow Model Server and Serving API
 -----------------------------------------------
 
 Follow the steps in the :ref:`neuron-install-guide`.
+
+If using DLAMI and aws_neuron_tensorflow_p36 environment, you can skip
+the installation step below.
 
 Then ensure you install using either apt-get or yum:
 
@@ -42,7 +45,7 @@ Python Imaging Library Pillow is required:
 .. code:: bash
 
    pip install pillow
-   
+
 To workaround h5py issue https://github.com/aws/aws-neuron-sdk/issues/220:
 
 .. code:: bash
@@ -86,11 +89,17 @@ listen to the same gRPC port:
 
 .. code:: bash
 
-   export NEURONCORE_GROUP_SIZES=1  # important to set this environment variable before launching model servers
-   for i in {0..3}; do
-       tensorflow_model_server_neuron --model_name=resnet50_inf1 \
-           --model_base_path=$(pwd)/resnet50_inf1/ --port=8500
-   done
+   export NEURON_RT_VISIBLE_CORES=0  # important to set this environment variable before launching model servers
+   tensorflow_model_server_neuron --model_name=resnet50_inf1 \
+        --model_base_path=$(pwd)/resnet50_inf1/ --port=8500
+
+   #then to run another server on a different neuron core open another
+   #window and run this, except this time set NEURON_RT_VISIBLE_CORES=1
+   #you can keep doing this up to the number of Neuron Cores on your machine
+
+   export NEURON_RT_VISIBLE_CORES=1
+   tensorflow_model_server_neuron --model_name=resnet50_inf1 \
+        --model_base_path=$(pwd)/resnet50_inf1/ --port=8500
 
 The compiled model is staged in Inferentia DRAM by the server to prepare
 for inference.
@@ -103,28 +112,27 @@ code:
 
 .. code:: python
 
-   import numpy as np
-   import grpc
-   import tensorflow as tf
-   from tensorflow.keras.preprocessing import image
-   from tensorflow.keras.applications.resnet50 import preprocess_input
-   from tensorflow_serving.apis import predict_pb2
-   from tensorflow_serving.apis import prediction_service_pb2_grpc
+  import numpy as np
+  import grpc
+  import tensorflow as tf
+  from tensorflow.keras.preprocessing import image
+  from tensorflow.keras.applications.resnet50 import preprocess_input
+  from tensorflow.keras.applications.resnet50 import decode_predictions
+  from tensorflow_serving.apis import predict_pb2
+  from tensorflow_serving.apis import prediction_service_pb2_grpc
 
-   tf.keras.backend.set_image_data_format('channels_last')
-
-   if __name__ == '__main__':
-       channel = grpc.insecure_channel('localhost:8500')
-       stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
-       img_file = tf.keras.utils.get_file(
-           "./kitten_small.jpg",
-           "https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg")
-       img = image.load_img(img_file, target_size=(224, 224))
-       img_array = preprocess_input(image.img_to_array(img)[None, ...])
-       request = predict_pb2.PredictRequest()
-       request.model_spec.name = 'resnet50_inf1'
-       request.inputs['input'].CopyFrom(
-           tf.contrib.util.make_tensor_proto(img_array, img_array=data.shape))
-       result = stub.Predict(request)
-       prediction = tf.make_ndarray(result.outputs['output'])
-       print(decode_predictions(prediction))
+  if __name__ == '__main__':
+      channel = grpc.insecure_channel('localhost:8500')
+      stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
+      img_file = tf.keras.utils.get_file(
+          "./kitten_small.jpg",
+          "https://raw.githubusercontent.com/awslabs/mxnet-model-server/master/docs/images/kitten_small.jpg")
+      img = image.load_img(img_file, target_size=(224, 224))
+      img_array = preprocess_input(image.img_to_array(img)[None, ...])
+      request = predict_pb2.PredictRequest()
+      request.model_spec.name = 'resnet50_inf1'
+      request.inputs['input'].CopyFrom(
+          tf.contrib.util.make_tensor_proto(img_array, shape=img_array.shape))
+      result = stub.Predict(request)
+      prediction = tf.make_ndarray(result.outputs['output'])
+      print(decode_predictions(prediction))

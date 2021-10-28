@@ -14,6 +14,11 @@ Inference Runtime Error
 Out-of-memory error when calling Symbol API bind() too many times
 -----------------------------------------------------------------
 
+.. important ::
+
+  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+
 If you see out-of-memory error when using Symbol API's bind() function, please ensure that the bind() function is
 called once for each desired model instance. For example, on inf1.xlarge, use Symbol API to create 4 parallel 
 instances of a model that was compiled to 1 NeuronCore (--neuroncore-pipeline-cores=1), each is bound to an 
@@ -100,6 +105,8 @@ Multi-Model Server
 Failed to create NEURONCORE Group with GRPC Error. Status Error: 14, Error message: "Connect Failed"
 ----------------------------------------------------------------------------------------------------
 
+NOTE: This error only applies to MXNet 1.5.
+
 If the client is unable to start workers and you get a message that MMS is unable to create NeuronCore Group,
 please check that Neuron RTD is running (neuron-rtd process).
 
@@ -117,6 +124,11 @@ please check that Neuron RTD is running (neuron-rtd process).
 
 Multiple MMS workers die with “Backend worker process die.” message
 -------------------------------------------------------------------
+
+.. important ::
+
+  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
 
 If you run inference with MMS and get multiple messages “Backend worker process die", please ensure that the number of workers ("intial_workers") passed during load model is less than or equal to number of NeuronCores available divided by  number of NeuronCores required by model.
 
@@ -148,6 +160,7 @@ MMS throws a "mxnet.base.MXNetError: array::at" error
 -----------------------------------------------------
 
 If you see “mxnet.base.MXNetError: array::at” when running MMS please check that NDArray/Gluon API is not used as they are not supported in MXNet-Neuron.
+If you would like to use NDArray or Gluon API, please upgrade to MXNet 1.8.
 
 .. code:: bash
 
@@ -168,7 +181,7 @@ If you see “mxnet.base.MXNetError: array::at” when running MMS please check 
 MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded
 ------------------------------------------------------------------------------------
 
-NOTE: this issue is resolved in version 1.5.1.1.1.88.0 released 11/17/2020.
+NOTE: This issue is resolved in version 1.5.1.1.1.88.0 released 11/17/2020 and only applies for MXNet 1.5.
 
 MXNet Model Server is not able to clean up Neuron RTD states after model is unloaded (deleted) from model server. Restarting the model server may fail with "Failed to create NEURONCORE_GROUP" error:
 
@@ -188,13 +201,10 @@ If you see that multiple executors in a neuron pipeline setup (one model compile
 
 Features only in MXNet-Neuron 1.5
 ---------------------------------
-- Autoloop for Auto-regressive models
 - Shared memory for IFMaps transfer to neuron runtime (has higher performance compared to GRPC mode)
 - Neuron profiling using MXNet
-- Neuron context in MXNet to target models to specific cores
-- CPredict API 
 
 Features only in MXNet-Neuron 1.8
 ---------------------------------
 - Gluon API support
-- ``experimental_set_device_id()`` API to target models to specific cores
+- Library mode neuron runtime

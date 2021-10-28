@@ -15,6 +15,7 @@ import tensorflow as tf
 import tensorflow.neuron
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
+import warnings
 
 tf.keras.backend.set_image_data_format('channels_last')
 
@@ -44,6 +45,9 @@ os.environ['NEURON_MAX_NUM_INFERS'] = str(NUM_INFERS_IN_FLIGHT)
 
 num_groups = avail_neuroncores // args.neuroncore_pipeline_cores
 group_sizes = [str(args.neuroncore_pipeline_cores)] * num_groups
+warnings.warn("NEURONCORE_GROUP_SIZES is being deprecated, if your application is using NEURONCORE_GROUP_SIZES please \
+see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html#announcing-end-of-support-for-neuroncore-group-sizes \
+for more details.", DeprecationWarning)
 os.environ['NEURONCORE_GROUP_SIZES'] = ','.join(group_sizes)
 
 # Create input from image
