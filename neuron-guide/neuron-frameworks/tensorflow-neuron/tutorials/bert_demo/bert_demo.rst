@@ -100,7 +100,6 @@ BERT-Large demo server :
 
 .. code:: bash
 
-   sudo systemctl restart neuron-rtd
    cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    python bert_server.py --dir bert-saved-model-neuron --batch 6 --parallel 4
 

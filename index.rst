@@ -7,7 +7,7 @@ Welcome to AWS Neuron
    
 AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (Incubating). With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
 
-Check :ref:`neuron-release-content`, :ref:`Neuron Performance page <appnote-performance-benchmark>` and :ref:`neuron-whatsnew` in latest Neuron release.
+Check :ref:`neuron-release-content`, :ref:`Neuron Performance page <appnote-performance-benchmark>` and :ref:`neuron-whatsnew` in :ref:`latest-neuron-release` release.
 
 
 |image|

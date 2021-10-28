@@ -15,5 +15,5 @@ popd 2>&1 >/dev/null
 echo -e "\nTokenization sanity checks passed."
 
 echo -e "Running end-to-end sanity check.\n"
-(./example-app $1 --sanity) || { echo "Sanity check failed."; exit 3; }
+(LD_LIBRARY_PATH="libtorch/lib:tokenizers_binding/lib" ./example-app $1 --sanity) || { echo "Sanity check failed."; exit 3; }
 echo -e "\nSanity check passed.\n"

@@ -3,6 +3,11 @@
 Neuron K8 Release Notes
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+.. contents::
+   :local:
+   :depth: 1
+
+
 Introduction
 ============
 
@@ -30,6 +35,18 @@ To Pull the Images from ECR:
    docker pull  public.ecr.aws/neuron/neuron-scheduler:1.6.22.0
 
 .. _1622:
+
+
+Neuron K8 release [1.7.3.0]
+===========================
+
+Date: 10/27/2021
+
+Summary
+-------
+
+Minor updates
+
 
 [1.6.22.0]
 =========

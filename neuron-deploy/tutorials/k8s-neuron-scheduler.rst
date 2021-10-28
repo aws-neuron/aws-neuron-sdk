@@ -1,7 +1,7 @@
 .. _neuron-k8-scheduler-ext:
 
-Neuron K8 Scheduler Extension
-=============================
+Neuron Kubernetes Scheduler Extension
+=====================================
 
 This document describes how the Neuron K8 scheduler extension works and
 how to use it in your cluster. The scheduler is required for scheduling

@@ -1,0 +1,33 @@
+# Example pytorch neuron container
+# To build:
+#    docker build . -f Dockerfile.pt -t neuron-container:pytorch
+# To run on EC2 Inf1 instances with AWS DLAMI:
+#    sudo service neuron-rtd stop
+#    docker run -it --device=/dev/neuron0 -v /run/:/run --cap-add IPC_LOCK neuron-container:pytorch
+
+FROM ubuntu:18.04
+
+LABEL maintainer=" "
+
+RUN apt-get update -y \
+ && apt-get install -y --no-install-recommends \
+ wget \
+ gnupg2 \
+ python3-pip \
+ python3-setuptools \
+ && cd /usr/local/bin \
+ && pip3 --no-cache-dir install --upgrade pip \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
+
+RUN echo "deb https://apt.repos.neuron.amazonaws.com bionic main" > /etc/apt/sources.list.d/neuron.list
+RUN wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
+
+# Include framework tensorflow-neuron or torch-neuron and compiler (compiler not needed for inference)
+RUN pip3 install \
+    torch-neuron \
+    --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+# Include your APP dependencies here.
+# RUN/ENTRYPOINT/CMD ...
+

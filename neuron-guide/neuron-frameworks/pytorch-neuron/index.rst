@@ -27,6 +27,7 @@ User Guide
 
       Tutorials <tutorials/index>
       api-compilation-python-api
+      api-torch-neuron-dataparallel-api
       /release-notes/neuron-cc-ops/neuron-cc-ops-pytorch
       troubleshooting-guide
 

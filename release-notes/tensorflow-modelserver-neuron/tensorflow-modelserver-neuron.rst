@@ -1,39 +1,43 @@
 .. _tensorflow-modelserver-rn:
 
-TensorFlow-Model-Server-Neuron Release Notes
-============================================
+TensorFlow-Model-Server-Neuron 1.x Release Notes
+================================================
+
+.. contents::
+   :local:
+   :depth: 1
 
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
-.. _25116100:
 
-[2.5.1.1.6.10.0]
-^^^^^^^^^^^^^^^^^^^
+TensorFlow Model Server Neuron 1.x release [2.0.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Date: 09/22/2021
+Date: 10/27/2021
 
-Summary
--------
+New in this release
+-------------------
 
-Bug fix on tensorflow-model-server-neuron 2.5.1.1.6.8.0 which can run into segmentation faults at model server launch time.
+* TensorFlow Model Server Neuron 1.x now support Neuron Runtime 2.x (``libnrt.so`` shared library) only.
 
-.. _2511680:
+     .. important::
 
-[2.5.1.1.6.8.0]
-^^^^^^^^^^^^^^^^^^^
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+           for proper functionality of the new runtime library.
+        -  Read :ref:`introduce-libnrt`
+           application note that describes :ref:`why are we making this
+           change <introduce-libnrt-why>` and
+           how :ref:`this change will affect the Neuron
+           SDK <introduce-libnrt-how-sdk>` in detail.
+        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+           migrate your application.
 
-Date: 08/12/2021
-
-Summary
--------
-
-TensorFlow 2.x - tensorflow-model-server-neuron now support TensorFlow 2.x,  tensorflow-model-server-neuron package versions 2.1.4, 2.2.2, 2.3.0, 2.4.1, and 2.5.1 support TensorFlow 2.x.
 
 .. _11501510:
 
 [1.15.0.1.5.1.0]
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 Date: 07/02/2021
 

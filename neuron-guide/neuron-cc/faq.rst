@@ -25,15 +25,15 @@ My current Neural Network is based on FP32, how can I use it with Neuron?
 -------------------------------------------------------------------------
 
 Developers who want to train their models in FP32 for best accuracy can
-compile and deploy them with Neuron. Since Inferentia chips support FP16,
-BFloat16 mixed-precision data-types and INT8 the trained graph needs to be
-converted to one of these data types for execution on Inferentia. Neuron can
-compile and execute FP32 neural
-nets by automatically converting them to BFloat16. Given an input using
-FP32, the compiler output will ensure that the executed graph can accept
-input inference requests in FP32. Since BFloat16 has the same dynamic range as
-FP32, most models will have no accuracy degragation, and will benefit from the
-fast BF16 execution.  Also see :ref:`neuron-data-types`.
+compile and deploy them with Neuron. The Neuron compiler automatically converts
+FP32 to internally supported datatypes, such as FP16 or BF16.
+You can find more details about FP32 data type support
+and performance and accuracy tuning
+in :ref:`mixed-precision`.
+The Neuron compiler preserves the application interface - FP32 inputs and outputs.
+Transferring such large tensors may become a bottleneck for your application.
+Therefore, you can improve execution time by casting the inputs and outputs to
+FP16 or BF16 in the ML framework prior to compilation for Inferentia.
 
 What are some of the important compiler defaults I should be aware of?
 -----------------------------------------------------------------------

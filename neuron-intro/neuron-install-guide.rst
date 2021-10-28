@@ -1,32 +1,41 @@
 .. _neuron-install-guide:
+.. _non-dlami-setup:
 
 Setup Guide
 ===========
 
-.. _non-dlami-setup:
+.. _pytorch-setup:
 
 PyTorch Setup 
---------------
+-------------
 
 * :ref:`Fresh install <install-neuron-pytorch>`
 * :ref:`Update to latest release <update-neuron-pytorch>`
 * :ref:`Install previous releases <install-prev-neuron-pytorch>`
 
+.. _tensorflow-setup:
+
 TensorFlow Setup 
---------------
+----------------
 
 * :ref:`Fresh install <install-neuron-tensorflow>`
 * :ref:`Update to latest release <update-neuron-tensorflow>`
 * :ref:`Install previous releases <install-prev-neuron-tensorflow>`
 
+.. _mxnet-setup:
 
 Apache MxNet Setup 
---------------
+------------------
 
 * :ref:`Fresh install <install-neuron-mxnet>`
 * :ref:`Update to latest release <update-neuron-mxnet>`
 * :ref:`Install previous releases <install-prev-neuron-mxnet>`
 
+
+Troubleshooting
+---------------
+
+* :ref:`neuron-setup-troubleshooting`
 
 .. _dlami-section:
 

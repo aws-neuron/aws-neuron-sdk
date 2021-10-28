@@ -1,6 +1,6 @@
 .. _tutorial-docker-environment-setup-for-neuron-runtime-10:
 
-Tutorial: Docker environment setup for Neuron Runtime 1.0
+Tutorial: Docker environment setup for Neuron Runtime 1.x
 =========================================================
 
 Introduction

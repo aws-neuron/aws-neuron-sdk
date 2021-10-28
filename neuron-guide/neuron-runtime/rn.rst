@@ -5,3 +5,4 @@ What's New
    :maxdepth: 1
 
    /release-notes/neuron-runtime
+   /release-notes/neuron-driver

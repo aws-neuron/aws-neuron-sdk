@@ -3,12 +3,11 @@
 # To build:
 #    docker build . -f Dockerfile.neuron-rtd -t neuron-rtd
 
-# Note: the container must start with CAP_SYS_ADMIN + CAP_IPC_LOCK capabilities in order
-# to map the memory needed from the Infernetia devices. These capabilities will
-# be dropped following initialization.
+# Note: the container must start with CAP_IPC_LOCK capability
 
-# i.e. To start the container with required capabilities:
-#   docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add SYS_ADMIN --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
+# To run on EC2 Inf1 instances with AWS DLAMI:
+#    sudo service neuron-rtd stop
+#   docker run --env AWS_NEURON_VISIBLE_DEVICES="0" --cap-add IPC_LOCK -v /tmp/neuron_rtd_sock/:/sock neuron-rtd
 
 
 FROM amazonlinux:2

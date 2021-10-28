@@ -29,6 +29,29 @@ use TensorBoard.
 
 .. _2.1.2.0:
 
+Neuron Plugin for TensorBoard release [2.2.0.0]
+===============================================
+
+Date: 10/27/2021
+
+New in this release
+-------------------
+
+   -  Neuron Plugin for TensorBoard now support applications built with Neuron Runtime 2.x (``libnrt.so``).
+
+      .. important::
+
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+           for proper functionality of the new runtime library.
+        -  Read :ref:`introduce-libnrt`
+           application note that describes :ref:`why are we making this
+           change <introduce-libnrt-why>` and
+           how :ref:`this change will affect the Neuron
+           SDK <introduce-libnrt-how-sdk>` in detail.
+        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+           migrate your application.
+
+
 [2.1.2.0]
 =========
 

@@ -1,7 +1,7 @@
 .. _neuron-cc-ops-pytorch:
 
-Supported operators [PyTorch]
-=============================
+PyTorch Supported operators
+===========================
 
 Current operator lists may be generated with these commands inside
 python:
@@ -11,6 +11,27 @@ python:
    import torch.neuron
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
+
+PyTorch Neuron Release [2.0.318.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Added support for new operators:
+
+   -  ``aten::empty_like``
+   -  ``aten::log``
+   -  ``aten::type_as``
+   -  ``aten::movedim``
+   -  ``aten::einsum``
+   -  ``aten::argmax``
+   -  ``aten::min``
+   -  ``aten::argmin``
+   -  ``aten::abs``
+   -  ``aten::cos``
+   -  ``aten::sin``
+   -  ``aten::linear``
+   -  ``aten::pixel_shuffle``
+   -  ``aten::group_norm``
+   -  ``aten::_weight_norm``
 
 .. _pytorch-neuron-release-15210:
 

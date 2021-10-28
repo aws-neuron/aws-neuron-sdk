@@ -3,7 +3,7 @@
 
 #include <torch/script.h>
 
-std::string get_group_sizes_str(size_t num_neuron_cores, size_t cores_per_model);
+std::string get_visible_cores_str(size_t num_neuron_cores, size_t cores_per_model);
 std::string get_uuid();
 torch::jit::script::Module get_model(const std::string& filename);
 

@@ -1,7 +1,7 @@
 .. _dlc-then-ecs-devflow:
 
-Deploy with DLC on Elastic Container Service (ECS)
-==================================================
+Deploy  Neuron Container on Elastic Container Service (ECS)
+===========================================================
 
 .. contents:: Table of Contents
    :local:
@@ -39,3 +39,10 @@ Setup Environment
 	When creating tasks for inf1 instances on ECS, be aware of the considerations and requirements listed in `Working with inference workloads on Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html>`_. 
 
 
+3. Use the container image created using :ref:`how-to-build-neuron-container` as the ``image`` in your task definition.
+
+   .. _push_to_ecr_note:
+
+   .. note ::
+
+       Before deploying your task definition to your ECS cluster, make sure to push the image to ECR. Refer to `Pushing a Docker image <https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html>`_ for more information.
