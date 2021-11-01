@@ -56,7 +56,7 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build','**.ipynb_checkpoints']
-
+html_extra_path = ['static']
 
 # nbsphinx_allow_errors = True
 nbsphinx_execute = 'never'

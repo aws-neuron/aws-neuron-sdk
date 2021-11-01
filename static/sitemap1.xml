@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/</loc>
+  <lastmod>2021-10-28T03:33:15+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/get-started.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/index.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/index.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/index.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/tutorials.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/benchmark/index.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/technotes/index.html</loc>
+  <lastmod>2021-10-28T03:32:58+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/dev-flows.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/index.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/faq.html</loc>
+  <lastmod>2021-10-28T03:32:58+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/neuron-install-guide.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-cc/index.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/index.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/index.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/roadmap-readme.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/releaseinfo.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/index.html</loc>
+  <lastmod>2021-10-28T03:33:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-quickstart.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/tensorflow-setup/tensorflow-quickstart.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/mxnet-setup/mxnet-quickstart.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/index.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/index.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/index.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/models/models-inferentia.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-install.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-update.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-install-prev.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.html</loc>
+  <lastmod>2021-10-28T03:32:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/api-torch-neuron-dataparallel-api.html</loc>
+  <lastmod>2021-10-28T03:32:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc-ops/neuron-cc-ops-pytorch.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/troubleshooting-guide.html</loc>
+  <lastmod>2021-10-28T03:32:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/rn.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/tensorflow-setup/tensorflow-install.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/tensorflow-setup/tensorflow-update.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/tensorflow-setup/tensorflow-install-prev.html</loc>
+  <lastmod>2021-10-28T03:32:42+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tf2.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tf1.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/rn.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/conda/torch/conda-torch-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/mxnet-setup/mxnet-install.html</loc>
+  <lastmod>2021-10-28T03:32:44+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/mxnet-setup/mxnet-update.html</loc>
+  <lastmod>2021-10-28T03:32:44+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/mxnet-setup/mxnet-install-prev.html</loc>
+  <lastmod>2021-10-28T03:32:44+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/api-compilation-python-api.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc-ops/neuron-cc-ops-mxnet.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/troubleshooting-guide.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/rn.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/conda/tensorflow/conda-tensorflow-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/tutorials.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/conda/mxnet/conda-mxnet-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/ec2-then-ec2-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/huggingface_bert/huggingface_bert.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/openpose_demo/openpose.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/keras_resnet50/keras_resnet50.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/resnet50.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/yolo_v4.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/README.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/neuron-components/introducing-libnrt.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/mixed-precision.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/flex-eg.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc-ops/index.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/maintenance.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/bucketing-app-note.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/torch-neuron-dataparallel-app-note.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/parallel-ncgs.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronCore-Group.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tensorflow2-accelerated-ops.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc-ops/neuron-cc-ops-tensorflow.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-tools.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/torch-neuron/torch-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorflow-neuron/tensorflow-neuron-v2.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorflow-modelserver-neuron/tensorflow-modelserver-neuron-v2.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorflow-neuron/tensorflow-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorflow-modelserver-neuron/tensorflow-modelserver-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/mxnet-neuron/mxnet-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-runtime.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-driver.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-k8.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-containers.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorboard-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/technotes/neuroncore-batching.html</loc>
+  <lastmod>2021-10-28T03:32:58+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/technotes/neuroncore-pipeline.html</loc>
+  <lastmod>2021-10-28T03:32:58+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/neo-then-hosting-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/byoc-hosting-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/dlc-then-ec2-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/dlc-then-ecs-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/devflows/dlc-then-eks-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:41+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/dlc-then-ec2-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/dlc-then-ecs-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/dlc-then-eks-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/container-sm-hosting-devflow.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/tutorials/neuron-container.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/tutorials/tutorial-docker-env-setup.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/tutorials/k8s-neuron-scheduler.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/rn.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/performance-tuning.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/FAQ.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/getting-started-faq.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tf1_faq.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tf2_faq.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/trouble-shooting-faq.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/contributing-faq.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-cc/faq.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/faq.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/roadmap-faq.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/setup-troubleshooting.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/dlami/dlami-neuron-matrix.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/dlami/dlami-neuron-conda-pip.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/dlami-release-notes.html</loc>
+  <lastmod>2021-10-28T03:32:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/setup-jupyter-notebook-steps-troubleshooting.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/running-jupyter-notebook-as-script.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/install-templates/launch-inf1-dlami-aws-cli.html</loc>
+  <lastmod>2021-10-28T03:32:44+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/install-tensorboard.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-cc/command-line-reference.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-cc/rn.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/nrt-configurable-parameters.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/nrt-troubleshoot.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/rn.html</loc>
+  <lastmod>2021-10-28T03:32:57+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/getting-started-tensorboard-neuron-plugin.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/neuron-monitor-user-guide.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/neuron-top-user-guide.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/neuron-ls.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/rn.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/tutorial-neuron-check-model.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/tutorial-neuron-gatherinfo.html</loc>
+  <lastmod>2021-10-28T03:32:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/maintenance-policy.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuronrelease/previous-content.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/security.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/support.html</loc>
+  <lastmod>2021-10-28T03:32:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/pytorch-tutorial-setup.html</loc>
+  <lastmod>2021-10-28T03:32:54+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-libtorch.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/transformers-marianmt.html</loc>
+  <lastmod>2021-10-28T03:32:48+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-torchserve.html</loc>
+  <lastmod>2021-10-28T03:32:54+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tensorflow-tutorial-setup.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/tensorflow_resnet50/resnet50.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/yolo_v4_demo/yolo_v4_demo.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/yolo_v3_demo/yolo_v3.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ssd300_demo/ssd300_demo.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/bert_demo/bert_demo.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-NeuronCore-Group.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/mxnet-tutorial-setup.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/mxnet/resnet50/resnet50.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/tutorial-model-serving.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/tutorial-gluon.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/bert_mxnet/index.html</loc>
+  <lastmod>2021-10-28T03:32:51+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/mxnet/data_parallel/data_parallel_tutorial.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/mxnet/resnet50_neuroncore_groups.html</loc>
+  <lastmod>2021-10-28T03:32:49+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/api-tracing-python-api.html</loc>
+  <lastmod>2021-10-28T03:32:53+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/api-compilation-python-api.html</loc>
+  <lastmod>2021-10-28T03:32:52+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/neuroncore_pipeline_pytorch.html</loc>
+  <lastmod>2021-10-28T03:32:55+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/neuron-cc-ops/neuron-cc-ops-xla.html</loc>
+  <lastmod>2021-10-28T03:32:45+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/tensorflow-neuron/index.html</loc>
+  <lastmod>2021-10-28T03:32:46+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/tutorials/tutorial-k8s.html</loc>
+  <lastmod>2021-10-28T03:32:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/Dockerfile-libmode.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/tensorflow/yolo_v4_demo/evaluate.html</loc>
+  <lastmod>2021-10-28T03:32:50+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/tutorial-docker-runtime1.0.html</loc>
+  <lastmod>2021-10-28T03:32:38+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/Dockerfile-app-rt-same.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/dockerd-entrypoint-app-rt-same.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/Dockerfile-neuron-rtd.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/Dockerfile-app-rt-diff.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-deploy/docker-example/Dockerfile-torch-neuron.html</loc>
+  <lastmod>2021-10-28T03:32:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+
+
+</urlset>
