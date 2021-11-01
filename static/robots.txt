@@ -1,0 +1,28 @@
+User-agent: *
+
+Disallow: /en/v1.16.0/
+
+Disallow: /en/v1.15.2/
+
+Disallow: /en/1.15.1/
+
+Disallow: /en/1.15.0/
+
+Disallow: /en/1.14.2/
+
+Disallow: /en/1.14.1/
+
+Disallow: /en/1.14.0/
+
+Disallow: /en/1.13.0/
+
+Disallow: /en/1.12.2/
+
+Disallow: /en/1.12.1/
+
+Disallow: /en/1.12.0/
+
+Disallow: /en/1.11.0/
+
+
+Sitemap: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/sitemap1.xml
