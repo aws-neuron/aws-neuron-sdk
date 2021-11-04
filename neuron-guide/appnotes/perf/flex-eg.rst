@@ -140,11 +140,12 @@ This can be achieved programmatically as shown below:
    results3 = model3.forward(data=inputs3)
 
 So comparing to FlexEG, we see that in case of NCGs neuron context
-requires the NeuronCore index of the first NeuronCore while in FlexEG,
-neuron context requires the index of the execution group on which the
-model is supposed to be loaded. For example, with
+requires the index of the execution group, while in FlexEG
+neuron context requires the NeuronCore index of the first NeuronCore on which the
+model is supposed to be loaded and executed. For example, with
 ``NEURONCORE_GROUP_SIZES='2,4,3,4'``, ``ctx=mx.neuron(1)`` loads the
-model on execution group 1 which effectively loads the model on
+model on execution group 1 which effectively loads the model on the 2nd NCG group 
+which has 4 NeuronCores.
 
 Best practices when using FlexEG
 --------------------------------
@@ -175,7 +176,7 @@ While using data parallel model of operation (were models are executed
 in parallel), for optimal performance the user should make sure that the
 models are not sharing any cores. That is because NeuronCores can
 execute one model at a time, when two or more models are executed on the
-same core, it executes the first model, unloads it, loads the second
+same core (assuming that they are already loaded), it executes the first model, stops it, starts the second
 model and then executes it. This is called model switiching and involves
 additional overhead and prevents execution on model in parallel. For
 example: assuming that you have an Inf1.6xl machine and there are 4
