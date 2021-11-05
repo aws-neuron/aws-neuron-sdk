@@ -11,6 +11,14 @@ This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
 
+TensorFlow Model Server Neuron 1.x release [2.0.4.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/05/2021
+
+* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
+  the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
+
 TensorFlow Model Server Neuron 1.x release [2.0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

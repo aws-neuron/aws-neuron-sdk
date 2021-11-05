@@ -9,6 +9,13 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.0.276.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/05/2021
+
+* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
+  the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
 
 Apache MXNet Neuron release [1.8.0.2.0.271.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -33,6 +33,14 @@ you can successfully torch.neuron.trace
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
 
+PyTorch Neuron release [2.0.392.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/05/2021
+
+* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
+  the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
+
 PyTorch Neuron release [2.0.318.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
