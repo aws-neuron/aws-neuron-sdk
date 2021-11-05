@@ -39,22 +39,56 @@ Would produce the following output:
 Steps:
 ------
 
-This tutorial starts from a fresh Ubuntu Server 16.04 LTS AMI
-"ami-08bc77a2c7eb2b1da".
+This tutorial starts from a fresh Ubuntu 18
 
-Step 1: install aws-neuron-runtime-base package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 1: Install Neuron driver and aws-neuron-runtime-base on the Linux host
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Follow the :ref:`neuron-install-guide` to
-setup access to Neuron repos. Then, install the aws-neuron-runtime-base
+.. important::
+
+   This step should run on the Linux host and not inside the container.
+
+Configure Linux for Neuron repository updates, install Neuron driver and the aws-neuron-runtime-base
 package.
 
 .. code:: bash
 
-   sudo apt-get install aws-neuron-runtime-base
+   # Configure Linux for Neuron repository updates
+   . /etc/os-release
+   sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+   deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+   EOF
+   wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
 
-Step 2: install oci-add-hooks dependency
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   # Update OS packages
+   sudo apt-get update -y
+
+   ###############################################################################################################
+   # Before installing or updating aws-neuron-dkms:
+   # - Stop any existing Neuron runtime 1.0 daemon (neuron-rtd) by calling: 'sudo systemctl stop neuron-rtd'
+   ###############################################################################################################
+
+   ################################################################################################################
+   # To install or update to Neuron versions 1.16.0 and newer from previous releases:
+   # - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
+   ################################################################################################################
+
+   # Install OS headers
+   sudo apt-get install linux-headers-$(uname -r) -y
+
+   # Install Neuron Driver
+   sudo apt-get install aws-neuron-dkms -y
+
+   sudo apt-get install aws-neuron-runtime-base -y
+
+
+Step 2: install oci-add-hooks dependency on the Linux host
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. important::
+
+   This step should run on the Linux host and not inside the container.
+   
 
 `oci-add-hooks <https://github.com/awslabs/oci-add-hooks>`__ is an OCI
 runtime with the sole purpose of injecting OCI prestart, poststart, and
@@ -133,14 +167,6 @@ Expected result:
 
 Build a docker image using provided dockerfile :ref:`libmode-dockerfile`, and use to
 verify whitelisting:
-
-.. note::
-
-	**Prior to running the container**, make sure that the Neuron runtime on the instance is turned off, by running the command:
-
-	.. code:: bash
-
-		sudo service neuron-rtd stop
 
 .. code:: bash
 

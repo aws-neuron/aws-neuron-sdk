@@ -22,6 +22,8 @@ To quickly start developing with Neuron:
 
    You can also check  :ref:`neuron-install-guide` for more options of installing Neuron.
 
+   For Neuron containers setup please visit :ref:`neuron-containers`.
+
    
 2. Run a tutorial from one of the leading machine learning frameworks supported by Neuron:
 
