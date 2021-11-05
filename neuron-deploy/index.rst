@@ -17,6 +17,18 @@ and use case.  In most cases, it is recommended to use a preconfigured
 version of Neuron components installed and is specific to the chosen ML Framework you want.
 
 
+.. _containers_quickstart:
+
+Quick Start
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/tutorial-docker-env-setup
+   tutorials/neuron-container
+   
+
 Deploy a Neuron Container
 -------------------------
 
@@ -37,8 +49,6 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
-   tutorials/neuron-container
-   tutorials/tutorial-docker-env-setup
    tutorials/k8s-neuron-scheduler
 
 Release Notes
