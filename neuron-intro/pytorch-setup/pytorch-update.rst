@@ -3,10 +3,11 @@
 Update to latest Neuron PyTorch
 ===============================
 
+.. include:: /neuron-intro/install-templates/note-setup-cntr.rst
+
 .. contents::
    :local:
    :depth: 2
-
 
 
 Develop on AWS ML accelerator instance
