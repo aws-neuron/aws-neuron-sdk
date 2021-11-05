@@ -25,6 +25,19 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+
+Neuron Runtime 2.x (``libnrt.so``) release [2.2.18.0]
+-----------------------------------------------------
+
+Date: 11/05/2021
+
+-  Resolved an issue that affect the use of Neuron within container. In previous Neuron Runtime release (libnrt.so.2.2.15.0), when /dev/neuron0
+   was not used by the application, Neuron Runtime attempted and failed to initialize /dev/neuron0 because user didn't pass /dev/neuron0 to the 
+   container. this Neuron Runtime release (``libnrt.so.2.2.18.0``) allows customers to launch containers with specific NeuronDevices other 
+   than /dev/neuron0.
+   
+   
+
 Neuron Runtime 2.x (``libnrt.so``) release [2.2.15.0]
 -----------------------------------------------------
 
