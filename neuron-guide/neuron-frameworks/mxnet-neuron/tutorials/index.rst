@@ -23,7 +23,7 @@ Computer Vision
 
 * ResNet-50 tutorial :ref:`[html] </src/examples/mxnet/resnet50/resnet50.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50/resnet50.ipynb>`
 * Model Serving tutorial :ref:`[html] <mxnet-neuron-model-serving>`
-* Getting started with Gluon tutorial :ref:`[html] <mxnet-gluon-tutorial>`
+* Getting started with Gluon tutorial :ref:`[html] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>` :mxnet-neuron-src:`[notebook] <mxnet-gluon-tutorial.ipynb>`
 
 
 .. toctree::
@@ -31,7 +31,7 @@ Computer Vision
 
    /src/examples/mxnet/resnet50/resnet50.ipynb
    /neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/tutorial-model-serving
-   /neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/tutorial-gluon
+   /src/examples/mxnet/mxnet-gluon-tutorial.ipynb
 
 .. _mxnet-nlp:
 
