@@ -3,6 +3,8 @@
 Install previous Neuron TensorFlow releases
 ========================================
 
+.. include:: /neuron-intro/install-templates/note-setup-cntr.rst
+
 .. toctree::
    :maxdepth: 1
 

@@ -3,6 +3,9 @@
 Install Neuron TensorFlow
 =========================
 
+
+.. include:: /neuron-intro/install-templates/note-setup-cntr.rst
+
 .. contents::
    :local:
    :depth: 2
