@@ -9,6 +9,28 @@ What's New
 
 .. _latest-neuron-release:
 
+Neuron 1.16.1 (11/05/2021)
+--------------------------
+
+**Neuron 1.16.1** is a patch release. This release fixes a bug in Neuron Runtime that would have prevented users from launching a container that doesn’t use all of the Neuron Devices in the instance. If you are using Neuron within a container, please update to this new release by updating to latest Neuron ML framework package, Neuron Tools, and/or TensorFlow Neuron Model Server.
+
+
+* To update to latest PyTorch 1.9.1:
+  ``pip install --upgrade torch-neuron neuron-cc[tensorflow] torchvision``
+
+* To update to latest TensorFlow 2.5.1:
+  ``pip install --upgrade tensorflow-neuron[cc]``
+
+* To update to latest TensorFlow 1.15.5:
+  ``pip install --upgrade tensorflow-neuron==1.15.5.* neuron-cc``
+
+* To update to latest MXNet 1.8.0:
+  ``pip install --upgrade mx_neuron neuron-cc``
+
+
+For more details on how to update the framework packages, please check out our :ref:`QuickStart guides <neuron-gettingstarted>`.
+
+
 Neuron 1.16.0 (10/27/2021)
 --------------------------
 

@@ -46,6 +46,14 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
+Tensorflow-Neuron 2.x release [2.0.4.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/05/2021
+
+* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
+  the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
+
 Tensorflow-Neuron 2.x release [2.0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
