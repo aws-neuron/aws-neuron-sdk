@@ -14,10 +14,7 @@ RUN apt-get update -y \
     wget \
     python3-pip \
     python3-setuptools \
-    && cd /usr/local/bin \
-    && pip3 --no-cache-dir install --upgrade pip \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+    && pip3 --no-cache-dir install --upgrade pip
 
 RUN echo "deb https://apt.repos.neuron.amazonaws.com bionic main" > /etc/apt/sources.list.d/neuron.list
 RUN wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
@@ -26,11 +23,15 @@ RUN wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEU
 RUN apt-get update -y && apt-get install -y \
     aws-neuron-tools
 
+# Clean up cache
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
 # Sets up Path for Neuron tools
 ENV PATH="/opt/bin/:/opt/aws/neuron/bin:${PATH}"
 
 # Include framework tensorflow-neuron or torch-neuron and compiler (compiler not needed for inference)
-RUN pip3 install \
+RUN pip3 --no-cache-dir install \
     torch-neuron \
     --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
