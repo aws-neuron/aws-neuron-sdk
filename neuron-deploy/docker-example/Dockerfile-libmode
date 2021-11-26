@@ -17,7 +17,7 @@ RUN apt-get update -y \
     && pip3 --no-cache-dir install --upgrade pip
 
 RUN echo "deb https://apt.repos.neuron.amazonaws.com bionic main" > /etc/apt/sources.list.d/neuron.list
-RUN wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
+RUN wget --no-check-certificate -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
 
 # Installing Neuron Tools
 RUN apt-get update -y && apt-get install -y \
