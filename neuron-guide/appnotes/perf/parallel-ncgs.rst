@@ -252,7 +252,6 @@ process with ``NEURONCORE_GROUP_SIZES=1,1`` (data-parallel).
 Examples using ``NEURONCORE_GROUP_SIZES`` include:
 
 * :ref:`PyTorch example </src/examples/pytorch/resnet50.ipynb>`
-* :ref:`TensorFlow example </neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-NeuronCore-Group.rst>`
 * :ref:`MXNet example </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>`
 
 Auto Model Replication (Experimental for TensorFlow-Neuron only)

@@ -67,6 +67,5 @@ Utilizing Neuron Capabilities
 .. toctree::
    :hidden:
 
-   /neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-NeuronCore-Group
    /neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-serving
    /neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronCore-Group
