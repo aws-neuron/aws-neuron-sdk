@@ -4,6 +4,7 @@ import torch.neuron
 import os
 from time import time
 from queue import Queue
+import warnings
 
 def consumer(model, input_queue):
     while True:
@@ -27,13 +28,14 @@ class NeuronSimpleDataParallel():
         self.num_neuron_cores = num_neuron_cores
         self.batch_size = batch_size
         
-        # Important - please read:
-        # https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/tutorial-tensorflow-NeuronCore-Group.html
         # For four cores we use
         ##     os.environ['NEURONCORE_GROUP_SIZES'] = "1,1,1,1"
         # when launching four threads
         # In this logic exists in worker processes, each process should use
         ##     os.environ['NEURONCORE_GROUP_SIZES'] = "1"
+        warnings.warn("NEURONCORE_GROUP_SIZES is being deprecated, if your application is using NEURONCORE_GROUP_SIZES please \
+see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html#announcing-end-of-support-for-neuroncore-group-sizes \
+for more details.", DeprecationWarning)
         nc_env = ','.join(['1'] * num_neuron_cores)
         os.environ['NEURONCORE_GROUP_SIZES'] = nc_env
         
