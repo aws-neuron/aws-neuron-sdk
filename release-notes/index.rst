@@ -9,6 +9,13 @@ What's New
 
 .. _latest-neuron-release:
 
+
+Neuron 1.16.2 (12/15/2021)
+--------------------------
+
+**Neuron 1.16.2** is a patch release. This release include performance enhancements and minor bug fixes in :ref:`Neuron Compiler <neuron-cc-rn>`
+and :ref:`PyTorch Neuron <pytorch-neuron-rn>`.
+
 Neuron 1.16.1 (11/05/2021)
 --------------------------
 
@@ -34,25 +41,25 @@ For more details on how to update the framework packages, please check out our :
 Neuron 1.16.0 (10/27/2021)
 --------------------------
 
-**Neuron 1.16.0 is a release that requires your attention**. **You must update to the latest Neuron Driver (** ``aws-neuron-dkms`` **version 2.1 or newer) 
-for successful installation or upgrade**. 
+**Neuron 1.16.0 is a release that requires your attention**. **You must update to the latest Neuron Driver (** ``aws-neuron-dkms`` **version 2.1 or newer)
+for successful installation or upgrade**.
 
-This release introduces 
-:ref:`Neuron Runtime 2.x <introduce-libnrt>`, upgrades :ref:`PyTorch Neuron <neuron-pytorch>` to 
-PyTorch 1.9.1, adds support for new APIs (:func:`torch.neuron.DataParallel` and ``torch_neuron.is_available()``), 
+This release introduces
+:ref:`Neuron Runtime 2.x <introduce-libnrt>`, upgrades :ref:`PyTorch Neuron <neuron-pytorch>` to
+PyTorch 1.9.1, adds support for new APIs (:func:`torch.neuron.DataParallel` and ``torch_neuron.is_available()``),
 adds new features and capabilities (compiler ``--fast-math`` :ref:`option for better fine-tuning of accuracy/performance <mixed-precision>` and :ref:`MXNet FlexEG feature <flexeg>`),
-improves :ref:`tools <neuron-tools>`, adds support for additional :ref:`operators <neuron-supported-operators>`, 
+improves :ref:`tools <neuron-tools>`, adds support for additional :ref:`operators <neuron-supported-operators>`,
 improves :ref:`performance <appnote-performance-benchmark>`
 (Up to 20% additional throughput and up to 25% lower latency),
-and reduces model loading times. It also simplifies :ref:`Neuron installation steps <neuron-install-guide>`, 
-and improves the user experience of :ref:`container creation and deployment <neuron-containers>`. 
-In addition it includes bug fixes, new :ref:`application notes <neuron-appnotes>`, updated :ref:`tutorials <neuron-tutorials>`, 
+and reduces model loading times. It also simplifies :ref:`Neuron installation steps <neuron-install-guide>`,
+and improves the user experience of :ref:`container creation and deployment <neuron-containers>`.
+In addition it includes bug fixes, new :ref:`application notes <neuron-appnotes>`, updated :ref:`tutorials <neuron-tutorials>`,
 and announcements of software :ref:`deprecation <software-deprecation>` and :ref:`maintenance <software-maintenance>`.
 
 
 -  **Neuron Runtime 2.x**
 
-   - :ref:`introduce-libnrt` - In this release we are introducing Neuron Runtime 2.x. 
+   - :ref:`introduce-libnrt` - In this release we are introducing Neuron Runtime 2.x.
      The new runtime is a shared library (``libnrt.so``), replacing Neuron Runtime 1.x
      which was a server daemon (``neruon-rtd``).
 
@@ -63,11 +70,11 @@ and announcements of software :ref:`deprecation <software-deprecation>` and :ref
      that are no longer needed. The new library-based runtime
      (``libnrt.so``) is directly integrated into Neuron’s ML Frameworks (with the exception of MXNet 1.5) and Neuron
      Tools packages. As a result, users no longer need to install/deploy the
-     ``aws-neuron-runtime``\ package. 
-    
+     ``aws-neuron-runtime``\ package.
+
      .. important::
 
-        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer)
            for proper functionality of the new runtime library.
         -  Read :ref:`introduce-libnrt`
            application note that describes :ref:`why we are making this
@@ -80,7 +87,7 @@ and announcements of software :ref:`deprecation <software-deprecation>` and :ref
 
 -  **Performance**
 
-   -  Updated :ref:`performance numbers <appnote-performance-benchmark>` - Improved performance: Up to 20% additional throughput 
+   -  Updated :ref:`performance numbers <appnote-performance-benchmark>` - Improved performance: Up to 20% additional throughput
       and up to 25% lower latency.
 
 -  **Documentation resources**
@@ -99,7 +106,7 @@ and announcements of software :ref:`deprecation <software-deprecation>` and :ref
 
    -  PyTorch now supports Neuron Runtime 2.x only. Please visit :ref:`introduce-libnrt` for
       more information.
-   -  Introducing PyTorch 1.9.1 support. 
+   -  Introducing PyTorch 1.9.1 support.
    -  Introducing new APIs: :func:`torch.neuron.DataParallel` (see :ref:`torch-neuron-dataparallel-app-note` application note for more details) and
       ``torch_neuron.is_available()``.
    -  Introducing :ref:`new operators support <neuron-cc-ops-pytorch>`.
@@ -181,7 +188,7 @@ and announcements of software :ref:`deprecation <software-deprecation>` and :ref
 
    - :ref:`maintenance_rtd`
    - :ref:`maintenance_mxnet_1_5`
-   - :ref:`maintenance_neuron-cli`   
+   - :ref:`maintenance_neuron-cli`
 
 Detailed release notes
 ----------------------
@@ -190,54 +197,54 @@ Detailed release notes
    :widths: auto
    :header-rows: 1
    :align: left
-   
-   * - Software 
+
+   * - Software
      - Details
-      
-   * - General     
-      
+
+   * - General
+
      - * :ref:`neuron-release-content`
-      
+
        * :ref:`software-deprecation`
 
        * :ref:`software-maintenance`
-      
-   * - PyTorch   
+
+   * - PyTorch
      - * :ref:`pytorch-neuron-rn`
-      
-       * :ref:`neuron-cc-ops-pytorch` 
-      
+
+       * :ref:`neuron-cc-ops-pytorch`
+
 
    * - TensorFlow 2.x
      - * :ref:`tensorflow-neuron-rn-v2`
 
        * :ref:`tensorflow-ref-neuron-accelerated-ops`
-      
-       * :ref:`tensorflow-modelserver-rn-v2`      
+
+       * :ref:`tensorflow-modelserver-rn-v2`
 
 
-      
+
    * - TensorFlow 1.x
      - * :ref:`tensorflow-neuron-rn`
 
        * :ref:`neuron-cc-ops-tensorflow`
-      
+
        * :ref:`tensorflow-modelserver-rn`
 
-      
-   * - Apache MXNet (Incubating)
-      
-     - * :ref:`mxnet-neuron-rn`
-      
-       * :ref:`neuron-cc-ops-mxnet`
-      
-      
 
-   * - Compiler              
+   * - Apache MXNet (Incubating)
+
+     - * :ref:`mxnet-neuron-rn`
+
+       * :ref:`neuron-cc-ops-mxnet`
+
+
+
+   * - Compiler
      - * :ref:`neuron-cc-rn`
 
        * :ref:`neuron-supported-operators`
-      
+
    * - Runtime
      - * :ref:`neuron-runtime-release-notes`
 
@@ -250,17 +257,17 @@ Detailed release notes
 
 
    * - Tools
-      
+
      - * :ref:`neuron-tools-rn`
-      
+
        * :ref:`neuron-tensorboard-rn`
-      
+
    * - Software Deprecation
-   
+
      - * :ref:`software-deprecation`
 
    * - Software Maintenance
-   
+
      - * :ref:`software-maintenance`
 
 
@@ -271,4 +278,4 @@ Previous Releases
    :maxdepth: 1
 
    README
-   
+
