@@ -47,6 +47,19 @@ Known issues and limitations - updated 10/27/2021
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
 
 
+Neuron Compiler release [1.8.2.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/15/2021
+
+
+New in this release
+-------------------
+
+* Performance enhancements as a result of improved layout and DMA optimizations.
+* Minor bug fixes.
+
+
 Neuron Compiler release [1.7.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -164,7 +177,7 @@ Date 1/30/2021
 Summary
 -------
 
-Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline. 
+Added suport for multiple new operators (see operators list) for Tensoflow and MXNET. Improved inference performance of language, object recognition models on single as well as multiple pipelined cores using neuroncore-pipeline.
 
 New in this release
 -------------------
@@ -209,7 +222,7 @@ New in this release
 
 Resolved Issues
 ---------------
-- Resolved issue with depthwise convolution that manifests as a type check error 
+- Resolved issue with depthwise convolution that manifests as a type check error
 
 
 .. _10240450:
@@ -536,8 +549,8 @@ Dependencies
 
 ::
 
-   dmlc_nnvm==1.0.2049.0 
-   dmlc_topi==1.0.2049.0 
+   dmlc_nnvm==1.0.2049.0
+   dmlc_topi==1.0.2049.0
    pip install --upgrade dmlc_tvm==1.0.2049.0
    inferentia_hwm==1.0.897.0
    islpy==2018.2

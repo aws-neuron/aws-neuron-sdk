@@ -33,12 +33,26 @@ you can successfully torch.neuron.trace
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
 
+
+PyTorch Neuron release [2.0.468.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/15/2021
+
+
+New in this release
+-------------------
+
+* Added support for ``aten::cumsum`` operation.
+* Fixed ``aten::expand`` to correctly handle adding new dimensions.
+
+
 PyTorch Neuron release [2.0.392.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 11/05/2021
 
-* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
+* Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing
   the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
 
 PyTorch Neuron release [2.0.318.0]
@@ -53,7 +67,7 @@ New in this release
 
      .. important::
 
-        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer) 
+        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer)
            for proper functionality of the new runtime library.
         -  Read :ref:`introduce-libnrt`
            application note that describes :ref:`why are we making this
@@ -159,9 +173,9 @@ Summary
 
         * Models compiled with previous versions of Neuron PyTorch (<1.8.1) are compatible with Neuron PyTorch 1.8.1.
         * Models compiled with Neuron PyTorch 1.8.1 are not backward compatible with previous versions of Neuron PyTorch (<1.8.1) .
-        
+
     * Updated  tutorials to use Hugging Face Transformers 4.6.0.
-    * Added a new set of forward operators (forward_v2) 
+    * Added a new set of forward operators (forward_v2)
     * Host memory allocation when loading the same model on multiple NeuronCores is significantly reduced
     * Fixed an issue where models would not deallocate all memory within a python session after being garbage collected.
     * Fixed a TorchScript/C++ issue where loading the same model multiple times would not use multiple NeuronCores by default.
