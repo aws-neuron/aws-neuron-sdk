@@ -43,7 +43,7 @@ Prepare a new Python virtual environment with the necessary Neuron and TorchServ
   $ . env/bin/activate
   $ pip install -U pip
   $ pip install torch-neuron 'neuron-cc[tensorflow]' --extra-index-url=https://pip.repos.neuron.amazonaws.com
-  $ pip install transformers==4.2.0 torchserve==0.3.0 torch-model-archiver==0.3.0
+  $ pip install transformers==4.12.5 torchserve==0.5.0 torch-model-archiver==0.5.0
 
 Install the system requirements for TorchServe.
 
@@ -54,9 +54,9 @@ Install the system requirements for TorchServe.
 
 ::
 
-  openjdk version "11.0.9.1" 2020-11-04
-  OpenJDK Runtime Environment (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04)
-  OpenJDK 64-Bit Server VM (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04, mixed mode, sharing)
+  openjdk 11.0.11 2021-04-20
+  OpenJDK Runtime Environment (build 11.0.11+9-Ubuntu-0ubuntu2.18.04)
+  OpenJDK 64-Bit Server VM (build 11.0.11+9-Ubuntu-0ubuntu2.18.04, mixed mode, sharing)
 
 .. code:: bash
 
@@ -64,7 +64,7 @@ Install the system requirements for TorchServe.
 
 ::
 
-  javac 11.0.9.1
+  javac 11.0.11
 
 Verify that TorchServe is now available.
 
@@ -74,7 +74,7 @@ Verify that TorchServe is now available.
 
 ::
 
-  TorchServe Version is 0.3.0
+  TorchServe Version is 0.5.0
 
 
 .. _torchserve-setup:
@@ -247,16 +247,14 @@ Run the benchmarking script.
 
 ::
 
-  pid 1984: current throughput 0.0, latency p50=0.000 p90=0.000
-  pid 1984: current throughput 502.0, latency p50=0.072 p90=0.121
-  pid 1984: current throughput 563.0, latency p50=0.090 p90=0.166
-  pid 1984: current throughput 579.0, latency p50=0.110 p90=0.185
-  pid 1984: current throughput 677.0, latency p50=0.102 p90=0.184
-  pid 1984: current throughput 604.0, latency p50=0.102 p90=0.193
-  pid 1984: current throughput 632.0, latency p50=0.106 p90=0.190
-  pid 1984: current throughput 614.0, latency p50=0.105 p90=0.191
-  pid 1984: current throughput 601.0, latency p50=0.107 p90=0.192
-  pid 1984: current throughput 596.0, latency p50=0.107 p90=0.187
+  pid 26980: current throughput 0.0, latency p50=0.000 p90=0.000
+  pid 26980: current throughput 584.1, latency p50=0.099 p90=0.181
+  pid 26980: current throughput 594.2, latency p50=0.100 p90=0.180
+  pid 26980: current throughput 598.8, latency p50=0.095 p90=0.185
+  pid 26980: current throughput 607.9, latency p50=0.098 p90=0.182
+  pid 26980: current throughput 608.6, latency p50=0.096 p90=0.181
+  pid 26980: current throughput 611.3, latency p50=0.096 p90=0.185
+  pid 26980: current throughput 610.2, latency p50=0.096 p90=0.185
   ...
 
 **Congratulations!** By now you should have successfully served a batched model over TorchServe.
