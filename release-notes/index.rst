@@ -9,11 +9,17 @@ What's New
 
 .. _latest-neuron-release:
 
+Neuron 1.16.3 (01/05/2022)
+--------------------------
+
+**Neuron 1.16.3** is a minor release. This release includes performance enhancements and operator support in :ref:`PyTorch Neuron <pytorch-neuron-rn>`
+and minor bug fixes in :ref:`Neuron Compiler <neuron-cc-rn>`.
+
 
 Neuron 1.16.2 (12/15/2021)
 --------------------------
 
-**Neuron 1.16.2** is a patch release. This release include performance enhancements and minor bug fixes in :ref:`Neuron Compiler <neuron-cc-rn>`
+**Neuron 1.16.2** is a patch release. This release includes performance enhancements and minor bug fixes in :ref:`Neuron Compiler <neuron-cc-rn>`
 and :ref:`PyTorch Neuron <pytorch-neuron-rn>`.
 
 Neuron 1.16.1 (11/05/2021)

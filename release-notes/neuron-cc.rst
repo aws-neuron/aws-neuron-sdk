@@ -47,6 +47,18 @@ Known issues and limitations - updated 10/27/2021
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
 
 
+Neuron Compiler release [1.8.5.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/05/2022
+
+
+New in this release
+-------------------
+
+* Minor bug fixes.
+
+
 Neuron Compiler release [1.8.2.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

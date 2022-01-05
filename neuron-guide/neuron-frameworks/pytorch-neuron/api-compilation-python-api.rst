@@ -77,6 +77,8 @@ TorchScript. It is analogous to :func:`torch.jit.trace` function in PyTorch.
     :keyword bool dynamic_batch_size: A flag to allow Neuron graphs to consume
        variable sized batches of data. Dynamic sizing is restricted to the 0th
        dimension of a tensor.
+    :keyword list optimizations: A list of :class:`~torch_neuron.Optimization`
+        passes to apply to the model.
     :keyword **kwargs: All other keyword arguments will be forwarded directly to
        :func:`torch.jit.trace`. This supports flags like ``strict=False``
        in order to allow dictionary outputs.
@@ -89,6 +91,26 @@ TorchScript. It is analogous to :func:`torch.jit.trace` function in PyTorch.
        Note that in ``torch<1.8`` This would return a
        :class:`~torch.jit.ScriptFunction` if the input was function type.
     :rtype: ~torch.jit.ScriptModule, ~torch.jit.ScriptFunction
+
+
+.. py:class:: torch_neuron.Optimization
+
+    A set of optimization passes that can be applied to the model.
+
+    .. py:attribute:: FLOAT32_TO_FLOAT16
+
+        A post-processing pass that converts all :attr:`torch.float32` tensors
+        to :attr:`torch.float16` tensors. The advantage to this
+        optimization pass is that input/output tensors will be type cast.
+        This reduces the amount of data that will be copied to and from
+        Inferentia hardware. The resulting traced model will accept both
+        :attr:`torch.float32` and :attr:`torch.float16` inputs where the
+        model used :attr:`torch.float32` inputs during tracing. It is only
+        beneficial to enable this optimization if the throughput of a
+        model is highly dependent upon data transfer speed. This optimization is
+        not recommended if the final application will use :attr:`torch.float32`
+        inputs since the :attr:`torch.float16` type cast will occur on CPU
+        during inference.
 
 
 Example Usage

@@ -33,6 +33,18 @@ you can successfully torch.neuron.trace
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
 
+PyTorch Neuron release [2.0.536.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/05/2022
+
+
+New in this release
+-------------------
+
+* Added new operator support for specific variants of operations (See :ref:`neuron-cc-ops-pytorch`)
+* Added optional ``optimizations`` keyword to :func:`torch_neuron.trace` which accepts a list of :class:`~torch_neuron.Optimization` passes.
+
 
 PyTorch Neuron release [2.0.468.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

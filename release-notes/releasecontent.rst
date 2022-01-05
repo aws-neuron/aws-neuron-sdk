@@ -8,7 +8,7 @@ Release Details
    :depth: 2
 
 
-Current Release - Neuron 1.16.2 (12/15/2021)
+Current Release - Neuron 1.16.3 (01/05/2022)
 --------------------------------------------
 
 
@@ -16,14 +16,14 @@ Current Release - Neuron 1.16.2 (12/15/2021)
 Release included packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=1.16.2
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=1.16.3
 
 See :ref:`neuron-maintenance-policy` for more information.
 
 Release supported frameworks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=1.16.2
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=1.16.3
 
 
 

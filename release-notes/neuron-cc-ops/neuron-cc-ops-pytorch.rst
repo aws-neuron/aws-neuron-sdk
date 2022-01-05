@@ -12,6 +12,23 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+.. _pytorch-neuron-release-2xxx:
+
+PyTorch Neuron Release [2.0.536.0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- The following are operators with limited support on Neuron. Unlike fully 
+  supported operators, these operators are not returned when using 
+  :func:`torch_neuron.get_supported_operations`. See each operator 
+  description for conditional support:
+
+    - ``aten::max_pool2d_with_indices`` - Supported when indices outputs are not used by a downstream operation. This allows the operation to be compiled to Neuron when it is equivalent to an ``aten::max_pool2d``.
+    - ``aten::max_pool3d_with_indices`` - Supported when indices outputs are not used by a downstream operation. This allows the operation to be compiled to Neuron when it is equivalent to an ``aten::max_pool3d``.
+    - ``aten::where`` - Supported when used as a conditional selection (3-argument variant). Unsupported when used to generate a dynamic list of indices (1-argument variant). See :func:`torch.where`.
+
+
+.. _pytorch-neuron-release-203180:
+
 PyTorch Neuron Release [2.0.318.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
