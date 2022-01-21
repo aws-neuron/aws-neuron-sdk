@@ -32,6 +32,12 @@ Bug fixes
   approach for screen updates.  
 
 
+Neuron Tools release [2.0.494.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/27/2021
+
+* Security related updates related to log4j vulnerabilities.
 
 
 Neuron Tools release [2.0.327.0]
