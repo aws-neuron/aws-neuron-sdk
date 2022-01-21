@@ -9,6 +9,25 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.1.5.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+New in this release
+-------------------
+
+* Added support of ``mx_neuron.__version__`` to get the build version of MXNet Neuron plugin
+
+Bug fixes
+---------
+
+* Fixed assertion errors when inference was completed with NaNs. The expected behavior is to complete inference successfully and warn the 
+  user that ``NaN``s were seen during the current inference. 
+* Fixed compile issue when individual output nodes have multiple output nodes. Because the output index was being dropped, fewer number 
+  of output feature maps were being considered and that caused failures during inference. 
+
+
 Apache MXNet Neuron release [1.8.0.2.0.276.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

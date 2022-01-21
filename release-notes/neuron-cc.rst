@@ -47,6 +47,13 @@ Known issues and limitations - updated 10/27/2021
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
 
 
+Neuron Compiler release [1.9.1.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+* Fixed an issue with frontend compiler for fused operators that was reported in `github #362 <https://github.com/aws/aws-neuron-sdk/issues/362>`_.
+
 Neuron Compiler release [1.8.5.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -207,9 +214,6 @@ Resolved Issues
 - Corrected a random failure to compile Resnet50 batch 5
 
 - Corrected numerical inaccuracy in RSQRT and related operators for tensors with very large values ( > 1e20)
-
-
-
 
 
 

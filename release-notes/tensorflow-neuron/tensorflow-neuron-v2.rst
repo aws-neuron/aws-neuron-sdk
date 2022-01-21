@@ -46,6 +46,16 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
+Tensorflow-Neuron 2.x release [2.1.6.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+* Updated Tensorflow 2.5 to version 2.5.2.
+* Enhanced auto data parallel (e.g. when using NEURONCORE_GROUP_SIZES=X,Y,Z,W) to support edge cases.
+* Fixed a bug that may cause tensorflow-neuron to generate in some cases scalar gather instruction with incorrect arguments.
+
+
 Tensorflow-Neuron 2.x release [2.0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

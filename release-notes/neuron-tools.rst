@@ -12,6 +12,34 @@ information.
    :depth: 1
 
 
+
+Neuron Tools release [2.0.623.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+New in the release
+------------------
+
+* ``neuron-top`` - Added “all” tab that aggregates all aggregate all running Neuron processes into a single view.  
+* ``neuron-top`` - Improved startup time to approximately 1.5 seconds in most cases.
+* ``neuron-ls``  - Removed header message about updating tools from neuron-ls output
+
+Bug fixes
+---------
+
+* ``neuron-top`` - Reduced single CPU core usage down to 0.7% from 80% on inf1.xlarge when running ``neuron-top`` by switching to an event-driven 
+  approach for screen updates.  
+
+
+Neuron Tools release [2.0.494.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/27/2021
+
+* Security related updates related to log4j vulnerabilities.
+
+
 Neuron Tools release [2.0.327.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
