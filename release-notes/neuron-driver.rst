@@ -8,6 +8,17 @@ Neuron Driver 2.x Release Notes
    :depth: 1
 
 
+Neuron Driver release [2.2.13.0]
+--------------------------------
+
+Date: 01/20/2022
+
+Summary
+-------
+
+- Minor updates
+
+
 Neuron Driver release [2.2.6.0]
 -------------------------------
 

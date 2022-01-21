@@ -61,7 +61,6 @@ Natural Language Processing
 Utilizing Neuron Capabilities
 -----------------------------
 
-*  Tensorflow 1.x - NeuronCore Groups tutorial :ref:`[html] <tensorflow-neurocore-group>`
 *  Tensorflow 1.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
 
 .. toctree::

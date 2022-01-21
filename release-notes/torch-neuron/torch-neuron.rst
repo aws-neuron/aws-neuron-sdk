@@ -11,8 +11,17 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 08/12/2021
+Known Issues and Limitations - Updated 12/30/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The index outputs of the ``aten::argmin``, ``aten::argmax``, ``aten::min``, and
+``aten::max`` operator implementations are sensitive to precision. For models
+that contain these operators and have ``float32`` inputs, we recommend using the
+``--fp32-cast=matmult --fast-math no-fast-relayout`` compiler option to avoid
+numerical imprecision issues. Additionally, the ``aten::min`` and ``aten::max``
+operator implementations do not currently support ``int64`` inputs when
+``dim=0``. For more information on precision and performance-accuracy tuning,
+see :ref:`mixed-precision`.
 
 The following are not torch-neuron limitations, but may impact models
 you can successfully torch.neuron.trace
@@ -27,10 +36,34 @@ you can successfully torch.neuron.trace
 
 -  Torchvision has dropped support for Python 3.5
 -  HuggingFace transformers has dropped support for Python 3.5
--  aten::max only correctly implements the simplest versions of that
-   operator, the variants that return a tuple with arg max now return
-   NotImplementedError during compilation
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+
+PyTorch Neuron release [2.1.7.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+New in this release
+-------------------
+
+* Added PyTorch 1.10 support
+* Added new operators support, see :ref:`neuron-cc-ops-pytorch`
+* Updated ``aten::_convolution`` to support 2d group convolution
+* Updated ``neuron::forward`` operators to allocate less dynamic memory. This can increase performance on models with many input & output tensors.
+* Updated ``neuron::forward`` to better handle batch sizes when ``dynamic_batch_size=True``. This can increase performance at 
+  inference time when the input batch size is exactly equal to the traced model batch size.
+
+Bug fixes
+---------
+
+* Added the ability to ``torch.jit.trace`` a ``torch.nn.Module`` where a submodule has already been traced with ``torch_neuron.trace`` on a CPU-type instance.
+  Previously, if this had been executed on a CPU-type instance, an initialization exception would have been thrown.
+* Fixed ``aten::matmul`` behavior on 1-dimensional by n-dimensional multiplies. Previously, this would cause a validation error.
+* Fixed binary operator type promotion. Previously, in unusual situations, operators like ``aten::mul`` could produce incorrect results due to invalid casting.
+* Fixed ``aten::select`` when index was -1. Previously, this would cause a validation error.
+* Fixed ``aten::adaptive_avg_pool2d`` padding and striding behavior. Previously, this could generate incorrect results with specific configurations.
+* Fixed an issue where dictionary inputs could be incorrectly traced when the tensor values had gradients.
 
 
 PyTorch Neuron release [2.0.536.0]

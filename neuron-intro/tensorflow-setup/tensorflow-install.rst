@@ -22,7 +22,7 @@ Develop on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.1
+   .. group-tab:: TensorFlow 2.5.2
 
       .. tabs::
 
@@ -206,7 +206,7 @@ Compile on compute instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.1
+   .. group-tab:: TensorFlow 2.5.2
 
       .. tabs::
 
@@ -395,7 +395,7 @@ Deploy on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.1
+   .. group-tab:: TensorFlow 2.5.2
 
       .. tabs::
 

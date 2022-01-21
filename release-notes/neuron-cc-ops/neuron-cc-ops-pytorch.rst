@@ -12,7 +12,36 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
-.. _pytorch-neuron-release-2xxx:
+.. _pytorch-neuron-release-2170
+
+PyTorch Neuron release [2.1.7.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+-  Added support for new operators:
+
+    * ``aten::bucketize``
+    * ``aten::any``
+    * ``aten::remainder``
+    * ``aten::clip``
+    * ``aten::repeat_interleave``
+    * ``aten::tensor_split``
+    * ``aten::split_with_sizes``
+    * ``aten::isnan``
+    * ``aten::embedding_renorm_``
+    * ``aten::dot``
+    * ``aten::mv``
+    * ``aten::hardsigmoid``
+    * ``aten::hardswish``
+    * ``aten::trunc``
+    * ``aten::one_hot``: Supported when ``num_classes`` is known at trace time. 
+      The dynamic version of this operation when ``num_classes = -1`` is not supported.
+    * ``aten::adaptive_max_pool1d``        
+    * ``aten::adaptive_max_pool2d``
+
+
+.. _pytorch-neuron-release-205360
 
 PyTorch Neuron Release [2.0.536.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

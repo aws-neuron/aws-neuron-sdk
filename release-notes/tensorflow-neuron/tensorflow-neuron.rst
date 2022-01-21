@@ -47,6 +47,14 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
+Tensorflow-Neuron 1.x release [2.1.6.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 01/20/2022
+
+* Enhanced auto data parallel (e.g. when using NEURONCORE_GROUP_SIZES=X,Y,Z,W) to support edge cases.
+* Added new operators support. see :ref:`neuron-cc-ops-tensorflow`.
+
 
 Tensorflow-Neuron 1.x release [2.0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

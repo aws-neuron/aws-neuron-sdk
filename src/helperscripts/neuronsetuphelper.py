@@ -674,6 +674,11 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
             elif (pkg!=None):
                 if ( nr_setup.releases_info[neuron_version].release_package_main[comp]['version']!= nr_setup.releases_info[neuron_version].release_packages_all[pkg]['version']):
                     os_cmd += '=' + pkg_dict[key]['version']
+
+            # Ubuntu DLAMI will not allow updating tensorflow-model-server without adding --allow-change-held-packages
+            if (comp=='tensorflow-model-server') & (nr_setup.ami == 'dlami') & (nr_setup.os == 'ubuntu'):
+                os_cmd += ' --allow-change-held-packages'
+
             os_cmd += ' -y'
             os_cmd += '\n'
 
