@@ -16,6 +16,8 @@ Known Issues and Limitations - updated 08/12/2021
 
 - Support on serialized TensorFlow 2.x custom operators is currently limited. Serializing some operators registered from tensorflow-text through `TensorFlow Hub <https://tfhub.dev/>`_ is going to cause failure in tensorflow.neuron.trace.
 
+- Memory leak exists on latest releases of TensorFlow Neuron for versions 2.1, 2.2, 2.3, and 2.4.
+
 
 -  Issue: When compiling large models, user might run out of memory and
    encounter this fatal error.
@@ -44,6 +46,17 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
    AttributeError: 'str' object has no attribute 'decode'.
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+
+
+Tensorflow-Neuron 2.x release [2.1.13.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 02/16/2022
+
+* Fixed a bug that caused a memory leak. The memory leak was approximately 128b for each inference and 
+  exists in all versions of Neuron TensorFlow versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`pre-release-content` 
+  for exact versions included in each release.  This release only addresses the leak in TensorFlow Neuron 2.5.  Future release of TensorFlow Neuron will fix the leak in other versions as well (2.1, 2.2, 2.3, 2.4).
+
 
 
 Tensorflow-Neuron 2.x release [2.1.6.0]

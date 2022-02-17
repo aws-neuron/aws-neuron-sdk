@@ -47,6 +47,17 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
 
 
+Tensorflow-Neuron 1.x release [2.1.13.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 02/16/2022
+
+* Fixed a bug that caused a memory leak. The memory leak was approximately 128b for each inference and 
+  exists in all versions of Neuron TensorFlow versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`pre-release-content` 
+  for exact versions included in each release.
+
+
+
 Tensorflow-Neuron 1.x release [2.1.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
