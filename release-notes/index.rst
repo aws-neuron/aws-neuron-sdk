@@ -9,6 +9,13 @@ What's New
 
 .. _latest-neuron-release:
 
+Neuron 1.17.1 (02/16/2022)
+--------------------------
+
+**Neuron 1.17.1** is a patch release. This release fixes a bug in TensorFlow Neuron that caused a memory leak. The memory leak was approximately 128b for each inference and 
+exists in all versions of TensorFlow Neuron versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`pre-release-content` for exact versions included in each release.  This release only fixes the memory leak for TensorFlow versions 1.15 and 2.5 from Neuron.  The other versions of TensorFlow Neuron will be fixed in a shortly upcoming release.
+
+
 Neuron 1.17.0 (01/20/2022)
 --------------------------
 
