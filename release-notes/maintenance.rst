@@ -8,6 +8,16 @@ Software maintenance mode
 	:depth: 1
 	
 
+.. _maintenance_tf21_tf24:
+
+TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4 enter maintenance mode
+-----------------------------------------------------------------------
+
+02/17/2022 - Starting with *Neuron 1.17.2* release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* are entering maintenance mode.  Future releases of 
+*TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will address security issues only. Current users of those versions are advised to migrate to 
+*TensorFlow Neuron version 2.5 or above*.
+
+
 .. _maintenance_rtd:
 
 Neuron Runtime 1.x (``neuron-rtd``) enters maintenance mode
