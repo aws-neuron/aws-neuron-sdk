@@ -7,7 +7,7 @@ Release Details
    :local:
    :depth: 2
 
-Current Release - Neuron 1.17.2 (02/17/2022)
+Current Release - Neuron 1.17.2 (02/18/2022)
 --------------------------------------------
 
 
