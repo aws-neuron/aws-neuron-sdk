@@ -1,4 +1,4 @@
-.. _install-neuron-1.17.0-tensorflow:
+.. _install-neuron-1.17.1-tensorflow:
 
 Install Neuron TensorFlow
 =========================
@@ -29,25 +29,25 @@ Develop on AWS ML accelerator instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=non-dlami --os=ubuntu --neuron-version=1.17.0
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=non-dlami --os=ubuntu --neuron-version=1.17.1
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --neuron-version=1.17.0
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --neuron-version=1.17.1
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=ubuntu --neuron-version=1.17.0
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=ubuntu --neuron-version=1.17.1
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=amazonlinux --neuron-version=1.17.0
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install tensorflow --mode=develop --ami=dlami --os=amazonlinux --neuron-version=1.17.1
 
 
 
