@@ -665,9 +665,13 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
             if (nr_setup.is_latest_neuron==False)&(nr_setup.os=='amazonlinux'):
                 os_cmd += '\n'
                 os_cmd += '# If you are downgrading from newer version , please remove existing package using \'sudo yum remove\' before installing the older package'
+            os_cmd += '\n'
+            # Amazon Linux DLAMI will not allow updating tensorflow-model-server and aws-neuron-dkms without adding sudo yum versionlock delete
+            if ((comp=='tensorflow-model-server') | (comp=='driver'))  & (nr_setup.ami == 'dlami') & (nr_setup.os == 'amazonlinux'):
+                os_cmd += 'sudo yum versionlock delete '
+                os_cmd += pkg_dict[key]['package']
+                os_cmd += '\n'
 
-
-            os_cmd += '\n' 
             os_cmd += os_cmd_prefix + pkg_dict[key]['package']
             if (nr_setup.is_latest_neuron==False) | (nr_setup.force_versions):
                 os_cmd += '=' + pkg_dict[key]['version']
@@ -675,8 +679,8 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
                 if ( nr_setup.releases_info[neuron_version].release_package_main[comp]['version']!= nr_setup.releases_info[neuron_version].release_packages_all[pkg]['version']):
                     os_cmd += '=' + pkg_dict[key]['version']
 
-            # Ubuntu DLAMI will not allow updating tensorflow-model-server without adding --allow-change-held-packages
-            if (comp=='tensorflow-model-server') & (nr_setup.ami == 'dlami') & (nr_setup.os == 'ubuntu'):
+            # Ubuntu DLAMI will not allow updating tensorflow-model-server and aws-neuron-dkms without adding --allow-change-held-packages
+            if ((comp=='tensorflow-model-server') | (comp=='driver'))  & (nr_setup.ami == 'dlami') & (nr_setup.os == 'ubuntu'):
                 os_cmd += ' --allow-change-held-packages'
 
             os_cmd += ' -y'
