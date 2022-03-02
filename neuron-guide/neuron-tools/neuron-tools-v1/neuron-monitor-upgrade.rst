@@ -75,7 +75,7 @@ Output JSON structure changes
        {
          "pid": 0,
          "address": "",
-         "neuron_runtime_tag", "my_app_1",
+         "neuron_runtime_tag": "my_app_1",
          ...
 * The ``"loaded_models"`` array has been removed from the objects representing
   ``"neuroncore_counters"`` entries since the same information can be found in the ``"memory_used"``

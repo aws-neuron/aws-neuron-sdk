@@ -40,7 +40,7 @@ will contain its GRPC address:
        {
          "pid": 0,
          "address": "unix:/run/neuron.sock",
-         "neuron_runtime_tag", "unix:/run/neuron.sock",
+         "neuron_runtime_tag": "unix:/run/neuron.sock",
          "error": "",
          "report": {
            "neuroncore_counters": {
