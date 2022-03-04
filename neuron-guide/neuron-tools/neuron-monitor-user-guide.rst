@@ -77,7 +77,7 @@ metric group:
      "period": "1s",
      "neuron_runtimes": [
        {
-         "tag_filter": ".*"
+         "tag_filter": ".*",
          "metrics": [
            {
              "type": "neuroncore_counters"
