@@ -169,7 +169,7 @@ Available Commands:
 
             * ``all`` is equivalent to using ``fp32-cast-all fast-relayout`` (best performance)
 
-            * ``none`` is equivalent to using ``fp32-cast-matmult-fp16 no-fast-relayout`` (best accuracy)
+            * ``none`` is equivalent to using ``fp32-cast-matmult-bf16 no-fast-relayout`` (best accuracy)
 
             * ``fp32-cast-*`` options are mutually exclusive
 
