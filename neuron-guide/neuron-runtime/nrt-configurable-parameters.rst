@@ -3,13 +3,11 @@
 Neuron Runtime Configuration
 ============================
 
-Runtime is responsible of executing ML models on Neuron devices and it determines which NeuronCore will execute which model and how to execute it.
-User application should configure the Runtime to change the default behavior, Runtime can be configured through environmental variables,
-in most cases Neuron framework extensions will take care of the proper configuration in other cases the user may need to explicitly configure the runtime
- to achieve the desired behavior.
+Neuron Runtime is responsible for executing ML models on Neuron Devices.  Neuron Runtime determines which NeuronCore will execute which model and how to execute it.
+Configuration of the Neuron Runtime is controlled through the use of environmental variables at the process level.  By default, Neuron framework extensions will take care of Neuron Runtime configuration on the user's behalf.  Explicit configurations are also possible when attempting to achieve a desired behavior.
 
 This guide provides an overview of the different environment variables available to
-configure Neuron runtime behavior.
+configure Neuron Runtime behavior.
 
 .. list-table:: Environment Variables
    :widths: 25 60 20 50 20
@@ -25,6 +23,11 @@ configure Neuron runtime behavior.
      - Integer range (like 1-3)
      - Any value or range between 0 to Max NeuronCore in the system.
      - None
+   * - ``NEURON_RT_NUM_CORES``
+     - Number of NeuronCores required by the process.
+     - Integer
+     - A value from 1 to Max NeuronCore in the system.
+     - 0, which is interpretted as "all"
    * - ``NEURON_RT_LOG_LOCATION``
      - Runtime log location
      - string
@@ -47,8 +50,8 @@ configure Neuron runtime behavior.
      - FALSE
 
 
-NeuronCore Allocation with NEURON_RT_VISIBLE_CORES
---------------------------------------------------
+NeuronCore Allocation
+---------------------
 
 .. important ::
 
@@ -60,35 +63,53 @@ By default, Neuron Runtime initializes all the cores present in the system and r
 
 .. note ::
 
-  Once a NeuronCore is reserved for a process, it cant be used by another process at all, until the process reserving that NeuronCore dies.
+  Once a NeuronCore is reserved for a process, it cannot be used by another process at all, until the process reserving that NeuronCore is terminated.
+  
+Using NEURON_RT_VISIBLE_CORES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For parallel processing, it is necessary multiple processes need to use different NeuronCores.
-For this purpose **``NEURON_RT_VISIBLE_CORES``** can be used which controls what NeuronCores the process would reserve.
-This variable takes a NeuronCore index or an inclusive range.
+For parallel processing, ``NEURON_RT_VISIBLE_CORES`` can be used to control which NeuronCores each process would reserve.  This variable is specified with a single NeuronCore index or an inclusive range value.
 
-For example, if an application(myapp.py) requires one NeuronCore, then it can be started with
-``NEURON_RT_VISIBLE_CORES=0`` to use only NeuronCore 0. To do parallel processing, multiple process can be
-started(without any change to application) with different ``NEURON_RT_VISIBLE_CORES`` values.
-Here is an example which runs myapp.py on inf1.xl parallely by using different NeuronCores available.
-
-::
-
- NEURON_RT_VISIBLE_CORES=0 myapp.py
- NEURON_RT_VISIBLE_CORES=1 myapp.py
- NEURON_RT_VISIBLE_CORES=2 myapp.py
- NEURON_RT_VISIBLE_CORES=3 myapp.py
-
-
-Another example, where myapp2.py requires 3 NeuronCores and being run on inf1.6xl.
-In the following example, the first instance of myapp2 would use NeuronCores 0, 1 and 2, then next instance would use 3, 4, and 4 and so on.
+For example, if a process (myapp.py) requires one NeuronCore, then it can be started with
+``NEURON_RT_VISIBLE_CORES=0`` to limit the process to NeuronCore 0. For parallel processing, multiple process can be
+started (without any change to myapp.py code) with different ``NEURON_RT_VISIBLE_CORES`` values.
+Here is an example that runs myapp.py on inf1.xlarge in parallel across the four different NeuronCores available in the inf1.xlarge.
 
 ::
 
- NEURON_RT_VISIBLE_CORES=0-2 myapp2.py
- NEURON_RT_VISIBLE_CORES=3-5 myapp2.py
- NEURON_RT_VISIBLE_CORES=6-8 myapp2.py
- NEURON_RT_VISIBLE_CORES=9-11 myapp2.py
- NEURON_RT_VISIBLE_CORES=12-14 myapp2.py
+ NEURON_RT_VISIBLE_CORES=0 myapp.py &
+ NEURON_RT_VISIBLE_CORES=1 myapp.py &
+ NEURON_RT_VISIBLE_CORES=2 myapp.py &
+ NEURON_RT_VISIBLE_CORES=3 myapp.py &
+
+
+If myapp.py required 3 NeuronCores and was running on a inf1.6xlarge (16 NeuronCores maximum), the first instance of myapp.py could use NeuronCores 0-2, the next instance could use 3-5 and so on:
+
+::
+
+ NEURON_RT_VISIBLE_CORES=0-2 myapp.py &
+ NEURON_RT_VISIBLE_CORES=3-5 myapp.py &
+ NEURON_RT_VISIBLE_CORES=6-8 myapp.py &
+ NEURON_RT_VISIBLE_CORES=9-11 myapp.py &
+ NEURON_RT_VISIBLE_CORES=12-14 myapp.py &
+
+
+Using NEURON_RT_NUM_CORES
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If ``NEURON_RT_NUM_CORES`` is set to a value between 1 and the maximum number of NeuronCores in the instance, Neuron Runtime will attempt to automatically reserve the number of free NeuronCores specified for the process. The difference between ``NEURON_RT_VISIBLE_CORES`` and ``NEURON_RT_NUM_CORES`` is that, ``NEURON_RT_VISIBLE_CORES`` specifies exact NeuronCores to allocate where as ``NEURON_RT_NUM_CORES`` specifies the number of NeuronCores needed and Neuron Runtime selects free NeuronCores.
+
+Using the same example earlier where myapp.py needed 3 cores, but _which_ 3 cores was of no concern, the same application could be executed in parallel up to 5 times on an inf1.6xlarge (16 NeuronCore max):
+
+::
+
+ NEURON_RT_NUM_CORES=3 myapp.py &
+ NEURON_RT_NUM_CORES=3 myapp.py &
+ NEURON_RT_NUM_CORES=3 myapp.py &
+ NEURON_RT_NUM_CORES=3 myapp.py &
+ NEURON_RT_NUM_CORES=3 myapp.py &
+
+Executing a 6th ``NEURON_RT_NUM_CORES=3 myapp.py &`` in the above example would fail as there is only a single NeuronCore still free.
 
 
 Notes
@@ -97,6 +118,8 @@ Notes
 1. Number of NeuronCores in a inferentia device is 4
 2. Number of inferentia is depends on the instance size.
 3. The NeuronCore index in NEURON_RT_VISIBLE_CORES starts from 0 and ends at (number of NeuronDevices * number of NeuronCores) - 1.
+4. By default, ``NEURON_RT_NUM_CORES`` is set to ``0``, which indicates to RT that all cores are to be used.  
+5. NEURON_RT_VISIBLE_CORES takes precedence over NEURON_RT_NUM_CORES.  If specified, all cores within the range will be assigned to the owning process.
 
 
 Logging and debug-ability

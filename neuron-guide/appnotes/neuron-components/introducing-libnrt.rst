@@ -95,13 +95,22 @@ Neuron Runtime
    Before the introduction of ``libnrt.so``, you needed to run multiple ``neuron-rtd`` daemons to allocate Neuron devices for each ``neuron-rtd`` 
    using configuration files.
    After the introduction of ``libnrt.so``, you will no longer need to run multiple ``neuron-rtd`` daemons to allocate Neuron devices to specific Neuron application . 
-   With ``libnrt.so`` allocation of NeuronCores (Neuron device include multiple NeuronCores) to a particular application is done by using ``NEURON_RT_VISIBLE_CORES`` 
-   environment variable, for example:
+   With ``libnrt.so`` allocation of NeuronCores (Neuron device include multiple NeuronCores) to a particular application is done by using ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES``
+   environment variables, for example:
 
    .. code ::
 
       NEURON_RT_VISIBLE_CORES=0-3 myapp1.py
       NEURON_RT_VISIBLE_CORES=4-11 myapp2.py
+
+   Or
+
+   .. code ::
+
+      NEURON_RT_NUM_CORES=3 myapp1.py &
+      NEURON_RT_NUM_CORES=4 myapp2.py &
+
+
 
    See :ref:`nrt-configuration` for details. 
 
@@ -219,7 +228,7 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
     If your application runs multiple processes and required running multiple ``neuron-rtd`` daemons:
 
     * Remove the code that runs multiple ``neuron-rtd`` daemons.
-    * Instead of allocating Neuron devices to ``neuron-rtd`` through configuration files, use ``NEURON_RT_VISIBLE_CORES`` environment variable to
+    * Instead of allocating Neuron devices to ``neuron-rtd`` through configuration files, use ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES`` environment variables to
       allocate NeuronCores. See :ref:`nrt-configuration` for details.
 
     If you application uses ``NEURONCORE_GROUP_SIZES``, see next item.
@@ -227,18 +236,29 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
 
     .. note ::
 
-      ``NEURON_RT_VISIBLE_CORES`` environment variable enables you to allocate NeuronCores to an application. Allocating NeuronCores improves application granularity because Neuron device include multiple NeuronCores.
+      ``NEURON_RT_VISIBLE_CORES`` and ``NEURON_RT_NUM_CORES`` environment variables enables you to allocate NeuronCores to an application. Allocating NeuronCores improves application granularity because Neuron device include multiple NeuronCores.
 
 #. Application running multiple processes using ``NEURONCORE_GROUP_SIZES``
-    * Please consider using ``NEURON_RT_VISIBLE_CORES`` introduced in *Neuron 1.16.0* release instead of ``NEURONCORE_GROUP_SIZES`` as it is being deprecated, 
+    * Please consider using ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES`` environment variables instead of ``NEURONCORE_GROUP_SIZES`` as it is being deprecated, 
     see :ref:`nrt-configuration` for details.
    
-    * Your application behavior will remain the same as before if you do not set ``NEURON_RT_VISIBLE_CORES``.
+    * Your application behavior will remain the same as before if you do not set ``NEURON_RT_VISIBLE_CORES`` and do not set ``NEURON_RT_NUM_CORES``.
 
-    * If you are considering migrating to ``NEURON_RT_VISIBLE_CORES``, please use the following guidelines:
+    * If you are considering migrating to ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES``, please use the following guidelines:
 
-      * For TensorFlow applications or PyTorch applications make sure that ``NEURONCORE_GROUP_SIZES`` is unset, or that ``NEURONCORE_GROUP_SIZES`` allocate the same or less number of NeuronCores allocated by ``NEURON_RT_VISIBLE_CORES``.
-      * For MXNet applications, setting ``NEURONCORE_GROUP_SIZES`` and ``NEURON_RT_VISIBLE_CORES`` environment variables at the same time is not supported. Please use ``NEURON_RT_VISIBLE_CORES`` only.
+      * ``NEURON_RT_VISIBLE_CORES`` takes precedence over ``NEURON_RT_NUM_CORES``.
+
+      * If you are migrating to ``NEURON_RT_VISIBLE_CORES``:
+
+         * For TensorFlow applications or PyTorch applications make sure that ``NEURONCORE_GROUP_SIZES`` is unset, or that ``NEURONCORE_GROUP_SIZES`` allocate the same or less number of NeuronCores allocated by ``NEURON_RT_VISIBLE_CORES``.
+         * For MXNet applications, setting ``NEURONCORE_GROUP_SIZES`` and ``NEURON_RT_VISIBLE_CORES`` environment variables at the same time is not supported. Please use ``NEURON_RT_VISIBLE_CORES`` only.
+         * See :ref:`nrt-configuration` for more details of how to use ``NEURON_RT_VISIBLE_CORES``.
+
+
+      * If you are migrating to ``NEURON_RT_NUM_CORES``:
+
+         * Make sure that ``NEURONCORE_GROUP_SIZES`` is unset.
+         * See :ref:`nrt-configuration` for more details of how to use ``NEURON_RT_NUM_CORES``.
 
 
 #. Application running multiple processes accessing same NeuronCore

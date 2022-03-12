@@ -118,3 +118,8 @@ Example Usage with Manual Device Placement Using `subgraph_builder_function`
         model, example_inputs,
         subgraph_builder_function=subgraph_builder_function,
     )
+
+.. important ::
+
+    Although the old API ``tensorflow.neuron.saved_model.compile`` is still available under tensorflow-neuron 2.x,
+    it supports only the limited capabilities of ``tensorflow.neuron.trace`` and will be deprecated in future releases.

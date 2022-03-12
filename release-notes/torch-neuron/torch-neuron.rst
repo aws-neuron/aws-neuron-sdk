@@ -38,6 +38,18 @@ you can successfully torch.neuron.trace
 -  HuggingFace transformers has dropped support for Python 3.5
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
+PyTorch Neuron release [2.2.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+New in this release
+-------------------
+
+* Added full support for  ``aten::max_pool2d_with_indices`` -  (Was previously supported only when indices were unused).
+* Added new torch-neuron packages compiled with ``-D_GLIBCXX_USE_CXX11_ABI=1``, the new packages support PyTorch 1.8, PyTorch 1.9, and PyTorch 1.10.
+  To install the additional packages compiled with ``-D_GLIBCXX_USE_CXX11_ABI=1`` please change the package repo index to ``https://pip.repos.neuron.amazonaws.com (https://pip.repos.neuron.amazonaws.com/)/cxx11/``
+  
 
 PyTorch Neuron release [2.1.7.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

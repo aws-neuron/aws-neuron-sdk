@@ -21,7 +21,7 @@ Develop on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.2
+   .. group-tab:: TensorFlow 2.7.1
 
       .. tabs::
 
@@ -49,7 +49,7 @@ Develop on AWS ML accelerator instance
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux
  
-   .. group-tab:: TensorFlow 2.4.3
+   .. group-tab:: TensorFlow 2.6.3
 
       .. tabs::
 
@@ -57,28 +57,28 @@ Develop on AWS ML accelerator instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
 
-   .. group-tab:: TensorFlow 2.3.4
+   .. group-tab:: TensorFlow 2.5.3
 
       .. tabs::
 
@@ -86,83 +86,26 @@ Develop on AWS ML accelerator instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
-
-   .. group-tab:: TensorFlow 2.2.3
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-
-   .. group-tab:: TensorFlow 2.1.4
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=develop --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.1.4      
 
 
    .. group-tab:: TensorFlow 1.15.5
@@ -202,7 +145,7 @@ Compile on compute instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.2
+   .. group-tab:: TensorFlow 2.7.1
 
       .. tabs::
 
@@ -234,7 +177,7 @@ Compile on compute instance
 
 
 
-   .. group-tab:: TensorFlow 2.4.3
+   .. group-tab:: TensorFlow 2.6.3
 
       .. tabs::
 
@@ -242,28 +185,28 @@ Compile on compute instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
 
-   .. group-tab:: TensorFlow 2.3.4
+   .. group-tab:: TensorFlow 2.5.3
 
       .. tabs::
 
@@ -271,83 +214,26 @@ Compile on compute instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
-
-   .. group-tab:: TensorFlow 2.2.3
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-
-   .. group-tab:: TensorFlow 2.1.4
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=compile --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.1.4      
 
 
    .. group-tab:: TensorFlow 1.15.5
@@ -393,7 +279,7 @@ Deploy on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: TensorFlow 2.5.2
+   .. group-tab:: TensorFlow 2.7.1
 
       .. tabs::
 
@@ -425,7 +311,7 @@ Deploy on AWS ML accelerator instance
 
 
 
-   .. group-tab:: TensorFlow 2.4.3
+   .. group-tab:: TensorFlow 2.6.3
 
       .. tabs::
 
@@ -433,28 +319,28 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.6.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.4.3
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.6.3
 
 
-   .. group-tab:: TensorFlow 2.3.4
+   .. group-tab:: TensorFlow 2.5.3
 
       .. tabs::
 
@@ -462,83 +348,26 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux AMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Ubuntu DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.5.3
 
          .. group-tab:: Amazon Linux DLAMI
 
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.3.4
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.5.3
 
-
-   .. group-tab:: TensorFlow 2.2.3
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.2.3
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.2.3
-
-
-   .. group-tab:: TensorFlow 2.1.4
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=ubuntu --framework-version=tensorflow-2.1.4
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update tensorflow --mode=deploy --ami=dlami --os=amazonlinux --framework-version=tensorflow-2.1.4      
 
 
    .. group-tab:: TensorFlow 1.15.5

@@ -25,19 +25,28 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime 2.x (``libnrt.so``) release [2.2.51.0]
+-----------------------------------------------------
+
+Date: 03/25/2022
+
+* Fixed an invalid memory access that could occur when unloading models.
+* Reduced severity of logging for numerical errors from ERROR to WARN.
+* Improved handling of models with numerous CPU operations to avoid inference failure due to memory exhaustion.
+
 Neuron Runtime 2.x (``libnrt.so``) release [2.2.31.0]
 -----------------------------------------------------
 
 Date: 01/20/2022
 
 New in the release
-------------------
+^^^^^^^^^^^^^^^^^^
 
 * Changed error notifications from ``WARN`` to ``ERROR`` in cases when the causing problem is non-recoverable.
 * Changed handling of inference timeouts (``NERR_TIMEOUT``) to avoid failure when the timeout is related to a software thread scheduling conflict.
 
 Bug fixes
----------
+^^^^^^^^^
 
 * Increased the number of data queues in Neuron Runtime 2.x to match what was previously used in Neuron Runtime 1.x.  The use 
   of fewer number of data queues in Neuron Runtime 2.x was leading to crashes in a limited number of models.

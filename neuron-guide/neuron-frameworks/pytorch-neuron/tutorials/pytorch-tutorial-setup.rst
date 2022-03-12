@@ -7,10 +7,8 @@ PyTorch Tutorial Setup
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    .. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
-    * Enable or install PyTorch-Neuron:
+    * Enable or install PyTorch-Neuron: :ref:`install-neuron-pytorch`.
       
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-pytorch.rst
 
 #. Run tutorial in Jupyter notebook:
     * Follow instruction at :ref:`Setup Jupyter notebook <setup-jupyter-notebook-steps-troubleshooting>` to:
