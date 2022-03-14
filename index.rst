@@ -49,6 +49,7 @@ Check :ref:`neuron-release-content`, :ref:`Neuron Performance page <appnote-perf
    Neuron Compiler </neuron-guide/neuron-cc/index>
    Neuron Runtime </neuron-guide/neuron-runtime/index>
    Neuron Tools </neuron-guide/neuron-tools/index> 
+   NeuronPerf (Beta) </neuron-guide/neuronperf/index>
    Release Details </release-notes/releasecontent>
    Roadmap </neuron-intro/roadmap-readme>
    Support </neuron-intro/releaseinfo>

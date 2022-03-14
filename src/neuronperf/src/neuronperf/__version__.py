@@ -1,0 +1,8 @@
+__title__ = "neuronperf"
+__description__ = "A benchmarking library for machine learning accelerators."
+__url__ = "https://awsdocs-neuron.readthedocs-hosted.com/en/neuronperf"
+__version__ = "0.0.0.0"
+__author__ = "AWS"
+__author_email__ = "neuronperf@amazon.com"
+__license__ = "Proprietary"
+__copyright__ = "Copyright Amazon Web Services and its Affiliates. All rights reserved."
