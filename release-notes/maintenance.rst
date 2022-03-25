@@ -11,10 +11,10 @@ Software Maintenance and Deprecation
 
 .. _eol-ncgs-env_2:
 
-MM/DD/YYY - Announcing end of support for ``NEURONCORE_GROUP_SIZES`` starting with Neuron 1.20.0 release
+03/25/2022 - Announcing end of support for ``NEURONCORE_GROUP_SIZES`` starting with Neuron 1.20.0 release
 --------------------------------------------------------------------------------------------------------
 
-MM/DD/YYY - Starting with Neuron SDK 1.20.0, ``NEURONCORE_GROUP_SIZES`` environment variable will no longer be supported. Setting 
+03/25/2022 - Starting with Neuron SDK 1.20.0, ``NEURONCORE_GROUP_SIZES`` environment variable will no longer be supported. Setting 
 ``NEURONCORE_GROUP_SIZES`` environment variable will no longer affect applications behavior.
 Current customers using ``NEURONCORE_GROUP_SIZES`` environment variable are advised to use ``NEURON_RT_VISIBLE_CORES`` environment variable  or ``NEURON_RT_NUM_CORES`` environment variable instead.
 
@@ -23,20 +23,20 @@ See :ref:`eol-ncg`, :ref:`nrt-configuration` and :ref:`neuron-migrating-apps-neu
 
 .. _announce-eol-pt-1-5:
 
-MM/DD/YYY - End of support for TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4
+03/25/2022 - End of support for TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4
 -------------------------------------------------------------------------------
 
-MM/DD/YYYY - Starting with *Neuron 1.18.0* release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will no longer be supported, and  
+03/25/2022 - Starting with *Neuron 1.18.0* release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will no longer be supported, and  
 no further releases of *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will be issued.  Current users of those versions are advised to migrate to 
 *TensorFlow Neuron version 2.5 or above*.
 
 
 .. _announce-eol-pt-1-5:
 
-MM/DD/YYY - Announcing end of support for PyTorch Neuron version 1.5 starting with Neuron 1.19.0 release
+03/25/2022 - Announcing end of support for PyTorch Neuron version 1.5 starting with Neuron 1.19.0 release
 --------------------------------------------------------------------------------------------------------
 
-MM/DD/YYYY - Starting with *Neuron 1.19.0* release, *PyTorch Neuron version 1.5* will no longer be supported. Last release of *PyTorch Neuron version 1.5* will be issued
+03/25/2022 - Starting with *Neuron 1.19.0* release, *PyTorch Neuron version 1.5* will no longer be supported. Last release of *PyTorch Neuron version 1.5* will be issued
 as part of *Neuron 1.18.0* release. Current users of those versions are advised to migrate to *PyTorch Neuron version 1.10 or above*.
 
 
