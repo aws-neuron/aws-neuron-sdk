@@ -4,8 +4,8 @@ Parallel Execution using NEURONCORE_GROUP_SIZES
 ===============================================
 
 .. important ::
-  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
-  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+  ``NEURONCORE_GROUP_SIZES`` will no longer be supported starting Neuron 1.19.0 release if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` and :ref:`eol-ncgs-env_2` for more details.
 
 
 Introduction

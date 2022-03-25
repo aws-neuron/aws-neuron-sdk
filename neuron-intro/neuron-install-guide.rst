@@ -53,18 +53,12 @@ More information about DLAMI and Inferentia be found also at the `DLAMI Document
 Deep Learning AMI (DLAMI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Neuron packages are installed within Conda environments in `AWS Deep Learning AMI (DLAMI) with Conda <https://docs.aws.amazon.com/dlami/latest/devguide/conda.html>`_, and `DLAMI <https://docs.aws.amazon.com/dlami/index.html>`_ is the recommended AMI to use with Neuron SDK. 
+Neuron packages are installed within Conda environments in  `Ubuntu 18.04 DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/ubuntu18-04.html>`_ and `Amazon Linux 2 DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/al2.html>`_ . For DLAMI release notes see:
 
-
-For more information about Neuron and DLAMI:
-
-.. toctree::
-   :maxdepth: 1
-
-   /neuron-intro/dlami/dlami-neuron-matrix.rst
-   /neuron-intro/dlami/dlami-neuron-conda-pip.rst
-   /release-notes/dlami-release-notes
-
+* `AWS Deep Learning AMI (Amazon Linux 2) <https://aws.amazon.com/releasenotes/aws-deep-learning-ami-amazon-linux-2/>`_
+* `AWS Deep Learning AMI (Ubuntu 18.04) <https://aws.amazon.com/releasenotes/aws-deep-learning-ami-ubuntu-18-04/>`_
+* `AWS Deep Learning Base AMI (Amazon Linux 2) <https://aws.amazon.com/releasenotes/aws-deep-learning-base-ami-amazon-linux-2/>`_
+* `AWS Deep Learning Base AMI (Ubuntu 18.04) <https://aws.amazon.com/releasenotes/aws-deep-learning-base-ami-ubuntu-18-04/>`_
 
 
 Deep Learning (DL) Containers

@@ -9,8 +9,24 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.2.1.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+New in this release
+-------------------
+
+* Added support for unloading models from a NeuronDevice by deleting the model instance in user application. Users can now call ``del`` in Python on an executor and to unload the model from a NeuronDevice (provided the deleted executor is the last executor pointing to the given model). This requires the latest ``aws-mx-1.8`` package from ``https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl``. 
+
+Bug fixes
+---------
+
+* Fixed a memory leak caused by stale unloaded models in NeuronDevice memory. For this fix to take effect please install aws-mx package from https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl along with the latest mx-neuron package.
+
+
 Apache MXNet Neuron release [1.8.0.2.1.5.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 01/20/2022
 

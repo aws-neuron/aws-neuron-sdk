@@ -31,9 +31,9 @@ XLA: :ref:`neuron-cc-ops-xla`
 
 Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
-Known issues and limitations - updated 10/27/2021
+Known issues and limitations - updated 03/25/2022
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+* The compiler performs validity checks to ensure it generates correct code. In some cases, it may report that a data race occurred due to address overlaps. This will appear in the log file as: ``found <number> initial races``. Since this could be false positive the recommendation is to rerun the compilation. If the issue still occurs, open a  _`GitHub issue <https://github.com/aws/aws-neuron-sdk/issues>`.
 * *TensorFlow 2.x* - In this release supported operators are limited to BERT-like models, specifically no conv2d  or reduce-window operators are available.
 * *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
 * *Data layout* The Neuron compiler supports multiple data layout format (NCHW, NHWC, …). Non-CNHW input/output data-layouts will require Neuron to insert additional transpose operations, causing a degradation in performance.
@@ -45,6 +45,14 @@ Known issues and limitations - updated 10/27/2021
 * *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
 * *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
+
+
+Neuron Compiler release [1.10.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+* Minor bug fixes.
 
 
 Neuron Compiler release [1.9.1.0]
@@ -893,7 +901,7 @@ Known issues and limitations
    step limit of up to 900; MLP models (like BERT) are limited up to
    sequence-length equal 128, batch=8.
 3. **Data layout** The Neuron compiler supports multiple data layout
-   format (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will
+   formats (NCHW, NHWC, ...). Non-CNHW input/output data-layouts will
    require Neuron to insert additional *transpose* operations, causing a
    degradation in performance.
 4. **Object detection models** Computer-vision object detection and

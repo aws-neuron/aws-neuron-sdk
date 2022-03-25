@@ -8,6 +8,7 @@ Install previous Neuron PyTorch releases
 .. toctree::
    :maxdepth: 1
 
+   Neuron 1.17.2 </neuron-intro/pytorch-setup/prev-releases/neuron-1.17.2-pytorch-install>
    Neuron 1.16.3 </neuron-intro/pytorch-setup/prev-releases/neuron-1.16.3-pytorch-install>
    Neuron 1.16.2 </neuron-intro/pytorch-setup/prev-releases/neuron-1.16.2-pytorch-install>
    Neuron 1.16.1 </neuron-intro/pytorch-setup/prev-releases/neuron-1.16.1-pytorch-install>

@@ -10,6 +10,13 @@ TensorFlow-Model-Server-Neuron 1.x Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+TensorFlow Model Server Neuron 1.x release [2.2.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+* Minor bug fixes.
+
 
 TensorFlow Model Server Neuron 1.x release [2.0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -16,8 +16,8 @@ Out-of-memory error when calling Symbol API bind() too many times
 
 .. important ::
 
-  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
-  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+  ``NEURONCORE_GROUP_SIZES`` will no longer be supported starting Neuron 1.19.0 release if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` and :ref:`eol-ncgs-env_2` for more details.
 
 If you see out-of-memory error when using Symbol API's bind() function, please ensure that the bind() function is
 called once for each desired model instance. For example, on inf1.xlarge, use Symbol API to create 4 parallel 
@@ -127,8 +127,8 @@ Multiple MMS workers die with “Backend worker process die.” message
 
 .. important ::
 
-  ``NEURONCORE_GROUP_SIZES`` is being deprecated, if your application is using ``NEURONCORE_GROUP_SIZES`` please 
-  see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+  ``NEURONCORE_GROUP_SIZES`` will no longer be supported starting Neuron 1.19.0 release if your application is using ``NEURONCORE_GROUP_SIZES`` please 
+  see :ref:`neuron-migrating-apps-neuron-to-libnrt` and :ref:`eol-ncgs-env_2` for more details.
 
 If you run inference with MMS and get multiple messages “Backend worker process die", please ensure that the number of workers ("intial_workers") passed during load model is less than or equal to number of NeuronCores available divided by  number of NeuronCores required by model.
 

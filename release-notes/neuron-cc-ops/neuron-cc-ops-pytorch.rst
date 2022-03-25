@@ -12,6 +12,15 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+PyTorch Neuron release [2.2.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+-  Added full support for  ``aten::max_pool2d_with_indices`` -  (Was previously supported only when indices were unused).
+
+
+
 .. _pytorch-neuron-release-2170
 
 PyTorch Neuron release [2.1.7.0]

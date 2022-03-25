@@ -13,6 +13,15 @@ information.
 
 
 
+Neuron Tools release [2.0.790.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+* ``neuron-monitor``: fixed a floating point error when calculating CPU utilization.   
+
+
+
 Neuron Tools release [2.0.623.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -24,6 +33,7 @@ New in the release
 * ``neuron-top`` - Added “all” tab that aggregates all aggregate all running Neuron processes into a single view.  
 * ``neuron-top`` - Improved startup time to approximately 1.5 seconds in most cases.
 * ``neuron-ls``  - Removed header message about updating tools from neuron-ls output
+
 
 Bug fixes
 ---------

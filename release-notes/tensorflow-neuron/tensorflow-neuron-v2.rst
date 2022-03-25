@@ -1,13 +1,13 @@
 .. _tensorflow-neuron-rn-v2:
 
-Tensorflow-Neuron 2.x Release Notes
+tensorflow-neuron 2.x Release Notes
 ===================================
 
 .. contents::
    :local:
    :depth: 1
 
-This document lists the release notes for the TensorFlow-Neuron 2.x packages.
+This document lists the release notes for the tensorflow-neuron 2.x packages.
 
 .. _tf-known-issues-and-limitations:
 
@@ -45,18 +45,30 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
    AttributeError: 'str' object has no attribute 'decode'.
 
-Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
 
-Tensorflow-Neuron 2.x release [2.1.14.0]
+tensorflow-neuron 2.x release [2.2.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+* Updated TensorFlow 2.5 to version 2.5.3.
+* Added support for TensorFlow 2.6 and 2.7.
+* Added a warning message when calling ``tfn.saved_model.compile`` API. In tensorflow-neuron 2.x you should call :ref:`tensorflow.neuron.trace <tensorflow-ref-neuron-tracing-api>`. ``tfn.saved_model.compile`` API supports only partial functionality of :ref:`tensorflow.neuron.trace <tensorflow-ref-neuron-tracing-api>` and will be deprecated in the future.
+
+
+
+tensorflow-neuron 2.x release [2.1.14.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 02/17/2022
 
 * Fixed a bug in TensorFlow Neuron versions 2.1, 2.2. 2.3 and 2.4. The fixed bug was causing a memory leak of 128 bytes for each inference.
+* Improved warning message when calling deprecated compilation API under tensorflow-neuron 2.x. 
 
 
-Tensorflow-Neuron 2.x release [2.1.13.0]
+tensorflow-neuron 2.x release [2.1.13.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 02/16/2022
@@ -67,17 +79,17 @@ Date: 02/16/2022
 
 
 
-Tensorflow-Neuron 2.x release [2.1.6.0]
+tensorflow-neuron 2.x release [2.1.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 01/20/2022
 
-* Updated Tensorflow 2.5 to version 2.5.2.
+* Updated TensorFlow 2.5 to version 2.5.2.
 * Enhanced auto data parallel (e.g. when using NEURONCORE_GROUP_SIZES=X,Y,Z,W) to support edge cases.
 * Fixed a bug that may cause tensorflow-neuron to generate in some cases scalar gather instruction with incorrect arguments.
 
 
-Tensorflow-Neuron 2.x release [2.0.4.0]
+tensorflow-neuron 2.x release [2.0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 11/05/2021
@@ -85,7 +97,7 @@ Date: 11/05/2021
 * Updated Neuron Runtime (which is integrated within this package) to ``libnrt 2.2.18.0`` to fix a container issue that was preventing 
   the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
 
-Tensorflow-Neuron 2.x release [2.0.3.0]
+tensorflow-neuron 2.x release [2.0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 10/27/2021
@@ -108,9 +120,9 @@ New in this release
            migrate your application.
 
 
-* Updated Tensorflow 2.3.x from Tensorflow 2.3.3 to Tensorflow 2.3.4. 
-* Updated Tensorflow 2.4.x from Tensorflow 2.4.2 to Tensorflow 2.4.3.
-* Updated Tensorflow 2.5.x from Tensorflow 2.5.0 to Tensorflow 2.5.1.
+* Updated TensorFlow 2.3.x from TensorFlow 2.3.3 to TensorFlow 2.3.4. 
+* Updated TensorFlow 2.4.x from TensorFlow 2.4.2 to TensorFlow 2.4.3.
+* Updated TensorFlow 2.5.x from TensorFlow 2.5.0 to TensorFlow 2.5.1.
 
 
 Resolved Issues
@@ -121,7 +133,7 @@ Resolved Issues
 
 .. _2501680:
 
-Tensorflow-Neuron 2.x release [1.6.8.0]
+tensorflow-neuron 2.x release [1.6.8.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 08/12/2021

@@ -16,6 +16,7 @@ Installation Guide
       Fresh install </neuron-intro/pytorch-setup/pytorch-install>
       Update to latest release </neuron-intro/pytorch-setup/pytorch-update>
       Install previous releases </neuron-intro/pytorch-setup/pytorch-install-prev>
+      Install versions with support for cxx11 ABI </neuron-intro/pytorch-setup/pytorch-install-cxx11>
 
 .. _pytorch-user-guide:
 

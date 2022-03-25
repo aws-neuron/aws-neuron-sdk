@@ -9,6 +9,7 @@ Install previous Neuron MXNet releases
 .. toctree::
    :maxdepth: 1
 
+   Neuron 1.17.2 </neuron-intro/mxnet-setup/prev-releases/neuron-1.17.2-mxnet-install>
    Neuron 1.16.3 </neuron-intro/mxnet-setup/prev-releases/neuron-1.16.3-mxnet-install>
    Neuron 1.15.2 </neuron-intro/mxnet-setup/prev-releases/neuron-1.15.2-mxnet-install>
    Neuron 1.15.1 </neuron-intro/mxnet-setup/prev-releases/neuron-1.15.1-mxnet-install>

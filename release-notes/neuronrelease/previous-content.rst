@@ -7,6 +7,39 @@ Previous Releases Content
    :local:
    :depth: 1
 
+Neuron 1.17.2 (02/18/2022)
+--------------------------
+
+Release included packages
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=1.17.2
+
+
+See :ref:`neuron-maintenance-policy` for more information.
+
+Release supported frameworks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=1.17.2
+
+
+
+Dependency Software Supported Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Software
+     - Supported
+   * - Python
+     - * Python 3.6
+       * Python 3.7
+
+
 Neuron 1.17.1 (02/16/2022)
 --------------------------
 

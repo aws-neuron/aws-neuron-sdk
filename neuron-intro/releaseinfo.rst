@@ -8,7 +8,6 @@ Support
    /neuron-intro/security
    /neuron-intro/maintenance-policy
    /release-notes/maintenance
-   /release-notes/deprecation
    support
 
 

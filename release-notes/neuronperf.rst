@@ -1,9 +1,10 @@
 .. _neuronperf_rn:
 
 NeuronPerf 1.x Release Notes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+============================
 
-NeuronPerf is a lightweight Python library that can help you measure the best performance your model can achieve on Neuron through an easy-to-use API.
+:ref:`NeuronPerf <neuronperf>` is a lightweight Python library with a simple API that enables fast measurements of performance when running models using Neuron.
+
 
 .. contents:: Table of Contents
    :local:
@@ -11,10 +12,15 @@ NeuronPerf is a lightweight Python library that can help you measure the best pe
 
 
 
-Known Issues and Limitations
-============================
+NeuronPerf release [1.2.0.0]
+----------------------------
 
-.. _1_0_X:
+Date: 03/25/2022
 
-[1.0.X]
-=======
+
+* Initial release of NeuronPerf
+* Supports PyTorch, TensorFlow, and Apache MXNet (Incubating).
+* Supports customizable JSON and CSV reports
+* See :ref:`neuronperf` for more information.
+
+

@@ -82,7 +82,7 @@ Step 3: Set up the Neuron Runtime environment & create a tutorial directory
 If using Conda DLAMI version 27 and up, activate pre-installed
 MXNet-Neuron environment (using
 ``source activate aws_neuron_mxnet_p36`` command). Please update
-MXNet-Neuron environment by following update steps in :ref:`dlami-release-notes-conda-dlami`.
+MXNet-Neuron environment by following update steps in :ref:`neuron-install-guide`.
 
 To install in your own AMI, please see :ref:`neuron-install-guide` to setup virtual environment and
 install MXNet-Neuron (mxnet-neuron) and Neuron Compiler (neuron-cc)

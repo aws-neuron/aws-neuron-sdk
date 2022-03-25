@@ -4,8 +4,7 @@
 NeuronPerf (Beta)
 =================
 
-NeuronPerf is intended to help you measure the best performance your model can achieve on Neuron through an easy-to-use API.
-
+NeuronPerf is a lightweight Python library with a simple API that enables fast measurements of performance when running models using Neuron.
 
 .. _neuronperf_quickstart:
 

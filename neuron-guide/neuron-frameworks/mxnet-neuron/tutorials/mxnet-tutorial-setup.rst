@@ -7,10 +7,8 @@ MXNet Tutorial Setup
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    .. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
-    * Enable or install MXNet-Neuron:
+    * Enable or install MXNet-Neuron: :ref:`install-neuron-mxnet`.
     
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-mxnet.rst
 
 #. Run tutorial in Jupyter notebook:
     * Follow instruction at :ref:`Setup Jupyter notebook <setup-jupyter-notebook-steps-troubleshooting>` to:

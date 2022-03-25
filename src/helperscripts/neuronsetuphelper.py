@@ -19,6 +19,7 @@ class neuron_release_info:
         self.release_components_list = []
         self.release_tf_package_to_model_server_package={}
         self.release_os_install_list =[]
+        self.python_ver=""
 
 
 
@@ -150,6 +151,7 @@ def enumerate_release_manifest(nr_setup, in_neuron_version):
     for neuron_release_ver in neuron_releases["neuron_versions"]:
         m_release=neuron_releases["neuron_versions"][neuron_release_ver]["components"]
         n_info=neuron_release_info()
+        n_info.python_ver=  neuron_releases["neuron_versions"][neuron_release_ver]["python_ver"][0]
 
         for component_name in m_release:
             if m_release[component_name]["framework"]==False:
@@ -440,17 +442,19 @@ def hlpr_pip_repos_setup():
 ##  hlpr_pip_install_create_python_venv
 #################################################
 
-def hlpr_pip_install_create_python_venv(nr_setup):
+def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
+
+    py_ver=nr_setup.releases_info[neuron_version].python_ver
     str = ''
     str += '\n'
     str += '# Install Python venv and activate Python virtual environment to install    ' + '\n'
     str += '# Neuron pip packages.' + '\n'
 
-    if nr_setup.os == 'ubuntu':
-        str += 'sudo apt-get install -y python3-venv g++' + '\n'
+    if nr_setup.os == 'ubuntu':        
+        str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'
     elif nr_setup.os == 'amazonlinux':
-        str += 'sudo yum install -y python3 gcc-c++' + '\n'
-    str += 'python3 -m venv ' + nr_setup.framework +'_venv' + '\n'
+        str += 'sudo yum install -y python'+ py_ver + '-venv gcc-c++' + '\n'
+    str += 'python'+ py_ver + ' -m venv ' + nr_setup.framework +'_venv' + '\n'
     str += 'source '+ nr_setup.framework  + '_venv/bin/activate' + '\n'
     str += 'pip install -U pip' + '\n'
     str += '\n'
@@ -463,7 +467,7 @@ def hlpr_pip_install_create_python_venv(nr_setup):
             str += '\n'
             str += '# Instal Jupyter notebook kernel '+ '\n'
             str += 'pip install ipykernel ' + '\n'
-            str += 'python -m ipykernel install --user --name '
+            str += 'python'+ py_ver + ' -m ipykernel install --user --name '
             str += nr_setup.framework  + '_venv '
             str += '--display-name "Python (' + package_formal_name[nr_setup.framework] + ')"' + '\n' 
             str += 'pip install jupyter notebook' + '\n'
@@ -476,10 +480,13 @@ def hlpr_pip_install_create_python_venv(nr_setup):
 ##  hlpr_pip_activate_python_venv
 #################################################
 
-def hlpr_pip_activate_python_venv(nr_setup):
+def hlpr_pip_activate_python_venv(nr_setup, neuron_version):
+
+    py_ver=nr_setup.releases_info[neuron_version].python_ver
+
     str = ''
     str += '\n'
-    str += '# Activate Python virtual environment where Neuron pip packages were installed ' + '\n'
+    str += '# Activate a Python ' + py_ver + ' virtual environment where Neuron pip packages were installed ' + '\n'
     str += 'source '+ nr_setup.framework  + '_venv/bin/activate' + '\n'
     str += '\n'
  
@@ -808,10 +815,10 @@ def hlpr_instructions(nr_setup, neuron_version):
 
                 if (nr_setup.action =='Install'):
                     # For first install , install python venv and activate a venv
-                    cmd_string += hlpr_pip_install_create_python_venv(nr_setup)
+                    cmd_string += hlpr_pip_install_create_python_venv(nr_setup, neuron_version)
                 elif (nr_setup.action =='Update'):
                     # For nect times, activate the venv used for initial install
-                    cmd_string += hlpr_pip_activate_python_venv(nr_setup)
+                    cmd_string += hlpr_pip_activate_python_venv(nr_setup, neuron_version)
             elif (nr_setup.ami=='dlami'):
                 cmd_string += hlpr_framework_dlami_activate(nr_setup)
                 
@@ -887,6 +894,7 @@ class neuron_setup_helper:
         self.latest_neuron_version = ver_tuple[1]
 
         self.conda_env=""
+        self.python_ver=""
         self.generic_conda_env=""
         
         if self.neuron_version == self.latest_neuron_version:

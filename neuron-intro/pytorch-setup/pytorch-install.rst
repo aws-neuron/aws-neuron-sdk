@@ -479,4 +479,3 @@ Deploy on AWS ML accelerator instance
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=dlami --os=amazonlinux --framework-version=pytorch-1.5.1
-

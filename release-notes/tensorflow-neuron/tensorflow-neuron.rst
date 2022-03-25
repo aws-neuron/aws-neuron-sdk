@@ -1,6 +1,6 @@
 .. _tensorflow-neuron-rn:
 
-Tensorflow-Neuron 1.x Release Notes
+tensorflow-neuron 1.x Release Notes
 ===================================
 
 .. contents::
@@ -8,14 +8,14 @@ Tensorflow-Neuron 1.x Release Notes
    :depth: 1
 
 
-This document lists the release notes for the TensorFlow-Neuron 1.x package.
+This document lists the release notes for the tensorflow-neuron 1.x package.
 
 .. _tf-known-issues-and-limitations:
 
 Known Issues and Limitations - updated 08/12/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Support on serialized TensorFlow 2.x custom operators is currently limited. Serializing some operators registered from tensorflow-text through `TensorFlow Hub <https://tfhub.dev/>`_ is going to cause failure in tensorflow.neuron.trace.
+- Support on serialized TensorFlow 2.x custom operators is currently limited. Serializing some operators registered from TensorFlow-text through `TensorFlow Hub <https://tfhub.dev/>`_ is going to cause failure in tensorflow.neuron.trace.
 
 
 -  Issue: When compiling large models, user might run out of memory and
@@ -33,7 +33,7 @@ Solution: run compilation on a c5.4xlarge instance type or larger.
 
 ::
 
-     Could not find a version that satisfies the requirement tensorflow<1.16.0,>=1.15.0 (from tensorflow-neuron)
+     Could not find a version that satisfies the requirement TensorFlow<1.16.0,>=1.15.0 (from tensorflow-neuron)
 
 Solution: run a ``pip install pip --upgrade`` before upgrading
 ``tensorflow-neuron``.
@@ -44,17 +44,25 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
    AttributeError: 'str' object has no attribute 'decode'.
 
-Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/tensorflow/tensorflow/issues/44467.
+Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
 
-Tensorflow-Neuron 2.x release [2.1.14.0]
+tensorflow-neuron 1.x release [2.1.14.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+* Minor bug fixes.
+
+
+tensorflow-neuron 1.x release [2.1.14.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 02/17/2022
 
-*  
+* Minor bug fixes.
 
-Tensorflow-Neuron 1.x release [2.1.13.0]
+tensorflow-neuron 1.x release [2.1.13.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 02/16/2022
@@ -65,16 +73,16 @@ Date: 02/16/2022
 
 
 
-Tensorflow-Neuron 1.x release [2.1.6.0]
+tensorflow-neuron 1.x release [2.1.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 01/20/2022
 
 * Enhanced auto data parallel (e.g. when using NEURONCORE_GROUP_SIZES=X,Y,Z,W) to support edge cases.
-* Added new operators support. see :ref:`neuron-cc-ops-tensorflow`.
+* Added new operators support. see :ref:`neuron-cc-ops-TensorFlow`.
 
 
-Tensorflow-Neuron 1.x release [2.0.4.0]
+tensorflow-neuron 1.x release [2.0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 11/05/2021
@@ -83,7 +91,7 @@ Date: 11/05/2021
   the use of containers when /dev/neuron0 was not present. See details here :ref:`neuron-runtime-release-notes`.
 
 
-Tensorflow-Neuron 1.x release [2.0.3.0]
+tensorflow-neuron 1.x release [2.0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 10/27/2021
@@ -193,9 +201,9 @@ New in this release
 
 1. Bug fixes and internal refactor.
 
-2. Bump tensorflow base package version to 1.15.5.
+2. Bump TensorFlow base package version to 1.15.5.
 
-3. Introduced a new argument ``convert_constants_to_variables`` to the compilation API ``tfn.saved_model.compile``. Setting it to ``True`` can address the issue of large constants consuming too much memory in the tensorflow runtime.
+3. Introduced a new argument ``convert_constants_to_variables`` to the compilation API ``tfn.saved_model.compile``. Setting it to ``True`` can address the issue of large constants consuming too much memory in the TensorFlow runtime.
 
 
 
@@ -228,7 +236,7 @@ New in this release
 -------------------
 
 1. tensorflow-neuron is now a plugin package that can be used together
-   with tensorflow~=1.15.0 built with ``GLIBCXX_USE_CXX11_ABI=0``.
+   with TensorFlow~=1.15.0 built with ``GLIBCXX_USE_CXX11_ABI=0``.
 
 2. Improved logging during ``tfn.saved_model.compile`` to display
    ``neuron-cc`` logging file path, which is useful for tracking
@@ -249,10 +257,10 @@ New in this release
 -------------------
 
 1. tensorflow-neuron now automatically enables data parallel mode on
-   four cores in one Inferentia. In ``tensorflow-model-server-neuron``,
+   four cores in one Inferentia. In ``TensorFlow-model-server-neuron``,
    most models can now fully utilize four cores automatically. In Python
-   tensorflow, running threaded inference using ``>=4`` Python threads
-   in the same tensorflow Session lead to full utilization of four
+   TensorFlow, running threaded inference using ``>=4`` Python threads
+   in the same TensorFlow Session lead to full utilization of four
    cores.
 
 2. tensorflow-neuron now tries to enable dynamic batch size
@@ -307,9 +315,9 @@ This version contains a few bug fixes and user experience improvements.
 Dependency change
 -----------------
 
-1. Bump tensorflow base package version number to 1.15.3
-2. Add ``tensorflow >= 1.15.0, < 1.16.0`` as an installation dependency
-   so that packages depending on tensorflow can be installed together
+1. Bump TensorFlow base package version number to 1.15.3
+2. Add ``TensorFlow >= 1.15.0, < 1.16.0`` as an installation dependency
+   so that packages depending on TensorFlow can be installed together
    with tensorflow-neuron without error
 
 New Features
@@ -382,7 +390,7 @@ This version contains some bug fixes and new features.
 Major New Features
 ------------------
 
--  Tensorflow-Neuron is now built on TensorFlow 1.15.2 instead of
+-  tensorflow-neuron is now built on TensorFlow 1.15.2 instead of
    TensorFlow 1.15.0
 
 .. _resolved-issues-2:
@@ -417,7 +425,7 @@ New in this release
 Major New Features
 ------------------
 
--  Improved performance between Tensorflow to Neuron runtime.
+-  Improved performance between TensorFlow to Neuron runtime.
 
 .. _resolved-issues-3:
 
