@@ -15,7 +15,7 @@ Neuron 1.18.0 (03/25/2022)
 **Neuron 1.18.0** release introduces the beta release of :ref:`NeuronPerf <neuronperf>`, NeuronPerf is a Python library with a simple API that enables fast measurements of performance when running models with Neuron. This release adds new 5 models to the :ref:`appnote-performance-benchmark` together with  NeuronPerf scripts used to compile these models and run the benchmarks.
 
 
-This release also introduces additional ``torch-neuron`` packages that support C++11 ABI, updates TensorFlow-Neuron 2.5 to 2.5.3, adds support for TensorFlow-Neuron 2.6 and 2.7, and introduces Runtime NEURON_RT_NUM_CORES :ref:environment variable <nrt-configuration>. In addition this release include minor enhancements and bug fixes in Compiler, Neuron Framework Extensions, Runtime 2.x library and tools. See below detailed release notes.
+This release also introduces additional ``torch-neuron`` packages that support C++11 ABI, updates TensorFlow-Neuron 2.5 to 2.5.3, adds support for TensorFlow-Neuron 2.6 and 2.7, and introduces Runtime NEURON_RT_NUM_CORES :ref:`environment variable <nrt-configuration>`. In addition this release include minor enhancements and bug fixes in Compiler, Neuron Framework Extensions, Runtime 2.x library and tools. See below detailed release notes.
 
 Detailed release notes
 ----------------------
