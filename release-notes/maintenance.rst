@@ -21,7 +21,7 @@ Current customers using ``NEURONCORE_GROUP_SIZES`` environment variable are advi
 See :ref:`eol-ncg`, :ref:`nrt-configuration` and :ref:`neuron-migrating-apps-neuron-to-libnrt` for more information.
 
 
-.. _announce-eol-pt-1-5:
+.. _eol-tf-21-24:
 
 03/25/2022 - End of support for TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4
 -------------------------------------------------------------------------------
