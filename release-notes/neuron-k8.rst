@@ -37,6 +37,16 @@ To Pull the Images from ECR:
 .. _1622:
 
 
+Neuron K8 release [1.8.2.0]
+===========================
+
+Date: 03/25/2022
+
+Summary
+-------
+
+- Minor updates.
+
 
 Neuron K8 release [1.7.7.0]
 ===========================

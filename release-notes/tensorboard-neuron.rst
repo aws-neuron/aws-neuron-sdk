@@ -29,6 +29,17 @@ use TensorBoard.
 
 .. _2.1.2.0:
 
+Neuron Plugin for TensorBoard release [2.3.0.0]
+===============================================
+
+Date: 03/25/2022
+
+Summary
+-------
+
+- Minor updates.
+
+
 Neuron Plugin for TensorBoard release [2.2.0.0]
 ===============================================
 

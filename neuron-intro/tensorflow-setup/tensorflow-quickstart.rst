@@ -10,10 +10,8 @@ TensorFlow Quick Start
     .. include:: /neuron-intro/install-templates/launch-inf1-dlami.rst
 
 #. Set up a development environment:
-    .. include :: /neuron-intro/install-templates/note-setup-libnrt-warning.rst
-    * Enable or install TensorFlow-Neuron:
-    
-      .. include:: /neuron-intro/install-templates/dlami-enable-neuron-tensorflow.rst
+    * Enable or install TensorFlow-Neuron: :ref:`install-neuron-tensorflow`.
+
 
 
 
