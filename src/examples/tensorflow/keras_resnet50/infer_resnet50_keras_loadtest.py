@@ -44,11 +44,8 @@ NUM_INFERS_IN_FLIGHT = args.neuroncore_pipeline_cores + 3
 os.environ['NEURON_MAX_NUM_INFERS'] = str(NUM_INFERS_IN_FLIGHT)
 
 num_groups = avail_neuroncores // args.neuroncore_pipeline_cores
-group_sizes = [str(args.neuroncore_pipeline_cores)] * num_groups
-warnings.warn("NEURONCORE_GROUP_SIZES is being deprecated, if your application is using NEURONCORE_GROUP_SIZES please \
-see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html#announcing-end-of-support-for-neuroncore-group-sizes \
-for more details.", DeprecationWarning)
-os.environ['NEURONCORE_GROUP_SIZES'] = ','.join(group_sizes)
+os.environ['NEURON_RT_NUM_CORES'] = str(num_groups)
+
 
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
@@ -95,7 +92,7 @@ def current_throughput():
     throughput_stats = []
     print("Instance type {} with {} NeuronCores".format(instance_type, avail_neuroncores))
     print("NEURON_MAX_NUM_INFERS (env): " + os.environ.get('NEURON_MAX_NUM_INFERS', '<unset>'))
-    print("NEURONCORE_GROUP_SIZES (env): " + os.environ.get('NEURONCORE_GROUP_SIZES', '<unset>'))
+    print("NEURON_RT_NUM_CORES(env): " + os.environ.get('NEURON_RT_NUM_CORES', '<unset>'))
     print("NUM THREADS: ", num_threads)
     print("NUM_LOOPS_PER_THREAD: ", NUM_LOOPS_PER_THREAD)
     print("USER_BATCH_SIZE: ", USER_BATCH_SIZE)

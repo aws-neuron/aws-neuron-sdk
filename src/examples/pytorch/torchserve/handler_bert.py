@@ -9,7 +9,7 @@ from abc import ABC
 from ts.torch_handler.base_handler import BaseHandler
 
 # one core per worker
-os.environ['NEURONCORE_GROUP_SIZES'] = '1'
+os.environ['NEURON_RT_NUM_CORES'] = '1'
 
 logger = logging.getLogger(__name__)
 
