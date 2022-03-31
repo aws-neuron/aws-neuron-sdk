@@ -44,7 +44,7 @@ NUM_INFERS_IN_FLIGHT = args.neuroncore_pipeline_cores + 3
 os.environ['NEURON_MAX_NUM_INFERS'] = str(NUM_INFERS_IN_FLIGHT)
 
 num_groups = avail_neuroncores // args.neuroncore_pipeline_cores
-os.environ['NEURON_RT_NUM_CORES'] = str(num_groups)
+os.environ['NEURON_RT_NUM_CORES'] = str(avail_neuroncores)
 
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))

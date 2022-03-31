@@ -28,7 +28,7 @@ class NeuronSimpleDataParallel():
         self.num_neuron_cores = num_neuron_cores
         self.batch_size = batch_size
         
-        os.environ['NEURONCORE_GROUP_SIZES'] = str(num_neuron_cores)
+        os.environ['NEURON_RT_NUM_CORES'] = str(num_neuron_cores)
         
         # Construct a list of models
         self.models = [torch.jit.load(model_file)
