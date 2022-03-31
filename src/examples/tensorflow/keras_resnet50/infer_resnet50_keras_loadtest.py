@@ -52,7 +52,6 @@ see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprec
 for more details.", DeprecationWarning)
 os.environ['NEURONCORE_GROUP_SIZES'] = ','.join(group_sizes)
 
-
 # Create input from image
 img_sgl = image.load_img('kitten_small.jpg', target_size=(224, 224))
 img_arr = image.img_to_array(img_sgl, dtype='float16')
