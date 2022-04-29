@@ -19,7 +19,7 @@ Develop on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: PyTorch 1.10.1
+   .. group-tab:: PyTorch 1.11.0
 
       .. tabs::
 
@@ -46,6 +46,34 @@ Develop on AWS ML accelerator instance
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=amazonlinux
+
+   .. group-tab:: PyTorch 1.10.2
+
+      .. tabs::
+
+         .. group-tab:: Ubuntu AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Ubuntu DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=amazonlinux --framework-version=pytorch-1.10.2
 
 
    .. group-tab:: PyTorch 1.9.1
@@ -106,6 +134,7 @@ Develop on AWS ML accelerator instance
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=amazonlinux --framework-version=pytorch-1.8.1
 
 
+
    .. group-tab:: PyTorch 1.7.1
 
       .. tabs::
@@ -135,36 +164,8 @@ Develop on AWS ML accelerator instance
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=amazonlinux --framework-version=pytorch-1.7.1
 
 
-   .. group-tab:: PyTorch 1.5.1
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=develop --ami=dlami --os=amazonlinux --framework-version=pytorch-1.5.1
 
 
- 
 
 
 Compile on compute instance
@@ -175,7 +176,7 @@ Compile on compute instance
 
 .. tabs::
 
-  .. group-tab:: PyTorch 1.10.1
+   .. group-tab:: PyTorch 1.11.0
 
       .. tabs::
 
@@ -202,6 +203,36 @@ Compile on compute instance
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=amazonlinux
+
+
+   .. group-tab:: PyTorch 1.10.2
+
+      .. tabs::
+
+         .. group-tab:: Ubuntu AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Ubuntu DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=amazonlinux --framework-version=pytorch-1.10.2
+
 
 
    .. group-tab:: PyTorch 1.9.1
@@ -231,7 +262,6 @@ Compile on compute instance
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=amazonlinux --framework-version=pytorch-1.9.1
-
 
 
    .. group-tab:: PyTorch 1.8.1
@@ -293,34 +323,6 @@ Compile on compute instance
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=amazonlinux --framework-version=pytorch-1.7.1
 
 
-   .. group-tab:: PyTorch 1.5.1
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=compile --ami=dlami --os=amazonlinux --framework-version=pytorch-1.5.1
-
 
 
 Deploy on AWS ML accelerator instance
@@ -333,7 +335,7 @@ Deploy on AWS ML accelerator instance
 
 .. tabs::
 
-   .. group-tab:: PyTorch 1.10.1
+   .. group-tab:: PyTorch 1.11.0
 
       .. tabs::
 
@@ -360,6 +362,34 @@ Deploy on AWS ML accelerator instance
             .. include :: /neuron-intro/install-templates/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=amazonlinux
+
+   .. group-tab:: PyTorch 1.10.2
+
+      .. tabs::
+
+         .. group-tab:: Ubuntu AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux AMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Ubuntu DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=ubuntu --framework-version=pytorch-1.10.2
+
+         .. group-tab:: Amazon Linux DLAMI
+
+            .. include :: /neuron-intro/install-templates/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=amazonlinux --framework-version=pytorch-1.10.2
 
 
    .. group-tab:: PyTorch 1.9.1
@@ -449,32 +479,4 @@ Deploy on AWS ML accelerator instance
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=amazonlinux --framework-version=pytorch-1.7.1
 
-
-   .. group-tab:: PyTorch 1.5.1
-
-      .. tabs::
-
-         .. group-tab:: Ubuntu AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux AMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Ubuntu DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=ubuntu --framework-version=pytorch-1.5.1
-
-         .. group-tab:: Amazon Linux DLAMI
-
-            .. include :: /neuron-intro/install-templates/note-setup-general.rst
-
-            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --update pytorch --mode=deploy --ami=dlami --os=amazonlinux --framework-version=pytorch-1.5.1
 
