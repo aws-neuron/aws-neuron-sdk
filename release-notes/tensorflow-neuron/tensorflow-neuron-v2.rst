@@ -48,6 +48,17 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
 
+tensorflow-neuron 2.x release [2.3.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 04/29/2022
+
+* Added support for Tensorflow 2.8.0.
+* Added support for Slice operator
+* The graph partitioner now prefers to place less compute intensive operators on CPU if the model already contains a large amount of compute intensive operators.
+* Fixed `Github issue #408 <https://github.com/aws/aws-neuron-sdk/issues/408>`_, the fix solves data type handling bug in ``tfn.trace`` when the model contains Conv2D operators.
+
+
 tensorflow-neuron 2.x release [2.2.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

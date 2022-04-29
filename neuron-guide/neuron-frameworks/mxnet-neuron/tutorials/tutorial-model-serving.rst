@@ -150,10 +150,10 @@ Also, comment out unnecessary data copy for model_input in
    curl -v -X POST "http://localhost:8081/models?initial_workers=1&max_workers=1&synchronous=true&url=resnet-50_compiled.mar"
    sleep 10 # allow sufficient time to load model
 
-Each worker requires NeuronCore Group that can accommodate the compiled
+Each worker requires a NeuronCore group that can accommodate the compiled
 model. Additional workers can be added by increasing max_workers
 configuration as long as there are enough NeuronCores available. Use
-``neuron-cli list-ncg`` to see NeuronCore Groups being created.
+``neuron-top`` to see which models are loaded on specific NeuronCores.
 
 8. Test inference using an example image:
 

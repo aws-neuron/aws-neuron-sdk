@@ -8,13 +8,22 @@ Software Maintenance and Deprecation
 	:depth: 1
 
 
+.. _eol-pt-15:
+
+04/29/2022 - End of support for torch-neuron version 1.5
+--------------------------------------------------------
+
+Starting with *Neuron 1.19.0* release, *torch-neuron 1.5* will no longer be supported, and  
+no further releases of *torch-neuron version 1.5* will be issued.  Current users of torch-neuron version 1.5 are advised to migrate to 
+latest *torch-neuron* version.
+
 
 .. _eol-ncgs-env_2:
 
 03/25/2022 - Announcing end of support for ``NEURONCORE_GROUP_SIZES`` starting with Neuron 1.20.0 release
 --------------------------------------------------------------------------------------------------------
 
-03/25/2022 - Starting with Neuron SDK 1.20.0, ``NEURONCORE_GROUP_SIZES`` environment variable will no longer be supported. Setting 
+Starting with Neuron SDK 1.20.0, ``NEURONCORE_GROUP_SIZES`` environment variable will no longer be supported. Setting 
 ``NEURONCORE_GROUP_SIZES`` environment variable will no longer affect applications behavior.
 Current customers using ``NEURONCORE_GROUP_SIZES`` environment variable are advised to use ``NEURON_RT_VISIBLE_CORES`` environment variable  or ``NEURON_RT_NUM_CORES`` environment variable instead.
 
@@ -23,31 +32,31 @@ See :ref:`eol-ncg`, :ref:`nrt-configuration` and :ref:`neuron-migrating-apps-neu
 
 .. _eol-tf-21-24:
 
-03/25/2022 - End of support for TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4
+03/25/2022 - End of support for tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4
 -------------------------------------------------------------------------------
 
-03/25/2022 - Starting with *Neuron 1.18.0* release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will no longer be supported, and  
-no further releases of *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will be issued.  Current users of those versions are advised to migrate to 
-*TensorFlow Neuron version 2.5 or above*.
+Starting with *Neuron 1.18.0* release, *tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4* will no longer be supported, and  
+no further releases of *tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4* will be issued.  Current users of those versions are advised to migrate to 
+latest *tensorflow-neuron* version.
 
 
 .. _announce-eol-pt-1-5:
 
-03/25/2022 - Announcing end of support for PyTorch Neuron version 1.5 starting with Neuron 1.19.0 release
---------------------------------------------------------------------------------------------------------
+03/25/2022 - Announcing end of support for torch-neuron version 1.5 starting with Neuron 1.19.0 release
+---------------------------------------------------------------------------------------------------------
 
-03/25/2022 - Starting with *Neuron 1.19.0* release, *PyTorch Neuron version 1.5* will no longer be supported. Last release of *PyTorch Neuron version 1.5* will be issued
-as part of *Neuron 1.18.0* release. Current users of those versions are advised to migrate to *PyTorch Neuron version 1.10 or above*.
+Starting with *Neuron 1.19.0* release, *torch-neuron version 1.5* will no longer be supported. Last release of *torch-neuron version 1.5* will be issued
+as part of *Neuron 1.18.0* release. Current users of those versions are advised to migrate to latest *torch-neuron* version.
 
 
 .. _maintenance_tf21_tf24:
 
-02/17/2022 - TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4 enter maintenance mode
+02/17/2022 - tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4 enter maintenance mode
 ------------------------------------------------------------------------------------
 
-02/17/2022 - Starting with *Neuron 1.17.2* release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* are entering maintenance mode.  Future releases of 
-*TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will address critical security issues only. Current users of those versions are advised to migrate to 
-*TensorFlow Neuron version 2.5 or above*.
+Starting with *Neuron 1.17.2* release, *tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4* are entering maintenance mode.  Future releases of 
+*tensorflow-neuron versions 2.1, 2.2, 2.3 and 2.4* will address critical security issues only. Current users of those versions are advised to migrate to 
+latest *tensorflow-neuron* version.
 
 
 .. _maintenance_rtd:
@@ -55,7 +64,7 @@ as part of *Neuron 1.18.0* release. Current users of those versions are advised 
 10/27/2021 - Neuron Runtime 1.x (``neuron-rtd``) enters maintenance mode
 ------------------------------------------------------------------------
 
-10/27/2021 - Starting with *Neuron 1.16.0* release, *Neuron Runtime 1.x* (``neuron-rtd``) is entering maintenance mode and replaced 
+Starting with *Neuron 1.16.0* release, *Neuron Runtime 1.x* (``neuron-rtd``) is entering maintenance mode and replaced 
 with *Neuron Runtime 2.x*, a shared library named ``libnrt.so``. 
 Future releases of *Neuron Runtime 1.x* (``neuron-rtd``) will address critical bug fixes and security issues only. Previous releases of 
 *Neuron Runtime 1.x* (``neuron-rtd``) will continue to be available via ``rpm`` and ``deb`` packages.
@@ -72,7 +81,7 @@ For more information please see:
 10/27/2021 - Neuron support for *Apache MXNet 1.5* enters maintenance mode
 --------------------------------------------------------------------------
 
-10/27/2021 - Starting *Neuron release 1.16.0*,  Neuron support for *MXNet 1.5* is entering maintenance mode.
+Starting *Neuron release 1.16.0*,  Neuron support for *MXNet 1.5* is entering maintenance mode.
 Future releases of Neuron supporting *MXNet 1.5*  will address critical bug fixes and security issues only.
 Previous releases of *Apache MXNet 1.5* will continue to be available via ``pip`` packages.
 
@@ -85,7 +94,7 @@ about Neuron MXNet support and how to upgrade to latest *Neuron MXNet 1.8*, plea
 10/27/2021 - ``neuron-cli`` enters maintenance mode
 ---------------------------------------------------
 
-10/27/2021 - Starting *Neuron release 1.16.0*, with the introduction of *Neuron Runtime 2.x*, ``neuron-cli`` is entering maintenance mode. ``neuron-cli`` 
+Starting *Neuron release 1.16.0*, with the introduction of *Neuron Runtime 2.x*, ``neuron-cli`` is entering maintenance mode. ``neuron-cli`` 
 functionality will be available only if *Neuron Runtime 1.x* (``neuron-rtd``) is being used by the application. If the application is using 
 *Neuron Runtime 2.x* shared library(``libnrt.so``), ``neuron-cli`` functionality will not be available.
 
@@ -101,7 +110,7 @@ critical bug fixes and security issues only. Previous releases of ``neuron-cli``
 10/27/2021 - End of support for NeuronCore Groups (NCG)
 -------------------------------------------------------
 
-10/27/2021 -  Before the introduction of *Neuron Runtime 2.x*, :ref:`NeuronCore Group (NCG) <neuron-core-group>` has been used by Neuron Runtime 1.x 
+Before the introduction of *Neuron Runtime 2.x*, :ref:`NeuronCore Group (NCG) <neuron-core-group>` has been used by Neuron Runtime 1.x 
 to define an execution group of one or more NeuronCores where models can be loaded and executed. It also provided separation between processes.
    
 With the introduction of *Neuron Runtime 2.x*, the strict separation of NeuronCores into groups is no longer needed and NeuronCore Groups (NCG) is 
@@ -120,7 +129,7 @@ For more information see details about ``NEURON_RT_VISIBLE_CORES`` at :ref:`nrt-
 10/27/2021 - Announcing end of support for ``NEURONCORE_GROUP_SIZES``
 ---------------------------------------------------------------------
 
-10/27/2021 - ``NEURONCORE_GROUP_SIZES`` environment variable is in the process of being deprecated, future Neuron releases may no longer support
+``NEURONCORE_GROUP_SIZES`` environment variable is in the process of being deprecated, future Neuron releases may no longer support
 the ``NEURONCORE_GROUP_SIZES`` environment variable. Please start
 using ``NEURON_RT_VISIBLE_CORES`` instead.
 
@@ -208,7 +217,7 @@ For more information please check the `blog <https://aws.amazon.com/blogs/develo
 05/01/2021 - End of support for Ubuntu 16 starting Neuron 1.14.0
 ----------------------------------------------------------------
 
-05/01/2021 - Ubuntu 16.04 entered end of life phase officially in April 2021 (see https://ubuntu.com/about/release-cycle) and will not receive any public software or security updates. Starting with Neuron SDK 1.14.0, Ubuntu 16 is no longer supported for Neuron, users who are using Ubuntu 16 are requested to migrate to Ubuntu18 or Amazon Linux 2.
+Ubuntu 16.04 entered end of life phase officially in April 2021 (see https://ubuntu.com/about/release-cycle) and will not receive any public software or security updates. Starting with Neuron SDK 1.14.0, Ubuntu 16 is no longer supported for Neuron, users who are using Ubuntu 16 are requested to migrate to Ubuntu18 or Amazon Linux 2.
 
 Customers who choose to upgrade libc on Ubuntu 16 to work with Neuron v1.13.0 (or higher versions) are highly discouraged from doing that since Ubuntu 16 will no longer receive public security updates.
 
@@ -217,7 +226,7 @@ Customers who choose to upgrade libc on Ubuntu 16 to work with Neuron v1.13.0 (o
 05/01/2021 - End of support for classic TensorBoard-Neuron starting Neuron 1.13.0 and introducing Neuron Plugin for TensorBoard 
 -------------------------------------------------------------------------------------------------------------------------------
 
-05/01/2021 - Starting with Neuron SDK 1.13.0, we are introducing :ref:`Neuron Plugin for TensorBoard <neuron-plugin-tensorboard>` and we will no longer support classic TensorBoard-Neuron. Users are required to migrate to Neuron Plugin for TensorBoard.
+Starting with Neuron SDK 1.13.0, we are introducing :ref:`Neuron Plugin for TensorBoard <neuron-plugin-tensorboard>` and we will no longer support classic TensorBoard-Neuron. Users are required to migrate to Neuron Plugin for TensorBoard.
 
 Starting with Neuron SDK 1.13.0, if you are using TensorFlow-Neuron within DLAMI Conda environment, attempting to run ``tensorboard`` with the existing version of TensorBoard will fail.  Please update the TensorBoard version before installing the Neuron plugin by running ``pip install TensorBoard --force-reinstall``, for installation instructions see :ref:`neuron-plugin-tensorboard`.
 
@@ -231,7 +240,7 @@ For more information see see :ref:`neuron-tensorboard-rn` and :ref:`neuron-plugi
 02/24/2021 - End of support for Python 3.5 
 -----------------------------------------
 
-02/24/2021 - As Python 3.5 reached end-of-life in October 2020, and many packages including TorchVision and Transformers have
+As Python 3.5 reached end-of-life in October 2020, and many packages including TorchVision and Transformers have
 stopped support for Python 3.5, we will begin to stop supporting Python 3.5 for frameworks, starting with
 PyTorch-Neuron version :ref:`neuron-torch-11170` in this release. You can continue to use older versions with Python 3.5.
 
@@ -239,7 +248,7 @@ PyTorch-Neuron version :ref:`neuron-torch-11170` in this release. You can contin
 11/17/2020 - End of support for ONNX 
 ------------------------------------
 
-11/17/2020 - ONNX support is limited and from this version onwards we are not
+ONNX support is limited and from this version onwards we are not
 planning to add any additional capabilities to ONNX. We recommend
 running models in TensorFlow, PyTorch or MXNet for best performance and
 support.
@@ -248,7 +257,7 @@ support.
 07/16/2020 - End of support for PyTorch 1.3 
 ------------------------------------------
 
-07/16/2020 - Starting this release we are ending the support of PyTorch 1.3 and migrating to PyTorch 1.5.1, customers are advised to migrate to PyTorch 1.5.1.
+Starting this release we are ending the support of PyTorch 1.3 and migrating to PyTorch 1.5.1, customers are advised to migrate to PyTorch 1.5.1.
 
 
 

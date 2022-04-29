@@ -10,7 +10,13 @@ NeuronPerf 1.x Release Notes
    :local:
    :depth: 1
 
+NeuronPerf release [1.3.0.0]
+----------------------------
 
+Date: 04/29/2022
+
+
+* Minor updates
 
 NeuronPerf release [1.2.0.0]
 ----------------------------

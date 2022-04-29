@@ -71,7 +71,7 @@ package_formal_name= {
     "pytorch":"Neuron PyTorch",
     "mxnet":"Neuron MXNet",
     "runtime-server":"Neuron Runtime server",
-    "runtime-lib":"Neuron Runtime library",
+    "libnrt":"Neuron Runtime library",
     "runtime-base":"Neuron Runtime base",
     "driver":"Neuron Driver",
     "tools":"Neuron Tools",
@@ -275,7 +275,7 @@ def cli_list_cmd(nr_setup, neuron_version, list):
         for package in nr_setup.releases_info[neuron_version].release_packages_all:
             if len( nr_setup.releases_info[neuron_version].release_packages_all[package]['package_type']):
                 #FIXME Runtime library hardcode print
-                if (nr_setup.releases_info[neuron_version].release_packages_all[package]["component"] == 'runtime-lib'):
+                if (nr_setup.releases_info[neuron_version].release_packages_all[package]["component"] == 'libnrt'):
                     str += nr_setup.releases_info[neuron_version].release_packages_all[package]["component"] +' : \t' +     \
                         "libnrt.so (version "+  \
                         nr_setup.releases_info[neuron_version].release_packages_all[package]["version"] +  ")"  + '\n'
@@ -447,11 +447,21 @@ def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
     py_ver=nr_setup.releases_info[neuron_version].python_ver
     str = ''
     str += '\n'
+
+    if nr_setup.os == 'ubuntu':        
+        str += '######################################################' + '\n'
+        str += '#   Only for Ubuntu 20 - Install Python' + py_ver + '\n'
+        str += '#' + '\n'
+        str += '# sudo add-apt-repository ppa:deadsnakes/ppa' + '\n'
+        str += '# sudo apt-get install python' + py_ver + '\n'
+        str += '#' + '\n'
+        str += '######################################################' + '\n'
+
     str += '# Install Python venv and activate Python virtual environment to install    ' + '\n'
     str += '# Neuron pip packages.' + '\n'
 
     if nr_setup.os == 'ubuntu':        
-        str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'
+        str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'        
     elif nr_setup.os == 'amazonlinux':
         str += 'sudo yum install -y python'+ py_ver + '-venv gcc-c++' + '\n'
     str += 'python'+ py_ver + ' -m venv ' + nr_setup.framework +'_venv' + '\n'

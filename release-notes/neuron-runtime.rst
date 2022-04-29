@@ -9,6 +9,14 @@ Neuron Runtime 2.x Release Notes
 
 .. _neff-support-table:
 
+Known issues
+------------
+
+Updated : 04/29/2022
+
+- In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
+
+
 NEFF Support Table:
 -------------------
 

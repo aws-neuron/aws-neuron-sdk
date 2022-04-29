@@ -38,6 +38,31 @@ you can successfully torch.neuron.trace
 -  HuggingFace transformers has dropped support for Python 3.5
 -  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
 
+PyTorch Neuron release [2.3.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 04/29/2022
+
+New in this release
+-------------------
+
+* Added support PyTorch 1.11.
+* Updated PyTorch 1.10 to version 1.10.2.
+* End of support for torch-neuron 1.5, see :ref:`eol-pt-15`.
+* Added support for new operators:
+
+    * ``aten::masked_fill_``
+    * ``aten::new_zeros``
+    * ``aten::frobenius_norm``
+
+Bug fixes
+---------
+
+* Improved ``aten::gelu`` accuracy
+* Updated ``aten::meshgrid`` to support optional indexing argument introduced in ``torch 1.10`` , see  `PyTorch issue 50276 <https://github.com/pytorch/pytorch/issues/50276>`_
+
+
+
 PyTorch Neuron release [2.2.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
