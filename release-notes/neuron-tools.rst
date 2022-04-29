@@ -11,7 +11,12 @@ information.
    :local:
    :depth: 1
 
+Neuron Tools release [2.1.14.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Date: 04/29/2022
+
+* Minor updates 
 
 Neuron Tools release [2.0.790.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

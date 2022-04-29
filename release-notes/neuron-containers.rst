@@ -8,6 +8,13 @@ Neuron Containers Release Notes
    :depth: 1
 
 
+Neuron 1.19.0
+-------------
+
+Date: 04/29/2022
+
+- Neuron Kubernetes device driver plugin now can figure out communication with the Neuron driver without the *oci hooks*.  Starting with *Neuron 1.19.0* release, installing ``aws-neuron-runtime-base`` and ``oci-add-hooks`` are no longer a requirement for Neuron Kubernetes device driver plugin.
+
 Neuron 1.16.0
 -------------
 

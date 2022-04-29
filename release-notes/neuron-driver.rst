@@ -7,6 +7,33 @@ Neuron Driver 2.x Release Notes
    :local:
    :depth: 1
 
+
+Known issues
+------------
+
+Updated : 04/29/2022
+
+- In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
+
+
+Neuron Driver release [2.3.3.0]
+--------------------------------
+
+Date: 04/29/2022
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+- Minor performance improvements on inference and loading of models.
+
+Bug Fixes
+^^^^^^^^^
+
+- Reduced Host CPU usage when reading ``hw_counters`` metric from neuron-monitor
+- Minor bug fixes. 
+
+
+
 Neuron Driver release [2.2.14.0]
 --------------------------------
 

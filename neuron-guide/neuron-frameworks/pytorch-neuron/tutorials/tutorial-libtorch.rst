@@ -36,7 +36,6 @@ Your directory tree should now look like this:
   ├── bert_neuron_b6.pt
   ├── libtorch_demo
   │   ├── example_app
-  │   │   ├── CMakeLists.txt
   │   │   ├── README.txt
   │   │   ├── build.sh
   │   │   ├── example_app.cpp

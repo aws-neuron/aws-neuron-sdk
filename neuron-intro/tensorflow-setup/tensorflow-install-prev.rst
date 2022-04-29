@@ -8,6 +8,7 @@ Install previous Neuron TensorFlow releases
 .. toctree::
    :maxdepth: 1
 
+   Neuron 1.18.0 </neuron-intro/tensorflow-setup/prev-releases/neuron-1.18.0-tensorflow-install>
    Neuron 1.17.2 </neuron-intro/tensorflow-setup/prev-releases/neuron-1.17.2-tensorflow-install>
    Neuron 1.17.1 </neuron-intro/tensorflow-setup/prev-releases/neuron-1.17.1-tensorflow-install>
    Neuron 1.17.0 </neuron-intro/tensorflow-setup/prev-releases/neuron-1.17.0-tensorflow-install>

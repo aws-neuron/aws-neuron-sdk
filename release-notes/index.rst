@@ -9,15 +9,12 @@ What's New
 
 .. _latest-neuron-release:
 
-Neuron 1.18.0 (03/25/2022)
+Neuron 1.19.0 (04/29/2022)
 --------------------------
 
-**Neuron 1.18.0** release introduces the beta release of :ref:`NeuronPerf <neuronperf>`, NeuronPerf is a Python library with a simple API that enables fast measurements of performance when running models with Neuron. This release adds new 5 models to the :ref:`appnote-performance-benchmark` together with  NeuronPerf scripts used to compile these models and run the benchmarks.
+**Neuron 1.19.0** release adds support for PyTorch version 1.11, updates torch-neuron 1.10 to 1.10.2, and adds support for TensorFlow version 2.8, as well as minor enhancements and bug fixes.
 
-
-This release also introduces additional ``torch-neuron`` packages that support C++11 ABI, updates TensorFlow-Neuron 2.5 to 2.5.3, adds support for TensorFlow-Neuron 2.6 and 2.7, and introduces Runtime NEURON_RT_NUM_CORES :ref:`environment variable <nrt-configuration>`. In addition this release include minor enhancements and bug fixes in Compiler, Neuron Framework Extensions, Runtime 2.x library and tools. See below detailed release notes.
-
-Starting with this release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will :ref:`no longer be supported <eol-tf-21-24>` . We will also :ref:`stop supporting PyTorch Neuron version 1.5 <announce-eol-pt-1-5>` starting with Neuron 1.19.0 release, and :ref:`will stop supporting <eol-ncgs-env_2>`  ``NEURONCORE_GROUP_SIZES`` environment variable starting with Neuron 1.20.0 release.
+Please note that starting with this release (*Neuron 1.19.0*), installing ``aws-neuron-runtime-base`` and ``oci-add-hooks`` are no longer required for Neuron Kubernetes device driver plugin. In addition starting with this release, *torch-neuron 1.5* :ref:`will no longer be supported <eol-pt-15>`.
 
 Detailed release notes
 ----------------------
