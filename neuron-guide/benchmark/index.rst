@@ -8,7 +8,7 @@ Neuron Inference Performance
 
 The following tables contain the reference inference performance for models in the :ref:`neuron-tutorials`. Follow the links on each row to replicate similar results in your own environment. Refer to :ref:`ec2-then-ec2-setenv` documentation to create a new environment based on the latest Neuron release.
 
-*Last update: April 28th, 2022*
+*Last update: April 29th, 2022*
 
 
 .. _NLP:
