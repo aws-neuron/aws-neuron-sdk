@@ -807,6 +807,52 @@
               }
             }
           }
+        },
+        "mxnet": {
+          "framework": true,
+          "packages": {
+            "mxnet_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.5.1.1.10.0.0": {
+                  "main_version": false,
+                  "pre_install_cmds": [],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            },
+            "mx_neuron": {
+              "install_on_compute_instance": true,
+              "versions": {
+                "1.8.0.2.2.2.0": {
+                  "main_version": true,
+                  "pre_install_cmds": [
+                    "wget https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl",
+                    "pip install aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl"
+                  ],
+                  "post_install_cmds": [],
+                  "format": [
+                    "bin"
+                  ],
+                  "content": [
+                    "tbd"
+                  ],
+                  "package_type": [
+                    "whl"
+                  ]
+                }
+              }
+            }
+          }
         }
       }
     },
