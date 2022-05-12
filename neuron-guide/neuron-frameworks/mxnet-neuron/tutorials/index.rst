@@ -38,13 +38,11 @@ Computer Vision
 Natural Language Processing
 ---------------------------
 
-* BERT tutorial :ref:`[html] <mxnet-bert-tutorial>`
 * MXNet 1.8: Using data parallel mode tutorial :ref:`[html] </src/examples/mxnet/data_parallel/data_parallel_tutorial.ipynb>` :mxnet-neuron-src:`[notebook] <data_parallel/data_parallel_tutorial.ipynb>`
 
 .. toctree::
    :hidden:
 
-   /neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/bert_mxnet/index
    /src/examples/mxnet/data_parallel/data_parallel_tutorial.ipynb
 
    
