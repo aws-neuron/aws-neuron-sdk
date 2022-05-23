@@ -15,10 +15,7 @@ package.
 Install TensorFlow Model Server and Serving API
 -----------------------------------------------
 
-Follow the steps in the :ref:`neuron-install-guide`.
-
-If using DLAMI and aws_neuron_tensorflow_p36 environment, you can skip
-the installation step below.
+Follow the steps in the :ref:`install-neuron-tensorflow`.
 
 Then ensure you install using either apt-get or yum:
 
