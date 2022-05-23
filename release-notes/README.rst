@@ -8,6 +8,12 @@ Previous Neuron Release Notes
    :depth: 1
 
 
+Neuron 1.19.0 (04/29/2022)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Neuron 1.19.0** release adds support for PyTorch version 1.11, updates torch-neuron 1.10 to 1.10.2, and adds support for TensorFlow version 2.8, as well as minor enhancements and bug fixes.
+
+Please note that starting with this release (*Neuron 1.19.0*), installing ``aws-neuron-runtime-base`` and ``oci-add-hooks`` are no longer required for Neuron Kubernetes device driver plugin. In addition starting with this release, *torch-neuron 1.5* :ref:`will no longer be supported <eol-pt-15>`.
+
 Neuron 1.18.0 (03/25/2022)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

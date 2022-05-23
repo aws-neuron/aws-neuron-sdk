@@ -31,14 +31,7 @@ neuron-cc
 Update compilation EC2 instance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Update to the latest neuron software by executing the following commands
-:
-
-.. code:: bash
-
-   source activate aws_neuron_tensorflow_p36
-   conda update tensorflow-neuron
-   conda update numpy
+Update to the latest neuron software by executing the instructions at :ref:`install-neuron-tensorflow`.
 
 Note: if your tensorflow-neuron version on the inference instance is
 lower than 1.15.0.1.0.1333.0, you will need to run this demo on
@@ -53,7 +46,7 @@ inference for the MRPC task and the saved model should be fine tuned for
 MRPC. Users who need additional help to fine-tune the model for MRPC or
 to create a saved model can refer to :ref:`bert-tensorflow-demo-appendix1`.
 
-In the same conda environment and directory bert_demo scripts, run the
+In the same environment and directory bert_demo scripts, run the
 following :
 
 .. code:: bash
@@ -81,14 +74,7 @@ aws-neuron-runtime and aws-neuron-tools.
 Update inference EC2 instance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Update to the latest neuron software by executing the following commands
-:
-
-.. code:: bash
-
-   source activate aws_neuron_tensorflow_p36
-   conda update tensorflow-neuron
-   conda update numpy
+Update to the latest neuron software by executing the instructions at :ref:`install-neuron-tensorflow`.
 
 Launching the BERT-Large demo server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
