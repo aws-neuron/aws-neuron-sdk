@@ -639,17 +639,17 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
 
 
     if (comp=='driver'):    
-        os_cmd += '\n'
-        os_cmd += '###############################################################################################################\n'
-        os_cmd += '# Before installing or updating aws-neuron-dkms:'+ '\n'
-        os_cmd += '# - Stop any existing Neuron runtime 1.0 daemon (neuron-rtd) by calling: \'sudo systemctl stop neuron-rtd\'' + '\n'
-        os_cmd += '###############################################################################################################\n'
+        #os_cmd += '\n'
+        #os_cmd += '###############################################################################################################\n'
+        #os_cmd += '# Before installing or updating aws-neuron-dkms:'+ '\n'
+        #os_cmd += '# - Stop any existing Neuron runtime 1.0 daemon (neuron-rtd) by calling: \'sudo systemctl stop neuron-rtd\'' + '\n'
+        #os_cmd += '###############################################################################################################\n'
         # WARNING: Exception
         # Starting Neuron 1.16.0 , new kernel is needed to work with Runtime 2.x (library mode)
-        if (parse(neuron_version)>=parse('1.16.0')):
+        if (parse(neuron_version)>=parse('1.19.1')):
             os_cmd += '\n'
             os_cmd += '################################################################################################################\n'
-            os_cmd += '# To install or update to Neuron versions 1.16.0 and newer from previous releases:'+ '\n'
+            os_cmd += '# To install or update to Neuron versions 1.19.1 and newer from previous releases:'+ '\n'
             os_cmd += '# - DO NOT skip \'aws-neuron-dkms\' install or upgrade step, you MUST install or upgrade to latest Neuron driver'+ '\n'
             os_cmd += '################################################################################################################\n'
 

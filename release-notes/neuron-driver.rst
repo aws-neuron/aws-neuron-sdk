@@ -16,6 +16,23 @@ Updated : 04/29/2022
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
 
+Neuron Driver release [2.3.11.0]
+--------------------------------
+
+Date: 05/27/2022
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+- This driver is required to support future releases of the Neuron Runtime.  Included in the release is both a bug fix to avoid a kernel crash scenario and an increased compatibility range to ensure compatibility with future versions of Neuron Runtime.
+
+Bug Fixes
+^^^^^^^^^
+
+- Correction to huge aligned memory allocation/freeing logic that was previously susceptible to crashes in the kernel.  The crash would bring down the OS.  Recommending upgrade to all customers.
+
+
+
 Neuron Driver release [2.3.3.0]
 --------------------------------
 

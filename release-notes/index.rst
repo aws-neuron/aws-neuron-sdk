@@ -9,12 +9,19 @@ What's New
 
 .. _latest-neuron-release:
 
-Neuron 1.19.0 (04/29/2022)
+Neuron 1.19.1 (05/27/2022)
 --------------------------
 
-**Neuron 1.19.0** release adds support for PyTorch version 1.11, updates torch-neuron 1.10 to 1.10.2, and adds support for TensorFlow version 2.8, as well as minor enhancements and bug fixes.
+**Neuron 1.19.1** is a patch release. This release fixes a bug in Neuron Driver (``aws-neuron-dkms``). Neuron driver version 2.3.11 included in this release fixes a bug that causes kernel panic when a large memory allocation on Neuron device fails.  Neuron Driver 2.3.11 also introduces a new functionality required by the upcoming Neuron 1.20.0 release.  Because the new functionality is mandatory for Neuron 1.20.0 support, Neuron Driver 2.3.11 adds a compatibility check that will prevents Neuron 1.20.0 from running with older versions of the driver.   An attempt to run Neuron 1.20.0 with an older version of the driver will result in the application terminating with an error message.
 
-Please note that starting with this release (*Neuron 1.19.0*), installing ``aws-neuron-runtime-base`` and ``oci-add-hooks`` are no longer required for Neuron Kubernetes device driver plugin. In addition starting with this release, *torch-neuron 1.5* :ref:`will no longer be supported <eol-pt-15>`.
+In addition, this release updates ``tensorflow-neuron`` installation instructions to pin ``protobuf`` version to avoid `compatibility issues <https://github.com/protocolbuffers/protobuf/issues/10051>`__ with older versions of TensorFlow.
+
+.. important ::
+
+   For successful installation or update to next releases (Neuron 1.20.0 and newer):
+      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
+      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`neuron-install-guide`" instructions.
+
 
 Detailed release notes
 ----------------------
