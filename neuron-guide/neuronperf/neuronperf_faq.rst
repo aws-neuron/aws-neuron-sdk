@@ -10,7 +10,7 @@ NeuronPerf FAQ
 	- When measuring end-to-end performance that includes your network serving stack. Instead, your should compare your e2e numbers to those obtained by NeuronPerf to optimize your serving overhead.
 
 - Is NeuronPerf Open Source?
-	- Yes. You can :download:`download the source here</src/neuronperf/neuronperf.tar.gz>`.
+	- Yes. You can :download:`download the source here </src/neuronperf.tar.gz>`.
 
 - What is the secret to obtaining the best numbers?
 	- There is no secret sauce. NeuronPerf follows best practices.
