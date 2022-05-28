@@ -18,7 +18,6 @@ Check :ref:`neuron-release-content`, :ref:`Neuron Performance page <appnote-perf
    :alt: Neuron developer flow
 
 
-
 .. toctree::
    :maxdepth: 1
    :caption: Getting Started
