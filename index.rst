@@ -1,3 +1,5 @@
+.. raw:: html
+   :file: popup.html
 
 Welcome to AWS Neuron
 =====================
