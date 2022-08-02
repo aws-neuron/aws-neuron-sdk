@@ -19,6 +19,52 @@ sys.path.append(os.path.abspath("./_ext"))
 env_project_name = os.environ.get('GIT_PROJECT_NAME')
 env_branch_name = os.environ.get('GIT_BRANCH_NAME')
 
+#for the survey banner
+rst_prolog = """
+.. raw:: html
+
+   <style>
+  .alert {
+  background-color: #1abc9c;
+  opacity: 1;
+ padding: 18px;
+ color: white;
+ margin-bottom: 12px;
+ transition: opacity 0.5s;
+  }
+  .closebtn {
+ margin-left: 12px;
+ font-weight: bold;
+ color: white;
+ float: right;
+ font-size: 21px;
+ line-height: 21px;
+ cursor: pointer;
+ transition: 0.3s;
+  }
+  .closebtn:hover {
+ color: purple;
+  }
+  </style>
+  </head>
+  <body>
+  <div class="alert">
+ <span class="closebtn">&times;</span>  
+ <strong>We want your feedback about Neuron SDK! </strong> Let us know by taking the <a href="https://amazonmr.au1.qualtrics.com/jfe/form/SV_cGwJD02R2blyZhQ" style = "color:white"><u> Neuron survey </u> </a>
+  </div>
+  <script>
+  var x;
+  var closedbutton = document.getElementsByClassName("closebtn");
+  for (x = 0; x < closedbutton.length; x++) {
+  closedbutton[x].onclick = function(){
+     var div = this.parentElement;
+     setTimeout(function(){ div.style.display = "none"; }, 500);
+  }
+  }
+  </script>
+  </body>
+
+"""
 
 
 # -- Project information -----------------------------------------------------
