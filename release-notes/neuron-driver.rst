@@ -15,6 +15,18 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+.. _ndriver_2_3_26_0:
+
+Neuron Driver release [2.3.26.0]
+--------------------------------
+
+Date: 08/02/2022
+
+Bug Fixes
+^^^^^^^^^
+
+- Security Update: Blocked user space access to control registers and DMA control queues intended to be used by the Neuron Driver only.  Recommending upgrade to all customers.
+
 
 Neuron Driver release [2.3.11.0]
 --------------------------------
