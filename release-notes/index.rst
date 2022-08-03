@@ -9,18 +9,18 @@ What's New
 
 .. _latest-neuron-release:
 
-Neuron 1.19.1 (05/27/2022)
+Neuron 1.19.2 (08/02/2022)
 --------------------------
 
-**Neuron 1.19.1** is a patch release. This release fixes a bug in Neuron Driver (``aws-neuron-dkms``). Neuron driver version 2.3.11 included in this release fixes a bug that causes kernel panic when a large memory allocation on Neuron device fails.  Neuron Driver 2.3.11 also introduces a new functionality required by the upcoming Neuron 1.20.0 release.  Because the new functionality is mandatory for Neuron 1.20.0 support, Neuron Driver 2.3.11 adds a compatibility check that will prevents Neuron 1.20.0 from running with older versions of the driver.   An attempt to run Neuron 1.20.0 with an older version of the driver will result in the application terminating with an error message.
-
-In addition, this release updates ``tensorflow-neuron`` installation instructions to pin ``protobuf`` version to avoid `compatibility issues <https://github.com/protocolbuffers/protobuf/issues/10051>`__ with older versions of TensorFlow.
+**Neuron 1.19.2** This is a patch release. The release include a :ref:`security update <ndriver_2_3_26_0>` for Neuron Driver (``aws-neuron-dkms``) and includes compiler bug fix that ignore MXNet dropout for 'training' while performing inference. 
+Please update the Neuron Driver to the latest (version 2.3.26 or newer) so that you can benefit from operational and security updates included in this release.
 
 .. important ::
 
-   For successful installation or update to next releases (Neuron 1.20.0 and newer):
+   You must update to the latest Neuron Driver (aws-neuron-dkms version 2.3.26 or newer) before installing or upgrading to latest Neuron release.
       * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
       * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`neuron-install-guide`" instructions.
+
 
 
 Detailed release notes
