@@ -401,7 +401,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
 
             if (component == 'pytorch'):
                 pip_cmd += ' ' + package_dict['compiler']['package']
-                pip_cmd += '[tensorflow] "protobuf<4"'
+                pip_cmd += '[tensorflow] "protobuf==3.20.1"'
                 if (nr_setup.is_latest_neuron==False) | (nr_setup.force_versions == True):
                     pip_cmd += '=='+package_dict['compiler']['version']
 
@@ -410,7 +410,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
                 pip_cmd += ' torchvision'
 
         if component == 'tensorflow':
-            pip_cmd += ' "protobuf<4"'
+            pip_cmd += ' "protobuf==3.20.1"'
 
     else:
         pip_cmd += '\n'
