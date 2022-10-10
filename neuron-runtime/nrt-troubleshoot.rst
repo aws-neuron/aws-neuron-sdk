@@ -83,7 +83,7 @@ If ``aws-neuron-dkms`` is installed but does not support the latest runtime then
 Solution
 ''''''''
 
-Please follow the installation steps in :ref:`neuron-install-guide` to install ``aws-neuron-dkms``.
+Please follow the installation steps in :ref:`install-guide-setup` to install ``aws-neuron-dkms``.
 
 ------------
 

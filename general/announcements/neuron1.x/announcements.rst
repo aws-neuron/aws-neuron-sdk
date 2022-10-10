@@ -40,7 +40,7 @@ Future releases of *Neuron Runtime 1.x* (``neuron-rtd``) will address critical b
 For more information please see:
 
 	* :ref:`introduce-libnrt`
-	* :ref:`neuron-install-guide`
+	* :ref:`install-guide-index`
 	* :ref:`neuron-maintenance-policy`
 
 
@@ -136,7 +136,7 @@ For more information please see:
 
 	* :ref:`introduce-libnrt`
 	* :ref:`neuron-tools`
-	* :ref:`neuron-install-guide`
+	* :ref:`install-guide-index`
 	* :ref:`neuron-maintenance-policy`
 
 
@@ -147,7 +147,7 @@ For more information please see:
 
 05/28/2021 - Starting with Neuron SDK 1.14.0, we will no longer support conda packages to install Neuron SDK framework in DLAMI and we will no longer update conda packages used to install Neuron SDK framework (Neuron conda packages) with new versions.
 
-Starting with Neuron SDK 1.14.0, pip packages (Neuron pip packages) will be used to install Neuron SDK framework in DLAMI conda environment. To upgrade Neuron SDK framework DLAMI users should use pip upgrade commands instead of conda update commands. Instructions are available in this blog and in Neuron SDK documentation (https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/neuron-install-guide.html#deep-learning-ami-dlami).
+Starting with Neuron SDK 1.14.0, pip packages (Neuron pip packages) will be used to install Neuron SDK framework in DLAMI conda environment. To upgrade Neuron SDK framework DLAMI users should use pip upgrade commands instead of conda update commands. Instructions are available in this blog and in Neuron SDK documentation (:ref:`setup-guide-index`).
 
 
 Starting with Neuron SDK 1.14.0, run one of the following commands to upgrade to latest Neuron framework of your choice:

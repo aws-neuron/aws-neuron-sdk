@@ -45,7 +45,7 @@ This tutorial starts from a fresh Ubuntu Server 16.04 LTS AMI
 Step 1: install aws-neuron-runtime-base package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Follow the :ref:`neuron-install-guide` to
+Follow the :ref:`install-guide-index` to
 setup access to Neuron repos. Then, install the aws-neuron-runtime-base
 package.
 

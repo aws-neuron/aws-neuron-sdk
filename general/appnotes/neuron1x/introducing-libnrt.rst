@@ -53,7 +53,7 @@ Neuron Driver
 
 You need to use latest Neuron Driver. For successful installation and upgrade to *Neuron 1.16.0* or newer, 
 you must install or upgrade to Neuron Driver (``aws-neuron-dkms``) *version 2.1.5.0* or newer. Neuron applications using *Neuron 1.16.0* will fail if 
-they do not detect *Neuron Driver version 2.1.5.0* or newer. For installation and upgrade instructions see :ref:`neuron-install-guide`.
+they do not detect *Neuron Driver version 2.1.5.0* or newer. For installation and upgrade instructions see :ref:`install-guide-index`.
 
 
 .. include:: ./important-neuronx-dkms.txt
@@ -65,7 +65,7 @@ To see details of Neuron component versions please see :ref:`neuron-release-cont
    For successful installation or update to Neuron 1.16.0 and newer from previous releases:
       * Stop Neuron Runtime 1.x daemon (``neuron-rtd``) by running: ``sudo systemctl stop neuron-rtd``
       * Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or ``sudo yum remove aws-neuron-runtime``
-      * Install or upgrade to latest Neuron Driver (``aws-neuron-dkms``) by following the :ref:`neuron-install-guide` instructions.
+      * Install or upgrade to latest Neuron Driver (``aws-neuron-dkms``) by following the :ref:`install-guide-index` instructions.
       * Starting Neuron version 2.3, ``aws-neuron-dkms`` package name is changed to ``aws-neuronx-dkms``, see :ref:`neuron2-intro`
 
 
@@ -76,7 +76,7 @@ Neuron Runtime
    Starting from *Neuron 1.16.0*, Neuron releases will no longer include the ``aws-neuron-runtime packages``, and the Neuron Runtime will be part of the Neuron 
    framework extension of choice (TensorFlow Neuron, PyTorch Neuron or MXNet Neuron). Installing any Neuron framework package will install the Neuron Runtime library 
    (``libnrt.so``).
-      * For installation and upgrade instructions see :ref:`neuron-install-guide`.
+      * For installation and upgrade instructions see :ref:`install-guide-index`.
 
 * Configuring *Neuron Runtime*
    Before *Neuron 1.16.0*, configuring *Neuron Runtime 1.x* was performed through configuration files (e.g. /opt/aws/neuron/config/neuron-rtd.config).
@@ -326,7 +326,7 @@ If an old ``aws-neuron-dkms`` is installed then the application will fail with a
 Solution
 ~~~~~~~~
 
-Please follow the installation steps in :ref:`neuron-install-guide` to install ``aws-neuron-dkms``.
+Please follow the installation steps in :ref:`install-guide-index` to install ``aws-neuron-dkms``.
 
 .. include:: ./important-neuronx-dkms.txt
 
@@ -345,7 +345,7 @@ Solution
 
 * Stop ``neuron-rtd`` by running: ``sudo systemctl stop neuron-rtd``
 * Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or sudo ``yum remove aws-neuron-runtime``
-* Install ``aws-neuron-dkms`` by following steps in :ref:`neuron-install-guide`
+* Install ``aws-neuron-dkms`` by following steps in :ref:`install-guide-index`
 
 .. include:: ./important-neuronx-dkms.txt
 

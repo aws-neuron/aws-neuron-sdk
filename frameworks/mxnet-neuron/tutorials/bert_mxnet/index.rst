@@ -49,7 +49,7 @@ Step 1: Launch EC2 instance
 ---------------------------
 
 For this task we’ll use a inf1.2xlarge instance. Ensure it has the
-latest DLAMI. Refer to the :ref:`neuron-install-guide` for details.
+latest DLAMI. Refer to the :ref:`install-neuron-mxnet` for details.
 
 Step 2: Connecting to your instance
 -----------------------------------
@@ -82,9 +82,9 @@ Step 3: Set up the Neuron Runtime environment & create a tutorial directory
 If using Conda DLAMI version 27 and up, activate pre-installed
 MXNet-Neuron environment (using
 ``source activate aws_neuron_mxnet_p36`` command). Please update
-MXNet-Neuron environment by following update steps in :ref:`neuron-install-guide`.
+MXNet-Neuron environment by following update steps in :ref:`install-neuron-mxnet`.
 
-To install in your own AMI, please see :ref:`neuron-install-guide` to setup virtual environment and
+To install in your own AMI, please see :ref:`install-neuron-mxnet` to setup virtual environment and
 install MXNet-Neuron (mxnet-neuron) and Neuron Compiler (neuron-cc)
 packages. In this tutorial we will use a python virtual environment.
 

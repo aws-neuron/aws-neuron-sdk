@@ -37,7 +37,7 @@ For this demo, launch one inf1.xlarge EC2 instance. We recommend using
 the latest Ubuntu 18 Deep Learning AMI (DLAMI).
 
 Please configure your ubuntu16/ubuntu18/yum repo following the steps in
-the :ref:`neuron-install-guide` in order to install
+the :ref:`install-neuron-tensorflow` in order to install
 ``tensorflow-model-server-neuron``.
 
 Generating Neuron compatible SSD300 TensorFlow SavedModel
