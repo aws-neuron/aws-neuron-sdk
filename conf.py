@@ -44,6 +44,8 @@ else:
     # set branch name
     if env_branch_name != None:
         branch_name = env_branch_name
+        if branch_name == "latest":
+            branch_name = "master"
     else:
         branch_name = "master"
 
