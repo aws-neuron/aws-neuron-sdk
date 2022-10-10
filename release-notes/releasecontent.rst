@@ -1,50 +1,39 @@
 .. _neuron-release-content:
 
-Release Details
+Release Content
 ===============
 
-.. contents::
+.. contents:: Table of contents
    :local:
    :depth: 2
 
-Current Release - Neuron 1.19.2 (08/02/2022)
---------------------------------------------
 
+.. _latest-neuron-release-content:
 
+Neuron 2.3.0 (10/10/2022) - Content
+--------------------------------------
 
-Release included packages
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Trn1 packages
+^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=1.19.2
+* ``aws-neuronx-dkms-2.5.41.0``
+* ``aws-neuronx-oci-hook-2.0.16.0``
+* ``aws-neuronx-runtime-lib-2.9.64.0``
+* ``aws-neuronx-collectives-2.9.86.0``
+* ``aws-neuronx-tools-2.4.14.0``
+* ``aws-neuronx-k8-plugin-2.0.1.0``
+* ``aws-neuronx-k8-scheduler-2.0.1.0``
+* ``neuronx-cc-2.1.0.76``
+* ``torch-neuronx-1.11.0.1.1.1``
 
+Inf1 packages
+^^^^^^^^^^^^^
 
-See :ref:`neuron-maintenance-policy` for more information.
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages
 
-Release supported frameworks
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Previous Neuron Releases Content
+--------------------------------
 
-.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=1.19.2
-
-
-
-Dependency Software Supported Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: auto
-   :header-rows: 1
-   :align: left
-
-   * - Software
-     - Supported
-   * - Python
-     - Python 3.7
-
-
-
-
-Previous Releases Content
--------------------------
-
-:ref:`pre-release-content`
+* :ref:`pre-release-content`
+* :ref:`pre-n1-release-content`
 

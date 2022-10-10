@@ -1,0 +1,5 @@
+.. note::
+
+    Logs used in tutorials do not present latest performance numbers
+
+    For latest performance numbers visit :ref:`benchmark`

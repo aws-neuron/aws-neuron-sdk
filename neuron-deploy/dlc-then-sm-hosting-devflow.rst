@@ -1,1 +1,0 @@
-.. include:: /neuron-intro/devflows/dlc-then-sm-hosting-devflow.rst

@@ -56,45 +56,13 @@ spec:
             - containerPort: 8500
             - containerPort: 9000
 
-          # Informs tensorflow_model_server_neuron of UDS socket location
-          env:
-            - name: NEURON_RTD_ADDRESS
-              value: unix:/sock/neuron.sock
-
           # Arbitrary resource requirements
           resources:
             limits:
               cpu: 4
               memory: 4Gi
+              aws.amazon.com/neuron: 1  # desired number of Inferentia devices.
             requests:
               cpu: "1"
               memory: 1Gi
-
-          # Shared volume mount, for UDS socket
-          volumeMounts:
-            - name: sock
-              mountPath: /sock
-
-        # Neuron-rtd container
-        - name: neuron-rtd
-          image: 790709498068.dkr.ecr.us-east-1.amazonaws.com/neuron-rtd:latest # neuron-rtd image.
-          imagePullPolicy: IfNotPresent
-
-          # Neuron-rtd required capabilities
-          securityContext:
-            capabilities:
-              add:
-                - SYS_ADMIN
-                - IPC_LOCK
-
-          # Shared volume mount, for UDS socket
-          volumeMounts:
-            - name: sock
-              mountPath: /sock
-
-          resources:
-            limits:
-              hugepages-2Mi: 256Mi    # configure to 256 * desired number of Inferentia devices.
               aws.amazon.com/neuron: 1  # desired number of Inferentia devices.
-            requests:
-              memory: 1024Mi          # Desired amount of memory. Should be larger than hugepages-2Mi limit.

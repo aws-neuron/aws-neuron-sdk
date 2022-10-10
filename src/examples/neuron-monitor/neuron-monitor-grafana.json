@@ -587,7 +587,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Inference Success Rate",
+      "title": "Execution Success Rate",
       "transformations": [],
       "type": "stat"
     },
@@ -648,7 +648,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Inference Error Rate",
+      "title": "Execution Error Rate",
       "type": "stat"
     },
     {
@@ -704,13 +704,13 @@
         {
           "expr": "sum(rate(inference_status_total{status_type=\"completed\"}[1m]))",
           "interval": "",
-          "legendFormat": "Inference Success Rate",
+          "legendFormat": "Execution Success Rate",
           "refId": "A"
         },
         {
           "expr": "sum(rate(inference_status_total{status_type!=\"completed\"}[1m]))",
           "interval": "",
-          "legendFormat": "Inference Error Rate",
+          "legendFormat": "Execution Error Rate",
           "refId": "B"
         }
       ],
@@ -718,7 +718,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Inference Status Rates",
+      "title": "Execution Status Rates",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -846,7 +846,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Inference Latency",
+      "title": "Execution Latency",
       "tooltip": {
         "shared": true,
         "sort": 0,

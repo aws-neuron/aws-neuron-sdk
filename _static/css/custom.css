@@ -1,0 +1,63 @@
+.xxtable-smaller-font-size p, strong  {
+    font-size:0.9em; 
+}
+
+.ablog-post-title p {
+    font-size:0.9em;     
+}
+
+.ablog-post p {
+    font-size:0.9em;     
+}
+
+.sphinx-design-class-title-small {
+    font-size:0.9em;     
+}
+
+.sphinx-design-class-title-med {
+    font-size:1em;     
+}
+
+.sphinx-design-class-body-small {
+    font-size:0.9em;     
+}
+
+
+h1{font-size:2em;}
+h2{font-size:1.5em;}
+h3{font-size:1.3em;}
+h4{font-size:1.2em;}
+div.topic  {
+    font-size:0.85em; 
+}
+li.toctree-l1 {
+    font-size:0.95em; 
+}
+th , tr, td{
+    white-space: normal !important;
+}
+th {
+    font-size:0.90em; 
+}
+
+.ff th , tr, td{
+    font-size:0.90em; 
+    white-space: normal !important;
+}
+
+.ff div.section.p  {
+    font-size:0.8em; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

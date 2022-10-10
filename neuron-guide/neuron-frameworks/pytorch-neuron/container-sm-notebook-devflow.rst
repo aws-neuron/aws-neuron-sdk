@@ -1,1 +1,0 @@
-.. include:: /neuron-intro/devflows/container-sm-notebook-devflow.rst

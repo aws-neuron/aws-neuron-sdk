@@ -1,1 +1,0 @@
-.. include:: /neuron-intro/devflows/ec2-then-ec2-devflow.rst

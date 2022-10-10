@@ -4,10 +4,9 @@
 
 ## Neuron SDK Overview
 
-AWS Neuron is a software development kit (SDK) enabling high-performance deep learning inference using AWS Inferentia custom designed machine learning chips. With Neuron, you can develop, profile, and deploy high-performance inference predictions on top of Inferentia based EC2
-Inf1 instances.
+AWS Neuron is a software development kit (SDK) enabling high-performance deep learning acceleration using AWS Inferentia and Trainium, AWS's custom designed machine learning accelerators. With Neuron, you can develop, profile, and deploy high-performance machine learning workloads on top of accelerated EC2 instances, e.g. Inf1 and Trn1.
 
-Neuron is pre-integrated into popular machine learning frameworks like TensorFlow, MXNet and Pytorch to provide a seamless training-to-inference workflow. It includes a compiler, runtime driver, as well as debug and profiling utilities with a TensorBoard plugin for visualization.
+Neuron includes a compiler, runtime driver, as well as debug and profiling utilities with a TensorBoard plugin for visualization, and is pre-integrated into popular machine learning frameworks like Pytorch, TensorFlow and MXNet, to provide a seamless machine learning acceleration workflow.
 
 ## Neuron SDK’s documentation
 

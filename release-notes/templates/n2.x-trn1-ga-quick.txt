@@ -1,0 +1,35 @@
+.. list-table::
+   :widths: auto
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - * :ref:`rn2.3.0_new`
+       * :ref:`neuron-packages-changes`
+       * :ref:`announce-aws-neuron-github-org`
+       * :ref:`announce-neuron-rtd-eol`
+
+   * - Get started with Neuron
+     - * :ref:`torch_quick_start`
+       * :ref:`docs-quick-links`
+
+   * - Tested workloads and known issues
+     - * :ref:`rn2.3.0_tested`
+       * :ref:`rn2.3.0-known-issues` 
+
+   * - Frequently Asked Questions (FAQ)
+     - * :ref:`neuron2-intro-faq`
+       * :ref:`neuron-training-faq`
+
+
+   * - Troubleshooting
+     - * :ref:`PyTorch Neuron Troubleshooting on Trn1 <pytorch-neuron-traning-troubleshooting>`
+       * :ref:`Neuron Runtime Troubleshooting on Trn1  <trouble-shoot-trn1>`   
+
+   * - Neuron architecture and features
+     - * :ref:`neuron-architecture-index`
+       * :ref:`neuron-features-index`
+
+
+   * - Neuron Components release notes
+     - * :ref:`components-rn`
