@@ -12,7 +12,7 @@ users to train their models on Trainium.
 
 Release [1.11.0.1.1.1]
 ----------------------
-Date: 10/1/2022
+Date: 10/10/2022
 
 
 Summary
@@ -33,7 +33,7 @@ Announcing the first PyTorch Neuron release for training.
 - Single-instance and multi-instance distributed training using torchrun
 - Support for ParallelCluster and SLURM with node-level scheduling granularity
 - Persistent cache for compiled graph
-- `neuron_parallel_compile <../../frameworks/torch/api-reference-guide/training/pytorch-neuron-parallel-compile.html>`__
+- :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`
   utility to help speed up compilation
 - Optimizer support: SGD, AdamW
 - Loss functions supported: NLLLoss
@@ -63,3 +63,7 @@ Runtime error "invalid offset in Coalesced\_memloc\_..." followed by "Failed to 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Currently, when running MRPC fine-tuning tutorial with ``bert-base-*`` model, you will encounter runtime error "invalid offset in Coalesced\_memloc\_..." followed by "Failed to process dma block: 1703".
 This issue will be fixed in an upcoming release.
+
+Compilation error: "TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When compiling MRPC fine-tuning tutorial with ``bert-large-*`` and FP32 (no XLA_USE_BF16=1) for two workers or more, you will encounter compiler error that looks like ``Error message:  TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]`` followed by ``Error class:    KeyError``. Single worker fine-tuning is not affected. This issue will be fixed in an upcoming release.
