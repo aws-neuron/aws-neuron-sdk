@@ -646,7 +646,19 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
         #os_cmd += '###############################################################################################################\n'
         # WARNING: Exception
         # Starting Neuron 1.16.0 , new kernel is needed to work with Runtime 2.x (library mode)
-        if (parse(neuron_version)>=parse('1.19.1')):
+
+
+        if (parse(neuron_version)>=parse('2.99.99')):
+            os_cmd += '\n'
+            os_cmd += '################################################################################################################\n'
+            os_cmd += '# To install or update to Neuron versions 2.99.99 and newer from previous releases:'+ '\n'
+            if (nr_setup.os=='ubuntu'):
+                os_cmd += '# - Unstall aws-neuron-dkms by calling \`sudo yum remove aws-neuron-dkms -y\`  -y'+ '\n'
+            elif (nr_setup.os=='amazonlinux'):
+                os_cmd += '# - Unstall aws-neuron-dkms by calling \`sudo apt-get remove aws-neuron-dkms\`  -y'+ '\n'
+            os_cmd += '# - DO NOT skip \'aws-neuronx-dkms\' install or upgrade step, you MUST install or upgrade to latest Neuron driver'+ '\n'
+            os_cmd += '################################################################################################################\n'
+        elif (parse(neuron_version)>=parse('1.19.1')):
             os_cmd += '\n'
             os_cmd += '################################################################################################################\n'
             os_cmd += '# To install or update to Neuron versions 1.19.1 and newer from previous releases:'+ '\n'
@@ -692,11 +704,17 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
                 os_cmd += '\n'
 
             os_cmd += os_cmd_prefix + pkg_dict[key]['package']
+
+            # Amazon Linux yum installation packaging versioning is set via hyphen not equals
+            version_key = "="
+            if (nr_setup.os=='amazonlinux'):
+                version_key = "-"
+
             if (nr_setup.is_latest_neuron==False) | (nr_setup.force_versions):
-                os_cmd += '=' + pkg_dict[key]['version']
+                os_cmd += version_key + pkg_dict[key]['version']
             elif (pkg!=None):
                 if ( nr_setup.releases_info[neuron_version].release_package_main[comp]['version']!= nr_setup.releases_info[neuron_version].release_packages_all[pkg]['version']):
-                    os_cmd += '=' + pkg_dict[key]['version']
+                    os_cmd += version_key + pkg_dict[key]['version']
 
             # Ubuntu DLAMI will not allow updating tensorflow-model-server and aws-neuron-dkms without adding --allow-change-held-packages
             if ((comp=='tensorflow-model-server') | (comp=='driver'))  & (nr_setup.ami == 'dlami') & (nr_setup.os == 'ubuntu'):
@@ -710,9 +728,23 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
         os_cmd += '\n'
         os_cmd += '####################################################################################\n'
         os_cmd += '# Warning: If Linux kernel is updated as a result of OS package update'+ '\n'
-        os_cmd += '#          Neuron driver (aws-neuron-dkms) should be re-installed after reboot'+ '\n'
+        if (parse(neuron_version)>=parse('2.99.99')):
+            os_cmd += '#          Neuron driver (aws-neuronx-dkms) should be re-installed after reboot'+ '\n'
+        else:
+            os_cmd += '#          Neuron driver (aws-neuron-dkms) should be re-installed after reboot'+ '\n'
         os_cmd += '####################################################################################\n'            
-    
+
+    if (comp=='tools'):
+        if (parse(neuron_version)>=parse('2.99.99')):
+            os_cmd += '\n'
+            os_cmd += '################################################################################################################\n'
+            os_cmd += '# To install or update to Neuron versions 2.99.99 and newer from previous releases:'+ '\n'
+            if (nr_setup.os=='ubuntu'):
+                os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo yum remove aws-neuron-tools -y\`  -y'+ '\n'
+            elif (nr_setup.os=='amazonlinux'):
+                os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo apt-get remove aws-neuron-tools\`  -y'+ '\n'
+            os_cmd += '################################################################################################################\n'            
+
     return os_cmd
 
 

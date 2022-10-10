@@ -2,53 +2,81 @@ Welcome to AWS Neuron
 =====================
 
 .. meta::
-   :description: Neuron SDK is powering AWS Inferentia and Trainium based instances, natively integrated into PyTorch and TensorFlow and can quickly start using with AWS Sagemaker, ECS and EKS.
-   
-AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (Incubating). With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
+   :description: Neuron SDK is powering AWS Inferentia and Trainium based instances, natively integrated into PyTorch and TensorFlow. Enabling you to quicky start with Amazon EC2, AWS Sagemaker, ECS and EKS.
 
-Check :ref:`neuron-release-content`, :ref:`Neuron Performance page <appnote-performance-benchmark>` and :ref:`neuron-whatsnew` in :ref:`latest-neuron-release` release.
+AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and AWS Trainium based instances. It supports customers in their end-to-end ML development lifecycle to build new models, train and optimize these models, and then deploy them for production. To learn about the model architectures currently supported on Inf1 and Trn1 instances, please see :ref:`model_architecture_fit`. To learn about upcoming capabilities, please view the :ref:`neuron_roadmap`.
+
+AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (incubating). The EC2 Trn1 instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf1 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
+
+Check :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in :ref:`latest-neuron-release`.
+
+.. grid:: 2
 
 
-|image|
+   .. card:: Get Started with PyTorch Neuron
+         :link: torch_quick_start
+         :link-type: ref
 
 
-.. |image| image:: /images/neuron-devflow.jpg
-   :width: 600
-   :alt: Neuron developer flow
+   .. card:: Get Started with TensorFlow Neuron
+         :link: tensorflow_quick_start
+         :link-type: ref
 
+
+   .. card:: Neuron Quick Links
+         :link: docs-quick-links
+         :link-type: ref
 
 .. toctree::
    :maxdepth: 1
-   :caption: Getting Started
-
-   QuickStart </neuron-intro/get-started>
-   PyTorch </neuron-guide/neuron-frameworks/pytorch-neuron/index>
-   TensorFlow </neuron-guide/neuron-frameworks/tensorflow-neuron/index>
-   Apache MXNet (Incubating) </neuron-guide/neuron-frameworks/mxnet-neuron/index>
-   Tutorials </neuron-intro/tutorials>
-   Performance </neuron-guide/benchmark/index>
+   :caption: Overview
+   
+   Quick Links </general/quick-start/docs-quicklinks>
+   Get Started with PyTorch </general/quick-start/torch-neuron>
+   Get Started with TensorFlow </general/quick-start/tensorflow-neuron>
+   Get Started with MXNet  </general/quick-start/mxnet-neuron>
+   Performance </general/benchmarks/index>
    What’s New </release-notes/index>
+   /general/announcements/blogs
+   Announcements </general/announcements/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ML Frameworks
+
+   PyTorch Neuron </frameworks/torch/index>
+   TensorFlow Neuron </frameworks/tensorflow/index>
+   Apache MXNet (Incubating) </frameworks/mxnet-neuron/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: User Guide
+
+   Neuron Runtime </neuron-runtime/index>
+   Neuron Compiler </compiler/index>
+   Neuron Tools </tools/index>
+   Setup Guide </general/setup/index>
+   Containers Deployment </containers/index>
+   Developer Flows </general/devflows/index>
 
 .. toctree::
    :maxdepth: 1
    :caption: Learning Neuron
 
-   Neuron Features </neuron-guide/technotes/index>
-   Neuron Developer Flows </neuron-intro/devflows/dev-flows>
-   Containers </neuron-deploy/index>
-   Application Notes </neuron-guide/appnotes>
-   Neuron FAQ </faq>
+   Architecture </general/arch/index>
+   Features </general/arch/neuron-features/index>
+   Application Notes </general/appnotes/index>
+   FAQ </general/faq>
+   Troubleshooting </general/troubleshooting>
+
 
 .. toctree::
    :maxdepth: 1
-   :caption: Neuron SDK
+   :caption: About Neuron
+   
+   /release-notes/release
+   Roadmap </general/roadmap-readme>
+   Support </general/support>
 
-   Setup Guide </neuron-intro/neuron-install-guide>
-   Neuron Compiler </neuron-guide/neuron-cc/index>
-   Neuron Runtime </neuron-guide/neuron-runtime/index>
-   Neuron Tools </neuron-guide/neuron-tools/index> 
-   NeuronPerf (Beta) </neuron-guide/neuronperf/index>
-   Release Details </release-notes/releasecontent>
-   Roadmap </neuron-intro/roadmap-readme>
-   Support </neuron-intro/releaseinfo>
+
 

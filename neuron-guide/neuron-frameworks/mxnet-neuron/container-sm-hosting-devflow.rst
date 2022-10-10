@@ -1,1 +1,0 @@
-.. include:: /neuron-intro/devflows/container-sm-hosting-devflow.rst

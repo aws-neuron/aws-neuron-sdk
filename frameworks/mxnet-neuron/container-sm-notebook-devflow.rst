@@ -1,0 +1,1 @@
+.. include:: /general/devflows/inference/container-sm-notebook-devflow.rst

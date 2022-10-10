@@ -1,9 +1,10 @@
 .. _mxnet-neuron-rn:
 
+
 Apache MXNet Neuron (Incubating) Release Notes
 ==============================================
 
-.. contents::
+.. contents:: Table of contents
    :local:
    :depth: 1
 

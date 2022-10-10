@@ -1,1 +1,0 @@
-.. include:: /neuron-intro/devflows/neo-then-hosting-devflow.rst
