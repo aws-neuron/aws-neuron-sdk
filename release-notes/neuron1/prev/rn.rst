@@ -17,7 +17,7 @@ Please update the Neuron Driver to the latest (version 2.3.26 or newer) so that 
 
    You must update to the latest Neuron Driver (aws-neuron-dkms version 2.3.26 or newer) before installing or upgrading to latest Neuron release.
       * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
-      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`neuron-install-guide`" instructions.
+      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 Neuron 1.19.1 (05/27/2022)
 --------------------------
@@ -30,7 +30,7 @@ In addition, this release updates ``tensorflow-neuron`` installation instruction
 
    For successful installation or update to next releases (Neuron 1.20.0 and newer):
       * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
-      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`neuron-install-guide`" instructions.
+      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 
 Neuron 1.19.1 (05/27/2022)
@@ -43,7 +43,7 @@ In addition, this release updates ``tensorflow-neuron`` installation instruction
 
    For successful installation or update to next releases (Neuron 1.20.0 and newer):
       * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
-      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`neuron-install-guide`" instructions.
+      * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 Neuron 1.19.0 (04/29/2022)
 --------------------------
@@ -153,7 +153,7 @@ adds new features and capabilities (compiler ``--fast-math`` :ref:`option for be
 improves :ref:`tools <neuron-tools>`, adds support for additional :ref:`operators <neuron-supported-operators>`,
 improves :ref:`performance <appnote-performance-benchmark>`
 (Up to 20% additional throughput and up to 25% lower latency),
-and reduces model loading times. It also simplifies :ref:`Neuron installation steps <neuron-install-guide>`,
+and reduces model loading times. It also simplifies :ref:`Neuron installation steps <install-guide-index>`,
 and improves the user experience of :ref:`container creation and deployment <neuron-containers>`.
 In addition it includes bug fixes, new :ref:`application notes <neuron-appnotes>`, updated :ref:`tutorials <neuron-tutorials>`,
 and announcements of software :ref:`deprecation <software-deprecation>` and :ref:`maintenance <software-maintenance>`.
@@ -194,7 +194,7 @@ and announcements of software :ref:`deprecation <software-deprecation>` and :ref
 
 -  **Documentation resources**
 
-   -  Improved :ref:`Neuron Setup Guide <neuron-install-guide>`.
+   -  Improved :ref:`Neuron Setup Guide <install-guide-index>`.
    -  New :ref:`introduce-libnrt` application note.
    -  New :ref:`bucketing_app_note` application note.
    -  New :ref:`neuron-cc-training-mixed-precision` application note.
