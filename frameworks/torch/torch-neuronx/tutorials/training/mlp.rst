@@ -137,8 +137,7 @@ Single-worker MLP training on Trainium
 --------------------------------------
 
 To run on Trainium, first we modify the CPU training script train_cpu.py to run with
-PyTorch Neuron torch_xla as described in `PyTorch Neuron for Trainium
-Getting Started Guide <../tutorials/pt_neuron_get_started.html>`__
+PyTorch Neuron torch_xla as described in :ref:`PyTorch Neuron for Trainium Getting Started Guide <pytorch-neuronx-programming-guide>`
 by changing the device:
 
 .. code:: python
