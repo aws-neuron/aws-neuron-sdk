@@ -25,6 +25,8 @@ branch_name = ""
 if os.environ.get('READTHEDOCS') == "True":
     env_branch_name = os.environ.get('READTHEDOCS_VERSION_NAME')
     branch_name = env_branch_name
+    if branch_name == "latest":
+        branch_name = "master"       
     if os.environ.get('READTHEDOCS_PROJECT') == "awsdocs-neuron":
         env_project_name = "aws-neuron-sdk"
         project_name = env_project_name
