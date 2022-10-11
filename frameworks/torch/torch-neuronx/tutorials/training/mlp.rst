@@ -45,7 +45,7 @@ To download the MNIST MLP examples, do:
 
 .. code:: bash
 
-   git clone git@github.com:aws-neuron/aws-neuron-samples.git
+   git clone https://github.com/aws-neuron/aws-neuron-samples.git
    cd aws-neuron-samples/torch-neuronx/training/mnist_mlp
 
 Multi-layer perceptron MNIST model
