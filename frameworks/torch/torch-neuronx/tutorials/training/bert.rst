@@ -65,8 +65,8 @@ Next, download the Python-based training script ``dp_bert_large_hf_pretrain_hdf5
 
    mkdir -p ~/examples/dp_bert_hf_pretrain
    cd ~/examples/dp_bert_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain/dp_bert_large_hf_pretrain_hdf5.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/dp_bert_large_hf_pretrain_hdf5.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/requirements.txt
    python3 -m pip install -r requirements.txt
 
 

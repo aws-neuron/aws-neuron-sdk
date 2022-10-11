@@ -16,14 +16,12 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
 
          .. tab-set:: 
 
-               .. tab-item:: Latest Neuron Inference DLC images
+               .. tab-item:: Latest Neuron DLC images
 
 
-                  `Neuron Inference DLC images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-inference-containers>`_.
+                  Find latest `Neuron DLC images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
 
-               .. tab-item:: Latest Neuron Training DLC images
-
-                  Neuron Training  DLC images are not available yet, please refer to :ref:`how-to-build-neuron-container` for building a  Neuron Training DLC.
+         .. tab-set:: 
 
                .. tab-item:: Locate specific Neuron DLC release
 
