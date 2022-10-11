@@ -17,7 +17,7 @@ Neuron Quick Links
             * :ref:`mxnet_quick_start`
             * :ref:`benchmark`
             * :ref:`neuron-whatsnew`
-            * :ref:`announcements`
+            * :ref:`announcements-main`
 
     .. dropdown::  ML Frameworks
             :class-title: sphinx-design-class-title-small

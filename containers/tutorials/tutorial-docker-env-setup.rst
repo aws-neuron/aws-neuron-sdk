@@ -15,46 +15,45 @@ to containers.
 
    .. tab-item:: Training
 
-      .. dropdown:: Install Drivers
-         :class-title: sphinx-design-class-title-small
-         :class-body: sphinx-design-class-body-small
-         :animate: fade-in
+        .. dropdown:: Install Drivers
+            :class-title: sphinx-design-class-title-small
+            :class-body: sphinx-design-class-body-small
+            :animate: fade-in
 
-         .. code:: bash
+            .. code:: bash
+
+               # Configure Linux for Neuron repository updates
+
+               sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
+               [neuron]
+               name=Neuron YUM Repository
+               baseurl=https://yum.repos.neuron.amazonaws.com
+               enabled=1
+               metadata_expire=0
+               EOF
+               sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+
+               # Update OS packages
+               sudo yum update -y
 
 
-			# Configure Linux for Neuron repository updates
+               # Install OS headers
+               sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 
-			sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
-			[neuron]
-			name=Neuron YUM Repository
-			baseurl=https://yum.repos.neuron.amazonaws.com
-			enabled=1
-			metadata_expire=0
-			EOF
-			sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+               # Remove preinstalled packages and Install Neuron Driver and Runtime
+               sudo yum remove aws-neuron-dkms -y
+               sudo yum remove aws-neuronx-dkms -y
+               sudo yum install aws-neuronx-dkms-2.*  -y
 
-			# Update OS packages
-			sudo yum update -y
-
-
-			# Install OS headers
-			sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
-
-			# Remove preinstalled packages and Install Neuron Driver and Runtime
-			sudo yum remove aws-neuron-dkms -y
-			sudo yum remove aws-neuronx-dkms -y
-			sudo yum install aws-neuronx-dkms-2.*  -y
-
-			# Install EFA Driver(only required for multiinstance training)
-			curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
-			wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
-			cat aws-efa-installer.key | gpg --fingerprint
-			wget https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz.sig && gpg --verify ./aws-efa-installer-latest.tar.gz.sig
-			tar -xvf aws-efa-installer-latest.tar.gz
-			cd aws-efa-installer && sudo bash efa_installer.sh --yes
-			cd
-			sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
+               # Install EFA Driver(only required for multiinstance training)
+               curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
+               wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
+               cat aws-efa-installer.key | gpg --fingerprint
+               wget https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz.sig && gpg --verify ./aws-efa-installer-latest.tar.gz.sig
+               tar -xvf aws-efa-installer-latest.tar.gz
+               cd aws-efa-installer && sudo bash efa_installer.sh --yes
+               cd
+               sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
         .. dropdown:: Install Docker
             :class-title: sphinx-design-class-title-small
