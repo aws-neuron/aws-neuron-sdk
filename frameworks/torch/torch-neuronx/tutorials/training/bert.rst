@@ -100,7 +100,7 @@ NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` o
     Currently Neuron Runtime only support 1 and 2 worker configurations on trn1.2xlarge and 1, 2, 8, and 32-worker configurations on trn1.32xlarge.
 
 BFloat16 and stochastic rounding in phase 1
--------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Phase 1 pretraining performance can be increased by using full BFloat16 casting
 and stochastic rounding. Full BFloat16 casting and stochastic rounding can be enabled by setting environment
