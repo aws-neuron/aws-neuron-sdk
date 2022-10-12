@@ -99,6 +99,20 @@ NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` o
 
     Currently Neuron Runtime only support 1 and 2 worker configurations on trn1.2xlarge and 1, 2, 8, and 32-worker configurations on trn1.32xlarge.
 
+BFloat16 and stochastic rounding in phase 1
+-------------------------------------------
+
+Phase 1 pretraining performance can be increased by using full BFloat16 casting
+and stochastic rounding. Full BFloat16 casting and stochastic rounding can be enabled by setting environment
+variable ``XLA_USE_BF16=1`` when
+launching the pretraining job.
+To achieve maximum performance while maintaining loss
+convergence characteristics, we are using batch size of 16 and
+gradient accumulation microsteps of 32 to maintain global batch size of 16384 for phase 1.
+The batch size and gradient accumulation microstep changes can be set by
+launching the BERT pretraining script ``dp_bert_large_hf_pretrain_hdf5.py`` with
+command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps.
+
 Pre-compilation
 ~~~~~~~~~~~~~~~
 
@@ -309,29 +323,16 @@ the BERT pretraining demo:
    to execute ``sudo rmmod neuron; sudo modprobe neuron`` in order to
    reload/reset the Neuron driver.
 
-Phase 1 BERT-Large pretraining with BFloat16 and stochastic rounding
---------------------------------------------------------------------
-
-Phase 1 pretraining performance can be increased by using full BFloat16 casting
-and stochastic rounding. Full BFloat16 casting and stochastic rounding can be enabled by setting environment
-variable ``XLA_USE_BF16=1`` when
-launching the pretraining job.
-To achieve maximum performance while maintaining loss
-convergence characteristics, please increase batch size from 8 -> 16 and decrease
-gradient accumulation microsteps from 64 -> 32 when these two features are enabled.
-The batch size and gradient accumulation microstep changes can be implemented by
-launching the BERT pretraining script ``dp_bert_large_hf_pretrain_hdf5.py`` with
-command-line arguments ``--batch_size=16 --grad_accum_usteps=32``.
 
 Phase 1 BERT-Large pretraining on two instances
 -----------------------------------------------
 
-If you have two trn1.32xlarge launched with the same AMI configured with EFA, you can run
+If you have two trn1.32xlarge instances with EFA-enabled interfaces, using `EFA-enabled security group <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start-nccl-base.html#nccl-start-base-setup>`__, and setup using :ref:`Install PyTorch Neuron on Trn1 <pytorch-neuronx-install>`, you can run
 multi-instance BERT-Large pretraining. The following example demonstrate running BERT phase 1 pretraining on two instances.
-To ensure that the global batch size remains at 16384 for phase 1, the gradient accumulation microstep count is reduced by half.
-NOTE: To run on multiple instances, you will need trn1.32xlarge instances using all 32 NeuronCores on each instance.
+To ensure that the global batch size remains at 16384 for phase 1, the gradient accumulation microstep count is reduced by half when the number of instances is 2.
+NOTE: To run on multiple instances, you will need to use trn1.32xlarge instances and using all 32 NeuronCores on each instance.
 
-On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utility:
+On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utility, and ``--master_addr`` set to rank-0 host's IP address:
 
 .. code:: shell
 
@@ -344,7 +345,7 @@ On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utilit
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
 
-On another Trn1 host, run with ``--node_rank=1``:
+On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set to rank-0 host's IP address:
 
 .. code:: shell
 
@@ -357,8 +358,9 @@ On another Trn1 host, run with ``--node_rank=1``:
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
 
-It is important to launch rank-0 worker with ``--node_rank=0``  to avoid hang.
+It is important to launch rank-0 worker with ``--node_rank=0`` to avoid hang.
 
+To train on multiple instances, it is recommended to use a ParallelCluster. For a ParallelCluster example, please see `Train a model on AWS Trn1 ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`__.
 
 Phase 2 BERT-Large pretraining
 ------------------------------
@@ -384,7 +386,9 @@ Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To launch the phase 2 pretraining job, run the same python script ``dp_bert_large_hf_pretrain_hdf5.py``
-as before except with different options for phase 2:
+as before except with different options for phase 2. Again, we are using full BFloat16 casting and stochastic rounding
+by setting environment variable ``XLA_USE_BF16=1``. For phase 2, we are using global batch size of 32768, with worker device batch size of 2
+and gradient accumulation microsteps of 512.
 
 .. code:: shell
 

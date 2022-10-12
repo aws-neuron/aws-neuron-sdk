@@ -281,24 +281,28 @@ Expected output on trn1.32xlarge (second run to avoid compilations):
     ----------End Training ---------------
     ----------End Training ---------------
 
-In another example, we run on two instances, using 32 NeuronCores on each instance.
-NOTE: To run on multiple instances, you will need trn1.32xlarge instances
-and using all 32 NeuronCores on each instance. 
+In another example, we run on two trn1.32xlarge instances launched with EFA-enabled interfaces, using `EFA-enabled security group <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start-nccl-base.html#nccl-start-base-setup>`__, and setup using :ref:`Install PyTorch Neuron on Trn1 <pytorch-neuronx-install>`.
+NOTE: To run on multiple instances, you will need to use trn1.32xlarge instances and using all 32 NeuronCores on each instance.
 
-On the rank-0 Trn1 host (root), run with ``--node_rank=0``  using torchrun utility:
-
-.. code:: shell
-
-    torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 train_torchrun.py
-
-On another Trn1 host, run with --node_rank=1 :
+On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utility, and ``--master_addr`` set to rank-0 host's IP address:
 
 .. code:: shell
 
-    torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 train_torchrun.py
+   export FI_EFA_USE_DEVICE_RDMA=1
+   export FI_PROVIDER=efa
+   torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 train_torchrun.py
 
-It is important to launch rank-0 worker with --node_rank=0  to avoid hang.
+On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set to rank-0 host's IP address:
 
+.. code:: shell
+
+   export FI_EFA_USE_DEVICE_RDMA=1
+   export FI_PROVIDER=efa
+   torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 train_torchrun.py
+
+It is important to launch rank-0 worker with ``--node_rank=0`` to avoid hang.
+
+To train on multiple instances, it is recommended to use a ParallelCluster. For a ParallelCluster example, please see `Train a model on AWS Trn1 ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`__.
 
 Known issues and limitations
 ----------------------------
