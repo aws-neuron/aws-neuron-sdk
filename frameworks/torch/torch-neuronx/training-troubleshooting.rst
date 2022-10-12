@@ -457,3 +457,47 @@ This issue will be fixed in an upcoming release.
     ERROR  TDRV:mem_ref_to_addr                         invalid offset in Coalesced_memloc_Coalesced_memloc_mhlo_multiply_1337_pftranspose_40839-t81854_i0_SpillSave2711--mhlo_multiply_1337_pftranspose_40839-t81854_i1_SpillSave2712_7832--mhlo_multiply_1367_pftranspose_40827-t54524_i0_SpillSave2714_10300, 12288 < (16896 + 768)
     ERROR  TDRV:drs_expand_data_desc_model              Failed to process dma block: 1703
     ERROR  TDRV:kbl_model_add                           create_data_refill_rings() error
+
+Compiler error "module 'numpy' has no attribute 'asscalar'"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you have a newer version of numpy in the Python environment, compilations may fail with the "error module 'numpy' has no attribute 'asscalar'".
+Please note the neuronx-cc has the following dependency on numpy "numpy<=1.20.0,>=1.13.3". To workaround this error, please do "pip install --force-reinstall neuronx-cc" to reinstall neuronx-cc with the proper dependencies.
+
+.. code:: base
+
+   ERROR 227874 [neuronx-cc]: ***************************************************************
+   ERROR 227874 [neuronx-cc]:  An Internal Compiler Error has occurred
+   ERROR 227874 [neuronx-cc]: ***************************************************************
+   ERROR 227874 [neuronx-cc]:
+   ERROR 227874 [neuronx-cc]: Error message:  module 'numpy' has no attribute 'asscalar'
+   ERROR 227874 [neuronx-cc]:
+   ERROR 227874 [neuronx-cc]: Error class:    AttributeError
+   ERROR 227874 [neuronx-cc]: Error location: Unknown
+   ERROR 227874 [neuronx-cc]: Version information:
+   ERROR 227874 [neuronx-cc]:   NeuronX Compiler version 2.1.0.76+2909d26a2
+   ERROR 227874 [neuronx-cc]:
+   ERROR 227874 [neuronx-cc]:   HWM version 2.1.0.7-64eaede08
+   ERROR 227874 [neuronx-cc]:   NEFF version Dynamic
+   ERROR 227874 [neuronx-cc]:   TVM not available
+   ERROR 227874 [neuronx-cc]:   NumPy version 1.23.3
+   ERROR 227874 [neuronx-cc]:   MXNet not available
+   ERROR 227874 [neuronx-cc]:
+
+
+Import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you encounter a PyTorch import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol" during execution, please check:
+    1. TensorFlow is not installed in the Python environment.
+    2. The PyTorch major/minor versions match the torch_neuronx's major/minor versions (ie. 1.11).
+
+.. code:: bash
+
+    Traceback (most recent call last):
+      File "/opt/ml/mlp_train.py", line 11, in <module>
+        import torch_xla.core.xla_model as xm
+      File "/usr/local/lib/python3.8/site-packages/torch_xla/__init__.py", line 117, in <module>
+        import _XLAC
+    ImportError: /usr/local/lib/python3.8/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol: _ZNK3c1010TensorImpl7stridesEv
+
