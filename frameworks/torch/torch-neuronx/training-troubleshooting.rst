@@ -483,3 +483,20 @@ Please note the neuronx-cc has the following dependency on numpy "numpy<=1.20.0,
    ERROR 227874 [neuronx-cc]:   NumPy version 1.23.3
    ERROR 227874 [neuronx-cc]:   MXNet not available
    ERROR 227874 [neuronx-cc]:
+
+
+Import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you encounter a PyTorch import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol" during execution, please check:
+    1. TensorFlow is not installed in the Python environment.
+    2. The PyTorch major/minor versions match the torch_neuronx's major/minor versions (ie. 1.11).
+
+.. code:: bash
+
+    Traceback (most recent call last):
+      File "/opt/ml/mlp_train.py", line 11, in <module>
+        import torch_xla.core.xla_model as xm
+      File "/usr/local/lib/python3.8/site-packages/torch_xla/__init__.py", line 117, in <module>
+        import _XLAC
+    ImportError: /usr/local/lib/python3.8/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol: _ZNK3c1010TensorImpl7stridesEv
