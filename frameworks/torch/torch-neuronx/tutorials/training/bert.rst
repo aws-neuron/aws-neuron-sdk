@@ -257,7 +257,7 @@ the following:
    training script saves a checkpoint after every dataset shard.
    The frequency of saving checkpoint can be reduced by increasing the number of
    dataset shards per checkpoint, using option :option:`--shards_per_ckpt`.
-   Furthermore, the number of checkpoints kept at a given time is limited by :option:`--num_ckpts_to_keep` option (currently default to 5).
+   Furthermore, the number of checkpoints kept at a given time is limited by :option:`--num_ckpts_to_keep` option (currently default to 1).
 
 -  TensorBoard log files (each training run will store its logs in a
    subdirectory with prefix ``neuron_tblogs_``).
@@ -277,7 +277,7 @@ the trn1 instance, and use the ``neuron-top`` command to examine the
 aggregate NeuronCore utilization. If you have not modified the :option:`--nproc_per_node` option
 in the run command, you should observe that
 all 32 NeuronCores are participating in the training job, with
-utilization fluctuating around 70%.
+utilization fluctuating around 80%.
 
 Monitoring Training Job Progress using TensorBoard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
