@@ -1,4 +1,4 @@
-.. _announcements:
+.. _announcements-main:
 
 Annoucements
 ============
