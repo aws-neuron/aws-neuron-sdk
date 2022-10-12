@@ -197,7 +197,7 @@ script and run it:
 
     export TASK_NAME=mrpc
     XLA_USE_BF16=1 torchrun --nproc_per_node=2 ./run_glue.py \
-    --model_name_or_path ./hf_saved_model \
+    --model_name_or_path hf_saved_model \
     --tokenizer_name bert-large-uncased \
     --task_name $TASK_NAME \
     --do_train \
