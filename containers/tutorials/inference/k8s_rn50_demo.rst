@@ -33,7 +33,7 @@ in the AWS Deep Learning AMI Developer Guide\.
 The sample deployment manifest manages a pre-built inference serving container for TensorFlow provided by
 AWS Deep Learning Containers. Inside the container is the AWS Neuron Runtime and the TensorFlow Serving application.
 A complete list of pre-built Deep Learning Containers optimized for Neuron is maintained on GitHub under
-`Available Images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-inference-containers>`_.
+`Available Images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
 At start\-up, the DLC will fetch your model from Amazon S3, launch Neuron TensorFlow Serving with the saved model,
 and wait for prediction requests\.
 
