@@ -489,8 +489,8 @@ Import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When you encounter a PyTorch import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol" during execution, please check:
-    1. TensorFlow is not installed in the Python environment.
-    2. The PyTorch major/minor versions match the torch_neuronx's major/minor versions (ie. 1.11).
+    1. TensorFlow is not installed in the Python environment. If it is installed, please uninstall it.
+    2. The installed PyTorch (torch) package major/minor versions match the installed torch-neuronx package's major/minor versions (ie. 1.11). If they don't match, please install the version of PyTorch that matches torch-neuronx.
 
 .. code:: bash
 
