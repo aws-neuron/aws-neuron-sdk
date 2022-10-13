@@ -2,8 +2,7 @@
 
 * Select your Amazon Machine Image (AMI) of choice, please note that Neuron support Amazon Linux 2 AMI(HVM) - Kernel 5.10. 
 
-* When launching a trn1, please adjust your primary EBS volume size to a minimum of 512GB.
-
+* When launching a Trn1, please adjust your primary EBS volume size to a minimum of 512GB.
 
 * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-connect-to-instance-linux>`_ to connect to the instance 
 
