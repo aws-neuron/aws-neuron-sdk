@@ -40,7 +40,7 @@ Run the following command to start the container
 
 .. code:: bash
 
-   docker run -it --name pt-cont --device=/dev/neuron0 neuron-container:pytorch python3 /opt/ml/mlp_train.py
+   docker run -it --name pt-cont --net=host --device=/dev/neuron0 neuron-container:pytorch python3 /opt/ml/mlp_train.py
 
 
 
