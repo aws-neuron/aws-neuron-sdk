@@ -167,10 +167,10 @@ download these three items :
 
 1. clone `this <https://github.com/google-research/bert>`__ github repo.
 2. download GLUE data as described
-   `here <https://github.com/google-research/bert#sentence-and-sentence-pair-classification-tasks>`__.
+   `here <https://github.com/google-research/bert#user-content-sentence-and-sentence-pair-classification-tasks>`__.
    Do not run the finetuning command.
 3. download a desired pre-trained BERT-Large checkpoint from
-   `here <https://github.com/google-research/bert#pre-trained-models>`__.
+   `here <https://github.com/google-research/bert#user-content-pre-trained-models>`__.
    This is the model we will fine tune.
 
 Next edit run_classifier.py in the cloned bert repo to apply the patch

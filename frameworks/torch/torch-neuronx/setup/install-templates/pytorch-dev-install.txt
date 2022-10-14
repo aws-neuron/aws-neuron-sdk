@@ -23,6 +23,9 @@
             	# Update OS packages
 		sudo apt-get update -y
 
+		# Install git
+		sudo apt-get install git -y
+
 		
 		# Install OS headers
 		sudo apt-get install linux-headers-$(uname -r) -y
@@ -55,6 +58,8 @@
 		sudo apt-get remove aws-neuronx-tools  -y
 		sudo apt-get install aws-neuronx-tools=2.* -y
 
+		export PATH=/opt/aws/neuron/bin:$PATH		
+
 		# Install Python venv and activate Python virtual environment to install
 		# Neuron pip packages.
 		sudo apt install python3.8-venv
@@ -63,9 +68,13 @@
 		pip install -U pip
             	
 
-		# Install packages from beta repos
+		# Install packages from  repos
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
         
+		# Install wget, awcli
+		pip install wget
+		pip install awcli
+
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*" transformers
 
@@ -94,6 +103,8 @@
 		# Update OS packages
 		sudo yum update -y
 
+		# Install git
+		sudo yum install git -y
 
 		# Remove preinstalled packages and Install Neuron Driver and Runtime
 		sudo yum remove aws-neuron-dkms -y
@@ -121,14 +132,20 @@
 		sudo yum remove aws-neuronx-tools  -y
 		sudo yum install aws-neuronx-tools-2.*  -y
 
+		export PATH=/opt/aws/neuron/bin:$PATH
+
 		# Install Python venv and activate Python virtual environment to install
 		# Neuron pip packages.
 		python3.7 -m venv aws_neuron_venv_pytorch_p37 
 		source aws_neuron_venv_pytorch_p37/bin/activate
 		python -m pip install -U pip
 
-		# Install packages from beta repos
+		# Install packages from repos
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 		
+		# Install wget, awcli
+		pip install wget
+		pip install awscli	
+
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*" transformers

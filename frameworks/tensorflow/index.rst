@@ -36,12 +36,12 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
                     .. tab-item:: Computer Vision Tutorials
                                 :name:         
 
-                                *  Tensorflow 1.x - OpenPose tutorial :ref:`[html] </src/examples/tensorflow/openpose_demo/openpose.ipynb>` :tensorflow-neuron-src:`[notebook] <openpose_demo/openpose.ipynb>`
-                                *  Tensorflow 1.x - ResNet-50 tutorial :ref:`[html] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>` :tensorflow-neuron-src:`[notebook] <tensorflow_resnet50/resnet50.ipynb>`
-                                *  Tensorflow 1.x - YOLOv4 tutorial :ref:`[html] <tensorflow-yolo4>` :tensorflow-neuron-src:`[notebook] <yolo_v4_demo/evaluate.ipynb>`
-                                *  Tensorflow 1.x - YOLOv3 tutorial :ref:`[html] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>` :tensorflow-neuron-src:`[notebook] <yolo_v3_demo/yolo_v3.ipynb>`
+                                *  Tensorflow 1.x - OpenPose tutorial :ref:`[html] </src/examples/tensorflow/openpose_demo/openpose.ipynb>` :github:`[notebook] </src/examples/tensorflow/openpose_demo/openpose.ipynb>`
+                                *  Tensorflow 1.x - ResNet-50 tutorial :ref:`[html] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`
+                                *  Tensorflow 1.x - YOLOv4 tutorial :ref:`[html] <tensorflow-yolo4>` :github:`[notebook] </src/examples/tensorflow/yolo_v4_demo/evaluate.ipynb>`
+                                *  Tensorflow 1.x - YOLOv3 tutorial :ref:`[html] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>` :github:`[notebook] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>`
                                 *  Tensorflow 1.x - SSD300 tutorial :ref:`[html] <tensorflow-ssd300>`
-                                *  Tensorflow 1.x - Keras ResNet-50 optimization tutorial :ref:`[html] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>` :tensorflow-neuron-src:`[notebook] <keras_resnet50/keras_resnet50.ipynb>`
+                                *  Tensorflow 1.x - Keras ResNet-50 optimization tutorial :ref:`[html] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>` :github:`[notebook] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>`
 
                                 .. toctree::
                                         :hidden:
@@ -58,13 +58,13 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
           
 
                                 *  Tensorflow 1.x - Running TensorFlow BERT-Large with AWS Neuron :ref:`[html] <tensorflow-bert-demo>`
-                                *  Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` :tensorflow-neuron-src:`[notebook] <huggingface_bert/huggingface_bert.ipynb>`
+                                *  Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` :github:`[notebook] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`
 
                                 .. toctree::
                                         :hidden:
 
                                         /frameworks/tensorflow/tensorflow-neuron/tutorials/bert_demo/bert_demo
-                                        /frameworks/tensorflow/tensorflow-neuron/tutorials/huggingface_bert/huggingface_bert
+                                        /src/examples/tensorflow/huggingface_bert/huggingface_bert
 
 
                     .. tab-item:: Utilizing Neuron Capabilities Tutorials

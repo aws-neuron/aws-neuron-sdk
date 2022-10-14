@@ -22,6 +22,7 @@ sys.path.append(os.path.abspath("./_ext"))
 project_name = ""
 branch_name = ""
 
+
 if os.environ.get('READTHEDOCS') == "True":
     env_branch_name = os.environ.get('READTHEDOCS_VERSION_NAME')
     branch_name = env_branch_name
@@ -36,7 +37,7 @@ if os.environ.get('READTHEDOCS') == "True":
 else:
     env_project_name = os.environ.get('GIT_PROJECT_NAME')
     env_branch_name = os.environ.get('GIT_BRANCH_NAME')
-
+    
     # set project name
     if env_project_name != None:
         project_name = env_project_name
@@ -104,18 +105,19 @@ projectblob = project_name+'/blob/'+branch_name
 projecttree = project_name+'/tree/'+branch_name
 
 extlinks = {
-            'mxnet-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/mxnet-neuron/%s', '')
-            ,'pytorch-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/pytorch-neuron/%s', '')
-            ,'tensorflow-neuron': ('https://github.com/aws/'+projectblob+'/neuron-guide/neuron-frameworks/tensorflow-neuron/%s', '')
-            ,'neuron-deploy': ('https://github.com/aws/'+projectblob+'/neuron-deploy/%s', '')
-            ,'neuron-tools-tree': ('https://github.com/aws/'+projecttree+'/neuron-guide/neuron-tools/%s', '')
-            ,'mxnet-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/mxnet/%s', '')
-            ,'pytorch-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/pytorch/%s', '')
-            ,'tensorflow-neuron-src': ('https://github.com/aws/'+projectblob+'/src/examples/tensorflow/%s', '')
-            ,'neuron-gatherinfor-src': ('https://github.com/aws/'+projectblob+'/src/examples/neuron-gatherinfo/%s', '')
-            ,'neuron-monitor-src': ('https://github.com/aws/'+projectblob+'/src/examples/neuron-monitor/%s', '')
-            ,'compile-pt': ('https://github.com/aws/'+projectblob+'/src/benchmark/pytorch/%s_compile.py', '')
-            ,'benchmark-pt': ('https://github.com/aws/'+projectblob+'/src/benchmark/pytorch/%s_benchmark.py', '')
+            'mxnet-neuron': ('https://github.com/aws-neuron/'+projectblob+'/neuron-guide/neuron-frameworks/mxnet-neuron/%s', '')
+            ,'pytorch-neuron': ('https://github.com/aws-neuron/'+projectblob+'/neuron-guide/neuron-frameworks/pytorch-neuron/%s', '')
+            ,'tensorflow-neuron': ('https://github.com/aws-neuron/'+projectblob+'/neuron-guide/neuron-frameworks/tensorflow-neuron/%s', '')
+            ,'neuron-deploy': ('https://github.com/aws-neuron/'+projectblob+'/neuron-deploy/%s', '')
+            ,'neuron-tools-tree': ('https://github.com/aws-neuron/'+projecttree+'/neuron-guide/neuron-tools/%s', '')
+            ,'mxnet-neuron-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/mxnet/%s', '')
+            ,'pytorch-neuron-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/pytorch/%s', '')
+            ,'tensorflow-neuron-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/tensorflow/%s', '')
+            ,'neuron-gatherinfor-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/neuron-gatherinfo/%s', '')
+            ,'neuron-monitor-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/neuron-monitor/%s', '')
+            ,'compile-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_compile.py', '')
+            ,'benchmark-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_benchmark.py', '')
+            ,'github':(f'https://github.com/aws-neuron/{projectblob}', '')
             }
 
 
@@ -213,3 +215,8 @@ rst_epilog = """
 .. neuron-tag::
 
 """
+
+# Exclude private github from linkcheck. Readthedocs only exposes the ssh-agent to the 'checkout' build step, which is too early for the linkchecker to run.
+linkcheck_ignore = [r'http://localhost:\d+/', r'https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/']
+linkcheck_exclude_documents = [r'src/examples/.*', 'general/announcements/neuron1.x/announcements', r'release-notes/.*']
+nitpicky = True

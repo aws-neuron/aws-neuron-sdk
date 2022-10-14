@@ -56,7 +56,7 @@ snippet.
        return tensor
 
 Comparing with the implementation in `the original
-repo <https://github.com/miemie2013/Keras-YOLOv4/blob/master/model/yolov4.py>`__,
+repo <https://github.com/miemie2013/Keras-YOLOv4/blob/f0a6b379a362dc3f2d1ef5bd0e58933ed6490ff3/model/yolov4.py>`__,
 our difference is the use of ``tf.image.decode_png`` and
 ``tf.image.resize``, along with a small number of scaling/casting
 operators. After this modification, the generated tensorflow SavedModel

@@ -4,7 +4,7 @@
 NeuronPerf Compile Guide
 ========================
 
-If you wish to compile multiple configurations at once, NeuronPerf provides a simplified and uniform API across frameworks. The output is a :ref:`neuronperf_model_index` that tracks the artifacts produces, and can be passed directly to the `benchmark <neuronperf_api_benchmark>`_ routine for a streamlined end-to-end process. This may be useful if you wish to test multiple configurations of your model on Neuron hardware.
+If you wish to compile multiple configurations at once, NeuronPerf provides a simplified and uniform API across frameworks. The output is a :ref:`neuronperf_model_index` that tracks the artifacts produces, and can be passed directly to the :ref:`benchmark <neuronperf_api_benchmark>` routine for a streamlined end-to-end process. This may be useful if you wish to test multiple configurations of your model on Neuron hardware.
 
 You can manually specify the model index filename by passing ``filename``, or let NeuronPerf generate one and return it for you. Compiled artifacts will be placed in a local ``models`` directory.
 

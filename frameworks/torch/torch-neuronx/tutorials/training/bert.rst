@@ -626,8 +626,8 @@ Troubleshooting
 ---------------
 
 The following are troubleshooting tips related to this tutorial. See
-`PyTorch Neuron on Trainium Troubleshooting
-Guide <../../troubleshoot.html>`__ for additional troubleshooting
+:ref:`PyTorch Neuron on Trainium Troubleshooting
+Guide <pytorch-neuron-traning-troubleshooting>` for additional troubleshooting
 tips.
 
 .. _modulenotfounderror-no-module-named-torch--torch_xla-transformers-etc:

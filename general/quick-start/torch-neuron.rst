@@ -42,6 +42,9 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 			# Update OS packages
 			sudo yum update -y
 
+			# Install git
+			sudo yum install git -y
+
 
 			# Install OS headers
 			sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
@@ -72,6 +75,7 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 			sudo yum remove aws-neuronx-tools  -y
 			sudo yum install aws-neuronx-tools-2.*  -y
 
+			export PATH=/opt/aws/neuron/bin:$PATH
 
         .. dropdown::  Install PyTorch Neuron (``torch-neuronx``)
                 :class-title: sphinx-design-class-title-small
@@ -88,6 +92,12 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 
 			# Install packages from repos
 			python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+		        
+			# Install wget, awcli	
+			pip install wget
+			pip install awcli
+
+			# Install Neuron packages
 			pip install torch-neuronx==1.11.0.1.*
 			pip install neuronx-cc==2.*
 

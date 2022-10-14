@@ -5,7 +5,7 @@ Simple MLP train script
 
 Save the following contents as mlp_train.py
 
-.. literalinclude:: mlp.py
+.. literalinclude:: mlp_train.py
    :linenos:
 
 

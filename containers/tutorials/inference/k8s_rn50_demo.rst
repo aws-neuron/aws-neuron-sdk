@@ -21,7 +21,7 @@ Deploy a TensorFlow Serving application image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A trained model must be compiled to an Inferentia target before it can be deployed on Inferentia instances\.
-To continue, you will need a `Neuron optimized TensorFlow <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuron/index.html>`_ model saved in Amazon S3\.
+To continue, you will need a :ref:`Neuron optimized TensorFlow <tensorflow-neuron>` model saved in Amazon S3\.
 If you don’t already have a SavedModel, please follow the tutorial for `creating a Neuron compatible ResNet50 model <https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia-tf-neuron.html>`_
 and upload the resulting SavedModel to S3\.
 
@@ -33,7 +33,7 @@ in the AWS Deep Learning AMI Developer Guide\.
 The sample deployment manifest manages a pre-built inference serving container for TensorFlow provided by
 AWS Deep Learning Containers. Inside the container is the AWS Neuron Runtime and the TensorFlow Serving application.
 A complete list of pre-built Deep Learning Containers optimized for Neuron is maintained on GitHub under
-`Available Images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
+`Available Images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#user-content-neuron-containers>`_.
 At start\-up, the DLC will fetch your model from Amazon S3, launch Neuron TensorFlow Serving with the saved model,
 and wait for prediction requests\.
 

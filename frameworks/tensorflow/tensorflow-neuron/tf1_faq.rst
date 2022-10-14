@@ -29,7 +29,7 @@ tensorflow-neuron includes a public-facing compilation API called tfn.saved_mode
 How do I deploy my model?
 -------------------------
 
-Same way as deploying any tensorflow `SavedModel <https://github.com/tensorflow/docs/blob/master/site/en/r1/guide/saved_model.md#save-and-restore-models>`_. In Python TensorFlow, the easiest way is through the `tf.contrib.predictor module <https://docs.w3cub.com/tensorflow~python/tf/contrib/predictor/from_saved_model>`_. If a Python-free deployment is preferred for performance or some other reasons, `tensorflow-serving <https://www.tensorflow.org/tfx/guide/serving>`_ is a great choice and the AWS Neuron team provides pre-built model server apt/yum packages named as ``tensorflow-model-server-neuron``.
+Same way as deploying any tensorflow `SavedModel <https://github.com/tensorflow/docs/blob/master/site/en/r1/guide/saved_model.md#user-content-save-and-restore-models>`_. In Python TensorFlow, the easiest way is through the `tf.contrib.predictor module <https://docs.w3cub.com/tensorflow~python/tf/contrib/predictor/from_saved_model>`_. If a Python-free deployment is preferred for performance or some other reasons, `tensorflow-serving <https://www.tensorflow.org/tfx/guide/serving>`_ is a great choice and the AWS Neuron team provides pre-built model server apt/yum packages named as ``tensorflow-model-server-neuron``.
 
 Where can I find tutorials and examples ?
 ----------------------------------------------------------
