@@ -3,5 +3,7 @@ HuggingFace BERT-Large Ph1 pre-training,FP32,BF16+SR,1,[32xNC(DP)],16,16384,2845
 HuggingFace BERT-Large Ph1 pre-training,FP32,BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),16,262144,42132.24,92.5%,:ref:`hf-bert-pretraining-tutorial`
 HuggingFace BERT-Large Ph2 pre-training,FP32,BF16+SR,1,[32xNC(DP)],2,32768,478.6, ,:ref:`hf-bert-pretraining-tutorial`
 HuggingFace BERT-Large Ph2 pre-training,FP32,BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),2,524288,7133,93.1%,:ref:`hf-bert-pretraining-tutorial`
+HuggingFace BERT-Large Ph1 pre-training,FP32,FP32,1,[32xNC(DP)],8,16384,1863.7, ,:ref:`hf-bert-pretraining-tutorial`
+HuggingFace BERT-Large Ph2 pre-training,FP32,FP32,1,[32xNC(DP)],1,32768,247.4, ,:ref:`hf-bert-pretraining-tutorial`
 GPT3-6.7B pre-training,FP32,BF16+SR,1,[8xNC(TP)x4(DP)],1,64,7.3, ,:ref:`megatron-lm-pretraining-tutorial`
 GPT3-6.7B pre-training,FP32,BF16+SR,16,[8xNC(TP)x4(DP)] x 16Nodes(DP),1,1024,101,86.5%,:ref:`megatron-lm-pretraining-tutorial`
