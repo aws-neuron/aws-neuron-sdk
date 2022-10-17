@@ -53,7 +53,7 @@ Compile the neural network
 - MXNet-Neuron:
    - :ref:`/src/examples/mxnet/resnet50/resnet50.ipynb`
 
-Enable profiling
+Enable profiling 
 -----------------
 
 In this step, we enable Neuron profile data collection and collect results
@@ -278,7 +278,7 @@ Get a breakdown of time spent per operator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The "Op Time Table" section shows the cycle count per operator, much like the "Compute time" coloring
-for graph visualization.  This table can be sorted by clicking the column names, and searched using the
+for graph visualization.  This table can be sorted by clicking the column names, and searched using the 
 provided text box in the top right corner. Due to Neuron compiler optimizations, some of the compute may
 not be associated with any specific operator and will be categorized as ``unknown``.  Additionally, time
 spent moving data to and from NeuronCores will fall under ``(ND_ENGINE_LOAD)``.

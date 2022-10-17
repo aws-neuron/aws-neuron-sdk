@@ -221,7 +221,7 @@ This is its structure:
        {
          "pid": 0,
          "address": "",
-         "neuron_runtime_tag": "my_app_1",
+         "neuron_runtime_tag", "my_app_1",
          "error": "",
          "report": {
            "neuroncore_counters": {

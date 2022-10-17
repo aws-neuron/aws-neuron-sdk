@@ -643,4 +643,3 @@ Python *virtualenv* which contains all of the demo dependencies:
 
    cd ~
    source <python virtual environment path>/bin/activate
-
