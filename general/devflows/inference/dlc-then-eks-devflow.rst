@@ -38,7 +38,7 @@ Setup Environment
 2. Follow the instructions in this `EKS documentation link <https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html>`_ to set up AWS Inferentia on your EKS cluster.
 	Using the YML deployment manifest shown `in the same link <https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html#deploy-tensorflow-serving-application>`_, replace the `image` in the `containers` specification with the one you built using :ref:`how-to-build-neuron-container` above.
 
-	.. note ::
+	.. note::
 
     	Before deploying your task definition to your EKS cluster, make sure to push the image to ECR. Refer to `Pushing a Docker image <https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html>`_ for more information.
 

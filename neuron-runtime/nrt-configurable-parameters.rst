@@ -63,7 +63,7 @@ NeuronCore Allocation
 
 By default, Neuron Runtime initializes all the cores present in the system and reserves them for the current process.
 
-.. note ::
+.. note::
 
   Once a NeuronCore is reserved for a process, it cannot be used by another process at all, until the process reserving that NeuronCore is terminated.
   

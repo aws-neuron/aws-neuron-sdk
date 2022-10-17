@@ -126,7 +126,7 @@ Neuron Runtime
     Access to the same NeuronCore should be done from the same process. 
     Instead you can load models on the same NeuronCore using multiple threads from the same process.
 
-    .. note ::
+    .. note::
 
       For optimal performance of multi-model execution, each NeuronCore should execute single model.
 
@@ -162,7 +162,7 @@ Starting from *Neuron 1.16.0*, TensorFlow Neuron model server will be packaged t
 *version 2.1.5.0* or newer for proper operation.
 
 
-.. note ::
+.. note::
 
    The TensorFlow Neuron model server included in *Neuron 1.16.0* should run from the directory in which it was installed, as it  will not run properly if copied to a different location due to its dependency on ``libnrt.so``.
 
@@ -249,7 +249,7 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
     If you application uses ``NEURONCORE_GROUP_SIZES``, see next item.
 
 
-    .. note ::
+    .. note::
 
       ``NEURON_RT_VISIBLE_CORES`` and ``NEURON_RT_NUM_CORES`` environment variables enables you to allocate NeuronCores to an application. Allocating NeuronCores improves application granularity because Neuron device include multiple NeuronCores.
 
@@ -280,7 +280,7 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
     If  your application accesses the same NeuronCore from multiple processes, this is no longer possible with ``libnrt.so``.
     Instead, please modify your application to access the same NeuronCore from multiple threads.
 
-    .. note ::
+    .. note::
 
       For optimal performance of multi-model execution, each NeuronCore should execute a single model.
 

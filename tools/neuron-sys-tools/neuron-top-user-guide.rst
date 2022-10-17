@@ -12,7 +12,7 @@ Overview
 ``neuron-top`` provides useful information about NeuronCore and vCPU utilization, memory usage,
 loaded models, and Neuron applications.
 
-.. note ::
+.. note::
   If you are parsing ``neuron-top`` output in your automation environment, you can now replace it with ``neuron-monitor``
   (:ref:`neuron-monitor-ug`) which outputs data in a standardized, easier to parse JSON format.
 
@@ -50,7 +50,7 @@ a single Neuron process:
     the 'parent' value is the sum of its 'children'
   * ``Device Memory`` - amount of device memory used by the model, displayed just like the Host Memory
 
-.. note ::
+.. note::
   The up/down/left/right keys can be used to navigate the tree view. The 'x' key expands/collapses the
   entire tree.
 
@@ -60,7 +60,7 @@ tab shows an aggregated view of all the Neuron processes currently running on th
 
 |image1|
 
-.. note ::
+.. note::
   The '1'-'9' keys select the current tab.'a'/'d' selects the previous/next
   tab on the bar.
 

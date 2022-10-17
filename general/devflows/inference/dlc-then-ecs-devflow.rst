@@ -43,6 +43,6 @@ Setup Environment
 
    .. _push_to_ecr_note:
 
-   .. note ::
+   .. note::
 
        Before deploying your task definition to your ECS cluster, make sure to push the image to ECR. Refer to `Pushing a Docker image <https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html>`_ for more information.
