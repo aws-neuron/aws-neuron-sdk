@@ -150,7 +150,7 @@ As indicated in :ref:`appnote-performance-tuning`, for greater flexibility user 
 
 More information about max_worker limit setting can be found at `MMS Management API Documentation`_. For example, to run up to 4 workers in inf1.xlarge where 4 NeuronCores are available by default to Neuron-RTD, set max_workers to 4:
 
-.. _MMS Management API Documentation: https://github.com/awslabs/multi-model-server/blob/master/docs/management_api.md#scale-workers
+.. _MMS Management API Documentation: https://github.com/awslabs/multi-model-server/blob/master/docs/management_api.md#user-content-scale-workers
 
 .. code:: bash
 

@@ -266,7 +266,7 @@ Major New Features
 
 -  With this release the device plugin now requires RBAC permission
    changes to get/patch NODE/POD objects. Please apply the 
-   :neuron-deploy:`k8s-neuron-device-plugin-rbac.yml <k8s-neuron-device-plugin-rbac.yml>`
+   :github:`k8s-neuron-device-plugin-rbac.yml </src/k8/k8s-neuron-device-plugin-rbac.yml>`
    before using the new device plugin.
 
 Resolved Issues

@@ -86,4 +86,4 @@ configuration
 documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/nrt-configurable-parameters.html>`__.
 
 Additional XLA runtime environment variables are described in `PyTorch-XLA troubleshooting guide
-<https://github.com/pytorch/xla/blob/v1.10.0/TROUBLESHOOTING.md#environment-variables>`__.
+<https://github.com/pytorch/xla/blob/v1.10.0/TROUBLESHOOTING.md#user-content-environment-variables>`__.

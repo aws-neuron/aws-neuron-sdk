@@ -9,7 +9,7 @@ Neuron Containers FAQ
 
 Where can I find DLC images
 ---------------------------
-* The Inference/Training DLC images can be found `here <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
+* The Inference/Training DLC images can be found `here <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#user-content-neuron-containers>`_.
 * In the `DLC release page <https://github.com/aws/deep-learning-containers/releases>`_ do a search for neuron to get the ECR repo location of specific neuron DLC release.
 
 

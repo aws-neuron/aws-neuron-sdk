@@ -71,7 +71,7 @@ Available Commands:
 
       The number of arguments required varies between frameworks:
 
-      - **XLA**: A local filename of a HLO file (hlo.pb) generated via XLA. See `hlo.proto <https://github.com/tensorflow/tensorflow/blob/73c8e20101ae93e9f5ff0b58f68be0b70eca44c5/tensorflow/compiler/xla/service/hlo.proto>`_ for the .proto description and `inspect-compiled-programs <https://github.com/tensorflow/tensorflow/blob/master/tensorflow/compiler/xla/g3doc/index.md#inspect-compiled-programs>`_ for more information on how to generate such files.
+      - **XLA**: A local filename of a HLO file (hlo.pb) generated via XLA. See `hlo.proto <https://github.com/tensorflow/tensorflow/blob/73c8e20101ae93e9f5ff0b58f68be0b70eca44c5/tensorflow/compiler/xla/service/hlo.proto>`_ for the .proto description and `inspect-compiled-programs <https://github.com/tensorflow/tensorflow/blob/master/tensorflow/compiler/xla/g3doc/index.md#user-content-inspect-compiled-programs>`_ for more information on how to generate such files.
 
   - :option:`--framework <framework_name>`: Framework used to generate training model.
 

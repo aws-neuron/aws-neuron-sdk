@@ -46,13 +46,13 @@ Natural Language Processing
 ---------------------------
 
 *  Tensorflow 1.x - Running TensorFlow BERT-Large with AWS Neuron :ref:`[html] <tensorflow-bert-demo>`
-*  Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` :tensorflow-neuron-src:`[notebook] <huggingface_bert/huggingface_bert.ipynb>`
+*  Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` :github:`[notebook] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`
 
 .. toctree::
    :hidden:
 
    /frameworks/tensorflow/tensorflow-neuron/tutorials/bert_demo/bert_demo
-   /frameworks/tensorflow/tensorflow-neuron/tutorials/huggingface_bert/huggingface_bert
+   /src/examples/tensorflow/huggingface_bert/huggingface_bert
 
 .. _tensorflow-utilize-neuron:
 

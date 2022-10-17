@@ -62,7 +62,7 @@ PyTorch Neuron single-worker training quick-start
 
 PyTorch Neuron uses XLA to enable conversion of
 PyTorch operations to Trainium instructions. To get started on PyTorch
-Neuron, first modify your `training script <../../tutorials/training/mlp.html>`__ to
+Neuron, first modify your :ref:`training script <neuronx-mlp-training-tutorial>` to
 use XLA in the same manner as described in `PyTorch/XLA
 documentation <https://pytorch.org/xla>`__ and
 use XLA device:
@@ -108,9 +108,9 @@ instances):
 More on the need for mark_step is at `Understand the lazy mode in
 PyTorch Neuron <#understand-the-lazy-mode-in-pytorch-neuron>`__.
 
-For a full runnable example, please see the `Single-worker MLP training
+For a full runnable example, please see the :ref:`Single-worker MLP training
 on Trainium tutorial
-<../../tutorials/training/mlp.html#single-worker-mlp-training-on-trainium>`__.
+<neuronx-mlp-training-tutorial:single-worker-mlp-training-on-trainium>`.
 
 PyTorch Neuron multi-worker data parallel training using torchrun
 -----------------------------------------------------------------
@@ -179,8 +179,8 @@ It is important to launch rank-0 worker with --node_rank=0  to avoid hang.
 More information about torchrun can be found PyTorch documentation at
 https://pytorch.org/docs/stable/elastic/run.html#launcher-api .
 
-See the `Multi-worker data-parallel MLP training using torchrun
-tutorial <../../tutorials/training/mlp.html#multi-worker-data-parallel-mlp-training-using-torchrun>`__
+See the :ref:`Multi-worker data-parallel MLP training using torchrun
+tutorial <neuronx-mlp-training-tutorial:multi-worker-data-parallel-mlp-training-using-torchrun>`
 for a full example.
 
 Conversion from Distributed Data Parallel (DDP) application
@@ -198,7 +198,7 @@ PyTorch Neuron environment variables
 --------------------------------------
 
 Environment variables allow modifications to PyTorch Neuron behavior
-without requiring code change to user script. See `PyTorch Neuron environment variables <../../api-reference-guide/training/torch-neuron-envvars.html>`__ for more details.
+without requiring code change to user script. See :ref:`PyTorch Neuron environment variables <pytorch-neuronx-envvars>` for more details.
 
 Persistent cache for compiled graphs
 ------------------------------------
@@ -390,7 +390,7 @@ The following shows the training loop modified to use BF16 autocast:
            optimizer.step()
            xm.mark_step()        
 
-For a full example of BF16 mixed-precision, see `PyTorch Neuron BERT Pretraining Tutorial <../../training/tutorials/bert.html>`__.
+For a full example of BF16 mixed-precision, see :ref:`PyTorch Neuron BERT Pretraining Tutorial <hf-bert-pretraining-tutorial>`.
 
 See official PyTorch documentation for more details about
 `torch.autocast <https://pytorch.org/docs/stable/amp.html#autocasting>`__

@@ -19,7 +19,7 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
                .. tab-item:: Latest Neuron DLC images
 
 
-                  Find latest `Neuron DLC images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
+                  Find latest `Neuron DLC images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#user-content-neuron-containers>`_.
 
          .. tab-set:: 
 

@@ -12,7 +12,7 @@ Multi-layer Perceptron MNIST Model
 ----------------------------------
 
 This tutorial is based on the MNIST example for PyTorch Neuron on Trainium.
-For the full tutorial, please see `Multi-Layer Perceptron Training Tutorial <../../frameworks/torch/tutorials/training/mlp.html>`__.
+For the full tutorial, please see :ref:`Multi-Layer Perceptron Training Tutorial <neuronx-mlp-training-tutorial>`.
 
 The Training Job
 ----------------

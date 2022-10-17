@@ -374,7 +374,7 @@ This release (Neuron 1.14.0) introduces first release of PyTorch Neuron 1.8.1, t
 * Software Deprecation
 
     * End of support for Neuron Conda packages in Deep Learning AMI, users should use pip upgrade commands to upgrade to latest Neuron version in DLAMI, see `blog <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_.
-    * End of support for Ubuntu 16, see  `documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html>`_.
+    * End of support for Ubuntu 16, see  :ref:`documentation <eol-ubuntu16>`_.
 
 
 Neuron 1.14.0 (05/28/2021)
@@ -396,7 +396,7 @@ This release (Neuron 1.14.0) introduces first release of PyTorch Neuron 1.8.1, t
 * Software Deprecation
 
     * End of support for Neuron Conda packages in Deep Learning AMI, users should use pip upgrade commands to upgrade to latest Neuron version in DLAMI, see `blog <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`_.
-    * End of support for Ubuntu 16, see  `documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/deprecation.html>`_.
+    * End of support for Ubuntu 16, see  :ref:`documentation <eol-ubuntu16>`.
 
 
 Neuron 1.13.0 (05/01/2021)
@@ -433,7 +433,7 @@ February 24, 2021 Release (Patch)
 
 This release updates all Neuron packages and libraries in response to the Python Secutity issue CVE-2021-3177 as described here: https://nvd.nist.gov/vuln/detail/CVE-2021-3177. This vulnerability potentially exists in multiple versions of Python including 3.5, 3.6, 3.7. Python is used by various components of Neuron, including the Neuron compiler as well as Machine Learning frameworks including TensorFlow, PyTorch and Apache MXNet (Incubating). It is recommended that the Python interpreters used in any AMIs and containers used with Neuron are also updated. 
 
-Python 3.5 reached `end-of-life <https://devguide.python.org/devcycle/?highlight=python%203.5%20end%20of%20life#end-of-life-branches>`_, from this release Neuron packages will not support Python 3.5.
+Python 3.5 reached `end-of-life <https://peps.python.org/pep-0478/>`_, from this release Neuron packages will not support Python 3.5.
 Users should upgrade to latest DLAMI or upgrade to a newer Python versions if they are using other AMI.
 
 

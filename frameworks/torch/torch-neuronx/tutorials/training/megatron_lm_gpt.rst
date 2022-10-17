@@ -323,7 +323,7 @@ Preparing Wikipedia Dataset from Scratch
 
 The process of preparing the Wikipedia dataset follows the original
 `Megatron-LM
-documentation <https://github.com/NVIDIA/Megatron-LM#datasets>`__. You
+documentation <https://github.com/NVIDIA/Megatron-LM#user-content-datasets>`__. You
 will need a large c5 machine like c5n.18xlarge and using the latest Deep
 Learning AMI. First download the Wikipedia dataset. Depending on
 the network bandwidth, this is expected to be about ~65 minutes.
