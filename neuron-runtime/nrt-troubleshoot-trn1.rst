@@ -297,3 +297,17 @@ the meantime, as a workaround, disable IPv6 on the instances.
 
    sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
    sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+Name resolution failure
+-----------------------
+
+.. code:: bash
+   
+     WARN Invalid NCCL_COMM_ID [compute1-st-kaena-training-0-1.pcluster-trn1-24-pdx80-2n.pcluster:41211], please use format: <ipv4>:<port> or [<ipv6>]:<port>
+
+.. _solution-11:
+
+Solution
+^^^^^^^^
+
+Verify that the name can be resolved by DNS by using nslookup or dig.  Currently released version fails to resolve FQDN longer than 63 characters.  This error will be fixed in the upcoming Neuron release.  In the mean time use shorter names to ensure that FQDN length does not exceed the maximum of 63 characters.
