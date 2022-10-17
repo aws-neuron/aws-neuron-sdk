@@ -29,7 +29,7 @@ For all the commands below, make sure you are in the virtual environment that yo
 
 .. code:: shell
 
-   source ~/aws_neuron_venv_pytorch_p37/bin/activate
+   source ~/aws_neuron_venv_pytorch/bin/activate
 
 First we install recent version of HF transformers and SKLearn packages in your environment. In this
 example, we chose version 4.15.0:

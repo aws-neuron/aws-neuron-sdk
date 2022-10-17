@@ -57,7 +57,7 @@ For all the commands below, make sure you are in the virtual environment that yo
 
 .. code:: shell
 
-   source ~/aws_neuron_venv_pytorch_p37/bin/activate
+   source ~/aws_neuron_venv_pytorch/bin/activate
 
 Next, download the Python-based training script ``dp_bert_large_hf_pretrain_hdf5.py`` and ``requirements.txt`` and install the requirements:
 
