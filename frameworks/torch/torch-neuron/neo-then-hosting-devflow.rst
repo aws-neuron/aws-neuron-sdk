@@ -1,1 +1,0 @@
-.. include:: /general/devflows/inference/neo-then-hosting-devflow.rst
