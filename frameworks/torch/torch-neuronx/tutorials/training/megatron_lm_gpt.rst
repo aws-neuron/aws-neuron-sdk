@@ -152,7 +152,7 @@ and change to the Megatron-LM package location:
 
 ::
 
-   source ~/aws_neuron_venv_pytorch_p37/bin/activate
+   source ~/aws_neuron_venv_pytorch/bin/activate
    cd ~/aws-neuron-reference-for-megatron-lm/
 
 Next, run the parallel compilations of graphs in order to reduce
@@ -221,7 +221,7 @@ following commands in your SSH session:
 
 ::
 
-   source ~/aws_neuron_venv_pytorch_p37/bin/activate
+   source ~/aws_neuron_venv_pytorch/bin/activate
    cd ~/aws-neuron-reference-for-megatron-lm/
    tensorboard --logdir ./
 

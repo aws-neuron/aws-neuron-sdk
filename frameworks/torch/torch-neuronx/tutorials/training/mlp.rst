@@ -33,7 +33,7 @@ For all the commands below, make sure you are in the virtual environment that yo
 
 .. code:: shell
 
-   source ~/aws_neuron_venv_pytorch_p37/bin/activate
+   source ~/aws_neuron_venv_pytorch/bin/activate
 
 Install needed dependencies in your environment by running:
 

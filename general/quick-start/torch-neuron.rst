@@ -86,8 +86,8 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 
                         # Install Python venv and activate Python virtual environment to install
 			# Neuron pip packages.
-			python3.7 -m venv aws_neuron_venv_pytorch_p37
-			source aws_neuron_venv_pytorch_p37/bin/activate
+			python3.7 -m venv aws_neuron_venv_pytorch
+			source aws_neuron_venv_pytorch/bin/activate
 			pip install -U pip
 
 			# Install packages from repos
