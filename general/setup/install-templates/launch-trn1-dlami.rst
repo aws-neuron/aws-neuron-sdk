@@ -3,6 +3,8 @@
 * Select your Amazon Machine Image (AMI) of choice, please note that Neuron support Ubuntu 18 AMI or Amazon Linux 2 AMI, you can also choose 
   Ubuntu 18 or Amazon Linux 2 Deep Learning AMI (DLAMI)
 
+* When launching a Trn1, please adjust your primary EBS volume size to a minimum of 512GB.
+
 * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-connect-to-instance-linux>`_ to connect to the instance 
 
 .. include:: /general/setup/install-templates/trn1-ga-warning.txt
