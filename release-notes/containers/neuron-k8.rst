@@ -36,6 +36,18 @@ To Pull the Images from ECR:
 
 .. _1622:
 
+Neuron K8 release [2.1.0.0]
+===========================
+
+Date: 10/27/2022
+
+Summary
+-------
+
+- Added support for NeuronCore based scheduling to the Neuron Kubernetes Scheduler.  Learn more about how to use NeuronCores for finer grain control over container scheduling by following the K8 tutorials documentation in the :ref:`containers section <neuron_containers>`.
+
+.. _1622:
+
 Neuron K8 release [2.0.0.0]
 ===========================
 

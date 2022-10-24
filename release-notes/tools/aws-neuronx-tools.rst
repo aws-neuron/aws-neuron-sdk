@@ -8,6 +8,23 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.5.16.0]
+-------------------------
+Date: 10/26/2022
+
+New in the release:
+
+* New ``neuron-monitor`` and ``neuron-top`` feature: **memory utilization breakdown**. This new feature provides more details on how memory is being currently used on the Neuron Devices as well as on the host instance.
+* ``neuron-top``'s UI layout has been updated to accommodate the new **memory utilization breakdown** feature.
+* ``neuron-monitor``'s ``inference_stats`` metric group was renamed to ``execution_stats``. While the previous release still supported ``inference_stats``, starting this release the name ``inference_stats`` is considered deprecated and can't be used anymore.
+
+.. note ::
+  For more details on the new **memory utilization breakdown** feature in ``neuron-monitor`` and ``neuron-top`` check out the full user guides: :ref:`neuron-monitor-ug` and :ref:`neuron-top-ug`.
+
+Bug Fixes:
+
+* Fix a rare crash in ``neuron-top`` when the instance is under heavy CPU load.
+* Fix process names on the bottom tab bar of ``neuron-top`` sometimes disappearing for smaller terminal window sizes.
 
 Neuron Tools  [2.4.6.0]
 -------------------------

@@ -22,6 +22,9 @@ devices to the container.
 With OCI neuron hook support is added to expose ALL devices to container using an environment variable,
 “AWS_NEURON_VISIBLE_DEVICES=ALL". For more details please refer :ref:`oci neuron hook <tutorial-oci-hook>`
 
+In Kubernetes, if we are using the device plugin version 1.7 & below, then the oci neuron hook is needed. If
+using device plugin version >= 1.8 then oci neuron hook is not needed
+
 What container runtimes are supported
 -------------------------------------
 Neuron containers have been tested to work with docker, containerd, cri-o runtimes without any changes.
@@ -35,7 +38,7 @@ Neuron Device: Represents the number of Inferentia/Trainium chips in the instanc
 
 How to expose Neuron Cores to Container
 ---------------------------------------
-Neuron Core: Represents the number of Neuron Cores in the instance. Each Inferentia 
+Neuron Core: Represents the number of Neuron Cores in the instance. Refer :ref:`Container Cores <container-cores>` for more details. Each Inferentia
 Chip has 4 Neuron Cores and each Trainium chip has 2 Neuron Cores.
 When the devices are exposed to the containers all the cores in the device are available
 for use in the container.  Please refer :ref:`nrt-configuration` to see how the environment variables NEURON_RT_VISIBLE_CORES and NEURON_RT_NUM_CORES 

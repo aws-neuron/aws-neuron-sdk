@@ -32,6 +32,34 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.10.15.0]
+---------------------------------
+Date: 10/26/2022
+
+.. _note::
+
+   Neuron Driver version 2.5 or newer is required for this version of Neuron Runtime Library
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Changed default runtime behavior to reset NeuronCores when initializing applications.  With this change, the reseting of the Neuron Driver after application crash is no longer necessary. The new reset functionality is controled by setting environment variable: ``NEURON_RT_RESET_CORES``, see :ref:`nrt-configuration` for more information.
+
+Bug fixes
+^^^^^^^^^
+
+* Fixed a bug where Stochastic Rounding was not being set for collective communication operators
+* Fixed an issue with triggering DMA for large tensors
+* Increased default execution timeout to 30 seconds
+* Fixed IOQ resetting queue to incorrect ring id value
+* Updated the Neuron driver for more reliable behavior of driver device reset.  Driver no longer busy waits on reset or gets stuck waiting on reset, which caused kernel taints or caused driver unload attempts to fail.
+* Fixed a bug the prevented collective communication over tensors larger than 2GB
+* Fixed a bug that caused intermittent memory corruption when unloading a model
+* Fixed a bug that caused the exhausting of EFA memory registration pool after multiple model reloads.
+
+
+
+
 Neuron Runtime Library [2.9.64.0]
 ---------------------------------
 Date: 10/10/2022
@@ -42,6 +70,7 @@ This release specifically adds support for training workloads on one or more EC2
 Required Neuron Driver Version: 2.5 or newer
 
 New in this release
+^^^^^^^^^^^^^^^^^^^
 
 * Broke out runtime into a separate package called aws-neuronx-runtime-lib. 
 * Added RUNPATH for discovery of libnrt.so, can be overridden with LD_LIBRARY_PATH.

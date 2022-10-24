@@ -309,11 +309,27 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. toctree::
-            :maxdepth: 1
+         .. dropdown:: Prerequisite
+               :class-title: sphinx-design-class-title-small
+               :class-body: sphinx-design-class-body-small
+               :animate: fade-in
 
-            tutorials/k8s-setup
-            tutorials/k8s-neuron-scheduler
+               .. include:: /containers/tutorials/k8s-prerequisite.rst
+
+         .. dropdown:: Deploy Neuron Device Plugin
+               :class-title: sphinx-design-class-title-small
+               :class-body: sphinx-design-class-body-small
+               :animate: fade-in
+
+               .. include:: /containers/tutorials/k8s-neuron-device-plugin.rst
+
+         .. dropdown:: Deploy Neuron Scheduler Extension
+               :class-title: sphinx-design-class-title-small
+               :class-body: sphinx-design-class-body-small
+               :animate: fade-in
+
+               .. include:: /containers/tutorials/k8s-neuron-scheduler.rst
+
 
 .. dropdown::  Tutorials
         :class-title: sphinx-design-class-title-med

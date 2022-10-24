@@ -146,55 +146,6 @@ bfloat16 uint8”, then please set the environment variable
    Offset: 0
    Memory Location: {compare.85-t604_i0}@SB<0,0>(8x2)#Internal DebugInfo: <compare.85||uint16||UNDEF||[8, 1, 1]>
 
-Compilation error: "TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When compiling MRPC fine-tuning tutorial with ``bert-large-*`` and FP32 (no XLA_USE_BF16=1) for two workers or more, you will encounter compiler error that looks like ``Error message:  TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]`` followed by ``Error class:    KeyError``. Single worker fine-tuning is not affected. This issue will be fixed in an upcoming release.
-
-.. code:: bash
-
-    ERROR 103915 [neuronx-cc]: ***************************************************************
-    ERROR 103915 [neuronx-cc]:  An Internal Compiler Error has occurred
-    ERROR 103915 [neuronx-cc]: ***************************************************************
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]: Error message:  TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]: Error class:    KeyError
-    ERROR 103915 [neuronx-cc]: Error location: Unknown
-    ERROR 103915 [neuronx-cc]: Command line:   /home/ec2-user/aws_neuron_venv_pytorch_p37/bin/neuronx-cc --target=trn1 compile --framework XLA /tmp/MODULE_1_SyncTensorsGraph.43535_10930462900538209641_ip-10-0-9-236.us-west-2.compute.internal-425495b5-100851-5eaa91287c491.hlo.pb --output /var/tmp/neuron-compile-cache/USER_neuroncc-2.1.0.76+2909d26a2/MODULE_10930462900538209641/MODULE_1_SyncTensorsGraph.43535_10930462900538209641_ip-10-0-9-236.us-west-2.compute.internal-425495b5-100851-5eaa91287c491/a3973086-78e0-4e16-b1f3-ce8e034fd4aa/MODULE_1_SyncTensorsGraph.43535_10930462900538209641_ip-10-0-9-236.us-west-2.compute.internal-425495b5-100851-5eaa91287c491.neff --model-type=transformer --verbose=35
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]: Internal details:
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/CommandDriver.py", line 226, in neuronxcc.driver.CommandDriver.CommandDriver.run
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/commands/CompileCommand.py", line 936, in neuronxcc.driver.commands.CompileCommand.CompileCommand.run
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/commands/CompileCommand.py", line 889, in neuronxcc.driver.commands.CompileCommand.CompileCommand.runPipeline
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/commands/CompileCommand.py", line 914, in neuronxcc.driver.commands.CompileCommand.CompileCommand.runPipeline
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/commands/CompileCommand.py", line 918, in neuronxcc.driver.commands.CompileCommand.CompileCommand.runPipeline
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/Job.py", line 294, in neuronxcc.driver.Job.SingleInputJob.run
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/Job.py", line 320, in neuronxcc.driver.Job.SingleInputJob.runOnState
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/Pipeline.py", line 30, in neuronxcc.driver.Pipeline.Pipeline.runSingleInput
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/Job.py", line 294, in neuronxcc.driver.Job.SingleInputJob.run
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/Job.py", line 320, in neuronxcc.driver.Job.SingleInputJob.runOnState
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/jobs/Frontend.py", line 556, in neuronxcc.driver.jobs.Frontend.Frontend.runSingleInput
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/driver/jobs/Frontend.py", line 357, in neuronxcc.driver.jobs.Frontend.Frontend.runXLAFrontend
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Frontend.py", line 168, in neuronxcc.starfish.penguin.Frontend.tensorizeXla
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Frontend.py", line 241, in neuronxcc.starfish.penguin.Frontend.tensorizeXlaImpl
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Frontend.py", line 242, in neuronxcc.starfish.penguin.Frontend.tensorizeXlaImpl
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Frontend.py", line 264, in neuronxcc.starfish.penguin.Frontend.tensorizeXlaImpl
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Compile.py", line 129, in neuronxcc.starfish.penguin.Compile.compile_cu
-    ERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/Compile.py", line 131, in neuronxcc.starfish.penguin.Compile.compile_cu
-EEEERROR 103915 [neuronx-cc]:   File "neuronxcc/starfish/penguin/targets/tonga/passes/AllocateBlocks.py", line 83, in neuronxcc.starfish.penguin.targets.tonga.passes.AllocateBlocks.AllocateBlocks._allocate
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]: Version information:
-    ERROR 103915 [neuronx-cc]:   NeuronX Compiler version 2.1.0.76+2909d26a2
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]:   HWM version 2.1.0.7-64eaede08
-    ERROR 103915 [neuronx-cc]:   NEFF version Dynamic
-    ERROR 103915 [neuronx-cc]:   TVM not available
-    ERROR 103915 [neuronx-cc]:   NumPy version 1.18.2
-    ERROR 103915 [neuronx-cc]:   MXNet not available
-    ERROR 103915 [neuronx-cc]:
-    ERROR 103915 [neuronx-cc]: Artifacts stored in: /home/ec2-user/transformers/examples/pytorch/text-classification/neuronxcc-wxp0mcjv
-
 NeuronCore(s) not available - Requested:1 Available:0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -446,18 +397,6 @@ If you see TDRV error "Timestamp program stop timeout", i.e. when rerunning a tr
     2022-Aug-31 04:59:22.0768 117717:117717 ERROR  TDRV:tdrv_destroy                            TDRV not initialized
     2022-Aug-31 04:59:22.0768 117717:117717 ERROR   NRT:nrt_init                                Failed to initialize devices, error:5
 
-Runtime error "invalid offset in Coalesced\_memloc\_..." followed by "Failed to process dma block: 1703"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Currently, when running MRPC fine-tuning tutorial with ``bert-base-*`` model, you will encounter runtime error "invalid offset in Coalesced\_memloc\_..." followed by "Failed to process dma block: 1703".
-This issue will be fixed in an upcoming release.
-
-.. code:: bash
-
-    ERROR  TDRV:mem_ref_to_addr                         invalid offset in Coalesced_memloc_Coalesced_memloc_mhlo_multiply_1337_pftranspose_40839-t81854_i0_SpillSave2711--mhlo_multiply_1337_pftranspose_40839-t81854_i1_SpillSave2712_7832--mhlo_multiply_1367_pftranspose_40827-t54524_i0_SpillSave2714_10300, 12288 < (16896 + 768)
-    ERROR  TDRV:drs_expand_data_desc_model              Failed to process dma block: 1703
-    ERROR  TDRV:kbl_model_add                           create_data_refill_rings() error
-
 Compiler error "module 'numpy' has no attribute 'asscalar'"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -484,12 +423,16 @@ Please note the neuronx-cc has the following dependency on numpy "numpy<=1.20.0,
    ERROR 227874 [neuronx-cc]:   MXNet not available
    ERROR 227874 [neuronx-cc]:
 
+Import errors 'generic_type: type "IrValue" is already registered!' or 'generic_type: type "XlaBuilder" is already registered!'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you encounter a PyTorch import error 'import _XLAC ... generic_type: type "IrValue" is already registered!' or 'import _XLAC ... generic_type: type "XlaBuilder" is already registered!', please check that TensorFlow and/or JAX are not installed in the Python environment. If they are installed, please uninstall them.
 
 Import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When you encounter a PyTorch import error "import _XLAC ImportError: <>/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol" during execution, please check:
-    1. TensorFlow is not installed in the Python environment. If it is installed, please uninstall it.
+    1. TensorFlow and/or JAX are not installed in the Python environment. If they are installed, please uninstall them.
     2. The installed PyTorch (torch) package major/minor versions match the installed torch-neuronx package's major/minor versions (ie. 1.11). If they don't match, please install the version of PyTorch that matches torch-neuronx.
 
 .. code:: bash

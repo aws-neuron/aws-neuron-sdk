@@ -166,7 +166,7 @@ Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After running the pre-compilation step, continue
-with the actual phase 1 pretraining by running one of the following
+with the actual phase 1 pretraining by running the following
 set of commands to launch 32 data parallel distributed training workers:
 
 .. code:: bash

@@ -16,7 +16,7 @@ Neuron provides debugging and profiling tools with the visualization support of 
             Neuron-Monitor User Guide </tools/neuron-sys-tools/neuron-monitor-user-guide>
             Neuron-Top User Guide </tools/neuron-sys-tools/neuron-top-user-guide>
             Neuron-LS User Guide </tools/neuron-sys-tools/neuron-ls>
-            What's New </release-notes/neuron-tools>
+            What's New </release-notes/neuron-tools/index>
 
 .. dropdown::  TensorBoard 
         :class-title: sphinx-design-class-title-med

@@ -10,16 +10,16 @@
 
 *       @aws-maens @aws-mesharma
 
-src/examples/mxnet/ @aws-rhsoln @nonatofabio @musunita @aws-maens
+src/examples/mxnet/ @aws-rhsoln  @musunita @aws-maens
 neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens
-neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws @nonatofabio @musunita @aws-rhsoln @aws-maens 
+neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws  @musunita @aws-rhsoln @aws-maens 
 
-src/examples/tensorflow/  @awshaichen @nonatofabio @musunita @aws-maens
+src/examples/tensorflow/  @awshaichen  @musunita @aws-maens
 neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen @aws-maens
-neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws @nonatofabio @musunita @awshaichen @aws-maens 
+neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws  @musunita @awshaichen @aws-maens 
 
 
-src/examples/pytorch/ @jluntamazon @nonatofabio @musunita @aws-maens
+src/examples/pytorch/ @jluntamazon @musunita @aws-maens
 neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens
-neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws @nonatofabio @musunita @jluntamazon @aws-maens 
+neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws  @musunita @jluntamazon @aws-maens 
 
