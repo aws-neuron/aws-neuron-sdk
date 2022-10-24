@@ -1,15 +1,19 @@
 .. _neuron-monitor-ug:
 
-User Guide for Neuron Monitor 2.0
-=================================
+Neuron Monitor User Guide
+=========================
 
-**neuron-monitor** collects metrics and stats from the Neuron Runtimes
-and Neuron Apps running on the system and streams the collected data to
-``stdout`` in ``JSON`` format.
+.. contents:: Table of contents
+   :local:
+   :depth: 2
 
-New in Monitor 2.0: Neuron Apps
-   Neuron Apps are applications that use the Neuron Shared Library to interface with
-   the Neuron hardware.
+Overview
+--------
+
+**neuron-monitor** collects metrics and stats from the Neuron
+Applications running on the system and streams the collected data to
+``stdout`` in ``JSON`` format. It is provided as part of the
+``aws-neuron-tools`` package.
 
 These metrics and stats are organized into **metric groups** which can
 be configured by providing a configuration file as described in :ref:`using-neuron-monitor`
@@ -32,31 +36,38 @@ When running, **neuron-monitor** will:
 Using neuron-monitor
 --------------------
 
-neuron-monitor takes the following 2 optional arguments:
+.. _monitor_cli:
 
-::
+.. rubric:: neuron-monitor CLI
 
-   --verbose= Verbosity level (default: 0)
-    -c, --config-file= Path to configuration file
+.. program:: neuron-monitor
 
--  ``--verbose Verbosity level``, where **Verbosity level** can be 0 to
-   4, controls the amount of debugging and verbose information sent to
-   stderr; **0: no output**, **4: maximum verbosity**, default is 0
+.. option:: neuron-monitor [parameters]
 
--  ``-c, --config-file path``, where **path** is a valid path to a
-   neuron-monitor JSON configuration file
+    neuron-monitor accepts the following optional parameters:
 
-Example:
+    - :option:`--verbose` (int) default=0: Can be 0 to 4, and controls the amount of
+      debugging and verbose information sent to stderr; **0: no output**,
+      **4: maximum verbosity**
 
-::
+    - :option:`-c, --config-file` (string): Allows specifying a valid path to a
+      neuron-monitor JSON configuration file
 
-   neuron-monitor -c monitor.conf
 
-Not specifying any option will enable collecting all the metric groups
-with a period of 5 seconds for all the currently running Neuron Apps.
+**Example:**
 
+.. code-block::
+
+    neuron-monitor -c monitor.conf
+
+
+Not specifying any configuration file will enable collecting all the metric groups
+with a period of 5 seconds for all currently running Neuron applications.
+
+Configuration file example
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 Example of a configuration file which enables all available **metric
-groups** for a single Neuron Runtime with a global update period of 1
+groups** for every running Neuron application, with a global update period of 1
 second and sets an update period of 2 seconds for the ``"neuron_hw_counters"``
 metric group:
 
@@ -66,7 +77,7 @@ metric group:
      "period": "1s",
      "neuron_runtimes": [
        {
-         "address": "unix:/run/neuron.sock",
+         "tag_filter": ".*",
          "metrics": [
            {
              "type": "neuroncore_counters"
@@ -97,30 +108,12 @@ metric group:
      ]
    }
 
-New in Monitor 2.0: ``"neuron_hw_counters"``
-   The ``"hw_counters"`` metrics have been renamed to ``"neuron_hw_counters"`` and are
-   now part of the ``"system_metrics"`` category.
+The **inference_stats** metric group is being renamed to **execution_stats**, since it also applies to training
+iterations, not just inferences. While this current release supports both names - with **inference_stats** being
+enabled by default - future releases will only support **execution_stats**.
 
-New in Monitor 2.0: Neuron App Tags
-   In order to make app monitoring easier, Neuron Apps can be tagged with a 32 character
-   string which identifies that app. Tagging is done using the ``NEURON_PROCESS_TAG`` environment
-   variable. For example:
-   ``NEURON_PROCESS_TAG=my_app_1 python run_inferences.py`` will
-   associate the ``my_app_1`` tag with that Python application. If ``NEURON_PROCESS_TAG``
-   is not specified, the tag will be a string representation of the PID of that app.
-
-New in Monitor 2.0: Monitoring Neuron Apps
-   Neuron Apps can also be added to the configuration as part of the ``"neuron_runtimes"``
-   array. Neuron Apps use a ``"tag_filter"`` instead of an address. Every running Neuron App
-   that has a tag which passes a ``"tag_filter"`` will be monitored using the settings in the
-   JSON object which contains that particular ``"tag_filter"``.
-
-New in Monitor 2.0: tag_filter
-   ``"tag_filter"`` is a regular expression against which all Neuron Apps' tags are checked.
-   If their tag verifies the regular expression, they will be monitored.
-
-
-Example of a similar configuration file which also includes Neuron Apps:
+Specifying **execution_stats** instead of **inference_stats** in your config file will enable the new naming.
+Here is an example configuration file:
 
 ::
 
@@ -128,35 +121,47 @@ Example of a similar configuration file which also includes Neuron Apps:
      "period": "1s",
      "neuron_runtimes": [
        {
-         "address": "unix:/run/neuron.sock",
-         "metrics": [
-           ...
-         ]
-       },
-       {
          "tag_filter": ".*",
          "metrics": [
-           ...
+           {
+             "type": "neuroncore_counters"
+           },
+           {
+             "type": "memory_used"
+           },
+           {
+             "type": "neuron_runtime_vcpu_usage"
+           },
+           {
+             "type": "execution_stats"
+           }
          ]
        }
-     ],
-     "system_metrics": [
-         ...
      ]
    }
 
-JSON objects and fields in the settings file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron applications tagging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In order to make application monitoring easier, Neuron applications can be tagged with a 255 character
+string which identifies that app. Tagging is done using the ``NEURON_PROCESS_TAG`` environment variable.
+
+For example:
+``NEURON_PROCESS_TAG=my_app_1 python run_inferences.py`` will associate the ``my_app_1`` tag with that Python application.
+If ``NEURON_PROCESS_TAG`` is not specified, the application's PID will be used as a TAG.
+
+This tag will be used by neuron-monitor to filter Neuron applications.
+
+JSON objects and fields in the configuration file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  ``"neuron_runtimes"`` - array of objects specifying which Neuron
-   Runtimes and Apps to monitor and what metric groups are enabled for each
-   runtime
+   Applications to monitor and what metric groups are enabled for each
+   of them
 
-   -  ``"address"`` - address of this Neuron Runtime (optional)
-   -  ``"tag_filter"`` - a regex which will be used to verify Neuron Apps tags
+   -  ``"tag_filter"`` - a regex which will be used to filter Neuron applications tags
       in order to determine if they will be monitored (optional)
    -  ``"metrics"`` - array of objects specifying which metric groups to
-      capture for this Neuron Runtime or App
+      capture for this Neuron application
 
       -  ``"type"`` - type of metric group
 
@@ -175,14 +180,14 @@ JSON objects and fields in the settings file
 Neuron Runtime-level metric groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
 -  :ref:`neuron-monitor-nc-counters` - NeuronCore related metrics
 -  :ref:`neuron-monitor-memory-used` - data on the amount of memory used
-   by the Neuron Runtime/App
--  :ref:`neuron-monitor-vcpu-usage` - Neuron Runtime/App vCPU
+   by the Neuron application
+-  :ref:`neuron-monitor-vcpu-usage` - Neuron application vCPU
    utilization data
--  :ref:`neuron-monitor-inference-stats` - Neuron Runtime/App inference
+-  :ref:`neuron-monitor-inference-stats` - Neuron application inference
+   stats, including error count and latency
+-  :ref:`neuron-monitor-execution-stats` - Neuron application execution
    stats, including error count and latency
 
 System-wide metric groups
@@ -245,35 +250,37 @@ This is its structure:
                [...]
        }
      },
-     "instance_data": {
+     "instance_info": {
+               [...]
+     },
+     "neuron_hardware_info": {
                [...]
      }
    }
 
 -  ``"neuron_runtime_data"`` is an array containing one entry per each
-   Neuron Runtime or App specified in the settings file
+   Neuron application which passes the filter specified in the settings file
 
-   -  ``"pid"`` is the pid of this Neuron Runtime/App
-   -  ``"address"`` is the Neuron Runtime's address or empty if this is
-      a Neuron App
-   -  ``"neuron_runtime_tag"`` is the configured tag if this is a Neuron
-      App or the Neuron Runtime address if this is a Neuron Runtime
+   -  ``"pid"`` is the pid of this Neuron application
+   -  ``"neuron_runtime_tag"`` is the configured tag for the Neuron application
    -  ``"error"`` specifies any error that occurred when collecting data
-      from this Neuron Runtime
-   -  ``"report"`` will contain the results for the Neuron Runtime-level
+      from this Neuron application
+   -  ``"report"`` will contain the results for the Neuron application-level
       metric groups; their formats are described below
 
--  ``"system_data"`` is similar to ``"neuron_runtime_data"``\ ‘s
+-  ``"system_data"`` has a similar structure to ``"neuron_runtime_data"``‘s
    ``"report"`` but only contains system-level metric groups (not
-   associated to any Neuron Runtime)
+   associated to any Neuron application)
 
 
-There is also instance information added to the root object regardless
-of the configuration:
+Regardless of the configuration, the following two JSON objects are always present
+in the output:
 
+**instance_info**
+Contains information about the instance on which neuron-monitor is running.
 ::
 
-     "instance_data": {
+     "instance_info": {
        "instance_name": "My_Instance",
        "instance_id": "i-0011223344556677a",
        "instance_type": "inf1.xlarge",
@@ -285,11 +292,6 @@ of the configuration:
        "error": ""
      }
 
-New in Monitor 2.0:
-   Each ``"neuron_runtime_data"`` object now contains 3 new properties:
-   ``"pid"``, ``"address"`` and ``"neuron_runtime_tag"``. The
-   ``"neuron_runtime_index"`` property has been removed.
-
 Depending on when the instance was launched, the following fields might
 not be available:
 
@@ -298,9 +300,26 @@ not be available:
 -  ``instance_region`` : available only for instances launched on
    2020-08-24 and later
 -  ``instance_name`` : available only if ``instance_region`` is set and
-   aws-cli tools are installed The ``error`` will contain an error
-   string if getting one of the fields, **except those mentioned
-   above**, resulted in error.
+   aws-cli tools are installed
+
+``error`` will contain an error string if getting one of the fields,
+**except those mentioned above**, resulted in an error.
+
+**neuron_hardware_info**
+Contains basic information about the Neuron hardware.
+::
+
+     "neuron_hardware_info": {
+       "neuron_device_count": 16,
+       "neuroncore_per_device_count": 4,
+       "error": ""
+     }
+
+-  ``neuron_device_count`` : number of available Neuron Devices
+-  ``neuroncore_per_device_count`` : number of NeuronCores present on each Neuron Device
+-  ``error`` : will contain an error string if any occurred when getting this information
+   (usually due to the Neuron Driver not being installed or not running).
+
 
 Each **metric group** requested in the settings file will get an entry
 in the resulting output. The general format for such an entry is:
@@ -315,8 +334,8 @@ in the resulting output. The general format for such an entry is:
 
 .. _runtime-level-metric-groups-1:
 
-Neuron Runtime level metric groups
-----------------------------------
+Neuron application level metric groups
+--------------------------------------
 
 .. _neuron-monitor-nc-counters:
 
@@ -353,11 +372,6 @@ neuroncore_counters
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
-
-New in Monitor 2.0:
-   The ``"loaded_models"`` array has been removed from the objects representing
-   NeuronCores since the same information can be found in the ``"memory_used"``
-   group.
 
 .. _neuron-monitor-inference-stats:
 
@@ -414,11 +428,8 @@ inference_stats
    -  ``"numeric"`` - NAN inference errors
    -  ``"transient"`` - recoverable errors, such as ECC corrections
    -  ``"model"`` - model-related errors
-   -  ``"runtime"`` - Neuron Runtime / Library errors
+   -  ``"runtime"`` - Neuron Runtime errors
    -  ``"hardware"`` - hardware errors such as uncorrectable ECC issues
-
-New in Monitor 2.0:
-   A new ``"model"`` error category has been added.
 
 -  ``"inference_summary"`` is an object containing all inference outcome
    counts for the captured period indexed by their type
@@ -448,6 +459,61 @@ New in Monitor 2.0:
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
+
+.. neuron-monitor-execution-stats:
+
+execution_stats
+~~~~~~~~~~~~~~~
+
+::
+
+           "execution_stats": {
+             "period": 1.030613214,
+             "error_summary": {
+               "generic": 0,
+               "numerical": 0,
+               "transient": 0,
+               "model": 0,
+               "runtime": 0,
+               "hardware": 0
+             },
+             "execution_summary": {
+               "completed": 123,
+               "completed_with_err": 0,
+               "completed_with_num_err": 0,
+               "timed_out": 0,
+               "incorrect_input": 0,
+               "failed_to_queue": 0
+             },
+             "latency_stats": {
+               "total_latency": {
+                 "p0": 0.01100001,
+                 "p1": 0.01100002,
+                 "p25": 0.01100004,
+                 "p50": 0.01100008,
+                 "p75": 0.01100010,
+                 "p99": 0.01100012,
+                 "p100": 0.01100013
+               },
+               "device_latency": {
+                 "p0": 0.01000001,
+                 "p1": 0.01000002,
+                 "p25": 0.01000004,
+                 "p50": 0.01000008,
+                 "p75": 0.01000010,
+                 "p99": 0.01000012,
+                 "p100": 0.01000013
+               }
+             },
+             "error": ""
+           },
+
+The fields present in the **execution_stats** object have the same meaning as the
+ones in the **inference_stats** object. Some names have been changed to reflect that
+these stats can be produced by the execution of inferences as well as training iterations:
+
+- ``"inference_stats"`` - renamed to ``"execution_stats"``
+- ``"inference_summary"`` - renamed to ``"execution_summary"``
 
 .. _neuron-monitor-memory-used:
 
@@ -488,11 +554,11 @@ memory_used
              "error": ""
            },
 
--  ``"runtime_memory"`` summarizes the amount of memory used by the
-   Neuron Runtime/App at the time of capture
+-  ``"memory_used"`` summarizes the amount of memory used by the
+   Neuron application
 
    -  ``"neuron_runtime_used_bytes"`` - current amount of memory used by
-      the Neuron Runtime/App
+      the Neuron application
    -  all memory usage objects contain these two fields:
 
       -  ``"host"`` - host DRAM usage in bytes
@@ -503,7 +569,7 @@ memory_used
 
    -  ``"name"`` - name of the model
    -  ``"uuid"`` - unique id for the model
-   -  ``"model_id"`` - Neuron Application-assigned ID for this model
+   -  ``"model_id"`` - Neuron application-assigned ID for this model
    -  ``"is_running"`` - true if this model is currently started, false
       otherwise
    -  ``"memory_used_bytes"`` - total memory usage for the model
@@ -535,12 +601,12 @@ neuron_runtime_vcpu_usage
            }
 
 -  ``"vcpu_usage"`` - object showing vCPU usage in percentages for the
-   Neuron Runtime/App during the captured period
+   Neuron application during the captured period
 
    -  ``"user"`` - percentage of time spent in user code by this Neuron
-      Runtime/App
+      Application
    -  ``"system"`` - percentage of time spent in kernel code by this
-      Neuron Runtime/App
+      Neuron application
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
@@ -562,7 +628,8 @@ neuron_hw_counters
                  "neuron_device_index": 0,
                  "mem_ecc_corrected": 0,
                  "mem_ecc_uncorrected": 0,
-                 "sram_ecc_uncorrected": 0
+                 "sram_ecc_uncorrected": 0,
+                 "sram_ecc_corrected": 0
                }
              ],
              "error": ""
@@ -577,10 +644,11 @@ neuron_hw_counters
       the Neuron device’s DRAM
    -  ``"sram_ecc_uncorrected"`` - number of uncorrected ECC events in
       the Neuron device’s SRAM
+   -  ``"sram_ecc_corrected"`` - number of corrected ECC events in
+      the Neuron device’s SRAM
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
-   
 
 .. _neuron-monitor-vcpu-usage:
 
@@ -729,8 +797,8 @@ For example:
 
 The default value for ``--port`` is ``8000``.
 
-If your data visualization framework is Grafana, we provided a :neuron-monitor-src:`Grafana
-dashboard <neuron-monitor-grafana.json>`
+If your data visualization framework is Grafana, we provided a :ref:`Grafana
+dashboard </src/examples/neuron-monitor/neuron-monitor-grafana.json>`
 which integrates with Prometheus and this script.
 
-.. |image| image:: ../../images/nm-img1.png
+.. |image| image:: ../../images/nm-img2.png
