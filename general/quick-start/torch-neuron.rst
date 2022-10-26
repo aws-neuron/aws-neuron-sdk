@@ -93,9 +93,9 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 			# Install packages from repos
 			python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 		        
-			# Install wget, awcli	
+			# Install wget, awscli	
 			pip install wget
-			pip install awcli
+			pip install awscli
 
 			# Install Neuron packages
 			pip install torch-neuronx==1.11.0.1.*
