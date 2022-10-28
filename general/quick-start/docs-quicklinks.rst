@@ -25,11 +25,11 @@ Neuron Quick Links
             :animate: fade-in
             :open:
 
-            * `AWS PyTorch Neuron Samples for Trainium (torch-neuronx) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
-            * `AWS Neuron Reference for Megatron-LM for Trainium <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`_
-            * `AWS Neuron Samples for AWS ParallelCluster for Trainium <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
-            * `AWS PyTorch Neuron Samples for Inferentia (torch-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuron>`_
-            * `AWS TensorFlow Neuron Samples for Inferentia (tensorflow-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/tensorflow-neuron>`_
+            * `PyTorch Neuron training samples for Trainium (torch-neuronx) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+            * `Neuron Reference for Megatron-LM for Trainium <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`_
+            * `AWS ParallelCluster samples for Trainium <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
+            * `PyTorch Neuron inference samples for Inferentia (torch-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuron>`_
+            * `TensorFlow Neuron inference samples for Inferentia (tensorflow-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/tensorflow-neuron>`_
            
 
     .. dropdown::  ML Frameworks
