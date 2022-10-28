@@ -20,13 +20,13 @@ Build and Run the Application Container
 ---------------------------------------
 Follow the steps below for creating neuron application containers.
 
-#. Build a docker image using provided dockerfile :ref:`libmode-dockerfile` for Inf1 and :ref:`trainium-dlc-dockerfile` for Trn1 (also for Trn1 the dockerfile needs mlp train script found here at :ref:`mlp-train`
+- Build a docker image using provided dockerfile :ref:`libmode-dockerfile` for Inf1 and :ref:`trainium-dlc-dockerfile` for Trn1 (also for Trn1 the dockerfile needs mlp train script found here at :ref:`mlp-train`
 
 .. code:: bash
 
    docker build . -f Dockerfile.pt -t neuron-container:pytorch
 
-#. Run the container locally:
+- Run the container locally:
 
 .. code:: bash
 
@@ -69,33 +69,65 @@ Important to know
 Devices
 ^^^^^^^
 
-There are currently two ways to specify Neuron Devices to a container.
-
-#. The docker native way is to use --device /dev/neuron# for each of the Neuron Devices intended to be passed. When using --device option ALL/all is not supported.
+- The docker native way is to use --device /dev/neuron# for each of the Neuron Devices intended to be passed. When using --device option ALL/all is not supported.
 
     .. code:: bash
 
         docker run --device=/dev/neuron0 --device=/dev/neuron1
 
-#. If you install the aws-neuronx-oci-hook package, you will have an OCI hook that also supports use of a container environment variable AWS_NEURON_VISIBLE_DEVICES=<ALL | csv of devices>, which intends to make things easier for multi device scenarios. Following are some examples. For setting up oci hook please refer :ref:`oci neuron hook <tutorial-oci-hook>`
+- If you install the aws-neuronx-oci-hook package, you will have an OCI hook that also supports use of a container environment variable AWS_NEURON_VISIBLE_DEVICES=<ALL | csv of devices>, which intends to make things easier for multi device scenarios. Following are some examples. For setting up oci hook please refer :ref:`oci neuron hook <tutorial-oci-hook>`
 
     .. code:: bash
 
         docker run -e “AWS_NEURON_VISIBLE_DEVICES=0,1”
         docker run -e “AWS_NEURON_VISIBLE_DEVICES=ALL”
 
-#. In kubernetes environment, the neuron device plugin is used for exposing the neuron device
-to the containers in the pod. The number of devices can be adjusted
-using the *aws.amazon.com/neuron* resource in the pod specification. Refer :ref:`K8s setup <tutorial-k8s-env-setup-for-neuron>` for more details
+- In kubernetes environment, the neuron device plugin is used for exposing the neuron device to the containers in the pod. The number of devices can be adjusted using the *aws.amazon.com/neurondevice* resource in the pod specification. Refer :ref:`K8s setup <tutorial-k8s-env-setup-for-neuron>` for more details
 
     .. code:: bash
 
          resources:
             limits:
-            aws.amazon.com/neuron: 1
-            requests:
-            aws.amazon.com/neuron: 1
+            aws.amazon.com/neurondevice: 1
+
+   .. note::
+
+      Only the number of devices can be specfied.
+      When only the neuron device plugin is running that does not guaratee the devices to be
+      contiguous. Make sure to run the neuron scheduler extension :ref:`neuron-k8-scheduler-ext`
+      so that it makes sure that contigiuous devices are allocated to the containers
 
 
-#. Multiple container applications running in the same host can share the devices but the cores cannot be shared. This is similar to running multiple applications in the host.
-In the kubernetes environment the devices cannot be shared by multiple containers in the pod
+- Multiple container applications running in the same host can share the devices but the cores cannot be shared. This is similar to running multiple applications in the host. 
+- In the kubernetes environment the devices cannot be shared by multiple containers in the pod
+
+.. _container-cores:
+
+Cores
+^^^^^
+Each neuron device has multiple cores. The cores allocated to process/container can be controlled by
+the environment variable NEURON_RT_VISIBLE_CORES and NEURON_RT_NUM_CORES. Please refer :ref:`nrt-configuration` for more details.
+
+- The docker native way is to use --device /dev/neuron# for each of the Neuron Devices intended to be passed. Add --env NEURON_RT_VISIBLE_CORES-1,2 to use cores 1 and 2 to this container. For example in inf1.24xlarge with 64 cores, if we want to use cores 51 & 52, the appropriate device and NEURON_RT_VISIBLE_CORES needs to be used. With 4 cores in each device, core 51 is in device 12 and 52 is in device 13
+
+    .. code:: bash
+
+        docker run --device=/dev/neuron12 --device=/dev/neuron13 --env NEURON_RT_VISIBLE_CORES=51,52
+
+- In kubernetes environment, the neuron device plugin is used for exposing the neuron cores to the containers in the pod. The number of cores can be adjusted using the *aws.amazon.com/neuroncore* resource in the pod specification. Refer :ref:`K8s setup <tutorial-k8s-env-setup-for-neuron>` for more details.
+
+    .. code:: bash
+
+         resources:
+            limits:
+            aws.amazon.com/neuroncore: 1
+
+   .. note::
+
+      Only the number of cores can be specfied.
+      When only the neuron device plugin is running that does not guaratee the cores to be
+      contiguous. Make sure to run the neuron scheduler extension :ref:`neuron-k8-scheduler-ext`
+      so that it makes sure that contigiuous cores are allocated to the containers
+
+- Multiple container applications running in the same host cannot share the cores. This is similar to running multiple applications in the host.
+- In the kubernetes environment the cores cannot be shared by multiple containers in the pod

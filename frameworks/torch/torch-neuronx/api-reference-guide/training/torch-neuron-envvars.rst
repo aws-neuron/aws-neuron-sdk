@@ -74,7 +74,7 @@ PyTorch Neuron are (experimental ones are noted):
 ``NEURON_RT_STOCHASTIC_ROUNDING_SEED`` **[Neuron Runtime]**:
 
 - Sets the seed for the
-  random number generator used in stochastic rounding (see previous section). Please set ``NEURON_RT_STOCHASTIC_ROUNDING_SEED`` to a fixed value if you need reproducibility between runs.
+  random number generator used in stochastic rounding (see previous section). If this environment variable is not set, the seed is set to 0 by default. Please set ``NEURON_RT_STOCHASTIC_ROUNDING_SEED`` to a fixed value to ensure reproducibility between runs.
 
 ``NEURON_RT_VISIBLE_CORES`` **[Neuron Runtime]**:
 

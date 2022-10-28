@@ -44,8 +44,8 @@ Solution
 ''''''''
 
 * Refer :ref:`container-devices` and make sure the devices are exposed to container
-* In kubernetes environment refer :ref:`k8s-specify-devices` to make sure neuron devices are requested in container spec
-
+* If specific cores are being used refer :ref:`container-cores` and make sure the cores are exposed to container
+* In kubernetes environment refer :ref:`k8s-specify-devices` or :ref:`k8s-specify-cores` to make sure neuron devices/cores are there in pods container spec
 
 
 Contiguous Device ID's

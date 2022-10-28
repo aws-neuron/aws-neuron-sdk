@@ -36,19 +36,40 @@ a single Neuron process:
 * The ``Neuroncore Utilization`` section shows the NeuronCore utilization for the
   currently selected tab 
 
-* The ``VCPU and Memory Info`` section shows:
+* The ``VCPU Utilization`` section shows:
 
-  * ``Total system vCPU usage`` - the two percentages are user% and system%
+  * ``System vCPU usage`` - the two percentages are user% and system%
   * ``Runtime vCPU usage`` - same breakdown
-  * ``Runtime Memory Host`` - amount of host memory used by the Application and total available
-  * ``Runtime Memory Device`` - amount of device memory used by the Application
 
-* ``Loaded Models`` is a tree view which can be expanded/collapsed. The columns are:
+* The ``Memory Usage Summary`` section provides a breakdown of the total memory usage on the Neuron Device as well
+  as on the host:
 
-  * ``Model ID`` - an Application-level identifier for this model instance
-  * ``Host Memory`` - amount of host memory used by the model, displayed hierarchically, where
-    the 'parent' value is the sum of its 'children'
-  * ``Device Memory`` - amount of device memory used by the model, displayed just like the Host Memory
+  * ``Host Used Memory`` - amount of host memory used by the selected application (or an aggregate of all applications if 'All' is selected)
+    * ``Total`` - total amount of host memory used
+    * ``Tensors`` - amount of host memory used for tensors
+    * ``Constants`` - amount of host memory used for constants (for applications running training) or weights (for applications running inferences)
+    * ``DMA Buffers`` - amount of host memory used for DMA transfers
+    * ``App. Memory`` - amount of host memory used by the application that doesn't fall in any of the previous categories
+
+  * ``Device Used Memory`` - amount of device memory used by the selected application (or an aggregate of all applications if 'All' is selected)
+    * ``Total`` - total amount of device memory used
+    * ``Tensors`` - amount of device memory used for tensors
+    * ``Constants`` - amount of device memory used for constants (for applications running training) or weights (for applications running inferences)
+    * ``Model Code`` - amount of device memory used for storing model executable code
+    * ``Runtime Memory`` - amount of device memory used by the Neuron Runtime (outside of the previous categories)
+    * ``Model Scratchpad`` - amount of device memory used for the shared model scratchpad, a shared buffer used for internal model variables and other
+    auxiliary buffers
+
+* ``Memory Usage Details`` contains memory usage data organized as a tree which can be expanded/collapsed. The columns are:
+
+  * ``Model ID`` - the Neuron Runtime identifier for this model instance
+  * ``Host Memory`` - amount of host memory used
+  * ``Device Memory`` - amount of device memory used
+
+The tree view shows the amount of memory used for the same categories shown in the ``Memory Usage Summary`` but in this section
+they are attached to either a model (if the memory has been allocated at model load time for that model), or to a NeuronCore (if
+the memory can't be associated with a model, but has been allocated for that NeuronCore).
+The 'parent' shows the total amount of memory used - the sum of its children.
 
 .. note::
   The up/down/left/right keys can be used to navigate the tree view. The 'x' key expands/collapses the
@@ -61,6 +82,7 @@ tab shows an aggregated view of all the Neuron processes currently running on th
 |image1|
 
 .. note::
+
   The '1'-'9' keys select the current tab.'a'/'d' selects the previous/next
   tab on the bar.
 

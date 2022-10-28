@@ -9,10 +9,8 @@ What's New
 
 .. _latest-neuron-release:
 
-.. _neuron2x-trn1ga:
-
-Neuron 2.3.0 (10/10/2022)
-----------------------------
+Neuron 2.4.0 (10/27/2022)
+-------------------------
 
 .. contents:: Table of contents
    :local:
@@ -23,43 +21,35 @@ What's New
 
 Overview
 ~~~~~~~~
+This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Sheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc>` and :ref:`PyTorch Neuron <torch-neuronx-rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.
 
-This Neuron 2.x release extends Neuron 1.x and adds support for the new AWS Trainium powered Amazon EC2 Trn1 instances. With this release, you can now run deep learning training workloads on Trn1 instances to save training costs by up to 50% over equivalent GPU-based EC2 instances, while getting the highest training performance in AWS cloud for popular NLP models.
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
+.. list-table::
+   :widths: auto
+   :align: left
+   :class: table-smaller-font-size
 
-.. include:: /release-notes/templates/n2.x-trn1-ga-quick.txt
+   * - Get started with Neuron
+     - * :ref:`torch_quick_start`
+       * :ref:`docs-quick-links`
 
-
-.. _rn2.3.0_new:
-
-New features and capabilities
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include:: /release-notes/templates/n2.x-trn1ga-whats-new.txt
-
-.. _main-rn-tested:
-
-.. _rn2.3.0_tested:
-
-Tested Workloads
-~~~~~~~~~~~~~~~~
-
-The following workloads were tested in this release:
-
-* Distributed data-parallel pre-training of Hugging Face BERT model on single Trn1.32xl instance (32 NeuronCores).
-* Distributed data-parallel pre-training of Hugging Face BERT model on multiple Trn1.32xl instances.
-* HuggingFace BERT MRPC task finetuning on single NeuronCore or multiple NeuronCores (data-parallel).
-* Megatron-LM GPT3 (6.7B parameters) pre-training on single Trn1.32xl instance. 
-* Megatron-LM GPT3 (6.7B parameters) pre-training on multi Trn1.32xl instances. 
-* Multi-Layer Perceptron (ML) model training on single NeuronCore or multiple NeuronCores (data-parallel).
+   * - Frequently Asked Questions (FAQ)
+     - * :ref:`neuron2-intro-faq`
+       * :ref:`neuron-training-faq`
 
 
-.. _rn2.3.0-known-issues:
+   * - Troubleshooting
+     - * :ref:`PyTorch Neuron Troubleshooting on Trn1 <pytorch-neuron-traning-troubleshooting>`
+       * :ref:`Neuron Runtime Troubleshooting on Trn1  <trouble-shoot-trn1>`   
 
-Known Issues
-~~~~~~~~~~~~
+   * - Neuron architecture and features
+     - * :ref:`neuron-architecture-index`
+       * :ref:`neuron-features-index`
 
-* For maximum training performance, please set environment variables ``XLA_USE_BF16=1`` to enable full BF16 and Stochastic Rounding.
+
+   * - Neuron Components release notes
+     - * :ref:`components-rn`
 
 
 
@@ -221,9 +211,6 @@ Inf1 only packages
      - Inf1
      - * ``neuronperf`` (.whl)
      - * :ref:`neuronperf_rn`
-
-
-
 
 
 Previous Releases

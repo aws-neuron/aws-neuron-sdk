@@ -1,8 +1,11 @@
 .. _pytorch-neuronx-install-prev:
 
-Install Previous PyTorch Neuron  (``torch-neuronx``) Releases
+Install Previous PyTorch Neuron Releases (``torch-neuronx``)
 =============================================================
 
-.. note::
+.. toctree::
+   :maxdepth: 1
 
-   There are no previous Neuron 2.x releases.
+   Neuron 2.3.0 </frameworks/torch/torch-neuronx/setup/prev-releases/neuronx-2.3.0-pytorch-install>
+
+   

@@ -7,6 +7,12 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
+Neuron Compiler [2.2.0.73]
+-----------------------------
+Date: 10/27/2022
+
+* Adding support for the following HLO operators: ``LogicalNot``, ``atan2`` and ``DynamicUpdateSlice`` (for constant index).
+
 Neuron Compiler [2.1.0.76]
 -----------------------------
 Date: 10/5/2022
@@ -55,6 +61,8 @@ The list of supported operators can also be retrieved from the command line usin
 +-------------------------+-------------------------------------------+
 | Allreduce               |                                           |
 +-------------------------+-------------------------------------------+
+| Atan2                   |                                           |
++-------------------------+-------------------------------------------+
 | Batchnorm               |                                           |
 +-------------------------+-------------------------------------------+
 | Batchnormgrad           |                                           |
@@ -89,6 +97,8 @@ The list of supported operators can also be retrieved from the command line usin
 +-------------------------+-------------------------------------------+
 | DotGeneral              |                                           |
 +-------------------------+-------------------------------------------+
+| DynamicUpdateSlice      | Supports only for constant index          |
++-------------------------+-------------------------------------------+
 | Eq                      |                                           |
 +-------------------------+-------------------------------------------+
 | Exp                     |                                           |
@@ -111,6 +121,8 @@ The list of supported operators can also be retrieved from the command line usin
 | Log                     |                                           |
 +-------------------------+-------------------------------------------+
 | LogicalAnd              |                                           |
++-------------------------+-------------------------------------------+
+| LogicalNot              |                                           |
 +-------------------------+-------------------------------------------+
 | Lt                      |                                           |
 +-------------------------+-------------------------------------------+

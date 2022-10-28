@@ -8,6 +8,13 @@ Neuron Containers Release Notes
    :depth: 1
 
 
+Neuron 2.4.0
+-------------
+
+Date: 10/27/2022
+
+- Neuron now supports Kubernetes work scheduling at the level of NeuronCore.  Updates on how to use the new core allocation method is captured in the Kubernetes documentation on this site.
+
 Neuron 2.3.0
 -------------
 

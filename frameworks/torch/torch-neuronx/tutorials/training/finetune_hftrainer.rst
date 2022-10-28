@@ -133,7 +133,8 @@ Multi-worker training
 
 The above script would run one worker on one NeuronCore. To run on
 multiple cores, run the run_glue.py script with torchrun using ``--nproc_per_node=N`` option to specify the number of workers
-(N=2 for trn1.2xlarge, and N=2, 8, or 32 for trn1.32xlarge). The following example runs 2 workers:
+(N=2 for trn1.2xlarge, and N=2, 8, or 32 for trn1.32xlarge).
+The following example runs 2 workers:
 
 .. code:: bash
 

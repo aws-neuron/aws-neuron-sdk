@@ -89,7 +89,7 @@ metric group:
              "type": "neuron_runtime_vcpu_usage"
            },
            {
-             "type": "inference_stats"
+             "type": "execution_stats"
            }
          ]
        }
@@ -108,45 +108,13 @@ metric group:
      ]
    }
 
-The **inference_stats** metric group is being renamed to **execution_stats**, since it also applies to training
-iterations, not just inferences. While this current release supports both names - with **inference_stats** being
-enabled by default - future releases will only support **execution_stats**.
-
-Specifying **execution_stats** instead of **inference_stats** in your config file will enable the new naming.
-Here is an example configuration file:
-
-::
-
-   {
-     "period": "1s",
-     "neuron_runtimes": [
-       {
-         "tag_filter": ".*",
-         "metrics": [
-           {
-             "type": "neuroncore_counters"
-           },
-           {
-             "type": "memory_used"
-           },
-           {
-             "type": "neuron_runtime_vcpu_usage"
-           },
-           {
-             "type": "execution_stats"
-           }
-         ]
-       }
-     ]
-   }
-
 Neuron applications tagging
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In order to make application monitoring easier, Neuron applications can be tagged with a 255 character
 string which identifies that app. Tagging is done using the ``NEURON_PROCESS_TAG`` environment variable.
 
 For example:
-``NEURON_PROCESS_TAG=my_app_1 python run_inferences.py`` will associate the ``my_app_1`` tag with that Python application.
+``NEURON_PROCESS_TAG=my_app_1 python training.py`` will associate the ``my_app_1`` tag with that Python application.
 If ``NEURON_PROCESS_TAG`` is not specified, the application's PID will be used as a TAG.
 
 This tag will be used by neuron-monitor to filter Neuron applications.
@@ -185,8 +153,6 @@ Neuron Runtime-level metric groups
    by the Neuron application
 -  :ref:`neuron-monitor-vcpu-usage` - Neuron application vCPU
    utilization data
--  :ref:`neuron-monitor-inference-stats` - Neuron application inference
-   stats, including error count and latency
 -  :ref:`neuron-monitor-execution-stats` - Neuron application execution
    stats, including error count and latency
 
@@ -227,7 +193,7 @@ This is its structure:
            "neuroncore_counters": {
                [...]
            },
-           "inference_stats": {
+           "execution_stats": {
                [...]
            },
            "memory_used": {
@@ -373,94 +339,7 @@ neuroncore_counters
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
 
-.. _neuron-monitor-inference-stats:
-
-inference_stats
-~~~~~~~~~~~~~~~
-
-::
-
-           "inference_stats": {
-             "period": 1.030613214,
-             "error_summary": {
-               "generic": 0,
-               "numerical": 0,
-               "transient": 0,
-               "model": 0,
-               "runtime": 0,
-               "hardware": 0
-             },
-             "inference_summary": {
-               "completed": 123,
-               "completed_with_err": 0,
-               "completed_with_num_err": 0,
-               "timed_out": 0,
-               "incorrect_input": 0,
-               "failed_to_queue": 0
-             },
-             "latency_stats": {
-               "total_latency": {
-                 "p0": 0.01100001,
-                 "p1": 0.01100002,
-                 "p25": 0.01100004,
-                 "p50": 0.01100008,
-                 "p75": 0.01100010,
-                 "p99": 0.01100012,
-                 "p100": 0.01100013
-               },
-               "device_latency": {
-                 "p0": 0.01000001,
-                 "p1": 0.01000002,
-                 "p25": 0.01000004,
-                 "p50": 0.01000008,
-                 "p75": 0.01000010,
-                 "p99": 0.01000012,
-                 "p100": 0.01000013
-               }
-             },
-             "error": ""
-           },
-
--  ``"error_summary"`` is an object containing the error counts for the
-   captured period indexed by their type
-
-   -  ``"generic"`` - generic inference errors
-   -  ``"numeric"`` - NAN inference errors
-   -  ``"transient"`` - recoverable errors, such as ECC corrections
-   -  ``"model"`` - model-related errors
-   -  ``"runtime"`` - Neuron Runtime errors
-   -  ``"hardware"`` - hardware errors such as uncorrectable ECC issues
-
--  ``"inference_summary"`` is an object containing all inference outcome
-   counts for the captured period indexed by their type
-
-   -  ``"completed"`` - inferences completed successfully
-   -  ``"completed_with_err"`` - inferences that ended in an error other
-      than numeric
-   -  ``"completed_with_num_err"`` - inferences that ended in a numeric
-      error
-   -  ``"timed_out"`` - inferences that took longer than the Neuron
-      Runtime configured timeout value
-   -  ``"incorrect_input"`` - inferences that failed to start due to
-      incorrect input being provided
-   -  ``"failed_to_queue"`` - inference requests that were rejected due
-      to Neuron Runtime not being able to queue them
-
--  ``"latency_stats"`` contains two objects containing latency
-   percentiles, in seconds, for the data captured for inferences
-   executed during the captured period. If there are no inferences being
-   executed during this time, the two objects will be ``null`` (i.e.
-   ``"total_latency": null``)
-
-   -  ``"total_latency"`` - percentiles, in seconds, representing
-      latency for an inference as measured by the Neuron Runtime
-   -  ``"device_latency"`` - percentiles, in seconds, representing time
-      spent by an inference exclusively on the Neuron device
-
--  ``"error"`` - string containing any error that occurred when
-   collecting the data
-
-.. neuron-monitor-execution-stats:
+.. _neuron-monitor-execution-stats:
 
 execution_stats
 ~~~~~~~~~~~~~~~
@@ -508,12 +387,45 @@ execution_stats
              "error": ""
            },
 
-The fields present in the **execution_stats** object have the same meaning as the
-ones in the **inference_stats** object. Some names have been changed to reflect that
-these stats can be produced by the execution of inferences as well as training iterations:
+-  ``"error_summary"`` is an object containing the error counts for the
+   captured period indexed by their type
 
-- ``"inference_stats"`` - renamed to ``"execution_stats"``
-- ``"inference_summary"`` - renamed to ``"execution_summary"``
+   -  ``"generic"`` - generic execution errors
+   -  ``"numeric"`` - NAN errors encountered during execution
+   -  ``"transient"`` - recoverable errors, such as ECC corrections
+   -  ``"model"`` - model-related errors
+   -  ``"runtime"`` - Neuron Runtime errors
+   -  ``"hardware"`` - hardware errors such as uncorrectable ECC issues
+
+-  ``"execution_summary"`` is an object containing all execution outcome
+   counts for the captured period indexed by their type
+
+   -  ``"completed"`` - executions completed successfully
+   -  ``"completed_with_err"`` - executions that ended in an error other
+      than a numeric error
+   -  ``"completed_with_num_err"`` - executions that ended in a numeric
+      error
+   -  ``"timed_out"`` - executions that took longer than the Neuron
+      Runtime configured timeout value
+   -  ``"incorrect_input"`` - executions that failed to start due to
+      incorrect input being provided
+   -  ``"failed_to_queue"`` - execution requests that were rejected due
+      to Neuron Runtime not being able to queue them
+
+-  ``"latency_stats"`` contains two objects containing latency
+   percentiles, in seconds, for the data captured for the model
+   executed during the captured period. If there are no models being
+   executed during this time, the two objects will be ``null`` (i.e.
+   ``"total_latency": null``)
+
+   -  ``"total_latency"`` - percentiles, in seconds, representing
+   latency for an execution as measured by the Neuron Runtime
+   -  ``"device_latency"`` - percentiles, in seconds, representing execution time
+   exclusively on the Neuron Device
+
+-  ``"error"`` - string containing any error that occurred when
+   collecting the data
+
 
 .. _neuron-monitor-memory-used:
 
@@ -522,65 +434,133 @@ memory_used
 
 ::
 
-           "memory_used": {
-             "period": 1.030366715,
-             "neuron_runtime_used_bytes": {
-               "host": 1000000,
-               "neuron_device": 2000000
+     "memory_used": {
+       "period": 1.00001,
+       "neuron_runtime_used_bytes": {
+         "host": 6997643264,
+         "neuron_device": 12519788544,
+         "usage_breakdown": {
+           "host": {
+             "application_memory": 6996594688,
+             "constants": 0,
+             "dma_buffers": 1048576,
+             "tensors": 0
+           },
+           "neuroncore_memory_usage": {
+             "0": {
+               "constants": 193986816,
+               "model_code": 176285056,
+               "model_shared_scratchpad": 0,
+               "runtime_memory": 0,
+               "tensors": 20971520
              },
-             "loaded_models": [
-               {
-                 "name": "my_model",
-                 "uuid": "aaaaaaaaaaabbbbbbbbbbb0000000000099999999999",
-                 "model_id": 10234,
-                 "is_running": true,
-                 "memory_used_bytes": {
-                   "host": 250000,
-                   "neuron_device": 500000
-                 },
-                 "subgraphs": {
-                   "sg00": {
-                     "memory_used_bytes": {
-                       "host": 250000,
-                       "neuron_device": 500000
-                     },
-                     "neuroncore_index": 2,
-                     "neuron_device_index": 0
+             "1": {
+               "constants": 193986816,
+               "model_code": 176285056,
+               "model_shared_scratchpad": 0,
+               "runtime_memory": 0,
+               "tensors": 20971520
+             },
+             ...
+           }
+       }
+       "loaded_models": [
+         {
+           "name": "neff",
+           "uuid": "91f2f66e83ea419dace1da07617ad39f",
+           "model_id": 10005,
+           "is_running": false,
+           "subgraphs": {
+             "sg_00": {
+               "memory_used_bytes": {
+                 "host": 20480,
+                 "neuron_device": 21001024,
+                 "usage_breakdown": {
+                   "host": {
+                     "application_memory": 20480,
+                     "constants": 0,
+                     "dma_buffers": 0,
+                     "tensors": 0
+                   },
+                   "neuron_device": {
+                     "constants": 20971520,
+                     "model_code": 29504,
+                     "runtime_memory": 0,
+                     "tensors": 0
                    }
                  }
                },
-               [...]
-             ],
-             "error": ""
-           },
+               "neuroncore_index": 0,
+               "neuron_device_index": 12
+             }
+           }
+         },
+         ...
+         ],
+         "error": ""
+      }
+
 
 -  ``"memory_used"`` summarizes the amount of memory used by the
    Neuron application
 
    -  ``"neuron_runtime_used_bytes"`` - current amount of memory used by
       the Neuron application
-   -  all memory usage objects contain these two fields:
+      
+      -  ``"host"`` - total host DRAM usage in bytes
+      -  ``"neuron_device"`` - total Neuron device memory usage in bytes
+      -  ``"usage_breakdown"`` - a breakdown of the total memory usage in the other two fields
+      
+         - ``"host"`` - breakdown of the host memory usage
+         
+            - ``"application_memory"`` - amount of host memory used by the application - this includes all allocations that are not included
+              in the next categories
+            - ``"constants"`` - amount of host memory used for constants during training (or weights during inference)
+            - ``"dma_buffers"`` - amount of host memory used for DMA transfers
+            - ``"tensors"`` - amount of host memory used for tensors
+            
+         - ``"neuroncore_memory_usage"`` - a breakdown of memory allocated on the Neuron Devices and the NeuronCores for which it was allocated
+         
+            - ``"0"`` - ``"32"`` (for trn1-32xlarge) - NeuronCores for which the memory was allocated
+            - ``"constants"`` - amount of device memory used for constants during training (or weights during inference)
+            - ``"model_code"`` - amount of device memory used for models' executable code
+            - ``"model_shared_scratchpad"`` - amount of device memory used for the scratchpad shared by the models - a memory region reserved for the models'
+            internal variables and auxiliary buffers
+            - ``"runtime_memory"`` - amount of device memory used by the Neuron Runtime
+            - ``"tensors"`` - amount of device memory used for tensors
 
-      -  ``"host"`` - host DRAM usage in bytes
-      -  ``"neuron_device"`` - Neuron device DRAM usage in bytes
-
--  ``"loaded_models"`` - array containing objects representing loaded
-   models
+-  ``"loaded_models"`` - array containing objects representing loaded models
 
    -  ``"name"`` - name of the model
    -  ``"uuid"`` - unique id for the model
    -  ``"model_id"`` - Neuron application-assigned ID for this model
-   -  ``"is_running"`` - true if this model is currently started, false
-      otherwise
-   -  ``"memory_used_bytes"`` - total memory usage for the model
-   -  "``subgraphs"`` - object containing all the subgraph for the model
-      indexed by their name: ``"subgraph_name": { subgraph_data }``
-
+   -  ``"is_running"`` - true if this model is currently started, false otherwise
+   -  "``subgraphs"`` - object containing all the subgraphs for the model, indexed by their name: ``"subgraph_name": { subgraph_data }``
+   
       -  ``"memory_used_bytes"`` - memory usage for this subgraph
-      -  ``"neuroncore_index"`` - NeuronCore index with which the
-         subgraph is associated
-      -  ``"neuron_device_index"`` - Neuron device index on which the
-         subgraph is loaded
+      
+         -  ``"host"`` - total host DRAM usage in bytes
+         -  ``"neuron_device"`` - total Neuron device DRAM usage in bytes
+         -  ``"usage_breakdown"`` - a breakdown of memory allocated at load time for this model
+         
+            - ``"host"`` - breakdown of host memory allocated for this model
+            
+               - ``"application_memory"`` - amount of host memory allocated for this model by the Neuron Runtime which doesn't fall in any
+                 of the next categories
+               - ``"constants"`` - amount of host memory used for constants during training (or weights during inference)
+               - ``"dma_buffers"`` - host memory allocated for DMA transfers for this model
+               - ``"tensors"`` - amount of device memory used for tensors at model load time
+               
+            - ``"neuron_device"`` - a breakdown of device memory allocated for this model
+            
+               - ``"constants"`` - amount of device memory used for constants during training (or weights during inference)
+               - ``"model_code"`` - amount of device memory used for the model's executable code
+               - ``"runtime_memory"`` - amount of device memory used by the Neuron Runtime for this model
+               - ``"tensors"`` - amount of device memory allocated for tensors at this model's load time
+               
+      -  ``"neuroncore_index"`` - NeuronCore index on which the subgraph is loaded
+      -  ``"neuron_device_index"`` - Neuron device index on which the subgraph is loaded
+
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
