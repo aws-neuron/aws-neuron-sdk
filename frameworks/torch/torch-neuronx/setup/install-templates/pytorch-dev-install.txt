@@ -67,16 +67,15 @@
 		source aws_neuron_venv_pytorch/bin/activate
 		pip install -U pip
             	
-
-		# Install packages from  repos
-		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
-        
 		# Install wget, awscli
 		pip install wget
 		pip install awscli
 
+		# Install packages from  repos
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*" transformers
+		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
 
 
          .. tab-item:: Amazon Linux 2 AMI
@@ -140,12 +139,12 @@
 		source aws_neuron_venv_pytorch/bin/activate
 		python -m pip install -U pip
 
-		# Install packages from repos
-		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
-		
 		# Install wget, awscli
 		pip install wget
 		pip install awscli	
 
+		# Install packages from repos
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*" transformers
+		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
