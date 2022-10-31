@@ -64,13 +64,12 @@ Install PyTorch Neuron (Neuron 2.3.0)
 		python3.8 -m venv aws_neuron_venv_pytorch_p38
 		source aws_neuron_venv_pytorch_p38/bin/activate
 		pip install -U pip
-            	
 
 		# Install packages from beta repos
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
         
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.1.1" "neuronx-cc==2.1.0.76" transformers
+		python -m pip install torch-neuronx=="1.11.0.1.1.1" "neuronx-cc==2.1.0.76"
 
 
          .. tab-item:: Amazon Linux 2 AMI
@@ -134,4 +133,4 @@ Install PyTorch Neuron (Neuron 2.3.0)
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 		
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.1.1" "neuronx-cc==2.1.0.76" transformers
+		python -m pip install torch-neuronx=="1.11.0.1.1.1" "neuronx-cc==2.1.0.76"
