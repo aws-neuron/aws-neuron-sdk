@@ -5,18 +5,29 @@ Neuron Tools
 Neuron provides debugging and profiling tools with the visualization support of the TensorBoard plugin. The Neuron helper tools assist in best practices for model onboarding and performance optimizations. The debugging and profiling tools provide monitoring of runtime and performance metrics insights.
 
 
+
+.. toctree:: 
+    :maxdepth: 1
+    :hidden:
+
+    /tools/neuron-sys-tools/index
+
 .. dropdown::  System Tools 
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
-        .. toctree:: 
-            :maxdepth: 1
+        * :ref:`neuron-monitor-ug`
+        * :ref:`neuron-top-ug`
+        * :ref:`neuron-ls-ug`
+        * :ref:`What's New <neuron-tools-rn>`
 
-            Neuron-Monitor User Guide </tools/neuron-sys-tools/neuron-monitor-user-guide>
-            Neuron-Top User Guide </tools/neuron-sys-tools/neuron-top-user-guide>
-            Neuron-LS User Guide </tools/neuron-sys-tools/neuron-ls>
-            What's New </release-notes/neuron-tools/index>
+
+.. toctree:: 
+    :maxdepth: 1
+    :hidden:
+
+    /tools/tensorboard/index
 
 .. dropdown::  TensorBoard 
         :class-title: sphinx-design-class-title-med
@@ -28,49 +39,49 @@ Neuron provides debugging and profiling tools with the visualization support of 
 
             .. tab-item:: TensorBoard for Trn1
 
-        
-                .. toctree:: 
-                    :maxdepth: 1
-
-                    /tools/tutorials/tutorial-tensorboard-scalars-mnist
+                * :ref:`tb_track_training_minst`
 
             
         .. tab-set:: 
 
             .. tab-item:: TensorBoard for Inf1
 
-
-                .. toctree:: 
-                    :maxdepth: 1
-
-                    TensorBoard Plugin for Neuron </tools/tensorboard/getting-started-tensorboard-neuron-plugin>
+                :ref:`neuron-plugin-tensorboard`
 
 
+
+.. toctree:: 
+    :maxdepth: 1
+    :hidden:
+       
+    /tools/helper-tools/index
 
 .. dropdown::  Helper Tools 
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
+        * :ref:`neuron_check_model`
+        * :ref:`neuron_gatherinfo`
 
+.. toctree:: 
+    :maxdepth: 1
+    :hidden:
 
-        .. toctree:: 
-            :maxdepth: 1
-
-                
-            Check Model </tools/helper-tools/tutorial-neuron-check-model>
-            GatherInfo </tools/helper-tools/tutorial-neuron-gatherinfo>
-
+    /tools/neuronperf/index
 
 .. dropdown::  Performance and Benchmarks Tools 
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
-        .. toctree:: 
-            :maxdepth: 1
+        * :ref:`neuronperf`
 
-            /tools/neuronperf/index.rst        
+.. toctree:: 
+    :maxdepth: 1
+    :hidden:
+
+    /tools/tutorials/index
 
 .. dropdown::  Tutorials 
         :class-title: sphinx-design-class-title-med
@@ -81,20 +92,12 @@ Neuron provides debugging and profiling tools with the visualization support of 
 
             .. tab-item:: Tools Tutorials for Trn1
 
-                .. toctree:: 
-                    :maxdepth: 1
-
-                    /tools/tutorials/tutorial-tensorboard-scalars-mnist
-                    /tools/tutorials/tutorial-neuron-monitor-mnist
-
-        .. tab-set:: 
+                * :ref:`tb_track_training_minst`
+                * :ref:`track-system-monitor`
 
 
-            .. tab-item:: Tools Tutorials for Inf1
-        
-                .. toctree::
-                    :maxdepth: 1
 
-                    /tools/tutorials/getting-started-tensorboard-neuron-plugin
+
+
 
 

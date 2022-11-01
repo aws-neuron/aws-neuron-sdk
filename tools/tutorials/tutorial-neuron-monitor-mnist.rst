@@ -1,3 +1,5 @@
+.. _track-system-monitor:
+
 Track System Resource Utilization during Training with neuron-monitor using PyTorch Neuron
 ==========================================================================================
 
