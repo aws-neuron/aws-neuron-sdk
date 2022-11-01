@@ -1,11 +1,9 @@
-.. _neuron-helper-tools:
+Helper Tools
+============
 
-Neuron Helper Tools
-===================
+.. toctree:: 
+    :maxdepth: 1
 
-.. toctree::
-   :maxdepth: 1
-
-    
-   Check Model </tools/helper-tools/tutorial-neuron-check-model>
-   GatherInfo </tools/helper-tools/tutorial-neuron-gatherinfo>
+        
+    Check Model </tools/helper-tools/tutorial-neuron-check-model>
+    GatherInfo </tools/helper-tools/tutorial-neuron-gatherinfo>

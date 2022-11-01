@@ -1,3 +1,5 @@
+.. _tb_track_training_minst:
+
 Track Training Progress in TensorBoard using PyTorch Neuron
 ============================================================
 
