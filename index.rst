@@ -8,7 +8,7 @@ AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and 
 
 AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (incubating). The EC2 Trn1 instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf1 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
 
-Check :ref:`announcements-main` and :ref:`latest-neuron-release` for latest release.
+Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for latest release.
 
 
 .. grid:: 2
