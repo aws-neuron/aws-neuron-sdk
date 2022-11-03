@@ -49,6 +49,7 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/devflows/training',
                 'compiler/neuronx-cc/',
                 'general/appnotes/perf/neuronx-cc/',
+                'general/announcements/neuron2.x/dlami-pytorch-introduce',
                 ]
 clear_trn1_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
