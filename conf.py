@@ -140,7 +140,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "home_page_in_toc": False,
     "repository_branch" : branch_name,
-    "announcement": "<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>Deep Learning AMI Neuron PyTorch is now available!</a>",
+    "announcement": "<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>",
 }
 
 
@@ -215,6 +215,6 @@ rst_epilog = """
 """
 
 # Exclude private github from linkcheck. Readthedocs only exposes the ssh-agent to the 'checkout' build step, which is too early for the linkchecker to run.
-linkcheck_ignore = [r'http://localhost:\d+/', r'https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html']
+linkcheck_ignore = [r'http://localhost:\d+/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html' ,r'https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html']
 linkcheck_exclude_documents = [r'src/examples/.*', 'general/announcements/neuron1.x/announcements', r'release-notes/.*']
 nitpicky = True
