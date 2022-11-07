@@ -55,7 +55,7 @@ customers to choose between four instances sizes:
         - 16
         - 64
         - 128
-        - 16
+        - 8
         - 50
         - N/A
         - up-to 25
@@ -66,7 +66,7 @@ customers to choose between four instances sizes:
         - 48
         - 256
         - 512
-        - 48
+        - 32
         - 200
         - 32
         - 25
@@ -77,7 +77,7 @@ customers to choose between four instances sizes:
         - 192
         - 1024
         - 2048
-        - 192
+        - 128
         - 800
         - 32
         - 100
