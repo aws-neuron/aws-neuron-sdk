@@ -32,13 +32,13 @@ Setup environment
 
 1. Install prerequisite infrastructure:
 
-Follow `these setup <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/tree/ga#user-content-prerequisite-infrastructure>`_ instructions to install VPC and all the necessary components for ParallelCluster. 
+Follow `these setup <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/general/network/vpc-subnet-setup.md>`_ instructions to install VPC and all the necessary components for ParallelCluster. 
 
 
 2. Create and launch ParallelCluster 
 
-Follow `these creating cluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/tree/ga#user-content-create-a-cluster>`_ instructions to launch ParallelCluster in the infrastructure.
+Follow `these creating cluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/cluster-configs/trn1-16-nodes-pcluster.md>`_ instructions to launch ParallelCluster in the VPC.
 
 1. Launch training job
 
-Follow `these running training <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/tree/ga#user-content-launch-training-job>`_ instructions to submit a model training script as a slurm job.
+Follow `these running training <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/dp-bert-launch-job.md>`_ instructions to submit a model training script as a slurm job.
