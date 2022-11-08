@@ -37,7 +37,7 @@ Follow `these setup <https://github.com/aws-neuron/aws-neuron-parallelcluster-sa
 
 2. Create and launch ParallelCluster 
 
-Follow `these creating cluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/cluster-configs/trn1-16-nodes-pcluster.md>`_ instructions to launch ParallelCluster in the infrastructure.
+Follow `these creating cluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/cluster-configs/trn1-16-nodes-pcluster.md>`_ instructions to launch ParallelCluster in the VPC.
 
 1. Launch training job
 
