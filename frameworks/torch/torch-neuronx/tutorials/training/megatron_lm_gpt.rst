@@ -74,13 +74,25 @@ Setting up the training environment on trn1.32xlarge
 Please follow the :ref:`instructions <pytorch-neuron-setup>` to setup Python virtual environment
 with Neuron packages.
 
-Clone the AWS Neuron Reference for Megatron-LM package:
+Install Python3 development package needed to build the data helpers tools. If you are on Amazon Linux, do:
+
+::
+
+    sudo yum install -y python3-devel
+
+If you are on Ubuntu, do:
+
+::
+
+    sudo apt install -y python3-dev
+
+Clone the AWS Neuron Reference for Megatron-LM package, install dependencies, and build the data helpers tool:
 
 ::
 
     cd ~/
     git clone https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm.git
-    pip install pybind11
+    pip install pybind11 regex
     pushd .
     cd aws-neuron-reference-for-megatron-lm/megatron/data/
     make
