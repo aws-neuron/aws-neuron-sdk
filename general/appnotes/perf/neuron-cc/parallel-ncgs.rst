@@ -119,7 +119,7 @@ For MXNet 2.x:
     results3 = model3.forward(data=inputs3)
 
 You can identify the NeuronCores used by each application using the ``neuron-top`` command
-line tool. For more information about the neuron-top user interface, please see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-tools/neuron-top-user-guide.html?highlight=neuron-top#user-interface .
+line tool. For more information about the neuron-top user interface, please see :ref:`neuron-top-ug`.
 
 .. code :: bash
 
