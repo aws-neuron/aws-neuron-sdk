@@ -36,7 +36,7 @@ example, we chose version 4.15.0:
 
 .. code:: bash
 
-    pip install -U transformers==4.15.0 datasets sklearn
+    pip install -U transformers==4.15.0 datasets scikit-learn
 
 Next we download the transformers source, checking out the tag that
 matches the installed version:
