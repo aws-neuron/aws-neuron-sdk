@@ -20,7 +20,7 @@ different consecutive groups of NeuronCores using your framework of choice.
 Data Parallel Execution
 -----------------------
 
-In PyTorch and TensorFlow, the same compiled model can run in parallel on an Inf1 instance by loading it multiple times, up to the total number of NeuronCores specified in NEURON_RT_NUM_CORES or NEURON_RT_VISIBLE_CORES. For more information about NEURON_RT_NUM_CORES and NEURON_RT_VISIBLE_CORES, please https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/nrt-configurable-parameters.html .
+In PyTorch and TensorFlow, the same compiled model can run in parallel on an Inf1 instance by loading it multiple times, up to the total number of NeuronCores specified in NEURON_RT_NUM_CORES or NEURON_RT_VISIBLE_CORES. For more information about NEURON_RT_NUM_CORES and NEURON_RT_VISIBLE_CORES, please refer to :ref:`Neuron Runtime Configuration <nrt-configuration>`.
 
 
 Running multiple models using single process
@@ -65,11 +65,11 @@ context ``mx.neuron(neuron_core_index)`` where ``neuron_core_index`` is the Neur
 index at the start of the group. In the example above, you map model A to ``mx.neuron(0)``
 context, model B to ``mx.neuron(2)`` context, model C to
 ``mx.neuron(6)`` context and model D to ``mx.neuron(9)`` context. For
-further details, https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/flex-eg.html .
+further details, please refer to :ref:`Flexible Execution Group (FlexEG) in Neuron-MXNet<flexeg>`.
 
 For PyTorch
 
-For an automated data parallel solution in PyTorch, please see https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/appnotes/perf/torch-neuron-dataparallel-app-note.html for more details.
+For an automated data parallel solution in PyTorch, please see :ref:`Data Parallel Inference on Torch Neuron<torch-neuron-dataparallel-app-note>` for more details.
 
 For Tensorflow
 
@@ -119,7 +119,7 @@ For MXNet 2.x:
     results3 = model3.forward(data=inputs3)
 
 You can identify the NeuronCores used by each application using the ``neuron-top`` command
-line tool. For more information about the neuron-top user interface, please see :ref:`neuron-top-ug`.
+line tool. For more information about the neuron-top user interface, please see :ref:`Neuron Top User Guide <neuron-top-ug>`.
 
 .. code :: bash
 
