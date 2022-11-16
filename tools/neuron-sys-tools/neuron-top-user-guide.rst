@@ -45,6 +45,7 @@ a single Neuron process:
   as on the host:
 
   * ``Host Used Memory`` - amount of host memory used by the selected application (or an aggregate of all applications if 'All' is selected)
+  
     * ``Total`` - total amount of host memory used
     * ``Tensors`` - amount of host memory used for tensors
     * ``Constants`` - amount of host memory used for constants (for applications running training) or weights (for applications running inferences)
@@ -52,13 +53,14 @@ a single Neuron process:
     * ``App. Memory`` - amount of host memory used by the application that doesn't fall in any of the previous categories
 
   * ``Device Used Memory`` - amount of device memory used by the selected application (or an aggregate of all applications if 'All' is selected)
+
     * ``Total`` - total amount of device memory used
     * ``Tensors`` - amount of device memory used for tensors
     * ``Constants`` - amount of device memory used for constants (for applications running training) or weights (for applications running inferences)
     * ``Model Code`` - amount of device memory used for storing model executable code
     * ``Runtime Memory`` - amount of device memory used by the Neuron Runtime (outside of the previous categories)
     * ``Model Scratchpad`` - amount of device memory used for the shared model scratchpad, a shared buffer used for internal model variables and other
-    auxiliary buffers
+      auxiliary buffers
 
 * ``Memory Usage Details`` contains memory usage data organized as a tree which can be expanded/collapsed. The columns are:
 
