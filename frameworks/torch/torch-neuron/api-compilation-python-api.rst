@@ -69,6 +69,13 @@ TorchScript. It is analogous to :func:`torch.jit.trace` function in PyTorch.
        This specifies the minimum number of graph nodes which should be compiled
        into a Neuron graph (default= :code:`2`). If the number of nodes is smaller
        than this size, the operations will run on CPU.
+    :keyword float single_fusion_ratio_threshold: A parameter used during
+        partitioning. During partitioning, if a single partition contains a
+        fraction of operations greater than this threshold, only one graph
+        partition will be compiled (default= :code:`0.6`). This is used to
+        avoid compiling many small Neuron graphs. To force compilation of all
+        graphs to Neuron (even when they are very small), a value of ``1.0``
+        can be used.
     :keyword bool fallback: A function parameter to turn off graph partitioning.
        Indicates whether to attempt to fall back to CPU operations if an
        operation is not supported by Neuron. By default this is ``True``. If

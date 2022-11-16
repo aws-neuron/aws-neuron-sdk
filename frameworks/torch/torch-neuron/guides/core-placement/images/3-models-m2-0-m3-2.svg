@@ -1,0 +1,20 @@
+<svg width="100%" height="50px" preserveAspectRatio="xMidYMin" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Font -->
+    <style>
+        .label {
+            font-family: Consolas, monaco, monospace;
+            font-size: 2vw;
+            text-anchor: middle;
+            alignment-baseline: central;
+            fill: white;
+            dominant-baseline: middle;
+        }
+    </style>
+
+    <!-- Models -->
+    <rect x="00.0%" height="100%" width="10.0%" rx="20" opacity="40%" fill="orange" />
+    <text x="5.0%" y="50%" class="label" style="fill:black">m2</text>
+    <rect x="25.0%" height="100%" width="10.0%" rx="20" opacity="40%" fill="orange" />
+    <text x="30.0%" y="50%" class="label" style="fill:black">m3</text>
+</svg>

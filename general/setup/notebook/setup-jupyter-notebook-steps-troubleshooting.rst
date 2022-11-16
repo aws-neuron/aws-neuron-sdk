@@ -69,7 +69,7 @@ into your local browser the Notebook navigation pane should pop up.
 
 This works because ssh is forwarding you local port 8888 through to the
 Inf1/Trn1 instance port 8888 where the notebook is running. Note that our new
-conda environment is visible as “kernel” with the “conda_” prefix
+conda environment is visible as “kernel” with the “conda\_” prefix
 (highlighted)
 
 1) In notebook browser select the tutorial.

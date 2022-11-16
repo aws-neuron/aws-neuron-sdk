@@ -453,7 +453,7 @@ This release introduces a PyTorch 1.7 based torch-neuron package as a part of th
 To aid visibility into compiler activity, the Neuron-extended Frameworks TensorFlow and PyTorch will display a new compilation status indicator that prints a dot (.) every 20 seconds to the console as compilation is executing. 
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. This update continues to support the torch-neuron version of PyTorch 1.5.1 for backwards compatibility.
 2. As Python 3.5 reached end-of-life in October 2020, and many packages including TorchVision and Transformers have
@@ -560,7 +560,7 @@ manual partition is needed. More details :ref:`neuron-pytorch`. The
 release also includes various bug fixes and increased operator support.
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. This update moves the supported version for PyTorch to the current
    release (PyTorch 1.5.1)
@@ -614,7 +614,7 @@ component.
 .. _important-to-know-1:
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. Size of neural network. The current Neuron compiler release has a
    limitation in terms of the size of neural network it could
@@ -674,7 +674,7 @@ component.
 .. _important-to-know-2:
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. Size of neural network. The current Neuron compiler release has a
    limitation in terms of the size of neural network it could
@@ -706,7 +706,7 @@ component.
 .. _important-to-know-3:
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. Size of neural network. The current Neuron compiler release has a
    limitation in terms of the size of neural network it could
@@ -739,7 +739,7 @@ forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`__.
 .. _important-to-know-4:
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. Size of neural network. The current Neuron compiler release has a
    limitation in terms of the size of neural network it could
@@ -782,7 +782,7 @@ forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`__.
 .. _important-to-know-5:
 
 Important to know:
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 1. Size of neural network. The current Neuron compiler release has a
    limitation in terms of the size of neural network it could

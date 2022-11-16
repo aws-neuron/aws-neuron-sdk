@@ -31,8 +31,9 @@ XLA: :ref:`neuron-cc-ops-xla`
 
 Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
 
-Known issues and limitations - updated 04/29/2022
+Known issues and limitations - updated 11/23/2022
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* There is a known issue of increased latency and lower throughput when MLM head is compiled along with BERT model. The workaround is to compile them separately and feed the raw Bert into the head.
 * *TensorFlow 2.x* - In this release supported operators are limited to BERT-like models, specifically no conv2d  or reduce-window operators are available.
 * *Control flow* Neuron only supports control flow operators which are static at compile time. For example static length RNN, top-k, sort.
 * *Data layout* The Neuron compiler supports multiple data layout format (NCHW, NHWC, …). Non-CNHW input/output data-layouts will require Neuron to insert additional transpose operations, causing a degradation in performance.
@@ -44,6 +45,14 @@ Known issues and limitations - updated 04/29/2022
 * *Conv2d operator* is mapped to Inferentia except for specific cases of extremely large tensors and specific parameters.
 * *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
+
+Neuron Compiler release [1.13.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Date: 11/23/2022
+
+* Resolved long compile-times when compiling the YOLOv5 and YOLOv6 models. [GitHub · aws-neuron-sdk · #434]
+* Improved the layout algorithm to resolve an issue compiling a transformer-based text recognition model. [GitHub · aws-neuron-sdk · #410]
+* Support was added for additional XLA operators
 
 Neuron Compiler release [1.11.7.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -8,6 +8,15 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.5.19.0]
+-------------------------
+Date: 11/07/2022
+
+New in the release:
+
+* Minor bug fixes and improvements.
+
+
 Neuron Tools  [2.5.16.0]
 -------------------------
 Date: 10/26/2022

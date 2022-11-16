@@ -93,7 +93,7 @@ Number of workers
 ~~~~~~~~~~~~~~~~~
 
 You will be using torchrun (`PyTorch's Elastic Launch <https://pytorch.org/docs/stable/elastic/run.html>`__) to run some of the commands in this tutorial. When running the training script, you can configure the number of
-NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` option.
+NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` option. In this tutorial, we use 32 NeuronCores on trn1.32xlarge.
 
 .. note::
 
@@ -133,6 +133,7 @@ graphs and then do parallel compilations on those graphs using multiple processe
 populating the on-disk persistent cache with compiled graphs. This helps make
 the actual training run faster because the compiled graphs will loaded from the persistent cache.
 Currently it takes ~13 minutes to compile the BERT-Large model training step using the pre-compilation script (compare to ~40 minute if not using the pre-compilation script).
+Note that the command above specifies 32 NeuronCores for trn1.32xlarge via --nproc_per_node option.
 
 .. note::
 
@@ -167,7 +168,7 @@ Initiating a Training Job
 
 After running the pre-compilation step, continue
 with the actual phase 1 pretraining by running the following
-set of commands to launch 32 data parallel distributed training workers:
+set of commands to launch 32 data parallel distributed training workers on trn1.32xlarge:
 
 .. code:: bash
 
@@ -301,7 +302,10 @@ established, TensorBoard can then be accessed via web browser at the
 following URL: `http://localhost:6006 <http://localhost:6006/>`__.
 Please note that you will not be able to access TensorBoard if you
 disconnect your port-forwarding SSH session to the Trainium instance.
-[Image: image.png]
+
+.. image:: tensorboard.png
+   :alt: Image: tensorboard.png
+
 
 Finishing the tutorial
 ~~~~~~~~~~~~~~~~~~~~~~

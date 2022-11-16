@@ -77,6 +77,9 @@ extensions = [
     'sphinx_design',
     'ablog',
     'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autodoc',
+    'local_documenter',
 ]
 
 
@@ -97,6 +100,8 @@ html_extra_path = ['static']
 nbsphinx_execute = 'never'
 
 html_logo = 'images/Site-Merch_Neuron-ML-SDK_Editorial.png'
+
+napoleon_google_docstring = True
 
 # -- more options -------------------------------------------------
 

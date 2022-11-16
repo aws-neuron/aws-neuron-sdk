@@ -11,5 +11,4 @@ You can also choose one of the following combinations for running the neuron con
    dlc-then-ec2-devflow
    dlc-then-ecs-devflow
    dlc-then-eks-devflow
-   # dlc-then-k8s-devflow
    container-sm-hosting-devflow

@@ -73,9 +73,10 @@ Neuron Runtime
 ^^^^^^^^^^^^^^
 
 * Installation
-   Starting from *Neuron 1.16.0*, Neuron releases will no longer include the ``aws-neuron-runtime packages``, and the Neuron Runtime will be part of the Neuron 
-   framework extension of choice (TensorFlow Neuron, PyTorch Neuron or MXNet Neuron). Installing any Neuron framework package will install the Neuron Runtime library 
-   (``libnrt.so``).
+  Starting from *Neuron 1.16.0*, Neuron releases will no longer include the ``aws-neuron-runtime packages``, and the Neuron Runtime will be part of the Neuron 
+  framework extension of choice (TensorFlow Neuron, PyTorch Neuron or MXNet Neuron). Installing any Neuron framework package will install the Neuron Runtime library 
+  (``libnrt.so``).
+
       * For installation and upgrade instructions see :ref:`install-guide-index`.
 
 * Configuring *Neuron Runtime*
@@ -256,6 +257,8 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
 #. Application running multiple processes using ``NEURONCORE_GROUP_SIZES``
     * Please consider using ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES`` environment variables instead of ``NEURONCORE_GROUP_SIZES`` as it is being deprecated, 
     see :ref:`nrt-configuration` for details.
+
+    * If you using TensorFlow Neuron (``tensorflow-nueron (TF2.x)``) and you are replacing ``NEURONCORE_GROUP_SIZES=AxB`` which enables auto multicore replication, please see the new api :ref:`tensorflow-ref-auto-replication-python-api` for usage and documentation.
    
     * Your application behavior will remain the same as before if you do not set ``NEURON_RT_VISIBLE_CORES`` and do not set ``NEURON_RT_NUM_CORES``.
 

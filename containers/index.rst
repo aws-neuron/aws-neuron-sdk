@@ -2,6 +2,7 @@
 
 Deploy Containers with Neuron
 =============================
+
 In this section you will find resources to help you use containers for your accelerated deep learning model acceleration on top of Inferentia and Trainium enabled instances. 
 
 The section is organized based on the target deployment environment
@@ -43,7 +44,7 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
                      :class-body: sphinx-design-class-body-small
                      :animate: fade-in
 
-                     .. include:: /general/setup/install-templates/launch-trn1.rst
+                     .. include:: /general/setup/install-templates/launch-trn1.txt
 
                .. dropdown:: Install Drivers
                      :class-title: sphinx-design-class-title-small
@@ -164,7 +165,7 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
                      :class-body: sphinx-design-class-body-small
                      :animate: fade-in
 
-                     .. include:: /containers/tutorials/build-run-neuron-container.rst
+                     * :ref:`how-to-build-neuron-container`
 
                .. dropdown::  Run Tutorial
                      :class-title: sphinx-design-class-title-small
@@ -182,7 +183,7 @@ Each DLC is pre-configured to have all of the Neuron components installed and is
                      :class-body: sphinx-design-class-body-small
                      :animate: fade-in
 
-                     .. include:: /general/setup/install-templates/launch-inf1.rst
+                     .. include:: /general/setup/install-templates/launch-inf1.txt
 
                .. dropdown:: Install Drivers
                      :class-title: sphinx-design-class-title-small

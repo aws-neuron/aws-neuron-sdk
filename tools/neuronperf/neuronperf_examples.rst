@@ -15,7 +15,7 @@ You will need to adapt the batch size, input shape, and filename for your model.
 
    import torch  # or tensorflow, mxnet
 
-   import neuronperf
+   import neuronperf as npf
    import neuronperf.torch  # or tensorflow, mxnet
 
    # Construct dummy inputs
@@ -24,10 +24,10 @@ You will need to adapt the batch size, input shape, and filename for your model.
    inputs = torch.ones(input_shape)  # or numpy array for TF, MX
 
    # Benchmark and save results
-   reports = neuronperf.torch.benchmark("your_model_file.pt", inputs, batch_sizes)
-   neuronperf.print_reports(reports)
-   neuronperf.write_csv(reports)  # save table of most useful data, or...
-   neuronperf.write_json(reports)  # save everything
+   reports = npf.torch.benchmark("your_model_file.pt", inputs, batch_sizes)
+   npf.print_reports(reports)
+   npf.write_csv(reports)  # save table of most useful data, or...
+   npf.write_json(reports)  # save everything
 
 
 .. code:: bash
@@ -44,13 +44,13 @@ Let's suppose you only wish to test two specific configurations. You wish to ben
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark(filename, inputs, batch_sizes, n_models=1, workers_per_model=[1, 2], duration=15)
+   reports = npf.torch.benchmark(filename, inputs, batch_sizes, n_models=1, workers_per_model=[1, 2], duration=15)
 
 You can also add a custom model name to reports.
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark(..., model_name="MyFancyModel")
+   reports = npf.torch.benchmark(..., model_name="MyFancyModel")
 
 See the :ref:`neuronperf_benchmark_guide` for further details.
 
@@ -99,12 +99,26 @@ Here is an end-to-end example of compiling and benchmarking a ResNet-50 model fr
     :linenos:
 
 
-Benchmark on CPU
-----------------
+Benchmark on CPU or GPU
+-----------------------
 
-It is also possible to sanity test your model on CPU without Neuron hardware to verify that acceleration is working properly by comparison. For this special case, you can call ``benchmark`` with one modification:
+When benchmarking on CPU or GPU, the API is slightly different. With CPU or GPU, there is no compiled model to benchmark, so instead we need to directly pass a reference to the model class that will be instantiated.
+
+.. note::
+
+   GPU benchmarking is currently only available for PyTorch.
+
+CPU:
 
 .. code:: python
 
-   cpu_reports = neuronperf.cpu.benchmark(YourModelClass, ...)
+   cpu_reports = npf.cpu.benchmark(YourModelClass, ...)
 
+GPU:
+
+.. code:: python
+
+   gpu_reports = npf.torch.benchmark(YourModelClass, ..., device_type="gpu")
+
+
+Please refer to :ref:`npf-cpu-gpu` for details and an example of providing your model class.

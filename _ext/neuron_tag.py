@@ -88,7 +88,8 @@ clear_trn1_tag = [
                 'general/devflows/inference',
                 'compiler/neuron-cc/',
                 'general/appnotes/perf/neuron-cc/',
-                'general/appnotes/neuron1x',                
+                'general/appnotes/neuron1x/',
+                'general/appnotes/torch-neuron/',
                 ]
 
 class NeuronTag(SphinxDirective):

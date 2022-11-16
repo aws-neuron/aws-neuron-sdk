@@ -10,6 +10,15 @@ TensorFlow-Model-Server-Neuron 2.x Release Notes
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron package.
 
+TensorFlow Model Server Neuron 2.x release [2.4.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/23/2022
+
+* Deprecated the NEURONCORE_GROUP_SIZES environment variable.
+* Minor bug fixes.
+
+
 TensorFlow Model Server Neuron 2.x release [2.3.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

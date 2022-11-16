@@ -473,15 +473,15 @@ Error: Out of space while checkpointing
 You may seem an error as follows. The model checkpoints are large as they dump all the model weights,
 optimizer and rng states. And if these are frequently checkpointed, the storage can run out fast.
 Please make sure you have enough disk space.
-.. code:: bash
-Traceback (most recent call last):
-  File "/home/ec2-user/aws_neuron_venv_pytorch_p37/lib64/python3.7/site-packages/torch/serialization.py", line 380, in save
-    _save(obj, opened_zipfile, pickle_module, pickle_protocol)
-  File "/home/ec2-user/aws_neuron_venv_pytorch_p37/lib64/python3.7/site-packages/torch/serialization.py", line 604, in _save
-    zip_file.write_record(name, storage.data_ptr(), num_bytes)
-OSError: [Errno 28] No space left on device
 
-During handling of the above exception, another exception occurred:
+.. code:: bash
+
+   Traceback (most recent call last):
+     File "/home/ec2-user/aws_neuron_venv_pytorch_p37/lib64/python3.7/site-packages/torch/serialization.py", line 380, in save
+       _save(obj, opened_zipfile, pickle_module, pickle_protocol)
+     File "/home/ec2-user/aws_neuron_venv_pytorch_p37/lib64/python3.7/site-packages/torch/serialization.py", line 604, in _save
+       zip_file.write_record(name, storage.data_ptr(), num_bytes)
+   OSError: [Errno 28] No space left on device
 
 
 Troubleshooting

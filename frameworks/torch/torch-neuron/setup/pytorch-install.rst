@@ -20,7 +20,7 @@ Develop on AWS ML accelerator instance
 
 .. tab-set::
 
-   .. tab-item:: PyTorch 1.11.0
+   .. tab-item:: PyTorch 1.12.1
 
       .. tab-set::
 
@@ -47,6 +47,34 @@ Develop on AWS ML accelerator instance
             .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=develop --ami=dlami --os=amazonlinux
+
+   .. tab-item:: PyTorch 1.11.0
+
+      .. tab-set::
+
+         .. tab-item:: Ubuntu 18 AMI/Ubuntu 20 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=develop --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=develop --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Ubuntu 18 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=develop --ami=dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=develop --ami=dlami --os=amazonlinux --framework-version=pytorch-1.11.0
 
    .. tab-item:: PyTorch 1.10.2
 
@@ -177,7 +205,7 @@ Compile on compute instance
 
 .. tab-set::
 
-   .. tab-item:: PyTorch 1.11.0
+   .. tab-item:: PyTorch 1.12.1
 
       .. tab-set::
 
@@ -204,6 +232,34 @@ Compile on compute instance
             .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=compile --ami=dlami --os=amazonlinux
+
+   .. tab-item:: PyTorch 1.11.0
+
+      .. tab-set::
+
+         .. tab-item:: Ubuntu 18 AMI/Ubuntu 20 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=compile --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=compile --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Ubuntu 18 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=compile --ami=dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=compile --ami=dlami --os=amazonlinux --framework-version=pytorch-1.11.0
 
 
    .. tab-item:: PyTorch 1.10.2
@@ -336,7 +392,7 @@ Deploy on AWS ML accelerator instance
 
 .. tab-set::
 
-   .. tab-item:: PyTorch 1.11.0
+   .. tab-item:: PyTorch 1.12.1
 
       .. tab-set::
 
@@ -363,6 +419,34 @@ Deploy on AWS ML accelerator instance
             .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
 
             .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=dlami --os=amazonlinux
+
+   .. tab-item:: PyTorch 1.11.0
+
+      .. tab-set::
+
+         .. tab-item:: Ubuntu 18 AMI/Ubuntu 20 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=non-dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 AMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=non-dlami --os=amazonlinux --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Ubuntu 18 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=dlami --os=ubuntu --framework-version=pytorch-1.11.0
+
+         .. tab-item:: Amazon Linux 2 DLAMI
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --install pytorch --mode=deploy --ami=dlami --os=amazonlinux --framework-version=pytorch-1.11.0
 
    .. tab-item:: PyTorch 1.10.2
 

@@ -11,7 +11,7 @@ Install PyTorch Neuron (Neuron 2.3.0)
 
          .. tab-item:: Ubuntu 20 AMI 
 
-            .. include :: note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
             .. code:: bash
             
             	
@@ -74,7 +74,7 @@ Install PyTorch Neuron (Neuron 2.3.0)
 
          .. tab-item:: Amazon Linux 2 AMI
 
-            .. include :: /note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
             .. code:: bash
 

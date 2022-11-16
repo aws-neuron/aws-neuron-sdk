@@ -8,6 +8,14 @@ Neuron Containers Release Notes
    :depth: 1
 
 
+Neuron 2.5.0
+-------------
+
+Date: 11/07/2022
+
+- Neuron now supports trn1-based training in Sagemaker and Deep Learning Containers using PyTorch.  Find Neuron DLC containers here: https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers
+
+
 Neuron 2.4.0
 -------------
 

@@ -1,0 +1,56 @@
+<svg width="100%" height="150px" preserveAspectRatio="xMidYMin" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Font -->
+    <style>
+        .label {
+            font-family: Consolas, monaco, monospace;
+            font-size: 2vw;
+            text-anchor: middle;
+            alignment-baseline: central;
+            fill: white;
+            dominant-baseline: middle;
+        }
+    </style>
+
+    <!-- Neuron Core Groups -->
+    <rect x="00.0%" y="33%" height="66.6%" width="22.5%" rx="20" opacity="40%" fill="dodgerblue" />
+    <text x="11.5%" y="82.5%" class="label" style="fill:black">ncg0</text>
+    <rect x="25.0%" y="33%" height="66.6%" width="22.5%" rx="20" opacity="40%" fill="limegreen" />
+    <text x="36.5%" y="82.5%" class="label" style="fill:black">ncg1</text>
+    <rect x="50.0%" y="33%" height="66.6%" width="47.5%" rx="20" opacity="20%" fill="gray"/>
+    <text x="74.0%" y="82.5%" class="label" style="fill:black">unallocated</text>
+
+    <!-- Models -->
+    <rect x="00.0%" height="31%" width="22.5%" rx="20" opacity="40%"  fill="orange" />
+    <text x="11.5%" y="16.66%" class="label" style="fill:black">m0</text>
+    <rect x="25.0%" height="31%" width="22.5%" rx="20" opacity="40%" fill="orange" />
+    <text x="36.5%" y="16.66%" class="label" style="fill:black">m1</text>
+
+    <!-- Neuron Cores -->
+    <defs>
+        <rect id="nc" x="0" y="33.3%" height="33.3%" width="10%" stroke="black" stroke-width="1px" rx="10"/>
+    </defs>
+    <g fill="blue">
+        <use href="#nc" x="00.0%" />
+        <use href="#nc" x="12.5%" />
+    </g>
+    <g fill="green">
+        <use href="#nc" x="25.0%" />
+        <use href="#nc" x="37.5%" />
+    </g>
+
+    <g fill="gray">
+        <use href="#nc" x="50.0%" />
+        <use href="#nc" x="62.5%" />
+        <use href="#nc" x="75.0%" />
+        <use href="#nc" x="87.5%" />
+    </g>
+    <text x="05.0%" y="50%" class="label">nc0</text>
+    <text x="17.5%" y="50%" class="label">nc1</text>
+    <text x="30.0%" y="50%" class="label">nc2</text>
+    <text x="42.5%" y="50%" class="label">nc3</text>
+    <text x="55.0%" y="50%" class="label">nc4</text>
+    <text x="67.5%" y="50%" class="label">nc5</text>
+    <text x="80.0%" y="50%" class="label">nc6</text>
+    <text x="92.5%" y="50%" class="label">nc7</text>
+</svg>

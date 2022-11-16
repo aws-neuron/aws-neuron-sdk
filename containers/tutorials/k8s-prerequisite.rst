@@ -1,5 +1,3 @@
-.. _k8s-prerequisite: 
-
 *  Working kubernetes cluster
 *  Inf1/Trn1 instances as worker nodes with attached roles allowing:
    *  ECR read access policy to retrieve container images from ECR: **arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly**

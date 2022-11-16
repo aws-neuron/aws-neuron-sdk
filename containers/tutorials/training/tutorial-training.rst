@@ -23,7 +23,7 @@ Setup Environment
 -----------------
 
 1. Launch an Trn1 Instance
-	.. include:: /neuron-intro/install-templates/launch-trn1-ami.rst
+	.. include:: /general/setup/install-templates/launch-trn1.txt
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 

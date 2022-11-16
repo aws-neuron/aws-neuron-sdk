@@ -11,7 +11,7 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
          .. tab-item:: Ubuntu 20 AMI 
 
-            .. include :: note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
             .. code:: bash
             
             		
@@ -50,12 +50,12 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
                python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
                
                # Update Python packages - Transformers package is needed for BERT
-               python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
+               python -m pip install -U torch-neuronx=="1.11.0.1.*" neuronx-cc=="2.*"
 
 
          .. tab-item:: Amazon Linux 2 AMI
 
-            .. include :: /note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
             .. code:: bash
 
          
@@ -92,4 +92,4 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
                python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
                
                # Update Python packages - Transformers package is needed for BERT
-               python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
+               python -m pip install -U torch-neuronx=="1.11.0.1.*" neuronx-cc=="2.*"

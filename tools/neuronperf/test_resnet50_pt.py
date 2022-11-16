@@ -1,7 +1,7 @@
 import torch
 import torch_neuron
 
-import neuronperf
+import neuronperf as npf
 import neuronperf.torch
 
 from torchvision import models
@@ -18,7 +18,7 @@ batch_sizes = [5, 6, 7]
 inputs = [torch.zeros([batch_size, 3, 224, 224], dtype=torch.float32) for batch_size in batch_sizes]
 
 # Compile
-neuronperf.torch.compile(
+npf.torch.compile(
 	model, 
 	inputs, 
 	batch_sizes=batch_sizes, 
@@ -26,9 +26,9 @@ neuronperf.torch.compile(
 )
 
 # Benchmark
-reports = neuronperf.torch.benchmark(filename, inputs)
+reports = npf.torch.benchmark(filename, inputs)
 
 # View and save results
-neuronperf.print_reports(reports)
-neuronperf.write_csv(reports, 'resnet50_results.csv')
-neuronperf.write_json(reports, 'resnet50_results.json')
+npf.print_reports(reports)
+npf.write_csv(reports, 'resnet50_results.csv')
+npf.write_json(reports, 'resnet50_results.json')

@@ -455,7 +455,7 @@
 		<priority>1.00</priority>
 	</url>
 	<url>
-		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronCore-Group.html</loc>
+                <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronRT-Visible-Cores.html</loc>
 		<lastmod>2022-11-09T14:04:12+00:00</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.00</priority>
@@ -2165,7 +2165,7 @@
 		<priority>0.18</priority>
 	</url>
 	<url>
-		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/_sources/frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronCore-Group.rst.txt</loc>
+		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/_sources/frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronRT-Visible-Cores.rst.txt</loc>
 		<lastmod>2022-11-09T14:04:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.18</priority>
