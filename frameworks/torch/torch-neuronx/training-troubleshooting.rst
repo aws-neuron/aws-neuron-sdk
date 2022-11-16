@@ -14,8 +14,8 @@ PyTorch-Neuron and provides guidance how to resolve or work-around them.
 General Troubleshooting
 -----------------------
 
-For XLA-related troubleshooting notes :ref:`How to debug models in PyTorch
-Neuron on Trainium <pytorch-neurong-debug>`
+For XLA-related troubleshooting notes see :ref:`How to debug models in PyTorch
+Neuron <pytorch-neuronx-debug>`
 and `PyTorch-XLA troubleshooting
 guide <https://github.com/pytorch/xla/blob/master/TROUBLESHOOTING.md>`__.
 
