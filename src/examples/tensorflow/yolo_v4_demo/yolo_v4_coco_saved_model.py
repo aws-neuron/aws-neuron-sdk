@@ -1,4 +1,3 @@
-import argparse
 import os
 import io
 from functools import partial
@@ -9,20 +8,6 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-
-def download_file_from_google_drive(id):
-    data = {'export': 'download', 'confirm': 't'}
-    response = requests.post('https://drive.google.com/uc?id='+id, data=data)
-    return save_response_content(response)
-
-def save_response_content(response):
-    CHUNK_SIZE = 32768
-    f = io.BytesIO()
-    for chunk in response.iter_content(CHUNK_SIZE):
-        if chunk:  # filter out keep-alive new chunks
-            f.write(chunk)
-    f.seek(0)
-    return f
 
 
 def rename_weights(checkpoint):
@@ -1058,14 +1043,8 @@ def preprocessor(input_tensor, image_size):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('model_dir')
-    args = parser.parse_args()
-    if os.path.exists(args.model_dir):
-        raise OSError('Directory {} already exists; please specify a different path for the tensorflow SavedModel'.format(args.model_dir))
-    print('Downloading YOLO v4 checkpoint from https://docs.google.com/uc?id=1wv_LiFeCRYwtpkqREPeI13-gPELBDwuJ')
-    checkpoint = download_file_from_google_drive('1wv_LiFeCRYwtpkqREPeI13-gPELBDwuJ')
-    torch_weights = rename_weights(checkpoint)
+    os.system('aws s3 cp s3://neuron-s3/training_checkpoints/pytorch/yolov4/yolov4.pth . --no-sign-request')
+    torch_weights = rename_weights('./yolov4.pth')
     keras_weights = convert_pt_checkpoint_to_keras_h5(torch_weights)
     keras.backend.set_learning_phase(0)
     num_anchors = 3
@@ -1080,8 +1059,7 @@ def main():
     inputs = {'image': yolo.inputs[0]}
     output_names = ['boxes', 'scores', 'classes']
     outputs = {name: ts for name, ts in zip(output_names, yolo.outputs)}
-    print('Saving YOLO v4 tensorflow SavedModel as {}'.format(args.model_dir))
-    tf.saved_model.simple_save(sess, args.model_dir, inputs, outputs)
+    tf.saved_model.simple_save(sess, './yolo_v4_coco_saved_model', inputs, outputs)
 
 
 if __name__ == '__main__':
