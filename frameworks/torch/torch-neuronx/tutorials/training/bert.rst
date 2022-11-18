@@ -302,7 +302,10 @@ established, TensorBoard can then be accessed via web browser at the
 following URL: `http://localhost:6006 <http://localhost:6006/>`__.
 Please note that you will not be able to access TensorBoard if you
 disconnect your port-forwarding SSH session to the Trainium instance.
-[Image: image.png]
+
+.. image:: tensorboard.png
+   :alt: Image: tensorboard.png
+
 
 Finishing the tutorial
 ~~~~~~~~~~~~~~~~~~~~~~
