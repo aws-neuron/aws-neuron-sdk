@@ -29,7 +29,7 @@ and optimized data prefetch).
 
 The ScalarEngine is optimized for scalar-computations, in which every
 element of the output is dependent on one element of the input, e.g.
-non-linearities like GELU, SIMGOID or EXP. The ScalarEngine is highly
+non-linearities like GELU, SIGMOID or EXP. The ScalarEngine is highly
 parallelized, and can process 512 floating point operations per cycle.
 It can handle various data-types, including FP16, BF16, FP32, INT8,
 INT16 and INT32. 
