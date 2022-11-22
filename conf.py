@@ -129,6 +129,9 @@ intersphinx_mapping = {
 
 # -- Options for Theme  -------------------------------------------------
 
+#top_banner_message="<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>"
+
+top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
@@ -140,7 +143,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "home_page_in_toc": False,
     "repository_branch" : branch_name,
-    "announcement": "<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>",
+    "announcement": top_banner_message,
 }
 
 
