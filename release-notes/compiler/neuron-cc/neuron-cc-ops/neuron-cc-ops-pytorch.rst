@@ -12,6 +12,45 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+.. _pytorch-neuron-release-2500
+
+PyTorch Neuron release [2.5.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/23/2022
+
+Added support for new operators:
+
+- ``aten::threshold``
+- ``aten::roll``
+- ``aten::instance_norm``
+- ``aten::amin``
+- ``aten::amax``
+- ``aten::new_empty``
+- ``aten::new_ones``
+- ``aten::tril``
+- ``aten::triu``
+- ``aten::zero_``
+- ``aten::all``
+- ``aten::broadcast_tensors``
+- ``aten::broadcast_to``
+- ``aten::logical_and``
+- ``aten::logical_not``
+- ``aten::logical_or``
+- ``aten::logical_xor``
+- ``aten::_convolution_mode``
+
+Added **limited** support for new operators:
+
+- LSTM Operations. See: :ref:`torch_neuron_lstm_support`
+    - ``aten::lstm``
+    - ``aten::_pack_padded_sequence``
+    - ``aten::_pad_packed_sequence``
+- ``aten::norm``: Supported when ``p`` argument is one of (``1``, ``2``, ``inf``, ``-inf``, ``'fro'``)
+
+
+.. _pytorch-neuron-release-2200
+
 PyTorch Neuron release [2.2.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

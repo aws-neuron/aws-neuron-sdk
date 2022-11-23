@@ -10,6 +10,20 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :depth: 1
 
 
+Neuron Collectives [2.10.20.0]
+-----------------------------
+Date: 10/10/2022
+
+New in this release
+
+* Improved logging to appear similar in style to Neuron Runtime
+
+Bug Fixes
+
+* Fixed memory registration to support 2GB+ sizes
+* Fixed association of network devices to channels (removes previous hard-coding).
+
+
 Neuron Collectives [2.9.86.0]
 -----------------------------
 Date: 10/10/2022

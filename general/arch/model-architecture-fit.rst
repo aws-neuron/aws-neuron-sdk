@@ -58,6 +58,12 @@ AWS Trainium (NeuronCore v2)
       - :ref:`Roadmap Item <neuron_roadmap>`
       - :ref:`Roadmap Item <neuron_roadmap>`
 
+   *  - LSTMs
+      - NLP and Computer Vision
+      - Good Fit
+      - :ref:`Roadmap Item <neuron_roadmap>`
+      - :ref:`Roadmap Item <neuron_roadmap>`
+
    *  - Vision Transformers
       - Computer Vision
       - Good Fit
@@ -76,14 +82,7 @@ AWS Trainium (NeuronCore v2)
       - :ref:`Roadmap Item <neuron_roadmap>`
       - :ref:`Roadmap Item <neuron_roadmap>`
 
-   *  - LSTMs
-      - Computer Vision
-      - Good Fit
-      - :ref:`Roadmap Item <neuron_roadmap>`
-      - :ref:`Roadmap Item <neuron_roadmap>`
-
-
-   *  - RNNs
+   *  - R-CNNs
       - Computer Vision
       - Good Fit
       - :ref:`Roadmap Item <neuron_roadmap>`
@@ -135,6 +134,13 @@ AWS Inferentia (NeuronCore v1)
       - NA
       - NA
 
+   *  - LSTMs
+      - NLP and Computer Vision
+      - Good Fit
+      - Supported
+      - NA
+      - NA
+
    *  - Vision Transformers
       - Computer Vision
       - Good Fit
@@ -144,8 +150,8 @@ AWS Inferentia (NeuronCore v1)
 
    *  - Diffusion models
       - Computer Vision
-      - Not a Good Fit
-      - NA
+      - Good Fit
+      - :ref:`Roadmap Item <neuron_roadmap>`
       - NA
       - NA
 
@@ -156,18 +162,10 @@ AWS Inferentia (NeuronCore v1)
       - Supported
       - :ref:`Roadmap Item <neuron_roadmap>`
 
-   *  - LSTMs
+   *  - R-CNNs
       - Computer Vision
-      - Not a Good Fit
-      - NA
-      - NA
-      - NA
-
-
-   *  - RNNs
-      - Computer Vision
-      - Not a Good Fit
-      - NA
+      - Supported with limitations
+      - Supported with limitations
       - NA
       - NA
 
@@ -224,7 +222,7 @@ Trainium
 ^^^^^^^^
 
 - **Architecture Fit** - Sequence-to-sequence models are a good fit for Trainium.
-- **Neuron Support** - Sequence-to-sequence models are not supported on Trainium as of the latest Neuron release, please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Neuron Support** - Sequence-to-sequence models are not supported on Trainium as of the latest Neuron release, please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
 
 Inferentia
 ^^^^^^^^^^
@@ -244,49 +242,50 @@ Trainium
 ^^^^^^^^
 
 - **Architecture Fit** - CNN based models are a good fit for Trainium.
-- **Neuron Support** - CNN based models are not supported on Trainium as of the latest Neuron release, please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Neuron Support** - CNN based models are not supported on Trainium as of the latest Neuron release, please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
 
 Inferentia
 ^^^^^^^^^^
 
 - **Architecture Fit** - CNN based models are a good fit for Inferentia.
-- **Neuron Support** - Neuron SDK supports CNN based models inference on Inferentia. Please see :ref:`benchmark results <appnote-performance-benchmark>` of these models. To get started with these models you can refer to Neuron :ref:`PyTorch <pytorch-computervision>`, :ref:`TensorFlow <tensorflow-computervision>` and :ref:`MXNet <mxnet-computervision>` tutorials.
+- **Neuron Support** - Neuron SDK supports CNN based models inference on Inferentia. Please see the :ref:`benchmark results <appnote-performance-benchmark>` of these models. To get started with these models you can refer to Neuron :ref:`PyTorch <pytorch-computervision>`, :ref:`TensorFlow <tensorflow-computervision>` and :ref:`MXNet <mxnet-computervision>` tutorials.
 
 Region-based CNN (R-CNN) models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-R-CNN models search limited number of regions on the image, while typical CNN models classify a huge number of regions, enabling running faster in object detection applications. The representatives of this family include models include **R-CNN, Fast R-CNN, Faster R-CNN**, etc.
+Region-based CNNs (R-CNNs) models are commonly used for object detection and image segmentation tasks. Popular variants of the the R-CNN model include R-CNN, Fast R-CNN, Faster R-CNN, and Mask R-CNN.
 
 Trainium
 ^^^^^^^^
 
 - **Architecture Fit** - R-CNN models are a good fit for Trainium.
-- **Neuron Support** -  R-CNN models are not supported on Trainium as of the latest Neuron release, please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Neuron Support** -  R-CNN models are not supported on Trainium as of the latest Neuron release, please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+
+
+.. _rcnn_limitations_inf1:
 
 Inferentia
 ^^^^^^^^^^
 
-- **Architecture Fit** - R-CNN models are not a good fit for Inferentia. R-CNN models can have a few limitations running on Inferentia for the following reasons: (1) While torch models must be traceable using ``torch.jit.trace`` for compilation on Inferentia, most R-CNNs are not jit traceable by default so they cannot readily be compiled for optimized inference on Inferentia. (2) At the moment, ROI Align operators typically cannot run efficiently on Neuron Cores. As a result, ROI Align operators are mapped directly to CPU during compilation, affecting the performance. R-CNN models that predict a low number of bounding boxes (e.g., <100) experience the best performance on Inferentia. (3) Since ResNet backbone part is fully utilizing Inferentia features such as parallelization, R-CNN models with a small ResNet backbone usually do not experience as much of performance booster on Inferentia. Consequently, R-CNNs that have a large ResNet backbone (such as ResNet-50 or ResNet-101) experience the greatest performance improvement on Inferentia.
-- **Neuron Support** - While Neuron SDK does not support R-CNN based models inference on Inferentia as of the latest Neuron release, there will be R-CNN support in future releases. Please check the future releases and track :ref:`neuron_roadmap` for details.
-
-
+- **Architecture Fit** - R-CNN models can have a few limitations and considerations on Inferentia: **RoI Align operators**: At this time, RoI Align operators typically cannot run efficiently on NeuronCore v1. As a result, RoI Align operators are mapped directly to CPU during compilation. R-CNN models that predict a low number of bounding boxes (<100) experience the best performance on Inferentia. **Large ResNet backbone**: R-CNNs that have a large ResNet backbone (such as ResNet-50 or ResNet-101) experience the greatest performance improvement on Inferentia because a larger portion of the R-CNN compute is accelerated.
+- **Neuron Support** - Torch models must be traceable using :func:`torch.jit.trace` for compilation on Inferentia. Most `Detectron2 <https://github.com/facebookresearch/detectron2>`_-based R-CNNs are not jit traceable by default, so they cannot readily be compiled for optimized inference on Inferentia. The :ref:`torch-neuron-r-cnn-app-note` application note demonstrates how to compile and improve the performance of R-CNN models on Inferentia. It also provides an end-to-end example of running a Detectron2 R-CNN on Inferentia.
 
 Models with Long Short-Term Memory (LSTM) networks
 --------------------------------------------------
 
-Models with LSTM networks allow outputs from previous time steps taken as inputs for the current time step and are used in the applications such as time series prediction, speech recognition, etc.
+LSTMs use an internal state to process sequential data. LSTMs are commonly used to model temporal sequences of data in language processing and computer vision applications. 
 
 Trainium
 ~~~~~~~~
 
 - **Architecture Fit** - Models with LSTM networks are a good fit for Trainium.
-- **Neuron Support** - Models with LSTM networks are not supported on Trainium as of the latest Neuron release, please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Neuron Support** - Models with LSTM networks are not supported on Trainium as of the latest Neuron release. Please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
 
 Inferentia
 ~~~~~~~~~~
 
-- **Architecture Fit** - Models with LSTM networks are not a good fit for Inferentia.  LSTM networks allow outputs from previous time steps taken as inputs for the current time step. This recurrent behavior is implemented using control flow. Since Inferentia does not support control flow, the model will have to be partitioned to execute partially on the CPU, which will affect the inference performance. The models should be unrolled to work with Neuron.
-- **Neuron Support** - While the models with LSTM networks are not supported on Inferentia as of the latest Neuron release, there will be LSTM support in future releases. Please check the future releases and track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Architecture Fit** - Models with LSTM cells are a good fit for Inferentia.
+- **Neuron Support** - Models with LSTM networks are supported on Inferentia, please see :ref:`torch_neuron_lstm_support`.
 
 
 Diffusion Models
@@ -296,21 +295,28 @@ Trainium
 ~~~~~~~~
 
 - **Architecture Fit** - Diffusion models are a good fit for Trainium.
-- **Neuron Support** - Diffusion models are not supported on Trainium as of the latest Neuron release, please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Neuron Support** - Diffusion models are not supported on Trainium as of the latest Neuron release. Please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
 
 Inferentia
 ~~~~~~~~~~
 
-- **Architecture Fit** - Diffusion models are not a good fit for Inferentia. Diffusion models utilize encoder and decoder that includes control flow, conditions mechanism and attention layers. Since Inferentia does not support control flow, the model will have to be partitioned to execute partially on the CPU, which will affect the size of the model compilation as well as the inference performance.
-- **Neuron Support** - Diffusion models are not supported on Inferentia as of the latest Neuron release. Please track :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+- **Architecture Fit** - Diffusion models are a good fit for Inferentia.
+- **Neuron Support** - Diffusion models are not supported on Inferentia as of the latest Neuron release. Please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
 
 
-Known Issues on Inferentia
---------------------------
+Known Issues on Inferentia (NeuronCore v1)
+------------------------------------------
 
-Support of large models (impacts `torch-neuron` and `tensorflow-neuron`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Support of large models (impacts `torch-neuron` and `tensorflow-neuron` (TF1.x))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Inferentia, the weights of the models are put into a buffer that has 2GB limitation at the moment. As a result, customers who want to run model inference with large weights such as **RegNet**, **Stable Diffusion**, and **t5-11b**, might run into an error related to the size of the model. 
+.. _2gb_protobuf_issue:
 
-This is a known issue related to the compilation process, not a hardware-dependent issue. Allowing large models like this to be compiled is a feature that we intend to address in a future release. Currently these models are not well-supported. Please check the future releases.
+During compilation on Inferentia (NeuronCore v1), ``torch-neuron`` and ``tensorflow-neuron (TF1.x)`` export a protobuf that contains the model's graph structure and weights. This causes an issue when the total size of the model's weights exceeds the 2GB limitation of protobufs. As a result, customers who want to run large models such as **RegNet**, **Stable Diffusion**, and **t5-11b** might run into protobuf errors during compilation. 
+
+This is a known issue related to the compilation process, not a hardware-dependent issue. Allowing large models like this to be compiled for inference on Inferentia (NeuronCore v1) is a feature that we intend to address in a future release. Please track the :ref:`Neuron Roadmap <neuron_roadmap>` for details.
+
+.. note::
+
+   Neuron release 2.5.0 added Experimental support for tracing models larger than 2GB `in `tensorflow-neuron (TF2.x)``, please see ``extract-weights`` flag in :ref:`tensorflow-ref-neuron-tracing-api` 
+

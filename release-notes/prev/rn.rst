@@ -7,8 +7,14 @@ Previous Releases Notes (Neuron 2.x)
    :local:
    :depth: 1
 
+Neuron 2.4.0 (10/27/2022)
+-------------------------
+
+This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Sheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc>` and :ref:`PyTorch Neuron <torch-neuronx-rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.
+
+
 Neuron 2.3.0 (10/10/2022)
-----------------------------
+-------------------------
 
 .. contents:: Table of contents
    :local:

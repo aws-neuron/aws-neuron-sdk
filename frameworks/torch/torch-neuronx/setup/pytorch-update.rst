@@ -11,7 +11,7 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
          .. tab-item:: Ubuntu 20 AMI 
 
-            .. include :: note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
             .. code:: bash
             
             		
@@ -55,7 +55,7 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
          .. tab-item:: Amazon Linux 2 AMI
 
-            .. include :: /note-setup-general.rst
+            .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
             .. code:: bash
 
          

@@ -102,7 +102,7 @@ In this step, we will process the Neuron profile data and launch TensorBoard.
 
 5.1. Install the Neuron plugin for Tensorboard.
 
-.. include:: /neuron-intro/install-templates/tensorboard-plugin-neuron-pip-install.rst
+.. include:: /general/setup/install-templates/inf1/tensorboard-plugin-neuron-pip-install.rst
 
 5.2. After collecting the raw profile data, we need to post-process it to create the
 log files used by the Neuron plugin.  This can be done when launching TensorBoard

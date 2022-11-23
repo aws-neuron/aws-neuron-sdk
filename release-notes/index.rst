@@ -8,8 +8,9 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
+.. _neuron-2.5.0-whatsnew:
 
-Neuron 2.4.0 (10/27/2022)
+Neuron 2.5.0 (11/23/2022)
 -------------------------
 
 .. contents:: Table of contents
@@ -19,39 +20,51 @@ Neuron 2.4.0 (10/27/2022)
 What's New
 ^^^^^^^^^^
 
-Overview
-~~~~~~~~
-This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Sheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc>` and :ref:`PyTorch Neuron <torch-neuronx-rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.
-
-For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+This is a major release which introduces new features and resolves issues that improve stability for Inf1 customers.
 
 .. list-table::
    :widths: auto
+   :header-rows: 1
    :align: left
    :class: table-smaller-font-size
 
-   * - Get started with Neuron
-     - * :ref:`torch_quick_start`
-       * :ref:`docs-quick-links`
 
-   * - Frequently Asked Questions (FAQ)
-     - * :ref:`neuron2-intro-faq`
-       * :ref:`neuron-training-faq`
+   * - Component
+     - New in this release
 
+   * - PyTorch Neuron ``(torch-neuron)``
+     - * PyTorch 1.12 support
+       
+       * Python 3.8 support
+     
+       * :ref:`LSTM <torch_neuron_lstm_support>` support on Inf1
 
-   * - Troubleshooting
-     - * :ref:`PyTorch Neuron Troubleshooting on Trn1 <pytorch-neuron-traning-troubleshooting>`
-       * :ref:`Neuron Runtime Troubleshooting on Trn1  <trouble-shoot-trn1>`   
+       * :ref:`R-CNN <torch-neuron-r-cnn-app-note>` support on Inf1
 
-   * - Neuron architecture and features
-     - * :ref:`neuron-architecture-index`
-       * :ref:`neuron-features-index`
+       * Support for new :ref:`API for core placement <torch_neuron_core_placement_api>`
+      
+       * Support for :ref:`improved logging <pytorch-neuron-rn>` 
+        
+       * Improved :func:`torch_neuron.trace` performance when using large graphs
+      
+       * Reduced host memory usage of loaded models in ``libtorchneuron.so``
+      
+       * :ref:`Additional operators <neuron-cc-ops-pytorch>` support
+       
 
+   * - TensorFlow Neuron ``(tensorflow-neuron)``
+     - * ``tf-neuron-auto-multicore`` tool to enable automatic data parallel on multiple NeuronCores.
+      
+       * Experimental support for tracing models larger than 2GB using ``extract-weights`` flag (TF2.x only), see :ref:`tensorflow-ref-neuron-tracing-api`
 
-   * - Neuron Components release notes
-     - * :ref:`components-rn`
+       * ``tfn.auto_multicore`` Python API to enable automatic data parallel (TF2.x only)
+    
 
+This Neuron release is the last release that will include ``torch-neuron`` :ref:`versions 1.7 and 1.8 <announce-eol-pt-before-1-8>`, and that will include ``tensorflow-neuron`` :ref:`versions 2.5 and 2.6 <announce-eol-tf-before-2-5>`.
 
+In addition, this release introduces changes to the Neuron packaging and installation instructions for Inf1 customers, see :ref:`neuron250-packages-changes` for more information.
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
 
 .. _components-rn:
@@ -74,11 +87,26 @@ Inf1 and Trn1 common packages
      - Package/s
      - Details
 
+
+   * - Neuron Runtime
+     - Trn1 , Inf1
+     - * Trn1: ``aws-neuronx-runtime-lib`` (.deb, .rpm)
+
+       * Inf1: Runtime is linked into the ML frameworks packages
+       
+     - * :ref:`neuron-runtime-rn`
+
    * - Neuron Runtime Driver
      - Trn1, Inf1
      - * ``aws-neuronx-dkms``  (.deb, .rpm)
        
      - * :ref:`neuron-driver-release-notes`
+
+   * - Neuron System Tools
+     - Trn1, Inf1
+     - * ``aws-neuronx-tools``  (.deb, .rpm)
+     - * :ref:`neuron-tools-rn`
+
 
 
    * - Containers
@@ -93,6 +121,11 @@ Inf1 and Trn1 common packages
 
        * :ref:`neuron-containers-release-notes`
 
+   * - NeuronPerf (Inference only)
+     - Trn1, Inf1 
+     - * ``neuronperf`` (.whl)
+     - * :ref:`neuronperf_rn`
+
 
 Trn1 only packages
 ~~~~~~~~~~~~~~~~~~
@@ -103,19 +136,12 @@ Trn1 only packages
    :align: left
    :class: table-smaller-font-size
    
-
    * - Component
      - Instance/s
      - Package/s
      - Details
 
 
-   * - Neuron Runtime
-     - Trn1
-     - * ``aws-neuronx-runtime-lib`` (.deb, .rpm)
-       
-     - * :ref:`neuron-runtime-rn`
-     
 
    * - PyTorch Neuron
      - Trn1
@@ -137,10 +163,6 @@ Trn1 only packages
 
      - * :ref:`neuron-collectives-rn`
 
-   * - Neuron System Tools
-     - Trn1
-     - * ``aws-neuronx-tools``  (.deb, .rpm)
-     - * :ref:`neuron-tools-rn`
 
 
 .. note::
@@ -182,7 +204,7 @@ Inf1 only packages
 
    * - TensorFlow Model Server Neuron
      - Inf1
-     - * ``tensorflow-model-server-neuron`` (.deb, .rpm)
+     - * ``tensorflow-model-server-neuronx`` (.deb, .rpm)
      - * :ref:`tensorflow-modelserver-rn`
 
 
@@ -200,17 +222,6 @@ Inf1 only packages
      - * :ref:`neuron-cc-rn`
 
        * :ref:`neuron-supported-operators`
-
-   * - Neuron System Tools
-     - Inf1
-     - * ``aws-neuron-tools``  (.deb, .rpm)
-     - * :ref:`neuron-tools-rn`
-
-
-   * - NeuronPerf
-     - Inf1
-     - * ``neuronperf`` (.whl)
-     - * :ref:`neuronperf_rn`
 
 
 Previous Releases

@@ -47,9 +47,18 @@ Prepare a new Python virtual environment with the necessary Neuron and TorchServ
 
 Install the system requirements for TorchServe.
 
+ +----------------------------------------+--------------------------------------------------------+
+ | Ubuntu                                 | AL2                                                    |
+ +----------------------------------------+--------------------------------------------------------+
+ | .. code-block:: bash                   | .. code-block:: bash                                   |
+ |                                        |                                                        |
+ |    $ sudo apt install openjdk-11-jdk   |    $ sudo yum install java-11-amazon-corretto-headless |
+ |                                        |    $ sudo alternatives --config java                   |
+ |                                        |    $ sudo alternatives --config javac                  |
+ +----------------------------------------+--------------------------------------------------------+
+
 .. code:: bash
 
-  $ sudo apt install openjdk-11-jdk
   $ java -version
 
 ::

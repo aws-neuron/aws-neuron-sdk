@@ -1,1 +1,0 @@
-.. include:: /general/devflows/inference/dlc-then-sm-hosting-devflow.rst

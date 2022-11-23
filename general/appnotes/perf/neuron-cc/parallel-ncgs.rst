@@ -218,8 +218,26 @@ Examples using ``NEURON_RT_NUM_CORES`` include:
 * :ref:`PyTorch example </src/examples/pytorch/resnet50.ipynb>`
 * :ref:`MXNet example </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>`
 
-Auto Model Replication (Experimental for TensorFlow-Neuron only)
-----------------------------------------------------------------
+
+Auto Model Replication in TensorFlow Neuron (``tensorflow-neuron``) (Experimental)
+----------------------------------------------------------------------------------
+
+Please see the below API documentation to see how to perform automatic replication on
+multiple cores. Note that the automatic replication will only work on models compiled with pipeline size 1:
+via ``--neuroncore-pipeline-cores=1``. If auto replication is not enabled, the model will default to 
+replicate on up to 4 cores.
+
+Python API (TF 2.x only):
+
+:ref:`tensorflow-ref-auto-replication-python-api`
+
+CLI API (TF 1.x and TF 2.x):
+
+:ref:`tensorflow-ref-auto-replication-cli-api`
+
+
+Auto Model Replication (Being Deprecated)
+-----------------------------------------
 
 The Auto Model Replication feature in TensorFlow-Neuron enables you to
 load the model once and the data parallel replication would happen
@@ -252,6 +270,7 @@ You will still need to use threads in the scaffolding code to feed the
 loaded replicated model instance in order to achieve high throughput.
 
 Example of auto model replication: :ref:`/src/examples/tensorflow/openpose_demo/openpose.ipynb`
+
 
 FAQ
 ---

@@ -11,8 +11,11 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 12/30/2021
---------------------------------------------------
+Known Issues and Limitations - Updated 11/23/2022
+-------------------------------------------------
+
+Min & Max Accuracy
+~~~~~~~~~~~~~~~~~~
 
 The index outputs of the ``aten::argmin``, ``aten::argmax``, ``aten::min``, and
 ``aten::max`` operator implementations are sensitive to precision. For models
@@ -23,10 +26,12 @@ operator implementations do not currently support ``int64`` inputs when
 ``dim=0``. For more information on precision and performance-accuracy tuning,
 see :ref:`neuron-cc-training-mixed-precision`.
 
-The following are not torch-neuron limitations, but may impact models
-you can successfully torch.neuron.trace
+Python 3.5
+~~~~~~~~~~
 
--  If you attempt to import torch.neuron from Python 3.5 you will see this error in 1.1.7.0 - please use Python 3.6 or greater:
+If you attempt to import torch.neuron from Python 3.5 you will see this error
+in 1.1.7.0 - please use Python 3.6 or greater:
+
 .. code-block::
 
    File "/tmp/install_test_env/lib/python3.5/site-packages/torch_neuron/__init__.py", line 29
@@ -36,7 +41,89 @@ you can successfully torch.neuron.trace
 
 -  Torchvision has dropped support for Python 3.5
 -  HuggingFace transformers has dropped support for Python 3.5
--  There is a dependency between versions of torchvision and the torch package that customers should be aware of when compiling torchvision models.  These dependency rules can be managed through pip.  At the time of writing torchvision==0.6.1 matched the torch==1.5.1 release, and torchvision==0.8.2 matched the torch==1.7.1 release
+
+Torchvision
+~~~~~~~~~~~
+
+When versions of ``torchvision`` and ``torch`` are mismatched, this
+can result in exceptions when compiling ``torchvision`` based
+models. Specific versions of ``torchvision`` are built against each release
+of ``torch``. For example:
+
+- ``torch==1.5.1`` matches ``torchvision==0.6.1``
+- ``torch==1.7.1`` matches ``torchvision==0.8.2``
+- etc.
+
+Simultaneously installing both ``torch-neuron`` and ``torchvision`` is the
+recommended method of correctly resolving versions.
+
+
+Dynamic Batching
+~~~~~~~~~~~~~~~~
+
+Dynamic batching does not work properly for some models that use the
+``aten::size`` operator. When this issue occurs, the input batch sizes are not
+properly recorded at inference time, resulting in an error such as:
+
+.. code-block:: text
+
+    RuntimeError: The size of tensor a (X) must match the size of tensor b (Y) at non-singleton dimension 0.
+
+This error typically occurs when ``aten::size`` operators are partitioned to
+CPU. We are investigating a fix for this issue.
+
+
+PyTorch Neuron release [2.5.0.0]
+--------------------------------------------------
+
+Date: 11/23/2022
+
+New in this release
+~~~~~~~~~~~~~~~~~~~
+
+* Added PyTorch 1.12 support
+* Added Python 3.8 support
+* Added new operators support. See :ref:`neuron-cc-ops-pytorch`
+* Added support for ``aten::lstm``. See: :ref:`torch_neuron_lstm_support`
+* Improved logging:
+    * Improved error messages for specific compilation failure modes, including out-of-memory errors
+    * Added a warning to show the code location of ``prim::PythonOp`` operations
+    * Removed overly-verbose tracing messages
+    * Added improved error messages for ``neuron-cc`` and ``tensorflow`` dependency issues
+    * Added more debug information when an invalid dynamic batching configuration is used
+* Added new experimental explicit NeuronCore placement API. See: :ref:`torch_neuron_core_placement_api`
+* Added new guide for NeuronCore placement. See: :ref:`torch_neuron_core_placement_guide`
+* Improved :func:`torch_neuron.trace` performance when using large graphs
+* Reduced host memory usage of loaded models in ``libtorchneuron.so``
+* Added ``single_fusion_ratio_threshold`` argument to :func:`torch_neuron.trace`
+  to give more fine-grained control of partitioned graphs
+
+
+
+Bug fixes
+~~~~~~~~~
+
+* Improved handling of tensor mutations which previously caused accuracy issues on certain models (i.e. yolor, yolov5)
+* Fixed an issue where ``inf`` and ``-inf`` values would cause unexpected ``NaN`` values. This could occur with newer versions of ``transformers``
+* Fixed an issue where :func:`torch.neuron.DataParallel` would not fully utilize all NeuronCores for specific batch sizes
+* Fixed and improved operators:
+    * ``aten::upsample_bilinear2d``: Improved error messages in cases where the operation cannot be supported
+    * ``aten::_convolution``: Added support for ``output_padding`` argument
+    * ``aten::div``: Added support for ``rounding_mode`` argument
+    * ``aten::sum``: Fixed to handle non-numeric data types
+    * ``aten::expand``: Fixed to handle scalar tensors
+    * ``aten::permute``: Fixed to handle negative indices
+    * ``aten::min``: Fixed to support more input types
+    * ``aten::max``: Fixed to support more input types
+    * ``aten::max_pool2d``: Fixed to support both 3-dimensional and 4-dimensional input tensors
+    * ``aten::Int``: Fixed an issue where long values would incorrectly lose precision
+    * ``aten::constant_pad_nd``: Fixed to correctly use non-0 padding values
+    * ``aten::pow``: Fixed to support more input types & values
+    * ``aten::avg_pool2d``: Added support for ``count_include_pad`` argument. Added support for ``ceil_mode`` argument if padding isn’t specified
+    * ``aten::zero``: Fixed to handle scalars correctly
+    * ``prim::Constant``: Fixed an issue where ``-inf`` was incorrectly handled
+    * Improved handling of scalars in arithmetic operators
+
 
 PyTorch Neuron release [2.3.0.0]
 --------------------------------------------------
@@ -94,7 +181,7 @@ New in this release
 Bug fixes
 ~~~~~~~~~
 
-* Added the ability to ``torch.jit.trace`` a ``torch.nn.Module`` where a submodule has already been traced with ``torch_neuron.trace`` on a CPU-type instance.
+* Added the ability to ``torch.jit.trace`` a ``torch.nn.Module`` where a submodule has already been traced with :func:`torch_neuron.trace` on a CPU-type instance.
   Previously, if this had been executed on a CPU-type instance, an initialization exception would have been thrown.
 * Fixed ``aten::matmul`` behavior on 1-dimensional by n-dimensional multiplies. Previously, this would cause a validation error.
 * Fixed binary operator type promotion. Previously, in unusual situations, operators like ``aten::mul`` could produce incorrect results due to invalid casting.

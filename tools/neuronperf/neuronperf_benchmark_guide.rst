@@ -13,8 +13,8 @@ That will depend how you provided your model and how your model was compiled.
 
 The two most common ways to provide your model are:
 
-1. Provide the path to your compiled model
-2. Provide the path to a model index from ``neuronperf.compile`` (a JSON file)
+#. Provide the path to your compiled model
+#. Provide the path to a model index from ``neuronperf.compile`` (a JSON file)
 
 Data Parallel
 ~~~~~~~~~~~~~
@@ -22,10 +22,10 @@ Data Parallel
 **If you choose 1, then...**
 
 Your model is benchmarked on provided ``inputs`` in 4 different configurations:
-   1. A single model on 1 NeuronCore with one worker (min. latency)
-   2. A single model on 1 NeuronCore with two workers (max. throughput / NC)
-   3. ``MAX`` models on ``MAX`` NeuronCores with one worker (min. latency + max. instance usage)
-   4. ``MAX`` models on ``MAX`` NeuronCores with two workers (max. throughput + max. instance usage)
+   #. A single model on 1 NeuronCore with one worker (min. latency)
+   #. A single model on 1 NeuronCore with two workers (max. throughput / NC)
+   #. ``MAX`` models on ``MAX`` NeuronCores with one worker (min. latency + max. instance usage)
+   #. ``MAX`` models on ``MAX`` NeuronCores with two workers (max. throughput + max. instance usage)
 
 The value ``MAX`` is automatically determined by your instance size. If it can't be identified, those configurations will be skipped.
 
@@ -33,8 +33,8 @@ The primary benefit of (3) and (4) is to verify that your model scales well at m
 
 **If you chose 2, then...**
 
-- Your input parameters to ``benchmark`` (``batch_sizes``, etc.) are treated as filters on the index
-- Each remaining model configuration is benchmarked as described in (1)
+* Your input parameters to ``benchmark`` (``batch_sizes``, etc.) are treated as filters on the index
+* Each remaining model configuration is benchmarked as described in (1)
 
 Pipeline
 ~~~~~~~~
@@ -47,11 +47,11 @@ Parameters
 
 Below are some useful and common parameters to tweak. Please see the :ref:`neuronperf_api` for full details.
 
-- ``n_models`` controls how many models to load. The default behavior is ``n_models=[1, MAX]``.
-- ``workers_per_model`` controls how many worker threads will be feeding inputs to each model. The default is automatically determined.
-- ``pipeline_sizes`` tells the benchmarker how many cores are needed for your model so that each model instance can be loaded properly. Default is 1.
-- ``duration`` controls how long to run each configuration.
-- ``batch_sizes`` is used to inform the benchmarker of your input shape so that throughput can be computed correctly.
+* ``n_models`` controls how many models to load. The default behavior is ``n_models=[1, MAX]``.
+* ``workers_per_model`` controls how many worker threads will be feeding inputs to each model. The default is automatically determined.
+* ``pipeline_sizes`` tells the benchmarker how many cores are needed for your model so that each model instance can be loaded properly. Default is 1.
+* ``duration`` controls how long to run each configuration.
+* ``batch_sizes`` is used to inform the benchmarker of your input shape so that throughput can be computed correctly.
 
 Almost all NeuronPerf behaviors are controllable via arguments found in the :ref:`neuronperf_api`. This guide attempts to provide some context and examples for those arguments.
 
@@ -79,14 +79,14 @@ In order for NeuronPerf to pass along your multiple inputs correctly, you should
 .. code:: python
 
 	inputs = (x, y, z)
-	neuronperf.torch.benchmark(model_filename, inputs, ...)
+	npf.torch.benchmark(model_filename, inputs, ...)
 
 If you are compiling and/or benchmarking multiple models, you can pass different sized inputs as a list of tuples:
 
 .. code:: python
 
 	inputs = [(x1, y1, z1), (x2, y2, z2), ...]
-	neuronperf.torch.benchmark(model_filename, inputs, ...)
+	npf.torch.benchmark(model_filename, inputs, ...)
 
 
 Preprocessing and Postprocessing
@@ -109,7 +109,7 @@ Here is an example for a model with one input. The example multiples the input b
     ...
 
     # Benchmark with custom preprocessing function
-    reports = neuronperf.torch.benchmark(
+    reports = npf.torch.benchmark(
             filename,
             inputs,
             ...,
@@ -126,7 +126,7 @@ Or if your model expects multiple inputs:
     ...
 
     # Benchmark with custom preprocessing function
-    reports = neuronperf.torch.benchmark(
+    reports = npf.torch.benchmark(
             filename,
             inputs,
             ...,
@@ -146,7 +146,7 @@ Postprocessing is almost identical to preprocessing, except that your function w
    ...
 
    # Benchmark with custom preprocessing function
-   reports = neuronperf.torch.benchmark(
+   reports = npf.torch.benchmark(
          filename,
          inputs,
          ...,
@@ -170,7 +170,7 @@ By default, NeuronPerf will try to pick try multiple combinations of model copie
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark('model_neuron_b1.pt', ..., workers_per_model=1)
+   reports = npf.torch.benchmark('model_neuron_b1.pt', ..., workers_per_model=1)
 
 
 You may also pass a list, as with other parameters:
@@ -178,7 +178,7 @@ You may also pass a list, as with other parameters:
 .. code:: python
 
    workers_per_model = [1, 2] # Same as the default for data parallel
-   reports = neuronperf.torch.benchmark('model_neuron_b1.pt', ..., workers_per_model=workers_per_model)
+   reports = npf.torch.benchmark('model_neuron_b1.pt', ..., workers_per_model=workers_per_model)
 
 With the default number of :ref:`neuronperf_model_copies`, a call to ``print_results`` might look like this:
 
@@ -204,14 +204,14 @@ You can override this behavior by passing ``n_models`` to ``benchmark``, as show
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark('model_neuron_b1.pt', ..., n_models=6)
+   reports = npf.torch.benchmark('model_neuron_b1.pt', ..., n_models=6)
 
 or
 
 .. code:: python
 
    n_models = list(range(1, 10))
-   reports = neuronperf.torch.benchmark('model_neuron_b1.pt', ..., n_models=n_models)
+   reports = npf.torch.benchmark('model_neuron_b1.pt', ..., n_models=n_models)
 
 .. _neuronperf_pipeline_mode:
 
@@ -220,20 +220,20 @@ Pipeline Mode
 
 By default, NeuronPerf will assume you intend to use DataParallel, with two exceptions:
 
-- You compiled your model using NeuronPerf for pipeline mode
-- You constructed a :ref:`neuronperf_model_index` that uses pipeline mode
+* You compiled your model using NeuronPerf for pipeline mode
+* You constructed a :ref:`neuronperf_model_index` that uses pipeline mode
 
 You can also manually tell NeuronPerf that your model was compiled for pipeline mode. It is similar to how other arguments are passed.
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark('model_neuron_b1.pt', ..., pipeline_sizes=2)
+   reports = npf.torch.benchmark('model_neuron_b1.pt', ..., pipeline_sizes=2)
 
 If you are passing multiple models in an index, then you should pass a list for ``pipeline_sizes``.
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark('model_index.json', ..., pipeline_sizes=[1, 2, 3])
+   reports = npf.torch.benchmark('model_index.json', ..., pipeline_sizes=[1, 2, 3])
 
 
 Duration
@@ -243,7 +243,7 @@ NeuronPerf will benchmark each configuration specified for 60 seconds by default
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark('model_index.json', ..., duration=10)
+   reports = npf.torch.benchmark('model_index.json', ..., duration=10)
 
 .. warning::
 
@@ -263,16 +263,16 @@ To use this API, call ``benchmark`` passing a ``torch.utils.data.Dataset`` to ``
 
    dataset = torchvision.datasets.FashionMNIST(
       root="data",
-      train=True,
+      train=False,
       download=True,
       transform=ToTensor()
    )
 
-   reports = neuronperf.torch.benchmark('model_index.json', inputs=dataset, dataset_inputs=True)
+   reports = npf.torch.benchmark('model_index.json', inputs=dataset, batch_sizes=[8], preprocess_fn=lambda x: x[0], loop_dataset=False)
 
 .. note::
 
-   If you also provide ``duration``, it must be long enough to run through the entire dataset, or benchmarking may terminate early with an error.
+   The ``preprocess_fn`` is required here to extract image input from the ``(image, label)`` tuple generated by dataloader. If the length of dataset is not sufficient to get the runtime performance, one can set ``loop_dataset=True`` to rerun dataset until certain duration. 
 
 Results
 -------
@@ -298,27 +298,28 @@ NeuronPerf automatically combines and summarizes the detailed timing information
 
 .. code:: python
 
-   results = neuronperf.torch.benchmark('model_index.json', ..., return_timers=True)
+   results = npf.torch.benchmark('model_index.json', ..., return_timers=True)
 
 If you later wish to produce reports the same way that NeuronPerf does internally, you can call:
 
 .. code:: python
 
-   reports = neuronperf.get_reports(results)
+   reports = npf.get_reports(results)
 
 Verbosity
 ---------
 
 Verbosity is an integer, currently one of ``{0, 1, 2}``, where:
-   - 0 = SILENT
-   - 1 = INFO (default)
-   - 2 = VERBOSE / DEBUG
+
+* 0 = SILENT
+* 1 = INFO (default)
+* 2 = VERBOSE / DEBUG
 
 Example:
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark(..., n_models=1, duration=5, verbosity=2)
+   reports = npf.torch.benchmark(..., n_models=1, duration=5, verbosity=2)
 
 .. code:: bash
 
@@ -346,13 +347,64 @@ If you suspect you are having trouble due to the way processes are managed, you 
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark(..., multiprocess=False)
+   reports = npf.torch.benchmark(..., multiprocess=False)
 
 Default is ``True``, and ``False`` will disable multiprocessing and run everything inside a single parent process. This may not work for all frameworks beyond the first model configuration, because process teardown is used to safely deallocate models from the hardware. It is not recommeneded to benchmark this way.
 
 
 .. code:: python
 
-   reports = neuronperf.torch.benchmark(..., multiinterpreter=True)
+   reports = npf.torch.benchmark(..., multiinterpreter=True)
 
 This flag controls whether a fresh interpreter is used instead of forking. Defaults to ``False`` except with Tensorflow/Keras.
+
+
+.. _npf-cpu-gpu:
+
+Benchmark on CPU or GPU
+-----------------------
+
+When benchmarking on CPU or GPU, the API is slightly different. With CPU or GPU, there is no compiled model to benchmark, so instead we need to directly pass a reference to the model class that will be instantiated.
+
+.. note::
+
+   GPU benchmarking is currently only available for PyTorch.
+
+CPU:
+
+.. code:: python
+
+   cpu_reports = npf.cpu.benchmark(YourModelClass, ...)
+
+GPU:
+
+.. code:: python
+
+   gpu_reports = npf.torch.benchmark(YourModelClass, ..., device_type="gpu")
+
+
+Your model class will be instantiated in a subprocess, so there are some things to keep in mind.
+
+* Your model class must be defined at the top level inside a Python module
+   * i.e. don't place your model class definition inside a function or other nested scope
+* If your model class has special Python module dependencies, consider importing them inside your class ``__init__``
+* If your model class expects constructor arguments, wrap your class so that it has no constructor arguments
+
+
+Example of a wrapped model class for CPU/GPU benchmarking:
+
+.. code:: python
+
+   class ModelWrapper(torch.nn.Module):
+      def __init__(self):
+         super().__init__()
+         from transformers import AutoModelForSequenceClassification
+         model_name = "bert-base-cased"
+         self.bert = AutoModelForSequenceClassification.from_pretrained(model_name, return_dict=False)
+         self.add_module(model_name, self.bert)
+
+      def forward(self, *inputs):
+         return self.bert(*inputs)
+
+
+   reports = npf.torch.benchmark(ModelWrapper, inputs, device_type="gpu")

@@ -76,8 +76,7 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
                                 .. toctree::
                                         :hidden:
 
-                                        /frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving
-                                        /frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronCore-Group
+                                        /frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronRT-Visible-Cores
 
 
 
@@ -107,6 +106,7 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
 
                     /frameworks/tensorflow/tensorflow-neuron/api-tracing-python-api
                     /frameworks/tensorflow/tensorflow-neuron/api-compilation-python-api
+                    /frameworks/tensorflow/tensorflow-neuron/api-auto-replication-api
 
         .. dropdown::  
                 :class-title: sphinx-design-class-title-med

@@ -33,6 +33,7 @@ NeuronPerf User Guide
    Terminology <neuronperf_terminology>
    Examples <neuronperf_examples>
    Benchmark Guide <neuronperf_benchmark_guide>
+   Evaluate Guide <neuronperf_evaluate_guide>
    Compile Guide <neuronperf_compile_guide>
    Model Index Guide <neuronperf_model_index_guide>
 

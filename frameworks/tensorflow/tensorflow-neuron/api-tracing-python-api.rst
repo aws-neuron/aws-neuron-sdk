@@ -71,6 +71,29 @@ Arguments
     ``subgraph_builder_function(node)`` returns ``False``, then ``trace``
     will place ``node`` on CPU.
 
+Special Flags
+-------------
+
+These are flags that get passed directly to the Neuron tracing API
+(rather than the Neuron Compiler). The flags are still passed
+via the environment variable ``NEURON_CC_FLAGS``.
+
+-   **workdir:** example usage - ``NEURON_CC_FLAGS='--workdir ./artifacts'``
+    will create a folder named artifacts in the current directory and
+    save artifacts that can be used for debug.
+-   **dynamic-batch-size:** example usage -
+    ``NEURON_CC_FLAGS='--dynamic-batch-size'`` A flag to allow Neuron graphs to
+    consume variable sized batches of data. Dynamic sizing is restricted to the
+    0th dimension of a tensor.
+-   **extract-weights (EXPERIMENTAL):** example usage -
+    ``NEURON_CC_FLAGS='--extract-weights'`` will reduce the compiled
+    model's protobuf size by taking the weights out of the protobuf.
+    Useful for compiling large models that would exceed the 2GB protobuf
+    size limit. This feature is experimental. Model performance is not
+    guaranteed and the flag does not work in combination with
+    ``--neuroncore-pipeline-cores``, ``--dynamic-batch-size``, and models with
+    multiple NEFFs. Compiles models for the inf1.2xlarge instance.
+
 Returns
 -------
 

@@ -1,7 +1,7 @@
 import torch
 import torch.neuron
 
-import neuronperf
+import neuronperf as npf
 import neuronperf.torch
 
 
@@ -25,8 +25,8 @@ model_neuron = torch.neuron.trace(model, inputs)
 model_neuron.save("model_neuron_b1.pt")
 
 # Benchmark
-reports = neuronperf.torch.benchmark("model_neuron_b1.pt", inputs, batch_sizes)
+reports = npf.torch.benchmark("model_neuron_b1.pt", inputs, batch_sizes)
 
 # View and save results
-neuronperf.print_reports(reports)
-neuronperf.write_csv(reports, "model_neuron_b1.csv")
+npf.print_reports(reports)
+npf.write_csv(reports, "model_neuron_b1.csv")

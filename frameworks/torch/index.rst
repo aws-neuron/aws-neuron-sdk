@@ -206,6 +206,7 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
                     PyTorch Neuron trace Python API </frameworks/torch/torch-neuron/api-compilation-python-api>
                     torch.neuron.DataParallel API </frameworks/torch/torch-neuron/api-torch-neuron-dataparallel-api>
+                    /frameworks/torch/torch-neuron/api-core-placement
 
         .. dropdown:: Developer Guide (``torch-neuron``)
                 :class-title: sphinx-design-class-title-med
@@ -216,7 +217,8 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
                     Running Inference on Variable Input Shapes with Bucketing </general/appnotes/torch-neuron/bucketing-app-note>                    
                     Data Parallel Inference on PyTorch Neuron </general/appnotes/torch-neuron/torch-neuron-dataparallel-app-note>
-
+                    /frameworks/torch/torch-neuron/guides/torch-lstm-support
+                    /frameworks/torch/torch-neuron/guides/core-placement/torch-core-placement
 
         .. dropdown:: 
                 :class-title: sphinx-design-class-title-med
