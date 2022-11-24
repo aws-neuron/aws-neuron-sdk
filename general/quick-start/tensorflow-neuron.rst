@@ -41,17 +41,25 @@ This page provide links that will assist you to quickly start with :ref:`tensorf
 
 			# Update OS packages
 			sudo yum update -y
+			
+			################################################################################################################
+			# Remove older versions of Neuron
+			################################################################################################################
+			sudo yum remove aws-neuron-dkms -y
+			sudo yum remove aws-neuronx-dkms -y
+			sudo yum remove aws-neuron-tools -y
+			sudo yum remove aws-neuronx-tools -y
 
 			################################################################################################################
-			# To install or update to Neuron versions 1.19.1 and newer from previous releases:
-			# - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
+			# To install or update to Neuron versions 2.5 and newer from previous releases:
+			# - DO NOT skip 'aws-neuronx-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
 			################################################################################################################
 
 			# Install OS headers
 			sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 
 			# Install Neuron Driver
-			sudo yum install aws-neuron-dkms -y
+			sudo yum install aws-neuronx-dkms-2.* -y
 
 			####################################################################################
 			# Warning: If Linux kernel is updated as a result of OS package update
@@ -59,7 +67,7 @@ This page provide links that will assist you to quickly start with :ref:`tensorf
 			####################################################################################
 
 			# Install Neuron Tools
-			sudo yum install aws-neuron-tools -y
+			sudo yum install aws-neuronx-tools=2.* -y
 
 			export PATH=/opt/aws/neuron/bin:$PATH
 
