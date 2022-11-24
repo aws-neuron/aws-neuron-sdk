@@ -136,7 +136,11 @@ intersphinx_mapping = {
 
 #top_banner_message="<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>"
 
-top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
+#top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
+
+
+top_banner_message="Neuron release 2.5 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
+
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
