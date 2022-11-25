@@ -112,9 +112,11 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
 
                .. tab-item:: Training
 
-                  .. note::
+                  .. toctree::
+                     :maxdepth: 1
 
-                     AWS Sagemaker support is coming soon.
+                     /general/devflows/training/sm-devflow/sm-training-devflow
+
 
    .. dropdown::  AWS ParallelCluster
          :class-title: sphinx-design-class-title-med
