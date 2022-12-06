@@ -80,10 +80,14 @@ If ``aws-neuron-dkms`` is installed but does not support the latest runtime then
 
  2021-Aug-11 19:18:21.0661 24616:24616 ERROR   NRT:nrt_init      This runtime requires Neuron Driver version 2.0 or greater. Please upgrade aws-neuron-dkms package.
 
+When using any supported framework from Neuron SDK version 2.5.0 and Neuron Driver (aws-neuron-dkms) versions 2.4 or older, Neuron Runtime will return the following error message::
+
+  2022-Dec-01 09:34:12.0559   138:138   ERROR   HAL:aws_hal_tpb_pooling_write_profile       failed programming the engine
+
 Solution
 ''''''''
 
-Please follow the installation steps in :ref:`install-guide-setup` to install ``aws-neuron-dkms``.
+Please follow the installation steps in :ref:`setup-guide-index` to install ``aws-neuronx-dkms``.
 
 ------------
 

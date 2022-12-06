@@ -1,7 +1,7 @@
 .. _neuron-plugin-tensorboard:
 
-Neuron Plugin for TensorBoard
-=============================
+Neuron Plugin for TensorBoard (Inf1)
+====================================
 
 .. contents:: Table of Contents
   :local:
@@ -17,19 +17,17 @@ model is executed using Neuron SDK through TensorBoard.
 The Neuron plugin for TensorBoard provides metrics to the performance of machine learning tasks accelerated using the Neuron SDK. It is
 compatible with TensorBoard versions 1.15 and higher. It provides visualizations and profiling results for graphs executed on NeuronCores.
 
+.. note::
+
+    The following information is compatible with Neuron SDK for Inf1.  For a walkthrough on the latest version, please check out the guide
+    :ref:`neuronx-plugin-tensorboard`.
+
 .. note:: 
 
    Graph visualization is currently only supported for TensorFlow-Neuron.  Support
    for MXNet-Neuron and PyTorch-Neuron visualization will be added in a future
    release.
 
-
-Setup Environment
------------------
-
-   * :ref:`pytorch-quickstart`
-   * :ref:`tensorflow-quickstart`
-   * :ref:`mxnet-quickstart`
 
 Compile the neural network
 --------------------------

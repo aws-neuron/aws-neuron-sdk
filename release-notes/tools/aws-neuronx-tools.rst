@@ -8,6 +8,17 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.6.0.0]
+-------------------------
+Date: 12/09/2022
+
+This release adds support for profiling with the Neuron Plugin for TensorBoard on TRN1.  Please check out the documentation :ref:`neuronx-plugin-tensorboard`.
+
+New in the release:
+
+* Updated profile post-processing for workloads executed on TRN1 
+
+
 Neuron Tools  [2.5.19.0]
 -------------------------
 Date: 11/07/2022
@@ -34,6 +45,7 @@ Bug Fixes:
 
 * Fix a rare crash in ``neuron-top`` when the instance is under heavy CPU load.
 * Fix process names on the bottom tab bar of ``neuron-top`` sometimes disappearing for smaller terminal window sizes.
+
 
 Neuron Tools  [2.4.6.0]
 -------------------------

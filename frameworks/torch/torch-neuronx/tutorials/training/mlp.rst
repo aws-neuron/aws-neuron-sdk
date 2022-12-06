@@ -39,7 +39,9 @@ Install needed dependencies in your environment by running:
 
 .. code:: bash
 
-    pip install pillow torchvision==0.12 --no-deps
+    pip install pillow
+
+Torchvision package is needed for MNIST dataset and has already been installed as part of :ref:`Install PyTorch Neuron on Trn1 <pytorch-neuronx-install>`. Installing Torchvision together with torch-neuronx ensures that the compatible version of Torchvision is selected. For example, torchvision==0.12 is compatible with torch==1.11 and torchvision==0.13 is compatible with torch==1.12.
     
 To download the MNIST MLP examples, do:
 

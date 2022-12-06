@@ -98,7 +98,7 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
 			pip install awscli
 
 			# Install Neuron packages
-			pip install torch-neuronx==1.11.0.1.*
+			pip install torch-neuronx==1.12.0.1.*
 			pip install neuronx-cc==2.*
 
 

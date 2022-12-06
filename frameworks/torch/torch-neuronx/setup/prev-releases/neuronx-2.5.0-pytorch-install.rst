@@ -1,6 +1,6 @@
-.. _install-neuronx-2.4.0-pytorch:
+.. _install-neuronx-2.5.0-pytorch:
 
-Install PyTorch Neuron (Neuron 2.4.0)
+Install PyTorch Neuron (Neuron 2.5.0)
 ======================================
 
 .. tab-set::
@@ -69,7 +69,7 @@ Install PyTorch Neuron (Neuron 2.4.0)
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
         
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73" torchvision
+		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"
 
 
          .. tab-item:: Amazon Linux 2 AMI
@@ -133,4 +133,4 @@ Install PyTorch Neuron (Neuron 2.4.0)
 		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 		
 		# Install Python packages - Transformers package is needed for BERT
-		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73" torchvision
+		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"

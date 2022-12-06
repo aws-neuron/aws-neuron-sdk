@@ -10,24 +10,34 @@ Neuron Plugin for TensorBoard Release Notes
    :depth: 1
 
 
-Known Issues and Limitations - Updated 5/28/2021
+Known Issues and Limitations - Updated 11/29/2022
 ================================================
 
 The following are not limitations in the Neuron plugin, but may affect your ability to
 use TensorBoard.
 
-- In the DLAMI TensorFlow-Neuron Conda environment, attempting to run ``tensorboard``
-  with the existing version of tensorboard will fail.  Please update the tensorboard
-  version before installing the Neuron plugin by running ``pip install tensorboard --force-reinstall``.
+- The Neuron plugin for Trn1 (``tensorboard-plugin-neuronx``) is not compatible with the Neuron plugin
+  for Inf1 (``tensorboard-plugin-neuron``).  Please ensure you only have only the correct package installed.
 
-.. code-block::
 
-   Traceback (most recent call last):
-   File "/home/ubuntu/anaconda3/envs/aws_neuron_tensorflow_p36/bin/tensorboard", line 7, in <module>
-      from tensorflow.tensorboard.tensorboard import main
-   ModuleNotFoundError: No module named 'tensorflow.tensorboard'
+Neuron Plugin for TensorBoard release [2.5.0.0]
+===============================================
 
-.. _2.1.2.0:
+Date: 12/09/2022
+
+Summary
+-------
+
+- Added support for PyTorch Neuron on Trn1 (``torch-neuronx``) with new views!  Includes a trace view,
+  an operator view, and an operator timeline view.  For more info, check out the documentation
+  :ref:`neuronx-plugin-tensorboard`.
+
+  .. important::
+
+    - You must update to the latest Neuron Tools (``aws-neuronx-tools`` version 2.6 or newer) and install
+      ``tensorboard-plugin-neuronx`` for proper functionality of the Neuron plugin on Trn1.
+    - For Inf1, please continue to use ``tensorboard-plugin-neuron``.  Refer to the getting started guide
+      on Inf1 :ref:`neuron-plugin-tensorboard`.
 
 
 Neuron Plugin for TensorBoard release [2.4.0.0]

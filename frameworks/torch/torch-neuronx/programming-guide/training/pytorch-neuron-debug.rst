@@ -368,3 +368,130 @@ script for debugging.
 Note: If you are running your training script in a docker container, to view the
 tensorboard, you should launch the docker container using flag: ``--network host``
 eg. ``docker run --network host my_image:my_tag``
+
+
+.. _torch-neuronx-snapshotting:
+
+**Snapshotting**
+~~~~~~~~~~~~~~~~
+
+Snapshotting models can be used to dump debug information that can then be sent 
+to the Neuron team. Neuron execution relies on a series of compiled graphs. Internally,
+graph HLOs are used as an intermediate representation which is then compiled. Then, during 
+execution, the graph inputs are passed to the Neuron runtime, which produces 
+outputs using the compiled graph. Snapshotting saves the inputs to a graph 
+execution, executes the graphs, saves the outputs of the execution, and then 
+bundles and dumps the inputs, outputs and graph HLO in one file. This is 
+illustrated here:
+
+.. image :: /images/./snapshot-diagram.png
+   :alt: Image: snapshot-diagram.png
+
+This feature can be enabled using the following environment variables, 
+which can be set at the beginning of your script as follows. 
+
+.. code:: python
+
+   ....
+   os.environ["XLA_FLAGS"] = " --xla_dump_to=dump"
+   os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
+   os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "1"
+   ....
+
+
+This set of environment variables will produce snapshots under the dump 
+folder with the extensions ``.hlo.snapshot.pb`` or ``.decomposed_hlo_snapshot`` 
+at every iteration. For example a file that looks like the following would 
+be produced.
+
+.. code:: bash
+
+   dump/module_SyncTensorsGraph.387.pid_12643.execution_7496.hlo_snapshot.pb
+
+The dumping environment variable can be set and unset at specific 
+iterations as shown in the following example.
+
+.. code:: python
+
+    ....
+    for step in range(STEPS):
+        if step == 20:
+            os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "1"
+        else:
+            os.environ.pop('NEURON_DUMP_HLO_SNAPSHOT', None)
+        train_x = torch.randn(BATCH_SIZE, 28, 28)
+        train_x = train_x.to(device)
+        loss = model(train_x)
+        loss.backward()
+        optimizer.step()
+        xm.mark_step()
+    ....
+
+
+Additionally, we provide capabilities to snapshot graphs automatically. 
+The environment variables above can be set as follows:
+
+.. code:: python
+
+    ....
+    os.environ["XLA_FLAGS"] = " --xla_dump_to=dump"
+    os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
+    os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR"
+    ....
+
+When unexpected errors such as a graph execution producing NaNs occurs, 
+snapshots will be automatically produced and execution will be terminated. 
+Occasionally, for larger models, automatic snapshotting may not capture 
+snapshots due to the device memory being exhausted. In this case, the above 
+flag can be set to 
+``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_HYBRID"``, this 
+will allocate memory for inputs on both the device and host memory. 
+In some additional cases, this may still go out of memory and may need to be 
+set to ``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_CPU"`` to 
+avoid allocating any memory on the device at all for automatic snapshotting.
+
+**Snapshot FAQs:**
+---------
+
+**When should I use this features?**
+
+This feature should be used when debugging errors that requires interfacing 
+with and providing debug data to the Neuron team. Snapshotting may be redundant 
+and unnecessary in some situations. For example, when only the model weights are 
+necessary for debugging, methods such as checkpointing may be more convenient to use.
+
+**What sort of data is captured with these snapshots?**
+
+The type of data captured by these snapshots may include model graphs in HLO form, 
+weights/parameters, optimizer states, intermediate tensors and gradients. 
+This data may be considered sensitive and this should be taken into account before 
+sending the data to the Neuron team.
+
+**What is the size of these snapshots?**
+
+The size of snapshots can be significant for larger models such as GPT or BERT 
+with several GBs worth of data for larger graphs, so it is recommended to check 
+that sufficient disk space exists before using snapshotting. In addition, limiting 
+the amount of snapshots taken in a run will help to preserve disk space. 
+
+**Will snapshotting add overhead to my execution?**
+
+Snapshotting does add a small overhead to the execution in most cases. This 
+overhead can be significant if snapshots are dumped at every iteration. In 
+order to alleviate some of this overhead, in the case that snapshotting is 
+not necessary on all cores the following environment variable can be set to 
+collect snapshots only on the first core. In addition, checkpointing in tandem 
+with snapshotting can be useful to reduce overhead. A checkpoint close to 
+the problem iteration can be captured, then execution resumed with 
+snapshots enabled. 
+
+.. code:: python
+
+    ....
+    os.environ["NEURON_NC0_ONLY_SNAPSHOT"] = "1"
+    ....
+
+**How can I share snapshots with the Neuron team?**
+
+These snapshots can be shared with the Neuron team via S3 bucket.
+

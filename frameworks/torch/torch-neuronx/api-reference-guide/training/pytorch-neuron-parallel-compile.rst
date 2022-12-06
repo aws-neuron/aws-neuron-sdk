@@ -13,7 +13,7 @@ incurring huge compilation penalty.
 To reduce this compilation time during execution, the ``neuron_parallel_compile``
 utility is provided as part of PyTorch Neuron installation. The
 ``neuron_parallel_compile`` will extract graphs from a trial run of your script,
-perform parallel pre-compilation of the graphs, and populate the neuron cache
+perform parallel pre-compilation of the graphs, and populate the Neuron Cache
 on disk with compiled graphs. Your trial run should be limited to a few steps
 (eg.10-15), enough for the utility to extract the different graphs needed for
 full execution. To run the utility:
@@ -38,7 +38,7 @@ extraction mode. In this mode, no real execution is performed and the outputs
 are invalid.
 
 Once the ``neuron_parallel_compile`` finishes compilation of all graphs, it will copy
-all the compilation results into the neuron cache.
+all the compilation results into the Neuron Cache.
 
 Now if you run your script (without ``neuron_parallel_compile``), it will be faster
 since the compiled graphs are already cached.

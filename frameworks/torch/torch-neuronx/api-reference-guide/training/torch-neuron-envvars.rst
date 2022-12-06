@@ -52,16 +52,36 @@ PyTorch Neuron are (experimental ones are noted):
   a crash in the training script would be ignored and the graphs collected upto the crash would be
   compiled.
 
+``NEURON_DUMP_HLO_SNAPSHOT`` **[Experimental]**:
+
+- Dump the inputs, outputs, and graph in HLO format of a graph execution in a snapshot file. This
+  variable can be set to ``1``, ``ON_NRT_ERROR``, ``ON_NRT_ERROR_CPU``, ``ON_NRT_ERROR_HYBRID`` to
+  dump snapshots at every iteration using CPU memory, or dump only on errors automatically using
+  device, host, and both device and host memory respectively.
+
+``NEURON_NC0_ONLY_SNAPSHOT`` **[Experimental]**:
+
+- Dump only the snapshot associated with Neuron Core 0 when ``NEURON_NC0_ONLY_SNAPSHOT=1`` and 
+  the ``NEURON_DUMP_HLO_SNAPSHOT`` flag is set.
+
+
 ``BUCKET_CAP_MB`` **[PyTorch XLA]**:
 
 - If there are many parameters, such as in BERT training, small allreduce sizes can limit performance. To improve performance, you can try increasing the bucket size using ``BUCKET_CAP_MB`` environment variable, which is set to 50MB by default. For example, BERT pretraining on multiple instances can see improved performance with ``BUCKET_CAP_MB=512``.
 
 ``XLA_USE_BF16`` **[PyTorch XLA]**:
 
-- When ``XLA_USE_BF16=1``, PyTorch Neuron will automatically map torch.float and torch.double tensors
+- When ``XLA_USE_BF16=1``, PyTorch Neuron will automatically map both torch.float and torch.double tensors
   to bfloat16 tensors and turn on Stochastic Rounding mode. This can both reduce memory footprint and improve performance.
   Example: to enable bfloat16 autocasting and stochastic rounding, set XLA_USE_BF16=1 only, as
-  stochastic rounding mode is on by default when XLA_USE_BF16=1.
+  stochastic rounding mode is on by default when XLA_USE_BF16=1. If you would like to preserve some tensors in float32, see ``XLA_DOWNCAST_BF16`` below.
+
+``XLA_DOWNCAST_BF16`` **[PyTorch XLA]**:
+
+- When ``XLA_DOWNCAST_BF16=1``, PyTorch Neuron will automatically map torch.float tensors to bfloat16 tensors, torch.double tensors
+  to float32 tensors and turn on Stochastic Rounding mode. This can both reduce memory footprint and improve performance, while preserving some tensors in float32.
+  Example: to enable float to bfloat16 and double to float autocasting and stochastic rounding, set XLA_DOWNCAST_BF16=1 only, as
+  stochastic rounding mode is on by default when XLA_DOWNCAST_BF16=1. If you want to cast both torch.float and torch.double to bfloat16, please see ``XLA_USE_BF16`` above.
 
 ``NEURON_RT_STOCHASTIC_ROUNDING_EN`` **[Neuron Runtime]**:
 
@@ -69,7 +89,7 @@ PyTorch Neuron are (experimental ones are noted):
   round-nearest-even for all internal rounding operations when casting from FP32 to a reduced precision data type (FP16, BF16, FP8, TF32).
   This feature has been shown to improve
   training convergence for reduced precision training jobs, such as when bfloat16 autocasting is
-  enabled. This is set to 1 by default by PyTorch Neuron when XLA_USE_BF16=1. To switch to round-nearest-even mode, please set ``NEURON_RT_STOCHASTIC_ROUNDING_EN=0``.
+  enabled. This is set to 1 by default by PyTorch Neuron when XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1. To switch to round-nearest-even mode, please set ``NEURON_RT_STOCHASTIC_ROUNDING_EN=0``.
 
 ``NEURON_RT_STOCHASTIC_ROUNDING_SEED`` **[Neuron Runtime]**:
 
