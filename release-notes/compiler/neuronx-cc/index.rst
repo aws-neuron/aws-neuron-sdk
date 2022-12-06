@@ -7,6 +7,15 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
+Neuron Compiler [2.x.y.z]
+-----------------------------
+Date: 12/08/2022
+
+* Added support for the following HLO operators: ``rev (reverse)`` [https://www.tensorflow.org/xla/operation_semantics#rev_reverse]
+* The ``pow()`` function can now handle both integer and floating-point exponents.
+* Optimization enhancements and bug fixes to improve model execution performance.
+
+
 Neuron Compiler [2.2.0.73]
 -----------------------------
 Date: 10/27/2022
