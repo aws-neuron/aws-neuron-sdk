@@ -7,11 +7,11 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
-Neuron Compiler [2.x.y.z]
+Neuron Compiler [2.3.y.z]
 -----------------------------
-Date: 12/08/2022
+Date: 12/09/2022
 
-* Added support for the following HLO operators: ``rev (reverse)`` [https://www.tensorflow.org/xla/operation_semantics#rev_reverse]
+* Added support for the following HLO operators: ``rev (reverse)``.
 * The ``pow()`` function can now handle both integer and floating-point exponents.
 * Optimization enhancements and bug fixes to improve model execution performance.
 
@@ -49,9 +49,22 @@ allows the user to make tradeoffs between higher performance and optimal accurac
 The decision on what option argument to use with the ``--auto-cast`` option will be
 application specific. Compiler CLI options can be passed to the compiler via the framework.
 
+Known issues
+^^^^^^^^^^^^
+
+-  The Random Number Generator operation can be passed an initial seed
+   value, however setting the seed is not supported in this release.
+-  The exponent value of the pow() function must be a compile-time
+   integer constant.
+-  The compiler treats INT64 datatypes as INT32 by truncating the
+   high-order bits. If possible, cast these values to 32 bits .
+-  Model compilation time is proportional to the model size and
+   operators used. For some larger NLP models it may be upwards of 30
+   minutes.
+
 
 Supported Operators
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 The following XLA operators are supported by the Neuron Compiler. 
 Future releases will broaden model support by providing additional XLA operators defined in
@@ -156,6 +169,8 @@ The list of supported operators can also be retrieved from the command line usin
 +-------------------------+-------------------------------------------+
 | Reshape                 |                                           |
 +-------------------------+-------------------------------------------+
+| Rev (reverse)           |                                           |
++-------------------------+-------------------------------------------+
 | RngBitGenerator         | Ignores user seed                         |
 +-------------------------+-------------------------------------------+
 | RngUniform              |                                           |
@@ -185,16 +200,3 @@ The list of supported operators can also be retrieved from the command line usin
 | Tuple                   |                                           |
 +-------------------------+-------------------------------------------+
 
-
-Known issues
-^^^^^^^^^^^^
-
--  The Random Number Generator operation can be passed an initial seed
-   value, however setting the seed is not supported in this release.
--  The exponent value of the pow() function must be a compile-time
-   integer constant.
--  The compiler treats INT64 datatypes as INT32 by truncating the
-   high-order bits. If possible, cast these values to 32 bits .
--  Model compilation time is proportional to the model size and
-   operators used. For some larger NLP models it may be upwards of 30
-   minutes.
