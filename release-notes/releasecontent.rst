@@ -9,6 +9,7 @@ Release Content
 
 
 .. _latest-neuron-release-content:
+.. _neuron-2.5.0-release-content:
 
 Neuron 2.5.0 (11/23/2022) - Content
 --------------------------------------
