@@ -10,6 +10,44 @@ PyTorch Neuron (``torch-neuronx``) release notes
 PyTorch Neuron for Trainium is a software package that enables PyTorch
 users to train their models on Trainium.
 
+Release [1.12.0.1.4.0]
+----------------------
+Date: 12/12/2022
+
+Summary
+~~~~~~~
+
+What’s new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for PyTorch 1.12.
+- Setting XLA_DOWNCAST_BF16=1 now also enables stochastic rounding by default (as done with XLA_USE_BF16=1).
+- Added support for :ref:`capturing snapshots <torch-neuronx-snapshotting>` of inputs, outputs and graph HLO for debug.
+- Fixed issue with parallel compile error when both train and evaluation are enabled in HuggingFace fine-tuning tutorial.
+- Added support for LAMB optimizer in FP32 mode.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning or pretraining with XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add the line ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to your Python training script (as now done in latest tutorials). `A permanent fix <https://github.com/huggingface/transformers/pull/20562>`_ will become part of an upcoming HuggingFace transformers release.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this release, convolution is not supported.
+
+Number of data parallel training workers on one Trn1 instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The number of workers used in single-instance data parallel
+training can be one of the following values: 1 or 2 for trn1.2xlarge and 1, 2, 8 or 32 for trn1.32xlarge.
+
 Release [1.11.0.1.2.0]
 ----------------------
 Date: 10/27/2022

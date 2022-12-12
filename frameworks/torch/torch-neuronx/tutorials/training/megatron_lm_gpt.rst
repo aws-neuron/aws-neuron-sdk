@@ -156,6 +156,8 @@ See `this link <https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/argumen
 The script for running on a single node is available at
 ``~/aws-neuron-reference-for-megatron-lm/examples/pretrain_gpt3_6.7B_32layers_bf16.sh``
 
+This shell script expects dataset files to be located in ~/examples_datasets/gpt2/ following the steps above. If you place the dataset files in another location, please update the DATA_PATH variable in the shell script.
+
 Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

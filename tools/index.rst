@@ -29,24 +29,18 @@ Neuron provides debugging and profiling tools with the visualization support of 
 
     /tools/tensorboard/index
 
-.. dropdown::  TensorBoard 
+.. dropdown::  TensorBoard Plugin for Neuron
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
 
-        .. tab-set::  
+        * :ref:`neuronx-plugin-tensorboard`
+        * :ref:`neuron-plugin-tensorboard`
+        * :ref:`What's New <neuron-tensorboard-rn>`
 
-            .. tab-item:: TensorBoard for Trn1
 
-                * :ref:`tb_track_training_minst`
-
-            
-        .. tab-set:: 
-
-            .. tab-item:: TensorBoard for Inf1
-
-                :ref:`neuron-plugin-tensorboard`
+                
 
 
 
@@ -77,12 +71,7 @@ Neuron provides debugging and profiling tools with the visualization support of 
 
         * :ref:`neuronperf`
 
-.. toctree:: 
-    :maxdepth: 1
-    :hidden:
-
-    /tools/tutorials/index
-
+                    
 .. dropdown::  Tutorials 
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
@@ -90,10 +79,16 @@ Neuron provides debugging and profiling tools with the visualization support of 
 
         .. tab-set:: 
 
-            .. tab-item:: Tools Tutorials for Trn1
+            .. tab-item:: TensorBoard
 
+                * :ref:`neuronx-plugin-tensorboard`
                 * :ref:`tb_track_training_minst`
+                * :ref:`torch-neuronx-profiling-with-tb`
+
+            .. tab-item:: System Tools
+
                 * :ref:`track-system-monitor`
+
 
 
 

@@ -279,13 +279,14 @@ compiled and executed if there are extra mark-steps or functions with
 implicit mark-steps. Additionally, more graphs can be generated if there
 are different execution paths taken due to control-flows.
 
-Cast all XLA float tensors to BFloat16
---------------------------------------
+Automatic casting of float tensors to BFloat16
+----------------------------------------------
 
 With PyTorch Neuron, the default behavior is for torch.float (FP32) and torch.double (FP64) tensors
 to be mapped to torch.float in hardware. To reduce memory footprint and improve performance,
 torch.float and torch.double tensors can automatically be converted to BFloat16 by setting
-the environment variable ``XLA_USE_BF16=1``.
+the environment variable ``XLA_USE_BF16=1``. Alternatively, torch.float can automatically be converted 
+to BFloat16 and torch.double converted to FP32 by setting the environment variable ``XLA_DOWNCAST_BF16=1``.
 
 Automatic Mixed-Precision
 -------------------------
@@ -299,7 +300,7 @@ do the casting. PyTorch's BF16 mixed-precision is achieved by casting
 certain operations to operate BF16. We currently use CUDA's list of
 operations that can operate in BF16:
 
-(NOTE: convolution is currently supported.)
+(NOTE: Although convolution is in the list below, it is currently unsupported by Neuron. See :ref:`model-architecture-fit`)
 
 .. code:: bash
 
@@ -339,7 +340,7 @@ compiler auto-cast:
 
 .. code:: python
 
-   os.environ["NEURON_CC_FLAGS"] = "--fast-math=none"
+   os.environ["NEURON_CC_FLAGS"] = "--auto-cast=none"
 
 Next, overwrite torch.cuda.is_bf16_supported to return True:
 
@@ -376,7 +377,7 @@ The following shows the training loop modified to use BF16 autocast:
 
 .. code:: python
 
-   os.environ["NEURON_CC_FLAGS"] = "--fast-math=none"
+   os.environ["NEURON_CC_FLAGS"] = "--auto-cast=none"
 
    def train_loop_fn(train_loader):
        for i, data in enumerate(train_loader):
@@ -449,6 +450,12 @@ PyTorch/XLA's model save function to properly checkpoint your model. For
 more information about the function, see
 `torch_xla.core.xla_model.save <https://pytorch.org/xla/release/1.9/index.html#torch_xla.core.xla_model.save>`__
 in the *PyTorch on XLA Devices* documentation.
+
+When training using multiple devices, ``xla_model.save`` can result in high host memory usage. If you see such high usage 
+causing the host to run out of memory, please use `torch_xla.utils.serialization.save <https://pytorch.org/xla/release/1.9/index.html#torch_xla.utils.serialization.save>`__ .
+This would save the model in a serialized manner. When saved using the ``serialization.save`` api, the model should 
+be loaded using ``serialization.load`` api. More information on this here: `Saving and Loading Tensors <https://pytorch.org/xla/release/1.9/index.html#saving-and-loading-xla-tensors>`__
+
 
 FAQ
 ---

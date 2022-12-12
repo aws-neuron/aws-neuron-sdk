@@ -8,6 +8,7 @@ Install previous PyTorch Neuron releases (``torch-neuron``)
 .. toctree::
    :maxdepth: 1
 
+   Neuron 2.5.0 </frameworks/torch/torch-neuron/setup/prev-releases/neuron-2.5.0-pytorch-install>
    Neuron 2.4.0 </frameworks/torch/torch-neuron/setup/prev-releases/neuron-2.4.0-pytorch-install>
    Neuron 2.3.0 </frameworks/torch/torch-neuron/setup/prev-releases/neuron-2.3.0-pytorch-install>
    Neuron 1.19.0 </frameworks/torch/torch-neuron/setup/prev-releases/neuron-1.19.0-pytorch-install>

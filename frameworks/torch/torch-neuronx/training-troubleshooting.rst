@@ -184,6 +184,18 @@ If you see TDRV error "TDRV:exec_consume_infer_status_notification", try reloadi
 
     (NON-FATAL, Ignoring) inference timeout (180000 ms) on Neuron Device 0 NC 1, waiting for cc status notifications.
 
+TDRV error "TDRV:tdrv_one_tmpbuf_reserve  Number of ONE TMPBUF pages requested exceeded the max number of pages allowed (requested: <N>, max allowed: 16)."
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you see the TDRV error "TDRV:tdrv_one_tmpbuf_reserve  Number of ONE TMPBUF pages requested exceeded the max number of pages allowed (requested: <N>, max allowed: 16)", it maybe due to model tensors requiring more device memory then available. A solution is to try training with a smaller data batch size.
+
+.. code:: bash
+
+    ERROR  TDRV:tdrv_one_tmpbuf_reserve                 Number of ONE TMPBUF pages requested exceeded the max number of pages allowed (requested: 28, max allowed: 16).
+    ERROR  TDRV:copy_and_stage_mr                       Failed to reserve one tmpbuf memory
+    ERROR  TDRV:kbl_model_add                           copy_and_stage_mr() error
+    W tensorflow/core/distributed_runtime/rpc/grpc_remote_master.cc:157] RPC failed with status = "UNAVAILABLE: Socket closed" and grpc_error_string = "{"created":"@1669183391.155135683","description":"Error received from peer ipv4:172.31.58.24:43941","file":"external/com_github_grpc_grpc/src/core/lib/surface/call.cc","file_line":1056,"grpc_message":"Socket closed","grpc_status":14}", maybe retrying the RPC
+
 
 Could not open the ndX, close device failed, TDRV not initialized
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -443,3 +455,8 @@ When you encounter a PyTorch import error "import _XLAC ImportError: <>/site-pac
       File "/usr/local/lib/python3.8/site-packages/torch_xla/__init__.py", line 117, in <module>
         import _XLAC
     ImportError: /usr/local/lib/python3.8/site-packages/_XLAC.cpython-38-x86_64-linux-gnu.so: undefined symbol: _ZNK3c1010TensorImpl7stridesEv
+
+NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning or pretraining with XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to the Python script.

@@ -75,7 +75,7 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
                     PyTorch Neuron neuron_parallel_compile CLI <torch-neuronx/api-reference-guide/training/pytorch-neuron-parallel-compile>
                     PyTorch Neuron Environment Variable <torch-neuronx/api-reference-guide/training/torch-neuron-envvars>
-
+                    PyTorch Neuron Profiling API <torch-neuronx/api-reference-guide/torch-neuronx-profiling-api>
 
         .. dropdown::  Developer Guide  (``torch-neuronx``)
                 :class-title: sphinx-design-class-title-med
@@ -88,7 +88,7 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
                     torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide
                     torch-neuronx/programming-guide/training/pytorch-neuron-debug
-
+                    torch-neuronx/programming-guide/torch-neuronx-profiling-dev-guide
 
         .. dropdown::  
                 :class-title: sphinx-design-class-title-med

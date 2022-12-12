@@ -31,12 +31,12 @@ For all the commands below, make sure you are in the virtual environment that yo
 
    source ~/aws_neuron_venv_pytorch/bin/activate
 
-First we install recent version of HF transformers and SKLearn packages in your environment. In this
+First we install recent version of HF transformers, scikit-learn and evaluate packages in our environment. In this
 example, we chose version 4.15.0:
 
 .. code:: bash
 
-    pip install -U transformers==4.15.0 datasets scikit-learn
+    pip install -U transformers==4.15.0 datasets evaluate scikit-learn
 
 Next we download the transformers source, checking out the tag that
 matches the installed version:
@@ -58,7 +58,7 @@ imports. They set the compiler flag for transformer model type and enable data p
 .. code:: python
 
     # Set compiler flag to compile for transformer model type
-    os.environ["NEURON_CC_FLAGS"] = "--model-type=transformer"
+    os.environ["NEURON_CC_FLAGS"] = os.environ.get('NEURON_CC_FLAGS', '') + "--model-type=transformer"
 
     # Enable torchrun
     import torch
@@ -67,11 +67,17 @@ imports. They set the compiler flag for transformer model type and enable data p
         torch.distributed.init_process_group('xla')
 
     # Fixup to enable distributed training with XLA
-    orig_wrap_model = Trainer._wrap_model
-    def _wrap_model(self, model, training=True):
-        self.args.local_rank = -1
-        return orig_wrap_model(self, model, training)
-    Trainer._wrap_model = _wrap_model
+    from packaging import version
+    from transformers import __version__
+    if version.parse(__version__) < version.parse("4.20.0"):
+        Trainer._wrap_model = lambda self, model, training=True: model
+    else:
+        Trainer._wrap_model = lambda self, model, training=True, dataloader=None: model
+        
+    # Workaround for NaNs seen with transformers version >= 4.21.0
+    # https://github.com/aws-neuron/aws-neuron-sdk/issues/593
+    if os.environ.get("XLA_USE_BF16") or os.environ.get("XLA_DOWNCAST_BF16"):
+        transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16
 
 We will run MRPC task fine-tuning following the example in README.md. In this part of the tutorial we will use the Hugging Face model hub's pretrained ``bert-large-uncased`` model.
 
@@ -165,7 +171,7 @@ If you have a pretrained checkpoint (i.e., from the BERT phase 2 pretraining tut
     import torch
     import transformers
     from transformers import (
-        AutoModelForSequenceClassification,
+        BertForPreTraining,
     )
     import torch_xla.core.xla_model as xm
     from transformers.utils import check_min_version
@@ -178,7 +184,7 @@ If you have a pretrained checkpoint (i.e., from the BERT phase 2 pretraining tut
         parser.add_argument('--checkpoint_path', type=str, required=True, help="Path to pretrained checkpoint which needs to be converted to a HF pretrained model format")
         args = parser.parse_args(sys.argv[1:])
         
-        model = AutoModelForSequenceClassification.from_pretrained(args.model_name)
+        model = BertForPreTraining.from_pretrained(args.model_name)
         check_point = torch.load(args.checkpoint_path, map_location='cpu')
         model.load_state_dict(check_point['model'], strict=False)
         model.save_pretrained(args.output_saved_model_path, save_config=True, save_function=xm.save)
@@ -215,17 +221,30 @@ Known issues and limitations
 
 The following are currently known issues:
 
--  Currently, when running MRPC fine-tuning tutorial with ``bert-base-*`` model, you will encounter runtime error ``invalid offset in Coalesced_memloc_...`` followed by ``Failed to process dma block: 1703``. This issue will be fixed in an upcoming release.
--  When compiling MRPC fine-tuning tutorial with ``bert-large-*`` and FP32 (no XLA_USE_BF16=1) for two workers or more, you will encounter compiler error that looks like ``Error message:  TongaSBTensor[0x7fb2a46e0830]:TongaSB partitions[0] uint8 %138392[128, 512]``. Single worker fine-tuning is not affected. This issue will be fixed in an upcoming release.
 -  Long compilation times: this can be alleviated with
    ``neuron_parallel_compile`` tool to extract graphs from a short trial run and
    compile them in parallel ahead of the actual run, as shown above.
 -  When precompiling using batch size of 16 on trn1.2xlarge, you will see ``ERROR ||PARALLEL_COMPILE||: parallel compilation with neuronx-cc exited with error.Received error code: -9``. To workaround this error, please set NEURON_PARALLEL_COMPILE_MAX_RETRIES=1 in the environment.
+-  When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to your Python script (i.e. run_glue.py).
 -  Using ``neuron_parallel_compile`` tool to run ``run_glue.py`` script
-   with evaluation option (``--do_eval``), you will
-   encounter error. To avoid this, only enable train for parallel
+   with both train and evaluation options (``--do_train`` and ``--do_eval``), you will
+   encounter INVALID_ARGUMENT error. To avoid this, only enable train for parallel
    compile (``--do_train``). This will cause compilations during evaluation step.
+   The INVALID_ARGUMENT error will fixed in release 2.6 together with latest transformers package version 4.25.1.
+-  With release 2.6 and transformers==4.25.1,
+   using ``neuron_parallel_compile`` tool to run ``run_glue.py`` script
+   with both train and evaluation option (``--do_train`` and ``--do_eval``), you will encounter harmless error
+   ``ValueError: Target is multiclass but average='binary'``
+-  Reduced accuracy for RoBerta-Large is seen with Neuron PyTorch 1.12 (release 2.6) in FP32 mode with compiler BF16 autocast.
+   The workaround is to set NEURON_CC_FLAGS="--auto-cast none" or set NEURON_RT_STOCHASTIC_ROUNDING_EN=1.
 -  Some recompilation is seen at the epoch boundary even after ``neuron_parallel_compile`` is used.
+-  When running multi-worker training, you may see the process getting killed at the time of model saving.
+   This happens because the transformers ``trainer.save_model`` api uses ``xm.save`` for saving models.
+   This api is known to cause high host memory usage in multi-worker setting `see Saving and Loading XLA Tensors in  <https://github.com/pytorch/xla/blob/master/API_GUIDE.md>`__ . Coupled with a compilation 
+   at the same time results in a host OOM. To avoid this issue, we can: Precompile all the graphs in multi-worker 
+   training. This can be done by running the multi-worker training first with ``neuron_parallel_compile`` 
+   followed by the actual training. This would avoid the compilation at model save during actual training.
+
 
 
 The following are currently known limitations:

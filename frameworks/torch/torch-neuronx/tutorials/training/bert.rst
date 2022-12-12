@@ -105,7 +105,7 @@ BFloat16 and stochastic rounding in phase 1
 Phase 1 pretraining performance can be increased by using full BFloat16 casting
 and stochastic rounding. Full BFloat16 casting and stochastic rounding can be enabled by setting environment
 variable ``XLA_USE_BF16=1`` when
-launching the pretraining job.
+launching the pretraining job. ``XLA_DOWNCAST_BF16=1`` can also be used instead of ``XLA_USE_BF16=1`` to preserve part of the training loop in FP32. Here we use ``XLA_DOWNCAST_BF16=1`` to ensure smooth loss curve when loss averaging is used.
 To achieve maximum performance while maintaining loss
 convergence characteristics, we are using batch size of 16 and
 gradient accumulation microsteps of 32 to maintain global batch size of 16384 for phase 1.
@@ -122,7 +122,7 @@ graph in the background and the graph is executed in hardware only when the tens
 .. code:: shell
 
    cd ~/examples/dp_bert_hf_pretrain
-   neuron_parallel_compile XLA_USE_BF16=1 torchrun --nproc_per_node=32 \
+   neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --steps_this_run 10 \
    --batch_size 16 \
@@ -134,6 +134,8 @@ populating the on-disk persistent cache with compiled graphs. This helps make
 the actual training run faster because the compiled graphs will loaded from the persistent cache.
 Currently it takes ~13 minutes to compile the BERT-Large model training step using the pre-compilation script (compare to ~40 minute if not using the pre-compilation script).
 Note that the command above specifies 32 NeuronCores for trn1.32xlarge via --nproc_per_node option.
+
+The pretokenized dataset is expected to be at ``~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen128/`` by default (see above for downloading instructions) and can be changed via the ``--data_dir`` option.
 
 .. note::
 
@@ -173,7 +175,7 @@ set of commands to launch 32 data parallel distributed training workers on trn1.
 .. code:: bash
 
    cd ~/examples/dp_bert_hf_pretrain
-   XLA_USE_BF16=1 torchrun --nproc_per_node=32 \
+   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
@@ -344,7 +346,8 @@ On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utilit
    export FI_EFA_USE_DEVICE_RDMA=1
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
-   XLA_USE_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 \
+   export XLA_TRANSFER_SEED_ASYNC=1
+   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
@@ -357,7 +360,8 @@ On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set
    export FI_EFA_USE_DEVICE_RDMA=1
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
-   XLA_USE_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 \
+   export XLA_TRANSFER_SEED_ASYNC=1
+   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
@@ -390,14 +394,14 @@ Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To launch the phase 2 pretraining job, run the same python script ``dp_bert_large_hf_pretrain_hdf5.py``
-as before except with different options for phase 2. Again, we are using full BFloat16 casting and stochastic rounding
-by setting environment variable ``XLA_USE_BF16=1``. For phase 2, we are using global batch size of 32768, with worker device batch size of 2
-and gradient accumulation microsteps of 512.
+as before except with different options for phase 2. Again, we are using BFloat16 casting and stochastic rounding
+by setting environment variable ``XLA_DOWNCAST_BF16=1``. For phase 2, we are using global batch size of 32768, with worker device batch size of 2
+and gradient accumulation microsteps of 512. The pretokenized dataset is expected to be at ``~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/`` following the setup steps above and is set via ``--data_dir`` option.
 
 .. code:: shell
 
     cd ~/examples/dp_bert_hf_pretrain
-    XLA_USE_BF16=1 torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
+    XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
         --data_dir ~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/ \
         --lr 2.8e-4 \
         --phase2 \
@@ -557,6 +561,11 @@ Copy this entire directory to ``~/examples_datasets/bert_pretrain_wikicorpus_tok
 Known issues and limitations
 ----------------------------
 
+NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning or pretraining with XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to the Python script.
+
 BERT-large compilation limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -625,6 +634,10 @@ The fix is to add xm.rendezvous at the end of training to ensure all workers syn
         train_bert_hdf5(flags)
         xm.rendezvous("_mp_fn finished")
 
+Reduced multi-node performance with Neuron PyTorch 1.12 (release 2.6)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default BERT performance on multiple instances is reduced with Neuron PyTorch 1.12 (release 2.6). The workaround is to set the XLA flag XLA_TRANSFER_SEED_ASYNC=1.
 
 Troubleshooting
 ---------------
