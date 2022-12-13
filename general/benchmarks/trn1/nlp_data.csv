@@ -1,11 +1,11 @@
-Model,Model Data-Type,Training Data-Type,Nodes,Topology,Microbatch,Global Minibatch,Performance [seq/sec],Scaling Efficiency,Neuron Version,Neuron Tutorial/Example,Pytorch Version
-HuggingFace BERT-Large Ph1 pre-training,FP32,Autocast:BF16+SR,1,[32xNC(DP)],16,16384,3365, ,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.12
-HuggingFace BERT-Large Ph1 pre-training,FP32,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),16,262144,49846,92.5%,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.12
-HuggingFace BERT-Large Ph2 pre-training,FP32,Autocast:BF16+SR,1,[32xNC(DP)],2,32768,527.95, ,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.12
-HuggingFace BERT-Large Ph2 pre-training,FP32,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),2,524288,8084,95.7%,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.12
-HuggingFace BERT-Large Ph1 pre-training,FP32,FP32,1,[32xNC(DP)],8,16384,1864, ,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.11
-HuggingFace BERT-Large Ph1 pre-training,FP32,FP32,16,[32xNC(DP)] x 16Nodes(DP),16,262144,27257,91%,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.11
-HuggingFace BERT-Large Ph2 pre-training,FP32,FP32,1,[32xNC(DP)],1,32768,247, ,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.11
-HuggingFace BERT-Large Ph2 pre-training,FP32,FP32,16,[32xNC(DP)] x 16Nodes(DP),2,524288,3619,91%,2.5.0,:ref:`hf-bert-pretraining-tutorial`,1.11
-GPT3-6.7B pre-training,FP32,Autocast:BF16+SR,1,[8xNC(TP)x4(DP)],1,64,8.23, ,2.5.0,:ref:`megatron-lm-pretraining-tutorial`,1.12
-GPT3-6.7B pre-training,FP32,Autocast:BF16+SR,16,[8xNC(TP)x4(DP)] x 16Nodes(DP),1,1024,122.13,92.74%,2.5.0,:ref:`megatron-lm-pretraining-tutorial`,1.12
+Model,Model Data-Type,Training Data-Type,Nodes,Topology,Microbatch,Global Minibatch,Performance [seq/sec],Scaling Efficiency,Neuron Version,Neuron Tutorial/Example,Pytorch Neuron(torch-neuronx) Version
+HuggingFace BERT-Large Ph1 pre-training,FP32,Autocast:BF16+SR,1,[32xNC(DP)],16,16384,3365, ,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.12.0.1.4.0
+HuggingFace BERT-Large Ph1 pre-training,FP32,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),16,262144,49846,92.5%,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.12.0.1.4.0
+HuggingFace BERT-Large Ph2 pre-training,FP32,Autocast:BF16+SR,1,[32xNC(DP)],2,32768,527.95, ,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.12.0.1.4.0
+HuggingFace BERT-Large Ph2 pre-training,FP32,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),2,524288,8084,95.7%,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.12.0.1.4.0
+HuggingFace BERT-Large Ph1 pre-training,FP32,FP32,1,[32xNC(DP)],8,16384,1864, ,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.11.0.1.2.0
+HuggingFace BERT-Large Ph1 pre-training,FP32,FP32,16,[32xNC(DP)] x 16Nodes(DP),16,262144,27257,91%,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.11.0.1.2.0
+HuggingFace BERT-Large Ph2 pre-training,FP32,FP32,1,[32xNC(DP)],1,32768,247, ,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.11.0.1.2.0
+HuggingFace BERT-Large Ph2 pre-training,FP32,FP32,16,[32xNC(DP)] x 16Nodes(DP),2,524288,3619,91%,2.6.0,:ref:`hf-bert-pretraining-tutorial`,1.11.0.1.2.0
+GPT3-6.7B pre-training,FP32,Autocast:BF16+SR,1,[8xNC(TP)x4(DP)],1,64,8.23, ,2.6.0,:ref:`megatron-lm-pretraining-tutorial`,1.12.0.1.4.0
+GPT3-6.7B pre-training,FP32,Autocast:BF16+SR,16,[8xNC(TP)x4(DP)] x 16Nodes(DP),1,1024,122.13,92.74%,2.6.0,:ref:`megatron-lm-pretraining-tutorial`,1.12.0.1.4.0
