@@ -7,7 +7,7 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
-Neuron Compiler [2.3.y.z]
+Neuron Compiler [2.3.0.4]
 -----------------------------
 Date: 12/09/2022
 
