@@ -1,6 +1,6 @@
 .. _torch-neuronx-profiling-with-tb:
 
-Profiling PyTorch Neuron (``torch-neuronx``) with Tensorboard
+Profiling PyTorch Neuron (``torch-neuronx``) with TensorBoard
 ==============================================================
 
 .. contents:: Table of Contents
@@ -10,10 +10,12 @@ Profiling PyTorch Neuron (``torch-neuronx``) with Tensorboard
 Introduction
 ------------
 
-Neuron provides a plugin for Tensorboard that allows users to measure and visualize
+Neuron provides a plugin for TensorBoard that allows users to measure and visualize
 performance on a torch runtime level or an operator
 level. With this information, it becomes quicker to identify any
 performance bottleneck allowing for quicker addressing of that issue.
+
+For more information on the Neuron plugin for TensorBoard, see :ref:`neuronx-plugin-tensorboard`.
 
 Setup
 -----
@@ -72,9 +74,10 @@ Here is the code for ``run.py``:
    import os
    import torch
    import torch_neuronx
+   from torch_neuronx.experimental import profiler
    import torch_xla.core.xla_model as xm
 
-   os.environ["NEURON_CC_FLAGS"] = "--internal-presched-by-mem=-1  --cache_dir=./compiler_cache"
+   os.environ["NEURON_CC_FLAGS"] = "--cache_dir=./compiler_cache"
 
    device = xm.xla_device()
 
@@ -123,7 +126,7 @@ Understanding the Code
 ~~~~~~~~~~~~~~~~~~~~~~
 
 For this first tutorial, we’ll be using a simple Feed forward NN model.
-However, once the Tensorboard dashboard is up, we’ll see some
+However, once the TensorBoard dashboard is up, we’ll see some
 interesting and unexpected things. A simple model is helpful since it is
 easy to reference back to.
 
@@ -214,7 +217,7 @@ Printing output from CPU model and Trn1 Model:
            [-0.0067, -0.3270],
            [-0.1684, -0.3229]], device='xla:1')
 
-Loading the Operators Level Trace in Tensorboard
+Loading the Operators Level Trace in TensorBoard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Run ``tensorboard --load_fast=false --logdir logs/``
@@ -224,7 +227,7 @@ the local browser (assuming port forwarding is set up properly)
 
 .. note::
 
-   Check :ref:`Tensorboard Interface Overview` to understand Tensorboard interface
+   Check :ref:`Tensorboard Interface Overview` to understand TensorBoard interface
 
 
 The Operator Level Trace views are the same format plus an id at the

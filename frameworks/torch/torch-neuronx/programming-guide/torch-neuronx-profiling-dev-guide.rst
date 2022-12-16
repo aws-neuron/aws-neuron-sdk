@@ -41,7 +41,7 @@ the context manager, the profiling won't work.
    profiler context manager.
 
 After running this script, notice a ``./logs`` directory has been
-created. It contains the Tensorboard logs including the
+created. It contains the TensorBoard logs including the
 profiler views.
 
 
@@ -73,17 +73,14 @@ Environment
 Setup
 ^^^^^
 
-Run the below steps to get started:
+Create a new working directory:
 
 ::
    
    mkdir simple_demo
    cd simple_demo
 
-   # this is where our code will be written
-   touch demo.py
-
-Here is the code for ``demo.py``:
+Save the following code as ``demo.py``:
 
 ::
 
@@ -162,16 +159,22 @@ Here is the code for ``demo.py``:
    if __name__ == '__main__':
        main()
 
+Then run it!
+
+::
+
+    python demo.py
+
 .. _Tensorboard Interface Overview:
 
-Viewing the Trace on Tensorboard
+Viewing the Trace on TensorBoard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To view the Tensorboard logs, run ``tensorboard --logdir=./logs``
+To view the TensorBoard logs, run ``tensorboard --logdir=./logs``
 
 .. note:: 
 
-   Depending on Tensorboard version ``--load_fast=false`` might be an additional
+   Depending on TensorBoard version ``--load_fast=false`` might be an additional
    parameter to add to view the trace.
 
 Take note of the port (usually 6006) and enter ``localhost:<port>`` into
@@ -247,7 +250,7 @@ Replace the respective code in the training loop with the following:
    xm.mark_step()
    ...
 
-Run the script, and follow the same Tensorboard steps. Afterwards, the
+Run the script, and follow the same TensorBoard steps. Afterwards, the
 trace should look like this:
 
 |tensorboard-run-trace-selected-section-zoomed-named-traces|
