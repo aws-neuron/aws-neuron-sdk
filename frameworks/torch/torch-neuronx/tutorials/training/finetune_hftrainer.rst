@@ -58,7 +58,7 @@ imports. They set the compiler flag for transformer model type and enable data p
 .. code:: python
 
     # Set compiler flag to compile for transformer model type
-    os.environ["NEURON_CC_FLAGS"] = os.environ.get('NEURON_CC_FLAGS', '') + "--model-type=transformer"
+    os.environ["NEURON_CC_FLAGS"] = os.environ.get('NEURON_CC_FLAGS', '') + " --model-type=transformer"
 
     # Enable torchrun
     import torch
