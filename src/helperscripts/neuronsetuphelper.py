@@ -410,7 +410,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
                 pip_cmd += ' torchvision'
 
         if component == 'tensorflow':
-            pip_cmd += ' "protobuf==3.20.1"'
+            pip_cmd += ' "protobuf"'
 
     else:
         pip_cmd += '\n'
