@@ -45,7 +45,7 @@ INT8, INT16 and INT32.
 The TensorEngine is based on a power-optimized systolic-array which is
 highly optimized for tensor computations (e.g. GEMM, CONV, Reshape,
 Transpose), and supports mixed-precision computations (FP16/BF16/INT8
-inputs, FP32/INT32 outputs). Each NeuronCore-v2 TensorEngine delivers 16
+inputs, FP32/INT32 outputs). Each NeuronCore-v1 TensorEngine delivers 16
 TFLOPS of FP16/BF16 tensor computations.
 
 
