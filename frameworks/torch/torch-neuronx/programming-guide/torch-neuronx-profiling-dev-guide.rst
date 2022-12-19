@@ -96,8 +96,9 @@ Save the following code as ``demo.py``:
    import torch_xla.debug.profiler as xp
 
    import torch_neuronx
+   from torch_neuronx.experimental import profiler
 
-   os.environ["NEURON_CC_FLAGS"] = "--internal-presched-by-mem=-1  --cache_dir=./compiler_cache"
+   os.environ["NEURON_CC_FLAGS"] = "--cache_dir=./compiler_cache"
 
    # Global constants
    EPOCHS = 10
