@@ -3,6 +3,8 @@
 # fail on error
 set -e
 
+VERSION="1.12.0"
+
 # checkout tokenizers and apply neuron patch
 if [ ! -e "tokenizers" ]; then
     git clone https://github.com/huggingface/tokenizers.git
@@ -23,21 +25,60 @@ cp -f tokenizers_binding/tokenizer.json .
 
 # setup torch
 if [ ! -e "libtorch" ]; then
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.9.1%2Bcpu.zip
-    unzip libtorch-shared-with-deps-1.9.1+cpu.zip
-    rm libtorch-shared-with-deps-1.9.1+cpu.zip
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${VERSION}%2Bcpu.zip
+    unzip libtorch-shared-with-deps-${VERSION}+cpu.zip
+    rm -f libtorch-shared-with-deps-${VERSION}+cpu.zip
 fi
 
 # get libneuron_op.so and install into libtorch
 if [ ! -e "venv" ]; then
-    python3 -m venv venv
+
+    PYTHON=python3
+    PYTHON_VERSION=$($PYTHON --version | cut -f2 -d' ' | cut -f1,2 -d'.')
+
+    if [ "$PYTHON_VERSION" == "3.7" ] || [ "$PYTHON_VERSION" == "3.8" ] || [ "$PYTHON_VERSION" == "3.9" ] || [ "$PYTHON_VERSION" == "3.10" ]
+    then
+        echo "Python version is '$PYTHON_VERSION'"
+    else
+        PYTHON=$(which python3.7)
+
+        if [ "$PYTHON" == "" ]
+        then
+            echo "No suitable version of python for libtorch demo current version is $PYTHON_VERSION"
+            echo "Install the 3.7, 3.8, 3.9 or 3.10 and set the PYTHON end variable as needed"
+            exit 1
+        fi
+    fi
+
+    $PYTHON -m venv venv
     . venv/bin/activate
     pip install -U pip
-    pip install torch-neuron==1.9.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+    OLD_TOOL_CHAIN=$(python -c \
+        "from bert_neuronx.detect_instance import get_instance_type; print('inf1' in get_instance_type())")
+  
+    if [ "$OLD_TOOL_CHAIN" == "True" ]
+    then
+        # Install compiler from the old tool chain
+        pip install torch-neuron~=${VERSION} neuron-cc tensorflow==1.15.5 --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    else
+        pip install torch-neuronx~=${VERSION} --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    fi
+    
+    pip install --upgrade "transformers==4.6.0" 
+    python bert_neuronx/compile.py
     deactivate
-    cp -f $(find ./venv -name libtorchneuron.so) libtorch/lib/
-    cp -f $(find ./venv -name libnrt.so) libtorch/lib/
-    cp -f $(find ./venv -name libnrt.so.1) libtorch/lib/
+
+    if [ "$OLD_TOOL_CHAIN" == "True" ]
+    then
+        cp -f $(find ./venv -name libtorchneuron.so | grep torch_neuron) libtorch/lib/
+        cp -f $(find ./venv -name libnrt.so) libtorch/lib/
+        cp -f $(find ./venv -name libnrt.so.1) libtorch/lib/        
+    else
+        cp -f $(find ./venv -name libtorchneuron.so | grep torch_neuronx) libtorch/lib/
+    fi
+
+
 fi
 
 # compile example app
@@ -48,3 +89,4 @@ popd
 
 chmod +x run_tests.sh
 echo "Successfully completed setup"
+
