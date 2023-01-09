@@ -11,7 +11,12 @@ LibTorch C++ Tutorial
 Overview
 --------
 
-This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
+This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1, Inf2 and Trn1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1, Inf2 and Trn1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
+
+Notes
+-----
+
+The tutorial has been tested on Inf1, Inf2 and Trn1 instances on ubuntu instances.
 
 
 Run the tutorial
@@ -31,34 +36,35 @@ Your directory tree should now look like this:
 
 ::
 
-  .
-  ├── bert_neuron_b6.pt
-  ├── libtorch_demo
-  │   ├── example_app
-  │   │   ├── README.txt
-  │   │   ├── build.sh
-  │   │   ├── example_app.cpp
-  │   │   ├── utils.cpp
-  │   │   └── utils.hpp
-  │   ├── neuron.patch
-  │   ├── run_tests.sh
-  │   ├── setup.sh
-  │   └── tokenizers_binding
-  │       ├── build.sh
-  │       ├── build_python.sh
-  │       ├── remote_rust_tokenizer.h
-  │       ├── run.sh
-  │       ├── run_python.sh
-  │       ├── tokenizer_test
-  │       ├── tokenizer_test.cpp
-  │       └── tokenizer_test.py
-  └── libtorch_demo.tar.gz
-
-Copy the compiled model from Step 2 into the new ``libtorch_demo`` directory.
-
-.. code:: bash
-
-  $ cp bert_neuron_b6.pt libtorch_demo/
+  libtorch_demo
+  ├── bert_neuronx
+  │   ├── compile.py
+  │   └── detect_instance.py
+  ├── clean.sh
+  ├── core_count
+  │   ├── build.sh
+  │   └── main.cpp
+  ├── example_app
+  │   ├── build.sh
+  │   ├── core_count.hpp
+  │   ├── example_app.cpp
+  │   ├── README.txt
+  │   ├── utils.cpp
+  │   └── utils.hpp
+  ├── neuron.patch
+  ├── run_tests.sh
+  ├── setup.sh
+  ├── tokenizer.json
+  └── tokenizers_binding
+      ├── build_python.sh
+      ├── build.sh
+      ├── remote_rust_tokenizer.h
+      ├── run_python.sh
+      ├── run.sh
+      ├── tokenizer.json
+      ├── tokenizer_test
+      ├── tokenizer_test.cpp
+      └── tokenizer_test.py
 
 This tutorial uses the `HuggingFace Tokenizers <https://github.com/huggingface/tokenizers>`_ library implemented in Rust.
 Install Cargo, the package manager for the Rust programming language.
@@ -83,13 +89,9 @@ Run the setup script to download additional depdendencies and build the app. (Th
 ::
 
   ...
-  [100%] Built target example_app
-  make[1]: Leaving directory '/home/ubuntu/libtorch_demo/example_app/build'
-  /usr/local/lib/python3.6/dist-packages/cmake/data/bin/cmake -E cmake_progress_start /home/ubuntu/libtorch_demo/example_app/build/CMakeFiles 0
-  ~/libtorch_demo/example_app
+  + g++ utils.cpp example_app.cpp -o ../example-app -O2 -D_GLIBCXX_USE_CXX11_ABI=0 -I../libtorch/include -L../tokenizers_binding/lib -L/opt/aws/neuron/lib/ -L../libtorch/lib -Wl,-rpath,libtorch/lib -Wl,-rpath,tokenizers_binding/lib -Wl,-rpath,/opt/aws/neuron/lib/ -ltokenizers -ltorchneuron -ltorch_cpu -lc10 -lpthread -lnrt
   ~/libtorch_demo
   Successfully completed setup
-
 
 .. _libtorch-benchmark:
 
@@ -138,22 +140,27 @@ Finally, run the example app directly to benchmark the BERT model.
 
 .. code:: bash
 
-  $ LD_LIBRARY_PATH="libtorch/lib:tokenizers_binding/lib" ./example-app bert_neuron_b6.pt
+  $ ./example-app bert_neuron_b6.pt
 
 ::
 
-  Getting ready....
-  Benchmarking....
-  Completed 4000 operations in 22 seconds => 1090.91 pairs / second
-
+  Getting ready................
+  Benchmarking................
+  Completed 32000 operations in 43 seconds => 4465.12 pairs / second
+  
   ====================
   Summary information:
   ====================
   Batch size = 6
-  Num neuron cores = 4
-  Num runs per neruon core = 1000
+  Num neuron cores = 16
+  Num runs per neuron core = 2000
 
 **Congratulations!** By now you should have successfully built and used a native C++ application with LibTorch.
+
+Troubleshooting
+---------------
+
+* In the event of SIGBUS errors you may have insufficient disk space for the creation of temporary model files at runtime.  Consider clearing space or mounting additional disk storage.
 
 .. _libtorch-cleanup:
 
