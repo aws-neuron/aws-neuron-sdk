@@ -8,7 +8,7 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @aws-mesharma
+*       @aws-maens @aws-mesharma @rgrandhiamzn
 
 src/examples/mxnet/ @aws-rhsoln  @musunita @aws-maens
 neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens
