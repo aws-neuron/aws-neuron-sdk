@@ -351,7 +351,7 @@ The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default
 
    cd ~/examples/dp_bert_hf_pretrain
    wget https://raw.githubusercontent.com/rwightman/pytorch-image-models/main/timm/optim/lamb.py .
-   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
+   XLA_DOWNCAST_BF16=1 NEURON_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --optimizer LAMB \
