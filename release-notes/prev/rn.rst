@@ -8,6 +8,25 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.6.0-whatsnew:
+
+Neuron 2.6.0 (12/12/2022)
+-------------------------
+
+This release introduces the support of PyTorch 1.12 version, and introduces PyTorch Neuron (``torch-neuronx``) profiling through Neuron Plugin for TensorBoard. Pytorch Neuron (``torch-neuronx``) users can now profile their models through the following TensorBoard views:
+
+* Operator Framework View
+* Operator HLO View
+* Operator Trace View
+
+This release introduces the support of LAMB optimizer for FP32 mode, and adds support for :ref:`capturing snapshots <torch-neuronx-snapshotting>` of inputs, outputs and graph HLO for debugging.
+
+In addition, this release introduces the support of new operators and resolves issues that improve stability for Trn1 customers.
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+.. _neuron-2.5.0-whatsnew:
+
 Neuron 2.5.0 (11/23/2022)
 -------------------------
 
@@ -58,11 +77,15 @@ In addition, this release introduces changes to the Neuron packaging and install
 For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
 
+.. _neuron-2.4.0-whatsnew:
+
 Neuron 2.4.0 (10/27/2022)
 -------------------------
 
 This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Sheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc>` and :ref:`PyTorch Neuron <torch-neuronx-rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.
 
+
+.. _neuron-2.3.0-whatsnew:
 
 Neuron 2.3.0 (10/10/2022)
 -------------------------

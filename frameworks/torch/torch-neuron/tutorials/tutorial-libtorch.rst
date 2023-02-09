@@ -17,8 +17,7 @@ This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/ins
 Run the tutorial
 ----------------
 
-First run the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
-
+To complete this tutorial, you will need a compiled BERT model. If you have already completed the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>` then you already have the necessary file. Otherwise run :download:`trace_bert_neuron.py </src/examples/pytorch/torchserve/trace_bert_neuron.py>` to obtain a traced BERT model.
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
 Right-click and copy :download:`this link address to the tutorial archive</src/examples/pytorch/libtorch_demo.tar.gz>`.

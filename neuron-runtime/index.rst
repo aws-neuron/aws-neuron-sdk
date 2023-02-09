@@ -15,7 +15,19 @@ Neuron runtime consists of kernel driver and C/C++ libraries which provides APIs
       .. toctree::
          :maxdepth: 1
 
+         Runtime API </neuron-runtime/nrt-api-guide>
+
+.. dropdown::  Configuration Guide
+      :class-title: sphinx-design-class-title-med
+      :class-body: sphinx-design-class-body-small
+      :animate: fade-in
+      :open:
+
+      .. toctree::
+         :maxdepth: 1
+
          Runtime Configuration </neuron-runtime/nrt-configurable-parameters>
+
 
 
 .. dropdown::  
@@ -27,8 +39,7 @@ Neuron runtime consists of kernel driver and C/C++ libraries which provides APIs
       .. toctree::
          :maxdepth: 1
 
-         Troubleshooting on Trn1 </neuron-runtime/nrt-troubleshoot-trn1>
-         Troubleshooting on Inf1 </neuron-runtime/nrt-troubleshoot>
+         Troubleshooting on Inf1 and Trn1 </neuron-runtime/nrt-troubleshoot>
          FAQ </neuron-runtime/faq>
          /release-notes/runtime/aws-neuronx-runtime-lib/index
          /release-notes/runtime/aws-neuronx-dkms/index

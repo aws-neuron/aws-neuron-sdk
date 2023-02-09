@@ -8,6 +8,7 @@ from concurrent import futures
 
 import torch
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--url', help='Torchserve model URL', type=str, default=f'http://127.0.0.1:8080/predictions/bert-max_length128-batch_size6')
 parser.add_argument('--num_thread', type=int, default=64, help='Number of threads invoking the model URL')
@@ -20,10 +21,11 @@ args = parser.parse_args()
 
 data = { 'seq_0': 'A completely made up sentence.',
     'seq_1': 'Well, I suppose they are all made up.' }
-
 live = True
 num_infer = 0
 latency_list = []
+
+
 def one_thread(pred, feed_data):
     global latency_list
     global num_infer
@@ -37,6 +39,7 @@ def one_thread(pred, feed_data):
         num_infer += 1
         if not live:
             break
+
 
 def current_performance():
     last_num_infer = num_infer
@@ -54,6 +57,7 @@ def current_performance():
         time.sleep(args.throughput_interval)
     global live
     live = False
+
 
 with futures.ThreadPoolExecutor(max_workers=args.num_thread+1) as executor:
     executor.submit(current_performance)

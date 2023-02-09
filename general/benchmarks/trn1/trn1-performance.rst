@@ -6,7 +6,9 @@ Trn1 Performance
 .. contents:: Table of contents
    :local:
 
-*Last update: October 5th, 2022*
+*Last update: February 8th, 2023*
+
+.. _trn1_training_perf:
 
 Training Performance
 --------------------

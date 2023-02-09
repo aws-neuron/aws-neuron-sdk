@@ -276,11 +276,15 @@ Contains basic information about the Neuron hardware.
 ::
 
      "neuron_hardware_info": {
+       "neuron_device_version": "v2",
+       "neuroncore_version": "v2",
        "neuron_device_count": 16,
        "neuroncore_per_device_count": 4,
        "error": ""
      }
 
+-  ``neuron_device_version``: version of the Neuron Devices on the instance,
+-  ``neuroncore_version``: version of the NeuronCores on the instance,
 -  ``neuron_device_count`` : number of available Neuron Devices
 -  ``neuroncore_per_device_count`` : number of NeuronCores present on each Neuron Device
 -  ``error`` : will contain an error string if any occurred when getting this information
@@ -315,15 +319,19 @@ neuroncore_counters
              "neuroncores_in_use": {
                "0": {
                  "neuroncore_utilization": 42.01,
+                 "flops": 1234567891011
                },
                "1": {
                  "neuroncore_utilization": 42.02,
+                 "flops": 1234567891021
                },
                "2": {
                  "neuroncore_utilization": 42.03,
+                 "flops": 1234567891031
                },
                "3": {
                  "neuroncore_utilization": 42.04,
+                 "flops": 1234567891041
                }
              },
              "error": ""
@@ -335,6 +343,8 @@ neuroncore_counters
 
    -  ``"neuroncore_utilization"`` - NeuronCore utilization, in percent,
       during the captured period
+   -  ``"flops"`` - number of floating point operations per second during
+      the captured period
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data

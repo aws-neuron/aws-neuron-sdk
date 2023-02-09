@@ -1,3 +1,5 @@
+.. _api_torch_neuron_dataparallel_api:
+
 torch.neuron.DataParallel API
 =============================
 

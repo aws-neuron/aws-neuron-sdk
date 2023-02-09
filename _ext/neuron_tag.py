@@ -36,7 +36,6 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-hardware/trn1-arch',
                 'general/benchmarks/trn1-performance',
                 'general/arch/neuron-features/rounding-modes',
-                'neuron-runtime/nrt-troubleshoot-trn1',
                 'tools/tutorials/tutorial-neuron-monitor-mnist',
                 'tools/tensorboard/getting-started-tensorboard-neuronx-plugin',
                 'release-notes/runtime/aws-neuronx-collectives/',
@@ -68,7 +67,6 @@ clear_trn1_tag = [
                 'containers/rn',
                 'general/announcements/neuron1.x/',
                 'general/quick-start/mxnet-neuron',
-                'neuron-runtime/nrt-troubleshoot',
                 'tools/tensorboard/getting-started-tensorboard-neuron-plugin',
                 'tools/helper-tools/tutorial-neuron-check-model',
                 'tools/helper-tools/tutorial-neuron-gatherinfo',
@@ -138,7 +136,7 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, clear_trn1_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
-        
+
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:
                 return_instances.remove('Inf1')

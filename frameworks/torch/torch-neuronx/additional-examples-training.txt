@@ -1,0 +1,3 @@
+* `AWS Neuron Reference for Megatron-LM GitHub Repository <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`_
+* `AWS Neuron Samples for AWS ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
+* `AWS Neuron Samples GitHub Repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_

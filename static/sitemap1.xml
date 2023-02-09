@@ -677,12 +677,6 @@
 		<priority>1.00</priority>
 	</url>
 	<url>
-		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot-trn1.html</loc>
-		<lastmod>2022-11-24T01:57:09+00:00</lastmod>
-		<changefreq>daily</changefreq>
-		<priority>1.00</priority>
-	</url>
-	<url>
 		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot.html</loc>
 		<lastmod>2022-11-24T01:57:09+00:00</lastmod>
 		<changefreq>daily</changefreq>
@@ -2448,12 +2442,6 @@
 	</url>
 	<url>
 		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/_sources/neuron-runtime/nrt-configurable-parameters.rst.txt</loc>
-		<lastmod>2022-11-24T01:57:09+00:00</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.16</priority>
-	</url>
-	<url>
-		<loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/_sources/neuron-runtime/nrt-troubleshoot-trn1.rst.txt</loc>
 		<lastmod>2022-11-24T01:57:09+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.16</priority>

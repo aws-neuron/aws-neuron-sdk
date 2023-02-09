@@ -74,50 +74,28 @@ metadata:
   namespace: kube-system
 data:
   my-scheduler-config.yaml: |
-    apiVersion: kubescheduler.config.k8s.io/v1beta1
+    apiVersion: kubescheduler.config.k8s.io/v1beta2
     kind: KubeSchedulerConfiguration
     profiles:
       - schedulerName: my-scheduler
+    extenders:
+      - urlPrefix: 'http://k8s-neuron-scheduler.kube-system.svc.cluster.local:12345'
+        filterVerb: filter
+        bindVerb: bind
+        enableHTTPS: false
+        nodeCacheCapable: true
+        managedResources:
+          - name: 'aws.amazon.com/neuron'
+            ignoredByScheduler: false
+          - name: 'aws.amazon.com/neuroncore'
+            ignoredByScheduler: false
+          - name: 'aws.amazon.com/neurondevice'
+            ignoredByScheduler: false
+        ignorable: false
     leaderElection:
       leaderElect: true
       resourceNamespace: kube-system    
       resourceName: my-scheduler
----
-apiVersion: v1
-data:
-  policy.cfg: |
-    {
-      "kind": "Policy",
-      "apiVersion": "v1",
-      "extenders": [
-        {
-          "urlPrefix": "http://127.0.0.1:12345",
-          "filterVerb": "filter",
-          "bindVerb":   "bind",
-          "enableHttps": false,
-          "nodeCacheCapable": true,
-          "managedResources": [
-            {
-              "name": "aws.amazon.com/neuron",
-              "ignoredByScheduler": false
-            },
-            {
-              "name": "aws.amazon.com/neuroncore",
-              "ignoredByScheduler": false
-            },
-            {
-              "name": "aws.amazon.com/neurondevice",
-              "ignoredByScheduler": false
-            }
-          ],
-          "ignorable": false
-        }
-      ]
-    }
-kind: ConfigMap
-metadata:
-  name: scheduler-policy-1
-  namespace: kube-system
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -147,11 +125,11 @@ spec:
         - --leader-elect=true
         - --v=2
         - --lock-object-name=my-scheduler
-        - --policy-configmap=scheduler-policy-1
+        #- --policy-configmap=scheduler-policy-1
           #- --policy-configmap-namespace=kube-system
         command:
         - /usr/local/bin/kube-scheduler
-        image: k8s.gcr.io/kube-scheduler:v1.20.6
+        image: k8s.gcr.io/kube-scheduler:v1.23.15
         livenessProbe:
           httpGet:
             path: /healthz
@@ -178,3 +156,4 @@ spec:
         - name: config-volume
           configMap:
             name: my-scheduler-config
+

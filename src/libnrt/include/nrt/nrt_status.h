@@ -28,14 +28,6 @@ typedef enum {
     NRT_LOAD_NOT_ENOUGH_NC = 9,             // Failed to allocate enough NCs for loading a NEFF
     NRT_UNSUPPORTED_NEFF_VERSION = 10,      // Unsupported version of NEFF
 
-    // TODO review existing code and return these 2 instead of generic RESOURCE,
-    // note, ideally would need to diff between host/dev DMA memory allocations as well
-    // which might be a pain.  Alternatively, use the first one for malloc errors and the second
-    // one for DMA alloc errors
-    NRT_FAIL_HOST_MEM_ALLOC = 11,           // failed to allocate host memory
-    // TODO currently not used
-    //NRT_FAIL_DEVICE_MEM_ALLOC = 12,       // failed to allocate device memory
-
     // Unique retcodes to help the caller identify when nrt apis are called outside the scope of nrt_init() and nrt_close()
     NRT_UNINITIALIZED = 13,
     NRT_CLOSED = 14,

@@ -33,6 +33,27 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.11.43.0]
+---------------------------------
+Date: 02/08/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added support for Neuron Custom C++ operators as an experimental feature. As of this release, usage of Custom C++ operators requires a reset of the Neuron Runtime after running a model which invoked a Neuron Custom C++ operator.
+* Added support for a counter that enable measuring FLOPS on neuron-top and neuron-monitor. 
+* Added support for LRU cache for DMA rings. 
+
+
+Bug fixes
+^^^^^^^^^
+
+* Fixed load failures due to memory bounds checking for Neuron Collective Compute operations in Runtime during model load.
+* Fixed an internal bug that was preventing Neuron Runtime metrics from posting.
+* Fixed a bug that caused segfaults as a result of double frees and stack overflows.
+
+
+
 Neuron Runtime Library [2.10.18.0]
 ---------------------------------
 Date: 11/07/2022
