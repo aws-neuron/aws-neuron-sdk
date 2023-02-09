@@ -59,6 +59,7 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
                     :start-line: 26
                     :end-line: 27
 
+            .. tab-item:: Ubuntu 20 AMI
 
 
             .. tab-item:: Ubuntu 20 AMI

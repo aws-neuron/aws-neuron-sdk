@@ -30,6 +30,13 @@ MXNet Neuron enables native MXNet models to be accelerated on Neuron devices, so
 
 
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /frameworks/mxnet-neuron/inference
+
+
 
 .. tab-set::
 
