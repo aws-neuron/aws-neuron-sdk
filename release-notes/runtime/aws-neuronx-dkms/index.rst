@@ -15,6 +15,18 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.7.15.0]
+--------------------------------
+
+Date: 02/08/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added Neuron sysfs metrics under ``/sys/devices/virtual/neuron_device/neuron{0,1, ...}/metrics/``
+
+
+
 Neuron Driver release [2.6.26.0]
 --------------------------------
 

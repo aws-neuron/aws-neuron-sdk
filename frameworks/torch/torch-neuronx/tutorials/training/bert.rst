@@ -15,10 +15,11 @@ with the following important characteristics:
 
 -  Framework: PyTorch/XLA
 -  Model: Hugging Face BertForPreTraining
--  Optimizer: AdamW
+-  Optimizer: AdamW, LAMB (Layerwise Adaptive Moments optimizer)
 -  Scheduler: Hugging Face's get_linear_schedule_with_warmup
 -  Allreduce occurs before optimizer step, after gradient accumulations
    (following DeepSpeed's Smart Gradient Accumulation)
+-  Training data types: Float32, full BFloat16 casting and Stochastic Rounding (SR), PyTorch Autocast (Automatic Mixed Precision or AMP) and SR
 
 As done in the original BERT paper, BERT pretraining happens in two
 phases. In the first phase (phase 1) BERT maximum sequence length is fixed
@@ -65,6 +66,7 @@ Next, download the Python-based training script ``dp_bert_large_hf_pretrain_hdf5
 
    mkdir -p ~/examples/dp_bert_hf_pretrain
    cd ~/examples/dp_bert_hf_pretrain
+   wget https://raw.githubusercontent.com/rwightman/pytorch-image-models/main/timm/optim/lamb.py .
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/dp_bert_large_hf_pretrain_hdf5.py
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/requirements.txt
    python3 -m pip install -r requirements.txt
@@ -99,6 +101,8 @@ NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` o
 
     Currently Neuron Runtime only support 1 and 2 worker configurations on trn1.2xlarge and 1, 2, 8, and 32-worker configurations on trn1.32xlarge.
 
+.. _bf16_sr_phase1:
+
 BFloat16 and stochastic rounding in phase 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -111,7 +115,7 @@ convergence characteristics, we are using batch size of 16 and
 gradient accumulation microsteps of 32 to maintain global batch size of 16384 for phase 1.
 The batch size and gradient accumulation microstep changes can be set by
 launching the BERT pretraining script ``dp_bert_large_hf_pretrain_hdf5.py`` with
-command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps.
+command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps. Other option with BFloat16, AMP is covered at :ref:`amp-sr-phase1`.
 
 Pre-compilation
 ~~~~~~~~~~~~~~~
@@ -329,6 +333,47 @@ the BERT pretraining demo:
    to execute ``sudo rmmod neuron; sudo modprobe neuron`` in order to
    reload/reset the Neuron driver.
 
+Phase 1 BERT-Large pretraining with Layerwise Adaptive Moments based optimizer (LAMB)
+-------------------------------------------------------------------------------------
+Sometimes, to reduce the training wall time, you can use higher learning rate and larger global batch size. The approach is discussed in `LARGE BATCH OPTIMIZATION FOR DEEP LEARNING: TRAINING BERT IN 76 MINUTES <https://arxiv.org/pdf/1904.00962.pdf>`__. Tranium supports LAMB, and in this tutorial, we use publicly available XLA-friendly LAMB implemenation from https://github.com/rwightman/pytorch-image-models/blob/master/timm/optim/lamb.py.
+
+.. code:: bash
+
+   cd ~/examples/dp_bert_hf_pretrain
+   torchrun --nproc_per_node=32 \
+   dp_bert_large_hf_pretrain_hdf5.py \
+   --batch_size 8 \
+   --optimizer LAMB \
+   --lr 6e-3 \
+   --grad_accum_usteps 256 |& tee run_pretrain_log.txt
+ 
+The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default optimizer AdamW will be used. Besides, you need to use a set of hyper-parameters supporting the larger global batch size (GBS). In this case, we have 64k as GBS for LAMB and use a set of hyper-params similar to https://github.com/NVIDIA/DeepLearningExamples/blob/master/PyTorch/LanguageModeling/BERT/README.md. Given higher GBS from LAMB than AdamW, it takes fewer steps (roughly 8k) to achieve similar level of accuracy as AdamW, which takes more than 28k steps. In addition, you can also use different data types on top of LAMB. Below is an example using the BFloat16 and Stochastic Roundings. 
+
+.. code:: bash
+
+   cd ~/examples/dp_bert_hf_pretrain
+   XLA_DOWNCAST_BF16=1  torchrun --nproc_per_node=32 \
+   dp_bert_large_hf_pretrain_hdf5.py \
+   --batch_size 16 \
+   --optimizer LAMB \
+   --lr 6e-3 \
+   --grad_accum_usteps 128 |& tee run_pretrain_log.txt
+
+.. _amp-sr-phase1:
+
+Phase 1 BERT-Large pretraining with PyTorch Autocast (AMP) and stochastic rounding
+----------------------------------------------------------------------------------
+Besides the :ref:`bf16_sr_phase1` , you can also use AMP with stochastic rounding. The detailed background is at https://pytorch.org/docs/stable/amp.html. It uses both data types BFloat16 and Float32, hence provides better performance over Float32. A detailed comparison is available at :ref:`trn1_training_perf`.
+To launch the AMP, one additional command-line argument is needed ``--enable_pt_autocast``. ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1`` enables the stochastic roundings. 
+
+.. code:: bash
+
+   cd ~/examples/dp_bert_hf_pretrain
+   torchrun --nproc_per_node=32 \
+   NEURON_RT_STOCHASTIC_ROUNDING_EN=1 dp_bert_large_hf_pretrain_hdf5.py \
+   --batch_size 16 \
+   --enable_pt_autocast \
+   --grad_accum_usteps 32 |& tee run_pretrain_log.txt
 
 Phase 1 BERT-Large pretraining on two instances
 -----------------------------------------------

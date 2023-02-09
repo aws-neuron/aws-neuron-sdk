@@ -2,11 +2,14 @@ import os
 import json
 import sys
 import logging
-
-import torch, torch_neuron
-from transformers import AutoTokenizer
 from abc import ABC
+
+import torch
+import torch_neuron
+
+from transformers import AutoTokenizer
 from ts.torch_handler.base_handler import BaseHandler
+
 
 # one core per worker
 os.environ['NEURON_RT_NUM_CORES'] = '1'

@@ -10,6 +10,53 @@ PyTorch Neuron (``torch-neuronx``) release notes
 PyTorch Neuron for Trainium is a software package that enables PyTorch
 users to train their models on Trainium.
 
+Release [1.13.0.1.6.0]
+----------------------
+Date: 02/08/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for PyTorch 1.13
+- Added support for Python version 3.9
+- Added support for torch.nn.parallel.DistributedDataParallel (DDP) along with a :ref:`tutorial <neuronx-ddp-tutorial>`
+- Added optimized lowering for Softmax activation
+- Added support for LAMB optimizer in BF16 mode
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this release, convolution is not supported.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop 
+with DDP. This is a known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its own graph. This causes an error in the runtime, and 
+you may see errors that look like this: ``bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Lower throughput for BERT-large training on AL2 instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We see a performance drop of roughly 5-10% for BERT model training on AL2 instances. This is because of the increase in time required for tracing the model.
+
+
 Release [1.12.0.1.4.0]
 ----------------------
 Date: 12/12/2022

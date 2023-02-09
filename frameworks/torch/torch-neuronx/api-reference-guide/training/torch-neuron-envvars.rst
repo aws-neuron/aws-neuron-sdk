@@ -64,6 +64,13 @@ PyTorch Neuron are (experimental ones are noted):
 - Dump only the snapshot associated with Neuron Core 0 when ``NEURON_NC0_ONLY_SNAPSHOT=1`` and 
   the ``NEURON_DUMP_HLO_SNAPSHOT`` flag is set.
 
+``NEURON_FUSE_SOFTMAX`` **[Experimental]**:
+
+- Enable custom lowering for Softmax operation to enable compiler optimizations.
+
+``NEURON_TRANSFER_ALL_PARAMETERS_WITH_STATIC_RING`` **[Experimental]**:
+
+- When set to 1, mark all parameter transfers as static to enable runtime optimizations for torch.nn modules that are wrapped as done in Megatron-LM. This setting is not needed if torch.nn modules are not wrapped.
 
 ``BUCKET_CAP_MB`` **[PyTorch XLA]**:
 

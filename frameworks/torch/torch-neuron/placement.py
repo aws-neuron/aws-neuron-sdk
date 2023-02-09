@@ -1,8 +1,5 @@
 """
-.. _torch_neuron_core_placement_api:
 
-Experimental: NeuronCore Placement APIs
-=======================================
 
 .. warning::
 

@@ -1,3 +1,5 @@
+.. _pytorch-install-cxx11:
+
 Install with support for cxx11 ABI
 ==================================
 

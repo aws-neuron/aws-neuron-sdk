@@ -1,7 +1,7 @@
 .. _torch_neuron_core_placement_guide:
 
-Developer Guide - PyTorch Neuron (``torch-neuron``) Core Placement
-===================================================================
+PyTorch Neuron (``torch-neuron``) Core Placement
+================================================
 
 This programming guide describes the available techniques and APIs to be able
 to allocate NeuronCores to a process and place models onto specific NeuronCores.

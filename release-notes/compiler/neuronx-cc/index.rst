@@ -7,6 +7,15 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
+Neuron Compiler [2.4.0.21]
+-----------------------------
+Date: 02/08/2023
+
+* Added support for the following HLO operators: ``SelectAndScatter``.
+* EXPERIMENTAL: ``--enable-experimental-O1`` flag: This option reduces the compile-time with a neglible impact on model execution performance.
+  It allows the compiler to execute compiler passes in parallel to perform the compilation. By default the compiler uses 8 processes.
+  This can be changed via the CLI option ``--num-parallel-jobs``. This option is expected to become the default in a future SDK release.
+
 Neuron Compiler [2.3.0.4]
 -----------------------------
 Date: 12/09/2022
@@ -180,6 +189,8 @@ The list of supported operators can also be retrieved from the command line usin
 | Scatter                 |                                           |
 +-------------------------+-------------------------------------------+
 | Select                  |                                           |
++-------------------------+-------------------------------------------+
+| SelectAndScatter        |                                           |
 +-------------------------+-------------------------------------------+
 | ShiftRightLogical       |                                           |
 +-------------------------+-------------------------------------------+

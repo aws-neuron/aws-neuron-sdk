@@ -26,15 +26,26 @@ Launch ``neuron-top`` by simply typing its name in the shell: ``neuron-top``.
 User interface
 ~~~~~~~~~~~~~~
 
-The user interface is divided in 4 sections. The data shown in these
+The title section of the user interface shows the application's version number, 
+EC2 instance ID, and the instance type on which it is running:
+
+|titleimg|
+
+The rest of the user interface is divided in 4 sections. The data shown in these
 sections applies to the currently selected tab - which can be the 'all' tab,
 which aggregates data from all running Neuron processes, or a tab representing
 a single Neuron process:
 
-|image0|
+|overview|
 
-* The ``Neuroncore Utilization`` section shows the NeuronCore utilization for the
-  currently selected tab 
+* The ``NeuronCore <vers> Utilization`` section shows the NeuronCore utilization for the
+  currently selected tab. ``<vers>`` is the version of the NeuronCores on the instance (for example,
+  ``v2`` for trn1 instances).
+
+  Pressing the 'F' key will toggle between displaying utilization percentages - as seen in the previous image -
+  and teraflops (trillion floating point operations per second), as seen in the image below:
+
+|flops|
 
 * The ``VCPU Utilization`` section shows:
 
@@ -81,12 +92,14 @@ The bottom bar shows which Neuron process' data is currently displayed by highli
 its tag using a green font and marking it using a pair of '>', '<' characters. The 'all'
 tab shows an aggregated view of all the Neuron processes currently running on the instance.
 
-|image1|
+|tabbar|
 
 .. note::
 
-  The '1'-'9' keys select the current tab.'a'/'d' selects the previous/next
+  The '1'-'9' keys select the current tab. 'a'/'d' selects the previous/next
   tab on the bar.
 
-.. |image0| image:: ../../images/nt-1.png
-.. |image1| image:: ../../images/nt-2.png
+.. |titleimg| image:: ../../images/nt-title.png
+.. |overview| image:: ../../images/nt-1.png
+.. |flops| image:: ../../images/nt-flops.png
+.. |tabbar| image:: ../../images/nt-2.png

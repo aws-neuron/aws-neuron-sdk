@@ -62,7 +62,6 @@ Available Commands:
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
      [--logfile <filename>]
-     [--neuroncore-pipeline-cores <count>]
      [--output <filename>]
 
   *Compile Parameters:*
@@ -123,10 +122,6 @@ Available Commands:
       This creates executable files which are larger in size but faster for the Neuron Runtime to load into memory during model execution.
 
   - :option:`--logfile <filename>`: Filename where compiler writes log messages. (Default: “log-neuron-cc.txt”).
-
-  - :option:`--neuroncore-pipeline-cores <count>`: Number of Neuron Cores to be used in "NeuronCore Pipeline" mode for low-latency inference. (Default: 1)
-
-    .. note:: This is not used to define the number of Neuron Cores to be used in a data parallel deployment (i.e., the same model on multiple Neuron Cores). That is a Runtime/Framework configuration choice. Refer to :ref:`Parallel Execution using NEURON_RT_NUM_CORES<parallel-exec-ncgs>` for more details.
 
   - :option:`--output <filename>`: Filename where compilation output (NEFF archive) will be recorded. (Default: "file.neff”)
 

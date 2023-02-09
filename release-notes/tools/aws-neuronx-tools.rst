@@ -8,6 +8,16 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.7.2.0]
+-------------------------
+Date: 02/08/2023
+
+New in the release:
+
+* Added support for model FLOPS metrics in both neuron-monitor and neuron-top. More details can be found in the Neuron Tools documentation.
+
+
+
 Neuron Tools  [2.6.0.0]
 -------------------------
 Date: 12/09/2022

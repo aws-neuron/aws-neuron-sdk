@@ -18,6 +18,7 @@ This document describes what types of deep learning model architectures are a go
 Model Support Overview
 ----------------------
 
+.. _model-architecture-fit-neuroncore-v2:
 
 AWS Trainium (NeuronCore v2)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,6 +92,8 @@ AWS Trainium (NeuronCore v2)
 .. note::
 
    Supported means that at least a single model of the model family or the neural-network architecture already enabled. 
+
+.. _model-architecture-fit-neuroncore-v1:
 
 AWS Inferentia (NeuronCore v1)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

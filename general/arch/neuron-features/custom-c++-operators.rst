@@ -3,8 +3,7 @@
 Neuron Custom C++ Operators
 ===========================
 
-.. note::
+.. include:: /neuron-customops/customops-intro.txt
 
-    This feature is supported in :ref:`neuroncores-v2-arch`, the NeuronCore that exists in :ref:`Trainium <trainium-arch>`, however it is still not implemented by the Neuron SDK.
 
-    Stay tuned and follow the :ref:`Neuron Roadmap <neuron_roadmap>`
+For more details see :ref:`neuron_c++customops`

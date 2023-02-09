@@ -14,19 +14,7 @@ use this new scheduler. Neuron scheduler extension is added to this new schedule
         kubectl apply -f k8s-neuron-scheduler-eks.yml
 
 
-* Get the neuron scheduler extension cluster ip
-
-    ::
-
-        kubectl get service --namespace kube-system k8s-neuron-scheduler -o jsonpath='{.spec.clusterIP}'
-
-* Modify the urlPrefix in my-scheduler.yml. Replace 127.0.0.1 with cluster ip above.
-
-    ::
-
-        "urlPrefix": "http://127.0.0.1:12345 to "urlPrefix": "http://<cluster-ip-from-above>:12345
-
-* Apply the modified my-scheduler.yml
+* Apply the my-scheduler.yml
 
     ::
 

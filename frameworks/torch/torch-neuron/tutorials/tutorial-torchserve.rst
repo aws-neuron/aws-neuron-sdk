@@ -19,7 +19,7 @@ This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ 
 Run the tutorial
 ----------------
 
-First run the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
+Verify that you have a Pytorch virtual environment setup and activated according to the :ref:`Pytorch Installation Guide <install-neuron-pytorch>`. To complete this tutorial, you will need a compiled BERT model. If you have already completed the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>` then you already have the necessary file. Otherwise, you can setup your environment as shown below and then run :download:`trace_bert_neuron.py </src/examples/pytorch/torchserve/trace_bert_neuron.py>` to obtain a traced BERT model.
 
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
@@ -28,8 +28,8 @@ Open a shell on the instance you prepared earlier, create a new directory named 
 
 .. code:: bash
 
-  $ cd torchserve
-  $ ls
+  cd torchserve
+  ls
 
 ::
 
@@ -39,51 +39,54 @@ Prepare a new Python virtual environment with the necessary Neuron and TorchServ
 
 .. code:: bash
 
-  $ python3 -m venv env
-  $ . env/bin/activate
-  $ pip install -U pip
-  $ pip install torch-neuron 'neuron-cc[tensorflow]' --extra-index-url=https://pip.repos.neuron.amazonaws.com
-  $ pip install transformers==4.12.5 torchserve==0.5.0 torch-model-archiver==0.5.0
+  pip install transformers==4.26.0 torchserve==0.7.0 torch-model-archiver==0.7.0
 
 Install the system requirements for TorchServe.
 
- +----------------------------------------+--------------------------------------------------------+
- | Ubuntu                                 | AL2                                                    |
- +----------------------------------------+--------------------------------------------------------+
- | .. code-block:: bash                   | .. code-block:: bash                                   |
- |                                        |                                                        |
- |    $ sudo apt install openjdk-11-jdk   |    $ sudo yum install java-11-amazon-corretto-headless |
- |                                        |    $ sudo alternatives --config java                   |
- |                                        |    $ sudo alternatives --config javac                  |
- +----------------------------------------+--------------------------------------------------------+
+.. tab-set::
+
+   .. tab-item:: Amazon Linux 2 DLAMI Base
+
+      .. code-block:: bash
+
+        sudo yum install java-11-amazon-corretto-headless
+        sudo alternatives --config java
+        sudo alternatives --config javac
+
+   .. tab-item:: Ubuntu 20 DLAMI Base
+
+      .. code-block:: bash
+
+        sudo apt install openjdk-11-jdk
+
 
 .. code:: bash
 
-  $ java -version
+  java -version
 
 ::
 
-  openjdk 11.0.11 2021-04-20
-  OpenJDK Runtime Environment (build 11.0.11+9-Ubuntu-0ubuntu2.18.04)
-  OpenJDK 64-Bit Server VM (build 11.0.11+9-Ubuntu-0ubuntu2.18.04, mixed mode, sharing)
+  openjdk version "11.0.17" 2022-10-18
+  OpenJDK Runtime Environment (build 11.0.17+8-post-Ubuntu-1ubuntu218.04)
+  OpenJDK 64-Bit Server VM (build 11.0.17+8-post-Ubuntu-1ubuntu218.04, mixed mode, sharing)
 
 .. code:: bash
 
-  $ javac -version
+  javac -version
 
 ::
 
-  javac 11.0.11
+  javac 11.0.17
 
 Verify that TorchServe is now available.
 
 .. code:: bash
 
-  $ torchserve --version
+  torchserve --version
 
 ::
 
-  TorchServe Version is 0.5.0
+  TorchServe Version is 0.7.0
 
 
 .. _torchserve-setup:
@@ -91,19 +94,19 @@ Verify that TorchServe is now available.
 Setup TorchServe
 ----------------
 
-During this tutorial you will need to download various files onto your instance. The simplest way to accomplish this is to paste the download links provided above each file into a ``wget`` command. (We don't provide the links directly because they are subject to change.) For example, right-click and copy the download link for ``config.json`` shown below.
+During this tutorial you will need to download a few files onto your instance. The simplest way to accomplish this is to paste the download links provided above each file into a ``wget`` command. (We don't provide the links directly because they are subject to change.) For example, right-click and copy the download link for ``config.json`` shown below.
 
 .. literalinclude:: /src/examples/pytorch/torchserve/config.json
     :language: JSON
-    :caption: :download:`config.json </src/torchserve/config.json>`
+    :caption: :download:`config.json </src/examples/pytorch/torchserve/config.json>`
 
 
 Now execute the following in your shell:
 
 .. code:: bash
 
-  $ wget <paste link here>
-  $ ls
+  wget <paste link here>
+  ls
 
 ::
 
@@ -120,11 +123,11 @@ Next, we need to associate the handler script with the compiled model using ``to
 
 .. code:: bash
 
-  $ mkdir model_store
-  $ MAX_LENGTH=$(jq '.max_length' config.json)
-  $ BATCH_SIZE=$(jq '.batch_size' config.json)
-  $ MODEL_NAME=bert-max_length$MAX_LENGTH-batch_size$BATCH_SIZE
-  $ torch-model-archiver --model-name "$MODEL_NAME" --version 1.0 --serialized-file ./bert_neuron_b6.pt --handler "./handler_bert.py" --extra-files "./config.json" --export-path model_store
+  mkdir model_store
+  MAX_LENGTH=$(jq '.max_length' config.json)
+  BATCH_SIZE=$(jq '.batch_size' config.json)
+  MODEL_NAME=bert-max_length$MAX_LENGTH-batch_size$BATCH_SIZE
+  torch-model-archiver --model-name "$MODEL_NAME" --version 1.0 --serialized-file ./bert_neuron_b6.pt --handler "./handler_bert.py" --extra-files "./config.json" --export-path model_store
 
 .. note::
 
@@ -166,13 +169,13 @@ It's time to start the server. Typically we'd want to launch this in a separate 
 
 .. code:: bash
 
-  $ torchserve --start --ncs --model-store model_store --ts-config torchserve.config 2>&1 >torchserve.log
+  torchserve --start --ncs --model-store model_store --ts-config torchserve.config 2>&1 >torchserve.log
 
 Verify that the server seems to have started okay.
 
 .. code:: bash
 
-  $ curl http://127.0.0.1:8080/ping
+  curl http://127.0.0.1:8080/ping
 
 ::
 
@@ -252,21 +255,25 @@ Run the benchmarking script.
 
 .. code:: bash
 
-  $ python benchmark_bert.py
+  python benchmark_bert.py
 
 ::
 
-  pid 26980: current throughput 0.0, latency p50=0.000 p90=0.000
-  pid 26980: current throughput 584.1, latency p50=0.099 p90=0.181
-  pid 26980: current throughput 594.2, latency p50=0.100 p90=0.180
-  pid 26980: current throughput 598.8, latency p50=0.095 p90=0.185
-  pid 26980: current throughput 607.9, latency p50=0.098 p90=0.182
-  pid 26980: current throughput 608.6, latency p50=0.096 p90=0.181
-  pid 26980: current throughput 611.3, latency p50=0.096 p90=0.185
-  pid 26980: current throughput 610.2, latency p50=0.096 p90=0.185
+  pid 28523: current throughput 0.0, latency p50=0.000 p90=0.000
+  pid 28523: current throughput 617.7, latency p50=0.092 p90=0.156
+  pid 28523: current throughput 697.3, latency p50=0.082 p90=0.154
+  pid 28523: current throughput 702.8, latency p50=0.081 p90=0.149
+  pid 28523: current throughput 699.1, latency p50=0.085 p90=0.147
+  pid 28523: current throughput 703.8, latency p50=0.083 p90=0.148
+  pid 28523: current throughput 699.3, latency p50=0.083 p90=0.148
   ...
 
 **Congratulations!** By now you should have successfully served a batched model over TorchServe.
 
+You can now shutdown torchserve.
+
+.. code:: bash
+
+  torchserve --stop
 
 

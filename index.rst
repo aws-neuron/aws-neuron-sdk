@@ -56,6 +56,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
 
    Neuron Runtime </neuron-runtime/index>
    Neuron Compiler </compiler/index>
+   Neuron C++ Custom Operators </neuron-customops/index>
    Neuron Tools </tools/index>
    Setup Guide </general/setup/index>
    Containers Deployment </containers/index>
