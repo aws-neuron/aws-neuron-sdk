@@ -84,7 +84,7 @@
         pip install awscli
 
         # Install Neuron packages
-        pip install torch-neuronx==1.12.0.1.*
+        pip install torch-neuronx==1.13.0.1.*
         pip install neuronx-cc==2.*
 
 
