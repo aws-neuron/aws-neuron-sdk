@@ -26,8 +26,7 @@ You will need to adapt the batch size, input shape, and filename for your model.
    # Benchmark and save results
    reports = npf.torch.benchmark("your_model_file.pt", inputs, batch_sizes)
    npf.print_reports(reports)
-   npf.write_csv(reports)  # save table of most useful data, or...
-   npf.write_json(reports)  # save everything
+   npf.write_json(reports)
 
 
 .. code:: bash

@@ -7,8 +7,8 @@ NeuronPerf Framework Notes
 PyTorch
 =======
 
-  * Requires: ``torch-neuron``
-  	- Versions: 1.7.x, 1.8.x, 1.9.x, 1.10.x
+  * Requires: ``torch-neuron`` or ``torch-neuronx``
+	- Versions: 1.7.x, 1.8.x, 1.9.x, 1.10.x, 1.11.x, 1.12.x, 1.13.x
   * Input to ``compile``: ``torch.nn.Module``
   * Model inputs: ``Any``.
 
@@ -28,7 +28,7 @@ TensorFlow 1.x
 TensorFlow 2.x
 ==============
 
-  * Requires: ``tensorflow-neuron``
+  * Requires: ``tensorflow-neuron`` or ``tensorflow-neuronx``
   	- Versions: All
   * Input to ``compile``: ``tf.keras.Model``
   * Model inputs: Tensors must be provided as ``numpy.ndarray``

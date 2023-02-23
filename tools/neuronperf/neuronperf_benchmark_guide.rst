@@ -16,10 +16,9 @@ The two most common ways to provide your model are:
 #. Provide the path to your compiled model
 #. Provide the path to a model index from ``neuronperf.compile`` (a JSON file)
 
+
 Data Parallel
 ~~~~~~~~~~~~~
-
-**If you choose 1, then...**
 
 Your model is benchmarked on provided ``inputs`` in 4 different configurations:
    #. A single model on 1 NeuronCore with one worker (min. latency)
@@ -31,10 +30,12 @@ The value ``MAX`` is automatically determined by your instance size. If it can't
 
 The primary benefit of (3) and (4) is to verify that your model scales well at maximum instance usage.
 
-**If you chose 2, then...**
+.. note::
 
-* Your input parameters to ``benchmark`` (``batch_sizes``, etc.) are treated as filters on the index
-* Each remaining model configuration is benchmarked as described in (1)
+   If you provided the path to a model index from ``compile``:
+      * Your input parameters to ``benchmark`` (``batch_sizes``, etc.) are treated as filters on the index
+      * Each remaining model configuration is benchmarked as described in (1)
+
 
 Pipeline
 ~~~~~~~~
