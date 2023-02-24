@@ -85,32 +85,7 @@ customers to choose between four instances sizes:
 
 
 Inf1 offers a direct device-to-device interconnect called NeuronLink-v1,
-which enables co-optimizing latency and throughput via the `Neuron Core Pipeline <neuroncore-pipeline>` technology. 
+which enables co-optimizing latency and throughput via the :ref:`Neuron Core Pipeline <neuroncore-pipeline>` technology. 
 
 .. image:: /images/inf1-server-arch.png
-    :width: 700
-
-.. _inferentia-arch:
-
-
-Inferentia Architecture
------------------------
-
-At the heart of the Inf1 instance are 16 Inferentia devices, as depicted
-below:
-
-.. image:: /images/inferentia-neurondevice.png
-    :width: 500
-
-Each Inferentia device consists of:
-
--  Compute:
-    * 4x :ref:`NeuronCore-v1 <neuroncores-v1-arch>` cores, delivering 128 INT8 TOPS and 64 FP16/BF16 TFLOPS
-
--  Device Memory:
-    * 8GB of device DRAM memory  (for storing parameters and intermediate state), with 50 GB/sec of bandwidth
-
--  NeuronLink:
-    * Enables co-optimization of latency
-      and throughput via the :ref:`Neuron Core Pipeline <neuroncore-pipeline>`   technology
 

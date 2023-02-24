@@ -1,4 +1,4 @@
-.. dropdown::  Setup Guide for Trn1
+.. dropdown::  Setup Guide for Trn1 & Inf2
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -9,7 +9,7 @@
 
     .. include:: /general/setup/install-templates/trn1-ga-warning.txt
 
-.. dropdown::  Tutorials  (``torch-neuronx``)
+.. dropdown::  Tutorials
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -29,7 +29,7 @@
     * :ref:`running-jupyter-notebook-as-script`
 
 
-.. dropdown::  Additional Examples (``torch-neuronx``)
+.. dropdown::  Additional Examples
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -38,7 +38,7 @@
     * `AWS Neuron Samples for AWS ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
     * `AWS Neuron Samples GitHub Repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_
 
-.. dropdown::  API Reference Guide  (``torch-neuronx``)
+.. dropdown::  API Reference Guide
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -47,7 +47,7 @@
     * :ref:`pytorch-neuronx-envvars`
     * :ref:`torch-neuronx-profiling-api`
 
-.. dropdown::  Developer Guide  (``torch-neuronx``)
+.. dropdown::  Developer Guide
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -56,11 +56,10 @@
     * :ref:`pytorch-neuronx-debug`
     * :ref:`torch-neuronx-dev-guide`
 
-.. dropdown:: Misc    (``torch-neuronx``)
+.. dropdown:: Misc
     :class-title: sphinx-design-class-title-med
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    :open:
 
     * :ref:`pytorch-neuron-supported-operators`
     * :ref:`pytorch-neuron-traning-troubleshooting`

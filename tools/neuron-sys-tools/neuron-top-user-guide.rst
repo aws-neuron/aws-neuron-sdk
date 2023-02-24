@@ -13,6 +13,11 @@ Overview
 loaded models, and Neuron applications.
 
 .. note::
+
+  ``neuron-top`` fully supports the newly launched inf2 instances.
+
+.. note::
+
   If you are parsing ``neuron-top`` output in your automation environment, you can now replace it with ``neuron-monitor``
   (:ref:`neuron-monitor-ug`) which outputs data in a standardized, easier to parse JSON format.
 
@@ -26,7 +31,7 @@ Launch ``neuron-top`` by simply typing its name in the shell: ``neuron-top``.
 User interface
 ~~~~~~~~~~~~~~
 
-The title section of the user interface shows the application's version number, 
+The title section of the user interface shows the application's version number,
 EC2 instance ID, and the instance type on which it is running:
 
 |titleimg|
@@ -40,7 +45,7 @@ a single Neuron process:
 
 * The ``NeuronCore <vers> Utilization`` section shows the NeuronCore utilization for the
   currently selected tab. ``<vers>`` is the version of the NeuronCores on the instance (for example,
-  ``v2`` for trn1 instances).
+  ``v2`` for trn1 instances and inf2 instances).
 
   Pressing the 'F' key will toggle between displaying utilization percentages - as seen in the previous image -
   and teraflops (trillion floating point operations per second), as seen in the image below:
@@ -56,7 +61,7 @@ a single Neuron process:
   as on the host:
 
   * ``Host Used Memory`` - amount of host memory used by the selected application (or an aggregate of all applications if 'All' is selected)
-  
+
     * ``Total`` - total amount of host memory used
     * ``Tensors`` - amount of host memory used for tensors
     * ``Constants`` - amount of host memory used for constants (for applications running training) or weights (for applications running inferences)

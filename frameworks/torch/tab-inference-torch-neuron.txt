@@ -1,14 +1,6 @@
-.. dropdown:: Setup Guide for Inference on Inf1
-	:class-title: sphinx-design-class-title-med
-	:animate: fade-in
 
-	* :ref:`Fresh install <install-neuron-pytorch>`
-	* :ref:`Update to latest release <update-neuron-pytorch>`
-	* :ref:`Install previous releases <install-prev-neuron-pytorch>`
-	* :ref:`pytorch-install-cxx11`
-		
 .. dropdown:: Tutorials  (``torch-neuron``)
-	:class-title: sphinx-design-class-title-med
+	:class-title: sphinx-design-class-title-small
 	:animate: fade-in
 	:name: torch-neuronx-training-tutorials
 
@@ -53,7 +45,7 @@
 
 
 .. dropdown::  Additional Examples (``torch-neuron``)
-	:class-title: sphinx-design-class-title-med
+	:class-title: sphinx-design-class-title-small
 	:class-body: sphinx-design-class-body-small
 	:animate: fade-in
 
@@ -61,7 +53,7 @@
 
 
 .. dropdown:: API Reference Guide (``torch-neuron``)
-	:class-title: sphinx-design-class-title-med
+	:class-title: sphinx-design-class-title-small
 	:animate: fade-in
 
 	* :ref:`PyTorch Neuron trace Python API <torch_neuron_trace_api>`
@@ -69,7 +61,7 @@
 	* :ref:`torch_core_placement_api`
 
 .. dropdown:: Developer Guide (``torch-neuron``)
-	:class-title: sphinx-design-class-title-med
+	:class-title: sphinx-design-class-title-small
 	:animate: fade-in
 
         * :ref:`Running Inference on Variable Input Shapes with Bucketing <bucketing_app_note>`
@@ -78,9 +70,8 @@
         * :ref:`torch_neuron_core_placement_guide`
 
 .. dropdown:: Misc (``torch-neuron``)
-	:class-title: sphinx-design-class-title-med
+	:class-title: sphinx-design-class-title-small
 	:animate: fade-in
-	:open:
 
 	* :ref:`neuron-cc-ops-pytorch`
 	* :ref:`pytorch-neuron-inference-troubleshooting`

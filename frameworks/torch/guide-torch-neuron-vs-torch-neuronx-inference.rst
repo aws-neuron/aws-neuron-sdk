@@ -1,7 +1,7 @@
 .. _torch-neuron_vs_torch-neuronx:
 
-Comparison of |torch-neuron| (|Inf1|) versus |torch-neuronx| (|Trn1|) for Inference
-===================================================================================
+Comparison of |torch-neuron| (|Inf1|) versus |torch-neuronx| (|Inf2| & |Trn1|) for Inference
+============================================================================================
 
 Neuron now supports multiple instance types for inference. The choice of
 instance should be motivated primarily by the performance needs of the
@@ -17,7 +17,7 @@ training*.
     **Recommendation**: Continue using |torch-neuron| (|Inf1|) for existing
     inference applications.
 
-    |torch-neuronx| (|Trn1|) should be used for inference applications that
+    |torch-neuronx| (|Inf2| & |Trn1|) should be used for inference applications that
     require very low latency, distributed inference, and large models that would
     not otherwise work with |Inf1|. See: :ref:`benchmark`.
 
@@ -68,7 +68,7 @@ Hardware Features
 ~~~~~~~~~~~~~~~~~
 
 The |torch-neuron| framework supports |Inf1| instances and the |torch-neuronx|
-framework supports |Trn1| instance. These instances have different
+framework supports |Inf2| & |Trn1| instances. These instances have different
 |architectures|, networking configurations, and capabilities due to the
 NeuronCore versions used.
 
@@ -76,8 +76,8 @@ Models compiled with |torch-neuron| produce artifacts which are *only*
 compatible with |NeuronCore-v1|. Models compiled with |torch-neuronx| produce
 artifacts which are *only* compatible with |NeuronCore-v2|. This also means
 that models that were previously compiled with |torch-neuron| for |Inf1| are
-not forwards compatible with |Trn1| instances. Likewise, models compiled
-with |torch-neuronx| for |Trn1| are not backwards compatible with |Inf1|.
+not forwards compatible with |Inf2| & |Trn1| instances. Likewise, models compiled
+with |torch-neuronx| for |Inf2| & |Trn1| are not backwards compatible with |Inf1|.
 
 |NeuronCore-v2| is capable of higher throughput and lower latency than
 |NeuronCore-v1| due to more powerful compute engines and improved memory
@@ -151,7 +151,7 @@ Feature Summary
 +-----------------------+-----------------------------+-----------------------------+
 |                       | `torch-neuron`              | `torch-neuronx`             |
 +=======================+=============================+=============================+
-| Supported Instances   | |Inf1|                      | |Trn1|                      |
+| Supported Instances   | |Inf1|                      | |Inf2| & |Trn1|             |
 +-----------------------+-----------------------------+-----------------------------+
 | Inference Support     | Yes                         | Yes                         |
 +-----------------------+-----------------------------+-----------------------------+
@@ -207,6 +207,7 @@ error occurs during compilation, please file a ticket in the
 .. |neuronx-cc-mixed-precision| replace:: :ref:`neuronx-cc-training-mixed-precision`
 .. |Inf1| replace:: :ref:`Inf1 <aws-inf1-arch>`
 .. |Trn1| replace:: :ref:`Trn1 <aws-trn1-arch>`
+.. |Inf2| replace:: :ref:`Inf2 <aws-inf2-arch>`
 .. |architectures| replace:: :ref:`architectures <neuroncores-arch>`
 .. |NeuronCore-v1| replace:: :ref:`NeuronCore-v1 <neuroncores-v1-arch>`
 .. |NeuronCore-v2| replace:: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`

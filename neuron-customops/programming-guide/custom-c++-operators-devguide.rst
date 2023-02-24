@@ -17,7 +17,7 @@ Please refer to the following documents for further information regarding Neuron
 Setup & Installation
 --------------------
 
-We provide tooling and library packages (RPM and DEB) that can be installed on a TRN1 instance:
+We provide tooling and library packages (RPM and DEB) that can be installed on TRN1 and INF2 instances:
 ::
 
    aws-neuronx-gpsimd-tools-0.1

@@ -1,0 +1,32 @@
+.. _inference-tensorflow-neuronx:
+
+.. dropdown::  Tutorials (``tensorflow-neuronx``)
+    :class-title: sphinx-design-class-title-med
+    :animate: fade-in
+
+    * HuggingFace Roberta-Base :ref:`[html]</src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>`
+    * :ref:`tensorflow-serving-neuronrt-visible-cores`
+
+    .. note::
+        To use Jupyter Notebook see:
+
+            * :ref:`setup-jupyter-notebook-steps-troubleshooting`
+            * :ref:`running-jupyter-notebook-as-script`
+
+
+
+
+.. dropdown::  API Reference Guide (``tensorflow-neuronx``)
+                :class-title: sphinx-design-class-title-med
+                :class-body: sphinx-design-class-body-small
+                :animate: fade-in
+
+                * :ref:`tfneuronx-ref-neuron-tracing-api`
+                * :ref:`tf-neuronx-ref-auto-replication-python-api`
+
+.. dropdown::  Misc (``tensorflow-neuronx``)
+                :class-title: sphinx-design-class-title-med
+                :class-body: sphinx-design-class-body-small
+                :animate: fade-in
+                
+                * :ref:`tensorflow-neuronx-release-notes`

@@ -1,12 +1,6 @@
-.. important::
-
-    AutoScalingGroups is currently not supported on Trn1 and will be added soon.
-    
-    To launch a Trn1 cluster you can use AWS ParallelCluster, please see `example <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_.
-
 .. note::
 
-  Neuron Driver installed on Deep Learning AMI (DLAMI) with Conda does not support Trn1.
+  Neuron Driver installed on Deep Learning AMI (DLAMI) with Conda does not support Inf2\\Trn1.
   
   If you want to use DLAMI with Conda, please make sure to uninstall ``aws-neuron-dkms`` and install 
   ``aws-neuronx-dkms`` before using  Neuron on DLAMI with Conda.

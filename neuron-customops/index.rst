@@ -12,6 +12,35 @@ Neuron Custom C++ Operators [Experimental]
         Neuron Custom C++ Operators feature is available only starting from second generation of NeuronCore (NeuronCore-v2)
 
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /neuron-customops/api-reference-guide/api-reference-guide
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+      
+    /neuron-customops/programming-guide/programming-guide
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /neuron-customops/tutorials/tutorials
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /neuron-customops/misc-customops
+
+
+
 
 .. dropdown::  API Reference Guide
       :class-title: sphinx-design-class-title-med
@@ -19,10 +48,8 @@ Neuron Custom C++ Operators [Experimental]
       :animate: fade-in
       :open:
 
-      .. toctree::
-         :maxdepth: 1
+      * :ref:`custom-ops-api-ref-guide`       
 
-         /neuron-customops/api-reference-guide/custom-ops-ref-guide
 
 .. dropdown::  Developer Guide
       :class-title: sphinx-design-class-title-med
@@ -30,10 +57,8 @@ Neuron Custom C++ Operators [Experimental]
       :animate: fade-in
       :open:
 
-      .. toctree::
-         :maxdepth: 1
+      * :ref:`feature-custom-operators-devguide`
 
-         /neuron-customops/programming-guide/custom-c++-operators-devguide
 
 .. dropdown::  Tutorials
       :class-title: sphinx-design-class-title-med
@@ -41,22 +66,20 @@ Neuron Custom C++ Operators [Experimental]
       :animate: fade-in
       :open:
 
-      .. toctree::
-         :maxdepth: 1
+      * :ref:`neuronx-customop-mlp-tutorial`
 
-         /neuron-customops/tutorials/customop-mlp-training
 
-.. dropdown::  
+.. dropdown::  Misc
       :class-title: sphinx-design-class-title-med
       :class-body: sphinx-design-class-body-small
       :animate: fade-in
       :open:
 
-      .. toctree::
-         :maxdepth: 1
+  
+      * :ref:`gpsimd-customop-tools-rn`
+      * :ref:`gpsimd-customop-lib-rn`
 
-         /release-notes/customcxxps/gpsimd-tools
-         /release-notes/customcxxps/gpsimd-customop-lib
+
 
 
 

@@ -17,7 +17,7 @@ Install TensorFlow Model Server and Serving API
 
 Follow the steps in the :ref:`install-neuron-tensorflow`.
 
-Then ensure you install using either apt-get or yum. 
+Then ensure you install using either apt-get or yum.
 If using TF 1.x, install the appropriate version (see above).:
 
 .. code:: bash
@@ -39,7 +39,7 @@ For Tensorflow 1.x:
 .. code:: bash
 
    pip install --no-deps tensorflow_serving_api==1.15
-   
+
 For Tensorflow 2.x:
 
 .. code:: bash
@@ -166,7 +166,7 @@ For Tensorflow 1.x:
       result = stub.Predict(request)
       prediction = tf.make_ndarray(result.outputs['output'])
       print(decode_predictions(prediction))
-      
+
 For Tensorflow 2.x:
 
 .. code:: python

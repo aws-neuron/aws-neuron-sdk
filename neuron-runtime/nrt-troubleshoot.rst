@@ -1,7 +1,7 @@
 .. _nrt-troubleshooting:
 
-Neuron Runtime Troubleshooting on Inf1 and Trn1
-===============================================
+Neuron Runtime Troubleshooting on Inf1, Inf2 and Trn1
+=====================================================
 
 This document aims to provide more information on how to fix issues you
 might encounter while using the Neuron Runtime 2.x or above. For each

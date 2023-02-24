@@ -1,0 +1,4 @@
+.. note::
+    For help selecting a framework type, see:
+
+    :ref:`torch-neuron_vs_torch-neuronx`

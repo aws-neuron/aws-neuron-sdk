@@ -258,7 +258,7 @@ For a successful migration of your application to *Neuron 1.16.0* or newer from 
     * Please consider using ``NEURON_RT_VISIBLE_CORES`` or ``NEURON_RT_NUM_CORES`` environment variables instead of ``NEURONCORE_GROUP_SIZES`` as it is being deprecated, 
     see :ref:`nrt-configuration` for details.
 
-    * If you using TensorFlow Neuron (``tensorflow-nueron (TF2.x)``) and you are replacing ``NEURONCORE_GROUP_SIZES=AxB`` which enables auto multicore replication, please see the new api :ref:`tensorflow-ref-auto-replication-python-api` for usage and documentation.
+    * If you are using TensorFlow Neuron (``tensorflow-neuron (TF2.x)``) and you are replacing ``NEURONCORE_GROUP_SIZES=AxB`` which enables auto multicore replication, please see the new api :ref:`tensorflow-ref-auto-replication-python-api` for usage and documentation.
    
     * Your application behavior will remain the same as before if you do not set ``NEURON_RT_VISIBLE_CORES`` and do not set ``NEURON_RT_NUM_CORES``.
 

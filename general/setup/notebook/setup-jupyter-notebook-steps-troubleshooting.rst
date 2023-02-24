@@ -90,7 +90,11 @@ If your jupyter notebook does not start please try the following:
    mkdir -p ~/.jupyter
    echo "c.NotebookApp.iopub_data_rate_limit = 10000000000" > ~/.jupyter/jupyter_notebook_config.py
 
-   conda install nb_conda_kernels
+   # Instal Jupyter notebook kernel
+    pip install ipykernel
+    python3 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python Neuronx"
+    pip install jupyter notebook
+    pip install environment_kernels
 
    jupyter notebook
 

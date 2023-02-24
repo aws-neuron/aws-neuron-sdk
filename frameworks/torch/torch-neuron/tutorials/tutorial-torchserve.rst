@@ -19,7 +19,7 @@ This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ 
 Run the tutorial
 ----------------
 
-Verify that you have a Pytorch virtual environment setup and activated according to the :ref:`Pytorch Installation Guide <install-neuron-pytorch>`. To complete this tutorial, you will need a compiled BERT model. If you have already completed the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>` then you already have the necessary file. Otherwise, you can setup your environment as shown below and then run :download:`trace_bert_neuron.py </src/examples/pytorch/torchserve/trace_bert_neuron.py>` to obtain a traced BERT model.
+Open a terminal, log into your remote instance, and activate a Pytorch virtual environment setup (see the :ref:`Pytorch Installation Guide <install-neuron-pytorch>`). To complete this tutorial, you will need a compiled BERT model. If you have already completed the HuggingFace Pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>` then you already have the necessary file. Otherwise, you can setup your environment as shown below and then run :download:`trace_bert_neuron.py </src/examples/pytorch/torchserve/trace_bert_neuron.py>` to obtain a traced BERT model.
 
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
@@ -39,7 +39,7 @@ Prepare a new Python virtual environment with the necessary Neuron and TorchServ
 
 .. code:: bash
 
-  pip install transformers==4.26.0 torchserve==0.7.0 torch-model-archiver==0.7.0
+  pip install transformers==4.20.1 torchserve==0.7.0 torch-model-archiver==0.7.0 captum==0.6.0
 
 Install the system requirements for TorchServe.
 
@@ -49,7 +49,7 @@ Install the system requirements for TorchServe.
 
       .. code-block:: bash
 
-        sudo yum install java-11-amazon-corretto-headless
+        sudo yum install jq java-11-amazon-corretto-headless
         sudo alternatives --config java
         sudo alternatives --config javac
 

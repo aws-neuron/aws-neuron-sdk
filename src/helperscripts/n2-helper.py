@@ -120,7 +120,7 @@ class manifest:
         str_runtime = self.install_neuron_runtime(args)
 
         # Install EFA driver
-        str_runtime += self.install_efa_driver(args)
+        str_efa = self.install_efa_driver(args)
 
         # Install Neuron Tools
         str_tools = self.install_neuron_system_tools(args)
@@ -136,6 +136,9 @@ class manifest:
         # Activate Pythohn venv
         str_python += self.activate_python_venv(args)
 
+        # install jupyter notebook
+        str_python += self.jupyter_notebook(args)
+
         # Set pip repository
         str_python += self.set_pip_repository()
 
@@ -148,12 +151,19 @@ class manifest:
         # Install Neuron framework
         str_framework = self.install_neuron_framework(args)
 
+        # install neuron compiler and framework
+        str_compiler_framework = self.install_neuron_compiler_and_framework(args)
         if args.category == 'all':
-            return str_preamble + str_driver + str_runtime + str_tools + str_python + str_compiler + str_framework
+            if args.instance == 'trn1':
+                 str_runtime += str_efa
+            return str_preamble + str_driver + str_runtime + str_tools + str_python + str_compiler_framework
         elif args.category == 'driver_runtime_tools':
             return str_preamble + str_driver + str_runtime + str_tools
         elif args.category == 'compiler_framework':
-            return str_python + str_compiler + str_framework
+            if args.instance != 'inf1':
+                return str_runtime + str_python + str_compiler_framework
+            else:
+                return str_python + str_compiler_framework
         elif args.category == 'driver':
             return str_preamble + str_driver
         elif args.category == 'runtime':
@@ -167,13 +177,36 @@ class manifest:
                 return str_python
         elif args.category == 'framework':
             return str_framework
+        elif args.category == 'efa':
+            return str_efa
+
+    def jupyter_notebook(self, args):
+        os_default_python_version = \
+            self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
+        packages_supporting_python_versions = self.get_pip_packages_supporting_python_versions(args)
+
+        if os_default_python_version in packages_supporting_python_versions:
+            target_python_version = os_default_python_version
+        else:
+            target_python_version = max(packages_supporting_python_versions)
+
+        framework_name = self.get_package_names(category=args.framework, instance=args.instance)[0]
+
+        str_jupiter = '\n# Install Jupyter notebook kernel\n'
+        str_jupiter += 'pip install ipykernel ' + '\n'
+        str_jupiter += 'python' + target_python_version + ' -m ipykernel install --user --name '
+        str_jupiter +=  'aws_neuron_venv_' + args.framework
+        str_jupiter += ' --display-name "Python (' + framework_name + ')"' + '\n'
+        str_jupiter += 'pip install jupyter notebook' + '\n'
+        str_jupiter += 'pip install environment_kernels' + '\n'
+        str_jupiter += '\n'
+        return str_jupiter
 
     def config_neuron_repository(self, args):
         """
         Reads OS type from the arguments and generates scripts for configuration of Neuron repository
         """
         str = ''
-
         if args.mode != 'compile':
             # Neuron repository needs when mode is 'develop' or 'deploy'
             if args.install_type == 'install':
@@ -471,7 +504,9 @@ class manifest:
 
             # Create Python venv
             str += f'\n{indentation}# Create Python venv\n'
-            str += f'{indentation}python{target_python_version} -m venv aws_neuron_venv_' + args.framework + ' \n'
+            str_venv_name = 'aws_neuron_venv_' + args.framework
+
+            str += f'{indentation}python{target_python_version} -m venv ' + str_venv_name + ' \n'
 
         return str
 
@@ -482,7 +517,8 @@ class manifest:
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
         str += f'\n{indentation}# Activate Python venv \n'
-        str += f'{indentation}source aws_neuron_venv_' + args.framework + '/bin/activate \n'
+        str_venv_name = 'aws_neuron_venv_' + args.framework
+        str += f'{indentation}source ' + str_venv_name + '/bin/activate \n'
 
         # install python packages
         if args.install_type == 'install':
@@ -511,6 +547,124 @@ class manifest:
             str += f'{indentation}python -m pip install awscli \n'
 
         return str
+
+    def install_neuron_compiler_and_framework(self, args):
+        str = ''
+        indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
+        compiler_package = self.get_package_names(category='compiler', instance=args.instance)[0]
+        framework_name = self.get_package_names(category=args.framework, instance=args.instance)[0]
+        # if args.instance == 'inf1':
+        #     return ''
+
+        str = ''
+        if args.mode != 'deploy':
+            if args.install_type == 'install':
+                str += f'\n{indentation}# Install Neuron Compiler and Framework\n'
+            elif args.install_type == 'update':
+                str += f'\n{indentation}# Update Neuron Compiler and Framework\n'
+
+            str += f'{indentation}python -m pip install '
+            if args.install_type == 'update':
+                str += '--upgrade '
+
+            str += compiler_package
+
+            if args.neuron_version == None:
+                if self.df_package_properties.loc[self.df_package_properties['name'] == compiler_package][
+                    'pin_major'].values[0] == 'true':
+                    str += '==' + self.get_major_version(compiler_package, args.instance) + '.* '
+            else:
+                str += '==' + self.get_package_version(category='compiler', name=compiler_package,
+                                                       neuron_version=args.neuron_version) + ' '
+
+        if args.neuron_version != None:  # prev install
+            str += framework_name + '=='
+            str += self.get_package_version(category=args.framework, name=framework_name,
+                                            neuron_version=args.neuron_version,
+                                            framework_version=args.framework_version)
+        else:  # fresh install
+            str += framework_name
+        
+        if args.framework == 'pytorch':
+            str += ' torchvision\n'
+
+        if args.instance == 'inf1':
+
+            install = 'Install' if args.install_type == 'install' else 'Update'
+            upgrade = '--upgrade ' if args.install_type == 'update' else ''
+
+            if args.neuron_version != None:  # in case of previous neuron version
+                version = '==' + self.get_package_version(category=args.framework, neuron_version=args.neuron_version,
+                                                          framework_version=args.framework_version)
+            else:  # in case of latest neuron version (fresh install)
+                if args.framework_version.startswith(
+                        self.get_main_framework_version(instance=args.instance, framework=args.framework,
+                                                        neuron_version=args.neuron_version)) == False:
+                    version = '==' + args.framework_version + '.*'
+                else:
+                    version = ''
+
+            if args.framework == 'pytorch':
+
+                pytorch_aux = ' neuron-cc[tensorflow] "protobuf"' if args.mode != 'deploy' else ''
+
+                str = f'\n# {install} PyTorch Neuron\n'
+                str += f'python -m pip install {upgrade}torch-neuron{version}{pytorch_aux} torchvision\n'
+
+            elif args.framework == 'tensorflow':
+
+                if args.neuron_version != None:  # in case of previous neuron version
+
+                    ms_version = '=' + self.get_package_version(category='model-server',
+                                                                neuron_version=args.neuron_version,
+                                                                framework_version=args.framework_version)
+                else:  # in case of latest neuron version (fresh install)
+                    if args.framework_version != self.get_main_framework_version(instance=args.instance,
+                                                                                 framework=args.framework,
+                                                                                 neuron_version=args.neuron_version):
+                        ms_version = '=' + self.get_package_version(category='model-server',
+                                                                    neuron_version=args.neuron_version,
+                                                                    framework_version=args.framework_version)
+                    else:
+                        ms_version = ''
+
+                str = f'\n# {install} TensorFlow Neuron\n'
+                str += f'python -m pip install {upgrade}tensorflow-neuron[cc]{version} "protobuf"\n'
+
+                str += f'\n# {install} Neuron TensorBoard\n'
+                str += f'python -m pip install {upgrade}tensorboard-plugin-neuron\n'
+
+                if args.mode != 'compile':
+                    str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
+                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
+                        str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
+                    elif args.os == 'amazonlinux2':
+                        str += f'sudo yum install tensorflow-model-server-neuronx{ms_version} -y\n'
+
+            elif args.framework == 'mxnet':
+
+                mxnet_framework = ''
+
+                if args.framework_version == '1.8.0':
+                    mxnet_framework = 'mx_neuron'
+                elif args.framework_version == '1.5.1':
+                    mxnet_framework = 'mxnet_neuron'
+
+                str = f'\n# {install} MXNet Neuron\n'
+                str += 'wget https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
+                str += 'pip install aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
+                str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc\n'
+
+        if args.venv_install_type == 'parallel-cluster':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
+                str += f'\n\n{indentation}chown ubuntu:ubuntu -R {args.framework}_venv\n'
+            elif args.os == 'amazonlinux2':
+                str += f'\n\n{indentation}chown ec2-user:ec2-user -R {args.framework}_venv\n'
+
+            str += 'fi'
+
+        return str
+
 
     def install_neuron_compiler(self, args):
         '''
@@ -576,9 +730,6 @@ class manifest:
             str += self.get_package_version(category=args.framework, name=framework_name,
                                             neuron_version=args.neuron_version,
                                             framework_version=args.framework_version)
-
-            # framework_major_version = self.extract_major_minor_version(Version(args.framework_version)) + ".*"
-            # str += framework_major_version
         else:  # fresh install
             str += framework_name
 
@@ -603,7 +754,7 @@ class manifest:
 
             if args.framework == 'pytorch':
 
-                pytorch_aux = ' neuron-cc[tensorflow] "protobuf==3.20.1"' if args.mode != 'deploy' else ''
+                pytorch_aux = ' neuron-cc[tensorflow] "protobuf"' if args.mode != 'deploy' else ''
 
                 str = f'\n# {install} PyTorch Neuron\n'
                 str += f'python -m pip install {upgrade}torch-neuron{version}{pytorch_aux} torchvision\n'
@@ -627,7 +778,7 @@ class manifest:
                         ms_version = ''
 
                 str = f'\n# {install} TensorFlow Neuron\n'
-                str += f'python -m pip install {upgrade}tensorflow-neuron[cc]{version} "protobuf==3.20.1"\n'
+                str += f'python -m pip install {upgrade}tensorflow-neuron[cc]{version} "protobuf"\n'
 
                 if args.mode != 'compile':
                     str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
@@ -646,6 +797,8 @@ class manifest:
                     mxnet_framework = 'mxnet_neuron'
 
                 str = f'\n# {install} MXNet Neuron\n'
+                str += 'wget https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
+                str += 'pip install aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
                 str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc\n'
 
         if args.venv_install_type == 'parallel-cluster':
@@ -759,13 +912,13 @@ def cli_parse_arguments():
                                      ,
                                      usage='\npython3 %(prog)s --list={packages} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --install-type={install,update}\n'
-                                           + 'python3 %(prog)s --instance={inf1,trn1}\n'
+                                           + 'python3 %(prog)s --instance={inf1,trn1,inf2}\n'
                                            + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2}\n'
                                            + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
                                            + 'python3 %(prog)s --framework-version=[X.Y.Z] [options]\n'
                                            + 'python3 %(prog)s --mode={develop,compile,deploy} [options]\n'
-                                           + 'python3 %(prog)s --category={framework,driver,runtime,compilere,tools,all,driver_runtime_tools,compiler_framework}\n'
+                                           + 'python3 %(prog)s --category={framework,driver,runtime,compiler,tools,all,driver_runtime_tools,compiler_framework,efa}\n'
                                            + 'options= [--file=FILE]\n'
                                      , description='Installer helper for Neuron SDK')
 
@@ -773,14 +926,14 @@ def cli_parse_arguments():
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
     group.add_argument("--list", choices=['neuron_versions', 'packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
-    parser.add_argument("--instance", choices=['inf1', 'trn1'])
+    parser.add_argument("--instance", choices=['inf1', 'trn1','inf2'])
     parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework'],
                         default='non-dlami', help='default=non-dlami')
-    parser.add_argument("--mode", choices=['develop', 'compile', 'deploy'], default='develop')
+    parser.add_argument("--mode", choices=['develop', 'compile', 'deploy', 'initialize'], default='develop')
     parser.add_argument("--category",
                         choices=['framework', 'driver', 'runtime', 'compiler', 'tools', 'all', 'driver_runtime_tools',
-                                 'compiler_framework'])
+                                 'compiler_framework', 'efa'])
     parser.add_argument("--framework", choices=['pytorch', 'tensorflow', 'mxnet'])
     parser.add_argument("--framework-version", metavar='X.Y.Z')
     parser.add_argument("--venv-install-type", choices=['single-node', 'parallel-cluster'], default='single-node')

@@ -13,13 +13,17 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.13.0 --neuron-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 14
+                    :end-line: 15
 
             .. tab-item:: Ubuntu 20 AMI
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.13.0 --neuron-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 17
+                    :end-line: 18
 
 
     .. tab-item:: PyTorch 1.12.0
@@ -30,13 +34,17 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.12.0 --neuron-version=2.6.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 20
+                    :end-line: 21
 
             .. tab-item:: Ubuntu 20 AMI
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.12.0 --neuron-version=2.6.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 23
+                    :end-line: 24
 
 
     .. tab-item:: PyTorch 1.11.0
@@ -47,10 +55,16 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.11.0 --neuron-version=2.4.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 26
+                    :end-line: 27
+
+
 
             .. tab-item:: Ubuntu 20 AMI
 
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=all --framework=pytorch --framework-version=1.11.0 --neuron-version=2.4.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+                .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                    :start-line: 29
+                    :end-line: 30

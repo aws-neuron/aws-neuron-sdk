@@ -4,7 +4,7 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include:: /general/setup/install-templates/launch-trn1.txt
+    .. include:: /general/setup/install-templates/launch-instance.txt
 
 
 .. dropdown::  Install Drivers and Tools

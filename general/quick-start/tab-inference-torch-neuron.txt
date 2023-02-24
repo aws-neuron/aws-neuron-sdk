@@ -1,91 +1,20 @@
-.. dropdown::  Launch Inf1 Instance
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
-
-    .. include:: /general/setup/install-templates/launch-inf1.txt
-
-
-.. dropdown::  Install Drivers and Tools
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
-
-    .. code:: bash
-
-        # Configure Linux for Neuron repository updates
-        sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
-        [neuron]
-        name=Neuron YUM Repository
-        baseurl=https://yum.repos.neuron.amazonaws.com
-        enabled=1
-        metadata_expire=0
-        EOF
-        sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
-
-        # Update OS packages
-        sudo yum update -y
-
-        ################################################################################################################
-        # To install or update to Neuron versions 1.19.1 and newer from previous releases:
-        # - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
-        ################################################################################################################
-
-        # Install OS headers
-        sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
-
-        # Install Neuron Driver
-        sudo yum install aws-neuron-dkms -y
-
-        ####################################################################################
-        # Warning: If Linux kernel is updated as a result of OS package update
-        #          Neuron driver (aws-neuron-dkms) should be re-installed after reboot
-        ####################################################################################
-
-        # Install Neuron Tools
-        sudo yum install aws-neuron-tools -y
-
-        export PATH=/opt/aws/neuron/bin:$PATH
+.. _neuron_installation:
 
 .. dropdown::  Install PyTorch Neuron (``torch-neuron``)
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. code:: bash
-
-        # Install Python venv and activate Python virtual environment to install
-        # Neuron pip packages.
-
-        sudo yum install -y python3.7-venv gcc-c++
-        python3.7 -m venv pytorch_venv
-        source pytorch_venv/bin/activate
-        pip install -U pip
-
-        # Instal Jupyter notebook kernel
-        pip install ipykernel
-        python3.7 -m ipykernel install --user --name pytorch_venv --display-name "Python (Neuron PyTorch)"
-        pip install jupyter notebook
-        pip install environment_kernels
-
-        # Set Pip repository  to point to the Neuron repository
-        pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-
-        #Install Neuron PyTorch
-        pip install torch-neuron neuron-cc[tensorflow] "protobuf<4" torchvision
-
+    .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.12.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami --category=compiler_framework
 
 .. dropdown::  Run Tutorial
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    :ref:`ResNet-50 </src/examples/pytorch/resnet50.ipynb>`
-
+    * Torchvision ResNet50 tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>`
 
 .. card:: Visit PyTorch Neuron section for more
     :class-body: sphinx-design-class-body-small
     :link: pytorch-neuronx-main
     :link-type: ref
-
-

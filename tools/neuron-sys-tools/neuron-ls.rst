@@ -25,10 +25,8 @@ those processes.
 
 .. note::
 
-  If you're running Neuron Runtime 1.x ``neuron-rtd`` daemons, use ``sudo`` with the
-  ``neuron-ls`` command to obtain their address and version information. Without ``sudo``,
-  the ``neuron-rtd`` processes will be considered generic processes using one or more Devices
-  and will only be displayed when running ``neuron-ls`` with the ``--show-all-procs`` option.
+  ``neuron-ls`` fully supports the newly launched inf2 instances.
+
 
 Examples
 ^^^^^^^^
@@ -99,13 +97,12 @@ First we will show the output of ``neuron-ls`` on an Inf1.6xlarge instance.
   | 2      | 4      | 8 GB   | 3, 1      | 00:1e.0 |
   | 3      | 4      | 8 GB   | 2         | 00:1f.0 |
   +--------+--------+--------+-----------+---------+
-  
-  Neuron Device Topology
-                                        
-                                                                              
-    [ 0 ]◄––►[ 1 ]◄––►[ 2 ]◄––►[ 3 ]  
 
-On Trn1 instances ``neuron-ls`` works similarly. Below is an example displaying the topology for a Trn1.32xlarge instance.
+  Neuron Device Topology
+
+    [ 0 ]◄––►[ 1 ]◄––►[ 2 ]◄––►[ 3 ]
+
+On Trn1 and Inf2 instances ``neuron-ls`` works similarly. Below is an example displaying the topology for a Trn1.32xlarge instance.
 
 ::
 

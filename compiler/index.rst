@@ -9,19 +9,34 @@ The Neuron compiler is invoked within the ML framework, where ML models are sent
 the compiler by the Neuron Framework plugin. The resulting compiler artifact is called
 a NEFF file (Neuron Executable File Format) that in turn is loaded by the Neuron runtime to the Neuron device.
 
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /compiler/neuronx-cc
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /compiler/neuron-cc
+
+
+
+
 .. tab-set::
 
-   .. tab-item:: Neuron Compiler for Trn1
+   .. tab-item:: Neuron Compiler for Trn1 & Inf2
 
          .. dropdown::  API Reference Guide
                :class-title: sphinx-design-class-title-med
                :class-body: sphinx-design-class-body-small
                :animate: fade-in
 
-               .. toctree::
-                  :maxdepth: 1
+               * :ref:`Neuron Compiler CLI Reference Guide <neuron-compiler-cli-reference-guide>`
 
-                  Neuron Compiler CLI Reference Guide </compiler/neuronx-cc/api-reference-guide/neuron-compiler-cli-reference-guide>
 
 
          .. dropdown::  Developer Guide
@@ -30,23 +45,17 @@ a NEFF file (Neuron Executable File Format) that in turn is loaded by the Neuron
                   :animate: fade-in
 
 
-                  .. toctree::
-                        :maxdepth: 1
-
-                        /general/appnotes/neuronx-cc/neuronx-cc-training-mixed-precision
+                  * :ref:`neuronx-cc-training-mixed-precision`
 
 
-         .. dropdown::  
+         .. dropdown::  Misc
                :class-title: sphinx-design-class-title-med
                :class-body: sphinx-design-class-body-small
                :animate: fade-in
                :open:
 
-               .. toctree::
-                  :maxdepth: 1
-
-                  FAQ </compiler/neuronx-cc/faq>
-                  What's New </release-notes/compiler/neuronx-cc/index>
+               * :ref:`FAQ <neuronx_compiler_faq>`
+               * :ref:`What's New <neuronx-cc-rn>`
 
    .. tab-item:: Neuron Compiler for Inf1
 
@@ -56,10 +65,8 @@ a NEFF file (Neuron Executable File Format) that in turn is loaded by the Neuron
                :class-body: sphinx-design-class-body-small
                :animate: fade-in
 
-               .. toctree::
-                  :maxdepth: 1
+               * :ref:`neuron-compiler-cli-reference`
 
-                  /compiler/neuron-cc/command-line-reference
 
          .. dropdown::  Developer Guide
                :class-title: sphinx-design-class-title-med
@@ -67,22 +74,17 @@ a NEFF file (Neuron Executable File Format) that in turn is loaded by the Neuron
                :animate: fade-in
 
 
-               .. toctree::
-                  :maxdepth: 1
-
-                  /general/appnotes/neuron-cc/mixed-precision
+               * :ref:`neuron-cc-training-mixed-precision`
 
 
-         .. dropdown::  
+
+         .. dropdown::  Misc
                :class-title: sphinx-design-class-title-med
                :class-body: sphinx-design-class-body-small
                :animate: fade-in
                :open:
 
-
-               .. toctree::
-                  :maxdepth: 1
-
-                  FAQ </compiler/neuron-cc/faq>
-                  What's New </release-notes/compiler/neuron-cc/neuron-cc>
-                  /release-notes/compiler/neuron-cc/neuron-cc-ops/index
+               * :ref:`FAQ <neuron_compiler_faq>`
+               * :ref:`What's New <neuron-cc-rn>`
+               * :ref:`neuron-supported-operators`
+         

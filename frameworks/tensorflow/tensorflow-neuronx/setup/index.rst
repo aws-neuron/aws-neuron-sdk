@@ -1,8 +1,9 @@
 .. _tensorflow-neuron-setup:
 
-TensorFlow Setup Guide for Trn1
-===============================
+TensorFlow Setup Guide for Inf2 & Trn1
+======================================
 
-* :ref:`Fresh install <tensorflow-install>`
-* :ref:`Update to latest release <tensorflow-update>`
-* :ref:`Install previous releases <tensorflow-install-prev>`
+.. toctree::
+    :maxdepth: 1
+
+    Fresh install </frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-neuronx-install>

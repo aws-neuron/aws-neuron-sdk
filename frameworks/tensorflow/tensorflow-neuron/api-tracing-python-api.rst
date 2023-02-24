@@ -91,8 +91,9 @@ via the environment variable ``NEURON_CC_FLAGS``.
     Useful for compiling large models that would exceed the 2GB protobuf
     size limit. This feature is experimental. Model performance is not
     guaranteed and the flag does not work in combination with
-    ``--neuroncore-pipeline-cores``, ``--dynamic-batch-size``, and models with
-    multiple NEFFs. Compiles models for the inf1.2xlarge instance.
+    ``--neuroncore-pipeline-cores``, ``--dynamic-batch-size``, models with
+    multiple NEFFs, and models that are 4GB or greater. 
+    Compiles models for the inf1.2xlarge instance.
 
 Returns
 -------
