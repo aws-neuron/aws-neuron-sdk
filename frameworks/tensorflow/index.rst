@@ -7,44 +7,34 @@ TensorFlow Neuron unlocks high-performance and cost-effective deep learning acce
 
 TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes.
 
+.. dropdown::  Tensorflow Neuron Setup
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
 
-.. toctree::
-    :maxdepth: 1
-    :hidden:
+    .. tab-set::
 
-    /frameworks/tensorflow/inference
+        .. tab-item:: tensorflow-neuronx (``Trn1 & Inf2``)
+            :name: tensorflow-neuronx-install-main
 
+            * :ref:`Fresh Install <install-tensorflow-neuronx>`
+            * :ref:`Update to Latest release <update-tensorflow-neuronx>`
 
-.. toctree::
-    :maxdepth: 1
-    :hidden:
+        .. tab-item:: tensorflow-neuron (``Inf1``)
+            :name: tensorflow-neuron-install-main
 
-    /frameworks/tensorflow/training
-
-
-
+            * :ref:`Fresh Install <install-neuron-tensorflow>`
+            * :ref:`Update to Latest Release <update-neuron-tensorflow>`
+            * :ref:`Install Previous Releases <install-prev-neuron-tensorflow>`
 
 
 
 .. tab-set::
 
+    .. tab-item:: Inference on Inf2 & Trn1 (``tensorflow-neuronx``)
 
-   .. tab-item:: Inference
-        :name: torch-neuronx-training-main
+        .. include:: tab-tensorflow-neuronx-inference.txt
 
-        .. include:: tab-inference.txt
+    .. tab-item:: Inference on Inf1 (``tensorflow-neuron``)
 
-        
-
-   .. tab-item:: Training
-        :name: torch-neuronx-training-main
-
-
-        .. include:: tab-training.txt
-      
-
-
-
-
-
-
+        .. include:: tab-tensorflow-neuron-inference.txt

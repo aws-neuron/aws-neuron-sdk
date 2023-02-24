@@ -11,7 +11,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 
 # directories
 neuron1_dir = ['n1']
-neuronx_dir = []
+neuronx_dir = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/']
 common_dir = ['tools','neuron-runtime','release-notes','containers','general','compiler','frameworks','src']
 text_template = '*This document is relevant for*: '
 add_inf1_tag = ['general/arch',
@@ -22,7 +22,7 @@ add_inf1_tag = ['general/arch',
                 'general/announcements/index',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
-add_trn1_tag = []
+add_trn1_tag = ['frameworks/neuron-customops/']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -51,8 +51,16 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/appnotes/perf/neuronx-cc/',
                 'general/announcements/neuron2.x/dlami-pytorch-introduce',
                 'general/announcements/neuron2.x/sm-training-trn1-introduce',
+                'frameworks/torch/training',
+                'frameworks/torch/inference-torch-neuronx'
+
                 ]
-                
+
+clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
+                  'frameworks/torch/training',
+                  'frameworks/torch/inference-torch-neuron'
+               ]
+
 clear_trn1_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
                 'tools/tutorials/tutorial-neuron-gatherinfo',
@@ -89,6 +97,7 @@ clear_trn1_tag = [
                 'general/appnotes/perf/neuron-cc/',
                 'general/appnotes/neuron1x/',
                 'general/appnotes/torch-neuron/',
+                'frameworks/torch/inference-torch-neuron'
                 ]
 
 class NeuronTag(SphinxDirective):
@@ -103,7 +112,7 @@ class NeuronTag(SphinxDirective):
         cur_file = self.env.docname # current file path
 
         path_split, path_len = splitall(cur_file)
-        
+
         # see if it is a landing page or an index file.
         if path_split[0] == 'index': # The landing page does not need a tag.
             return_instances = []
@@ -114,9 +123,9 @@ class NeuronTag(SphinxDirective):
         if path_split[0] in neuron1_dir: 
             return_instances = ['Inf1']
         elif path_split[0] in neuronx_dir:
-            return_instances = ['Trn1']
+            return_instances = ['Trn1','Inf2']
         elif path_split[0] in common_dir:
-            return_instances = ['Trn1','Inf1']
+            return_instances = ['Trn1','Inf2','Inf1']
 
         # parse based on the directory where the file is.
         if path_split[path_len-2] == 'inference':
@@ -128,6 +137,7 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, add_trn1_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
+                return_instances.append('Inf2')
 
         if in_list(cur_file, add_inf1_tag):
             if 'Inf1' not in return_instances:
@@ -136,16 +146,21 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, clear_trn1_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
+                return_instances.remove('Inf2')
 
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:
                 return_instances.remove('Inf1')
+        
+        if in_list(cur_file, clear_inf2_tag):
+            if 'Inf2' in return_instances:
+                return_instances.remove('Inf2')
             
         # generate text from instances list if the list is not empty.
         return_instances = sorted(set(return_instances))
         if len(return_instances) > 0:
             return_text = text_template + ', '. join([str('``'+item+'``') for item in return_instances])
-        
+
         rst = ViewList()
         # Add the content one line at a time.
         # Second argument is the filename to report in any warnings

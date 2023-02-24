@@ -123,6 +123,21 @@ Neuron Machine Learning Accelerators (or Neuron Devices) are custom accelerators
       - Devices Per Instance
       - Availability
     * - Inference
+      - Inferentia II (v3)
+      - inf2.xlarge, inf2.8xlarge
+      - 1
+      - Available Now!
+    * - Inference
+      - Inferentia II (v3)
+      - inf2.24xlarge
+      - 6
+      - Available Now!
+    * - Inference
+      - Inferentia II (v3)
+      - inf2.48xlarge
+      - 12
+      - Available Now!
+    * - Inference
       - Inferentia (v1)
       - inf1.xlarge, inf1.2xlarge
       - 1
@@ -147,11 +162,7 @@ Neuron Machine Learning Accelerators (or Neuron Devices) are custom accelerators
       - trn1.32xlarge
       - 16
       - Available Now!
-    * - Inference
-      - Inferentia II (v3)
-      - TBD
-      - TBD
-      - Coming Soon
+
 
 
 Neuron Device
@@ -1058,7 +1069,7 @@ The Model API
 Environment variables used to configure a model being loaded
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``NEURON_RT_EXEC_TIMEOUT=<n>, default=30 (inf1), default=600(trn1)``
+``NEURON_RT_EXEC_TIMEOUT=<n>, default=30 (inf1), default=600(trn1,inf2)``
     Maximum of time, in seconds, allowed for one execution before timing out - which will cause the call to ``nrt_execute`` to fail and return ``NRT_TIMEOUT``.
 
 ``NEURON_RT_VALIDATE_HASH=<true/false>, default=false``

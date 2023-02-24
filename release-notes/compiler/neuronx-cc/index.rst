@@ -9,6 +9,14 @@ Neuron Compiler (``neuronx-cc``) release notes
 
 Neuron Compiler [2.4.0.21]
 -----------------------------
+Date: 02/24/2023
+
+* This release introduces the ``inf2`` option argument to the compiler ``--target`` option to specify that it should
+  generate code for an inf2 instance type. Example usage: ``neuronx-cc compile --target=inf2 ...``
+  The ``inf2`` option argument does not appear in the compiler's usage message. It will be added in the next release.
+
+Neuron Compiler [2.4.0.21]
+-----------------------------
 Date: 02/08/2023
 
 * Added support for the following HLO operators: ``SelectAndScatter``.

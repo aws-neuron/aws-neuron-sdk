@@ -21,7 +21,7 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
     .. warning::
 
         Currently this only supports |NeuronCore-v2| type instances
-        (e.g. |trn1|). To compile models compatible with |NeuronCore-v1|
+        (e.g. |trn1|, inf2). To compile models compatible with |NeuronCore-v1|
         (e.g. |inf1|), please see :func:`torch_neuron.trace`
 
     :arg ~torch.nn.Module,callable func: The function/module that that will be
@@ -181,3 +181,59 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
 
 .. _torch-xla: https://github.com/pytorch/xla
 .. _torchscript: https://pytorch.org/docs/stable/jit.html
+
+
+Dynamic Batching
+~~~~~~~~~~~~~~~~
+
+.. py:function:: torch_neuronx.dynamic_batch(neuron_script)
+
+    Enables a compiled Neuron model to be called with variable sized batches.
+
+    When tracing with Neuron, usually a model can only consume tensors that are the same size as the example tensor used in the :func:`torch_neuronx.trace` call. Enabling dynamic batching allows a model to consume inputs that may be either smaller or larger than the original trace-time tensor size. Internally, dynamic batching splits & pads an input batch into chunks of size equal to the original trace-time tensor size. These chunks are passed to the underlying model(s). Compared to serial inference, the expected runtime scales by ``ceil(inference_batch_size / trace_batch_size) / neuron_cores``.
+    
+    This function modifies the ``neuron_script`` network in-place. The returned result is a reference to the modified input.
+
+    Dynamic batching is only supported by chunking inputs along the 0th dimension. A network that uses a non-0 batch dimension is incompatible with dynamic batching. Upon inference, inputs whose shapes differ from the compile-time shape in a non-0 dimension will raise a ValueError. For example, take a model was traced with a single example input of size ``[2, 3, 5]``. At inference time, when dynamic batching is enabled, a batch of size ``[3, 3, 5]`` is *valid* while a batch of size ``[2, 7, 5]`` is *invalid* due to changing a non-0 dimension.
+
+    Dynamic batching is only supported when the 0th dimension is the same size for all inputs. For example, this means that dynamic batching would not be applicable to a network which consumed two inputs with shapes ``[1, 2]`` and ``[3, 2]`` since the 0th dimension is different. Similarly, at inference time, the 0th dimension batch size for all inputs must be identical otherwise a ValueError will be raised.
+    
+    *Required Arguments*
+
+    :arg ~torch.jit.ScriptModule neuron_script: The neuron traced :class:`~torch.jit.ScriptModule` with the
+       embedded compiled neuron graph. This is the output of :func:`torch_neuronx.trace`.
+
+    :returns: The traced :class:`~torch.jit.ScriptModule` with the embedded
+       compiled neuron graph. The same type as the input, but with dynamic_batch enabled in the neuron graph.
+    :rtype: ~torch.jit.ScriptModule
+
+.. code-block:: python
+
+    import torch
+    import torch_neuronx
+    import torch.nn as nn
+
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.conv = nn.Conv2d(1, 1, 3)
+
+        def forward(self, x):
+            return self.conv(x) + 1
+
+    n = Net()
+    n.eval()
+
+    inputs = torch.rand(1, 1, 3, 3)
+    inputs_batch_8 = torch.rand(8, 1, 3, 3)
+
+    # Trace a neural network with input batch size of 1
+    neuron_net = torch_neuronx.trace(n, inputs)
+
+    # Enable the dynamic batch size feature so the traced network
+    # can consume variable sized batch inputs
+    neuron_net_dynamic_batch = torch_neuronx.dynamic_batch(neuron_net)
+
+    # Run inference on inputs with batch size of 8
+    # different than the batch size used in compilation (tracing)
+    ouput_batch_8 = neuron_net_dynamic_batch(inputs_batch_8)

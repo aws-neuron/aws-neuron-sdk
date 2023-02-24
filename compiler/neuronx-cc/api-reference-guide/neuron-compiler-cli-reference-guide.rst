@@ -83,6 +83,7 @@ Available Commands:
     Valid values:
 
     - ``trn1``
+    - ``inf2``
 
   - :option:`--model-type <model>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 

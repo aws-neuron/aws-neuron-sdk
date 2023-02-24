@@ -1,11 +1,4 @@
-.. dropdown::  Setup Guide for Inf1 
-    :class-title: sphinx-design-class-title-med
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
-                
-    * :ref:`Fresh Install <install-neuron-tensorflow>`
-    * :ref:`Update to Latest Release <update-neuron-tensorflow>`
-    * :ref:`Install Previous Releases <install-prev-neuron-tensorflow>`
+.. _inference-tensorflow-neuron:
 
 .. dropdown::  Tutorials (``tensorflow-neuron``)
     :class-title: sphinx-design-class-title-med
@@ -68,15 +61,10 @@
                 :class-title: sphinx-design-class-title-med
                 :class-body: sphinx-design-class-body-small
                 :animate: fade-in
-                :open:
                 
-
-                .. toctree::
-                    :maxdepth: 1
-
-                    * :ref:`tensorflow-neuron-release-notes`
-                    * :ref:`tensorflow-neuron-rn-v2`
-                    * :ref:`tensorflow-ref-neuron-accelerated-ops`
-                    * :ref:`neuron-cc-ops-tensorflow`
+                * :ref:`tensorflow-neuron-release-notes`
+                * :ref:`tensorflow-neuron-rn-v2`
+                * :ref:`tensorflow-ref-neuron-accelerated-ops`
+                * :ref:`neuron-cc-ops-tensorflow`
 
 

@@ -1,18 +1,6 @@
-.. dropdown::  Setup Guide for Inference on Trn1
-    :class-title: sphinx-design-class-title-med
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
-
-        
-    * :ref:`Fresh Install <pytorch-neuronx-install>`
-    * :ref:`Update to latest release <pytorch-neuronx-update>`
-    * :ref:`Install previous releases <pytorch-neuronx-install-prev>`
-
-    .. include:: /general/setup/install-templates/trn1-ga-warning.txt
-
 
 .. dropdown::  Tutorials  (``torch-neuronx``)
-    :class-title: sphinx-design-class-title-med
+    :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
@@ -29,7 +17,7 @@
 
 
 .. dropdown::  Additional Examples (``torch-neuronx``)
-    :class-title: sphinx-design-class-title-med
+    :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
@@ -37,7 +25,7 @@
 
 
 .. dropdown::  API Reference Guide  (``torch-neuronx``)
-    :class-title: sphinx-design-class-title-med
+    :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
@@ -45,7 +33,7 @@
     * :ref:`torch_neuronx_core_placement_api`
 
 .. dropdown::  Developer Guide  (``torch-neuronx``)
-    :class-title: sphinx-design-class-title-med
+    :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
@@ -53,11 +41,9 @@
     * :ref:`trace-vs-xla-lazytensor`
 
 .. dropdown:: Misc (``torch-neuronx``)
-    :class-title: sphinx-design-class-title-med
+    :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    :open:
 
-
-    :ref:`torch-neuronx-rn`
+    * :ref:`torch-neuronx-rn`
 

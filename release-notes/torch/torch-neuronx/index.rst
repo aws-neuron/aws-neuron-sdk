@@ -10,6 +10,39 @@ PyTorch Neuron (``torch-neuronx``) release notes
 PyTorch Neuron for Trainium is a software package that enables PyTorch
 users to train their models on Trainium.
 
+
+Release [1.13.0.1.5.0]
+----------------------
+Date: 02/24/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- Added SPMD flag for XLA backend to generate global collective-compute replica groups
+
+Inference support:
+
+- Expanded inference support to inf2
+- Added Dynamic Batching
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- :func:`torch.argmax` and :func:`torch.argmin` do not support the single
+  argument call variant. Only the 3 argument variant of these functions is
+  supported. The ``dim`` argument *must be* specified or this function will
+  fail at the call-site. Secondly, :func:`torch.argmin` may produce
+  incorrect results.
+
+
 Release [1.13.0.1.6.0]
 ----------------------
 Date: 02/08/2023
@@ -20,11 +53,25 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Training support:
+
 - Added support for PyTorch 1.13
 - Added support for Python version 3.9
 - Added support for torch.nn.parallel.DistributedDataParallel (DDP) along with a :ref:`tutorial <neuronx-ddp-tutorial>`
 - Added optimized lowering for Softmax activation
 - Added support for LAMB optimizer in BF16 mode
+
+Added initial support for inference on Trn1, including the following features:
+
+- Trace API (torch_neuronx.trace)
+- Core placement API (experimental)
+- Python 3.7, 3.8 and 3.9 support
+- Support for tracing models larger than 2 GB
+
+The following inference features are not included in this release:
+
+- Automatic partitioning of a model into subgraphs that run on NeuronCores and subgraphs that run on CPU
+- cxx11 ABI wheels
 
 Resolved Issues
 ~~~~~~~~~~~~~~~

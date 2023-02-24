@@ -15,6 +15,22 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.7.33.0]
+--------------------------------
+
+Date: 02/24/2023
+
+Bug Fixes
+^^^^^^^^^
+
+* Added a retry mechanism to mitigate possible data copy failures during reset of a NeuronCore.  An info log message will be emitted when this occurs indicating that the retry was attempted.  An example::
+
+
+   kernel: [726415.485022] neuron:ndma_memcpy_wait_for_completion: DMA completion timeout for UDMA_ENG_33 q0
+   kernel: [726415.491744] neuron:ndma_memcpy_offset_move: Failed to copy memory during a NeuronCore reset: nd 0, src 0x100154480000, dst 0x100154500000, size 523264. Retrying the copy.
+::
+
+
 Neuron Driver release [2.7.15.0]
 --------------------------------
 

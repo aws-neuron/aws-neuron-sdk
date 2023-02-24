@@ -47,6 +47,14 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
+tensorflow-neuron 1.x release [2.6.5.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 2/24/2023
+
+* Added support for TensorFlow versions 2.9 and 2.10
+* End-of-support for TensorFlow versions 2.5 and 2.6
+
 tensorflow-neuron 1.x release [2.4.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

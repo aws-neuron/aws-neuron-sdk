@@ -33,6 +33,7 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
                      :maxdepth: 1
 
                      /general/devflows/inference/ec2-then-ec2-devflow
+                     /general/devflows/inference/ec2-then-ec2-devflow-inf2
 
          .. tab-set:: 
 

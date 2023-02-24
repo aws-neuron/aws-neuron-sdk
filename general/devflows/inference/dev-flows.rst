@@ -20,6 +20,7 @@ A typical Neuron developer flow includes compilation phase and then deployment (
    :maxdepth: 1
 
    ec2-then-ec2-devflow
+   ec2-then-ec2-devflow-inf2
    neo-then-hosting-devflow
    byoc-hosting-devflow
    dlc-then-ec2-devflow

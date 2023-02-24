@@ -1,17 +1,17 @@
 .. _tensorflow-ref-auto-replication-python-api:
 
-TensorFlow Neuron (``tensorflow-nueron``) Auto Multicore Replication (Experimental)
+TensorFlow Neuron (``tensorflow-neuron``) Auto Multicore Replication (Experimental)
 ===================================================================================
 
-The Neuron auto multicore replication Python API enables modifying TensorFlow 2.x 
-traced models so that they can be automatically replicated across multiple cores. 
+The Neuron auto multicore replication Python API enables modifying TensorFlow 2.x
+traced models so that they can be automatically replicated across multiple cores.
 For Tensorflow-Serving models and TensorFlow 1.x models, see :ref:`tensorflow-ref-auto-replication-cli-api`
 
 .. contents:: Table of contents
    :local:
    :depth: 1
 
-TensorFlow Neuron TF 2.x (``tensorflow-nueron TF2.x``) Auto Multicore Replication Python API (Experimental)
+TensorFlow Neuron TF 2.x (``tensorflow-neuron TF2.x``) Auto Multicore Replication Python API (Experimental)
 -----------------------------------------------------------------------------------------------------------
 
 Method
@@ -22,8 +22,8 @@ Method
 Description
 ^^^^^^^^^^^
 
-Converts an existing AWS-Neuron-optimized ``keras.Model`` and return an auto-replication tagged 
-AWS-Multicore-Neuron-optimized  ``keras.Model`` that can execute on AWS Machine Learning Accelerators. 
+Converts an existing AWS-Neuron-optimized ``keras.Model`` and returns an auto-replication tagged
+AWS-Multicore-Neuron-optimized  ``keras.Model`` that can execute on AWS Machine Learning Accelerators.
 Like the traced model, the returned ``keras.Model`` will support inference only. Attributes or
 variables held by the original function or ``keras.Model`` will be dropped.
 
@@ -40,7 +40,7 @@ information about exporting to saved model and serving using TensorFlow
 Serving.
 
 Note that the automatic replication will only work on models compiled with pipeline size 1:
-via ``--neuroncore-pipeline-cores=1``. If auto replication is not enabled, the model will default to 
+via ``--neuroncore-pipeline-cores=1``. If auto replication is not enabled, the model will default to
 replicate on up to 4 cores.
 
 See  :ref:`neuron-compiler-cli-reference` for more information about compiler options.
@@ -83,14 +83,14 @@ Example Python API Usage for TF2.x traced models:
         num_cores = 4
         multicore_model = tfn.auto_multicore(model_neuron, input0_tensor, num_cores=num_cores)
         multicore_model(input0_tensor)
-        
+
 Example Python API Usage for TF2.x saved models:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code :: python
 
         from tensorflow.python import saved_model
-        
+
         input0_tensor = tf.random.uniform([1, 3])
         num_cores = 4
         reload_model = saved_model.load(model_dir)
@@ -98,7 +98,7 @@ Example Python API Usage for TF2.x saved models:
 
 .. _tensorflow-ref-auto-replication-cli-api:
 
-TensorFlow Neuron TF1.x/TF2.x (``tensorflow-nueron TF1.x/TF2.x``) Auto Multicore Replication CLI (Experimental)
+TensorFlow Neuron TF1.x/TF2.x (``tensorflow-neuron TF1.x/TF2.x``) Auto Multicore Replication CLI (Experimental)
 ---------------------------------------------------------------------------------------------------------------
 
 The Neuron auto multicore replication CLI  enables modifying TensorFlow 1.x and Tensorflow 2.x
@@ -117,7 +117,7 @@ Arguments
 -   **MODEL_DIR:** The directory of a saved AWS-Neuron-optimized ``keras.Model``.
 -   **NUM_CORES:** The desired number of cores where the model will be automatically
     replicated across
--   **NEW_MODEL_DIR:** The directory of where the AWS-Multicore-Neuron-optimized 
+-   **NEW_MODEL_DIR:** The directory of where the AWS-Multicore-Neuron-optimized
     ``keras.Model`` will be saved
 
 Example CLI Usage for TF 1.x and Tensorflow-Serving saved models:

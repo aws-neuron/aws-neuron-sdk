@@ -31,6 +31,10 @@ When running, **neuron-monitor** will:
 -  Wait until at least one **metric group** needs to be collected and
    repeat this flow
 
+.. note::
+
+  ``neuron-monitor`` fully supports the newly launched inf2 instances.
+
 .. _using-neuron-monitor:
 
 Using neuron-monitor

@@ -11,6 +11,7 @@ You can also choose one of the following combinations for compilation and deploy
    :maxdepth: 1
    
    ec2-then-ec2-devflow
+   ec2-then-ec2-devflow-inf2
    neo-then-hosting-devflow
    dlc-then-ec2-devflow
    dlc-then-ecs-devflow
