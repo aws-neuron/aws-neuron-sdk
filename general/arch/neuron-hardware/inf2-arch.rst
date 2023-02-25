@@ -26,8 +26,8 @@ customers to choose between four instances sizes:
         - FP8/FP16/BF16/TF32 TFLOPS
         - FP32 TFLOPS
         - Device Memory (GiB)
-        - Device Memory Bandwidth (GiB/sec)
-        - NeuronLink-v2 device-to-device 
+        - Instance Memory Bandwidth (GiB/sec)
+        - NeuronLink-v2 device-to-device (GiB/sec/chip)
 
     *   - Inf2.xlarge
         - 1
