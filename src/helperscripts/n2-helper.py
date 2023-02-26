@@ -366,7 +366,8 @@ class manifest:
                         elif (args.neuron_version != None) & (args.install_type == 'install'):
                             str += '=' + self.get_package_version(category='runtime', name=runtime_package,
                                                                   neuron_version=args.neuron_version) + '* -y\n'
-
+                        else:
+                            str += '\n'
 
                     elif args.os == 'amazonlinux2':
                         str += 'sudo yum '
