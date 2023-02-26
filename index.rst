@@ -4,9 +4,9 @@ Welcome to AWS Neuron
 .. meta::
    :description: Neuron SDK is powering AWS Inferentia and Trainium based instances, natively integrated into PyTorch and TensorFlow. Enabling you to quicky start with Amazon EC2, AWS Sagemaker, ECS and EKS.
 
-AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and AWS Trainium based instances. It supports customers in their end-to-end ML development lifecycle to build new models, train and optimize these models, and then deploy them for production. To learn about the model architectures currently supported on Inf1 and Trn1 instances, please see :ref:`model_architecture_fit`. To learn about upcoming capabilities, please view the :ref:`neuron_roadmap`.
+AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and AWS Trainium based instances. It supports customers in their end-to-end ML development lifecycle to build new models, train and optimize these models, and then deploy them for production. To learn about the model architectures currently supported on Inf1, Inf2 and Trn1 instances, please see :ref:`model_architecture_fit`. To learn about upcoming capabilities, please view the :ref:`neuron_roadmap`.
 
-AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (incubating). The EC2 Trn1 instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf1 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
+AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (incubating). The EC2 Trn1 instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf2 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
 
 Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for latest release.
 
@@ -37,6 +37,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    Get Started with PyTorch </general/quick-start/torch-neuron>
    Get Started with TensorFlow </general/quick-start/tensorflow-neuron>
    Get Started with MXNet  </general/quick-start/mxnet-neuron>
+   GitHub Samples </general/quick-start/github-samples>
    Performance </general/benchmarks/index>
    What’s New </release-notes/index>
    /general/announcements/blogs
