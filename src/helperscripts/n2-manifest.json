@@ -39,7 +39,7 @@
       {"name":"tensorboard-plugin-neuronx","inf1":"2","trn1":"2","inf2":"2"}
     ],
     "package_properties": [
-      {"name":"aws-neuronx-runtime-discovery", "component":"Runtime Library","category":"runtime","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
+      {"name":"aws-neuronx-runtime-discovery", "component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"aws_neuron_sdk_release_version", "component":"Github","category":"github","package_type":"pip","use_cases":["inference"],"pin_major":"false"},      
       {"name":"libneuronxla","component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"neuronx_hwm", "component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
