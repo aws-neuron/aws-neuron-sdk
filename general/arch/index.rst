@@ -51,11 +51,22 @@ Trainium and Inferentia devices
             :link-type: ref
             :class-body: sphinx-design-class-title-small                         
 
-      .. card:: AWS NeuronCore Architecture
-            :link: neuroncores-arch
-            :link-type: ref
-            :class-body: sphinx-design-class-title-small      
 
+
+NeuronCores
+-----------
+
+.. grid:: 2
+
+      .. card:: NeuronCore-v1
+            :link: neuroncores-v1-arch
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small 
+
+      .. card:: NeuronCore-v2
+            :link: neuroncores-v2-arch
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small 
 
 
 
