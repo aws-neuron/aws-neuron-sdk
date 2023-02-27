@@ -28,6 +28,9 @@ class manifest:
         # ami properties
         self.df_ami_properties = json_normalize(manifest['ami_properties'])
 
+        # dlami properties
+        self.df_dlami_properties = json_normalize(manifest['dlami_properties'])
+
         # major version properties
         self.df_major_version_properties = json_normalize(manifest['major_version_properties'])
 
@@ -153,7 +156,13 @@ class manifest:
 
         # install neuron compiler and framework
         str_compiler_framework = self.install_neuron_compiler_and_framework(args)
-        if args.category == 'all':
+
+        #dlami instructions
+        str_dlami = self.install_dlami(args)
+
+        if args.ami == 'dlami-framework':
+            return str_dlami
+        elif args.category == 'all':
             if args.instance == 'trn1':
                  str_runtime += str_efa
             return str_preamble + str_driver + str_runtime + str_tools + str_python + str_compiler_framework
@@ -179,6 +188,22 @@ class manifest:
             return str_framework
         elif args.category == 'efa':
             return str_efa
+        
+
+    def install_dlami(self, args):
+        latest_release_for_instance = self.df_latest_release.loc[self.df_latest_release['instance'] == args.instance]['version'].values[0]
+        latest_release_for_dlami = self.df_dlami_properties[ (self.df_dlami_properties['framework'] == args.framework) & (self.df_dlami_properties['supported_instances'].map(lambda x: args.instance in x))]['neuron_released_version'].values[0]
+    
+        if (latest_release_for_instance == latest_release_for_dlami):
+            return self.activate_python_venv(args)
+        else:
+            args.install_type = 'update'
+            str_dlami = self.install_neuron_runtime(args)
+            str_dlami += self.activate_python_venv(args)
+            str_dlami += self.jupyter_notebook(args)
+            str_dlami += self.set_pip_repository()
+            str_dlami += self.install_neuron_compiler_and_framework(args)
+        return str_dlami
 
     def jupyter_notebook(self, args):
         os_default_python_version = \
@@ -199,7 +224,6 @@ class manifest:
         str_jupiter += ' --display-name "Python (' + framework_name + ')"' + '\n'
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
-        str_jupiter += '\n'
         return str_jupiter
 
     def config_neuron_repository(self, args):
@@ -516,13 +540,17 @@ class manifest:
         str = ''
 
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
-
+        str_venv_name = ''
         str += f'\n{indentation}# Activate Python venv \n'
-        str_venv_name = 'aws_neuron_venv_' + args.framework
+
+        if args.ami == 'dlami-framework':
+            str_venv_name += '/opt/'
+
+        str_venv_name += 'aws_neuron_venv_' + args.framework
         str += f'{indentation}source ' + str_venv_name + '/bin/activate \n'
 
         # install python packages
-        if args.install_type == 'install':
+        if (args.install_type == 'install' and args.ami != 'dlami-framework'):
             str += f'{indentation}python -m pip install -U pip \n'
 
         return str

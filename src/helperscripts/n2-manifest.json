@@ -23,6 +23,10 @@
       {"ami":"dlami-conda", "package_categories": ["driver","runtime","tools","compiler","framework"]},
       {"ami":"dlami-<framework>", "package_categories": ["driver","runtime","tools","compiler"]}
     ],
+    "dlami_properties": [
+      {"framework":"pytorch", "dlami": "1.13", "neuron_released_version": "2.7.0", "supported_instances":["trn1","inf2"]},
+      {"framework":"pytorch", "dlami": "1.11", "neuron_released_version": "2.4.0", "supported_instances":["trn1","inf2"]}
+    ],  
     "major_version_properties": [
       {"name":"neuronx-cc","inf1":"","trn1":"2","inf2":"2"},
       {"name":"aws-neuronx-k8-plugin","inf1":"2","trn1":"2","inf2":"2"},
