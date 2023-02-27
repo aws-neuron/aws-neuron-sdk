@@ -1,12 +1,12 @@
 .. _inference-torch-neuronx:
 
 Inference with ``torch-neuronx`` (Inf2 & Trn1)
-=======================================
+=============================================
 
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
-    Setup Guide for Inf2 & Trn1 </frameworks/torch/torch-neuronx/setup/setup-inference>
     Tutorials </frameworks/torch/torch-neuronx/tutorials/inference/tutorials-torch-neuronx>
     Additional Examples </frameworks/torch/torch-neuronx/additional-examples-inference-torch-neuronx>
     API Reference Guide </frameworks/torch/torch-neuronx/api-reference-guide/inference/inference-api-guide-torch-neuronx>
@@ -14,3 +14,6 @@ Inference with ``torch-neuronx`` (Inf2 & Trn1)
     Misc  </frameworks/torch/torch-neuronx/misc-inference-torch-neuronx>
 
 
+
+
+.. include:: inference-torch-neuronx.txt

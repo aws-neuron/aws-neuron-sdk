@@ -11,44 +11,55 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 .. _pytorch-neuronx-training:
 
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    
+    /frameworks/torch/torch-setup
+
+ 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    
+    Training </frameworks/torch/training-torch-neuronx>
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    
+    /frameworks/torch/inference
+
+
 .. dropdown::  Pytorch Neuron Setup
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. tab-set::
+    .. include:: dropdown-neuron-setup.txt
 
-        .. tab-item:: torch-neuronx (``Trn1 & Inf2``)
-            :name: torch-neuronx-install-main
-
-            * :ref:`Fresh Install <pytorch-neuronx-install>`
-            * :ref:`Update to latest release <pytorch-neuronx-update>`
-            * :ref:`Install previous releases <pytorch-neuronx-install-prev>`
-
-            .. include:: /general/setup/install-templates/trn1-ga-warning.txt
-
-        .. tab-item:: torch-neuron (``Inf1``)
-            :name: torch-neuron-install-main
-
-            * :ref:`Fresh Install <install-neuron-pytorch>`
-            * :ref:`Update to latest release <update-neuron-pytorch>`
-            * :ref:`Install previous releases <install-prev-neuron-pytorch>`
-            * :ref:`pytorch-install-cxx11`
 
 .. tab-set::
 
     .. tab-item:: Training (``torch-neuronx``)
 
-        .. include:: tab-training-torch-neuronx.txt
+        .. include:: training-torch-neuronx.txt
 
     .. tab-item:: Inference (``torch-neuronx & torch-neuron``)
+
+        .. note::
+
+            For help selecting a framework type, see:
+
+            :ref:`torch-neuron_vs_torch-neuronx`
 
         .. tab-set::
 
             .. tab-item:: Inference on Inf2 & Trn1 (``torch-neuronx``)
 
-                .. include:: tab-inference-torch-neuronx.txt
+                .. include:: inference-torch-neuronx.txt
 
             .. tab-item:: Inference on Inf1 (``torch-neuron``)
 
-                .. include:: tab-inference-torch-neuron.txt
+                .. include:: inference-torch-neuron.txt

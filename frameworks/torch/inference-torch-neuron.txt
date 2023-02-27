@@ -1,0 +1,37 @@
+
+.. dropdown:: Tutorials  (``torch-neuron``)
+	:class-title: sphinx-design-class-title-small
+	:animate: fade-in
+	:name: torch-neuronx-training-tutorials
+
+	.. include:: /frameworks/torch/torch-neuron/tutorials/tutorials-inference-torch-neuron.txt
+
+
+.. dropdown::  Additional Examples (``torch-neuron``)
+	:class-title: sphinx-design-class-title-small
+	:class-body: sphinx-design-class-body-small
+	:animate: fade-in
+	
+	.. include:: /frameworks/torch/torch-neuron/additional-examples-inference-torch-neuron.txt
+
+
+.. dropdown:: API Reference Guide (``torch-neuron``)
+	:class-title: sphinx-design-class-title-small
+	:animate: fade-in
+
+	.. include:: /frameworks/torch/torch-neuron/api-reference-guide-torch-neuron.txt
+
+
+.. dropdown:: Developer Guide (``torch-neuron``)
+	:class-title: sphinx-design-class-title-small
+	:animate: fade-in
+
+	.. include:: /frameworks/torch/torch-neuron/developer-guide-torch-neuron.txt
+
+.. dropdown:: Misc (``torch-neuron``)
+	:class-title: sphinx-design-class-title-small
+	:animate: fade-in
+
+	* :ref:`neuron-cc-ops-pytorch`
+	* :ref:`pytorch-neuron-inference-troubleshooting`
+	* :ref:`pytorch-neuron-rn`

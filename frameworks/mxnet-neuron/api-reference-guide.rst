@@ -1,7 +1,4 @@
-API Reference Guide
-===================
+API Reference Guide (mxnet-neuron)
+==================================
 
-.. toctree::
-    :maxdepth: 1
-
-    /frameworks/mxnet-neuron/api-compilation-python-api
+.. include:: /frameworks/mxnet-neuron/api-reference-guide.txt

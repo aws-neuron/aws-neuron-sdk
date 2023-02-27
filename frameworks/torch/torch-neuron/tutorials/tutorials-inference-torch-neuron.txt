@@ -1,0 +1,38 @@
+.. tab-set::
+
+    .. tab-item:: Computer Vision Tutorials
+        :name:
+
+
+        * ResNet-50 tutorial :ref:`[html] </src/examples/pytorch/resnet50.ipynb>` :pytorch-neuron-src:`[notebook] <resnet50.ipynb>`
+        * PyTorch YOLOv4 tutorial :ref:`[html] </src/examples/pytorch/yolo_v4.ipynb>` :pytorch-neuron-src:`[notebook] <yolo_v4.ipynb>`
+
+
+
+    .. tab-item:: Natural Language Processing (NLP) Tutorials
+        :name:
+
+
+        * HuggingFace pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`
+        * Bring your own HuggingFace pretrained BERT container to Sagemaker Tutorial :ref:`[html] </src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>` :pytorch-neuron-src:`[notebook] <byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>`
+        * LibTorch C++ tutorial :ref:`[html] <pytorch-tutorials-libtorch>`
+        * TorchServe tutorial :ref:`[html] <pytorch-tutorials-torchserve>`
+        * HuggingFace MarianMT tutorial :ref:`[html] </src/examples/pytorch/transformers-marianmt.ipynb>` :pytorch-neuron-src:`[notebook] <transformers-marianmt.ipynb>`
+
+
+
+    .. tab-item:: Utilizing Neuron Capabilities Tutorials
+        :name:
+
+
+        * BERT TorchServe tutorial :ref:`[html] <pytorch-tutorials-torchserve>`
+        * NeuronCore Pipeline tutorial :ref:`[html] </src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb>` :pytorch-neuron-src:`[notebook] <pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb>`
+
+
+
+.. note::
+
+    To use Jupyter Notebook see:
+
+    * :ref:`setup-jupyter-notebook-steps-troubleshooting`
+    * :ref:`running-jupyter-notebook-as-script`

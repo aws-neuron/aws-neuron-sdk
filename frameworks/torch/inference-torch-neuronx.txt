@@ -1,0 +1,40 @@
+
+.. dropdown::  Tutorials  (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/tutorials/inference/tutorials-torch-neuronx.txt
+
+
+.. dropdown::  Additional Examples (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/additional-examples-inference-torch-neuronx.txt
+
+
+.. dropdown::  API Reference Guide  (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/api-reference-guide/inference/inference-api-guide-torch-neuronx.txt
+
+
+.. dropdown::  Developer Guide  (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/programming-guide/inference/index.txt
+
+
+.. dropdown:: Misc (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/misc-inference-torch-neuronx.txt
+

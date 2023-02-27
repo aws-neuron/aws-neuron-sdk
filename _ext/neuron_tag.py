@@ -11,7 +11,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 
 # directories
 neuron1_dir = ['n1']
-neuronx_dir = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/']
+neuronx_dir = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','neuron-customops']
 common_dir = ['tools','neuron-runtime','release-notes','containers','general','compiler','frameworks','src']
 text_template = '*This document is relevant for*: '
 add_inf1_tag = ['general/arch',
@@ -22,7 +22,8 @@ add_inf1_tag = ['general/arch',
                 'general/announcements/index',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
-add_trn1_tag = ['frameworks/neuron-customops/']
+add_trn1_tag = []
+add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -52,13 +53,15 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/announcements/neuron2.x/dlami-pytorch-introduce',
                 'general/announcements/neuron2.x/sm-training-trn1-introduce',
                 'frameworks/torch/training',
-                'frameworks/torch/inference-torch-neuronx'
+                'frameworks/torch/inference-torch-neuronx',
+                'frameworks/tensorflow/tensorflow-neuronx-inference'
 
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'frameworks/torch/training',
-                  'frameworks/torch/inference-torch-neuron'
+                  'frameworks/torch/inference-torch-neuron',
+                  'frameworks/tensorflow/tensorflow-neuron-inference'
                ]
 
 clear_trn1_tag = [
@@ -97,7 +100,8 @@ clear_trn1_tag = [
                 'general/appnotes/perf/neuron-cc/',
                 'general/appnotes/neuron1x/',
                 'general/appnotes/torch-neuron/',
-                'frameworks/torch/inference-torch-neuron'
+                'frameworks/torch/inference-torch-neuron',
+                'frameworks/tensorflow/tensorflow-neuron-inference'
                 ]
 
 class NeuronTag(SphinxDirective):
@@ -135,6 +139,11 @@ class NeuronTag(SphinxDirective):
 
         # add or clear tags based on file name and/or folder
         if in_list(cur_file, add_trn1_tag):
+            if 'Trn1' not in return_instances:
+                return_instances.append('Trn1')
+                return_instances.append('Inf2')
+
+        if in_list(cur_file, add_neuronx_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
                 return_instances.append('Inf2')

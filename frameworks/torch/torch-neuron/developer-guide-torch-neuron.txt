@@ -1,0 +1,4 @@
+* :ref:`Running Inference on Variable Input Shapes with Bucketing <bucketing_app_note>`
+* :ref:`Data Parallel Inference on PyTorch Neuron <torch-neuron-dataparallel-app-note>`
+* :ref:`torch_neuron_lstm_support`
+* :ref:`torch_neuron_core_placement_guide`
