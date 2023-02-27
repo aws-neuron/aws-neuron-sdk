@@ -118,7 +118,7 @@ AWS Trainium and AWS Inferentia2 (NeuronCore-v2)
       - Computer Vision
       - Good Fit
       - :ref:`Roadmap Item <neuron_roadmap>`
-      - :ref:`Roadmap Item <neuron_roadmap>`
+      - Supported
       - :ref:`Roadmap Item <neuron_roadmap>`
 
    *  - R-CNNs
