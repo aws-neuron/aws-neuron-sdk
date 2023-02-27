@@ -110,8 +110,7 @@ CPU threads to feed inputs into the Neuron pipeline. The number of
 threads need to be larger than the specified maximum number of
 NeuronCores.
 
-Additionally, dynamic batching (framework optimization currently
-supported only by TensorFlow-Neuron) can be used to process a larger
+Additionally, dynamic batching can be used to process a larger
 client-side inference batch-size and the framework automatically breaks
 up the user-batch into smaller batch sizes to match the compiled
 batch-size. This technique increases the achievable throughput by hiding
