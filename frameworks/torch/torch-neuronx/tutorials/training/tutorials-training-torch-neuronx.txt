@@ -1,0 +1,14 @@
+    
+* :ref:`hf-bert-pretraining-tutorial`
+* :ref:`neuronx-mlp-training-tutorial`
+* :ref:`torch-hf-bert-finetune`
+* :ref:`megatron-lm-pretraining-tutorial`
+* :ref:`neuronx-ddp-tutorial`
+* :ref:`neuronx-customop-mlp-tutorial`
+
+.. note::
+
+    To use Jupyter Notebook see:
+
+    * :ref:`setup-jupyter-notebook-steps-troubleshooting`
+    * :ref:`running-jupyter-notebook-as-script`

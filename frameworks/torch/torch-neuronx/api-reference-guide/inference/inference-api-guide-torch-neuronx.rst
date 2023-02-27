@@ -1,8 +1,11 @@
 API Reference Guide  (``torch-neuronx``)
 ========================================
 
-.. toctree::
-    :maxdepth: 1
+.. dropdown::  API Reference Guide  (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    :open:
 
-    /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-trace
-    /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-core-placement
+    .. include:: /frameworks/torch/torch-neuronx/api-reference-guide/inference/inference-api-guide-torch-neuronx.txt
+

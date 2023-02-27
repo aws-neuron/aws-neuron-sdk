@@ -2,35 +2,7 @@
         :class-title: sphinx-design-class-title-small
         :animate: fade-in
 
-
-        .. tab-set::
-
-            .. tab-item:: Computer Vision Tutorials
-                        :name:
-
-                        * ResNet-50 tutorial :ref:`[html] </src/examples/mxnet/resnet50/resnet50.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50/resnet50.ipynb>`
-                        * Model Serving tutorial :ref:`[html] <mxnet-neuron-model-serving>`
-                        * Getting started with Gluon tutorial :ref:`[html] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>` :github:`[notebook] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>`
-
-
-            .. tab-item:: Natural Language Processing (NLP) Tutorials
-                        :name:
-
-                        * MXNet 1.8: Using data parallel mode tutorial :ref:`[html] </src/examples/mxnet/data_parallel/data_parallel_tutorial.ipynb>` :mxnet-neuron-src:`[notebook] <data_parallel/data_parallel_tutorial.ipynb>`
-
-
-            .. tab-item:: Utilizing Neuron Capabilities Tutorials
-                        :name:
-
-                        * NeuronCore Groups tutorial :ref:`[html] </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50_neuroncore_groups.ipynb>`
-
-
-        .. note::
-
-                To use Jupyter Notebook see:
-
-                * :ref:`setup-jupyter-notebook-steps-troubleshooting`
-                * :ref:`running-jupyter-notebook-as-script`
+        .. include:: /frameworks/mxnet-neuron/tutorials/tutorials-mxnet-neuron.txt
 
 
 .. dropdown::  API Reference Guide
@@ -38,7 +10,7 @@
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
-        * :ref:`ref-mxnet-neuron-compilation-python-api`
+        .. include:: /frameworks/mxnet-neuron/api-reference-guide.txt
 
 
 .. dropdown::  Developer Guide
@@ -46,13 +18,12 @@
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
-        * :ref:`flexeg`
+        .. include:: /frameworks/mxnet-neuron/developer-guide.txt
+
 
 .. dropdown::  Misc
         :class-title: sphinx-design-class-title-small
         :class-body: sphinx-design-class-body-small
         :animate: fade-in
 
-        * :ref:`mxnet_troubleshooting_guide`
-        * :ref:`What's New <mxnet-neuron-rn>`
-        * :ref:`neuron-cc-ops-mxnet`
+        .. include:: /frameworks/mxnet-neuron/misc-mxnet-neuron.txt
