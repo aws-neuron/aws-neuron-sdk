@@ -1,3 +1,5 @@
+.. _tf-setup:
+
 Tensorflow Neuron Setup
 =======================
 
