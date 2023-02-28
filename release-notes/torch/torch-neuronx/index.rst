@@ -33,15 +33,50 @@ Inference support:
 Resolved Issues
 ~~~~~~~~~~~~~~~
 
-Known Issues and Limitations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :func:`torch.argmax` and :func:`torch.argmin` do not support the single
-  argument call variant. Only the 3 argument variant of these functions is
-  supported. The ``dim`` argument *must be* specified or this function will
-  fail at the call-site. Secondly, :func:`torch.argmin` may produce
-  incorrect results.
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+In this release, convolution is not supported.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop
+with DDP. This is a known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its own graph. This causes an error in the runtime, and
+you may see errors that look like this: ``bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Lower throughput for BERT-large training on AL2 instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We see a performance drop of roughly 5-10% for BERT model training on AL2 instances. This is because of the increase in time required for tracing the model.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmax` and :func:`torch.argmin` do not support the single argument call variant
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmax` and :func:`torch.argmin` do not support the single
+argument call variant. Only the 3 argument variant of these functions is
+supported. The ``dim`` argument *must be* specified or this function will
+fail at the call-site. Secondly, :func:`torch.argmin` may produce
+incorrect results.
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, there's no automatic partitioning of a model into subgraphs that run on NeuronCores and subgraphs that run on CPU
+Operations in the model that are not supported by Neuron would result in compilation error. Please see :ref:`pytorch-neuron-supported-operators` for a list of supported operators.
 
 Release [1.13.0.1.6.0]
 ----------------------
@@ -87,13 +122,13 @@ In this release, convolution is not supported.
 DDP shows slow convergence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop 
+Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop
 with DDP. This is a known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
 
 Runtime crash when we use too many workers per node with DDP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, if we use 32 workers with DDP, we see that each worker generates its own graph. This causes an error in the runtime, and 
+Currently, if we use 32 workers with DDP, we see that each worker generates its own graph. This causes an error in the runtime, and
 you may see errors that look like this: ``bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
 
 Hence, it is recommended to use fewer workers per node with DDP.
