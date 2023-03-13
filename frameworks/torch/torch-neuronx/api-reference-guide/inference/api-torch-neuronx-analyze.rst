@@ -40,6 +40,7 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
    *Fully supported model*
 
    .. code-block:: python
+
       import json
 
       import torch
@@ -79,3 +80,39 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
          },
          "unsupported_operators": []
       }
+   
+   *Unsupported Model/Operator*
+
+   .. code-block:: python
+
+      import json
+      import torch
+      import torch_neuronx
+
+      def fft(x):
+         return torch.fft.fft(x)
+
+      model = fft
+      ex_input = torch.arange(4)
+
+      model_support = torch_neuronx.analyze(model,ex_input)
+      print(json.dumps(model_support,indent=4))
+
+   .. code-block::
+
+      {
+         "torch_neuronx_version": "1.13.0.1.5.0",
+         "neuronx_cc_version": "2.0.0.11796a0+24a26e112",
+         "support_percentage": "0.00%",
+         "supported_operators": {},
+         "unsupported_operators": [
+            {
+               "kind": "aten::fft_fft",
+               "failureAt": "neuronx-cc",
+               "call": "test.py(6): fft\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch_neuronx/xla_impl/analyze.py(35): forward\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch/nn/modules/module.py(1182): _slow_forward\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch/nn/modules/module.py(1194): _call_impl\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch/jit/_trace.py(976): trace_module\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch/jit/_trace.py(759): trace\n/home/ubuntu/testdir/venv/lib/python3.8/site-packages/torch_neuronx/xla_impl/analyze.py(302): analyze\ntest.py(11): <module>\n",
+               "opGraph": "graph(%x : Long(4, strides=[1], requires_grad=0, device=cpu),\n      %neuron_4 : NoneType,\n      %neuron_5 : int,\n      %neuron_6 : NoneType):\n  %neuron_7 : ComplexFloat(4, strides=[1], requires_grad=0, device=cpu) = aten::fft_fft(%x, %neuron_4, %neuron_5, %neuron_6)\n  return (%neuron_7)\n"
+            }
+         ]
+      }
+   
+   **Note:** the `failureAt` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then that means that the operator failed to be compiled with `neuronx-cc`. This could either indicate that the operator is unsupported, or there is a bug with the operator.
