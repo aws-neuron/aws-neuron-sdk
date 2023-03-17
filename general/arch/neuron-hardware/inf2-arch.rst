@@ -10,7 +10,7 @@ them (Inferentia2 devices from here on).
 Inf2 Architecture
 -----------------
 
-The EC2 Inf2 instance is powered by 12 :ref:`Inferentia2 devices <inferentia2-arch>`, and allows
+The EC2 Inf2 instance is powered by up to 12 :ref:`Inferentia2 devices <inferentia2-arch>`, and allows
 customers to choose between four instances sizes:
 
 .. list-table::

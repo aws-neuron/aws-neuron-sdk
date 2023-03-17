@@ -22,8 +22,9 @@ add_inf1_tag = ['general/arch',
                 'general/announcements/index',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
-add_trn1_tag = []
-add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx']
+add_trn1_tag = ['frameworks/neuron-customops/']
+
+
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -54,17 +55,23 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/announcements/neuron2.x/sm-training-trn1-introduce',
                 'frameworks/torch/training',
                 'frameworks/torch/inference-torch-neuronx',
-                'frameworks/tensorflow/tensorflow-neuronx-inference'
-
+                'general/arch/neuron-hardware/inf2-arch',
+                'general/arch/neuron-hardware/inferentia2'
+                'general/arch/neuron-hardware/trainium',
+                'general/arch/neuron-hardware/neuron-core-v2'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'frameworks/torch/training',
                   'frameworks/torch/inference-torch-neuron',
-                  'frameworks/tensorflow/tensorflow-neuron-inference'
+                  'general/arch/neuron-hardware/trn1-arch',
+                  'general/arch/neuron-hardware/trainium'
                ]
 
-clear_trn1_tag = [
+clear_trn1_tag = [ 'general/arch/neuron-hardware/inf2-arch'
+               ]
+
+clear_nc_v2_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
                 'tools/tutorials/tutorial-neuron-gatherinfo',
                 'tools/tutorials/getting-started-tensorboard-neuron-plugin',
@@ -101,7 +108,8 @@ clear_trn1_tag = [
                 'general/appnotes/neuron1x/',
                 'general/appnotes/torch-neuron/',
                 'frameworks/torch/inference-torch-neuron',
-                'frameworks/tensorflow/tensorflow-neuron-inference'
+                'general/arch/neuron-hardware/inferentia',
+                'general/arch/neuron-hardware/neuron-core-v1'
                 ]
 
 class NeuronTag(SphinxDirective):
@@ -152,10 +160,16 @@ class NeuronTag(SphinxDirective):
             if 'Inf1' not in return_instances:
                 return_instances.append('Inf1')
 
+        if in_list(cur_file, clear_nc_v2_tag):
+            if 'Trn1' in return_instances:
+                return_instances.remove('Trn1')
+            if 'Inf2' in return_instances:
+                return_instances.remove('Inf2')
+
         if in_list(cur_file, clear_trn1_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
-                return_instances.remove('Inf2')
+
 
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:

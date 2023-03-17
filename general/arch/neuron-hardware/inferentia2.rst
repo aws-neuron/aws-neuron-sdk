@@ -3,8 +3,8 @@
 Inferentia2 Architecture
 ------------------------
 
-At the heart of the Inf2 instance are 12 x Inferentia2 devices (each Inferentia2 include 2 x :ref:`NeuronCore-v2 <neuroncores-v2-arch>`). Inferentia2 is the second
-generation of purpose built Machine Learning inference accelerator from
+At the heart of the Inf2 instance are up to 12 Inferentia2 devices (each Inferentia2 include 2 :ref:`NeuronCore-v2 <neuroncores-v2-arch>`). Inferentia2 is the second
+generation purpose built Machine Learning inference accelerator from
 AWS. The Inferentia2 device architecture is depicted below: 
 
 .. image:: /images/inferentia2.jpg
@@ -24,7 +24,7 @@ Each Inferentia2 device consists of:
     * 1 TB/sec of DMA bandwidth, with inline memory compression/decompression.
 
 -  NeuronLink:
-    * NeuronLink-v2 for device-to-device interconnect, capable of 384 GB/sec per device. Enables high performance collective compute for co-optimization of latency and throughput.
+    * NeuronLink-v2 for device-to-device interconnect enables high performance collective compute for co-optimization of latency and throughput.
 
 -  Programmability:
     * Inferentia2 supports dynamic shapes and control flow, via ISA extensions of NeuronCore-v2 and custom-operators via the deeply embedded GPSIMD engines.
