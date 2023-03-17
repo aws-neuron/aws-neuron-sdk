@@ -15,22 +15,11 @@ Neuron Quick Links
             * :ref:`torch_quick_start`
             * :ref:`tensorflow_quick_start`
             * :ref:`mxnet_quick_start`
+            * :ref:`neuron-github-samples`
             * :ref:`benchmark`
             * :ref:`neuron-whatsnew`
             * :ref:`announcements-main`
             
-    .. dropdown::  Neuron Samples
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
-
-            * `PyTorch Neuron training samples for Trainium (torch-neuronx) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
-            * `Megatron-LM sample for Trainium <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`_
-            * `AWS ParallelCluster samples for Trainium <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
-            * `PyTorch Neuron inference samples for Inferentia (torch-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuron>`_
-            * `TensorFlow Neuron inference samples for Inferentia (tensorflow-neuron) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/tensorflow-neuron>`_
-           
 
     .. dropdown::  ML Frameworks
             :class-title: sphinx-design-class-title-small
@@ -51,6 +40,7 @@ Neuron Quick Links
 
             * :ref:`neuron_runtime`
             * :ref:`neuron_cc`
+            * :ref:`neuron_c++customops`
             * :ref:`neuron-tools`
             * :ref:`setup-guide-index`
             * :ref:`neuron_containers`

@@ -1,16 +1,20 @@
 .. _training-torch-neuronx:
 
-Training with ``torch-neuronx`` (Trn1)
-=======================================
+Training (``torch-neuronx``) 
+============================
 
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
-    Setup Guide for Trn1 </frameworks/torch/torch-neuronx/setup/setup-inference>
-    Tutorials </frameworks/torch/torch-neuronx/tutorials/inference/tutorials-torch-neuronx>
-    Additional Examples </frameworks/torch/torch-neuronx/additional-examples-inference-torch-neuronx>
-    API Reference Guide </frameworks/torch/torch-neuronx/api-reference-guide/inference/inference-api-guide-torch-neuronx>
-    Developer Guide  </frameworks/torch/torch-neuronx/programming-guide/inference/index>
-    Misc  </frameworks/torch/torch-neuronx/misc-inference-torch-neuronx>
+     Tutorials </frameworks/torch/torch-neuronx/tutorials/training/tutorials-training-torch-neuronx>
+     Additional Examples </frameworks/torch/torch-neuronx/additional-examples-training>
+     API Reference Guide </frameworks/torch/torch-neuronx/api-reference-guide/training/index>
+     Developer Guide  </frameworks/torch/torch-neuronx/programming-guide/training/index>
+     Misc  </frameworks/torch/torch-neuronx/misc-training>
+
+
+.. include:: training-torch-neuronx.txt
+
 
 

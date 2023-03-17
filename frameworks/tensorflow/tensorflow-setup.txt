@@ -1,0 +1,14 @@
+.. tab-set::
+
+    .. tab-item:: tensorflow-neuronx (``Trn1 & Inf2``)
+        :name: tensorflow-neuronx-install-main
+
+        * :ref:`Fresh Install <install-tensorflow-neuronx>`
+        * :ref:`Update to Latest release <update-tensorflow-neuronx>`
+
+    .. tab-item:: tensorflow-neuron (``Inf1``)
+        :name: tensorflow-neuron-install-main
+
+        * :ref:`Fresh Install <install-neuron-tensorflow>`
+        * :ref:`Update to Latest Release <update-neuron-tensorflow>`
+        * :ref:`Install Previous Releases <install-prev-neuron-tensorflow>`

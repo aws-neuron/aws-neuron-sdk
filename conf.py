@@ -228,6 +228,6 @@ rst_epilog = """
 """
 
 # Exclude private github from linkcheck. Readthedocs only exposes the ssh-agent to the 'checkout' build step, which is too early for the linkchecker to run.
-linkcheck_ignore = [r'http://localhost:\d+/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html' ,r'https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html', r'https://awsdocs-neuron-staging.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-neuronx-install.html#install-tensorflow-neuronx']
+linkcheck_ignore = [r'http://localhost:\d+/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html' ,r'https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/',r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html', r'https://awsdocs-neuron-staging.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-neuronx-install.html#install-tensorflow-neuronx',r'https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx#inference',r'https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx#training']
 linkcheck_exclude_documents = [r'src/examples/.*', 'general/announcements/neuron1.x/announcements', r'release-notes/.*']
 nitpicky = True

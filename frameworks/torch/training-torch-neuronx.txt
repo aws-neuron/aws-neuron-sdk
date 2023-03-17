@@ -1,0 +1,40 @@
+
+
+.. dropdown::  Tutorials
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/tutorials/training/tutorials-training-torch-neuronx.txt
+
+
+.. dropdown::  Additional Examples
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/additional-examples-training.txt
+
+  
+.. dropdown::  API Reference Guide
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/api-reference-guide/training/index.txt
+   
+.. dropdown::  Developer Guide
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/programming-guide/training/index.txt
+
+.. dropdown:: Misc
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/torch/torch-neuronx/misc-training.txt   
+
+

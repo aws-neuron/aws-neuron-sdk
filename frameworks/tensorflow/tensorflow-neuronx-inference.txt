@@ -1,0 +1,23 @@
+.. _inference-tensorflow-neuronx:
+
+.. dropdown::  Tutorials (``tensorflow-neuronx``)
+    :class-title: sphinx-design-class-title-med
+    :animate: fade-in
+
+    .. include:: /frameworks/tensorflow/tensorflow-neuronx/tutorials/tutorials-tensorflow-neuronx.txt
+
+
+.. dropdown::  API Reference Guide (``tensorflow-neuronx``)
+    :class-title: sphinx-design-class-title-med
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /frameworks/tensorflow/tensorflow-neuronx/api-reference-guide.txt
+
+
+.. dropdown::  Misc (``tensorflow-neuronx``)
+    :class-title: sphinx-design-class-title-med
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+                
+    .. include:: /frameworks/tensorflow/tensorflow-neuronx/misc-tensorflow-neuronx.txt

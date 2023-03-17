@@ -1,0 +1,19 @@
+
+.. tab-set::
+
+    .. tab-item:: torch-neuronx (``Trn1 & Inf2``)
+        :name: torch-neuronx-install-main
+
+        * :ref:`Fresh Install <pytorch-neuronx-install>`
+        * :ref:`Update to latest release <pytorch-neuronx-update>`
+        * :ref:`Install previous releases <pytorch-neuronx-install-prev>`
+
+        .. include:: /general/setup/install-templates/trn1-ga-warning.txt
+
+    .. tab-item:: torch-neuron (``Inf1``)
+        :name: torch-neuron-install-main
+
+        * :ref:`Fresh Install <install-neuron-pytorch>`
+        * :ref:`Update to latest release <update-neuron-pytorch>`
+        * :ref:`Install previous releases <install-prev-neuron-pytorch>`
+        * :ref:`pytorch-install-cxx11`

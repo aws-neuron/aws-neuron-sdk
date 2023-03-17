@@ -1,4 +1,6 @@
 Additional Examples (``torch-neuron``)
 ======================================
 
-* `AWS Neuron Samples GitHub Repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuron/inference>`_
+
+
+.. include:: /frameworks/torch/torch-neuron/additional-examples-inference-torch-neuron.txt
