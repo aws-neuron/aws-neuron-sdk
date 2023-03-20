@@ -1,3 +1,6 @@
+.. _mxnet-setup:
+
+
 MXNet Neuron Setup
 ==================
 
