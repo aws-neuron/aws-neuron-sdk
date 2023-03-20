@@ -161,20 +161,21 @@ This shell script expects dataset files to be located in ~/examples_datasets/gpt
 Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To run the GPT example, first activate the Python virtual environment
-and change to the Megatron-LM package location:
+To run the GPT example, first activate the Python virtual environment, 
+change to the Megatron-LM package location, and allow execute permission on the script:
 
 ::
 
    source ~/aws_neuron_venv_pytorch/bin/activate
    cd ~/aws-neuron-reference-for-megatron-lm/
+   chmod +x *.sh
 
 Next, run the parallel compilations of graphs in order to reduce
 compilation time during the actual run.
 
 ::
 
-   neuron_parallel_compile sh ./examples/pretrain_gpt3_6.7B_32layers_bf16.sh
+   neuron_parallel_compile ./examples/pretrain_gpt3_6.7B_32layers_bf16.sh
 
 This command performs a short trial run of the training script to
 extract graphs and then do parallel compilations on those graphs before
@@ -198,7 +199,7 @@ Finally, run the script for the actual run:
 
 ::
 
-   sh ./examples/pretrain_gpt3_6.7B_32layers_bf16.sh
+   ./examples/pretrain_gpt3_6.7B_32layers_bf16.sh
 
 During the run, you will see outputs like below, some lines showing
 throughput and loss statistics every global step.
