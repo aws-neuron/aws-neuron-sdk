@@ -427,6 +427,22 @@ Dropout is disabled
 
 Currently, dropout is disabled in the example.
 
+"Failed accept4: Too many open files"
+-------------------------------------
+
+When running Megatron-LM GPT3 6.7B example above on `Ubuntu Server 20.04 LTS (HVM)` and `Ubuntu Server 22.04 LTS (HVM)` AMIs, you may encounter the following "Failed accept4: Too many open files" error:
+
+.. code:: bash
+
+   E0301 08:06:14.272283286   72588 tcp_server_posix.cc:214]    Failed accept4: Too many open files
+   2023-03-01 08:06:15.515834: F tensorflow/libtpu/neuron/neuron_compiler.cc:200] Check failed: fd != -1 Opening lock file failed with errno 24
+
+The reason is that on this AMI, the "ulimit -n" is set to 1024, which is too low compared to for example `Amazon Linux 2 AMI (HVM) - Kernel 5.10` where it is set tp 65535 by default. To workaround this issue, please increase "ulimit -n" to a higher value, such as 65535 which matches `Amazon Linux 2 AMI (HVM) - Kernel 5.10` and is sufficient for the Megatron-LM GPT3 6.7B example. Additionally, this can be set within the shell script (which is ran using SLURM srun command) so that it is set for each worker process.
+
+.. code:: bash
+
+   ulimit -n 65535
+
 Error: cannot import name 'helpers' from 'megatron.data'
 --------------------------------------------------------
 
