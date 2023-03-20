@@ -1,0 +1,7 @@
+Name,Model,Model details,Framework,Application Type,Run Mode,Inst. Type,Num. Cores,Batch Size,Throughput (/sec),Max Throughput,Threads,Ops in Inferentia,Latency P50 (ms),Latency P90 (ms),Latency P95 (ms),Latency P99 (ms),Latency P100 (ms),Neuron Version,Application,Tutorial
+albert-base-v2,albert-base-v2,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,1792.01,,2,,1.09,,1.14,1.54,,2.8.0,NLP,
+bert-base-cased,bert-base-cased,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,1791.86,,2,,1.10,,1.13,1.49,,2.8.0,NLP,
+bert-base-cased-finetuned-mrpc,bert-base-cased-finetuned-mrpc,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,1833.98,,2,,1.09,,1.10,1.12,,2.8.0,NLP,
+bert-large-cased,bert-large-cased,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,657.83,,2,,3.03,,3.06,3.09,,2.8.0,NLP,
+roberta-base,roberta-base,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,1728.98,,2,,1.15,,1.17,1.20,,2.8.0,NLP,
+roberta-large,roberta-large,bf16,PyTorch 1.13.0,Real Time,Data Parallel,trn1.2xlarge,,1,645.22,,2,,3.09,,3.12,3.13,,2.8.0,NLP,
