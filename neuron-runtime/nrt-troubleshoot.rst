@@ -112,7 +112,7 @@ message in the console and in syslog:
 Solution
 ''''''''
 
-Terminate the the process using NeuronCore and then try launching the application again.
+Terminate any other processes that are using NeuronCore devices and then try launching the application again. If you are using Jupyter, ensure that you only have a single Jupyter kernel attempting to access the NeuronCores by restarting or shutting-down any other kernels, which will release any NeuronCores that might be in use.
 
 ------------
 

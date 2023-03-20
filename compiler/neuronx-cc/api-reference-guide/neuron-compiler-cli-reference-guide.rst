@@ -96,7 +96,7 @@ Available Commands:
 
     Valid values:
 
-    - ``matmul``: Only cast FP32 operations that use the Neuron matrix-multiplication engine.
+    - ``matmult``: Only cast FP32 operations that use the Neuron matrix-multiplication engine.
     - ``all``: Cast all FP32 operations to achieve highest performance. This option can potentially lower precision/accuracy.
     - ``none``: Leave all data types as defined in the model. Do not apply auto-casting data type optimizations.
 
