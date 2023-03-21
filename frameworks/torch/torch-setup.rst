@@ -1,3 +1,5 @@
+.. _torch-setup:
+
 Pytorch Neuron Setup
 ====================
 

@@ -10,6 +10,35 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.2.43.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 11/23/2022
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.8 Neuron.
+
+[1.5.1.1.10.11.0]
+^^^^^^^^^^^^^^^^^
+
+Date: 11/23/2022
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
+
+[1.5.1.1.10.0.0]
+^^^^^^^^^^^^^^^^
+
+Date: 04/28/2022
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
 
 Apache MXNet Neuron release [1.8.0.2.2.2.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -25,6 +54,16 @@ Bug fixes
 ---------
 
 * Fixed a memory leak caused by stale unloaded models in NeuronDevice memory. For this fix to take effect please install aws-mx package from https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl along with the latest mx-neuron package.
+
+[1.5.1.1.9.0.0]
+^^^^^^^^^^^^^^^
+
+Date: 03/25/2022
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
 
 
 Apache MXNet Neuron release [1.8.0.2.1.5.0]
@@ -57,6 +96,8 @@ Date: 11/05/2021
 Apache MXNet Neuron release [1.8.0.2.0.271.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Date 10/27/2021
+
 New in this release
 -------------------
 
@@ -87,6 +128,8 @@ Resolved Issues
 
 [1.5.1.1.7.0.0]
 ^^^^^^^^^^^^^^^
+
+Date 10/27/2021
 
 New in this release
 -------------------
