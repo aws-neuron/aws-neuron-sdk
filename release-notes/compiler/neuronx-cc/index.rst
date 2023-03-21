@@ -7,11 +7,24 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
+Neuron Compiler [2.x.y]
+-----------------------------
+Date: 03/23/2023
+
+* This release introduces the ``trn1n`` option argument to the compiler ``target`` option to specify that it should
+  generate code for an trn1n instance type. Example usage: ``neuronx-cc compile --target=trn1n ...``
+  
+* The compiler's usage message now includes the ``inf2`` option argument.
+
+* A new 8-bit floating point data type, ``fp8_e4m3``, is now supported and can be specificed using the ``auto-cast-type`` option.
+  This instructs the compiler to convert the FP32 operations selected via the ``--auto-cast`` option to a signed FP8 size
+  with 4-bit exponent and 3-bit mantissa. Care must be taken to ensure that the down-casted values are representable within the 8-bit data range.
+
 Neuron Compiler [2.4.0.21]
 -----------------------------
 Date: 02/24/2023
 
-* This release introduces the ``inf2`` option argument to the compiler ``--target`` option to specify that it should
+* This release introduces the ``inf2`` option argument to the compiler ``target`` option to specify that it should
   generate code for an inf2 instance type. Example usage: ``neuronx-cc compile --target=inf2 ...``
   The ``inf2`` option argument does not appear in the compiler's usage message. It will be added in the next release.
 
