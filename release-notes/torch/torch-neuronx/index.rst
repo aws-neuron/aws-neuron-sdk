@@ -10,6 +10,138 @@ PyTorch Neuron (``torch-neuronx``) release notes
 PyTorch Neuron for Trainium is a software package that enables PyTorch
 users to train their models on Trainium.
 
+Release [1.13.0.1.6.0]
+----------------------
+Date: 03/23/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- Added pipeline parallelism support in AWS Samples for Megatron-LM
+- Added 3D parallelism tutorial for AWS Samples for Megatron-LM
+
+Inference support:
+
+    * Added model analysis API: torch_neuronx.analyze
+    * Added HLO opcode support for:
+        * kAtan2
+        * kAfterAll
+        * kMap
+    * Added XLA lowering support for:
+        * aten::glu
+        * aten::scatter_reduce
+    * Updated torch.nn.MSELoss to promote input data types to a compatible type
+
+Resolved Issues (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+GRPC timeout errors when running Megatron-LM GPT 6.7B tutorial on multiple instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running AWS Samples for Megatron-LM GPT 6.7B tutorial over multiple instances, you may encounter GRPC timeout errors like below:
+
+```
+E0302 01:10:20.511231294  138645 chttp2_transport.cc:1098]   Received a GOAWAY with error code ENHANCE_YOUR_CALM and debug data equal to "too_many_pings"
+2023-03-02 01:10:20.511500: W tensorflow/core/distributed_runtime/rpc/grpc_remote_master.cc:157] RPC failed with status = "UNAVAILABLE: Too many pings" and grpc_error_string = "{"created":"@1677719420.511317309","description":"Error received from peer ipv4:10.1.35.105:54729","file":"external/com_github_grpc_grpc/src/core/lib/surface/call.cc","file_line":1056,"grpc_message":"Too many pings","grpc_status":14}", maybe retrying the RPC
+```
+
+or:
+
+```
+2023-03-08 21:18:27.040863: F tensorflow/compiler/xla/xla_client/xrt_computation_client.cc:476] Non-OK-status: session->session()->Run(session_work->feed_inputs, session_work->outputs_handles, &outputs) status: UNKNOWN: Stream removed
+```
+
+This is due to excessive DNS lookups during execution, and is fixed in this release.
+
+
+NaNs seen in BERT-like models when using full BF16 plus stochastic rounding
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The latest version 4.26.1 of Hugging Face transformers can sometimes produce NaN outputs for BERT-like models when using full BF16 (XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1) plus stochastic rounding. To workaround this issue, add the following to the beginning of your Python script:
+
+.. code:: python
+
+    import torch
+
+    def guard_bf16_finfo():
+      Bf16 = torch.finfo(torch.bfloat16)
+      Fp32 = torch.finfo(torch.float32)
+      if os.environ.get("XLA_DOWNCAST_BF16") == '1':
+        torch.finfo = lambda a: Fp32 if a == torch.float64 else (Bf16 if a == torch.float32 else a)
+      elif os.environ.get("XLA_USE_BF16") == '1':
+        torch.finfo = lambda a: Bf16 if (a == torch.float64 or a == torch.float32)  else a
+
+    guard_bf16_finfo()
+
+
+Resolved Issues (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmax` now supports single argument call variant
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Previously only the 3 argument variant of :func:`torch.argmax` was supported. Now the single argument call variant is supported.
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this release, convolution is not supported.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop 
+with DDP. This is a known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its own graph. This causes an error in the runtime, and
+you may see errors that look like this: ``bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Lower throughput for BERT-large training on AL2 instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We see a performance drop of roughly 5-10% for BERT model training on AL2 instances. This is because of the increase in time required for tracing the model.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` now supports both the single
+argument call variant and the 3 argument variant.
+However, :func:`torch.argmin` currently produce
+incorrect results.
+
+Error when using the xm.xla_device() object followed by using torch_neuronx.trace
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Executing a model using the xm.xla_device() object followed by using torch_neuronx.trace in the same process can produce errors in specific situations due to torch-xla caching behavior. It is recommended that only one type of execution is used per process.
+
+Error when executing torch_neuronx.trace with torch.bfloat16 input/output tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Executing torch_neuronx.trace with torch.bfloat16 input/output tensors can cause an error. It is currently recommended to use an alternative torch data type in combination with compiler casting flags instead.
+
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, there's no automatic partitioning of a model into subgraphs that run on NeuronCores and subgraphs that run on CPU
+Operations in the model that are not supported by Neuron would result in compilation error. Please see :ref:`pytorch-neuron-supported-operators` for a list of supported operators.
+
 
 Release [1.13.0.1.5.0]
 ----------------------
