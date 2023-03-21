@@ -11,7 +11,7 @@ This document lists the release notes for the Pytorch-Neuron package.
 
 
 
-Known Issues and Limitations - Updated 11/23/2022
+Known Issues and Limitations - Updated 03/21/2023
 -------------------------------------------------
 
 Min & Max Accuracy
@@ -82,15 +82,17 @@ New in this release
 ~~~~~~~~~~~~~~~~~~~
 
 * Added support for ``torch==1.13.1``
-* New versions of ``torch-neuron`` no longer includes versions for ``torch==1.7`` and ``torch==1.8``
+* New releases of ``torch-neuron`` no longer include versions for ``torch==1.7`` and ``torch==1.8``
 * Added support for Neuron runtime 2.12
 * Added support for new operators:
-    * ``aten::tensordot``
-    * ``aten::adaptive_avg_pool1d``
-    * ``aten::prelu``
-    * ``aten::reflection_pad2d``
-    * ``aten::baddbmm``
-    * ``aten::repeat``
+
+  * ``aten::tensordot``
+  * ``aten::adaptive_avg_pool1d``
+  * ``aten::prelu``
+  * ``aten::reflection_pad2d``
+  * ``aten::baddbmm``
+  * ``aten::repeat``
+
 * Added a ``separate_weights`` flag to :func:`torch_neuron.trace` to support
   models that are larger than 2GB
 
@@ -99,9 +101,11 @@ Bug fixes
 ~~~~~~~~~
 
 * Fixed ``aten::_convolution`` with grouping for:
-    * :class:`torch.nn.Conv1d`
-    * :class:`torch.nn.Conv3d`
-    * :class:`torch.nn.ConvTranspose2d`
+
+  * :class:`torch.nn.Conv1d`
+  * :class:`torch.nn.Conv3d`
+  * :class:`torch.nn.ConvTranspose2d`
+
 * Fixed ``aten::linear`` to support 1d input tensors
 * Fixed an issue where an input could not be directly returned from the network
 
@@ -119,11 +123,13 @@ New in this release
 * Added new operators support. See :ref:`neuron-cc-ops-pytorch`
 * Added support for ``aten::lstm``. See: :ref:`torch_neuron_lstm_support`
 * Improved logging:
-    * Improved error messages for specific compilation failure modes, including out-of-memory errors
-    * Added a warning to show the code location of ``prim::PythonOp`` operations
-    * Removed overly-verbose tracing messages
-    * Added improved error messages for ``neuron-cc`` and ``tensorflow`` dependency issues
-    * Added more debug information when an invalid dynamic batching configuration is used
+
+  * Improved error messages for specific compilation failure modes, including out-of-memory errors
+  * Added a warning to show the code location of ``prim::PythonOp`` operations
+  * Removed overly-verbose tracing messages
+  * Added improved error messages for ``neuron-cc`` and ``tensorflow`` dependency issues
+  * Added more debug information when an invalid dynamic batching configuration is used
+
 * Added new experimental explicit NeuronCore placement API. See: :ref:`torch_neuron_core_placement_api`
 * Added new guide for NeuronCore placement. See: :ref:`torch_neuron_core_placement_guide`
 * Improved :func:`torch_neuron.trace` performance when using large graphs
@@ -140,22 +146,23 @@ Bug fixes
 * Fixed an issue where ``inf`` and ``-inf`` values would cause unexpected ``NaN`` values. This could occur with newer versions of ``transformers``
 * Fixed an issue where :func:`torch.neuron.DataParallel` would not fully utilize all NeuronCores for specific batch sizes
 * Fixed and improved operators:
-    * ``aten::upsample_bilinear2d``: Improved error messages in cases where the operation cannot be supported
-    * ``aten::_convolution``: Added support for ``output_padding`` argument
-    * ``aten::div``: Added support for ``rounding_mode`` argument
-    * ``aten::sum``: Fixed to handle non-numeric data types
-    * ``aten::expand``: Fixed to handle scalar tensors
-    * ``aten::permute``: Fixed to handle negative indices
-    * ``aten::min``: Fixed to support more input types
-    * ``aten::max``: Fixed to support more input types
-    * ``aten::max_pool2d``: Fixed to support both 3-dimensional and 4-dimensional input tensors
-    * ``aten::Int``: Fixed an issue where long values would incorrectly lose precision
-    * ``aten::constant_pad_nd``: Fixed to correctly use non-0 padding values
-    * ``aten::pow``: Fixed to support more input types & values
-    * ``aten::avg_pool2d``: Added support for ``count_include_pad`` argument. Added support for ``ceil_mode`` argument if padding isn’t specified
-    * ``aten::zero``: Fixed to handle scalars correctly
-    * ``prim::Constant``: Fixed an issue where ``-inf`` was incorrectly handled
-    * Improved handling of scalars in arithmetic operators
+
+  * ``aten::upsample_bilinear2d``: Improved error messages in cases where the operation cannot be supported
+  * ``aten::_convolution``: Added support for ``output_padding`` argument
+  * ``aten::div``: Added support for ``rounding_mode`` argument
+  * ``aten::sum``: Fixed to handle non-numeric data types
+  * ``aten::expand``: Fixed to handle scalar tensors
+  * ``aten::permute``: Fixed to handle negative indices
+  * ``aten::min``: Fixed to support more input types
+  * ``aten::max``: Fixed to support more input types
+  * ``aten::max_pool2d``: Fixed to support both 3-dimensional and 4-dimensional input tensors
+  * ``aten::Int``: Fixed an issue where long values would incorrectly lose precision
+  * ``aten::constant_pad_nd``: Fixed to correctly use non-0 padding values
+  * ``aten::pow``: Fixed to support more input types & values
+  * ``aten::avg_pool2d``: Added support for ``count_include_pad`` argument. Added support for ``ceil_mode`` argument if padding isn’t specified
+  * ``aten::zero``: Fixed to handle scalars correctly
+  * ``prim::Constant``: Fixed an issue where ``-inf`` was incorrectly handled
+  * Improved handling of scalars in arithmetic operators
 
 
 PyTorch Neuron release [2.3.0.0]
@@ -171,9 +178,9 @@ New in this release
 * End of support for torch-neuron 1.5, see :ref:`eol-pt-15`.
 * Added support for new operators:
 
-    * ``aten::masked_fill_``
-    * ``aten::new_zeros``
-    * ``aten::frobenius_norm``
+  * ``aten::masked_fill_``
+  * ``aten::new_zeros``
+  * ``aten::frobenius_norm``
 
 Bug fixes
 ~~~~~~~~~
@@ -267,17 +274,17 @@ New in this release
 
 -  PyTorch Neuron 1.x now support Neuron Runtime 2.x (``libnrt.so`` shared library) only.
 
-     .. important::
+   .. important::
 
-        -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer)
-           for proper functionality of the new runtime library.
-        -  Read :ref:`introduce-libnrt`
-           application note that describes :ref:`why are we making this
-           change <introduce-libnrt-why>` and
-           how :ref:`this change will affect the Neuron
-           SDK <introduce-libnrt-how-sdk>` in detail.
-        -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
-           migrate your application.
+      -  You must update to the latest Neuron Driver (``aws-neuron-dkms`` version 2.1 or newer)
+         for proper functionality of the new runtime library.
+      -  Read :ref:`introduce-libnrt`
+         application note that describes :ref:`why are we making this
+         change <introduce-libnrt-why>` and
+         how :ref:`this change will affect the Neuron
+         SDK <introduce-libnrt-how-sdk>` in detail.
+      -  Read :ref:`neuron-migrating-apps-neuron-to-libnrt` for detailed information of how to
+         migrate your application.
 
 -  Introducing PyTorch 1.9.1 support (support for ``torch==1.9.1)``
 -  Added ``torch_neuron.DataParallel``, see ResNet-50 tutorial :ref:`[html] </src/examples/pytorch/resnet50.ipynb>` and
@@ -371,16 +378,16 @@ Summary
 
 * Added support for PyTorch 1.8.1
 
-    * Models compatibility
+  * Models compatibility
 
-        * Models compiled with previous versions of PyTorch Neuron (<1.8.1) are compatible with PyTorch Neuron 1.8.1.
-        * Models compiled with PyTorch Neuron 1.8.1 are not backward compatible with previous versions of PyTorch Neuron (<1.8.1) .
+    * Models compiled with previous versions of PyTorch Neuron (<1.8.1) are compatible with PyTorch Neuron 1.8.1.
+    * Models compiled with PyTorch Neuron 1.8.1 are not backward compatible with previous versions of PyTorch Neuron (<1.8.1) .
 
-    * Updated  tutorials to use Hugging Face Transformers 4.6.0.
-    * Added a new set of forward operators (forward_v2)
-    * Host memory allocation when loading the same model on multiple NeuronCores is significantly reduced
-    * Fixed an issue where models would not deallocate all memory within a python session after being garbage collected.
-    * Fixed a TorchScript/C++ issue where loading the same model multiple times would not use multiple NeuronCores by default.
+  * Updated  tutorials to use Hugging Face Transformers 4.6.0.
+  * Added a new set of forward operators (forward_v2)
+  * Host memory allocation when loading the same model on multiple NeuronCores is significantly reduced
+  * Fixed an issue where models would not deallocate all memory within a python session after being garbage collected.
+  * Fixed a TorchScript/C++ issue where loading the same model multiple times would not use multiple NeuronCores by default.
 
 
 * Fixed logging to no longer configure the root logger.
