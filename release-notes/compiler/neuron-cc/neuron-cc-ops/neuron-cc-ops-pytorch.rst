@@ -12,6 +12,23 @@ python:
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
 
+.. _pytorch-neuron-release-2900
+
+PyTorch Neuron release [2.9.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: XX/XX/2023
+
+Added support for new operators:
+
+- ``aten::tensordot``
+- ``aten::adaptive_avg_pool1d``
+- ``aten::prelu``
+- ``aten::reflection_pad2d``
+- ``aten::baddbmm``
+- ``aten::repeat``
+
+
 .. _pytorch-neuron-release-2500
 
 PyTorch Neuron release [2.5.0.0]

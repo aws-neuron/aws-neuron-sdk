@@ -73,6 +73,39 @@ This error typically occurs when ``aten::size`` operators are partitioned to
 CPU. We are investigating a fix for this issue.
 
 
+PyTorch Neuron release [2.9.0.0]
+--------------------------------------------------
+
+Date: XX/XX/2023
+
+New in this release
+~~~~~~~~~~~~~~~~~~~
+
+* Added support for ``torch==1.13.1``
+* New versions of ``torch-neuron`` no longer includes versions for ``torch==1.7`` and ``torch==1.8``
+* Added support for Neuron runtime 2.12
+* Added support for new operators:
+    * ``aten::tensordot``
+    * ``aten::adaptive_avg_pool1d``
+    * ``aten::prelu``
+    * ``aten::reflection_pad2d``
+    * ``aten::baddbmm``
+    * ``aten::repeat``
+* Added a ``separate_weights`` flag to :func:`torch_neuron.trace` to support
+  models that are larger than 2GB
+
+
+Bug fixes
+~~~~~~~~~
+
+* Fixed ``aten::_convolution`` with grouping for:
+    * :class:`torch.nn.Conv1d`
+    * :class:`torch.nn.Conv3d`
+    * :class:`torch.nn.ConvTranspose2d`
+* Fixed ``aten::linear`` to support 1d input tensors
+* Fixed an issue where an input could not be directly returned from the network
+
+
 PyTorch Neuron release [2.5.0.0]
 --------------------------------------------------
 
