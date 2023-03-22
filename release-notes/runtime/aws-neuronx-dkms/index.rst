@@ -23,6 +23,7 @@ Date: 03/24/2023
 New in this release
 ^^^^^^^^^^^^^^^^^^^
 
+* Supports both TRN1N and INF2 instance types.
 * Renamed NEURON_ARCH_INFERENTIA=>NEURON_ARCH_V1 and NEURON_ARCH_TRN=>NEURON_ARCH_V2
 * Under sysfs nodes, the following changes were made:
   * Changed “infer” metrics to “execute” metrics
