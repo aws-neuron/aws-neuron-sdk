@@ -124,15 +124,15 @@ argument call variant and the 3 argument variant.
 However, :func:`torch.argmin` currently produces
 incorrect results.
 
-Error when using the `xm.xla_device()` object followed by using `torch_neuronx.trace`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when using the ``xm.xla_device()`` object followed by using ``torch_neuronx.trace``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Executing a model using the `xm.xla_device()` object followed by using `torch_neuronx.trace` in the same process can produce errors in specific situations due to torch-xla caching behavior. It is recommended that only one type of execution is used per process.
+Executing a model using the ``xm.xla_device()`` object followed by using ``torch_neuronx.trace`` in the same process can produce errors in specific situations due to torch-xla caching behavior. It is recommended that only one type of execution is used per process.
 
-Error when executing `torch_neuronx.trace` with torch.bfloat16 input/output tensors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when executing ``torch_neuronx.trace`` with ``torch.bfloat16`` input/output tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Executing `torch_neuronx.trace` with `torch.bfloat16` input/output tensors can cause an error. It is currently recommended to use an alternative torch data type in combination with compiler casting flags instead.
+Executing ``torch_neuronx.trace`` with ``torch.bfloat16`` input/output tensors can cause an error. It is currently recommended to use an alternative torch data type in combination with compiler casting flags instead.
 
 
 No automatic partitioning
