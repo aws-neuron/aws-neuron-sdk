@@ -23,19 +23,18 @@ What's new in this release
 Training support:
 
 - Added pipeline parallelism support in AWS Samples for Megatron-LM
-- Added 3D parallelism tutorial for AWS Samples for Megatron-LM
 
 Inference support:
 
-    * Added model analysis API: torch_neuronx.analyze
-    * Added HLO opcode support for:
-        * kAtan2
-        * kAfterAll
-        * kMap
-    * Added XLA lowering support for:
-        * aten::glu
-        * aten::scatter_reduce
-    * Updated torch.nn.MSELoss to promote input data types to a compatible type
+- Added model analysis API: torch_neuronx.analyze
+- Added HLO opcode support for:
+    - kAtan2
+    - kAfterAll
+    - kMap
+- Added XLA lowering support for:
+    - aten::glu
+    - aten::scatter_reduce
+- Updated torch.nn.MSELoss to promote input data types to a compatible type
 
 Resolved Issues (Training)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,18 +121,18 @@ Known Issues and Limitations (Inference)
 
 :func:`torch.argmin` now supports both the single
 argument call variant and the 3 argument variant.
-However, :func:`torch.argmin` currently produce
+However, :func:`torch.argmin` currently produces
 incorrect results.
 
-Error when using the xm.xla_device() object followed by using torch_neuronx.trace
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when using the `xm.xla_device()` object followed by using `torch_neuronx.trace`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Executing a model using the xm.xla_device() object followed by using torch_neuronx.trace in the same process can produce errors in specific situations due to torch-xla caching behavior. It is recommended that only one type of execution is used per process.
+Executing a model using the `xm.xla_device()` object followed by using `torch_neuronx.trace` in the same process can produce errors in specific situations due to torch-xla caching behavior. It is recommended that only one type of execution is used per process.
 
-Error when executing torch_neuronx.trace with torch.bfloat16 input/output tensors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when executing `torch_neuronx.trace` with torch.bfloat16 input/output tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Executing torch_neuronx.trace with torch.bfloat16 input/output tensors can cause an error. It is currently recommended to use an alternative torch data type in combination with compiler casting flags instead.
+Executing `torch_neuronx.trace` with `torch.bfloat16` input/output tensors can cause an error. It is currently recommended to use an alternative torch data type in combination with compiler casting flags instead.
 
 
 No automatic partitioning
@@ -210,7 +209,7 @@ No automatic partitioning
 Currently, there's no automatic partitioning of a model into subgraphs that run on NeuronCores and subgraphs that run on CPU
 Operations in the model that are not supported by Neuron would result in compilation error. Please see :ref:`pytorch-neuron-supported-operators` for a list of supported operators.
 
-Release [1.13.0.1.6.0]
+Release [1.13.0.1.4.0]
 ----------------------
 Date: 02/08/2023
 
