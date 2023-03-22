@@ -12,7 +12,7 @@ Neuron Compiler [2.x.y]
 Date: 03/23/2023
 
 * This release introduces the ``trn1n`` option argument to the compiler ``target`` option to specify that it should
-  generate code for an trn1n instance type. Example usage: ``neuronx-cc compile --target=trn1n ...``
+  generate code for a trn1n instance type. Example usage: ``neuronx-cc compile --target=trn1n ...``
   
 * The compiler's usage message now includes the ``inf2`` option argument.
 
