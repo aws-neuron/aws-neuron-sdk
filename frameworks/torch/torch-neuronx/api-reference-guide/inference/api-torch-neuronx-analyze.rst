@@ -18,7 +18,7 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
       |neuronx-cc|. This can be useful for debugging and/or inspecting
       intermediary |neuronx-cc| outputs
     
-   :keyword ~callable _op_checker_callback: Only used for testing/debugging. This argument is 
+   :keyword callable _op_checker_callback: Only used for testing/debugging. This argument is 
         for substituting the function used to check for operator support.
 
    :returns: A JSON like :class:`~Dict` with the supported operators and their count, and unsupported
@@ -118,6 +118,6 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
          ]
       }
    
-   **Note:** the `failureAt` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then that means that the operator failed to be compiled with `neuronx-cc`. This could either indicate that the operator is unsupported, or there is a bug with the operator.
+   **Note:** the ``failureAt`` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then that means that the operator failed to be compiled with ``neuronx-cc``. This could either indicate that the operator is unsupported, or there is a bug with the operator.
 
 .. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`
