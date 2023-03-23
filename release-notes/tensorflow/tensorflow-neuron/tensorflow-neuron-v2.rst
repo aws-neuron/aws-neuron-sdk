@@ -47,6 +47,15 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
+
+tensorflow-neuron 2.x release [2.9.0.0]
+
+Date: xx/xx/2023
+
+* Introduce the ``tfn.analyze_model`` that displays information about the supported and unsupported operators of a traceable model.
+* Introduce the ``.on_neuron_ratio`` attribute of neuron_models returned by ``tfn.trace`` which is the percentage of ops on neuron after compilation. 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 tensorflow-neuron 2.x release [2.6.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
