@@ -27,5 +27,5 @@ Each Inferentia2 device consists of:
     * NeuronLink-v2 for device-to-device interconnect enables high performance collective compute for co-optimization of latency and throughput.
 
 -  Programmability:
-    * Inferentia2 supports dynamic shapes and control flow, via ISA extensions of NeuronCore-v2 and custom-operators via the deeply embedded GPSIMD engines.
+    * Inferentia2 supports dynamic shapes and control flow, via ISA extensions of NeuronCore-v2 and :ref:`custom-operators <feature-custom-c++-operators>` via the deeply embedded GPSIMD engines.
 
