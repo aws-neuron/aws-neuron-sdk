@@ -99,7 +99,7 @@ Run the setup script to download additional depdendencies and build the app. (Th
 Benchmark
 ---------
 
-The setup script should have compiled and saved a PyTorch mode (bert_neuron_b6.pt).  Run the provided sanity tests to ensure everything is working properly.
+The setup script should have compiled and saved a PyTorch model compiled for neuron (bert_neuron_b6.pt).  Run the provided sanity tests to ensure everything is working properly.
 
 .. code:: bash
 
