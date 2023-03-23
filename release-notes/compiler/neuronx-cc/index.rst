@@ -7,9 +7,9 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
-Neuron Compiler [2.x.y]
+Neuron Compiler [2.5.0.28]
 -----------------------------
-Date: 03/23/2023
+Date: 03/27/2023
 
 * This release introduces the ``trn1n`` option argument to the compiler ``target`` option to specify that it should
   generate code for a trn1n instance type. Example usage: ``neuronx-cc compile --target=trn1n ...``
