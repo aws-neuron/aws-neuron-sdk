@@ -22,9 +22,10 @@ The tutorial has been tested on Inf1, Inf2 and Trn1 instances on ubuntu instance
 Run the tutorial
 ----------------
 
-This tutorial is self contained, it produces similar output to :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
+This tutorial is self contained.  It produces similar output to :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
 
-You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
+Note:  The tutorial will use about 8.5 GB of disk space.  Please ensure you have sufficient space before beginning.
+
 Right-click and copy :download:`this link address to the tutorial archive</src/examples/pytorch/libtorch_demo.tar.gz>`.
 
 .. code:: bash
@@ -98,7 +99,7 @@ Run the setup script to download additional depdendencies and build the app. (Th
 Benchmark
 ---------
 
-Run the provided sanity tests to ensure everything is working properly.
+The setup script should have compiled and saved a PyTorch mode (bert_neuron_b6.pt).  Run the provided sanity tests to ensure everything is working properly.
 
 .. code:: bash
 
