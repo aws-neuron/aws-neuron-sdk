@@ -5,23 +5,26 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
 
 .. py:function:: torch_neuronx.analyze(func, example_inputs, compiler_workdir=None, _op_checker_callback=None)
 
-    Checks the support of the operations in the ``func`` by checking each operator against neuronx-cc.
+   Checks the support of the operations in the ``func`` by checking each operator against neuronx-cc.
 
-    :arg ~torch.nn.Module,callable func: The function/module that that will be
-       run using the ``example_inputs`` arguments in order to record the
-       computation graph.
-    :arg ~torch.Tensor,tuple[~torch.Tensor] example_inputs: A tuple of example
-       inputs that will be passed to the ``func`` while tracing.
+   :arg ~torch.nn.Module,callable func: The function/module that that will be
+      run using the ``example_inputs`` arguments in order to record the
+      computation graph.
+    
+   :arg ~torch.Tensor,tuple[~torch.Tensor] example_inputs: A tuple of example
+      inputs that will be passed to the ``func`` while tracing.
 
-    :keyword str compiler_workdir: Work directory used by
-       |neuronx-cc|. This can be useful for debugging and/or inspecting
-       intermediary |neuronx-cc| outputs
-    :keyword ~callable _op_checker_callback: Only used for testing/debugging. This argument is 
+   :keyword str compiler_workdir: Work directory used by
+      |neuronx-cc|. This can be useful for debugging and/or inspecting
+      intermediary |neuronx-cc| outputs
+    
+   :keyword ~callable _op_checker_callback: Only used for testing/debugging. This argument is 
         for substituting the function used to check for operator support.
 
-    :returns: A JSON like :class:`~Dict` with the supported operators and their count, and unsupported
-       operators with the failure mode and location of the operator in the python code.
-    :rtype: ~Dict
+   :returns: A JSON like :class:`~Dict` with the supported operators and their count, and unsupported
+      operators with the failure mode and location of the operator in the python code.
+    
+   :rtype: :class:`~Dict`
 
 
    .. rubric:: Notes
@@ -116,3 +119,5 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
       }
    
    **Note:** the `failureAt` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then that means that the operator failed to be compiled with `neuronx-cc`. This could either indicate that the operator is unsupported, or there is a bug with the operator.
+
+.. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`
