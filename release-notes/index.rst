@@ -8,10 +8,10 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.8.0-whatsnew:
-.. _neuron-2.7.0-whatsnew:
+.. _neuron-2.9.0-whatsnew:
 
-Neuron 2.8.0 (02/24/2023)
+
+Neuron 2.9.0 (03/27/2023)
 -------------------------
 
 .. contents:: Table of contents
@@ -21,9 +21,7 @@ Neuron 2.8.0 (02/24/2023)
 What's New
 ^^^^^^^^^^
 
-This release adds support for `EC2 Inf2 <https://aws.amazon.com/ec2/instance-types/inf2/>`_ instances, introduces initial inference support with TensorFlow 2.x Neuron (``tensorflow-neuronx``) on Trn1 and Inf2, and introduces minor enhancements and bug fixes.
-
-This release introduces the following:
+This release adds support for EC2 Trn1n instances, introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 .. list-table::
    :widths: auto
@@ -33,39 +31,66 @@ This release introduces the following:
 
    * - What's New
      - Details
+     - Instances
 
-   * - Support for `EC2 Inf2 <https://aws.amazon.com/ec2/instance-types/inf2/>`_ instances
-     - * Inference support for Inf2 instances in PyTorch Neuron (``torch-neuronx``)      
-    
-       * Inference support for Inf2 instances in TensorFlow 2.x Neuron (``tensorflow-neuronx``)
-        
-       * Overall documentation update to include Inf2 instances
-  
-
-   * - TensorFlow 2.x Neuron (``tensorflow-neuronx``) support
-     - * This releases introduces initial inference support with TensorFlow 2.x Neuron (``tensorflow-neuronx``) on Trn1 and Inf2
-
-
-   * - New Neuron GitHub samples
-     - * New sample scripts for deploying LLM models with ``transformer-neuronx`` under       `aws-neuron-samples <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference>`_  GitHub repository.
+   * - Support for EC2 Trn1n instances
+     - * Updated Neuron Runtime for Trn1n instances     
       
-       * New sample scripts for deploying models with ``torch-neuronx`` under `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_  GitHub repository.
+       * Overall documentation update to include Trn1n instances
+     - Trn1n
+
+   * - New Analyze API in PyTorch Neuron (``torch-neuronx``)  
+     - * A new API that return list of supported and unsupported PyTorch operators for a model. See :ref:`torch_neuronx_analyze_api`
+     - Trn1, Inf2
+  
+   * - Support models that are larger than 2GB in PyTorch Neuron (``torch-neuron``) on Inf1
+     - * See ``separate_weights`` flag to :func:`torch_neuron.trace` to support models that are larger than 2GB
+     - Inf1
+
+
+   * - Performance Improvements
+     - * Up to 10% higher throughput when training GPT3 6.7B model on multi-node
+     - Trn1
+
+
+   * - Dynamic Batching support in TensorFlow 2.x Neuron (``tensorflow-neuronx``)
+     - * See :ref:`tensorflow-neuronx-special-flags` for details.
+     - Trn1, Inf2
+
+
+
+   * - NeuronPerf support for Trn1/Inf2 instances
+     - * Added Trn1/Inf2 support for PyTorch Neuron (``torch-neuronx``) and TensorFlow 2.x Neuron (``tensorflow-neuronx``)
+     - Trn1, Inf2
+
+   * - Hierarchical All-Reduce and Reduce-Scatter collective communication
+     - * Added support for hierarchical All-Reduce and Reduce-Scatter in Neuron Runtime to enable better scalability of distributed workloads .
+     - Trn1, Inf2
+  
+   * - New Tutorials added
+     - * :ref:`Added tutorial to fine-tune T5 model <torch-hf-t5-finetune>`
+      
+       * Added tutorial to demonstrate use of Libtorch with PyTorch Neuron (``torch-neuronx``) for inference :ref:`[html] <pytorch-tutorials-libtorch>`
+     - Trn1, Inf2
 
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
+     - Trn1, Inf2, Inf1
 
    * - Release included packages
      - * see :ref:`neuron-release-content`
+     - Trn1, Inf2, Inf1
 
 For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
 
 .. _components-rn:
 
 Neuron Components Release Notes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Inf1, Trn1 and Inf2 common packages
+Inf1, Trn1/Trn1n and Inf2 common packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -82,28 +107,28 @@ Inf1, Trn1 and Inf2 common packages
 
 
    * - Neuron Runtime
-     - Trn1, Inf1, Inf2
-     - * Trn1: ``aws-neuronx-runtime-lib`` (.deb, .rpm)
+     - Trn1/Trn1n, Inf1, Inf2
+     - * Trn1/Trn1n: ``aws-neuronx-runtime-lib`` (.deb, .rpm)
 
        * Inf1: Runtime is linked into the ML frameworks packages
        
      - * :ref:`neuron-runtime-rn`
 
    * - Neuron Runtime Driver
-     - Trn1, Inf1, Inf2
+     - Trn1/Trn1n, Inf1, Inf2
      - * ``aws-neuronx-dkms``  (.deb, .rpm)
        
      - * :ref:`neuron-driver-release-notes`
 
    * - Neuron System Tools
-     - Trn1, Inf1, Inf2
+     - Trn1/Trn1n, Inf1, Inf2
      - * ``aws-neuronx-tools``  (.deb, .rpm)
      - * :ref:`neuron-tools-rn`
 
 
 
    * - Containers
-     - Trn1, Inf1, Inf2
+     - Trn1/Trn1n, Inf1, Inf2
      - * ``aws-neuronx-k8-plugin`` (.deb, .rpm)
 
        * ``aws-neuronx-k8-scheduler`` (.deb, .rpm)
@@ -115,19 +140,19 @@ Inf1, Trn1 and Inf2 common packages
        * :ref:`neuron-containers-release-notes`
 
    * - NeuronPerf (Inference only)
-     - Trn1, Inf1, Inf2
+     - Trn1/Trn1n, Inf1, Inf2
      - * ``neuronperf`` (.whl)
      - * :ref:`neuronperf_rn`
 
 
    * - TensorFlow Model Server Neuron
-     - Trn1, Inf1, Inf2
+     - Trn1/Trn1n, Inf1, Inf2
      - * ``tensorflow-model-server-neuronx`` (.deb, .rpm)
      - * :ref:`tensorflow-modeslserver-neuronx-rn`
 
 
-Trn1 and Inf2 only packages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Trn1/Trn1n and Inf2 only packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :widths: auto
@@ -143,7 +168,7 @@ Trn1 and Inf2 only packages
 
 
    * - PyTorch Neuron
-     - Trn1, Inf2
+     - Trn1/Trn1n, Inf2
      - * ``torch-neuronx`` (.whl)
      - * :ref:`torch-neuronx-rn`
 
@@ -151,18 +176,18 @@ Trn1 and Inf2 only packages
        
 
    * - TensorFlow Neuron
-     - Trn1, Inf2
+     - Trn1/Trn1n, Inf2
      - * ``tensorflow-neuronx`` (.whl)
      - * :ref:`tensorflow-neuronx-release-notes`
 
 
-   * - Neuron Compiler (Trn1 only)
-     - Trn1, Inf2
+   * - Neuron Compiler (Trn1/Trn1n, Inf2 only)
+     - Trn1/Trn1n, Inf2
      - * ``neuronx-cc`` (.whl)
      - * :ref:`neuronx-cc-rn`
 
    * - Collective Communication library
-     - Trn1, Inf2
+     - Trn1/Trn1n, Inf2
        
      - * ``aws-neuronx-collective`` (.deb, .rpm)
 
@@ -170,7 +195,7 @@ Trn1 and Inf2 only packages
 
 
    * - Neuron Custom C++ Operators
-     - Trn1, Inf2
+     - Trn1/Trn1n, Inf2
   
      - * ``aws-neuronx-gpsimd-customop`` (.deb, .rpm)
   
@@ -182,7 +207,7 @@ Trn1 and Inf2 only packages
 
 
    * - ``transformers-neuronx``
-     - Trn1, Inf2
+     - Trn1/Trn1n, Inf2
        
      - * GitHub repository `(link) <https://github.com/aws-neuron/transformers-neuronx>`_
 
@@ -224,6 +249,8 @@ Inf1 only packages
      - * :ref:`tensorflow-neuron-rn`
 
        * :ref:`neuron-cc-ops-tensorflow`
+       
+       * :ref:`tensorflow-neuron-rn-v2` 
 
 
 

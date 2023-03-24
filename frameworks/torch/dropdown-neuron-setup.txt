@@ -20,7 +20,7 @@
 
 .. tab-set::
 
-    .. tab-item:: torch-neuronx (``Trn1 & Inf2``)
+    .. tab-item:: torch-neuronx (``Trn1/Trn1n & Inf2``)
         :name: torch-neuronx-install-main
 
         * :ref:`Fresh Install <pytorch-neuronx-install>`

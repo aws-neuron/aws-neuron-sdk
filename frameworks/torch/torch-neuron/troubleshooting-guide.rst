@@ -26,6 +26,22 @@ downgrade torchvision to version 0.6.1:
    E   AttributeError: module 'torch.jit' has no attribute '_script_if_tracing'                                                                                      
 
 
+2GB protobuf limit related issues
+---------------------------------
+
+If you encounter an error like below, it is because the model size is larger than 2GB.
+To compile such large models, use the :ref:`separate_weights=True <torch_neuron_trace_api>` flag. Note,
+ensure that you have the latest version of compiler installed to support this flag.
+You can upgrade neuron-cc using 
+:code:`python3 -m pip install neuron-cc[tensorflow] -U --force --extra-index-url=https://pip.repos.neuron.amazonaws.com`
+
+::
+
+   E google.protobuf.message.DecodeError: Error parsing message with type 'tensorflow.GraphDef'
+
+
+
+
 torch.jit.trace issues
 ----------------------
 The :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`

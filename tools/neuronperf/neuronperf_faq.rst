@@ -17,6 +17,19 @@ When should I **not** use NeuronPerf?
 
 When measuring end-to-end performance that includes your network serving stack. Instead, your should compare your e2e numbers to those obtained by NeuronPerf to optimize your serving overhead.
 
+
+Which frameworks does NeuronPerf support?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See :ref:`neuronperf_framework_notes`.
+
+Which Neuron instance types does NeuronPerf support?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PyTorch and TensorFlow support all instance types.
+MXNet support is limited to inf1.
+
+
 Is NeuronPerf Open Source?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -10,6 +10,12 @@ TensorFlow-Model-Server-Neuron (``tensorflow-modeslserver-neuronx``) Release Not
 This document lists the release notes for the
 TensorFlow-Model-Server-Neuron (``tensorflow-modeslserver-neuronx``) package.
 
+TensorFlow Model Server Neuron  [2.7.3.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Date: 3/28/2023
+
+* Minor updates
+
 TensorFlow Model Server Neuron  [2.6.5.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Date: 2/24/2023

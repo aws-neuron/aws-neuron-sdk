@@ -8,6 +8,57 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.8.0-whatsnew:
+
+Neuron 2.8.0 (02/24/2023)
+-------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 3
+
+What's New
+^^^^^^^^^^
+
+This release adds support for `EC2 Inf2 <https://aws.amazon.com/ec2/instance-types/inf2/>`_ instances, introduces initial inference support with TensorFlow 2.x Neuron (``tensorflow-neuronx``) on Trn1 and Inf2, and introduces minor enhancements and bug fixes.
+
+This release introduces the following:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+
+   * - Support for `EC2 Inf2 <https://aws.amazon.com/ec2/instance-types/inf2/>`_ instances
+     - * Inference support for Inf2 instances in PyTorch Neuron (``torch-neuronx``)      
+    
+       * Inference support for Inf2 instances in TensorFlow 2.x Neuron (``tensorflow-neuronx``)
+        
+       * Overall documentation update to include Inf2 instances
+  
+
+   * - TensorFlow 2.x Neuron (``tensorflow-neuronx``) support
+     - * This releases introduces initial inference support with TensorFlow 2.x Neuron (``tensorflow-neuronx``) on Trn1 and Inf2
+
+
+   * - New Neuron GitHub samples
+     - * New sample scripts for deploying LLM models with ``transformer-neuronx`` under       `aws-neuron-samples <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference>`_  GitHub repository.
+      
+       * New sample scripts for deploying models with ``torch-neuronx`` under `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_  GitHub repository.
+
+   * - Minor enhancements and bug fixes.
+     - * See :ref:`components-rn`
+
+   * - Release included packages
+     - * see :ref:`neuron-release-content`
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+
 .. _neuron-2.7.0-whatsnew:
 
 Neuron 2.7.0 (02/08/2023)

@@ -1,6 +1,6 @@
 .. _inference-tensorflow-neuronx:
 
-Inference on Inf2 & Trn1 (``tensorflow-neuronx``)
+Inference on Inf2 & Trn1/Trn1n (``tensorflow-neuronx``)
 =================================================
 
 .. toctree::

@@ -1,9 +1,9 @@
 .. _aws-trn1-arch:
 
-AWS Trn1 Architecture
-=====================
+AWS Trn1/Trn1n Architecture
+===========================
 
-In this page, we provide an architectural overview of the AWS Trn1
+In this page, we provide an architectural overview of the AWS Trn1/Trn1n
 instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices that power them
 (Trainium devices from here on).
 
@@ -13,11 +13,10 @@ instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices t
 
 .. _trn1-arch:
 
-Trn1 Architecture
------------------
+Trn1/Trn1n Architecture
+-----------------------
 
-The EC2 Trn1 instance is powered by up to 16 :ref:`Trainium <trainium-arch>` devices, and allows
-customers to choose between 2 instance sizes:
+The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>` devices.
 
 
 .. list-table::
@@ -60,26 +59,37 @@ customers to choose between 2 instance sizes:
         - Yes
         - 800
 
+    *   - Trn1n.32xlarge
+        - 16
+        - 128
+        - 512
+        - 3,360
+        - 840
+        - 512
+        - 13,120
+        - Yes
+        - 1600
+
 
 The Trn1.2xlarge instance size allows customers to train their models on
 a single Trainium device, which is useful for small model training, as
-well as model experimentation. The Trn1.32xlarge instance size comes
+well as model experimentation. The Trn1.32xlarge/ Trn1n.32xlarge instance size comes
 with a high-bandwidth and low-latency NeuronLink-v2 device-to-device
 interconnect, which utilizes a 4D-HyperCube topology. This is useful for
 collective-communication between the Trainium devices during scale-out
 training, as well as for pooling the memory capacity of all Trainium
 devices, making it directly addressable from each one of the devices.
 
-In a Trn1 server, the Trainium devices are connected in a 2D Torus topology, as depicted below:
+In a Trn1/Trn1n server, the Trainium devices are connected in a 2D Torus topology, as depicted below:
 
 .. image:: /images/trn1-topology.png
 
-The Trn1 instances are also available in an EC2 UltraCluster, which
-enables customers to scale Trn1 instances to over 30,000 Trainium
+The Trn1/Trn1n instances are also available in an EC2 UltraCluster, which
+enables customers to scale Trn1/Trn1n instances to over 30,000 Trainium
 devices, and leverage the AWS-designed non-blocking petabit-scale EFA
 networking infrastructure.
 
-.. image:: /images/trn1-ultra-cluster.png
+.. image:: /images/ultracluster-1.png
 
 
 

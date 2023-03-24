@@ -474,3 +474,20 @@ NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning o
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to the Python script.
+
+
+.. _trn1_ubuntu_troubleshooting:
+
+Timeout error during model load on Ubuntu
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Multiple network interfaces on non-Amazon Linux distributions, such as Ubuntu, will fail unless extra steps are taken to ensure proper routing. Neuron users will experience this failure as a timeout during model load.  If you’re experiencing timeouts when loading models on TRN1.32xlarge or another Neuron instance with multiple network interfaces, please attempt to fix your instance by installing the helper service below.  The helper service will configure source based routing for all interfaces on the instance.  At startup, the service creates netplan files, updates netplan, then terminates.
+
+Apply the following:
+
+.. code:: bash
+
+    wget -O /tmp/aws-ubuntu-eni-helper.deb 'https://github.com/aws-samples/aws-efa-nccl-baseami-pipeline/blob/master/nvidia-efa-ami_base/networking/aws-ubuntu-eni-helper_0.3-1_all.deb?raw=true'
+    sudo apt install /tmp/aws-ubuntu-eni-helper.deb -y
+    sudo systemctl enable aws-ubuntu-eni-helper.service
+    sudo systemctl start aws-ubuntu-eni-helper.service
+

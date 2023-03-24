@@ -300,6 +300,8 @@ The following are currently known issues:
        import torch.distributed as dist
        _verify_param_shape_across_processes = lambda process_group, tensors, logger=None: True
 
+- Variable input sizes: When fine-tune models such as dslim/bert-base-NER using the `token-classification example <https://github.com/huggingface/transformers/tree/main/examples/pytorch/token-classification>`__, you may encounter timeouts (lots of "socket.h:524 CCOM WARN Timeout waiting for RX" messages) and execution hang. This occurs because NER dataset has different sample sizes, which causes many recompilations and compiled graph (NEFF) reloads. Furthermore, different data parallel workers can execute different compiled graph. This multiple-program multiple-data behavior is currently unsupported. To workaround this issue, please pad to maximum length using the Trainer API option ``--pad_to_max_length``.
+
 The following are resolved issues:
 
 -  Using ``neuron_parallel_compile`` tool to run ``run_glue.py`` script

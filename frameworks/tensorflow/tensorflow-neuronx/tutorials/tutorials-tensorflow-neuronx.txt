@@ -1,5 +1,5 @@
 * HuggingFace Roberta-Base :ref:`[html]</src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>`
-* :ref:`tensorflow-serving-neuronrt-visible-cores`
+* :ref:`tensorflow-servingx-neuronrt-visible-cores`
 
 .. note::
     To use Jupyter Notebook see:

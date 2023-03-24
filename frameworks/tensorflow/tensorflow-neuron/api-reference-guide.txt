@@ -1,3 +1,4 @@
 * :ref:`tensorflow-ref-neuron-tracing-api`
+* :ref:`tensorflow-ref-neuron-analyze_model-api`
 * :ref:`tensorflow-ref-neuron-compile-api`
 * :ref:`tensorflow-ref-auto-replication-python-api`
