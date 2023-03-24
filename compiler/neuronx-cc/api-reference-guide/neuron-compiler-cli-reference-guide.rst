@@ -82,8 +82,9 @@ Available Commands:
 
     Valid values:
 
-    - ``trn1``
     - ``inf2``
+    - ``trn1``
+    - ``trn1n``
 
   - :option:`--model-type <model>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
@@ -111,6 +112,8 @@ Available Commands:
     - ``bf16``: Cast the FP32 operations selected via the :option:`--auto-cast` option to BF16 to achieve highest performance and preserve dynamic range.
     - ``fp16``: Cast the FP32 operations selected via the :option:`--auto-cast` option to FP16 to achieve improved performance relative to FP32 and increased precision relative to BF16.
     - ``tf32``: Cast the FP32 operations selected via the :option:`--auto-cast` option to TensorFloat-32.
+    - ``fp8_e4m3``: Cast the FP32 operations selected via the :option:`--auto-cast` option to FP8 with 4-bit exponent and 3-bit mantissa.
+
 
     .. note:: If multiple competing options are specified then the option later in the command line will supercede previous options.
 
