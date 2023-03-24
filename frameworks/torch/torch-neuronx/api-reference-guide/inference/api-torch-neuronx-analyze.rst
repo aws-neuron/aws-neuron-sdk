@@ -3,7 +3,7 @@
 PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
 ============================================================
 
-.. py:function:: torch_neuronx.analyze(func, example_inputs, compiler_workdir=None, _op_checker_callback=None)
+.. py:function:: torch_neuronx.analyze(func, example_inputs, compiler_workdir=None)
 
    Checks the support of the operations in the ``func`` by checking each operator against neuronx-cc.
 
@@ -17,9 +17,6 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
    :keyword str compiler_workdir: Work directory used by
       |neuronx-cc|. This can be useful for debugging and/or inspecting
       intermediary |neuronx-cc| outputs
-    
-   :keyword callable _op_checker_callback: Only used for testing/debugging. This argument is 
-        for substituting the function used to check for operator support.
 
    :returns: A JSON like :class:`~Dict` with the supported operators and their count, and unsupported
       operators with the failure mode and location of the operator in the python code.
