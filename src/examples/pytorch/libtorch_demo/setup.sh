@@ -27,7 +27,7 @@ else
     fi
 fi
 
-OLD_TOOL_CHAIN=$(python -c \
+OLD_TOOL_CHAIN=$($PYTHON -c \
     "from bert_neuronx.detect_instance import get_instance_type; print('inf1' in get_instance_type())")
 
 if [ "$OLD_TOOL_CHAIN" == "True" ]; then
