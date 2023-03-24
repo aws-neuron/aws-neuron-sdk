@@ -114,7 +114,7 @@ Description for Each Metric
 
 * ``status/``: this directory stores the number of each return status of API calls. As explained in :ref:`The LIBNRT API Return Codes <nrt_api>`, every API call returns an NRT_STATUS value, which represents the return status of that API call. Our sysfs filesystem stores all ``NRT_STATUS`` as subdirectories under the ``status/`` directory. They all have the counter structure. Thus each ``NRT_STATUS`` subdirectory holds two values (total and present) and records the number of times you receive a certain ``NRT_STATUS``. The following is description for each ``NRT_STATUS`` subdirectory. You should see the description align with what is described in :ref:`The LIBNRT API Return Codes <nrt_api>`.
 
-* ``memory_usage/``: this directory contains memory usage statistics, as per device and per host, all of which are counters:
+* ``memory_usage/``: this directory contains memory usage statistics, as per device and per host, all of which are counters. In this directory, total counters refer to the amount of memory you are using now, and present counters refer to the last memory allocation or deallocation amount:
 
   * ``device_mem/{total, present}``: the amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
   * ``host_mem/{total, present}``: the amount of memory that Neuron Runtime uses for input and output tensors.
