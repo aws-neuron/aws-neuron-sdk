@@ -3,7 +3,7 @@
         :class-body: drop-down-class-body-small
         :animate: fade-in
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami --category=compiler_framework
+        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=compiler_framework
 
 .. dropdown::  Get Started with Inference (``Inf1``)
        :class-title: sphinx-design-class-title-small
