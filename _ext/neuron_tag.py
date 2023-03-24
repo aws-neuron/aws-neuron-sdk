@@ -92,7 +92,6 @@ clear_nc_v2_tag = [
                 'tools/helper-tools/tutorial-neuron-gatherinfo',
                 'tools/neuronperf',
                 'containers/tutorials/k8s-neuron-scheduler',
-                'general/arch/neuron-features/neuroncore-batching',
                 'general/arch/neuron-features/neuroncore-pipeline',
                 'release-notes/mxnet-neuron/',
                 'release-notes/torch/torch-neuron/',
