@@ -162,7 +162,7 @@ Troubleshooting
 ---------------
 
 * In the event of SIGBUS errors you may have insufficient disk space for the creation of temporary model files at runtime.  Consider clearing space or mounting additional disk storage.
-* In the event of a neuron runtime failure, confirm that the Neuron kernel modules is loaded using ``sudo modprobe neuron``.
+* In the event of a neuron runtime failure, confirm that the Neuron kernel module is loaded using ``sudo modprobe neuron``.
 
 .. _libtorch-cleanup:
 
