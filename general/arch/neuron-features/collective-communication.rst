@@ -108,7 +108,7 @@ inf2.48xlarge topology
 **inf2.48xlarge topology**
 
 On inf2.48xlarge instance Neuron devices are connected in a ring via 
-NeuronLink, with 9.8TB/sec BW. Any **even** number of ranks for Collective
+NeuronLink. Any **even** number of ranks for Collective
 Communication operators is supported provided that the ranks occupy 
 consecutive Neuron devices. However, when using any number of ranks 
 other than 24 (full instance) full performance of the ring is not utilized.
