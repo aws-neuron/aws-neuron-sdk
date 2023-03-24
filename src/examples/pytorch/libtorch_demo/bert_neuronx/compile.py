@@ -61,7 +61,7 @@ except Exception as e:
 try:
     paraphrase_classification_logits_neuron = model_neuron(*example_inputs_paraphrase)
 except:
-    print("libtorch_demo: Neuron runtime faile - check tutorial steps and preconditions")
+    print("libtorch_demo: Neuron runtime failed - check tutorial steps and preconditions")
     print("libtorch_demo: If this does not resolve your issue - Report a bug at ")
     print("https://github.com/aws-neuron/aws-neuron-sdk/issues")
     exit(1)
