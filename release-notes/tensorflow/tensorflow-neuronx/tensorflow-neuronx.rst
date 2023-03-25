@@ -12,9 +12,22 @@ This document lists the release notes for the tensorflow-neuronx 2.x packages.
 .. _tfx-known-issues-and-limitations:
 
 Known Issues and Limitations - updated 02/24/2023
+
+tensorflow-neuronx 2.10 release [2.10.1.2]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 03/27/2023
+
+The second release of tensorflow-neuronx 2.10 includes the following features:
+
+* Dynamic batching
+
+The following features are not included in this release:
+
+* Support for tracing models larger than 2 GB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tensorflow-neuronx 2.10 release [2.10.1.0]
+tensorflow-neuronx 2.10 release [2.10.1.1]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 2/24/2023
