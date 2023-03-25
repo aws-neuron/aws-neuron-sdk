@@ -12,7 +12,7 @@ users to train their models on Trainium.
 
 Release [1.13.0.1.6.0]
 ----------------------
-Date: 03/23/2023
+Date: 03/27/2023
 
 Summary
 ~~~~~~~
