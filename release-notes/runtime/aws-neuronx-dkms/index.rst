@@ -15,6 +15,33 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.8.4.0]
+--------------------------------
+
+Date: 03/27/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Supports both TRN1N and INF2 instance types.
+* Renamed NEURON_ARCH_INFERENTIA=>NEURON_ARCH_V1 and NEURON_ARCH_TRN=>NEURON_ARCH_V2
+* Under sysfs nodes, the following changes were made:
+  * Changed “infer” metrics to “execute” metrics
+  * Added peak memory usage metric
+  * Removed empty dynamic metrics directory
+  * Removed refresh rate metric
+  * Fixed arch type names in sysfs
+
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed minor memory leak when closing the Neuron Runtime. 
+* Fixed memory leaks on error paths in Neuron Driver. 
+* Added a workaround to resolve hangs when NeuronCore reset is ran while another core is performing DMA operations. 
+
+
+
 Neuron Driver release [2.7.33.0]
 --------------------------------
 
