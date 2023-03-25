@@ -17,7 +17,7 @@ Each Inferentia2 device consists of:
     * 2x :ref:`NeuronCore-v2 <neuroncores-v2-arch>` cores, delivering 380 INT8 TOPS, 190 FP16/BF16/cFP8/TF32 TFLOPS, and 47.5 FP32 TFLOPS.
 
 -  Device Memory:
-    * 32GB of HBM2E of device memory (for storing model state), with 820 GB/sec of bandwidth.
+    * 32GB of HBM of device memory (for storing model state), with 820 GB/sec of bandwidth.
 
 
 -  Data movement:
