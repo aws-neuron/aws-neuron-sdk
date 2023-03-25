@@ -30,6 +30,10 @@ TensorFlow Serving. Please see :ref:`tensorflow-serving` for more
 information about exporting to saved model and serving using TensorFlow
 Serving.
 
+The returned ``keras.Model`` has an ``.on_neuron_ratio`` attribute
+which shows the percentage of ops mapped to neuron hardware. This calculation
+ignores PlaceholerOp, IdentityOp, ReadVariableOp and NoOp.
+
 Options can be passed to Neuron compiler via the environment variable
 ``NEURON_CC_FLAGS``. For example, the syntax
 ``env NEURON_CC_FLAGS="--workdir ./artifacts"`` directs the Neuron compiler to dump artifacts
@@ -104,6 +108,8 @@ Example Usage
     model = tf.keras.Model(inputs=[input0], outputs=[dense0])
     example_inputs = tf.random.uniform([1, 3])
     model_neuron = tfnx.trace(model, example_inputs)  # trace
+    # check to see how much of the model was compiled successfully
+    print(model_neuron.on_neuron_ratio) 
 
     model_dir = './model_neuron'
     model_neuron.save(model_dir)
