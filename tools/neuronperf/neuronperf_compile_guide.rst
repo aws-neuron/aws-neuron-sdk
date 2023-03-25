@@ -28,7 +28,7 @@ For example:
 Compiling multiple variants
 ---------------------------
 
-If you provide multople pipeline sizes, batch sizes, and/or cast modes, NeuronPerf will compile all of them.
+If you provide multiple pipeline sizes, batch sizes, and/or cast modes, NeuronPerf will compile all of them.
 
 .. code:: python
 
