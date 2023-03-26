@@ -73,6 +73,8 @@ Arguments
     ``subgraph_builder_function(node)`` returns ``False``, then ``trace``
     will place ``node`` on CPU.
 
+.. _tensorflow-neuronx-special-flags:
+
 Special Flags
 -------------
 
