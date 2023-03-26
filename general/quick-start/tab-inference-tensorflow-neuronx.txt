@@ -6,8 +6,8 @@
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 44
-        :end-line: 45
+        :start-line: 47
+        :end-line: 48
 
 .. dropdown::  Install Tensorflow Neuron (``tensorflow-neuronx``)
     :class-title: sphinx-design-class-title-small
@@ -15,8 +15,8 @@
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 32
-        :end-line: 33
+        :start-line: 35
+        :end-line: 36
 
 .. dropdown::  Get Started with Inference (``Inf2 & Trn1``)
        :class-title: sphinx-design-class-title-small

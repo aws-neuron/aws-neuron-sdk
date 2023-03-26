@@ -18,7 +18,7 @@ interchangeably but have different performance characteristics and advantages:
 
 - The :func:`~torch_neuronx.experimental.multicore_context` &
   :func:`~torch_neuronx.experimental.neuron_cores_context` functions are context
-  managers that allow a model to be placed on a given NeuronCore at
+  managers that allow a model to be placed on a given NeuronCore *only* at
   :func:`torch.jit.load` time. These functions are the most efficient way of
   loading a model since the model is loaded directly to a NeuronCore. The
   alternative functions described below require that a model is unloaded from
@@ -145,13 +145,14 @@ interchangeably but have different performance characteristics and advantages:
 
 .. py:function:: torch_neuronx.experimental.neuron_cores_context(start_nc: int=-1, nc_count: int=-1)
 
-    A context which sets the NeuronCore start/count for all Neuron subgraphs.
+    A context which sets the NeuronCore start/count for Neuron models loaded
+    with :func:`torch.jit.load`.
 
-    Any calls to :func:`torch.jit.load` will cause any underlying Neuron
-    subgraphs to load to the specified NeuronCores within this context.
-    This context manager only needs to be used during the model load.
-    After loading, inferences do not need to occur in this context in order
-    to use the correct NeuronCores.
+    This context manager may only be used when loading a model with
+    :func:`torch.jit.load`. A model which has already been loaded into memory
+    will not be affected by this context manager. Furthermore, after loading the
+    model, inferences do not need to occur in this context in order to use the
+    correct NeuronCores.
 
     Note that this context is *not* threadsafe. Using multiple core placement
     contexts from multiple threads may not correctly place models.
@@ -177,7 +178,7 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         with torch_neuronx.experimental.neuron_cores_context(start_nc=0, nc_count=1):
-            model = torch.jit.load('example_neuron_model.pt')
+            model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 0
         model(example) # Executes on NeuronCore 0
@@ -190,7 +191,7 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         with torch_neuronx.experimental.neuron_cores_context(start_nc=2, nc_count=2):
-            model = torch.jit.load('example_neuron_model.pt')
+            model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 2
         model(example) # Executes on NeuronCore 3
@@ -203,10 +204,10 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         with torch_neuronx.experimental.neuron_cores_context(start_nc=2):
-            model1 = torch.jit.load('example_neuron_model.pt')
+            model1 = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         with torch_neuronx.experimental.neuron_cores_context(start_nc=0):
-            model2 = torch.jit.load('example_neuron_model.pt')
+            model2 = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model1(example) # Executes on NeuronCore 2
         model1(example) # Executes on NeuronCore 2
@@ -216,7 +217,8 @@ interchangeably but have different performance characteristics and advantages:
 
 .. py:function:: torch_neuronx.experimental.multicore_context()
 
-    A context which loads all Neuron subgraphs to all visible NeuronCores.
+    A context manager which loads models to all visible NeuronCores for Neuron
+    models loaded with :func:`torch.jit.load`.
 
     This loads each Neuron subgraph within a :class:`torch.jit.ScriptModule`
     to multiple NeuronCores without requiring multiple calls to
@@ -225,11 +227,11 @@ interchangeably but have different performance characteristics and advantages:
     concurrent threadsafe inferences. Executions use a round-robin strategy
     to distribute across NeuronCores.
 
-    Any calls to :func:`torch.jit.load` will cause any underlying Neuron
-    subgraphs to load to the specified NeuronCores within this context.
-    This context manager only needs to be used during the model load.
-    After loading, inferences do not need to occur in this context in order
-    to use the correct NeuronCores.
+    This context manager may only be used when loading a model with
+    :func:`torch.jit.load`. A model which has already been loaded into memory
+    will not be affected by this context manager. Furthermore, after loading the
+    model, inferences do not need to occur in this context in order to use the
+    correct NeuronCores.
 
     Note that this context is *not* threadsafe. Using multiple core placement
     contexts from multiple threads may not correctly place models.
@@ -245,7 +247,7 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         with torch_neuronx.experimental.multicore_context():
-            model = torch.jit.load('example_neuron_model.pt')
+            model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 0
         model(example) # Executes on NeuronCore 1

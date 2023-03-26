@@ -120,6 +120,20 @@ This would retry the compilation and would replace a failed result in the cache 
 successful compilation result.
 
 
+Compilation errors when placing NeuronCache home directory on NFS/EFS/FSx mounted drive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, NeuronCache default root directory is /var/tmp which is local to the instance you are running on. You can modify the location of the NeuronCache root directory using ``NEURON_CC_FLAGS='--cache_dir=<root dir>'``.  However, when the NeuronCache directory is placed in a directory that is part of a NFS mounted drive shared among multiple instances, you may encounter file errors such as file not found, file corruption, or KeyError when running multi-instance training:
+
+.. code:: bash
+
+    KeyError: 'neff_cache2/neuron-compile-cache/USER_neuroncc-1.0.48875.0+7437fbf18/MODULE_7223055628515330524/MODULE_0_SyncTensorsGraph.14_7223055628515330524_compute1-dy-kaena-training-2-1-e859998e-3035-5df63dab5ce63'
+
+This is a result of limitations to file locking on NFS. EFS/FSx also exhibit similar limitation. The workaround is to setup separate NeuronCache root directories for each worker instance, such as ``NEURON_CC_FLAGS="--cache_dir=$HOME/neuron_cache/bert/`hostname`"``, where the home directory is shared among worker instances as in ParallelCluster.
+
+Consider the use case of a ParallelCluster with SLURM cluster management. The home directory of the head node is shared via NFS with worker instances. Also, SLURM would terminate the idle worker instances when the cluster is configured as dynamic auto-scaling cluster, and the default cache in the terminated worker instance's /var/tmp is deleted. So to persist the cache across runs separated by a cluster idle period, we use the workaround above to create separate NeuronCache root directories for each worker instance. For example, see `BERT ParallelCluster script <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/dp_bert_hf_pretrain/run_dp_bert_large_hf_pretrain_bf16_s128.sh#L42>`__.
+
+
 Compilation error: “Expect ap datatype to be of type float32 float16 bfloat16 uint8”
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

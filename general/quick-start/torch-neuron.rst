@@ -6,7 +6,7 @@ Get Started with PyTorch Neuron
 This page provide links that will assist you to quickly start with :ref:`pytorch-neuronx-main` for both Inference and Training.
 
 .. note::
-  Below instructions are for Amazon Linux 2, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
+  Below instructions are for Ubuntu20, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
 
 
 .. dropdown::  Launch the Instance
@@ -22,8 +22,8 @@ This page provide links that will assist you to quickly start with :ref:`pytorch
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 2
-        :end-line: 3
+        :start-line: 5
+        :end-line: 6
 
 .. tab-set::
 

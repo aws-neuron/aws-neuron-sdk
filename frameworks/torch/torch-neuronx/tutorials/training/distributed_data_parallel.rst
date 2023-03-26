@@ -11,6 +11,9 @@ DDP requires applications to spawn multiple processes and then create a
 single DDP instance. DDP would then make use of ``torch.distributed``
 package to synchronize the gradients.
 
+.. note::
+   PyTorch XLA support for Distributed Data Parallel (DDP) is currently considered experimental. Please refer to the `PyTorch XLA Documentation <https://pytorch.org/xla/release/1.13/index.html#disclaimer>`_ for additional information.
+
 .. contents:: Table of Contents
    :local:
    :depth: 3

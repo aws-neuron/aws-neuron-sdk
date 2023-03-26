@@ -86,6 +86,10 @@ TorchScript. It is analogous to :func:`torch.jit.trace` function in PyTorch.
        dimension of a tensor.
     :keyword list optimizations: A list of :class:`~torch_neuron.Optimization`
         passes to apply to the model.
+    :keyword bool separate_weights: A flag to enable compilation of models with 
+        over 1.9GB of constant parameters. By default this flag is ``False``. 
+        If this is set to ``True`` and the compiler version is not new enough 
+        to support the flag, this will raise an ``NotImplementedError``.
     :keyword **kwargs: All other keyword arguments will be forwarded directly to
        :func:`torch.jit.trace`. This supports flags like ``strict=False``
        in order to allow dictionary outputs.
@@ -300,3 +304,24 @@ Neuron. The remaining operations are executed on CPU.
         inputs,
         subgraph_builder_function=subgraph_builder_function
     )
+
+
+Separate Weights
+~~~~~~~~~~~~~~~~
+This example uses the optional :code:`separate_weights` option in order to
+support compilation of models greater than 1.9GB.
+
+.. code-block:: python
+
+    import torch
+    import torch_neuron
+    from torchvision import models
+
+    # Load the model
+    model = models.resnet50(pretrained=True)
+    model.eval()
+
+    # Compile with an example input
+    image = torch.rand([1, 3, 224, 224])
+    #the models' output format does not change
+    model_neuron = torch.neuron.trace(model, image, separate_weights=True)
