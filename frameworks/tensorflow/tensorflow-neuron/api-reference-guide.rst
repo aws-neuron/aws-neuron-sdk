@@ -6,6 +6,7 @@ API Reference Guide (``tensorflow-neuron``)
     :hidden:
 
     /frameworks/tensorflow/tensorflow-neuron/api-tracing-python-api
+    /frameworks/tensorflow/tensorflow-neuron/api-tfn-analyze-model-api
     /frameworks/tensorflow/tensorflow-neuron/api-compilation-python-api
     /frameworks/tensorflow/tensorflow-neuron/api-auto-replication-api
 
