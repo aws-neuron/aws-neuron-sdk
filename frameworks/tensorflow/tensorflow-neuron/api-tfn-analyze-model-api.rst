@@ -50,3 +50,14 @@ Example Usage
     model = tf.keras.Model(inputs=[input0], outputs=[dense0])
     example_inputs = tf.random.uniform([1, 3])
     results = tfn.analyze_model(model, example_inputs)
+    print(results)
+
+    # expected output
+    '''
+    BiasAdd
+	MatMul
+	100.00% of all operations (2 of 2) are supported
+	{'percent_supported': 100.0, 'supported_count': 2, 'total_count': 2, 
+	'supported_operators': {'BiasAdd', 'MatMul'}, 'unsupported_operators': [], 
+	'operators': ['BiasAdd', 'MatMul'], 'operator_count': {'MatMul': 1, 'BiasAdd': 1}}
+	'''
