@@ -28,6 +28,9 @@ class manifest:
         # ami properties
         self.df_ami_properties = json_normalize(manifest['ami_properties'])
 
+        # dlami properties
+        self.df_dlami_properties = json_normalize(manifest['dlami_properties'])
+
         # major version properties
         self.df_major_version_properties = json_normalize(manifest['major_version_properties'])
 
@@ -65,11 +68,11 @@ class manifest:
 
         df_instance = self.df_release_packages[
             (self.df_release_packages['supported_instances'].map(lambda x: args.instance in x)) & (
-                        self.df_release_packages['neuron_version'] == neuron_version)]
+                    self.df_release_packages['neuron_version'] == neuron_version)]
 
         # Compiler supporting Python versions
         compiler_python_versions = \
-        df_instance.loc[df_instance['component'] == 'Compiler']['supported_python_versions'].values[0]
+            df_instance.loc[df_instance['component'] == 'Compiler']['supported_python_versions'].values[0]
 
         # Specific framework version supporting Python versions
         df_framework = df_instance.loc[df_instance['category'] == args.framework].copy()
@@ -153,9 +156,14 @@ class manifest:
 
         # install neuron compiler and framework
         str_compiler_framework = self.install_neuron_compiler_and_framework(args)
-        if args.category == 'all':
+
+        if args.ami == 'dlami-framework':
+            # dlami instructions
+            str_dlami = self.install_dlami(args)
+            return str_dlami
+        elif args.category == 'all':
             if args.instance == 'trn1':
-                 str_runtime += str_efa
+                str_runtime += str_efa
             return str_preamble + str_driver + str_runtime + str_tools + str_python + str_compiler_framework
         elif args.category == 'driver_runtime_tools':
             return str_preamble + str_driver + str_runtime + str_tools
@@ -180,6 +188,25 @@ class manifest:
         elif args.category == 'efa':
             return str_efa
 
+    def install_dlami(self, args):
+        latest_release_for_instance = \
+            self.df_latest_release.loc[self.df_latest_release['instance'] == args.instance]['version'].values[0]
+        latest_release_for_dlami = self.df_dlami_properties[
+            (self.df_dlami_properties['framework'] == args.framework) & (
+                self.df_dlami_properties['supported_instances'].map(lambda x: args.instance in x))][
+            'neuron_released_version'].values[0]
+
+        if (latest_release_for_instance == latest_release_for_dlami):
+            return self.activate_python_venv(args)
+        else:
+            args.install_type = 'update'
+            str_dlami = self.install_neuron_runtime(args)
+            str_dlami += self.activate_python_venv(args)
+            str_dlami += self.jupyter_notebook(args)
+            str_dlami += self.set_pip_repository()
+            str_dlami += self.install_neuron_compiler_and_framework(args)
+        return str_dlami
+
     def jupyter_notebook(self, args):
         os_default_python_version = \
             self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
@@ -195,11 +222,10 @@ class manifest:
         str_jupiter = '\n# Install Jupyter notebook kernel\n'
         str_jupiter += 'pip install ipykernel ' + '\n'
         str_jupiter += 'python' + target_python_version + ' -m ipykernel install --user --name '
-        str_jupiter +=  'aws_neuron_venv_' + args.framework
+        str_jupiter += 'aws_neuron_venv_' + args.framework
         str_jupiter += ' --display-name "Python (' + framework_name + ')"' + '\n'
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
-        str_jupiter += '\n'
         return str_jupiter
 
     def config_neuron_repository(self, args):
@@ -305,7 +331,7 @@ class manifest:
                     if self.df_package_properties.loc[self.df_package_properties['name'] == driver_package][
                         'pin_major'].values[0] == 'true':
                         version = '=' + self.get_package_version(category='driver', name=driver_package,
-                                                             neuron_version=args.neuron_version)
+                                                                 neuron_version=args.neuron_version)
                 str += f'sudo apt-get {install} {driver_package}{version}* -y\n'
 
             elif args.os == 'amazonlinux2':
@@ -376,8 +402,9 @@ class manifest:
                             str += runtime_package
                             if args.neuron_version == None:
                                 if \
-                                self.df_package_properties.loc[self.df_package_properties['name'] == runtime_package][
-                                    'pin_major'].values[0] == 'true':
+                                        self.df_package_properties.loc[
+                                            self.df_package_properties['name'] == runtime_package][
+                                            'pin_major'].values[0] == 'true':
                                     str += '-' + self.get_major_version(runtime_package, args.instance) + '.* -y\n'
                             else:
                                 str += '-' + self.get_package_version(category='driver', name=runtime_package,
@@ -460,7 +487,7 @@ class manifest:
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
         os_default_python_version = \
-        self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
+            self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
         packages_supporting_python_versions = self.get_pip_packages_supporting_python_versions(args)
 
         if os_default_python_version in packages_supporting_python_versions:
@@ -516,13 +543,17 @@ class manifest:
         str = ''
 
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
-
+        str_venv_name = ''
         str += f'\n{indentation}# Activate Python venv \n'
-        str_venv_name = 'aws_neuron_venv_' + args.framework
+
+        if args.ami == 'dlami-framework':
+            str_venv_name += '/opt/'
+
+        str_venv_name += 'aws_neuron_venv_' + args.framework
         str += f'{indentation}source ' + str_venv_name + '/bin/activate \n'
 
         # install python packages
-        if args.install_type == 'install':
+        if (args.install_type == 'install' and args.ami != 'dlami-framework'):
             str += f'{indentation}python -m pip install -U pip \n'
 
         return str
@@ -585,7 +616,7 @@ class manifest:
                                             framework_version=args.framework_version)
         else:  # fresh install
             str += framework_name
-        
+
         if args.framework == 'pytorch':
             str += ' torchvision\n'
 
@@ -665,7 +696,6 @@ class manifest:
             str += 'fi'
 
         return str
-
 
     def install_neuron_compiler(self, args):
         '''
@@ -824,8 +854,8 @@ class manifest:
             self.df_release_packages['supported_instances'].map(lambda x: instance in x)]
 
         return \
-        df_instance.loc[(df_instance['category'] == category) & (df_instance['neuron_version'] == neuron_version)][
-            'name'].tolist()
+            df_instance.loc[(df_instance['category'] == category) & (df_instance['neuron_version'] == neuron_version)][
+                'name'].tolist()
 
     def get_package_version(self, category, neuron_version, name=None, framework_version=None):
 
@@ -834,7 +864,7 @@ class manifest:
 
         if name != None:
             df_package = self.df_release_packages.loc[(self.df_release_packages['neuron_version'] == neuron_version) & (
-                        self.df_release_packages['name'] == name)]
+                    self.df_release_packages['name'] == name)]
         else:
             df_package = self.df_release_packages.loc[self.df_release_packages['neuron_version'] == neuron_version]
 
@@ -927,7 +957,7 @@ def cli_parse_arguments():
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
     group.add_argument("--list", choices=['neuron_versions', 'packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
-    parser.add_argument("--instance", choices=['inf1', 'trn1','inf2'])
+    parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2'])
     parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework'],
                         default='non-dlami', help='default=non-dlami')

@@ -20,6 +20,17 @@ use TensorBoard.
   for Inf1 (``tensorboard-plugin-neuron``).  Please ensure you only have only the correct package installed.
 
 
+Neuron Plugin for TensorBoard release [2.5.25.0]
+================================================
+
+Date: 03/27/2023
+
+Summary
+-------
+
+- Supports INF2 and TRN1.
+
+
 Neuron Plugin for TensorBoard release [2.5.0.0]
 ===============================================
 

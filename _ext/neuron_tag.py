@@ -22,8 +22,8 @@ add_inf1_tag = ['general/arch',
                 'general/announcements/index',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
-add_trn1_tag = []
-add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx']
+add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx']
+add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -54,17 +54,26 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/announcements/neuron2.x/sm-training-trn1-introduce',
                 'frameworks/torch/training',
                 'frameworks/torch/inference-torch-neuronx',
-                'frameworks/tensorflow/tensorflow-neuronx-inference'
-
+                'frameworks/tensorflow/tensorflow-neuronx-inference',
+                'general/arch/neuron-hardware/inf2-arch',
+                'general/arch/neuron-hardware/inferentia2',
+                'general/arch/neuron-hardware/trainium',
+                'general/arch/neuron-hardware/neuron-core-v2'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'frameworks/torch/training',
                   'frameworks/torch/inference-torch-neuron',
-                  'frameworks/tensorflow/tensorflow-neuron-inference'
+                  'frameworks/tensorflow/tensorflow-neuron-inference',
+                  'general/arch/neuron-hardware/trn1-arch',
+                  'general/arch/neuron-hardware/trainium'
                ]
 
-clear_trn1_tag = [
+clear_trn1_tag = [ 'general/arch/neuron-hardware/inf2-arch', 
+                    'general/arch/neuron-hardware/inferentia2'
+               ]
+
+clear_nc_v2_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
                 'tools/tutorials/tutorial-neuron-gatherinfo',
                 'tools/tutorials/getting-started-tensorboard-neuron-plugin',
@@ -81,7 +90,6 @@ clear_trn1_tag = [
                 'tools/helper-tools/tutorial-neuron-check-model',
                 'tools/helper-tools/tutorial-neuron-gatherinfo',
                 'containers/tutorials/k8s-neuron-scheduler',
-                'general/arch/neuron-features/neuroncore-batching',
                 'general/arch/neuron-features/neuroncore-pipeline',
                 'release-notes/mxnet-neuron/',
                 'release-notes/torch/torch-neuron/',
@@ -99,7 +107,9 @@ clear_trn1_tag = [
                 'general/appnotes/neuron1x/',
                 'general/appnotes/torch-neuron/',
                 'frameworks/torch/inference-torch-neuron',
-                'frameworks/tensorflow/tensorflow-neuron-inference'
+                'frameworks/tensorflow/tensorflow-neuron-inference',
+                'general/arch/neuron-hardware/inferentia',
+                'general/arch/neuron-hardware/neuron-core-v1'
                 ]
 
 class NeuronTag(SphinxDirective):
@@ -112,6 +122,9 @@ class NeuronTag(SphinxDirective):
         return_instances = []
 
         cur_file = self.env.docname # current file path
+
+        
+
 
         path_split, path_len = splitall(cur_file)
 
@@ -150,10 +163,15 @@ class NeuronTag(SphinxDirective):
             if 'Inf1' not in return_instances:
                 return_instances.append('Inf1')
 
+        if in_list(cur_file, clear_nc_v2_tag):
+            if 'Trn1' in return_instances:
+                return_instances.remove('Trn1')
+            if 'Inf2' in return_instances:
+                return_instances.remove('Inf2')
+
         if in_list(cur_file, clear_trn1_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
-                return_instances.remove('Inf2')
 
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:
@@ -162,6 +180,11 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, clear_inf2_tag):
             if 'Inf2' in return_instances:
                 return_instances.remove('Inf2')
+
+        if cur_file=='general/arch/neuron-hardware/inferentia2':
+             if 'Inf2' not in return_instances:
+                return_instances.append('Inf2')
+       
             
         # generate text from instances list if the list is not empty.
         return_instances = sorted(set(return_instances))

@@ -107,11 +107,11 @@ inf2.48xlarge topology
 
 **inf2.48xlarge topology**
 
-On inf2.48xlarge instance Neuron devices are connected in a ring. Any
-**even** number of ranks for Collective Communication operators is
-supported provided that the ranks occupy consecutive Neuron devices.
-However, when using any number of ranks other than 24 (full instance)
-Collective Communication performance is reduced.
+On inf2.48xlarge instance Neuron devices are connected in a ring via 
+NeuronLink. Any **even** number of ranks for Collective
+Communication operators is supported provided that the ranks occupy 
+consecutive Neuron devices. However, when using any number of ranks 
+other than 24 (full instance) full performance of the ring is not utilized.
 
 Inf2 other instance sizes topologies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +120,7 @@ Inf2 other instance sizes topologies
 
 **inf2 other instance sizes topologies**
 
-On other inf2 instance sizes Neuron devices are connected in a chain.
+On other inf2 instance sizes Neuron devices are connected bi-directionally.
 Any **even** number of ranks for Collective Communication operators is
 supported provided that the ranks occupy consecutive Neuron devices.
 Collective Communication performance is similar to the performance on
