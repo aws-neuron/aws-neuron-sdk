@@ -53,9 +53,17 @@ torch::jit::script::Module get_model(const std::string& filename)
     // the section below is no longer necessary. It was a workaround 
     // for a runtime issue when loading identical copies of a model.
 
+    // This is redundant in the new flow, but left to provide future 
+    // pointer on torchscript graph manipulation if needed
+
     // this next section adds a unique uuid to the graph, so that the neuron runtime
     // will load the graph multiple times instead of reusing a previously loaded copy
-    auto graph = model.get_method("forward").function().graph();
+
+    /*
+    auto fwd = model.get_method("forward");
+    auto& fn = static_cast<torch::jit::GraphFunction&>(fwd.function());
+    auto graph = fn.graph();
+
     torch::jit::Inline(*graph);
     for (auto node : graph->nodes()) {
         if (std::string(node->kind().toQualString()).rfind("neuron::forward") == 0) {
@@ -76,6 +84,7 @@ torch::jit::script::Module get_model(const std::string& filename)
             }
         }
     }
+    */
 
     return model;
 }
