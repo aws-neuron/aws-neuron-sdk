@@ -10,7 +10,7 @@ Data Types
 Introduction
 ------------
 
-:ref:`Inferentia <neurondevice_inferentia>` and :ref:`Trainium <neurondevice_trainium>` NeuronDevices include different NeuronCore versions, which support differnt data-types. This section describes what data-types are supported in each NeuronCore version, for details about NeuronCore versions see :ref:`neuron_hw_arch`.
+:ref:`Inferentia <neurondevice_inferentia>` and :ref:`Trainium <neurondevice_trainium>` NeuronDevices include different NeuronCore versions, which support different data-types. This section describes what data-types are supported in each NeuronCore version, for details about NeuronCore versions see :ref:`neuron_hw_arch`.
 
 NeuronCore v1 Data Types
 ------------------------
@@ -99,9 +99,10 @@ The NeuronCore v2 supports the following data types:
 * 32 and 16-bit Floating Point (FP32 / FP16)
 * TensorFloat-32 (TF32)
 * Brain Floating Point (BFloat16)
+* 8-bit Floating point with configurable range and precision (cFP8)
 * Unsigned 8-bit integer (UINT8)
 
-.. note:: Neuron Compiler support for UINT8 is planned for a future Neuron SDK release. See `Neuron Compiler: Enable Neuron INT8 support <https://github.com/aws/aws-neuron-sdk/issues/36>`_ for details.
+.. note:: Neuron Compiler support for cFP8 and UINT8 is planned for a future Neuron SDK release. For INT8, see `Neuron Compiler: Enable Neuron INT8 support <https://github.com/aws/aws-neuron-sdk/issues/36>`_ for details.
 
 The layout for these is as follows:
 
@@ -145,6 +146,33 @@ The layout for these is as follows:
   			<td bgcolor="#AFEFA9" colspan="5">5 bits</td>
   			<td colspan="13" />
   			<td bgcolor="#FAC49E" colspan="10">10 bits</td>
+      </tr>
+      <tr>
+  			<td>FP8_e5m2</td>
+  			<td bgcolor="#ad3bff">1</td>
+         <td colspan="3" />
+  			<td bgcolor="#AFEFA9" colspan="5">5 bits</td>
+         <td style="border-right: 0px" colspan="18" />
+         <td colspan="3" />
+  			<td bgcolor="#FAC49E" colspan="2">2 bits</td>
+  		</tr>
+      <tr>
+  			<td>FP8_e4m3</td>
+  			<td bgcolor="#ad3bff">1</td>
+         <td style="border-right: 0px" colspan="3" />
+         <td colspan="1" />
+  			<td bgcolor="#AFEFA9" colspan="4">4 bits</td>
+         <td style="border-right: 0px" colspan="20" />
+  			<td bgcolor="#FAC49E" colspan="3">3 bits</td>
+  		</tr>
+      <tr>
+  			<td>FP8_e3m4</td>
+  			<td bgcolor="#ad3bff">1</td>
+         <td style="border-right: 0px" colspan="4" />
+         <td colspan="1" />
+  			<td bgcolor="#AFEFA9" colspan="3">3 bits</td>
+         <td style="border-right: 0px" colspan="19" />
+  			<td bgcolor="#FAC49E" colspan="4">4 bits</td>
   		</tr>
       <tr>
   			<td>UINT8</td>

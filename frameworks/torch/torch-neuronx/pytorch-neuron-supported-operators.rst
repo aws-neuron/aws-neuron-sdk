@@ -1,7 +1,7 @@
 .. _pytorch-neuron-supported-operators:
 
-PyTorch Neuron (``torch-neuronx``) - Training Supported Operators
-=================================================================
+PyTorch Neuron (``torch-neuronx``) - Supported Operators
+========================================================
 
 
 .. contents:: Table of Contents

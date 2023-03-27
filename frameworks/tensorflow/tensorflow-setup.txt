@@ -1,3 +1,23 @@
+
+.. dropdown::  Install Drivers and Tools
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. tab-set::
+
+       .. tab-item:: Amazon Linux 2
+
+        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+            :start-line: 2
+            :end-line: 3
+
+       .. tab-item:: Ubuntu 20
+
+        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+            :start-line: 5
+            :end-line: 6
+
 .. tab-set::
 
     .. tab-item:: tensorflow-neuronx (``Trn1 & Inf2``)

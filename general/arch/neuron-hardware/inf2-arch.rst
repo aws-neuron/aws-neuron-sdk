@@ -10,7 +10,7 @@ them (Inferentia2 devices from here on).
 Inf2 Architecture
 -----------------
 
-The EC2 Inf2 instance is powered by 12 :ref:`Inferentia2 devices <inferentia2-arch>`, and allows
+The EC2 Inf2 instance is powered by up to 12 :ref:`Inferentia2 devices <inferentia2-arch>`, and allows
 customers to choose between four instances sizes:
 
 .. list-table::
@@ -26,8 +26,8 @@ customers to choose between four instances sizes:
         - FP8/FP16/BF16/TF32 TFLOPS
         - FP32 TFLOPS
         - Device Memory (GiB)
-        - Device Memory Bandwidth (GiB/sec)
-        - NeuronLink-v2 device-to-device 
+        - Instance Memory Bandwidth (GiB/sec)
+        - NeuronLink-v2 device-to-device (GiB/sec/chip)
 
     *   - Inf2.xlarge
         - 1

@@ -2,6 +2,7 @@
 * :ref:`hf-bert-pretraining-tutorial`
 * :ref:`neuronx-mlp-training-tutorial`
 * :ref:`torch-hf-bert-finetune`
+* :ref:`torch-hf-t5-finetune`
 * :ref:`megatron-lm-pretraining-tutorial`
 * :ref:`neuronx-ddp-tutorial`
 * :ref:`neuronx-customop-mlp-tutorial`

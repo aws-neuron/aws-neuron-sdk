@@ -120,6 +120,20 @@ This would retry the compilation and would replace a failed result in the cache 
 successful compilation result.
 
 
+Compilation errors when placing NeuronCache home directory on NFS/EFS/FSx mounted drive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, NeuronCache default root directory is /var/tmp which is local to the instance you are running on. You can modify the location of the NeuronCache root directory using ``NEURON_CC_FLAGS='--cache_dir=<root dir>'``.  However, when the NeuronCache directory is placed in a directory that is part of a NFS mounted drive shared among multiple instances, you may encounter file errors such as file not found, file corruption, or KeyError when running multi-instance training:
+
+.. code:: bash
+
+    KeyError: 'neff_cache2/neuron-compile-cache/USER_neuroncc-1.0.48875.0+7437fbf18/MODULE_7223055628515330524/MODULE_0_SyncTensorsGraph.14_7223055628515330524_compute1-dy-kaena-training-2-1-e859998e-3035-5df63dab5ce63'
+
+This is a result of limitations to file locking on NFS. EFS/FSx also exhibit similar limitation. The workaround is to setup separate NeuronCache root directories for each worker instance, such as ``NEURON_CC_FLAGS="--cache_dir=$HOME/neuron_cache/bert/`hostname`"``, where the home directory is shared among worker instances as in ParallelCluster.
+
+Consider the use case of a ParallelCluster with SLURM cluster management. The home directory of the head node is shared via NFS with worker instances. Also, SLURM would terminate the idle worker instances when the cluster is configured as dynamic auto-scaling cluster, and the default cache in the terminated worker instance's /var/tmp is deleted. So to persist the cache across runs separated by a cluster idle period, we use the workaround above to create separate NeuronCache root directories for each worker instance. For example, see `BERT ParallelCluster script <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/dp_bert_hf_pretrain/run_dp_bert_large_hf_pretrain_bf16_s128.sh#L42>`__.
+
+
 Compilation error: “Expect ap datatype to be of type float32 float16 bfloat16 uint8”
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -460,3 +474,20 @@ NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning o
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to the Python script.
+
+
+.. _trn1_ubuntu_troubleshooting:
+
+Timeout error during model load on Ubuntu
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Multiple network interfaces on non-Amazon Linux distributions, such as Ubuntu, will fail unless extra steps are taken to ensure proper routing. Neuron users will experience this failure as a timeout during model load.  If you’re experiencing timeouts when loading models on TRN1.32xlarge or another Neuron instance with multiple network interfaces, please attempt to fix your instance by installing the helper service below.  The helper service will configure source based routing for all interfaces on the instance.  At startup, the service creates netplan files, updates netplan, then terminates.
+
+Apply the following:
+
+.. code:: bash
+
+    wget -O /tmp/aws-ubuntu-eni-helper.deb 'https://github.com/aws-samples/aws-efa-nccl-baseami-pipeline/blob/master/nvidia-efa-ami_base/networking/aws-ubuntu-eni-helper_0.3-1_all.deb?raw=true'
+    sudo apt install /tmp/aws-ubuntu-eni-helper.deb -y
+    sudo systemctl enable aws-ubuntu-eni-helper.service
+    sudo systemctl start aws-ubuntu-eni-helper.service
+

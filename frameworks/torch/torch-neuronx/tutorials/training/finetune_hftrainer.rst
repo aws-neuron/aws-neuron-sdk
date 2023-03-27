@@ -84,6 +84,11 @@ time):
 Please ignore the results from this precompile run as it is only for
 extracting and compiling the XLA graphs.
 
+.. note::
+
+   With both train and evaluation options (``--do_train`` and ``--do_eval``), you will encounter harmless error
+   ``ValueError: Target is multiclass but average='binary'`` when using neuron_parallel_compile.
+
 Precompilation is optional and only needed to be done once unless hyperparameters such as batch size are modified.
 After the optional precompilation, the actual run will be faster with minimal
 additional compilations.
@@ -106,7 +111,11 @@ multiple cores, first add these lines to top of run_glue.py to disable Distribut
 
     # Disable DDP for torchrun
     from transformers import __version__, Trainer
-    Trainer._wrap_model = lambda self, model, training=True, dataloader=None: model
+    import contextlib
+    def _wrap_model(self, model, training=True, dataloader=None):
+        model.no_sync = lambda: contextlib.nullcontext()
+        return model
+    Trainer._wrap_model = _wrap_model
 
 .. note::
 
@@ -277,7 +286,7 @@ The following are currently known issues:
 -  When precompiling using batch size of 16 on trn1.2xlarge, you will see ``ERROR ||PARALLEL_COMPILE||: parallel compilation with neuronx-cc exited with error.Received error code: -9``. To workaround this error, please set NEURON_PARALLEL_COMPILE_MAX_RETRIES=1 in the environment.
 -  With release 2.6 and transformers==4.25.1,
    using ``neuron_parallel_compile`` tool to run ``run_glue.py`` script
-   with both train and evaluation option (``--do_train`` and ``--do_eval``), you will encounter harmless error
+   with both train and evaluation options (``--do_train`` and ``--do_eval``), you will encounter harmless error
    ``ValueError: Target is multiclass but average='binary'``
 -  Reduced accuracy for RoBerta-Large is seen with Neuron PyTorch 1.12 (release 2.6) in FP32 mode with compiler BF16 autocast.
    The workaround is to set NEURON_CC_FLAGS="--auto-cast none" or set NEURON_RT_STOCHASTIC_ROUNDING_EN=1.
@@ -290,6 +299,8 @@ The following are currently known issues:
    if os.environ.get("NEURON_EXTRACT_GRAPHS_ONLY", None):
        import torch.distributed as dist
        _verify_param_shape_across_processes = lambda process_group, tensors, logger=None: True
+
+- Variable input sizes: When fine-tune models such as dslim/bert-base-NER using the `token-classification example <https://github.com/huggingface/transformers/tree/main/examples/pytorch/token-classification>`__, you may encounter timeouts (lots of "socket.h:524 CCOM WARN Timeout waiting for RX" messages) and execution hang. This occurs because NER dataset has different sample sizes, which causes many recompilations and compiled graph (NEFF) reloads. Furthermore, different data parallel workers can execute different compiled graph. This multiple-program multiple-data behavior is currently unsupported. To workaround this issue, please pad to maximum length using the Trainer API option ``--pad_to_max_length``.
 
 The following are resolved issues:
 

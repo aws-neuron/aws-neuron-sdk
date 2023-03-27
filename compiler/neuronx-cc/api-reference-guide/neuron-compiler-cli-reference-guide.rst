@@ -82,8 +82,9 @@ Available Commands:
 
     Valid values:
 
-    - ``trn1``
     - ``inf2``
+    - ``trn1``
+    - ``trn1n``
 
   - :option:`--model-type <model>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
@@ -96,7 +97,7 @@ Available Commands:
 
     Valid values:
 
-    - ``matmul``: Only cast FP32 operations that use the Neuron matrix-multiplication engine.
+    - ``matmult``: Only cast FP32 operations that use the Neuron matrix-multiplication engine.
     - ``all``: Cast all FP32 operations to achieve highest performance. This option can potentially lower precision/accuracy.
     - ``none``: Leave all data types as defined in the model. Do not apply auto-casting data type optimizations.
 

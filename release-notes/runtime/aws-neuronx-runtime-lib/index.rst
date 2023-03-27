@@ -33,6 +33,22 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.12.14.0]
+---------------------------------
+Date: 03/27/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added support for 16 channels and 16 EFA devices, which is required for enabling EC2 TRN1N instances with Neuron.
+* Added support for hierarchical All-Reduce and Reduce-Scatter. These implementations are now used by default and provides up to 75% reduction in latency for 2MB buffers across 256 ranks.
+* Added support for loading more than one Neuron Custom Operator library. 
+* Added support for loading multicore Neuron Custom Operators.
+* Updated INF2 to support rank 1 topology. 
+* Minor improvement in model load time for small models (below 100MB).
+
+
+
 Neuron Runtime Library [2.11.43.0]
 ---------------------------------
 Date: 02/08/2023
