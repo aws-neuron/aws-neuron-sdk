@@ -98,13 +98,9 @@ Known Issues and Limitations (Training)
 Slower BERT bf16 Phase 1 Single Node Performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Between release 2.8.0 and 2.9.0, BERT phase 1 pretraining performance is
-worse by approximately 8-9% when executed on a *single node*
-(i.e. just one ``trn1.32xlarge`` instance).
-
-This issue applies to the following tutorial: :ref:`hf-bert-pretraining-tutorial`
-
-This issue is not known not affect multi-node clusters or other tutorials.
+In the Neuron 2.9.0 release, :ref:`BERT phase 1 pretraining <hf-bert-pretraining-tutorial>`
+performance has regressed by approximately 8-9% when executed on a *single
+node* only (i.e. just one ``trn1.32xlarge`` instance).
 
 Convolution is not supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
