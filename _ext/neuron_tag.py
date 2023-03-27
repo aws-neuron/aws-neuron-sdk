@@ -140,25 +140,27 @@ class NeuronTag(SphinxDirective):
         if path_split[0] in neuron1_dir: 
             return_instances = ['Inf1']
         elif path_split[0] in neuronx_dir:
-            return_instances = ['Trn1','Inf2']
+            return_instances = ['Trn1','Trn1n','Inf2']
         elif path_split[0] in common_dir:
-            return_instances = ['Trn1','Inf2','Inf1']
+            return_instances = ['Trn1','Trn1n','Inf2','Inf1']
 
         # parse based on the directory where the file is.
         if path_split[path_len-2] == 'inference':
             return_instances = ['Inf1']
         elif path_split[path_len-2] == 'training':
-            return_instances = ['Trn1']
+            return_instances = ['Trn1','Trn1n']
 
         # add or clear tags based on file name and/or folder
         if in_list(cur_file, add_trn1_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
+                return_instances.append('Trn1n')
                 return_instances.append('Inf2')
 
         if in_list(cur_file, add_neuronx_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
+                return_instances.append('Trn1n')
                 return_instances.append('Inf2')
 
         if in_list(cur_file, add_inf1_tag):
@@ -168,12 +170,16 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, clear_nc_v2_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
+            if 'Trn1n' in return_instances:
+                return_instances.remove('Trn1n')
             if 'Inf2' in return_instances:
                 return_instances.remove('Inf2')
 
         if in_list(cur_file, clear_trn1_tag):
             if 'Trn1' in return_instances:
                 return_instances.remove('Trn1')
+            if 'Trn1n' in return_instances:
+                return_instances.remove('Trn1n')
 
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:

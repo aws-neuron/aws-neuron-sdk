@@ -45,7 +45,7 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
 
         .. tab-set::
 
-            .. tab-item:: Inference on Inf2 & Trn1 (``tensorflow-neuronx``)
+            .. tab-item:: Inference on Inf2 & Trn1/Trn1n (``tensorflow-neuronx``)
 
                 .. include:: tensorflow-neuronx-inference.txt
 

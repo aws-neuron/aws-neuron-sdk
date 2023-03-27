@@ -10,7 +10,7 @@ Model Architecture Fit Guidelines
 Introduction
 $$$$$$$$$$$$
 
-AWS Neuron SDK enables you to train and deploy a wide range of deep learning models on :ref:`EC2 Inf1 <aws-inf1-arch>`, :ref:`EC2 inf2 <aws-inf2-arch>` and :ref:`EC2 Trn1 <aws-trn1-arch>` instances, which are powered by :ref:`Inferentia <inferentia-arch>`, :ref:`Inferentia2 <inferentia2-arch>` and :ref:`Trainium <trainium-arch>` devices. The below table provides details of the NeuronDevices and NeuronCores enabling each instance:
+AWS Neuron SDK enables you to train and deploy a wide range of deep learning models on :ref:`EC2 Inf1 <aws-inf1-arch>`, :ref:`EC2 inf2 <aws-inf2-arch>`, :ref:`EC2 Trn1 <aws-trn1-arch>` and EC2 Trn1n instances, which are powered by :ref:`Inferentia <inferentia-arch>`, :ref:`Inferentia2 <inferentia2-arch>` and :ref:`Trainium <trainium-arch>` devices. The below table provides details of the NeuronDevices and NeuronCores enabling each instance:
 
 
 .. list-table::
@@ -27,6 +27,11 @@ AWS Neuron SDK enables you to train and deploy a wide range of deep learning mod
 
 
     *   - :ref:`EC2 Trn1 <aws-trn1-arch>`
+        - 16 x :ref:`Trainium <trainium-arch>`
+        - 32 x :ref:`NeuronCore-v2 <neuroncores-v2-arch>`
+        - 2
+
+    *   - :ref:`EC2 Trn1n <aws-trn1-arch>`
         - 16 x :ref:`Trainium <trainium-arch>`
         - 32 x :ref:`NeuronCore-v2 <neuroncores-v2-arch>`
         - 2
