@@ -28,12 +28,16 @@ Inference support:
 
 - Added model analysis API: torch_neuronx.analyze
 - Added HLO opcode support for:
-    - kAtan2
-    - kAfterAll
-    - kMap
+
+  - kAtan2
+  - kAfterAll
+  - kMap
+
 - Added XLA lowering support for:
-    - aten::glu
-    - aten::scatter_reduce
+
+  - aten::glu
+  - aten::scatter_reduce
+
 - Updated torch.nn.MSELoss to promote input data types to a compatible type
 
 Resolved Issues (Training)
@@ -44,16 +48,18 @@ GRPC timeout errors when running Megatron-LM GPT 6.7B tutorial on multiple insta
 
 When running AWS Samples for Megatron-LM GPT 6.7B tutorial over multiple instances, you may encounter GRPC timeout errors like below:
 
-```
-E0302 01:10:20.511231294  138645 chttp2_transport.cc:1098]   Received a GOAWAY with error code ENHANCE_YOUR_CALM and debug data equal to "too_many_pings"
-2023-03-02 01:10:20.511500: W tensorflow/core/distributed_runtime/rpc/grpc_remote_master.cc:157] RPC failed with status = "UNAVAILABLE: Too many pings" and grpc_error_string = "{"created":"@1677719420.511317309","description":"Error received from peer ipv4:10.1.35.105:54729","file":"external/com_github_grpc_grpc/src/core/lib/surface/call.cc","file_line":1056,"grpc_message":"Too many pings","grpc_status":14}", maybe retrying the RPC
-```
+::
+
+    E0302 01:10:20.511231294  138645 chttp2_transport.cc:1098]   Received a GOAWAY with error code ENHANCE_YOUR_CALM and debug data equal to "too_many_pings"
+    2023-03-02 01:10:20.511500: W tensorflow/core/distributed_runtime/rpc/grpc_remote_master.cc:157] RPC failed with status = "UNAVAILABLE: Too many pings" and grpc_error_string = "{"created":"@1677719420.511317309","description":"Error received from peer ipv4:10.1.35.105:54729","file":"external/com_github_grpc_grpc/src/core/lib/surface/call.cc","file_line":1056,"grpc_message":"Too many pings","grpc_status":14}", maybe retrying the RPC
+
 
 or:
 
-```
-2023-03-08 21:18:27.040863: F tensorflow/compiler/xla/xla_client/xrt_computation_client.cc:476] Non-OK-status: session->session()->Run(session_work->feed_inputs, session_work->outputs_handles, &outputs) status: UNKNOWN: Stream removed
-```
+::
+
+    2023-03-08 21:18:27.040863: F tensorflow/compiler/xla/xla_client/xrt_computation_client.cc:476] Non-OK-status: session->session()->Run(session_work->feed_inputs, session_work->outputs_handles, &outputs) status: UNKNOWN: Stream removed
+
 
 This is due to excessive DNS lookups during execution, and is fixed in this release.
 
@@ -88,6 +94,13 @@ Previously only the 3 argument variant of :func:`torch.argmax` was supported. No
 
 Known Issues and Limitations (Training)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Slower BERT bf16 Phase 1 Single Node Performance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the Neuron 2.9.0 release, :ref:`BERT phase 1 pretraining <hf-bert-pretraining-tutorial>`
+performance has regressed by approximately 8-9% when executed on a *single
+node* only (i.e. just one ``trn1.32xlarge`` instance).
 
 Convolution is not supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
