@@ -61,9 +61,6 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
             .. tab-item:: Ubuntu 20 AMI
 
-
-            .. tab-item:: Ubuntu 20 AMI
-
                 .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
                 .. include :: /src/helperscripts/installationScripts/python_instructions.txt
