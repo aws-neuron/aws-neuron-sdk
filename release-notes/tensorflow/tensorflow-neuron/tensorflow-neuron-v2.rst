@@ -53,8 +53,8 @@ tensorflow-neuron 2.x release [2.9.0.0]
 
 Date: 03/27/2023
 
-* Introduce the ``tfn.analyze_model`` that displays information about the supported and unsupported operators of a traceable model.
-* Introduce the ``.on_neuron_ratio`` attribute of neuron_models returned by ``tfn.trace`` which is the percentage of ops on neuron after compilation. 
+* Introduce the ``tfn.analyze_model`` function that displays information about the supported and unsupported operators of a traceable model.
+* Introduce the ``on_neuron_ratio`` attribute of AWS Optimized Neuron Models returned by ``tfn.trace``, which is the percentage of ops on neuron after compilation. 
 
 tensorflow-neuron 2.x release [2.6.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
