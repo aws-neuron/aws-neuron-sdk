@@ -20,10 +20,6 @@ Date: 3/27/2023
 * Uses new IMDSv2 for obtaining instance types
 * Some API changes (backwards compatible)
 
-Bug fixes
-
-* Fixes a Dill compatability issue
-
 
 NeuronPerf release [1.6.0.0]
 ----------------------------
