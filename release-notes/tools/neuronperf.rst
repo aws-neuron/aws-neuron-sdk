@@ -18,7 +18,6 @@ Date: 3/27/2023
 
 * Adds trn1/inf2 support for PyTorch and TensorFlow 2.x
 * Uses new IMDSv2 for obtaining instance types
-* Some API changes (backwards compatible)
 
 
 NeuronPerf release [1.6.0.0]
