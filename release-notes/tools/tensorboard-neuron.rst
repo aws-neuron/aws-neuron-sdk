@@ -23,7 +23,7 @@ use TensorBoard.
 Neuron Plugin for TensorBoard release [2.5.25.0]
 ================================================
 
-Date: 03/27/2023
+Date: 03/28/2023
 
 Summary
 -------

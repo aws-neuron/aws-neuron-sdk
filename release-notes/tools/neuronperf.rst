@@ -14,7 +14,7 @@ NeuronPerf 1.x Release Notes
 NeuronPerf release [1.7.0.0]
 ----------------------------
 
-Date: 3/27/2023
+Date: 3/28/2023
 
 * Adds trn1/inf2 support for PyTorch and TensorFlow 2.x
 * Uses new IMDSv2 for obtaining instance types

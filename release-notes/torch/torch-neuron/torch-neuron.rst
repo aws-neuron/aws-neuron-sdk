@@ -76,7 +76,7 @@ CPU. We are investigating a fix for this issue.
 PyTorch Neuron release [2.9.0.0]
 --------------------------------------------------
 
-Date: 03/27/2023
+Date: 03/28/2023
 
 New in this release
 ~~~~~~~~~~~~~~~~~~~
