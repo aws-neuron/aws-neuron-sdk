@@ -183,6 +183,8 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
 .. _torchscript: https://pytorch.org/docs/stable/jit.html
 
 
+.. _torch-neuronx-dynamic-batching:
+
 Dynamic Batching
 ~~~~~~~~~~~~~~~~
 

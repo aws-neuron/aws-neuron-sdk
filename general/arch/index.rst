@@ -14,7 +14,7 @@ Trn and Inf instances
 
 .. grid:: 2
 
-      .. card:: EC2 Trn1 Architecture
+      .. card:: EC2 Trn1/Trn1n Architecture
             :link: aws-trn1-arch
             :link-type: ref
             :class-body: sphinx-design-class-title-small

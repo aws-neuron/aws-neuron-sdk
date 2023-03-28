@@ -7,7 +7,7 @@ Get Started with Apache MXNet (Incubating) Neuron
 This page provide links that will assist you to quickly start with :ref:`mxnet-neuron-main` (supporting inference only).
 
 .. note::
-  Below instructions are for Amazon Linux 2, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
+  Below instructions are for Ubuntu20, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
 
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
@@ -22,7 +22,7 @@ This page provide links that will assist you to quickly start with :ref:`mxnet-n
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 2
-        :end-line: 3
+        :start-line: 5
+        :end-line: 6
 		
 .. include:: tab-inference-mxnet-neuron.txt

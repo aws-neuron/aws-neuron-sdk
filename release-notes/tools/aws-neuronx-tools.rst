@@ -8,6 +8,15 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.9.5.0]
+-------------------------
+Date: 03/27/2023
+
+New in the release:
+
+* Updated neuron-top to show effective FLOPs across all NeuronCores.
+
+
 Neuron Tools  [2.8.2.0]
 -------------------------
 Date: 02/24/2023

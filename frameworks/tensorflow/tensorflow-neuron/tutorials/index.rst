@@ -59,10 +59,9 @@ Natural Language Processing
 Utilizing Neuron Capabilities
 -----------------------------
 
-*  Tensorflow 1.x & 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
+*  Tensorflow 1.x & 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial.rst>`
 
 .. toctree::
    :hidden:
 
-   /frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving
-   /frameworks/tensorflow/tensorflow-neuron/tutorials/tutorial-tensorflow-serving-NeuronRT-Visible-Cores
+   /src/examples/tensorflow/tensorflow_serving_tutorial.rst

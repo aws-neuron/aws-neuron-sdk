@@ -20,7 +20,7 @@
 
 .. tab-set::
 
-    .. tab-item:: tensorflow-neuronx (``Trn1 & Inf2``)
+    .. tab-item:: tensorflow-neuronx (``Trn1/Trn1n & Inf2``)
         :name: tensorflow-neuronx-install-main
 
         * :ref:`Fresh Install <install-tensorflow-neuronx>`

@@ -7,7 +7,7 @@ This page provide links that will assist you to quickly start with :ref:`tensorf
 
 
 .. note::
-  Below instructions are for Amazon Linux 2, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
+  Below instructions are for Ubuntu20, if you looking for complete setup instructions for different platforms, please :ref:`Check Here. <setup-guide-index>`
 
 .. _tensorflow_quick_start_inference:
 
@@ -25,8 +25,8 @@ This page provide links that will assist you to quickly start with :ref:`tensorf
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 2
-        :end-line: 3
+        :start-line: 5
+        :end-line: 6
 
 
 .. tab-set::

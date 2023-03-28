@@ -56,7 +56,7 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
         .. tab-set::
 
-            .. tab-item:: Inference on Inf2 & Trn1 (``torch-neuronx``)
+            .. tab-item:: Inference on Inf2 & Trn1/Trn1n (``torch-neuronx``)
 
                 .. include:: inference-torch-neuronx.txt
 

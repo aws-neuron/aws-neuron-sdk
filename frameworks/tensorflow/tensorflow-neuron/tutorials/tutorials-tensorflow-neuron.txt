@@ -23,7 +23,7 @@
     .. tab-item:: Utilizing Neuron Capabilities Tutorials
         :name:
         
-        *  Tensorflow 1.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
+        *  Tensorflow 1.x & 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial.rst>`
 
 .. note::
 

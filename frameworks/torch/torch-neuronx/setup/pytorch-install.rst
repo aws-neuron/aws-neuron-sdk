@@ -43,15 +43,11 @@ Develop on AWS ML accelerator instance
                 :start-line: 25
                 :end-line: 29
 
-            .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
-                :start-line: 35
-                :end-line: 39
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 50
+                :end-line: 51
 
-            .. code:: python
-
-                # Activate the python virtual environment
-
-                source /opt/aws_neuron_venv_pytorch/bin/activate
+            
 
          .. tab-item:: Ubuntu 20 DLAMI Pytorch
 
@@ -59,15 +55,9 @@ Develop on AWS ML accelerator instance
                 :start-line: 30
                 :end-line: 35
 
-            .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
-                :start-line: 35
-                :end-line: 39
-
-            .. code:: python
-
-                # Activate the python virtual environment
-
-                source /opt/aws_neuron_venv_pytorch/bin/activate
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 53
+                :end-line: 54
 
          .. tab-item:: Amazon Linux 2
 

@@ -29,8 +29,6 @@ MXNet Neuron enables native MXNet models to be accelerated on Neuron devices, so
         .. include:: mxnet-neuron-setup.txt
 
 
-
-
 .. tab-set::
 
     .. tab-item:: Inference

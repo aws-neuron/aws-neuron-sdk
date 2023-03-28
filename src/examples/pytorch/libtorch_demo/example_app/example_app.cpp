@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "utils.hpp"
+#include "core_count.hpp"
 #include "../tokenizers_binding/remote_rust_tokenizer.h"
 
 typedef std::vector<std::vector<long>> Input;
@@ -13,9 +14,9 @@ namespace
     // some hardcoded parameters that could be read from a config file
     const size_t seq_len = 128;
     const size_t batch_size = 6;
-    const size_t num_neuron_cores = 4;
+    uint32_t num_neuron_cores = 0;
     const size_t cores_per_model = 1;
-    const size_t num_runs_per_neuron_core = 1000;
+    const size_t num_runs_per_neuron_core = 2000;
 
     // these token ids are particular to a vocabulary, could be parsed from vocab file
     const long start_token = 101;
@@ -168,6 +169,11 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    if( nrt_get_total_nc_count( &num_neuron_cores ) != NRT_SUCCESS ) {
+        std::cerr << "Could not determine number of cores - aborting!" << std::endl;
+        return -1;
+    }
+
     // let runtime know we want M models / core for N cores (e.g. "1,1,1,1")
     setenv("NEURON_RT_VISIBLE_CORES", get_visible_cores_str(num_neuron_cores, cores_per_model).c_str(), true);
 
@@ -222,7 +228,7 @@ int main(int argc, char *argv[])
     std::cout << "====================" << std::endl;
     std::cout << "Batch size = " << batch_size << std::endl;
     std::cout << "Num neuron cores = " << num_neuron_cores << std::endl;
-    std::cout << "Num runs per neruon core = " << num_runs_per_neuron_core << std::endl;
+    std::cout << "Num runs per neuron core = " << num_runs_per_neuron_core << std::endl;
 
     return 0;
 }
