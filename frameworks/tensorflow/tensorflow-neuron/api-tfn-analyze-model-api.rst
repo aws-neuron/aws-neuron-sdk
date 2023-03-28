@@ -12,7 +12,7 @@ Description
 -----------
 
 Analyzes a ``keras.Model`` or a Python callable that can be decorated by
-``tf.function`` for it's compatability with neuron. It displays supported 
+``tf.function`` for it's compatibility with Neuron. It displays supported 
 vs. unsupported operators in the model as well as percentages and counts of 
 each operator and returns a dictionary with operator statistics.
 
