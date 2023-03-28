@@ -9,7 +9,7 @@ Release Content
    :depth: 2
 
 
-Neuron 2.9.0 (03/27/2023)
+Neuron 2.9.0 (03/28/2023)
 -------------------------
 
 Trn1 packages
