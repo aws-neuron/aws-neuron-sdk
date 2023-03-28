@@ -64,24 +64,10 @@ or:
 This is due to excessive DNS lookups during execution, and is fixed in this release.
 
 
-NaNs seen in BERT-like models when using full BF16 plus stochastic rounding
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NaNs seen with transformers version >= 4.21.0 when running HF GPT fine-tuning or pretraining with XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The latest version 4.26.1 of Hugging Face transformers can sometimes produce NaN outputs for BERT-like models when using full BF16 (XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1) plus stochastic rounding. To workaround this issue, add the following to the beginning of your Python script:
-
-.. code:: python
-
-    import torch
-
-    def guard_bf16_finfo():
-      Bf16 = torch.finfo(torch.bfloat16)
-      Fp32 = torch.finfo(torch.float32)
-      if os.environ.get("XLA_DOWNCAST_BF16") == '1':
-        torch.finfo = lambda a: Fp32 if a == torch.float64 else (Bf16 if a == torch.float32 else a)
-      elif os.environ.get("XLA_USE_BF16") == '1':
-        torch.finfo = lambda a: Bf16 if (a == torch.float64 or a == torch.float32)  else a
-
-    guard_bf16_finfo()
+Using Hugging Face transformers version >= 4.21.0 can produce NaN outputs for GPT models when using full BF16 (XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1) plus stochastic rounding. This issue occurs due to large negative constants used to implement attention masking (https://github.com/huggingface/transformers/pull/17306). To workaround this issue, please use transformers version <= 4.20.0.
 
 
 Resolved Issues (Inference)
