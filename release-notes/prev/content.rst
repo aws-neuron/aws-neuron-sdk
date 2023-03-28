@@ -8,24 +8,31 @@ Previous Releases' Content (Neuron 2.x)
    :depth: 1
 
 
+Neuron 2.8.0 (02/24/2023)
+--------------------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.8.0
+
+Inf2 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.8.0
+
+Inf1 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.8.0
+
+
+
 Neuron 2.7.0 (02/08/2023)
 --------------------------------------
 
 Trn1 packages
 ^^^^^^^^^^^^^
 
-* ``aws-neuronx-dkms-2.7.15.0``
-* ``aws-neuronx-oci-hook-2.1.60.0``
-* ``aws-neuronx-runtime-lib-2.11.43.0``
-* ``aws-neuronx-collectives-2.11.47.0``
-* ``aws-neuronx-tools-2.7.2.0``
-* ``aws-neuronx-k8-plugin-2.1.12.0``
-* ``aws-neuronx-k8-scheduler-2.1.12.0``
-* ``aws-neuronx-gpsimd-customop-0.1.23.0``
-* ``aws-neuronx-gpsimd-tools-0.1.7.0``
-* ``tensorboard_plugin_neuronx-2.5.15.0``
-* ``neuronx-cc-2.4.0.21``
-* ``torch-neuronx-1.13.0.1.4.0``
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.7.0
 
 Inf1 packages
 ^^^^^^^^^^^^^
