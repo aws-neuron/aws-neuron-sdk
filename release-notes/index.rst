@@ -73,10 +73,6 @@ This release adds support for EC2 Trn1n instances, introduces new features, perf
        * Added tutorial to demonstrate use of Libtorch with PyTorch Neuron (``torch-neuronx``) for inference :ref:`[html] <pytorch-tutorials-libtorch>`
      - Trn1, Inf2
 
-   * - New sample scripts for 3D Parallelism training in Megatron-LM reference for Neuron
-     - * See `GPT3-65b <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm/blob/master/examples/pretrain_gpt3_65B_3D.sh>`_ and `GPT3-175b <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm/blob/master/examples/pretrain_gpt3_175B.sh>`_ examples. 
-     - Trn1, Inf2
-
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1, Inf2, Inf1
