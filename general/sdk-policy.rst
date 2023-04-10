@@ -107,3 +107,79 @@ Maintenance and End-Of-Support announcements are communicated as follows:
 * Neuron SDK documentation.
 
 To see the list of available Neuron SDK versions and supported Dependency Software versions see :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron version.
+
+Licenses
+--------
+
+The license files for the Neuron SDK packages are located in the installation directories.
+
+For RPM/YUM packages, first follow Neuron SDK setup instructions to install RPM/YUM packages, then do:
+
+.. code:: bash
+
+    # The following command assumes you have already installed RPM/YUM packages per Neuron SDK setup instructions
+    if [ $USER == "ubuntu" ]; then sudo dpkg -L $(sudo dpkg-query -f '${binary:Package}\n' -W | grep neuron) | grep -i license; else rpm -ql $(rpm -qa | grep neuron) | grep -i license; fi
+
+Example output:
+
+.. code:: bash
+
+    /usr/share/doc/aws-neuronx-tools/LICENSE.txt
+    /usr/share/doc/aws-neuronx-tools/THIRD-PARTY-LICENSES.txt
+    /usr/share/doc/aws-neuronx-oci-hook/LICENSE.txt
+    /usr/share/doc/aws-neuronx-oci-hook/THIRD-PARTY-LICENSES.txt
+    /usr/share/doc/aws-neuronx-collectives/LICENSE.txt
+    /usr/share/doc/aws-neuronx-runtime-lib/LICENSE.txt
+    /usr/src/aws-neuronx-2.7.33.0/LICENSE
+
+For the Python packages, you can see the locations of licenses in the site-packages directory of the Python environment using the following commands:
+
+.. code:: bash
+
+    # The following installation instructions are only for license check, not development or deployment.
+    # See Neuron SDK setup instruction for proper development or deployment setups.
+    python -m venv check_license_venv
+    source check_license_venv/bin/activate
+    pip install -U pip
+    python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+    python -m pip install neuron-cc neuronx-cc torch-neuron torch-neuronx tensorflow-neuron tensorflow-neuronx tensorboard-plugin-neuron tensorboard-plugin-neuronx mx_neuron
+    ls $VIRTUAL_ENV/lib/python*/site-packages/{libneuronxla,torch_xla,torch_neuron,tensorflow_neuron,tensorboard_plugin_neuron,mx_neuron,neuron}*/*LICENSE*
+
+Example output:
+
+.. code:: bash
+
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/libneuronxla/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/libneuronxla/THIRD-PARTY-LICENSES.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/mx_neuron/THIRD-PARTY-LICENSES.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/neuron_cc-1.14.3.0+adaa2ac56.dist-info/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/neuronx_cc-2.5.0.28+1be23f232.dist-info/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/neuronx_hwm-2.5.0.0+dad732dd6.dist-info/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorboard_plugin_neuron/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorboard_plugin_neuron/THIRD-PARTY-LICENSES.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorboard_plugin_neuronx/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorboard_plugin_neuronx/THIRD-PARTY-LICENSES.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorflow_neuron/LICENSE
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorflow_neuron/THIRD-PARTY-LICENSES.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/tensorflow_neuronx/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/torch_neuron-1.13.1.2.6.5.0.dist-info/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/torch_neuronx/LICENSE.txt
+    /home/ec2-user/test_venv/lib/python3.7/site-packages/torch_xla-1.13.0+torchneuron5.dist-info/LICENSE
+
+Neuron documentation, samples and tools packages on GitHub licenses are available in the respective GitHub repositories:
+
+https://github.com/aws-neuron/aws-neuron-sdk/blob/master/LICENSE-DOCUMENTATION
+
+https://github.com/aws-neuron/transformers-neuronx/blob/master/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-samples/blob/master/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/neuronperf/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm/blob/master/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-tensorflow/blob/master/LICENSE
+
+https://github.com/aws-neuron/aws-neuron-tensorflow/blob/master/THIRD-PARTY-LICENSES.txt
