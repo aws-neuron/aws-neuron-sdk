@@ -43,6 +43,7 @@ spec:
                       - inf1.24xlarge
                       - trn1.2xlarge
                       - trn1.32xlarge
+                      - trn1n.32xlarge
               - matchExpressions:
                   - key: "node.kubernetes.io/instance-type"
                     operator: In
@@ -53,6 +54,7 @@ spec:
                       - inf1.24xlarge
                       - trn1.2xlarge
                       - trn1.32xlarge
+                      - trn1n.32xlarge
       containers:
         #Device Plugin containers are available both in us-east and us-west ecr
         #repos
