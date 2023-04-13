@@ -12,3 +12,7 @@ The Neuron Performance pages provide a reference to the expected performance of 
 .. card:: Trn1 Performance Numbers
       :link: trn1-performance
       :link-type: ref
+
+.. card:: Inf2 Performance Numbers
+      :link: inf2-performance
+      :link-type: ref
