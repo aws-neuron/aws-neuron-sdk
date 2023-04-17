@@ -11,7 +11,7 @@ What's New
 .. _neuron-2.9.0-whatsnew:
 
 
-Neuron 2.9.0 (03/27/2023)
+Neuron 2.9.0 (03/28/2023)
 -------------------------
 
 .. contents:: Table of contents
