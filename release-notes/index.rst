@@ -11,6 +11,12 @@ What's New
 .. _neuron-2.9.0-whatsnew:
 
 
+Neuron 2.9.1 (04/19/2023)
+-------------------------
+Minor patch release to add support for deserialized torchscript model compilation and support for multi-node training in EKS. Fixes included in this release are critical to enable training
+and deploying models with Amazon Sagemaker or Amazon EKS.
+
+
 Neuron 2.9.0 (03/28/2023)
 -------------------------
 

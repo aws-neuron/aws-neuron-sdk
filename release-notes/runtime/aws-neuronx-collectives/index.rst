@@ -9,6 +9,17 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+
+Neuron Collectives [2.12.35.0]
+------------------------------
+Date: 04/19/2023
+
+Bug Fixes
+
+* Fixed support for SOCKET_IFNAME config that was affecting EKS users at scale on large training jobs.
+
+
+
 Neuron Collectives [2.12.22.0]
 ------------------------------
 Date: 03/28/2023

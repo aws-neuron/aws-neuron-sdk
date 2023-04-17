@@ -41,6 +41,11 @@ spec:
                       - inf1.2xlarge
                       - inf1.6xlarge
                       - inf1.24xlarge
+                      - inf2.xlarge
+                      - inf2.4xlarge
+                      - inf2.8xlarge
+                      - inf2.24xlarge
+                      - inf2.48xlarge
                       - trn1.2xlarge
                       - trn1.32xlarge
                       - trn1n.32xlarge
@@ -52,13 +57,18 @@ spec:
                       - inf1.2xlarge
                       - inf1.6xlarge
                       - inf1.24xlarge
+                      - inf2.xlarge
+                      - inf2.4xlarge
+                      - inf2.8xlarge
+                      - inf2.24xlarge
+                      - inf2.48xlarge
                       - trn1.2xlarge
                       - trn1.32xlarge
                       - trn1n.32xlarge
       containers:
         #Device Plugin containers are available both in us-east and us-west ecr
         #repos
-      - image: 790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-device-plugin:latest
+      - image: public.ecr.aws/neuron/neuron-device-plugin:2.12.5.0
         imagePullPolicy: Always
         name: neuron-device-plugin
         env:

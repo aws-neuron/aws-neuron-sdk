@@ -10,6 +10,26 @@ PyTorch Neuron (``torch-neuronx``) release notes
 PyTorch Neuron for Trainium is a software package that enables PyTorch
 users to train their models on Trainium.
 
+
+Release [1.13.0.1.6.1]
+----------------------
+Date: 04/19/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- No changes
+
+Inference support:
+
+- Enable deserialized TorchScript modules to be compiled with :func:`torch_neuronx.trace`
+
+
 Release [1.13.0.1.6.0]
 ----------------------
 Date: 03/28/2023

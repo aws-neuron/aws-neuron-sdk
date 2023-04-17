@@ -94,7 +94,7 @@ spec:
       serviceAccount: k8s-neuron-scheduler
       containers:
         - name: neuron-scheduler
-          image: 790709498068.dkr.ecr.us-west-2.amazonaws.com/neuron-scheduler:latest
+          image: public.ecr.aws/neuron/neuron-scheduler:2.12.5.0
           env:
           - name: PORT
             value: "12345"

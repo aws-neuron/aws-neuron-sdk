@@ -16,6 +16,8 @@ import tensorflow.neuron
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import resnet50
 import warnings
+import subprocess
+import json
 
 tf.keras.backend.set_image_data_format('channels_last')
 
@@ -24,16 +26,9 @@ arg_parser.add_argument('--batch_size', type=int, default=5, choices=range(1, 6)
 arg_parser.add_argument('--neuroncore-pipeline-cores', type=int, default=1, choices=range(1, 17), help='Number of NeuronCores limit for each partitioned graph')
 args = arg_parser.parse_args()
 
-instance_type = requests.get('http://169.254.169.254/latest/meta-data/instance-type').text
-
-avail_neuroncores_dict = {
-    'inf1.xlarge' : 4,
-    'inf1.2xlarge' : 4,
-    'inf1.6xlarge' : 16,
-    'inf1.24xlarge' : 64
-}
-
-avail_neuroncores = avail_neuroncores_dict.get(instance_type, 0)
+neuron_ls_output = subprocess.run(["neuron-ls","-j"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, encoding="utf-8")
+neuron_ls_json = json.loads(neuron_ls_output.stdout)
+avail_neuroncores = neuron_ls_json[0]["nc_count"]
 
 USER_BATCH_SIZE = 2 * args.batch_size
 NUM_LOOPS_PER_THREAD = 400
@@ -93,7 +88,7 @@ def current_throughput():
     num_infer = 0
     last_num_infer = num_infer
     throughput_stats = []
-    print("Instance type {} with {} NeuronCores".format(instance_type, avail_neuroncores))
+    print("Run with {} NeuronCores".format(avail_neuroncores))
     print("NEURON_MAX_NUM_INFERS (env): " + os.environ.get('NEURON_MAX_NUM_INFERS', '<unset>'))
     print("NEURONCORE_GROUP_SIZES (env): " + os.environ.get('NEURONCORE_GROUP_SIZES', '<unset>'))
     print("NUM THREADS: ", num_threads)
