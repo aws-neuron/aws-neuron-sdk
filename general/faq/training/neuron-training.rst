@@ -54,11 +54,12 @@ How does Trainium accelerates collective communication  operations?
 
 Trainium introduces a dedicated collective compute engine, that runs in parallel to the compute cores (aka NeuronCores). This improves convergence time of intermediate steps as the communication happens in parallel to the compute. This capability, in addition to the faster and optimized EFA, results in better scalability and faster time to train, as compared to other training instances in AWS.
 
-What does Strong Scaling mean?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+What does Strong/Weak Scaling mean?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To enable strong scaling, we optimized Trainium to be efficient at small batch sizes. Compared to GPUs Trn1 maintains high efficiency even for small batch sizes. This allows you to scale-out to thousands of devices without increasing the global mini-batch size at the same rate, which in turn leads to faster end-to-end training convergence.
+To enable strong scaling, we optimized Trainium to be efficient at small batch sizes. Compared to GPUs, Trn1 maintains high efficiency even for small batch sizes. This allows you to scale-out to thousands of devices without increasing the global mini-batch size at the same rate, which in turn leads to faster end-to-end training convergence.
 
+In weak scaling setup, we show the optimal throughput with suffciently large batch size per Trainium. The large batch size is set to leverage the high core utilization so that the overall end-to-end training will be fast. This setup also enables a large global batch size as it scales with the total number of nodes in the cluster.
 
 Usability
 ---------

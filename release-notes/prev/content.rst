@@ -8,6 +8,24 @@ Previous Releases' Content (Neuron 2.x)
    :depth: 1
 
 
+Neuron 2.9.0 (03/28/2023)
+--------------------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.0
+
+Inf2 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.0
+
+Inf1 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.0
+
+
+
 Neuron 2.8.0 (02/24/2023)
 --------------------------------------
 
@@ -66,8 +84,8 @@ Inf1 packages
 
 .. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list packages --neuron-version=2.6.0
 
-Neuron 2.5.0 (11/23/2022) - Content
---------------------------------------
+Neuron 2.5.0 (11/23/2022)
+-------------------------
 
 Trn1 packages
 ^^^^^^^^^^^^^

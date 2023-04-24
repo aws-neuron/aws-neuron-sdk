@@ -13,8 +13,8 @@ Trainium device architecture is depicted below:
 Each Trainium device consists of:
 
 -  Compute:
-    * 2x :ref:`NeuronCore-v2 <neuroncores-v2-arch>` cores, delivering 420 INT8 TOPS, 210 FP16/BF16/cFP8/TF32 TFLOPS, and
-      52.5 FP32 TFLOPS.
+    * 2x :ref:`NeuronCore-v2 <neuroncores-v2-arch>` cores, delivering 380 INT8 TOPS, 190 FP16/BF16/cFP8/TF32 TFLOPS, and
+      47.5 FP32 TFLOPS.
 
 -  Device Memory:
     * 32GB of device memory (for storing model state), with 820 GB/sec of bandwidth.

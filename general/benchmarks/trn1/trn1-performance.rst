@@ -1,23 +1,23 @@
 .. _trn1-performance:
 
-Trn1 Performance
-===========================
+Trn1/Trn1n Performance 
+=======================
 
 .. contents:: Table of contents
    :local:
 
 
-*Last update:  February 8th, 2023*
+*Last update:  April 12th, 2023*
 
 
 .. _NLP:
 
-Training Performance
---------------------
-
+Training Performance (Trn1 / Trn1n)
+-----------------------------------
+      
 .. csv-table::
-  :file: nlp_data.csv
-  :header-rows: 1
+   :file: trn1_trn1n_nlp_data.csv
+   :header-rows: 1
 
 Inference Performance
 ---------------------

@@ -11,7 +11,13 @@ What's New
 .. _neuron-2.9.0-whatsnew:
 
 
-Neuron 2.9.0 (03/27/2023)
+Neuron 2.9.1 (04/19/2023)
+-------------------------
+Minor patch release to add support for deserialized torchscript model compilation and support for multi-node training in EKS. Fixes included in this release are critical to enable training
+and deploying models with Amazon Sagemaker or Amazon EKS.
+
+
+Neuron 2.9.0 (03/28/2023)
 -------------------------
 
 .. contents:: Table of contents
@@ -71,10 +77,6 @@ This release adds support for EC2 Trn1n instances, introduces new features, perf
      - * :ref:`Added tutorial to fine-tune T5 model <torch-hf-t5-finetune>`
       
        * Added tutorial to demonstrate use of Libtorch with PyTorch Neuron (``torch-neuronx``) for inference :ref:`[html] <pytorch-tutorials-libtorch>`
-     - Trn1, Inf2
-
-   * - New sample scripts for 3D Parallelism training in Megatron-LM reference for Neuron
-     - * See `GPT3-65b <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm/blob/master/examples/pretrain_gpt3_65B_3D.sh>`_ and `GPT3-175b <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm/blob/master/examples/pretrain_gpt3_175B.sh>`_ examples. 
      - Trn1, Inf2
 
    * - Minor enhancements and bug fixes.

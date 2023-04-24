@@ -31,11 +31,11 @@ For all the commands below, make sure you are in the virtual environment that yo
 
    source ~/aws_neuron_venv_pytorch/bin/activate
 
-First we install a recent version of HF transformers, scikit-learn and evaluate packages in our environment as well as download the source matching the installed version. In this example, we chose version 4.26.0 and the text classification example from HF transformers source:
+First we install a recent version of HF transformers, scikit-learn and evaluate packages in our environment as well as download the source matching the installed version. In this example, we use the text classification example from HF transformers source:
 
 .. code:: bash
 
-    export HF_VER=4.26.0
+    export HF_VER=4.27.4
     pip install -U transformers==$HF_VER datasets evaluate scikit-learn
     cd ~/
     git clone https://github.com/huggingface/transformers --branch v$HF_VER
@@ -48,7 +48,7 @@ We will run MRPC task fine-tuning following the example in README.md located in 
 
 .. note::
 
-    If you are using older versions of transformers <4.26.0 or PyTorch Neuron <1.13.0, please see section :ref:`workarounds_for_older_versions` for necessary workarounds.
+    If you are using older versions of transformers <4.27.0 or PyTorch Neuron <1.13.0, please see section :ref:`workarounds_for_older_versions` for necessary workarounds.
 
 We use full BF16 casting using XLA_USE_BF16=1 and compiler flag ``--model-type=transformer`` to enable best performance.
 First, paste the following script into your terminal to create a “run.sh” file and change it to executable:
@@ -105,24 +105,13 @@ Multi-worker training
 ---------------------
 
 The above script would run one worker on one NeuronCore. To run on
-multiple cores, first add these lines to top of run_glue.py to disable Distributed Data Parallel (DDP) when using torchrun (see :ref:`known_issues` section below):
-
-.. code:: python
-
-    # Disable DDP for torchrun
-    from transformers import __version__, Trainer
-    import contextlib
-    def _wrap_model(self, model, training=True, dataloader=None):
-        model.no_sync = lambda: contextlib.nullcontext()
-        return model
-    Trainer._wrap_model = _wrap_model
+multiple cores, launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_node=N`` option to specify the number of workers
+(N=2 for trn1.2xlarge, and N=2, 8, or 32 for trn1.32xlarge).
 
 .. note::
 
-    If you are using older versions of transformers <4.26.0 or PyTorch Neuron <1.13.0, please see section :ref:`workarounds_for_older_versions` for necessary workarounds.
+    If you are using older versions of transformers <4.27.0 or PyTorch Neuron <1.13.0, please see section :ref:`workarounds_for_older_versions` for necessary workarounds.
 
-Then launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_node=N`` option to specify the number of workers
-(N=2 for trn1.2xlarge, and N=2, 8, or 32 for trn1.32xlarge).
 The following example runs 2 workers.
 Paste the following script into your terminal to create a “run_2w.sh” file and change it to executable:
 
@@ -241,31 +230,34 @@ If you have run the single worker training in a previous section, then you can s
 
 .. _workarounds_for_older_versions:
 
-Older versions of transformers <4.26.0 or PyTorch Neuron <1.13.0
+Older versions of transformers <4.27.0 or PyTorch Neuron <1.13.0
 ----------------------------------------------------------------
 
-If using older versions of transformers package before 4.26.0 or PyTorch Neuron before 1.13.0, please edit the python script run_glue.py and add the following lines after the Python
+If using older versions of transformers package before 4.27.0 or PyTorch Neuron before 1.13.0, please edit the python script run_glue.py and add the following lines after the Python
 imports. They set the compiler flag for transformer model type and enable data parallel training using torchrun:
 
 .. code:: python
 
-    # Set compiler flag to compile for transformer model type
-    import os
-    os.environ["NEURON_CC_FLAGS"] = os.environ.get('NEURON_CC_FLAGS', '') + " --model-type=transformer"
-
     # Enable torchrun
+    import os
     import torch
     import torch_xla.distributed.xla_backend
-    if os.environ.get("WORLD_SIZE"):
-        torch.distributed.init_process_group('xla')
-
-    # Fixup to enable distributed training with XLA
     from packaging import version
     from transformers import __version__, Trainer
+    if version.parse(__version__) < version.parse("4.26.0") and os.environ.get("WORLD_SIZE"):
+        torch.distributed.init_process_group('xla')
+
+    # Disable DDP for torchrun
+    import contextlib
     if version.parse(__version__) < version.parse("4.20.0"):
-        Trainer._wrap_model = lambda self, model, training=True: model
+        def _wrap_model(self, model, training=True):
+            model.no_sync = lambda: contextlib.nullcontext()
+            return model
     else:
-        Trainer._wrap_model = lambda self, model, training=True, dataloader=None: model
+        def _wrap_model(self, model, training=True, dataloader=None):
+            model.no_sync = lambda: contextlib.nullcontext()
+            return model
+    Trainer._wrap_model = _wrap_model
 
     # Workaround for NaNs seen with transformers version >= 4.21.0
     # https://github.com/aws-neuron/aws-neuron-sdk/issues/593
@@ -301,6 +293,8 @@ The following are currently known issues:
        _verify_param_shape_across_processes = lambda process_group, tensors, logger=None: True
 
 - Variable input sizes: When fine-tune models such as dslim/bert-base-NER using the `token-classification example <https://github.com/huggingface/transformers/tree/main/examples/pytorch/token-classification>`__, you may encounter timeouts (lots of "socket.h:524 CCOM WARN Timeout waiting for RX" messages) and execution hang. This occurs because NER dataset has different sample sizes, which causes many recompilations and compiled graph (NEFF) reloads. Furthermore, different data parallel workers can execute different compiled graph. This multiple-program multiple-data behavior is currently unsupported. To workaround this issue, please pad to maximum length using the Trainer API option ``--pad_to_max_length``.
+- When running HuggingFace GPT fine-tuning with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you might see NaNs in the loss immediately at the first step. This issue occurs due to large negative constants used to implement attention masking (https://github.com/huggingface/transformers/pull/17306). To workaround this issue, please use transformers version <= 4.20.0.
+- When using Trainer API option --bf16, you will see "RuntimeError: No CUDA GPUs are available". To workaround this error, please add "import torch; torch.cuda.is_bf16_supported = lambda: True" to the Python script (i.e. run_glue.py). (Trainer API option --fp16 is not yet supported).
 
 The following are resolved issues:
 
@@ -317,8 +311,3 @@ The following are resolved issues:
    at the same time results in a host OOM. To avoid this issue, we can: Precompile all the graphs in multi-worker
    training. This can be done by running the multi-worker training first with ``neuron_parallel_compile <script>``
    followed by the actual training. This would avoid the compilation at model save during actual training.
-
-The following are currently known limitations:
-
--  Only MRPC task fine-tuning is supported. Other tasks will be
-   supported in the future.
