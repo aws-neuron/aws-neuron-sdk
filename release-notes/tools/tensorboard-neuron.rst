@@ -30,7 +30,7 @@ Summary
 
 * Neuron operator timeline view now includes Neuron Runtime setup/teardown time and a collapsed execution of NC engines and DMA - see Tensorboard tutorial for updated views. 
 
-* Improved execution categorization to include "control" instructions (Process Control)
+* Improved execution categorization to include "control" instructions
 
 
 
