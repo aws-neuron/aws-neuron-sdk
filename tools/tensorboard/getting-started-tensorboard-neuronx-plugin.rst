@@ -129,8 +129,10 @@ Neuron Operator Timeline View
 
 |image5|
 
-The operator timeline view is a detailed look into a single execution with Neuron.  Compute and data transfers are
-shown as two separate processes, with each showing a hierarchical view of the framework operators and their correspondingg
+The operator timeline view is a detailed look into a single execution with Neuron.  A high level overview at the top breaks
+down the execution into categories, including Neuron Runtime setup time, as well ass NeuronCore compute engine and DMA engine busyness.
+Activity on the compute and DMA engines are further categorized as compute, control, and data transfer intervals which are
+shown as separate processes, with each showing a hierarchical view of the framework operators and their corresponding
 HLO operation.  The fused operations can be a result of compiler optimizations or are operations that are running in
 parallel on the device.  Each bar can be clicked to show information regarding which operators are overlapped.
 
@@ -146,7 +148,7 @@ may improve performance.
   :scale: 10%
 .. |image3| image:: /images/Neuron_Profiler_Runtime_Trace_Original.jpg
 .. |image4| image:: /images/Neuron_Profiler_T1_Op_Framework_View.png
-.. |image5| image:: /images/Neuron_Profiler_T1_Op_Trace_View.png
+.. |image5| image:: /images/TB_Operator_Timeline_2-10.png
 .. |tensorboard_address| raw:: html
 
    <a href="http://localhost:6006" target="_blank">localhost:6006</a>
