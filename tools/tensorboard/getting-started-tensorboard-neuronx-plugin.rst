@@ -130,7 +130,7 @@ Neuron Operator Timeline View
 |image5|
 
 The operator timeline view is a detailed look into a single execution with Neuron.  A high level overview at the top breaks
-down the execution into categories, including Neuron Runtime setup time, as well ass NeuronCore compute engine and DMA engine busyness.
+down the execution into categories, including Neuron Runtime setup time, as well as NeuronCore compute engine and DMA engine busyness.
 Activity on the compute and DMA engines are further categorized as compute, control, and data transfer intervals which are
 shown as separate processes, with each showing a hierarchical view of the framework operators and their corresponding
 HLO operation.  The fused operations can be a result of compiler optimizations or are operations that are running in
