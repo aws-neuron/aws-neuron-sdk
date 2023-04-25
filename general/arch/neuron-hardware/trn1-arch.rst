@@ -34,7 +34,7 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
         - FP32 TFLOPS
         - Device Memory (GiB)
         - Device Memory Bandwidth (GiB/sec)
-        - NeuronLink-v2 device-to-device 
+        - NeuronLink-v2 device-to-device (GiB/sec/device)
         - EFA bandwidth (Gbps)
 
     *   - Trn1.2xlarge
@@ -56,7 +56,7 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
         - 760
         - 512
         - 13,120
-        - Yes
+        - 1,536
         - 800
 
     *   - Trn1n.32xlarge
@@ -67,8 +67,8 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
         - 760
         - 512
         - 13,120
-        - Yes
-        - 1600
+        - 3,072
+        - 1,600
 
 
 The Trn1.2xlarge instance size allows customers to train their models on

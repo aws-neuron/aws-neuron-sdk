@@ -6,6 +6,6 @@ bert-large-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,Inf2.xlarge,647
 distilbert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,Inf2.xlarge,2612.46,0.72,1.15,Real Time,2.9.0,Data Parallel,1,FP32,Matmult-BF16
 roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,Inf2.xlarge,1726.45,1.14,1.42,Real Time,2.9.0,Data Parallel,1,FP32,Matmult-BF16
 roberta-large,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,Inf2.xlarge,628.55,3.17,3.52,Real Time,2.9.0,Data Parallel,1,FP32,Matmult-BF16
-opt-13b,,PyTorch 1.13.0,Inf2.48xlarge,36.1,28,28.3,Real Time,2.9.0,Tensor Parallel,1,,
-opt-30b,,PyTorch 1.13.0,Inf2.48xlarge,20.7,48.4,50.1,Real Time,2.9.0,Tensor Parallel,1,,
-opt-66b,,PyTorch 1.13.0,Inf2.48xlarge,14.9,65.7,74.2,Real Time,2.9.0,Tensor Parallel,1,,
+opt-13b,:benchmark-pt:`Benchmark <opt>`,PyTorch 1.13.0,Inf2.48xlarge,36.1,28,28.3,Real Time,2.9.0,Tensor Parallel,1,FP16,Matmult-BF16
+opt-30b,:benchmark-pt:`Benchmark <opt>`,PyTorch 1.13.0,Inf2.48xlarge,20.7,48.4,50.1,Real Time,2.9.0,Tensor Parallel,1,FP16,Matmult-BF16
+opt-66b,:benchmark-pt:`Benchmark <opt>`,PyTorch 1.13.0,Inf2.48xlarge,14.9,65.7,74.2,Real Time,2.9.0,Tensor Parallel,1,FP16,Matmult-BF16

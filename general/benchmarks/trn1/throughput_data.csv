@@ -1,7 +1,8 @@
-Name,Model,Model details,Framework,Application Type,Run Mode,Inst. Type,Num. Cores,Batch Size,Throughput (/sec),Max Throughput,Threads,Ops in Inferentia,Latency P50 (ms),Latency P90 (ms),Latency P95 (ms),Latency P99 (ms),Latency P100 (ms),Neuron Version,Application,Tutorial
-albert-base-v2,albert-base-v2,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,16,2693.22,,2,,11.86,,11.98,12.16,,2.8.0,NLP,
-bert-base-cased,bert-base-cased,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,8,2606.53,,2,,6.11,,6.19,6.27,,2.8.0,NLP,
-bert-base-cased-finetuned-mrpc,bert-base-cased-finetuned-mrpc,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,8,2990.35,,2,,5.33,,5.36,5.37,,2.8.0,NLP,
-bert-large-cased,bert-large-cased,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,4,958.36,,2,,8.33,,8.39,8.51,,2.8.0,NLP,
-roberta-base,roberta-base,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,8,2564.65,,2,,6.21,,6.33,6.42,,2.8.0,NLP,
-roberta-large,roberta-large,bf16,PyTorch 1.13.0,Batch,Data Parallel,trn1.2xlarge,,4,948.23,,2,,8.42,,8.51,8.53,,2.8.0,NLP,
+Model,Scripts,Framework,Inst. Type,Throughput (/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type
+albert-base-v2,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,2665.95,11.99,12.26,Batch,2.9.0,Data Parallel,16,128,FP32,Matmult-BF16
+bert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,2616.35,6.1,6.23,Batch,2.9.0,Data Parallel,8,128,FP32,Matmult-BF16
+bert-base-cased-finetuned-mrpc,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,3012.41,5.3,5.33,Batch,2.9.0,Data Parallel,8,128,FP32,Matmult-BF16
+bert-large-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,931.36,8.57,8.69,Batch,2.9.0,Data Parallel,4,128,FP32,Matmult-BF16
+distilbert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,4198.35,7.43,10.58,Batch,2.9.0,Data Parallel,16,128,FP32,Matmult-BF16
+roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,2564.26,6.22,6.64,Batch,2.9.0,Data Parallel,8,128,FP32,Matmult-BF16
+roberta-large,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.0,trn1.2xlarge,919.37,8.68,8.81,Batch,2.9.0,Data Parallel,4,128,FP32,Matmult-BF16
