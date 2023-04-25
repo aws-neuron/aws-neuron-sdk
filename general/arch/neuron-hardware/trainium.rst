@@ -17,7 +17,7 @@ Each Trainium device consists of:
       47.5 FP32 TFLOPS.
 
 -  Device Memory:
-    * 32GB of device memory (for storing model state), with 820 GB/sec of bandwidth.
+    * 32GiB of device memory (for storing model state), with 820 GiB/sec of bandwidth.
 
 
 -  Data movement:

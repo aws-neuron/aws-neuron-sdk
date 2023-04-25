@@ -15,7 +15,7 @@ Each Inferentia device consists of:
     * 4x :ref:`NeuronCore-v1 <neuroncores-v1-arch>` cores, delivering 128 INT8 TOPS and 64 FP16/BF16 TFLOPS
 
 -  Device Memory:
-    * 8GB of device DRAM memory  (for storing parameters and intermediate state), with 50 GB/sec of bandwidth
+    * 8GiB of device DRAM memory  (for storing parameters and intermediate state), with 50 GiB/sec of bandwidth
 
 -  NeuronLink:
     * Enables co-optimization of latency

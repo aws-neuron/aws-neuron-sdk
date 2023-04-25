@@ -27,7 +27,7 @@ customers to choose between four instances sizes:
         - FP32 TFLOPS
         - Device Memory (GiB)
         - Instance Memory Bandwidth (GiB/sec)
-        - NeuronLink-v2 device-to-device (GiB/sec/chip)
+        - NeuronLink-v2 device-to-device (GiB/sec/device)
 
     *   - Inf2.xlarge
         - 1
@@ -57,7 +57,7 @@ customers to choose between four instances sizes:
         - 285
         - 192
         - 4920
-        - 384
+        - 768
 
     *   - Inf2.48xlarge
         - 12
@@ -67,7 +67,7 @@ customers to choose between four instances sizes:
         - 570
         - 384
         - 9840
-        - 384
+        - 768
 
 
 Inf2 offers a low-latency and high-bandwidth chip-to-chip interconnect
