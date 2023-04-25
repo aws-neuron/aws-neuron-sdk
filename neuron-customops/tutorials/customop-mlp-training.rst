@@ -17,15 +17,18 @@ Before running the tutorial please follow the installation instructions at:
 * :ref:`pytorch-neuronx-install` on Trn1
 
 .. note::
+    The name of ``aws-neuronx-gpsimd-customop`` has been changed to ``aws-neuronx-gpsimd-customop-lib`` as of the neuron 2.10 release.
+
+.. note::
 
    Custom C++ Operators are supported as of Neuron SDK Version 2.7 as a beta feature. As such this feature is not installed by default. Additional tooling and library packages (RPM and DEB) are required. They can be installed with the following commands:
    ::
 
       sudo yum remove aws-neuronx-gpsimd-tools-0.* -y
-      sudo yum remove aws-neuronx-gpsimd-customop-0.* -y
+      sudo yum remove aws-neuronx-gpsimd-customop-lib-0.* -y
  
       sudo yum install aws-neuronx-gpsimd-tools-0.* -y 
-      sudo yum install aws-neuronx-gpsimd-customop-0.* -y
+      sudo yum install aws-neuronx-gpsimd-customop-lib-0.* -y
 
   
 For all the commands below, make sure you are in the virtual environment that you have created above before you run the commands:
