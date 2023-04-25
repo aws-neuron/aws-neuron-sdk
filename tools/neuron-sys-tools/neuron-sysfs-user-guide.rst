@@ -107,10 +107,10 @@ Description for Each Metric
 
 ``info/``: this directory stores hardware information. All of them are not counter types:
 
-* ``notify_delay``: Sysfs notification feature hurts perf. It will be turn off automatically upon driver load due to its performance impact. You can set /sys/devices/virtual/neuron_device/neuron0/info/notify_delay to 0 to turn notification on, or set it to -1 to turn it off. Please see :ref:`How to Troubleshoot via Sysfs <_troubleshoot_via_sysfs>` for how to use sysfs notification for system monitoring and debugging.
-* ``arch_type``: it stores the architecture type of the Neuron Device. Sample architecture types are v1, v2, and v3. You can only read the value but not change it.
-* ``instance_type``: it stores the instance type of the Neuron Device. Sample instance types are Inf1, Inf2, and Trn1. You can only read the value but not change it.
-* ``device_type``: it stores the Neuron Device type. Sample Neuron Device types are Inferentia, Inferentia2, and Trainium1. You can only read the value but not change it.
+* ``notify_delay``: Controls delays between notifications from Neuron Device.  Current settings are on (``0``) or off (``-1``).  Off by default. 
+* ``arch_type``: Architecture type of the Neuron Device. Sample architecture types are v1, v2, and v3. You can only read the value but not change it.
+* ``instance_type``: Instance type of the Neuron Device. Sample instance types are Inf1, Inf2, and Trn1. You can only read the value but not change it.
+* ``device_type``: Neuron Device type. Sample Neuron Device types are Inferentia, Inferentia2, and Trainium1. You can only read the value but not change it.
 
 
 ``stats/``: this directory stores Neuron Runtime and Driver statistics. It contains three subdirectories: ``status/``, ``memory_usage/``, and ``other_info/``.
@@ -167,8 +167,6 @@ By default, the Sysfs notification feature is turned off when the driver is load
 Here is a sample user space program using poll():
 
 .. code-block:: dash
-
-	:linenos:
 
 	#include <fcntl.h>
 	#include <poll.h>
