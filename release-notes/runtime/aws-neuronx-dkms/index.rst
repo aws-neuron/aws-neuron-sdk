@@ -23,7 +23,6 @@ Date: 04/28/2023
 New in this release
 ^^^^^^^^^^^^^^^^^^^
 
-* Ubuntu 22 (jammy) support added. 
 * Added dma_buf support, which is needed for future EFA implementations in the Linux kernel. 
 * Added new IOCTL to get Neuron Device BDF (used by Neuron Runtime)
 * Added optional support for sysfs notify (off by default). See Neuron Sysfs documentation (under Neuron System Tools) for more details. 
