@@ -17,7 +17,7 @@ Date: 04/28/2023
   
 * The new compiler option ``distribution-strategy`` can be used to better support models using the PyTorch 2.x Fully Sharded Data Parallel (FSDP) APIs.
 
-* Added support for the HLO operator ``BitcastConvertType`` and also added support for ``TopK``(sampling mode) operator.
+* Added support for the HLO operator ``BitcastConvertType`` and also added support for ``TopK`` (sampling mode) operator.
 
 Neuron Compiler [2.5.0.28]
 -----------------------------
