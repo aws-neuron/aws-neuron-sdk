@@ -2,10 +2,10 @@
 .. _GPT2: https://huggingface.co/docs/transformers/model_doc/gpt2
 .. _GPT-J: https://huggingface.co/docs/transformers/model_doc/gptj
 
-.. |generate| replace:: :meth:`~transformers.GenerationMixin.generate`
-.. |beam_search| replace:: :meth:`~transformers.GenerationMixin.beam_search`
-.. |sample| replace:: :meth:`~transformers.GenerationMixin.sample`
-.. |greedy_search| replace:: :meth:`~transformers.GenerationMixin.greedy_search`
+.. |generate| replace:: :py:meth:`~transformers.generation_utils.GenerationMixin.generate`
+.. |beam_search| replace:: :meth:`~transformers.generation_utils.GenerationMixin.beam_search`
+.. |sample| replace:: :meth:`~transformers.generation_utils.GenerationMixin.sample`
+.. |greedy_search| replace:: :meth:`~transformers.generation_utils.GenerationMixin.greedy_search`
 
 .. |Trn1| replace:: :ref:`Trn1 <aws-trn1-arch>`
 .. |Inf2| replace:: :ref:`Inf2 <aws-inf2-arch>`
@@ -22,7 +22,6 @@ Transformers Neuron (``transformers-neuronx``) release notes
 Transformers Neuron for |Trn1|/|Inf2| is a software package that enables
 PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
-
 
 Release [x.x.x.x.x.x]
 ----------------------
