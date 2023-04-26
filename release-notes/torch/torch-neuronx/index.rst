@@ -140,7 +140,7 @@ Known Issues and Limitations (Inference)
 :func:`torch.argmin` produces incorrect results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-func:`torch.argmin` produces incorrect results.
+:func:`torch.argmin` produces incorrect results.
 
 No automatic partitioning
 ^^^^^^^^^^^^^^^^^^^^^^^^^
