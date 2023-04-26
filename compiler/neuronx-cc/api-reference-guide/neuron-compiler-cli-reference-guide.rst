@@ -58,6 +58,7 @@ Available Commands:
      [--model-type <model>]
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
+     [--distribution-strategy <disribution_type>]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
      [--logfile <filename>]
@@ -93,7 +94,11 @@ Available Commands:
     - ``transformer-inference``: Perform optimizations specific to Transformer models that are performing inference.  Inference models are often memory-bound; this option allows the compiler to apply additional transformer-specific memory optimizations.  While the :option:`--model-type transformer` option can be used when compiling either inference or training models, the :option:`--model-type transformer-inference` option should achieve better performance over the :option:`--model-type transformer` option for inference models. 
     - ``unet-inference``: Perform optimizations specific to certain `U-Net <https://en.wikipedia.org/wiki/U-Net>` model architectures when performing inference. U-Net models often have certain structures that result in excessive performance-impacting data transfers; this option allows the compiler to apply additional memory optimizations to prevent these data transfers and also allows the compiler to map larger normalization operators which would otherwise not successfully execute.
 
-  - :option:`--distribution-strategy=FSDP`: Enable the compiler to perform optimizations applicable to models that use the PyTorch 2.x Fully Sharded Data Parallel (FSDP) `APIs <https://pytorch.org/docs/stable/fsdp.html>` to shard parameters, gradients, and optimizer states across data-parallel workers. These optimizations can also apply to models that use `DeepSpeed <https://www.deepspeed.ai/>` to implement distributed execution.
+  - :option:`--distribution-strategy <disribution_type>`: Specify the type of data parallelism sharding being used in the model
+  
+    Valid values:
+
+    - ``FSDP``: Enable the compiler to perform optimizations applicable to models that use the PyTorch 2.x Fully Sharded Data Parallel (FSDP) `APIs <https://pytorch.org/docs/stable/fsdp.html>` to shard parameters, gradients, and optimizer states across data-parallel workers. These optimizations can also apply to models that use `DeepSpeed <https://www.deepspeed.ai/>` to implement distributed execution.
 
   - :option:`--auto-cast <cast_mode>`: Controls how the compiler makes tradeoffs between performance and accuracy for FP32 operations. (Default: ``matmult``)
 
