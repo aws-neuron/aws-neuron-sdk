@@ -71,7 +71,7 @@ CLI arguments
 ^^^^^^^^^^^^^
 
 .. list-table::
-    :widths: 40 40 260
+    :widths: 40 80 260
     :header-rows: 1
 
     * - Argument
@@ -81,6 +81,7 @@ CLI arguments
       - N/A, required argument
       - The type of Collective Communication operation to execute for this benchmark.
         Supported types:
+
             - ``all_reduce`` / ``allr``: All-Reduce
             - ``all_gather`` / ``allg``: All-Gather
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
@@ -103,7 +104,7 @@ CLI arguments
       - The end size for the benchmark. **nccom-test** will run benchmarks for all sizes between ``-b, --minbytes`` and
         ``-e, --maxbytes``, increasing the size by either ``-i, --stepbytes`` or ``--f, --stepfactor`` with every run.
     * - ``-i, --stepbytes``
-      - (``--maxbytes`` - ``--minbytes`` / 10)
+      - (``--maxbytes`` - ``--minbytes``) / 10
       - Amount of bytes with which to increase the benchmark's size on every subsequent run.
         For example, for this combination of arguments: ``-b 8 -e 16 -i 4``, the benchmark will
         be ran for the following sizes: 8 bytes, 12 bytes, 16 bytes.
