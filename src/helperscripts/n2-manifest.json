@@ -9,7 +9,8 @@
     "latest_release": [
       {"instance":"inf1", "version":"2.9.1"},
       {"instance":"trn1", "version":"2.9.1"},
-      {"instance":"inf2", "version":"2.9.1"}
+      {"instance":"inf2", "version":"2.9.1"},
+      {"instance":"trn1n", "version":"2.9.1"}
     ],
     "os_properties": [
       {"os":"ubuntu18", "default_python_version":"3.7"},
@@ -127,7 +128,7 @@
         {"name":"libneuronxla","version":"0.5.173","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"neuronx_hwm","version":"2.5.0.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"torch_xla","version":"1.13.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
-        {"name":"neuronx-cc","version":"2.5.0.28","supported_instances":["trn1","inf2"],"supported_python_versions":["3.7","3.8"]},
+        {"name":"neuronx-cc","version":"2.5.0.28","supported_instances":["trn1","inf2"],"supported_python_versions":["3.7","3.8","3.9"]},
         {"name":"neuron-cc","version":"1.14.3.0","supported_instances":["inf1"],"supported_python_versions":["3.7","3.8"]},
         {"name":"aws-neuronx-k8-plugin","version":"2.12.5.0","supported_instances":["inf1","trn1","inf2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-k8-scheduler","version":"2.12.5.0","supported_instances":["inf1","trn1","inf2"],"supported_python_versions":[]},
