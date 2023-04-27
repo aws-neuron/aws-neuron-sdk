@@ -81,7 +81,7 @@ Finally, start **Prometheus**:
 Setting up **Grafana**
 ~~~~~~~~~~~~~~~~~~~~~~
 
-For a more detailed guide on how to install **Grafana** visit their official guide at https://grafana.com/docs/grafana/latest/setup-grafana/installation/rpm/.
+For a more detailed guide on how to install **Grafana** visit their official guide at https://grafana.com/grafana/download.
 
 Add the Grafana repo to yum:
 
