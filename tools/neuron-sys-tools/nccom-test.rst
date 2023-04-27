@@ -62,8 +62,8 @@ seen in the previous example).
     * - algbw(GB/s)
       - Algorithm bandwidth in gibibytes (1GiB = 1,073,741,824 bytes) per second which is calculated as **size(B)** / **time(us)**
     * - busbw(GB/s)
-      - Bandwidth per data line in gibibytes per second - it provides a bandwidth number that is independent from the number of ranks (unlike **algbw**).
-        For a more in-depth explanation, please refer to [NVIDIA's nccl-test documentation](https://github.com/NVIDIA/nccl-tests/blob/master/doc/PERFORMANCE.md#bus-bandwidth)
+      - Bus bandwidth - bandwidth per data line in gibibytes per second - it provides a bandwidth number that is independent from the number of ranks (unlike **algbw**).
+        For a more in-depth explanation on bus Bandwidth, please refer to `NVIDIA's nccl-tests documentation <https://github.com/NVIDIA/nccl-tests/blob/master/doc/PERFORMANCE.md>`_.
     * - Avg bus bandwidth
       - Average of the values in the busbw column
 
