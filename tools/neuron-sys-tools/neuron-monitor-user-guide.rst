@@ -791,8 +791,7 @@ For example:
 
 The default value for ``--port`` is ``8000``.
 
-If your data visualization framework is Grafana, we provided a :ref:`Grafana
-dashboard </src/examples/neuron-monitor/neuron-monitor-grafana.json>`
+If your data visualization framework is Grafana, we provided a :download:`Grafana dashboard </src/examples/neuron-monitor/neuron-monitor-grafana.json>`
 which integrates with Prometheus and this script.
 
 .. |image| image:: ../../images/nm-img2.png
