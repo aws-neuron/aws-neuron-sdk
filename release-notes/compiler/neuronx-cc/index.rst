@@ -11,8 +11,8 @@ Neuron Compiler [2.x.x]
 -----------------------------
 Date: 04/28/2023
 
-* This release introduces two new ``model-type`` option arguments: ``transformer-inference`` and  ``unet-inference``.
-  These options instruct the compiler to perform model-specific optimizations that produce executable models with improved performance
+* This release introduces a new ``model-type`` option argument: ``unet-inference``.
+  This option instructs the compiler to perform model-specific optimizations that produce executable models with improved performance
   on the specified target instance.
   
 * The new compiler option ``distribution-strategy`` can be used to better support models using the PyTorch 2.x Fully Sharded Data Parallel (FSDP) APIs.
