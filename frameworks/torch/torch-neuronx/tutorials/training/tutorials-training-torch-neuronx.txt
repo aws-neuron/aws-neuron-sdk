@@ -6,6 +6,7 @@
 * :ref:`megatron-lm-pretraining-tutorial`
 * :ref:`neuronx-ddp-tutorial`
 * :ref:`neuronx-customop-mlp-tutorial`
+* :ref:`neuronx-customop-mlp-perf`
 
 .. note::
 

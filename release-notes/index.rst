@@ -203,7 +203,7 @@ Trn1/Trn1n and Inf2 only packages
    * - Neuron Custom C++ Operators
      - Trn1/Trn1n, Inf2
   
-     - * ``aws-neuronx-gpsimd-customop`` (.deb, .rpm)
+     - * ``aws-neuronx-gpsimd-customop-lib`` (.deb, .rpm)
   
        * ``aws-neuronx-gpsimd-tools`` (.deb, .rpm)
   
