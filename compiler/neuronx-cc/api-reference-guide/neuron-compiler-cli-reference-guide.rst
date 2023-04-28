@@ -90,7 +90,7 @@ Available Commands:
     Valid values:
 
     - ``generic``: Perform optimizations applicable to all types of inference and training models.
-    - ``transformer``: Perform optimizations specific to `Transformer <https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)>` models that are performing training. 
+    - ``transformer``: Perform optimizations specific to `Transformer <https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)>` models. 
     - ``unet-inference``: Perform optimizations specific to certain `U-Net <https://en.wikipedia.org/wiki/U-Net>` model architectures when performing inference. U-Net models often have certain structures that result in excessive performance-impacting data transfers; this option allows the compiler to apply additional memory optimizations to prevent these data transfers and also allows the compiler to map larger normalization operators which would otherwise not successfully execute.
 
   - :option:`--distribution-strategy <disribution_type>`: Specify the type of data parallelism sharding being used in the model
