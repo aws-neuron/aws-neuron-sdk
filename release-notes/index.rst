@@ -11,7 +11,7 @@ What's New
 .. _neuron-2.10.0-whatsnew:
 
 
-Neuron 2.10.0 (04/28/2023)
+Neuron 2.10.0 (05/01/2023)
 -------------------------
 
 .. contents:: Table of contents
@@ -21,7 +21,7 @@ Neuron 2.10.0 (04/28/2023)
 What's New
 ^^^^^^^^^^
 
-This release adds support for FSDP, introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+This release adds support for introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 .. list-table::
    :widths: auto
@@ -33,66 +33,51 @@ This release adds support for FSDP, introduces new features, performance optimiz
      - Details
      - Instances
 
-   * - Added initial FSDP support for Training (Experimental) in PyTorch Neuron (``torch-neuronx``)
-     - * Iniitial support includes MiCS (Minimize Communication Scale) in FSDP. See more at :ref:`torch-neuronx-rn`    
-     - Trn1/Trn1n
 
-   * - New sample scripts for inference
-     - * This release adds new sample scripts for deploying Stable Diffusion 2.1 and other models with ``torch-neuronx``, Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+   * - Computer Vision(including Stable Diffusion 2.1) Model scripts for Inference 
+     - * This release adds new sample scripts for deploying Stable Diffusion 2.1 and other Vision models with ``torch-neuronx``, Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
      - Trn1, Inf2
 
-   * - Added Profiling support in PyTorch Neuron for Inference (``torch-neuronx``)  
+   * - Profiling support in PyTorch Neuron for Inference (``torch-neuronx``)  
      - * See more at :ref:`torch-neuronx-profiling-with-tb`
      - Inf2, Trn1/Trn1n
   
-   * -  Added support for the HuggingFace generate in transfomers-neuronx 
-     - * See more at :ref:`transformers-neuronx-rn`
-     - Inf2, Trn1/Trn1n
-   
-   * -  Added support for Model Serialization in transfomers-neuronx 
-     - * Support for model saving, loading, and weight swapping. See more at :ref:`transformers-neuronx-rn`
-     - Inf2, Trn1/Trn1n
-   
-   * -  Performance improvements in transfomers-neuronx 
-     - * Improved performance by removing unnecessary KV-cache tensor resetting. 
-       * Improved prompt context encoding performance (``OPT`_ , `GPT2`_``) 
+   * - New Features and Performance Enhancements in transformers-neuronx
+     - * Support for the HuggingFace generate function
+       * Model Serialization support including model saving, loading, and weight swapping
+       * Performance optimizations by removing unnecessary KV-cache tensor resetting.
+       * Improved prompt context encoding performance for OPT and GPT2 models.
        * See more at :ref:`transformers-neuronx-rn`
      - Inf2, Trn1/Trn1n
 
-   * - Support models larger than 2GB in TensorFlow 2.x Neuron 
+   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuronx``) 
      - * See :ref:`tensorflow-neuronx-special-flags` for details. (``tensorflow-neuronx``) 
-       * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
+     - Trn1/Trn1n, Inf2, Inf1
+
+   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuron``) 
+     - * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
      - Trn1/Trn1n, Inf2, Inf1
   
-   * - Added new operators and options in Compiler. (``neuronx-cc``)
-     - * Added support for the HLO operator ``BitcastConvertType`` and ``TopK`` operator.
-       * Added two new ``model-type`` option arguments for model specific optimizations.
-       * See more at :ref:`neuronx-cc-rn`
-     - Inf2, Trn1/Trn1n
-
-   * - Support for using multiple GPSIMD Cores in Neuron Custom C++ Operators
-     - * See :ref:`custom-ops-api-ref-guide`
+   * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
+     - * Support for using multiple GPSIMD Cores in Custom C++ Operators
        * Updated package name to ``aws-neuronx-gpsimd-customop-lib``
+       * See :ref:`custom-ops-api-ref-guide`
      - Trn1/Trn1n
    
-   * - Runtime Support for Weight Deduplication across multiple instances of same model. 
+   * - Weight Deduplication Feature (Inf1) 
      - * Support for Sharing weights when loading multiple instance versions of the same model on different NeuronCores.
        * See more at :ref:`nrt-configuration`
-     - Trn1, Inf2
+     - Inf1
 
-   * - Added new Neuron Collectives benchmarking tool, ``nccom-test``  
+   * - ``nccom-test``- Collective Communication Benchmarking Tool
      - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
-     - Trn1, Inf2
-
-   * - Expanded support for Neuron profiling to include runtime setup/teardown times
-     - * Expanded support for Neuron profiling to include runtime setup/teardown times and collapsed execution of NeuronCore engines and DMA.  See :ref:`neuron-tensorboard-rn` for more details.
      - Trn1, Inf2
   
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1, Inf2, Inf1
 
-   * - Release included packages
+   * - Release Artifacts
      - * see :ref:`neuron-release-content`
      - Trn1, Inf2, Inf1
 
