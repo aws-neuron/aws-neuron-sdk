@@ -8,15 +8,10 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.9.0-whatsnew:
-
-Neuron 2.9.1 (04/19/2023)
--------------------------
-Minor patch release to add support for deserialized torchscript model compilation and support for multi-node training in EKS. Fixes included in this release are critical to enable training
-and deploying models with Amazon Sagemaker or Amazon EKS.
+.. _neuron-2.10.0-whatsnew:
 
 
-Neuron 2.9.0 (03/28/2023)
+Neuron 2.10.0 (04/28/2023)
 -------------------------
 
 .. contents:: Table of contents
@@ -26,7 +21,7 @@ Neuron 2.9.0 (03/28/2023)
 What's New
 ^^^^^^^^^^
 
-This release adds support for EC2 Trn1n instances, introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+This release adds support for FSDP, introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 .. list-table::
    :widths: auto
@@ -38,46 +33,61 @@ This release adds support for EC2 Trn1n instances, introduces new features, perf
      - Details
      - Instances
 
-   * - Support for EC2 Trn1n instances
-     - * Updated Neuron Runtime for Trn1n instances     
-      
-       * Overall documentation update to include Trn1n instances
-     - Trn1n
+   * - Added initial FSDP support for Training (Experimental) in PyTorch Neuron (``torch-neuronx``)
+     - * Iniitial support includes MiCS (Minimize Communication Scale) in FSDP. See more at :ref:`torch-neuronx-rn`    
+     - Trn1/Trn1n
 
-   * - New Analyze API in PyTorch Neuron (``torch-neuronx``)  
-     - * A new API that return list of supported and unsupported PyTorch operators for a model. See :ref:`torch_neuronx_analyze_api`
+   * - New sample scripts for inference
+     - * This release adds new sample scripts for deploying Stable Diffusion 2.1 and other models with ``torch-neuronx``, Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+     - Trn1, Inf2
+
+   * - Added Profiling support in PyTorch Neuron for Inference (``torch-neuronx``)  
+     - * See more at :ref:`torch-neuronx-profiling-with-tb`
+     - Inf2, Trn1/Trn1n
+  
+   * -  Added support for the HuggingFace generate in transfomers-neuronx 
+     - * See more at :ref:`transformers-neuronx-rn`
+     - Inf2, Trn1/Trn1n
+   
+   * -  Added support for Model Serialization in transfomers-neuronx 
+     - * Support for model saving, loading, and weight swapping. See more at :ref:`transformers-neuronx-rn`
+     - Inf2, Trn1/Trn1n
+   
+   * -  Performance improvements in transfomers-neuronx 
+     - * Improved performance by removing unnecessary KV-cache tensor resetting. 
+       * Improved prompt context encoding performance (``OPT`_ , `GPT2`_``) 
+       * See more at :ref:`transformers-neuronx-rn`
+     - Inf2, Trn1/Trn1n
+
+   * - Support models larger than 2GB in TensorFlow 2.x Neuron 
+     - * See :ref:`tensorflow-neuronx-special-flags` for details. (``tensorflow-neuronx``) 
+       * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
+     - Trn1/Trn1n, Inf2, Inf1
+  
+   * - Added new operators and options in Compiler. (``neuronx-cc``)
+     - * Added support for the HLO operator ``BitcastConvertType`` and ``TopK`` operator.
+       * Added two new ``model-type`` option arguments for model specific optimizations.
+       * See more at :ref:`neuronx-cc-rn`
+     - Inf2, Trn1/Trn1n
+
+   * - Support for using multiple GPSIMD Cores in Neuron Custom C++ Operators
+     - * See :ref:`custom-ops-api-ref-guide`
+       * Updated package name to ``aws-neuronx-gpsimd-customop-lib``
+     - Trn1/Trn1n
+   
+   * - Runtime Support for Weight Deduplication across multiple instances of same model. 
+     - * Support for Sharing weights when loading multiple instance versions of the same model on different NeuronCores.
+       * See more at :ref:`nrt-configuration`
+     - Trn1, Inf2
+
+   * - Added new Neuron Collectives benchmarking tool, ``nccom-test``  
+     - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
+     - Trn1, Inf2
+
+   * - Expanded support for Neuron profiling to include runtime setup/teardown times
+     - * Expanded support for Neuron profiling to include runtime setup/teardown times and collapsed execution of NeuronCore engines and DMA.  See :ref:`neuron-tensorboard-rn` for more details.
      - Trn1, Inf2
   
-   * - Support models that are larger than 2GB in PyTorch Neuron (``torch-neuron``) on Inf1
-     - * See ``separate_weights`` flag to :func:`torch_neuron.trace` to support models that are larger than 2GB
-     - Inf1
-
-
-   * - Performance Improvements
-     - * Up to 10% higher throughput when training GPT3 6.7B model on multi-node
-     - Trn1
-
-
-   * - Dynamic Batching support in TensorFlow 2.x Neuron (``tensorflow-neuronx``)
-     - * See :ref:`tensorflow-neuronx-special-flags` for details.
-     - Trn1, Inf2
-
-
-
-   * - NeuronPerf support for Trn1/Inf2 instances
-     - * Added Trn1/Inf2 support for PyTorch Neuron (``torch-neuronx``) and TensorFlow 2.x Neuron (``tensorflow-neuronx``)
-     - Trn1, Inf2
-
-   * - Hierarchical All-Reduce and Reduce-Scatter collective communication
-     - * Added support for hierarchical All-Reduce and Reduce-Scatter in Neuron Runtime to enable better scalability of distributed workloads .
-     - Trn1, Inf2
-  
-   * - New Tutorials added
-     - * :ref:`Added tutorial to fine-tune T5 model <torch-hf-t5-finetune>`
-      
-       * Added tutorial to demonstrate use of Libtorch with PyTorch Neuron (``torch-neuronx``) for inference :ref:`[html] <pytorch-tutorials-libtorch>`
-     - Trn1, Inf2
-
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1, Inf2, Inf1
@@ -170,17 +180,21 @@ Trn1/Trn1n and Inf2 only packages
      - Package/s
      - Details
 
+
+
    * - PyTorch Neuron
      - Trn1/Trn1n, Inf2
      - * ``torch-neuronx`` (.whl)
      - * :ref:`torch-neuronx-rn`
 
        * :ref:`pytorch-neuron-supported-operators`
+       
 
    * - TensorFlow Neuron
      - Trn1/Trn1n, Inf2
      - * ``tensorflow-neuronx`` (.whl)
      - * :ref:`tensorflow-neuronx-release-notes`
+
 
    * - Neuron Compiler (Trn1/Trn1n, Inf2 only)
      - Trn1/Trn1n, Inf2
@@ -198,7 +212,7 @@ Trn1/Trn1n and Inf2 only packages
    * - Neuron Custom C++ Operators
      - Trn1/Trn1n, Inf2
   
-     - * ``aws-neuronx-gpsimd-customop-lib`` (.deb, .rpm)
+     - * ``aws-neuronx-gpsimd-customop`` (.deb, .rpm)
   
        * ``aws-neuronx-gpsimd-tools`` (.deb, .rpm)
   
@@ -207,11 +221,12 @@ Trn1/Trn1n and Inf2 only packages
        * :ref:`gpsimd-customop-tools-rn`
 
 
-   * - Transformers Neuron
+   * - ``transformers-neuronx``
      - Trn1/Trn1n, Inf2
        
      - * GitHub repository `(link) <https://github.com/aws-neuron/transformers-neuronx>`_
-     - * :ref:`transformers-neuronx-rn`
+
+     - * `Release Notes <https://github.com/aws-neuron/transformers-neuronx/blob/master/releasenotes.md>`_
 
 
 .. note::
