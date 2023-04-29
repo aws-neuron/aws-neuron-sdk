@@ -69,7 +69,7 @@ This release introduces new features, performance optimizations, minor enhanceme
        * See more at :ref:`nrt-configuration`
      - Inf1
 
-   * - ``nccom-test``- Collective Communication Benchmarking Tool
+   * - ``nccom-test`` - Collective Communication Benchmarking Tool
      - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
      - Trn1, Inf2
   
