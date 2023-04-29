@@ -29,10 +29,8 @@ Training support:
 
 - Added an improved Neuron-optimized AdamW optimizer implementation.
 - Added an improved Neuron-optimized :class:`torch.nn.Dropout` implementation.
-
-  - Added an assertion when the :class:`torch.nn.Dropout` argument
-    ``inplace=True`` during training. This is currently not supported on Neuron.
-
+- Added an assertion when the :class:`torch.nn.Dropout` argument
+  ``inplace=True`` during training. This is currently not supported on Neuron.
 - Added XLA lowering for ``aten::count_nonzero``
 
 Inference support:
