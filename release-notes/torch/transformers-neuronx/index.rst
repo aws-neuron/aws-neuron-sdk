@@ -47,7 +47,7 @@ Resolved Issues
 Incorrect `GPT-J`_ ``amp_callback`` import
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed the `GPT-J`_ demo now imports the correct ``amp_callback`` function.
+Fixed the `GPT-J`_ demo to import the correct ``amp_callback`` function.
 
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

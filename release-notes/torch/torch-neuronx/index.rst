@@ -1,4 +1,3 @@
-.. |FSDP| replace:: :class:`~torch.distributed.fsdp.FullyShardedDataParallel`
 .. |Trn1| replace:: :ref:`Trn1 <aws-trn1-arch>`
 .. |Inf2| replace:: :ref:`Inf2 <aws-inf2-arch>`
 
@@ -35,9 +34,6 @@ Training support:
     ``inplace=True`` during training. This is currently not supported on Neuron.
 
 - Added XLA lowering for ``aten::count_nonzero``
-- Added initial |FSDP| (FSDP) support.
-- Added MiCS (Minimize Communication Scale) support in FSDP. Supported
-  partition sizes are 2,8,32 and multiples of 32.
 
 Inference support:
 
@@ -81,13 +77,6 @@ consumed or produced ``torch.bfloat16`` values.
 
 Known Issues and Limitations (Training)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-|FSDP| does not support all features
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- |FSDP| checkpoint consolidation not yet supported.
-- Restoration of random states from Activation checkpoints only works with the
-  new Neuron dropout operator implementation.
 
 Memory leaking in ``glibc``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
