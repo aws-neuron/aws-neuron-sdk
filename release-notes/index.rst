@@ -21,7 +21,7 @@ Neuron 2.10.0 (05/01/2023)
 What's New
 ^^^^^^^^^^
 
-This release adds support for introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+This release introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 .. list-table::
    :widths: auto
