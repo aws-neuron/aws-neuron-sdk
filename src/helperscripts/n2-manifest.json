@@ -57,7 +57,7 @@
       {"name":"tensorflow-neuronx","component":"TensorFlow","category":"tensorflow","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"torch-neuron","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"torch-neuronx","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
-      {"name":"transformers-neuronx","component":"Transformers","category":"transformers","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
+      {"name":"transformers-neuronx","component":"Transformers Neuron","category":"transformers-neuronx","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"mxnet_neuron","component":"MXNet","category":"mxnet","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"mx_neuron","component":"MXNet","category":"mxnet","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"aws-neuronx-dkms","component":"Driver","category":"driver","package_type":"os","use_cases":["inference","training"],"pin_major":"true"},
