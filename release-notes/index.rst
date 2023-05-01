@@ -36,7 +36,7 @@ This release introduces new features, performance optimizations, minor enhanceme
 
    * - Computer Vision(including Stable Diffusion 2.1) Model scripts for Inference 
      - * This release adds new sample scripts for deploying Stable Diffusion 2.1 and other Vision models with ``torch-neuronx``, Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
-     - Trn1, Inf2
+     - Inf2, Trn1/Trn1n
 
    * - Profiling support in PyTorch Neuron for Inference (``torch-neuronx``)  
      - * See more at :ref:`torch-neuronx-profiling-with-tb`
@@ -60,7 +60,6 @@ This release introduces new features, performance optimizations, minor enhanceme
   
    * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
      - * Support for using multiple GPSIMD Cores in Custom C++ Operators
-       * Updated package name to ``aws-neuronx-gpsimd-customop-lib``
        * See :ref:`custom-ops-api-ref-guide`
      - Trn1/Trn1n
    
@@ -273,7 +272,7 @@ Inf1 only packages
 .. _latest-neuron-release-artifacts:
 
 Release Artifacts
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 Trn1 packages
 
