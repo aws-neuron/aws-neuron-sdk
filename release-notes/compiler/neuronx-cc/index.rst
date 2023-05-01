@@ -7,6 +7,18 @@ Neuron Compiler (``neuronx-cc``) release notes
    :local:
    :depth: 2
 
+Neuron Compiler [2.x.x]
+-----------------------------
+Date: 04/28/2023
+
+* This release introduces a new ``model-type`` option argument: ``unet-inference``.
+  This option instructs the compiler to perform model-specific optimizations that produce executable models with improved performance
+  on the specified target instance.
+  
+* The new compiler option ``distribution-strategy`` can be used to better support models using the PyTorch 2.x Fully Sharded Data Parallel (FSDP) APIs.
+
+* Added support for the HLO operator ``BitcastConvertType`` and also added support for ``TopK`` (sampling mode) operator.
+
 Neuron Compiler [2.5.0.28]
 -----------------------------
 Date: 03/28/2023
@@ -120,6 +132,8 @@ The list of supported operators can also be retrieved from the command line usin
 | Batchnormgrad           |                                           |
 +-------------------------+-------------------------------------------+
 | Batchnorminference      |                                           |
++-------------------------+-------------------------------------------+
+| BitcastConvertType      |                                           |
 +-------------------------+-------------------------------------------+
 | Broadcast               |                                           |
 +-------------------------+-------------------------------------------+
