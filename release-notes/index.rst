@@ -52,11 +52,11 @@ This release introduces new features, performance optimizations, minor enhanceme
 
    * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuronx``) 
      - * See :ref:`tensorflow-neuronx-special-flags` for details. (``tensorflow-neuronx``) 
-     - Trn1/Trn1n, Inf2, Inf1
+     - Trn1/Trn1n, Inf2
 
    * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuron``) 
      - * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
-     - Trn1/Trn1n, Inf2, Inf1
+     - Inf1
   
    * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
      - * Support for using multiple GPSIMD Cores in Custom C++ Operators
@@ -71,15 +71,15 @@ This release introduces new features, performance optimizations, minor enhanceme
 
    * - ``nccom-test`` - Collective Communication Benchmarking Tool
      - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
-     - Trn1, Inf2
+     - Trn1/Trn1n , Inf2
   
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
-     - Trn1, Inf2, Inf1
+     - Trn1/Trn1n , Inf2, Inf1
 
    * - Release Artifacts
-     - * see :ref:`neuron-release-content`
-     - Trn1, Inf2, Inf1
+     - * see :ref:`latest-neuron-release-artifacts`
+     - Trn1/Trn1n , Inf2, Inf1
 
 For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
@@ -270,10 +270,24 @@ Inf1 only packages
        * :ref:`neuron-supported-operators`
 
 
-Release Content
-~~~~~~~~~~~~~~~
+.. _latest-neuron-release-artifacts:
 
-* :ref:`neuron-release-content`
+Release Artifacts
+~~~~~~~~~~~~~~~~~
+
+Trn1 packages
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.1
+
+Inf2 packages
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.1
+
+Inf1 packages
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.9.1
+
+
 
 
 Previous Releases
