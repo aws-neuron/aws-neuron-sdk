@@ -2,14 +2,14 @@
 
 Neuron Compiler (``neuronx-cc``) release notes
 ==============================================
-
 .. contents:: Table of Contents
    :local:
+
    :depth: 2
 
-Neuron Compiler [2.x.x]
+Neuron Compiler [2.6.0.19]
 -----------------------------
-Date: 04/28/2023
+Date: 05/01/2023
 
 * This release introduces a new ``model-type`` option argument: ``unet-inference``.
   This option instructs the compiler to perform model-specific optimizations that produce executable models with improved performance
