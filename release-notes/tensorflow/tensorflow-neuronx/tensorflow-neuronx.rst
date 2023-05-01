@@ -13,7 +13,17 @@ This document lists the release notes for the tensorflow-neuronx 2.x packages.
 
 Known Issues and Limitations - updated 02/24/2023
 
-tensorflow-neuronx 2.10 release [2.10.1.2]
+
+tensorflow-neuronx 2.x release [2.10.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 05/28/2023
+
+* Added support for tracing models larger than 2 GB through the environment variable ``NEURON_CC_FLAGS='--extract-weights INSTANCE_TYPE'`` for all trn1 and inf2 instance types.
+* tensorflow-neuronx now supports tensorflow 2.7, 2.8, and 2.9 (In addition to the already supported 2.10).
+* Neuron release 2.10 release will be the last release that will include support for tensorflow-neuronx version 2.7. Future Neuron releases will not include tensorflow-neuronx version 2.7.
+
+tensorflow-neuronx 2.10 release [2.9.1.2]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 03/28/2023
@@ -27,7 +37,7 @@ The following features are not included in this release:
 * Support for tracing models larger than 2 GB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tensorflow-neuronx 2.10 release [2.10.1.1]
+tensorflow-neuronx 2.10 release [2.9.1.1]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 2/24/2023
