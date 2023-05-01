@@ -16,7 +16,7 @@ New in the release:
 
 * Added new Neuron Collectives benchmarking tool, ``nccom-test``, to enable benchmarking sweeps on various Neuron Collective Communication operations.  See new nccom-test documentation under System Tools for more details.
 
-* Expanded support for Neuron profiling to include runtime setup/teardown times and collapsed exection of NeuronCore engines and DMA.  See Tensorboard release notes and tutorial for more details. 
+* Expanded support for Neuron profiling to include runtime setup/teardown times and collapsed execution of NeuronCore engines and DMA.  See Tensorboard release notes and tutorial for more details. 
 
 
 Neuron Tools  [2.9.5.0]
