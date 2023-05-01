@@ -74,7 +74,8 @@
       {"name":"libnrt.so","component":"Runtime Library","category":"libnrt","package_type":"os","use_cases":["inference"],"pin_major":"false"},
       {"name":"torch_xla","component":"PyTorch","category":"helper-lib","package_type":"pip","use_cases":["inference","training"],"pin_major":"false"},
       {"name":"aws-neuronx-gpsimd-customop","component":"CustomOps","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
-      {"name":"aws-neuronx-gpsimd-tools","component":"CustomOps Tools","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"}
+      {"name":"aws-neuronx-gpsimd-tools","component":"CustomOps Tools","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
+      {"name":"aws-neuronx-oci-hook","component":"OCI","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"}
     ],
     "neuron_releases": [
       {"neuron_version":"2.10.0", "packages": [
