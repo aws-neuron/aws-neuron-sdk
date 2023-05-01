@@ -18,7 +18,7 @@ Updated : 04/29/2022
 Neuron Driver release [2.9.4.0]
 --------------------------------
 
-Date: 04/28/2023
+Date: 05/01/2023
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
