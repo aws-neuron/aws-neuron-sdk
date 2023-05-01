@@ -10,7 +10,6 @@ What's New
 .. _latest-neuron-release:
 .. _neuron-2.9.0-whatsnew:
 
-
 Neuron 2.9.1 (04/19/2023)
 -------------------------
 Minor patch release to add support for deserialized torchscript model compilation and support for multi-node training in EKS. Fixes included in this release are critical to enable training
@@ -171,21 +170,17 @@ Trn1/Trn1n and Inf2 only packages
      - Package/s
      - Details
 
-
-
    * - PyTorch Neuron
      - Trn1/Trn1n, Inf2
      - * ``torch-neuronx`` (.whl)
      - * :ref:`torch-neuronx-rn`
 
        * :ref:`pytorch-neuron-supported-operators`
-       
 
    * - TensorFlow Neuron
      - Trn1/Trn1n, Inf2
      - * ``tensorflow-neuronx`` (.whl)
      - * :ref:`tensorflow-neuronx-release-notes`
-
 
    * - Neuron Compiler (Trn1/Trn1n, Inf2 only)
      - Trn1/Trn1n, Inf2
@@ -212,12 +207,11 @@ Trn1/Trn1n and Inf2 only packages
        * :ref:`gpsimd-customop-tools-rn`
 
 
-   * - ``transformers-neuronx``
+   * - Transformers Neuron
      - Trn1/Trn1n, Inf2
        
      - * GitHub repository `(link) <https://github.com/aws-neuron/transformers-neuronx>`_
-
-     - * `Release Notes <https://github.com/aws-neuron/transformers-neuronx/blob/master/releasenotes.md>`_
+     - * :ref:`transformers-neuronx-rn`
 
 
 .. note::

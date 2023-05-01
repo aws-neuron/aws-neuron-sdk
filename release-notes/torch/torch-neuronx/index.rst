@@ -1,3 +1,6 @@
+.. |Trn1| replace:: :ref:`Trn1 <aws-trn1-arch>`
+.. |Inf2| replace:: :ref:`Inf2 <aws-inf2-arch>`
+
 .. _torch-neuronx-rn:
 
 PyTorch Neuron (``torch-neuronx``) release notes
@@ -7,8 +10,141 @@ PyTorch Neuron (``torch-neuronx``) release notes
    :local:
    :depth: 1
 
-PyTorch Neuron for Trainium is a software package that enables PyTorch
-users to train their models on Trainium.
+PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
+users to train, evaluate, and perform inference on second-generation Neuron
+hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
+
+
+Release [1.13.0.1.7.0]
+----------------------
+Date: 04/xx/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- Added an improved Neuron-optimized AdamW optimizer implementation.
+- Added an improved Neuron-optimized :class:`torch.nn.Dropout` implementation.
+- Added an assertion when the :class:`torch.nn.Dropout` argument
+  ``inplace=True`` during training. This is currently not supported on Neuron.
+- Added XLA lowering for ``aten::count_nonzero``
+
+Inference support:
+
+- Added profiling support for models compiled with :func:`torch_neuronx.trace`
+- Added torch_neuronx.DataParallel for models compiled with :func:`torch_neuronx.trace`
+
+
+Resolved Issues (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unexpected behavior with :class:`torch.autocast`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed an issue where :class:`torch.autocast` did not correctly autocast
+when using ``torch.bfloat16``
+
+
+Resolved Issues (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Error when using the original model after ``torch_neuronx.trace``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed an issue where model parameters would be moved to the Neuron ``'xla'``
+device during :func:`torch_neuronx.trace` and would no longer be available to
+execute on the original device. This made it more difficult to compare Neuron
+models against CPU since previously this would require manually moving
+parameters back to CPU.
+
+Error when using the ``xm.xla_device()`` object followed by using ``torch_neuronx.trace``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed an issue where XLA device execution and :func:`torch_neuronx.trace` could
+not be performed in the same python process.
+
+Error when executing ``torch_neuronx.trace`` with ``torch.bfloat16`` input/output tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed an issue where :func:`torch_neuronx.trace` could not compile models which
+consumed or produced ``torch.bfloat16`` values.
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX``.
+
+Slower BERT bf16 Phase 1 Single Node Performance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As of the Neuron 2.9.0 release, :ref:`BERT phase 1 pretraining <hf-bert-pretraining-tutorial>`
+performance has regressed by approximately 8-9% when executed on a *single
+node* only (i.e. just one ``trn1.32xlarge`` instance).
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Convolution is not supported during training.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Lower throughput for BERT-large training on AL2 instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We see a performance drop of roughly 5-10% for BERT model training on AL2
+instances. This is because of the increase in time required for tracing the
+model.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when Neuron encounters an operation that it does not support during
+:func:`torch_neuronx.trace`, this will cause an error. The intended behavior
+when tracing is to automatically partition the model into separate subgraphs
+that run on NeuronCores and subgraphs that run on CPU. See
+:ref:`pytorch-neuron-supported-operators` for a list of supported operators.
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
 
 
 Release [1.13.0.1.6.1]
