@@ -34,11 +34,14 @@ This release introduces new features, performance optimizations, minor enhanceme
      - Instances
 
 
-   * - Computer Vision(including Stable Diffusion 2.1) Model scripts for Inference 
-     - * This release adds new sample scripts for deploying Stable Diffusion 2.1 and other Vision models with ``torch-neuronx``, Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+   * - Computer Vision Model scripts for Inference 
+     - * Added Stable Diffusion 2.1 model script for Text to Image Generation
+       * Added VGG model script for Image Classification Task
+       * Added UNet model script for Image Segmentation Task
+       * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
      - Inf2, Trn1/Trn1n
 
-   * - Profiling support in PyTorch Neuron for Inference (``torch-neuronx``)  
+   * - Profiling support in PyTorch Neuron(``torch-neuronx``) for Inference with TensorBoard
      - * See more at :ref:`torch-neuronx-profiling-with-tb`
      - Inf2, Trn1/Trn1n
   
@@ -46,7 +49,7 @@ This release introduces new features, performance optimizations, minor enhanceme
      - * Support for the HuggingFace generate function
        * Model Serialization support including model saving, loading, and weight swapping
        * Performance optimizations by removing unnecessary KV-cache tensor resetting.
-       * Improved prompt context encoding performance for OPT and GPT2 models.
+       * Improved prompt context encoding performance.
        * See more at :ref:`transformers-neuronx-rn`
      - Inf2, Trn1/Trn1n
 
