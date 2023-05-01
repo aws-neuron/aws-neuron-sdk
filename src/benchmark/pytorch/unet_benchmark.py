@@ -1,13 +1,12 @@
 import torch
-import torch.neuron
-
 import neuronperf as npf
 import neuronperf.torch
 
 # Add to these lists or change as needed
-model_name = "resnet50"
-batch_sizes = [1, 6]
-
+model_name = "UNet"
+batch_sizes = [1, 4]
+n_models = [1, 2]
+workers_per_model = [1, 2] # optimized for latency or throughput
 
 def get_batch(batch_size):
     return torch.zeros([batch_size, 3, 224, 224], dtype=torch.float32)
@@ -19,7 +18,7 @@ if __name__ == "__main__":
 
     # Benchmark
     print("Benchmarking {}".format(filename))
-    reports = npf.torch.benchmark(filename, inputs)
+    reports = npf.torch.benchmark(filename, inputs, n_models=n_models, workers_per_model=workers_per_model) 
 
     # View and save results
     print("======== {} ========".format(filename))
