@@ -15,9 +15,9 @@ users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
 
-Release [1.13.0.1.7.0]
+Release [1.13.1.1.7.0]
 ----------------------
-Date: 04/xx/2023
+Date: 05/01/2023
 
 Summary
 ~~~~~~~
