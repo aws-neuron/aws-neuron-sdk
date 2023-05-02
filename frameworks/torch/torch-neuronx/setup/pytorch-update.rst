@@ -5,7 +5,7 @@ Update to latest PyTorch Neuron  (``torch-neuronx``)
 
 .. tab-set::
 
-    .. tab-item:: PyTorch 1.13.0
+    .. tab-item:: PyTorch 1.13.1
 
         .. tab-set::
 
