@@ -8,6 +8,92 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.9.0-whatsnew:
+
+
+Neuron 2.9.1 (04/19/2023)
+-------------------------
+Minor patch release to add support for deserialized torchscript model compilation and support for multi-node training in EKS. Fixes included in this release are critical to enable training
+and deploying models with Amazon Sagemaker or Amazon EKS.
+
+
+Neuron 2.9.0 (03/28/2023)
+-------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 3
+
+What's New
+^^^^^^^^^^
+
+This release adds support for EC2 Trn1n instances, introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+     - Instances
+
+   * - Support for EC2 Trn1n instances
+     - * Updated Neuron Runtime for Trn1n instances     
+      
+       * Overall documentation update to include Trn1n instances
+     - Trn1n
+
+   * - New Analyze API in PyTorch Neuron (``torch-neuronx``)  
+     - * A new API that return list of supported and unsupported PyTorch operators for a model. See :ref:`torch_neuronx_analyze_api`
+     - Trn1, Inf2
+  
+   * - Support models that are larger than 2GB in PyTorch Neuron (``torch-neuron``) on Inf1
+     - * See ``separate_weights`` flag to :func:`torch_neuron.trace` to support models that are larger than 2GB
+     - Inf1
+
+
+   * - Performance Improvements
+     - * Up to 10% higher throughput when training GPT3 6.7B model on multi-node
+     - Trn1
+
+
+   * - Dynamic Batching support in TensorFlow 2.x Neuron (``tensorflow-neuronx``)
+     - * See :ref:`tensorflow-neuronx-special-flags` for details.
+     - Trn1, Inf2
+
+
+
+   * - NeuronPerf support for Trn1/Inf2 instances
+     - * Added Trn1/Inf2 support for PyTorch Neuron (``torch-neuronx``) and TensorFlow 2.x Neuron (``tensorflow-neuronx``)
+     - Trn1, Inf2
+
+   * - Hierarchical All-Reduce and Reduce-Scatter collective communication
+     - * Added support for hierarchical All-Reduce and Reduce-Scatter in Neuron Runtime to enable better scalability of distributed workloads .
+     - Trn1, Inf2
+  
+   * - New Tutorials added
+     - * :ref:`Added tutorial to fine-tune T5 model <torch-hf-t5-finetune>`
+      
+       * Added tutorial to demonstrate use of Libtorch with PyTorch Neuron (``torch-neuronx``) for inference :ref:`[html] <pytorch-tutorials-libtorch>`
+     - Trn1, Inf2
+
+   * - Minor enhancements and bug fixes.
+     - * See :ref:`components-rn`
+     - Trn1, Inf2, Inf1
+
+   * - Release included packages
+     - * see :ref:`neuron-release-content`
+     - Trn1, Inf2, Inf1
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+
+
+
 .. _neuron-2.8.0-whatsnew:
 
 Neuron 2.8.0 (02/24/2023)
