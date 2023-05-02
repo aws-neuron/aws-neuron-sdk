@@ -49,7 +49,7 @@ This release introduces new features, performance optimizations, minor enhanceme
      - * Support for the HuggingFace generate function. 
        * Model Serialization support including model saving, loading, and weight swapping
        * Improved prompt context encoding performance.
-       * See :ref:transformers_neuronx_readme for examples and usage
+       * See :ref:`transformers_neuronx_readme` for examples and usage
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
