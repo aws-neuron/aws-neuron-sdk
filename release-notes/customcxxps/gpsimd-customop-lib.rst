@@ -3,6 +3,14 @@
 Neuron Custom C++ Library Release Notes
 ========================================
 
+aws-neuronx-gpsimd-customop-lib [0.3]
+-------------------------------------
+
+Date: 04/28/2023
+
+* Add initial support for using Multiple GPSIMD Cores for Custom C++ Operators
+* Package name was changed to ``aws-neuronx-gpsimd-customop-lib``
+
 aws-neuronx-gpsimd-customop [0.1]
 ---------------------------------
 

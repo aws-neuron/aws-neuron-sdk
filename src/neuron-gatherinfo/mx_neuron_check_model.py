@@ -78,7 +78,7 @@ class neuron_parser:
     import mxnet as mx
     if mx.__version__ != "1.5.1":
       try:
-        import mxnetneuron as mxn
+        import mx_neuron as mxn
       except:
         raise "Please install mxnetneuron package."
     self.framework = 'MXNET'

@@ -33,6 +33,22 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.13.6.0]
+---------------------------------
+Date: 05/01/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added support for internal Neuron Compiler change, Queue Set Instances, which leads to reduced NEFF footprints on Neuron Devices.  In some cases, the reduction is as much as 60% smaller DMA ring size. 
+
+Bug fixes
+^^^^^^^^^
+
+* Fixed a rare fabric deadlock scenario (hang) in NeuronCore v2 related to notification events.
+* Ensure tensor store writes are complete before synchronization event is set. 
+
+
 Neuron Runtime Library [2.12.23.0]
 ---------------------------------
 Date: 04/19/2023

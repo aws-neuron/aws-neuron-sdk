@@ -89,7 +89,16 @@ via the environment variable ``NEURON_CC_FLAGS``.
     ``NEURON_CC_FLAGS='--dynamic-batch-size'`` A flag to allow Neuron graphs to
     consume variable sized batches of data. Dynamic sizing is restricted to the
     0th dimension of a tensor.
--   **extract-weights (EXPERIMENTAL):** not supported yet for ```tensorflow-neuronx```
+-   **extract-weights (EXPERIMENTAL):** example usage - 
+    ``NEURON_CC_FLAGS='--extract-weights trn1.2xlarge'`` will reduce the compiled
+    model's protobuf size by taking the weights out of the protobuf.
+    Useful for compiling large models that would exceed the 2GB protobuf
+    size limit. This feature is experimental. Model performance is not
+    guaranteed and the flag does not work in combination with
+    ``--neuroncore-pipeline-cores``, ``--dynamic-batch-size``, models with
+    multiple NEFFs, and models that are 16GB or greater. 
+    Compiles models for different neuron instances depending on the instance type passed.
+    Supports all trn1 and inf2 instance types except for trn1n.
 
 Returns
 -------

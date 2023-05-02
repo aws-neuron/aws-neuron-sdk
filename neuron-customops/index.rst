@@ -67,6 +67,7 @@ Neuron Custom C++ Operators [Experimental]
       :open:
 
       * :ref:`neuronx-customop-mlp-tutorial`
+      * :ref:`neuronx-customop-mlp-perf`
 
 
 .. dropdown::  Misc

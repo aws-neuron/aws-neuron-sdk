@@ -11,3 +11,4 @@ Tutorials  (``torch-neuronx``)
     /frameworks/torch/torch-neuronx/tutorials/training/megatron_lm_gpt
     /frameworks/torch/torch-neuronx/tutorials/training/distributed_data_parallel
     /neuron-customops/tutorials/customop-mlp-training
+    /neuron-customops/tutorials/customop-mlp-perf-opt

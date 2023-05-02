@@ -15,6 +15,25 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.9.4.0]
+--------------------------------
+
+Date: 05/01/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added dma_buf support, which is needed for future EFA implementations in the Linux kernel. 
+* Added new IOCTL to get Neuron Device BDF (used by Neuron Runtime)
+* Added optional support for sysfs notify (off by default). See Neuron Sysfs documentation (under Neuron System Tools) for more details. 
+
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed max DMA queue size constant to be the correct size - previous incorrect sizing had potential to lead to DMA aborts (execution timeout). 
+
+
 Neuron Driver release [2.8.4.0]
 --------------------------------
 

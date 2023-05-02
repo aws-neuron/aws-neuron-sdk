@@ -57,15 +57,12 @@ configure Neuron Runtime behavior.
      - TRUE or FALSE
      - FALSE
      - 2.0+
-
-.. 
-    Commented out this variable - we will change the name in 2.8
-    * - ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS``
-      - Share weights when loading multiple instance versions of the same model on different NeuronCores
-      - Boolean
-      - TRUE or FALSE
-      - FALSE
-      - 2.11+
+   * - ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS``
+     - Share weights when loading multiple instance versions of the same model on different NeuronCores
+     - Boolean
+     - TRUE or FALSE
+     - FALSE
+     - 2.11+
 
 
 NeuronCore Allocation
@@ -171,14 +168,13 @@ This option is off by default to avoid performance penalty during model load tim
  NEURON_RT_VALIDATE_HASH=false myapp2.py    # disables(default) model checksum validation while loading
  
  
-..  
-  Shared Weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
-  --------------------------------------------------------
-  By default, Neuron Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with Neuron Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
-  Note: the use of this flag requires the model to be loaded with the multi-instance feature.
+Shared Weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
+--------------------------------------------------------
+By default, Neuron Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with Neuron Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
 
-  ::
+Note: the use of this flag requires the model to be loaded with the multi-instance feature.
 
-   NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE myapp1.py     # enables model weight sharing
-   NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=FALSE myapp2.py    # disables(default) model weight sharing
+::
 
+ NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE myapp1.py     # enables model weight sharing
+ NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=FALSE myapp2.py    # disables(default) model weight sharing

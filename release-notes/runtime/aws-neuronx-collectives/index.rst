@@ -10,6 +10,17 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :depth: 1
 
 
+Neuron Collectives [2.13.7.0]
+------------------------------
+Date: 05/01/2023
+
+New in this release
+
+* Added support for dma_buf - required for future EFA and Linux kernel updates. 
+* Reduced benign reporting of timeouts. Previous implementations reported “Timeout waiting for incoming connection” too frequently (log spam).
+
+
+
 Neuron Collectives [2.12.35.0]
 ------------------------------
 Date: 04/19/2023
