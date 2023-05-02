@@ -65,12 +65,13 @@ create a “run.sh” file and change it to executable:
         --do_eval \
         --source_prefix "summarize: " \
         --max_source_length 512 \
-        --per_device_train_batch_size 4 \
+        --per_device_train_batch_size 32 \
         --per_device_eval_batch_size 4 \
         --overwrite_output_dir \
         --pad_to_max_length \
         --max_steps 100 \
         --max_eval_samples 100 \
+        --gradient_accumulation_steps=32 \
         --output_dir /tmp/tst-summarization |& tee log_run
     else
         XLA_USE_BF16=1 python3 ./run_summarization.py \
@@ -81,10 +82,11 @@ create a “run.sh” file and change it to executable:
         --do_eval \
         --source_prefix "summarize: " \
         --max_source_length 512 \
-        --per_device_train_batch_size 4 \
+        --per_device_train_batch_size 32 \
         --per_device_eval_batch_size 4 \
         --overwrite_output_dir \
         --pad_to_max_length \
+        --gradient_accumulation_steps=32 \
         --output_dir /tmp/tst-summarization |& tee log_run
     fi
     EOF
@@ -210,12 +212,13 @@ create a “run\_2w.sh” file and change it to executable:
         --do_eval \
         --source_prefix "summarize: " \
         --max_source_length 512 \
-        --per_device_train_batch_size 4 \
+        --per_device_train_batch_size 32 \
         --per_device_eval_batch_size 4 \
         --overwrite_output_dir \
         --pad_to_max_length \
         --max_steps 100 \
         --max_eval_samples 100 \
+        --gradient_accumulation_steps=32 \
         --output_dir /tmp/tst-summarization |& tee log_run
     else
         XLA_USE_BF16=1 torchrun --nproc_per_node=2 ./run_summarization.py \
@@ -226,10 +229,11 @@ create a “run\_2w.sh” file and change it to executable:
         --do_eval \
         --source_prefix "summarize: " \
         --max_source_length 512 \
-        --per_device_train_batch_size 4 \
+        --per_device_train_batch_size 32 \
         --per_device_eval_batch_size 4 \
         --overwrite_output_dir \
         --pad_to_max_length \
+        --gradient_accumulation_steps=32 \
         --output_dir /tmp/tst-summarization |& tee log_run
     fi
     EOF
@@ -285,6 +289,7 @@ On a trn1-32xl machine, you can create a run_32w.sh on the terminal using the fo
         --pad_to_max_length \
         --max_steps 100 \
         --max_eval_samples 100 \
+        --gradient_accumulation_steps=11 \
         --output_dir /tmp/tst-summarization |& tee log_run
     else
         XLA_USE_BF16=1 torchrun --nproc_per_node=32 ./run_summarization.py \
@@ -299,6 +304,7 @@ On a trn1-32xl machine, you can create a run_32w.sh on the terminal using the fo
         --per_device_eval_batch_size 4 \
         --overwrite_output_dir \
         --pad_to_max_length \
+        --gradient_accumulation_steps=11 \
         --output_dir /tmp/tst-summarization |& tee log_run
     fi
     EOF

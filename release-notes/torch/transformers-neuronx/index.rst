@@ -23,9 +23,9 @@ Transformers Neuron for |Trn1|/|Inf2| is a software package that enables
 PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
-Release [x.x.x.x.x.x]
+Release [0.3.0]
 ----------------------
-Date: 04/xx/2023
+Date: 05/01/2023
 
 Summary
 ~~~~~~~
@@ -57,4 +57,5 @@ Incorrect output with HuggingFace |beam_search|
 
 When the HuggingFace |generate| method is configured to use |beam_search|, this
 can produce incorrect results for certain configurations. It is recommended to
-use other generation methods such as |sample| or |greedy_search|.
+use other generation methods such as |sample| or |greedy_search|. This will be
+fixed in a future Neuron release.

@@ -58,7 +58,10 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-hardware/inf2-arch',
                 'general/arch/neuron-hardware/inferentia2',
                 'general/arch/neuron-hardware/trainium',
-                'general/arch/neuron-hardware/neuron-core-v2'
+                'general/arch/neuron-hardware/neuron-core-v2',
+                'frameworks/torch/torch-neuronx/transformers-neuronx/readme',
+                'release-notes/torch/transformers-neuronx/index',
+                'tools/neuron-sys-tools/nccom-test'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
