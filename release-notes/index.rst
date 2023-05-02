@@ -34,7 +34,7 @@ This release introduces new features, performance optimizations, minor enhanceme
      - Instances
 
 
-   * - Computer Vision Model scripts for Inference 
+   * - Initial support for computer vision models inference
      - * Added Stable Diffusion 2.1 model script for Text to Image Generation
        * Added VGG model script for Image Classification Task
        * Added UNet model script for Image Segmentation Task
