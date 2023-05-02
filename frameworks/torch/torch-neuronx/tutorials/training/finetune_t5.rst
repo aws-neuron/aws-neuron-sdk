@@ -142,7 +142,8 @@ the model is trained. Once training is completed, a trained checkpoint
 would be saved. We can load the trained model and run the
 ``predict_with_generate`` to compute the final accuracy.
 
-To do so, in run_summarization.py, add the following before importing ``transformers``:
+To do so, in run_summarization.py, add the following before ``transformers`` get imported.
+This can be done by adding the below lines before all the ``imports``:
 
 .. code:: ipython3
 
@@ -286,7 +287,7 @@ On a trn1-32xl machine, you can create a run_32w.sh on the terminal using the fo
         --max_eval_samples 100 \
         --output_dir /tmp/tst-summarization |& tee log_run
     else
-        XLA_USE_BF16=1 torchrun --nproc_per_node=2 ./run_summarization.py \
+        XLA_USE_BF16=1 torchrun --nproc_per_node=32 ./run_summarization.py \
         --model_name_or_path t5-large \
         --dataset_name cnn_dailymail \
         --dataset_config "3.0.0" \

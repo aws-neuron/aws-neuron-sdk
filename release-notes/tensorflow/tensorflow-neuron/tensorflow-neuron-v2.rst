@@ -48,6 +48,15 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
 
+tensorflow-neuron 2.x release [2.10.0.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 05/01/2023
+
+* Added support for tracing models larger than 2 GB through the environment variable ``NEURON_CC_FLAGS='--extract-weights INSTANCE_TYPE'`` for all inf1 instance types.
+* Neuron release 2.10 release will be the last release that will include support for tensorflow-neuron version 2.7. Future Neuron releases will not include tensorflow-neuron version 2.7.
+
+
 tensorflow-neuron 2.x release [2.9.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

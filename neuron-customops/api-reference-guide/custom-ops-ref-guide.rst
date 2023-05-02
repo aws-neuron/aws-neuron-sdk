@@ -158,6 +158,7 @@ Alternatively, for functions that do not end in ``_out``, a new tensor that cont
 .. cpp:function:: torch::Tensor& sub_out(torch::Tensor& result, const torch::Tensor& self, const torch::Scalar &other, const torch::Scalar& alpha=1)
 .. cpp:function:: torch::Tensor& sub_out(torch::Tensor& result, const torch::Tensor& self, const torch::Tensor& other, const torch::Scalar& alpha=1)
 .. cpp:function:: torch::Tensor sub(const torch::Tensor& self, const torch::Tensor &other, const torch::Scalar& alpha=1)
+.. cpp:function:: torch::Tensor sub(const torch::Tensor& self, const torch::Scalar& other, const torch::Scalar& alpha=1)
 
     Subtracts ``other``, scaled by ``alpha``, to ``input``,
 .. math:: 
@@ -395,6 +396,9 @@ TCM Accessor
 
 TCM accessors provide the fastest read and write performance. TCM accessors allow the user to manually manage copying data between larger, but slower-access NeuronCore memory to faster GPSIMD tightly-coupled memory (TCM). It may be beneficial to see the diagram under :ref:`custom-ops-ref-guide-mem-arch`. Create a ``TensorTcmAccessor`` from a ``Tensor`` by calling ``Tensor::tcm_accessor()``. Users can allocate and free TCM memory using ``tcm_malloc()`` and ``tcm_free()``. Users have access to a 16KB pool of TCM memory. Note the streaming accessors also allocate from this pool (4KB each). TCM accessors do not do any coherence checks.
 
+.. note:: 
+    See :ref:`neuronx-customop-mlp-perf` for a tutorial on how to use TCM accessors. 
+
 Example Usage
 ^^^^^^^^^^^^^
 
@@ -461,6 +465,90 @@ Member Functions
 
     Copy ``num_elem`` elements from a TCM buffer starting at ``tcm_ptr`` to the accessor's ``Tensor`` starting at the index ``tensor_offset``. Tensor indexing is performed as if the tensor was flattened. The TCM buffer's size should be at least ``sizeof(T) * num_elem`` bytes.
 
+
+Writing Directly to Output Tensor
+---------------------------------
+
+.. cpp:function:: torch::Tensor get_dst_tensor()
+
+    Returns a reference to the Custom C++ operator output tensor (return value). If this method is called, it is assumed that data will be written to this output tensor, and the tensor returned from the C++ operator will be ignored. Using this method will improve performance by avoiding additional copying of the return value. See example below for function usage.
+
+    .. code-block:: c++
+        :emphasize-lines: 4, 12
+        
+        // Example of write to get_dst_tensor()
+        torch::Tensor example_kernel(const torch::Tensor& t_in) {
+            size_t num_elem = t_in.numel();
+            torch::Tensor t_out = get_dst_tensor();
+            auto t_out_tcm_acc = t_out.tcm_accessor();
+
+            float *tcm_buffer = (float *)torch::neuron::tcm_malloc(sizeof(float) * buffer_size);
+            
+            // Populate tcm_buffer with results
+            ...
+            // Write to t_out throught tcm_accessor
+            t_out_acc.tcm_to_tensor<float>(tcm_buffer, offset, copy_size);
+            
+            ...
+        }
+
+Using multiple GPSIMD cores
+---------------------------
+
+.. note:: 
+    See :ref:`neuronx-customop-mlp-perf` for a tutorial on how to use multiple GPSIMD cores to execute the Custom C++ Operator
+
+By default, Custom C++ operators target a single core of the GPSIMD-Engine. Performance of Custom C++ operators can be improved by targeting multiple cores. To enable usage of multiple GPSIMD cores, ``multicore=True`` should be passed to ``custom_op.load()``.
+
+.. code-block:: python
+    :emphasize-lines: 6
+
+    custom_op.load(
+        name=name,
+        compute_srcs=compute_srcs,
+        shape_srcs=shape_srcs,
+        build_directory=os.getcwd(),
+        multicore=True
+    )
+
+Each GPSIMD core executes the same kernel function. The user can control the execution on each core by conditioning the Custom C++ operator logic on the core id (obtained via ``get_cpu_id()`` API). This is illustrated in the example below.
+
+The following functions are defined in ``neuron/neuron-utils.hpp``
+
+.. cpp:function:: uint32_t get_cpu_id()
+
+    Return the id of the core that the Custom C++ operator is executing on, id is in range ``[0, get_cpu_count())``
+
+.. cpp:function:: uint32_t get_cpu_count()
+
+    Return the total number of available GPSIMD cores.
+
+.. code-block:: c++
+    :emphasize-lines: 5, 6, 15
+
+    torch::Tensor example_kernel(const torch::Tensor& t_in) {
+        size_t num_elem = t_in.numel();
+        torch::Tensor t_out = get_dst_tensor();
+
+        uint32_t cpu_id = get_cpu_id();
+        uint32_t cpu_count = get_cpu_count();
+
+        uint32_t partition = num_elem / cpu_count;
+
+        float *tcm_buffer = (float *)torch::neuron::tcm_malloc(sizeof(float) * buffer_size);
+        // Populate tcm_buffer with desired results
+        ...
+
+        // Write to t_out with a offset computed from cpu_id and cpu_count
+        t_out_tcm_acc.tcm_to_tensor<float>(tcm_buffer, partition*cpu_id, copy_size);
+
+        ...
+    }
+
+Return Value Handling
+^^^^^^^^^^^^^^^^^^^^^
+
+When using multiple GPSIMD cores, the ``get_dst_tensor()`` API must be used to write the return value of the Custom C++ operators. Data not written to the tensor reference returned by ``get_dst_tensor()``, or not invoking ``get_dst_tensor()`` will result in undefined behavior. The user is responsible for writing the appropriate portion of the output reference tensor from a given GPSIMD core. Since there is no synchronization between GPSIMD cores, it is advised that each GPSIMD core writes to a mutually exclusive partition of the output reference tensor.
 
 printf()
 --------------
@@ -545,3 +633,6 @@ Limitations
     * The model can still execute successfully if the programmer overflows the buffer
     * Overflowing the buffer will cause the oldest data in it to be overwritten
 * Print statements are processed and printed to the host's terminal at the end of model execution, not in real time
+* ``printf`` is only supported in single core mode, or on GPSIMD core 0 only when using multiple GPSIMD cores.
+* When using multiple GPSIMD cores, only ``TensorTcmAccessor`` is supported. Usage of other accessors will result in undefined behaviour.
+* When using multiple GPSIMD cores, only one custom operator per model is currently supported.

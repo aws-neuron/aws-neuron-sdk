@@ -38,7 +38,9 @@ trace events at the operator or runtime level.
       If set to false, the profiler can be set to start at a later condition.
       Refer to ``profile.start()`` for more details. Default is ``True``.
    :keyword bool delete_working: If set to False turns off the deletion of temporary files. Default True.
-
+   :keyword str traced_only: This should be set to ``True`` if profiling a model that has been traced with
+      ``torch_neuronx.trace()``. Default is ``False``.
+      
    :returns: The traced :class:`profile`
 
    :rtype: ~profile

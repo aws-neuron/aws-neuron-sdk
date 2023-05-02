@@ -131,7 +131,7 @@ Next, you'll add a Prometheus data source by going to ``Configuration`` -> ``Dat
 .. image:: tutorial_grafana_add_prometheus.png
    :alt: Image: image.png
 
-Finally, upload the sample dashboard :download:`neuron-monitor-grafana.json <src/examples/neuron-monitor/neuron-monitor-grafana.json`
+Finally, upload the sample dashboard :download:`neuron-monitor-grafana.json <src/examples/neuron-monitor/neuron-monitor-grafana.json>`
 to **Grafana**:
 
 .. image:: tutorial_grafana_upload_dash.png
