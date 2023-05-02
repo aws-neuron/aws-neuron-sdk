@@ -20,6 +20,20 @@ use TensorBoard.
   for Inf1 (``tensorboard-plugin-neuron``).  Please ensure you only have only the correct package installed.
 
 
+Neuron Plugin for TensorBoard release [2.5.26.0]
+================================================
+
+Date: 05/01/2023
+
+Summary
+-------
+
+* Neuron operator timeline view now includes Neuron Runtime setup/teardown time and a collapsed execution of NC engines and DMA - see Tensorboard tutorial for updated views. 
+
+* Improved execution categorization to include "control" instructions
+
+
+
 Neuron Plugin for TensorBoard release [2.5.25.0]
 ================================================
 

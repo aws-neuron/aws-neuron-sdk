@@ -34,6 +34,22 @@ Develop on AWS ML accelerator instance
 
             .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
 
+   .. tab-item:: PyTorch 1.13.1
+
+      .. tab-set::
+
+         .. tab-item:: Ubuntu 20 DLAMI Base
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+
+         .. tab-item:: Amazon Linux 2 DLAMI Base
+
+            .. include :: /general/setup/install-templates/inf1/note-setup-general.rst
+
+            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+
    .. tab-item:: PyTorch 1.12.1
 
       .. tab-set::
@@ -99,7 +115,7 @@ Develop on AWS ML accelerator instance
             .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.9.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
 
 
-   
+
 
 
 

@@ -577,7 +577,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "sum(rate(inference_status_total{status_type=\"completed\"}[1m]))",
+          "expr": "sum(rate(execution_status_total{status_type=\"completed\"}[1m]))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -639,7 +639,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "sum(rate(inference_status_total{status_type!=\"completed\"}[1m]))",
+          "expr": "sum(rate(execution_status_total{status_type!=\"completed\"}[1m]))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -702,13 +702,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(inference_status_total{status_type=\"completed\"}[1m]))",
+          "expr": "sum(rate(execution_status_total{status_type=\"completed\"}[1m]))",
           "interval": "",
           "legendFormat": "Execution Success Rate",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(inference_status_total{status_type!=\"completed\"}[1m]))",
+          "expr": "sum(rate(execution_status_total{status_type!=\"completed\"}[1m]))",
           "interval": "",
           "legendFormat": "Execution Error Rate",
           "refId": "B"
@@ -836,7 +836,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (percentile) (inference_latency_seconds)",
+          "expr": "avg by (percentile) (execution_latency_seconds)",
           "interval": "",
           "legendFormat": "{{percentile}}",
           "refId": "A"
@@ -934,9 +934,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (neuroncore, runtime_index) (neuroncore_utilization_ratio)",
+          "expr": "avg by (neuroncore) (neuroncore_utilization_ratio)",
           "interval": "",
-          "legendFormat": "r{{runtime_index}}:nc{{neuroncore}}",
+          "legendFormat": "nc{{neuroncore}}",
           "refId": "A"
         }
       ],
@@ -1152,7 +1152,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (memory_location) (sum by (runtime_index, instance_id, memory_location) (neuron_runtime_memory_used_bytes))",
+          "expr": "avg by (memory_location) (sum by (instance_id, memory_location) (neuron_runtime_memory_used_bytes))",
           "interval": "",
           "legendFormat": "{{memory_location}}",
           "refId": "A"

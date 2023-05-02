@@ -1,6 +1,6 @@
 .. _trn1-performance:
 
-Trn1/Trn1n Performance 
+Trn1/Trn1n Performance
 =======================
 
 .. contents:: Table of contents
@@ -14,7 +14,7 @@ Trn1/Trn1n Performance
 
 Training Performance (Trn1 / Trn1n)
 -----------------------------------
-      
+
 .. csv-table::
    :file: trn1_trn1n_nlp_data.csv
    :header-rows: 1
@@ -28,7 +28,7 @@ Inference Performance
 .. tab-set::
 
    .. tab-item:: Throughput optimized
-   
+
       .. df-table::
          :header-rows: 1
 
@@ -43,14 +43,14 @@ Inference Performance
 
          df['Throughput (/sec)'] = df['Throughput (/sec)'].round(2).astype('float',copy=True)
          int_cols = ['Latency P50 (ms)', 'Latency P99 (ms)']
-         df[int_cols] = df[int_cols].round(2).astype('float',copy=True)   
-   
+         df[int_cols] = df[int_cols].round(2).astype('float',copy=True)
+
       .. note::
          **Throughput optimization was performed by selecting a batch size which maximized the metric. All compiler flags, data types, and parameters are identical between model configurations**
          **Cost per 1M inferences** is calculated using On-Demand hourly rate.
 
          **Real Time** application refers to batch size 1 inference for minimal latency. **Batch** application refers to maximum throughput with minimum cost-per-inference.
-   
+
    .. tab-item:: Latency optimized
 
       .. df-table::

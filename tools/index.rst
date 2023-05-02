@@ -71,6 +71,7 @@ Neuron provides debugging and profiling tools with the visualization support of 
         :animate: fade-in
 
         * :ref:`neuronperf`
+        * :ref:`nccom-test`
 
                     
 .. dropdown::  Tutorials 

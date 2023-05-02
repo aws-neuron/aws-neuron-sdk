@@ -10,6 +10,32 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.4.1.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 5/1/2023
+
+New in this release
+-------------------
+
+* Updated Neuron Runtime library to version 2.12
+* Added missing LICENSE.txt
+
+Known Issues and Limitations
+----------------------------
+
+* Bert-base in 16 NeuronCores pipeline mode has 50% lower performance when running 16 inferences in parallel with Runtime version 2.12.
+
+[1.5.1.1.10.39.0]
+^^^^^^^^^^^^^^^^^
+
+Date: 5/1/2023
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
+
 Apache MXNet Neuron release [1.8.0.2.2.43.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
