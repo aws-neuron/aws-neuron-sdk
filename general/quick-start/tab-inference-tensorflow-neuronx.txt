@@ -23,7 +23,7 @@
        :class-body: sphinx-design-class-body-small
        :animate: fade-in
 
-        :ref:`ResNet-50 </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`
+        :ref:`Roberta-Base </src/examples/tensorflow/tensorflow-neuronx/ttfneuronx-roberta-base-tutorial.ipynb>`
 
 .. card:: Visit TensorFlow Neuron section for more
         :class-body: sphinx-design-class-body-small

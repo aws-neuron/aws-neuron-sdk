@@ -74,6 +74,11 @@ This release introduces new features, performance optimizations, minor enhanceme
    * - ``nccom-test`` - Collective Communication Benchmarking Tool
      - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
      - Trn1/Trn1n , Inf2
+
+   * - Announcing end of support for tensorflow-neuron 2.7 & mxnet-neuron 1.5 versions
+     - * See :ref:`announce-eol-tf-before-2-7`
+       * See :ref:`announce-eol-mxnet-before-1-5`
+     - Inf1
   
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
