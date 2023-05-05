@@ -35,7 +35,7 @@ What's new in this release
 
 - Added ``transformers-neuronx`` artifacts to PyPI repository.
 - Added support for the HuggingFace |generate|.
-- Added support for model serialization, including model saving, loading, and
+- Added model serialization support for GPT2 models, including model saving, loading, and
   weight swapping.
 - Added support for caching compiled artifacts.
 - Improved performance by removing unnecessary KV-cache tensor resetting.

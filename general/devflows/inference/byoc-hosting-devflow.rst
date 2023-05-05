@@ -1,6 +1,6 @@
 .. _byoc-hosting-devflow:
 
-Bring Your Own Neuron Container to Sagemaker Hosting
+Bring Your Own Neuron Container to Sagemaker Hosting (inf1)
 ====================================================
 
 .. contents:: Table of Contents

@@ -106,8 +106,9 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
                   .. toctree:: 
                      :maxdepth: 1
 
-                     /general/devflows/inference/neo-then-hosting-devflow
+                     /general/devflows/inference/byoc-hosting-devflow-inf2
                      /general/devflows/inference/byoc-hosting-devflow 
+                     /general/devflows/inference/neo-then-hosting-devflow
 
          .. tab-set:: 
 

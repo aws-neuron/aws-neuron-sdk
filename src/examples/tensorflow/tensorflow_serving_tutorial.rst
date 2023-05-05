@@ -102,6 +102,8 @@ For Tensorflow 2.x:
     model = tf.keras.applications.ResNet50(weights='imagenet')
     example_inputs = tf.random.uniform([1, *image_sizes, 3], dtype=tf.float32)
 
+    # run the model once to define the forward pass and allow for saving
+    model_neuron(example_inputs)
     model_neuron = tfn.trace(model, example_inputs)
     tf.keras.models.save_model(model_neuron, './resnet50_inf1/1')
 
