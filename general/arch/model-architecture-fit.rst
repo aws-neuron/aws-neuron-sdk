@@ -10,7 +10,7 @@ Model Architecture Fit Guidelines
 Introduction
 $$$$$$$$$$$$
 
-AWS Neuron SDK enables you to train and deploy a wide range of deep learning models on :ref:`EC2 Inf1 <aws-inf1-arch>`, :ref:`EC2 inf2 <aws-inf2-arch>`, :ref:`EC2 Trn1 <aws-trn1-arch>` and EC2 Trn1n instances, which are powered by :ref:`Inferentia <inferentia-arch>`, :ref:`Inferentia2 <inferentia2-arch>` and :ref:`Trainium <trainium-arch>` devices. The below table provides details of the NeuronDevices and NeuronCores enabling each instance:
+AWS Neuron SDK enables you to train and deploy a wide range of deep learning models on :ref:`EC2 Inf1 <aws-inf1-arch>`, :ref:`EC2 inf2 <aws-inf2-arch>` and :ref:`EC2 Trn1/Trn1n <aws-trn1-arch>` instances , which are powered by :ref:`Inferentia <inferentia-arch>`, :ref:`Inferentia2 <inferentia2-arch>` and :ref:`Trainium <trainium-arch>` devices. The below table provides details of the NeuronDevices and NeuronCores enabling each instance:
 
 
 .. list-table::
@@ -59,7 +59,7 @@ $$$$$$$$$$$$$$$$$$$$$$
 AWS Trainium and AWS Inferentia2 (NeuronCore-v2)
 ------------------------------------------------
 
-*Last update* - 02/25/2023
+*Last update* - 05/05/2023
 
 .. list-table::
    :widths: auto
@@ -109,14 +109,14 @@ AWS Trainium and AWS Inferentia2 (NeuronCore-v2)
       - Computer Vision
       - Good Fit
       - Supported
-      - :ref:`Roadmap Item <neuron_roadmap>`
+      - Supported
       - :ref:`Roadmap Item <neuron_roadmap>`
 
    *  - Diffusion models
       - Computer Vision
       - Good Fit
       - :ref:`Roadmap Item <neuron_roadmap>`
-      - :ref:`Roadmap Item <neuron_roadmap>`
+      - Supported
       - :ref:`Roadmap Item <neuron_roadmap>`
 
    *  - Convolutional Neural Network (CNN) models
@@ -142,7 +142,7 @@ AWS Trainium and AWS Inferentia2 (NeuronCore-v2)
 AWS Inferentia (NeuronCore v1)
 ------------------------------
 
-*Last update* - 10/10/2022
+*Last update* - 05/05/2023
 
 .. list-table::
    :widths: auto
@@ -191,7 +191,7 @@ AWS Inferentia (NeuronCore v1)
    *  - Vision Transformer
       - Computer Vision
       - Good Fit
-      - :ref:`Roadmap Item <neuron_roadmap>`
+      - Supported
       - :ref:`Roadmap Item <neuron_roadmap>`
       - :ref:`Roadmap Item <neuron_roadmap>`
 
