@@ -97,6 +97,46 @@ Please follow the installation steps in :ref:`setup-guide-index` to install ``aw
 ------------
 
 
+This Neuron Runtime (compatibility id: X) is not compatible with the installed aws-neuron-dkms package
+------------------------------------------------------------------------------------------------------
+
+This error is caused by incompatibility between the Neuron Driver (dkms package) and the Runtime Library (runtime-lib package).  The driver remains backwards compatible with older versions of Neuron Runtime, but newer versions of the Runtime might rely on the functionality that is only provided by a newer driver.  In that case, an update to the newer driver is required.
+
+In some cases the compatibility error persists even after the driver has been updated.  That happens when the update process fails to reload the driver at the end of the update.  Note that ``$ modinfo neuron``  will misleadingly show the new version because modinfo reads the version information for neuron.ko file that’s been successfully replaced.
+
+Reload failure happens because one of the processes is still using Neuron Devices and thus the driver cannot be reloaded.  
+
+Solution
+''''''''
+
+Check for any process that is still using the Neuron driver by running lsmod:
+
+.. code:: bash
+
+   ubuntu@ip-10-1-200-50:~$ lsmod | grep neuron
+   neuron                237568  0
+   ubuntu@ip-10-1-200-50:~$ 
+   
+“Used by” counter, the second number, should be 0.  If it is not, there is still a running process that is using Neuron.  Terminate that process and either:
+
+.. code:: bash
+
+   $ sudo rmmod neuron
+   $ sudo modprobe neuron
+
+Or simply rerun the installation one more time.  The driver logs its version in dmesg:
+
+.. code:: base
+
+   $ sudo dmesg
+   ...
+   [21531.105295] Neuron Driver Started with Version:2.9.4.0-8a6fdf292607dccc3b7059ebbe2fb24c60dfc7c4
+
+A common culprit is a Jupyter process.  If you are using Jupyter on the instance, make sure to terminate Jupyter process before updating the driver.
+
+------------
+
+
 Neuron Core is in use
 ---------------------
 
