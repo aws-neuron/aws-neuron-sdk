@@ -37,7 +37,7 @@ To install the most rigorously tested stable release, use the PyPI pip wheel:
 
 ::
 
-    pip install transformers-neuronx
+    pip install transformers-neuronx --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
 --------------------
 Development Version
