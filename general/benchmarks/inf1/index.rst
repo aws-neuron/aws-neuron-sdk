@@ -15,21 +15,41 @@ The following tables contain the reference inference performance for models in t
 
 Natural Language Processing
 ---------------------------
+.. tab-set::
 
-.. df-table::
-   :header-rows: 1
+   .. tab-item:: Throughput optimized
 
-   df = pd.read_csv('neuronperf_nlp.csv')
-   df_prices = pd.read_csv('instance_prices.csv')
-   df = pd.merge(df,df_prices,on='Inst. Type')
+      .. df-table::
+         :header-rows: 1
 
-   df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
+         df = pd.read_csv('neuronperf_nlp_throughput_optimized.csv')
+         df_prices = pd.read_csv('instance_prices.csv')
+         df = pd.merge(df,df_prices,on='Inst. Type')
 
-   cols_to_show = ['Model', 'Scripts', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
-   df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
+         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
-   int_cols = ['Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)']
-   df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
+         cols_to_show = ['Model', 'Scripts', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
+         df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
+
+         int_cols = ['Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)']
+         df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
+
+   .. tab-item:: Latency optimized
+
+      .. df-table::
+         :header-rows: 1
+
+         df = pd.read_csv('neuronperf_nlp_latency_optimized.csv')
+         df_prices = pd.read_csv('instance_prices.csv')
+         df = pd.merge(df,df_prices,on='Inst. Type')
+
+         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
+
+         cols_to_show = ['Model', 'Scripts', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
+         df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
+
+         int_cols = ['Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)']
+         df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
 
 
 \*\ *Throughput and latency numbers in this table were computed using* NeuronPerf_\ *. To reproduce these results, install NeuronPerf and run the provided scripts.*

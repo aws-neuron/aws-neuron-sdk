@@ -1,0 +1,12 @@
+Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
+google/vit-base-patch16-224,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,358.362,2.81,3.72,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1147.186,0.884,0.997,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1034.719,0.948,1.299,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,970.459,1.012,1.139,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,830.237,1.189,1.318,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,694.813,1.433,1.529,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.437,2286,2566,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.126,7956,8087,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 1.13.1,Inf2.xlarge,Image Segmentation,334.545,2.959,3.762,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1103.539,1.966,2.052,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,418.538,2.382,2.485,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16

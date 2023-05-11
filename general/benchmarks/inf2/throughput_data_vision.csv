@@ -1,0 +1,12 @@
+Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
+google/vit-base-patch16-224,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1403.746,223.53,258.99,Batch,2.10.0,Data Parallel,32,FP32,Matmult-BF16
+resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,5793.641,5.52,5.598,Batch,2.10.0,Data Parallel,8,FP32,Matmult-BF16
+resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,4570.571,6.998,7.061,Batch,2.10.0,Data Parallel,8,FP32,Matmult-BF16
+resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,3896.43,8.207,8.278,Batch,2.10.0,Data Parallel,8,FP32,Matmult-BF16
+resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,3052.692,83.808,83.939,Batch,2.10.0,Data Parallel,64,FP32,Matmult-BF16
+resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,2310.552,110.681,110.86,Batch,2.10.0,Data Parallel,64,FP32,Matmult-BF16
+Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.437,2286,2566,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.126,7956,8087,Real Time,2.10.0,Data Parallel,1,FP32,Matmult-BF16
+UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 1.13.1,Inf2.xlarge,Image Segmentation,850.527,18.764,19.333,Batch,2.10.0,Data Parallel,4,FP32,Matmult-BF16
+vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,3347.133,75.793,76.56,Batch,2.10.0,Data Parallel,64,FP32,Matmult-BF16
+vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1781.928,17.948,18.055,Batch,2.10.0,Data Parallel,8,FP32,Matmult-BF16
