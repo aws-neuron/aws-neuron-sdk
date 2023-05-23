@@ -31,7 +31,7 @@ class NeuronUNet(nn.Module):
         self.device = unetwrap.unet.device
 
     def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
-        sample = self.unetwrap(sample, timestep.float().expand((sample.shape[0],)), encoder_hidden_states)[0]
+        sample = self.unetwrap(sample, timestep.bfloat16().expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
     
 class NeuronTextEncoder(nn.Module):
@@ -98,7 +98,7 @@ model_id = "stabilityai/stable-diffusion-2-1-base"
 # --- Compile CLIP text encoder and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
 text_encoder = copy.deepcopy(pipe.text_encoder)
 del pipe
 
@@ -135,12 +135,12 @@ del text_encoder_neuron
 # --- Compile VAE decoder and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
 decoder = copy.deepcopy(pipe.vae.decoder)
 del pipe
 
 # Compile vae decoder
-decoder_in = torch.randn([1, 4, 64, 64])
+decoder_in = torch.randn([1, 4, 64, 64]).bfloat16()
 decoder_neuron = torch_neuronx.trace(
     decoder, 
     decoder_in, 
@@ -158,8 +158,7 @@ del decoder_neuron
 
 
 # --- Compile UNet and save ---
-
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
 
 # Replace original cross-attention module with custom cross-attention module for better performance
 CrossAttention.get_attention_scores = get_attention_scores
@@ -172,9 +171,9 @@ unet = copy.deepcopy(pipe.unet.unetwrap)
 del pipe
 
 # Compile unet - FP32
-sample_1b = torch.randn([1, 4, 64, 64])
-timestep_1b = torch.tensor(999).float().expand((1,))
-encoder_hidden_states_1b = torch.randn([1, 77, 1024])
+sample_1b = torch.randn([1, 4, 64, 64]).bfloat16()
+timestep_1b = torch.tensor(999).bfloat16().expand((1,))
+encoder_hidden_states_1b = torch.randn([1, 77, 1024]).bfloat16()
 example_inputs = sample_1b, timestep_1b, encoder_hidden_states_1b
 
 unet_neuron = torch_neuronx.trace(
@@ -197,12 +196,12 @@ del unet_neuron
 # --- Compile VAE post_quant_conv and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
 post_quant_conv = copy.deepcopy(pipe.vae.post_quant_conv)
 del pipe
 
 # # Compile vae post_quant_conv
-post_quant_conv_in = torch.randn([1, 4, 64, 64])
+post_quant_conv_in = torch.randn([1, 4, 64, 64]).bfloat16()
 post_quant_conv_neuron = torch_neuronx.trace(
     post_quant_conv, 
     post_quant_conv_in,

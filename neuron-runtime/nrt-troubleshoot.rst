@@ -590,3 +590,16 @@ behaviour of resetting NeuronCores when initializing applications. See
 
 Also note that the timeout period can be changed by setting
 ``NEURON_RT_EXEC_TIMEOUT``. See :ref:`nrt-configuration` for more information.
+
+
+FI_EFA_FORK_SAFE
+----------------
+
+Older Linux (<5.15) kernels require environment variable FI_EFA_FORK_SAFE to be set to 1 for the libfabric to operate correctly.  Specifically Amazon Linux 2 uses 5.10 kernel and requires the variable to be set.
+
+When the variable is not set multi-node collective communication will be disabled.  Intra-node collective communication is still possible.  The following error message will be logged the first time a model containing collective communication is loaded:
+
+::
+
+   Linux kernel 5.10 requires setting FI_EFA_FORK_SAFE=1 environment variable.  Multi-node support will be disabled.  
+   Please restart with FI_EFA_FORK_SAFE=1 set."
