@@ -57,7 +57,7 @@ customers to choose between four instances sizes:
         - 285
         - 192
         - 4920
-        - 768
+        - 192
 
     *   - Inf2.48xlarge
         - 12
@@ -67,7 +67,7 @@ customers to choose between four instances sizes:
         - 570
         - 384
         - 9840
-        - 768
+        - 192
 
 
 Inf2 offers a low-latency and high-bandwidth chip-to-chip interconnect
