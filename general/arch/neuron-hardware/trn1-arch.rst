@@ -56,7 +56,7 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
         - 760
         - 512
         - 13,120
-        - 1,536
+        - 384
         - 800
 
     *   - Trn1n.32xlarge
@@ -67,7 +67,7 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
         - 760
         - 512
         - 13,120
-        - 3,072
+        - 768
         - 1,600
 
 
