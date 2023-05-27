@@ -68,7 +68,7 @@ customers to choose between four instances sizes:
         - 512
         - 32
         - 200
-        - 64
+        - 32
         - 25
 
     *   - Inf1.24xlarge
@@ -79,7 +79,7 @@ customers to choose between four instances sizes:
         - 2048
         - 128
         - 800
-        - 64
+        - 32
         - 100
 
 
