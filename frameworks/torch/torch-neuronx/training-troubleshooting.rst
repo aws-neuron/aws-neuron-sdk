@@ -14,6 +14,9 @@ PyTorch-Neuron and provides guidance how to resolve or work-around them.
 General Troubleshooting
 -----------------------
 
+For setting up EFA that is needed for multi-node training, please see :ref:`setup-trn1-multi-node-execution`
+
+
 For XLA-related troubleshooting notes see :ref:`How to debug models in PyTorch
 Neuron <pytorch-neuronx-debug>`
 and `PyTorch-XLA troubleshooting

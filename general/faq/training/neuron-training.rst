@@ -15,6 +15,12 @@ How do I get started with training my model on Trn1?
 
 Once you select your machine learning framework, you can get started here: :ref:`docs-quick-links`
 
+
+How do I setup EFA for multi-node training?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For setting up EFA that is needed for multi-node training, please see :ref:`setup-trn1-multi-node-execution`
+
+
 How do I know if I can train my models with Trainium?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

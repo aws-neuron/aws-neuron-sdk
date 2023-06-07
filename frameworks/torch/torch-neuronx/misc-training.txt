@@ -1,3 +1,4 @@
 * :ref:`pytorch-neuron-supported-operators`
+* :ref:`setup-trn1-multi-node-execution`
 * :ref:`pytorch-neuron-traning-troubleshooting`
 * :ref:`torch-neuronx-rn`
