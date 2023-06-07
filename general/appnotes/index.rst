@@ -48,3 +48,14 @@ Neuron Application Notes
             :maxdepth: 1
 
             /general/appnotes/torch-neuron/rcnn-app-note
+
+.. dropdown::  Transformers Neuron (transformers-neuronx)
+         :class-title: sphinx-design-class-title-med
+         :class-body: sphinx-design-class-body-small
+         :animate: fade-in
+
+
+         .. toctree::
+            :maxdepth: 1
+
+            /general/appnotes/transformers-neuronx/generative-llm-inference-with-neuron

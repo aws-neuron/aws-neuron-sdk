@@ -59,6 +59,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    Neuron Compiler </compiler/index>
    Neuron C++ Custom Operators </neuron-customops/index>
    Neuron Tools </tools/index>
+   Neuron Calculator </general/calculator/neuron-calculator>
    Setup Guide </general/setup/index>
    Containers Deployment </containers/index>
    Developer Flows </general/devflows/index>

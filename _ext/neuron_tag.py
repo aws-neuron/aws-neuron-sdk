@@ -64,7 +64,9 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'release-notes/torch/transformers-neuronx/index',
                 'tools/neuron-sys-tools/nccom-test',
                 'general/benchmarks/inf2/inf2-performance',
-                'general/announcements/neuron2.x/sm-training-dlc-2.9.1'
+                'general/announcements/neuron2.x/sm-training-dlc-2.9.1',
+                'general/appnotes/transformers-neuronx/generative-llm-inference-with-neuron',
+                'general/calculator/neuron-calculator'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
