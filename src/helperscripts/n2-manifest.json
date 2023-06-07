@@ -76,7 +76,12 @@
       {"name":"torch_xla","component":"PyTorch","category":"helper-lib","package_type":"pip","use_cases":["inference","training"],"pin_major":"false"},
       {"name":"aws-neuronx-gpsimd-customop","component":"CustomOps","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
       {"name":"aws-neuronx-gpsimd-tools","component":"CustomOps Tools","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
-      {"name":"aws-neuronx-oci-hook","component":"OCI","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"}
+      {"name":"aws-neuronx-oci-hook","component":"OCI","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
+      {"name":"dmlc_nnvm","component":"Compiler","category":"na","package_type":"os","use_cases":["inference"],"pin_major":"false"},
+      {"name":"dmlc_topi","component":"Compiler","category":"na","package_type":"os","use_cases":["inference"],"pin_major":"false"},
+      {"name":"dmlc_tvm","component":"Compiler","category":"na","package_type":"os","use_cases":["inference"],"pin_major":"false"},
+      {"name":"inferentia_hwm","component":"Compiler","category":"na","package_type":"os","use_cases":["inference","training"],"pin_major":"false"},
+      {"name":"islpy","component":"Compiler","category":"NA","package_type":"os","use_cases":["inference","training"],"pin_major":"false"}
     ],
     "neuron_releases": [
       {"neuron_version":"2.10.0", "packages": [
@@ -121,7 +126,12 @@
       {"name":"transformers-neuronx","version":"0.3.32","supported_instances":["trn1","inf2"],"supported_python_versions":["3.7","3.8","3.9"]},
       {"name":"efa-installer","version":"na","supported_instances":["trn1"],"supported_python_versions":[]},
       {"name":"neuronperf","version":"1.8.0.0","supported_instances":["inf1"],"supported_python_versions":[]},
-      {"name":"libnrt.so","version":"2.12.23.0","supported_instances":["inf1"],"supported_python_versions":[]}
+      {"name":"libnrt.so","version":"2.12.23.0","supported_instances":["inf1"],"supported_python_versions":[]},
+      {"name":"dmlc_nnvm","version":"1.15.0.0","supported_instances":["inf1"],"supported_python_versions":[]},
+      {"name":"dmlc_topi","version":"1.15.0.0","supported_instances":["inf1"],"supported_python_versions":[]},
+      {"name":"dmlc_tvm","version":"1.15.0.0","supported_instances":["inf1"],"supported_python_versions":[]},
+      {"name":"inferentia_hwm","version":"1.14.1","supported_instances":["inf1"],"supported_python_versions":[]},
+      {"name":"islpy","version":"2021.1","supported_instances":["inf1","trn1","inf2"],"supported_python_versions":[]}
       ]},
       {"neuron_version":"2.9.1", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.12.35.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
