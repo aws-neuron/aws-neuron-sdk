@@ -14,13 +14,8 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
 .. grid:: 2
 
 
-   .. card:: Get Started with PyTorch Neuron
-         :link: torch_quick_start
-         :link-type: ref
-
-
-   .. card:: Get Started with TensorFlow Neuron
-         :link: tensorflow_quick_start
+   .. card:: Get Started with Neuron
+         :link: neuron-quickstart
          :link-type: ref
 
 
@@ -34,9 +29,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    :caption: Overview
    
    Quick Links </general/quick-start/docs-quicklinks>
-   Get Started with PyTorch </general/quick-start/torch-neuron>
-   Get Started with TensorFlow </general/quick-start/tensorflow-neuron>
-   Get Started with MXNet  </general/quick-start/mxnet-neuron>
+   Get Started with Neuron </general/quick-start/index>
    GitHub Samples </general/quick-start/github-samples>
    Performance </general/benchmarks/index>
    What’s New </release-notes/index>
@@ -50,6 +43,16 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    PyTorch Neuron </frameworks/torch/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
    Apache MXNet (Incubating) </frameworks/mxnet-neuron/index>
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ML Libraries
+
+   Transformers Neuron </libraries/transformers-neuronx/index>
+   Neuron Distributed </libraries/neuronx-distributed/index>
+
+
 
 .. toctree::
    :maxdepth: 1

@@ -15,6 +15,26 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+
+Neuron Driver release [2.10.11.0]
+--------------------------------
+
+Date: 6/14/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added memory usage breakdown by category to the Neuron Sysfs nodes.  New categories are code, misc, tensors, constants, and scratchpad.  Please see the Sysfs page under Neuron Tools for more detailed description of each. 
+* Improved NeuronCore initialization (nrt_init) performance by approximately 1 second. 
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed small timing window during NeuronCore resets, which previously would timeout during memcpy
+* Removed potential double free of memory when terminating the Neuron Driver.
+* Fixed sysfs race condition, which was leading to Neuron Driver crash during termination.
+
+
 Neuron Driver release [2.9.4.0]
 --------------------------------
 

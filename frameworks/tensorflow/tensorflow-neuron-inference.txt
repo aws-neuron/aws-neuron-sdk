@@ -1,4 +1,8 @@
-.. _inference-tensorflow-neuron:
+.. card:: Setup  (``tensorflow-neuron``)
+            :link: setup-tensorflow-neuron
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+
 
 .. dropdown::  Tutorials (``tensorflow-neuron``)
     :class-title: sphinx-design-class-title-med

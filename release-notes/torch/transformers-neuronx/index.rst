@@ -23,6 +23,38 @@ Transformers Neuron for |Trn1|/|Inf2| is a software package that enables
 PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+
+Release [0.4.0]
+----------------------
+Date: 6/14/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added ``int8`` weight storage for `GPT2`_ models.
+- Improved prompt context encoding performance for `GPT2`_ models.
+- Improved collective communications performance for tp-degrees 4, 8, and 24 on Inf2.
+- Improved collective communications performance for tp-degrees 8 and 32 on Trn1.
+- Support for the ``--model-type=transformer-inference`` compiler flag for optimized decoder-only LLM inference.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+Incorrect `GPT-J`_ ``linear`` layer sharding
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Added padding to the `GPT-J`_ ``linear`` layer to correctly handle odd vocabulary sizes. 
+
+Incorrect output with HuggingFace |beam_search|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Issues where the HuggingFace |generate| method produces incorrect results when
+|beam_search| is used have been resolved.
+
+
 Release [0.3.0]
 ----------------------
 Date: 05/01/2023

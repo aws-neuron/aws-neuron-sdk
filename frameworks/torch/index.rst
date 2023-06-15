@@ -17,6 +17,13 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
     
     /frameworks/torch/torch-setup
 
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    
+    /frameworks/torch/inference
+
  
 .. toctree::
     :maxdepth: 1
@@ -25,41 +32,25 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
     Training </frameworks/torch/training-torch-neuronx>
 
 
-.. toctree::
-    :maxdepth: 1
-    :hidden:
+
+
+.. card:: PyTorch Neuron(``torch-neuronx``) for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
+    :link: inference-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+
+
+.. card:: PyTorch Neuron(``torch-neuronx``) for Training on ``Trn1`` / ``Trn1n``
+    :link: training-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+
+
+.. card:: PyTorch Neuron(``torch-neuron``) for Inference on ``Inf1``
+    :link: inference-torch-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
     
-    /frameworks/torch/inference
-
-
-.. dropdown::  Pytorch Neuron Setup
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
-
-    .. include:: dropdown-neuron-setup.txt
-
-
-.. tab-set::
-
-    .. tab-item:: Training (``torch-neuronx``)
-
-        .. include:: training-torch-neuronx.txt
-
-    .. tab-item:: Inference (``torch-neuronx & torch-neuron``)
-
-        .. note::
-
-            For help selecting a framework type, see:
-
-            :ref:`torch-neuron_vs_torch-neuronx`
-
-        .. tab-set::
-
-            .. tab-item:: Inference on Inf2 & Trn1/Trn1n (``torch-neuronx``)
-
-                .. include:: inference-torch-neuronx.txt
-
-            .. tab-item:: Inference on Inf1 (``torch-neuron``)
-
-                .. include:: inference-torch-neuron.txt

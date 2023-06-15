@@ -1,34 +1,10 @@
+.. card:: Tensorflow Neuron (``tensorflow-neuronx``) Setup for  Inf2, Trn1/Trn1n Instances
+            :link: setup-tensorflow-neuronx
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
 
-.. dropdown::  Install Drivers and Tools
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
 
-    .. tab-set::
-
-       .. tab-item:: Amazon Linux 2
-
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 2
-            :end-line: 3
-
-       .. tab-item:: Ubuntu 20
-
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 5
-            :end-line: 6
-
-.. tab-set::
-
-    .. tab-item:: tensorflow-neuronx (``Trn1/Trn1n & Inf2``)
-        :name: tensorflow-neuronx-install-main
-
-        * :ref:`Fresh Install <install-tensorflow-neuronx>`
-        * :ref:`Update to Latest release <update-tensorflow-neuronx>`
-
-    .. tab-item:: tensorflow-neuron (``Inf1``)
-        :name: tensorflow-neuron-install-main
-
-        * :ref:`Fresh Install <install-neuron-tensorflow>`
-        * :ref:`Update to Latest Release <update-neuron-tensorflow>`
-        * :ref:`Install Previous Releases <install-prev-neuron-tensorflow>`
+.. card:: Tensorflow Neuron (``tensorflow-neuron``) Setup for Inf1 Instances
+            :link: setup-tensorflow-neuron
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small

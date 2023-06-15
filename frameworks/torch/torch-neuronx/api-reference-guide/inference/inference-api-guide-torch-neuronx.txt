@@ -1,3 +1,4 @@
 * :ref:`torch_neuronx_trace_api`
 * :ref:`torch_neuronx_core_placement_api`
 * :ref:`torch_neuronx_analyze_api`
+* :ref:`torch_neuronx_dataparallel_api`

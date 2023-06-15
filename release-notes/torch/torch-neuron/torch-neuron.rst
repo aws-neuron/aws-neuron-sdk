@@ -72,8 +72,29 @@ properly recorded at inference time, resulting in an error such as:
 This error typically occurs when ``aten::size`` operators are partitioned to
 CPU. We are investigating a fix for this issue.
 
+PyTorch Neuron release [2.7.10.0]
+--------------------------------------------------
 
-PyTorch Neuron release [2.9.0.0]
+Date: 6/14/2023
+
+New in this release
+~~~~~~~~~~~~~~~~~~~
+
+* Added support for Python 3.10
+
+Bug fixes
+~~~~~~~~~
+
+* torch.pow Operation now correctly handles mismatch between base and exponent data types
+
+PyTorch Neuron release [2.7.1.0]
+--------------------------------------------------
+
+Date: 05/1/2023
+
+* Minor updates.
+
+PyTorch Neuron release [2.6.5.0]
 --------------------------------------------------
 
 Date: 03/28/2023

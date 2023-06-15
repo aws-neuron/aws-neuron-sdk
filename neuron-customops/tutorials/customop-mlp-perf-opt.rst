@@ -19,16 +19,27 @@ To download the source code for this tutorial, do:
 .. code:: bash
 
     git clone https://github.com/aws-neuron/aws-neuron-samples.git
-    cd aws-neuronx-samples/torch-neuronx/inference/customop_mlp
+    cd aws-neuron-samples/torch-neuronx/inference/customop_mlp
 
 .. note:: 
     We will be using an inference example in this tutorial in order to adhere to certain Custom C++ operator restrictions when using multiple GPSIMD cores (see :ref:`custom-ops-api-ref-guide`  for details on current restrictions).
 
+Activate the virtual environment created in :ref:`neuronx-customop-mlp-tutorial`,
+
+.. code:: shell
+
+    source ~/aws_neuron_venv_pytorch/bin/activate
+
+As a reminder, ``ninja`` should be already installed in the virtual environment. If not, install it for PyTorch Custom Extensions in your environment by running:
+
+.. code:: bash
+
+    pip install ninja
 
 Model Configuration Adjustment
 ------------------------------
 
-For this tutorial, we will enlarge the size of the hidden layer from ``[120, 84]`` to ``[4096, 2048]``.
+For this tutorial, we will enlarge the size of the hidden layer from ``[120, 84]`` to ``[4096, 2048]`` in ``model.py``.
 
 .. code-block:: python
     :emphasize-lines: 8
@@ -57,7 +68,7 @@ For this tutorial, we will enlarge the size of the hidden layer from ``[120, 84]
 Performance with Element-wise Accessor
 ---------------------------------------
 
-The ``neuron`` directory contains the same code shown in :ref:`neuronx-customop-mlp-tutorial`, where the ``relu_forward`` is implemented with element-wise accessor. Go to ``neuron`` directory and run ``inference.py``, the expected output on a trn1 instance is,
+The ``neuron`` directory contains the same code shown in :ref:`neuronx-customop-mlp-tutorial`, where the ``relu_forward`` is implemented with element-wise accessor. Go to ``neuron`` directory, run ``build.py`` then ``inference.py``, the expected output on a trn1 instance is,
 
 .. code-block:: bash
 
@@ -66,7 +77,7 @@ The ``neuron`` directory contains the same code shown in :ref:`neuronx-customop-
 
 Performance with TCM Accessor
 -----------------------------
-Now we switch to ``neuron-tcm`` folder. As mentioned in :ref:`custom-ops-api-ref-guide`, TCM accessors provide faster read and write performance. We implement the ``relu_forward`` using TCM accessor:
+Now we switch to ``neuron-tcm`` folder. As mentioned in :ref:`custom-ops-api-ref-guide`, TCM accessors provide faster read and write performance. We implement the ``relu_forward`` using TCM accessor in ``relu.cpp``:
 
 .. code-block:: c++
 
@@ -96,7 +107,7 @@ Now we switch to ``neuron-tcm`` folder. As mentioned in :ref:`custom-ops-api-ref
         return t_out;
     }
 
-Running ``build.py`` and ``inference.py``, the expected output on a trn1 instance is:
+Run ``build.py`` then ``inference.py``, the expected output on a trn1 instance is:
 
 .. code-block:: bash
 
@@ -119,7 +130,7 @@ Now we switch to the ``neuron-multicore`` folder. We first enable the usage of m
         verbose=True
     )
 
-After passing the flag, the kernel function ``relu_forward`` will execute on all GPSIMD cores. Thus we need to use ``cpu_id`` to partiton the workload among all cores. 
+After passing the flag, the kernel function ``relu_forward`` defined in ``relu.cpp`` will execute on all GPSIMD cores. Thus we need to use ``cpu_id`` to partiton the workload among all cores. 
 
 .. code-block:: c++
 
@@ -161,7 +172,7 @@ There are two things noteworthy in the code:
 1. We use ``cpu_id`` and ``cpu_count`` to distribute the workload among all cores. Particularly, each cores performs ``relu`` on a partition of the tensor, the offset is computed based on ``cpu_id``.
 2. The output of the operator is directly written to the tensor from ``get_dst_tensor()``. The ``return t_out;`` statement is ignored during execution.
 
-Run the code, the expected output on a trn1 instance is:
+Run ``build.py`` then ``inference.py``, the expected output on a trn1 instance is:
 
 .. code-block:: bash
 

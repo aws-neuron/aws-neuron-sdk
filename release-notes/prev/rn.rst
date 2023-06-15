@@ -8,6 +8,93 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.10.0-whatsnew:
+
+
+Neuron 2.10.0 (05/01/2023)
+-------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 3
+
+What's New
+^^^^^^^^^^
+
+This release introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+     - Instances
+
+
+   * - Initial support for computer vision models inference
+     - * Added Stable Diffusion 2.1 model script for Text to Image Generation
+       * Added VGG model script for Image Classification Task
+       * Added UNet model script for Image Segmentation Task
+       * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+     - Inf2, Trn1/Trn1n
+
+   * - Profiling support in PyTorch Neuron(``torch-neuronx``) for Inference with TensorBoard
+     - * See more at :ref:`torch-neuronx-profiling-with-tb`
+     - Inf2, Trn1/Trn1n
+  
+   * - New Features and Performance Enhancements in transformers-neuronx
+     - * Support for the HuggingFace generate function. 
+       * Model Serialization support for GPT2 models. (including model saving, loading, and weight swapping)
+       * Improved prompt context encoding performance.
+       * See :ref:`transformers_neuronx_readme` for examples and usage
+       * See more at :ref:`transformers-neuronx-rn` 
+     - Inf2, Trn1/Trn1n
+
+   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuronx``) 
+     - * See :ref:`tensorflow-neuronx-special-flags` for details. (``tensorflow-neuronx``) 
+     - Trn1/Trn1n, Inf2
+
+   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuron``) 
+     - * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
+     - Inf1
+  
+   * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
+     - * Support for using multiple GPSIMD Cores in Custom C++ Operators
+       * See :ref:`custom-ops-api-ref-guide`
+     - Trn1/Trn1n
+   
+   * - Weight Deduplication Feature (Inf1) 
+     - * Support for Sharing weights when loading multiple instance versions of the same model on different NeuronCores.
+       * See more at :ref:`nrt-configuration`
+     - Inf1
+
+   * - ``nccom-test`` - Collective Communication Benchmarking Tool
+     - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
+     - Trn1/Trn1n , Inf2
+
+   * - Announcing end of support for tensorflow-neuron 2.7 & mxnet-neuron 1.5 versions
+     - * See :ref:`announce-eol-tf-before-2-7`
+       * See :ref:`announce-eol-mxnet-before-1-5`
+     - Inf1
+  
+   * - Minor enhancements and bug fixes.
+     - * See :ref:`components-rn`
+     - Trn1/Trn1n , Inf2, Inf1
+
+   * - Release Artifacts
+     - * see :ref:`latest-neuron-release-artifacts`
+     - Trn1/Trn1n , Inf2, Inf1
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+
+
+
 .. _neuron-2.9.0-whatsnew:
 
 

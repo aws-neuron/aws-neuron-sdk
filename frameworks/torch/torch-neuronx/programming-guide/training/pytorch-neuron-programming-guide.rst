@@ -57,7 +57,7 @@ or
 
    tensor.to('cpu')
 
-PyTorch Neuron single-worker training quick-start
+PyTorch Neuron single-worker training/evaluation quick-start
 --------------------------------------------------------------
 
 PyTorch Neuron uses XLA to enable conversion of
@@ -77,11 +77,11 @@ use XLA device:
 
 The NeuronCore is mapped to an XLA device. On Trainium instance, the XLA device is automatically mapped to the first available NeuronCore.
 
-By default the above steps will enable the training script to run on one
+By default the above steps will enable the training or evaluation script to run on one
 NeuronCore. NOTE: Each process is mapped to one NeuronCore.
 
-Finally, add ``mark_step`` at the end of the training step to compile
-and execute the training step:
+Finally, add ``mark_step`` at the end of the training or evaluation step to compile
+and execute the training or evaluation step:
 
 .. code:: python
 
@@ -209,7 +209,7 @@ cache is not persistent between runs. PyTorch Neuron includes a
 persistent cache that enables caching of previously compiled graph on disk so
 that subsequent run of the same program do not incur long compilation
 time. This cache is enabled by default and the default cache directory
-is /var/tmp/neuron-compile-cache.
+is /var/tmp/neuron-compile-cache. **It also support remote cache using AWS S3**.
 
 The cache uses hash of the Neuron compiler flags and XLA graph as the
 key. If the Neuron compiler version or XLA graph changes, you will see
@@ -227,33 +227,18 @@ To disable the cache, you can pass ``--no_cache`` option via NEURON_CC_FLAGS:
 
    os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --no_cache'
 
-To change the cache's root directory, pass ``cache_dir=<root dir>``
-option via NEURON_CC_FLAGS (the actual cache directory will be in
-``<root dir>/neuron-compile-cache``:
+To change the cache's url, pass ``cache_dir=<cache_url>``
+option via NEURON_CC_FLAGS or NEURON_COMPILE_CACHE_URL=<cache_url>. `--cache_dir` is prioritied if both are set.
+If ``<cache_url>`` start with ``s3://``, it will use AWS S3 as remote cache backend. Users need to
+create S3 bucket prior to use S3 cache. The default cache path: ``/var/tmp/neuron_compile_cache``.
 
 .. code:: python
 
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_dir=<root dir>'
-
-Stale cached compiled graphs (NEFFs) are deleted from the cache whenever
-the size of cache is above default cache size of 100GB . The deletion
-order is based on least-recently-used first. To change the cache size,
-pass ``--cache_size=SIZE_IN_BYTES``. For example, to change the cache
-size to 16 MB:
+   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_dir=<cache_url>'
 
 .. code:: python
 
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_size=16777216'
-
-A cache entry considered stale if the last used time is older than a
-time-to-live value, currently default to 30 days. If the last used time
-is earlier than the time-to-live value, then it is not deleted even if
-cache size exceeds cache size limit. To change cache time-to-live, set
-the option ``--cache_ttl`` to the number of days desired:
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_ttl=60'
+   os.environ['NEURON_COMPILE_CACHE_URL'] = '<cache_url>'
 
 If in some cases, the compilation failed because of an environment issue, and you want to retry compilation,
 you can do so by adding ``--retry_failed_compilation``. This will retry the compilation even if there is a

@@ -1,0 +1,31 @@
+.. _neuronx_installation:
+
+.. dropdown::  Install EFA (Applicable only for ``Trn1``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        :start-line: 47
+        :end-line: 48
+
+.. dropdown::  Install PyTorch Neuron (``torch-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        :start-line: 11
+        :end-line: 12
+
+
+.. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section
+    :link: inference-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+
+.. card:: Visit PyTorch Neuron(``torch-neuronx``) for Training section
+    :link: training-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

@@ -1,0 +1,2 @@
+* :ref:`tp_training_tutorial`
+* :ref:`tp_inference_tutorial`

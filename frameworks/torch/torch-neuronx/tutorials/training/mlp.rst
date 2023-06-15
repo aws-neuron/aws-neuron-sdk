@@ -308,6 +308,71 @@ It is important to launch rank-0 worker with ``--node_rank=0`` to avoid hang.
 
 To train on multiple instances, it is recommended to use a ParallelCluster. For a ParallelCluster example, please see `Train a model on AWS Trn1 ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`__.
 
+Single-worker MLP evaluation on Trainium
+----------------------------------------
+
+After training, the final checkpoint is saved in ``checkpoints`` directory. You can run the evaluation step by running the ``eval.py`` script in the same directory as the training script:
+
+.. code:: bash
+
+   cd ~/aws-neuron-samples/torch-neuronx/training/mnist_mlp
+   python eval.py
+
+This evaluation phase can be merged with the training script to check accuracy, for example at the end of every epoch. It is kept separate for illustration purpose.
+
+The evaluation script follow similar flow as the training script with the following differences:
+
+- The input data used is the validation subset of the MNIST dataset.
+- Only need to loop through the dataset once (no epochs).
+- There's only forward pass through the model, and no backward pass or optimizer update.
+- Compute the accuracy across validation set instead of loss per batch.
+
+Expected results (after a second execution to eliminate warmup compilation time during first execution):
+
+.. code:: bash
+
+   ----------Evaluating---------------
+   Test throughput (iter/sec): 47.897945949832845
+   Accuracy: 0.9273833632469177
+   ----------Done Evaluating---------------
+
+If you get a lower accuracy than above, please check that the training is done with at least 4 epochs.
+
+You can also use :ref:`torch_neuronx_trace_api` in the evaluation loop. This can be achieved by the following changes to the ``eval.py``:
+
+- Use ``device = 'cpu'`` instead of XLA device.
+- Don't use ``mark_step()``.
+- Trace the model at the first iteration to freeze it and precompile for inference:
+
+.. code:: python
+
+         if idx == 0:
+             import torch_neuronx
+             model = torch_neuronx.trace(model, test_x)
+
+
+However, note that the inference trace API fixed the input tensor shape, so that every  input tensor will need to match the size used during the tracing step. To ensure every batch from ``DataLoader`` has the same tensor shape, pass ``drop_last=True`` option when instantiating ``DataLoader``.
+
+.. code:: python
+
+        test_loader = DataLoader(test_dataset, batch_size=32, drop_last=True)
+
+The script ``eval_using_trace.py`` can be compared against ``eval.py`` to show the above modifications. It can be executed using:
+
+.. code:: bash
+
+   python eval_using_trace.py
+
+Expected results (note the large increase in performance when using trace API for inference):
+
+.. code:: bash
+
+   ----------Evaluating---------------
+   Test throughput (iter/sec): 409.0836291417652
+   Accuracy: 0.9288585186004639
+   ----------Done Evaluating---------------
+
+
 Known issues and limitations
 ----------------------------
 

@@ -29,30 +29,16 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
     /frameworks/tensorflow/training
 
 
-
-
-.. dropdown::  Tensorflow Neuron Setup
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
     
-    .. include:: tensorflow-setup.txt
+
+.. card:: Tensorflow Neuron(``tensorflow-neuronx``) for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
+    :link: inference-tensorflow-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
 
 
-.. tab-set::
 
-    .. tab-item:: Inference
-
-        .. tab-set::
-
-            .. tab-item:: Inference on Inf2 & Trn1/Trn1n (``tensorflow-neuronx``)
-
-                .. include:: tensorflow-neuronx-inference.txt
-
-            .. tab-item:: Inference on Inf1 (``tensorflow-neuron``)
-
-                .. include:: tensorflow-neuron-inference.txt
-    
-    .. tab-item:: Training 
-
-        .. include:: training.txt
+.. card:: Tensorflow Neuron(``tensorflow-neuron``) for Inference on ``Inf1``
+    :link: inference-tensorflow-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

@@ -7,6 +7,16 @@ Neuron System Tools
    :local:
    :depth: 2
 
+Neuron Tools  [2.11.10.0]
+-------------------------
+Date: 6/14/2023
+
+New in the release:
+
+* ``nccom-test`` can now show multiple latency stats in the results table, such as average or percentiles, by specifying the ``-s`` option (for example: ``-s p10 p99 avg p50``).
+* First public support for ``neuron-profile`` as a standalone tool that can be used to profile executions on Neuron Devices.  Visit the Neuron Tools documentation page for more details on how to use the Neuron Profiler.
+
+
 Neuron Tools  [2.10.1.0]
 -------------------------
 

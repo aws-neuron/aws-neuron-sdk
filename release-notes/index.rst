@@ -8,10 +8,10 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.10.0-whatsnew:
+.. _neuron-2.11.0-whatsnew:
 
 
-Neuron 2.10.0 (05/01/2023)
+Neuron 2.11.0 (06/14/2023)
 -------------------------
 
 .. contents:: Table of contents
@@ -21,7 +21,9 @@ Neuron 2.10.0 (05/01/2023)
 What's New
 ^^^^^^^^^^
 
-This release introduces new features, performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+This release introduces Neuron Distributed, a new python library to simplify training and inference of large models, improving usability with features like S3 model caching, standalone profiler tool, support for Ubuntu22, as well as other new features,
+performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+
 
 .. list-table::
    :widths: auto
@@ -33,53 +35,50 @@ This release introduces new features, performance optimizations, minor enhanceme
      - Details
      - Instances
 
-
-   * - Initial support for computer vision models inference
-     - * Added Stable Diffusion 2.1 model script for Text to Image Generation
-       * Added VGG model script for Image Classification Task
-       * Added UNet model script for Image Segmentation Task
-       * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
-     - Inf2, Trn1/Trn1n
-
-   * - Profiling support in PyTorch Neuron(``torch-neuronx``) for Inference with TensorBoard
-     - * See more at :ref:`torch-neuronx-profiling-with-tb`
-     - Inf2, Trn1/Trn1n
   
-   * - New Features and Performance Enhancements in transformers-neuronx
-     - * Support for the HuggingFace generate function. 
-       * Model Serialization support for GPT2 models. (including model saving, loading, and weight swapping)
-       * Improved prompt context encoding performance.
-       * See :ref:`transformers_neuronx_readme` for examples and usage
+   * - New Features and Performance Enhancements in ``transformers-neuronx``
+     - * Support for ``int8`` inference. See example at :ref:`int8_weight_storage_support`
+       * Improved prompt context encoding performance. See more at :ref:`transformers_neuronx_developer_guide`
+       * Improved collective communications performance for Tensor Parallel inference on Inf2 and Trn1.
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
-   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuronx``) 
-     - * See :ref:`tensorflow-neuronx-special-flags` for details. (``tensorflow-neuronx``) 
-     - Trn1/Trn1n, Inf2
+   * - Neuron Profiler Tool 
+     - * Support for as a stand alone tool to profile and get visualized insights on execution of models on Trainium and Inferentia devices.
+       * See more at :ref:`neuron-profile-ug`
+     - Inf1, Inf2, Trn1/Trn1n
 
-   * - Support models larger than 2GB in TensorFlow 2.x Neuron (``tensorflow-neuron``) 
-     - * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
-     - Inf1
-  
-   * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
-     - * Support for using multiple GPSIMD Cores in Custom C++ Operators
-       * See :ref:`custom-ops-api-ref-guide`
-     - Trn1/Trn1n
-   
-   * - Weight Deduplication Feature (Inf1) 
-     - * Support for Sharing weights when loading multiple instance versions of the same model on different NeuronCores.
-       * See more at :ref:`nrt-configuration`
-     - Inf1
+   * - Neuron Compilation Cache through S3
+     - * Support for sharing compiled models across Inf2 and Trn1 nodes through S3
+       * See more at :ref:`pytorch-neuronx-parallel-compile-cli`
+     - Inf2, Trn1/Trn1n
 
-   * - ``nccom-test`` - Collective Communication Benchmarking Tool
-     - * Supports enabling benchmarking sweeps on various Neuron Collective Communication operations. See :ref:`nccom-test` for more details.
-     - Trn1/Trn1n , Inf2
+   * - New script to scan a model for supported/unsupported operators
+     - * Script to scan a model for supported/unsupported operators before training, scan output includes supported and unsupported operators at both XLA operators and PyTorch operators level.
+       * See a sample tutorial at :ref:`torch-analyze-for-training-tutorial`
+     - Inf2, Trn1/Trn1n
 
-   * - Announcing end of support for tensorflow-neuron 2.7 & mxnet-neuron 1.5 versions
-     - * See :ref:`announce-eol-tf-before-2-7`
-       * See :ref:`announce-eol-mxnet-before-1-5`
-     - Inf1
-  
+   * - Neuron Distributed Library [Experimental]
+     - * New Python Library based on PyTorch enabling distributed training and inference of large models.
+       * Initial support for tensor-parallelism.
+       * See more at :ref:`neuronx-distributed-index`
+     - Inf2, Trn1/Trn1n
+
+   * - Neuron Calculator and Documentation Updates  
+     - * New :ref:`neuron_calculator` Documentation section to help determine number of Neuron Cores needed for LLM Inference.
+       * Added App Note :ref:`neuron_llm_inference`
+       * See more at :ref:`neuron-documentation-rn`
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Enhancements to Neuron SysFS
+     - * Support for detailed breakdown of memory usage across the NeuronCores
+       * See more at :ref:`neuron-sysfs-ug`
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Support for Ubuntu 22
+     - * See more at :ref:`setup-guide-index` for setup instructions on Ubuntu22
+     - Inf1, Inf2, Trn1/Trn1n
+
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1/Trn1n , Inf2, Inf1
@@ -133,7 +132,6 @@ Inf1, Trn1/Trn1n and Inf2 common packages
      - * :ref:`neuron-tools-rn`
 
 
-
    * - Containers
      - Trn1/Trn1n, Inf1, Inf2
      - * ``aws-neuronx-k8-plugin`` (.deb, .rpm)
@@ -158,6 +156,12 @@ Inf1, Trn1/Trn1n and Inf2 common packages
      - * :ref:`tensorflow-modeslserver-neuronx-rn`
 
 
+   * - Neuron Documentation
+     - Trn1/Trn1n, Inf1, Inf2
+     - * 
+     - * :ref:`neuron-documentation-rn`
+
+
 Trn1/Trn1n and Inf2 only packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -173,12 +177,10 @@ Trn1/Trn1n and Inf2 only packages
      - Details
 
 
-
    * - PyTorch Neuron
      - Trn1/Trn1n, Inf2
      - * ``torch-neuronx`` (.whl)
      - * :ref:`torch-neuronx-rn`
-
        * :ref:`pytorch-neuron-supported-operators`
        
 
@@ -187,7 +189,7 @@ Trn1/Trn1n and Inf2 only packages
      - * ``tensorflow-neuronx`` (.whl)
      - * :ref:`tensorflow-neuronx-release-notes`
 
-
+ 
    * - Neuron Compiler (Trn1/Trn1n, Inf2 only)
      - Trn1/Trn1n, Inf2
      - * ``neuronx-cc`` (.whl)
@@ -213,12 +215,20 @@ Trn1/Trn1n and Inf2 only packages
        * :ref:`gpsimd-customop-tools-rn`
 
 
-   * - ``transformers-neuronx``
+   * - Transformers Neuron
      - Trn1/Trn1n, Inf2
-       
-     - * GitHub repository `(link) <https://github.com/aws-neuron/transformers-neuronx>`_
+     - * ``transformers-neuronx`` (.whl)
+     - * :ref:`transformers-neuronx-rn`
 
-     - * `Release Notes <https://github.com/aws-neuron/transformers-neuronx/blob/master/releasenotes.md>`_
+
+   * - Neuron Distributed
+     - Trn1/Trn1n, Inf2
+  
+     - * ``neuronx-distributed`` (.whl)
+  
+     - * :ref:`neuronx-distributed-rn`
+
+
 
 
 .. note::
@@ -284,20 +294,21 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.10.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.10.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.10.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
 
 
 Previous Releases
 -----------------
 
 * :ref:`prev-rn`
+* :ref:`pre-release-content`
 * :ref:`prev-n1-rn`
 

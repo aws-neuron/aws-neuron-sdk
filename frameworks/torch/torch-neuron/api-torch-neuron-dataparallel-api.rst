@@ -5,7 +5,7 @@ torch.neuron.DataParallel API
 
 The :func:`torch.neuron.DataParallel` Python API implements data parallelism on
 :class:`~torch.jit.ScriptModule` models created by the
-:ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`.
+:ref:`torch_neuron_trace_api`.
 This function is analogous to :class:`~torch.nn.DataParallel` in PyTorch.
 The :ref:`torch-neuron-dataparallel-app-note` application note provides an
 overview of how :func:`torch.neuron.DataParallel` can be used to improve
@@ -42,7 +42,7 @@ the performance of inference workloads on Inferentia.
     *Required Arguments*
 
     :arg ~torch.jit.ScriptModule model: Model created by the
-        :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`
+        :ref:`torch_neuron_trace_api`
         to be parallelized.
 
     *Optional Arguments*

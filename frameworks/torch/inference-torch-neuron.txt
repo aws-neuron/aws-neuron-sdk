@@ -1,3 +1,8 @@
+.. card:: Setup  (``torch-neuron``)
+            :link: setup-torch-neuron
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+
 
 .. dropdown:: Tutorials  (``torch-neuron``)
 	:class-title: sphinx-design-class-title-small

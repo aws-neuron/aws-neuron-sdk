@@ -1,3 +1,8 @@
+.. card:: Setup  (``mxnet-neuron``)
+            :link: setup-mxnet-neuron
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+
 .. dropdown::  Tutorials
         :class-title: sphinx-design-class-title-small
         :animate: fade-in

@@ -1,9 +1,58 @@
-Setup for PyTorch Neuron (Trn1 & Inf2)
-======================================
+.. _setup-torch-neuronx:
 
-.. toctree::
-    maxdepth: 1
+PyTorch Neuron (``torch-neuronx``) Setup 
+========================================
 
-    Fresh install </frameworks/torch/torch-neuronx/setup/pytorch-install>
-    Update to latest release </frameworks/torch/torch-neuronx/setup/pytorch-update>
-    Install previous releases </frameworks/torch/torch-neuronx/setup/pytorch-install-prev>
+.. note::
+   This Setup guide is relevant for ``Inf2`` & ``Trn1`` / ``Trn1n`` instances.
+
+.. contents:: Table of contents
+   :local:
+   :depth: 2
+
+``torch-neuronx`` setup on Ubuntu 20 
+------------------------------------
+
+.. card:: Ubuntu 20 (Ubuntu20 AMI)
+        :link: setup-torch-neuronx-ubuntu20
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+.. card:: Ubuntu 20 (DLAMI Base AMI)
+        :link: setup-torch-neuronx-ubuntu20-base-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+.. card:: Ubuntu 20 (DLAMI PyTorch Neuron)
+        :link: setup-torch-neuronx-ubuntu20-dlami-pytorch
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+
+``torch-neuronx`` setup on Ubuntu 22
+------------------------------------
+
+.. card:: Ubuntu 22 (Ubuntu22 AMI)
+        :link: setup-torch-neuronx-ubuntu22
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+
+``torch-neuronx`` setup on Amazon Linux 2 (AL2)
+-----------------------------------------------
+
+
+.. card:: Amazon Linux 2 (Amazon Linux 2 AMI)
+        :link: setup-torch-neuronx-al2
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+.. card:: Amazon Linux 2  (DLAMI Base AMI)
+        :link: setup-torch-neuronx-al2-base-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+.. card:: Amazon Linux 2 (DLAMI PyTorch Neuron)
+        :link: setup-torch-neuronx-al2-dlami-pytorch
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small

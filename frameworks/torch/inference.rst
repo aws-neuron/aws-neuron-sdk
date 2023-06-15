@@ -15,12 +15,20 @@ Inference
 
     :ref:`torch-neuron_vs_torch-neuronx`
 
-.. tab-set::
 
-    .. tab-item:: Inference on Inf2 & Trn1 (``torch-neuronx``)
+Inference on Inf2 & Trn1/Trn1n
+------------------------------
 
-        .. include:: inference-torch-neuronx.txt
+.. card:: PyTorch Neuron(``torch-neuronx``) for Inference
+    :link: inference-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
 
-    .. tab-item:: Inference on Inf1 (``torch-neuron``)
 
-        .. include:: inference-torch-neuron.txt
+Inference on Inf1
+-----------------
+
+.. card:: PyTorch Neuron(``torch-neuron``) for Inference
+    :link: inference-torch-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

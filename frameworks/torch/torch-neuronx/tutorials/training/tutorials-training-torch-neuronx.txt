@@ -5,6 +5,7 @@
 * :ref:`torch-hf-t5-finetune`
 * :ref:`megatron-lm-pretraining-tutorial`
 * :ref:`neuronx-ddp-tutorial`
+* :ref:`torch-analyze-for-training-tutorial`
 * :ref:`neuronx-customop-mlp-tutorial`
 * :ref:`neuronx-customop-mlp-perf`
 

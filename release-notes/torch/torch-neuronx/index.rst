@@ -14,6 +14,84 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [1.13.1.1.8.0]
+----------------------
+Date: 6/14/2023
+
+Summary
+~~~~~~~
+
+- Added s3 caching to NeuronCache.
+- Added extract/compile/analyze phases to neuron_parallel_compile.
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- Added S3 caching support to NeuronCache. Removed NeuronCache options --cache_size/cache_ttl (please delete cache directories as needed).
+- Added separate extract and compile phases Neuron Parallel Compile.
+- Added model analyze API to Neuron Parallel Compile.
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX``.
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Convolution is not supported during training.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when Neuron encounters an operation that it does not support during
+:func:`torch_neuronx.trace`, this will cause an error. The intended behavior
+when tracing is to automatically partition the model into separate subgraphs
+that run on NeuronCores and subgraphs that run on CPU. See
+:ref:`pytorch-neuron-supported-operators` for a list of supported operators.
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
 
 Release [1.13.1.1.7.0]
 ----------------------
@@ -48,6 +126,18 @@ Unexpected behavior with :class:`torch.autocast`
 Fixed an issue where :class:`torch.autocast` did not correctly autocast
 when using ``torch.bfloat16``
 
+Resolved slower BERT bf16 Phase 1 Single Node Performance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As of the Neuron 2.9.0 release, :ref:`BERT phase 1 pretraining <hf-bert-pretraining-tutorial>`
+performance has regressed by approximately 8-9% when executed on a *single
+node* only (i.e. just one ``trn1.32xlarge`` instance). This is resolved in 2.10 release.
+
+Resolved lower throughput for BERT-large training on AL2 instances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Starting in release 2.7, we see a performance drop of roughly 5-10% for BERT model training on AL2
+instances. This is resolved in release 2.10.
 
 Resolved Issues (Inference)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,13 +172,6 @@ Memory leaking in ``glibc``
 ``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
 setting ``MALLOC_ARENA_MAX``.
 
-Slower BERT bf16 Phase 1 Single Node Performance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-As of the Neuron 2.9.0 release, :ref:`BERT phase 1 pretraining <hf-bert-pretraining-tutorial>`
-performance has regressed by approximately 8-9% when executed on a *single
-node* only (i.e. just one ``trn1.32xlarge`` instance).
-
 Convolution is not supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -114,12 +197,6 @@ look like this:
 
 Hence, it is recommended to use fewer workers per node with DDP.
 
-Lower throughput for BERT-large training on AL2 instances
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We see a performance drop of roughly 5-10% for BERT model training on AL2
-instances. This is because of the increase in time required for tracing the
-model.
 
 Known Issues and Limitations (Inference)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

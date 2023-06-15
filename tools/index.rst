@@ -20,6 +20,7 @@ Neuron provides debugging and profiling tools with the visualization support of 
         * :ref:`neuron-monitor-ug`
         * :ref:`neuron-top-ug`
         * :ref:`neuron-ls-ug`
+        * :ref:`neuron-profile-ug`
         * :ref:`neuron-sysfs-ug`
         * :ref:`What's New <neuron-tools-rn>`
 

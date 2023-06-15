@@ -9,7 +9,7 @@
         :start-line: 47
         :end-line: 48
 
-.. dropdown::  Install Tensorflow Neuron (``tensorflow-neuronx``)
+.. dropdown::  Install TensorFlow Neuron (``tensorflow-neuronx``)
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -18,14 +18,8 @@
         :start-line: 35
         :end-line: 36
 
-.. dropdown::  Get Started with Inference (``Inf2 & Trn1``)
-       :class-title: sphinx-design-class-title-small
-       :class-body: sphinx-design-class-body-small
-       :animate: fade-in
+.. card:: Visit TensorFlow Neuron(``tensorflow-neuronx``) for Inference section
+    :link: inference-tensorflow-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
 
-        :ref:`Roberta-Base </src/examples/tensorflow/tensorflow-neuronx/ttfneuronx-roberta-base-tutorial.ipynb>`
-
-.. card:: Visit TensorFlow Neuron section for more
-        :class-body: sphinx-design-class-body-small
-        :link: tensorflow-neuron-main
-        :link-type: ref

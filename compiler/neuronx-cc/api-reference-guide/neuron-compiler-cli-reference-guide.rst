@@ -59,6 +59,7 @@ Available Commands:
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
      [--distribution-strategy <disribution_type>]
+     [--enable-saturate-infinity]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
      [--logfile <filename>]
@@ -93,11 +94,8 @@ Available Commands:
     - ``transformer``: Perform optimizations specific to `Transformer <https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)>` models. 
     - ``unet-inference``: Perform optimizations specific to certain `U-Net <https://en.wikipedia.org/wiki/U-Net>` model architectures when performing inference. U-Net models often have certain structures that result in excessive performance-impacting data transfers; this option allows the compiler to apply additional memory optimizations to prevent these data transfers and also allows the compiler to map larger normalization operators which would otherwise not successfully execute.
 
-  - :option:`--distribution-strategy <disribution_type>`: Specify the type of data parallelism sharding being used in the model
-  
-    Valid values:
-
-    - ``FSDP``: Enable the compiler to perform optimizations applicable to models that use the PyTorch 2.x Fully Sharded Data Parallel (FSDP) `APIs <https://pytorch.org/docs/stable/fsdp.html>` to shard parameters, gradients, and optimizer states across data-parallel workers. These optimizations can also apply to models that use `DeepSpeed <https://www.deepspeed.ai/>` to implement distributed execution.
+  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk 
+  of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
 
   - :option:`--auto-cast <cast_mode>`: Controls how the compiler makes tradeoffs between performance and accuracy for FP32 operations. (Default: ``matmult``)
 

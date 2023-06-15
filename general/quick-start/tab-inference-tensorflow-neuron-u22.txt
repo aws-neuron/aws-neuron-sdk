@@ -1,0 +1,21 @@
+.. _neuron_installation:
+
+.. dropdown::  Install TensorFlow Neuron (``tensorflow-neuron``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        :start-line: 113
+        :end-line: 114
+
+
+.. card:: Visit TensorFlow Neuron(``tensorflow-neuron``) for Inference section
+    :link: inference-tensorflow-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+.. card:: Visit TensorFlow Neuron section for more
+    :class-body: sphinx-design-class-body-small
+    :link: tensorflow-neuron-main
+    :link-type: ref

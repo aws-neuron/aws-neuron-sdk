@@ -1,4 +1,11 @@
 
+
+.. card:: Setup  (``torch-neuronx``)
+            :link: setup-torch-neuronx
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+
+
 .. dropdown::  Tutorials  (``torch-neuronx``)
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small

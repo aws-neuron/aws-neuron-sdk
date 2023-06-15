@@ -1,7 +1,7 @@
 .. _inference-torch-neuronx:
 
 Inference with ``torch-neuronx`` (Inf2 & Trn1/Trn1n)
-=============================================
+====================================================
 
 .. toctree::
     :maxdepth: 1

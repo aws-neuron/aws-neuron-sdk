@@ -140,6 +140,18 @@ This view can give better insight into how operators translate to Neuron, as wel
 may improve performance.
 
 
+Troubleshooting
+---------------
+
+TensorBoard launch fails
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    ImportError: cannot import name 'Mapping' from 'collections'
+
+This is an issue with Python 3.10 and a dependency of an old tensorboard version.  To workaround this error, please run
+``pip install --upgrade tensorboard``.  For more information, see https://github.com/tensorflow/tensorboard/pull/5490.
 
 .. |image1| image:: /images/Neuron_Profiler_Tensorboard_Dropdown.jpg
 .. |image2| image:: /images/tb-plugin-img12.png

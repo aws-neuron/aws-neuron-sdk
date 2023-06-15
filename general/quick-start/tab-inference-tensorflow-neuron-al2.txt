@@ -1,0 +1,18 @@
+.. _neuron_installation:
+
+.. dropdown::  Install TensorFlow Neuron (``tensorflow-neuron``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+
+.. card:: Visit TensorFlow Neuron(``tensorflow-neuron``) for Inference section
+    :link: inference-tensorflow-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+.. card:: Visit TensorFlow Neuron section for more
+    :class-body: sphinx-design-class-body-small
+    :link: tensorflow-neuron-main
+    :link-type: ref

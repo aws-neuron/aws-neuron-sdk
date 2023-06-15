@@ -43,6 +43,13 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │       ├── arch_type
   │   │       ├── device_name
   │   │       └── instance_type
+  │   ├── stats/
+  │   │   └── memory_usage/
+  │   │       └── host_mem/
+  │   │           ├── application_memory
+  │   │           ├── constants
+  │   │           ├── dam_buffers
+  │   │           └── tensors
   │   ├── neuron_core0/
   │   │   ├── info/
   │   │   │   └── architecture/
@@ -63,7 +70,12 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │   │   │   ├── resource_error
   │   │   │   │   └── timeout
   │   │   │   ├── memory_usage/
-  │   │   │   │   ├── device_mem
+  │   │   │   │   ├── device_mem/
+  │   │   │   │   │    ├── constants
+  │   │   │   │   │    ├── model_code
+  │   │   │   │   │    ├── model_shared_scratchpad
+  │   │   │   │   │    ├── runtime_memory
+  │   │   │   │   │    └── tensors
   │   │   │   │   └── host_mem
   │   │   │   └── other_info/
   │   │   │       ├── inference_count
@@ -84,7 +96,10 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
 
 Each Neuron Device is represented as a directory under ``/sys/devices/virtual/neuron_device/``, where ``neuron0/`` represents Neuron Device 0, ``neuron1/`` represents Neuron Device 1, etc. Each NeuronCore is represented as a directory under a Neuron Device directory, represented as ``neuron_core{0,1,2,...}``. Metrics such as Runtime and Driver info and statistics are collected as per NeuronCore in two directories under the NeuronCore directory, i.e. ``info/`` and ``stats/``.
 
-Most of the metrics belong to a category called “counter.” Each counter is represented as a directory, which holds two numerical values as two files: total and present. The total value starts accumulating metrics when the Driver is loaded; the present value records the last changed metric value. Each counter has the same filesystem structure like this:
+Most of the metrics belong to a category called “counter.” 
+Each counter is represented as a directory, which holds two numerical values as two files: total and present. Each memory usage counter has an additional value called peak.
+The total value starts accumulating metrics when the Driver is loaded. The present value records the last changed metric value. The peak value records the max value so far.
+Each counter has the same filesystem structure like this:
 
 .. code-block:: dash
 
@@ -117,10 +132,16 @@ Description for Each Metric
 
 * ``status/``: this directory stores the number of each return status of API calls. As explained in :ref:`The LIBNRT API Return Codes <nrt_api>`, every API call returns an NRT_STATUS value, which represents the return status of that API call. Our sysfs filesystem stores all ``NRT_STATUS`` as subdirectories under the ``status/`` directory. They all have the counter structure. Thus each ``NRT_STATUS`` subdirectory holds two values (total and present) and records the number of times you receive a certain ``NRT_STATUS``. The following is description for each ``NRT_STATUS`` subdirectory. You should see the description align with what is described in :ref:`The LIBNRT API Return Codes <nrt_api>`.
 
-* ``memory_usage/``: this directory contains memory usage statistics, as per device and per host, all of which are counters. In this directory, total counters refer to the amount of memory you are using now, and present counters refer to the last memory allocation or deallocation amount:
+* ``memory_usage/``: this directory contains memory usage statistics for both device and host, represented as counters. In this directory, the total counters indicate the current memory usage, present counters represent the memory allocation or deallocation amount in the previous operation, and peak counters indicate the maximum memory usage observed. Additionally, this directory provides detailed breakdown statistics for device and host memory usage. These memory breakdown details correspond to the :ref:`Memory Usage Summary <neuron_top_mem_usage>` section displayed on in Neuron Monitor.
 
-  * ``device_mem/{total, present}``: the amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
-  * ``host_mem/{total, present}``: the amount of memory that Neuron Runtime uses for input and output tensors.
+  * ``device_mem/``: the amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
+
+    * This device memory per Neuron Core is further categorized into five types: ``constants/``, ``model_code/``, ``model_shared_scratchpad/``, ``runtime_memory/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Device Used Memory <neuron_top_device_mem_usage>` section.  Each of these categories has total, present, and peak.
+  
+  * ``host_mem/``: the amount of memory that Neuron Runtime uses for input and output tensors.
+
+    * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
+
 
 * ``other_info/``: this directory contains statistics that are not included by ``status/`` and ``memory_usage/``. All of them are not counter types:
 

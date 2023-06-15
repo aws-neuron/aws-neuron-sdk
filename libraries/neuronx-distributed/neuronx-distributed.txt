@@ -1,0 +1,42 @@
+.. dropdown::  Setup  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/neuronx-distributed/setup/index.rst
+
+.. dropdown::  App Notes  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+   
+    .. include:: /libraries/neuronx-distributed/app_notes.txt
+
+.. dropdown::  API Reference Guide  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/neuronx-distributed/api-reference-guide.txt
+
+.. dropdown::  Developer Guide  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/neuronx-distributed/developer-guide.txt
+
+.. dropdown::  Tutorials  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/neuronx-distributed/tutorials/neuronx_distributed_tutorials.txt
+
+
+.. dropdown::  Misc  (``neuronx-distributed``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/neuronx-distributed/neuronx-distributed-misc.txt

@@ -1,0 +1,30 @@
+.. dropdown::  Setup  (``transformers-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /libraries/transformers-neuronx/setup/index.rst
+
+
+.. dropdown::  Developer Guide  (``transformers-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /libraries/transformers-neuronx/developer-guide.txt
+
+
+.. dropdown::  Tutorials  (``transformers-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /libraries/transformers-neuronx/transformers-neuronx-tutorials.txt
+
+
+.. dropdown::  Misc  (``transformers-neuronx``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include:: /libraries/transformers-neuronx/transformers-neuronx-misc.txt

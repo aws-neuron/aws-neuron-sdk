@@ -57,8 +57,12 @@ a single Neuron process:
   * ``System vCPU usage`` - the two percentages are user% and system%
   * ``Runtime vCPU usage`` - same breakdown
 
+.. _neuron_top_mem_usage:
+
 * The ``Memory Usage Summary`` section provides a breakdown of the total memory usage on the Neuron Device as well
   as on the host:
+
+  .. _neuron_top_host_mem_usage:
 
   * ``Host Used Memory`` - amount of host memory used by the selected application (or an aggregate of all applications if 'All' is selected)
 
@@ -67,6 +71,8 @@ a single Neuron process:
     * ``Constants`` - amount of host memory used for constants (for applications running training) or weights (for applications running inferences)
     * ``DMA Buffers`` - amount of host memory used for DMA transfers
     * ``App. Memory`` - amount of host memory used by the application that doesn't fall in any of the previous categories
+
+  .. _neuron_top_device_mem_usage:
 
   * ``Device Used Memory`` - amount of device memory used by the selected application (or an aggregate of all applications if 'All' is selected)
 

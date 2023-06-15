@@ -14,7 +14,7 @@ To reduce this compilation time during execution, the ``neuron_parallel_compile`
 utility is provided as part of PyTorch Neuron installation. The
 ``neuron_parallel_compile`` will extract graphs from a trial run of your script,
 perform parallel pre-compilation of the graphs, and populate the Neuron Cache
-on disk with compiled graphs. Your trial run should be limited to a few steps
+on disk or AWS S3 bucket with compiled graphs. Your trial run should be limited to a few steps
 (eg.10-15), enough for the utility to extract the different graphs needed for
 full execution. To run the utility:
 
@@ -71,3 +71,56 @@ Two additional utility flags are provided:
   Example: If NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE=1 is set when using ``neuron_parallel_compile``,
   a crash in the training script would be ignored and the graphs collected upto the crash would be
   compiled.
+
+``NEURON_COMPILE_CACHE_URL``:
+
+-  Set the cache url when using ``neuron_parallel_compile`` tool.
+   If starts with ``s3://``, it will use AWS S3 as cache backend. Otherwise it will use
+   local disk cache. Default is ``/var/tmp/neuron-compile-cache``.
+
+
+S3 as Neuron Cache
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In ``neuron_parallel_compile``, user can either do ``NEURON_COMPILE_CACHE_URL=<cache_url>`` 
+or ``NEURON_CC_FLAGS=="--cache_dir=<cache_url>"`` to set the cache URL (``--cache_dir`` is prioritized if both are set). The default cache location
+is on disk as ``/var/tmp/neuron-compile-cache``. Now we support using **AWS S3** as remote cache backend besides local disk cache.
+When ``<cache_url>`` starts with ``s3://``, it will put cache files into S3, which can be easily shared
+between tasks running on different machines. **Note: you need to create S3 bucket before using S3 cache, and also have read/write permissions to the bucket.**
+
+Seperate collection and compilation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For cases like finetuning, there could be multiple independent training tasks running on different nodes,
+but shares a lot compilation graphs in common. ``neuron_parallel_compile`` provides commands to seperate 
+graph collection and compilation, so users can collect all graphs across different training session in advance to avoid duplicated compilation.
+
+Please make sure to use the same neuronx-cc compilier version when invoking these two commands.
+
+``neuron_parallel_compile --command collect <run_script>`` will collect graphs with dry-run into cache.
+
+``neuron_parallel_compile --command compile <run_script>`` will compile the collected graphs from cache, and store
+compiled result (NEFFs) back into cache.
+
+``neuron_parallel_compile --command clean`` will remove cached files.
+
+**Note: if --command is not specified, will do collection and then compilation by default**.
+
+Analyze operations support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The analyze command checks the support of operations within the training script by checking each operator against neuronx-cc.
+It is only supported for PyTorch models. The output of the tool will be available as result.json within the output location.
+
+``neuron_parallel_compile --command analyze python3 training_script.py``
+
+Optional Arguments:
+
+``--analyze-output ANALYZE_OUTPUT_LOCATION``
+Only supported for --command analyze. Path to location where output will be persisted.
+Default: cwd/model_analysis_result
+
+``--analyze-verbosity {1,2}``
+Only supported for --command analyze. Level of information to be included within the output.
+1: add XLA operator information into the results.
+2: add aten metadata into results.
+Default: 2
+
+The tutorial for ``analyze`` can be found :ref:`here <torch-analyze-for-training-tutorial>`

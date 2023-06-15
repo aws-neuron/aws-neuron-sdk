@@ -1,4 +1,5 @@
 .. _tensorflow-neuron-setup:
+.. _tensorflow-neuronx-main:
 
 TensorFlow Setup Guide for Inf2 & Trn1
 ======================================

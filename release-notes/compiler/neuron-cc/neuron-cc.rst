@@ -46,6 +46,13 @@ Known issues and limitations - updated 11/23/2022
 * *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
 
+Neuron Compiler release [1.16.2.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 6/14/2023
+
+* Minor bug fixes.
+
 Neuron Compiler release [1.15.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

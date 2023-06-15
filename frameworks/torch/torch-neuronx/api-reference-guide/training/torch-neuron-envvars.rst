@@ -36,6 +36,12 @@ PyTorch Neuron are (experimental ones are noted):
    process, where N is the value this environment variable is set to.
    Default is to keep all graphs loaded by a process.
 
+``NEURON_COMPILE_CACHE_URL`` **[Experimental]**:
+
+-  Set the cache url when using ``neuron_parallel_compile`` tool.
+   If starts with ``s3://``, it will use AWS S3 as cache backend. Otherwise it will use
+   local disk cache. Default is ``/var/tmp/neuron-compile-cache``.
+
 ``NEURON_PARALLEL_COMPILE_MAX_RETRIES`` **[Experimental]**:
 
 -  Set the maximum number of retries when using ``neuron_parallel_compile`` tool.

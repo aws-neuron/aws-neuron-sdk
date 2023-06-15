@@ -6,16 +6,16 @@
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
 
 # AL2 Pytorch Neuronx Install
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
 
 # U20 Pytorch Neuronx Install
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
 
 # AL2 Pytorch Neuronx Upgrade(1.13)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
 
 # U20 Pytorch Neuronx Upgrade(1.13)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
 
 # AL2 Pytorch Neuronx Upgrade(1.12)
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.12.0 --neuron-version=2.6.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
@@ -48,34 +48,34 @@
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=efa --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
 
 # AL2 PyTorch DLAMI
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=dlami-framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=dlami-framework
 
 # U20 PyTorch DLAMI
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=dlami-framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=dlami-framework
+
+# AL2 tensorflow Neuronx upgrade(2.10)
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
+
+# U20 tensorflow Neuronx upgrade(2.10)
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
 # AL2 tensorflow Neuronx upgrade(2.9)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
 # U20 tensorflow Neuronx upgrade(2.9)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
 # AL2 tensorflow Neuronx upgrade(2.8)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
 # U20 tensorflow Neuronx upgrade(2.8)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --neuron-version=2.10.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
-# AL2 tensorflow Neuronx upgrade(2.7)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
+# AL2 tensorflow Neuronx Install(2.10)
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
-# U20 tensorflow Neuronx upgrade(2.7)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
-
-# AL2 tensorflow Neuronx Install(2.9)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.9 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
-
-# U20 tensorflow Neuronx Install(2.9)
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.9 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
+# U20 tensorflow Neuronx Install(2.10)
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
 
 # AL2 tensorflow Neuronx Install(2.8)
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=tensorflow --framework-version=2.8 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami --category=compiler_framework
@@ -88,3 +88,27 @@
 
 # U20 tensorflow Neuronx Install(2.7)
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.7 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami --category=compiler_framework
+
+# AL2 Tensorflow DLAMI
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=tensorflow --framework-version=2.10 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=dlami-framework
+
+# U20 Tensorflow DLAMI
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=tensorflow --framework-version=2.10 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=dlami-framework
+
+# AL2 PyTorch Neuron DLAMI
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=dlami-framework
+
+# U20 PyTorch Neuron DLAMI
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=all --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=dlami-framework
+
+# U22 Pytorch Neuronx Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
+
+# U22 Tensorflow Neuronx Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
+
+# U22 Pytorch Neuron Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=inf1 --ami=non-dlami
+
+# U22 Tensorflow Neuron Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=inf1 --ami=non-dlami

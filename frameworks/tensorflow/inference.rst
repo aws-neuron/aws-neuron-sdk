@@ -9,12 +9,21 @@ Inference
     Inference on Inf1 (``tensorflow-neuron``) </frameworks/tensorflow/tensorflow-neuron-inference>
 
 
-.. tab-set::
 
-    .. tab-item:: Inference on Inf2 & Trn1 (``tensorflow-neuronx``)
+Inference on Inf2 & Trn1/Trn1n
+------------------------------
 
-        .. include:: tensorflow-neuronx-inference.txt
+.. card:: Tensorflow Neuron(``tensorflow-neuronx``) for Inference
+    :link: inference-tensorflow-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
 
-    .. tab-item:: Inference on Inf1 (``tensorflow-neuron``)
 
-        .. include:: tensorflow-neuron-inference.txt
+
+Inference on Inf1
+-----------------
+
+.. card:: Tensorflow Neuron(``tensorflow-neuron``) for Inference
+    :link: inference-tensorflow-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

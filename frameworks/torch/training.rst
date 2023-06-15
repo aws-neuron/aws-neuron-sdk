@@ -5,3 +5,13 @@ Training
     :maxdepth: 1
 
     Training with Trn1/Trn1n </frameworks/torch/training-torch-neuronx>
+
+
+
+Training on Trn1/Trn1n
+----------------------
+
+.. card:: PyTorch Neuron(``torch-neuronx``) for Training
+    :link: training-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

@@ -23,7 +23,7 @@ add_inf1_tag = ['general/arch',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
 add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx']
-add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/']
+add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','general/setup/tensorflow-neuronx']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -66,7 +66,12 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/benchmarks/inf2/inf2-performance',
                 'general/announcements/neuron2.x/sm-training-dlc-2.9.1',
                 'general/appnotes/transformers-neuronx/generative-llm-inference-with-neuron',
-                'general/calculator/neuron-calculator'
+                'general/calculator/neuron-calculator',
+                 'general/appnotes/torch-neuronx/torch-neuronx-dataparallel-app-note',
+                'general/setup/torch-neuronx',
+                 'general/setup/tensorflow-neuronx',
+                 'general/setup/neuron-setup/tensorflow/neuronx/',
+                 'general/setup/neuron-setup/pytorch/neuronx/'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
@@ -118,7 +123,16 @@ clear_nc_v2_tag = [
                 'frameworks/torch/inference-torch-neuron',
                 'frameworks/tensorflow/tensorflow-neuron-inference',
                 'general/arch/neuron-hardware/inferentia',
-                'general/arch/neuron-hardware/neuron-core-v1'
+                'general/arch/neuron-hardware/neuron-core-v1',
+                'general/setup/tensorflow-neuron',
+                'general/setup/neuron-setup/pytorch/neuron/',
+                'general/setup/mxnet-neuron/',
+                'general/setup/torch-neuron',
+                'general/setup/mxnet-neuron',
+                'general/setup/neuron-setup/mxnet/neuron/ubuntu/',
+                'general/setup/neuron-setup/mxnet/neuron/amazon-linux/',
+                'general/setup/neuron-setup/tensorflow/neuron/ubuntu/',
+                'general/setup/neuron-setup/tensorflow/neuron/amazon-linux/'
                 ]
 
 class NeuronTag(SphinxDirective):
@@ -197,9 +211,14 @@ class NeuronTag(SphinxDirective):
                 return_instances.remove('Inf2')
 
         if cur_file=='general/arch/neuron-hardware/inferentia2':
-             if 'Inf2' not in return_instances:
+            if 'Inf2' not in return_instances:
                 return_instances.append('Inf2')
        
+        if cur_file=='frameworks/torch/inference-torch-neuronx' or cur_file=='general/setup/torch-neuronx' or cur_file=='general/setup/tensorflow-neuronx':
+            if 'Inf2' not in return_instances:
+                return_instances.append('Inf2')
+                return_instances.append('Trn1')
+                return_instances.append('Trn1n')
             
         # generate text from instances list if the list is not empty.
         return_instances = sorted(set(return_instances))

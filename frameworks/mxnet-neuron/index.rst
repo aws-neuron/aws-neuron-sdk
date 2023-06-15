@@ -7,7 +7,8 @@ MXNet Neuron
 MXNet Neuron unlocks high-performance and cost-effective deep learning acceleration on AWS Trainium-based and Inferentia-based Amazon EC2 instances.
 
 MXNet Neuron enables native MXNet models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes. 
- 
+
+
 .. toctree::
     :maxdepth: 1
     :hidden:
@@ -21,17 +22,13 @@ MXNet Neuron enables native MXNet models to be accelerated on Neuron devices, so
     /frameworks/mxnet-neuron/inference-mxnet-neuron
     
 
-.. dropdown::  MXNet Neuron Setup
-        :class-title: sphinx-design-class-title-small
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
+.. contents:: Table of contents
+	:local:
+	:depth: 2
 
-        .. include:: mxnet-neuron-setup.txt
+    
 
-
-.. tab-set::
-
-    .. tab-item:: Inference
-        
-        .. include:: inference-mxnet-neuron.txt
-
+.. card:: MxNet Neuron(``mxnet-neuron``) for Inference on ``Inf1``
+    :link: inference-mxnet-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small

@@ -1,3 +1,5 @@
+.. _setup-torch-neuron:
+
 Setup Guide for Inf1
 ====================
 

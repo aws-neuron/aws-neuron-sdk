@@ -47,8 +47,14 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
+tensorflow-neuron 2.x release [2.8.9.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tensorflow-neuron 2.x release [2.10.0.0]
+Date: 6/14/2023
+
+* Added Python 3.10 support.
+
+tensorflow-neuron 2.x release [2.8.1.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 05/01/2023
@@ -56,14 +62,27 @@ Date: 05/01/2023
 * Added support for tracing models larger than 2 GB through the environment variable ``NEURON_CC_FLAGS='--extract-weights INSTANCE_TYPE'`` for all inf1 instance types.
 * Neuron release 2.10 release will be the last release that will include support for tensorflow-neuron version 2.7. Future Neuron releases will not include tensorflow-neuron version 2.7.
 
+tensorflow-neuron 2.x release [2.7.4.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tensorflow-neuron 2.x release [2.9.0.0]
+Date: 04/19/2023
+
+* Minor updates.
+
+tensorflow-neuron 2.x release [2.7.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 03/28/2023
 
 * Introduce the ``tfn.analyze_model`` function that displays information about the supported and unsupported operators of a traceable model.
 * Introduce the ``on_neuron_ratio`` attribute of AWS Optimized Neuron Models returned by ``tfn.trace``, which is the percentage of ops on neuron after compilation. 
+
+tensorflow-neuron 2.x release [2.6.5.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 02/24/2023
+
+* Minor updates.
 
 tensorflow-neuron 2.x release [2.6.0.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

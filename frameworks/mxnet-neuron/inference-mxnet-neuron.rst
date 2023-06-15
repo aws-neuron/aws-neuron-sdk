@@ -1,3 +1,5 @@
+.. _inference-mxnet-neuron:
+
 Inference (mxnet-neuron)
 ========================
 

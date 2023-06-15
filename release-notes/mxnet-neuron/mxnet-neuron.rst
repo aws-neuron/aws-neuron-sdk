@@ -10,6 +10,16 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.4.9.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 6/14/2023
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.8 Neuron.
+
 Apache MXNet Neuron release [1.8.0.2.4.1.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -30,6 +40,32 @@ Known Issues and Limitations
 ^^^^^^^^^^^^^^^^^
 
 Date: 5/1/2023
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.5 Neuron.
+
+This is the last released version. Please use neuron-cc version 1.15.0 only for this mxnet-neuron version. Also, this version is limited to python 3.9 or below only.
+
+.. code:: bash
+
+   python -m pip install mxnet_neuron==1.5.1.* neuron-cc==1.15.0
+
+Apache MXNet Neuron release [1.8.0.2.2.127.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 3/28/2023
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.8 Neuron.
+
+[1.5.1.1.10.37.0]
+^^^^^^^^^^^^^^^^^
+
+Date: 3/28/2023
 
 Summary
 -------

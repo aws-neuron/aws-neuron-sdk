@@ -533,6 +533,8 @@ class manifest:
             # Create Python venv
             str += f'\n{indentation}# Create Python venv\n'
             str_venv_name = 'aws_neuron_venv_' + args.framework
+            if args.instance == 'inf1':
+                str_venv_name += '_inf1'
 
             str += f'{indentation}python{target_python_version} -m venv ' + str_venv_name + ' \n'
 
@@ -550,6 +552,10 @@ class manifest:
             str_venv_name += '/opt/'
 
         str_venv_name += 'aws_neuron_venv_' + args.framework
+
+        if args.instance == 'inf1':
+            str_venv_name += '_inf1'
+
         str += f'{indentation}source ' + str_venv_name + '/bin/activate \n'
 
         # install python packages
@@ -677,15 +683,17 @@ class manifest:
 
                 mxnet_framework = ''
 
+                neuron_cc_version = ''
                 if args.framework_version == '1.8.0':
                     mxnet_framework = 'mx_neuron'
                 elif args.framework_version == '1.5.1':
                     mxnet_framework = 'mxnet_neuron'
+                    neuron_cc_version='==1.15.0'
 
                 str = f'\n# {install} MXNet Neuron\n'
                 str += 'wget https://aws-mx-pypi.s3.us-west-2.amazonaws.com/1.8.0/aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
                 str += 'pip install aws_mx-1.8.0.2-py2.py3-none-manylinux2014_x86_64.whl\n'
-                str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc\n'
+                str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc{neuron_cc_version}\n'
 
         if args.venv_install_type == 'parallel-cluster':
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
@@ -858,7 +866,6 @@ class manifest:
                 'name'].tolist()
 
     def get_package_version(self, category, neuron_version, name=None, framework_version=None):
-
         if neuron_version == None:
             neuron_version = self.get_latest_neuron_version_per_instance(args.instance)
 

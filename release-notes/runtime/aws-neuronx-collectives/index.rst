@@ -10,6 +10,15 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :depth: 1
 
 
+Neuron Collectives [2.14.9.0]
+------------------------------
+Date: 6/14/2023
+
+New in this release
+
+* Added check for FI_EFA_FORK_SAFE environment variable; now forcing the flag to be set to 1 for multinode runs executing on Linux kernels older than 5.15. 
+
+
 Neuron Collectives [2.13.7.0]
 ------------------------------
 Date: 05/01/2023

@@ -115,6 +115,6 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
          ]
       }
    
-   **Note:** the ``failureAt`` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then that means that the operator failed to be compiled with ``neuronx-cc``. This could either indicate that the operator is unsupported, or there is a bug with the operator.
+   **Note:** the ``failureAt`` field can either be "neuronx-cc" or "Lowering to HLO". If the field is "neuronx-cc", then it indicates that the provided operator configuration failed to be compiled with ``neuronx-cc``. This could either indicate that the operator configuration is unsupported, or there is a bug with that operator configuration.
 
 .. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`

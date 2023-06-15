@@ -1,0 +1,20 @@
+.. _neuron_installation:
+
+.. dropdown::  Install PyTorch Neuron (``torch-neuron``)
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+
+    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        :start-line: 110
+        :end-line: 111
+
+.. card:: Visit PyTorch Neuron(``torch-neuron``) for Inference section
+    :link: inference-torch-neuron
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
+
+.. card:: Visit PyTorch Neuron section for more
+    :class-body: sphinx-design-class-body-small
+    :link: neuron-pytorch
+    :link-type: ref

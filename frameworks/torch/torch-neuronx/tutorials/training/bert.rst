@@ -60,16 +60,13 @@ For all the commands below, make sure you are in the virtual environment that yo
 
    source ~/aws_neuron_venv_pytorch/bin/activate
 
-Next, download the Python-based training script ``dp_bert_large_hf_pretrain_hdf5.py`` and ``requirements.txt`` and install the requirements:
+Next, clone the AWS Neuron Samples repository and install requirements in the BERT tutorial directory ``aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain``:
 
 .. code:: shell
 
-   mkdir -p ~/examples/dp_bert_hf_pretrain
-   cd ~/examples/dp_bert_hf_pretrain
-   wget https://raw.githubusercontent.com/rwightman/pytorch-image-models/main/timm/optim/lamb.py .
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/dp_bert_large_hf_pretrain_hdf5.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/dp_bert_hf_pretrain/requirements.txt
-   python3 -m pip install -r requirements.txt
+   cd ~/
+   git clone https://github.com/aws-neuron/aws-neuron-samples.git
+   python3 -m pip install -r ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain/requirements.txt
 
 
 Downloading tokenized and sharded dataset files
@@ -106,16 +103,18 @@ NeuronCores to use for training by using torchrun's :option:`--nproc_per_node` o
 BFloat16 and stochastic rounding in phase 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Phase 1 pretraining performance can be increased by using full BFloat16 casting
-and stochastic rounding. Full BFloat16 casting and stochastic rounding can be enabled by setting environment
+Phase 1 pretraining performance can be increased by using BFloat16 casting
+and stochastic rounding. BFloat16 casting and stochastic rounding can be enabled by setting environment
 variable ``XLA_USE_BF16=1`` when
-launching the pretraining job. ``XLA_DOWNCAST_BF16=1`` can also be used instead of ``XLA_USE_BF16=1`` to preserve part of the training loop in FP32. Here we use ``XLA_DOWNCAST_BF16=1`` to ensure smooth loss curve when loss averaging is used.
+launching the pretraining job. ``XLA_DOWNCAST_BF16=1`` can also be used instead of ``XLA_USE_BF16=1`` to preserve part of the training loop in FP32. Here we use ``XLA_DOWNCAST_BF16=1`` to ensure smooth loss curve when loss averaging is used. We also preserve the optimizer states in FP32 using a modified HuggingFace AdamW implementation in order to match FP32 loss with BFloat16.
 To achieve maximum performance while maintaining loss
 convergence characteristics, we are using batch size of 16 and
 gradient accumulation microsteps of 32 to maintain global batch size of 16384 for phase 1.
 The batch size and gradient accumulation microstep changes can be set by
 launching the BERT pretraining script ``dp_bert_large_hf_pretrain_hdf5.py`` with
-command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps. Other option with BFloat16, AMP is covered at :ref:`amp-sr-phase1`.
+command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps.
+
+Another option with BFloat16 using PyTorch AutoCast (Automatic Mixed Precision or AMP) is covered at :ref:`amp-sr-phase1`.
 
 Pre-compilation
 ~~~~~~~~~~~~~~~
@@ -125,7 +124,7 @@ graph in the background and the graph is executed in hardware only when the tens
 
 .. code:: shell
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --steps_this_run 10 \
@@ -138,6 +137,8 @@ populating the on-disk persistent cache with compiled graphs. This helps make
 the actual training run faster because the compiled graphs will loaded from the persistent cache.
 Currently it takes ~13 minutes to compile the BERT-Large model training step using the pre-compilation script (compare to ~40 minute if not using the pre-compilation script).
 Note that the command above specifies 32 NeuronCores for trn1.32xlarge via --nproc_per_node option.
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script using ``neuron_parallel_compile ./run_dp_bert_large_hf_pretrain_bf16_s128.sh`` to start the precompilation.
 
 The pretokenized dataset is expected to be at ``~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen128/`` by default (see above for downloading instructions) and can be changed via the ``--data_dir`` option.
 
@@ -178,11 +179,13 @@ set of commands to launch 32 data parallel distributed training workers on trn1.
 
 .. code:: bash
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training.
 
 As the training script launches, you will initially see several console
 messages indicating that the Neuron Runtime is initializing:
@@ -256,7 +259,7 @@ average_loss, step_loss, and throughput:
     LOG Thu Sep 29 22:30:50 2022 - (0, 85) step_loss : 9.0000  learning_rate : 1.70e-05  throughput : 2873.39
 
 By default, the training script will store all output files under
-``~/examples/dp_bert_hf_pretrain/output``. The output files consist of
+``~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain/output``. The output files consist of
 the following:
 
 -  PyTorch model checkpoint files, with names containing the global step
@@ -292,14 +295,14 @@ Monitoring Training Job Progress using TensorBoard
 The demo includes TensorBoard-compatible logging, which allows the
 learning rate and training metrics to be monitored in real-time. By
 default, the training script logs metrics to the following TensorBoard
-log directory ``~/examples/dp_bert_hf_pretrain/output/neuron_tblogs_<date/time>_<training configs>``.
+log directory ``~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain/output/neuron_tblogs_<date/time>_<training configs>``.
 
 In order to view your training metrics in TensorBoard, first run the
 following commands in your SSH session:
 
 .. code:: bash
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    tensorboard --logdir ./output
 
 Once running, open a new SSH connection to the instance and port-forward
@@ -339,7 +342,7 @@ Sometimes, to reduce the training wall time, you can use higher learning rate an
 
 .. code:: bash
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 8 \
@@ -351,13 +354,15 @@ The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default
 
 .. code:: bash
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    XLA_DOWNCAST_BF16=1  torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --optimizer LAMB \
    --lr 6e-3 \
    --grad_accum_usteps 128 |& tee run_pretrain_log.txt
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128_lamb.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training.
 
 .. _amp-sr-phase1:
 
@@ -368,12 +373,14 @@ To launch the AMP, one additional command-line argument is needed ``--enable_pt_
 
 .. code:: bash
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    torchrun --nproc_per_node=32 \
    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --enable_pt_autocast \
    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script with ``amp`` option like ``./run_dp_bert_large_hf_pretrain_bf16_s128.sh amp`` to start the training with AMP.
 
 Phase 1 BERT-Large pretraining on two instances
 -----------------------------------------------
@@ -387,7 +394,7 @@ On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utilit
 
 .. code:: shell
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    export FI_EFA_USE_DEVICE_RDMA=1
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
@@ -401,7 +408,7 @@ On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set
 
 .. code:: shell
 
-   cd ~/examples/dp_bert_hf_pretrain
+   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    export FI_EFA_USE_DEVICE_RDMA=1
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
@@ -438,14 +445,14 @@ The following dataset and checkpoint are required:
 Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To launch the phase 2 pretraining job, run the same python script ``dp_bert_large_hf_pretrain_hdf5.py``
+To launch the phase 2 pretraining job with AdamW optimizer, run the same python script ``dp_bert_large_hf_pretrain_hdf5.py``
 as before except with different options for phase 2. Again, we are using BFloat16 casting and stochastic rounding
 by setting environment variable ``XLA_DOWNCAST_BF16=1``. For phase 2, we are using global batch size of 32768, with worker device batch size of 2
 and gradient accumulation microsteps of 512. The pretokenized dataset is expected to be at ``~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/`` following the setup steps above and is set via ``--data_dir`` option.
 
 .. code:: shell
 
-    cd ~/examples/dp_bert_hf_pretrain
+    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
     XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
         --data_dir ~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/ \
         --lr 2.8e-4 \
@@ -459,6 +466,8 @@ and gradient accumulation microsteps of 512. The pretokenized dataset is expecte
         --warmup_steps 781 \
         --max_steps 1563 \
         |& tee run_pretrain_log_phase2.txt
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training with AdamW optimizer. Similarly, you can use LAMB optimizer using the script ``run_dp_bert_large_hf_pretrain_bf16_s512_lamb_phase2.sh``.
 
 The output below is expected as the job is initiated. Step 28125 is the phase1_end_step in this run, which could be different if phase1 training stops at a different global step.
 
@@ -660,7 +669,7 @@ We use neuron_parallel_compile in front of the short run command to do precompil
 
 .. code:: bash
 
-    neuron_parallel_compile XLA_USE_BF16=1 torchrun --nproc_per_node=32 --nnodes=1 dp_bert_large_hf_pretrain_hdf5.py --steps_this_run 5
+    neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 --nnodes=1 dp_bert_large_hf_pretrain_hdf5.py --steps_this_run 5
 
     ...
     Updating train metrics in provide results.json file

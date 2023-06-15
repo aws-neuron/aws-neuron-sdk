@@ -10,5 +10,6 @@ Tutorials  (``torch-neuronx``)
     /frameworks/torch/torch-neuronx/tutorials/training/finetune_t5
     /frameworks/torch/torch-neuronx/tutorials/training/megatron_lm_gpt
     /frameworks/torch/torch-neuronx/tutorials/training/distributed_data_parallel
+    /frameworks/torch/torch-neuronx/tutorials/training/analyze_for_training
     /neuron-customops/tutorials/customop-mlp-training
     /neuron-customops/tutorials/customop-mlp-perf-opt

@@ -1,5 +1,9 @@
-.. _inference-tensorflow-neuronx:
-
+.. card:: Setup  (``tensorflow-neuronx``)
+            :link: setup-tensorflow-neuronx
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+            
+            
 .. dropdown::  Tutorials (``tensorflow-neuronx``)
     :class-title: sphinx-design-class-title-med
     :animate: fade-in

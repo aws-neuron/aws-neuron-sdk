@@ -7,6 +7,16 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.7.0.40]
+-----------------------------
+Date: 06/14/2023
+
+* This release introduces a new ``--enable-saturate-infinity`` compiler option. A computation that can generate +/- infinity is at a high
+  risk of generating Not-a-Number (NaN) values when the infinity value is used in subsequent computations. This option helps avoid this
+  by converting +Inf/-Inf values to MAX/MIN_FLOAT before operations that could produce NaN values for +Inf/-Inf inputs on the target
+  architecture. While this option helps to avoid NaN values, there is a potential performance degradation that occurs during model
+  execution when this conversion is enabled.
+  
 Neuron Compiler [2.6.0.19]
 -----------------------------
 Date: 05/01/2023
@@ -15,8 +25,6 @@ Date: 05/01/2023
   This option instructs the compiler to perform model-specific optimizations that produce executable models with improved performance
   on the specified target instance.
   
-* The new compiler option ``distribution-strategy`` can be used to better support models using the PyTorch 2.x Fully Sharded Data Parallel (FSDP) APIs.
-
 * Added support for the HLO operator ``BitcastConvertType`` and also added support for ``TopK`` (sampling mode) operator.
 
 Neuron Compiler [2.5.0.28]

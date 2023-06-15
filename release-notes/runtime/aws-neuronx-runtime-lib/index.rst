@@ -33,6 +33,26 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.14.8.0]
+---------------------------------
+Date: 6/14/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added All-to-All All-Reduce support for Neuron Collective operations, which is expected to improve All-Reduce performance by 3-7x in most cases.
+* Added more descriptive NEURON_SCRATCHPAD_PAGE_SIZE to eventually replace NEURON_RT_ONE_TMPBUF_PAGE_SIZE_MB
+* Neuron Runtime is now getting the device BDF from Neuron Driver for internal use.
+
+Bug fixes
+^^^^^^^^^
+
+* Fixed rare race condition caused by DMA memory barrier not being set for certain data transfers leading to non-determinism in outputs
+* Fixed NeuronCore latency not being counted properly in Neuron metrics
+* Removed stack allocation of error notifications buffer when parsing error notifications, which may lead to stack overflows on smaller stack sizes. 
+
+
+
 Neuron Runtime Library [2.13.6.0]
 ---------------------------------
 Date: 05/01/2023
