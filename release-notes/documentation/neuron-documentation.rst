@@ -16,5 +16,5 @@ Date: 06/14/2023
 - New :ref:`neuron_calculator` Documentation section to help determine number of Neuron Cores needed for LLM Inference.
 - Added App Note :ref:`neuron_llm_inference`
 - New ``ML Libraries`` Documentation section to have :ref:`neuronx-distributed-index` and :ref:`transformers_neuronx_readme`
-- Improved Installation and Setup Guides for the different platforms supported. See more at :ref:setup-guide-index
-- Added Tutorial :ref:setup-trn1-multi-node-execution
+- Improved Installation and Setup Guides for the different platforms supported. See more at :ref:`setup-guide-index`
+- Added Tutorial :ref:`setup-trn1-multi-node-execution`
