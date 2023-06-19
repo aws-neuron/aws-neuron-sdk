@@ -12,9 +12,7 @@ Neuron Quick Links
             :animate: fade-in
             :open:
 
-            * :ref:`torch_quick_start`
-            * :ref:`tensorflow_quick_start`
-            * :ref:`mxnet_quick_start`
+            * :ref:`neuron-quickstart`
             * :ref:`neuron-github-samples`
             * :ref:`benchmark`
             * :ref:`neuron-whatsnew`
