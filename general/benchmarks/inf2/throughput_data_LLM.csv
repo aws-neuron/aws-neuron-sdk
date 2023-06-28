@@ -1,4 +1,4 @@
 Model,Scripts,Framework,Inst. Type,Task,Throughput (tokens/second),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,TP Degree,DP Degree,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type
-opt-13b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,2247.61,95.32,120.91,Batch,2.10.0,Tensor Parallel,8,1,256,128,FP16,Matmult-BF16
-opt-30b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,1384.42,162.93,173.34,Batch,2.10.0,Tensor Parallel,8,1,256,128,FP16,Matmult-BF16
-opt-66b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,1400.11,156.34,848.62,Batch,2.10.0,Tensor Parallel,24,1,64,128,FP16,Matmult-BF16
+opt-13b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,2479.2,77.5,95.5,Batch,2.11.0,Tensor Parallel,8,1,256,128,FP16,Matmult-BF16
+opt-30b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,1477.7,150.2,155.5,Batch,2.11.0,Tensor Parallel,8,1,256,128,FP16,Matmult-BF16
+opt-66b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,1666.2,134.3,141.9,Batch,2.11.0,Tensor Parallel,24,1,256,128,FP16,Matmult-BF16

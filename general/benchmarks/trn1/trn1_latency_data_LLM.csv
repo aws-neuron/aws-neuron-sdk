@@ -1,0 +1,3 @@
+Model,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type,OS Type
+opt-13b,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,trn1.32xlarge,Raw Output (AutoModel),47.8,20.6,22.6,Real Time,2.11.0,Data Parallel,256,128,FP16,Matmult-BF16,U20
+opt-30b,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,trn1.32xlarge,Raw Output (AutoModel),23.5,42,44.6,Real Time,2.11.0,Data Parallel,256,128,FP16,Matmult-BF16,U20

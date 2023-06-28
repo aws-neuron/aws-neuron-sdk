@@ -5,7 +5,7 @@ import neuronperf
 import neuronperf.torch
 import torch_neuronx
 from transformers import (
-    AutoModel, AutoModelForSequenceClassification
+    AutoModel, AutoModelForSequenceClassification  # Any other model class respective to the model we want to infer on
 )
 
 def benchmark(model_name, batch_size, sequence_length):
@@ -28,4 +28,8 @@ def benchmark(model_name, batch_size, sequence_length):
     neuronperf.write_json(reports)
 
 if __name__ == '__main__':
-   benchmark('bert-base-cased', 16, 128)
+    # benchmark(model_name, batch_size, sequence_length)
+    # Below are a few examples -
+    # benchmark('bert-base-cased', 16, 128)
+    # benchmark('bert-base-uncased', 4, 128)
+    # benchmark('gpt2', 16, 256)
