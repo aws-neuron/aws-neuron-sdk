@@ -28,7 +28,7 @@ configuration management application to the inference fleet.
 What is the difference between ``neuron-cc`` and ``neuronx-cc``?
 ----------------------------------------------------------------
 
-* ``neuron-cc`` is the Neuron Compiler with TVM front-end, ``neuron-cc``supports only :ref:`neuroncores-v1-arch`.
+* ``neuron-cc`` is the Neuron Compiler with TVM front-end, ``neuron-cc`` supports only :ref:`neuroncores-v1-arch`.
 * ``neuronx-cc`` is the Neuron Compiler with XLA fron-end, ``neuronx-cc`` currently supports 
   :ref:`neuroncores-v2-arch`, ``neuronx-cc`` support of :ref:`neuroncores-v1-arch` is currently a 
   :ref:`Roadmap Item <neuron_roadmap>`.
