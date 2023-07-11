@@ -46,10 +46,5 @@
     .. include:: /frameworks/torch/torch-neuronx/misc-inference-torch-neuronx.txt
 
 
-.. dropdown:: Transformers Neuron (``transformers-neuronx``)
-    :class-title: sphinx-design-class-title-small
-    :class-body: sphinx-design-class-body-small
-    :animate: fade-in
 
-    .. include:: /frameworks/torch/torch-neuronx/transformers-neuronx/index.txt
 

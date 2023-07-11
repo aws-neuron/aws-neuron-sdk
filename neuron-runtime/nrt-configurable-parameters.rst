@@ -49,7 +49,7 @@ configure Neuron Runtime behavior.
      - Timeout for execution in seconds
      - Integer
      - 0 to INT_MAX
-     - 30
+     - 30 on inf1, 600 on trn1/inf2
      - 2.0+
    * - ``NEURON_RT_VALIDATE_HASH``
      - Validate NEFF contents before loading into accelerator

@@ -345,18 +345,20 @@ Sometimes, to reduce the training wall time, you can use higher learning rate an
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
+   --max_steps 7032 \
    --batch_size 8 \
    --optimizer LAMB \
    --lr 6e-3 \
    --grad_accum_usteps 256 |& tee run_pretrain_log.txt
  
-The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default optimizer AdamW will be used. Besides, you need to use a set of hyper-parameters supporting the larger global batch size (GBS). In this case, we have 64k as GBS for LAMB and use a set of hyper-params similar to https://github.com/NVIDIA/DeepLearningExamples/blob/master/PyTorch/LanguageModeling/BERT/README.md. Given higher GBS from LAMB than AdamW, it takes fewer steps (roughly 8k) to achieve similar level of accuracy as AdamW, which takes more than 28k steps. In addition, you can also use different data types on top of LAMB. Below is an example using the BFloat16 and Stochastic Roundings. 
+The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default optimizer AdamW will be used. Besides, you need to use a set of hyper-parameters supporting the larger global batch size (GBS). In this case, we have 64k as GBS for LAMB and use a set of hyper-params similar to https://github.com/NVIDIA/DeepLearningExamples/blob/master/PyTorch/LanguageModeling/BERT/README.md. Given higher GBS from LAMB than AdamW, it takes fewer steps (roughly 7k) to achieve similar level of accuracy as AdamW, which takes more than 28k steps. In addition, you can also use different data types on top of LAMB. Below is an example using the BFloat16 and Stochastic Roundings. 
 
 .. code:: bash
 
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
    XLA_DOWNCAST_BF16=1  torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
+   --max_steps 7032 \
    --batch_size 16 \
    --optimizer LAMB \
    --lr 6e-3 \
