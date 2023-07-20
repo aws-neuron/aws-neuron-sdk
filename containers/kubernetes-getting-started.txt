@@ -1,0 +1,20 @@
+.. dropdown:: Prerequisite
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-prerequisite.rst
+
+.. dropdown:: Deploy Neuron Device Plugin
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-neuron-device-plugin.rst
+
+.. dropdown:: Deploy Neuron Scheduler Extension
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-neuron-scheduler.rst

@@ -1,3 +1,5 @@
+.. _parallelcluster-training:
+
 Train your model on ParallelCluster
 ===================================
 

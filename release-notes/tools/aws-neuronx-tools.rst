@@ -7,6 +7,19 @@ Neuron System Tools
    :local:
    :depth: 2
 
+
+Neuron Tools  [2.12.2.0]
+-------------------------
+Date: 7/19/2023
+
+New in the release:
+
+* Bumped the max supported profiling NTFF version to version 2 to resolve crashes when postprocessing NTFFs captured with newer versions of the Neuron Runtime Library.
+  When viewing profiles captured using Neuron Runtime Library 2.15 or above, please upgrade tools to 2.12.
+  This version of Neuron tools remains compatible with NTFF version 1.
+* Bug fixes for ``neuron-profile`` related to the calculation of some summary stats.
+
+
 Neuron Tools  [2.11.10.0]
 -------------------------
 Date: 6/14/2023

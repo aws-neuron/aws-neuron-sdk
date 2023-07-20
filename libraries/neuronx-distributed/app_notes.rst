@@ -3,4 +3,12 @@
 App Notes (``neuronx-distributed`` )
 ====================================
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /libraries/neuronx-distributed/tensor_parallelism_overview
+
+
+
 .. include:: /libraries/neuronx-distributed/app_notes.txt

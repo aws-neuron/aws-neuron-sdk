@@ -46,6 +46,17 @@ Known issues and limitations - updated 11/23/2022
 * *Conv3d operator* performance is limited when the operator has small number of input channels (< 64).
 * FP64 and INT64 input and output tensors are not supported. Please cast to FP32/INT32 in the machine learning framework, prior compiling for Neuron.
 
+Neuron Compiler release [1.17.0.0]]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 7/19/2023
+
+New in this release
+-------------------
+
+* This release introduces a new ``--enable-saturate-infinity`` compiler option. A computation that can generate +/- infinity is at a high risk of generating Not-a-Number (NaN) values when the infinity value is used in subsequent computations. This option helps avoid this by converting +Inf/-Inf values to MAX/MIN_FLOAT before operations that could produce NaN values for +Inf/-Inf inputs on the target architecture. While this option helps to avoid NaN values, there is a potential performance degradation that occurs during model execution when this conversion is enabled.
+* Minor bug fixes.
+
 Neuron Compiler release [1.16.2.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -175,8 +186,7 @@ Summary
 New in this release
 -------------------
 
-* Added --enable-fast-context-switch to optimize for
-  faster model switching rather than inference latency.
+* Added ``--enable-fast-context-switch`` option to optimize for faster model switching rather than inference latency.
 * Deprecated support for ONNX
 * Improved robustness of Conv3d
 * Corrected compilation error "too many instructions" in DLRM model

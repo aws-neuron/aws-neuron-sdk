@@ -1,5 +1,5 @@
-Computer Vision Tutorials
-=========================
+Computer Vision Tutorials (``tensorflow-neuron``)
+=================================================
 
 *  Tensorflow 1.x - OpenPose tutorial :ref:`[html] </src/examples/tensorflow/openpose_demo/openpose.ipynb>` :github:`[notebook] </src/examples/tensorflow/openpose_demo/openpose.ipynb>`
 *  Tensorflow 1.x - ResNet-50 tutorial :ref:`[html] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`

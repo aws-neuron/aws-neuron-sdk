@@ -8,6 +8,7 @@
     * :ref:`torch-hf-bert-finetune`
     * :ref:`megatron-lm-pretraining-tutorial`
     * :ref:`neuronx-ddp-tutorial`
+    * :ref:`zero1-gpt2-pretraining-tutorial`
     * :ref:`neuronx-customop-mlp-tutorial`
     * :ref:`neuronx-customop-mlp-perf`
 

@@ -14,6 +14,94 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [1.13.1.1.9.0]
+----------------------
+Date: 7/19/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training support:
+
+- Uses jemalloc as the primary malloc lib to avoid memory leak at checkpointing
+- Added support for ZeRO-1 along with :ref:`tutorial <zero1-gpt2-pretraining-tutorial>`
+
+Inference support:
+
+- Add async load and lazy model load options to accelerate model loading
+- Optimize DataParallel API to load onto multiple cores simultaneously when device IDs specified in device_ids are consecutive
+
+Resolved Issues (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Remove extra graph creation in torch_neuronx.optim.adamw when the beta/lr parameters values become 0 or 1.
+- Stability improvements and faster failure on hitting a fault in XRT server used by XLA.
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX``.
+
+Convolution is not supported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Convolution is not supported during training.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when Neuron encounters an operation that it does not support during
+:func:`torch_neuronx.trace`, it may exit with the following compiler error: "Import of the HLO graph into the Neuron Compiler has failed.
+This may be caused by unsupported operators or an internal compiler error."
+The intended behavior
+when tracing is to automatically partition the model into separate subgraphs
+that run on NeuronCores and subgraphs that run on CPU. This will be supported in a future release. See
+:ref:`pytorch-neuron-supported-operators` for a list of supported operators.
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
+
 Release [1.13.1.1.8.0]
 ----------------------
 Date: 6/14/2023
@@ -349,7 +437,7 @@ In this release, convolution is not supported.
 DDP shows slow convergence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop 
+Currently we see that the models converge slowly with DDP when compared to the scripts that don't use DDP. We also see a throughput drop
 with DDP. This is a known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
 
 Runtime crash when we use too many workers per node with DDP

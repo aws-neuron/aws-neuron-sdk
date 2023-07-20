@@ -1,0 +1,11 @@
+.. tab-set:: 
+
+    .. tab-item:: Training
+
+        .. include:: /containers/tutorials/training/index.txt
+
+.. tab-set:: 
+
+    .. tab-item:: Inference
+    
+         .. include:: /containers/tutorials/inference/index.txt

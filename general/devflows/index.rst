@@ -2,6 +2,20 @@
 
 Developer Flows
 ===============
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    /containers/index
+    /general/devflows/ec2-flows
+    /general/devflows/eks-flows
+    /general/devflows/ecs-flows
+    /general/devflows/sagemaker-flows
+    /general/devflows/parallelcluster-flows
+    /general/devflows/aws-batch-flows
+
+
 Neuron can be used in a wide selection of development flows. Each flow has its own starting point and requirements which are required to enable deep learning acceleration with AWS Neuron.
 
 .. grid:: 2
@@ -11,62 +25,22 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
+         .. include:: /general/devflows/containers-flows.txt
 
-               .. tab-item:: Inference and Training
-
-                  .. toctree::
-                     :maxdepth: 1
-
-                     /containers/index
 
    .. dropdown::  AWS EC2
          :class-title: sphinx-design-class-title-med
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
-
-               .. tab-item:: Inference
-
-                  .. toctree::
-                     :maxdepth: 1
-
-                     /general/devflows/inference/ec2-then-ec2-devflow
-                     /general/devflows/inference/ec2-then-ec2-devflow-inf2
-
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. toctree:: 
-                     :maxdepth: 1
-
-                     /general/devflows/training/ec2/ec2-training
-
+         .. include:: /general/devflows/ec2-flows.txt
+        
    .. dropdown::  Amazon EKS
          :class-title: sphinx-design-class-title-med
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
-
-               .. tab-item:: Inference
-
-                  .. toctree:: 
-                     :maxdepth: 1
-
-                     /general/devflows/inference/dlc-then-eks-devflow
-
-
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. note::
-
-                     Amazon EKS support is coming soon.
-
+         .. include:: /general/devflows/eks-flows.txt
 
 
    .. dropdown::  Amazon ECS
@@ -74,50 +48,15 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
+          .. include:: /general/devflows/ecs-flows.txt
 
-               .. tab-item:: Inference
-
-                  .. toctree:: 
-                     :maxdepth: 1
-
-                     /general/devflows/inference/dlc-then-ecs-devflow
-
-
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. note::
-
-                     Amazon ECS supports Trn1.
-
-                     An example of how to train a model with Neuron using ECS is coming soon.
-
+        
    .. dropdown::  AWS Sagemaker
          :class-title: sphinx-design-class-title-med
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
-
-               .. tab-item:: Inference
-
-                  .. toctree:: 
-                     :maxdepth: 1
-
-                     /general/devflows/inference/byoc-hosting-devflow-inf2
-                     /general/devflows/inference/byoc-hosting-devflow 
-                     /general/devflows/inference/neo-then-hosting-devflow
-
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. toctree::
-                     :maxdepth: 1
-
-                     /general/devflows/training/sm-devflow/sm-training-devflow
+         .. include:: /general/devflows/sagemaker-flows.txt
 
 
    .. dropdown::  AWS ParallelCluster
@@ -126,25 +65,7 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
          :animate: fade-in
 
 
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. toctree::
-                     :maxdepth: 1
-
-                     /general/devflows/training/parallelcluster/parallelcluster-training
-                     
-
-         .. tab-set:: 
-
-               .. tab-item:: Inference
-
-                  .. note::
-
-                     AWS ParallelCluster support is coming soon.
-
-
+         .. include:: /general/devflows/parallelcluster-flows.txt
 
 
 

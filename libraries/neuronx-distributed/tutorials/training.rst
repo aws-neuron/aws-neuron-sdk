@@ -3,8 +3,7 @@
 Training with Tensor Parallelism (``neuronx-distributed`` )
 ===========================================================
 
-`Install PyTorch Neuron on Trn1 <tp_developer_guide>`
-Keeping the above changes made in `Developer guide <`, let’s now run an end-to-end training
+Keeping the above changes made in `Developer guide <tp_developer_guide>`, let’s now run an end-to-end training
 with tensor-parallelism. This section is adopted from `BERT pretraining
 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/bert.html#hf-bert-pretraining-tutorial>`__
 which used data-parallel training to scale the throughput. In this
@@ -67,13 +66,13 @@ tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tor
    cd ~/examples/tp_dp_bert_hf_pretrain
    neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    tp_dp_bert_large_hf_pretrain_hdf5.py \
-   --tensor_parallel_size 2 \
+   --tensor_parallel_size 8 \
    --steps_this_run 10 \
-   --batch_size 32 \
-   --grad_accum_usteps 32 |& tee compile_log.txt
+   --batch_size 64 \
+   --grad_accum_usteps 64 |& tee compile_log.txt
 
-This script uses a tensor-parallel size of 2. This will automatically
-set the data-parallel degree to 16 (32 workers / tensor_parallel_size).
+This script uses a tensor-parallel size of 8. This will automatically
+set the data-parallel degree to 4 (32 workers / tensor_parallel_size).
 Once the graphs are compiled we can now run training and observe our
 loss go down. To run the training, we just the above command but without
 ``neuron_parallel_compile``.
@@ -82,14 +81,14 @@ loss go down. To run the training, we just the above command but without
 
    XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
    tp_dp_bert_large_hf_pretrain_hdf5.py \
-   --tensor_parallel_size 2 \
+   --tensor_parallel_size 8 \
    --steps_this_run 10 \
-   --batch_size 32 \
-   --grad_accum_usteps 32 |& tee training_log.txt
+   --batch_size 64 \
+   --grad_accum_usteps 64 |& tee training_log.txt
 
 You would notice that the throughput is lower when you run the
 ``dp_bert_large_hf_pretrain_hdf5.py``. This is expected as the number of
-data-parallel workers have gone down (from 32 to 16). However, if you
+data-parallel workers have gone down (from 32 to 4). However, if you
 open ``neuron-top`` in another terminal, you should see the memory
 utilization per core for this script is lower than the
 ``dp_bert_large_hf_pretrain_hdf5.py``. Since the memory requirement has

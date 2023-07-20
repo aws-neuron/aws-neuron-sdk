@@ -156,7 +156,6 @@ class manifest:
 
         # install neuron compiler and framework
         str_compiler_framework = self.install_neuron_compiler_and_framework(args)
-
         if args.ami == 'dlami-framework':
             # dlami instructions
             str_dlami = self.install_dlami(args)
@@ -168,10 +167,7 @@ class manifest:
         elif args.category == 'driver_runtime_tools':
             return str_preamble + str_driver + str_runtime + str_tools
         elif args.category == 'compiler_framework':
-            if args.instance != 'inf1':
-                return str_runtime + str_python + str_compiler_framework
-            else:
-                return str_python + str_compiler_framework
+            return str_python + str_compiler_framework
         elif args.category == 'driver':
             return str_preamble + str_driver
         elif args.category == 'runtime':
@@ -223,6 +219,8 @@ class manifest:
         str_jupiter += 'pip install ipykernel ' + '\n'
         str_jupiter += 'python' + target_python_version + ' -m ipykernel install --user --name '
         str_jupiter += 'aws_neuron_venv_' + args.framework
+        if args.instance == 'inf1':
+            str_jupiter += '_inf1'
         str_jupiter += ' --display-name "Python (' + framework_name + ')"' + '\n'
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
@@ -370,9 +368,9 @@ class manifest:
         str = ''
 
         # get runtime package names for release verion, instance
+
         runtime_packages = self.get_package_names(category='runtime', instance=args.instance,
                                                   neuron_version=args.neuron_version)
-
         # install neuron runtime on trn1
         if args.mode != 'compile':
             if len(runtime_packages) != 0:

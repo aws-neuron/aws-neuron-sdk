@@ -24,6 +24,28 @@ To download the source code for this tutorial, do:
 .. note:: 
     We will be using an inference example in this tutorial in order to adhere to certain Custom C++ operator restrictions when using multiple GPSIMD cores (see :ref:`custom-ops-api-ref-guide`  for details on current restrictions).
 
+.. note::
+
+   Custom C++ Operators are supported as of Neuron SDK Version 2.7 as a beta feature. As such this feature is not installed by default. Additional tooling and library packages (RPM and DEB) are required. On AL2, they can be installed with the following commands:
+   ::
+      sudo yum remove python3-devel -y
+      sudo yum remove aws-neuronx-gpsimd-tools-0.* -y
+      sudo yum remove aws-neuronx-gpsimd-customop-lib-0.* -y
+      
+      sudo yum install python3-devel -y
+      sudo yum install aws-neuronx-gpsimd-tools-0.* -y 
+      sudo yum install aws-neuronx-gpsimd-customop-lib-0.* -y
+
+   On Ubuntu, they can be installed with the following commands:
+   ::
+      sudo apt-get remove python3-dev -y
+      sudo apt-get remove aws-neuronx-gpsimd-tools=0.* -y
+      sudo apt-get remove aws-neuronx-gpsimd-customop-lib=0.* -y  
+      
+      sudo apt-get install python3-dev -y
+      sudo apt-get install aws-neuronx-gpsimd-tools=0.* -y
+      sudo apt-get install aws-neuronx-gpsimd-customop-lib=0.* -y  
+
 Activate the virtual environment created in :ref:`neuronx-customop-mlp-tutorial`,
 
 .. code:: shell
@@ -34,6 +56,7 @@ As a reminder, ``ninja`` should be already installed in the virtual environment.
 
 .. code:: bash
 
+    pip install regex
     pip install ninja
 
 Model Configuration Adjustment

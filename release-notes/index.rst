@@ -8,11 +8,11 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.11.0-whatsnew:
+.. _neuron-2.12.0-whatsnew:
 
 
-Neuron 2.11.0 (06/14/2023)
--------------------------
+Neuron 2.12.0 (07/19/2023)
+--------------------------
 
 .. contents:: Table of contents
    :local:
@@ -21,7 +21,7 @@ Neuron 2.11.0 (06/14/2023)
 What's New
 ^^^^^^^^^^
 
-This release introduces Neuron Distributed, a new python library to simplify training and inference of large models, improving usability with features like S3 model caching, standalone profiler tool, support for Ubuntu22, as well as other new features,
+This release introduces  ZeRO-1 optimizer for model training in ``torch-neuronx`` , introduces experimental support for ``GPT-NeoX``, ``BLOOM`` , ``Llama`` and ``Llama 2(coming soon)`` models in ``transformers-neuronx``. This release also adds support for model inference serving on Triton Inference Server for Inf2 & Trn1 instances, ``lazy_load`` API and ``async_load`` API for model loading in ``torch-neuronx``, as well as other new features,
 performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 
@@ -35,54 +35,69 @@ performance optimizations, minor enhancements and bug fixes. This release introd
      - Details
      - Instances
 
-  
-   * - New Features and Performance Enhancements in ``transformers-neuronx``
-     - * Support for ``int8`` inference. See example at :ref:`int8_weight_storage_support`
-       * Improved prompt context encoding performance. See more at :ref:`transformers_neuronx_developer_guide`
-       * Improved collective communications performance for Tensor Parallel inference on Inf2 and Trn1.
+   * - ZeRO-1 optimizer for model training in ``torch-neuronx``
+     - * Support of ZeRO-Stage-1 optimizer ( ZeroRedundancyOptimizer() API) for training models using ``torch-neuronx``
+       * See tutorial at  :ref:`zero1-gpt2-pretraining-tutorial`
+     - Inf2, Trn1/Trn1n
+
+   * - Support for new models and Enhancements in ``transformers-neuronx``
+     - * [Experimental] Support for inference of ``GPT-NeoX``, ``BLOOM`` and ``Llama`` models. 
+       * [Experimental] Support for ``Llama 2`` coming soon. Please monitor the `transformers-neuronx repository <https://github.com/aws-neuron/transformers-neuronx/tree/main/src/transformers_neuronx>`_ for updates.
+       * Removed constraints on ``tp_degree`` in tensor-parallel configurations for ``GPT2``, ``OPT``, and ``BLOOM`` . See more at :ref:`transformers-neuronx-rn`
+       * Added multi-query / multi-group attention support for ``GPT2``.
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
+   
+   * - Support for Inf2 and Trn1 instances on Triton Inference Server
+     - * Support for Model Inference serving on Triton for Inf2 and Trn1 instances. See more at `Triton Server Python Backend <https://github.com/triton-inference-server/python_backend/tree/main/inferentia#using-triton-with-inferentia-2-or-trn1>`_
+       * See tutorial at `Triton on SageMaker - Deploying on Inf2 <https://github.com/aws/amazon-sagemaker-examples/tree/main/sagemaker-triton/inferentia2>`_
+     - Inf2, Trn1
 
-   * - Neuron Profiler Tool 
-     - * Support for as a stand alone tool to profile and get visualized insights on execution of models on Trainium and Inferentia devices.
-       * See more at :ref:`neuron-profile-ug`
+   * - Support for new computer vision models 
+     - * Performance optimizations in Stable Diffusion 2.1 model script and added [experimental] support for Stable Diffusion 1.5 models.
+       * [Experimental] Script for training CLIP model for Image Classification.
+       * [Experimental] Script for inference of Multimodal perceiver model
+       * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
+     - Inf2, Trn1/Trn1n
+
+   * - New Features in ``neuronx-distributed`` for training
+     - * Added parallel cross entropy loss function.
+       * See more at :ref:`tp_api_guide`
+     - Trn1/Trn1n
+
+   * - ``lazy_load`` and ``async_load`` API for model loading in inference and performance enhancements in ``torch-neuronx`` 
+     - * Added ``lazy_load`` and ``async_load`` API to accelerate model loading for Inference. See more at :ref:`torch_neuronx_lazy_async_load_api`
+       * Optimize DataParallel API to load onto multiple cores simultaneously when device IDs specified are consecutive.
+       * See more at :ref:`torch-neuronx-rn`
+     - Inf2, Trn1/Trn1n
+  
+   * - [Experimental]Asynchronous Execution support and Enhancements in Neuron Runtime 
+     - * Added experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads. See more at :ref:`nrt-configuration`
+       * AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode)
+       * See more at :ref:`neuron-runtime-rn`
      - Inf1, Inf2, Trn1/Trn1n
-
-   * - Neuron Compilation Cache through S3
-     - * Support for sharing compiled models across Inf2 and Trn1 nodes through S3
-       * See more at :ref:`pytorch-neuronx-parallel-compile-cli`
+  
+   * - Support for ``distribution_strategy`` compiler option in ``neuronx-cc``
+     - * Support for optional ``--distribution_strategy`` compiler option to enable compiler specific optimizations based on distribution strategy used.
+       * See more at :ref:`neuron-compiler-cli-reference-guide`
      - Inf2, Trn1/Trn1n
 
-   * - New script to scan a model for supported/unsupported operators
-     - * Script to scan a model for supported/unsupported operators before training, scan output includes supported and unsupported operators at both XLA operators and PyTorch operators level.
-       * See a sample tutorial at :ref:`torch-analyze-for-training-tutorial`
-     - Inf2, Trn1/Trn1n
-
-   * - Neuron Distributed Library [Experimental]
-     - * New Python Library based on PyTorch enabling distributed training and inference of large models.
-       * Initial support for tensor-parallelism.
-       * See more at :ref:`neuronx-distributed-index`
-     - Inf2, Trn1/Trn1n
-
-   * - Neuron Calculator and Documentation Updates  
-     - * New :ref:`neuron_calculator` Documentation section to help determine number of Neuron Cores needed for LLM Inference.
-       * Added App Note :ref:`neuron_llm_inference`
+   * - New Micro Benchmarking Performance User Guide and Documentation Updates 
+     - * Added best practices user guide for benchmarking performance of Neuron devices. See more at `Benchmarking Guide and Helper scripts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/microbenchmark>`_
+       * Announcing end of support for Ubuntu 18. See more at :ref:`announce-eol-ubuntu18`
+       * Removed support for Distributed Data Parallel(DDP) Tutorial.
+       * Improved sidebar navigation in Documentation.
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
-
-   * - Enhancements to Neuron SysFS
-     - * Support for detailed breakdown of memory usage across the NeuronCores
-       * See more at :ref:`neuron-sysfs-ug`
-     - Inf1, Inf2, Trn1/Trn1n
-
-   * - Support for Ubuntu 22
-     - * See more at :ref:`setup-guide-index` for setup instructions on Ubuntu22
-     - Inf1, Inf2, Trn1/Trn1n
-
+  
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1/Trn1n , Inf2, Inf1
-
+   
+   * - Known Issues and Limitations
+     - * See :ref:`neuron-2.12.0-known-issues`
+     - Trn1/Trn1n , Inf2, Inf1
+  
    * - Release Artifacts
      - * see :ref:`latest-neuron-release-artifacts`
      - Trn1/Trn1n , Inf2, Inf1
@@ -90,6 +105,23 @@ performance optimizations, minor enhancements and bug fixes. This release introd
 For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
 
 To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+.. _neuron-2.12.0-known-issues:
+
+2.12.0 Known Issues and Limitations 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Known Issues in Ubuntu 22 Support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Several Vision and NLP models on Ubuntu 22 are not supported due to Compilation issues. Issues will be addressed in upcoming releases.
+* CustomOp feature failing with seg fault on Ubuntu 22.  Issue will be addressed in upcoming releases.
+  
+Known issues in certain resnet models on Ubuntu 20
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Known issue with support for resnet-18, resnet-34, resnet-50, resnet-101 and resnet-152 models on Ubuntu 20. Issues will be addressed in upcoming releases.
+             
+
+
+
 
 .. _components-rn:
 
@@ -294,15 +326,15 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.0
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.0
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.11.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.0
 
 
 Previous Releases

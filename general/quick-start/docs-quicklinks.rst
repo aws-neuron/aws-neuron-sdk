@@ -29,7 +29,16 @@ Neuron Quick Links
             * :ref:`tensorflow-neuron-main`
             * :ref:`mxnet-neuron-main`
 
+    .. dropdown::  ML Libraries
+            :class-title: sphinx-design-class-title-small
+            :class-body: sphinx-design-class-body-small
+            :animate: fade-in
+            :open:
 
+            * :ref:`transformers_neuronx_readme`
+            * :ref:`neuronx-distributed-index`
+        
+             
     .. dropdown::  User Guide
             :class-title: sphinx-design-class-title-small
             :class-body: sphinx-design-class-body-small

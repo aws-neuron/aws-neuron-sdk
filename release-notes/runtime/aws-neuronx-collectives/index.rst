@@ -10,6 +10,21 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :depth: 1
 
 
+Neuron Collectives [2.15.13.0]
+------------------------------
+Date: 7/19/2023
+
+New in this release:
+
+* AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode); choice of 16 ranks is limited to NeuronCores 0-15 or 16-31.
+
+Bug Fixes:
+
+* Fix incorrect mask calculation for 16 ranks when using NeuronCores 16-31
+* Fix channels for 16 ranks to avoid failures in the runtime; restrict participating ranks to 0-15 or 16-31
+
+
+
 Neuron Collectives [2.14.9.0]
 ------------------------------
 Date: 6/14/2023

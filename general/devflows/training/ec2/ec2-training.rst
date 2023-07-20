@@ -1,3 +1,5 @@
+.. _ec2-training:
+
 Train your model on EC2
 =======================
 

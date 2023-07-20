@@ -19,11 +19,22 @@ use TensorBoard.
 - The Neuron plugin for Trn1 (``tensorboard-plugin-neuronx``) is not compatible with the Neuron plugin
   for Inf1 (``tensorboard-plugin-neuron``).  Please ensure you only have only the correct package installed.
 
+Neuron Plugin for TensorBoard release [2.5.39.0]
+===============================================
+
+Date: 7/19/2023
+
+Summary
+-------
+
+- Minor updates.
+
+
 
 Neuron Plugin for TensorBoard release [2.5.37.0]
 ===============================================
 
-Date: 6/14/2022
+Date: 6/14/2023
 
 Summary
 -------

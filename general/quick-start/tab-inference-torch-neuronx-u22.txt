@@ -1,6 +1,6 @@
 .. _neuronx_installation:
 
-.. dropdown::  Install EFA (Applicable only for ``Trn1``)
+.. dropdown::  Install EFA (Applicable only for ``Trn1\Trn1n``)
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in

@@ -63,6 +63,12 @@ configure Neuron Runtime behavior.
      - TRUE or FALSE
      - FALSE
      - 2.11+
+   * - ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS``
+     - Controls number of asynchronous execution requests to be supported.
+     - Integer
+     - 0 to INT_MAX; 0 is disabled.
+     - 0
+     - 2.15+
 
 
 NeuronCore Allocation
@@ -178,3 +184,13 @@ Note: the use of this flag requires the model to be loaded with the multi-instan
 
  NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE myapp1.py     # enables model weight sharing
  NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=FALSE myapp2.py    # disables(default) model weight sharing
+
+
+Aynchronous Execution (NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS)
+--------------------------------------------------------
+An experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads. Starting in Neuron Runtime version 2.15, the feature is available, but disabled.  To enable the feature for possible improvement, recommendation is to set NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS to 3.  Setting the number of inflight requests above 3 may lead to Out-Of-Memory (OOM) errors during execution.  For developers using libnrt.so directly, please use nrt_register_async_exec_callback to register a callback for the nrt execution thread to post the execution status to. A default callback will be registered if one is not set by the developer.
+
+::
+
+ NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS=3 myapp.py     # Up to 3 async exec requests at once.
+ NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS=0 myapp.py     # disables async execution (default behavior)

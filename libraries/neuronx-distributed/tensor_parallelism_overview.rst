@@ -56,13 +56,16 @@ dimension and since the inputs are already columns sharded and we can
 multiply them to produce partial outputs. These outputs finally requires
 an all-reduce sum, since we want to sum up the single column*row result.
 
-Tensor Parallelism for Transformers: A transformer block
+Tensor Parallelism for Transformers:
+
+A transformer block
 
 .. image:: images/self-attention.png
    :alt: Image: image.png
 
-Fig: Taken from Megatron-LM paper As seen from the figure above, a
-simple self attention block has the QKV linear layer followed by MLP.
+Fig: Taken from Megatron-LM paper.
+
+As seen from the figure above, a simple self attention block has the QKV linear layer followed by MLP.
 Using the same Column and Row Parallel linear layers, we can partition
 the self-attention block across devices thereby reducing the memory
 footprint on each device, since each device now only holds partial

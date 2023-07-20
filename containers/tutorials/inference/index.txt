@@ -1,0 +1,2 @@
+* :ref:`tutorial-infer`
+* :ref:`example-deploy-rn50-as-k8s-service`

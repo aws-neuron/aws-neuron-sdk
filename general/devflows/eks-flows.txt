@@ -1,0 +1,12 @@
+.. tab-set:: 
+
+    .. tab-item:: Inference
+
+        .. include:: /general/devflows/inference/eks-flows.txt
+
+
+.. tab-set:: 
+
+    .. tab-item:: Training
+
+        .. include:: /general/devflows/training/eks-flows.txt

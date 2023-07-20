@@ -1,4 +1,4 @@
-.. _ec2-then-ec2-devflow:
+.. _ec2-then-ec2-devflow-inf2:
 
 Compile with Framework API and Deploy on EC2 Inf2
 =================================================

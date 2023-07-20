@@ -16,10 +16,13 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
 
  
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :hidden:
-    
-    /frameworks/tensorflow/inference
+
+    Inference (Inf2 & Trn1)  </frameworks/tensorflow/tensorflow-neuronx-inference>
+    Inference (Inf1)  </frameworks/tensorflow/tensorflow-neuron-inference>
+
+
 
 
 .. toctree::

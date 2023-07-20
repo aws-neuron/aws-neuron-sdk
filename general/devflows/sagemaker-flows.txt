@@ -1,0 +1,12 @@
+.. tab-set:: 
+
+    .. tab-item:: Inference
+
+        .. include:: /general/devflows/inference/sagemaker-flows.txt
+
+.. tab-set:: 
+
+    .. tab-item:: Training
+
+        .. include:: /general/devflows/training/sagemaker-flows.txt
+

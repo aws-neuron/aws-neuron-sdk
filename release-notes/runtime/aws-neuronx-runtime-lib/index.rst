@@ -32,6 +32,23 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.15.11.0]
+---------------------------------
+Date: 7/19/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads.  See Runtime Configuration guide for details on how to use the feature.
+* AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode); choice of 16 ranks is limited to NeuronCores 0-15 or 16-31.
+* Minor improvement in end-to-end execution latency after reducing the processing time required for benign error notifications.
+* Reduced notification overhead by using descriptor packing improving DMA performance for memory bound workloads by up to 25%.
+* Improved load speed by removing extraneous checks that were previously being performed during loads.  
+* Minor performance boost to CC Ops by removing the need to sort execution end notifications.
+* Bumped profiling NTFF version to version 2 to remove duplicate information which may result in hitting protobuf limits, and avoid crashing when using an older version of Neuron tools to postprocess the profile.
+  Please upgrade to Neuron tools 2.12 or above to view profiles captured using this version of the Neuron runtime.
+
+
 
 Neuron Runtime Library [2.14.8.0]
 ---------------------------------

@@ -19,7 +19,7 @@ MXNet Neuron enables native MXNet models to be accelerated on Neuron devices, so
     :maxdepth: 1
     :hidden:
         
-    /frameworks/mxnet-neuron/inference-mxnet-neuron
+    Inference (Inf1) </frameworks/mxnet-neuron/inference-mxnet-neuron>
     
 
 .. contents:: Table of contents

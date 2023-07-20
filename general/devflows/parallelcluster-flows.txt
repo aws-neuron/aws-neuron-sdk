@@ -1,0 +1,16 @@
+.. tab-set:: 
+
+    .. tab-item:: Training
+            
+        .. include:: /general/devflows/training/parallelcluster-flows.txt
+                
+
+.. tab-set:: 
+
+    .. tab-item:: Inference
+
+        .. note::
+
+            AWS ParallelCluster support is coming soon.
+
+

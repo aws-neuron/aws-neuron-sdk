@@ -56,7 +56,7 @@ Available Commands:
 
     .. code-block::
 
-        neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--enable-fast-loading-neuron-binaries] [--enable-fast-context-switch] [--fp32-cast cast-method] [--fast-math cast-method] [--output <value>]
+        neuron-cc compile <file names> --framework <value> --io-config <value> [--neuroncore-pipeline-cores <value>] [--enable-saturate-infinity] [--enable-fast-loading-neuron-binaries] [--enable-fast-context-switch] [--fp32-cast cast-method] [--fast-math cast-method] [--output <value>]
 
     **Compile Parameters:**
 
@@ -123,6 +123,9 @@ Available Commands:
          },
          "outputs": ["output:0"]
         }
+
+    - :option:`--enable-saturate-infinity` : Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
+
 
     - :option:`--enable-fast-loading-neuron-binaries` : Write the compilation
       output (NEFF archive) in uncompressed format which results

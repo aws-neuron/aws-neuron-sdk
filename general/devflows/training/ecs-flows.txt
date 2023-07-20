@@ -1,0 +1,5 @@
+.. note::
+
+        Amazon ECS supports Trn1.
+
+        An example of how to train a model with Neuron using ECS is coming soon.

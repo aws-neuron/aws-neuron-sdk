@@ -58,7 +58,7 @@ Available Commands:
      [--model-type <model>]
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
-     [--distribution-strategy <disribution_type>]
+     [--distribution-strategy <distribution_type>]
      [--enable-saturate-infinity]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
@@ -94,9 +94,6 @@ Available Commands:
     - ``transformer``: Perform optimizations specific to `Transformer <https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)>` models. 
     - ``unet-inference``: Perform optimizations specific to certain `U-Net <https://en.wikipedia.org/wiki/U-Net>` model architectures when performing inference. U-Net models often have certain structures that result in excessive performance-impacting data transfers; this option allows the compiler to apply additional memory optimizations to prevent these data transfers and also allows the compiler to map larger normalization operators which would otherwise not successfully execute.
 
-  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk 
-  of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
-
   - :option:`--auto-cast <cast_mode>`: Controls how the compiler makes tradeoffs between performance and accuracy for FP32 operations. (Default: ``matmult``)
 
     Valid values:
@@ -120,6 +117,14 @@ Available Commands:
 
 
     .. note:: If multiple competing options are specified then the option later in the command line will supercede previous options.
+
+  - :option:`--distribution-strategy <distribution_type>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
+
+    Valid values:
+
+    - ``NEMO``: Enable the compiler to perform optimizations applicable to models that use the `NeMo <https://github.com/NVIDIA/NeMo>` APIs to shard parameters, gradients, and optimizer states across data-parallel workers.
+
+  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
 
   - :option:`--enable-fast-context-switch`: Optimize for faster model switching rather than execution latency.
       This option will defer loading some weight constants until the start of model execution. This results in overall faster system performance when your application switches between models frequently on the same Neuron Core (or set of cores).

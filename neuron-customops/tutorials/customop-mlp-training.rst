@@ -21,14 +21,25 @@ Before running the tutorial please follow the installation instructions at:
 
 .. note::
 
-   Custom C++ Operators are supported as of Neuron SDK Version 2.7 as a beta feature. As such this feature is not installed by default. Additional tooling and library packages (RPM and DEB) are required. They can be installed with the following commands:
-   ::
+    Custom C++ Operators are supported as of Neuron SDK Version 2.7 as a beta feature. As such this feature is not installed by default. Additional tooling and library packages (RPM and DEB) are required. On AL2, they can be installed with the following commands:
+    ::
+        sudo yum remove python3-devel -y
+        sudo yum remove aws-neuronx-gpsimd-tools-0.* -y
+        sudo yum remove aws-neuronx-gpsimd-customop-lib-0.* -y
 
-      sudo yum remove aws-neuronx-gpsimd-tools-0.* -y
-      sudo yum remove aws-neuronx-gpsimd-customop-lib-0.* -y
- 
-      sudo yum install aws-neuronx-gpsimd-tools-0.* -y 
-      sudo yum install aws-neuronx-gpsimd-customop-lib-0.* -y
+        sudo yum install python3-devel -y
+        sudo yum install aws-neuronx-gpsimd-tools-0.* -y 
+        sudo yum install aws-neuronx-gpsimd-customop-lib-0.* -y
+
+    On Ubuntu, they can be installed with the following commands:
+    ::
+        sudo apt-get remove python3-dev -y
+        sudo apt-get remove aws-neuronx-gpsimd-tools=0.* -y
+        sudo apt-get remove aws-neuronx-gpsimd-customop-lib=0.* -y  
+
+        sudo apt-get install python3-dev -y
+        sudo apt-get install aws-neuronx-gpsimd-tools=0.* -y
+        sudo apt-get install aws-neuronx-gpsimd-customop-lib=0.* -y 
 
   
 For all the commands below, make sure you are in the virtual environment that you have created above before you run the commands:
@@ -41,6 +52,7 @@ Install dependencies for PyTorch Custom Extensions in your environment by runnin
 
 .. code:: bash
 
+    pip install regex
     pip install ninja
 
 The ``ninja`` package is only needed for the reference CPU example. It is not needed by Neuron to run on Trainium instances.

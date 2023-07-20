@@ -11,6 +11,9 @@ from diffusers.models.unet_2d_condition import UNet2DConditionOutput
 import time
 import math
 
+# Define datatype
+DTYPE = torch.bfloat16
+
 # Specialized benchmarking class for stable diffusion.
 # We cannot use any of the pre-existing benchmarking utilities to benchmark E2E stable diffusion performance,
 # because the top-level StableDiffusionPipeline cannot be serialized into a single Torchscript object.
@@ -89,7 +92,7 @@ class NeuronUNet(nn.Module):
         self.device = unetwrap.unet.device
 
     def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
-        sample = self.unetwrap(sample, timestep.bfloat16().expand((sample.shape[0],)), encoder_hidden_states)[0]
+        sample = self.unetwrap(sample, timestep.to(dtype=DTYPE).expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 
 class NeuronTextEncoder(nn.Module):
@@ -103,6 +106,15 @@ class NeuronTextEncoder(nn.Module):
     def forward(self, emb, attention_mask = None):
         return [self.neuron_text_encoder(emb)['last_hidden_state']]
     
+def decode_latents(self, latents):
+    latents = latents.to(torch.float)
+    latents = 1 / self.vae.config.scaling_factor * latents
+    image = self.vae.decode(latents).sample
+    image = (image / 2 + 0.5).clamp(0, 1)
+    image = image.cpu().permute(0, 2, 3, 1).float().numpy()
+    return image
+
+StableDiffusionPipeline.decode_latents = decode_latents
 
 # --- Load all compiled models and benchmark pipeline ---
 COMPILER_WORKDIR_ROOT = 'sd2_compile_dir_512'
@@ -112,7 +124,7 @@ decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
 
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 
 # Load the compiled UNet onto two neuron cores.

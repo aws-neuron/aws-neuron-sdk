@@ -11,6 +11,9 @@ from diffusers.models.unet_2d_condition import UNet2DConditionOutput
 import time
 import math
 
+# Define datatype
+DTYPE = torch.float32
+
 # Specialized benchmarking class for stable diffusion.
 # We cannot use any of the pre-existing benchmarking utilities to benchmark E2E stable diffusion performance,
 # because the top-level StableDiffusionPipeline cannot be serialized into a single Torchscript object.
@@ -89,7 +92,7 @@ class NeuronUNet(nn.Module):
         self.device = unetwrap.unet.device
 
     def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
-        sample = self.unetwrap(sample, timestep.bfloat16().expand((sample.shape[0],)), encoder_hidden_states)[0]
+        sample = self.unetwrap(sample, timestep.to(dtype=DTYPE).expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 
 class NeuronTextEncoder(nn.Module):
@@ -112,7 +115,7 @@ decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
 
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.bfloat16)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 
 # Load the compiled UNet onto two neuron cores.

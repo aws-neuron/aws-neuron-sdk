@@ -1,0 +1,11 @@
+.. tab-set:: 
+
+    .. tab-item:: Inference
+
+        .. include:: /general/devflows/inference/ec2-flows.txt
+
+.. tab-set:: 
+
+    .. tab-item:: Training
+        
+        .. include:: /general/devflows/training/ec2-flows.txt

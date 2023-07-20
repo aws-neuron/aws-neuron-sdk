@@ -1,0 +1,6 @@
+.. note::
+
+    AWS Batch supports Inf1.
+
+    An example of how to deploy a model with Neuron using Batch is coming soon.
+

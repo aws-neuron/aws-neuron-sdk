@@ -1,5 +1,5 @@
-Computer Vision Tutorials
-=========================
+Computer Vision Tutorials (``mxnet-neuron``)
+============================================
 
 * ResNet-50 tutorial :ref:`[html] </src/examples/mxnet/resnet50/resnet50.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50/resnet50.ipynb>`
 * Model Serving tutorial :ref:`[html] <mxnet-neuron-model-serving>`

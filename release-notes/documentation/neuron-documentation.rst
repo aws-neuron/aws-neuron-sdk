@@ -7,6 +7,15 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.12.0
+-------------
+Date: 07/19/2023
+
+- Added best practices user guide for benchmarking performance of Neuron Devices `Benchmarking Guide and Helper scripts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/microbenchmark>`_
+- Announcing end of support for Ubuntu 18. See more at :ref:`announce-eol-ubuntu18`
+- Improved sidebar navigation in Documentation.
+- Removed support for Distributed Data Parallel(DDP) Tutorial.
+  
 
 Neuron 2.11.0
 -------------

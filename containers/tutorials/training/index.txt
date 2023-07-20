@@ -1,0 +1,2 @@
+* :ref:`tutorial-training`
+* :ref:`example-deploy-mlp-train-pod`

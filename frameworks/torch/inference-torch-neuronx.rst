@@ -15,5 +15,4 @@ Inference with ``torch-neuronx`` (Inf2 & Trn1/Trn1n)
 
 
 
-
 .. include:: inference-torch-neuronx.txt

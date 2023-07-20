@@ -1,0 +1,3 @@
+.. note::
+
+    AWS Batch support is coming soon.

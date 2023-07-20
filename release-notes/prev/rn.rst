@@ -8,8 +8,90 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
-.. _neuron-2.10.0-whatsnew:
+.. _neuron-2.11.0-whatsnew:
 
+Neuron 2.11.0 (06/14/2023)
+-------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 3
+
+What's New
+^^^^^^^^^^
+
+This release introduces Neuron Distributed, a new python library to simplify training and inference of large models, improving usability with features like S3 model caching, standalone profiler tool, support for Ubuntu22, as well as other new features,
+performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+     - Instances
+
+  
+   * - New Features and Performance Enhancements in ``transformers-neuronx``
+     - * Support for ``int8`` inference. See example at :ref:`int8_weight_storage_support`
+       * Improved prompt context encoding performance. See more at :ref:`transformers_neuronx_developer_guide`
+       * Improved collective communications performance for Tensor Parallel inference on Inf2 and Trn1.
+       * See more at :ref:`transformers-neuronx-rn` 
+     - Inf2, Trn1/Trn1n
+
+   * - Neuron Profiler Tool 
+     - * Profiling and visualization of model execution on Trainium and Inferentia devices now supported as a stand-alone tool.
+       * See more at :ref:`neuron-profile-ug`
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Neuron Compilation Cache through S3
+     - * Support for sharing compiled models across Inf2 and Trn1 nodes through S3
+       * See more at :ref:`pytorch-neuronx-parallel-compile-cli`
+     - Inf2, Trn1/Trn1n
+
+   * - New script to scan a model for supported/unsupported operators
+     - * Script to scan a model for supported/unsupported operators before training, scan output includes supported and unsupported operators at both XLA operators and PyTorch operators level.
+       * See a sample tutorial at :ref:`torch-analyze-for-training-tutorial`
+     - Inf2, Trn1/Trn1n
+
+   * - Neuron Distributed Library [Experimental]
+     - * New Python Library based on PyTorch enabling distributed training and inference of large models.
+       * Initial support for tensor-parallelism.
+       * See more at :ref:`neuronx-distributed-index`
+     - Inf2, Trn1/Trn1n
+
+   * - Neuron Calculator and Documentation Updates  
+     - * New :ref:`neuron_calculator` Documentation section to help determine number of Neuron Cores needed for LLM Inference.
+       * Added App Note :ref:`neuron_llm_inference`
+       * See more at :ref:`neuron-documentation-rn`
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Enhancements to Neuron SysFS
+     - * Support for detailed breakdown of memory usage across the NeuronCores
+       * See more at :ref:`neuron-sysfs-ug`
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Support for Ubuntu 22
+     - * See more at :ref:`setup-guide-index` for setup instructions on Ubuntu22
+     - Inf1, Inf2, Trn1/Trn1n
+
+   * - Minor enhancements and bug fixes.
+     - * See :ref:`components-rn`
+     - Trn1/Trn1n , Inf2, Inf1
+
+   * - Release Artifacts
+     - * see :ref:`latest-neuron-release-artifacts`
+     - Trn1/Trn1n , Inf2, Inf1
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+
+.. _neuron-2.10.0-whatsnew:
 
 Neuron 2.10.0 (05/01/2023)
 -------------------------

@@ -7,6 +7,12 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.8.0.25]
+-----------------------------
+Date: 07/19/2023
+
+* This release introduces a new optional ``--distribution_strategy`` compiler option. This option informs the compiler what type of distributed APIs are used to shard the model and allows the compiler to make API-specific optimizations. Currently following option-arguments are supported: ``nemo``.
+
 Neuron Compiler [2.7.0.40]
 -----------------------------
 Date: 06/14/2023

@@ -147,6 +147,33 @@ Parameters:
 -  ``device: (torch.device)`` : Device to initialize the weights on. By
    default, the weights would be initialized on CPU
 
+Loss functions:
+''''''''''''''''''
+
+When you shard the final MLP layer using tensor-parallelism, instead of 
+recollecting all the outputs from each TP rank, we can use the 
+ParallelCrossEntropy loss function. This function would take the parallel 
+logits produced by final parallel MLP and produce a loss by taking into 
+account that the logits are sharded across multiple workers.
+
+
+::
+
+   def neuronx_distributed.parallel_layers.loss_functions.parallel_cross_entropy(
+       parallel_logits, labels, label_smoothing=0.0)
+
+.. _parameters-6:
+
+Parameters:
+           
+
+-  ``parallel_logits (Tensor)`` : Sharded logits from the previous MLP
+-  ``labels (Tensor)`` : Label for each token. Labels should not be sharded,
+   and the parallel_cross_entropy would take care of sharding the labels internally
+-  ``label_smoothing (float)`` : A float in [0.0, 1.0]. Specifies the amount of 
+   smoothing when computing the loss, where 0.0 means no smoothing
+
+
 Checkpointing:
 ^^^^^^^^^^^^^^
 

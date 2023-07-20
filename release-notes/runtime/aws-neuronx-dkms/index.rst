@@ -15,6 +15,22 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.11.9.0]
+--------------------------------
+
+Date: 7/19/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added support for creating batch DMA queues.
+
+Bug Fixes
+^^^^^^^^^
+
+* Error message, "ncdev is not NULL", was being printed unnecessarily.  Fixed.
+* Fix DMA timeouts during NeuronCore reset of neighboring core caused by incorrect nc_id (NeuronCore ID) assigned to reserved memory
+
 
 Neuron Driver release [2.10.11.0]
 --------------------------------
