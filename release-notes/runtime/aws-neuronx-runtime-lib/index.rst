@@ -32,6 +32,17 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.15.14.0]
+---------------------------------
+Date: 8/09/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Reduced the contiguous memory size requirement for initializing Neuron Runtime on trn1/inf2 instance families by shrinking some of the notification buffers.  A particularly large decrease was the reduction of a 4MB error notification buffer down to 64K.  Expectation is that under memory constrained or highly fragmented memory systems, the Neuron Runtime would come up more reliably than previous versions.  
+
+
+
 Neuron Runtime Library [2.15.11.0]
 ---------------------------------
 Date: 7/19/2023

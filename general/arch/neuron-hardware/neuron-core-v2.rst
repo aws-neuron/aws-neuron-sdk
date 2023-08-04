@@ -27,7 +27,7 @@ elements. Examples include ‘axpy’ operations (Z=aX+Y), Layer
 Normalization, Pooling operations, and many more. The VectorEngine is
 also highly parallelized, and can perform 2,500 floating points
 operations per cycle (10x speedup vs NeuronCore-v1). The NeuronCore-v2
-ScalarEngine can handle various data-types, including cFP8, FP16, BF16,
+VectorEngine can handle various data-types, including cFP8, FP16, BF16,
 TF32, FP32, INT8, INT16 and INT32.
 
 The TensorEngine is based on a power-optimized systolic-array which is

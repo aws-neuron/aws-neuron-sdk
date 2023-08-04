@@ -15,7 +15,7 @@ Setup Guide
 
 
 
-This section walks you through the various options to install Neuron. You have to install Neuron on Trainium and Inferentia powered instances to enable deep-learning acceleration. 
+This section walks you through the various options to install and upgrade Neuron. You have to install Neuron on Trainium and Inferentia powered instances to enable deep-learning acceleration. 
 
 
 .. card:: PyTorch Neuron (``torch-neuronx``) Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
