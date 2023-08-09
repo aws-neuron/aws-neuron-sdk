@@ -12,11 +12,10 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
+      priorityClassName: high-priority
       serviceAccount: neuron-device-plugin
       tolerations:
       - key: CriticalAddonsOnly
@@ -94,5 +93,3 @@ spec:
         - name: infa-map
           hostPath:
             path: /run
-
-
