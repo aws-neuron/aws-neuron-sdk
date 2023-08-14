@@ -14,7 +14,7 @@ What's New
 
 Neuron 2.12.1 (08/09/2023)
 --------------------------
-Patch release to improve reliability of Neuron Runtime for customers using memory constrained instances.  The Neuron Runtime has reduced the contiguous memory requirement for initializing the Neuron Cores associated with applications.
+Patch release to improve reliability of Neuron Runtime when running applications on memory constrained instances. The Neuron Runtime has reduced the contiguous memory requirement for initializing the Neuron Cores associated with applications.
 This reduction allows bringup when only small amounts of contiguous memory remain on an instance.  Please :ref:`upgrade to latest Neuron release<setup-guide-index>` to use the latest Neuron Runtime.
 
 
