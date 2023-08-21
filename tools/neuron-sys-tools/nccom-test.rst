@@ -1,7 +1,7 @@
 .. _nccom-test:
 
 =================
-NCCOM-TEST (Beta)
+NCCOM-TEST User Guide
 =================
 
 .. contents:: Table of contents
