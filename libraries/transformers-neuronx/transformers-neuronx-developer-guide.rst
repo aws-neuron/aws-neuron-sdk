@@ -4,7 +4,7 @@ Transformers Neuron (``transformers-neuronx``) Developer Guide
 ==============================================================
 
 Transformers Neuron for Trn1 and Inf2 is a software package that enables
-PyTorch users to perform large language model (LLM) inference on
+PyTorch users to perform large language model (LLM) :ref:`performant inference <neuron_llm_inference>` on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
 
@@ -174,6 +174,25 @@ demonstrate how to run sampling with temperature using the ``GPT2`` model:
     )
     print([tokenizer.decode(tok) for tok in sample_output])
 
+Note: As the Hugging Face generation API can expand the input's batch dimension
+based on different generation configurations, we need to compile the neuron
+model with different compile batch_size compared to the run time batch_size
+(batch dimension of inputs to generation API).
+- if ``do_sample=True``, ``compile_batch_size = runtime_batch_size x num_return_sequences x beam_size``
+- otherwise, ``compile_batch_size = runtime_batch_size x num_return_sequences``
+
+
+------------------------
+Neuron Persistent Cache
+------------------------
+
+The Neuron Persistent Cache is now enabled for Transformers Neuron by default.
+Model artifacts which have been compiled once will be cached and reused on
+successive runs when possible. Model artifacts will only be reused when
+compiling with the same compiler version (neuronx-cc), model configurations,
+and compiler flags. It also includes other features (i.e. using an S3 bucket as
+the cache backend). For more defailed information, see the
+`Persistent cache documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide.html#persistent-cache-for-compiled-graphs>`_.
 
 .. _int8_weight_storage_support:
 
@@ -400,12 +419,3 @@ can be used to allocate the necessary number of NeuronCores to each process
 to run multiple transformers-neuronx models in parallel. See the
 :ref:`torch_neuronx_core_placement_guide` section for additional information
 about how to use these environment variables.
-
-
-
-Currently supported models
---------------------------
-
--  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__
--  `GPT-J <https://huggingface.co/docs/transformers/model_doc/gptj>`__
--  `OPT <https://huggingface.co/docs/transformers/model_doc/opt>`__

@@ -1,12 +1,5 @@
 .. note::
 
-  Neuron Driver installed on Deep Learning AMI (DLAMI) with Conda does not support Inf2\\Trn1.
-  
-  If you want to use DLAMI with Conda, please make sure to uninstall ``aws-neuron-dkms`` and install 
-  ``aws-neuronx-dkms`` before using  Neuron on DLAMI with Conda.
+  If you are facing a connectivity issue during the model loading process on a Trn1 instance with Ubuntu, that could probably be because of Ubuntu limitations with multiple interfaces. To solve this problem, please follow the steps mentioned :ref:`here<trn1_ubuntu_troubleshooting>`.
 
-.. note::
-
-  If you are facing a timeout issue during the model loading process on a Trn1 instance with Ubuntu, that could probably be because of Ubuntu limitations with multiple interfaces. To solve this problem, please follow the steps mentioned :ref:`here<trn1_ubuntu_troubleshooting>`.
-
-  Neuron SDK team highly recommends to launch the instances using DLAMIs since they already have a fix for any such problems.
+  Users are highly encouraged to use DLAMI to launch the instances, since DLAMIs come with the required fix.

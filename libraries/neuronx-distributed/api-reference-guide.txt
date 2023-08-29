@@ -1,1 +1,1 @@
-* :ref:`tp_api_guide`
+* :ref:`api_guide`

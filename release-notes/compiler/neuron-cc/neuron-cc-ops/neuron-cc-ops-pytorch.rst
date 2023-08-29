@@ -11,6 +11,17 @@ python:
    import torch.neuron
    print(*torch.neuron.get_supported_operations(), sep='\n')
 
+.. _pytorch-neuron-release-2130:
+
+PyTorch Neuron release [package version 1.*.*.2.9.1.0, SDK 2.13.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 08/28/2023
+
+Added support for new operators:
+
+- ``aten::clamp_min``
+- ``aten::clamp_max``
 
 .. _pytorch-neuron-release-2900:
 

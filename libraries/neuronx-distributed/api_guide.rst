@@ -1,12 +1,14 @@
-.. _tp_api_guide:
+.. _api_guide:
 
-API Reference Guide for Tensor Parallelism (``neuronx-distributed`` )
+API Reference Guide (``neuronx-distributed`` )
 ======================================================================
 
+Neuronx-Distributed is XLA based library for distributed training and inference.
+As part of this library, currently we support 2D parallelism: Tensor-Parallelism 
+and DataParallelism. We also support Zero1 optimizer to shard the optimizer weights.
 To support tensor-parallelism on Neuron, we adopted the Apex Library
 built for CUDA devices. We modified the implementations to work with
-XLA. Here are the tensor-parallel APIs that can be used to enable tensor
-parallelism:
+XLA. This document enlist the different APIs and modules provided by the library
 
 Parallel Model State:
 ^^^^^^^^^^^^^^^^^^^^^
@@ -95,7 +97,7 @@ ColumnParallel Linear Layer:
 
    class neuronx_distributed.parallel_layers.ColumnParallelLinear(
        input_size, output_size, bias=True, gather_output=True,
-       dtype=torch.float32, device=None)
+       sequence_parallel_enabled=False, dtype=torch.float32, device=None)
 
 This module would perform a Column wise partition of the weight matrix.
 Linear layer is defined as ``Y = XA + b`` , here A is parallelized along
@@ -113,6 +115,9 @@ Parameters:
 -  ``gather_output: (bool)`` : If true, call all-gather on output and
    make Y available to all Neuron devices, otherwise, every Neuron
    device will have its output which is Y_i = XA_i
+- ``sequence_parallel_enabled: (bool)`` : When sequence-parallel is enabled, it would
+   gather the inputs from the sequence parallel region and perform the forward and backward
+   passes
 -  ``dtype: (dtype)`` : Datatype for the weights
 -  ``device: (torch.device)`` : Device to initialize the weights on. By
    default, the weights would be initialized on CPU
@@ -124,7 +129,7 @@ RowParallel Linear Layer:
 
    class neuronx_distributed.parallel_layers.RowParallelLinear(
        input_size, output_size, bias=True, input_is_parallel=False,
-       dtype=torch.float32, device=False
+       sequence_parallel_enabled=False, dtype=torch.float32, device=False
    )
 
 The linear layer is defined as ``Y = XA + b``. A is parallelized along
@@ -143,6 +148,9 @@ Parameters:
    already split across the Neuron devices and we do not split again.
    This is useful when we have a ColumnParallel Layer just before the
    Row Parallel layer
+- ``sequence_parallel_enabled: (bool)`` : When sequence-parallel is enabled, it would
+   gather the inputs from the sequence parallel region and perform the forward and backward
+   passes
 -  ``dtype: (dtype)`` : Datatype for the weights
 -  ``device: (torch.device)`` : Device to initialize the weights on. By
    default, the weights would be initialized on CPU
@@ -186,7 +194,7 @@ Save Checkpoint:
 
 ::
 
-   def neuronx_distributed.parallel_layers.save(state_dict, save_dir)
+   def neuronx_distributed.parallel_layers.save(state_dict, save_dir, save_serially = True, down_cast_bf16 = False)
 
 This API will save the model from each tensor-parallel rank in the
 save_dir . Only workers with data parallel rank equal to 0 would be
@@ -202,6 +210,9 @@ Parameters:
 -  ``state_dict: (dict)`` : Model state dict. Its the same dict that you
    would save using torch.save
 -  ``save_dir: (str)`` : Model save directory.
+- ``save_serially: (bool)``: This flag would save checkpoints one data-parallel rank at a time.
+   This is particularly useful when we are checkpointing large models.
+- ``down_cast_bf16: (bool)``: This flag would downcast the state_dict to bf16 before saving.
 
 Load Checkpoint
 '''''''''''''''
@@ -258,6 +269,74 @@ Parameters:
 -  ``norm_type (float or int)`` : type of the used p-norm. Can be ‘inf’
    for infinity norm.
 
+Neuron Zero1 Optimizer:
+'''''''''''''''''''''''
+
+In Neuronx-Distributed, we built a wrapper on the Zero1-Optimizer present in torch-xla.
+
+::
+   class NeuronZero1Optimizer(Zero1Optimizer)
+
+This wrapper takes into account the tensor-parallel degree and computes the grad-norm 
+accordingly. It also provides two APIs: save_sharded_state_dict and load_sharded_state_dict.
+As the size of the model grows, saving the optimizer state from a single rank can result in OOMs.
+Hence, the api to save_sharded_state_dict can allow saving states from each data-parallel rank. To
+load this sharded optimizer state, there is a corresponding load_sharded_state_dict that allows each 
+rank to pick its corresponding shard from the checkpoint directory.
+
+:: 
+
+   optimizer_grouped_parameters = [
+        {
+            "params": [
+                p for n, p in param_optimizer if not any(nd in n for nd in no_decay)
+            ],
+            "weight_decay": 0.01,
+        },
+        {
+            "params": [
+                p for n, p in param_optimizer if any(nd in n for nd in no_decay)
+            ],
+            "weight_decay": 0.0,
+        },
+   ]
+
+   optimizer = NeuronZero1Optimizer(
+        optimizer_grouped_parameters,
+        AdamW,
+        lr=flags.lr,
+        pin_layout=False,
+        sharding_groups=parallel_state.get_data_parallel_group(as_list=True),
+        grad_norm_groups=parallel_state.get_tensor_model_parallel_group(as_list=True),
+    )
+
+The interface is same as Zero1Optimizer in torch-xla
+
+::
+   save_sharded_state_dict(output_dir, save_serially = True)
+
+.. _parameters-7:
+
+Parameters:
+           
+
+-  ``output_dir (str)`` : Checkpoint directory where the sharded optimizer states need to be saved
+-  ``save_serially (bool)`` : Whether to save the states one data-parallel rank at a time. This is
+    especially useful when we want to checkpoint large models.
+
+::
+   load_sharded_state_dict(output_dir, num_workers_per_step = 8)
+
+.. _parameters-8:
+
+Parameters:
+           
+
+-  ``output_dir (str)`` : Checkpoint directory where the sharded optimizer states are saved
+-  ``num_workers_per_step (int)`` : This argument controls how many workers are doing model load
+   in parallel.
+
+
 Model Trace:
 ^^^^^^^^^^^^
 
@@ -276,13 +355,13 @@ trace its own model. These traced models would be wrapped with a single
 TensorParallelModel module which can then be used like any other traced
 model.
 
-.. _parameters-7:
+.. _parameters-9:
 
 Parameters:
            
 
 -  ``func : (Function)``: This is a function that returns a ``Model``
-   object. The ``parallel_model_trace`` API would call this function
+   object and a dictionary of states. The ``parallel_model_trace`` API would call this function
    inside each worker and run trace against them. Note: This differs
    from the ``torch_neuronx.trace`` where the ``torch_neuronx.trace``
    requires a model object to be passed.
@@ -318,7 +397,7 @@ Load:
 This API will load the sharded traced model into ``TensorParallelModel``
 for inference.
 
-.. _parameters-8:
+.. _parameters-10:
 
 Parameters:
 '''''''''''

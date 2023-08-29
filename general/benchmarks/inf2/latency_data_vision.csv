@@ -1,12 +1,18 @@
 Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
+deepmind/multimodal-perceiver,16x224x224,:benchmark-pt: `Benchmark <perceiver-multimodal>`,PyTorch 1.13.1,Inf2.xlarge,Multimodal Autoencoding,0.85,1255.36,1277.71,Real Time,2.13.0,Data Parallel,1,FP32,None
+deepmind/vision-perceiver-learned,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,52.59,20.8,20.9,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+deepmind/vision-perceiver-fourier,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,33.97,30.15,30.2,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+deepmind/vision-perceiver-conv,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,71.51,14.4,14.5,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 google/vit-base-patch16-224,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,479.346,2.076,2.135,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1363.352,0.724,0.778,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1120.142,0.888,0.916,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1103.531,0.899,0.949,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,898.32,1.116,1.195,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,755.719,1.315,1.355,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.437,2127,2313,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.126,6960,7632,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 1.13.1,Inf2.xlarge,Image Segmentation,329.095,2.965,3.364,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,511.615,1.956,1.986,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
-vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,419.097,2.391,2.42,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
+resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1699.80,0.72,0.74,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1406.80,0.84,0.87,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1223.13,0.96,0.97,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1005.24,1.14,1.15,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,828.37,1.36,1.38,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 1.5,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.41,2439.19,2842.78,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 1.5,768x768,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.13,7863.51,8808.31,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.51,1942.84,2428.52,Real Time,2.13.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
+Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.15,6058.06,6732.08,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 1.13.1,Inf2.xlarge,Image Segmentation,418.71,2.54,2.58,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,613.98,1.78,1.81,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,472.47,2.26,2.27,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16

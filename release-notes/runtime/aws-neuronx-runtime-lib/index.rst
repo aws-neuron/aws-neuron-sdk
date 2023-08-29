@@ -32,6 +32,41 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+
+Neuron Runtime Library [2.16.8.0]
+---------------------------------
+Date: 8/09/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Add runtime version and capture time to NTFF
+* Improved Neuron Device copy times for all instance types via async DMA copies
+* Improved error messages for unsupported topologies (example below)
+
+   global comm ([COMM ID]) has less channels than this replica group ([REPLICA GROUP ID]) :
+
+   likely not enough EFA devices found if running on multiple nodes or CC not permitted on this group [[TOPOLOGY]]
+
+* Improved logging message for collectives timeouts by adding rank id to trace logs (example below)
+
+   [gid: [RANK ID]] exchange proxy tokens
+
+* Improved error messages when loading NEFFs with unsupported instructions (example below)
+
+   Unsupported hardware operator code [OPCODE] found in neff.
+
+   Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.
+
+
+Bug fixes
+^^^^^^^^^
+* Fixed “failed to get neighbor input/output addr” error when loading collectives NEFF compiled with callgraph flow and NEFF without callgraph flow.
+
+
+
+
+
 Neuron Runtime Library [2.15.14.0]
 ---------------------------------
 Date: 8/09/2023

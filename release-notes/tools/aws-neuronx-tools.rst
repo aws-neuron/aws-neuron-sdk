@@ -8,6 +8,17 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.13.4.0]
+------------------------
+Date: 08/28/2023
+
+New in the release:
+
+* ``--check`` option of ``nccom-test`` now supports more data types (``fp16``, ``bf16``, ``(u)int8``, ``(u)int16``, and ``(u)int32`` are now supported in addition to ``fp32``)
+* Fixed bug in ``nccom-test`` that would wait indefinitely for execution to end when running on multiple instances (``-N 2`` and higher).
+* Fixed bug in ``neuron-profile`` to prevent a crash during utilization calculation
+
+
 Neuron Tools  [2.12.2.0]
 -------------------------
 Date: 7/19/2023

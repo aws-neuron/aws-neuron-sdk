@@ -1,2 +1,3 @@
 * :ref:`tfneuronx-ref-neuron-tracing-api`
 * :ref:`tf-neuronx-ref-auto-replication-python-api`
+* :ref:`tf-neuronx-ref-analyze-model-api`

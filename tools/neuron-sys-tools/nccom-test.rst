@@ -130,7 +130,6 @@ CLI arguments
       - false
       - If provided, the corectness of the operations will be checked. This will not impact results (time, algbw and busbw)
         but will slightly increase the overall execution time.
-        **NOTE**: Currently, this option only works with ``--datatype fp32``.
 
 .. note::
 

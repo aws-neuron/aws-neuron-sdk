@@ -8,24 +8,11 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.12.0-whatsnew:
+.. _neuron-2.13.0-whatsnew:
 
 
 
-
-Neuron 2.12.2 (08/19/2023)
---------------------------
-Patch release to fix a jemalloc conflict for all Neuron customers that use Ubuntu 22.  The previous releases shipped with a dependency on jemalloc that may lead to compilation failures in Ubuntu 22 only.  
-Please :ref:`follow these instructions in setup guide<setup-guide-index>` to upgrade to latest Neuron release.
-
-
-Neuron 2.12.1 (08/09/2023)
---------------------------
-Patch release to improve reliability of Neuron Runtime when running applications on memory constrained instances. The Neuron Runtime has reduced the contiguous memory requirement for initializing the Neuron Cores associated with applications.
-This reduction allows bringup when only small amounts of contiguous memory remain on an instance.  Please :ref:`upgrade to latest Neuron release<setup-guide-index>` to use the latest Neuron Runtime.
-
-
-Neuron 2.12.0 (07/19/2023)
+Neuron 2.13.0 (08/28/2023)
 --------------------------
 
 .. contents:: Table of contents
@@ -35,8 +22,10 @@ Neuron 2.12.0 (07/19/2023)
 What's New
 ^^^^^^^^^^
 
-This release introduces  ZeRO-1 optimizer for model training in ``torch-neuronx`` , introduces experimental support for ``GPT-NeoX``, ``BLOOM`` , ``Llama`` and ``Llama 2(coming soon)`` models in ``transformers-neuronx``. This release also adds support for model inference serving on Triton Inference Server for Inf2 & Trn1 instances, ``lazy_load`` API and ``async_load`` API for model loading in ``torch-neuronx``, as well as other new features,
-performance optimizations, minor enhancements and bug fixes. This release introduces the following:
+
+This release introduces support for ``GPT-NeoX`` 20B model training in ``neuronx-distributed`` including Zero-1 optimizer capability. It also adds support for ``Stable Diffusion XL`` and ``CLIP`` models inference in ``torch-neuronx``. Neuron 2.13 also introduces `AWS Neuron Reference for Nemo Megatron <https://github.com/aws-neuron/neuronx-nemo-megatron>`_ library supporting distributed training of LLMs like ``GPT-3 175B``. This release also introduces other new features, performance optimizations, minor enhancements and bug fixes.
+This release introduces the following:
+
 
 
 .. list-table::
@@ -49,58 +38,57 @@ performance optimizations, minor enhancements and bug fixes. This release introd
      - Details
      - Instances
 
-   * - ZeRO-1 optimizer for model training in ``torch-neuronx``
-     - * Support of ZeRO-Stage-1 optimizer ( ZeroRedundancyOptimizer() API) for training models using ``torch-neuronx``
-       * See tutorial at  :ref:`zero1-gpt2-pretraining-tutorial`
-     - Inf2, Trn1/Trn1n
+   * - AWS Neuron Reference for Nemo Megatron library
+     - * Modified versions of the open-source packages `NeMo <https://github.com/NVIDIA/NeMo>`_ and `Apex <https://github.com/NVIDIA/apex>`_ that have been adapted for use with AWS Neuron and AWS EC2 Trn1 instances.
+       * ``GPT-3`` model training support ( `tutorial <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-gpt-job.md>`_ )
+       * See more at `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_
+     - Trn1/Trn1n
 
-   * - Support for new models and Enhancements in ``transformers-neuronx``
-     - * [Experimental] Support for inference of ``GPT-NeoX``, ``BLOOM`` and ``Llama`` models. 
-       * [Experimental] Support for ``Llama 2`` coming soon. Please monitor the `transformers-neuronx repository <https://github.com/aws-neuron/transformers-neuronx/tree/main/src/transformers_neuronx>`_ for updates.
-       * Removed constraints on ``tp_degree`` in tensor-parallel configurations for ``GPT2``, ``OPT``, and ``BLOOM`` . See more at :ref:`transformers-neuronx-rn`
-       * Added multi-query / multi-group attention support for ``GPT2``.
+   * - Transformers Neuron (transformers-neuronx) for Inference
+     - * Latency optimizations for  ``Llama`` and ``GPT-2`` models inference.
+       * Neuron Persistent Cache support (:ref:`developer guide <transformers_neuronx_developer_guide>`)
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
    
-   * - Support for Inf2 and Trn1 instances on Triton Inference Server
-     - * Support for Model Inference serving on Triton for Inf2 and Trn1 instances. See more at `Triton Server Python Backend <https://github.com/triton-inference-server/python_backend/tree/main/inferentia#using-triton-with-inferentia-2-or-trn1>`_
-       * See tutorial at `Triton on SageMaker - Deploying on Inf2 <https://github.com/aws/amazon-sagemaker-examples/tree/main/sagemaker-triton/inferentia2>`_
-     - Inf2, Trn1
-
-   * - Support for new computer vision models 
-     - * Performance optimizations in Stable Diffusion 2.1 model script and added [experimental] support for Stable Diffusion 1.5 models.
-       * [Experimental] Script for training CLIP model for Image Classification.
-       * [Experimental] Script for inference of Multimodal perceiver model
-       * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
-     - Inf2, Trn1/Trn1n
-
-   * - New Features in ``neuronx-distributed`` for training
-     - * Added parallel cross entropy loss function.
-       * See more at :ref:`tp_api_guide`
+   * - Neuron Distributed (neuronx-distributed) for Training
+     - * Now Stable, removed Experimental support
+       * ZeRO-1 Optimizer support with tensor parallel. (:ref:`tutorial <gpt_neox_tp_zero1_tutorial>`)
+       * Sequence Parallel support. (:ref:`api guide <api_guide>`)
+       * GPT-NeoX model training support. (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_) (:ref:`tutorial <gpt_neox_tp_zero1_tutorial>`)
+       * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
      - Trn1/Trn1n
 
-   * - ``lazy_load`` and ``async_load`` API for model loading in inference and performance enhancements in ``torch-neuronx`` 
-     - * Added ``lazy_load`` and ``async_load`` API to accelerate model loading for Inference. See more at :ref:`torch_neuronx_lazy_async_load_api`
-       * Optimize DataParallel API to load onto multiple cores simultaneously when device IDs specified are consecutive.
-       * See more at :ref:`torch-neuronx-rn`
-     - Inf2, Trn1/Trn1n
+   * - Neuron Distributed (neuronx-distributed) for Inference
+     - * KV Cache Support for LLM Inference (:ref:`tutorial <tp_inference_tutorial>`) (:ref:`release notes <neuronx-distributed-rn>`)
+     - Inf2,Trn1/Trn1n
+
+
+   * - PyTorch Neuron (torch-neuronx)
+     - * Seedable dropout enabled by default for training
+       * ``camembert-base`` training script. (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_text_classification/CamembertBase.ipynb>`_)
+       * New models inference support that include `Stable Diffusion XL <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sdxl_1024_inference.ipynb>`_ , CLIP (`clip-vit-base-patch32 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_ , `clip-vit-large-patch14 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_clip_large_inference_on_inf2.ipynb>`_ ) , `Vision Perceiver <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_perceiver_vision_inference.ipynb>`_ , `Language Perceiver <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_perceiver_language_inference.ipynb>`_ and :pytorch-neuron-src:`T5 <torch-neuronx/t5-inference-tutorial.ipynb>`
+     - Trn1/Trn1n,Inf2
+
+
+   * - Neuron Tools
+     - * New data types support for Neuron Collective Communication Test Utility (NCCOM-TEST)  --check option: fp16, bf16, (u)int8, (u)int16, and (u)int32 
+       * Neuron SysFS support for FLOP count(flop_count) and connected Neuron Device ids (connected_devices).  See :ref:`neuron-sysfs-ug`
+       * See more at :ref:`neuron-tools-rn`
+     - Inf1/Inf2/Trn1/Trn1n
   
-   * - [Experimental]Asynchronous Execution support and Enhancements in Neuron Runtime 
-     - * Added experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads. See more at :ref:`nrt-configuration`
-       * AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode)
+   * - Neuron Runtime 
+     - * Runtime version and Capture Time support to NTFF
+       * Async DMA copies support to improve Neuron Device copy times for all instance types
+       * Logging and error messages improvements for Collectives timeouts and when loading NEFFs.
        * See more at :ref:`neuron-runtime-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
-   * - Support for ``distribution_strategy`` compiler option in ``neuronx-cc``
-     - * Support for optional ``--distribution_strategy`` compiler option to enable compiler specific optimizations based on distribution strategy used.
-       * See more at :ref:`neuron-compiler-cli-reference-guide`
-     - Inf2, Trn1/Trn1n
-
-   * - New Micro Benchmarking Performance User Guide and Documentation Updates 
-     - * Added best practices user guide for benchmarking performance of Neuron devices. See more at `Benchmarking Guide and Helper scripts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/microbenchmark>`_
-       * Announcing end of support for Ubuntu 18. See more at :ref:`announce-eol-ubuntu18`
-       * Removed support for Distributed Data Parallel(DDP) Tutorial.
-       * Improved sidebar navigation in Documentation.
+   * - End of Support Announcements and Documentation Updates 
+     - * Announcing End of support for ``AWS Neuron reference for Megatron-LM`` starting Neuron 2.13. See more at :ref:`announce-eol-megatronlm`
+       * Announcing end of support for ``torch-neuron`` version 1.9 starting Neuron 2.14. See more at :ref:`announce-eol-pytorch19`
+       * Added TensorFlow 2.x (``tensorflow-neuronx``) analyze_model API section. See more at :ref:`tensorflow-ref-neuron-analyze_model-api`
+       * Upgraded ``numpy`` version to ``1.21.6`` in various training scripts for `Text Classification <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_
+       * Updated ``bert-japanese`` training Script to use ``multilingual-sentiments`` dataset. See `hf-bert-jp <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_bert_jp> `_
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
@@ -109,9 +97,9 @@ performance optimizations, minor enhancements and bug fixes. This release introd
      - Trn1/Trn1n , Inf2, Inf1
    
    * - Known Issues and Limitations
-     - * See :ref:`neuron-2.12.0-known-issues`
+     - * See :ref:`neuron-2.13.0-known-issues`
      - Trn1/Trn1n , Inf2, Inf1
-  
+
    * - Release Artifacts
      - * see :ref:`latest-neuron-release-artifacts`
      - Trn1/Trn1n , Inf2, Inf1
@@ -120,20 +108,12 @@ For more detailed release notes of the new features and resolved issues, see :re
 
 To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
 
-.. _neuron-2.12.0-known-issues:
+.. _neuron-2.13.0-known-issues:
 
-2.12.0 Known Issues and Limitations 
+2.13.0 Known Issues and Limitations 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Known Issues in Ubuntu 22 Support
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Several Vision and NLP models on Ubuntu 22 are not supported due to Compilation issues. Issues will be addressed in upcoming releases.
-* CustomOp feature failing with seg fault on Ubuntu 22.  Issue will be addressed in upcoming releases.
-  
-Known issues in certain resnet models on Ubuntu 20
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Known issue with support for resnet-18, resnet-34, resnet-50, resnet-101 and resnet-152 models on Ubuntu 20. Issues will be addressed in upcoming releases.
-             
 
+* Currently we see a NaN generated when the model implementation uses torch.dtype(float32.min) or torch.dtype(float32.max) along with XLA_USE_BF16/XLA_DOWNCAST_BF16. This is because, float32.min or float32.max gets downcasted to Inf in bf16 thereby producing a NaN. Short term fix is that we can use a small/large fp32 number instead of using float32.min/float32.max. Example, for mask creation, we can use -/+1e4 instead of min/max values. The issue will be addressed in future Neuron releases.   
 
 
 
@@ -340,15 +320,15 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.0
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.0
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.12.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.0
 
 
 Previous Releases

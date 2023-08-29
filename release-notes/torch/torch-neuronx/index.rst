@@ -14,6 +14,90 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [1.13.1.1.10.0]
+----------------------
+Date: 8/28/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Removed support for Python 3.7
+- (Training) Added a neuron_parallel_compile command to clear file locks left behind when a neuron_parallel_compile execution was interrupted (neuron_parallel_compile --command clear-locks)
+- (Training) Seedable dropout now enabled by default
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- (Training) Convolution is now supported
+- Fixed segmentation fault when using torch-neuronx to compile models on U22
+- Fixed XLA tensor stride information in torch-xla package, which blocked lowering of log_softmax and similar functions which show errors like:
+::
+
+      File "/home/ubuntu/waldronn/asr/test_env/lib/python3.7/site-packages/torch/nn/functional.py", line 1930, in log_softmax
+            ret = input.log_softmax(dim)
+        RuntimeError: dimensionality of sizes (3) must match dimensionality of strides (1)
+
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX``.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+No automatic partitioning
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when Neuron encounters an operation that it does not support during
+:func:`torch_neuronx.trace`, it may exit with the following compiler error: "Import of the HLO graph into the Neuron Compiler has failed.
+This may be caused by unsupported operators or an internal compiler error."
+The intended behavior
+when tracing is to automatically partition the model into separate subgraphs
+that run on NeuronCores and subgraphs that run on CPU. This will be supported in a future release. See
+:ref:`pytorch-neuron-supported-operators` for a list of supported operators.
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
+
 Release [1.13.1.1.9.0]
 ----------------------
 Date: 7/19/2023

@@ -1,7 +1,7 @@
 .. _tp_inference_tutorial:
 
-Inference with Tensor Parallelism (``neuronx-distributed``)
-===========================================================
+Inference with Tensor Parallelism (``neuronx-distributed``) [Experimental]
+===========================================================================
 
 Before we start, let's install transformers.
 
@@ -102,18 +102,23 @@ inference against it. Let’s look at the example below:
         # you can set the sharded=True, as that checkpoint will contain shards from each tp rank.
         neuronx_distributed.parallel_layers.load("bert.pt", model, sharded=False)
 
-        return model
+        # These io aliases would enable us to mark certain input tensors as state tensors. These
+        # state tensors are going to be device tensors.
+        io_aliases = {}
+        return model, io_aliases
+    
+    if __name__ == "__main__":
 
-    # Note how we are passing a function that returns a model object, which needs to be traced.
-    # This is mainly done, since the model initialization needs to happen within the processes
-    # that get launched internally withing the parallel_model_trace.
-    model = neuronx_distributed.trace.parallel_model_trace(get_model, paraphrase, tp_degree=2)
+        # Note how we are passing a function that returns a model object, which needs to be traced.
+        # This is mainly done, since the model initialization needs to happen within the processes
+        # that get launched internally withing the parallel_model_trace.
+        model = neuronx_distributed.trace.parallel_model_trace(get_model, paraphrase, tp_degree=2)
 
-    # Once traced, we now save the trace model for future inference. This API takes care
-    # of saving the checkpoint from each tensor parallel worker
-    neuronx_distributed.trace.parallel_model_save(model, "tp_models")
+        # Once traced, we now save the trace model for future inference. This API takes care
+        # of saving the checkpoint from each tensor parallel worker
+        neuronx_distributed.trace.parallel_model_save(model, "tp_models")
 
-    # We now load the saved model and will run inference against it
-    model = neuronx_distributed.trace.parallel_model_load("tp_models")
-    cpu_model = AutoModelForSequenceClassification.from_pretrained(name, torchscript=True)
-    assert torch.argmax(model(*paraphrase)[0]) == torch.argmax(cpu_model(*paraphrase)[0])
+        # We now load the saved model and will run inference against it
+        model = neuronx_distributed.trace.parallel_model_load("tp_models")
+        cpu_model = AutoModelForSequenceClassification.from_pretrained(name, torchscript=True)
+        assert torch.argmax(model(*paraphrase)[0]) == torch.argmax(cpu_model(*paraphrase)[0])

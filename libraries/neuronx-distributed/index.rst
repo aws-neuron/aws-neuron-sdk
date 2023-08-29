@@ -1,8 +1,8 @@
 .. _neuronx-distributed-index:
 
 
-Neuron Distributed [Experimental]
-=================================
+Neuron Distributed
+===================
 Neuron Distributed is a package for supporting different distributed
 training/inference mechanism for Neuron devices. It would provide xla
 friendly implementations of some of the more popular distributed

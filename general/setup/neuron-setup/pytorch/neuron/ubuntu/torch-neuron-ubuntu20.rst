@@ -36,13 +36,11 @@ This section provide links that will assist you to quickly start with a fresh in
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 5
-        :end-line: 6
+    .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
 
 
 .. include:: /general/quick-start/tab-inference-torch-neuron-u20.txt
 
-.. include :: /frameworks/torch/torch-neuron/setup/pytorch-update-al2.rst
+.. include:: /frameworks/torch/torch-neuron/setup/pytorch-update-u20.rst
 
-.. include :: /frameworks/torch/torch-neuron/setup/pytorch-install-prev-u20.rst
+.. include:: /frameworks/torch/torch-neuron/setup/pytorch-install-prev-u20.rst

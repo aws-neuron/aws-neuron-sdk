@@ -183,3 +183,5 @@ https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/LIC
 https://github.com/aws-neuron/aws-neuron-tensorflow/blob/master/LICENSE
 
 https://github.com/aws-neuron/aws-neuron-tensorflow/blob/master/THIRD-PARTY-LICENSES.txt
+
+https://github.com/aws-neuron/neuronx-nemo-megatron/blob/main/THIRD-PARTY-LICENSES

@@ -33,6 +33,11 @@ This section provide links that will assist you to quickly start with a fresh in
     * When launching a Trn1, please adjust your primary EBS volume size to a minimum of 512GB.
     * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html>`_ to connect to the instance 
 
+.. dropdown::  Update Neuron Drivers
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+
+    .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=driver_runtime_tools --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1
 
 .. dropdown::  Get Started With Pytorch DLAMI
     :class-title: sphinx-design-class-title-small
@@ -54,6 +59,6 @@ This section provide links that will assist you to quickly start with a fresh in
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2.rst
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2-dlami.rst
 
 .. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2.rst

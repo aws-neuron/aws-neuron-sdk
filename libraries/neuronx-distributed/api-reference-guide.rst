@@ -7,7 +7,7 @@ App Reference Guide (``neuronx-distributed`` )
     :maxdepth: 1
     :hidden:
     
-    /libraries/neuronx-distributed/tp_api_guide
+    /libraries/neuronx-distributed/api_guide
 
 
 .. include:: /libraries/neuronx-distributed/api-reference-guide.txt

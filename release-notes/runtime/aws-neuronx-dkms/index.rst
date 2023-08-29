@@ -15,6 +15,27 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+
+Neuron Driver release [2.12.11.0]
+--------------------------------
+
+Date: 8/28/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added FLOP count to sysfs (flop_count)
+* Added connected Neuron Device ids to sysfs (connected_devices)
+* Added async DMA copy support
+* Suppressed benign timeout/retry messages
+
+
+Bug Fixes
+^^^^^^^^^
+* Allocated CC-Core to correct NeuronCore; splitting CC-Cores evenly between NeuronCores.
+
+
+
 Neuron Driver release [2.11.9.0]
 --------------------------------
 

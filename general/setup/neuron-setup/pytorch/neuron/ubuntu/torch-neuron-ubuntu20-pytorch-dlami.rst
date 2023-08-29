@@ -32,6 +32,14 @@ This section provide links that will assist you to quickly start with a fresh in
     * Search for the copied AMI name in the AMI Search , you should see an exact matching AMI with the AMI name in Community AMIs. Select the AMI and use it to launch the instance.
     * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html>`_ to connect to the instance 
 
+
+.. dropdown::  Update Neuron Drivers
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+
+    .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=driver_runtime_tools --framework=pytorch --framework-version=1.13.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1
+
+
 .. dropdown::  Get Started With Pytorch DLAMI
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
@@ -50,6 +58,6 @@ This section provide links that will assist you to quickly start with a fresh in
     :link: neuron-pytorch
     :link-type: ref
 
-.. include:: /frameworks/torch/torch-neuron/setup/pytorch-update-u20.rst
+.. include:: /frameworks/torch/torch-neuron/setup/pytorch-update-u20-dlami.rst
 
 .. include:: /frameworks/torch/torch-neuron/setup/pytorch-install-prev-u20.rst

@@ -12,7 +12,7 @@ Tutorials for Inference (``torch-neuronx``)
     /frameworks/torch/torch-neuronx/tutorials/inference/tutorial-torchserve-neuronx
     /frameworks/torch/torch-neuron/tutorials/tutorial-libtorch
     /src/examples/pytorch/torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb
-
+    /src/examples/pytorch/torch-neuronx/t5-inference-tutorial.ipynb
 
 
 .. include:: /frameworks/torch/torch-neuronx/tutorials/inference/tutorials-torch-neuronx.txt

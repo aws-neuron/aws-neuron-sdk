@@ -375,12 +375,12 @@ To launch the AMP, one additional command-line argument is needed ``--enable_pt_
 
 .. code:: bash
 
-   cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-   torchrun --nproc_per_node=32 \
-   NEURON_RT_STOCHASTIC_ROUNDING_EN=1 dp_bert_large_hf_pretrain_hdf5.py \
-   --batch_size 16 \
-   --enable_pt_autocast \
-   --grad_accum_usteps 32 |& tee run_pretrain_log.txt
+    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
+    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 \
+    torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
+    --batch_size 16 \
+    --enable_pt_autocast \
+    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
 
 The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script with ``amp`` option like ``./run_dp_bert_large_hf_pretrain_bf16_s128.sh amp`` to start the training with AMP.
 

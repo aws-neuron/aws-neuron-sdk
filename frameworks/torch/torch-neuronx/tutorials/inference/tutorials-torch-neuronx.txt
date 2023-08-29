@@ -2,6 +2,7 @@
 * TorchServe tutorial :ref:`[html] <pytorch-tutorials-torchserve-neuronx>`
 * LibTorch C++ tutorial (for torch-neuron and torch-neuronx) :ref:`[html] <pytorch-tutorials-libtorch>`
 * Torchvision ResNet50 tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>`
+* T5 inference tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/t5-inference-tutorial.ipynb>`
 
 .. note::
 

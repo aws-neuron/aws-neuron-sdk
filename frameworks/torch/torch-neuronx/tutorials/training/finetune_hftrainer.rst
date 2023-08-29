@@ -56,6 +56,7 @@ First, paste the following script into your terminal to create a “run.sh” fi
 .. code:: bash
 
     tee run.sh > /dev/null <<EOF
+    #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
     XLA_USE_BF16=1 python3 ./run_glue.py \\
@@ -118,6 +119,7 @@ Paste the following script into your terminal to create a “run_2w.sh” file a
 .. code:: bash
 
     tee run_2w.sh > /dev/null <<EOF
+    #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
     XLA_USE_BF16=1 torchrun --nproc_per_node=2 ./run_glue.py \\
@@ -198,6 +200,7 @@ Paste the following script into your terminal to create a “run_converted.sh”
 .. code:: bash
 
     tee run_converted.sh > /dev/null <<EOF
+    #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
     XLA_USE_BF16=1 python3 ./run_glue.py \\

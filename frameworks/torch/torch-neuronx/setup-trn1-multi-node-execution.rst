@@ -278,4 +278,5 @@ Appendix - trn1 instance launch example script
  
     echo "The instance has been launched.\nYou can now SSH into $public_ips with key $KEYNAME.\n"
 
+.. note:: if you face connectivity issues after launching trn1\\trn1n 32xlarge instance on Ubuntu, please follow the troubleshooting instructions mentioned :ref:`here. <trn1_ubuntu_troubleshooting>`
 

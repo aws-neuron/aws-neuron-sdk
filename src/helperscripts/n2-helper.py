@@ -86,7 +86,6 @@ class manifest:
         return list(set(compiler_python_versions) & set(framework_python_versions))
 
     def get_major_version(self, package_name, instance):
-
         return self.df_major_version_properties.loc[(self.df_major_version_properties['name'] == package_name)][
             args.instance].values[0]
 
@@ -196,8 +195,7 @@ class manifest:
             return self.activate_python_venv(args)
         else:
             args.install_type = 'update'
-            str_dlami = self.install_neuron_runtime(args)
-            str_dlami += self.activate_python_venv(args)
+            str_dlami = self.activate_python_venv(args)
             str_dlami += self.jupyter_notebook(args)
             str_dlami += self.set_pip_repository()
             str_dlami += self.install_neuron_compiler_and_framework(args)
@@ -250,7 +248,26 @@ class manifest:
                     str += 'metadata_expire=0' + '\n'
                     str += 'EOF' + '\n'
                     str += 'sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB' + '\n'
+        return str
 
+
+    def get_repo(self):
+        str = '\n# Configure Linux for Neuron repository updates' + '\n'
+        if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
+            str += '. /etc/os-release' + '\n'
+            str += 'sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF' + '\n'
+            str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
+            str += 'EOF' + '\n'
+            str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
+        elif args.os == 'amazonlinux2':
+            str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
+            str += '[neuron]' + '\n'
+            str += 'name=Neuron YUM Repository' + '\n'
+            str += 'baseurl=https://yum.repos.neuron.amazonaws.com' + '\n'
+            str += 'enabled=1' + '\n'
+            str += 'metadata_expire=0' + '\n'
+            str += 'EOF' + '\n'
+            str += 'sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB' + '\n'
         return str
 
     def update_os_packages(self, args):
@@ -603,15 +620,16 @@ class manifest:
             if args.install_type == 'update':
                 str += '--upgrade '
 
-            str += compiler_package
 
-            if args.neuron_version == None:
-                if self.df_package_properties.loc[self.df_package_properties['name'] == compiler_package][
-                    'pin_major'].values[0] == 'true':
-                    str += '==' + self.get_major_version(compiler_package, args.instance) + '.* '
-            else:
-                str += '==' + self.get_package_version(category='compiler', name=compiler_package,
-                                                       neuron_version=args.neuron_version) + ' '
+        str += compiler_package
+
+        if args.neuron_version == None or args.install_type == 'update':
+            if self.df_package_properties.loc[self.df_package_properties['name'] == compiler_package][
+                'pin_major'].values[0] == 'true':
+                str += '==' + self.get_major_version(compiler_package, args.instance) + '.* '
+        else:
+            str += '==' + self.get_package_version(category='compiler', name=compiler_package,
+                                                   neuron_version=args.neuron_version) + ' '
 
         if args.neuron_version != None:  # prev install
             str += framework_name + '=='

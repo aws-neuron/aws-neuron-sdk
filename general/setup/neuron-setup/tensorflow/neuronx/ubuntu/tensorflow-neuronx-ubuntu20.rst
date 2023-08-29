@@ -20,7 +20,7 @@ Get Started with Latest Release of TensorFlow Neuron (``tensorflow-neuronx``)
 
 This section provide links that will assist you to quickly start with a fresh installation of :ref:`tensorflow-neuronx-main`.
 
-
+.. include:: /general/setup/install-templates/trn1-ga-warning.txt
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small

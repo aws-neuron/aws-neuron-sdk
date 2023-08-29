@@ -7,6 +7,12 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.9.0.16]
+-----------------------------
+Date: 08/28/2023
+
+* This release fixes an issue where any initial seed passed into the Random Number Generator operator was not honored. The RngBitGenerator operator now correctly accepts and uses setting the seed. Note that the current RNG implementation only supports 32-bit seeds.
+
 Neuron Compiler [2.8.0.25]
 -----------------------------
 Date: 07/19/2023

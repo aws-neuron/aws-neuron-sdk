@@ -1,11 +1,11 @@
 .. _megatron-lm-pretraining-tutorial:
 
-Megatron-LM GPT Pretraining Tutorial
-====================================
+Megatron-LM GPT Pretraining Tutorial [End of Support]
+======================================================
 
 GPT is a large language model that excels at many natural language
 processing (NLP) tasks. It is derived from the decoder part of the
-Transformer. `Neuron Reference For Megatron-LM <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`__ is a library
+Transformer. `Neuron Reference For Megatron-LM [EOS] <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`__ is a library
 that enables large-scale distributed training of language models such as
 GPT and is adapted from `Megatron-LM <https://github.com/NVIDIA/Megatron-LM>`__.
 This tutorial explains how to run the Neuron reference for Megatron-LM GPT pretraining on Trainium.

@@ -7,7 +7,7 @@ Inf2 Performance
    :local:
    :depth: 1
 
-*Last update: June 26th, 2023*
+*Last update: Aug 28th, 2023*
 
 .. _inf2_inference_perf:
 

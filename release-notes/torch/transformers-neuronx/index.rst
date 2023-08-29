@@ -25,14 +25,17 @@ Transformers Neuron for |Trn1|/|Inf2| is a software package that enables
 PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
-Definition of model support status
+Model support status
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Definition of model support status
+----------------------------------
 
 - Prototype (Alpha): An initial in-development version of a model that should be considered a preview of future functionality. A prototype may not be fully functional. A prototype model is not expected to perform well and may also have known accuracy issues. Prototype models may not maintain compatibility across versions.
 - Experimental (Beta): A functional model which may still need performance & accuracy tuning. An experimental model should produce accurate results in most cases but is not yet considered stable. Prototype models may not maintain compatibility across versions.
 - Stable: A model which has been validated for both accuracy and performance. Breaking changes to a stable models will occur with a deprecation notice in advance. 
 
-.. list-table:: Model Support Status
+.. list-table::
    :widths: auto
    :header-rows: 1
    :align: left
@@ -56,6 +59,98 @@ Definition of model support status
      - Yes
      - Yes
      - Yes
+
+Current model support status
+-----------------------------
+
+-  `BLOOM <https://huggingface.co/docs/transformers/model_doc/bloom>`__: [Experimental]
+-  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Experimental]
+-  `GPT-J <https://huggingface.co/docs/transformers/model_doc/gptj>`__: [Experimental]
+-  `GPT-Neox <https://huggingface.co/docs/transformers/model_doc/gpt_neox>`__: [Experimental]
+-  `LLaMA <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Experimental]
+-  `LLaMA 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Experimental]
+-  `OPT <https://huggingface.co/docs/transformers/model_doc/opt>`__: [Experimental]
+
+--------------------------
+Model features
+--------------------------
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Model
+     - Flexible Tensor Parallelism
+     - Prompt Estimate Support
+     - Serialization Support
+
+   * - BLOOM
+     - Yes
+     - Yes
+     - No
+
+   * - GPT2
+     - Yes
+     - Partial
+     - Partial
+
+   * - GPT-J
+     - No
+     - No
+     - No
+
+   * - GPT-NeoX
+     - No
+     - No
+     - No
+
+   * - LLaMA
+     - Yes
+     - Yes
+     - No
+
+   * - LLaMA 2
+     - Yes
+     - Yes
+     - No
+
+   * - OPT
+     - Yes
+     - No
+     - No
+
+
+Release [0.6.106]
+----------------------
+Date: 08/28/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- [Experimental] Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70b)
+- [Experimental] Improved the performance of BLOOM and LLaMA models
+- Reduced execution latency of token generation in tensor parallel models by improving thread synchronization. (supported in LLaMA only) 
+- Added an optimized vector implementation of RoPE positional embedding. (supported in LLaMA only)
+- Added support for faster context encoding on sequences of varying lengths. This is implemented by allowing multiple buckets for parallel context encoding. During inference the best fit bucket is chosen. (supported in LLaMA/GPT-2 only)
+- Added the Neuron Persistent Cache for compilation to automatically load pre-compiled model artifacts. (supported by all models)
+- Improved compilation time by compiling models used for different sequence length buckets in parallel. (not supported in GPT-NeoX/GPT-J)
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- [LLaMA] Fixed an issue in the parallel context encoding network where incorrect results could be generated if the context length is shorter than the context length estimate
+- [GPT2 / OPT] Fixed an issue in the parallel context encoding network where incorrect results could be generated
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- The ``HuggingFaceGenerationModelAdapter`` class currently falls back to serial context encoding for models that have parallel context encoding (``GPT2ForSamplingWithContextBroadcasting``, ``LlamaForSampling``, etc. )
+- Beam search can introduce memory issues for large models
+- There can be accuracy issues for the GPT-J model for certain use-cases
   
 Release [0.5.58]
 ----------------------

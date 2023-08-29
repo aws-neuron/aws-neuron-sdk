@@ -29,6 +29,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   ├── neuron0/
   │   ├── subsystem
   │   ├── uevent
+  │   ├── connected_devices
   │   ├── core_count
   │   ├── reset
   │   ├── power/
@@ -48,7 +49,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │       └── host_mem/
   │   │           ├── application_memory
   │   │           ├── constants
-  │   │           ├── dam_buffers
+  │   │           ├── dma_buffers
   │   │           └── tensors
   │   ├── neuron_core0/
   │   │   ├── info/
@@ -78,6 +79,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │   │   │   │    └── tensors
   │   │   │   │   └── host_mem
   │   │   │   └── other_info/
+  │   │   │       ├── flop_count
   │   │   │       ├── inference_count
   │   │   │       ├── model_load_count
   │   │   │       └── reset_count
@@ -144,10 +146,15 @@ Description for Each Metric
 
 
 * ``other_info/``: this directory contains statistics that are not included by ``status/`` and ``memory_usage/``. All of them are not counter types:
-
+  * ``flop_count``: number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval
   * ``inference_count``: number of successful inferences
   * ``model_load_count``:  number of successful model loads
   * ``reset_count``: number of successful device resets
+
+
+Other metrics:
+
+* ``connected_devices``: a list of connected devices' ids. You should see the same output as neuron-ls's CONNECTED DEVICES.
 
 
 Read and Write to Metrics

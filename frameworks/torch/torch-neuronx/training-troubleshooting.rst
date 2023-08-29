@@ -45,6 +45,47 @@ To turn on Neuron NCCL debug:
    os.environ["NCCL_DEBUG"] = "WARN"
    os.environ["NCCL_DEBUG_SUBSYS"] = "ALL"
 
+If some process crashed during training, you can enable core dumps using ``ulimit`` command:
+
+.. code:: bash
+
+   ulimit -S -c unlimited
+
+To see the type of signals that would cause core dumps, see https://www.man7.org/linux/man-pages/man7/signal.7.html.
+
+Note that core dumps take significant amount of storage, so make sure there is enough free disk space before enabling core dumps.
+
+On Ubuntu, if Apport is not running, core dump file name is by default "core" in the local directory. To change file location and name format, modify ``/proc/sys/kernel/core_pattern`` (see https://www.kernel.org/doc/html/latest/admin-guide/sysctl/kernel.html#core-pattern for pattern info). For example, to dump to /tmp with executable filename and process ID:
+
+.. code:: bash
+
+   echo '/tmp/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+
+For containers, install appropriate dependencies during docker build ("apt-get update && apt-get -y install build-essential gdb") and start the container with "--ulimit core=-1" to enable core dump and "-v /tmp/:/tmp/" to ensure core dumps to /tmp are preserved when container is stopped or deleted. Dependencies can also be installed after container is started.
+
+On Ubuntu, core dumps can also handled by Apport which is disabled by default. To enable Apport, run ``sudo service apport start``. The ``/proc/sys/kernel/core_pattern`` is updated by Apport service. After a crash, look in /var/log/apport.log for the core dump file name, which should be in located in /var/lib/apport/coredump/.
+
+Once you have the core dump, you can use gdb to debug further (for Python applications, <executable> is ``python`` or ``python3``):
+
+.. code:: bash
+
+   gdb <executable> <core file>
+
+If some process (i.e. XRT server) is killed due to out-of-memory on host (i.e. you see "Out of memory: Killed process <PID>" in syslog or dmesg), there won't be any core dump generated. However, you can change to it to kernel panic mode to trigger core dump by setting ``/proc/sys/vm/panic_on_oom`` to value of 1 on the host or from inside container.
+
+On the host where you need ``sudo`` (this change will be reflected inside the container also):
+
+.. code:: bash
+
+   echo 1 | sudo tee /proc/sys/vm/panic_on_oom
+
+From inside container where ``sudo`` doesn't work (this change will be reflected on the host also):
+
+.. code:: bash
+    
+   echo 1 > /proc/sys/vm/panic_on_oom
+
+
 Possible Error Conditions
 -------------------------
 
@@ -481,11 +522,18 @@ When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tut
 
 .. _trn1_ubuntu_troubleshooting:
 
-Timeout error during model load on Ubuntu
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Multiple network interfaces on non-Amazon Linux distributions, such as Ubuntu, will fail unless extra steps are taken to ensure proper routing. Neuron users will experience this failure as a timeout during model load.  If you’re experiencing timeouts when loading models on TRN1.32xlarge or another Neuron instance with multiple network interfaces, please attempt to fix your instance by installing the helper service below.  The helper service will configure source based routing for all interfaces on the instance.  At startup, the service creates netplan files, updates netplan, then terminates.
+Network Connectivity Issue on trn1/trn1n 32xlarge with Ubuntu
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Apply the following:
+**Description**
+
+Ubuntu distributions have network connectivity issues when multiple interfaces are connected to the same subnet. trn1/trn1n 32xlarge comes with 8/16 network interfaces. (To launch trn1/trn1n with 8/16 interfaces please follow :ref:`here <setup-trn1-multi-node-execution>`)
+
+AWS publishes a package that installs a helper service to address the issue. This service runs at the startup, creates the appropriate netplan files, updates the netplan and the the instance networking and terminates.
+
+Note that the following fix is only required on instances launched using generic Ubuntu AMIs.  Neuron AMIs and instances launched via ParalleCluster do not require the fix.
+
+**Patch to fix networking on a multi-interface instance**
 
 .. code:: bash
 
@@ -493,4 +541,49 @@ Apply the following:
     sudo apt install /tmp/aws-ubuntu-eni-helper.deb -y
     sudo systemctl enable aws-ubuntu-eni-helper.service
     sudo systemctl start aws-ubuntu-eni-helper.service
+
+
+**How to apply the patch?**
+
+The following steps could be followed to resolve this issue:
+
+* Launch trn1.32xl from AWS console (starts with ``single interface``, does not suffer from the multi-interface issue)
+* Apply the patch on this newly launched single-interface instance
+* Create a new AMI from this instance
+* Launch an 8 or 16 interface instance using that AMI.
+
+.. note::
+    The patch installs and enables the service but does not run it.  This is intentional.  The service will run at the startup when the AMI is used to launch a multi-interface instance. 
+
+**FAQs**
+
+.. note::
+  Neuron DLAMI has the patch installed, users are always encouraged to launch the instances using the DLAMI which does not require any fix. Please refer to the :ref:`Set Up Guide <setup-guide-index>` to know how to launch an instance using DLAMI.
+
+
+
+"Too many open files" when running training job
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When running a large model training with several workers, it can result in errors like the following.
+
+.. code:: bash
+
+	2023-Jun-14 19:05:29.0312 4112959:4113326 [23] bootstrap.cc:106 CCOM WARN Call to accept failed : Too many open files
+	2023-Jun-14 19:05:29.0312 4112959:4113263 [14] include/socket.h:438 CCOM WARN Net : Socket creation failed : Too many open files
+	2023-Jun-14 19:05:29.0312 4112959:4113326 ERROR   ENC:ncclBootstrapRecv                       failed neuronBootstrapRecv request to NCCL
+	2023-Jun-14 19:05:29.0312 4112959:4113249 [12] bootstrap.cc:106 CCOM WARN Call to accept failed : Too many open files
+	2023-Jun-14 19:05:29.0312 4112959:4113263 ERROR   ENC:ncclBootstrapSend                       failed neuronBootstrapSend request to NCCL2023-Jun-14 19:05:29.03122023-Jun-14 19:05:29.0312 4112959:4113270 [15] bootstrap.cc:106 CCOM WARN Call to accept failed : Too many open files
+
+This can result when the default OS limits is low. The hard and soft limits can be set on OS using the following commands or by manually opening and setting the limits.
+
+.. code:: bash
+
+	sudo sed -i 'H;1h;$!d;x;/hard  *nofile/!s/$/\n* hard nofile 65536/' /etc/security/limits.conf
+	sudo sed -i 'H;1h;$!d;x;/soft  *nofile/!s/$/\n* soft nofile 65536/' /etc/security/limits.conf
+	sudo sed -i 's/^#*\(\*\|\s*\*\)\s*soft\s*nofile\s*[0-9]\+$/\1 soft nofile 65536/' /etc/security/limits.conf
+	sudo sed -i 's/^#*\(\*\|\s*\*\)\s*hard\s*nofile\s*[0-9]\+$/\1 hard nofile 65536/' /etc/security/limits.conf
+	sudo sed -i 's/^#*\(\*\|\s*\*\)\s*soft\s*nofile\s*[0-9]\+$/\1 soft nofile 65536/' /etc/security/limits.d/01_efa.conf || true
+	sudo sed -i 's/^#*\(\*\|\s*\*\)\s*hard\s*nofile\s*[0-9]\+$/\1 hard nofile 65536/' /etc/security/limits.d/01_efa.conf || true
+
+The `01_efa.conf` file is created as part of the EFA installation and needs to be updated. If EFA driver is not installed the file `01_efa.conf` doesn't exist and the sed commands will fail with `No such file or directory`. If there are other files under `limits.d` with file limits they need to be updated as well.
 

@@ -9,6 +9,19 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.16.8.0]
+------------------------------
+Date: 8/28/2023
+
+New in this release:
+
+* Improved error messages for unsupported topologies
+* Improved timeout error messages for bootstrapInit
+
+Bug Fixes:
+* Fix bug where Linux kernel version check for SAFE_FORK env variable was incorrectly requiring SAFE_FORK to be set on kernel versions greater than 5
+
+
 Neuron Collectives [2.15.16.0]
 ------------------------------
 Date: 8/09/2023

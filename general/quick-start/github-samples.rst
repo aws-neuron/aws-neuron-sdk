@@ -12,7 +12,7 @@ Neuron GitHub Samples
                 :open:
 
                 * `PyTorch Neuron (torch-neuronx) samples for Trn1 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx#training>`_
-                * `Megatron-LM for Neuron for Trn1 <https://github.com/aws-neuron/aws-neuron-reference-for-megatron-lm>`_
+                * `Nemo Megatron for Neuron for Trn1 <https://github.com/aws-neuron/neuronx-nemo-megatron>`_
                 * `AWS Neuron samples for ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
                 * `AWS Neuron samples for EKS <https://github.com/aws-neuron/aws-neuron-eks-samples>`_
                 * `AWS Neuron samples for SageMaker <https://github.com/aws-neuron/aws-neuron-sagemaker-samples>`_

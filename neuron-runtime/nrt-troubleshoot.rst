@@ -176,6 +176,24 @@ simplest solution. If updating one of the two is not an option, please
 refer to the :ref:`neuron-runtime-release-notes`
 of the Neuron Runtime to determine NEFF version support.
 
+------------
+
+Unsupported Hardware Operator Code
+----------------------------------
+
+While loading a model(NEFF), Neuron Runtime checks whether the hardware operators are supported or not. If unsupported,
+Neuron Runtime will display the following error messages:
+
+::
+    2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Unsupported hardware operator code 214 found in neff.
+    2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.    
+
+Solution
+''''''''
+
+Upgrade to latest Neuron Runtime and Neuron Collectives.
+
+------------
 
 Insufficient Memory
 -------------------
@@ -197,6 +215,8 @@ As the error is contextual to what's going on with your instance, the
 exact next step is unclear. Try unloading some of the loaded models
 which will free up device DRAM space. If this is still a problem, moving
 to a larger Inf1 instance size with additional NeuronCores may help.
+
+------------
 
 Insufficient number of NeuronCores
 ----------------------------------

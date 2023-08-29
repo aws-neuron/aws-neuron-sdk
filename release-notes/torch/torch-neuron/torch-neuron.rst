@@ -72,8 +72,15 @@ properly recorded at inference time, resulting in an error such as:
 This error typically occurs when ``aten::size`` operators are partitioned to
 CPU. We are investigating a fix for this issue.
 
-PyTorch Neuron release [2.8.6.0]
---------------------------------
+PyTorch Neuron release [package ver. 1.*.*.2.9.1.0, SDK ver. 2.13.0]
+--------------------------------------------------------------------
+
+Date: 8/28/2023
+
+* Added support for clamp_min/clamp_max ATEN operators.
+
+PyTorch Neuron release [package ver. 1.*.*.2.8.9.0, SDK ver. 2.12.0]
+--------------------------------------------------------------------
 
 Date: 7/19/2023
 

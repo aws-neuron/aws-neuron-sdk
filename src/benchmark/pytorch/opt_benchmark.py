@@ -5,7 +5,7 @@ from transformers import AutoTokenizer
 
 """
 Run the sample at this link to get the split model state_dict (opt-13b-split):
-https://github.com/aws-neuron/aws-neuron-samples-staging/blob/master/torch-neuronx/transformers-neuronx/inference/facebook-opt-13b-sampling.ipynb
+https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/facebook-opt-13b-sampling.ipynb
 
 Make sure transformers is installed
 

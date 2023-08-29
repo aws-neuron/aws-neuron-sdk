@@ -20,6 +20,7 @@ Get Started with Latest Release of PyTorch Neuron (``torch-neuronx``)
 
 This section provide links that will assist you to quickly start with a fresh installation of :ref:`pytorch-neuronx-main` for both Inference and Training.
 
+.. include:: /general/setup/install-templates/trn1-ga-warning.txt
 
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
@@ -43,3 +44,5 @@ This section provide links that will assist you to quickly start with a fresh in
 
 
 .. include:: /general/quick-start/tab-inference-torch-neuronx-u22.txt
+
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-u22.rst

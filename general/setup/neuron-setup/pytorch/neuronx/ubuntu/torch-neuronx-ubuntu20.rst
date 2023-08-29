@@ -21,6 +21,7 @@ Get Started with Latest Release of PyTorch Neuron (``torch-neuronx``)
 
 This section provide links that will assist you to quickly start with a fresh installation of :ref:`pytorch-neuronx-main` for both Inference and Training.
 
+.. include:: /general/setup/install-templates/trn1-ga-warning.txt
 
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
@@ -31,7 +32,7 @@ This section provide links that will assist you to quickly start with a fresh in
     * To get more information about instances sizes and pricing see: `Trn1 web page <https://aws.amazon.com/ec2/instance-types/trn1/>`_, `Inf2 web page <https://aws.amazon.com/ec2/instance-types/inf2/>`_
     * Select Ubuntu Server 20 AMI
     * When launching a Trn1, please adjust your primary EBS volume size to a minimum of 512GB.
-    * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html>`_ to connect to the instance 
+    * After launching the instance, follow the instructions in `Connect to your instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html>`_ to connect to the instance
 
 .. dropdown::  Install Drivers and Tools
     :class-title: sphinx-design-class-title-small

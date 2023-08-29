@@ -11,7 +11,7 @@ TensorFlow 2.x FAQ
 How do I get started with TensorFlow?
 -------------------------------------
 
-The easiest entry point is the tutorials offered by the AWS Neuron team. For beginners, the :ref:`HuggingFace Pipelines distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
+The easiest entry point is the tutorials offered by the AWS Neuron team. For beginners, the :ref:`HuggingFace DistilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
 
 What TensorFlow versions are supported by Neuron?
 -------------------------------------------------
@@ -92,7 +92,7 @@ The generated SavedModel './model_neuron_dir' can be loaded into tensorflow-mode
 Where can I find tutorials and examples ?
 -----------------------------------------
 
-:ref:`HuggingFace Pipelines distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
+:ref:`HuggingFace DistilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` is a good place to start.
 
 
 How to debug or profile my model?
