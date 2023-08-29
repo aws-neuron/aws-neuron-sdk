@@ -57,3 +57,9 @@ folder.
     The development version may contain breaking changes. Please use it with caution.
     Additionally, the APIs and functionality in the development version are
     subject to change without warning.
+
+.. warning::
+    The AWS Neuron team is currently restructuring the contribution model of transformers-neuronx.
+    Within the period of 08/28/2023 and 10/18/2023, transformers-neuronx's github repository content
+    does not reflect latest features and improvements. Please install the stable release version
+    from https://pip.repos.neuron.amazonaws.com.
