@@ -59,12 +59,13 @@ This release introduces the following:
      - Trn1/Trn1n
 
    * - Neuron Distributed (neuronx-distributed) for Inference
-     - * KV Cache Support for LLM Inference (:ref:`tutorial <tp_inference_tutorial>`) (:ref:`release notes <neuronx-distributed-rn>`)
+     - * KV Cache Support for LLM Inference (:ref:`release notes <neuronx-distributed-rn>`)
      - Inf2,Trn1/Trn1n
 
 
    * - PyTorch Neuron (torch-neuronx)
      - * Seedable dropout enabled by default for training
+       * KV Cache inference support ( :pytorch-neuron-src:`tutorial <torch-neuronx/t5-inference-tutorial.ipynb>` )
        * ``camembert-base`` training script. (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_text_classification/CamembertBase.ipynb>`_)
        * New models inference support that include `Stable Diffusion XL <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sdxl_1024_inference.ipynb>`_ , CLIP (`clip-vit-base-patch32 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_ , `clip-vit-large-patch14 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_clip_large_inference_on_inf2.ipynb>`_ ) , `Vision Perceiver <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_perceiver_vision_inference.ipynb>`_ , `Language Perceiver <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_perceiver_language_inference.ipynb>`_ and :pytorch-neuron-src:`T5 <torch-neuronx/t5-inference-tutorial.ipynb>`
      - Trn1/Trn1n,Inf2
