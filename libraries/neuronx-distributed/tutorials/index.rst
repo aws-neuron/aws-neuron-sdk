@@ -9,6 +9,8 @@ Tutorials for Neuron Distributed (``neuronx-distributed`` )
         
     Training using Tensor Parallelism </libraries/neuronx-distributed/tutorials/training>
     Training GPT-NeoX 6.9B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-gpt-neox>
+    Training GPT-NeoX 20B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-gpt-neox-20b>
+
 
 .. toctree::
     :maxdepth: 1

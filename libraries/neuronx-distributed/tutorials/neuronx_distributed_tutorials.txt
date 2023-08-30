@@ -1,3 +1,4 @@
 * :ref:`tp_training_tutorial`
 * :ref:`gpt_neox_tp_zero1_tutorial`
+* :ref:`gpt_neox_20b_tp_zero1_tutorial`
 * :ref:`tp_inference_tutorial`
