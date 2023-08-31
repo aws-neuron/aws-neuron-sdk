@@ -111,7 +111,7 @@ inference against it. Let’s look at the example below:
 
         # Note how we are passing a function that returns a model object, which needs to be traced.
         # This is mainly done, since the model initialization needs to happen within the processes
-        # that get launched internally withing the parallel_model_trace.
+        # that get launched internally within the parallel_model_trace.
         model = neuronx_distributed.trace.parallel_model_trace(get_model, paraphrase, tp_degree=2)
 
         # Once traced, we now save the trace model for future inference. This API takes care

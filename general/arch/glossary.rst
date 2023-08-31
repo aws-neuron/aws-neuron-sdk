@@ -77,11 +77,11 @@ NeuronCore terms
 
    * - .. glossary::
           NeuronCore-v1
-     - Neuron Core withing Inferentia
+     - Neuron Core within Inferentia
 
    * - .. glossary::
           NeuronCore-v2
-     - Neuron Core withing Trainium
+     - Neuron Core within Trainium
 
    * - .. glossary::
           Tensor Engine
