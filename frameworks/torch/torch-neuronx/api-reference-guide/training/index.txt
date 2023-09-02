@@ -1,3 +1,4 @@
 * :ref:`pytorch-neuronx-parallel-compile-cli`
+* :ref:`neuron-caching`
 * :ref:`pytorch-neuronx-envvars`
 * :ref:`torch-neuronx-profiling-api`

@@ -13,9 +13,8 @@ PyTorch Neuron are (experimental ones are noted):
 ``NEURON_CC_FLAGS``:
 
 -  Compiler options. Full compiler options are described in the :ref:`mixed-precision-casting-options`.
-   Additional options for the
-   persistent cache can be found in the "Persistent cache" section
-   below.
+   Additional options for the Neuron
+   Persistent Cache can be found in the :ref:`Neuron Persistent Cache <neuron-caching>` guide.
 
 ``NEURON_FRAMEWORK_DEBUG`` **[Experimental]**:
 
@@ -25,8 +24,8 @@ PyTorch Neuron are (experimental ones are noted):
 
 -  Dump the XLA graphs in HLO format (intermediate representation) and execute empty stubs with zero outputs
    in order to allow multiple XLA graphs to be traced through a trial execution.
-   Used for ahead-of-time
-   graph extraction for parallel compilation in neuron_parallel_compile
+   Used automatically for ahead-of-time
+   graph extraction for parallel compilation in :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`
    tool. This environment variable can be checked in the training script
    to prevent checking of bad outputs during trial run.
 
@@ -36,15 +35,16 @@ PyTorch Neuron are (experimental ones are noted):
    process, where N is the value this environment variable is set to.
    Default is to keep all graphs loaded by a process.
 
-``NEURON_COMPILE_CACHE_URL`` **[Experimental]**:
+``NEURON_COMPILE_CACHE_URL``
 
--  Set the cache url when using ``neuron_parallel_compile`` tool.
+-  Set the :ref:`Neuron Persistent Cache <neuron-caching>` URL or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`.
    If starts with ``s3://``, it will use AWS S3 as cache backend. Otherwise it will use
    local disk cache. Default is ``/var/tmp/neuron-compile-cache``.
+   If this is specified together with ``cache_dir=<cache_url>`` option via ``NEURON_CC_FLAGS``, the ``--cache_dir`` option takes precedence.
 
 ``NEURON_PARALLEL_COMPILE_MAX_RETRIES`` **[Experimental]**:
 
--  Set the maximum number of retries when using ``neuron_parallel_compile`` tool.
+-  Set the maximum number of retries when using :ref:`Neuron Persistent Cache <neuron-caching>` or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`.
    If set to N, the tool will try compilation N more time(s) if the first graph compilation failed.
    Example: Set NEURON_PARALLEL_COMPILE_MAX_RETRIES=1 when precompiling on 
    trn1.2xlarge where there's limited host memory and CPU resources.
@@ -52,7 +52,7 @@ PyTorch Neuron are (experimental ones are noted):
 
 ``NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE`` **[Experimental]**:
 
-- When using neuron_parallel_compile, if you want to ignore the error in training script
+- When using :ref:`Neuron Persistent Cache <neuron-caching>` or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>` , if you want to ignore the error in training script
   and compile the accumulated HLO graphs, you can do so by setting this environment variable.
   Example: If NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE=1 is set when using ``neuron_parallel_compile``,
   a crash in the training script would be ignored and the graphs collected upto the crash would be

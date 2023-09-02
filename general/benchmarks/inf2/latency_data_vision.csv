@@ -3,7 +3,9 @@ deepmind/multimodal-perceiver,16x224x224,:benchmark-pt:`Benchmark <perceiver-mul
 deepmind/vision-perceiver-learned,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,52.59,20.8,20.9,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 deepmind/vision-perceiver-fourier,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,33.97,30.15,30.2,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 deepmind/vision-perceiver-conv,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,71.51,14.4,14.5,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
-google/vit-base-patch16-224,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,479.346,2.076,2.135,Real Time,2.11.0,Data Parallel,1,FP32,Matmult-BF16
+google/vit-base-patch16-224 *,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,704.824,1.403,1.487,Real Time,2.13.0 *,Data Parallel,1,FP32,Matmult-BF16
+openai/clip-vit-base-patch32,224x224,:benchmark-pt:`Benchmark <hf-openai-clip>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,161.176,6.182,6.319,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
+openai/clip-vit-large-patch14,224x224,:benchmark-pt:`Benchmark <hf-openai-clip>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,60.672,16.454,16.664,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1699.80,0.72,0.74,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1406.80,0.84,0.87,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16
 resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1223.13,0.96,0.97,Real Time,2.13.0,Data Parallel,1,FP32,Matmult-BF16

@@ -33,6 +33,17 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.16.14.0]
+---------------------------------
+Date: 9/01/2023
+
+Bug fixes
+^^^^^^^^^
+* Fixed a segfault on failure to complete Neuron Device initialization.  New behavior will avoid the failure and escalate a fixed Neuron Runtime error code (NERR_FAIL, code 0x1)
+* Improved error messages around Neuron Device initialization failures.
+
+
+
 Neuron Runtime Library [2.16.8.0]
 ---------------------------------
 Date: 8/09/2023

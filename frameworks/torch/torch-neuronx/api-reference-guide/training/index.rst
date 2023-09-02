@@ -7,6 +7,7 @@ API Reference Guide for Training (``torch-neuronx``)
 
     /frameworks/torch/torch-neuronx/api-reference-guide/training/pytorch-neuron-parallel-compile
     /frameworks/torch/torch-neuronx/api-reference-guide/training/torch-neuron-envvars
+    /general/arch/neuron-features/neuron-caching
     /frameworks/torch/torch-neuronx/api-reference-guide/torch-neuronx-profiling-api
 
 

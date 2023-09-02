@@ -10,6 +10,15 @@ What's New
 .. _latest-neuron-release:
 .. _neuron-2.13.0-whatsnew:
 
+Neuron 2.13.2 (09/01/2023)
+---------------------------
+
+This is a patch release that fixes issues in Kubernetes (K8) deployments related to Neuron Device Plugin crashes and other pod scheduling issues. This release also adds support for zero-based Neuron Device indexing in K8 deployments, see the :ref:`Neuron K8 release notes <neuron-k8-rn>` for more details on the specific bug fixes.
+
+Updating to latest Neuron Kubernetes components and Neuron Driver is highly encouraged for customers using Kubernetes.
+
+Please :ref:`follow these instructions in setup guide <setup-guide-index>` to upgrade to latest Neuron release.
+
 
 Neuron 2.13.1 (08/29/2023)
 --------------------------
@@ -332,15 +341,15 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
 
 
 Previous Releases

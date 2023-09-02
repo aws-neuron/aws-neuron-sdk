@@ -14,6 +14,16 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [1.13.1.1.10.1]
+----------------------
+Date: 9/01/2023
+
+Summary
+~~~~~~~
+
+Minor bug fixes and enhancements.
+
+
 Release [1.13.1.1.10.0]
 ----------------------
 Date: 8/28/2023

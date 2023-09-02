@@ -15,6 +15,16 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.12.18.0]
+--------------------------------
+
+Date: 9/01/2023
+
+Bug Fixes
+^^^^^^^^^
+* Added fixes required by Neuron K8 components for improving reliability of pod failures (see :ref:`Neuron K8 release notes <neuron-k8-rn>` for more details).
+* Added fixes required by Neuron K8 components to support zero-based indexing of Neuron Devices in Kubernetes deployments.
+
 
 Neuron Driver release [2.12.11.0]
 --------------------------------

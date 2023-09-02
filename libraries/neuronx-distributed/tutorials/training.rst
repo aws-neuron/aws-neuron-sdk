@@ -3,7 +3,7 @@
 Training with Tensor Parallelism (``neuronx-distributed`` )
 ===========================================================
 
-Keeping the above changes made in `Developer guide <tp_developer_guide>`, let’s now run an end-to-end training
+Keeping the above changes made in :ref:`Developer guide <tp_developer_guide>`, let’s now run an end-to-end training
 with tensor-parallelism. This section is adopted from `BERT pretraining
 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/bert.html#hf-bert-pretraining-tutorial>`__
 which used data-parallel training to scale the throughput. In this
@@ -13,13 +13,11 @@ model.
 
 Setting up environment:
                        
-
 For this experiment, we will use a trn1-32xl machine with the storage
-set to 512GB atleast. Next follow the instructions mentioned here:
-`Install PyTorch Neuron on
-Trn1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install>`__
-to create a pytorch environment. It is recommended to work out of python
-virtual env so as to avoid package installation issues.
+set to 512GB atleast.
+Follow the instructions mentioned here: 
+:ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`. 
+It is recommended to work out of python virtual env so as to avoid package installation issues.
 
 We also have to install the ``neuronx-distributed`` package using the
 following command:

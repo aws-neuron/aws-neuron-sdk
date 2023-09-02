@@ -45,7 +45,7 @@ Install PyTorch Neuron
 
 Before running the tutorial please follow the installation instructions at:
 
-* :ref:`Install PyTorch Neuron on Trn1 <pytorch-neuronx-install>`
+:ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`
 
 Please set the storage of instance to *512GB* or more if you intent to run multiple experiments and save many checkpoints.
 

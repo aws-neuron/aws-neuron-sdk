@@ -101,9 +101,8 @@ Table of Contents:
 Setup
 ~~~~~
 
-We use single Trn1.32xlarge instance. Follow `Install PyTorch Neuron on
-Trn1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install>`__
-to setup the environment first. For all the commands below, make sure
+We use single Trn1.32xlarge instance. Follow :ref:`Install PyTorch Neuron on
+Trn1 <setup-torch-neuronx>` to setup the environment first. For all the commands below, make sure
 you are in the virtual environment that you have created above before
 you run the commands:
 

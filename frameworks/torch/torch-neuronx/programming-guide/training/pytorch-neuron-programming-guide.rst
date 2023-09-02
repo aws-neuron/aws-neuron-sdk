@@ -200,60 +200,10 @@ PyTorch Neuron environment variables
 Environment variables allow modifications to PyTorch Neuron behavior
 without requiring code change to user script. See :ref:`PyTorch Neuron environment variables <pytorch-neuronx-envvars>` for more details.
 
-Persistent cache for compiled graphs
-------------------------------------
+Neuron Persistent Cache for compiled graphs
+-------------------------------------------
 
-PyTorch/XLA has an internal in-memory compilation cache that caches previously
-compiled graphs within the same python process. However this internal
-cache is not persistent between runs. PyTorch Neuron includes a
-persistent cache that enables caching of previously compiled graph on disk so
-that subsequent run of the same program do not incur long compilation
-time. This cache is enabled by default and the default cache directory
-is /var/tmp/neuron-compile-cache. **It also support remote cache using AWS S3**.
-
-The cache uses hash of the Neuron compiler flags and XLA graph as the
-key. If the Neuron compiler version or XLA graph changes, you will see
-recompilation. Examples of changes that would cause XLA graph change
-include:
-
--  Model type and size
--  Batch size
--  Optimizer and optimizer hyperparameters
--  Location of xm.mark_step()
-
-To disable the cache, you can pass ``--no_cache`` option via NEURON_CC_FLAGS:
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --no_cache'
-
-To change the cache's url, pass ``cache_dir=<cache_url>``
-option via NEURON_CC_FLAGS or NEURON_COMPILE_CACHE_URL=<cache_url>. `--cache_dir` is prioritied if both are set.
-If ``<cache_url>`` start with ``s3://``, it will use AWS S3 as remote cache backend. Users need to
-create S3 bucket prior to use S3 cache. The default cache path: ``/var/tmp/neuron_compile_cache``.
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_dir=<cache_url>'
-
-.. code:: python
-
-   os.environ['NEURON_COMPILE_CACHE_URL'] = '<cache_url>'
-
-If in some cases, the compilation failed because of an environment issue, and you want to retry compilation,
-you can do so by adding ``--retry_failed_compilation``. This will retry the compilation even if there is a
-failed NEFF in the cache.
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --retry_failed_compilation'
-
-You can change the verbose level of the compiler by adding ``log_level`` to either ``WARNING``, ``INFO``
-or ``ERROR``. This can be done as follows:
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --log_level=INFO'
+See :ref:`Neuron Persistent Cache for compiled graphs <neuron-caching>`
 
 Number of graphs
 -----------------

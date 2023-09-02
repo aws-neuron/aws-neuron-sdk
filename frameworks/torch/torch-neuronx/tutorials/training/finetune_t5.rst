@@ -19,7 +19,7 @@ Setup and compilation
 
 Before running the tutorial please follow the installation instructions at:
 
-* :ref:`Install PyTorch Neuron on Trn1 <pytorch-neuronx-install>`
+:ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`
 
 Please set the storage of instance to *512GB* or more if you also want to run through the BERT pretraining and GPT pretraining tutorials.
 

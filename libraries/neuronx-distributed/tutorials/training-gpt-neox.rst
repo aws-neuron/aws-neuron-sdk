@@ -12,11 +12,9 @@ Setting up environment:
 For this experiment, we will use a ParallelCluster with at least four trn1-32xl compute nodes.
 `Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`__
 introduces how to setup and use a ParallelCluster.
-We need first to create and activiate a python virtual env on the head node of the ParallelCluster.
+We need first to create and activate a python virtual env on the head node of the ParallelCluster.
 Next follow the instructions mentioned here:
-`Install PyTorch Neuron on
-Trn1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install>`__
-to install neuron python packages.
+:ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>` to install neuron python packages.
 
 We also need to install the ``neuronx-distributed`` package using the following command:
 

@@ -19,7 +19,7 @@ This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ 
 Run the tutorial
 ----------------
 
-Open a terminal, log into your remote instance, and activate a Pytorch virtual environment setup (see the :ref:`Pytorch Installation Guide <pytorch-neuronx-install>`). To complete this tutorial, you will also need a compiled BERT model. You can run :download:`trace_bert_neuronx.py </src/examples/pytorch/torchserve/trace_bert_neuronx.py>` to obtain a traced BERT model.
+Open a terminal, log into your remote instance, and activate a Pytorch virtual environment setup (see the:ref:`Install PyTorch Neuron <setup-torch-neuronx>`). To complete this tutorial, you will also need a compiled BERT model. You can run :download:`trace_bert_neuronx.py </src/examples/pytorch/torchserve/trace_bert_neuronx.py>` to obtain a traced BERT model.
 
 You should now have a compiled ``bert_neuron_b6.pt`` file, which is required going forward.
 

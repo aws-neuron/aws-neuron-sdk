@@ -13,17 +13,17 @@ Introduction
 
 This document lists the current release notes for AWS Neuron Kubernetes
 (k8) components. Neuron K8 components include a device plugin and a
-scheduler extension to assist with deployment and management of inf1
+scheduler extension to assist with deployment and management of inf/trn
 nodes within Kubernetes clusters. Both components are offered as
 pre-built containers in Public ECR and ready for deployment.
 
 -  **Device Plugin:**
-   public.ecr.aws/neuron/neuron-device-plugin:2.0.0.0
+   public.ecr.aws/neuron/neuron-device-plugin:2.x.y.z
 -  **Neuron Scheduler:**
-   public.ecr.aws/neuron/neuron-scheduler:2.0.0.0
+   public.ecr.aws/neuron/neuron-scheduler:2.x.y.z
 
 It's recommended to pin the version of the components used and to never
-use the "latest" tag. To get the list of image tags, please refer to
+use the "latest" tag. To get the list of image tags (2.x.y.z), please refer to
 these notes or check the image tags on the repo directly.
 
 
@@ -31,8 +31,29 @@ To Pull the Images from ECR:
 
 ::
 
-   docker pull  public.ecr.aws/neuron/neuron-device-plugin:2.0.0.0
-   docker pull  public.ecr.aws/neuron/neuron-scheduler:2.0.0.0
+   docker pull  public.ecr.aws/neuron/neuron-device-plugin:2.x.y.z
+   docker pull  public.ecr.aws/neuron/neuron-scheduler:2.x.y.z
+
+.. _1622:
+
+Neuron K8 release [2.16.18.0]
+===========================
+
+Date: 09/01/2023
+
+Major New Features
+------------------
+
+- Previously, the Neuron Device indexing was assigned randomly, which made programming difficult.  Changed to using 0-based indexing for Neuron Devices and NeuronCores in EKS container environments; requires Neuron Driver version 2.12.14 or newer.  
+- Improved logging when Neuron Driver not installed/present.
+
+Bug Fixes
+---------
+
+- Fixed Neuron Device Plugin crash when Neuron Driver is not installed/present on the host.
+- Fixed issue where pods fail to deploy when multiple containers are requesting Neuron resources.
+- Fixed issue where launching many pods each requesting Neuron cores fails to deploy.
+
 
 .. _1622:
 

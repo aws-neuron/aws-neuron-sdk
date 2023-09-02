@@ -8,7 +8,7 @@ is recorded in a graph. The graph is executed only when the results are requeste
 the user when they use ``print`` or ``xm.mark_step``.  Requesting results tells 
 ``torch-xla`` that the recorded graph needs to be executed. 
 
-Before executing the graph, ``torch-xla`` would call Neuron Compiler (``neuronx-cc``) to compile the graph into Neuron specific 
+Before executing the graph on a Neuron device, ``torch-xla`` would call Neuron Compiler (``neuronx-cc``) to compile the graph into Neuron specific 
 graph. Then the graph is executed on the :ref:`NeuronCore/s <neuroncores-arch>`. Compiling the graph involves 
 running optimizations that can make use of the :ref:`NeuronCore/s <neuroncores-arch>` efficiently. Running these 
 optimizations can be expensive and can result in long compile times. To save the 
@@ -26,8 +26,9 @@ now, when a graph is compiled for the fist time, the compilation result is saved
 ready, it would send the graph for compilation. PyTorch Neuron (``torch-neuronx``) would then check if 
 the compiled result is present in the ``Neuron Persistent Cache``, if yes, it would return with the 
 compiled result. This on-disk cache thereby avoids compilations across training runs. 
-This cache is enabled by default and the default cache directory is 
-``/var/tmp/neuron-compile-cache``.
+This cache is enabled by default for Neuron's PyTorch/XLA flow (training) as well as
+transformers-neuronx LLM inference package.
+The default cache path is the directory ``/var/tmp/neuron-compile-cache``.
 
 Look at the diagram below on the end to end flow:
 
@@ -61,20 +62,19 @@ To better understand how ``Neuron Persistent Cache`` works, consider the example
 
 Running the above example produces the following logs:
 
-.. code:: python
+.. code:: bash
 
-   2022-07-17 17:59:53.000541: INFO ||NCC_WRAPPER||: No candidate found under /var/tmp/neuron-compile-cache/USER_neuroncc-2.0.0.48+e5fcdf753/MODULE_8742523875190354238.
-   2022-07-17 17:59:53.000541: INFO ||NCC_WRAPPER||: Cache dir for the neff: /var/tmp/neuron-compile-cache/USER_neuroncc-2.0.0.48+e5fcdf753/MODULE_8742523875190354238/MODULE_0_SyncTensorsGraph.6_8742523875190354238_ip-172-31-43-112.ec2.internal-e7aed083-14217-5e404023e468c/d3d4b823-0872-418e-bf85-390dbce2bec3
+   2023-08-25 21:51:36.000433: INFO ||NCC_WRAPPER||: Compile cache path: /var/tmp/neuron-compile-cache
    .
    Compiler status PASS
-   2022-07-17 18:00:01.000117: INFO ||NCC_WRAPPER||: Exiting with a successfully compiled graph
 
 Re-running the above script would fetch the graph from the 
 neuron cache and you would see logs as follows:
 
-.. code:: python
+.. code:: bash
 
-   2022-07-17 18:05:37.000179: INFO ||NCC_WRAPPER||: Using a cached neff at /var/tmp/neuron-compile-cache/USER_neuroncc-2.0.0.48+e5fcdf753/MODULE_8742523875190354238/MODULE_0_SyncTensorsGraph.6_8742523875190354238_ip-172-31-43-112.ec2.internal-e7aed083-14217-5e404023e468c/d3d4b823-0872-418e-bf85-390dbce2bec3/MODULE_0_SyncTensorsGraph.6_8742523875190354238_ip-172-31-43-112.ec2.internal-e7aed083-14217-5e404023e468c.neff. Exiting with a successfully compiled graph
+   2023-08-25 21:52:23.000451: INFO ||NCC_WRAPPER||: Compile cache path: /var/tmp/neuron-compile-cache
+   2023-08-25 21:52:23.000453: INFO ||NCC_WRAPPER||: Using a cached neff at /var/tmp/neuron-compile-cache/neuronxcc-2.8.0.25+a3ad0f342/MODULE_198775565831884870+d41d8cd9/model.neff. Exiting with a successfully compiled graph.
 
 As you can see, the next run picks the compiled graph from
 cache, thereby saving the compilation time.
@@ -95,33 +95,20 @@ can pass ``--no_cache`` option via NEURON_CC_FLAGS:
 
    os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --no_cache'
 
-To change the cache’s root directory, pass ``--cache_dir=<root dir>``
-option via NEURON_CC_FLAGS (the actual cache directory will be in
-``<root dir>/neuron-compile-cache``):
+The default cache path is the directory ``/var/tmp/neuron-compile-cache``.
+To change the cache's location, pass ``cache_dir=<cache_url>``
+option via ``NEURON_CC_FLAGS`` or ``NEURON_COMPILE_CACHE_URL=<cache_url>`` environment variables:
 
 .. code:: python
 
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_dir=<root dir>'
-
-Stale cached compiled graphs (NEFFs) are deleted from the cache whenever
-the size of cache is above default cache size of 100GB . The deletion
-order is based on least-recently-used first. To change the cache size,
-pass ``--cache_size=SIZE_IN_BYTES``. For example, to change the cache
-size to 16 MB:
+   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_dir=<cache URL>'
 
 .. code:: python
 
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_size=16777216'
+   os.environ['NEURON_COMPILE_CACHE_URL'] = '<cache_URL>'
 
-A cache entry considered stale if the last used time is older than a
-time-to-live value, currently default to 30 days. If the last used time
-is earlier than the time-to-live value, then it is not deleted even if
-cache size exceeds cache size limit. To change cache time-to-live, set
-the option ``--cache_ttl`` to the number of days desired:
-
-.. code:: python
-
-   os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --cache_ttl=60'
+The cache URL specified using ``--cache_dir`` is prioritized over that specified using ``NEURON_COMPILE_CACHE_URL`` if both are set.
+If ``<cache_url>`` starts with ``s3://``, it will use the AWS S3 URL as the cache location, provided that the corresponding S3 bucket exists and is both readable and writeable.
 
 You can change the verbose level of the compiler by adding ``log_level`` to either ``WARNING``, ``INFO``
 or ``ERROR``. This can be done as follows:
@@ -130,15 +117,17 @@ or ``ERROR``. This can be done as follows:
 
    os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --log_level=INFO'
 
+A graph compilation can fail because of a compilation error or an environment issue (for example, compilation is interrupted by ctrl-C). The graph would be marked as failed and subsequent rerun would encounter message like below:
 
-Note: All compilation results are saved in the cache. In other words even if there is a failed compilation, 
-its result would be saved in the cache. If you want to retry a failed compilation, you can do so by using 
-``--retry_failed_compilation``.
+.. code:: bash
+
+    INFO ||NCC_WRAPPER||: Got a cached failed neff at /var/tmp/neuron-compile-cache/neuronxcc-2.8.0.25+a3ad0f342/MODULE_12486829708343293975+d41d8cd9/model.neff. Will skip compilation, please set --retry_failed_compilation for recompilation. 
+
+To retry compilation,
+add ``--retry_failed_compilation`` in ``NEURON_CC_FLAGS`` environment variable. When the script is reran, all the previously failed compilations are recompiled and fresh results are saved in the cache.
 
 .. code:: python
 
    os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --retry_failed_compilation'
-
-Setting the above flag, would retry all the failed compilations and save fresh results in the cache.
 
 .. |Image:| image:: ./images/NeuronCaching.png

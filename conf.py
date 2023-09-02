@@ -123,6 +123,7 @@ extlinks = {
             ,'neuron-monitor-src': ('https://github.com/aws-neuron/'+projectblob+'/src/examples/neuron-monitor/%s', '')
             ,'compile-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_compile.py', '')
             ,'benchmark-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_benchmark.py', '')
+            ,'llama-sample': ('https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/%s.ipynb', '')
             ,'github':(f'https://github.com/aws-neuron/{projectblob}', '')
             }
 
@@ -141,7 +142,7 @@ intersphinx_mapping = {
 #top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
 
 
-top_banner_message="Neuron 2.13.1 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
+top_banner_message="Neuron 2.13.2 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
 
 
 html_theme = "sphinx_book_theme"

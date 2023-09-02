@@ -9,6 +9,15 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.16.16.0]
+------------------------------
+Date: 9/01/2023
+
+New in this release:
+* minor bug fixes and enhancements
+
+
+
 Neuron Collectives [2.16.8.0]
 ------------------------------
 Date: 8/28/2023
