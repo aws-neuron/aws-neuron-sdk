@@ -10,6 +10,16 @@ Apache MXNet Neuron (Incubating) Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.4.10.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 7/19/2023
+
+Summary
+-------
+
+Minor bug fixes and enhancements for MXNet 1.8 Neuron.
+
 Apache MXNet Neuron release [1.8.0.2.4.9.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
