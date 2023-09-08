@@ -51,6 +51,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
 
    Transformers Neuron </libraries/transformers-neuronx/index>
    Neuron Distributed </libraries/neuronx-distributed/index>
+   AWS Neuron Reference for NeMo Megatron </libraries/nemo-megatron/index>
 
 
 

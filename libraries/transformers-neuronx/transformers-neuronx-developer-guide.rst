@@ -192,7 +192,8 @@ successive runs when possible. Model artifacts will only be reused when
 compiling with the same compiler version (neuronx-cc), model configurations,
 and compiler flags. It also includes other features (i.e. using an S3 bucket as
 the cache backend). For more defailed information, see the
-`Persistent cache documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide.html#persistent-cache-for-compiled-graphs>`_.
+:ref:`Persistent cache documentation <neuron-caching>`
+
 
 .. _int8_weight_storage_support:
 
