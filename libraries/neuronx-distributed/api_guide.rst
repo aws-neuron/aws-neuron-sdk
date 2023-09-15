@@ -148,12 +148,76 @@ Parameters:
    already split across the Neuron devices and we do not split again.
    This is useful when we have a ColumnParallel Layer just before the
    Row Parallel layer
-- ``sequence_parallel_enabled: (bool)`` : When sequence-parallel is enabled, it would
+-  ``sequence_parallel_enabled: (bool)`` : When sequence-parallel is enabled, it would
    gather the inputs from the sequence parallel region and perform the forward and backward
    passes
 -  ``dtype: (dtype)`` : Datatype for the weights
 -  ``device: (torch.device)`` : Device to initialize the weights on. By
    default, the weights would be initialized on CPU
+
+
+Padding Tensor-Parallel Layers
+''''''''''''''''''''''''''''''
+
+::
+
+   def neuronx_distributed.parallel_layers.pad.pad_model(
+      model, tp_degree, n_heads, wrapped_classes=(), pad_hook_fn=None)
+
+
+Pads a generic model to function to a desired tensor parallelism degree by padding the 
+number of attention heads. Returns the original model modified with padding.
+Uses 1-axis padding strategy: pads the sharded dim of the ParallelLinear layers to the 
+size it would have been for the padded number of heads.
+
+.. _parameters-4:
+
+Parameters:
+
+- ``model (torch.nn.Module)`` : model to be padded
+- ``tp_degree (int)`` : tensor parallel degree
+- ``n_heads (int)`` : the number of heads the given model to be padded has. This can 
+   typically be found in the config
+- ``wrapped_classes (Tuple[any], *optional*, defaults to `()`)`` : tuple of classes
+   (and their submodules) which should be padded
+- ``pad_hook_fn (Callable[any, float], *optional*, defaults to `None`)`` : a hook
+   function that is called whenever encountering a class to pad. Receives an instance
+   of the class to pad and the tgt_src_ratio (num_heads_padded / num_heads)as its argument
+
+Usage:
+   When modifying the Attention layer, typically you must divide by TP degree like so:
+   ::
+      self.num_heads = neuronx_dist_utils.divide(self.num_heads, get_tensor_model_parallel_size())
+
+   This line must be modified like so:
+   ::
+      self.num_heads = neuronx_dist_utils.divide(
+         self.num_heads + get_number_of_extra_heads(self.num_heads, get_tensor_model_parallel_size()),
+         get_tensor_model_parallel_size())
+
+   Then, after initializing the model, you must call this wrapper:
+   ::
+      model = get_model(config=desired_config)
+      model = pad_model(model, tp_degree=32, desired_config.num_heads)  # Use the model as desired after this point
+
+   You can specify a specific layer or class for your model to pad, so you aren't unnecessarily padding.
+   Typically, this layer will be your Attention layer
+   ::
+      model = pad_model(model, tp_degree=32, desired_config.num_heads, wrapped_classes=[MyAttention])
+
+   You can also specify a pad_hook_fn, to be called whenever encountering an instance of wrapped_class,
+   passing in said instance as a parameter, along with the tgt_src_ratio (num_heads_padded / num_heads).
+   ::
+      def my_hook(attention_to_pad, tgt_src_ratio):
+         attention_to_pad.split_size = int(model.split_size * tgt_src_ratio)
+         model = pad_model(
+                  model,
+                  tp_degree=32,
+                  desired_config.num_heads,
+                  wrapped_classes=[MyAttention],
+                  pad_hook_fn=my_hook
+               )
+
 
 Loss functions:
 ''''''''''''''''''

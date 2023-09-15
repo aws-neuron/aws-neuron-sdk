@@ -18,7 +18,7 @@ def benchmark(batch_size):
     inputs = inputs['pixel_values'].repeat([batch_size, 1, 1, 1])
     example = (inputs,)
 
-    traced = torch_neuronx.trace(model, example)
+    traced = torch_neuronx.trace(model, example, compiler_args="--model-type=transformer")
     filename = 'model.pt'
     torch.jit.save(traced, filename)
     reports = neuronperf.torch.benchmark(filename, [example], batch_sizes=[batch_size])
@@ -29,4 +29,5 @@ def benchmark(batch_size):
     neuronperf.write_json(reports)
 
 if __name__ == '__main__':
-   benchmark(batch_size=32)
+    # Use batch_size = 1 for best latency, batch_size = 2 for best throughput
+    benchmark(batch_size=2)

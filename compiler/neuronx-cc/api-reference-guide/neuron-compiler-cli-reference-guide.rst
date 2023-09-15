@@ -59,6 +59,7 @@ Available Commands:
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
      [--distribution-strategy <distribution_type>]
+     [--O <opt-level>]
      [--enable-saturate-infinity]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
@@ -116,13 +117,23 @@ Available Commands:
     - ``fp8_e4m3``: Cast the FP32 operations selected via the :option:`--auto-cast` option to a signed 8-bit floating point represented as a 4-bit exponent and 3-bit mantissa. 
 
 
-    .. note:: If multiple competing options are specified then the option later in the command line will supercede previous options.
+    .. note:: If multiple competing options are specified then the option right-most on the command line will supercede previous options.
 
   - :option:`--distribution-strategy <distribution_type>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
     Valid values:
 
     - ``NEMO``: Enable the compiler to perform optimizations applicable to models that use the `NeMo <https://github.com/NVIDIA/NeMo>`_ APIs to shard parameters, gradients, and optimizer states across data-parallel workers.
+
+  - :option:`--O <opt_level>`: Specify the level of optimization the compiler should perform. Possible numeric values are {1, 2, 3}. (Default: ``2``)
+
+    Valid values:
+
+    - ``1``: enables the core performance optimizations in the compiler, while also minimizing compile time.
+    - ``2``: [default] provides the best balance between model performance and compile time.
+    - ``3``: may provide additional model execution performance but may incur longer compile times and higher host memory usage during model compilation.
+
+    .. note:: This option supercedes, and deprecates, the ``—enable-experimental-O1`` option introduced in an earlier release.
 
   - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
 

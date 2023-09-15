@@ -121,8 +121,6 @@ Vision Models Inference Performance
 
          **Real Time** application refers to batch size 1 inference for minimal latency. **Batch** application refers to maximum throughput with minimum cost-per-inference.
 
-         * Performance values achieved by adding the `--model-type=transformer-inference`` compiler flag. This flag is being deprecated, and instead will be available via `--model-type=transformer` for transformer inference workloads starting in Neuron 2.14.
-
 
     .. tab-item:: Latency optimized
 
@@ -147,8 +145,6 @@ Vision Models Inference Performance
          **Cost per 1M images** is calculated using On-Demand hourly rate.
 
          **Real Time** application refers to batch size 1 inference for minimal latency. **Batch** application refers to maximum throughput with minimum cost-per-inference.
-
-         * Performance values achieved by adding the `--model-type=transformer-inference`` compiler flag. This flag is being deprecated, and instead will be available via `--model-type=transformer` for transformer inference workloads starting in Neuron 2.14.
 
 .. note::
 

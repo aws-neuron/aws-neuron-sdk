@@ -88,6 +88,12 @@ include:
 -  Optimizer and optimizer hyperparameters
 -  Location of xm.mark_step()
 
+To keep cache size small and to enable weights/parameters updates without recompilation, 
+only the compute graphs are cached when using transformers-neuronx (weights/parameters are inputs to the compute graphs) and 
+training flow using torch-neuronx's XLA  (weights/parameters are inputs and outputs of the compute graphs). 
+Note that this caching mechanism doesn't apply to the torch-neuronx trace API where the weights/parameters are frozen and converted to constants, 
+then compiled together with the compute operations (traced graphs with frozen weights/parameters are not cached).
+
 All compilation results are saved in the cache. To disable the cache, you 
 can pass ``--no_cache`` option via NEURON_CC_FLAGS:
 
@@ -129,5 +135,7 @@ add ``--retry_failed_compilation`` in ``NEURON_CC_FLAGS`` environment variable. 
 .. code:: python
 
    os.environ['NEURON_CC_FLAGS'] = os.environ.get('NEURON_CC_FLAGS', '') + ' --retry_failed_compilation'
+
+Note that all flags demonstrated above will be parsed by a tool called ``neuron_cc_wrapper``, which is a wrapper over Neuron Compiler CLI to provide caching mechanism. All these flags will not be passed into Neuron Compiler CLI.  
 
 .. |Image:| image:: ./images/NeuronCaching.png

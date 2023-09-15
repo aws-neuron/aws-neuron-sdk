@@ -68,7 +68,7 @@ spec:
       containers:
         #Device Plugin containers are available both in us-east and us-west ecr
         #repos
-      - image: public.ecr.aws/neuron/neuron-device-plugin:2.12.5.0
+      - image: public.ecr.aws/neuron/neuron-device-plugin:2.16.18.0
         imagePullPolicy: Always
         name: neuron-device-plugin
         env:

@@ -15,6 +15,19 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+
+Neuron Driver release [2.13.8.0]
+--------------------------------
+
+Date: 9/14/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Added sysfs support for showing connected devices on trn1.32xl, inf2.24xl, and inf2.48xl instances.
+* Fixed potential timeouts when transfering small buffers on inf1 instances.
+
+
 Neuron Driver release [2.12.18.0]
 --------------------------------
 

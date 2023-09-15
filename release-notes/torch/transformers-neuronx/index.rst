@@ -121,6 +121,28 @@ Model features
      - No
 
 
+Release [0.7.84]
+----------------------
+Date: 09/15/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Use the ``--model-type=transformer`` compiler flag by default for all models. This flag improves performance and compilation time for all models. This flag replaces the ``--model-type=transformer-inference`` flag, which is now depracated.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Fixed an issue where the ``HuggingFaceGenerationModelAdapter`` class falls back to serial context encoding for models that have parallel context encoding (``GPT2ForSamplingWithContextBroadcasting``, ``LlamaForSampling``, etc.)
+- [GPT2 / OPT] Fixed an issue in the parallel context encoding network where incorrect results could be generated due to incorrect masking logic.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 Release [0.6.106]
 ----------------------
 Date: 08/28/2023

@@ -8,6 +8,24 @@ Previous Releases Artifacts (Neuron 2.x)
    :depth: 1
 
 
+
+Neuron 2.13.2 (09/01/2023)
+--------------------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
+
+Inf2 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
+
+Inf1 packages
+^^^^^^^^^^^^^
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.13.2
+
+
 Neuron 2.13.1 (08/29/2023)
 --------------------------------------
 

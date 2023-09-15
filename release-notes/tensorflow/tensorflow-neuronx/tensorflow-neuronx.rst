@@ -9,8 +9,14 @@ TensorFlow Neuron (``tensorflow-neuronx``) Release Notes
 
 This document lists the release notes for the tensorflow-neuronx 2.x packages.
 
+
+
 tensorflow-neuronx 2.x release [2.1.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 09/15/2023
+
+* Minor updates
 
 Date: 05/1/2023
 

@@ -8,6 +8,20 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.14.6.0]
+------------------------
+Date: 09/15/2023
+
+New in the release:
+
+* Added legend in ``neuron-ls`` to clarify wrap around edges for topology view.
+* Improved error messaging when passing invalid arguments to ``neuron-profile view``.
+* Fixed bug in ``neuron-profile`` that incorrectly calculated buffer utilization for more recently compiled NEFFs.
+* Fixed bug in ``neuron-profile`` where the profile would sometimes include additional idle time while waiting for execution to start.
+* Profiler output now includes HLO name in addition to framework layer names.
+* ``neuron-profile view`` now has ``--output-format json`` option which will write to a file specified by ``--output-file <name>`` (default is ``ntff.json``) instead of writing data to InfluxDB.
+
+
 Neuron Tools  [2.13.4.0]
 ------------------------
 Date: 08/28/2023

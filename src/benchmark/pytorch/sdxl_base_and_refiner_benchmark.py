@@ -103,27 +103,74 @@ class NeuronUNet(nn.Module):
                                added_cond_kwargs["time_ids"])[0]
         return UNet2DConditionOutput(sample=sample)
     
+# Helper function to run both refiner and base pipes and return the final image
+def run_refiner_and_base(base, refiner, prompt, n_steps=40, high_noise_frac=0.8, generator=None):
+    image = base(
+        prompt=prompt,
+        num_inference_steps=n_steps,
+        denoising_end=high_noise_frac,
+        output_type="latent",
+        generator=generator,
+    ).images
+
+    image = refiner(
+        prompt=prompt,
+        num_inference_steps=n_steps,
+        denoising_start=high_noise_frac,
+        image=image,
+    ).images[0]
+
+    return image
+    
     
 # --- Load all compiled models and run pipeline ---
-COMPILER_WORKDIR_ROOT = 'sdxl_compile_dir_1024'
-model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+COMPILER_WORKDIR_ROOT = 'sdxl_base_and_refiner_compile_dir_1024'
+base_model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+refiner_model_id = "stabilityai/stable-diffusion-xl-refiner-1.0"
+
+unet_base_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet_base/model.pt')
+unet_refiner_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet_refiner/model.pt')
 decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
-unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
 
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+# ------- Load base -------
+pipe_base = DiffusionPipeline.from_pretrained(base_model_id, torch_dtype=DTYPE)
+pipe_base.scheduler = DPMSolverMultistepScheduler.from_config(pipe_base.scheduler.config)
 
 # Load the compiled UNet onto two neuron cores.
-pipe.unet = NeuronUNet(UNetWrap(pipe.unet))
+pipe_base.unet = NeuronUNet(UNetWrap(pipe_base.unet))
 device_ids = [0,1]
-pipe.unet.unetwrap = torch_neuronx.DataParallel(torch.jit.load(unet_filename), device_ids, set_dynamic_batching=False)
+pipe_base.unet.unetwrap = torch_neuronx.DataParallel(torch.jit.load(unet_base_filename), device_ids, set_dynamic_batching=False)
 
 # Load other compiled models onto a single neuron core.
-pipe.vae.decoder = torch.jit.load(decoder_filename)
-pipe.vae.post_quant_conv = torch.jit.load(post_quant_conv_filename)
+pipe_base.vae.decoder = torch.jit.load(decoder_filename)
+pipe_base.vae.post_quant_conv = torch.jit.load(post_quant_conv_filename)
+
+
+# ------- Load refiner -------
+# refiner shares text_encoder_2 and vae with the base
+pipe_refiner = DiffusionPipeline.from_pretrained(
+    refiner_model_id,
+    text_encoder_2=pipe_base.text_encoder_2,
+    vae=pipe_base.vae,
+    torch_dtype=torch.float32,
+)
+pipe_refiner.scheduler = DPMSolverMultistepScheduler.from_config(pipe_refiner.scheduler.config)
+
+# Refiner - load the compiled UNet onto two neuron cores.
+pipe_refiner.unet = NeuronUNet(UNetWrap(pipe_refiner.unet))
+device_ids = [0,1]
+pipe_refiner.unet.unetwrap = torch_neuronx.DataParallel(torch.jit.load(unet_refiner_filename), device_ids, set_dynamic_batching=False)
+
+
+
+# Define how many steps and what % of steps to be run on each experts (80/20) here
+n_steps = 40
+high_noise_frac = 0.8
 
 
 prompt = "a photo of an astronaut riding a horse on mars"
-n_runs = 20
-benchmark(n_runs, "stable_diffusion_1024", pipe, prompt)
+inputs = (pipe_base, pipe_refiner, prompt, n_steps, high_noise_frac, torch.manual_seed(0),)
+
+n_runs = 50
+benchmark(n_runs, "stable_diffusion_1024", run_refiner_and_base, inputs)

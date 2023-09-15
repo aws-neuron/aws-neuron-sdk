@@ -1,4 +1,4 @@
-.. _tensorflow-ref-neuron-analyze_model-api:
+.. _tf-neuronx-ref-analyze-model-api:
 
 TensorFlow 2.x (``tensorflow-neuronx``) analyze_model API
 ========================================================

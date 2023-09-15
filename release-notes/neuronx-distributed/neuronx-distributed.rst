@@ -10,6 +10,24 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+Neuron Distributed [0.4.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 9/15/2023
+
+New in this release
+-------------------
+
+* Added API for padding attention heads when they are not divisible by tensor-parallel degree
+* Added a constant threadpool for distributed inference
+* Fixed a bug with padding_idx in ParallelEmbedding layer
+* Fixed an issue with checkpoint loading to take into account the stride parameter in tensor parallel layers
+
+Known Issues and Limitations
+----------------------------
+
+* Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
+
 Neuron Distributed [0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

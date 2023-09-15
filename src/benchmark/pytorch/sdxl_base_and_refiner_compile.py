@@ -64,7 +64,7 @@ class NeuronUNet(nn.Module):
  
     def forward(self, sample, timestep, encoder_hidden_states, added_cond_kwargs=None, return_dict=False, cross_attention_kwargs=None):
         sample = self.unetwrap(sample,
-                               timestep.to(dtype=DTYPE).expand((sample.shape[0],)),
+                               timestep.expand((sample.shape[0],)),
                                encoder_hidden_states,
                                added_cond_kwargs["text_embeds"],
                                added_cond_kwargs["time_ids"])[0]
@@ -72,39 +72,44 @@ class NeuronUNet(nn.Module):
     
 
 # For saving compiler artifacts
-COMPILER_WORKDIR_ROOT = 'sdxl_compile_dir_1024'
+COMPILER_WORKDIR_ROOT = 'sdxl_base_and_refiner_compile_dir_1024'
 
-# Model ID for SD XL version pipeline
-model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+# Model IDs for SD XL version pipeline
+base_model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+refiner_model_id = "stabilityai/stable-diffusion-xl-refiner-1.0"
 
+# All components we compile in this script:
+# 1. unet (base, in fp32)
+# 2. unet (refiner, in fp32)
+# 3. vae.decoder (base & refiner)
+# 4. vae.post_quant_conv (base & refiner)
 
+# --- Compile UNet in fp32 (base) and save ---
 
-# --- Compile UNet and save ---
-
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe_base = DiffusionPipeline.from_pretrained(base_model_id, torch_dtype=DTYPE)
 
 # Replace original cross-attention module with custom cross-attention module for better performance
 Attention.get_attention_scores = get_attention_scores_neuron
 
 # Apply double wrapper to deal with custom return type
-pipe.unet = NeuronUNet(UNetWrap(pipe.unet))
+pipe_base.unet = NeuronUNet(UNetWrap(pipe_base.unet))
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-unet = copy.deepcopy(pipe.unet.unetwrap)
-del pipe
+unet = copy.deepcopy(pipe_base.unet.unetwrap)
+del pipe_base
 
-# Compile unet - FP32
-sample_1b = torch.randn([1, 4, 128, 128], dtype=DTYPE)
-timestep_1b = torch.tensor(999, dtype=DTYPE).expand((1,))
-encoder_hidden_states_1b = torch.randn([1, 77, 2048], dtype=DTYPE)
-added_cond_kwargs_1b = {"text_embeds": torch.randn([1, 1280], dtype=DTYPE),
-                        "time_ids": torch.randn([1, 6], dtype=DTYPE)}
+# Compile unet - fp32 (note these tensors are cast to fp32 in UNetWrap)
+sample_1b = torch.randn([1, 4, 128, 128])
+timestep_1b = torch.tensor(999).float().expand((1,))
+encoder_hidden_states_1b = torch.randn([1, 77, 2048])
+added_cond_kwargs_1b = {"text_embeds": torch.randn([1, 1280]),
+                        "time_ids": torch.randn([1, 6])}
 example_inputs = (sample_1b, timestep_1b, encoder_hidden_states_1b, added_cond_kwargs_1b["text_embeds"], added_cond_kwargs_1b["time_ids"],)
 
 unet_neuron = torch_neuronx.trace(
     unet,
     example_inputs,
-    compiler_workdir=os.path.join(COMPILER_WORKDIR_ROOT, 'unet'),
+    compiler_workdir=os.path.join(COMPILER_WORKDIR_ROOT, 'unet_base'),
     compiler_args=["--model-type=unet-inference"]
 )
 
@@ -113,7 +118,50 @@ torch_neuronx.async_load(unet_neuron)
 torch_neuronx.lazy_load(unet_neuron)
 
 # save compiled unet
-unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
+unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet_base/model.pt')
+torch.jit.save(unet_neuron, unet_filename)
+
+# delete unused objects
+del unet
+del unet_neuron
+
+
+
+# --- Compile UNet in fp32 (refiner) and save ---
+
+pipe_refiner = DiffusionPipeline.from_pretrained(refiner_model_id, torch_dtype=DTYPE)
+
+# Replace original cross-attention module with custom cross-attention module for better performance
+Attention.get_attention_scores = get_attention_scores_neuron
+
+# Apply double wrapper to deal with custom return type
+pipe_refiner.unet = NeuronUNet(UNetWrap(pipe_refiner.unet))
+
+# Only keep the model being compiled in RAM to minimze memory pressure
+unet = copy.deepcopy(pipe_refiner.unet.unetwrap)
+del pipe_refiner
+
+# Compile unet - fp32 - some input shapes are different from base
+sample_1b = torch.randn([1, 4, 128, 128])
+timestep_1b = torch.tensor(999).float().expand((1,))
+encoder_hidden_states_1b = torch.randn([1, 77, 1280])
+added_cond_kwargs_1b = {"text_embeds": torch.randn([1, 1280]),
+                        "time_ids": torch.randn([1, 5])}
+example_inputs = (sample_1b, timestep_1b, encoder_hidden_states_1b, added_cond_kwargs_1b["text_embeds"], added_cond_kwargs_1b["time_ids"],)
+
+unet_neuron = torch_neuronx.trace(
+    unet,
+    example_inputs,
+    compiler_workdir=os.path.join(COMPILER_WORKDIR_ROOT, 'unet_refiner'),
+    compiler_args=["--model-type=unet-inference"]
+)
+
+# Enable asynchronous and lazy loading to speed up model load
+torch_neuronx.async_load(unet_neuron)
+torch_neuronx.lazy_load(unet_neuron)
+
+# save compiled unet
+unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet_refiner/model.pt')
 torch.jit.save(unet_neuron, unet_filename)
 
 # delete unused objects
@@ -125,7 +173,7 @@ del unet_neuron
 # --- Compile VAE decoder and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe = DiffusionPipeline.from_pretrained(base_model_id, torch_dtype=DTYPE)
 decoder = copy.deepcopy(pipe.vae.decoder)
 del pipe
 
@@ -153,7 +201,7 @@ del decoder_neuron
 # --- Compile VAE post_quant_conv and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe = DiffusionPipeline.from_pretrained(base_model_id, torch_dtype=DTYPE)
 post_quant_conv = copy.deepcopy(pipe.vae.post_quant_conv)
 del pipe
 

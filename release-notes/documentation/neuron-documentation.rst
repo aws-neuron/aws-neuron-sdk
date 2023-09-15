@@ -8,6 +8,29 @@ Neuron Documentation Release Notes
    :depth: 1
 
 
+Neuron 2.14.0
+-------------
+Date: 09/15/2023
+
+- Neuron Calculator now supports multiple model configurations for Tensor Parallel Degree computation. See :ref:`neuron_calculator`
+- Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-deprecation-transformer-flag`
+- Updated HF ViT benchmarking script to use ``--model-type=transformer`` flag. See :ref:`[script] <src/benchmark/pytorch/hf-google-vit_benchmark.py>`
+- Updated ``torch_neuronx.analyze`` API documentation. See :ref:`torch_neuronx_analyze_api`
+- Updated Performance benchmarking numbers for models on Inf1,Inf2 and Trn1 instances with 2.14 release bits. See :ref:`_benchmark`
+- New tutorial for Training Llama2 7B with Tensor Parallelism and ZeRO-1 Optimizer using ``neuronx-distributed``  :ref:`llama2_7b_tp_zero1_tutorial`
+- New tutorial for ``T5-3B`` model inference using ``neuronx-distributed``  (:pytorch-neuron-src:`tutorial <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`)
+- Updated ``Neuron Persistent Cache`` documentation regarding clarification of flags parsed by ``neuron_cc_wrapper`` tool which is a wrapper over ``Neuron Compiler CLI``. See :ref:`neuron-caching`
+- Added ``tokenizers_parallelism=true`` in various notebook scripts to supress tokenizer warnings making errors easier to detect
+- Updated Neuron device plugin and scheduler YAMLs to point to latest images.  See `yaml configs <https://github.com/aws-neuron/aws-neuron-sdk/tree/master/src/k8>`_
+- Added notebook script to fine-tune ``deepmind/language-perceiver`` model using ``torch-neuronx``. See `sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_text_classification/LanguagePerceiver.ipynb>`_
+- Added notebook script to fine-tune ``clip-large`` model using ``torch-neuronx``. See `sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_contrastive_image_text/CLIPLarge.ipynb>`_
+- Added ``SD XL Base+Refiner`` inference sample script using ``torch-neuronx``. See `sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sdxl_base_and_refiner_1024_inference.ipynb>`_
+- Upgraded default ``diffusers`` library from 0.14.0 to latest 0.20.2 in ``Stable Diffusion 1.5`` and ``Stable Diffusion 2.1`` inference scripts. See `sample scripts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference>`_
+- Added ``Llama-2-13B`` model training script using ``neuronx-nemo-megatron`` ( `tutorial <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_ )
+
+
+
+
 Neuron 2.13.0
 -------------
 Date: 08/28/2023

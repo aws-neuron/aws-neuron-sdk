@@ -5,7 +5,7 @@ Transformers Neuron (``transformers-neuronx``) Developer Guide
 
 Transformers Neuron for Trn1 and Inf2 is a software package that enables
 PyTorch users to perform large language model (LLM) :ref:`performant inference <neuron_llm_inference>` on
-second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
+second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).The :ref:`Neuron performance page <inf2-performance>` lists expected inference performance for commonly used Large Language Models.
 
 
 Introduction
@@ -138,12 +138,10 @@ demonstrate how to run sampling with temperature using the ``GPT2`` model:
 
 .. code-block:: python
 
-    import os
     from transformers_neuronx.gpt2.model import GPT2ForSampling
     from transformers_neuronx.generation_utils import HuggingFaceGenerationModelAdapter
     from transformers_neuronx.module import save_pretrained_split
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    os.environ['NEURON_CC_FLAGS'] = '--model-type=transformer-inference'
 
     # Load and save the CPU model
     model_cpu = AutoModelForCausalLM.from_pretrained('gpt2')
@@ -210,13 +208,11 @@ how to apply int8 weight storage to the ``GPT2`` model via the
 
 .. code-block:: python
 
-    import os
     import torch
     from transformers_neuronx.gpt2.model import GPT2ForSampling
     from transformers_neuronx.module import save_pretrained_split
     from transformers_neuronx.config import NeuronConfig, QuantizationConfig
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    os.environ['NEURON_CC_FLAGS'] = '--model-type=transformer-inference'
 
     # Cast attention and mlp layers to low precisions only; layernorms stay as f32
     def amp_callback(model, dtype):
@@ -271,13 +267,11 @@ the closest power of 2 the length of the input prompt (97 tokens).
 
 .. code-block:: python
 
-    import os
     import math
     import torch
     from transformers_neuronx.gpt2.model import GPT2ForSamplingWithContextBroadcasting
     from transformers_neuronx.module import save_pretrained_split
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    os.environ['NEURON_CC_FLAGS'] = '--model-type=transformer-inference' # Apply optimal
 
     # Load and save the CPU model with bfloat16 casting
     model_cpu = AutoModelForCausalLM.from_pretrained('gpt2')
@@ -314,13 +308,11 @@ to generate 5 outputs for a single input.
 
 .. code-block:: python
 
-    import os
     import math
     import torch
     from transformers_neuronx.gpt2.model import GPT2ForSamplingWithContextBroadcasting
     from transformers_neuronx.module import save_pretrained_split
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    os.environ['NEURON_CC_FLAGS'] = '--model-type=transformer-inference'
 
     # Load and save the CPU model with bfloat16 casting
     model_cpu = AutoModelForCausalLM.from_pretrained('gpt2')
@@ -359,13 +351,11 @@ how to save and load the ``GPT2`` model:
 
 .. code-block:: python
 
-    import os
     import torch
     from transformers_neuronx.gpt2.model import GPT2ForSampling
     from transformers_neuronx.generation_utils import HuggingFaceGenerationModelAdapter
     from transformers_neuronx.module import save_pretrained_split
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    os.environ['NEURON_CC_FLAGS'] = '--model-type=transformer-inference'
 
     # Load and save the CPU model
     model_cpu = AutoModelForCausalLM.from_pretrained('gpt2')
@@ -391,20 +381,6 @@ how to save and load the ``GPT2`` model:
     with torch.inference_mode():
         generated_sequence = model_neuron.sample(encoded_input.input_ids, sequence_length=256, start_ids=None)
         print([tokenizer.decode(tok) for tok in generated_sequence])
-
-
-------------------------
-model-type=transformer-inference Compiler Flag
-------------------------
-
-We recommend using the ``--model-type=transformer-inference`` compiler flag for optimized
-decoder-only LLM inference. In a future release, this compiler flag may be enabled
-by default. This compiler flag can be enabled via the ``NEURON_CC_FLAGS`` environment
-variable:
-
-.. code-block:: console
-
-   export NEURON_CC_FLAGS="--model-type=transformer-inference"
 
 
 --------------------------------------

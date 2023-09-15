@@ -7,7 +7,7 @@ API Reference Guide (``tensorflow-neuronx``)
 
     /frameworks/tensorflow/tensorflow-neuronx/tfneuronx-python-tracing-api
     /frameworks/tensorflow/tensorflow-neuronx/tf-neuronx-auto-replication-api
-    /frameworks/tensorflow/tensorflow-neuronx/tfnx-analyze-model-api.rst
+    /frameworks/tensorflow/tensorflow-neuronx/tfnx-analyze-model-api
 
 
 .. include:: /frameworks/tensorflow/tensorflow-neuronx/api-reference-guide.txt

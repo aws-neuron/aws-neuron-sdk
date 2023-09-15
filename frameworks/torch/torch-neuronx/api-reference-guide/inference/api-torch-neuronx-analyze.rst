@@ -17,6 +17,18 @@ PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
    :keyword str compiler_workdir: Work directory used by
       |neuronx-cc|. This can be useful for debugging and/or inspecting
       intermediary |neuronx-cc| outputs
+   
+   :keyword set additional_ignored_ops: A set of aten operators to not analyze. Default is an empty set.
+   
+   :keyword int max_workers: The max number of workers threads to spawn.
+      The default is ``4``.
+   
+   :keyword bool is_hf_transformers: If the model is a huggingface transformers model,
+      it is recommended to enable this option to prevent deadlocks. Default is ``False``.
+   
+   :keyword bool cleanup: Specifies whether to delete the compiler artifact directories
+      generated after running analyze. Default is ``False``.
+   
 
    :returns: A JSON like :class:`~Dict` with the supported operators and their count, and unsupported
       operators with the failure mode and location of the operator in the python code.

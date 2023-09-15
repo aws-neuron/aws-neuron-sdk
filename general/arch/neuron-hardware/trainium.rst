@@ -33,3 +33,4 @@ Each Trainium device consists of:
       Stochastic Rounding), and custom-operators via the deeply embedded GPSIMD engines.
 
 
+More detailed description of all the hardware engines can be seen at :ref:`NeuronCore-v2 <neuroncores-v2-arch>`

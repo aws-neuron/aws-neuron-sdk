@@ -3,10 +3,10 @@
 Training GPT-NeoX 6.9B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
 =========================================================================================
 
-In this section, we showcase to pretrain a GPT-NeoX 6.9B model by using tenser parallelism
-and zero-1 optimzer in the ``neuronx-distributed`` package.
+In this section, we showcase to pretrain a GPT-NeoX 6.9B model by using tensor parallelism
+and zero-1 optimzer in the ``neuronx-distributed`` package. Please refer to the `Neuron Samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain>`__ to view the files in this tutorial.
 
-Setting up environment:
+**Setting up environment:**
                        
 
 For this experiment, we will use a ParallelCluster with at least four trn1-32xl compute nodes.
@@ -42,9 +42,9 @@ Next let’s download and pre-process the dataset:
    cd ~/examples/tp_dp_gpt_neox_hf_pretrain
    python3 get_dataset.py
 
-At this point, you are all set to start training
+At this point, you are all set to start training.
 
-Running training
+**Running training**
                 
 
 We first pre-compile the graphs using the ``neuron_parallel_compile``.
@@ -68,7 +68,7 @@ To run the training, we just the above command but without ``neuron_parallel_com
    --nodelist=compute1-dy-training-0-[1-4] \
    --wrap="srun bash $(pwd)/tp_dp_gpt_neox_6.9b_hf_pretrain.sh"
 
-ZeRO-1 Optimizer
+**ZeRO-1 Optimizer**
                 
 
 The training script uses ZeRO-1 optimizer, where the optimizer states are partitioned across

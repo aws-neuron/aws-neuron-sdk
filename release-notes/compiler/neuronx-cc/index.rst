@@ -7,6 +7,20 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.10.0.34]
+-----------------------------
+Date: 09/15/2023
+
+* This release introduces a new ``--O`` compiler option. This option allows the user to balance between compile-time and optimizations performed.
+  Three levels are supported. Level ``--O1`` aims to minimize compile-time and allow for a more rapid model development cycle. Model execution
+  time may be reduced. Level ``--O3`` performs whole-model optimization. This level will deliver the best performance however there will be longer
+  compile-times and the compiler will use more host DRAM, potentially requiring a larger instance to compile the model.
+  The default is ``-O2`` which provides a balance between model performance and compile time. 
+
+  The previous ``—enable-experimental-O1`` flag introduced in the 02/08/2023 Neuron Compiler [2.4.0.21] release is now deprecated. Using this flag
+  will generate a message similar to:
+      WARNING: Option —enable-experimental-O1 is deprecated and will be removed in a future release." Use ``--O1`` instead.
+
 Neuron Compiler [2.9.0.16]
 -----------------------------
 Date: 08/28/2023

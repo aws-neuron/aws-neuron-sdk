@@ -33,6 +33,23 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.17.7.0]
+---------------------------------
+Date: 9/14/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved logging by printing out NEFF name in debug logs of nrt_execute
+
+Bug fixes
+^^^^^^^^^
+* Fixed hang that would occur when running a NEFF which contains embedding update instructions in multiple functions.
+* Fixed issue where the Neuron Runtime registered the same memory multiple times to an EFA device causing applications to exceed the number of physical pages that could be registered.
+* Fixed assert (``void tvm::runtime::GraphRuntime::PatchDltDataPtr(DLTensor*, uint32_t*, size_t): Assertion `tensor_get_mem_type(grt->io_tensor) == NRT_TENSOR_MEM_TYPE_MALLOC' failed.``) that occured on INF1 caused by an uninitialized pointer.
+* Fixed potential hang that can occur when partial replica groups for collectives are present in a NEFF.
+
+
+
 Neuron Runtime Library [2.16.14.0]
 ---------------------------------
 Date: 9/01/2023

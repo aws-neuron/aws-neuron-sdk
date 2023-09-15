@@ -29,3 +29,6 @@ Each Inferentia2 device consists of:
 -  Programmability:
     * Inferentia2 supports dynamic shapes and control flow, via ISA extensions of NeuronCore-v2 and :ref:`custom-operators <feature-custom-c++-operators>` via the deeply embedded GPSIMD engines.
 
+
+
+More detailed description of all the hardware engines can be seen at :ref:`NeuronCore-v2 <neuroncores-v2-arch>`
