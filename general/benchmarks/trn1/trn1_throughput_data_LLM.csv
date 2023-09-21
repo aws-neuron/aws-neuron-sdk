@@ -1,3 +1,4 @@
-Model,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type,OS Type
-opt-13b,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,trn1.32xlarge,Raw Output (AutoModel),2847.1,77.5,95.5,Batch,2.11.0,Data Parallel,256,128,FP16,Matmult-BF16,U20
-opt-30b,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,trn1.32xlarge,Raw Output (AutoModel),1595.8,143,152.4,Batch,2.11.0,Data Parallel,256,128,FP16,Matmult-BF16,U20
+Model,Scripts,Framework,Inst. Type,Task,Throughput (tokens/second),Latency per Token P50 (ms),Latency per Token P99 (ms),Application Type,Neuron Version,Run Mode,TP Degree,DP Degree,Batch Size,Sequence Length,Input Length,Output Length,Model Data Type,Compilation Autocast Data Type
+opt-13b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,trn1.32xlarge,Text Generation,3622.3,59.4,69.6,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
+opt-30b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,trn1.32xlarge,Text Generation,2382.7,96.9,101.1,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
+Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,152.5,6.6,6.6,Batch,2.14.0,Tensor Parallel,32,1,1,256,64,192,FP16,Matmult-BF16
