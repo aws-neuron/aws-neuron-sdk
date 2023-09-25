@@ -148,16 +148,28 @@ class T5Wrapper(T5ForConditionalGeneration, NeuronGenerationMixin):
         return output
 
     def parallel_infer(self,
-                       tokenizer: T5Tokenizer,
-                       prompt: str,
                        max_length: int,
                        num_beams: int,
                        num_return_sequences: int,
-                       device: str):
+                       device: str = None,
+                       tokenizer: T5Tokenizer = None,
+                       prompt: str = None, 
+                       input_ids: torch.Tensor = None,
+                       attention_mask: torch.Tensor = None):
 
-        batch_encoding = tokenizer(prompt, max_length=max_length, truncation=True, padding='max_length',
-                                return_tensors="pt")
+        if input_ids is None or attention_mask is None: 
+            batch_encoding = tokenizer(prompt, 
+                                    max_length=max_length, 
+                                    truncation=True, 
+                                    padding='max_length',
+                                    return_tensors="pt")
+        else: 
+            batch_encoding = {
+                'input_ids' : input_ids,
+                'attention_mask': attention_mask
+            }
 
+        
         past_key_values = self.encoder(batch_encoding['input_ids'],batch_encoding['attention_mask'])
  
         decoder_attention_mask = torch.cat([torch.zeros((1, max_length-1), dtype=torch.int32),
@@ -597,8 +609,20 @@ class EncoderWrapper(torch.nn.Module):
                                                                 self.max_length-1, 
                                                                 self.model_config.d_kv), dtype=torch.float32, device=self.device))
             else:
-                present_key_value_states_ca.append(self.past_key_values_ca[i*2]*key_states)
-                present_key_value_states_ca.append(self.past_key_values_ca[i*2+1]*value_states)
+                # We want to copy the cross attention states (key_states and value_states) into the decoder trace. 
+                # One way of doing it is to get the encoder trace to return the kv states as an output and then we can pass it to the decoder trace  
+                # as an output. But this requires a copy from device to cpu and back. 
+                #
+                # There is no good way to keep the output within the device yet. Until we build that feature, we use this workaround. 
+                # The work around uses input_output_aliasing to map the output kv state to an input parameter. The output present_key_value_states_ca
+                # represents the cross attention kv states and is aliased to a similarly named parameter. 
+                # 
+                # Why are we multiplying past_key_values_ca with 0 and adding to the key or value state?  
+                # The trace api will remove any variables that are not used to compute the output tensor. As the past_key_values parameter is not 
+                # being used and to compute the kv cache, it would be removed. To avoid that, we use it in an operation that computes the output 
+                # but at the same time does not effect the output. 
+                present_key_value_states_ca.append((self.past_key_values_ca[i*2] * 0) + key_states)
+                present_key_value_states_ca.append((self.past_key_values_ca[i*2+1] * 0) + value_states)
                 present_key_value_states_sa.append(self.past_key_values_sa[i*2]*torch.zeros((self.batch_size, self.num_attention_heads_per_partition, self.max_length-1, self.model_config.d_kv), dtype=torch.float32, device="xla"))
                 present_key_value_states_sa.append(self.past_key_values_sa[i*2+1]*torch.zeros((self.batch_size, self.num_attention_heads_per_partition, self.max_length-1, self.model_config.d_kv), dtype=torch.float32, device="xla"))
 

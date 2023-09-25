@@ -11,6 +11,21 @@ What's New
 .. _neuron-2.14.0-whatsnew:
 
 
+Neuron 2.14.1 (09/26/2023)
+--------------------------
+
+This is a patch release that fixes compiler issues in certain configurations of ``Llama`` and ``Llama-2`` model inference using ``transformers-neuronx``.
+
+.. note::
+
+   There is still a known compiler issue for inference of some configurations of ``Llama`` and ``Llama-2`` models that will be addressed in future Neuron release.
+   Customers are advised to use ``--optlevel 1 (or -O1)`` compiler flag to mitigate this known compiler issue.  
+    
+   See :ref:`neuron-compiler-cli-reference-guide` on the usage of ``--optlevel 1`` compiler flag. Please see more on the compiler fix and known issues in :ref:`neuronx-cc-rn` and :ref:`transformers-neuronx-rn` 
+   
+
+
+
 Neuron 2.14.0 (09/15/2023)
 --------------------------
 
@@ -67,7 +82,7 @@ This release introduces the following:
      - Trn1/Trn1n,Inf2
 
    * - Neuron Compiler (neuronx-cc)
-     - * New ``--O`` compiler option that enables different optimizations with tradeoff between faster model compile time and faster model execution. See more at :ref:`neuron-compiler-cli-reference-guide`
+     - * New  ``--optlevel``(or ``-O``) compiler option that enables different optimizations with tradeoff between faster model compile time and faster model execution. See more at :ref:`neuron-compiler-cli-reference-guide`
        * See more at :ref:`neuronx-cc-rn`
      - Inf2/Trn1/Trn1n
 
@@ -299,11 +314,11 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.1
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.1
 
 Inf1 packages
 
