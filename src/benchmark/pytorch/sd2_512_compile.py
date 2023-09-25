@@ -8,7 +8,15 @@ import torch_neuronx
 import copy
 from diffusers import StableDiffusionPipeline
 from diffusers.models.unet_2d_condition import UNet2DConditionOutput
-from diffusers.models.cross_attention import CrossAttention
+# Compatibility for diffusers<0.18.0
+from packaging import version
+import diffusers
+diffusers_version = version.parse(diffusers.__version__)
+use_new_diffusers = diffusers_version >= version.parse('0.18.0')
+if use_new_diffusers:
+    from diffusers.models.attention_processor import Attention
+else:
+    from diffusers.models.cross_attention import CrossAttention
 
 # Define datatype
 DTYPE = torch.bfloat16
@@ -100,7 +108,10 @@ model_id = "stabilityai/stable-diffusion-2-1-base"
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
 
 # Replace original cross-attention module with custom cross-attention module for better performance
-CrossAttention.get_attention_scores = get_attention_scores
+if use_new_diffusers:
+    Attention.get_attention_scores = get_attention_scores
+else:
+    CrossAttention.get_attention_scores = get_attention_scores
 
 # Apply double wrapper to deal with custom return type
 pipe.unet = NeuronUNet(UNetWrap(pipe.unet))

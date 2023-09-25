@@ -10,7 +10,16 @@ import torch_neuronx
 from diffusers import StableDiffusionPipeline
 from diffusers.models.unet_2d_condition import UNet2DConditionOutput
 
-from diffusers.models.cross_attention import CrossAttention
+# Compatibility for diffusers<0.18.0
+from packaging import version
+import diffusers
+diffusers_version = version.parse(diffusers.__version__)
+use_new_diffusers = diffusers_version >= version.parse('0.18.0')
+if use_new_diffusers:
+    from diffusers.models.attention_processor import Attention
+else:
+    from diffusers.models.cross_attention import CrossAttention
+
 
 def get_attention_scores(self, query, key, attn_mask):    
     dtype = query.dtype
@@ -70,7 +79,7 @@ class NeuronUNet(nn.Module):
         self.in_channels = unetwrap.unet.in_channels
         self.device = unetwrap.unet.device
 
-    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
+    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None, return_dict=False):
         sample = self.unetwrap(sample, timestep.float().expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 
@@ -181,7 +190,10 @@ del decoder_neuron
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
 
 # Replace original cross-attention module with custom cross-attention module for better performance
-CrossAttention.get_attention_scores = get_attention_scores
+if use_new_diffusers:
+    Attention.get_attention_scores = get_attention_scores
+else:
+    CrossAttention.get_attention_scores = get_attention_scores
 
 # Apply double wrapper to deal with custom return type
 pipe.unet = NeuronUNet(UNetWrap(pipe.unet))

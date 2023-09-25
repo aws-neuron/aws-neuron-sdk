@@ -91,7 +91,7 @@ class NeuronUNet(nn.Module):
         self.in_channels = unetwrap.unet.in_channels
         self.device = unetwrap.unet.device
 
-    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
+    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None, return_dict=False):
         sample = self.unetwrap(sample, timestep.to(dtype=DTYPE).expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 

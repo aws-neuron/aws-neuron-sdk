@@ -91,7 +91,7 @@ class NeuronUNet(nn.Module):
         self.in_channels = unetwrap.unet.in_channels
         self.device = unetwrap.unet.device
 
-    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
+    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None, return_dict=False):
         sample = self.unetwrap(sample, timestep.to(dtype=DTYPE).expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 
@@ -132,11 +132,19 @@ pipe.unet = NeuronUNet(UNetWrap(pipe.unet))
 device_ids = [0,1]
 pipe.unet.unetwrap = torch_neuronx.DataParallel(torch.jit.load(unet_filename), device_ids, set_dynamic_batching=False)
 
+class NeuronTypeConversionWrapper(nn.Module):
+    def __init__(self, network):
+        super().__init__()
+        self.network = network
+
+    def forward(self, x):
+        return self.network(x.float())
+
 # Load other compiled models onto a single neuron core.
 pipe.text_encoder = NeuronTextEncoder(pipe.text_encoder)
 pipe.text_encoder.neuron_text_encoder = torch.jit.load(text_encoder_filename)
-pipe.vae.decoder = torch.jit.load(decoder_filename)
-pipe.vae.post_quant_conv = torch.jit.load(post_quant_conv_filename)
+pipe.vae.decoder = NeuronTypeConversionWrapper(torch.jit.load(decoder_filename))
+pipe.vae.post_quant_conv = NeuronTypeConversionWrapper(torch.jit.load(post_quant_conv_filename))
 
 prompt = "a photo of an astronaut riding a horse on mars"
 n_runs = 20

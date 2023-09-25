@@ -10,8 +10,6 @@ import torch_neuronx
 from diffusers import StableDiffusionPipeline
 from diffusers.models.unet_2d_condition import UNet2DConditionOutput
 
-from diffusers.models.cross_attention import CrossAttention
-
 import time
 import math
 
@@ -92,7 +90,7 @@ class NeuronUNet(nn.Module):
         self.in_channels = unetwrap.unet.in_channels
         self.device = unetwrap.unet.device
 
-    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None):
+    def forward(self, sample, timestep, encoder_hidden_states, cross_attention_kwargs=None, return_dict=False):
         sample = self.unetwrap(sample, timestep.float().expand((sample.shape[0],)), encoder_hidden_states)[0]
         return UNet2DConditionOutput(sample=sample)
 
@@ -130,7 +128,7 @@ text_encoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder/model.
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
-safety_model_neuron_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'safety_model_neuron/model.pt')
+safety_model_neuron_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'safety_model/model.pt')
 
 
 # Load the compiled UNet onto two neuron cores.
