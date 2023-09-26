@@ -4,8 +4,8 @@ Neuron Profile User Guide
 =========================
 
 .. contents:: Table of contents
-   :local:
-   :depth: 2
+    :local:
+    :depth: 2
 
 Overview
 --------

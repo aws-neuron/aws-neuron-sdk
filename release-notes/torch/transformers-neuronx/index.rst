@@ -142,6 +142,10 @@ Resolved Issues
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- Some configurations of LLaMA and LLaMA-2 inference models fail compilation with the error ``IndirectLoad/Save requires contiguous indirect access per partition``. This is fixed in the compiler version 2.10.0.35 (Neuron SDK 2.14.1).
+
+- Some configurations of LLaMA and LLaMA-2 inference model fail compilation with the error ``Too many instructions after unroll for function sg0000``. To mitigate this, please try with ``-O1`` compiler option (or ``--optlevel 1``) by adding ``os.environ["NEURON_CC_FLAGS"] = "-O1"`` to your script or set in the environment. A complete fix will be coming in the future release which will not require this option. Note: Using -O1 in the LLaMA-2 13B tutorial results in about 50% increase in latency compared to Neuron SDK 2.13.2. If this is not acceptable, please use compiler version from Neuron SDK 2.13.2.
+
 
 Release [0.6.106]
 ----------------------

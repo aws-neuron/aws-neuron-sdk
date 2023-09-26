@@ -7,19 +7,27 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.10.0.35]
+-----------------------------
+Date: 09/26/2023
+
+* This release addresses a compilation regression for certain configurations of Llama and Llama-2 inference models when it fails compilation with this error "IndirectLoad/Save requires contiguous indirect access per partition" .
+
+There is still a known issue for some configurations of the model with the error "Too many instructions after unroll for function sg0000" . To mitigate this, please try with -O1 compiler option (or --optlevel 1) . A complete fix will be coming in the future release which will not require this option
+
 Neuron Compiler [2.10.0.34]
 -----------------------------
 Date: 09/15/2023
 
-* This release introduces a new ``--O`` compiler option. This option allows the user to balance between compile-time and optimizations performed.
-  Three levels are supported. Level ``--O1`` aims to minimize compile-time and allow for a more rapid model development cycle. Model execution
-  time may be reduced. Level ``--O3`` performs whole-model optimization. This level will deliver the best performance however there will be longer
+* This release introduces a new ``--optlevel (-O)`` compiler option. This option allows the user to balance between compile-time and optimizations performed.
+  Three levels are supported. Level ``--optlevel 1 (-O1)`` aims to minimize compile-time and allow for a more rapid model development cycle. Model execution
+  time may be reduced. Level ``--optlevel 3 (-O3)`` performs whole-model optimization. This level will deliver the best performance however there will be longer
   compile-times and the compiler will use more host DRAM, potentially requiring a larger instance to compile the model.
-  The default is ``-O2`` which provides a balance between model performance and compile time. 
+  The default is ``--optlevel 2 (-O2)`` which provides a balance between model performance and compile time. 
 
   The previous ``—enable-experimental-O1`` flag introduced in the 02/08/2023 Neuron Compiler [2.4.0.21] release is now deprecated. Using this flag
   will generate a message similar to:
-      WARNING: Option —enable-experimental-O1 is deprecated and will be removed in a future release." Use ``--O1`` instead.
+      WARNING: Option —enable-experimental-O1 is deprecated and will be removed in a future release." Use ``--optlevel 1 (-O1)`` instead.
 
 Neuron Compiler [2.9.0.16]
 -----------------------------

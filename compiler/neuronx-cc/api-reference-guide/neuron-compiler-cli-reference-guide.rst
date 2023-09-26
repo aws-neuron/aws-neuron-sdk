@@ -59,7 +59,7 @@ Available Commands:
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
      [--distribution-strategy <distribution_type>]
-     [--O <opt-level>]
+     [--optlevel <opt-level>], or [-O <opt-level>]
      [--enable-saturate-infinity]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
@@ -125,7 +125,7 @@ Available Commands:
 
     - ``NEMO``: Enable the compiler to perform optimizations applicable to models that use the `NeMo <https://github.com/NVIDIA/NeMo>`_ APIs to shard parameters, gradients, and optimizer states across data-parallel workers.
 
-  - :option:`--O <opt_level>`: Specify the level of optimization the compiler should perform. Possible numeric values are {1, 2, 3}. (Default: ``2``)
+  - :option:`--optlevel <opt_level>`: Specify the level of optimization the compiler should perform. Possible numeric values are {1, 2, 3}. (Default: ``2``)
 
     Valid values:
 
