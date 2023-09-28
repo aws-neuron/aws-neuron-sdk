@@ -2,3 +2,4 @@ Model,Scripts,Framework,Inst. Type,Task,Throughput (tokens/second),Latency per T
 opt-13b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,trn1.32xlarge,Text Generation,3622.3,59.4,69.6,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
 opt-30b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,trn1.32xlarge,Text Generation,2382.7,96.9,101.1,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
 Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,152.5,6.6,6.6,Batch,2.14.0,Tensor Parallel,32,1,1,256,64,192,FP16,Matmult-BF16
+t5-3b,`Tutorial <https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`_,Neuron Distributed,trn1.32xlarge,Text Generation,93.69,10.67,10.78,Batch,2.14.0,Tensor Parallel,8,1,1,128,128,84,FP32,Matmult-BF16

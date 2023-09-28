@@ -12,7 +12,7 @@ Inf2 Performance
 .. _inf2_inference_perf:
 
 Language Models Inference Performance
----------------------
+-------------------------------------
 
 .. tab-set::
 
