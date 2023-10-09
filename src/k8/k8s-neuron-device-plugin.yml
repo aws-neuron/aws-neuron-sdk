@@ -12,8 +12,9 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ""
+      # Uncomment the annotation below if k8s version is 1.13 or lower
+      # annotations:
+      #   scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
