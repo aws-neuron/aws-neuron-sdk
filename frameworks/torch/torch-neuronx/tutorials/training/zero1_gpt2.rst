@@ -89,9 +89,10 @@ these arguments to the wrapper constructor:
 
 GPT2-XL Pretraining Tutorial
 ----------------------------
+Update 10/02:This tutorial is currently broken and the AWS Neuron team is working on the fix. 
 
 Table of Contents:
-
+///
 -  Setup
 -  Dataset
 -  Training

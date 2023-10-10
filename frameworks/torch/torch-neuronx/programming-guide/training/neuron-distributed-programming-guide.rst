@@ -35,8 +35,7 @@ result and concatenate the tensor along the column dimension. In this
 way, we are able to distribute the tensor over devices while making sure
 the computation flow remains correct.
 
-.. image:: images/tp.png
-   :alt: Image: image.png
+.. image:: /libraries/neuronx-distributed/images/tp.png
 
 Fig and TP explanation is borrowed from [1]
 
@@ -55,8 +54,7 @@ arbitrary depth until the need to operate on the whole output tensor, in
 which case we would have to construct the output but gathering it from
 all devices.
 
-.. image:: images/mlp.png
-   :alt: Image: image.png
+.. image:: /libraries/neuronx-distributed/images/mlp.png
 
 Here is an illustration from the Megatron-LM paper In the above case, as
 you can see two linear layers are implemented using Column Parallel and
@@ -74,8 +72,7 @@ an all-reduce sum, since we want to sum up the single column*row result.
 
 Tensor Parallelism for Transformers: A transformer block
 
-.. image:: images/self-attention.png
-   :alt: Image: image.png
+.. image:: /libraries/neuronx-distributed/images/self-attention.png
 
 Fig: Taken from Megatron-LM paper As seen from the figure above, a
 simple self attention block has the QKV linear layer followed by MLP.

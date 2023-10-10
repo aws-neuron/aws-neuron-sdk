@@ -10,6 +10,7 @@ BERT TorchServe Tutorial
 
 Overview
 --------
+Update 10/02:This tutorial is currently broken and the AWS Neuron team is working on providing the fix.
 
 This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ with Neuron, the SDK for EC2 Inf2 and Trn1 instances. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf2/Trn1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 

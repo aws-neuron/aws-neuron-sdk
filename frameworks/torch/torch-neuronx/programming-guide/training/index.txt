@@ -1,3 +1,4 @@
 * :ref:`pytorch-neuronx-programming-guide`
 * :ref:`pytorch-neuronx-debug`
 * :ref:`torch-neuronx-dev-guide`
+* :ref:`neuronx-distributed`
