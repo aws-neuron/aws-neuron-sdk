@@ -287,3 +287,12 @@ Commit changes by running ``sudo sysctl -p``.
 
 .. |neuron-profile-web-timeline| image:: /images/neuron-profile-web-timeline_2-11.png
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
+
+When viewing UI "FATAL - Failed metadata query"
+~~~~~~~~~~~~~~~~~~~
+
+If you are SSH port forwaring the web UI from a remote machine to your local desktop you will need to port forward both the web UI (3001) and the database (8086) like so:
+
+::
+
+    ssh -L 3001:localhost:3001 -L 8086:localhost:8086 remote_machine
