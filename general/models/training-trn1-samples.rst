@@ -233,7 +233,10 @@ Convolutional Neural Networks(CNN)
    :header-rows: 1
    :align: left
    :class: table-smaller-font-size
-
+   
+   * - Model
+     - Frameworks/Libraries
+     - Samples and Tutorials
 
    * - resnet50
      - torch-neuronx

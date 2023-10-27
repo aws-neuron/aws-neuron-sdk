@@ -19,10 +19,10 @@ The total activation memory without any parallelism comes to about:
 
 where,
 
-`a`: Number of attention heads
-`b`: microbatch size
-`h`: hidden dimension size
-`s`: sequence length
+* `a`: Number of attention heads
+* `b`: microbatch size
+* `h`: hidden dimension size
+* `s`: sequence length
 
 
 When we use tensor-parallelism, it not only helps to reduce the parameter and optimizer states
@@ -34,8 +34,9 @@ layernorms and dropouts are computationally inexpensive, however, they increase 
 on each device. Moreover, since we only parallelize within the attention block or within the MLP block (h -> 4h projection),
 the inputs to the QKV multiplies and the MLP are still unsharded. This overall adds to about `10sbh` of total activation 
 memory. To reduce this activation memory, one can use 2 methods:
-1. `Sequence-Parallelism <https://arxiv.org/abs/2105.13120>`__ 
-2. `Activation Recomputation <https://arxiv.org/abs/1604.06174>__`
+
+* `Sequence-Parallelism <https://arxiv.org/abs/2105.13120>`__ 
+* `Activation Recomputation <https://arxiv.org/abs/1604.06174>`__
 
 
 Sequence Parallelism
@@ -91,7 +92,7 @@ at the expense of recomputing forward pass activations.
 
 Ideally one can recompute the entire forward pass, there by resulting in an activation memory of `2sbh` per transformer layer.
 This method is called `Full-activation checkpointing`. This memory can further go down by a factor of `t` if we use tensor-parallelism.
-In the activation memory equation, we have a quadratic term of `5as^2b`. As the sequence length, this term will grow at a much 
+In the activation memory equation, we have a quadratic term of `5abs^2`. As the sequence length, this term will grow at a much 
 faster rate. This quadratic term comes from the softmax computation. `Vijay Korthikanti et.al <https://browse.arxiv.org/pdf/2205.05198.pdf>`__ 
 propose `Selective activation checkpointing` where they only recompute the softmax and attention computation and thereby avoid saving the activations coming 
 from softmax and attention computation. This completely gets rid of the quadratic term and brings down the activation memory per layer to 

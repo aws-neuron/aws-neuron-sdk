@@ -71,7 +71,7 @@ Neuron 2.15 also introduces support for training ``resnet50``, ``milesial/Pytorc
      - Inf2/Trn1/Trn1n
 
    * - Neuron Tools
-     - * ``alltoall`` Collective Communication operation, previously released in Neuron Collectives v2.15.13, was added as a testable operation in ``nccom-test``. See :ref:`nccom-test`
+     - * ``alltoall`` Collective Communication operation for intra node(with in the instance), previously released in Neuron Collectives v2.15.13, was added as a testable operation in ``nccom-test``. See :ref:`nccom-test`
        * See more at :ref:`neuron-tools-rn`
      - Inf1/Inf2/Trn1/Trn1n
   

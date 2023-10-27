@@ -463,6 +463,7 @@ Neuron Zero1 Optimizer:
 In Neuronx-Distributed, we built a wrapper on the Zero1-Optimizer present in torch-xla.
 
 ::
+   
    class NeuronZero1Optimizer(Zero1Optimizer)
 
 This wrapper takes into account the tensor-parallel degree and computes the grad-norm 
@@ -501,6 +502,7 @@ rank to pick its corresponding shard from the checkpoint directory.
 The interface is same as Zero1Optimizer in torch-xla
 
 ::
+   
    save_sharded_state_dict(output_dir, save_serially = True)
 
 .. _parameters-7:
@@ -513,6 +515,7 @@ Parameters:
     especially useful when we want to checkpoint large models.
 
 ::
+   
    load_sharded_state_dict(output_dir, num_workers_per_step = 8)
 
 .. _parameters-8:

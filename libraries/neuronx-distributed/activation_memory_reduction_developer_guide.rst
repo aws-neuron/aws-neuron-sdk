@@ -128,7 +128,7 @@ also need to partiton the inputs along the sequence dimensions such that each tp
         hidden_states = scatter_to_sequence_parallel_region(hidden_states)
 
 2. Since the attention block requires the sequence dimension to be 1st dimension, we transpose the output of QKV projection and then 
- transpose it back before the final MLP of the attention block. 
+transpose it back before the final MLP of the attention block. 
 
 .. code:: ipython3
 
@@ -167,7 +167,7 @@ For reference implementation, follow `GPTNeoX-20B model script <https://github.c
 Activation Recomputation
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-As seen in the `App notes on Activation Memory Recomputation` we can reduce the activation memory by recomputing few operations from 
+As seen in the :ref:`App notes on Activation Memory Recomputation <activation_memory_reduction>` we can reduce the activation memory by recomputing few operations from 
 the forward pass during the backward run. To replay some of the compute, we can use the 
 `torch.utils.checkpoint.checkpoint <https://pytorch.org/docs/stable/checkpoint.html>`__. To use this API, we need 
 to put the compute, we want to replay, inside a function which can be passed to the `checkpoint` API. This API takes care 

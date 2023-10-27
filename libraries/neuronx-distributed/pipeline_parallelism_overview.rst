@@ -23,6 +23,7 @@ Currently we require user to provide model partition decision but auto-partition
 Here is an example of simple partition with 5 linear layers
 
 .. code:: ipython3
+
    # original NN module
    class MyModule(torch.nn.Module):
       def __init__(self):
@@ -62,6 +63,7 @@ there will be 2 submodules, where `submod_0` contains first 3 linear layers
 and `submod_1` contains last 2 linear layers.
 
 .. code:: ipython3
+
    After Split module
    GraphModule(
    (submod_0): GraphModule(
