@@ -2,5 +2,6 @@
 * :ref:`gpt_neox_tp_zero1_tutorial`
 * :ref:`gpt_neox_20b_tp_zero1_tutorial`
 * :ref:`llama2_7b_tp_zero1_tutorial`
+* :ref:`llama2_70b_tp_pp_tutorial`
 * :ref:`tp_inference_tutorial`
 * T5 inference tutorial :ref:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`

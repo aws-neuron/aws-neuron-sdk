@@ -4,8 +4,8 @@ API Reference Guide (``neuronx-distributed`` )
 ======================================================================
 
 Neuronx-Distributed is XLA based library for distributed training and inference.
-As part of this library, currently we support 2D parallelism: Tensor-Parallelism 
-and DataParallelism. We also support Zero1 optimizer to shard the optimizer weights.
+As part of this library, we support 3D parallelism: Tensor-Parallelism, Pipeline-Parallelism
+and Data-Parallelism. We also support Zero1 optimizer to shard the optimizer weights.
 To support tensor-parallelism on Neuron, we adopted the Apex Library
 built for CUDA devices. We modified the implementations to work with
 XLA. This document enlist the different APIs and modules provided by the library
@@ -29,6 +29,8 @@ Parameters:
 
 ``tensor_model_parallel_size`` : This should set the number of tensor
 parallel workers. Note the default value is set to 1
+``pipeline_model_parallel_size`` : This should set the number of pipeline
+parallel workers. Note the default value is set to 1
 
 Other helper APIs:
 ''''''''''''''''''
@@ -40,6 +42,10 @@ Other helper APIs:
    : Returns the tensor parallel world size.
 -  ``neuronx_distributed.parallel_state.get_tensor_model_parallel_rank()``
    : Returns the rank of the worker within the tensor parallel group
+-  ``neuronx_distributed.parallel_state.get_pipeline_model_parallel_size()``
+   : Returns the pipeline parallel world size.
+-  ``neuronx_distributed.parallel_state.get_pipeline_model_parallel_rank()``
+   : Returns the rank of the worker within the pipeline parallel group
 -  ``neuronx_distributed.parallel_state.get_data_parallel_rank()`` :
    Returns the rank of the worker in the data parallel group.
 -  ``neuronx_distributed.parallel_state.get_data_parallel_group(as_list=False)``
@@ -50,6 +56,11 @@ Other helper APIs:
 -  ``neuronx_distributed.parallel_state.get_tensor_model_parallel_group(as_list=False)``
    : Returns the tensor parallel group after taking into account the
    tensor parallel size and the global world size. as_list argument when
+   set to True, would return the group as a List[List] otherwise it
+   would return a torch.distributed.group.
+-  ``neuronx_distributed.parallel_state.get_pipeline_model_parallel_group(as_list=False)``
+   : Returns the pipeline parallel group after taking into account the
+   pipeline parallel size and the global world size. as_list argument when
    set to True, would return the group as a List[List] otherwise it
    would return a torch.distributed.group.
 - ``move_model_to_device(model, device)``: This api moves the model to device by 
@@ -246,6 +257,110 @@ Parameters:
    smoothing when computing the loss, where 0.0 means no smoothing
 
 
+
+
+Pipeline parallelism:
+^^^^^^^^^^^^^^^^^^^^
+
+Neuron Distributed Pipeline Model
+'''''''''''''''''''''''''''''''''
+
+::
+
+   class NxDPPModel(module: torch.nn.Module,
+        transformer_layer_cls: Optional[Any] = None,
+        num_microbatches: int = 1,
+        output_loss_value_spec: Optional[Union[Dict, Tuple]] = None,
+        return_mb_loss: bool = False,
+        broadcast_and_average_loss: bool = False,
+        pipeline_cuts: Optional[List[str]] = None,
+        input_names: Optional[List[str]] = None,
+        leaf_module_cls: Optional[List[Any]] = None,
+        autowrap_functions: Optional[Tuple[ModuleType]] = None,
+        autowrap_modules: Optional[Tuple[Callable, ...]] = None,
+        tracer_cls: Optional[Union[str, Any]] = None,
+        param_init_fn: Optional[Any] = None,
+        trace_file_path: Optional[str] = None,
+        use_zero1_optimizer: bool = False,
+   )
+
+Parameters:
+
+- ``module``: Module to be distributed with pipeline parallelism
+
+- ``transformer_layer_cls``: The module class of transformer layers
+
+- ``num_microbatches``: Number of pipeline microbatchs
+
+- ``output_loss_value_spec``:
+      The ``output_loss_value_spec`` value can be specified to disambiguate
+      which value in the output of `forward` is the loss value on which NxDPPModel should apply
+      backpropagation. For example, if your ``forward`` returns a tuple ``(loss, model_out)``,
+      you can specify ``output_loss_value_spec=(True, False)``. Or, if your ``forward`` returns
+      a dict ``{'loss': loss_value, 'model_out': model_out}``, you can specify
+      ``output_loss_value_spec={'loss': True, 'model_out': False}``
+      referred from `this <https://github.com/pytorch/PiPPy/blob/main/pippy/IR.py#L697>`__
+
+- ``return_mb_loss``: Whether return a list of loss for all microbatchs
+
+- ``broadcast_and_average_loss``:Whether to broadcast loss to all PP ranks and average across dp ranks, when set to True return_mb_loss must be False
+
+- ``pipeline_cuts``: A list of layer names that will be used to annotate pipeline stage boundaries
+
+- ``input_names``:The input names that will be used for tracing, which will be the same as the model inputs during runtime.
+
+- ``leaf_module_cls``:A list of module classes that should be treated as leaf nodes during tracing. Note transformer layer class will be by default treat as leaf nodes.
+
+- ``autowrap_modules``: (symbolic tracing only)
+      Python modules whose functions should be wrapped automatically
+      without needing to use fx.wrap().
+      reference `here <https://github.com/pytorch/pytorch/blob/main/torch/fx/_symbolic_trace.py#L241>`__
+
+- ``autowrap_functions``: (symbolic tracing only)
+      Python functions that should be wrapped automatically without
+      needing to use fx.wrap().
+      reference `here <https://github.com/pytorch/pytorch/blob/main/torch/fx/_symbolic_trace.py#L241>`__
+
+- ``tracer_cls``:User provided tracer class for symbolic tracing. It can be "hf", "torch" or any tracer class user created.
+
+- ``param_init_fn``:
+      Function used to initialize parameters. This is useful if user wants to use meta device to do
+      delayed parameter initialization. param_init_fn should take a module as input and initialize the
+      parameters that belongs to this module only (not for submodules).
+
+- ``use_zero1_optimizer``: Whether to use the zero1 optimizer. When setting to True the gradient average will be handled over.
+
+Common used APIs
+
+::
+
+   NxDPPModel.run_train(**kwargs)
+
+Train the model with PP schedule, which will run both forward and backward in a PP manner. 
+The kwargs should be the same as the input_names provided to the trace function. 
+Will output the loss that provided by user from output_loss_value_spec.
+
+::
+
+   NxDPPModel.run_eval(**kwargs)
+
+Eval the model with PP schedule, which will run forward only. 
+The kwargs should be the same as the input_names provided to the trace function. 
+Will output the loss that provided by user from output_loss_value_spec.
+
+::
+
+   NxDPPModel.local_named_parameters(**kwargs)
+
+The parameters that are local to this PP rank. This must be called after the model is partitioned.
+
+::
+
+   NxDPPModel.local_named_modules(**kwargs)
+
+The graph modules that are local to this PP rank. This must be called after the model is partitioned.
+
+
 Checkpointing:
 ^^^^^^^^^^^^^^
 
@@ -258,13 +373,15 @@ Save Checkpoint:
 
 ::
 
-   def neuronx_distributed.parallel_layers.save(state_dict, save_dir, save_serially = True, down_cast_bf16 = False)
+   def neuronx_distributed.parallel_layers.save(state_dict, save_dir, save_serially=True, save_xser: bool=False, down_cast_bf16=False)
 
 This API will save the model from each tensor-parallel rank in the
 save_dir . Only workers with data parallel rank equal to 0 would be
 saving the checkpoints. Each tensor parallel rank would be creating a
-``tp_rank_i`` folder inside ``save_dir`` and each ones saves its shard
-in the ``tp_rank_i`` folder.
+``tp_rank_ii_pp_rank_ii`` folder inside ``save_dir`` and each ones saves its shard
+in the ``tp_rank_ii_pp_rank_ii`` folder.
+If ``save_xser`` is enabled, the folder name would be ``tp_rank_ii_pp_rank_ii.tensors``
+and there will be a ref data file named as ``tp_rank_ii_pp_rank_ii`` in save_dir for each rank.
 
 .. _parameters-4:
 
@@ -274,9 +391,13 @@ Parameters:
 -  ``state_dict: (dict)`` : Model state dict. Its the same dict that you
    would save using torch.save
 -  ``save_dir: (str)`` : Model save directory.
-- ``save_serially: (bool)``: This flag would save checkpoints one data-parallel rank at a time.
+-  ``save_serially: (bool)``: This flag would save checkpoints one model-parallel rank at a time.
    This is particularly useful when we are checkpointing large models.
-- ``down_cast_bf16: (bool)``: This flag would downcast the state_dict to bf16 before saving.
+-  ``save_xser: (bool)``: This flag would save the model with torch xla serialization.
+   This could significantly reduce checkpoint saving time when checkpointing large model, so it's recommended 
+   to enable xser when the model is large.
+   Note that if a checkpoint is saved with ``save_xser``, it needs to be loaded with ``load_xser``, vice versa.
+-  ``down_cast_bf16: (bool)``: This flag would downcast the state_dict to bf16 before saving.
 
 Load Checkpoint
 '''''''''''''''
@@ -284,7 +405,7 @@ Load Checkpoint
 ::
 
    def neuronx_distributed.parallel_layers.load(
-       load_dir, model=None, model_key='model', sharded=True)
+       load_dir, model_or_optimizer=None, model_key='model', load_xser=False, sharded=True)
 
 This API will automatically load checkpoint depending on the tensor
 parallel rank. For large models, one should pass the model object to the
@@ -298,9 +419,12 @@ Parameters:
            
 
 -  ``load_dir: (str)`` : Directory where the checkpoint is saved.
--  ``model``: (torch.nn.Module): Model object
--  ``model_key: (str)`` :The model key used when saving the model in the
+-  ``model_or_optimizer``: (torch.nn.Module or torch.optim.Optimizer): Model or Optimizer object.
+-  ``model``: (torch.nn.Module or torch.optim.Optimizer): Model or Optimizer object, equivilant to ``model_or_optimizer``
+-  ``model_key: (str)`` : The model key used when saving the model in the
    state_dict.
+-  ``load_xser: (bool)`` : Load model with torch xla serialization.
+   Note that if a checkpoint is saved with ``save_xser``, it needs to be loaded with ``load_xser``, vice versa.
 -  ``sharded: (bool)`` : If the checkpoint is not sharded, pass False.
    This is useful (especially during inference) when the model is
    trained using a different strategy and you end up saving a single

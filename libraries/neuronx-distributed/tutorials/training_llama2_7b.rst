@@ -36,17 +36,17 @@ Let’s download the scripts for pretraining:
 .. code:: ipython3
 
    mkdir -p ~/examples/tp_zero1_llama2_7b_hf_pretrain
-   cd ~/examples/tp_zero1_llama2_7b_hf_pretrain
+   cd ~/examples/tp_zero1_llama2_7b_hf_pretrain   
 
 2. Downloading training scripts for our experiments
 .. code:: ipython3
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.sh
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/modeling_llama2_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/adamw_fp32_optim_params.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/requirements.txt
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/config.json
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.sh
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/config.json
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/modeling_llama2_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/adamw_fp32_optim_params.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/get_dataset.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/requirements.txt
 
 3. Installing the additional requirements and giving the right permissions to our shell script
 .. code:: ipython3

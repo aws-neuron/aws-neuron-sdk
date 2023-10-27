@@ -8,6 +8,7 @@ Developer Guide (``neuronx-distributed`` )
     :hidden:
     
     /libraries/neuronx-distributed/tp_developer_guide
+    /libraries/neuronx-distributed/pp_developer_guide
     /libraries/neuronx-distributed/activation_memory_reduction_developer_guide
 
 
