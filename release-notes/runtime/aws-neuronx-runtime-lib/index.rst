@@ -33,6 +33,23 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.18.14.0]
+---------------------------------
+Date: 10/26/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Add experimental Collectives barrier API (nrt_barrier) to nrt_experimental.h
+* Improved error handling and logging for NaNs produced by intermediate calculations that do not affect output.
+* Improved logging by surfacing model id on load and execution errors.
+* Output a better error message when Neff fails to load due to JSON size issues, e.g. “File sg00/def.json size (8589934592) exceeds json parser maximum (4294967295)”
+
+Bug fixes
+^^^^^^^^^
+* Fixed logging error message to specify Neuron Cores instead of Neuron Devices when loading unsupported collectives topology.
+* Fixed segfault on error path when Neuron Device fails to initialize.
+
+
 Neuron Runtime Library [2.17.7.0]
 ---------------------------------
 Date: 9/14/2023

@@ -29,7 +29,9 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
        computation graph.
     :arg ~torch.Tensor,tuple[~torch.Tensor] example_inputs: A tuple of example
        inputs that will be passed to the ``func`` while tracing.
-
+    
+    :keyword dict input_output_aliases: Marks input tensors as state tensors
+     which are device tensors. 
     :keyword str compiler_workdir: Work directory used by
        |neuronx-cc|. This can be useful for debugging and/or inspecting
        intermediary |neuronx-cc| outputs

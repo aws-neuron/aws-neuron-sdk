@@ -38,13 +38,13 @@ This section provide links that will assist you to quickly start with a fresh in
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+    .. include:: /src/helperscripts/installationScripts/python_instructions.txt
         :start-line: 2
         :end-line: 3
 
 
 .. include:: /general/quick-start/tab-inference-torch-neuronx-al2.txt
 
-.. include :: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2.rst
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2.rst
 
-.. include :: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2.rst
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2.rst

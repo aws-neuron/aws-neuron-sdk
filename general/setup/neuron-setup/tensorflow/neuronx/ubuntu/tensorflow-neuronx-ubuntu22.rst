@@ -37,7 +37,7 @@ This section provide links that will assist you to quickly start with a fresh in
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+    .. include:: /src/helperscripts/installationScripts/python_instructions.txt
         :start-line: 5
         :end-line: 6
 
@@ -45,4 +45,6 @@ This section provide links that will assist you to quickly start with a fresh in
 .. include:: /general/quick-start/tab-inference-tensorflow-neuronx-u22.txt
 
 .. include:: /frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-update-u22.rst
+
+.. include:: /frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-install-prev-u22.rst
 

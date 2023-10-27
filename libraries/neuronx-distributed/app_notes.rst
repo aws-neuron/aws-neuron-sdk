@@ -8,6 +8,7 @@ App Notes (``neuronx-distributed`` )
     :hidden:
 
     /libraries/neuronx-distributed/tensor_parallelism_overview
+    /libraries/neuronx-distributed/activation_memory_reduction
 
 
 

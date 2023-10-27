@@ -1,12 +1,16 @@
 import torch
 import neuronx_distributed
 
+from functools import partial
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 from wrapper import EncoderWrapper, DecoderWrapper
 from t5_model_layers import load_pretrained_with_parallel_attn
 
-def get_wrapped_encoder(max_length, num_beams, tp_degree, model):
+def get_wrapped_encoder(max_length, num_beams, tp_degree, model_name):
+    
+    model = load_pretrained_with_parallel_attn(model_name)
+
     encoder = EncoderWrapper(model.encoder, model.decoder, model.config, num_beams, max_length, "xla", num_beams, tp_degree=tp_degree)
     encoder.eval()
     
@@ -21,7 +25,10 @@ def get_wrapped_encoder(max_length, num_beams, tp_degree, model):
     return encoder, aliases
 
 
-def get_wrapped_decoder(max_length, num_beams, tp_degree, model):
+def get_wrapped_decoder(max_length, num_beams, tp_degree, model_name):
+    
+    model = load_pretrained_with_parallel_attn(model_name)
+
     decoder = DecoderWrapper(decoder=model.decoder,
                              lm_head=model.lm_head,
                              model_config=model.config,
@@ -31,7 +38,6 @@ def get_wrapped_decoder(max_length, num_beams, tp_degree, model):
                              tp_degree=tp_degree)
     
     decoder.eval()
-    
     num_outputs_from_trace = 3 if num_beams > 1 else 1
     aliases = {}
     for i in range(len(decoder.past_key_values_sa)):
@@ -41,28 +47,6 @@ def get_wrapped_decoder(max_length, num_beams, tp_degree, model):
 
     return decoder, aliases
 
-### Callable functions used by neuronx-distributed trace
-
-def get_t5_3b_4_128_tp8_encoder():
-
-    max_length=128
-    num_beams=4
-    tp_degree=8
-    model = load_pretrained_with_parallel_attn("t5-3b")
-    
-    return get_wrapped_encoder(max_length, num_beams, tp_degree, model)
-
-def get_t5_3b_4_128_tp8_decoder():
-    
-    max_length=128
-    num_beams=4
-    tp_degree=8
-
-    model = load_pretrained_with_parallel_attn("t5-3b")
-    
-    return get_wrapped_decoder(max_length, num_beams, tp_degree, model)
-
-
 def parallel_trace_encoder(model_name: str,
                            max_length: int,
                            num_beams: int,
@@ -71,8 +55,7 @@ def parallel_trace_encoder(model_name: str,
     print("starting encoder parallel trace")
     
     tokenizer = T5Tokenizer.from_pretrained(model_name)
-
-    get_encoder_callable = get_t5_3b_4_128_tp8_encoder
+    get_encoder_callable = partial(get_wrapped_encoder, max_length, num_beams, tp_degree, model_name)
 
     # Trace encoder
     batch_encoding = tokenizer("translate English to German: Lets go home now",
@@ -103,9 +86,8 @@ def parallel_trace_decoder(model: T5ForConditionalGeneration,
 
     print("starting decoder trace")
 
-    # Determine which func to pass NxD based on request parameters
-    get_decoder_callable = get_t5_3b_4_128_tp8_decoder
-    
+    get_decoder_callable = partial(get_wrapped_decoder, max_length, num_beams, tp_degree, model_name)
+  
     # We create mock inputs so we can trace the decoder
     decoder_input_ids = torch.ones((num_beams, 1), dtype=torch.int64)
     decoder_attention_mask = torch.ones((num_beams, max_length), dtype=torch.int32)

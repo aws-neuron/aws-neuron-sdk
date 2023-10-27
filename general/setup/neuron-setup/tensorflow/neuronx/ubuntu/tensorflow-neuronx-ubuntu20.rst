@@ -37,7 +37,7 @@ This section provide links that will assist you to quickly start with a fresh in
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+    .. include:: /src/helperscripts/installationScripts/python_instructions.txt
         :start-line: 5
         :end-line: 6
 

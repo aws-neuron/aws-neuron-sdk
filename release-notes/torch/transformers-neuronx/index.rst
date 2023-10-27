@@ -28,48 +28,48 @@ second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch
 Model support status
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Definition of model support status
-----------------------------------
+.. Definition of model support status
+.. ----------------------------------
 
-- Prototype (Alpha): An initial in-development version of a model that should be considered a preview of future functionality. A prototype may not be fully functional. A prototype model is not expected to perform well and may also have known accuracy issues. Prototype models may not maintain compatibility across versions.
-- Experimental (Beta): A functional model which may still need performance & accuracy tuning. An experimental model should produce accurate results in most cases but is not yet considered stable. Prototype models may not maintain compatibility across versions.
-- Stable: A model which has been validated for both accuracy and performance. Breaking changes to a stable models will occur with a deprecation notice in advance. 
+.. - Prototype (Alpha): An initial in-development version of a model that should be considered a preview of future functionality. A prototype may not be fully functional. A prototype model is not expected to perform well and may also have known accuracy issues. Prototype models may not maintain compatibility across versions.
+.. - Experimental (Beta): A functional model which may still need performance & accuracy tuning. An experimental model should produce accurate results in most cases but is not yet considered stable. Prototype models may not maintain compatibility across versions.
+.. - Stable: A model which has been validated for both accuracy and performance. Breaking changes to a stable models will occur with a deprecation notice in advance. 
 
-.. list-table::
-   :widths: auto
-   :header-rows: 1
-   :align: left
+.. .. list-table::
+..    :widths: auto
+..    :header-rows: 1
+..    :align: left
 
-   * - Model Support
-     - Functional
-     - Performance Tuned
-     - Backwards Compatibility
+..    * - Model Support
+..      - Functional
+..      - Performance Tuned
+..      - Backwards Compatibility
 
-   * - Prototype
-     - No
-     - No
-     - No
+..    * - Prototype
+..      - No
+..      - No
+..      - No
    
-   * - Experimental
-     - Yes
-     - No
-     - No
+..    * - Experimental
+..      - Yes
+..      - No
+..      - No
    
-   * - Stable
-     - Yes
-     - Yes
-     - Yes
+..    * - Stable
+..      - Yes
+..      - Yes
+..      - Yes
 
 Current model support status
 -----------------------------
 
--  `BLOOM <https://huggingface.co/docs/transformers/model_doc/bloom>`__: [Experimental]
--  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Experimental]
--  `GPT-J <https://huggingface.co/docs/transformers/model_doc/gptj>`__: [Experimental]
--  `GPT-Neox <https://huggingface.co/docs/transformers/model_doc/gpt_neox>`__: [Experimental]
--  `LLaMA <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Experimental]
--  `LLaMA 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Experimental]
--  `OPT <https://huggingface.co/docs/transformers/model_doc/opt>`__: [Experimental]
+-  `BLOOM <https://huggingface.co/docs/transformers/model_doc/bloom>`__: [Beta]
+-  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Beta]
+-  `GPT-J <https://huggingface.co/docs/transformers/model_doc/gptj>`__: [Beta]
+-  `GPT-Neox <https://huggingface.co/docs/transformers/model_doc/gpt_neox>`__: [Beta]
+-  `LLaMA <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Beta]
+-  `LLaMA 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Beta]
+-  `OPT <https://huggingface.co/docs/transformers/model_doc/opt>`__: [Beta]
 
 --------------------------
 Model features
@@ -121,6 +121,31 @@ Model features
      - No
 
 
+Release [0.8.268]
+----------------------
+Date: 10/26/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- [LLaMA] [Experimental] Added support for ``int8`` quantization for LLaMA.
+- [BLOOM] [Experimental] Added multi bucket context encoding support for BLOOM.
+- [Beta] Added model Serialization for all supported models (except GPT-J and GPT-NeoX).
+- [Beta] Added the ability to return output logit scores during sampling.
+- [Stable] Added support for ``SOLU`` activation and ``GroupNorm``.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- [GPT2] Fixed an issue in ``GPT2ForSamplingWithContextBroadcasting`` where the input prompt would get truncated if it was longer than the ``context_length_estimate``.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 Release [0.7.84]
 ----------------------
 Date: 09/15/2023
@@ -143,9 +168,7 @@ Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Some configurations of LLaMA and LLaMA-2 inference models fail compilation with the error ``IndirectLoad/Save requires contiguous indirect access per partition``. This is fixed in the compiler version 2.10.0.35 (Neuron SDK 2.14.1).
-
 - Some configurations of LLaMA and LLaMA-2 inference model fail compilation with the error ``Too many instructions after unroll for function sg0000``. To mitigate this, please try with ``-O1`` compiler option (or ``--optlevel 1``) by adding ``os.environ["NEURON_CC_FLAGS"] = "-O1"`` to your script or set in the environment. A complete fix will be coming in the future release which will not require this option. Note: Using -O1 in the LLaMA-2 13B tutorial results in about 50% increase in latency compared to Neuron SDK 2.13.2. If this is not acceptable, please use compiler version from Neuron SDK 2.13.2.
-
 
 Release [0.6.106]
 ----------------------

@@ -1,6 +1,6 @@
 .. _custom-ops-api-ref-guide:
 
-Custom Operators API Reference Guide [Experimental]
+Custom Operators API Reference Guide [Beta]
 ===================================================
 
 This page provides the documentation for the C++ API available to creators of Neuron custom C++ operators (see :ref:`neuron_c++customops`).
@@ -611,14 +611,14 @@ Print statements then appear on the host's terminal with a header message prepen
 ::
 
     2023-Jan-26 00:25:02.0183  4057:4131   INFO  TDRV:pool_stdio_queue_consume_all_entries    Printing stdout from GPSIMD:
-    Setting element 0 to value -1.000000
-    Setting element 1 to value -2.000000
-    Setting element 2 to value -3.000000
-    Setting element 3 to value -4.000000
-    Setting element 4 to value -5.000000
-    Setting element 5 to value -6.000000
-    Setting element 6 to value -7.000000
-    Setting element 7 to value -8.000000
+    Assigning element 0 to a value of -1.000000
+    Assigning element 1 to a value of -2.000000
+    Assigning element 2 to a value of -3.000000
+    Assigning element 3 to a value of -4.000000
+    Assigning element 4 to a value of -5.000000
+    Assigning element 5 to a value of -6.000000
+    Assigning element 6 to a value of -7.000000
+    Assigning element 7 to a value of -8.000000
 
 
 Limitations

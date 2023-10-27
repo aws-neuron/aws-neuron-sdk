@@ -9,14 +9,24 @@
         :start-line: 47
         :end-line: 48
 
-.. dropdown::  Install PyTorch Neuron (``torch-neuronx``)
+.. dropdown::  Install PyTorch Neuron (torch-neuronx) (PyTorch 1.13.1 or PyTorch 2.0[Beta])
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 104
-        :end-line: 105
+    .. tab-set::
+
+        .. tab-item:: PyTorch 1.13.1
+
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 104
+                :end-line: 105
+
+        .. tab-item:: PyTorch 2.0 [BETA]
+
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 146
+                :end-line: 147
 
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section

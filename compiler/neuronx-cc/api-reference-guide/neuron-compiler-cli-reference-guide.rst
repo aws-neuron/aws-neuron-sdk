@@ -123,7 +123,7 @@ Available Commands:
 
     Valid values:
 
-    - ``NEMO``: Enable the compiler to perform optimizations applicable to models that use the `NeMo <https://github.com/NVIDIA/NeMo>`_ APIs to shard parameters, gradients, and optimizer states across data-parallel workers.
+    - ``llm-training``: Enable the compiler to perform optimizations applicable to large language model (LLMS) training runs that  shard parameters, gradients, and optimizer states across data-parallel workers. This is equivalent to the previously documented option argument value of ``NEMO``, which will be deprecated in a future release.
 
   - :option:`--optlevel <opt_level>`: Specify the level of optimization the compiler should perform. Possible numeric values are {1, 2, 3}. (Default: ``2``)
 

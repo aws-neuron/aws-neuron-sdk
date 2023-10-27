@@ -7,6 +7,41 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.15.0
+--------------
+Date: 10/26/2023
+
+- New :ref:`introduce-pytorch-2-0` application note with ``torch-neuronx``
+- New :ref:`llama2_70b_tp_pp_tutorial` and (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_pp_llama2_70b_hf_pretrain>`_) using ``neuronx-distributed``
+- New :ref:`model_samples_tutorials` documentation for a consolidated list of code samples and tutorials published by AWS Neuron.
+- New :ref:`sdk-classification` documentation for alpha, beta, and stable Neuron SDK definitions and updated documentation references.
+- New :ref:`pipeline_parallelism_overview` and :ref:`pp_developer_guide` documentation in ``neuronx-distributed``
+- Updated :ref:`Neuron Distributed API Guide <api_guide>` regarding pipeline-parallelism support and checkpointing
+- New :ref:`activation_memory_reduction` application note and :ref:`activation_memory_reduction_developer_guide` in ``neuronx-distributed``
+- New ``Weight Sharing (Deduplication)`` `notebook script <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb>`_
+- Added Finetuning script for `google/electra-small-discriminator <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_text_classification/ElectraSmall.ipynb>`_ with ``torch-neuronx``
+- Added `ResNet50 training (Beta) <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/resnet50/resnet50.ipynb>`_ tutorial and scripts with ``torch-neuronx``
+- Added `Vision Perceiver training sample <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_image_classification/VisionPerceiverConv.ipynb>`_ with ``torch-neuronx``
+- Added ``flan-t5-xl`` model inference :pytorch-neuron-src:`tutorial <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>` using ``neuronx-distributed`` 
+- Added ``HuggingFace Stable Diffusion 4X Upscaler model Inference on Trn1 / Inf2`` `sample script <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_sd_x4_upscaler_inference.ipynb>`_ with ``torch-neuronx``
+- Updated `GPT-NeoX 6.9B and 20B model scripts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain>`_ to include selective checkpointing.
+- Added serialization support and removed ``-O1`` flag constraint to ``Llama-2-13B`` model inference script `tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_ with ``transformers-neuronx``
+- Updated ``BERT`` script and ``Llama-2-7B`` script with Pytorch 2.0 support
+- Added option-argument ``llm-training`` to the existing ``--distribution_strategy`` compiler option to make specific optimizations related to training distributed models in :ref:`neuron-compiler-cli-reference-guide`
+- Updated :ref:`neuron-sysfs-ug` to include mem_ecc_uncorrected and sram_ecc_uncorrected hardware statistics.
+- Updated :ref:`torch_neuronx_trace_api` to include io alias documentation
+- Updated :ref:`transformers_neuronx_developer_guide` with serialization support.
+- Upgraded ``numpy`` version to ``1.22.2`` for various scripts
+- Updated ``LanguagePerceiver`` fine-tuning `script <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_text_classification/LanguagePerceiver.ipynb>`_ to ``stable``
+- Announcing :ref:`End of Support for OPT <announce-intent-eos-opt>`  example in ``transformers-neuronx``
+- Announcing :ref:`End of Support for "nemo" option-argument <announce-intent-deprecate-nemo-arg>`  
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Following tutorials are currently not working. These tutorials will be updated once there is a fix.
+
+- `Zero1-gpt2-pretraining-tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2.html#zero1-gpt2-pretraining-tutorial>`_
+- `Finetune t5 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/finetune_t5.html#torch-hf-t5-finetune>`_
 
 Neuron 2.14.0
 -------------

@@ -30,7 +30,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    
    Quick Links </general/quick-start/docs-quicklinks>
    Get Started with Neuron </general/quick-start/index>
-   GitHub Samples </general/quick-start/github-samples>
+   Samples and Tutorials </general/models/index>
    Performance </general/benchmarks/index>
    What’s New </release-notes/index>
    /general/announcements/blogs

@@ -7,24 +7,19 @@ set -e
 INF1_VERSION="1.13.1"
 
 # For torch-neuronx
-VERSION="1.13.0"
+VERSION="1.13.1"
 
 # Python setup
 PYTHON=python3
 PYTHON_VERSION=$($PYTHON --version | cut -f2 -d' ' | cut -f1,2 -d'.')
 
-if [ "$PYTHON_VERSION" == "3.7" ] || [ "$PYTHON_VERSION" == "3.8" ] || [ "$PYTHON_VERSION" == "3.9" ] 
+if [ "$PYTHON_VERSION" == "3.8" ] || [ "$PYTHON_VERSION" == "3.9" ] || [ "$PYTHON_VERSION" == "3.10" ]
 then
     echo "Python version is '$PYTHON_VERSION'"
 else
-    PYTHON=$(which python3.7)
-
-    if [ "$PYTHON" == "" ]
-    then
-        echo "No suitable version of python for libtorch demo current version is $PYTHON_VERSION"
-        echo "Install the 3.7, 3.8 or 3.9 and set the PYTHON end variable as needed"
-        exit 1
-    fi
+    echo "ERROR: No suitable version of Python found for libtorch demo. Current Python version is '$PYTHON_VERSION'."
+    echo "Install Python 3.8, 3.9, or 3.10 and set the PYTHON environment variable as needed."
+    exit 1
 fi
 
 OLD_TOOL_CHAIN=$($PYTHON -c \
@@ -50,8 +45,8 @@ fi
 
 # build tests
 pushd tokenizers_binding
-chmod +x build_python.sh build.sh
-./build_python.sh && ./build.sh
+chmod +x build.sh
+./build.sh
 popd
 cp -f tokenizers_binding/tokenizer.json .
 
@@ -77,7 +72,7 @@ if [ ! -e "venv" ]; then
         pip install torch-neuronx~=${VERSION} --extra-index-url=https://pip.repos.neuron.amazonaws.com
     fi
     
-    pip install --upgrade "transformers==4.6.0" 
+    pip install --upgrade "transformers==4.34.1"
     python bert_neuronx/compile.py
     deactivate
 

@@ -339,15 +339,12 @@ to generate 5 outputs for a single input.
         print(f'Batch {i} output:')
         print(tokenizer.decode(output))
 
-
-------------------------
-[Experimental] Serialization support
-------------------------
+Serialization support [Beta]
+----------------------------
 
 Transformers Neuron supports model serialization (model saving and loading) for
-the ``GPT2`` model class. Serialization support for additional model classes
-will be added in an uncoming relesae. In the following example we demonstrate
-how to save and load the ``GPT2`` model:
+all models except the ``GPTJ`` and ``GPTNeoX``` model classes. In the following 
+example we demonstrate how to save and load the ``GPT2`` model:
 
 .. code-block:: python
 
@@ -366,11 +363,11 @@ how to save and load the ``GPT2`` model:
     model_neuron.to_neuron()
 
     # Save the compiled Neuron model
-    model_neuron._save_compiled_artifacts('gpt2-neuron')
+    model_neuron.save('gpt2-neuron')
 
     # Load the Neuron model
     model_neuron = GPT2ForSampling.from_pretrained('gpt2-split', batch_size=1, tp_degree=2, n_positions=256, amp='f32', unroll=None)
-    model_neuron._load_compiled_artifacts('gpt2-neuron') # Load the compiled Neuron artifacts
+    model_neuron.load('gpt2-neuron') # Load the compiled Neuron artifacts
     model_neuron.to_neuron() # Load the model weights but skip compilation
     # Get a tokenizer and exaple input
     tokenizer = AutoTokenizer.from_pretrained('gpt2')

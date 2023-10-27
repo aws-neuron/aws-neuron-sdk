@@ -469,7 +469,7 @@ The use of ``NEURONCORE_GROUP_SIZES`` has the following problems:
 
 .. _torch_placement_explicit:
 
-Experimental: Explicit Core Placement
+Explicit Core Placement [Beta]
 -------------------------------------
 
 To address the limitations of ``NEURONCORE_GROUP_SIZES``, a new set of APIs has

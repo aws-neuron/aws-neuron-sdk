@@ -13,7 +13,7 @@ Neuron Quick Links
             :open:
 
             * :ref:`neuron-quickstart`
-            * :ref:`neuron-github-samples`
+            * :ref:`model_samples_tutorials`
             * :ref:`benchmark`
             * :ref:`neuron-whatsnew`
             * :ref:`announcements-main`

@@ -77,12 +77,10 @@ class manifest:
         # Specific framework version supporting Python versions
         df_framework = df_instance.loc[df_instance['category'] == args.framework].copy()
         df_framework['version'] = df_framework['version'].map(lambda x: Version(x))
-
         df_framework['major_minor_version'] = df_framework['version'].map(lambda x: str(x.major) + '.' + str(x.minor))
         framework_python_versions = df_framework.loc[
             df_framework['major_minor_version'] == self.extract_major_minor_version(Version(args.framework_version))][
             'supported_python_versions'].values[0]
-
         return list(set(compiler_python_versions) & set(framework_python_versions))
 
     def get_major_version(self, package_name, instance):
@@ -205,6 +203,7 @@ class manifest:
         os_default_python_version = \
             self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
         packages_supporting_python_versions = self.get_pip_packages_supporting_python_versions(args)
+
 
         if os_default_python_version in packages_supporting_python_versions:
             target_python_version = os_default_python_version
@@ -637,10 +636,16 @@ class manifest:
                                             neuron_version=args.neuron_version,
                                             framework_version=args.framework_version)
         else:  # fresh install
-            str += framework_name
-
-        if args.framework == 'pytorch':
-            str += ' torchvision\n'
+            if args.framework == 'pytorch':
+                if args.framework_version == '2.0':  # in case of PT2.0 beta version
+                    str += '--pre '
+                    str += framework_name
+                    str += '==2.0.*'
+                else:
+                    str += framework_name
+                str += ' torchvision\n'
+            else:
+                str += framework_name
 
         if args.instance == 'inf1':
 

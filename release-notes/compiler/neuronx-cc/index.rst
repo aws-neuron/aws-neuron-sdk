@@ -7,6 +7,13 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.11.0.34]
+-----------------------------
+Date: 10/26/2023
+
+* This release introduces the option-argument ``llm-training`` to the existing ``--distribution_strategy`` compiler option. This option-argument allows the compiler to make specific optimizations related to training distributed models. This new option-argument is equivalent to the previously introduced ``nemo`` option-argument, which will be deprecated in a future release.
+
+
 Neuron Compiler [2.10.0.35]
 -----------------------------
 Date: 09/26/2023

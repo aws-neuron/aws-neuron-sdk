@@ -1,6 +1,6 @@
 .. _tp_inference_tutorial:
 
-Inference with Tensor Parallelism (``neuronx-distributed``) [Experimental]
+Inference with Tensor Parallelism (``neuronx-distributed``) [Beta]
 ===========================================================================
 
 Before we start, let's install transformers.

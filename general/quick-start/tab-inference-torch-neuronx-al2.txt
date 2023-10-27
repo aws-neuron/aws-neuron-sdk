@@ -14,10 +14,13 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 8
-        :end-line: 9
+    .. tab-set::
 
+        .. tab-item:: torch-neuronx(1.13.1)
+
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 8
+                :end-line: 9
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section
     :link: inference-torch-neuronx

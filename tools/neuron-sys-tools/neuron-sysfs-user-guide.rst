@@ -44,47 +44,62 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │       ├── arch_type
   │   │       ├── device_name
   │   │       └── instance_type
-  │   ├── stats/
-  │   │   └── memory_usage/
-  │   │       └── host_mem/
-  │   │           ├── application_memory
-  │   │           ├── constants
-  │   │           ├── dma_buffers
-  │   │           └── tensors
-  │   ├── neuron_core0/
-  │   │   ├── info/
-  │   │   │   └── architecture/
-  │   │   │       └── arch_type
-  │   │   ├── stats/
-  │   │   │   ├── status/
-  │   │   │   │   ├── exec_bad_input
-  │   │   │   │   ├── hw_error
-  │   │   │   │   ├── infer_failed_to_queue
-  │   │   │   │   ├── resource_nc_error
-  │   │   │   │   ├── unsupported_neff_version
-  │   │   │   │   ├── failure
-  │   │   │   │   ├── infer_completed_with_error
-  │   │   │   │   ├── invalid_error
-  │   │   │   │   ├── success
-  │   │   │   │   ├── generic_error
-  │   │   │   │   ├── infer_completed_with_num_error
-  │   │   │   │   ├── resource_error
-  │   │   │   │   └── timeout
-  │   │   │   ├── memory_usage/
-  │   │   │   │   ├── device_mem/
-  │   │   │   │   │    ├── constants
-  │   │   │   │   │    ├── model_code
-  │   │   │   │   │    ├── model_shared_scratchpad
-  │   │   │   │   │    ├── runtime_memory
-  │   │   │   │   │    └── tensors
-  │   │   │   │   └── host_mem
-  │   │   │   └── other_info/
-  │   │   │       ├── flop_count
-  │   │   │       ├── inference_count
-  │   │   │       ├── model_load_count
-  │   │   │       └── reset_count
-  │   │   └── ...
-  │   ├── neuron_core1/
+  ├── stats
+  │   ├── hardware
+  │   │   ├── mem_ecc_uncorrected
+  │   │   └── sram_ecc_uncorrected
+  │   └── memory_usage
+  │       └── host_mem
+  │           ├── application_memory
+  │           │   ├── peak
+  │           │   ├── present
+  │           │   └── total
+  │           ├── constants
+  │           │   ├── peak
+  │           │   ├── present
+  │           │   └── total
+  │           ├── dma_buffers
+  │           │   ├── peak
+  │           │   ├── present
+  │           │   └── total
+  │           └── tensors
+  │               ├── peak
+  │               ├── present
+  │               └── total
+  ├── neuron_core0/
+  │       ├── info/
+  │       │   └── architecture/
+  │       │       └── arch_type
+  │       ├── stats/
+  │       │   ├── status/
+  │       │   │   ├── exec_bad_input
+  │       │   │   ├── hw_error
+  │       │   │   ├── infer_failed_to_queue
+  │       │   │   ├── resource_nc_error
+  │       │   │   ├── unsupported_neff_version
+  │       │   │   ├── failure
+  │       │   │   ├── infer_completed_with_error
+  │       │   │   ├── invalid_error
+  │       │   │   ├── success
+  │       │   │   ├── generic_error
+  │       │   │   ├── infer_completed_with_num_error
+  │       │   │   ├── resource_error
+  │       │   │   └── timeout
+  │       │   ├── memory_usage/
+  │       │   │   ├── device_mem/
+  │       │   │   │    ├── constants
+  │       │   │   │    ├── model_code
+  │       │   │   │    ├── model_shared_scratchpad
+  │       │   │   │    ├── runtime_memory
+  │       │   │   │    └── tensors
+  │       │   │   └── host_mem
+  │       │   └── other_info/
+  │       │       ├── flop_count
+  │       │       ├── inference_count
+  │       │       ├── model_load_count
+  │       │       └── reset_count
+  │       └── ...
+  │── neuron_core1/
   │   │   ├── info/
   │   │   │   └── ...
   │   │   └── stats/
@@ -144,6 +159,9 @@ Description for Each Metric
 
     * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
 
+  * ``hardware/``: hardware statistics.
+    * ``mem_ecc_uncorrected``: the number of uncorrected ECC events in the Neuron device's DRAM.
+    * ``sram_ecc_uncorrected``: the  number of uncorrected ECC events in the Neuron device's SRAM.
 
 * ``other_info/``: this directory contains statistics that are not included by ``status/`` and ``memory_usage/``. All of them are not counter types:
   * ``flop_count``: number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval

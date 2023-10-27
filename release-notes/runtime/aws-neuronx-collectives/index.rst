@@ -9,6 +9,14 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.18.18.0]
+------------------------------
+Date: 10/26/2023
+
+New in this release:
+* Bumpped compatibility version to 17 to align with struct change in the nec.h header
+
+
 Neuron Collectives [2.17.9.0]
 ------------------------------
 Date: 9/14/2023

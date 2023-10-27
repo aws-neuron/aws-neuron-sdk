@@ -47,11 +47,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
             :link-type: ref
             :class-body: sphinx-design-class-title-small 
 
-      .. card:: Neuron Dynamic Shapes
-            :link: dynamic-shapes
-            :link-type: ref
-            :class-body: sphinx-design-class-title-small 
-
 .. toctree::
     :maxdepth: 1
     :hidden:
@@ -65,7 +60,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
     Collective Communication <collective-communication>
     control-flow
     custom-c++-operators
-    dynamic-shapes
 
 
 

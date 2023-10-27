@@ -41,3 +41,5 @@ This section provide links that will assist you to quickly start with a fresh in
 .. include:: /general/quick-start/tab-inference-tensorflow-neuron-u22.txt
 
 .. include:: /frameworks/tensorflow/tensorflow-neuron/setup/tensorflow-update-u22.rst
+
+.. include:: /frameworks/tensorflow/tensorflow-neuron/setup/tensorflow-install-prev-u22.rst

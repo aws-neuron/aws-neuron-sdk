@@ -11,8 +11,8 @@ If you already have a previous Neuron release installed, this section provide li
 
     .. tab-item:: PyTorch 1.13.1
 
-        .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 116
             :end-line: 117

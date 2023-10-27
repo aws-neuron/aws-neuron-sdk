@@ -15,6 +15,17 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.14.5.0]
+--------------------------------
+
+Date: 10/26/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Show uncorrectable SRAM and HBM ECC errors on TRN1 and INF2
+* Fixed double free on error path during driver startup
+
 
 Neuron Driver release [2.13.4.0]
 --------------------------------

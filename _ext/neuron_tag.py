@@ -71,7 +71,9 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/setup/torch-neuronx',
                  'general/setup/tensorflow-neuronx',
                  'general/setup/neuron-setup/tensorflow/neuronx/',
-                 'general/setup/neuron-setup/pytorch/neuronx/'
+                 'general/setup/neuron-setup/pytorch/neuronx/',
+                 'general/models/inference-inf2-trn1-samples',
+                 'general/models/training-trn1-samples'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
@@ -132,7 +134,8 @@ clear_nc_v2_tag = [
                 'general/setup/neuron-setup/mxnet/neuron/ubuntu/',
                 'general/setup/neuron-setup/mxnet/neuron/amazon-linux/',
                 'general/setup/neuron-setup/tensorflow/neuron/ubuntu/',
-                'general/setup/neuron-setup/tensorflow/neuron/amazon-linux/'
+                'general/setup/neuron-setup/tensorflow/neuron/amazon-linux/',
+                'general/models/inference-inf1-samples'
                 ]
 
 class NeuronTag(SphinxDirective):

@@ -1,1 +1,2 @@
 * :ref:`tp_developer_guide`
+* :ref:`activation_memory_reduction_developer_guide`

@@ -344,6 +344,6 @@ def load_pretrained_with_parallel_attn(model_name):
         block.layer[1] = ParallelCrossAttention(model.config)
         block.layer[2] = ParallelFF(model.config)
     # Load the weights into the parallel layers        
-    neuronx_distributed.parallel_layers.load(model_name + ".pt", model, sharded=False)
+    neuronx_distributed.parallel_layers.load(model_name.split("/")[-1] + ".pt", model, sharded=False)
 
     return model

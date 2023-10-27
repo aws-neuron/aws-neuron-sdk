@@ -14,7 +14,7 @@ spec:
     metadata:
       # Uncomment the annotation below if k8s version is 1.13 or lower
       # annotations:
-      #   scheduler.alpha.kubernetes.io/critical-pod: ""
+      #  scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
@@ -96,5 +96,6 @@ spec:
         - name: infa-map
           hostPath:
             path: /run
+
 
 

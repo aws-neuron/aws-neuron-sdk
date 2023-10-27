@@ -8,6 +8,17 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.15.4.0]
+------------------------
+Date: 10/26/2023
+
+New in the release:
+
+* Fixed bug in ``neuron-profile`` that may result in a crash when using the NeuronCore Pipeline feature on Inf1.
+* Improved visibility of summary stats in the profiler UI with added groupings.
+* Added support for ``alltoall`` CC operation in ``nccom-test``.
+
+
 Neuron Tools  [2.14.6.0]
 ------------------------
 Date: 09/15/2023

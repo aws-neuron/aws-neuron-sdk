@@ -1,6 +1,6 @@
 .. _tf-neuronx-ref-auto-replication-python-api:
 
-TensorFlow Neuron (``tensorflow-neuronx``) Auto Multicore Replication (Experimental)
+TensorFlow Neuron (``tensorflow-neuronx``) Auto Multicore Replication (Beta)
 ===================================================================================
 
 The Neuron auto multicore replication Python API enables modifying TensorFlow 2.x
@@ -10,7 +10,7 @@ models trace by ```tensorflow_neuronx.trace``` so that they can be automatically
    :local:
    :depth: 1
 
-TensorFlow Neuron TF 2.x (``tensorflow-neuron TF2.x``) Auto Multicore Replication Python API (Experimental)
+TensorFlow Neuron TF 2.x (``tensorflow-neuron TF2.x``) Auto Multicore Replication Python API (Beta)
 -----------------------------------------------------------------------------------------------------------
 
 Method
@@ -104,7 +104,7 @@ Example Python API Usage for TF2.x saved models:
 
 .. _tensorflow-ref-auto-replication-cli-api:
 
-TensorFlow Neuron TF2.x (``tensorflow-neuronx TF2.x``) Auto Multicore Replication CLI (Experimental)
+TensorFlow Neuron TF2.x (``tensorflow-neuronx TF2.x``) Auto Multicore Replication CLI (Beta)
 ---------------------------------------------------------------------------------------------------------------
 
 The Neuron auto multicore replication CLI  enables modifying Tensorflow 2.x

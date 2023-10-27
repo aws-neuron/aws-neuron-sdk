@@ -2,6 +2,6 @@
 
 set -e
 
-. venv/bin/activate
+. ../venv/bin/activate
 python tokenizer_test.py
 deactivate

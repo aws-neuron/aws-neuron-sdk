@@ -178,7 +178,9 @@ Shared Weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
 --------------------------------------------------------
 By default, Neuron Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with Neuron Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
 
-Note: the use of this flag requires the model to be loaded with the multi-instance feature.
+Note: the use of this flag requires the model to be loaded with the multi-instance feature (see :ref:`torch_core_placement_api`).
+
+See the :pytorch-neuron-src:`[BERT tutorial with shared weights notebook] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb>` for an example of how this is used in ``Torch-Neuron``.
 
 ::
 

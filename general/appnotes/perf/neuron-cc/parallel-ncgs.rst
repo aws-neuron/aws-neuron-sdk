@@ -219,7 +219,7 @@ Examples using ``NEURON_RT_NUM_CORES`` include:
 * :ref:`MXNet example </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>`
 
 
-Auto Model Replication in TensorFlow Neuron (``tensorflow-neuron``) (Experimental)
+Auto Model Replication in TensorFlow Neuron (``tensorflow-neuron``) (Beta)
 ----------------------------------------------------------------------------------
 
 Please see the below API documentation to see how to perform automatic replication on
@@ -242,7 +242,7 @@ Auto Model Replication (Being Deprecated)
 The Auto Model Replication feature in TensorFlow-Neuron enables you to
 load the model once and the data parallel replication would happen
 automatically. This reduces framework memory usage as you are not
-loading the same model multiple times. This feature is experimental and
+loading the same model multiple times. This feature is beta and
 available in TensorFlow-Neuron only.
 
 To enable Auto Model Replication, set NEURONCORE_GROUP_SIZES to Nx1

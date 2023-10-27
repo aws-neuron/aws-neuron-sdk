@@ -41,3 +41,5 @@ This section provide links that will assist you to quickly start with a fresh in
 .. include:: /general/quick-start/tab-inference-torch-neuron-u22.txt
 
 .. include:: /frameworks/torch/torch-neuron/setup/pytorch-update-u22.rst
+
+.. include:: /frameworks/torch/torch-neuron/setup/pytorch-install-prev-u22.rst

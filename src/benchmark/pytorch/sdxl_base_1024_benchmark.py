@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch_neuronx
 
-from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
+from diffusers import DiffusionPipeline
 from diffusers.models.unet_2d_condition import UNet2DConditionOutput
 
 import time
@@ -111,8 +111,7 @@ decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
 
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
 
 # Load the compiled UNet onto two neuron cores.
 pipe.unet = NeuronUNet(UNetWrap(pipe.unet))

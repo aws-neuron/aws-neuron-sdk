@@ -1,11 +1,11 @@
 .. _torch_neuronx_core_placement_api:
 
-PyTorch Neuron (``torch-neuronx``) NeuronCore Placement APIs **[Experimental]**
+PyTorch Neuron (``torch-neuronx``) NeuronCore Placement APIs **[Beta]**
 ===============================================================================
 
 .. warning::
 
-    The following functionality is experimental and **will not be supported** in
+    The following functionality is beta and **will not be supported** in
     future releases of the NeuronSDK. This module serves only as a preview for
     future functionality. In future releases, equivalent functionality may
     be moved directly to the :code:`torch_neuronx` module and will no longer be

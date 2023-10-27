@@ -587,3 +587,9 @@ This can result when the default OS limits is low. The hard and soft limits can 
 
 The `01_efa.conf` file is created as part of the EFA installation and needs to be updated. If EFA driver is not installed the file `01_efa.conf` doesn't exist and the sed commands will fail with `No such file or directory`. If there are other files under `limits.d` with file limits they need to be updated as well.
 
+"undefined symbol"
+^^^^^^^^^^^^^^^^^^
+To maintain compatibility with the packages vended publicly in Pypi, AWS Neuron python packages contain binary extensions that are compiled with the pre-2011 libstdc++ application binary interface (ABI). If a custom version of a package - such as `torch` - is compiled using a modern compiler, it can result in "undefined symbol" errors due to mismatches between the package and AWS Neuron package. 
+
+To support this situation, we provide alternative versions of AWS Neuron packages that are compiled according to the newer 2011 ABI. For information on how to use these packages, see :ref:`pytorch-install-cxx11`.
+

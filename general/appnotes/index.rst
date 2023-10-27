@@ -59,3 +59,14 @@ Neuron Application Notes
             :maxdepth: 1
 
             /general/appnotes/transformers-neuronx/generative-llm-inference-with-neuron
+
+
+.. dropdown::  PyTorch 2.0 
+         :class-title: sphinx-design-class-title-med
+         :class-body: sphinx-design-class-body-small
+         :animate: fade-in
+
+         .. toctree::
+            :maxdepth: 1
+
+            /general/appnotes/torch-neuronx/introducing-pytorch-2-0

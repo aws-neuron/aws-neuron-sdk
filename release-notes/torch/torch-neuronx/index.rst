@@ -14,6 +14,103 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [2.0.0.2.0.0b0] (Beta)
+------------------------------
+
+Date: 10/26/2023
+
+Summary
+~~~~~~~
+
+Introducing the beta (experimental) release of Torch-Neuronx with PyTorch 2.0 and PJRT support.
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Updating from XRT to PJRT runtime. For more info see: <link to intro pjrt doc>
+- (Inference) Added the ability to partition unsupported ops to CPU during traced inference (See ``torch_neuronx.trace`` API guide)
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Snapshotting is not supported
+- NEURON_FRAMEWORK_DEBUG=1 is not supported
+- Analyze in neuron_parallel_compile is not supported
+- Neuron Profiler is not supported
+- VGG11 with input sizes 300x300 may show accuracy issues
+- Possible issues with NeMo Megatron checkpointing
+- S3 caching with neuron_parallel_compile may show compilation errors
+- Compiling without neuron_parallel_compile on multiple nodes may show compilation errors
+- GPT2 inference may show errors with torch_neuronx.trace 
+
+Release [1.13.1.1.12.0]
+-----------------------
+Date: 10/26/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- (Training) Added coalescing of all-gather and reduce-scatter inside Zero1, which should help in improving performance at high cluster sizes.
+- (Inference) Added the ability to partition unsupported ops to CPU during traced inference. (See ``torch_neuronx.trace`` API guide)
+- (Inference) Previously undocumented arguments trace API args ``state`` and ``options`` are now unsupported (have no effect) and will result in a deprecation warning if used.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Fixed an issue where torch.topk would fail on specific dimensions
+- (Inference) Fixed an issue where NaNs could be produced when using torch_neuronx.dynamic_batch
+- (Inference) Updated torch_neuronx.dynamic_batch to better support Modules (traced, scripted, and normal modules) with multiple Neuron subgraphs
+- (Inference) Isolate frontend calls to the Neuron compiler to working directories, so concurrent compilations do not conflict by being run from the same directory.
+
+Known Issues and Limitations (Training)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX``.
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
 
 Release [1.13.1.1.11.0]
 ----------------------

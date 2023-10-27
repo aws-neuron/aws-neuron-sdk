@@ -8,6 +8,108 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.14.0-whatsnew:
+
+
+Neuron 2.14.1 (09/26/2023)
+--------------------------
+
+This is a patch release that fixes compiler issues in certain configurations of ``Llama`` and ``Llama-2`` model inference using ``transformers-neuronx``.
+
+.. note::
+
+   There is still a known compiler issue for inference of some configurations of ``Llama`` and ``Llama-2`` models that will be addressed in future Neuron release.
+   Customers are advised to use ``--optlevel 1 (or -O1)`` compiler flag to mitigate this known compiler issue.  
+    
+   See :ref:`neuron-compiler-cli-reference-guide` on the usage of ``--optlevel 1`` compiler flag. Please see more on the compiler fix and known issues in :ref:`neuronx-cc-rn` and :ref:`transformers-neuronx-rn` 
+   
+
+
+
+Neuron 2.14.0 (09/15/2023)
+--------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 3
+
+What's New
+^^^^^^^^^^
+
+This release introduces support for ``Llama-2-7B`` model training and ``T5-3B`` model inference using ``neuronx-distributed``. It also adds support for  ``Llama-2-13B`` model training using ``neuronx-nemo-megatron``. Neuron 2.14 also adds support for ``Stable Diffusion XL(Refiner and Base)`` model inference using ``torch-neuronx`` . This release also introduces other new features, performance optimizations, minor enhancements and bug fixes.
+This release introduces the following:
+
+.. note::
+   This release deprecates ``--model-type=transformer-inference`` compiler flag. Users are highly encouraged to migrate to the ``--model-type=transformer`` compiler flag.
+
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+     - Instances
+
+   * - AWS Neuron Reference for Nemo Megatron library (``neuronx-nemo-megatron``)
+     - * ``Llama-2-13B`` model training support ( `tutorial <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_ )
+       * ZeRO-1 Optimizer support  that works with tensor parallelism and pipeline parallelism
+       * See more at :ref:`neuronx-nemo-rn` and `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_
+     - Trn1/Trn1n
+   
+   * - Neuron Distributed (neuronx-distributed) for Training
+     - * ``pad_model`` API to pad attention heads that do not divide by the number of NeuronCores, this will allow users to use any supported tensor-parallel degree. See  :ref:`api_guide`
+       * ``Llama-2-7B`` model training support  (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain>`_) (:ref:`tutorial <llama2_7b_tp_zero1_tutorial>`)
+       * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
+     - Trn1/Trn1n
+
+   * - Neuron Distributed (neuronx-distributed) for Inference
+     - * ``T5-3B`` model inference support (:pytorch-neuron-src:`tutorial <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`)
+       * ``pad_model`` API to pad attention heads that do not divide by the number of NeuronCores, this will allow users to use any supported tensor-parallel degree. See  :ref:`api_guide` 
+       * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
+     - Inf2,Trn1/Trn1n
+
+   * - Transformers Neuron (transformers-neuronx) for Inference
+     - * Introducing ``--model-type=transformer`` compiler flag that deprecates ``--model-type=transformer-inference`` compiler flag. 
+       * See more at :ref:`transformers-neuronx-rn` 
+     - Inf2, Trn1/Trn1n
+
+   * - PyTorch Neuron (torch-neuronx)
+     - * Performance optimizations in ``torch_neuronx.analyze`` API. See :ref:`torch_neuronx_analyze_api`
+       * ``Stable Diffusion XL(Refiner and Base)`` model inference support  ( `sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sdxl_base_and_refiner_1024_inference.ipynb>`_)
+     - Trn1/Trn1n,Inf2
+
+   * - Neuron Compiler (neuronx-cc)
+     - * New  ``--optlevel``(or ``-O``) compiler option that enables different optimizations with tradeoff between faster model compile time and faster model execution. See more at :ref:`neuron-compiler-cli-reference-guide`
+       * See more at :ref:`neuronx-cc-rn`
+     - Inf2/Trn1/Trn1n
+
+   * - Neuron Tools
+     - * Neuron SysFS support for showing connected devices on ``trn1.32xl``, ``inf2.24xl`` and ``inf2.48xl`` instances. See :ref:`neuron-sysfs-ug`
+       * See more at :ref:`neuron-tools-rn`
+     - Inf1/Inf2/Trn1/Trn1n
+  
+   * - Documentation Updates
+     - * Neuron Calculator now supports multiple model configurations for Tensor Parallel Degree computation. See :ref:`neuron_calculator`
+       * Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-deprecation-transformer-flag`
+       * See more at :ref:`neuron-documentation-rn`
+     - Inf1, Inf2, Trn1/Trn1n
+  
+   * - Minor enhancements and bug fixes.
+     - * See :ref:`components-rn`
+     - Trn1/Trn1n , Inf2, Inf1
+   
+   * - Release Artifacts
+     - * see :ref:`latest-neuron-release-artifacts`
+     - Trn1/Trn1n , Inf2, Inf1
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+
 .. _neuron-2.13.0-whatsnew:
 
 Neuron 2.13.2 (09/01/2023)

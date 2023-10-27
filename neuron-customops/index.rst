@@ -1,6 +1,6 @@
 .. _neuron_c++customops:
 
-Neuron Custom C++ Operators [Experimental]
+Neuron Custom C++ Operators [Beta]
 ==========================================
 
 

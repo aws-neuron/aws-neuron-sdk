@@ -8,25 +8,11 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.14.0-whatsnew:
-
-
-Neuron 2.14.1 (09/26/2023)
---------------------------
-
-This is a patch release that fixes compiler issues in certain configurations of ``Llama`` and ``Llama-2`` model inference using ``transformers-neuronx``.
-
-.. note::
-
-   There is still a known compiler issue for inference of some configurations of ``Llama`` and ``Llama-2`` models that will be addressed in future Neuron release.
-   Customers are advised to use ``--optlevel 1 (or -O1)`` compiler flag to mitigate this known compiler issue.  
-    
-   See :ref:`neuron-compiler-cli-reference-guide` on the usage of ``--optlevel 1`` compiler flag. Please see more on the compiler fix and known issues in :ref:`neuronx-cc-rn` and :ref:`transformers-neuronx-rn` 
-   
+.. _neuron-2.15.0-whatsnew:
 
 
 
-Neuron 2.14.0 (09/15/2023)
+Neuron 2.15.0 (10/26/2023)
 --------------------------
 
 .. contents:: Table of contents
@@ -36,12 +22,8 @@ Neuron 2.14.0 (09/15/2023)
 What's New
 ^^^^^^^^^^
 
-This release introduces support for ``Llama-2-7B`` model training and ``T5-3B`` model inference using ``neuronx-distributed``. It also adds support for  ``Llama-2-13B`` model training using ``neuronx-nemo-megatron``. Neuron 2.14 also adds support for ``Stable Diffusion XL(Refiner and Base)`` model inference using ``torch-neuronx`` . This release also introduces other new features, performance optimizations, minor enhancements and bug fixes.
-This release introduces the following:
-
-.. note::
-   This release deprecates ``--model-type=transformer-inference`` compiler flag. Users are highly encouraged to migrate to the ``--model-type=transformer`` compiler flag.
-
+This release adds support for PyTorch 2.0 (Beta), increases performance for both training and inference workloads, adding ability to train models like ``Llama-2-70B`` using ``neuronx-distributed``. With this release, we are also adding pipeline parallelism support for ``neuronx-distributed`` enabling full 3D parallelism support to easily scale training to large model sizes.
+Neuron 2.15 also introduces support for training ``resnet50``, ``milesial/Pytorch-UNet`` and ``deepmind/vision-perceiver-conv`` models using ``torch-neuronx``, as well as new sample code for ``flan-t5-xl`` model inference using ``neuronx-distributed``, in addition to other performance optimizations, minor enhancements and bug fixes.
 
 .. list-table::
    :widths: auto
@@ -53,47 +35,50 @@ This release introduces the following:
      - Details
      - Instances
 
-   * - AWS Neuron Reference for Nemo Megatron library (``neuronx-nemo-megatron``)
-     - * ``Llama-2-13B`` model training support ( `tutorial <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_ )
-       * ZeRO-1 Optimizer support  that works with tensor parallelism and pipeline parallelism
-       * See more at :ref:`neuronx-nemo-rn` and `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_
-     - Trn1/Trn1n
-   
    * - Neuron Distributed (neuronx-distributed) for Training
-     - * ``pad_model`` API to pad attention heads that do not divide by the number of NeuronCores, this will allow users to use any supported tensor-parallel degree. See  :ref:`api_guide`
-       * ``Llama-2-7B`` model training support  (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain>`_) (:ref:`tutorial <llama2_7b_tp_zero1_tutorial>`)
-       * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
+     - * Pipeline parallelism support. See :ref:`api_guide` , :ref:`pp_developer_guide` and :ref:`pipeline_parallelism_overview`
+       * ``Llama-2-70B`` model training script  (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/llama2/tp_pp_llama2_70b_hf_pretrain>`_) (:ref:`tutorial <llama2_70b_tp_pp_tutorial>`)
+       * Mixed precision support. See :ref:`pp_developer_guide`
+       * Support serialized checkpoint saving and loading using ``save_xser`` and ``load_xser`` parameters. See :ref:`api_guide` 
+       * See more at :ref:`neuronx-distributed-rn` 
      - Trn1/Trn1n
 
    * - Neuron Distributed (neuronx-distributed) for Inference
-     - * ``T5-3B`` model inference support (:pytorch-neuron-src:`tutorial <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`)
-       * ``pad_model`` API to pad attention heads that do not divide by the number of NeuronCores, this will allow users to use any supported tensor-parallel degree. See  :ref:`api_guide` 
+     - * ``flan-t5-xl`` model inference script (:pytorch-neuron-src:`tutorial <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`)
        * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
      - Inf2,Trn1/Trn1n
 
    * - Transformers Neuron (transformers-neuronx) for Inference
-     - * Introducing ``--model-type=transformer`` compiler flag that deprecates ``--model-type=transformer-inference`` compiler flag. 
+     - * Serialization support for ``Llama``, ``Llama-2``, ``GPT2`` and ``BLOOM`` models . See :ref:`developer guide <transformers_neuronx_developer_guide>` and `tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
    * - PyTorch Neuron (torch-neuronx)
-     - * Performance optimizations in ``torch_neuronx.analyze`` API. See :ref:`torch_neuronx_analyze_api`
-       * ``Stable Diffusion XL(Refiner and Base)`` model inference support  ( `sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sdxl_base_and_refiner_1024_inference.ipynb>`_)
+     - * Introducing ``PyTorch 2.0`` Beta support. See :ref:`introduce-pytorch-2-0` . See  :ref:`llama-2-7b training <llama2_7b_tp_zero1_tutorial>` , `bert training <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/dp_bert_hf_pretrain>`_ and  `t5-3b inference <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.html>`_ samples.
+       * Scripts for training `resnet50[Beta] <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/resnet50>`_ ,
+         `milesial/Pytorch-UNet[Beta] <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/unet_image_segmentation>`_ and `deepmind/vision-perceiver-conv[Beta] <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_image_classification/VisionPerceiverConv.ipynb>`_ models.
      - Trn1/Trn1n,Inf2
 
+   * - AWS Neuron Reference for Nemo Megatron library (``neuronx-nemo-megatron``)
+     - * ``Llama-2-70B`` model training sample using pipeline parallelism and tensor parallelism ( `tutorial <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_ )
+       * ``GPT-NeoX-20B`` model training using pipeline parallelism and tensor parallelism 
+       * See more at :ref:`neuronx-nemo-rn` and `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_
+     - Trn1/Trn1n
+
    * - Neuron Compiler (neuronx-cc)
-     - * New  ``--optlevel``(or ``-O``) compiler option that enables different optimizations with tradeoff between faster model compile time and faster model execution. See more at :ref:`neuron-compiler-cli-reference-guide`
+     - * New ``llm-training`` option argument to ``--distribution_strategy`` compiler option for optimizations related to distributed training. See more at :ref:`neuron-compiler-cli-reference-guide`
        * See more at :ref:`neuronx-cc-rn`
      - Inf2/Trn1/Trn1n
 
    * - Neuron Tools
-     - * Neuron SysFS support for showing connected devices on ``trn1.32xl``, ``inf2.24xl`` and ``inf2.48xl`` instances. See :ref:`neuron-sysfs-ug`
+     - * ``alltoall`` Collective Communication operation, previously released in Neuron Collectives v2.15.13, was added as a testable operation in ``nccom-test``. See :ref:`nccom-test`
        * See more at :ref:`neuron-tools-rn`
      - Inf1/Inf2/Trn1/Trn1n
   
    * - Documentation Updates
-     - * Neuron Calculator now supports multiple model configurations for Tensor Parallel Degree computation. See :ref:`neuron_calculator`
-       * Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-deprecation-transformer-flag`
+     - * New :ref:`App Note <activation_memory_reduction>` and :ref:`Developer Guide <activation_memory_reduction_developer_guide>` about Activation memory reduction using ``sequence parallelism`` and ``activation recomputation`` in ``neuronx-distributed``
+       * Added a new Model Samples and Tutorials summary page. See :ref:`model_samples_tutorials`
+       * Added Neuron SDK Classification guide. See :ref:`sdk-classification`
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
@@ -215,10 +200,8 @@ Trn1/Trn1n and Inf2 only packages
      - * :ref:`neuronx-cc-rn`
 
    * - Collective Communication library
-     - Trn1/Trn1n, Inf2
-       
+     - Trn1/Trn1n, Inf2    
      - * ``aws-neuronx-collective`` (.deb, .rpm)
-
      - * :ref:`neuron-collectives-rn`
 
 
@@ -314,15 +297,15 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.0
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.0
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.14.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.0
 
 
 Previous Releases

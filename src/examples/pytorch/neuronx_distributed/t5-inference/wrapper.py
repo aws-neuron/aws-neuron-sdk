@@ -645,6 +645,7 @@ class DecoderWrapper(torch.nn.Module):
         self.device = device
         self.num_beams = num_beams
         self.batch_size = 1
+        self.config = model_config
 
         num_heads=model_config.num_heads
         num_decoder_layers=model_config.num_decoder_layers
@@ -674,8 +675,7 @@ class DecoderWrapper(torch.nn.Module):
     
     def reorder_cache(self, past_key_values, beam_idx):
         for i in range(len(past_key_values)):
-            gather_index = beam_idx.view([beam_idx.shape[0],1,1,1]).expand_as(past_key_values[i])
-            past_key_values[i] = torch.gather(past_key_values[i], dim = 0, index=gather_index)
+             past_key_values[i] = torch.index_select(past_key_values[i], 0, beam_idx)
         return past_key_values
 
     def forward(self,
@@ -713,7 +713,9 @@ class DecoderWrapper(torch.nn.Module):
         last_hidden_state = decoder_output['last_hidden_state']
         past_key_values = decoder_output['past_key_values']
 
-        last_hidden_state = last_hidden_state * (self.model_dim**-0.5)
+        if self.config.tie_word_embeddings:
+            last_hidden_state = last_hidden_state * (self.model_dim**-0.5)
+
         lm_logits = self.lm_head(last_hidden_state)
 
         past_key_values_sa, past_key_values_ca = self.update_past(past_key_values)

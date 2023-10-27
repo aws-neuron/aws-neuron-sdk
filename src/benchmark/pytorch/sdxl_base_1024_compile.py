@@ -81,7 +81,7 @@ model_id = "stabilityai/stable-diffusion-xl-base-1.0"
 
 # --- Compile UNet and save ---
 
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
 
 # Replace original cross-attention module with custom cross-attention module for better performance
 Attention.get_attention_scores = get_attention_scores_neuron
@@ -125,7 +125,7 @@ del unet_neuron
 # --- Compile VAE decoder and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
 decoder = copy.deepcopy(pipe.vae.decoder)
 del pipe
 
@@ -153,7 +153,7 @@ del decoder_neuron
 # --- Compile VAE post_quant_conv and save ---
 
 # Only keep the model being compiled in RAM to minimze memory pressure
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
 post_quant_conv = copy.deepcopy(pipe.vae.post_quant_conv)
 del pipe
 

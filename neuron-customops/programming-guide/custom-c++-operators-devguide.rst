@@ -1,6 +1,6 @@
 .. _feature-custom-operators-devguide:
 
-Neuron Custom C++ Operators Developer Guide [Experimental]
+Neuron Custom C++ Operators Developer Guide [Beta]
 ==========================================================
 
 This document gives an overview of the Neuron Custom C++ Operator feature and APIs . Currently, CustomOp support is limited to the PyTorch framework.  

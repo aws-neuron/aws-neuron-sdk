@@ -10,6 +10,25 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+Neuron Distributed [0.5.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 10/26/2023
+
+New in this release
+-------------------
+
+* Added support for pipeline-parallelism for distributed training.
+* Added support for serialized checkpoint saving/loading, resulting in better checkpoint saving/loading time.
+* Added support for mixed precision training using `torch.autocast`.
+* Fixed an issue with Zero1 checkpoint saving/loading.
+
+
+Known Issues and Limitations
+----------------------------
+
+* Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
+
 Neuron Distributed [0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

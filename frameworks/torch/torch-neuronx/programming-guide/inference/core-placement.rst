@@ -19,7 +19,7 @@ techniques:
    control of all cores for a single process.
 2. For applications using multiple processes, default core placement should be
    used in conjunction with ``NEURON_RT_NUM_CORES`` (:ref:`torch_neuronx_placement_default`)
-3. For more granular control, then the experimental explicit placement APIs may
+3. For more granular control, then the beta explicit placement APIs may
    be used (:ref:`torch_neuronx_placement_explicit`).
 
 .. contents:: Table of Contents
@@ -182,7 +182,7 @@ specified by the ``NEURON_RT_NUM_CORES`` configuration.
 
 .. _torch_neuronx_placement_explicit:
 
-Experimental: Explicit Core Placement
+Explicit Core Placement [Beta]
 -------------------------------------
 
 The ``torch_neuronx`` framework allows can be found in the

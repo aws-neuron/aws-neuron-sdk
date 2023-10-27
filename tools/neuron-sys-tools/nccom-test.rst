@@ -86,6 +86,7 @@ CLI arguments
             - ``all_gather`` / ``allg``: All-Gather
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
             - ``sendrecv``: Send-Receive
+            - ``alltoall``: All-to-All
     * - ``-r, --nworkers``
       - N/A, required argument
       - Total number of workers (ranks) to use
@@ -130,6 +131,12 @@ CLI arguments
       - false
       - If provided, the corectness of the operations will be checked. This will not impact results (time, algbw and busbw)
         but will slightly increase the overall execution time.
+    * - ``-s, --hosts``
+      - N/A
+      - Hosts on which to run execution.  Checks ``~/hosts`` if not specified.
+    * - ``--non-interactive``
+      - false
+      - Do not display any animation or progress indicator.
 
 .. note::
 
