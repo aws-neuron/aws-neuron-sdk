@@ -180,7 +180,7 @@ By default, Neuron Runtime will make copies of modle weights when loading the sa
 
 Note: the use of this flag requires the model to be loaded with the multi-instance feature (see :ref:`torch_core_placement_api`).
 
-See the :pytorch-neuron-src:`[BERT tutorial with shared weights notebook] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb>` for an example of how this is used in ``Torch-Neuron``.
+See the :pytorch-neuron-src:`[BERT tutorial with shared weights notebook] <bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb>` for an example of how this is used in ``Torch-Neuron``.
 
 ::
 
