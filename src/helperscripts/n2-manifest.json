@@ -47,8 +47,8 @@
     "package_properties": [
       {"name":"aws-neuronx-runtime-discovery", "component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"aws_neuron_sdk_release_version", "component":"Github","category":"github","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
-      {"name":"libneuronxla","component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
-      {"name":"neuronx_hwm", "component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
+      {"name":"libneuronxla","component":"Framework","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
+      {"name":"neuronx_hwm", "component":"Compiler","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"neuron-cc","component":"Compiler","category":"compiler","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"neuronx-cc","component":"Compiler","category":"compiler","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"aws-neuronx-k8-plugin","component":"Kubernetes Plugin","category":"container","package_type":"os","use_cases":["inference","training"],"pin_major":"true"},
@@ -102,6 +102,7 @@
       {"name":"dmlc_tvm","version":"1.18.1.0","supported_instances":["inf1"],"supported_python_versions":["3.8","3.9","3.10"]},
       {"name":"inferentia_hwm","version":"1.16.1.0","supported_instances":["inf1"],"supported_python_versions":["3.8","3.9","3.10"]},
       {"name":"libneuronxla","version":"1.0.663","supported_instances":["trn1","inf2"],"supported_python_versions":["3.8","3.9","3.10"]},
+      {"name":"libneuronxla","version":"0.5.538","supported_instances":["trn1","inf2"],"supported_python_versions":["3.8","3.9","3.10"]},
       {"name":"mx_neuron","version":"1.8.0.2.4.25.0","supported_instances":["inf1"],"supported_python_versions":["3.8","3.9","3.10"]},
       {"name":"mxnet_neuron","version":"1.5.1.1.10.0.0","supported_instances":["inf1"],"supported_python_versions":["3.8","3.9","3.10"]},
       {"name":"neuron-cc","version":"1.20.3.0","supported_instances":["inf1"],"supported_python_versions":["3.8","3.9","3.10"]},

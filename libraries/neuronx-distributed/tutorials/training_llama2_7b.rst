@@ -43,13 +43,13 @@ Let’s download the scripts for pretraining:
 
 .. code:: ipython3
 
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.sh
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/modeling_llama2_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/adamw_fp32_optim_params.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/requirements.txt
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_zero1_llama2_7b_hf_pretrain/config.json
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.sh
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/modeling_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/adamw_fp32_optim_params.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/get_dataset.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/tp_zero1_llama2_7b_hf_pretrain/config.json
 
 3. Installing the additional requirements and giving the right permissions to our shell script
 
@@ -241,16 +241,3 @@ This can be done as follows:
 
 By default, `num_workers_per_step` is set to 8.
 
-
-Known Issues
-^^^^^^^^^^^^
-
-1. When running on single node, to avoid device OOM, it is recommended to run with 
-`NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS` set to `0`. This can be done as follows:
-
-.. code:: ipython3
-   
-   export NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS=0
-
-This env variable disables the async runtime. We would see a performance drop by disabling 
-the async runtime.
