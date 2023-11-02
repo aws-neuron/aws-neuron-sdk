@@ -10,7 +10,8 @@ Tutorials for Neuron Distributed (``neuronx-distributed`` )
     Training using Tensor Parallelism </libraries/neuronx-distributed/tutorials/training>
     Training GPT-NeoX 6.9B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-gpt-neox>
     Training GPT-NeoX 20B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-gpt-neox-20b>
-    Training Llama2 7B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-llama2-7b>
+    Training Llama2 7B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training_llama2_7b>
+    Training Llama2 70B using TP and PP </libraries/neuronx-distributed/tutorials/training_llama2_70b>
     /src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb
     
 .. toctree::

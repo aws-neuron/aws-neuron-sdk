@@ -330,7 +330,7 @@ class manifest:
 
         if args.mode != 'compile':
             # if args.ami != 'dlami-base':
-            install = 'install' if args.install_type == 'install' else 'update'
+            install = 'install' if args.install_type == 'install' else 'upgrade'
             str += f'\n# {install} Neuron Driver\n'
 
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
@@ -346,7 +346,10 @@ class manifest:
                         'pin_major'].values[0] == 'true':
                         version = '=' + self.get_package_version(category='driver', name=driver_package,
                                                                  neuron_version=args.neuron_version)
-                str += f'sudo apt-get {install} {driver_package}{version}* -y\n'
+                str += f'sudo apt-get {install} {driver_package}{version}* -y'
+                if args.install_type == 'update':
+                    str += ' --allow-change-held-packages'
+                str += '\n'
 
             elif args.os == 'amazonlinux2':
                 yum_install = 'install' if args.install_type == 'install' else 'update'
@@ -389,6 +392,7 @@ class manifest:
                                                   neuron_version=args.neuron_version)
         # install neuron runtime on trn1
         if args.mode != 'compile':
+            install = 'install' if args.install_type == 'install' else 'upgrade'
             if len(runtime_packages) != 0:
                 if args.install_type == 'install':
                     str += '\n# Install Neuron Runtime \n'
@@ -398,11 +402,14 @@ class manifest:
                 for runtime_package in runtime_packages:
                     # if args.ami != 'dlami-base':
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
-                        str += 'sudo apt-get install ' + runtime_package
+                        str += (f'sudo apt-get {install} ' + runtime_package)
                         if args.neuron_version == None:
                             if self.df_package_properties.loc[self.df_package_properties['name'] == runtime_package][
                                 'pin_major'].values[0] == 'true':
-                                str += '=' + self.get_major_version(runtime_package, args.instance) + '.* -y\n'
+                                str += '=' + self.get_major_version(runtime_package, args.instance) + '.* -y'
+                                if args.install_type == 'update':
+                                    str += ' --allow-change-held-packages'
+                                str += '\n'
                         elif (args.neuron_version != None) & (args.install_type == 'install'):
                             str += '=' + self.get_package_version(category='runtime', name=runtime_package,
                                                                   neuron_version=args.neuron_version) + '* -y\n'
@@ -453,6 +460,7 @@ class manifest:
         str = ''
         if args.mode == 'develop':
             # get runtime package names for release verion, instance
+            install = 'install' if args.install_type == 'install' else 'upgrade'
             system_tool_packages = self.get_package_names(category='system-tools', instance=args.instance)
             if len(system_tool_packages) != 0:
                 if args.install_type == 'install':
@@ -462,11 +470,14 @@ class manifest:
 
                 for system_tool in system_tool_packages:
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
-                        str += 'sudo apt-get install ' + system_tool
+                        str += (f'sudo apt-get {install} ' + system_tool)
                         if args.neuron_version == None:
                             if self.df_package_properties.loc[self.df_package_properties['name'] == system_tool][
                                 'pin_major'].values[0] == 'true':
-                                str += '=' + self.get_major_version(system_tool, args.instance) + '.* -y\n'
+                                str += '=' + self.get_major_version(system_tool, args.instance) + '.* -y'
+                                if args.install_type == 'update':
+                                    str += ' --allow-change-held-packages'
+                                str += '\n'
 
                         elif (args.neuron_version != None) & (args.install_type == 'install'):
                             str += '=' + self.get_package_version(category='system-tools', name=system_tool,
