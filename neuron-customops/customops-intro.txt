@@ -1,3 +1,3 @@
 Neuron Custom C++ Operators enable developers to write C++ Custom Operators (“CustomOps”) that run on NeuronCores. This enables developers to extend operator support beyond what is officially supported by Neuron.
 
-Developers can use standard PyTorch custom operators programming interfaces to leverage Neuron Custom C++ Operators feature. This makes it easy to migrate CPU Custom Operators to Neuron, and implement new experimental operators, all without any intimate knowledge of the NeuronCore hardware.
+Developers can use standard PyTorch custom operators programming interfaces to leverage Neuron Custom C++ Operators feature. This makes it easy to migrate CPU Custom Operators to Neuron, and implement new beta operators, all without any intimate knowledge of the NeuronCore hardware.

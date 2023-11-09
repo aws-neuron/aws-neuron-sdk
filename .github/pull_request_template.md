@@ -1,7 +1,8 @@
 *Description:*
 
-*Tests run (if applicable):*
-Please specify the AMI, instance sizes, and any necessary details.  
+**MANDATORY: PR needs test run output**
+**Test Run Output:**
+Please specify the release version, instance size and type, OS type and test output.
 
 Please make sure this PR contains correct classification terms (Alpha, Beta, and Stable).
 

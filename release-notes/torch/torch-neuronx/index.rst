@@ -22,7 +22,7 @@ Date: 10/26/2023
 Summary
 ~~~~~~~
 
-Introducing the beta (experimental) release of Torch-Neuronx with PyTorch 2.0 and PJRT support.
+Introducing the beta release of Torch-Neuronx with PyTorch 2.0 and PJRT support.
 
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -776,7 +776,7 @@ Training support:
 Added initial support for inference on Trn1, including the following features:
 
 - Trace API (torch_neuronx.trace)
-- Core placement API (experimental)
+- Core placement API (Beta)
 - Python 3.7, 3.8 and 3.9 support
 - Support for tracing models larger than 2 GB
 

@@ -25,43 +25,8 @@ Transformers Neuron for |Trn1|/|Inf2| is a software package that enables
 PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
-Model support status
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. Definition of model support status
-.. ----------------------------------
-
-.. - Prototype (Alpha): An initial in-development version of a model that should be considered a preview of future functionality. A prototype may not be fully functional. A prototype model is not expected to perform well and may also have known accuracy issues. Prototype models may not maintain compatibility across versions.
-.. - Experimental (Beta): A functional model which may still need performance & accuracy tuning. An experimental model should produce accurate results in most cases but is not yet considered stable. Prototype models may not maintain compatibility across versions.
-.. - Stable: A model which has been validated for both accuracy and performance. Breaking changes to a stable models will occur with a deprecation notice in advance. 
-
-.. .. list-table::
-..    :widths: auto
-..    :header-rows: 1
-..    :align: left
-
-..    * - Model Support
-..      - Functional
-..      - Performance Tuned
-..      - Backwards Compatibility
-
-..    * - Prototype
-..      - No
-..      - No
-..      - No
-   
-..    * - Experimental
-..      - Yes
-..      - No
-..      - No
-   
-..    * - Stable
-..      - Yes
-..      - Yes
-..      - Yes
-
-Current model support status
------------------------------
+Model classes status
+~~~~~~~~~~~~~~~~~~~~~
 
 -  `BLOOM <https://huggingface.co/docs/transformers/model_doc/bloom>`__: [Beta]
 -  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Beta]
@@ -131,8 +96,8 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [LLaMA] [Experimental] Added support for ``int8`` quantization for LLaMA.
-- [BLOOM] [Experimental] Added multi bucket context encoding support for BLOOM.
+- [LLaMA] [Beta] Added support for ``int8`` quantization for LLaMA.
+- [BLOOM] [Beta] Added multi bucket context encoding support for BLOOM.
 - [Beta] Added model Serialization for all supported models (except GPT-J and GPT-NeoX).
 - [Beta] Added the ability to return output logit scores during sampling.
 - [Stable] Added support for ``SOLU`` activation and ``GroupNorm``.
@@ -180,8 +145,8 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [Experimental] Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70b)
-- [Experimental] Improved the performance of BLOOM and LLaMA models
+- Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70b) [Beta]
+- Improved the performance of BLOOM and LLaMA models [Beta]
 - Reduced execution latency of token generation in tensor parallel models by improving thread synchronization. (supported in LLaMA only) 
 - Added an optimized vector implementation of RoPE positional embedding. (supported in LLaMA only)
 - Added support for faster context encoding on sequences of varying lengths. This is implemented by allowing multiple buckets for parallel context encoding. During inference the best fit bucket is chosen. (supported in LLaMA/GPT-2 only)
@@ -211,9 +176,9 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [Experimental] Added support for GPT-NeoX models.
-- [Experimental] Added support for BLOOM models.
-- [Prototype] Added support for LLaMA models.
+- Added support for GPT-NeoX models [Beta].
+- Added support for BLOOM models [Beta].
+- Added support for LLaMA models [Alpha].
 - Added support for more flexible tensor-parallel configurations to GPT2, OPT, and BLOOM. The attention heads doesn't need to be evenly divisible by `tp_degree` anymore. (Note: The `tp_degree` still needs to satisfy the runtime topologies constraint for collective communication (i.e Allreduce). For more details on supported topologies, see: `Tensor-parallelism-support`_ and https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-features/collective-communication.html.)
 - Added multi-query / multi-group attention support for GPT2.
 

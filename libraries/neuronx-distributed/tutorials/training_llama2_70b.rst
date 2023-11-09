@@ -33,7 +33,7 @@ Let’s download the scripts for pretraining:
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/adamw_fp32_optim_params.py
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/convert_checkpoints.py
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/modeling_llama2_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/modeling_llama_nxd.py
    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/llama2/requirements.txt
    python3 -m pip install -r requirements.txt
    chmod +x run_llama_70b_tp_pp.sh
@@ -69,6 +69,7 @@ We first pre-compile the graphs using the ``neuron_parallel_compile``. Let’s r
 
    sbatch --exclusive \
    --nodes 32 \
+   --cpus-per-task 128 \
    --wrap="srun neuron_parallel_compile bash $(pwd)/run_llama_70b_tp_pp.sh"
 
 This script uses a tensor-parallel size of 8, pipeline-parallel size of 8
@@ -78,6 +79,7 @@ To run the training, we just use the above command but without ``neuron_parallel
 
    sbatch --exclusive \
    --nodes 32 \
+   --cpus-per-task 128 \
    --wrap="srun bash $(pwd)/run_llama_70b_tp_pp.sh"
 
 

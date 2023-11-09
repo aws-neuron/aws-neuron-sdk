@@ -168,7 +168,7 @@ The GPT2 python fine-tuning script is adapted from the example
 in
 https://github.com/huggingface/transformers/tree/main/examples/pytorch/language-modeling.
 It incorporates the Accelerate
-https://github.com/huggingface/accelerate. Given its experimental stage,
+https://github.com/huggingface/accelerate. Given its beta stage,
 some modifications are needed, along with the bridge code to XLA.
 Particularly, some workarounds to support Accelerate for the training
 script are listed in "Known Issues Workarounds and Limitations" below.

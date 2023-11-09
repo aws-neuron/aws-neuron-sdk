@@ -190,7 +190,7 @@ See the :pytorch-neuron-src:`[BERT tutorial with shared weights notebook] <bert_
 
 Aynchronous Execution (NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS)
 --------------------------------------------------------
-An experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads. Starting in Neuron Runtime version 2.15, the feature is available, but disabled.  To enable the feature for possible improvement, recommendation is to set NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS to 3.  Setting the number of inflight requests above 3 may lead to Out-Of-Memory (OOM) errors during execution.  For developers using libnrt.so directly, please use nrt_register_async_exec_callback to register a callback for the nrt execution thread to post the execution status to. A default callback will be registered if one is not set by the developer.
+A beta asynchronous execution feature which can reduce latency by roughly 12% for training workloads. Starting in Neuron Runtime version 2.15, the feature is available, but disabled.  To enable the feature for possible improvement, recommendation is to set NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS to 3.  Setting the number of inflight requests above 3 may lead to Out-Of-Memory (OOM) errors during execution.  For developers using libnrt.so directly, please use nrt_register_async_exec_callback to register a callback for the nrt execution thread to post the execution status to. A default callback will be registered if one is not set by the developer.
 
 ::
 

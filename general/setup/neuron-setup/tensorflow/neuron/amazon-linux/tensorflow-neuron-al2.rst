@@ -14,6 +14,7 @@ TensorFlow Neuron ("tensorflow-neuron") Setup on Amazon Linux 2
 	:local:
 	:depth: 2
 
+.. include:: /general/setup/install-templates/al2-python.rst
 
 Get Started with Latest Release of TensorFlow Neuron (``tensorflow-neuron``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

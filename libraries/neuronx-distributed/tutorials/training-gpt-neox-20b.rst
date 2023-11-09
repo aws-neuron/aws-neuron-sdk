@@ -49,6 +49,7 @@ let’s run the command below:
 
    sbatch --exclusive \
    --nodelist=compute1-dy-training-0-[1-4] \
+   --cpus-per-task 128 \
    --wrap="srun neuron_parallel_compile bash $(pwd)/tp_dp_gpt_neox_20b_hf_pretrain.sh"
 
 This script uses a tensor-parallel size of 32.
@@ -60,6 +61,7 @@ To run the training, we just the above command but without ``neuron_parallel_com
 
    sbatch --exclusive \
    --nodelist=compute1-dy-training-0-[1-4] \
+   --cpus-per-task 128 \
    --wrap="srun bash $(pwd)/tp_dp_gpt_neox_20b_hf_pretrain.sh"
 
 

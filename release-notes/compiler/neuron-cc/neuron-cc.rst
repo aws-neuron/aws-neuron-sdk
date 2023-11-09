@@ -767,7 +767,7 @@ See previous release notes. Some tutorials show use of specific compiler
 options and flags, these are needed to help provide guidance to the
 compiler to achieve best performance in specific cases. Please do not
 use in cases other than as shown in the specific tutorial as results may
-not be defined. These options should be considered experimental and will
+not be defined. These options should be considered beta and will
 be removed over time.
 
 .. _other-notes-5:
@@ -831,7 +831,7 @@ See previous release notes. Some tutorials show use of specific compiler
 options and flags, these are needed to help provide guidance to the
 compiler to achieve best performance in specific cases. Please do not
 use in cases other than as shown in the specific tutorial as results may
-not be defined. These options should be considered experimental and will
+not be defined. These options should be considered beta and will
 be removed over time.
 
 .. _other-notes-6:

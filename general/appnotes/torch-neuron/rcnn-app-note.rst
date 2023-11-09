@@ -775,7 +775,7 @@ Benchmarking
 In the benchmarkinng section, we load multiple optimized RCNN models and
 run them in parallel to maximize throughput.
 
-We use the experimental NeuronCore placement API,
+We use the beta NeuronCore placement API,
 ``torch_neuron.experimental.neuron_cores_context()``, to ensure all
 compiled models in an optimized RCNN model are loaded onto the same
 NeuronCore. Please note that the functionality and API of

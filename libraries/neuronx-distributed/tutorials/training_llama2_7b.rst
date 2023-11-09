@@ -96,6 +96,7 @@ Let’s run the command below:
 
    sbatch --exclusive \
    --nodes 4 \
+   --cpus-per-task 128 \
    --wrap="srun neuron_parallel_compile bash $(pwd)/tp_zero1_llama2_7b_hf_pretrain.sh"
 
 This script uses a tensor-parallel size of 8.
@@ -114,6 +115,7 @@ To run the training, we just run the above command but without ``neuron_parallel
 
    sbatch --exclusive \
    --nodes 4 \
+   --cpus-per-task 128 \
    --wrap="srun bash $(pwd)/tp_zero1_llama2_7b_hf_pretrain.sh"
 
 

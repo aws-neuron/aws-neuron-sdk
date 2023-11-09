@@ -47,7 +47,7 @@ The initial release of tensorflow-neuronx 2.10 includes the following features:
 * Initial support for TensorFlow 2.10 inference on Inf2 and Trn1
 * Trace API (tensorflow_neuronx.trace)
 * Automatic partitioning of model into CPU vs NeuronCore parts
-* Automatic data parallel on multiple NeuronCores (experimental)
+* Automatic data parallel on multiple NeuronCores (beta)
 * Python 3.7, 3.8 and 3.9 support
 * HuggingFace Roberta tutorial
 

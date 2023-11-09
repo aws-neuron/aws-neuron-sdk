@@ -48,7 +48,7 @@ Date: 10/26/2023
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
-* Add experimental Collectives barrier API (nrt_barrier) to nrt_experimental.h
+* Add beta Collectives barrier API (nrt_barrier) to nrt_experimental.h
 * Improved error handling and logging for NaNs produced by intermediate calculations that do not affect output.
 * Improved logging by surfacing model id on load and execution errors.
 * Output a better error message when Neff fails to load due to JSON size issues, e.g. “File sg00/def.json size (8589934592) exceeds json parser maximum (4294967295)”
@@ -139,7 +139,7 @@ Date: 7/19/2023
 New in this release
 ^^^^^^^^^^^^^^^^^^^
 
-* Added experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads.  See Runtime Configuration guide for details on how to use the feature.
+* Added beta asynchronous execution feature which can reduce latency by roughly 12% for training workloads.  See Runtime Configuration guide for details on how to use the feature.
 * AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode); choice of 16 ranks is limited to NeuronCores 0-15 or 16-31.
 * Minor improvement in end-to-end execution latency after reducing the processing time required for benign error notifications.
 * Reduced notification overhead by using descriptor packing improving DMA performance for memory bound workloads by up to 25%.
@@ -219,7 +219,7 @@ Date: 02/08/2023
 New in this release
 ^^^^^^^^^^^^^^^^^^^
 
-* Added support for Neuron Custom C++ operators as an experimental feature. As of this release, usage of Custom C++ operators requires a reset of the Neuron Runtime after running a model which invoked a Neuron Custom C++ operator.
+* Added support for Neuron Custom C++ operators as a beta feature. As of this release, usage of Custom C++ operators requires a reset of the Neuron Runtime after running a model which invoked a Neuron Custom C++ operator.
 * Added support for a counter that enable measuring FLOPS on neuron-top and neuron-monitor. 
 * Added support for LRU cache for DMA rings. 
 

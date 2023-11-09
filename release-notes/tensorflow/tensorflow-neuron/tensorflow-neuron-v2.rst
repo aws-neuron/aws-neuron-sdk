@@ -118,7 +118,7 @@ tensorflow-neuron 2.x release [2.4.0.0]
 
 Date: 11/22/2022
 
-* Experimental support for tracing models larger than 2 GB through environment variable ``NEURON_CC_FLAGS='--extract-weights'``.
+* Beta support for tracing models larger than 2 GB through environment variable ``NEURON_CC_FLAGS='--extract-weights'``.
 * Introduce ``tfn.auto_multicore`` Python API to enable automatic data parallel on multiple NeuronCores.
 * Introduce ``tf-neuron-auto-multicore`` tool to enable automatic data parallel on multiple NeuronCores.
 * Deprecated the NEURONCORE_GROUP_SIZES environment variable.

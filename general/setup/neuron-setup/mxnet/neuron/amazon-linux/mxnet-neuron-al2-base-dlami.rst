@@ -8,12 +8,11 @@
 
 MXNet Neuron ("mxnet-neuron") Setup on Amazon Linux 2
 =========================================================
-
-
 .. contents:: Table of contents
 	:local:
 	:depth: 2
 
+.. include:: /general/setup/install-templates/al2-python.rst
 
 Get Started with Latest Release of MXNet Neuron (``mxnet-neuron``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -12,7 +12,7 @@ placement techniques:
    conjunction with ``NEURON_RT_NUM_CORES`` (:ref:`torch_placement_default`)
 2. For more specific core placement for NeuronCore Pipelined models, then
    ``NEURONCORE_GROUP_SIZES`` should be used (:ref:`torch_placement_ncg`).
-3. Finally, for even more granular control, then the experimental
+3. Finally, for even more granular control, then the beta
    explicit placement APIs may be used (:ref:`torch_placement_explicit`).
 
 .. contents:: Table of Contents

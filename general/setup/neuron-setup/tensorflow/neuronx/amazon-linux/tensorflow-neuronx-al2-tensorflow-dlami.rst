@@ -14,6 +14,7 @@ Tensorflow Neuron ("tensorflow-neuronx") Setup on Amazon Linux 2 with DLAMI Tens
 	:local:
 	:depth: 2
 
+.. include:: /general/setup/install-templates/al2-python.rst
 
 Get Started with Latest Release of Neuron Tensorflow (``tensorflow-neuronx``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

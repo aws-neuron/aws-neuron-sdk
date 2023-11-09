@@ -305,5 +305,5 @@ This is a known issue related to the compilation process, not a hardware-depende
 
 .. note::
 
-   Neuron release 2.5.0 added Experimental support for tracing models larger than 2GB `in `tensorflow-neuron (TF2.x)``, please see ``extract-weights`` flag in :ref:`tensorflow-ref-neuron-tracing-api` 
+   Neuron release 2.5.0 added beta support for tracing models larger than 2GB `in `tensorflow-neuron (TF2.x)``, please see ``extract-weights`` flag in :ref:`tensorflow-ref-neuron-tracing-api` 
 

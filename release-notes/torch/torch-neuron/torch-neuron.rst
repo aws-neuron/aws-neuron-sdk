@@ -172,7 +172,7 @@ New in this release
   * Added improved error messages for ``neuron-cc`` and ``tensorflow`` dependency issues
   * Added more debug information when an invalid dynamic batching configuration is used
 
-* Added new experimental explicit NeuronCore placement API. See: :ref:`torch_neuron_core_placement_api`
+* Added new beta explicit NeuronCore placement API. See: :ref:`torch_neuron_core_placement_api`
 * Added new guide for NeuronCore placement. See: :ref:`torch_neuron_core_placement_guide`
 * Improved :func:`torch_neuron.trace` performance when using large graphs
 * Reduced host memory usage of loaded models in ``libtorchneuron.so``

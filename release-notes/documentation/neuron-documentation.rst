@@ -78,7 +78,7 @@ Date: 08/28/2023
 - Updated tensorflow-neuron HF distilbert tutorial to improve performance by removing HF pipeline. See more at :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.html>` :github:`[notebook] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`
 - Updated training troubleshooting guide in torch-neuronx to describe network Connectivity Issue on trn1/trn1n 32xlarge with Ubuntu. See more at :ref:`pytorch-neuron-traning-troubleshooting`
 - Added "Unsupported Hardware Operator Code" section to Neuron Runtime Troubleshooting page. See more at :ref:`nrt-troubleshooting`
-- Removed 'Experimental' tag from ``neuronx-distributed`` section for training. ``neuronx-distributed`` Training is now considered stable and ``neuronx-distributed`` inference is considered as experimental.
+- Removed 'beta' tag from ``neuronx-distributed`` section for training. ``neuronx-distributed`` Training is now considered stable and ``neuronx-distributed`` inference is considered as beta.
 - Added FLOP count(``flop_count``) and connected Neuron Device ids (``connected_devices``) to sysfs userguide. See :ref:`neuron-sysfs-ug`
 - Added tutorial for ``T5`` model inference.  See more at :pytorch-neuron-src:`[notebook] <torch-neuronx/t5-inference-tutorial.ipynb>`
 - Updated neuronx-distributed api guide and inference tutorial. See more at :ref:`api_guide` and :ref:`tp_inference_tutorial`

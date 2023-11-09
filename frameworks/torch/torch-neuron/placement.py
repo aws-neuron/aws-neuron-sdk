@@ -3,8 +3,8 @@
 
 .. warning::
 
-    The following functionality is experimental and **will not be supported** in
-    future releases of the NeuronSDK. This module serves only as a preview for
+    The following functionality is beta and **will not be supported** in
+    future releases of the Neuron SDK. This module serves only as a preview for
     future functionality. In future releases, equivalent functionality may
     be moved directly to the :code:`torch_neuron` module and will no longer be
     available in the :code:`torch_neuron.experimental` module.

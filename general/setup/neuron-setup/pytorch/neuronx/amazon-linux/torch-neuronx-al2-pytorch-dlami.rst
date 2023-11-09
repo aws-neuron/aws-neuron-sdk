@@ -14,6 +14,7 @@ PyTorch Neuron ("torch-neuronx") Setup on Amazon Linux 2 with DLAMI Pytorch
 	:local:
 	:depth: 2
 
+.. include:: /general/setup/install-templates/al2-python.rst
 
 Get Started with Latest Release of PyTorch Neuron (``torch-neuronx``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

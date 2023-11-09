@@ -173,7 +173,7 @@ This release introduces the following:
      - Inf2, Trn1/Trn1n
    
    * - Neuron Distributed (neuronx-distributed) for Training
-     - * Now Stable, removed Experimental support
+     - * Now Stable, removed beta support
        * ZeRO-1 Optimizer support with tensor parallel. (:ref:`tutorial <gpt_neox_tp_zero1_tutorial>`)
        * Sequence Parallel support. (:ref:`api guide <api_guide>`)
        * GPT-NeoX model training support. (`sample script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_) (:ref:`tutorial <gpt_neox_tp_zero1_tutorial>`)
@@ -265,7 +265,7 @@ Neuron 2.12.0 (07/19/2023)
 What's New
 ^^^^^^^^^^
 
-This release introduces  ZeRO-1 optimizer for model training in ``torch-neuronx`` , introduces experimental support for ``GPT-NeoX``, ``BLOOM`` , ``Llama`` and ``Llama 2(coming soon)`` models in ``transformers-neuronx``. This release also adds support for model inference serving on Triton Inference Server for Inf2 & Trn1 instances, ``lazy_load`` API and ``async_load`` API for model loading in ``torch-neuronx``, as well as other new features,
+This release introduces  ZeRO-1 optimizer for model training in ``torch-neuronx`` , introduces beta support for ``GPT-NeoX``, ``BLOOM`` , ``Llama`` and ``Llama 2(coming soon)`` models in ``transformers-neuronx``. This release also adds support for model inference serving on Triton Inference Server for Inf2 & Trn1 instances, ``lazy_load`` API and ``async_load`` API for model loading in ``torch-neuronx``, as well as other new features,
 performance optimizations, minor enhancements and bug fixes. This release introduces the following:
 
 
@@ -285,8 +285,8 @@ performance optimizations, minor enhancements and bug fixes. This release introd
      - Inf2, Trn1/Trn1n
 
    * - Support for new models and Enhancements in ``transformers-neuronx``
-     - * [Experimental] Support for inference of ``GPT-NeoX``, ``BLOOM`` and ``Llama`` models. 
-       * [Experimental] Support for ``Llama 2`` coming soon. Please monitor the `transformers-neuronx repository <https://github.com/aws-neuron/transformers-neuronx/tree/main/src/transformers_neuronx>`_ for updates.
+     - * [Beta] Support for inference of ``GPT-NeoX``, ``BLOOM`` and ``Llama`` models. 
+       * [Beta] Support for ``Llama 2`` coming soon. Please monitor the `transformers-neuronx repository <https://github.com/aws-neuron/transformers-neuronx/tree/main/src/transformers_neuronx>`_ for updates.
        * Removed constraints on ``tp_degree`` in tensor-parallel configurations for ``GPT2``, ``OPT``, and ``BLOOM`` . See more at :ref:`transformers-neuronx-rn`
        * Added multi-query / multi-group attention support for ``GPT2``.
        * See more at :ref:`transformers-neuronx-rn` 
@@ -298,9 +298,9 @@ performance optimizations, minor enhancements and bug fixes. This release introd
      - Inf2, Trn1
 
    * - Support for new computer vision models 
-     - * Performance optimizations in Stable Diffusion 2.1 model script and added [experimental] support for Stable Diffusion 1.5 models.
-       * [Experimental] Script for training CLIP model for Image Classification.
-       * [Experimental] Script for inference of Multimodal perceiver model
+     - * Performance optimizations in Stable Diffusion 2.1 model script and added [beta] support for Stable Diffusion 1.5 models.
+       * [Beta] Script for training CLIP model for Image Classification.
+       * [Beta] Script for inference of Multimodal perceiver model
        * Please check `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_
      - Inf2, Trn1/Trn1n
 
@@ -315,8 +315,8 @@ performance optimizations, minor enhancements and bug fixes. This release introd
        * See more at :ref:`torch-neuronx-rn`
      - Inf2, Trn1/Trn1n
   
-   * - [Experimental]Asynchronous Execution support and Enhancements in Neuron Runtime 
-     - * Added experimental asynchronous execution feature which can reduce latency by roughly 12% for training workloads. See more at :ref:`nrt-configuration`
+   * - [Beta] Asynchronous Execution support and Enhancements in Neuron Runtime 
+     - * Added beta asynchronous execution feature which can reduce latency by roughly 12% for training workloads. See more at :ref:`nrt-configuration`
        * AllReduce with All-to-all communication pattern enabled for 16 ranks on TRN1/TRN1N within the instance (intranode)
        * See more at :ref:`neuron-runtime-rn`
      - Inf1, Inf2, Trn1/Trn1n
@@ -414,7 +414,7 @@ performance optimizations, minor enhancements and bug fixes. This release introd
        * See a sample tutorial at :ref:`torch-analyze-for-training-tutorial`
      - Inf2, Trn1/Trn1n
 
-   * - Neuron Distributed Library [Experimental]
+   * - Neuron Distributed Library [Beta]
      - * New Python Library based on PyTorch enabling distributed training and inference of large models.
        * Initial support for tensor-parallelism.
        * See more at :ref:`neuronx-distributed-index`
@@ -500,7 +500,7 @@ This release introduces new features, performance optimizations, minor enhanceme
      - * See :ref:`Special Flags <tensorflow-ref-neuron-tracing-api>` for details. (``tensorflow-neuron``)
      - Inf1
   
-   * - Performance Enhancements in PyTorch C++ Custom Operators (Experimental)
+   * - Performance Enhancements in PyTorch C++ Custom Operators (Beta)
      - * Support for using multiple GPSIMD Cores in Custom C++ Operators
        * See :ref:`custom-ops-api-ref-guide`
      - Trn1/Trn1n
@@ -702,11 +702,11 @@ This release introduces new capabilities and libraries, as well as features and 
    * - Inference support in ``torch-neuronx``
      - For more details please visit :ref:`pytorch-neuronx-main`` page. You can also try Neuron Inference samples `<https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ in the ``aws-neuron-samples`` GitHub repo.     
 
-   * - Neuron Custom C++ Operators[Experimental]
-     - Initial support for Neuron Custom C++ Operators [Experimental] , with Neuron Custom C++ Operators (“CustomOps”) you can now write CustomOps that run on NeuronCore-v2 chips. For more resources please check :ref:`neuron_c++customops` section.
+   * - Neuron Custom C++ Operators[Beta]
+     - Initial support for Neuron Custom C++ Operators [Beta] , with Neuron Custom C++ Operators (“CustomOps”) you can now write CustomOps that run on NeuronCore-v2 chips. For more resources please check :ref:`neuron_c++customops` section.
 
 
-   * - ``transformers-neuronx`` [Experimental] 
+   * - ``transformers-neuronx`` [Beta] 
      - ``transformers-neuronx``  is a new library enabling LLM model inference. It contains models that are checkpoint-compatible with HuggingFace Transformers, and currently supports Transformer Decoder models like GPT2, GPT-J and OPT. Please check `aws-neuron-samples repository <https://github.com/aws-neuron/transformers-neuronx>`_  
 
 
@@ -788,7 +788,7 @@ Neuron 2.5.0 is a major release which introduces new features and resolves issue
    * - TensorFlow Neuron ``(tensorflow-neuron)``
      - * ``tf-neuron-auto-multicore`` tool to enable automatic data parallel on multiple NeuronCores.
       
-       * Experimental support for tracing models larger than 2GB using ``extract-weights`` flag (TF2.x only), see :ref:`tensorflow-ref-neuron-tracing-api`
+       * Beta support for tracing models larger than 2GB using ``extract-weights`` flag (TF2.x only), see :ref:`tensorflow-ref-neuron-tracing-api`
 
        * ``tfn.auto_multicore`` Python API to enable automatic data parallel (TF2.x only)
     

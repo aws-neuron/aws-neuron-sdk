@@ -392,7 +392,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
 
 
 Neuron v1.15.1 (August 30 2021)
@@ -427,7 +427,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
 
 
 Neuron v1.15.0 (August 12 2021)
@@ -460,7 +460,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
 
 Neuron v1.14.2 (July 26 2021)
 -----------------------------
@@ -492,7 +492,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
        
 
 
@@ -528,7 +528,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
        
 
 
@@ -564,7 +564,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
        
 
 Neuron v1.13.0 (May 1st 2021)
@@ -598,7 +598,7 @@ Dependency Software Supported Versions
    * - Python
      - * Python 3.6
        * Python 3.7
-       * Python 3.8 [Experimental]
+       * Python 3.8 [Beta]
    * - Neuron Conda Packages
      - * torch-neuron-1.7.1.1.3.5.0 
      

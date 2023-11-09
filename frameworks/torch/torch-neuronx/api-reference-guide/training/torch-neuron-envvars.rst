@@ -8,7 +8,7 @@ without requiring code change to user script. It is recommended to set
 them in code or just before invoking the python process, such as
 ``NEURON_FRAMEWORK_DEBUG=1 python3 <script>`` to avoid inadvertently
 changing behavior for other scripts. Environment variables specific to
-PyTorch Neuron are (experimental ones are noted):
+PyTorch Neuron are (beta ones are noted):
 
 ``NEURON_CC_FLAGS``:
 
@@ -16,11 +16,11 @@ PyTorch Neuron are (experimental ones are noted):
    Additional options for the Neuron
    Persistent Cache can be found in the :ref:`Neuron Persistent Cache <neuron-caching>` guide.
 
-``NEURON_FRAMEWORK_DEBUG`` **[Experimental]**:
+``NEURON_FRAMEWORK_DEBUG`` **[Beta]**:
 
 -  Enable dumping of XLA graphs in both HLO format (intermediate representation) and text form for debugging.
 
-``NEURON_EXTRACT_GRAPHS_ONLY`` **[Experimental]**:
+``NEURON_EXTRACT_GRAPHS_ONLY`` **[Beta]**:
 
 -  Dump the XLA graphs in HLO format (intermediate representation) and execute empty stubs with zero outputs
    in order to allow multiple XLA graphs to be traced through a trial execution.
@@ -29,7 +29,7 @@ PyTorch Neuron are (experimental ones are noted):
    tool. This environment variable can be checked in the training script
    to prevent checking of bad outputs during trial run.
 
-``NEURON_NUM_RECENT_MODELS_TO_KEEP`` **[Experimental]**:
+``NEURON_NUM_RECENT_MODELS_TO_KEEP`` **[Beta]**:
 
 -  Keep only N number of graphs loaded in Neuron runtime for each
    process, where N is the value this environment variable is set to.
@@ -42,7 +42,7 @@ PyTorch Neuron are (experimental ones are noted):
    local disk cache. Default is ``/var/tmp/neuron-compile-cache``.
    If this is specified together with ``cache_dir=<cache_url>`` option via ``NEURON_CC_FLAGS``, the ``--cache_dir`` option takes precedence.
 
-``NEURON_PARALLEL_COMPILE_MAX_RETRIES`` **[Experimental]**:
+``NEURON_PARALLEL_COMPILE_MAX_RETRIES`` **[Beta]**:
 
 -  Set the maximum number of retries when using :ref:`Neuron Persistent Cache <neuron-caching>` or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`.
    If set to N, the tool will try compilation N more time(s) if the first graph compilation failed.
@@ -50,7 +50,7 @@ PyTorch Neuron are (experimental ones are noted):
    trn1.2xlarge where there's limited host memory and CPU resources.
    Default is 0.
 
-``NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE`` **[Experimental]**:
+``NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE`` **[Beta]**:
 
 - When using :ref:`Neuron Persistent Cache <neuron-caching>` or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>` , if you want to ignore the error in training script
   and compile the accumulated HLO graphs, you can do so by setting this environment variable.
@@ -58,23 +58,23 @@ PyTorch Neuron are (experimental ones are noted):
   a crash in the training script would be ignored and the graphs collected upto the crash would be
   compiled.
 
-``NEURON_DUMP_HLO_SNAPSHOT`` **[Experimental]**:
+``NEURON_DUMP_HLO_SNAPSHOT`` **[Beta]**:
 
 - Dump the inputs, outputs, and graph in HLO format of a graph execution in a snapshot file. This
   variable can be set to ``1``, ``ON_NRT_ERROR``, ``ON_NRT_ERROR_CPU``, ``ON_NRT_ERROR_HYBRID`` to
   dump snapshots at every iteration using CPU memory, or dump only on errors automatically using
   device, host, and both device and host memory respectively.
 
-``NEURON_NC0_ONLY_SNAPSHOT`` **[Experimental]**:
+``NEURON_NC0_ONLY_SNAPSHOT`` **[Beta]**:
 
 - Dump only the snapshot associated with Neuron Core 0 when ``NEURON_NC0_ONLY_SNAPSHOT=1`` and 
   the ``NEURON_DUMP_HLO_SNAPSHOT`` flag is set.
 
-``NEURON_FUSE_SOFTMAX`` **[Experimental]**:
+``NEURON_FUSE_SOFTMAX`` **[Beta]**:
 
 - Enable custom lowering for Softmax operation to enable compiler optimizations.
 
-``NEURON_TRANSFER_ALL_PARAMETERS_WITH_STATIC_RING`` **[Experimental]**:
+``NEURON_TRANSFER_ALL_PARAMETERS_WITH_STATIC_RING`` **[Beta]**:
 
 - When set to 1, mark all parameter transfers as static to enable runtime optimizations for torch.nn modules that are wrapped as done in Megatron-LM. This setting is not needed if torch.nn modules are not wrapped.
 
