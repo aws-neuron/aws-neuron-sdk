@@ -264,6 +264,18 @@ Report issue to Neuron by posting the relevant details on GitHub
 `issues <https://github.com/aws/aws-neuron-sdk/issues>`__.
 
 
+
+
+RuntimeError: module compiled against API version 0xf but this version of numpy is 0xe
+--------------------------------------------------------------------------------------
+This usally means that the numpy version used during compilation is different than the one used when executing the model.
+As of Neuron SDK release 2.15, numpy versions supported in Neuron SDK are following:  numpy<=1.25.2, >=1.22.2.  Check and confirm the right
+numpy version is installed and re-compile/execute the model.
+
+
+
+
+
 Memory Errors
 $$$$$$$$$$$$$
 

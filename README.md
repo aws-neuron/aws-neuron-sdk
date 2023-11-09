@@ -1,6 +1,6 @@
 ![neuron](./images/Site-Merch_Neuron-ML-SDK_Editorial.png)
 
-# AWS Neuron  
+# AWS Neuron
 
 ## Neuron SDK Overview
 
@@ -14,4 +14,3 @@ For full documentations including user guide, Howtos and Tutorials see [Neuron S
 
 ## Support
 If none of the github and online resources have an answer to your question, checkout the AWS Neuron [support forum](https://forums.aws.amazon.com/forum.jspa?forumID=355).
-

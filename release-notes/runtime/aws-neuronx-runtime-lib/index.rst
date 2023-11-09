@@ -33,6 +33,15 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 
+Neuron Runtime Library [2.18.15.0]
+---------------------------------
+Date: 11/09/2023
+
+Bug fixes
+^^^^^^^^^
+* Removed unnecessary data collection during execution logging which could impact performance.
+
+
 Neuron Runtime Library [2.18.14.0]
 ---------------------------------
 Date: 10/26/2023
