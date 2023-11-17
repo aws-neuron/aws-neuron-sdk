@@ -11,6 +11,11 @@ What's New
 .. _neuron-2.15.0-whatsnew:
 
 
+Neuron 2.15.2 (11/17/2023)
+--------------------------
+Patch release that fixes compiler issues related to performance when training using ``neuronx-nemo-megatron`` library.
+
+
 Neuron 2.15.1 (11/09/2023)
 --------------------------
 Patch release to fix execution overhead issues in Neuron Runtime that were inadvertently introduced in 2.15 release.
@@ -302,15 +307,15 @@ Release Artifacts
 
 Trn1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.2
 
 Inf2 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.2
 
 Inf1 packages
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.15.2
 
 
 Previous Releases

@@ -7,6 +7,13 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.11.0.35]
+-------------------------
+Date: 11/17/2023
+
+* This release addresses performance related issues when traning through ``neuronx-nemo-megatron`` library.
+
+
 Neuron Compiler [2.11.0.34]
 -----------------------------
 Date: 10/26/2023
