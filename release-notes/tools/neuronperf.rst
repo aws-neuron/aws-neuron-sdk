@@ -59,6 +59,6 @@ Date: 03/25/2022
 
 
 * Initial release of NeuronPerf
-* Supports PyTorch, TensorFlow, and Apache MXNet (Incubating).
+* Supports PyTorch, TensorFlow, and Apache MXNet.
 * Supports customizable JSON and CSV reports
 * See :ref:`neuronperf` for more information.

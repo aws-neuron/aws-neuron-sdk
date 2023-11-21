@@ -52,8 +52,8 @@ Enable TensorFlow-Neuron
 
 .. include:: /general/setup/install-templates/inf1/dlami-enable-neuron-tensorflow.rst
 
-Enable Apache MXNet (Incubating)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enable Apache MXNet
+~~~~~~~~~~~~~~~~~~~~
 
 .. include :: /general/setup/install-templates/inf1/note-setup-libnrt-warning.rst
 

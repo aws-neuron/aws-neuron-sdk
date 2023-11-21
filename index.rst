@@ -6,7 +6,7 @@ Welcome to AWS Neuron
 
 AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and AWS Trainium based instances. It supports customers in their end-to-end ML development lifecycle to build new models, train and optimize these models, and then deploy them for production. To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`. To learn about upcoming capabilities, please view the :ref:`neuron_roadmap`.
 
-AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet (incubating). The EC2 Trn1/Trn1n instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf2 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
+AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet. The EC2 Trn1/Trn1n instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf2 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
 
 Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for latest release.
 
@@ -42,7 +42,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
 
    PyTorch Neuron </frameworks/torch/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
-   Apache MXNet (Incubating) </frameworks/mxnet-neuron/index>
+   Apache MXNet </frameworks/mxnet-neuron/index>
 
 
 .. toctree::

@@ -1,6 +1,6 @@
 .. mxnet-neuron-rn:
 
-Neuron Apache MXNet (Incubating) Release Notes
+Neuron Apache MXNet Release Notes
 ==============================================
 
 .. toctree::

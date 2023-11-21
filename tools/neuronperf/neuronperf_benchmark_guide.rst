@@ -342,7 +342,7 @@ Internal Process Model
 
 For each model loaded (see :ref:`neuronperf_model_copies`), a process is spawned. Each process may use multiple threads (see :ref:`neuronperf_worker_threads`). The threads will continue to load examples and keep the hardware busy.
 
-NeuronPerf spawns processes slightly differently between frameworks. For PyTorch and Apache MXNet (Incubating), processes are forked. For Tensorflow/Keras, a fresh interpreter is launched, and benchmarkers are serialized and run as a script.
+NeuronPerf spawns processes slightly differently between frameworks. For PyTorch and Apache MXNet, processes are forked. For Tensorflow/Keras, a fresh interpreter is launched, and benchmarkers are serialized and run as a script.
 
 If you suspect you are having trouble due to the way processes are managed, you have two mechanisms of control:
 

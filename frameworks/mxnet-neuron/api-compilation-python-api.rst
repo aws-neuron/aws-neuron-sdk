@@ -1,6 +1,6 @@
 .. _ref-mxnet-neuron-compilation-python-api:
 
-Neuron Apache MXNet (Incubating) Compilation Python API
+Neuron Apache MXNet Compilation Python API
 =======================================================
 
 The MXNet-Neuron compilation Python API provides a method to compile

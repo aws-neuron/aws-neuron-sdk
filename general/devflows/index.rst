@@ -74,23 +74,7 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. tab-set:: 
-
-               .. tab-item:: Inference
-
-                  .. note::
-
-                     AWS Batch supports Inf1.
-
-                     An example of how to deploy a model with Neuron using Batch is coming soon.
-
-         .. tab-set:: 
-
-               .. tab-item:: Training
-
-                  .. note::
-
-                     AWS Batch support is coming soon.
+         .. include:: /general/devflows/aws-batch-flows.txt
 
 
 

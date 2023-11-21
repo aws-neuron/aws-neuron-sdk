@@ -284,7 +284,7 @@ Inf1 only packages
 
 
 
-   * - Apache MXNet (Incubating)
+   * - Apache MXNet
      - Inf1
      - * ``mx_neuron`` (.whl)
      - * :ref:`mxnet-neuron-rn`

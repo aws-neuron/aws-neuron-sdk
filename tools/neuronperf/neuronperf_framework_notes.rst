@@ -37,8 +37,8 @@ TensorFlow 2.x
 
 	Although TensorFlow *tensors* must be ``ndarray``, this doesn't stop you from wrapping them inside of data structures that traverse process boundaries safely. For example, you can still pass an input ``dict`` like ``{'input_0': np.zeros((2, 1))}``.
 
-Apache MXNet (Incubating)
-=========================
+Apache MXNet
+=============
 
   * Requires: ``mxnet-neuron``
   	- Versions 1.5, 1.8

@@ -29,7 +29,7 @@ Pytorch: :ref:`neuron-cc-ops-pytorch`
 
 XLA: :ref:`neuron-cc-ops-xla`
 
-Apache MXNet (Incubating): :ref:`neuron-cc-ops-mxnet`
+Apache MXNet: :ref:`neuron-cc-ops-mxnet`
 
 Known issues and limitations - updated 11/23/2022
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,7 +1,7 @@
 .. _mxnet_troubleshooting_guide:
 
-Troubleshooting Guide for Neuron Apache MXNet (Incubating)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Troubleshooting Guide for Neuron Apache MXNet 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. contents:: Table of Contents
    :local:

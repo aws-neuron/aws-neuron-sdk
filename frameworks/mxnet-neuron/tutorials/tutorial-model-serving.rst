@@ -1,7 +1,7 @@
 .. _mxnet-neuron-model-serving:
 
-Tutorial: Neuron Apache MXNet (Incubating) Model Serving
-=========================================================
+Tutorial: Neuron Apache MXNet Model Serving
+=============================================
 
 This MXNet Neuron Model Serving (MMS) example is adapted from the MXNet
 vision service example which uses pretrained squeezenet to perform image

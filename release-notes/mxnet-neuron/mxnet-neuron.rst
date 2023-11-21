@@ -1,8 +1,8 @@
 .. _mxnet-neuron-rn:
 
 
-Apache MXNet Neuron (Incubating) Release Notes
-==============================================
+Apache MXNet Neuron Release Notes
+==================================
 
 .. contents:: Table of contents
    :local:
@@ -300,7 +300,7 @@ Date 4/30/2021
 Summary
 -------
 
-Initial release of Apache MXNet (Incubating) 1.8 for Neuron
+Initial release of Apache MXNet 1.8 for Neuron
 
 Major New Features
 ------------------

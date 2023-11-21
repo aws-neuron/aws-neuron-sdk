@@ -47,7 +47,7 @@ Step 1: Re-run the compile steps for your workload with increased verbosity or d
 
    tfn.saved_model.compile(model_dir, compiled_model_dir, compiler_args=['--verbose', '2', '--pipeline', 'compile',  'SaveTemps'], compiler_workdir='./compiler-workdir')
 
--  For Neuron Apache MXNet (Incubating), add compiler arguments as shown below and run the
+-  For Neuron Apache MXNet, add compiler arguments as shown below and run the
    compilation process from an empty workdir:
 
 ::

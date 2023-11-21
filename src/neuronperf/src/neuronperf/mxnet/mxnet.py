@@ -3,7 +3,7 @@
 """
 neuronperf.mxnet
 ~~~~~~~~~~~~~~~~~~~~~~~
-Provides Apache MXNet (Incubating) support.
+Provides Apache MXNet support.
 """
 
 import contextlib

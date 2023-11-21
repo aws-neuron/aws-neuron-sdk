@@ -407,10 +407,10 @@ This release introduces higher performance, updated framework support, new tutor
 
 * Additional compiler improvements boost performance up to 20% higher throughput compared to previous release across model types.
 * Improving usability for NLP models, with out-of-the-box 12x higher-throughput at 70% lower cost for Hugging Face Transformers pre-trained BERT Base models, see :ref:`pytorch-tutorials-neuroncore-pipeline-pytorch`.
-* Upgrade Apache MXNet (Incubating) to 1.8, where Neuron is now a plugin, see :ref:`mxnet-neuron-rn`.
+* Upgrade Apache MXNet to 1.8, where Neuron is now a plugin, see :ref:`mxnet-neuron-rn`.
 * PyTorch ResNext models now functional with new operator support, see :ref:`pytorch-neuron-rn`.
 * PyTorch Yolov5 support, see :ref:`pytorch-neuron-rn`.
-* MXNet (Incubating): Gluon API and Neuron support for NLP BERT models, see :ref:`mxnet-neuron-rn`.
+* MXNet: Gluon API and Neuron support for NLP BERT models, see :ref:`mxnet-neuron-rn`.
 * PyTorch Convolution operator support has been extended to include most Conv1d and Conv3d variants, please see :ref:`neuron-cc-ops-pytorch`  for the complete list of operators.
 * First release of Neuron plugin for TensorBoard, see :ref:`neuron-tensorboard-rn`.
 
@@ -432,7 +432,7 @@ This release include bug fixes and minor enhancements to the Neuron Runtime and 
 February 24, 2021 Release (Patch)
 ---------------------------------
 
-This release updates all Neuron packages and libraries in response to the Python Secutity issue CVE-2021-3177 as described here: https://nvd.nist.gov/vuln/detail/CVE-2021-3177. This vulnerability potentially exists in multiple versions of Python including 3.5, 3.6, 3.7. Python is used by various components of Neuron, including the Neuron compiler as well as Machine Learning frameworks including TensorFlow, PyTorch and Apache MXNet (Incubating). It is recommended that the Python interpreters used in any AMIs and containers used with Neuron are also updated. 
+This release updates all Neuron packages and libraries in response to the Python Secutity issue CVE-2021-3177 as described here: https://nvd.nist.gov/vuln/detail/CVE-2021-3177. This vulnerability potentially exists in multiple versions of Python including 3.5, 3.6, 3.7. Python is used by various components of Neuron, including the Neuron compiler as well as Machine Learning frameworks including TensorFlow, PyTorch and Apache MXNet. It is recommended that the Python interpreters used in any AMIs and containers used with Neuron are also updated. 
 
 Python 3.5 reached `end-of-life <https://peps.python.org/pep-0478/>`_, from this release Neuron packages will not support Python 3.5.
 Users should upgrade to latest DLAMI or upgrade to a newer Python versions if they are using other AMI.

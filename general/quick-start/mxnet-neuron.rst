@@ -1,8 +1,8 @@
 .. _mxnet_quick_start:
 
 
-Get Started with Apache MXNet (Incubating) Neuron
-=================================================
+Get Started with Apache MXNet Neuron
+=====================================
 
 This page provide links that will assist you to quickly start with :ref:`mxnet-neuron-main` (supporting inference only).
 

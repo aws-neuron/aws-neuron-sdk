@@ -1,7 +1,7 @@
 .. _mxnet-tutorials:
 
-Neuron Apache MXNet (Incubating) Tutorials
-==========================================
+Neuron Apache MXNet Tutorials
+===============================
 
 Before running a tutorial
 -------------------------
