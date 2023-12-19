@@ -24,3 +24,11 @@ The library uses various techniques to improve memory utilization such as sequen
    
     * `Launch a GPT-3 pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-gpt-job.md>`_
     * `Launch a Llama 2 pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
+
+Important Tips for Training with Neuron NeMo Megatron
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do Not Create the Attention Mask
+""""""""""""""""""""""""""""""""
+
+If you are using your own data pipeline, do not create an attention mask for each record. Neuron NeMo Megatron is optimized to create an attention mask on Neuron Cores directly before use. Creating an attention mask per sample consumes excess CPU memory and often causes out of memory errors on CPU.
