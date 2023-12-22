@@ -584,7 +584,7 @@ To use ``printf()`` within a Custom C++ operator, the programmer must set the fo
      - Runtime log verbose level
      - String
      - At least ``INFO``
-     - See (https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-configurable-parameters.html?highlight=NEURON_RT_LOG_LEVEL#neuron-runtime-configuration) for more options.
+     - See (:ref:`nrt-configuration`) for more options.
    * - ``NEURON_RT_GPSIMD_STDOUT_QUEUE_SIZE_BYTES``
      - Size of the printf output buffer, in bytes
      - Integer
