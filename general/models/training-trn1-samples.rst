@@ -128,9 +128,13 @@ Decoders
      - neuronx-distributed
      - * :ref:`llama2_7b_tp_zero1_tutorial`
 
+   * - meta-llama/Llama-2-13b
+     - neuronx-distributed
+     - * :ref:`llama2_tp_pp_tutorial`
+
    * - meta-llama/Llama-2-70b
      - neuronx-distributed
-     - * :ref:`llama2_70b_tp_pp_tutorial`
+     - * :ref:`llama2_tp_pp_tutorial`
 
    * - meta-llama/Llama-2
      - neuronx-nemo-megatron
@@ -160,6 +164,10 @@ Encoder-Decoders
      - * torch-neuronx
        * optimum-neuron
      - * :ref:`torch-hf-t5-finetune`
+
+   * - facebook/bart-large
+     - * torch-neuronx
+     - * `How to fine-tune a "Bart-Large" PyTorch model with AWS Trainium (trn1 instances) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_summarization/BartLarge.ipynb>`_
 
 
 
@@ -193,6 +201,33 @@ Vision Transformers
      - * `Fine-tune a pretrained HuggingFace CLIP-large PyTorch model with AWS Trainium <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_contrastive_image_text/CLIPLarge.ipynb>`_
 
 
+
+.. _sd_model_samples_training_trn1:
+
+Stable Diffusion
+----------------
+
+.. list-table::
+   :widths: 20 15 45 
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+
+   * - Model
+     - Frameworks/Libraries
+     - Samples and Tutorials
+       
+
+   * - stabilityai/stable-diffusion-2-1-base
+     - torch-neuronx
+     - * [Beta] `Train stabilityai/stable-diffusion-2-1-base with AWS Trainium (trn1 instances) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/stable_diffusion/>`_
+
+
+   * - runwayml/stable-diffusion-v1-5
+     - torch-neuronx
+     - * [Beta] `Train runwayml/stable-diffusion-v1-5 with AWS Trainium (trn1 instances) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/stable_diffusion/>`_
+  
 
 
 .. _multi_modal_model_samples_training_trn1:

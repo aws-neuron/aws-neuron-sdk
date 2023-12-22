@@ -7,6 +7,36 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+
+Neuron 2.16.0
+-------------
+Date: 12/21/2023
+
+- Added setup guide instructions for ``AL2023`` OS. See :ref:`setup-guide-index`
+- Added announcement for name change of Neuron Components. See :ref:`announce-component-name-change`
+- Added announcement for End of Support for ``PyTorch 1.10`` . See :ref:`announce-eos_pytorch110`
+- Added announcement for End of Support for ``PyTorch 2.0`` Beta. See :ref:`announce-eos_pytorch2`
+- Added announcement for moving NeuronX Distributed sample model implementations. See :ref:`announce-moving-samples`
+- Updated Transformers NeuronX developer guide with support for Grouped Query Attention(GQA). See :ref:`developer guide <transformers_neuronx_developer_guide>` 
+- Added sample for ``Llama-2-70b`` model inference. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_ 
+- Added documentation for ``PyTorch Lightning``  to train models using ``tensor parallelism`` and ``data parallelism`` . See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` and :ref:`tutorial <llama2_7b_tp_zero1_ptl_tutorial>`
+- Added documentation for Model and Optimizer Wrapper training API that handles the parallelization. See :ref:`api guide <api_guide>` and :ref:`model_optimizer_wrapper_developer_guide`
+- Added documentation for New ``save_checkpoint``  and ``load_checkpoint`` APIs to save/load checkpoints during distributed training. See :ref:`save_load_developer_guide`
+- Added documentation for a new ``Query-Key-Value(QKV)`` module in NeuronX Distributed for Training. See :ref:`api guide <api_guide>` and :ref:`tutorial <llama2_tp_pp_tutorial>`
+- Added new developer guide for Inference using NeuronX Distributed. :ref:`developer guide<nxd_inference_developer_guide>`
+- Added ``Llama-2-7B`` model inference script (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
+- Added App note on Support for ``PyTorch 2.1`` (Beta) . See :ref:`introduce-pytorch-2-1`
+- Added developer guide for ``replace_weights`` API to replace the separated weights. See :ref:`torch_neuronx_replace_weights_api` 
+- Added [Beta] script for training ``stabilityai/stable-diffusion-2-1-base`` and  ``runwayml/stable-diffusion-v1-5`` models . See `script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/stable_diffusion/>`_ 
+- Added [Beta] script for training ``facebook/bart-large`` model. See `script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_summarization/BartLarge.ipynb>`_ 
+- Added [Beta] script for ``stabilityai/stable-diffusion-2-inpainting`` model inference.  See `script <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sd2_inpainting_936_624_inference.ipynb>`_ 
+- Added documentation for new ``Neuron Distributed Event Tracing (NDET) tool`` to help visualize execution trace logs and diagnose errors in multi-node workloads. See :ref:`neuron-det-ug` 
+- Updated Neuron Profile User guide with support for multi-worker jobs. See :ref:`neuron-profile-ug`
+- Minor updates to Custom Ops API reference guide.See :ref:`custom-ops-api-ref-guide`
+
+
+
+
 Neuron 2.15.0
 --------------
 Date: 10/26/2023

@@ -7,7 +7,7 @@
 Announcing Name Change for Neuron Components
 ---------------------------------------------
 
-Starting with:ref:`Neuron release 2.16 <neuron-2.16.0-whatsnew>`, the name of the following Neuron components will change as follows:
+Starting with :ref:`Neuron release 2.16 <neuron-2.16.0-whatsnew>`, the name of the following Neuron components will change as follows:
 
 ======================= =================== ====================
 Package name            Current Name        New Name

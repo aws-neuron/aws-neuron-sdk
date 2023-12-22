@@ -81,7 +81,17 @@ Decoders
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-2-13b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
 
+   * - meta-llama/Llama-2-70b
+     - transformers-neuronx
+     - * `Run Hugging Face meta-llama/Llama-2-70b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_
 
+   * - meta-llama/Llama-2-7b
+     - neuronx-distributed
+     - * Run Hugging Face meta-llama/Llama-2-7b autoregressive sampling on Inf2 & Trn1 (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
+
+   * - Mistral-7B-Instruct-v0.1
+     - transformers-neuronx
+     - * :ref:`Run Mistral-7B-Instruct-v0.1 autoregressive sampling on Inf2 & Trn1 <mistral_gqa_code_sample>`
 
 .. _encoder_decoder_model_samples_inference_inf2_trn1:
 
@@ -211,6 +221,10 @@ Stable Diffusion
      - torch-neuronx
      - * `HuggingFace Stable Diffusion XL 1.0 (1024x1024) Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_sdxl_base_1024_inference.ipynb>`_
        * `HuggingFace Stable Diffusion XL 1.0 Base and Refiner (1024x1024) Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_sdxl_base_and_refiner_1024_inference.ipynb>`_
+
+   * - stable-diffusion-2-inpainting
+     - torch-neuronx
+     - * `stable-diffusion-2-inpainting model Inference on Trn1 / Inf2 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sd2_inpainting_936_624_inference.ipynb>`_
 
 
 
