@@ -40,9 +40,7 @@ If you want to pre-train Llama 70B, you would need to run the following steps -
 
     wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_70b_tp_pp.sh
     chmod +x run_llama_70b_tp_pp.sh
-    mkdir 70B_config && cd 70B_config
     wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/70B_config/config.json
-    cd ..
 
 If you want to pre-train Llama 13B, you would need to run the following steps -
 
@@ -51,9 +49,7 @@ If you want to pre-train Llama 13B, you would need to run the following steps -
 
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_13B_tp_pp.sh
    chmod +x run_llama_13B_tp_pp.sh
-   mkdir 13B_config && cd 13B_config
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/13B_config/config.json
-   cd ..
 
 The below tutorial uses ``Llama70B`` as an example. To run 13B, simply change the script from ``run_llama_70b_tp_pp.sh`` to ``run_llama_13B_tp_pp.sh``.
 
