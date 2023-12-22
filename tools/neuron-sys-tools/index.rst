@@ -9,5 +9,6 @@ System Tools
     Neuron-LS User Guide </tools/neuron-sys-tools/neuron-ls>
     Neuron Profile User Guide </tools/neuron-sys-tools/neuron-profile-user-guide>
     Neuron-Sysfs User Guide </tools/neuron-sys-tools/neuron-sysfs-user-guide>
+    Neuron-DET User guide </tools/neuron-sys-tools/neuron-det>
     NCCOM-TEST User Guide </tools/neuron-sys-tools/nccom-test>
     What's New </release-notes/tools/aws-neuronx-tools>

@@ -4,17 +4,17 @@ Performance Tuning
 ==================
 
 .. important ::
-  NeuronCore Groups (NCG) is deprecated, please see :ref:`eol-ncg` and :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
+  NeuronCore Groups (NCG) have been deprecated. See :ref:`eol-ncg` and :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
 
 This guide is intended to provide the reader with an in-depth
-understanding on how to optimize neural network performance on
+understanding of how to optimize neural network performance on
 Inferentia for both throughput and latency. For simplicity, the guide
-uses TensorFlow and ResNet-50 model as a teaching example to learn how
-choosing between different compile-time optimizations (e.g. Batching and
-NeuronCore Pipeline), as well as model-serving optimizations (e.g.
-multi-threading and dynamic-batching) improves inference performance.
+uses the TensorFlow and ResNet-50 models as teaching examples to show how
+to choose between different compile-time optimizations (e.g., Batching and
+NeuronCore Pipeline), as well as model-serving optimizations (e.g.,
+multi-threading and dynamic-batching) to improve inference performance.
 
-The following guides are considered prerequisites for this tutorial:
+The following guides are considered to be prerequisites for this tutorial:
 
 -  :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb`
 -  :ref:`tensorflow-serving-neurocore-group`
@@ -27,27 +27,26 @@ Batching and pipelining (technical background)
 Neuron provides developers with various performance optimization features.
 
 Two of the most widely used features are batching and pipelining. Both
-techniques aim to keep the data close to the compute engines, but achieve
+techniques aim to keep the data close to the compute engines, but they achieve
 this data locality in different ways. In batching it is achieved by loading
 the data into an on-chip cache and reusing it multiple times for multiple
-different model-inputs, while in pipelining this is achieved by caching all
+different model-inputs, while in pipelining it is achieved by caching all
 model parameters into the on-chip cache across multiple NeuronCores and
 streaming the calculation across them.
 
 As a general rule of thumb, batching is preferred for applications that
 aim to optimize throughput and cost at the expense of latency, while
-pipelining is preferred for applications with high-throughput
+pipelining is preferred for applications with a high-throughput
 requirement under a strict latency budget.
 
 Compiling for batching optimization
 -----------------------------------
 
-To enable the batching optimization, we first need to compile the model
+To enable batching optimization, the model must first be compiled
 for a target batch-size. This is done by specifying the batch size in
 the input tensor's batch dimension during compilation. Users are
-encouraged to evaluate multiple batch sizes in order to determine the
-optimal latency/throughput deployment-point, which is application
-dependent.
+encouraged to evaluate multiple batch size, in order to determine the
+optimal latency/throughput deployment-point, which is application-dependent.
 
 For example, the code snippet below enables batching on a ResNet50
 model, with a batch-size of 5:
@@ -68,7 +67,7 @@ model, with a batch-size of 5:
 
 .. note::
 
-   Depending on the neural network size, Neuron will have a maximum
+   Depending on the size of the neural network, Neuron has a maximum
    batch size that works optimally on Inferentia. If
    an unsupported batch size is used, an internal compiler error message
    will be displayed.
@@ -79,11 +78,11 @@ model, with a batch-size of 5:
 Compiling for pipeline optimization
 -----------------------------------
 
-With NeuronCore Pipeline mode, Neuron stores the model parameters onto
-the Inferentias' local caches, and streams the inference requests across
+In NeuronCore Pipeline mode, Neuron stores the model parameters in
+Inferentias' local cache and streams inference requests across
 the available NeuronCores, as specified by the
 ``--neuroncore-pipeline-cores`` compiler argument. For example, to
-compile the model to fit pipeline size of four Inferentia devices (16
+compile the model to fit a pipeline size of four Inferentia devices (16
 NeuronCores) avaliable in the inf1.6xlarge instance size:
 
 .. code:: python
@@ -99,49 +98,48 @@ NeuronCores) avaliable in the inf1.6xlarge instance size:
                            compiler_args=compiler_args)
 
 The minimum number of NeuronCores needed to run a compiled model can be
-found using Neuron Check Model tool. Please see :ref:`neuron_check_model`.
+found using the Neuron Check Model tool. See :ref:`neuron_check_model`.
 
 Model-serving inference optimizations
 -------------------------------------
 
-In order to fully realize the maximum throughput of the compiled model
+To fully realize the maximum throughput of the compiled model
 (for either batching and pipelining), users need to launch multiple host
 CPU threads to feed inputs into the Neuron pipeline. The number of
-threads need to be larger than the specified maximum number of
+threads needs to be larger than the specified maximum number of
 NeuronCores.
 
 Additionally, dynamic batching can be used to process a larger
 client-side inference batch-size and the framework automatically breaks
-up the user-batch into smaller batch sizes to match the compiled
+up the user-batch into smaller batch sizes, to match the compiled
 batch-size. This technique increases the achievable throughput by hiding
 the framework-to-neuron overhead, and amortizing it over a larger batch
 size. To use dynamic batching, set the argument
-``--dynamic_batch_size=True`` during compilation and send larger
+``--dynamic_batch_size=True`` during compilation and send a larger
 inference batch size (user inference batch size) that is equal to a
 multiple of the compiled batch size.
 
-Both of methods can be applied together if that shows improvement in
+Both methods can be applied together if this improves
 performance. However, multi-threading is always needed as a first step
-to achieve high throughput. You may need to experiment in order to find
-the right optimization settings for your application.
+to achieve high throughput. You need to experiment to find
+optimal settings for your application.
 
-By default, the framework sets the number of outstanding inference
+By default the framework sets the number of outstanding inference
 requests to the total number of NeuronCores plus three. This can be
 changed by setting the NEURON_MAX_NUM_INFERS environment variable. For
-example, if the compiled model includes some CPU partitions (as when
-Neuron compiler decided some operations are more efficient to execute on
-CPU), the number of threads should be increased to account for the
+example, if the compiled model includes CPU partitions (e.g., if the Neuron compiler decides that some operations are more efficient to execute on CPU), 
+the number of threads needs to be increased to account for the
 additional compute performed on the CPU. Note that the available
-instance host memory size should be taken into consideration to avoid
+instance host memory size needs to be taken into consideration to prevent
 out-of-memory errors. As above, you need to experiment in order to find
-the right optimization settings for your application.
+the optimal settings for your application.
 
 .. note::
 
-   By default the framework allocates NeuronCore Group size to
+   By default the framework allocates a NeuronCore Group size to
    match the size of the compiled model. The size of the model is the
    number of NeuronCores limit passed to compiler during compilation
-   (``--neuroncore-pipeline-cores`` option). For more information see
+   (``--neuroncore-pipeline-cores`` option). For more information see the
    :ref:`tensorflow-serving-neurocore-group`.
 
 Other considerations
@@ -150,7 +148,7 @@ Other considerations
 Mixed Precision
 ~~~~~~~~~~~~~~~
 
-You can find more defails about performance and accuracy trade offs
+You can find more information about performance and accuracy trade offs
 in :ref:`neuron-cc-training-mixed-precision`.
 
 
@@ -161,10 +159,10 @@ The Neuron Compiler maintains an evolving list of supported operators
 for each framework: :ref:`neuron-supported-operators`
 
 AWS Neuron handles unsupported operators by partitioning the graph into
-subgraph, and executing them on different targets (e.g. NeuronCore
+subgraphs and executing them on different targets (e.g., NeuronCore
 partition, CPU partition). If the entire model can run on Inferentia
-(i.e. all operators are supported), then the model will be compiled into
-a single subgraph which will be executed by a NeuronCore Group.
+(i.e., all operators are supported), then it will be compiled into
+a single subgraph, which will be executed by a NeuronCore Group.
 
 Debug
 ~~~~~

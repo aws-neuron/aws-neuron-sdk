@@ -1,9 +1,9 @@
 .. _pytorch-neuronx-parallel-compile-cli:
 
-PyTorch Neuron neuron_parallel_compile CLI (``torch-neuronx``)
-==============================================================
+PyTorch NeuronX neuron_parallel_compile CLI
+=============================================
 
-PyTorch Neuron performs just-in-time compilation of graphs during
+PyTorch NeuronX performs just-in-time compilation of graphs during
 execution. At every step, a graph is traced. If the traced graph varies
 from the previous executions, it is compiled by the neuron compiler. For
 large models, the compilation time for each graph can be high. Moreover,

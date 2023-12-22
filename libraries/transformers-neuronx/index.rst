@@ -1,7 +1,7 @@
 .. _transformers_neuronx_readme:
 
 
-Transformers Neuron (``transformers-neuronx``)
+Transformers NeuronX (``transformers-neuronx``)
 ==============================================
 
 .. toctree::

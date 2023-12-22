@@ -6,7 +6,7 @@ Running R-CNNs on Inf1
 This application note demonstrates how to compile and run
 `Detectron2 <https://github.com/facebookresearch/detectron2>`__-based
 R-CNNs on Inf1. It also provides guidance on how to use profiling to
-improve the performance of R-CNN models on Inf1.
+improve performance of R-CNN models on Inf1.
 
 .. contents:: Table of contents
    :local:
@@ -16,70 +16,70 @@ R-CNN Model Overview
 --------------------
 
 Region-based CNN (R-CNN) models are commonly used for object detection
-and image segmentation tasks. A typical R-CNN architecture is composed
+and image segmentation tasks. A typical R-CNN architecture consists
 of the following components:
 
 -  **Backbone:** The backbone extracts features from input images. In
-   some models, the backbone is a Feature Pyramid Network (FPN), which
+   some models the backbone is a Feature Pyramid Network (FPN), which
    uses a top-down architecture with lateral connections to build an
    in-network feature pyramid from a single-scale input. The backbone is
    commonly a ResNet or Vision Transformer based network.
 -  **Region Proposal Network (RPN):** The RPN predicts region proposals
    with a wide range of scales and aspect ratios. RPNs are constructed
-   using convolutional layers and anchor boxes that serve as references
+   using convolutional layers and anchor boxes, which that serve as references
    for multiple scales and aspect ratios.
 -  **Region of Interest (RoI):** The RoI component is used to resize the
-   extracted features that have varying size to the same size so that
+   extracted features of varying size to the same size so that
    they can be consumed by a fully connected layer. RoI Align is
-   typically used instead of RoI Pooling because RoI Align provides
+   typically used instead of RoI Pooling, because RoI Align provides
    better alignment.
 
 The `Detectron2 <https://github.com/facebookresearch/detectron2>`__
 library provides many popular PyTorch R-CNN implementations, including
-R-CNN, Fast R-CNN, Faster R-CNN, and Mask R-CNN. This application note will
-focus on the Detectron2 R-CNN models.
+R-CNN, Fast R-CNN, Faster R-CNN, and Mask R-CNN. This application note 
+focuses on the Detectron2 R-CNN models.
 
 R-CNN Limitations and Considerations on Inferentia (NeuronCore-v1)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-R-CNN models can have a few limitations and considerations on Inferentia
+R-CNN models may have limitations and considerations on Inferentia
 (NeuronCore-v1). See the :ref:`Model Architecture Fit Guidelines
-<rcnn_limitations_inf1>` for more information. These limitatins are not
+<rcnn_limitations_inf1>` for more information. These limitations are not
 applicable to NeuronCore-v2.
 
 Requirements
 ------------
 
-This application note is intended to be run on an ``inf1.2xlarge``. In practice,
+The process described in this application note is intended to be run on an ``inf1.2xlarge``. In practice,
 R-CNN models can be run on any Inf1 instance size.
 
 Verify that this Jupyter notebook is running the Python kernel
 environment that was set up according to the `PyTorch Installation
 Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuron/setup/pytorch-install.html>`__.
-You can select the kernel from the “Kernel -> Change Kernel” option on
-the top of this Jupyter notebook page.
+Select the kernel from the “Kernel -> Change Kernel” option at
+the top of the Jupyter notebook page.
 
 Installation
 ------------
 
-This application note requires the following pip packages:
+This process requires the following pip packages:
 
-1. ``torch==1.11.0``
-2. ``torch-neuron``
-3. ``neuron-cc``
-4. ``opencv-python``
-5. ``pycocotools``
-6. ``torchvision==0.12.0``
-7. ``detectron2==0.6``
+- ``torch==1.11.0``
+- ``torch-neuron``
+- ``neuron-cc``
+- ``opencv-python``
+- ``pycocotools``
+- ``torchvision==0.12.0``
+- ``detectron2==0.6``
 
-The following section builds ``torchvision`` from source and installs
-the ``Detectron2`` package. It also reinstalls the Neuron packages to ensure
-version compability.
+The following section explains how to build ``torchvision`` from source and install
+the ``Detectron2`` package. It also reinstalls the Neuron packages, to ensure
+version compatibility.
 
-The the ``torchvision`` ``roi_align_kernel.cpp`` kernel is modified to
-use OMP threading for multithreaded inference on CPU. This significantly
+The ``torchvision`` ``roi_align_kernel.cpp`` kernel is modified to
+use OMP threading for a multi-threaded inference on the CPU. This significantly
 improves the performance of RoI Align kernels on Inf1: OMP threading
-leads to a 2 - 3x RoI Align latency reduction compared to the default
+leads to a RoI Align latency reduction two to three times larger than the default
 ``roi_align_kernel.cpp`` kernel configuration.
 
 .. code:: ipython3
@@ -122,25 +122,25 @@ leads to a 2 - 3x RoI Align latency reduction compared to the default
 Compiling an R-CNN for Inf1
 ---------------------------
 
-By default, R-CNN models are not compilable on Inf1 because they cannot
+By default, R-CNN models are not compilable on Inf1, because they cannot
 be traced with ``torch.jit.trace``, which is a requisite for inference
 on Inf1. The following section demonstrates techniques for compiling a
 Detectron2 R-CNN model for inference on Inf1.
 
-Specifically, this section creates a standard Detectron2 R-CNN model
+Specifically, this section explains how to create a standard Detectron2 R-CNN model,
 using a ResNet-101 backbone. It demonstrates how to use profiling to
-identify the most compute intensive parts of the R-CNN that should be
+identify the most compute-intensive parts of the R-CNN that need to be
 compiled for accelerated inference on Inf1. It then explains how to
 manually extract and compile the ResNet backbone (the dominant compute
-component) and inject the compiled backbone back into the full model for
+component) and inject the compiled backbone back into the full model, for
 improved performance.
 
 Create a Detectron2 R-CNN Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We create a Detectron2 R-CNN model using the
+Create a Detectron2 R-CNN model using the
 ``COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml`` pretrained weights and
-config file. We also download a sample image from the COCO dataset and
+config file. Download a sample image from the COCO dataset and
 run an example inference.
 
 .. code:: ipython3
@@ -197,10 +197,10 @@ run an example inference.
 Profile the Model
 ~~~~~~~~~~~~~~~~~
 
-We can use the `PyTorch
+Use the `PyTorch
 Profiler <https://pytorch.org/docs/stable/profiler.html>`__ to identify
 which operators contribute the most to the model’s runtime on CPU.
-Ideally, we can compile these compute intensive operators onto Inf1 for
+Ideally, you can compile these compute intensive operators onto Inf1 for
 accelerated inference.
 
 .. code:: ipython3
@@ -213,8 +213,8 @@ accelerated inference.
     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
 
 We see that convolution operators (``aten::convolution``) contribute the
-most to the inference time. By compiling these convolution operators to
-Inf1, we can improve performance of the R-CNN model. We can print the
+most to inference time. By compiling these convolution operators to
+Inf1, you can improve performance of the R-CNN model. Print the
 R-CNN model architecture to see which layers contain the
 ``aten::convolution`` operators:
 
@@ -222,30 +222,29 @@ R-CNN model architecture to see which layers contain the
 
     print(predictor.model)
 
-We observe that the ResNet FPN backbone
+Note that the ResNet FPN backbone
 (`predictor.model.backbone <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/backbone/fpn.py>`__ L17-L162)
 contains the majority of convolution operators in the model. The RPN
 (`predictor.model.proposal_generator <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/proposal_generator/rpn.py>`__ L181-L533)
-also contains a few convolutions. Based on this, we should try to
+also contains several convolutions. Based on this,
 compile the ResNet backbone and RPN onto Inf1 to maximize performance.
 
 Compiling the ResNet backbone to Inf1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this section we demonstrate how to compile the ResNet backbone to
+This section demonstrates how to compile the ResNet backbone to
 Inf1 and use it for inference.
 
-We “extract” the backbone by accessing it using
-``predictor.model.backbone``. We compile the backbone using
-``strict=False`` because the backbone outputs a dictionary. We use a
-fixed input shape (``800 x 800``) for compilation. This will be the
-input shape that all inputs will be resized to during inference. This
+Eextract the backbone by accessing it with
+``predictor.model.backbone``. Compile the backbone using
+``strict=False``, because the backbone outputs a dictionary. Use a
+fixed input shape (``800 x 800``) for compilation, as all inputs will be resized to this shape during inference. This
 section also defines a basic preprocessing function (mostly derived from
 the Detectron2 R-CNN
 `DefaultPredictor <https://github.com/facebookresearch/detectron2/blob/45b3fcea6e76bf7a351e54e01c7d6e1a3a0100a5/detectron2/engine/defaults.py>`__
 module L308-L318) that reshapes inputs to ``800 x 800``.
 
-We also create a ``NeuronRCNN`` wrapper that we use to inject the
+Create a ``NeuronRCNN`` wrapper to inject the
 compiled backbone back into the model by dynamically replacing the
 ``predictor.model.backbone`` attribute with the compiled model.
 
@@ -341,7 +340,7 @@ compiled backbone back into the model by dynamically replacing the
 By running the backbone on Inf1, the overall runtime is already
 significantly improved. The count and runtime of ``aten::convolution``
 operators is also decreased. We now see a ``neuron::forward_v2``
-operator which is the compiled backbone.
+operator that is the compiled backbone.
 
 Optimize the R-CNN model
 ------------------------
@@ -349,26 +348,26 @@ Optimize the R-CNN model
 Compiling the RPN
 ~~~~~~~~~~~~~~~~~
 
-Looking at the profiling, we see that there are still several
+Examine the profiling and note that there are still several
 ``aten::convolution``, ``aten::linear``, and ``aten::addmm`` operators
 that significantly contribute to the model’s overall latency. By
-inspecting the model architecture and code, we can determine that the
+inspecting the model's architecture and code, we can determine that the
 majority of these operators are contained in the RPN module
 (`predictor.model.proposal_generator <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/proposal_generator/rpn.py>`__ L181-L533).
 
-To improve the model performance, we will extract the RPN Head and
-compile it on Inf1 to increase the number of operators that are running
-on Inf1. We only compile the RPN Head because the RPN Anchor Generator
+To improve the model's performance, extract the RPN Head and
+compile it on Inf1 to increase the number of operators running
+on Inf1. You need to compile the RPN Head, because the RPN Anchor Generator
 contains objects that are not traceable with ``torch.jit.trace``.
 
 The RPN Head contains five layers that run inference on multiple resized
-inputs. In order to compile the RPN Head, we create a list of tensors
-that contain the input (“``features``”) shapes that the RPN Head uses at
+inputs. To compile the RPN Head, create a list of tensors
+that contain the input (“``features``”) shapes used by RPN Head on
 each layer. These tensor shapes can be determined by printing the input
 shapes in the RPN Head ``forward`` function
 (``predictor.model.proposal_generator.rpn_head.forward``).
 
-We also create a new ``NeuronRCNN`` wrapper that injects both the
+Create a new ``NeuronRCNN`` wrapper that injects both the
 compiled backbone and RPN Head into the R-CNN model.
 
 .. code:: ipython3
@@ -446,36 +445,36 @@ compiled backbone and RPN Head into the R-CNN model.
             neuron_rcnn([inputs])
     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
 
-By running the compiled backbone and RPN Head on Inf1, the overall
+By running the compiled backbone and RPN Head on Inf1, overall
 runtime is improved. Once again, the number and runtime of
-``aten::convolution`` operators is also decreased. We now see two
-``neuron::forward_v2`` operators which correspond to the compiled
+``aten::convolution`` operators is also decreased. There are now two
+``neuron::forward_v2`` operators, which correspond to the compiled
 backbone and RPN Head.
 
 Fusing the Backbone and RPN Head
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is typically preferable to compile fewer independent models
+It is usually preferable to compile fewer independent models
 (“subgraphs”) on Inf1. Combining models and compiling them as a single
 subgraph enables the Neuron compiler to perform additional optimizations
-and reduces the I/O data transfer between CPU and NeuronCores between
+and reduces I/O data transfer between CPU and NeuronCores between
 each subgraph.
 
-In this section, we “fuse” the ResNet backbone and RPN Head into a
-single model that we compile on Inf1. We create the
-``NeuronFusedBackboneRPNHead`` wrapper to create a compilable model that
+In this section, the ResNet backbone and RPN Head are "fused" into a
+single model to compile on Inf1. Create the
+``NeuronFusedBackboneRPNHead`` wrapper as a compilable model that
 contains both the ResNet backbone
 (`predictor.model.backbone <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/backbone/fpn.py>`__ L17-L162)
 and RPN Head
 (`predictor.model.proposal_generator <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/proposal_generator/rpn.py>`__ L181-L533).
-We also output the ``features`` because it is used downstream by the RoI
-Heads. We compile this ``NeuronFusedBackboneRPNHead`` wrapper as
-``neuron_backbone_rpn``. We then create a separate ``BackboneRPN``
-wrapper that we use to inject the ``neuron_backbone_rpn`` in place of
-the original backbone and RPN Head. We also copy the remainder of the
+Output the ``features`` to be used downstream by the RoI
+Heads. Compile this ``NeuronFusedBackboneRPNHead`` wrapper as
+``neuron_backbone_rpn``, then create a separate ``BackboneRPN``
+wrapper to inject the ``neuron_backbone_rpn`` in place of
+the original backbone and RPN Head. Copy the remainder of the
 RPN ``forward`` code
 (`predictor.model.proposal_generator.forward <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/proposal_generator/rpn.py>`__ L431-L480)
-to create a “fused” backbone + RPN module. Lastly, we re-write the
+to create a “fused” backbone + RPN module. Lastly, re-write the
 ``NeuronRCNN`` wrapper to use the fused backbone + RPN module. The
 ``NeuronRCNN`` wrapper also uses the ``predictor.model`` ``forward``
 code to re-write the rest of the R-CNN model forward function.
@@ -610,26 +609,25 @@ code to re-write the rest of the R-CNN model forward function.
             neuron_rcnn([inputs])
     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
 
-By running the fused backbone + RPN Head on Inf1, the overall runtime is
-improved again. We now see a single ``neuron::forward_v2`` operator with
+By running the fused backbone + RPN Head on Inf1, overall runtime is
+improved even more. We now see a single ``neuron::forward_v2`` operator with
 a lower runtime than the previous combined runtime of the two separate
 ``neuron::forward_v2`` operators.
 
 Compiling the RoI Heads
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-In this section, we extract and compile part of RoI Heads module
-(`predictor.model.roi_heads <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/roi_heads/roi_heads.py>`__ L530-L778).
-This will run most of the remaining ``aten::linear`` and ``aten::addmm``
-operators on Inf1. We cannot extract the entire RoI Heads module because
-it contains unsupported operators. Thus, we create a
-``NeuronBoxHeadBoxPredictor`` wrapper that extracts specific parts of
+This section describes how to extract and compile part of RoI Heads module
+(`predictor.model.roi_heads <https://github.com/facebookresearch/detectron2/blob/v0.6/detectron2/modeling/roi_heads/roi_heads.py>`__ L530-L778) which runs most of the remaining ``aten::linear`` and ``aten::addmm``
+operators on Inf1. The entire RoI Heads module cannot be extracted, because
+it contains unsupported operators. So you need to create a
+``NeuronBoxHeadBoxPredictor`` wrapper, extracts specific parts of
 the ``roi_heads`` for compilation. The example input for compilation is
 the shape of the input into the ``self.roi_heads.box_head.forward``
-function. We write another wrapper, ``ROIHead`` that combines the
+function. Write another wrapper, ``ROIHead`` that combines the
 compiled ``roi_heads`` into the rest of the RoI module. The
 ``_forward_box`` and ``forward`` functions are from the
-``predictor.model.roi_heads`` module. We re-write the ``NeuronRCNN``
+``predictor.model.roi_heads`` module. Lastly, re-write the ``NeuronRCNN``
 wrapper to use the optimized RoI Heads wrapper as well as the fused
 backbone + RPN module.
 
@@ -748,46 +746,46 @@ backbone + RPN module.
             neuron_rcnn([inputs])
     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
 
-Although the overall latency didn’t change significantly, running more
-of the model on Inf1 instead of CPU will free up CPU resources when
+Although the overall latency did not change significantly, running more
+of the model on Inf1 instead of CPU frees up CPU resources when
 multiple models are running in parallel.
 
 End-to-end Compilation and Inference
 ------------------------------------
 
-In this section we provide standalone code that compiles and runs an
+This section provides standalone code that compiles and runs an
 optimized Detectron2 R-CNN on Inf1. Most of the code in this section is
-from the previous sections in this application note and it’s
+from the previous sections in this application note and is
 consolidated here for easy deployment. This section has the following
-main componennts:
+main components:
 
-1. Preprocessing and compilation functions
-2. Wrappers that extract the R-CNN ResNet backbone, RPN Head, and RoI
+- Preprocessing and compilation functions
+- Wrappers that extract the R-CNN ResNet backbone, RPN Head, and RoI
    Head for compilation on Inf1.
-3. A ``NeuronRCNN`` wrapper that creates an optimized end-to-end
+- A ``NeuronRCNN`` wrapper that creates an optimized end-to-end
    Detectron2 R-CNN model for inference on Inf1
-4. Benchmarking code that runs parallelized inference for optimized
+- Benchmarking code that runs parallelized inference for optimized
    throughput on Inf1
 
 Benchmarking
 ~~~~~~~~~~~~
 
-In the benchmarkinng section, we load multiple optimized RCNN models and
-run them in parallel to maximize throughput.
+The benchmarking section explains how to load multiple optimized RCNN models and
+run them in parallel, to maximize throughput.
 
-We use the beta NeuronCore placement API,
+Use the beta NeuronCore placement API,
 ``torch_neuron.experimental.neuron_cores_context()``, to ensure all
 compiled models in an optimized RCNN model are loaded onto the same
-NeuronCore. Please note that the functionality and API of
+NeuronCore. Note that the functionality and API of
 ``torch_neuron.experimental.neuron_cores_context()`` might change in
 future releases.
 
-We define a simple benchmark function that loads four optimized RCNN
+Define a simple benchmark function that loads four optimized RCNN
 models onto four separate NeuronCores, runs multithreaded inference, and
-calculates the corresponding latency and throughput. We benchmark
-various numbers of loaded models to show the impact of parallelism.
+calculates the corresponding latency and throughput. Benchmark
+various numbers of loaded models, to show the impact of parallelism.
 
-We observe that throughput increases (at the cost of latency) when more
+Note that throughput increases (at the cost of latency) when more
 models are run in parallel on Inf1. Increasing the number of worker
 threads also improves throughput.
 
@@ -801,15 +799,15 @@ For latency sensitive applications:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  Each of the five layers in the RPN head can be parallelized to
-   decrease the overall latency.
+   decrease overall latency.
 -  The number of OMP Threads can be increased in the ROI Align kernel.
-   Both of these optimizations will improve latency at the cost of
+   Both of these optimizations improve latency, at the cost of
    decreasing throughput.
 
 For throughput sensitive applications:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  The input batch size can be increased to improve the NeuronCore
+-  The input batch size can be increased to improve NeuronCore
    utilization.
 
 .. code:: ipython3

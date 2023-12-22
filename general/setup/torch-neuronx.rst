@@ -56,3 +56,10 @@ PyTorch Neuron (``torch-neuronx``) Setup
         :link: setup-torch-neuronx-al2-dlami-pytorch
         :link-type: ref
         :class-body: sphinx-design-class-title-small
+
+``torch-neuronx`` setup on Amazon Linux 2023 (AL2023)
+-----------------------------------------------------
+.. card:: Amazon Linux 2023 (Amazon Linux 2023 AMI)
+        :link: setup-torch-neuronx-al2023
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small

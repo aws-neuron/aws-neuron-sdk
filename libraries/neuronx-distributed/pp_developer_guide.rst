@@ -1,7 +1,7 @@
 .. _pp_developer_guide:
 
 Developer guide for Pipeline Parallelism (``neuronx-distributed`` )
-=================================================================
+=====================================================================
 
 Training
 ^^^^^^^^

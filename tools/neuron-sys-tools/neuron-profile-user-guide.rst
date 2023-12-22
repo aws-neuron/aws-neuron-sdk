@@ -99,6 +99,63 @@ For this example, we assume a NEFF is already available as ``file.neff``
 
     $ neuron-profile capture -n file.neff -s profile.ntff
 
+Capturing profiles for multi-worker jobs
+----------------------------------------
+
+``neuron-profile`` can capture profiles for collectives-enabled NEFFs running across multiple Neuron cores, Neuron devices, or even nodes. 
+This is useful for understanding performance and communication overheads when deploying larger distributed models.
+
+The following example, performs a distributed run across all Neuron Devices and Neuron Cores on an Inf2.24xlarge instances, capturing profiles for all 12 workers (one for each core).
+
+::
+
+    $ neuron-profile capture -n file.neff --collectives-workers-per-node 12 -s output/profile.ntff
+
+A profile is saved for each worker in the output directory.
+
+:: 
+
+    $ ls output
+    profile_rank_0.ntff   profile_rank_2.ntff  profile_rank_6.ntff profile_rank_1.ntff   profile_rank_3.ntff  profile_rank_7.ntff
+    profile_rank_10.ntff  profile_rank_4.ntff  profile_rank_8.ntff profile_rank_11.ntff  profile_rank_5.ntff  profile_rank_9.ntff
+
+You can see a summary of each profile using the command ``neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_<i>.ntff``. This output
+includes fields for the Neuron Core (``nc_idx``) and Neuron Device (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
+device 3.
+
+::
+
+    $ neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_5.ntff | grep -e "nd_idx" -e "nc_idx"
+    nc_idx    1
+    nd_idx    2
+
+
+It is also possible to run a distributed job while only capturing a profile for a specific worker instead of all workers. To do that, use the ``--collectives-profile-id`` option.
+
+::
+
+    $ neuron-profile capture -n file.neff --collectives-profile-id 5 --collectives-workers-per-node 12 -s output/profile.ntff
+    $ ls output
+    profile_rank_5.ntff
+
+
+Capturing profiles for multi-node jobs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For multi-node jobs, ``neuron-profile`` must be invoked on each node using the ``collectives-worker-start-id`` to specify the global index of the first worker on the given
+node. For example, for a two node job with a total of four workers and two workers per node, the following commands are run on each node.
+
+::
+
+    # on node 0
+    $ neuron-profile capture -n file.neff --collectives-worker-start-id 0 --collectives-workers-per-node 2 --collectives-worker-count 4
+    # on node 1
+    $ neuron-profile capture -n file.neff --collectives-worker-start-id 2 --collectives-workers-per-node 2 --collectives-worker-count 4
+
+``neuron-profile`` saves the profile for a worker on the node where that worker was launched. So in the case above, ``profile_rank_0.ntff`` and ``profile_rank_1.ntff``
+are saved to node 0, and ``profile_rank_2.ntff`` and ``profile_rank_3.ntff`` are saved to node 1.
+
+
+
 Processing and viewing the profile results
 ------------------------------------------
 
@@ -114,8 +171,37 @@ It will post-process these artifacts and print out a direct link to the profile 
 ::
 
     $ neuron-profile view -n file.neff -s profile.ntff
-    View profile at http://0.0.0.0:3001/profile/n_fdc71a0b582ee3009711a96e59958af921243921
+    View profile at http://localhost:3001/profile/n_fdc71a0b582ee3009711a96e59958af921243921
     ctrl-c to exit
+
+
+Viewing profiles for multi-worker jobs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Profiles from multi-worker jobs can either be viewed individually or in a combined collectives view.
+Since profile data is often similar between workers and processing profile data for all workers can be time-consuming, it is recommended to first 
+explore the profile for a single worker or small subset of workers. Viewing the profile for a specific worker is the same as for single-worker profiles.
+
+::
+
+    $ neuron-profile view -n file.neff -s output/profile_rank_5.ntff
+    View profile at http://localhost:3001/profile/n_fdc71a0b582ee3009711a96e59958af921243921
+
+
+To view the profile for multiple workers, pass the directory containing all worker profiles to ``neuron-profile``.
+
+::
+
+    $ neuron-profile view -n file.neff -d output
+    View profile at http://localhost:3001/profile_cc/p_9a69d907e1350100c9b03745eaa67aa7422842ed
+
+|neuron-profile-multiworker-timeline|
+
+When viewing profiles with the combined collectives view you can easily switch between the timelines of different workers by clicking
+the "Rank <x>" tabs.
+
+Note: the "CC Aggregated View" currently shows no data. This will be populated in an upcoming release. 
+
 
 Viewing multiple profiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,7 +212,7 @@ In this case, we can skip passing arguments to the command, which will direct us
 ::
 
     $ neuron-profile view
-    View a list of profiles at http://0.0.0.0:3001/
+    View a list of profiles at http://localhost:3001/
 
 In a separate window, we can kick off the post-processing without launching another server by passing the ``--ingest-only`` flag.
 
@@ -210,7 +296,7 @@ CLI reference
 
     Takes a given compiled NEFF, executes it, and collect the profile results.
     When no inputs are provided, all-zero inputs are used, which may result in inf or NaNs.
-    It is recommended to use ``--ignore-inference
+    It is recommended to use ``--ignore-inference``
 
     - :option:`-n,--neff` (string): the compiled NEFF to profile
 
@@ -218,8 +304,18 @@ CLI reference
 
     - :option:`--ignore-exec-errors`: ignore errors during execution
 
-    - :option:`inputs` (positional args): List of inputs in the form of <NAME> <FILE_PATH> separated by space. Eg IN1 x.npy IN2 y.npy
+    - :option:`inputs` (positional args): list of inputs in the form of <NAME> <FILE_PATH> separated by space. Eg IN1 x.npy IN2 y.npy
 
+
+    The following ``neuron-profile capture`` arguments are only relevant for multi-worker jobs
+
+    - :option:`--collectives-profile-id` (string): worker id which will be profiled. Passing ``all`` profiles all workers. (default: ``all``)
+
+    - :option:`-r,--collectives-workers-per-node` (int): the number of workers on the current node. The global worker id (rank) of worker n on current node is ``collectives-worker-start-id+n``
+
+    - :option:`--collectives-worker-count` (int): total number of Neuron workers across all nodes for this collectives run.
+
+    - :option:`--collectives-worker-start-id` (int): The rank offset for the first worker on the current node. For example, if node 0 has workers 0,1 and node 1 has workers 2,3 then ``collectives-worker-start-id`` for node 0 and 1 will be 0 and 2, respectively. (default: ``0``)
 
 .. option:: neuron-profile view [parameters]
 
@@ -227,11 +323,15 @@ CLI reference
 
     - :option:`-s,--session-file` (string): the profile results NTFF file location
 
+    - :option:`-d,--session-dir` (string): directory containing profile files for multi-worker runs
+
     - :option:`--db-endpoint` (string): the endpoint of InfluxDB (default: ``http://localhost:8086``)
 
     - :option:`--db-org` (string): the org name of InfluxDB
 
-    - :option:`--port` (int): the port number of the http server (default: 3001)
+    - :option:`--db-bucket` (string): name of the InfluxDB bucket where ingested profile data is stored. Also used in the URL for viewing the profile (Optional)
+
+    - :option:`--port` (int): the port number of the http server (default: ``3001``)
 
     - :option:`--force`: force overwrite an existing profile in the database
 
@@ -287,6 +387,7 @@ Commit changes by running ``sudo sysctl -p``.
 
 .. |neuron-profile-web-timeline| image:: /images/neuron-profile-web-timeline_2-11.png
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
+.. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
 
 When viewing UI "FATAL - Failed metadata query"
 ~~~~~~~~~~~~~~~~~~~

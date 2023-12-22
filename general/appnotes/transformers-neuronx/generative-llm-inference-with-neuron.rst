@@ -12,8 +12,8 @@ Background
 ----------
 
 Large Language Models (LLMs) generate human-like text through a
-process known as generative inference. Fundamentally, generative LLM
-inference generates text outputs given an input prompt, by
+process known as generative inference. Fundamentally, given an input prompt, generative LLM
+inference generates text outputs, by
 iteratively predicting the next token in a sequence.
 
 These models typically take a sequence of integers as input, which
@@ -49,7 +49,7 @@ that illustrates this in code:
     next_token = vocab[next_token_id] 
 
 
-To generate full sentences, the application iteratively invokes the
+To generate entire sentences, the application iteratively invokes the
 LLM to generate the next token's prediction, and at each iteration we
 append the predicted token back into the input:
 
@@ -75,8 +75,8 @@ append the predicted token back into the input:
    output_tokens = [vocab[i] for i in output_token_ids] # "having" "fun" "learning" “Neuron”
 
 
-This process, of predicting a future value (regression), and adding
-them back into the input (auto), is sometimes referred to as
+This process, of predicting a future value (regression) and adding
+it back into the input (auto), is sometimes referred to as
 autoregression. For more details, Jay Mody’s \ `GPT in 60 Lines of
 NumPy <https://jaykmody.com/blog/gpt-from-scratch/>`__\  is an
 excellent writeup on GPTs (Generative Pre-trained Transformers).
@@ -89,30 +89,30 @@ The sheer size of state-of-the-art LLMs, as well as the sequential
 nature of text generation, poses multiple challenges for efficient
 generative LLM deployment.
 
-First, the model is typically sharded across multiple devices in order to fit the model
-in device memory, which creates communication overhead and complexity among devices.
-Second, certain deployments have strict application-level latency bounds and hence require
-substantial latency optimizations, which is especially challenging due to the sequential nature
+First, the model is typically sharded across multiple devices, in order to fit the model
+in device memory. This creates communication overhead and complexity among devices.
+Secondly, certain deployments have strict application-level latency bounds, thus requiring
+substantial latency optimizations. This is especially challenging, due to the sequential nature
 of token-by-token generation. Finally, generating one token at a time often leads to poor 
-device utilization due to low arithmetic intensity, which can be improved via batching (see :ref:`what_batch_size_to_use`).
+device utilization, due to low arithmetic intensity, which can be improved via batching (see :ref:`what_batch_size_to_use`).
 
 The Neuron SDK provides several built-in
-optimizations, to allow you to extract the optimal performance when
+optimizations, allowing you to extract optimal performance when
 deploying LLM models, including:
 
 KV-caching:
 ^^^^^^^^^^^
 
 The `transformers-neuronx <https://github.com/aws-neuron/transformers-neuronx>`__
-library implements the KV-cache optimization, which saves compute
+library implements KV-cache optimization, which saves compute
 resources by reusing previously calculated SelfAttention key-value
 pairs, instead of recalculating them for each generated token.
 
-To illustrate this concept, we show the
+To illustrate this concept, see the
 inner workings of the MaskedSelfAttention operator in the figure below.
 
 At each token generation step, the Query vector of a single current token is multiplied by the Key vectors of all 
-previous tokens in the sequence to create attention scores, and the scores are further multiplied by the Value
+previous tokens in the sequence to create attention scores and these scores are further multiplied by the Value
 vectors of all previous tokens.
 
 
@@ -120,9 +120,9 @@ vectors of all previous tokens.
 
 
 The core idea behind this optimization is that instead of re-computing the Key and Value vectors
-for all previous tokens at each token generation step, Neuron can perform only the incremental
+for all previous tokens at each token generation step, Neuron can perform only incremental
 computation for the current token and re-use previously computed Key/Value vectors from the KV-cache. 
-The Key/Value vector of the current token is also appended to the KV-cache for the next token generation step.
+The Key/Value vector of the current token is also appended to the KV-cache, for the next token generation step.
 
 
 
@@ -130,16 +130,16 @@ The Key/Value vector of the current token is also appended to the KV-cache for t
 
 
 
-As a final observation, one should note that the first token in the
+Note that the first token in the
 output sequence is unique in two ways:
 
 .. container::
 
-   -  There's no KV-cache available at that point
+   -  No KV-cache is available at this point.
    -  Neuron needs to compute the entire KV-cache for <input_len> tokens (the
-      input prompt), rather than one incremental KV-cache entry
+      input prompt), rather than one incremental KV-cache entry.
 
-This means that first-token latency is typically going to be higher
+This means that first-token latency is typically higher
 than the following tokens.
 
 Model sharding:
@@ -148,12 +148,12 @@ Model sharding:
 Neuron enables you to shard the model across devices via Tensor
 Parallelism, Pipeline Parallelism (coming soon), or a combination of the two (coming soon).
 
-Tensor Parallelism shards each layer across multiple devices, and
-allows you to achieve the optimal latency.
+Tensor Parallelism shards each layer across multiple devices,
+enabling you to achieve the optimal latency.
 
 Pipeline Parallelism places different layers on different devices and
-creates a pipeline between them (as the name suggests), and is mostly
-useful when optimizing throughput and/or cost-per-inference.
+creates a pipeline between them (as the name suggests) and is
+useful mainly when optimizing throughput and/or cost-per-inference.
 
 To find the optimal Tensor/Pipeline parallelism configuration for your
 model, see the :ref:`model_partitioning` section.
@@ -161,22 +161,22 @@ model, see the :ref:`model_partitioning` section.
 Computation/communication overlap:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Neuron compiler automatically fuses Collective Communication
-primitives (e.g. AllReduce) with the following computation (e.g.
-GEMM) in the compute graph. This helps to minimize any overhead caused by sharding the
+primitives (e.g., AllReduce) with the following computation (e.g.,
+GEMM) in the compute graph. This helps minimize any overhead caused by sharding the
 model across devices.
 
 Compact data-types:
 ^^^^^^^^^^^^^^^^^^^
-Neuron supports INT8 (coming soon) and FP8 (coming soon), which can significantly reduce memory bandwidth and capacity requirements of the model. 
-This is especially useful for Generative LLM inference which is typically memory bound. Therefore, using a compact data-type can improve the overall
+Neuron supports INT8 and FP8 (coming soon), which can significantly reduce the model's memory bandwidth and capacity requirements. 
+This is especially useful for Generative LLM inference, which is typically memory-bound. Therefore, using a compact data-type can improve the overall
 LLM inference performance with lower latency and higher throughput.
 
 
 Bucketing:
 ^^^^^^^^^^
 The transformers-neuronx library automatically uses bucketing to process the input prompt and output tokens. Bucketing makes
-it possible to handle variable sequence lengths without requiring support for dynamic shapes. We use multiple progressively 
-larger buckets to help minimize the portion of the KV-cache that we need to read for each token.
+it possible to handle variable sequence lengths, without requiring support for dynamic shapes. Using multiple progressively 
+larger buckets helps minimize the portion of the KV-cache that needs to be read for each token.
 
 .. _model_partitioning:
 
@@ -186,7 +186,7 @@ Model partitioning
 How many NeuronCores do I need?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Transformer models are typically defined via a hyper-parameter configuration, such
-as the below:
+as the following:
 
 .. code-block:: python
 
@@ -198,7 +198,7 @@ as the below:
     "n_layer": 64 # number of layers (determines the "depth" of the network)
    }
 
-To determine the number of NeuronCores needed to fit the model, we
+To determine the number of NeuronCores needed to fit the model,
 perform the following calculation:
 
 .. code-block:: python
@@ -219,8 +219,8 @@ And from here, determining the number of NeuronCores is straightforward:
 
 
 
-As an example, we examine running OPT-66B on Inf2, with batch-size of 16, 
-the number of required NeuronCores can be computed as below.
+For example, when running OPT-66B on Inf2, with a batch-size of 16, 
+the number of required NeuronCores can be computed as follows.
 
 
 .. code-block:: python
@@ -238,16 +238,16 @@ the number of required NeuronCores can be computed as below.
                     ## and supports tensor-parallelism degrees 2, 4, 8, 12 and 24 on Inf2.
 
 
-You can use :ref:`neuron_calculator` to compute the number of cores needed for a custom hyper-parameter configuration
+Use the :ref:`neuron_calculator` to compute the number of cores needed for a custom hyper-parameter configuration.
 
 Which parallelism technique should I use?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Tensor parallelism improves latency, at the expense of increased
-intra-layer communication. Thus, as a general rule, we advise to use
+intra-layer communication. Thus, as a general rule, it is recommended to use
 the smallest tensor parallelism degree that meets your latency
-requirement, and then use pipeline/data parallelism from that point on.
+requirement and then use pipeline/data parallelism from that point on.
 
-If latency is not a main concern in your application (e.g. model evaluation),
+If latency is not a major concern in your application (e.g., model evaluation)
 and the primary goal is to maximize throughput (i.e., minimize total cost per token),
 then it is most efficient to use pipeline parallelism and increase the batch-size
 as much as possible.
@@ -259,21 +259,21 @@ What batch-size should I use?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Due to the serial token generation nature of generative LLM inference,
 this workload tends to be extremely memory bound. This means that
-throughput (and thus cost per inference) will improve significantly by
+throughput (and thus cost per inference) improves significantly by
 batching.
 
 As a general rule, we recommend increasing the batch-size to the
-maximum amount that fits within the latency budget (up to batch=256,
-a larger batch-size beyond that typically does not help with performance).
+maximum amount that fits within the latency budget (up to batch=256.
+A larger batch-size typically does not help with performance.)
 
-Note that the KV-cache grows linearly with the batch-size, and can
-grow to a point of running out of memory (typically referred to as
-OOM). If the latency budget allows, we recommend growing the
-batch-size to the maximum value that doesn’t result in OOM.
+Note that the KV-cache grows linearly with the batch-size and can
+grow until it runs out of memory (typically referred to as
+OOM). If the latency budget allows, we recommend increasing the
+batch-size to the maximum value that does not result in OOM.
 
-Users may also consider pipelining the model beyond what’s necessary
+Users may also consider pipelining the model beyond what is necessary
 to fit model parameters / KV-cache on devices, in order to free up
-device-memory space and thus allow the batch-size to grow higher
+device-memory space and thus allow the batch-size to increase
 without causing OOM issues.
 
 

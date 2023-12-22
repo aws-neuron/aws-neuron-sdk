@@ -1,7 +1,7 @@
 .. _neuronx_distributed_setup:
 
-Neuron Distributed Setup (``neuronx-distributed``)
-==================================================
+NeuronX Distributed Setup
+===========================
 
 :ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>` to create a pytorch environment. It is recommended to work out of python
 virtual env so as to avoid package installation issues.

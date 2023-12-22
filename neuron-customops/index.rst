@@ -1,7 +1,7 @@
 .. _neuron_c++customops:
 
 Neuron Custom C++ Operators [Beta]
-==========================================
+==================================
 
 
 .. include:: /neuron-customops/customops-intro.txt

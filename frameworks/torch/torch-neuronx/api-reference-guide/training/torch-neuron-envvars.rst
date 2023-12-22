@@ -1,9 +1,9 @@
 .. _pytorch-neuronx-envvars:
 
-PyTorch Neuron Environment Variables (``torch-neuronx``)
-========================================================
+PyTorch NeuronX Environment Variables
+======================================
 
-Environment variables allow modifications to PyTorch Neuron behavior
+Environment variables allow modifications to PyTorch NeuronX behavior
 without requiring code change to user script. It is recommended to set
 them in code or just before invoking the python process, such as
 ``NEURON_FRAMEWORK_DEBUG=1 python3 <script>`` to avoid inadvertently

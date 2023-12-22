@@ -1,7 +1,7 @@
 .. _transformers_neuronx_tutorials:
 
-Transformers Neuron Tutorials (``transformers-neuronx``)
-========================================================
+Transformers NeuronX Tutorials 
+===============================
 
 .. toctree::
     :maxdepth: 1

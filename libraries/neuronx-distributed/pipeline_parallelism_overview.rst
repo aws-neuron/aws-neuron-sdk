@@ -1,7 +1,7 @@
 .. _pipeline_parallelism_overview:
 
 Pipeline Parallelism Overview 
-===========================
+===============================
 
 Pipeline parallelism is a technique used in deep learning model training to improve efficiency 
 and reduce the training time of large neural networks.

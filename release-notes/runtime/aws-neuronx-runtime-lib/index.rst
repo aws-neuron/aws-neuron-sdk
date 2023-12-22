@@ -32,6 +32,22 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.19.5.0]
+---------------------------------
+Date: 12/21/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added Out-of-bound error detection logic for Gather/Scatter operations
+   * Out-of-bound error message "failed to run scatter/gather (indirect memory copy), due to out-of-bound access" will be displayed on an OOB error
+   * The runtime execution will return an “Out of Bound” error return code in the case an OOB error occurs
+      * NRT_EXEC_OOB = 1006
+* Improved Neff not supported error message to list out runtime supported features vs features used by the Neff
+   * Example output: "NEFF version 2.0 uses unsupported features: [0x100000]. Neuron Runtime NEFF supported features map: [0x1ff]. Please update the aws-neuronx-runtime-lib package"
+* Increased limit of multicore custom ops functions
+   * Total number of CustomOps in a model has been increased to 10.
+   * Note: these 10 ops have to reside in one .so, as a result, they either have to be all single core op or all multicore op.
+
 
 Neuron Runtime Library [2.18.15.0]
 ---------------------------------

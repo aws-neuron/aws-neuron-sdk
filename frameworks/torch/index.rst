@@ -39,19 +39,19 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
 
     :ref:`torch-neuron_vs_torch-neuronx`
 
-.. card:: PyTorch Neuron(``torch-neuronx``) for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
+.. card:: PyTorch NeuronX for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
     :link: inference-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
 
-.. card:: PyTorch Neuron(``torch-neuron``) for Inference on ``Inf1``
+.. card:: PyTorch Neuron for Inference on ``Inf1``
     :link: inference-torch-neuron
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
     
-.. card:: PyTorch Neuron(``torch-neuronx``) for Training on ``Trn1`` / ``Trn1n``
+.. card:: PyTorch NeuronX for Training on ``Trn1`` / ``Trn1n``
     :link: training-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small

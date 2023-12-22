@@ -1,13 +1,13 @@
 .. _nrt-configuration:
 
-Neuron Runtime Configuration
+NeuronX Runtime Configuration
 ============================
 
-Neuron Runtime is responsible for executing ML models on Neuron Devices.  Neuron Runtime determines which NeuronCore will execute which model and how to execute it.
-Configuration of the Neuron Runtime is controlled through the use of Environment variables at the process level.  By default, Neuron framework extensions will take care of Neuron Runtime configuration on the user's behalf.  Explicit configurations are also possible when attempting to achieve a desired behavior.
+NeuronX Runtime is responsible for executing ML models on Neuron Devices. NeuronX Runtime determines which NeuronCore will execute which model and how to execute it.
+Configuration of the NeuronX Runtime is controlled through the use of Environment variables at the process level.  By default, Neuron framework extensions will take care of NeuronX Runtime configuration on the user's behalf.  Explicit configurations are also possible when attempting to achieve a desired behavior.
 
 This guide provides an overview of the different environment variables available to
-configure Neuron Runtime behavior.
+configure NeuronX Runtime behavior.
 
 .. list-table:: Environment Variables
    :widths: 25 60 20 50 20 50
@@ -80,7 +80,7 @@ NeuronCore Allocation
   see :ref:`neuron-migrating-apps-neuron-to-libnrt` for more details.
 
 
-By default, Neuron Runtime initializes all the cores present in the system and reserves them for the current process.
+By default, NeuronX Runtime initializes all the cores present in the system and reserves them for the current process.
 
 .. note::
 
@@ -145,7 +145,7 @@ Notes
 
 Logging and debug-ability
 -------------------------
-By default, Neuron Runtime logs to syslog with verbose level of *INFO* and only *ERROR* s are logged in console.
+By default, NeuronX Runtime logs to syslog with verbose level of *INFO* and only *ERROR* s are logged in console.
 The following code snippet shows ways to increase/decrease the log level.
 
 ::
@@ -153,7 +153,7 @@ The following code snippet shows ways to increase/decrease the log level.
  NEURON_RT_LOG_LEVEL=INFO myapp.py         # Sets the log level for syslog and console to INFO
  NEURON_RT_LOG_LOCATION=console NEURON_RT_LOG_LEVEL=QUIET myapp.py    # Completely disables console logging.
 
-By default, Neuron Runtime expects the NeuronCore to complete execution of any model with in 2 seconds.
+By default, NeuronX Runtime expects the NeuronCore to complete execution of any model with in 2 seconds.
 If NeuronCore didnt complete the execution within 2 seconds then runtime would fail the execution with timeout error.
 Most of the models takes few milliseconds to complete so 2 seconds(2000 milliseconds) is more than adequate.
 However if your model is expected to run more than 2 seconds then you can increase the timeout with NEURON_RT_EXEC_TIMEOUT.
@@ -164,7 +164,7 @@ However if your model is expected to run more than 2 seconds then you can increa
 
 Checksum
 --------
-To execute a model(NEFF), Neuron Runtime needs to load the NEFF file into NeuronCore and run.
+To execute a model(NEFF), NeuronX Runtime needs to load the NEFF file into NeuronCore and run.
 Neuron Runtime provides a way to do checksum validation on each NEFF file while loading to validate the file is not corrupted.
 This option is off by default to avoid performance penalty during model load time(~50%).
 
@@ -176,7 +176,7 @@ This option is off by default to avoid performance penalty during model load tim
  
 Shared Weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
 --------------------------------------------------------
-By default, Neuron Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with Neuron Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
+By default, NeuronX Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with NeuronX Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
 
 Note: the use of this flag requires the model to be loaded with the multi-instance feature (see :ref:`torch_core_placement_api`).
 

@@ -26,7 +26,7 @@ PyTorch users to perform large language model (LLM) inference on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
 Model classes status
-~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 -  `BLOOM <https://huggingface.co/docs/transformers/model_doc/bloom>`__: [Beta]
 -  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Beta]
@@ -34,9 +34,9 @@ Model classes status
 -  `GPT-Neox <https://huggingface.co/docs/transformers/model_doc/gpt_neox>`__: [Beta]
 -  `LLaMA <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Beta]
 -  `LLaMA 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Beta]
--  `OPT <https://huggingface.co/docs/transformers/model_doc/opt>`__: [Beta]
+-  `Mistral <https://huggingface.co/docs/transformers/main/model_doc/mistral>`__: [Beta]
 
---------------------------
+
 Model features
 --------------------------
 
@@ -53,12 +53,12 @@ Model features
    * - BLOOM
      - Yes
      - Yes
-     - No
+     - Yes
 
    * - GPT2
      - Yes
      - Partial
-     - Partial
+     - Yes
 
    * - GPT-J
      - No
@@ -73,18 +73,49 @@ Model features
    * - LLaMA
      - Yes
      - Yes
-     - No
+     - Yes
 
    * - LLaMA 2
      - Yes
      - Yes
-     - No
-
-   * - OPT
      - Yes
-     - No
-     - No
 
+   * - Mistral
+     - Yes
+     - Yes
+     - Yes
+
+
+Release [0.9.474]
+----------------------
+Date: 12/21/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- [Llama] [Beta] Added support for Llama-2 70b.
+- [Mistral] [Beta] Added support for Mistral 7b.
+- [Beta] Added support for PyTorch 2.1.
+- [Beta] Added support for Grouped Query Attention (GQA).
+- [Beta] Added support for ``safetensors`` serialization.
+- [Llama] [Beta] Added support for early stopping in the ``sample_llama`` function.
+- [GPT2] [Beta] Added sparse attention support.
+- [Stable] Added support for ``BatchNorm``.
+- Use the ``--auto-cast=none`` compiler flag by default for all models. This flag improves accuracy for ``float32`` operations.
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Resolved an issue in ``top_p`` in the ``sample_llama`` function so that it now selects the same number of tokens that the Hugging Face ``top_p`` implementation selects.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- There is a known compiler issue for inference of some configurations of Llama-2 70b that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70b accuracy issues occur.
+- There are known compiler issues impacting inference accuracy of certain model configurations of ``Llama-2-13b`` when ``amp = fp16`` is used. If this issue is observed, ``amp=fp32`` should be used as a work around.  This issue will be addressed in future Neuron releases.
 
 Release [0.8.268]
 ----------------------

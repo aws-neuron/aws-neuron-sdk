@@ -1,7 +1,7 @@
 .. _torch_neuronx_lazy_async_load_api:
 
-PyTorch Neuron (``torch-neuronx``) Lazy and Asynchronous Loading API
-=============================
+PyTorch NeuronX Lazy and Asynchronous Loading API
+===================================================
 
 The :func:`torch_neuronx.lazy_load` and :func:`torch_neuronx.async_load` Python APIs allow
 for more fine-grained control of loading a model onto the Neuron cores. They are designed to

@@ -1,7 +1,7 @@
 .. _torch_neuronx_core_placement_api:
 
-PyTorch Neuron (``torch-neuronx``) NeuronCore Placement APIs **[Beta]**
-===============================================================================
+PyTorch NeuronX NeuronCore Placement APIs **[Beta]**
+============================================================================
 
 .. warning::
 

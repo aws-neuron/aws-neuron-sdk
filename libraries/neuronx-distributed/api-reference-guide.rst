@@ -1,7 +1,7 @@
 .. _neuronx_distributed_api_guide
 
 App Reference Guide (``neuronx-distributed`` )
-====================================
+===============================================
 
 .. toctree::
     :maxdepth: 1

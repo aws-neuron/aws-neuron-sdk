@@ -6,6 +6,7 @@ import torch_neuronx
 
 from diffusers import DiffusionPipeline
 from diffusers.models.unet_2d_condition import UNet2DConditionOutput
+from transformers.models.clip.modeling_clip import CLIPTextModelOutput
 
 import time
 import math
@@ -102,6 +103,18 @@ class NeuronUNet(nn.Module):
                                added_cond_kwargs["text_embeds"],
                                added_cond_kwargs["time_ids"])[0]
         return UNet2DConditionOutput(sample=sample)
+
+class TextEncoderOutputWrapper(nn.Module):
+    def __init__(self, traceable_text_encoder, original_text_encoder):
+        super().__init__()
+        self.traceable_text_encoder = traceable_text_encoder
+        self.config = original_text_encoder.config
+        self.dtype = original_text_encoder.dtype
+        self.device = original_text_encoder.device
+
+    def forward(self, text_input_ids, output_hidden_states=True):
+        out_tuple = self.traceable_text_encoder(text_input_ids)
+        return CLIPTextModelOutput(text_embeds=out_tuple[0], last_hidden_state=out_tuple[1], hidden_states=out_tuple[2])
     
     
 # --- Load all compiled models and run pipeline ---
@@ -110,6 +123,8 @@ model_id = "stabilityai/stable-diffusion-xl-base-1.0"
 decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
+text_encoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder/model.pt')
+text_encoder_2_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder_2/model.pt')
 
 pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
 
@@ -121,6 +136,8 @@ pipe.unet.unetwrap = torch_neuronx.DataParallel(torch.jit.load(unet_filename), d
 # Load other compiled models onto a single neuron core.
 pipe.vae.decoder = torch.jit.load(decoder_filename)
 pipe.vae.post_quant_conv = torch.jit.load(post_quant_conv_filename)
+pipe.text_encoder = TextEncoderOutputWrapper(torch.jit.load(text_encoder_filename), pipe.text_encoder)
+pipe.text_encoder_2 = TextEncoderOutputWrapper(torch.jit.load(text_encoder_2_filename), pipe.text_encoder_2)
 
 
 prompt = "a photo of an astronaut riding a horse on mars"

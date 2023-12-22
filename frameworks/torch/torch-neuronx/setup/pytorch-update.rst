@@ -1,7 +1,7 @@
 .. _pytorch-neuronx-update:
 
-Update to latest PyTorch Neuron  (``torch-neuronx``)
-====================================================
+Update to latest PyTorch NeuronX 
+=================================
 
 .. tab-set::
 

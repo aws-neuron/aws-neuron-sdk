@@ -93,7 +93,7 @@ After that restart the containerd daemon
 
 .. code:: bash
 
-   sudo systemcl restart containerd
+   sudo systemctl restart containerd
 
 For cri-o runtime, setup cri-o to use oci-neuron OCI runtime.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,4 +111,4 @@ After that restart the containerd daemon
 
 .. code:: bash
 
-   sudo systemcl restart cri-o
+   sudo systemctl restart cri-o

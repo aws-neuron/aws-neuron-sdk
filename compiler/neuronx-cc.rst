@@ -1,6 +1,6 @@
 .. _neuronx-cc-index:
 
-Neuron Compiler for Trn1 & Inf2
+NeuronX Compiler for Trn1 & Inf2
 ===============================
 
 .. toctree::

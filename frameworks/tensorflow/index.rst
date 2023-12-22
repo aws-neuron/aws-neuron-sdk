@@ -34,14 +34,14 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
 
     
 
-.. card:: Tensorflow Neuron(``tensorflow-neuronx``) for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
+.. card:: Tensorflow NeuronX for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
     :link: inference-tensorflow-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
 
 
-.. card:: Tensorflow Neuron(``tensorflow-neuron``) for Inference on ``Inf1``
+.. card:: Tensorflow Neuron for Inference on ``Inf1``
     :link: inference-tensorflow-neuron
     :link-type: ref
     :class-body: sphinx-design-class-title-small

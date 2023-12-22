@@ -1,4 +1,4 @@
-Misc(Neuron Runtime)
+Misc (NeuronX Runtime)
 ====================
 
 .. toctree::

@@ -1,8 +1,8 @@
 
 .. _pytorch-neuronx-ubuntu22-update:
 
-Update to latest PyTorch Neuron  (``torch-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Update to latest PyTorch NeuronX
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.
 
@@ -22,3 +22,11 @@ If you already have a previous Neuron release installed, this section provide li
         .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 155
             :end-line: 156
+
+    .. tab-item:: PyTorch 2.1 [BETA]
+
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
+            :start-line: 191
+            :end-line: 192

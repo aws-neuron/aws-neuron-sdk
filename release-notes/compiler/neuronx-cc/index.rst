@@ -7,11 +7,22 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.12.54.0]
+-------------------------
+Date: 12/21/2023
+
+* The compiler now generates instructions to check if a model references an embedding table with an illegal index. The check is made at model execution time. If an attempted invalid table index is encountered, the model execution will continue and the user will see an error similar to:
+
+      WARNING: Received notification generated at runtime: failed to run scatter/gather (indirect memory copy with branch_label_id = xx), due to out-of-bound access.
+
+When this occurs, users are encouraged to review the model's gather/scatter input values to determine if there is a coding error.
+
+
 Neuron Compiler [2.11.0.35]
 -------------------------
 Date: 11/17/2023
 
-* This release addresses performance related issues when traning through ``neuronx-nemo-megatron`` library.
+* This release addresses performance related issues when training through ``neuronx-nemo-megatron`` library.
 
 
 Neuron Compiler [2.11.0.34]

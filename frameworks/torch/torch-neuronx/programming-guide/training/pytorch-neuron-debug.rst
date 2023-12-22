@@ -1,7 +1,7 @@
 .. _pytorch-neuronx-debug:
 
-How to debug models in PyTorch Neuron (``torch-neuronx``)
-=========================================================
+How to debug models in PyTorch NeuronX 
+=======================================
 
 .. contents:: Table of Contents
    :local:

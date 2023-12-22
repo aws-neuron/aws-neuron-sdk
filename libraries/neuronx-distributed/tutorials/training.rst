@@ -34,8 +34,8 @@ Let’s download the scripts and datasets for pretraining.
 
    mkdir -p ~/examples/tp_dp_bert_hf_pretrain
    cd ~/examples/tp_dp_bert_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_bert_hf_pretrain/tp_dp_bert_large_hf_pretrain_hdf5.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_bert_hf_pretrain/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_bert_hf_pretrain/tp_dp_bert_large_hf_pretrain_hdf5.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_bert_hf_pretrain/requirements.txt
    python3 -m pip install -r requirements.txt
 
 Next let’s download the tokenizer and the sharded datasets:

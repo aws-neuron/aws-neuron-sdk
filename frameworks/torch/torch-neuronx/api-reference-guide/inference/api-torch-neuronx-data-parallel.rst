@@ -1,7 +1,7 @@
 .. _torch_neuronx_dataparallel_api:
 
-PyTorch Neuron (``torch-neuronx``) DataParallel API
-=============================
+PyTorch NeuronX DataParallel API
+==================================
 
 The :func:`torch_neuronx.DataParallel` Python API implements data parallelism on
 :class:`~torch.jit.ScriptModule` models created by 

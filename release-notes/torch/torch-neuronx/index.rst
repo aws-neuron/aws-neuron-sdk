@@ -14,6 +14,128 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [2.1.1.2.0.0b0] (Beta)
+------------------------------
+
+Date: 12/21/2023
+
+Summary
+~~~~~~~
+
+Introducing the beta release of Torch-Neuronx with PyTorch 2.1 support.
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This version of Torch-Neuronx 2.1 supports:
+
+* (Inference) Transformers-Neuronx
+* (Inference) Torch-Neuronx Trace API
+* (Training) Neuronx-Distributed training
+* (Training) Torch-Neuronx training
+* (Training) New snapshotting capability enabled via the XLA_FLAGS environment variable (see :ref:`debug guide <pytorch-neuronx-debug>`)
+
+Known Limitations
+~~~~~~~~~~~~~~~~~
+
+The following features are not yet supported in this version of Torch-Neuronx 2.1: 
+
+* (Training/Inference) Neuron Profiler
+* (Inference) Neuronx-Distributed inference
+* (Training) Nemo Megatron
+* (Training) GSPMD
+* (Training) TorchDynamo (torch.compile)
+* (Training) `analyze` feature in `neuron_parallel_compile` 
+* (Training) HuggingFace Trainer API (see `Known Issues` below)
+
+Additional limitations are noted in the `Known Issues` section below.
+
+Known Issues
+~~~~~~~~~~~~
+
+Please see the :ref:`Introducing PyTorch 2.1 Support (Beta)<introduce-pytorch-2-1>` for a full list of known issues.
+
+Lower performance for BERT-Large
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see 8% less performance when running BERT-Large pretraining tutorial with Torch-Neuronx 2.1.
+
+Divergence (non-convergence) of loss for BERT/LLaMA when using release 2.16 compiler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when using release 2.16 compiler version 2.12.54.0+f631c2365, you may see divergence (non-convergence) of loss curve. To workaround this issue, please use release 2.15 compiler version 2.11.0.35+4f5279863.
+
+Error "Attempted to access the data pointer on an invalid python storage" when using HF Trainer API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if using HuggingFace Transformers Trainer API to train (i.e. :ref:`HuggingFace Trainer API fine-tuning tutorial<torch-hf-bert-finetune>`), you may see the error "Attempted to access the data pointer on an invalid python storage". This is a known issue https://github.com/huggingface/transformers/issues/27578 and will be fixed in a future release.
+
+
+Release [1.13.1.1.13.0]
+-----------------------
+Date: 12/21/2023
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added :ref:`Weight Replacement API For Inference<_torch_neuronx_replace_weights_api>`)
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Add bucketting logic to control the size of tensors for all-gather and reduce-scatter
+- Fixed ZeRO-1 bug for inferring local ranks in 2-D configuration (https://github.com/pytorch/xla/pull/5936)
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX`` or using ``jemallo`` library (see https://github.com/aws-neuron/aws-neuron-sdk/issues/728).
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`torch.argmin` produces incorrect results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`torch.argmin` produces incorrect results.
+
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
+
 Release [2.0.0.2.0.0b0] (Beta)
 ------------------------------
 

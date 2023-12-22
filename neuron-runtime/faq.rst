@@ -1,6 +1,6 @@
 .. _neuron-runtime-faq:
 
-Neuron runtime FAQ
+NeuronX runtime FAQ
 ==================
 
 .. contents:: Table of Contents
@@ -31,7 +31,7 @@ Do I need to change my application launch command?
 --------------------------------------------------
 No.
 
-How do I restart/start/stop the Neuron Runtime?
+How do I restart/start/stop the NeuronX Runtime?
 -----------------------------------------------
 Since Neuron Runtime is a library, starting/stopping application would result in starting/stopping the Neuron Runtime.
 

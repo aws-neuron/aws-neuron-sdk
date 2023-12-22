@@ -8,6 +8,34 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.16.1.0]
+------------------------
+Date: 12/21/2023
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* First release of the Neuron Distributed Event Tracing tool ``neuron-det`` to visualize execution for
+  multi-node workloads.
+  Get started with the :ref:`neuron-det-ug`.
+* ``neuron-profile`` now has the ability to capture multi-worker jobs.
+  See the :ref:`neuron-profile-ug` for more info.
+* Added terminology descriptions to ``neuron-profile`` summary statistics.
+  To view through the CLI, use ``neuron-profile view --terminology``
+  To view in the UI, hover over the key in the summary.
+* Added optional flags to ``neuron-profile view`` to change the InfluxDB bucket name (``--db-bucket <bucket name>``)
+  and profile display name (``--display-name <name>``).
+
+Bug fixes
+^^^^^^^^^
+* Fixed bug where GPSimd summary values were missing in the profile summary.
+* Fixed issue in ``nccom-test`` to no longer expect Neuron Device 0 in a container environemnt.
+* Fixed issue in ``nccom-test`` to no longer require the instance launching ``nccom-test`` to be participating in the workload.
+
+Known issues
+^^^^^^^^^^^^
+* Execution time reported in ``neuron-profile`` is sometimes in-accurate due to a bug in how the time is captured.  The bug will be address in upcoming Neuron releases.
+
+
 Neuron Tools  [2.15.4.0]
 ------------------------
 Date: 10/26/2023

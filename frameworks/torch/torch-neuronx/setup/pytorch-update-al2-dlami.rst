@@ -1,8 +1,8 @@
 
 .. _pytorch-neuronx-al2-dlami-update:
 
-Update to latest PyTorch Neuron  (``torch-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Update to latest PyTorch NeuronX 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.
 

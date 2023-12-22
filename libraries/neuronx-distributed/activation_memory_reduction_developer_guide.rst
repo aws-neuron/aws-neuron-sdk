@@ -1,7 +1,7 @@
 .. _activation_memory_reduction_developer_guide:
 
 Developer guide for Activation Memory reduction (``neuronx-distributed`` )
-=================================================================
+============================================================================
 
 Sequence Parallelism
 ^^^^^^^^^^^^^^^^^^^^

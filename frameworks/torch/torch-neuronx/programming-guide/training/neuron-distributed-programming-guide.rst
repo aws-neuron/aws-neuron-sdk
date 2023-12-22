@@ -1,13 +1,13 @@
 .. _neuronx-distributed:
 
-NeuronxDistributed
-==================
+NeuronX Distributed
+====================
 
 .. contents:: Table of Contents
    :local:
    :depth: 2
 
-Neuronx Distributed is a package for supporting different distributed
+NeuronX Distributed is a package for supporting different distributed
 training/inference mechanism for Neuron devices. It would provide xla
 friendly implementations of some of the more popular distributed
 training/inference techniques. As the size of the model scales, fitting

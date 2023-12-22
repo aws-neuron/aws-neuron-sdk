@@ -1,10 +1,10 @@
 .. _torch_neuronx_trace_api:
 
-PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
-============================================================
+PyTorch NeuronX Tracing API for Inference
+===========================================
 
-.. py:function:: torch_neuronx.trace(func, example_inputs, *, compiler_workdir=None, compiler_args=None)
-
+.. py:function:: torch_neuronx.trace(func, example_inputs, *_, input_output_aliases={}, compiler_workdir=None, compiler_args=None, partitioner_config=None, inline_weights_to_neff=True)
+    
     Trace and compile operations in the ``func`` by executing it using
     ``example_inputs``.
 
@@ -29,19 +29,32 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
        computation graph.
     :arg ~torch.Tensor,tuple[~torch.Tensor] example_inputs: A tuple of example
        inputs that will be passed to the ``func`` while tracing.
-    
+
     :keyword dict input_output_aliases: Marks input tensors as state tensors
-     which are device tensors. 
+       which are device tensors. 
     :keyword str compiler_workdir: Work directory used by
        |neuronx-cc|. This can be useful for debugging and/or inspecting
        intermediary |neuronx-cc| outputs
     :keyword str,list[str] compiler_args: List of strings representing
        |neuronx-cc| compiler arguments. See :ref:`neuron-compiler-cli-reference-guide`
        for more information about compiler options.
+    :keyword PartitionerConfig partitioner_config: A PartitionerConfig object,
+        which can be optionally supplied if there are unsupported ops in the model 
+        that need to be partitioned out to CPU.
+    :keyword bool inline_weights_to_neff: A boolean indicating whether the weights should be
+        inlined to the neff. If set to False, weights will be seperated from the neff.
+        The default is `True`.
 
     :returns: The traced :class:`~torch.jit.ScriptModule` with the embedded
        compiled Neuron graph. Operations in this module will execute on Neuron.
     :rtype: ~torch.jit.ScriptModule
+
+    .. warning::
+
+      Behavior Change! The use of using args for kwargs is deprecated starting from release 2.15.0 (``torch-neuronx==1.13.1.1.12.0``).
+      The current behavior is that a warning will be raised, but ``torch_neuronx.trace()`` will attempt to infer the keyword
+      arguments. This is likely to become an error in future releases, so to avoid the warning/error, assign kwargs as kwargs and
+      not args.
 
     .. rubric:: Notes
 
@@ -118,26 +131,42 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
 
         import torch
         import torch_neuronx
-
         def func(x, y):
             return 2 * x + y
-
         example_inputs = torch.rand(3), torch.rand(3)
-
         # Runs `func` with the provided inputs and records the tensor operations
-        trace = torch_neuronx.trace(func, example_inputs)
-
+        trace = torch.neuronx.trace(func, example_inputs)
         # `trace` can now be run with the TorchScript interpreter or saved
         # and loaded in a Python-free environment
         torch.jit.save(trace, 'func.pt')
-
         # Executes on a NeuronCore
         loaded = torch.jit.load('func.pt')
         loaded(torch.rand(3), torch.rand(3))
-
-
-
+    
     *Module Compilation*
+
+    .. code-block:: python
+
+        import torch
+        import torch_neuronx
+        import torch.nn as nn
+        class Model(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.conv = nn.Conv2d(1, 1, 3)
+            def forward(self, x):
+                return self.conv(x) + 1
+        model = Model()
+        model.eval()
+        example_inputs = torch.rand(1, 1, 3, 3)
+        # Traces the forward method and constructs a `ScriptModule`
+        trace = torch_neuronx.trace(model, example_inputs)
+        torch.jit.save(trace, 'model.pt')
+        # Executes on a NeuronCore
+        loaded = torch.jit.load('model.pt')
+        loaded(torch.rand(1, 1, 3, 3))
+
+    *Weight Separated Module*
 
     .. code-block:: python
 
@@ -160,30 +189,18 @@ PyTorch Neuron (``torch-neuronx``) Tracing API for Inference
         example_inputs = torch.rand(1, 1, 3, 3)
 
         # Traces the forward method and constructs a `ScriptModule`
-        trace = torch_neuronx.trace(model, example_inputs)
+        trace = torch_neuronx.trace(model, example_inputs,inline_weights_to_neff=False)
+
+        # Model can be saved like a normally traced model
         torch.jit.save(trace, 'model.pt')
 
-        # Executes on a NeuronCore
+        # Executes on a NeuronCore like a normally traced model
         loaded = torch.jit.load('model.pt')
         loaded(torch.rand(1, 1, 3, 3))
+    
+    .. note::
 
-
-.. |neuron-cc| replace:: :ref:`neuron-cc <neuron-compiler-cli-reference>`
-.. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`
-.. |NeuronCore-v1| replace:: :ref:`NeuronCore-v1 <neuroncores-v1-arch>`
-.. |NeuronCore-v2| replace:: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`
-
-.. |HloModule| replace:: HloModule
-
-.. |inf1| replace:: :ref:`inf1 <aws-inf1-arch>`
-.. |trn1| replace:: :ref:`trn1 <aws-trn1-arch>`
-
-.. |bucketing| replace:: :ref:`bucketing_app_note`
-.. |nrt-configuration| replace:: :ref:`nrt-configuration`
-
-.. _torch-xla: https://github.com/pytorch/xla
-.. _torchscript: https://pytorch.org/docs/stable/jit.html
-
+      Weight Separated models can have its weights replaced via the `torch_neuronx.replace_weights` API.
 
 .. _torch-neuronx-dynamic-batching:
 
@@ -241,3 +258,127 @@ Dynamic Batching
     # Run inference on inputs with batch size of 8
     # different than the batch size used in compilation (tracing)
     ouput_batch_8 = neuron_net_dynamic_batch(inputs_batch_8)
+
+Graph Partitioner
+~~~~~~~~~~~~~~~~~
+
+.. py:function:: torch_neuronx.PartitionerConfig(*,trace_kwargs=None,model_support_percentage_threshold=0.5,min_subgraph_size=-1,max_subgraph_count=-1,ops_to_partition=None,analyze_parameters=None)
+
+    Allows for Neuron to trace a model with unsupported operators and partition these operators to CPU.
+
+    This model will contain subgraphs of Neuron and CPU submodules, but it is executed like one model,
+    and can be saved and loaded like one model as well.
+
+    The graph partitioner is customized using this class, and is *only* enabled (disabled by default) from the ``torch_neuronx.trace`` API by setting ``partitioner_config``
+    keyword argument to this class. Below are the various configuration options.
+
+    :arg Dict trace_kwargs: Used if you need to pass trace kwargs to the Neuron subgraphs, such as the
+      ``compiler_workdir`` and/or ``compiler_args``. The default is ``None`` corresponding to the default trace args.
+    
+    :arg float model_support_percentage_threshold: A number between 0 to 1 representing
+      the maximum allowed percentage of operators that must be supported.
+      If the max is breached, the function will throw a ValueError.
+      Default is ``0.5`` (i.e 50% of operators must be supported by Neuron)
+    
+    :arg int min_subgraph_size: The minimum number of operators in a subgraph.
+      Can be ``>= 1`` or ``== -1``. If ``-1``, minimum subgraph size is not checked (i.e no minimum).
+      If ``>= 1``, each subgraph must contain at least that many operators.
+      If not, the graph partitioner will throw a ``ValueError``.
+    
+    :arg int max_subgraph_count: The maximum number of subgraphs in the partitioned model.
+      Can be ``>= 1`` or ``== -1``. If ``-1``, max subgraph count is not checked (i.e no maximum).
+      If ``>= 1``, the partitioned model must contain at most that many subgraphs.
+      If not, the graph partitioner will throw a ``ValueError``.
+    
+    :arg Set[str] ops_to_partition: This is a set of strings of this structure "aten::<operator>".
+      These are operators that will be partitioned to CPU regardless of Neuron support.
+      The default is ``None`` (i.e no additional operators will be partitioned).
+
+    :arg Dict analyze_parameters: This is a dictionary of kwargs used in ``torch_neuronx.analyze()``.
+      NOTE: Not all kwargs in ``torch_neuronx.analyze()`` are supported
+      in the graph partitioner.
+      The following kwargs in analyze are supported for use in the graph partitioenr.
+          a) compiler_workdir
+          b) additional_ignored_ops
+          c) max_workers
+      The default is ``None``, corresponding to the default analyze arguments.
+
+    :returns: The  :class:`~torch_neuronx.PartitionerConfig` with the configuration for the graph partitioner.
+    :rtype: ~torch_neuronx.PartitionerConfig
+
+.. rubric:: Examples
+
+.. _graph_partitioner_example_default_usage:
+
+This example demonstrates using the graph partitioner.
+
+The below model is a simple MLP model with sorted log softmax output.
+The sort operator, ``torch.sort()`` or ``aten::sort``, is not supported
+by ``neuronx-cc`` at this time, so the graph partitioner will partition
+out the sort operator to CPU.
+
+.. code-block:: python
+
+  import torch
+  import torch_neuronx
+  import torch.nn as nn
+
+  import logging
+  
+  # adjust logger level to see what the partitioner is doing
+  logger = logging.getLogger("Neuron")
+
+  class MLP(nn.Module):
+      def __init__(
+          self, input_size=28 * 28, output_size=10, layers=[4096, 2048]
+      ):
+          super(MLP, self).__init__()
+          self.fc1 = nn.Linear(input_size, layers[0])
+          self.fc2 = nn.Linear(layers[0], layers[1])
+          self.fc3 = nn.Linear(layers[1], output_size)
+          self.relu = nn.ReLU()
+
+      def forward(self, x):
+          f1 = self.fc1(x)
+          r1 = self.relu(f1)
+          f2 = self.fc2(r1)
+          r2 = self.relu(f2)
+          f3 = self.fc3(r2)
+          out = torch.log_softmax(f3, dim=1)
+          sort_out,_ = torch.sort(out)
+          return sort_out
+
+  n = MLP()
+  n.eval()
+
+  inputs = torch.rand(32,784)
+
+  # Configure the graph partitioner with the default values
+  partitioner_config = torch_neuronx.PartitionerConfig()
+
+  # Trace a neural network with graph partitioner enabled
+  neuron_net = torch_neuronx.trace(n, inputs, partitioner_config=partitioner_config)
+
+  # Run inference on the partitioned model
+  output = neuron_net(inputs)
+
+.. note::
+  Dynamic batching has a case-by-case support with partitioned
+  models, because it is highly dependent on how the
+  final partition scheme looks like.
+
+.. |neuron-cc| replace:: :ref:`neuron-cc <neuron-compiler-cli-reference>`
+.. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`
+.. |NeuronCore-v1| replace:: :ref:`NeuronCore-v1 <neuroncores-v1-arch>`
+.. |NeuronCore-v2| replace:: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`
+
+.. |HloModule| replace:: HloModule
+
+.. |inf1| replace:: :ref:`inf1 <aws-inf1-arch>`
+.. |trn1| replace:: :ref:`trn1 <aws-trn1-arch>`
+
+.. |bucketing| replace:: :ref:`bucketing_app_note`
+.. |nrt-configuration| replace:: :ref:`nrt-configuration`
+
+.. _torch-xla: https://github.com/pytorch/xla
+.. _torchscript: https://pytorch.org/docs/stable/jit.html

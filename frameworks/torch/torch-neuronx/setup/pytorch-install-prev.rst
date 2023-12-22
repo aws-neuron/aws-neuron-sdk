@@ -1,7 +1,7 @@
 .. _pytorch-neuronx-install-prev:
 
-Install Previous PyTorch Neuron Releases (``torch-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install Previous PyTorch NeuronX Releases 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1

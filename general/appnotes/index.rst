@@ -49,6 +49,17 @@ Neuron Application Notes
 
             /general/appnotes/torch-neuron/rcnn-app-note
 
+.. dropdown::  PyTorch Neuronx (torch-neuronx)
+         :class-title: sphinx-design-class-title-med
+         :class-body: sphinx-design-class-body-small
+         :animate: fade-in
+
+
+         .. toctree::
+            :maxdepth: 1
+
+            /general/appnotes/torch-neuronx/torch-neuronx-graph-partitioner-app-note
+
 .. dropdown::  Transformers Neuron (transformers-neuronx)
          :class-title: sphinx-design-class-title-med
          :class-body: sphinx-design-class-body-small
@@ -61,7 +72,7 @@ Neuron Application Notes
             /general/appnotes/transformers-neuronx/generative-llm-inference-with-neuron
 
 
-.. dropdown::  PyTorch 2.0 
+.. dropdown::  PyTorch 2.x 
          :class-title: sphinx-design-class-title-med
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
@@ -70,3 +81,4 @@ Neuron Application Notes
             :maxdepth: 1
 
             /general/appnotes/torch-neuronx/introducing-pytorch-2-0
+            /general/appnotes/torch-neuronx/introducing-pytorch-2-1

@@ -1,9 +1,9 @@
 .. _transformers_neuronx_developer_guide:
 
-Transformers Neuron (``transformers-neuronx``) Developer Guide
-==============================================================
+Transformers NeuronX (``transformers-neuronx``) Developer Guide
+================================================================
 
-Transformers Neuron for Trn1 and Inf2 is a software package that enables
+Transformers NeuronX for Trn1 and Inf2 is a software package that enables
 PyTorch users to perform large language model (LLM) :ref:`performant inference <neuron_llm_inference>` on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).The :ref:`Neuron performance page <inf2-performance>` lists expected inference performance for commonly used Large Language Models.
 
@@ -11,7 +11,7 @@ second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch
 Introduction
 ------------
 
-The `Transformers Neuron repository <https://github.com/aws-neuron/transformers-neuronx>`_
+The `Transformers NeuronX repository <https://github.com/aws-neuron/transformers-neuronx>`_
 contains the source code of the AWS Neuron Transformers integration project. 
 As it stands now, it mainly serves the purpose of
 running transformer decoder inference (autoregressive sampling)
@@ -379,6 +379,56 @@ example we demonstrate how to save and load the ``GPT2`` model:
         generated_sequence = model_neuron.sample(encoded_input.input_ids, sequence_length=256, start_ids=None)
         print([tokenizer.decode(tok) for tok in generated_sequence])
 
+
+Grouped-query attention (GQA) support [Beta]
+----------------------------
+
+Transformers Neuron supports grouped-query attention (GQA) models for
+``Llama`` and ``Mistral`` model classes.
+There are multiple sharding strategies for K/V cache, in order to satisfy different constraints.
+
+- ``constants.GQA.SHARD_OVER_HEADS`` distributes K/V caches along head dimension. This can be only used when K/V heads is multiple of tensor-parallelism degree. This is the default configuration.
+- ``constants.GQA.SHARD_OVER_BATCH`` distributes K/V caches along batch dimension. This can be only used when batch size is multiple of tensor-parallelism degree. This can be useful for large-batch inference.
+- ``constants.GQA.REPLICATED_HEADS`` replicates K/V heads. This can be used when neither batch size nor K/V heads can be divisible by tensor-parallelism degree. This can be useful for low-latency small-batch inference.
+- ``constants.GQA.ALL_GATHER_HEADS`` evenly splits the K/V heads across all NeuronCores. This is optimized for large-batch inference of GQA model without replication.
+
+.. _mistral_gqa_code_sample:
+
+In the following example we demonstrate how to configure these distributed inference strategies and
+perform inference with the ``Mistral`` model:
+
+.. code-block:: python
+
+    import torch
+    from transformers_neuronx import constants
+    from transformers_neuronx.mistral.model import MistralForSampling
+    from transformers_neuronx.module import save_pretrained_split
+    from transformers_neuronx.config import NeuronConfig
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    # Load and save the CPU model with bfloat16 casting
+    model_cpu = AutoModelForCausalLM.from_pretrained('mistralai/Mistral-7B-Instruct-v0.1')
+    save_pretrained_split(model_cpu, 'mistralai/Mistral-7B-Instruct-v0.1-split')
+
+    # Set sharding strategy for GQA to be shard over heads
+    neuron_config = NeuronConfig(
+        grouped_query_attention=constants.GQA.SHARD_OVER_HEADS
+    )
+
+    # Create and compile the Neuron model
+    model_neuron = MistralForSampling.from_pretrained('mistralai/Mistral-7B-Instruct-v0.1-split', batch_size=1, \
+        tp_degree=2, n_positions=256, amp='bf16', neuron_config=neuron_config)
+    model_neuron.to_neuron()
+
+    # Get a tokenizer and exaple input
+    tokenizer = AutoTokenizer.from_pretrained('mistralai/Mistral-7B-Instruct-v0.1')
+    text = "[INST] What is your favourite condiment? [/INST]"
+    encoded_input = tokenizer(text, return_tensors='pt')
+
+    # Run inference
+    with torch.inference_mode():
+        generated_sequence = model_neuron.sample(encoded_input.input_ids, sequence_length=256, start_ids=None)
+        print([tokenizer.decode(tok) for tok in generated_sequence])
 
 --------------------------------------
 Running inference with multiple models

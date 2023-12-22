@@ -69,13 +69,73 @@ class NeuronUNet(nn.Module):
                                added_cond_kwargs["text_embeds"],
                                added_cond_kwargs["time_ids"])[0]
         return UNet2DConditionOutput(sample=sample)
-    
+
+class TraceableTextEncoder(nn.Module):
+    def __init__(self, text_encoder):
+        super().__init__()
+        self.text_encoder = text_encoder
+
+    def forward(self, text_input_ids):
+        out_tuple = self.text_encoder(text_input_ids, output_hidden_states=True, return_dict=False)
+        return out_tuple
 
 # For saving compiler artifacts
 COMPILER_WORKDIR_ROOT = 'sdxl_base_compile_dir_1024'
 
 # Model ID for SD XL version pipeline
 model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+
+
+
+# --- Compile Text Encoders and save ---
+
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+
+# Apply wrappers to make text encoders traceable
+traceable_text_encoder = copy.deepcopy(TraceableTextEncoder(pipe.text_encoder))
+traceable_text_encoder_2 = copy.deepcopy(TraceableTextEncoder(pipe.text_encoder_2))
+
+del pipe
+
+text_input_ids_1 = torch.tensor([[49406,   736,  1615, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407, 49407,
+        49407, 49407, 49407, 49407, 49407, 49407, 49407]])
+
+
+text_input_ids_2 = torch.tensor([[49406,   736,  1615, 49407,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0]])
+
+
+# Text Encoder 1
+neuron_text_encoder = torch_neuronx.trace(
+    traceable_text_encoder,
+    text_input_ids_1,
+    compiler_workdir=os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder'),
+)
+
+text_encoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder/model.pt')
+torch.jit.save(neuron_text_encoder, text_encoder_filename)
+
+# Text Encoder 2
+neuron_text_encoder_2 = torch_neuronx.trace(
+    traceable_text_encoder_2,
+    text_input_ids_2,
+    compiler_workdir=os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder_2'),
+)
+
+text_encoder_2_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder_2/model.pt')
+torch.jit.save(neuron_text_encoder_2, text_encoder_2_filename)
 
 
 

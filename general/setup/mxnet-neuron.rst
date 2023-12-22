@@ -25,6 +25,13 @@ MxNet Neuron (``mxnet-neuron``) Setup
         :link-type: ref
         :class-body: sphinx-design-class-title-small
 
+``mxnet-neuron`` setup on Ubuntu 22
+-----------------------------------
+
+.. card:: Ubuntu 22 (Ubuntu22 AMI)
+        :link: setup-mxnet-neuron-u22
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
 
 ``mxnet-neuron`` setup on Amazon Linux 2 (AL2)
 -----------------------------------------------
@@ -36,5 +43,13 @@ MxNet Neuron (``mxnet-neuron``) Setup
 
 .. card:: Amazon Linux 2  (DLAMI Base AMI)
         :link: setup-mxnet-neuron-al2-base-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+``mxnet-neuron`` setup on Amazon Linux 2023 (AL2023)
+----------------------------------------------------
+
+.. card:: Amazon Linux 2023 (Amazon Linux 2023 AMI)
+        :link: setup-mxnet-neuron-al2023
         :link-type: ref
         :class-body: sphinx-design-class-title-small

@@ -1,7 +1,7 @@
 .. _torch-neuronx-profiling-api:
 
-PyTorch Neuron (``torch-neuronx``) Profiling API
-================================================
+PyTorch NeuronX Profiling API
+===============================
 
 .. contents:: Table of Contents
    :local:

@@ -10,6 +10,28 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+Neuron Distributed [0.6.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/21/2023
+
+New in this release
+-------------------
+
+* Added support for Model/Optimizer wrapper that handles the parallelization in both model and optimizer.
+* Added support for PyTorch-lightning. This allows users to train models using Tensor-parallelism and Data-parallelism.
+* Added new checkpoint save/load APIs that handles the parallelization and dumps/loads the checkpoint.
+* Added a new QKV module which has the ability to replicate the KV heads and produce the query, key and value states.
+* Reduced the model initialization time when pipeline-parallel distributed strategy is used.
+* Added support for limiting max parallel compilations in parallel_model_trace. This resolves many out of memory errors by reducing the host memory usage.
+* Added example for Llama-2-7b inference. This is still early in development and is not well-optimized. The current recommendation is to use `transformers-neuronx` for optimal performance of llama inference.
+
+Known Issues and Limitations
+----------------------------
+
+* Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
+* Pipeline-parallelism is not supported as part of PyTorch-lightning integration.
+
 Neuron Distributed [0.5.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

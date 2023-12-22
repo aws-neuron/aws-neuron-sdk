@@ -1,7 +1,7 @@
 .. _torch-neuronx-dev-guide:
 
-Developer Guide for Profiling with PyTorch Neuron (``torch-neuronx``)
-=====================================================================
+Developer Guide for Profiling with PyTorch NeuronX 
+===================================================
 
 .. contents:: Table of Contents
    :local:

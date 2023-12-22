@@ -1,7 +1,7 @@
 .. _pytorch-neuronx-install:
 
-Install PyTorch Neuron  (``torch-neuronx``)
-===========================================
+Install PyTorch NeuronX 
+========================
 
 .. contents:: Table of Contents
    :local:

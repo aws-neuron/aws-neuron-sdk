@@ -1,9 +1,9 @@
 .. _api_guide:
 
 API Reference Guide (``neuronx-distributed`` )
-======================================================================
+===============================================
 
-Neuronx-Distributed is XLA based library for distributed training and inference.
+NeuronX Distributed (NxD) is XLA based library for distributed training and inference on Neuron devices.
 As part of this library, we support 3D parallelism: Tensor-Parallelism, Pipeline-Parallelism
 and Data-Parallelism. We also support Zero1 optimizer to shard the optimizer weights.
 To support tensor-parallelism on Neuron, we adopted the Apex Library
@@ -19,18 +19,19 @@ Initialize Model Parallelism:
 ::
 
    def neuronx_distributed.parallel_state.initialize_model_parallel(
-           tensor_model_parallel_size=1)
+       tensor_model_parallel_size=1,
+       pipeline_model_parallel_size=1,
+   )
 
 This module would initialize the distributed model training and allows
 users to set the number of tensor_parallel world size.
 
 Parameters:
-           
 
-``tensor_model_parallel_size`` : This should set the number of tensor
-parallel workers. Note the default value is set to 1
-``pipeline_model_parallel_size`` : This should set the number of pipeline
-parallel workers. Note the default value is set to 1
+- ``tensor_model_parallel_size`` : This should set the number of tensor
+  parallel workers. Note the default value is set to 1
+- ``pipeline_model_parallel_size`` : This should set the number of pipeline
+  parallel workers. Note the default value is set to 1
 
 Other helper APIs:
 ''''''''''''''''''
@@ -63,7 +64,7 @@ Other helper APIs:
    pipeline parallel size and the global world size. as_list argument when
    set to True, would return the group as a List[List] otherwise it
    would return a torch.distributed.group.
-- ``move_model_to_device(model, device)``: This api moves the model to device by 
+- ``move_model_to_device(model, device)``: This api moves the model to device by
   preserving tensor parallel attributes.
 
 Parallel Layers:
@@ -91,7 +92,6 @@ tensor-parallel workers.
 .. _parameters-1:
 
 Parameters:
-           
 
 -  ``num_embeddings (int)`` : size of the dictionary of embeddings
 -  ``embedding_dim (int)`` : the size of each embedding vector
@@ -118,7 +118,6 @@ is designed to operate on 3-dimensional inputs.
 .. _parameters-2:
 
 Parameters:
-           
 
 -  ``input_size: (int)`` : First dimension of the weight matrix
 -  ``output_size: (int)`` : Second dimension of the weight matrix
@@ -150,7 +149,6 @@ designed to operate on 3-dimensional inputs.
 .. _parameters-3:
 
 Parameters:
-           
 
 -  ``input_size: (int)`` : First dimension of the weight matrix
 -  ``output_size: (int)`` : Second dimension of the weight matrix
@@ -176,9 +174,9 @@ Padding Tensor-Parallel Layers
       model, tp_degree, n_heads, wrapped_classes=(), pad_hook_fn=None)
 
 
-Pads a generic model to function to a desired tensor parallelism degree by padding the 
+Pads a generic model to function to a desired tensor parallelism degree by padding the
 number of attention heads. Returns the original model modified with padding.
-Uses 1-axis padding strategy: pads the sharded dim of the ParallelLinear layers to the 
+Uses 1-axis padding strategy: pads the sharded dim of the ParallelLinear layers to the
 size it would have been for the padded number of heads.
 
 .. _parameters-4:
@@ -187,7 +185,7 @@ Parameters:
 
 - ``model (torch.nn.Module)`` : model to be padded
 - ``tp_degree (int)`` : tensor parallel degree
-- ``n_heads (int)`` : the number of heads the given model to be padded has. This can 
+- ``n_heads (int)`` : the number of heads the given model to be padded has. This can
    typically be found in the config
 - ``wrapped_classes (Tuple[any], *optional*, defaults to `()`)`` : tuple of classes
    (and their submodules) which should be padded
@@ -233,10 +231,10 @@ Usage:
 Loss functions:
 ''''''''''''''''''
 
-When you shard the final MLP layer using tensor-parallelism, instead of 
-recollecting all the outputs from each TP rank, we can use the 
-ParallelCrossEntropy loss function. This function would take the parallel 
-logits produced by final parallel MLP and produce a loss by taking into 
+When you shard the final MLP layer using tensor-parallelism, instead of
+recollecting all the outputs from each TP rank, we can use the
+ParallelCrossEntropy loss function. This function would take the parallel
+logits produced by final parallel MLP and produce a loss by taking into
 account that the logits are sharded across multiple workers.
 
 
@@ -248,12 +246,12 @@ account that the logits are sharded across multiple workers.
 .. _parameters-6:
 
 Parameters:
-           
+
 
 -  ``parallel_logits (Tensor)`` : Sharded logits from the previous MLP
 -  ``labels (Tensor)`` : Label for each token. Labels should not be sharded,
    and the parallel_cross_entropy would take care of sharding the labels internally
--  ``label_smoothing (float)`` : A float in [0.0, 1.0]. Specifies the amount of 
+-  ``label_smoothing (float)`` : A float in [0.0, 1.0]. Specifies the amount of
    smoothing when computing the loss, where 0.0 means no smoothing
 
 
@@ -336,16 +334,16 @@ Common used APIs
 
    NxDPPModel.run_train(**kwargs)
 
-Train the model with PP schedule, which will run both forward and backward in a PP manner. 
-The kwargs should be the same as the input_names provided to the trace function. 
+Train the model with PP schedule, which will run both forward and backward in a PP manner.
+The kwargs should be the same as the input_names provided to the trace function.
 Will output the loss that provided by user from output_loss_value_spec.
 
 ::
 
    NxDPPModel.run_eval(**kwargs)
 
-Eval the model with PP schedule, which will run forward only. 
-The kwargs should be the same as the input_names provided to the trace function. 
+Eval the model with PP schedule, which will run forward only.
+The kwargs should be the same as the input_names provided to the trace function.
 Will output the loss that provided by user from output_loss_value_spec.
 
 ::
@@ -375,6 +373,8 @@ Save Checkpoint:
 
    def neuronx_distributed.parallel_layers.save(state_dict, save_dir, save_serially=True, save_xser: bool=False, down_cast_bf16=False)
 
+.. note:: This method will be deprecated, use ``neuronx_distributed.trainer.save_checkpoint`` instead.
+
 This API will save the model from each tensor-parallel rank in the
 save_dir . Only workers with data parallel rank equal to 0 would be
 saving the checkpoints. Each tensor parallel rank would be creating a
@@ -386,7 +386,7 @@ and there will be a ref data file named as ``tp_rank_ii_pp_rank_ii`` in save_dir
 .. _parameters-4:
 
 Parameters:
-           
+
 
 -  ``state_dict: (dict)`` : Model state dict. Its the same dict that you
    would save using torch.save
@@ -394,7 +394,7 @@ Parameters:
 -  ``save_serially: (bool)``: This flag would save checkpoints one model-parallel rank at a time.
    This is particularly useful when we are checkpointing large models.
 -  ``save_xser: (bool)``: This flag would save the model with torch xla serialization.
-   This could significantly reduce checkpoint saving time when checkpointing large model, so it's recommended 
+   This could significantly reduce checkpoint saving time when checkpointing large model, so it's recommended
    to enable xser when the model is large.
    Note that if a checkpoint is saved with ``save_xser``, it needs to be loaded with ``load_xser``, vice versa.
 -  ``down_cast_bf16: (bool)``: This flag would downcast the state_dict to bf16 before saving.
@@ -407,6 +407,8 @@ Load Checkpoint
    def neuronx_distributed.parallel_layers.load(
        load_dir, model_or_optimizer=None, model_key='model', load_xser=False, sharded=True)
 
+.. note:: This method will be deprecated, use ``neuronx_distributed.trainer.load_checkpoint`` instead.
+
 This API will automatically load checkpoint depending on the tensor
 parallel rank. For large models, one should pass the model object to the
 load API to load the weights directly into the model. This could avoid
@@ -416,7 +418,7 @@ parallel rank at a time.
 .. _parameters-5:
 
 Parameters:
-           
+
 
 -  ``load_dir: (str)`` : Directory where the checkpoint is saved.
 -  ``model_or_optimizer``: (torch.nn.Module or torch.optim.Optimizer): Model or Optimizer object.
@@ -449,7 +451,7 @@ This should be handled by the following API
 .. _parameters-6:
 
 Parameters:
-           
+
 
 -  ``parameters (Iterable[Tensor] or Tensor)`` : an iterable of Tensors
    or a single Tensor that will have gradients normalized
@@ -463,17 +465,17 @@ Neuron Zero1 Optimizer:
 In Neuronx-Distributed, we built a wrapper on the Zero1-Optimizer present in torch-xla.
 
 ::
-   
+
    class NeuronZero1Optimizer(Zero1Optimizer)
 
-This wrapper takes into account the tensor-parallel degree and computes the grad-norm 
+This wrapper takes into account the tensor-parallel degree and computes the grad-norm
 accordingly. It also provides two APIs: save_sharded_state_dict and load_sharded_state_dict.
 As the size of the model grows, saving the optimizer state from a single rank can result in OOMs.
 Hence, the api to save_sharded_state_dict can allow saving states from each data-parallel rank. To
-load this sharded optimizer state, there is a corresponding load_sharded_state_dict that allows each 
+load this sharded optimizer state, there is a corresponding load_sharded_state_dict that allows each
 rank to pick its corresponding shard from the checkpoint directory.
 
-:: 
+::
 
    optimizer_grouped_parameters = [
         {
@@ -502,31 +504,318 @@ rank to pick its corresponding shard from the checkpoint directory.
 The interface is same as Zero1Optimizer in torch-xla
 
 ::
-   
+
    save_sharded_state_dict(output_dir, save_serially = True)
+
+.. note:: This method will be deprecated, use ``neuronx_distributed.trainer.save_checkpoint`` instead.
 
 .. _parameters-7:
 
 Parameters:
-           
+
 
 -  ``output_dir (str)`` : Checkpoint directory where the sharded optimizer states need to be saved
 -  ``save_serially (bool)`` : Whether to save the states one data-parallel rank at a time. This is
     especially useful when we want to checkpoint large models.
 
 ::
-   
+
    load_sharded_state_dict(output_dir, num_workers_per_step = 8)
+
+.. note:: This method will be deprecated, use ``neuronx_distributed.trainer.load_checkpoint`` instead.
 
 .. _parameters-8:
 
 Parameters:
-           
+
 
 -  ``output_dir (str)`` : Checkpoint directory where the sharded optimizer states are saved
 -  ``num_workers_per_step (int)`` : This argument controls how many workers are doing model load
    in parallel.
 
+Neuronx-Distributed Training APIs:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In Neuronx-Distributed, we provide a series of APIs under `neuronx_distributed` directly that helps
+user to apply optimizations in NxD easily. These APIs cover configuration, model/optimizer initialization
+and saving/loading checkpoint.
+
+
+Initialize NxD config:
+''''''''''''''''''''''
+
+::
+
+   def neuronx_distributed.trainer.neuronx_distributed_config(
+       tensor_parallel_size=1,
+       pipeline_parallel_size=1,
+       pipeline_config=None,
+       optimizer_config=None,
+       activation_checkpoint_config=None,
+       pad_model=False,
+       sequence_parallel=False,
+       model_init_config=None,
+   )
+
+This method initialize NxD training config and initialize model parallel. This config
+maintains all optimization options of the distributed training, and it's a global config
+(the same for all processes).
+
+Parameters:
+
+- ``tensor_parallel_size (int)`` : Tensor model parallel size. Default: :code:`1`.
+- ``pipeline_parallel_size (int)`` : Pipeline model parallel size. Default: :code:`1`.
+- ``pipeline_config (dict)`` : Pipeline parallel config. For details please refer to
+  `pipeline parallel guidance <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/pp_developer_guide.html>`__.
+  Default: :code:`None`.
+- ``optimizer_config (dict)`` : Optimizer config.
+  Default: :code:`{"zero_one_enabled": False, "grad_clipping": True, "max_grad_norm": 1.0}`.
+
+  - Enable ZeRO-1 by setting ``zero_one_enabled`` to ``True``.
+  - Enable grad clipping by setting ``grad_clipping`` to ``True``.
+  - Change maximum grad norm value by setting ``max_grad_norm``.
+
+- ``activation_checkpoint_config (str of torch.nn.Module)`` : Activation checkpoint config,
+  accept value: ``"full"``, ``None``, or any ``torch.nn.Module``. When set to ``full``,
+  regular activation checkpoint enabled (every transformer layer will be re-computed).
+  When set to ``None``, activation checkpoint disabled. When set to any ``torch.nn.Module``,
+  selective activation checkpoint enabled, any provided module will be re-computed.
+  Default: :code:`None`.
+- ``pad_model (bool)`` : Whether to pad attention heads of model. Default: :code:`False`.
+- ``sequence_parallel (bool)`` : Whether to enable sequence parallel. Default: :code:`False`.
+- ``model_init_config (dict)`` : Model initialization config.
+  Default: :code:`{"sequential_move_factor": 11, "meta_device_init": False, "param_init_fn": None}`.
+
+  - ``sequential_move_factor``: num of processes instantiating model on host at the same time.
+    This is done to avoid the host OOM. Range: 1-32.
+  - ``meta_device_init``: whether to initialize model on meta device.
+  - ``param_init_fn``: method that initialize parameters of modules, should be provided when
+    ``param_init_fn`` is ``True``.
+
+Initialize NxD Model Wrapper:
+'''''''''''''''''''''''''''''
+
+::
+
+   def neuronx_distributed.trainer.initialize_parallel_model(nxd_config, model_fn, *model_args, **model_kwargs)
+
+This method initialize NxD model wrapper, return a wrapped model that can be used as
+a regular ``torch.nn.Module``, while has all the model optimizations in config applied.
+This wrapper is designed to hide the complexity of optimizations such as pipeline model
+parallel, so that users can simply use the wrapped model as the unwrapped version.
+
+Parameters:
+
+- ``nxd_config (dict)``: config generated by ``neuronx_distributed_config``.
+- ``model_fn (callable)``: user provided function to get the model for training.
+- ``model_args`` and ``model_kwargs``: arguments that will be passed to ``model_fn``.
+
+Model wrapper class and its methods:
+
+::
+
+   class neuronx_distributed.trainer.model.NxDModel(torch.nn.Module):
+       def local_module(self):
+           # return the unwrapped local module
+
+       def run_train(self, *args, **kwargs):
+           # method to run one iteration, when pipeline parallel enabled,
+           # user have to use this instead of forward+backward
+
+       def named_parameters(self, *args, **kwargs):
+           # only return parameters on local rank.
+           # same for `parameters`, `named_buffers`, `buffers`
+
+       def named_modules(self, *args, **kwargs):
+           # only return modules on local rank.
+           # same for `modules`, `named_children`, `children`
+
+P.S.: as a short cut, users can call ``model.config`` or ``model.dtype`` from wrapped model
+if original model is hugging face transformers pre-trained model.
+
+Initialize NxD Optimizer Wrapper:
+'''''''''''''''''''''''''''''''''
+
+::
+
+   def neuronx_distributed.trainer.initialize_parallel_optimizer(nxd_config, optimizer_class, parameters, **defaults)
+
+This method initialize NxD optimizer wrapper, return a wrapped optimizer that can be used as
+a regular ``torch.optim.Optimizer``, while has all the optimizer optimizations in config applied.
+
+This optimizer wrapper is inherited from ``toch.optim.Optimizer``. It takes in the ``nxd_config`` and
+configures the optimizer to work with different distributed training regime.
+
+The `step` method of the wrapped optimizer contains necessary all-reduce operations and grad clipping.
+Other methods and variables work the same as the unwrapped optimizer.
+
+Parameters:
+
+- ``nxd_config (dict)``: config generated by ``neuronx_distributed_config``.
+- ``optimizer_class (Type[torch.optim.Optimizer])``: optimizer class to create the optimizer.
+- ``parameters (iterable)``: parameters passed to the optimizer.
+- ``defaults``: optimizer options that will be passed to the optimizer.
+
+Save Checkpoint:
+''''''''''''''''
+
+Method to save checkpoint, return ``None``.
+
+This method saves checkpoints for model, optimizer, scheduler and user contents sequentially.
+Model states are saved on data parallel rank-0 only. When ZeRO-1 optimizer is not turned on,
+optimizer states are also saved like this; while when ZeRO-1 optimizer is turned on, states
+are saved on all ranks. Scheduler and user contents are saved on master rank only. Besides,
+users can use ``use_xser=True`` to boost saving performance and avoid host OOM. It's achieved
+by saving tensors one by one simultaneously and keeping the original data structure.
+
+::
+
+   def neuronx_distributed.trainer.save_checkpoint(
+       path,
+       tag="",
+       model=None,
+       optimizer=None,
+       scheduler=None,
+       user_content=None,
+       num_workers=8,
+       use_xser=False,
+       num_kept_ckpts=None,
+   )
+
+Parameters:
+
+- ``path (str)``: path to save the checkpoints.
+- ``tag (str)``: tag to save the checkpoints.
+- ``model (torch.nn.Module)``: model to save, optinal.
+- ``optimizer (torch.optim.Optimizer)``: optimizer to save, optinal.
+- ``scheduler``: scheduler to save, optinal.
+- ``user_content``: user contents to save, optinal.
+- ``num_workers (int)``: num of processes saving data on host at the same time.
+  This is done to avoid the host OOM, range: 1-32.
+- ``use_xser (bool)``: whether to use torch-xla serialization. When enabled, ``num_workers``
+  will be ignored and maximum num of workers will be used. Default: :code:`False`.
+- ``num_kept_ckpts (int)``: number of checkpoints to keep on disk, optional. Default: :code:`None`.
+
+Load Checkpoint:
+''''''''''''''''
+
+Method to load checkpoint saved by ``save_checkpoint``, return user contents if exists otherwise ``None``.
+If ``tag`` not provided, will try to use the newest tag tracked by ``save_checkpoint``.
+
+Note that the checkpoint to be loaded must have the same model parallel degrees as in current use,
+and if ZeRO-1 optimizer is used, must use the same data parallel degress.
+
+::
+
+   def neuronx_distributed.trainer.load_checkpoint(
+       path,
+       tag=None,
+       model=None,
+       optimizer=None,
+       scheduler=None,
+       num_workers=8,
+       strict=True,
+   )
+
+Parameters:
+
+- ``path (str)``: path to load the checkpoints.
+- ``tag (str)``: tag to load the checkpoints.
+- ``model (torch.nn.Module)``: model to load, optinal.
+- ``optimizer (torch.optim.Optimizer)``: optimizer to load, optinal.
+- ``scheduler``: scheduler to load, optinal.
+- ``num_workers (int)``: num of processes loading data on host at the same time.
+  This is done to avoid the host OOM, range: 1-32.
+- ``strict (bool)``: whether to use strict mode when loading model checkpoint. Default: :code:`True`.
+
+**Sample usage:**
+
+::
+
+   import neuronx_distributed as nxd
+
+   # create config
+   nxd_config = nxd.neuronx_distributed_config(
+       tensor_parallel_size=8,
+       optimizer_config={"zero_one_enabled": True, "grad_clipping": True, "max_grad_norm": 1.0},
+   )
+
+   # wrap model
+   model = nxd.initialize_parallel_model(nxd_config, get_model)
+
+   # wrap optimizer
+   optimizer = nxd.initialize_parallel_optimizer(nxd_config, AdamW, model.parameters(), lr=1e-3)
+
+   ...
+   (training loop):
+      loss = model.run_train(inputs)
+      optimizer.step()
+
+   ...
+   # loading checkpoint (auto-resume)
+   user_content = nxd.load_checkpoint(
+       "ckpts",
+       model=model,
+       optimizer=optimizer,
+       scheduler=scheduler,
+   )
+   ...
+   # saving checkpoint
+   nxd.save_checkpoint(
+       "ckpts",
+       nxd_config=nxd_config,
+       model=model,
+       optimizer=optimizer,
+       scheduler=scheduler,
+       user_content={"total_steps": total_steps},
+   )
+
+Modules:
+^^^^^^^^
+
+GQA-QKV Linear Module:
+''''''''''''''''''''''
+
+::
+
+   class neuronx_distributed.modules.qkv_linear.GQAQKVColumnParallelLinear(
+       input_size, output_size, bias=True, gather_output=True,
+       sequence_parallel_enabled=False, dtype=torch.float32, device=None, kv_size_multiplier=1)
+
+This module parallelizes the Q,K,V linear projections using ColumnParallelLinear layers. Instead of using 
+3 different linear layers, we can replace it with a single QKV module. In case of GQA module, the number of 
+Q attention heads are `N` times more than the number of K and V attention heads. The K and V attention heads 
+are replicated after projection to match the number of Q attention heads. This helps to reduce the K and V 
+weights and is useful especially during inference. However, in case of training these modules, it restricts 
+the tensor-parallel degree that can be used, since the attention heads should be divisble by tensor-parallel 
+degree. Hence, to mitigate this bottleneck, the `GQAQKVColumnParallelLinear` takes in a `kv_size_multiplier` 
+argument. The module would replicate the K and V weights `kv_size_multiplier` times thereby allowing you to 
+use higher tensor-parallel degree. Note: here instead of replicating the projection `N/tp_degree` times, we 
+end of replicating the weights `kv_size_multiplier` times. This would produce the same result, allow you to use 
+higher tp_degree degree, however, it would result in extra memory getting consumed.
+
+.. _parameters-11:
+
+Parameters:
+           
+
+-  ``input_size: (int)`` : First dimension of the weight matrix
+-  ``output_sizes: (List[int])`` : A list of second dimension of the Q and K/V weight matrix
+-  ``bias: (bool)``: If set to True, bias would be added
+-  ``gather_output: (bool)`` : If true, call all-gather on output and
+   make Y available to all Neuron devices, otherwise, every Neuron
+   device will have its output which is Y_i = XA_i
+- ``sequence_parallel_enabled: (bool)`` : When sequence-parallel is enabled, it would
+   gather the inputs from the sequence parallel region and perform the forward and backward
+   passes
+-  ``init_method: (torch.nn.init)`` : Initialization function for the
+   Q and K/V weights.
+-  ``dtype: (dtype)`` : Datatype for the weights
+-  ``device: (torch.device)`` : Device to initialize the weights on. By
+   default, the weights would be initialized on CPU
+- ``kv_size_multiplier: (int)``: Factor by which the K and V weights would be replicated along the first dimension
+
+.. _nxd_tracing:
 
 Model Trace:
 ^^^^^^^^^^^^
@@ -549,7 +838,7 @@ model.
 .. _parameters-9:
 
 Parameters:
-           
+
 
 -  ``func : (Function)``: This is a function that returns a ``Model``
    object and a dictionary of states. The ``parallel_model_trace`` API would call this function
@@ -594,3 +883,112 @@ Parameters:
 '''''''''''
 
 -  ``load_dir: (str)`` : Directory which contains the traced model.
+
+
+Neuron PyTorch-Lightning
+^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron PyTorch-Lightning is currently based on Lightning version 2.1.0, and will eventually be upstreamed Lightning-AI code base
+
+Neuron Lightning Module
+'''''''''''''''''''''''
+
+Inherited from `LightningModule <https://lightning.ai/docs/pytorch/stable/common/lightning_module.html>`__
+::
+
+   class neuronx_distributed.lightning.NeuronLTModule(
+      model_fn: Callable,
+      nxd_config: Dict,
+      opt_cls: Callable,
+      scheduler_cls: Callable,
+      model_args: Tuple = (),
+      model_kwargs: Dict = {},
+      opt_args: Tuple = (),
+      opt_kwargs: Dict = {},
+      scheduler_args: Tuple = (),
+      scheduler_kwargs: Dict = {},
+      grad_accum_steps: int = 1,
+      manual_opt: bool = True,
+   )
+
+Parameters:
+
+- ``model_fn``: Model function to create the actual model
+
+- ``nxd_config``: Neuronx Distributed Config, output of neuronx_distributed.neuronx_distributed_config
+
+- ``opt_cls``: Callable to create optimizer
+
+- ``scheduler_cls``: Callable to create scheduler
+
+- ``model_args``: Tuple of args fed to model callable
+
+- ``model_kwargs``: Dict of keyworded args fed to model callable
+
+- ``opt_args``: Tuple of args fed to optimizer callable
+
+- ``opt_kwargs``: Dict of keyword args fed to optimizer callable
+
+- ``scheduler_args``: Tuple of args fed to scheduler callable
+
+- ``scheduler_args``: Dict of keyworded args fed to scheduler callable
+
+- ``grad_accum_steps``: Grad accumulation steps
+
+- ``manual_opt``: Whether to do manual optimization, note that currently NeuronLTModule doesn't support auto optimization so this should always set to True
+
+
+Neuron XLA Strategy
+'''''''''''''''''''
+
+Inherited from `XLAStrategy <https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.strategies.XLAStrategy.html>`__
+::
+
+   class neuronx_distributed.lightning.NeuronXLAStrategy(
+      nxd_config: Dict = None,
+      tensor_parallel_size: int = 1,
+      pipeline_parallel_size: int = 1,
+      save_load_xser: bool = True,
+   )
+
+Parameters:
+
+- ``nxd_config``: Neuronx Distributed Config, output of neuronx_distributed.neuronx_distributed_config
+
+- ``tensor_parallel_size``: Tensor parallel degree, only needed when nxd_config is not specified
+
+- ``pipeline_parallel_size``: Pipeline parallel degree, only needed when nxd_config is not specified (Note that for now we only support TP with Neuron-PT-Lightning)
+
+- ``save_load_xser``: Set to True will enable save/load with xla serialization, for more context check `Save Checkpoint <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#save-checkpoint>`__
+
+
+Neuron XLA Precision Plugin
+'''''''''''''''''''''''''''
+
+Inherited from `XLAPrecisionPlugin <https://github.com/Lightning-AI/lightning/blob/2.1.0/src/lightning/pytorch/plugins/precision/xla.py>`__
+
+::
+
+   class neuronx_distributed.lightning.NeuronXLAPrecisionPlugin
+
+Neuron TQDM Progress Bar
+''''''''''''''''''''''''
+
+Inherited from `TQDMProgressBar <https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.TQDMProgressBar.html>`__
+
+::
+
+   class neuronx_distributed.lightning.NeuronTQDMProgressBar
+
+
+Neuron TensorBoard Logger
+'''''''''''''''''''''''''
+
+Inherited from `TensorBoardLogger <https://lightning.ai/docs/pytorch/stable/extensions/generated/lightning.pytorch.loggers.TensorBoardLogger.html>`__
+
+::
+
+   class neuronx_distributed.lightning.NeuronTensorBoardLogger(save_dir)
+
+Parameters:
+
+- ``save_dir``: Directory to save the log files

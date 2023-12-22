@@ -78,6 +78,7 @@ class manifest:
         df_framework = df_instance.loc[df_instance['category'] == args.framework].copy()
         df_framework['version'] = df_framework['version'].map(lambda x: Version(x))
         df_framework['major_minor_version'] = df_framework['version'].map(lambda x: str(x.major) + '.' + str(x.minor))
+
         framework_python_versions = df_framework.loc[
             df_framework['major_minor_version'] == self.extract_major_minor_version(Version(args.framework_version))][
             'supported_python_versions'].values[0]
@@ -204,7 +205,6 @@ class manifest:
             self.df_os_properties.loc[self.df_os_properties['os'] == args.os]['default_python_version'].values[0]
         packages_supporting_python_versions = self.get_pip_packages_supporting_python_versions(args)
 
-
         if os_default_python_version in packages_supporting_python_versions:
             target_python_version = os_default_python_version
         else:
@@ -238,7 +238,7 @@ class manifest:
                     str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
                     str += 'EOF' + '\n'
                     str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
-                elif args.os == 'amazonlinux2':
+                elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                     str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
                     str += '[neuron]' + '\n'
                     str += 'name=Neuron YUM Repository' + '\n'
@@ -258,7 +258,7 @@ class manifest:
             str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
             str += 'EOF' + '\n'
             str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
-        elif args.os == 'amazonlinux2':
+        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
             str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
             str += '[neuron]' + '\n'
             str += 'name=Neuron YUM Repository' + '\n'
@@ -279,7 +279,7 @@ class manifest:
             str += '\n# Update OS packages \n'
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get update -y' + '\n'
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += 'sudo yum update -y' + '\n'
 
         return str
@@ -297,7 +297,7 @@ class manifest:
                 str += '\n# Update OS headers \n'
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += 'sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
 
         return str
@@ -307,7 +307,7 @@ class manifest:
         str = '\n# Install git \n'
         if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
             str += 'sudo apt-get install git -y\n'
-        elif args.os == 'amazonlinux2':
+        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
             str += 'sudo yum install git -y\n'
 
         return str
@@ -351,7 +351,7 @@ class manifest:
                     str += ' --allow-change-held-packages'
                 str += '\n'
 
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 yum_install = 'install' if args.install_type == 'install' else 'update'
 
                 if args.install_type == 'install':
@@ -416,7 +416,7 @@ class manifest:
                         else:
                             str += '\n'
 
-                    elif args.os == 'amazonlinux2':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += 'sudo yum '
                         if args.install_type == 'install':
                             str += 'install '
@@ -483,7 +483,7 @@ class manifest:
                             str += '=' + self.get_package_version(category='system-tools', name=system_tool,
                                                                   neuron_version=args.neuron_version) + '* -y\n'
 
-                    elif args.os == 'amazonlinux2':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += 'sudo yum '
                         if args.install_type == 'install':
                             str += 'install '
@@ -527,7 +527,7 @@ class manifest:
                 if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                     str += 'sudo add-apt-repository ppa:deadsnakes/ppa\n'
                     str += 'sudo apt-get install python' + target_python_version + '\n'
-                elif args.os == 'amazonlinux2':
+                elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                     str += 'sudo yum install -y amazon-linux-extras\n'
                     str += 'sudo yum install python' + target_python_version + '\n'
 
@@ -541,7 +541,7 @@ class manifest:
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += '\n# Install Python venv \n'
                 str += 'sudo apt-get install -y python' + target_python_version + '-venv g++ \n'
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += '\n# Install Python venv \n'
                 str += 'sudo yum install -y python' + target_python_version + '-venv gcc-c++ \n'
 
@@ -549,7 +549,7 @@ class manifest:
             if args.venv_install_type == 'parallel-cluster':
                 if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                     str += '\ncd /home/ubuntu\n'
-                elif args.os == 'amazonlinux2':
+                elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                     str += '\ncd /home/ec2-user\n'
 
                 str += '. "/etc/parallelcluster/cfnconfig"\n'
@@ -648,10 +648,10 @@ class manifest:
                                             framework_version=args.framework_version)
         else:  # fresh install
             if args.framework == 'pytorch':
-                if args.framework_version == '2.0':  # in case of PT2.0 beta version
+                if "2." in args.framework_version:  # in case of PT2.x beta version
                     str += '--pre '
                     str += framework_name
-                    str += '==2.0.*'
+                    str += '==' + args.framework_version + '.*'
                 else:
                     str += framework_name
                 str += ' torchvision\n'
@@ -708,7 +708,7 @@ class manifest:
                     str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
-                    elif args.os == 'amazonlinux2':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += f'sudo yum install tensorflow-model-server-neuronx{ms_version} -y\n'
 
             elif args.framework == 'mxnet':
@@ -730,7 +730,7 @@ class manifest:
         if args.venv_install_type == 'parallel-cluster':
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += f'\n\n{indentation}chown ubuntu:ubuntu -R {args.framework}_venv\n'
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += f'\n\n{indentation}chown ec2-user:ec2-user -R {args.framework}_venv\n'
 
             str += 'fi'
@@ -855,7 +855,7 @@ class manifest:
                     str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
-                    elif args.os == 'amazonlinux2':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += f'sudo yum install tensorflow-model-server-neuronx{ms_version} -y\n'
 
             elif args.framework == 'mxnet':
@@ -875,7 +875,7 @@ class manifest:
         if args.venv_install_type == 'parallel-cluster':
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += f'\n\n{indentation}chown ubuntu:ubuntu -R {args.framework}_venv\n'
-            elif args.os == 'amazonlinux2':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += f'\n\n{indentation}chown ec2-user:ec2-user -R {args.framework}_venv\n'
 
             str += 'fi'
@@ -961,6 +961,44 @@ class manifest:
 
         return str
 
+    def list_pyversions(self, args):
+
+        str = ''
+
+        if args.neuron_version == None:
+            neuron_version = self.get_latest_neuron_version_per_instance(args.instance)
+        else:
+            neuron_version = args.neuron_version
+
+        if (args.list == 'pyversions'):  # list packages by neuron version
+
+            df_instance = self.df_release_packages[
+                self.df_release_packages['supported_instances'].map(lambda x: args.instance in x)]
+
+            df_version = df_instance.loc[
+                (df_instance['neuron_version'] == neuron_version) & (df_instance['category'] != 'efa')].copy()
+
+            str += '\nList of packages in Neuron ' + neuron_version + ':\n\n'
+            str += '{0:35} {1:50}\n'.format("Package", "           Supported Python Versions")
+
+            for index, row in df_version.iterrows():
+                python_version_str = ''
+                for i, pversion in enumerate(row['supported_python_versions']):
+                    if i != len(row['supported_python_versions'])-1:
+                        python_version_str += pversion + ", "
+                    else:
+                        python_version_str += pversion
+                if len(row['supported_python_versions']) != 0:
+                    if row['category'] == 'libnrt':
+                        str += f"{row['name'] + ' Version ' + row['version']:<50}{python_version_str} \n" 
+                    else:
+                        str += f"{row['name'] + '-' + row['version']:<50}{python_version_str} \n"
+
+                df_version['package'] = (df_version['name'] + '-' + df_version['version'])
+        
+        return str
+
+
 
 ################
 # Sanity Checks
@@ -981,9 +1019,10 @@ def cli_parse_arguments():
     parser = argparse.ArgumentParser(prog=__name__
                                      ,
                                      usage='\npython3 %(prog)s --list={packages} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
+                                           + 'python3 %(prog)s --list={pyversions} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --install-type={install,update}\n'
                                            + 'python3 %(prog)s --instance={inf1,trn1,inf2}\n'
-                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2}\n'
+                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023}\n'
                                            + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
                                            + 'python3 %(prog)s --framework-version=[X.Y.Z] [options]\n'
@@ -994,10 +1033,10 @@ def cli_parse_arguments():
 
     group = parser.add_mutually_exclusive_group(required=True)
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
-    group.add_argument("--list", choices=['neuron_versions', 'packages', 'components', 'frameworks'])
+    group.add_argument("--list", choices=['neuron_versions', 'pyversions','packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
     parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2'])
-    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2'], )
+    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework'],
                         default='non-dlami', help='default=non-dlami')
     parser.add_argument("--mode", choices=['develop', 'compile', 'deploy', 'initialize'], default='develop')
@@ -1025,7 +1064,9 @@ if __name__ == '__main__':
 
     # framework version sanity check
     # generate install script
-    if (args.list):
+    if (args.list == 'packages'):
         print(n2_manifest.list_packages(args))
+    elif (args.list == 'pyversions'):
+        print(n2_manifest.list_pyversions(args))
     else:
         print(n2_manifest.generate_script(args))

@@ -6,6 +6,7 @@ API Reference Guide  (``torch-neuronx``)
     :hidden:
     
     /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-trace
+    /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-replace-weights
     /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-core-placement
     /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-analyze
     /frameworks/torch/torch-neuronx/api-reference-guide/inference/api-torch-neuronx-data-parallel

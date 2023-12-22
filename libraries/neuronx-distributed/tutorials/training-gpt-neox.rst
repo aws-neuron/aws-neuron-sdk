@@ -28,11 +28,11 @@ Let’s download the scripts for pretraining.
 
    mkdir -p ~/examples/tp_dp_gpt_neox_hf_pretrain
    cd ~/examples/tp_dp_gpt_neox_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain.sh
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/common/adamw_fp32_optim_params.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/common/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-samples/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/common/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain.sh
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/adamw_fp32_optim_params.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/get_dataset.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/requirements.txt
    python3 -m pip install -r requirements.txt
 
 Next let’s download and pre-process the dataset:

@@ -1,6 +1,6 @@
 .. _nrt-api-guide:
 
-Developer's Guide - Neuron Runtime
+Developer's Guide - NeuronX Runtime
 ==================================
 
 .. contents:: Table of contents

@@ -74,9 +74,9 @@ gradient reduction will be handle by ZeRO-1.
 
        ...
        loss.backward()
-       xm**.**mark_step**()**
+       xm.mark_step()
        optimizer.step()
-       xm**.**mark_step**()**
+       xm.mark_step()
 
 ZeRO-1 optimizer also provides some additional features, user can pass
 these arguments to the wrapper constructor:
@@ -114,7 +114,6 @@ necessary for the tutorial
 
    transformers==4.27.3
    accelerate==0.17
-   datasets==2.10.1
    tensorboard==2.12.2
 
 ::

@@ -1,7 +1,7 @@
 .. _pytorch-neuronx-programming-guide:
 
-Developer Guide for Training with PyTorch Neuron  (``torch-neuronx``)
-=====================================================================
+Developer Guide for Training with PyTorch NeuronX 
+===================================================
 
 
 .. contents:: Table of Contents
@@ -11,20 +11,20 @@ Developer Guide for Training with PyTorch Neuron  (``torch-neuronx``)
 
 Trainium is designed to speed up model training and reduce training cost. It is available on the Trn1 instances. Each Trainium accelerator has two NeuronCores, which are the main neural network compute units.
 
-PyTorch Neuron enables PyTorch users to train their models on Trainium's
+PyTorch NeuronX enables PyTorch users to train their models on Trainium's
 NeuronCores with little code change to their training code. It is based
 on the `PyTorch/XLA software package <https://pytorch.org/xla>`__.
 
 This guide helps you get started with single-worker training and
 distributed training using PyTorch Neuron.
 
-PyTorch Neuron
---------------
+PyTorch NeuronX
+----------------
 
 Neuron XLA device
 ~~~~~~~~~~~~~~~~~
 
-With PyTorch Neuron the default XLA device is mapped to a NeuronCore. By default, one NeuronCore is configured. To use Neuron XLA device, specify
+With PyTorch NeuronX the default XLA device is mapped to a NeuronCore. By default, one NeuronCore is configured. To use Neuron XLA device, specify
 the device as ``xm.xla_device()`` or ``'xla'``:
 
 .. code:: python
@@ -57,12 +57,12 @@ or
 
    tensor.to('cpu')
 
-PyTorch Neuron single-worker training/evaluation quick-start
+PyTorch NeuronX single-worker training/evaluation quick-start
 --------------------------------------------------------------
 
-PyTorch Neuron uses XLA to enable conversion of
+PyTorch NeuronX uses XLA to enable conversion of
 PyTorch operations to Trainium instructions. To get started on PyTorch
-Neuron, first modify your :ref:`training script <neuronx-mlp-training-tutorial>` to
+NeuronX, first modify your :ref:`training script <neuronx-mlp-training-tutorial>` to
 use XLA in the same manner as described in `PyTorch/XLA
 documentation <https://pytorch.org/xla>`__ and
 use XLA device:
@@ -112,7 +112,7 @@ For a full runnable example, please see the :ref:`Single-worker MLP training
 on Trainium tutorial
 <neuronx-mlp-training-tutorial:single-worker-mlp-training-on-trainium>`.
 
-PyTorch Neuron multi-worker data parallel training using torchrun
+PyTorch NeuronX multi-worker data parallel training using torchrun
 -----------------------------------------------------------------
 
 Data parallel training allows you to replicate your script across
@@ -194,7 +194,7 @@ single-worker training, which simply involves removing the DDP wrapper,
 for example ``model = DDP(model, device_ids=[rank])``. After this,
 follow the previous section to change to multi-worker training.
 
-PyTorch Neuron environment variables
+PyTorch NeuronX environment variables
 --------------------------------------
 
 Environment variables allow modifications to PyTorch Neuron behavior
@@ -335,14 +335,14 @@ See official PyTorch documentation for more details about
 Tips and Best Practices
 -----------------------
 
-Understand the lazy mode in PyTorch Neuron
+Understand the lazy mode in PyTorch NeuronX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-One significant difference between PyTorch Neuron and native PyTorch is
-that the PyTorch Neuron system runs in lazy mode while the native
+One significant difference between PyTorch NeuronX and native PyTorch is
+that the PyTorch NeuronX system runs in lazy mode while the native
 PyTorch runs in eager mode. Tensors in lazy mode are placeholders for
 building the computational graph until they are materialized after the
-compilation and evaluation are complete. The PyTorch Neuron system
+compilation and evaluation are complete. The PyTorch NeuronX system
 builds the computational graph on the fly when you call PyTorch APIs to
 build the computation using tensors and operators. The computational
 graph gets compiled and executed when ``xm.mark_step()`` is called

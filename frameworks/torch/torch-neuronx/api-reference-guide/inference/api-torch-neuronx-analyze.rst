@@ -1,6 +1,6 @@
 .. _torch_neuronx_analyze_api:
 
-PyTorch Neuron (``torch-neuronx``) Analyze API for Inference
+PyTorch NeuronX Analyze API for Inference
 ============================================================
 
 .. py:function:: torch_neuronx.analyze(func, example_inputs, compiler_workdir=None)

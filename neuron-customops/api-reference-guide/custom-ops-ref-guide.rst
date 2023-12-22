@@ -1,7 +1,7 @@
 .. _custom-ops-api-ref-guide:
 
 Custom Operators API Reference Guide [Beta]
-===================================================
+============================================
 
 This page provides the documentation for the C++ API available to creators of Neuron custom C++ operators (see :ref:`neuron_c++customops`).
 
@@ -264,6 +264,9 @@ Tensor Accessors
 
 The standard tensor accessor provides element-wise random access to ``Tensor`` elements. They can be created by calling ``Tensor::accessor()``. It can be used similarly to the Pytorch ATen version (see https://pytorch.org/cppdocs/notes/tensor_basics.html#cpu-accessors). However, it is not as fast as other methods of accessing a ``Tensor``, such as the streaming accessor or TCM accessor.
 
+.. warning::
+    The standard tensor accessors can only be used in single core mode. Using standard tensor accessors in multicore mode is undefined behaviour and is going to cause race condition, yielding incorrect result.
+
 Example Usage
 ^^^^^^^^^^^^^
 
@@ -305,6 +308,9 @@ An active stream accessor is defined as a stream accessor that has been instanti
 The user is responsible for managing stream accessors concurrently accessing the same ``Tensor``. For safest usage, no stream accessor should be active while there is an active ``TensorWriteStreamAccessor`` on the same ``Tensor``. The user may either have multiple ``TensorReadStreamAccessors`` active on the same ``Tensor``, or only have a single ``TensorWriteStreamAccessor`` active on that ``Tensor``. Stream accessors should not be used concurrently with standard tensor accessors on the same ``Tensor``.
 
 An unlimited number of active stream accessors (in total, across all ``Tensors``) are functionally supported, but only up to 4 active stream accessors will be performant. Additional stream accessors beyond the 4th will have performance similar to that of a standard tensor accessor.
+
+.. warning::
+    Streaming Accessors can only be used in single core mode. Using streaming accessors in multicore mode is undefined behaviour and is going to cause race condition, yielding incorrect result.
 
 Example Usage
 ^^^^^^^^^^^^^
@@ -513,6 +519,9 @@ By default, Custom C++ operators target a single core of the GPSIMD-Engine. Perf
 
 Each GPSIMD core executes the same kernel function. The user can control the execution on each core by conditioning the Custom C++ operator logic on the core id (obtained via ``get_cpu_id()`` API). This is illustrated in the example below.
 
+.. warning::
+    In multicore mode, tensors can only be accessed through TCM accessors. Using regular tensor accessors and streaming accessors are going to yield incorrect result.
+
 The following functions are defined in ``neuron/neuron-utils.hpp``
 
 .. cpp:function:: uint32_t get_cpu_id()
@@ -579,8 +588,8 @@ To use ``printf()`` within a Custom C++ operator, the programmer must set the fo
    * - ``NEURON_RT_GPSIMD_STDOUT_QUEUE_SIZE_BYTES``
      - Size of the printf output buffer, in bytes
      - Integer
-     - Any power of two that is equal to or less than ``2097152`` (2MB)
-     - Recommend setting a value of ``2097152`` to maximize the size of printf's buffer. Setting a value of 0 disables printf.
+     - Any power of two that is equal to or less than ``131072`` (128KB)
+     - Recommend setting a value of ``131072`` to maximize the size of printf's buffer. Setting a value of 0 disables printf.
 
 Within a Custom C++ operator, ``printf()`` can be used as normal from within a C++ program. For more information, consult a reference such as (https://cplusplus.com/reference/cstdio/printf/)
 
@@ -634,5 +643,6 @@ Limitations
     * Overflowing the buffer will cause the oldest data in it to be overwritten
 * Print statements are processed and printed to the host's terminal at the end of model execution, not in real time
 * ``printf`` is only supported in single core mode, or on GPSIMD core 0 only when using multiple GPSIMD cores.
+* Tensors passed into and returned from CustomOp functions can have up to 8 dimensions, and the maximum size of each dimension is 65535.
 * When using multiple GPSIMD cores, only ``TensorTcmAccessor`` is supported. Usage of other accessors will result in undefined behaviour.
-* When using multiple GPSIMD cores, only one custom operator per model is currently supported.
+* Each model can only have one CustomOp library, and the library can have 10 functions registered. For more information on function registration in PyTorch, please refer to section `Implementing an operator in C++` in :ref:`feature-custom-operators-devguide`.

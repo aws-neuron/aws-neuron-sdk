@@ -40,7 +40,7 @@ To install PyTorch Neuron 2.0 Beta please follow the :ref:`setup-torch-neuronx` 
 
 .. code::
 
-    python -m pip install --upgrade neuronx-cc==2.* --pre torch-neuronx==2.* torchvision
+    python -m pip install --upgrade neuronx-cc==2.* --pre torch-neuronx==2.0.* torchvision
 
 
 .. note::

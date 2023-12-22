@@ -9,6 +9,20 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.19.7.0]
+------------------------------
+Date: 12/21/2023
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+
+* Improve collectives barrier latency from 500us to 40us
+
+Bug Fixes
+^^^^^^^^^
+
+* Fix bug where proxy thread blocks the runtime from adding ops leading to an execution hang
+
 Neuron Collectives [2.18.18.0]
 ------------------------------
 Date: 10/26/2023

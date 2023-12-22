@@ -1,7 +1,7 @@
 .. _feature-custom-operators-devguide:
 
 Neuron Custom C++ Operators Developer Guide [Beta]
-==========================================================
+==================================================
 
 This document gives an overview of the Neuron Custom C++ Operator feature and APIs . Currently, CustomOp support is limited to the PyTorch framework.  
 
@@ -27,14 +27,30 @@ We provide tooling and library packages (RPM and DEB) that can be installed on T
    aws-neuronx-gpsimd-tools-0.3
    aws-neuronx-gpsimd-customop-lib-0.3
 
-They can be installed with the following commands:
+For AL2023 only, the following packages need be installed as dependencies:
 ::
+   sudo yum install libnsl
+   sudo yum install libxcrypt-compat
 
+On AL2 and AL2023, they can be installed with the following commands:
+::
+   sudo yum remove python3-devel -y
    sudo yum remove aws-neuronx-gpsimd-tools-0.* -y
    sudo yum remove aws-neuronx-gpsimd-customop-lib-0.* -y
- 
+   
+   sudo yum install python3-devel -y
    sudo yum install aws-neuronx-gpsimd-tools-0.* -y 
    sudo yum install aws-neuronx-gpsimd-customop-lib-0.* -y
+
+On Ubuntu, they can be installed with the following commands:
+::
+   sudo apt-get remove python3-dev -y
+   sudo apt-get remove aws-neuronx-gpsimd-tools=0.* -y
+   sudo apt-get remove aws-neuronx-gpsimd-customop-lib=0.* -y  
+   
+   sudo apt-get install python3-dev -y
+   sudo apt-get install aws-neuronx-gpsimd-tools=0.* -y
+   sudo apt-get install aws-neuronx-gpsimd-customop-lib=0.* -y 
 
 
 Implementing an operator in C++
@@ -65,6 +81,9 @@ The kernel function contains the C++ implementation of the CustomOp, as shown in
    }
 
 The kernel function is the main computational code for the operator. We support a subset of the input types usable by regular PyTorch Custom Operators: ``torch::Tensor``, ``torch::Scalar``, ``double``, and ``int64_t``. However we do not support ``std::vector`` or ``std::tuple`` of these types at this time. Note that similar to regular PyTorch Custom Operators, only ``double`` and not ``float``, and only ``int64_t`` and not other integral types such as ``int``, ``short`` or ``long`` are supported. The return value must be a ``torch::Tensor``.
+
+.. warning::
+   Tensors passed into and returned from CustomOp functions can have up to 8 dimensions, and the maximum size of each dimension is 65535.
 
 The body of the kernel function may exercise C/C++ libraries, ``torch::Tensor`` classes, and select aTen operators, as is customary for Torch programming.  For high performance, feature offerings provide faster memory access, via new Tensor Accessor classes and stack management compiler flags. Additionally, higher performance can be obtained by parallelizing execution of the kernel over multiple GPSIMD cores. See the :ref:`custom-ops-api-ref-guide` for more details.
 
@@ -115,7 +134,10 @@ Similar to PyTorch, Neuron Custom C++ Operators are grouped into libraries defin
       m.def("tensor_negate", &tensor_negate_shape, "tensor_negate_compute");
    }
 
-Notice that the ``NEURON_LIBRARY`` macro is used in the same C++ file as the shape function. This is because the registration is loaded on the host. 
+Notice that the ``NEURON_LIBRARY`` macro is used in the same C++ file as the shape function. This is because the registration is loaded on the host.
+
+.. warning::
+   Each model can only have one CustomOp library, and the library can have 10 functions registered.
 
 The custom op library is built by calling the ``load`` API in Python like:
 ::
@@ -126,10 +148,13 @@ The custom op library is built by calling the ``load`` API in Python like:
    custom_op.load(
       name=name,
       compute_srcs=['kernel.cpp'],
-      shape_srcs=['shape.cpp']
+      shape_srcs=['shape.cpp'],
+      multicore=False
    )
 
 In the example above, name refers to the name of the library file to be created (i.e. ``libmy_ops.so``) and the ``compute_srcs`` and ``shape_srcs`` are lists of files to be compiled. After the ``load`` API completes, the library will have been compiled and loaded into the current PyTorch process. 
+
+CustomOp also supports multicore execution mode. If you want to the library to run in multicore mode, pass the flag ``multicore=True`` into the ``load`` API. Notice that the execution mode is specified at the library level, so all the functions in the library run in the same mode. For more details of multicore CustomOp, please refer to `Using multiple GPSIMD cores` section in :ref:`custom-ops-api-ref-guide`.
 
 Similar to PyTorch, the Neuron custom op will be available at ``torch.ops.<lib_name>.<op_name>`` where ``lib_name`` is defined in the ``NEURON_LIBRARY`` macro, and ``op_name`` is defined in the call to ``m.def``.
 ::
@@ -175,7 +200,7 @@ Performance Guidance
 When possible, it is recommended that operators supported by the designated framework with supported compilation onto Neuron devices are used. These operators have been have been highly optimized for the Neuron architecture. However, for other scenarios where Custom C++ operators are the required solution, the following recommendations can be followed to improve performance:
 
 * Use the provided memory management accessors (streaming and tcm accessor). Both of these accessors improve data fetch overhead. See the :ref:`custom-ops-api-ref-guide` for more information.
-* You can optionally specify the estimated amount of stack space (in bytes) used in your Custom C++ operator via the ``extra_cflags`` argument in the call to ``custom_op.load()``. For instance, if you anticipate your operator using ~20KB of stack space, include the argument ``extra_cflags=['-DSTACK_SIZE=20000']`` in the call to custom_op.load(). **This is necessary only if you anticipate the stack to grow beyond 6KB.** Otherwise, the stack will automatically be placed in local memory which significantly improves performance. Note, however, that if you do not specify the stack size but your stack grows beyond 6KB, there's a risk of a stack overflow, and you will be notified with an error message from GPSIMD should such a case occur. If you do specify a stack size, the maximum supported stack size is 400KB. 
+* You can optionally specify the estimated amount of stack space (in bytes) used in your Custom C++ operator via the ``extra_cflags`` argument in the call to ``custom_op.load()``. For instance, if you anticipate your operator using ~20KB of stack space, include the argument ``extra_cflags=['-DSTACK_SIZE=20000']`` in the call to custom_op.load(). **This is necessary only if you anticipate the stack to grow beyond ~8KB.** This flag is used to decide whether to place the stack in faster local memory, which significantly improves performance, or if we will need to place the stack in larger NeuronCore memory with longer access latency. If you do not specify this flag, or the estimate you provide is small enough (less than ~8KB), the stack will go in local memory. Note, when placed in local memory, the stack space will not be restricted by your estimate, but if your stack grows beyond ~8KB, there's a risk of a stack overflow, and you will be notified with an error message from GPSIMD should such a case occur. If you do specify a stack size, the maximum supported stack size is 400KB.
 * Use multiple GPSIMD cores when possible to parallelize (and hence improve performance) of Custom C++ operator, refer to `Using multiple GPSIMD cores`  section in :ref:`custom-ops-api-ref-guide` for more information.
 
 Functional Debug

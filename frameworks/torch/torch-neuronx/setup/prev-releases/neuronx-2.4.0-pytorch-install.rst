@@ -1,6 +1,6 @@
 .. _install-neuronx-2.4.0-pytorch:
 
-Install PyTorch Neuron (Neuron 2.4.0)
+Install PyTorch NeuronX (Neuron 2.4.0)
 ======================================
 
 .. tab-set::

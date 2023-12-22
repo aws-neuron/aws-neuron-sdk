@@ -10,6 +10,16 @@ Apache MXNet Neuron Release Notes
 
 This document lists the release notes for MXNet-Neuron framework.
 
+Apache MXNet Neuron release [1.8.0.2.4.40.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/21/2023
+
+Summary
+-------
+
+Minor updates.
+
 Apache MXNet Neuron release [1.8.0.2.4.25.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

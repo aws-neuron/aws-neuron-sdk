@@ -15,6 +15,19 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.15.9.0]
+--------------------------------
+
+Date: 12/21/2023
+
+Bug Fixes
+^^^^^^^^^
+
+* Release PCIe BAR4 on driver startup failure
+* Fix container BDF indexing issues to support relative device ordering used by containers
+* Remove incorrect error message in neuron_p2p_unregister_va and harden P2P error checking
+
+
 Neuron Driver release [2.14.5.0]
 --------------------------------
 

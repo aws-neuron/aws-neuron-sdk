@@ -11,26 +11,26 @@ If you already have a previous Neuron release installed, this section provide li
 
     .. tab-item:: Tensorflow 2.10.1
 
-        .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 122
             :end-line: 123
 
 
     .. tab-item:: Tensorflow 2.9.3
 
-        .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 125
             :end-line: 126
 
 
     .. tab-item:: Tensorflow 2.8.4
 
-        .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 128
             :end-line: 129
