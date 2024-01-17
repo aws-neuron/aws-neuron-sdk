@@ -1,0 +1,8 @@
+Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
+deepmind/multimodal-perceiver,16x224x224,:benchmark-pt:`Benchmark <perceiver-multimodal>`,PyTorch 1.13.1,Inf2.xlarge,Multimodal Autoencoding,0.85,1242,1279,Real Time,2.16.0,Data Parallel,1,FP32,None
+deepmind/vision-perceiver-learned,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,100,19.1,19.2,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16
+deepmind/vision-perceiver-fourier,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,66.99,29.1,29.2,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16
+deepmind/vision-perceiver-conv,224x224,:benchmark-pt:`Benchmark <perceiver-vision>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,123.8,14.2,14.2,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16
+google/vit-base-patch16-224,224x224,:benchmark-pt:`Benchmark <hf-google-vit>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,1666.32,4.821,4.958,Batch,2.16.0,Data Parallel,2,FP32,Matmult-BF16
+openai/clip-vit-base-patch32,224x224,:benchmark-pt:`Benchmark <hf-openai-clip>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,5178.908,48.445,71.698,Batch,2.16.0,Data Parallel,64,FP32,Matmult-BF16
+openai/clip-vit-large-patch14,224x224,:benchmark-pt:`Benchmark <hf-openai-clip>`,PyTorch 1.13.1,Inf2.xlarge,Image Classification,272.295,113.882,160.425,Batch,2.16.0,Data Parallel,8,FP32,Matmult-BF16

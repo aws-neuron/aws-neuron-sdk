@@ -36,6 +36,22 @@ To Pull the Images from ECR:
 
 .. _1622:
 
+Neuron K8 release [2.19.16.0]
+===========================
+
+Date: 01/18/2024
+
+Critical Security Patch
+---------
+
+We updated the dependencies used by the Neuron Device Plugin and the Neuron Kubernetes Scheduler to fix several important
+security vulnerabilities.
+This update fixes all security vulnerabilities reported in https://github.com/aws-neuron/aws-neuron-sdk/issues/817.
+Please see the ticket for all impacted dependencies and their associated vulnerabilities.
+
+
+.. _1622:
+
 Neuron K8 release [2.16.18.0]
 ===========================
 

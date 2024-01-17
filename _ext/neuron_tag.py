@@ -83,7 +83,8 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'frameworks/tensorflow/tensorflow-neuron-inference',
                   'general/arch/neuron-hardware/trn1-arch',
                   'general/arch/neuron-hardware/trainium',
-                  'general/benchmarks/trn1/trn1-performance'
+                  'general/benchmarks/trn1/trn1-inference-performance',
+                  'general/benchmarks/trn1/trn1-training-performance'
                ]
 
 clear_trn1_tag = [ 'general/arch/neuron-hardware/inf2-arch', 

@@ -7,6 +7,13 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.12.68.0]
+----------------------------
+Date: 01/18/2024
+
+* Patch release with bug fixes.
+
+
 Neuron Compiler [2.12.54.0]
 -------------------------
 Date: 12/21/2023

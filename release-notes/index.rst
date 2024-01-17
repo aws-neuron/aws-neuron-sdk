@@ -12,6 +12,11 @@ What's New
 
 
 
+Neuron 2.16.1 (01/18/2024)
+--------------------------
+Patch release with compiler bug fixes, updates to :ref:`Neuron Device Plugin and Neuron Kubernetes Scheduler <neuron-k8-rn>` .
+
+
 Neuron 2.16.0 (12/21/2023)
 --------------------------
 
@@ -324,17 +329,17 @@ Release Artifacts
 Trn1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.1
 
 Inf2 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.1
 
 Inf1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.16.1
 
 Supported Python Versions for Inf1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

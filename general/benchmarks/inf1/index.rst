@@ -8,13 +8,13 @@ Inf1 Inference Performance
 
 The following tables contain the reference inference performance for models in the tutorials. Follow the links on each row to replicate similar results in your own environment. Refer to :ref:`ec2-then-ec2-setenv` documentation to create a new environment based on the latest Neuron release.
 
-*Last update: September 15th, 2023*
+*Last update: Jan 2nd, 2024*
 
 
 .. _NLP:
 
-Natural Language Processing
----------------------------
+Encoder Models
+--------------
 .. tab-set::
 
    .. tab-item:: Throughput optimized
@@ -22,7 +22,7 @@ Natural Language Processing
       .. df-table::
          :header-rows: 1
 
-         df = pd.read_csv('neuronperf_nlp_throughput_optimized.csv')
+         df = pd.read_csv('throughput_data_encoder.csv')
          df_prices = pd.read_csv('instance_prices.csv')
          df = pd.merge(df,df_prices,on='Inst. Type')
 
@@ -39,7 +39,7 @@ Natural Language Processing
       .. df-table::
          :header-rows: 1
 
-         df = pd.read_csv('neuronperf_nlp_latency_optimized.csv')
+         df = pd.read_csv('latency_data_encoder.csv')
          df_prices = pd.read_csv('instance_prices.csv')
          df = pd.merge(df,df_prices,on='Inst. Type')
 
@@ -52,34 +52,18 @@ Natural Language Processing
          df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
 
 
-\*\ *Throughput and latency numbers in this table were computed using* NeuronPerf_\ *. To reproduce these results, install NeuronPerf and run the provided scripts.*
+.. note::
+    Throughput and latency numbers in this table were computed using* NeuronPerf_. To reproduce these results, install NeuronPerf and run the provided scripts.*
 
 .. _NeuronPerf: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuronperf/index.html
 
-.. df-table::
-   :header-rows: 1
-
-   df = pd.read_csv('data.csv')
-   df_prices = pd.read_csv('instance_prices.csv')
-   df = pd.merge(df,df_prices,on='Inst. Type').query('`Application`=="NLP"')
-
-   df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
-
-   cols_to_show = ['Model', 'Tutorial', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
-   df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
-
-   int_cols = ['Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)']
-   df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
-
-\*\ *Throughput and latency numbers in this table were generated using Neuron Tutorials.*
-
-Computer Vision
----------------
+Convolutional Neural Networks (CNN) Models
+------------------------------------------
 
 .. df-table::
    :header-rows: 1
 
-   df = pd.read_csv('data.csv')
+   df = pd.read_csv('throughput_data_cnn.csv')
    df_prices = pd.read_csv('instance_prices.csv')
    df = pd.merge(df,df_prices,on='Inst. Type').query('`Application`=="CV"')
 
@@ -91,7 +75,8 @@ Computer Vision
    int_cols = ['Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)']
    df[int_cols] = df[int_cols].round(0).astype('int',copy=True)
 
-\*\ *Throughput and latency numbers in this table were generated using Neuron Tutorials.*
+.. note::
+    Throughput and latency numbers in this table were generated using Neuron Tutorials.
 
 .. note::
    **Cost per 1M inferences** is calculated using US East (N. Virginia) On-Demand hourly rate.

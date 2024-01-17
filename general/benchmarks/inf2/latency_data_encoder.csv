@@ -1,0 +1,15 @@
+Model,Scripts,Framework,Inst. Type,Task,Throughput (inference/second),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type,OS Type
+albert-base-v2,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),2071.378437,0.958681107,1.03259325,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+bert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),1946.708793,1.019001007,1.094102859,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+bert-base-cased-finetuned-mrpc,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Sequence Classification,2059.250165,0.97322464,1.007795334,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+bert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),1948.941345,1.019001007,1.095056534,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+bert-large-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),727.598127,2.757549286,2.813816071,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+bert-large-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),726.1255532,2.759456635,2.817869186,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+camembert-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),1952.986418,1.01852417,1.096010208,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+distilbert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),3294.383248,0.599384308,0.679972172,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+distilbert-base-cased-distilled-squad,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),3301.532923,0.596761703,0.678062439,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+distilbert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),3275.590527,0.602006912,0.691416264,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+google/electra-base-discriminator,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),1964.795443,1.013278961,1.07550621,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),1945.352356,1.020669937,1.101970673,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+roberta-large,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.xlarge,Raw Output (AutoModel),733.2390707,2.71487236,2.778291702,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
+xlm-roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 1.13.1,Inf2.48xlarge,Raw Output (AutoModel),39.58934096,50.03333092,67.0243144,Real Time,2.16.0,Data Parallel,1,128,FP32,Matmult-BF16,U22
