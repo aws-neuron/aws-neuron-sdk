@@ -8,7 +8,6 @@ Developer Guide  (``torch-neuronx``)
     /frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide
     /frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-debug
     /frameworks/torch/torch-neuronx/programming-guide/torch-neuronx-profiling-dev-guide
-    /frameworks/torch/torch-neuronx/programming-guide/training/neuron-distributed-programming-guide
 
 
 .. dropdown::  Developer Guide

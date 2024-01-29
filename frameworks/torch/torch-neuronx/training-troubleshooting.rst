@@ -61,9 +61,9 @@ On Ubuntu, if Apport is not running, core dump file name is by default "core" in
 
    echo '/tmp/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
 
-For containers, install appropriate dependencies during docker build ("apt-get update && apt-get -y install build-essential gdb") and start the container with "--ulimit core=-1" to enable core dump and "-v /tmp/:/tmp/" to ensure core dumps to /tmp are preserved when container is stopped or deleted. Dependencies can also be installed after container is started.
+For containers, install appropriate dependencies during docker build ("apt-get update && apt-get -y install build-essential gdb") and start the container with ``--ulimit core=-1`` to enable core dump and ``-v /tmp/:/tmp/`` to ensure core dumps to ``/tmp`` are preserved when container is stopped or deleted. Dependencies can also be installed after container is started.
 
-On Ubuntu, core dumps can also handled by Apport which is disabled by default. To enable Apport, run ``sudo service apport start``. The ``/proc/sys/kernel/core_pattern`` is updated by Apport service. After a crash, look in /var/log/apport.log for the core dump file name, which should be in located in /var/lib/apport/coredump/.
+On Ubuntu, core dumps can also handled by Apport which is disabled by default. To enable Apport, run ``sudo service apport start``. The ``/proc/sys/kernel/core_pattern`` is updated by Apport service. After a crash, look in ``/var/log/apport.log`` for the core dump file name, which should be in located in ``/var/lib/apport/coredump/``.
 
 Once you have the core dump, you can use gdb to debug further (for Python applications, <executable> is ``python`` or ``python3``):
 
@@ -71,7 +71,7 @@ Once you have the core dump, you can use gdb to debug further (for Python applic
 
    gdb <executable> <core file>
 
-If some process (i.e. XRT server) is killed due to out-of-memory on host (i.e. you see "Out of memory: Killed process <PID>" in syslog or dmesg), there won't be any core dump generated. However, you can change to it to kernel panic mode to trigger core dump by setting ``/proc/sys/vm/panic_on_oom`` to value of 1 on the host or from inside container.
+If some process (i.e. XRT server) is killed due to out-of-memory on host (i.e. you see ``Out of memory: Killed process <PID>`` in ``/var/log/syslog`` or output of ``dmesg``), there won't be any core dump generated. However, you can change to it to kernel panic mode to trigger core dump by setting ``/proc/sys/vm/panic_on_oom`` to value of 1 on the host or from inside container.
 
 On the host where you need ``sudo`` (this change will be reflected inside the container also):
 

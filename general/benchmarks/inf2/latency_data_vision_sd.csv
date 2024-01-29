@@ -4,4 +4,4 @@ Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 1.13.1,
 Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.188,5400.1,5600,Real Time,2.16.0,Data Parallel,1,BF16,Matmult-BF16
 Stable Diffusion 2 Inpainting,936x624,:benchmark-pt:`Benchmark <sd2_inpainting>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.15,6701.4,6737.4,Real Time,2.16.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
 Stable Diffusion XL Base,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_1024>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.072,13500.73,16000.5,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion XL Base & Refiner,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_and_refiner>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.084,12007.9,13000.1,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion XL Base & Refiner,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_and_refiner_1024>`,PyTorch 1.13.1,Inf2.xlarge,Image Generation,0.084,12007.9,13000.1,Real Time,2.16.0,Data Parallel,1,FP32,Matmult-BF16

@@ -146,6 +146,9 @@ class manifest:
         # Install wget, awscli
         str_python += self.install_aux(args)
 
+        # install extra dependencies
+        str_deps = self.install_extra_dependencies(args)
+
         # Install Neuron compiler
         str_compiler = self.install_neuron_compiler(args)
 
@@ -161,11 +164,11 @@ class manifest:
         elif args.category == 'all':
             if args.instance == 'trn1':
                 str_runtime += str_efa
-            return str_preamble + str_driver + str_runtime + str_tools + str_python + str_compiler_framework
+            return str_preamble + str_driver + str_runtime + str_tools + str_deps + str_python + str_compiler_framework
         elif args.category == 'driver_runtime_tools':
             return str_preamble + str_driver + str_runtime + str_tools
         elif args.category == 'compiler_framework':
-            return str_python + str_compiler_framework
+            return str_deps + str_python + str_compiler_framework
         elif args.category == 'driver':
             return str_preamble + str_driver
         elif args.category == 'runtime':
@@ -501,6 +504,21 @@ class manifest:
                             if self.df_package_properties.loc[self.df_package_properties['name'] == system_tool][
                                 'pin_major'].values[0] == 'true':
                                 str += '-' + self.get_major_version(system_tool, args.instance) + '.* -y\n'
+        return str
+
+    def install_extra_dependencies(self, args):
+        """
+        Any extra dependencies must be added in this function
+        """
+        str = ''
+        if args.os == 'amazonlinux2023':
+            str += '# Install External Dependency\n'
+            str += 'sudo yum '
+            if args.mode == 'develop':
+                str += 'install -y '
+            elif args.install_type == 'update':
+                str += 'update '
+            str += 'libxcrypt-compat\n'
         return str
 
     def set_python_venv(self, args):

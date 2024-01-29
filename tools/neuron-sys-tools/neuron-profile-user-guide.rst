@@ -17,22 +17,23 @@ and run on Neuron devices.
 
     Please use the ``aws-neuronx-tools`` package from Neuron SDK 2.11 or higher.
 
+neuron-profile helps developers identify performance bottlenecks and optimize their workloads for Neuron devices. neuron-profile provides insights into Neuron device activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. Neuron device activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling overhead is typically minimal because Neuron devices have dedicated on-chip hardware profiling.
 
 Installation
 ------------
 
 ``neuron-profile`` comes as part of the ``aws-neuronx-tools`` package, and will be installed to ``/opt/aws/neuron/bin``.
 
-The Neuron web profile viewer utilizes InfluxDB OSS 2.x to store time series data for the profiled workloads during postprocessing.
+The Neuron web profile viewer utilizes InfluxDB OSS 2.x to store time series data for the profiled workloads after post processing.
 Please follow the instructions provided at https://portal.influxdata.com/downloads/ for the correct OS.  A sample installation
-of InfluxDB is provided below.
+of Neuron Profile and InfluxDB is provided below.
 
 Ubuntu
 ~~~~~~
 
 ::
 
-    # Neuron
+    # Install Neuron Profile
     . /etc/os-release
     sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
     deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
@@ -43,7 +44,7 @@ Ubuntu
     sudo apt-get install aws-neuronx-runtime-lib aws-neuronx-dkms -y
     sudo apt-get install aws-neuronx-tools -y
 
-    # InfluxDB
+    # Install InfluxDB
     wget -q https://repos.influxdata.com/influxdata-archive_compat.key
     echo '393e8779c89ac8d958f81f942f9ad7fb82a25e133faddaf92e15b16e6ac9ce4c influxdata-archive_compat.key' | sha256sum -c && cat influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
     echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
@@ -58,7 +59,7 @@ AL2
 
 ::
 
-    # Neuron
+    # Install Neuron Profile
     sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
     [neuron]
     name=Neuron YUM Repository
@@ -71,7 +72,7 @@ AL2
     sudo yum install aws-neuronx-runtime-lib aws-neuronx-dkms -y
     sudo yum install aws-neuronx-tools -y
 
-    # InfluxDB
+    # Install InfluxDB
     cat <<EOF | sudo tee /etc/yum.repos.d/influxdata.repo
     [influxdata]
     name = InfluxData Repository - Stable
@@ -91,8 +92,7 @@ AL2
 Capturing a profile
 -------------------
 
-The ``neuron-profile`` tool can both capture and post-process profiling information.
-In the simplest mode, it takes a compiled model (a NEFF), executes it, and saves the profile results to a NTFF (``profile.ntff`` by default).
+The ``neuron-profile`` tool can both capture and post-process profiling information. ``neuron-profile`` takes a compiled model (a NEFF), executes it, and saves the profile results to a NTFF (``profile.ntff`` by default).
 For this example, we assume a NEFF is already available as ``file.neff``
 
 ::
@@ -102,10 +102,10 @@ For this example, we assume a NEFF is already available as ``file.neff``
 Capturing profiles for multi-worker jobs
 ----------------------------------------
 
-``neuron-profile`` can capture profiles for collectives-enabled NEFFs running across multiple Neuron cores, Neuron devices, or even nodes. 
+``neuron-profile`` can capture profiles for collectives-enabled NEFFs running across multiple Neuron Cores, Neuron devices, or even nodes. 
 This is useful for understanding performance and communication overheads when deploying larger distributed models.
 
-The following example, performs a distributed run across all Neuron Devices and Neuron Cores on an Inf2.24xlarge instances, capturing profiles for all 12 workers (one for each core).
+The following example, performs a distributed run across all Neuron Devices and Neuron Cores on an Inf2.24xlarge instances, capturing profiles for all 12 workers (one for each Neuron Core).
 
 ::
 
@@ -120,15 +120,41 @@ A profile is saved for each worker in the output directory.
     profile_rank_10.ntff  profile_rank_4.ntff  profile_rank_8.ntff profile_rank_11.ntff  profile_rank_5.ntff  profile_rank_9.ntff
 
 You can see a summary of each profile using the command ``neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_<i>.ntff``. This output
-includes fields for the Neuron Core (``nc_idx``) and Neuron Device (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
-device 3.
+includes summary metrics and fields for the Neuron Core (``nc_idx``) and Neuron Device (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
+device 3 and took 0.017 seconds (17 ms) to run the model.
 
 ::
 
-    $ neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_5.ntff | grep -e "nd_idx" -e "nc_idx"
-    nc_idx    1
-    nd_idx    2
+    $ neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_5.ntff | grep -e "nd_idx" -e "nc_idx" -e "total_time"
+    nc_idx      1
+    nd_idx      2
+    total_time  0.017
 
+
+You can also view the profile summary and all post-processed profiler events as json. To do that, use the ``--output-format json`` option.
+
+::
+
+    $ neuron-profile view --output-format json --output-file profile.json -n file.neff -s output/profile_rank_5.ntff
+    $ cat profile.json
+    {
+    "summary": [
+        {
+            "total_time": 0.017,
+            "event_count": 11215
+            [...]
+        }
+        "instruction": [
+            {
+                "timestamp": 10261883214,
+                "duration": 148,
+                "label": "TensorMatrix",
+                "hlo_name": "%add.1 = add(%dot, %custom-call.44)",
+                "opcode": "MATMUL",
+                "operands": "S[5] (Tensor)++@complete acc_flags=3 row_grp=q0 src=fp16@0x5600[1,0,0][3,1,1] dst=0x2000000[1,0,0][3,1,1] 3*128 "
+            },
+        [...]
+    }
 
 It is also possible to run a distributed job while only capturing a profile for a specific worker instead of all workers. To do that, use the ``--collectives-profile-id`` option.
 
@@ -178,7 +204,7 @@ It will post-process these artifacts and print out a direct link to the profile 
 Viewing profiles for multi-worker jobs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Profiles from multi-worker jobs can either be viewed individually or in a combined collectives view.
+Profiles from multi-worker jobs (ie. more than one Neuron Core) can either be viewed individually or in a combined collectives view.
 Since profile data is often similar between workers and processing profile data for all workers can be time-consuming, it is recommended to first 
 explore the profile for a single worker or small subset of workers. Viewing the profile for a specific worker is the same as for single-worker profiles.
 
@@ -229,7 +255,7 @@ Accessing the profiles
 If ``neuron-profile view`` is run on a remote instance, you may need to use port forwarding to access the profiles.
 
 From the local machine, SSH to the remote instance and forward ports 3001 (the default ``neuron-profile`` HTTP server port) and 8086 (the default
-influxdb port).  Then in the browser, go to ``localhost:3001`` to view the profiles.
+InfluxDB port).  Then in the browser, go to ``localhost:3001`` to view the profiles.
 
 ::
 
@@ -254,7 +280,7 @@ Starting from the bottom, the ``TensorMatrix Utilization`` shows the efficiency 
 the ``Pending DMA Count`` and ``DMA Throughput`` rows show the DMA activity.  In general, we want these to be as high
 as possible, and in some cases may help give clues as to whether the workload is memory or compute bound.
 
-Next are the individual NeuronCore engine executions.  These rows show the start and end times for instructions executed by each
+Next are the individual Neuron Core engine executions.  These rows show the start and end times for instructions executed by each
 engine, and clicking on one of these bars will show more detailed information, as well as any dependencies that were found.
 For models involving collective compute operations, you will additionally see rows labeled with ``CC-core``, which are used to synchronize
 the CC operations.
@@ -277,6 +303,7 @@ The following are some useful features that may help with navigating a profile:
   - Markers can be saved and loaded by using a provided name for the marker set.
   - Individual markers can be renamed or deleted in this menu as well.
 
+- Click on the "Box Select" button in the top-right corner of the timeline and then click and drag on any region of the plot to select all events in that region and get summary statistics such as total duration and breakdowns of opcodes, transfer_sizes, and more.
 - The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.
 
 Additionally, there are various summary buttons that can be clicked to provide more information on the model/NEFF, such as the input and output tensors,
@@ -294,7 +321,7 @@ CLI reference
 
 .. option:: neuron-profile capture [parameters] [inputs...]
 
-    Takes a given compiled NEFF, executes it, and collect the profile results.
+    Takes a given compiled NEFF, executes it, and collects the profile results.
     When no inputs are provided, all-zero inputs are used, which may result in inf or NaNs.
     It is recommended to use ``--ignore-inference``
 

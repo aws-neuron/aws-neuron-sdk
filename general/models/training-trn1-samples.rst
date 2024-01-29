@@ -127,6 +127,7 @@ Decoders
    * - meta-llama/Llama-2-7b
      - neuronx-distributed
      - * :ref:`llama2_7b_tp_zero1_tutorial`
+       * `Training Llama2 7B Model with AWS Batch and Trainium <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/aws-batch/llama2/README.md>`_
 
    * - meta-llama/Llama-2-13b
      - neuronx-distributed
@@ -141,8 +142,6 @@ Decoders
      - * `Launch a Llama-2-7B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
        * `Launch a Llama-2-13B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
        * `Launch a Llama-2-70B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
-
-
 
 .. _encoder_decoder_model_samples_training_trn1:
 

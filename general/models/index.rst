@@ -30,9 +30,4 @@ This section gives you the consolidated list of code samples and tutorials publi
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
-
 For links to individual github sample repos, please see :ref:`neuron-github-samples`
-
-
-
-

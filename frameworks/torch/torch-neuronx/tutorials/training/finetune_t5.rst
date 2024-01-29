@@ -3,6 +3,9 @@
 Fine-tune T5 model on Trn1
 ================================
 
+.. note:: 
+   Update 01/03/24: This tutorial is currently broken and the AWS Neuron team is working on the fix.
+
 
 In this tutorial, we show how to fine-tune a Hugging Face (HF) T5 model 
 using HF trainer API. This example fine-tunes a `T5 model for

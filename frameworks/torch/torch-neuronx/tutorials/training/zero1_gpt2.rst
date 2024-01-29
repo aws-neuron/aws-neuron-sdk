@@ -3,6 +3,9 @@
 ZeRO-1 Tutorial
 ===============
 
+.. note::
+   Update 01/03/24: This tutorial is currently broken and the AWS Neuron team is working on the fix.
+
 What is ZeRO-1?
 ---------------
 
@@ -89,15 +92,13 @@ these arguments to the wrapper constructor:
 
 GPT2-XL Pretraining Tutorial
 ----------------------------
-Update 10/02:This tutorial is currently broken and the AWS Neuron team is working on the fix. 
 
-Table of Contents:
-///
--  Setup
--  Dataset
--  Training
+.. note::
+   Update 01/03/24: This tutorial is currently broken and the AWS Neuron team is working on the fix.
 
---------------
+.. contents:: Table of contents
+   :local:
+   :depth: 2
 
 Setup
 ~~~~~

@@ -1,6 +1,0 @@
-Model,Scripts,Framework,Inst. Type,Task,Throughput (tokens/second),Latency per Token P50 (ms),Latency per Token P99 (ms),Application Type,Neuron Version,Run Mode,TP Degree,DP Degree,Batch Size,Sequence Length,Input Length,Output Length,Model Data Type,Compilation Autocast Data Type
-opt-13b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,3014.3,68.9,80,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
-opt-30b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,2023.7,110.9,117.8,Batch,2.14.0,Tensor Parallel,8,1,256,128,9,119,FP16,Matmult-BF16
-opt-66b,:benchmark-pt:`Benchmark <opt>`,Transformers Neuron,Inf2.48xlarge,Text Generation,1782.9,126.6,144.6,Batch,2.14.0,Tensor Parallel,24,1,256,128,9,119,FP16,Matmult-BF16
-Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,Inf2.48xlarge,Text Generation,122.4,8.2,8.3,Batch,2.14.0,Tensor Parallel,24,1,1,256,64,192,FP16,Matmult-BF16
-t5-3b,`Tutorial <https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`_,Neuron Distributed,Inf2.24xlarge,Text Generation,91.3,10.9,10.9,Batch,2.14.0,Tensor Parallel,8,1,1,128,128,84,FP32,Matmult-BF16

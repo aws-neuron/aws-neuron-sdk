@@ -16,6 +16,7 @@ Neuron GitHub Samples
                 * `AWS Neuron samples for ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`_
                 * `AWS Neuron samples for EKS <https://github.com/aws-neuron/aws-neuron-eks-samples>`_
                 * `AWS Neuron samples for SageMaker <https://github.com/aws-neuron/aws-neuron-sagemaker-samples>`_
+                * `AWS Neuron samples for Batch <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/aws-batch/>`_
 
 
         .. dropdown::  Inference Samples for ``Inf2 & Trn1``

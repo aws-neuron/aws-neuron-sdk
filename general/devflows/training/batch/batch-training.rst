@@ -40,7 +40,7 @@ Please follow the below mentioned steps to run your training jobs on ``AWS Batch
 
       cd ~/
       git clone https://github.com/aws-neuron/aws-neuron-samples.git
-      cd ~/aws-neuron-samples/torch-neuronx/training/aws-batch/scripts
+      cd ~/aws-neuron-samples/torch-neuronx/training/aws-batch/all-reduce
 
 #. **Configure resource requirements**
 
@@ -69,5 +69,6 @@ Please follow the below mentioned steps to run your training jobs on ``AWS Batch
    You can use Amazon CloudWatch Logs to monitor, store, and view all your logs from AWS Batch job. To learn more about it, please see `here <https://docs.aws.amazon.com/batch/latest/userguide/batch-eks-cloudwatch-logs.html>`_.
 
 .. note::
-    * Replace ``allreduce.py`` and ``allreduce.sh`` with your custom training script. You can further tailor your ``Dockerfile`` to include any additional dependencies specific to your needs.
+    * You could run a full model training job using this setup. For example, `this sample <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/aws-batch/llama2/README.md>`_ runs the Llama2-7B tutorial on AWS Batch using the same setup.
+    * You can further tailor your ``Dockerfile`` to include any additional dependencies specific to your needs.
     * You have the option to leverage ``trn1n.32xlarge`` instances as an alternative to ``trn1.32xlarge``. To make this transition, you only need to make adjustments to the ``launch template`` and ``job definition`` in order to accommodate the use of 16 EFA (Elastic Fabric Adapter) devices, whereas the current setup for ``trn1`` employs 8 EFA devices. Please check out `this document <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution.html?highlight=multi-node>`_ to start with ``trn1n.32xlarge`` for multi-node execution.
