@@ -33,7 +33,7 @@ https://awsdocs-neuron-staging.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
 - [ ] (If applicable) I've automated a test to safegaurd my changes from regression.
 - [ ] (If applicable) I've posted test collateral to prove my change was effective and not harmful.
 - [ ] (If applicable) I've added someone from QA to the list of reviewers.  Do this if you didn't make an automated test or feel it's appropriate for another reason.
-- [ ] (If applicable) I've reviewed the licenses of updated and new binaries and their dependencies to make sure all licenses are on the pre-approved Amazon license list.  See https://inside.amazon.com/en/services/legal/us/OpenSource/Pages/BlessedOpenSourceLicenses.aspx.
+
 
 
 ## Pytest Marker Checklist
