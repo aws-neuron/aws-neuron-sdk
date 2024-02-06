@@ -6,8 +6,9 @@
 Please specify the release version, instance size and type, OS type and test output.
 
 Training tutorial:
-Convergence graph for training tutorials
-Performance metrics average_throughput, latency_p50, latency_p99 and MFU% if available
+Please attach convergence graph for training tutorials.
+
+Please attache performance metrics average_throughput, latency_p50, latency_p99 and MFU% if available
 
 
 Please make sure this PR contains correct classification terms (Alpha, Beta, and Stable).
