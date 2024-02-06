@@ -19,7 +19,7 @@ If possible, provide your results or a link to them for the reviewer to check yo
 
 
 *Link to RTD for my changes:* 
-https://awsdocs-neuron-staging.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
+https://awsdocs-neuron.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
 
 
 *Additional context:*
