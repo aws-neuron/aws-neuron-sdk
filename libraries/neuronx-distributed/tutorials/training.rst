@@ -14,7 +14,7 @@ model.
 Setting up environment:
                        
 For this experiment, we will use a trn1-32xl machine with the storage
-set to 512GB atleast.
+set to 512GB at least.
 Follow the instructions mentioned here: 
 :ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`. 
 It is recommended to work out of python virtual env so as to avoid package installation issues.

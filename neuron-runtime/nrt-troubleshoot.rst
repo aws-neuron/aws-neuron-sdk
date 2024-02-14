@@ -185,6 +185,7 @@ While loading a model(NEFF), Neuron Runtime checks whether the hardware operator
 Neuron Runtime will display the following error messages:
 
 ::
+
     2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Unsupported hardware operator code 214 found in neff.
     2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.    
 
@@ -263,54 +264,15 @@ input.
 Report issue to Neuron by posting the relevant details on GitHub
 `issues <https://github.com/aws/aws-neuron-sdk/issues>`__.
 
-
-
+--------------------------------------------------------------------------------------
 
 RuntimeError: module compiled against API version 0xf but this version of numpy is 0xe
 --------------------------------------------------------------------------------------
-This usally means that the numpy version used during compilation is different than the one used when executing the model.
+This usually means that the numpy version used during compilation is different than the one used when executing the model.
 As of Neuron SDK release 2.15, numpy versions supported in Neuron SDK are following:  numpy<=1.25.2, >=1.22.2.  Check and confirm the right
 numpy version is installed and re-compile/execute the model.
 
-
-
-
-
-Memory Errors
-$$$$$$$$$$$$$
-
-
-Transient memory errors
------------------------
-
-::
-
-   Uncorrectable memory error is detected on Neuron device: 5:1 metadata: 0x2. The error might cause incorrect computational results and might affect training convergence. Please 
-   terminate and restart from the last checkpoint if the convergence is impacted.
-
-Solution
-^^^^^^^^
-
-Neuron detected a single uncorrectable bit flip in the device memory.
-The execution can continue but there is a possibility of a numerical
-error. If this is a concern, terminate and restart from the last known
-good check point.
-
-Persistent memory errors
-------------------------
-
-::
-
-   Uncorrectable memory error is detected on Neuron device: 5:1 metadata: 0x2. Failing execution.
-
-.. _solution-1:
-
-Solution
-^^^^^^^^
-
-Multiple uncorrectable errors are detected during execution. The
-execution cannot continue. This is most likely caused by faulty
-hardware. Terminate and move to a different instance.
+----------------------------
 
 Failure to initialize Neuron
 ----------------------------
@@ -338,6 +300,8 @@ devices automatically.
 
    sudo rmmod neuron; sudo modprobe neuron
 
+-----------------------------------------------------------------------------
+
 An application is trying to use more cores that are available on the instance
 -----------------------------------------------------------------------------
 
@@ -352,6 +316,66 @@ Solution
 
 Use properly sized instance. trn1.32xlarge has 32 Neuron Cores,
 trn1.2xlarge has 2 Neuron Cores.
+
+
+
+
+Hardware Errors
+$$$$$$$$$$$$$$$
+
+
+For Trn and Inf instances, the following hardware errors are monitored by Neuron Runtime:
+
+
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Error Types            | Description                                               | Behaviors                                                                                                                     | Recommended Actions                                                                                                                                                  |
++========================+===========================================================+===============================================================================================================================+======================================================================================================================================================================+
+| SRAM Uncorrectable     | An on-chip SRAM encountered a parity error and produced   | 1. Instance Retirement Notice:                                                                                                | 1. Replace the EC2 instance by                                                                                                                                       |
+|                        | incorrect results.                                        | You will receive an `EC2 instance retirement notice                                                                           | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-retirement.html>`_                                              | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
+|                        |                                                           | within 15 minutes of experiencing this message.                                                                               |                                                                                                                                                                      |
+|                        |                                                           | EKS, EC2 Auto Scaling Groups, and AWS ParallelCluster will react to                                                           | 2. Utilize `Neuron Sysfs <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-sysfs-user-guide.html#description-for-each-metric>`_ |
+|                        |                                                           | these retirement notices according to their configured policies,                                                              | and `Neuron Monitor <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html#system-level-metric-groups>`_     |
+|                        |                                                           | but you can also automate responses to these notices yourself with                                                            | to monitor the ``sram_ecc_uncorrected`` error counts.                                                                                                                |
+|                        |                                                           | `EventBridge rules <https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events>`_.                         |                                                                                                                                                                      |
+|                        |                                                           |                                                                                                                               |                                                                                                                                                                      |
+|                        |                                                           | 2. Neuron Runtime Behavior:                                                                                                   |                                                                                                                                                                      |
+|                        |                                                           | Neuron Runtime will exit with ``NRT_EXEC_COMPLETED_WITH_ERR (1004)`` return code.                                             |                                                                                                                                                                      |
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| HBM Uncorrectable      | An HBM encountered an uncorrectable error and produced    | 1. Instance Retirement Notice:                                                                                                | 1. Replace the EC2 instance by                                                                                                                                       |
+|                        | incorrect results.                                        | You will receive an `EC2 instance retirement notice                                                                           | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-retirement.html>`_                                              | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
+|                        |                                                           | within 15 minutes of experiencing this message.                                                                               |                                                                                                                                                                      |
+|                        |                                                           | EKS, EC2 Auto Scaling Groups, and AWS ParallelCluster will react to                                                           | 2. Utilize `Neuron Sysfs <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-sysfs-user-guide.html#description-for-each-metric>`_ |
+|                        |                                                           | these retirement notices according to their configured policies,                                                              | and `Neuron Monitor <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html#system-level-metric-groups>`_     |
+|                        |                                                           | but you can also automate responses to these notices yourself with                                                            | to monitor the ``mem_ecc_uncorrected`` error counts.                                                                                                                 |
+|                        |                                                           | `EventBridge rules <https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events>`_.                         |                                                                                                                                                                      |
+|                        |                                                           |                                                                                                                               |                                                                                                                                                                      |
+|                        |                                                           | 2. Neuron Runtime Behavior:                                                                                                   |                                                                                                                                                                      |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    |                                                                                                                                                                      |
+|                        |                                                           | You will see the following error message in runtime logs from stdout console: ``(FATAL-RT-UNDEFINED-STATE)                    |                                                                                                                                                                      |
+|                        |                                                           | encountered uncorrectable memory error on Neuron Device 0. Execution results may be invalid.                                  |                                                                                                                                                                      |
+|                        |                                                           | Please terminate or start/stop this instance to recover from bad hardware.``                                                  |                                                                                                                                                                      |
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DMA Aborts             | A DMA engine encountered an unrecoverable error.          | Neuron Runtime Behavior:                                                                                                      | Replace the EC2 instance by                                                                                                                                          |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
+|                        |                                                           | ``[MLA 0][NC 0] DMA TX engine 0 is in an abort state`` or                                                                     |                                                                                                                                                                      | 
+|                        |                                                           | ``[MLA 0][NC 0] DMA RX engine 0 is in an abort state``                                                                        |                                                                                                                                                                      |
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Hang on Collectives    | Possibly caused by a hardware error on another worker.    | Neuron Runtime Behavior:                                                                                                      | Search for SRAM Uncorrectable, HBM Uncorrectable, DMA Aborts, and Hang on Compute errors on the other workers, and implement the recommended actions on the          |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | affected worker. Afterward, restart your workload and attempt again.                                                                                                 |
+|                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                |                                                                                                                                                                      |
+|                        |                                                           | ``(FATAL-RT-UNDEFINED-STATE) missing collectives status                                                                       |                                                                                                                                                                      |
+|                        |                                                           | on Neuron Device 0 NC 0, model 0 - suspected hang in collectives operation 0 out of 100``                                     |                                                                                                                                                                      |
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Hang on Compute        | Unexpected software or hardware issue.                    | Neuron Runtime Behavior:                                                                                                      | Replace the EC2 instance by                                                                                                                                          |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
+|                        |                                                           | ``(FATAL-RT-UNDEFINED-STATE) execution timeout (30000 ms)                                                                     |                                                                                                                                                                      |
+|                        |                                                           | on Neuron Device 0 NC 0, model xxx.neff, waiting for execution completion notification``                                      |                                                                                                                                                                      |
++------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
 
 
 EFA and Collective Communication Errors
@@ -399,7 +423,7 @@ the path to to libfabric library to LD_LIBRARY_PATH
 
 .. _efa-is-not-enabled-in-trn132xlarage:
 
-EFA is not enabled in trn1.32xlarage
+EFA is not enabled in trn1.32xlarge
 ------------------------------------
 
 EFA is used as a transport for Collective Communication among multiple

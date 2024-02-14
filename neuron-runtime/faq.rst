@@ -47,7 +47,7 @@ What about RedHat or other versions of Linux and Windows?
 We don't officially support it yet.
 
 
-How can I take advantage of multiple NeuronCores to run multipleinferences in parallel?
+How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?
 ---------------------------------------------------------------------------------------
 
 Examples of this for TensorFlow and MXNet are found

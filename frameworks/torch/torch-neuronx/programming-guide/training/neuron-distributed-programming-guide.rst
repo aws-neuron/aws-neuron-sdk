@@ -523,9 +523,9 @@ to get it all started.
        # Here we use clip_grad_norm from neuronx_distributed as that 
        # can handle tensor parallel ranks
        clip_grad_norm(model.parameters(), max_norm)
-       # For the optimzer step, we have to pass the data_parallel group
+       # For the optimizer step, we have to pass the data_parallel group
        xm.optimizer_step(
-           optimzer, 
+           optimizer, 
            groups=parallel_state.get_data_parallel_group(as_list=True)
        )
        optimizer.zero_grad()
@@ -535,7 +535,7 @@ Few things to take note of in the above code snippet: 1. We are
 initializing the model parallel with tensor parallel size of 2. This
 will shard the model across 2 devices. 2. We use the
 ``move_model_to_device`` API to move model to device. This is equivalent
-to doing ``model.to(device)``. We need to explicity call this API since
+to doing ``model.to(device)``. We need to explicitly call this API since
 some of the tensor-parallel attributes do not get copied over when we
 move the model to device using ``model.to(device)``. 3. We are calling
 the ``clip_grad_norm`` from ``parallel_layers``. This clip_grad_norm
@@ -567,7 +567,7 @@ model load.
 Training Tutorial:
 ^^^^^^^^^^^^^^^^^^
 
-Keeping the above changes in mind, let’s now run an end-to-end trainging
+Keeping the above changes in mind, let’s now run an end-to-end training
 with tensor-parallelism. This section is adopted from `BERT pretraining
 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/bert.html#hf-bert-pretraining-tutorial>`__
 which used data-parallel training to scale the throughput. In this
@@ -579,7 +579,7 @@ Setting up environment:
                        
 
 For this experiment, we will use a trn1-32xl machine with the storage
-set to 512GB atleast. Next follow the instructions mentioned here:
+set to 512GB at least. Next follow the instructions mentioned here:
 `Install PyTorch Neuron on
 Trn1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install>`__
 to create a pytorch environment. It is recommended to work out of python

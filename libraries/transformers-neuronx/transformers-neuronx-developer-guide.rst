@@ -93,7 +93,7 @@ Tensor-parallelism support
 --------------------------
 
 For transformer decoders used in large language models,
-tensor-parallelism is neccessary as it provides a way to shard the
+tensor-parallelism is necessary as it provides a way to shard the
 models' large weight matrices onto multiple NeuronCores, and having
 NeuronCores working on the same matrix multiply operation
 collaboratively. transformers-neuronx's tensor-parallelism support makes
@@ -189,7 +189,7 @@ Model artifacts which have been compiled once will be cached and reused on
 successive runs when possible. Model artifacts will only be reused when
 compiling with the same compiler version (neuronx-cc), model configurations,
 and compiler flags. It also includes other features (i.e. using an S3 bucket as
-the cache backend). For more defailed information, see the
+the cache backend). For more detailed information, see the
 :ref:`Persistent cache documentation <neuron-caching>`
 
 
@@ -201,8 +201,8 @@ int8 weight storage support
 
 Transformers Neuron supports int8 weight storage for the ``GPT2`` model class.
 int8 weight storage can be used to reduce memory bandwidth usage to improve
-model performace. int8 weight storage support for additional model classes
-will be added in an uncoming relesae. In the following example we demonstrate
+model performance. int8 weight storage support for additional model classes
+will be added in an upcoming release. In the following example we demonstrate
 how to apply int8 weight storage to the ``GPT2`` model via the
 ``QuantizationConfig`` and ``NeuronConfig`` configs:
 
@@ -254,7 +254,7 @@ Transformers Neuron supports parallel input prompt context encoding for the ``GP
 model class. Parallel context encoding can be used to significantly reduce
 the latency of the input prompt context encoding before the autoregressive
 decoder token generation loop. Parallel context encoding support for additional
-model classes will be added in an uncoming release.
+model classes will be added in an upcoming release.
 
 The ``GPT2ForSamplingWithContextBroadcasting`` class has a ``context_length_estimate``
 variable that determines the number of input prompt tokens that will be processed in

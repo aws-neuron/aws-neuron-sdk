@@ -20,7 +20,7 @@ Neuron SDK
 AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and MXNet. With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
 
 The Neuron SDK release versions are in the form of X.Y.Z where X represents the major version and Y represent the minor version. Increasing the major version of an SDK indicates that this SDK underwent significant and substantial changes, and some of those changes may not maintain the same programming model. 
-Increasing the minor version of an SDK indicates that this SDK underwent addition of new features, support of new dependency software versions, end-of-support of certain dependency software, enhacement and/or bugfixes.
+Increasing the minor version of an SDK indicates that this SDK underwent addition of new features, support of new dependency software versions, end-of-support of certain dependency software, enhancement and/or bugfixes.
 Applications may need to be updated in order for them to work with the newest SDK version. It is important to update major versions carefully and in accordance with the upgrade guidelines provided by AWS.
 
 

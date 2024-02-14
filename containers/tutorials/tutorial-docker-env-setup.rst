@@ -45,7 +45,7 @@ to containers.
                sudo yum remove aws-neuronx-dkms -y
                sudo yum install aws-neuronx-dkms-2.*  -y
 
-               # Install EFA Driver(only required for multiinstance training)
+               # Install EFA Driver(only required for multi-instance training)
                curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
                wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
                cat aws-efa-installer.key | gpg --fingerprint

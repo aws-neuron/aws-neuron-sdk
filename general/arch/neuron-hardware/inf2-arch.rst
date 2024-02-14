@@ -3,15 +3,15 @@
 AWS Inf2 Architecture
 =====================
 
-In this page, we provide an architectural overview of the AWS Inf2
-instances, and the corresponding Inferentia2 NeuronDevices that power
+On this page we provide an architectural overview of the AWS Inf2
+instances and the corresponding Inferentia2 NeuronDevices that power
 them (Inferentia2 devices from here on).
 
 Inf2 Architecture
 -----------------
 
 The EC2 Inf2 instance is powered by up to 12 :ref:`Inferentia2 devices <inferentia2-arch>`, and allows
-customers to choose between four instances sizes:
+customers to choose between four instance sizes:
 
 .. list-table::
     :widths: auto
@@ -70,13 +70,13 @@ customers to choose between four instances sizes:
         - 192
 
 
-Inf2 offers a low-latency and high-bandwidth chip-to-chip interconnect
-called NeuronLink-v2, which enables high performance collective communication operations (e.g. AllReduce, AllGather).
+Inf2 offers a low-latency, high-bandwidth chip-to-chip interconnect
+called NeuronLink-v2, which enables high-performance collective communication operations (e.g., AllReduce and AllGather).
 
-This allows sharding large models across Inferentia2 devices (e.g. via
-Tensor Parallelism), and thus optimizing latency and throughput. This
+This allows sharding large models across Inferentia2 devices (e.g., via
+Tensor Parallelism), thus optimizing latency and throughput. This
 capability is especially useful when deploying Large Generative Models.
 
-.. image:: /images/inf2-topology.jpg
+.. image:: /images/inf2-topology.png
 
 

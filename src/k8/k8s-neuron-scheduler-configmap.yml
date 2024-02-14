@@ -15,6 +15,14 @@ data:
             {
               "name": "aws.amazon.com/neuron",
               "ignoredByScheduler": false
+            },
+            {
+              "name": "aws.amazon.com/neurondevice",
+              "ignoredByScheduler": false
+            },
+            {
+              "name": "aws.amazon.com/neuroncore",
+              "ignoredByScheduler": false
             }
           ],
           "ignorable": false

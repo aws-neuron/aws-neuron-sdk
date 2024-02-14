@@ -113,11 +113,11 @@ Transposing the activations:
 
 Sequence-parallelism implementation requires the sequence dimension to be the 0th dimension whereas the tensor-parallel region 
 requires the sequence dimension to be the first dimension. All our model implementation keeps the sequence dimension 
-as 1st dimension and batch dimension as 0th dimnesion. Hence, to accomodate sequence parallelism, we need to insert a few 
+as 1st dimension and batch dimension as 0th dimension. Hence, to accommodate sequence parallelism, we need to insert a few 
 transpose operations at the following places:
 
 1. Before we start looping through all the layers, we need to transpose the sequence and batch dimension. We 
-also need to partiton the inputs along the sequence dimensions such that each tp-rank gets a part. This can be done as:
+also need to partition the inputs along the sequence dimensions such that each tp-rank gets a part. This can be done as:
 
 .. code:: ipython3
 

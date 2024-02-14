@@ -95,7 +95,8 @@ spec:
       schedulerName: my-scheduler
       containers:
         - name: neuron-scheduler-exp
-          image: public.ecr.aws/neuron/neuron-scheduler:2.16.18.0
+          # Find all neuron-scheduler images at https://gallery.ecr.aws/neuron/neuron-scheduler
+          image: public.ecr.aws/neuron/neuron-scheduler:2.19.16.0
           env:
           - name: PORT
             value: "12345"

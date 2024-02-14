@@ -19,7 +19,7 @@ provide direct feedback.
 What do the roadmap categories mean?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  **Roadmap Requests** - Requests we recieved and we are considering to add to the roadmap, 
+-  **Roadmap Requests** - Requests we received and we are considering to add to the roadmap, 
    this is a great phase to give us feedback and let us know if you need this feature as well.
 -  **Working on it** - In progress, we might still be
    working through the implementation details, or scoping stuff out.

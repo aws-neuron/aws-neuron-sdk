@@ -107,7 +107,7 @@ The shape function has the same function signature as the kernel function, but d
       return t_out;
    }
 
-The body of the shape function may exercize C/C++ libraries or ``torch::Tensor`` classes. The body may not access the data of input tensors since these are XLA Tensors and do not have any data storage allocated yet. However, any of the functions that access shape information such as *numel* (to get the number of elements) may be used. 
+The body of the shape function may exercise C/C++ libraries or ``torch::Tensor`` classes. The body may not access the data of input tensors since these are XLA Tensors and do not have any data storage allocated yet. However, any of the functions that access shape information such as *numel* (to get the number of elements) may be used. 
 
 
 Building and executing operators

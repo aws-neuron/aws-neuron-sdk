@@ -133,7 +133,7 @@ graph is cut and you would see another evaluation. To avoid multiple evaluations
 ~~~~~~~~~~~~~~~~~
 
 Torch-XLA provides an api called ``mark_step`` which evaluates a graph
-collected upto that point. While this is similar to printing of an output tensor
+collected up to that point. While this is similar to printing of an output tensor
 wherein a graph is also evaluated, there is a difference. When 
 an output tensor is printed, only the graph associated with that specific tensor is
 evaluated, whereas mark_step enables all the output tensors up to ``mark_step`` call to be evaluated

@@ -68,9 +68,8 @@ spec:
                       - trn1.32xlarge
                       - trn1n.32xlarge
       containers:
-        #Device Plugin containers are available both in us-east and us-west ecr
-        #repos
-      - image: public.ecr.aws/neuron/neuron-device-plugin:2.16.18.0
+        # Find all neuron-device-plugin images at https://gallery.ecr.aws/neuron/neuron-device-plugin
+      - image: public.ecr.aws/neuron/neuron-device-plugin:2.19.16.0
         imagePullPolicy: Always
         name: neuron-device-plugin
         env:

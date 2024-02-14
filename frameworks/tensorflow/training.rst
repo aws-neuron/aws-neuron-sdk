@@ -1,6 +1,0 @@
-Training
-========
-
-
-.. include:: training.txt
-

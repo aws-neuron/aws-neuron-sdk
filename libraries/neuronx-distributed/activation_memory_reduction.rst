@@ -71,7 +71,7 @@ backward pass, `g¯` becomes an all-gather operation and `g` becomes the reduce-
 that sequence-parallelism when combined with tensor-parallelism introduces an extra communication operation, however, in a ring 
 all-reduce, the op is broken down into all-gather and reduce-scatter. Hence, the bandwidth required for sequence-parallelism is 
 same as tensor-parallelism only. Hence, we are not losing out on compute but end up saving the activation memory per device.
-The final activation memory when sequence-parllelism is combined with tensor-parallelism:
+The final activation memory when sequence-parallelism is combined with tensor-parallelism:
 
 .. math::
 
@@ -82,12 +82,12 @@ Activation Recomputation
 ========================
 
 The total required memory in the above equation can still be high as we increase the sequence length and hidden size. 
-We would have to keep increasing the tensor-parallel degree to accommodate this requirement. Increasing the tensor-paralllel 
+We would have to keep increasing the tensor-parallel degree to accommodate this requirement. Increasing the tensor-parallel 
 degree might soon start producing diminishing returns as the model would start becoming bandwidth bottlenecked because of the 
 extra collective communication operations. `Activation recomputation <https://arxiv.org/abs/1604.06174>`__ can help to alleviate 
 this problem. In this method, we recompute a part of the forward pass during the backward pass, thereby avoiding the need to 
 save the activations during the forward pass. Activation recomputation is a trade-off between duplicate computation vs memory.
-It allows you to save on memory at the cost of extra recompute. This trade-off becomes valuable when we can fit largers models 
+It allows you to save on memory at the cost of extra recompute. This trade-off becomes valuable when we can fit larger models 
 at the expense of recomputing forward pass activations. 
 
 Ideally one can recompute the entire forward pass, there by resulting in an activation memory of `2sbh` per transformer layer.

@@ -90,6 +90,6 @@ To enable parallel cross entropy, we made the following model level modeifincati
 
 * replace the ``CrossEntropyLoss`` with neuronx-distributed ``parallel_cross_entropy`` in the forward
   function of ``GPTNeoXForCausalLM``.
-* ues ``ColumnParallelLinear`` for the ``embed_out`` layer in ``GPTNeoXForCausalLM``.
+* use ``ColumnParallelLinear`` for the ``embed_out`` layer in ``GPTNeoXForCausalLM``.
 
 Please check ``modeling_gpt_neox_nxd.py`` for details.

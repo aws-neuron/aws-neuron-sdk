@@ -120,8 +120,8 @@ enable sequence parallel and selective activation checkpointing.
 In LLama 70B GQA module, the K and V attention heads are `8` whereas Q has `64` attentions heads. Since the number of 
 attention heads should be divisible by tensor_parallel_degree, we would end up using a tp_degree of 8. Hence to fit 
 a 70B model, we would have to use a higher pipeline-parallel degree. Using higher pipeline-parallel degree works well 
-when the global batchsize is very high, however, as the data-parallel degree increases at higher cluster size, the 
-batchsize per node decreases. This would result in higher `pipeline bubble <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/>`__ 
+when the global batch size is very high, however, as the data-parallel degree increases at higher cluster size, the 
+batch size per node decreases. This would result in higher `pipeline bubble <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/>`__ 
 thereby reducing performance. To mitigate this issue, one can use the :ref:`GQAQKVColumnParallelLinear <parameters-11>` layer with the
 `kv_size_multiplier` set to 4. This would repeat the KV heads and make them 32. This would allow doing tensor-parallelism 
 using tp_degree of 32. This reduces the activation memory per device and thereby eventually allows using a pipeline 

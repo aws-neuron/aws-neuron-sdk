@@ -3,11 +3,11 @@
 AWS Inf1 Architecture
 =====================
 
-In this page, we provide an architectural overview of the AWS Inf1
-instances, and the corresponding :ref:`Inferentia <inferentia-arch>` NeuronDevices that power
+On this page, we provide an architectural overview of the AWS Inf1
+instance and the corresponding :ref:`Inferentia <inferentia-arch>` NeuronDevices that power
 them (:ref:`Inferentia <inferentia-arch>` devices from here on).
 
-.. contents:: Table of contents
+.. contents:: Table of Contents
    :local:
    :depth: 2
 
@@ -16,8 +16,8 @@ them (:ref:`Inferentia <inferentia-arch>` devices from here on).
 Inf1 Architecture
 -----------------
 
-The EC2 Inf1 instance is powered by 16 :ref:`Inferentia <inferentia-arch>` devices, and allows
-customers to choose between four instances sizes:
+The EC2 Inf1 instance is powered by 16 :ref:`Inferentia <inferentia-arch>` devices, allowing
+customers to choose between four instance sizes:
 
 .. list-table::
     :widths: auto
@@ -33,7 +33,7 @@ customers to choose between four instances sizes:
         - FP16/BF16 TFLOPS
         - INT8 TOPS
         - Device Memory (GiB)
-        - Device Memory Bandwidth (GiB/sec)
+        - Device Memory bandwidth (GiB/sec)
         - NeuronLink-v1 device-to-device bandwidth (GiB/sec/device)
         - EFA bandwidth (Gbps)
 

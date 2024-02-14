@@ -44,7 +44,7 @@ They are great! please refer to the :ref:`benchmark` page for open-source model 
 Can I use CUDA libraries with AWS Trainium?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-AWS Trainium and Neuron are plugged into popular frameworkd, and is automatically optimizing model deployment on Neuron devices like Inferentia and Trainium. The Neuron SDK automatically optimizes for Trainium without using closed source dependencies like Nvidia CUDA, not requiring any application level code changes to accelerate models. We believe this intentional approach allows developers freedom of choice with their code and models. If you have applications dependencieson CUDA (or other 3rd party closed source artifacts) you will need to strip them out, and from that point the Neuron compiler will take the model as is and optimize it at the hardware level. 
+AWS Trainium and Neuron are plugged into popular frameworks, and is automatically optimizing model deployment on Neuron devices like Inferentia and Trainium. The Neuron SDK automatically optimizes for Trainium without using closed source dependencies like Nvidia CUDA, not requiring any application level code changes to accelerate models. We believe this intentional approach allows developers freedom of choice with their code and models. If you have applications dependencieson CUDA (or other 3rd party closed source artifacts) you will need to strip them out, and from that point the Neuron compiler will take the model as is and optimize it at the hardware level. 
 
 
 Networking
@@ -65,7 +65,7 @@ What does Strong/Weak Scaling mean?
 
 To enable strong scaling, we optimized Trainium to be efficient at small batch sizes. Compared to GPUs, Trn1 maintains high efficiency even for small batch sizes. This allows you to scale-out to thousands of devices without increasing the global mini-batch size at the same rate, which in turn leads to faster end-to-end training convergence.
 
-In weak scaling setup, we show the optimal throughput with suffciently large batch size per Trainium. The large batch size is set to leverage the high core utilization so that the overall end-to-end training will be fast. This setup also enables a large global batch size as it scales with the total number of nodes in the cluster.
+In weak scaling setup, we show the optimal throughput with sufficiently large batch size per Trainium. The large batch size is set to leverage the high core utilization so that the overall end-to-end training will be fast. This setup also enables a large global batch size as it scales with the total number of nodes in the cluster.
 
 Usability
 ---------
@@ -97,4 +97,4 @@ When running training, evaluation or inference workloads you can use Neuron 2.x 
 How will compile time impact my work flow?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We understand compilation is a new step with Trainium, but as long as the overall time to train and cost to train is optimized, the compilation impact on these two metrics is minimized. To further help reduce compilation time impact on usability, Neuron supports a persistent cache, where artifacts that have not changed since the last run can be reused, skipping compilation alltogether. For developing and experimenting with new models, you can use the eager debug mode, that compiles (and caches) op-by-op, enabling quick evaluation without compiling large models. We are also working on Neuron model analyzer (see Neuron roadmap) that will recommend optimized hyper parameters, skipping full compilation per experiment.
+We understand compilation is a new step with Trainium, but as long as the overall time to train and cost to train is optimized, the compilation impact on these two metrics is minimized. To further help reduce compilation time impact on usability, Neuron supports a persistent cache, where artifacts that have not changed since the last run can be reused, skipping compilation all together. For developing and experimenting with new models, you can use the eager debug mode, that compiles (and caches) op-by-op, enabling quick evaluation without compiling large models. We are also working on Neuron model analyzer (see Neuron roadmap) that will recommend optimized hyper parameters, skipping full compilation per experiment.

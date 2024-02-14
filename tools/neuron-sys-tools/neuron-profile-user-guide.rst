@@ -11,13 +11,13 @@ Overview
 --------
 
 **neuron-profile** is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler
-and run on Neuron devices.
+and run on NeuronDevices.
 
 .. note::
 
     Please use the ``aws-neuronx-tools`` package from Neuron SDK 2.11 or higher.
 
-neuron-profile helps developers identify performance bottlenecks and optimize their workloads for Neuron devices. neuron-profile provides insights into Neuron device activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. Neuron device activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling overhead is typically minimal because Neuron devices have dedicated on-chip hardware profiling.
+neuron-profile helps developers identify performance bottlenecks and optimize their workloads for NeuronDevices. neuron-profile provides insights into NeuronDevice activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. NeuronDevice activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling typically has near zero overhead because NeuronDevices have dedicated on-chip hardware profiling.
 
 Installation
 ------------
@@ -102,10 +102,10 @@ For this example, we assume a NEFF is already available as ``file.neff``
 Capturing profiles for multi-worker jobs
 ----------------------------------------
 
-``neuron-profile`` can capture profiles for collectives-enabled NEFFs running across multiple Neuron Cores, Neuron devices, or even nodes. 
+``neuron-profile`` can capture profiles for collectives-enabled NEFFs running across multiple NeuronCores, NeuronDevices, or even nodes. 
 This is useful for understanding performance and communication overheads when deploying larger distributed models.
 
-The following example, performs a distributed run across all Neuron Devices and Neuron Cores on an Inf2.24xlarge instances, capturing profiles for all 12 workers (one for each Neuron Core).
+The following example, performs a distributed run across all NeuronDevices and NeuronCores on an inf2.24xlarge instances, capturing profiles for all 12 workers (one for each NeuronCore).
 
 ::
 
@@ -120,7 +120,7 @@ A profile is saved for each worker in the output directory.
     profile_rank_10.ntff  profile_rank_4.ntff  profile_rank_8.ntff profile_rank_11.ntff  profile_rank_5.ntff  profile_rank_9.ntff
 
 You can see a summary of each profile using the command ``neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_<i>.ntff``. This output
-includes summary metrics and fields for the Neuron Core (``nc_idx``) and Neuron Device (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
+includes summary metrics and fields for the NeuronCore (``nc_idx``) and NeuronDevice (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
 device 3 and took 0.017 seconds (17 ms) to run the model.
 
 ::
@@ -204,7 +204,7 @@ It will post-process these artifacts and print out a direct link to the profile 
 Viewing profiles for multi-worker jobs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Profiles from multi-worker jobs (ie. more than one Neuron Core) can either be viewed individually or in a combined collectives view.
+Profiles from multi-worker jobs (i.e. more than one NeuronCore) can either be viewed individually or in a combined collectives view.
 Since profile data is often similar between workers and processing profile data for all workers can be time-consuming, it is recommended to first 
 explore the profile for a single worker or small subset of workers. Viewing the profile for a specific worker is the same as for single-worker profiles.
 
@@ -280,7 +280,7 @@ Starting from the bottom, the ``TensorMatrix Utilization`` shows the efficiency 
 the ``Pending DMA Count`` and ``DMA Throughput`` rows show the DMA activity.  In general, we want these to be as high
 as possible, and in some cases may help give clues as to whether the workload is memory or compute bound.
 
-Next are the individual Neuron Core engine executions.  These rows show the start and end times for instructions executed by each
+Next are the individual NeuronCore engine executions.  These rows show the start and end times for instructions executed by each
 engine, and clicking on one of these bars will show more detailed information, as well as any dependencies that were found.
 For models involving collective compute operations, you will additionally see rows labeled with ``CC-core``, which are used to synchronize
 the CC operations.
@@ -310,6 +310,10 @@ Additionally, there are various summary buttons that can be clicked to provide m
 number of FLOPs, and the start and end of a framework layer.
 
 |neuron-profile-web-summaries|
+
+Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times. Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
+
+|neuron-profile-tensor-reload-annotation|
 
 
 CLI reference
@@ -411,9 +415,9 @@ Add the following lines to /etc/sysctl.conf
 
 Commit changes by running ``sudo sysctl -p``.
 
-
 .. |neuron-profile-web-timeline| image:: /images/neuron-profile-web-timeline_2-11.png
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
+.. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
 
 When viewing UI "FATAL - Failed metadata query"

@@ -1,12 +1,14 @@
 .. _introduce-pytorch-2-0:
 
-Introducing PyTorch 2.0 Support (Beta)  
-======================================
+Introducing PyTorch 2.0 Support (End of Support)  
+=================================================
 
 .. contents:: Table of contents
    :local:
    :depth: 2
 
+.. note::
+ Neuron no longer supports PyTorch 2.0. Please migrate to PyTorch 2.1 via :ref:`migration guide <migrate_to_pytorch_2_1>`.
 
 What are we introducing?
 ------------------------

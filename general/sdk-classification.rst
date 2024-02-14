@@ -60,7 +60,8 @@ compiler flags). Examples of APIs supported by Neuron are Neuron APIs like
 |        | the API contract)\*         |                             |
 +--------+-----------------------------+-----------------------------+
 
-*In case when a new Neuron version of a Stable release will break backwards compatibility, AWS will notify customers of the breaking change at least one month before the change.
+.. note::
+   *In case when a new Neuron version of a Stable release will break backwards compatibility, AWS will notify customers of the breaking change at least one month before the change.
 
 .. _packages--libraries-software-classification:
 
@@ -84,9 +85,9 @@ Distributed <neuronx-distributed-index>`.
 +--------+---------------------+---------------------+-------------+
 |        | Testing             | Features            | Performance |
 +========+=====================+=====================+=============+
-| Alpha  | Basic               | Basic               | Not tested  |
+| Alpha  | Basic               | Basic               |             |
 +--------+---------------------+---------------------+-------------+
-| Beta   | Basic               | Minimal Viable      | Not tested  |
+| Beta   | Basic               | Minimal Viable      |             |
 |        |                     | Product (MVP)\*     |             |
 +--------+---------------------+---------------------+-------------+
 | Stable | Standard Product    | Incremental         | Tested      |
@@ -94,8 +95,9 @@ Distributed <neuronx-distributed-index>`.
 |        |                     | in new releases     |             |
 +--------+---------------------+---------------------+-------------+
 
-*A minimum viable product (MVP) for a package/library contains just enough features to be usable by early customers who can then provide feedback for future development. MVP can be different per use case and depends on the specific package/library of interest.
-Please note that in many cases, an MVP can also represent an advanced level of features.
+.. note::
+   *A minimum viable product (MVP) for a package/library contains just enough features to be usable by early customers who can then provide feedback for future development. MVP can be different per use case and depends on the specific package/library of interest.
+   Please note that in many cases, an MVP can also represent an advanced level of features.
 
 .. _features-software-classification:
 
@@ -117,9 +119,9 @@ Neuron <transformers_neuronx_readme>` library.
 +--------+---------------------+---------------------+-------------+
 |        | Testing             | Functionality       | Performance |
 +========+=====================+=====================+=============+
-| Alpha  | Basic               | Basic               | Not tested  |
+| Alpha  | Basic               | Basic               |             |
 +--------+---------------------+---------------------+-------------+
-| Beta   | Basic               | Minimal Viable      | Not tested  |
+| Beta   | Basic               | Minimal Viable      |             |
 |        |                     | Product (MVP)\*     |             |
 +--------+---------------------+---------------------+-------------+
 | Stable | Standard Product    | Incremental         | Tested      |
@@ -127,7 +129,8 @@ Neuron <transformers_neuronx_readme>` library.
 |        |                     | in new releases     |             |
 +--------+---------------------+---------------------+-------------+
 
-*A minimum viable product (MVP) for a feature contains just enough functionality to be usable by early customers who can then provide feedback for future development. MVP can be different per use case and depends on the specific feature of interest. Please note that in many cases, an MVP can also represent an advanced level of functionality.
+.. note::
+   *A minimum viable product (MVP) for a feature contains just enough functionality to be usable by early customers who can then provide feedback for future development. MVP can be different per use case and depends on the specific feature of interest. Please note that in many cases, an MVP can also represent an advanced level of functionality.
 
 .. _models-software-classification:
 
@@ -157,7 +160,7 @@ inference.
 ====== ====================== ====================
 \      Accuracy / Convergence Throughput / Latency
 ====== ====================== ====================
-Beta   Validated              Not tested
+Beta   Validated              
 Stable Validated              Tested
 ====== ====================== ====================
 

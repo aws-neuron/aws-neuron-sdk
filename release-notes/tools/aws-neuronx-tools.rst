@@ -8,6 +8,25 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.17.0.0]
+------------------------
+Date: 02/13/2024
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Added support to ``neuron-profile`` for collective communication operator improvements in Neuron SDK 2.17.
+  See :ref:`neuron-runtime-rn` for more info.
+* Optimized count query for sampling in ``neuron-profile`` UI for up to 3x faster load performance.
+* Introduced warning annotations in ``neuron-profile`` UI to automatically highlight potential performance issues.
+  See the :ref:`neuron-profile-ug` for more info.
+
+Bug fixes
+^^^^^^^^^
+* Resolved issue of inaccurate execution time reported by ``neuron-profile`` as mentioned in Neuron Tools 2.16.1.0 release notes.
+* Fixed NaN display errors in the ``neuron-profile`` UI.
+* Fixed file naming issue when capturing collectives profiles with ``neuron-profile``.
+
+
 Neuron Tools  [2.16.1.0]
 ------------------------
 Date: 12/21/2023

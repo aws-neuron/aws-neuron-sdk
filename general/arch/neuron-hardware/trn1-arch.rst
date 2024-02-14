@@ -3,7 +3,7 @@
 AWS Trn1/Trn1n Architecture
 ===========================
 
-In this page, we provide an architectural overview of the AWS Trn1/Trn1n
+On this page, we provide an architectural overview of the AWS Trn1/Trn1n
 instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices that power them
 (Trainium devices from here on).
 
@@ -16,7 +16,7 @@ instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices t
 Trn1/Trn1n Architecture
 -----------------------
 
-The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>` devices.
+An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>` devices.
 
 
 .. list-table::
@@ -73,12 +73,12 @@ The EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch
 
 The Trn1.2xlarge instance size allows customers to train their models on
 a single Trainium device, which is useful for small model training, as
-well as model experimentation. The Trn1.32xlarge/ Trn1n.32xlarge instance size comes
+well as for model experimentation. The Trn1.32xlarge and Trn1n.32xlarge instance size come
 with a high-bandwidth and low-latency NeuronLink-v2 device-to-device
 interconnect, which utilizes a 4D-HyperCube topology. This is useful for
-collective-communication between the Trainium devices during scale-out
+collective communication between the Trainium devices during scale-out
 training, as well as for pooling the memory capacity of all Trainium
-devices, making it directly addressable from each one of the devices.
+devices, making it directly addressable from each of the devices.
 
 In a Trn1/Trn1n server, the Trainium devices are connected in a 2D Torus topology, as depicted below:
 

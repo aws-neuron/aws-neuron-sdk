@@ -39,7 +39,7 @@ Let's take a look at our Llama example:
     )
     model.move_model_to_device()
 
-We first create the model from the Huggingface model config. If tensor parallel needs to be applied to model
+We first create the model from the Hugging Face model config. If tensor parallel needs to be applied to model
 it must be done here before applying the pipeline parallel model wrapper. The next step is to create the partitions. Here
 is an example to evenly partition the layers for all stages:
 
@@ -65,7 +65,7 @@ in Llama model is indicated as ``model.layers.i`` where ``i`` is the layer index
 In the future release, automated partitioning will be supported.
 After pipeline cuts are decided, pipeline model wrapper is applied. Let's take a deeper look into each input of the model wrapper
 
-- ``model``: The orginal Pytorch module, could be TPfied.
+- ``model``: The original Pytorch module, could be TPfied.
 - ``transformer_layer_cls=LlamaDecoderLayer``: The transformer layer class, we will use it for partition
 - ``num_microbatches=args.num_microbatches``: The number of microbatches we used for pipeline execution.
 - ``output_loss_value_spec=(True, False)``: This tells ``NxDPPModel`` how to get the loss from the model output. In this case output is a tuple, where first value is loss and second value is something else. ``NxDPPModel`` will use loss to run backward and return loss as the output.
@@ -82,7 +82,7 @@ Runtime execution:
 '''''''''''''''''
 
 To use pipeline runtime, user simply needs to replace their original model call with ``NxDPPModel.run_train``, rest will remain unchanged. 
-Please note that the pipeline runtime will take care of both forward and backward call, so user will not need to explictly make backward calls. 
+Please note that the pipeline runtime will take care of both forward and backward call, so user will not need to explicitly make backward calls. 
 The ``NxDPPModel.run_train`` call will return the loss that is achieved from ``output_loss_value_spec``.
 
 Mixed precision training
@@ -110,7 +110,7 @@ Model initialization
 
 When the model is large, it is easy to cause host OOM when full model is created on every Neuron core. We recommend 2 ways to deal with this situation:
 
-Using torchdistx's deferred initialiation
+Using torchdistx's deferred initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pytorch's torchdistx package (https://github.com/pytorch/torchdistx/tree/main) provides easy way to do deferred initialization. If you have torchdistx installed,
@@ -183,9 +183,9 @@ Gradient checkpointing
 
 Gradient checkpointing (or activation checkpointing) is a common method used in deep learning to reduce memory footprint by doing 
 recomputation of forward computation. The common way to apply the gradient checkpointing on XLA device is to use the torch_xla's 
-`gradient checkpointing wrapper <https://github.com/pytorch/xla/blob/master/torch_xla/utils/checkpoint.py#L129>`__, which will apply a autograd function.
+`gradient checkpointing wrapper <https://github.com/pytorch/xla/blob/master/torch_xla/utils/checkpoint.py#L129>`__, which will apply an autograd function.
 However FX's symbolic tracing does not understand autograd function, and as a result the checkpointing information will be ignored if the checkpoint wrapper
-is traced during parition.
+is traced during partition.
 To handle this case, user can manually re-apply gradient checkpoint after partition. Here we provide an example to checkpoint every transformer layer
 after partition.
 
@@ -320,11 +320,11 @@ we would like to trace as less operations as possible, which means that we only 
 By default, we will mark all transformer layers as leaf nodes, so that the tracer will not trace inside these layers. If you have some module that might cause tracing problem, you can try to mark them as leaf nodes as well. Our previous example 
 also marks the `LlamaRMSNorm` as leaf module for Llama model.
 
-Special treatment for Huggingface models
+Special treatment for Hugging Face models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Huggingface offers FX support for many of its models. We will detect if user is using a Huggingface model (by checking if the model class is `transformers.PreTrainedModel`), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
-The Huggingface's tracer has implementation of many functionalities to help tracing, for details please refer to `here <https://github.com/huggingface/transformers/blob/main/src/transformers/utils/fx.py>`__.
-However, please be aware that Huggingface's tracer will check if the model class name belongs to one of the Huggingface models. So if you create your model class based on some Huggingface model class, it is important to maintain the same class name. Below is an example:
+Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is `transformers.PreTrainedModel`), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
+The Hugging Face's tracer has implementation of many functionalities to help tracing, for details please refer to `here <https://github.com/huggingface/transformers/blob/main/src/transformers/utils/fx.py>`__.
+However, please be aware that Hugging Face's tracer will check if the model class name belongs to one of the Hugging Face models. So if you create your model class based on some Huggingface model class, it is important to maintain the same class name. Below is an example:
 
 .. code:: ipython3
 

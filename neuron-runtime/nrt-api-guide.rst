@@ -248,7 +248,7 @@ Monitoring and Profiling
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Neuron Runtime is able to capture key execution metrics which can be read in real-time using ``neuron-monitor`` and
-``neuron-top``. ``neuron-monitor`` allows forwarding those metrics to Cloudwatch or a Prometheus server, enabling fleet-wide
+``neuron-top``. ``neuron-monitor`` allows forwarding those metrics to CloudWatch or a Prometheus server, enabling fleet-wide
 monitoring - for more on that please refer to the ``neuron-monitor`` usage guide :ref:`neuron-monitor-ug`.
 Profiling an execution is another feature of the Neuron Runtime - which provides an API for starting and stopping profiling,
 as well as saving the profile data to a file, which can be used by tools such as the Neuron Tensorboard. This API is
@@ -927,41 +927,69 @@ will also be logged (based on the logging settings, more on that in the next sec
 Please note that some error codes only apply to certain API calls.
 
 .. list-table::
-    :widths: 40 260
+    :widths: 40 20 260
     :header-rows: 1
 
-    * - Return Code
+    * - Name
+      - Return Code
       - Error
     * - ``NRT_SUCCESS``
+      - 0
       - Call was successful
     * - ``NRT_FAILURE``
+      - 1
       - Generic failure
     * - ``NRT_INVALID``
+      - 2
       - Invalid NEFF, bad instruction, bad DMA descriptor, input tensor name/size does not match the model, etc.
     * - ``NRT_INVALID_HANDLE``
+      - 3
       - Invalid handle (e.g. an invalid model handle)
     * - ``NRT_RESOURCE``
+      - 4
       - Failed to allocate a resource for the requested operation
     * - ``NRT_TIMEOUT``
+      - 5
       - Operation timed out
     * - ``NRT_HW_ERROR``
+      - 6
       - Hardware failure
+    * - ``NRT_QUEUE_FULL``
+      - 7
+      - Too many pending ``nrt_execute()`` requests. The runtime request queue is full. Cannot enqueue more ``nrt_execute()`` requests
     * - ``NRT_LOAD_NOT_ENOUGH_NC``
+      - 9
       - The number of available NeuronCores is insufficient for the requested operation
     * - ``NRT_UNSUPPORTED_NEFF_VERSION``
+      - 10
       - NEFF version unsupported
     * - ``NRT_UNINITIALIZED``
+      - 13
       - Returned when attempting an API call when the library is not initialized
     * - ``NRT_CLOSED``
+      - 14
       - Returned when attempting an API call after ``nrt_close()`` was called
     * - ``NRT_EXEC_BAD_INPUT``
+      - 1002
       - Invalid input has been submitted to nrt_execute()
     * - ``NRT_EXEC_COMPLETED_WITH_NUM_ERR``
+      - 1003
       - Execution completed with numerical errors (produced NaN)
     * - ``NRT_EXEC_COMPLETED_WITH_ERR``
+      - 1004
       - Execution was completed with other errors, either logical (event double clear), or hardware (parity error)
     * - ``NRT_EXEC_NC_BUSY``
+      - 1005
       - The neuron core is locked (in use) by another model/thread
+    * - ``NRT_OOB``
+      - 1006
+      - One or more indirect memcopies and/or embedding updates are out of bound due to input corruptions
+    * - ``NRT_EXEC_HW_ERR_COLLECTIVES``
+      - 1200
+      - Suspected hang in collectives operation due to hardware errors on this or other workers.
+    * - ``NRT_EXEC_HW_ERR_HBM_UE``
+      - 1201
+      - An HBM suffered from an uncorrectable error and produced incorrect results
 
 
 .. _api_init:

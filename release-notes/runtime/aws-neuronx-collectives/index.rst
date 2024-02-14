@@ -9,6 +9,15 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.20.11.0]
+------------------------------
+Date: 02/13/2024
+
+Bug Fixes
+^^^^^^^^^
+
+* Require “libatomic” for rpm installs
+
 Neuron Collectives [2.19.7.0]
 ------------------------------
 Date: 12/21/2023

@@ -1,5 +1,5 @@
 Name,Model,Model details,Framework,Application Type,Run Mode,Inst. Type,Num. Cores,Batch Size,Avg Throughput (/sec),Max Throughput,Threads,Ops in Inferentia,Latency P50 (ms),Latency P90 (ms),Latency P95 (ms),Latency P99 (ms),Latency P100 (ms),Neuron Version,Application,Tutorial
-"YOLOv4-PT(fp32,b1,c4)",YOLO v4,fp32,PyTorch 1.13,Real Time,Data Parallel,inf1.2xlarge,4,1,182.1,,8,,40.1,,,52,,2.16.0,CV,:ref:`Evaluate YOLO v4 on Inferentia </src/examples/pytorch/yolo_v4.ipynb>`
-"Resnet50-PT(fp32,b5,c4)",Resnet-50,fp32,PyTorch 1.13,Batch,Data Parallel,inf1.xlarge,4,5,921,,4,,22,,,23,,2.16.0,CV,:ref:`Resnet50 model for Inferentia </src/examples/pytorch/resnet50.ipynb>`
+"YOLOv4-PT(fp32,b1,c4)",YOLO v4,fp32,PyTorch 1.13,Real Time,Data Parallel,inf1.2xlarge,4,1,179.6,,8,,40.3,,,50.7,,2.17.0,CV,:ref:`Evaluate YOLO v4 on Inferentia </src/examples/pytorch/yolo_v4.ipynb>`
+"Resnet50-PT(fp32,b5,c4)",Resnet-50,fp32,PyTorch 1.13,Batch,Data Parallel,inf1.xlarge,4,5,927.5,,4,,21.5,,,22.2,,2.17.0,CV,:ref:`Resnet50 model for Inferentia </src/examples/pytorch/resnet50.ipynb>`
 "Resnet50-TF(fp16,b5,c4)",Resnet-50,fp16,Tensorflow 1.15,Batch,Data Parallel,inf1.xlarge,4,10,2207,,8,,17.8,,,22.7,,2.12.0,CV,:ref:`ResNet-50 optimization example </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>`
 "OpenPose-TF(fp16,b1,c4)",OpenPose,fp16,Tensorflow 1.15,Real Time,Data Parallel,inf1.xlarge,4,1,57.5,,4,,60.3,,,67.4,,2.12.0,CV,:ref:`Running OpenPose on Inferentia </src/examples/tensorflow/openpose_demo/openpose.ipynb>`

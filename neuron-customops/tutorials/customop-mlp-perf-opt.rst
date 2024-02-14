@@ -160,7 +160,7 @@ Now we switch to the ``neuron-multicore`` folder. We first enable the usage of m
         verbose=True
     )
 
-After passing the flag, the kernel function ``relu_forward`` defined in ``relu.cpp`` will execute on all GPSIMD cores. Thus we need to use ``cpu_id`` to partiton the workload among all cores. 
+After passing the flag, the kernel function ``relu_forward`` defined in ``relu.cpp`` will execute on all GPSIMD cores. Thus we need to use ``cpu_id`` to partition the workload among all cores. 
 
 .. code-block:: c++
 

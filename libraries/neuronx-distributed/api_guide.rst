@@ -686,10 +686,10 @@ Parameters:
 
 - ``path (str)``: path to save the checkpoints.
 - ``tag (str)``: tag to save the checkpoints.
-- ``model (torch.nn.Module)``: model to save, optinal.
-- ``optimizer (torch.optim.Optimizer)``: optimizer to save, optinal.
-- ``scheduler``: scheduler to save, optinal.
-- ``user_content``: user contents to save, optinal.
+- ``model (torch.nn.Module)``: model to save, optional.
+- ``optimizer (torch.optim.Optimizer)``: optimizer to save, optional.
+- ``scheduler``: scheduler to save, optional.
+- ``user_content``: user contents to save, optional.
 - ``num_workers (int)``: num of processes saving data on host at the same time.
   This is done to avoid the host OOM, range: 1-32.
 - ``use_xser (bool)``: whether to use torch-xla serialization. When enabled, ``num_workers``
@@ -703,7 +703,7 @@ Method to load checkpoint saved by ``save_checkpoint``, return user contents if 
 If ``tag`` not provided, will try to use the newest tag tracked by ``save_checkpoint``.
 
 Note that the checkpoint to be loaded must have the same model parallel degrees as in current use,
-and if ZeRO-1 optimizer is used, must use the same data parallel degress.
+and if ZeRO-1 optimizer is used, must use the same data parallel degrees.
 
 ::
 
@@ -721,9 +721,9 @@ Parameters:
 
 - ``path (str)``: path to load the checkpoints.
 - ``tag (str)``: tag to load the checkpoints.
-- ``model (torch.nn.Module)``: model to load, optinal.
-- ``optimizer (torch.optim.Optimizer)``: optimizer to load, optinal.
-- ``scheduler``: scheduler to load, optinal.
+- ``model (torch.nn.Module)``: model to load, optional.
+- ``optimizer (torch.optim.Optimizer)``: optimizer to load, optional.
+- ``scheduler``: scheduler to load, optional.
 - ``num_workers (int)``: num of processes loading data on host at the same time.
   This is done to avoid the host OOM, range: 1-32.
 - ``strict (bool)``: whether to use strict mode when loading model checkpoint. Default: :code:`True`.
@@ -787,7 +787,7 @@ This module parallelizes the Q,K,V linear projections using ColumnParallelLinear
 Q attention heads are `N` times more than the number of K and V attention heads. The K and V attention heads 
 are replicated after projection to match the number of Q attention heads. This helps to reduce the K and V 
 weights and is useful especially during inference. However, in case of training these modules, it restricts 
-the tensor-parallel degree that can be used, since the attention heads should be divisble by tensor-parallel 
+the tensor-parallel degree that can be used, since the attention heads should be divisible by tensor-parallel 
 degree. Hence, to mitigate this bottleneck, the `GQAQKVColumnParallelLinear` takes in a `kv_size_multiplier` 
 argument. The module would replicate the K and V weights `kv_size_multiplier` times thereby allowing you to 
 use higher tensor-parallel degree. Note: here instead of replicating the projection `N/tp_degree` times, we 

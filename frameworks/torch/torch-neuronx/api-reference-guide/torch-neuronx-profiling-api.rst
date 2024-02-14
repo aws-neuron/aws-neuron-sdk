@@ -12,7 +12,7 @@ trace events at the operator or runtime level.
 
 .. py:function:: torch_neuronx.experimental.profiler.profile(port=9012,ms_duration=60000,neuron_tensorboard_plugin_dir="logs/plugins/neuron",profile_type="operator",auto_start=True,delete_working=True)
 
-   The :func:`torch_neuronx.experimental.profiler.profile` method retuns a ``profile`` context manager object. This object
+   The :func:`torch_neuronx.experimental.profiler.profile` method returns a ``profile`` context manager object. This object
    doesn't need to be used directly, as default options are set to auto capture events based on the ``profile_type``.
 
    The context manager will wrap around the entire model

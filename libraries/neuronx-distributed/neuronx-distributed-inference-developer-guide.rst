@@ -129,7 +129,7 @@ Below is an example using BERT:
 
 Notice that the ``get_model()`` function returns not only the model, but also ``io_aliases``. This is a
 dictionary containing model tensors that are marked as containing state. This is necessary for models
-that have dynamic tensors during each inference pass. One such usecase is for models with KV-Caching,
+that have dynamic tensors during each inference pass. One such use case is for models with KV-Caching,
 which can be seen in the T5 and Llama-v2 samples linked at the bottom of the guide.
 In this example, we don't have such tensors, so we return an empty dictionary.
 

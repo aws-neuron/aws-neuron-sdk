@@ -22,12 +22,6 @@
                 :start-line: 164
                 :end-line: 165
 
-        .. tab-item :: PyTorch 2.0 [BETA]
-
-            .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 170
-                :end-line: 171
-
         .. tab-item :: PyTorch 2.1 [BETA]
 
             .. include:: /src/helperscripts/installationScripts/python_instructions.txt

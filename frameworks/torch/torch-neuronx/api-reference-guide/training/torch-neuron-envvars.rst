@@ -55,7 +55,7 @@ PyTorch Neuron are (beta ones are noted):
 - When using :ref:`Neuron Persistent Cache <neuron-caching>` or :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>` , if you want to ignore the error in training script
   and compile the accumulated HLO graphs, you can do so by setting this environment variable.
   Example: If NEURON_IGNORE_TRAINING_SCRIPT_ERROR_AND_COMPILE=1 is set when using ``neuron_parallel_compile``,
-  a crash in the training script would be ignored and the graphs collected upto the crash would be
+  a crash in the training script would be ignored and the graphs collected up to the crash would be
   compiled.
 
 ``NEURON_DUMP_HLO_SNAPSHOT`` **[Beta]**:

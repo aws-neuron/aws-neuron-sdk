@@ -46,7 +46,7 @@
         sudo yum install aws-neuronx-runtime-lib-2.*  -y
         sudo yum install aws-neuronx-collectives-2.*  -y
 
-        # Install EFA Driver(only required for multiinstance training)
+        # Install EFA Driver(only required for multi-instance training)
         curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
         wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
         cat aws-efa-installer.key | gpg --fingerprint

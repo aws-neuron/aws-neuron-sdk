@@ -16,7 +16,7 @@ compiler supports many commonly used machine learning operators used in computer
 
 It's important to mention that to get good performance doesn't require all of the model operators to run on the chip. In many cases, some of the operators will continue to run on the instance CPUs, like the case of embeddings or image pre-processing, and will still provide a compelling end to end performance. We call this approach auto-partitioning, where the Neuron compiler optimizes the model execution based on operators that are most suitable to run on the CPU or the chip.
 
-For the latest model architecture support, please refer to the model architecuture fit and performance pages.
+For the latest model architecture support, please refer to the model architecture fit and performance pages.
 
 Why is a compiler needed, and how do I use it?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,7 +61,7 @@ NeuronCores, NeuronCore Groups and NeuronCore Pipelines: What do they do?
 Each Inferentia chip has four compute engines called NeuronCores. A
 NeuronCore Group is a way to aggregate NeuronCores to increase hardware
 utilization and assign models with the right compute sizing for a
-specific application. If you want to run mutiple models in parallel,
+specific application. If you want to run multiple models in parallel,
 you can assign different models to separate NeuronCore Groups. A model
 compiled to use multiple NeuronCores in a NeuronCore Pipeline can be
 assigned to a NeuronCore Group with enough NeuronCores to load into.

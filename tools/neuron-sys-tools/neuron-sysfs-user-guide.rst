@@ -160,13 +160,20 @@ Description for Each Metric
     * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
 
   * ``hardware/``: hardware statistics.
+
     * ``mem_ecc_uncorrected``: the number of uncorrected ECC events in the Neuron device's DRAM.
+
     * ``sram_ecc_uncorrected``: the  number of uncorrected ECC events in the Neuron device's SRAM.
 
+
 * ``other_info/``: this directory contains statistics that are not included by ``status/`` and ``memory_usage/``. All of them are not counter types:
+
   * ``flop_count``: number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval
+
   * ``inference_count``: number of successful inferences
+
   * ``model_load_count``:  number of successful model loads
+
   * ``reset_count``: number of successful device resets
 
 

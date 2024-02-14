@@ -32,6 +32,27 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.20.11.0]
+---------------------------------
+Date: 02/13/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved performance of collective communication operators (CC ops) by up to 30% for problem sizes smaller than 16MB. This is a typical size of CC ops when executing LLM inference.
+* Added support for inter-node alltoall which is a MoE use case.
+* Added NRT version check across all ranks to make sure all ranks are using the same runtime.
+* Improved logging on collectives timeout during model execution.
+    * "(FATAL-RT-UNDEFINED-STATE) missing collectives status on Neuron Device 0 NC 0, model model.neff - suspected hang in collectives operation 0 out of 32"
+* Log HBM uncorrectable errors on timeout if any occurred during model execution.
+    * "(FATAL-RT-UNDEFINED-STATE) encountered uncorrectable memory error on Neuron Device 0, execution results may be invalid.  Please terminate or start/stop this instance to recover from bad hardware."
+
+Bug fixes
+^^^^^^^^^
+* Fixed bug where metrics were undercounting the amount of memory used for a loaded model.
+* Fixed bug which prevented the runtime from reporting more than 32 loaded models to metrics.
+* Fixed replica group signature calculation check.
+
+
 Neuron Runtime Library [2.19.5.0]
 ---------------------------------
 Date: 12/21/2023

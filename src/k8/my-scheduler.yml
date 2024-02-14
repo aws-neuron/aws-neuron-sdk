@@ -74,7 +74,7 @@ metadata:
   namespace: kube-system
 data:
   my-scheduler-config.yaml: |
-    apiVersion: kubescheduler.config.k8s.io/v1beta2
+    apiVersion: kubescheduler.config.k8s.io/v1
     kind: KubeSchedulerConfiguration
     profiles:
       - schedulerName: my-scheduler
@@ -124,12 +124,11 @@ spec:
         - --config=/etc/kubernetes/my-scheduler/my-scheduler-config.yaml
         - --leader-elect=true
         - --v=2
-        - --lock-object-name=my-scheduler
-        #- --policy-configmap=scheduler-policy-1
-          #- --policy-configmap-namespace=kube-system
         command:
         - /usr/local/bin/kube-scheduler
-        image: k8s.gcr.io/kube-scheduler:v1.23.15
+        image: registry.k8s.io/kube-scheduler:v1.28.5
+        # or use below for your version of k8s
+        # image: registry.k8s.io/kube-scheduler:<version>
         livenessProbe:
           httpGet:
             path: /healthz

@@ -31,7 +31,7 @@ configure NeuronX Runtime behavior.
      - Number of NeuronCores required by the process.
      - Integer
      - A value from 1 to Max NeuronCore in the system.
-     - 0, which is interpretted as "all"
+     - 0, which is interpreted as "all"
      - 2.0+
    * - ``NEURON_RT_LOG_LOCATION``
      - Runtime log location
@@ -154,7 +154,7 @@ The following code snippet shows ways to increase/decrease the log level.
  NEURON_RT_LOG_LOCATION=console NEURON_RT_LOG_LEVEL=QUIET myapp.py    # Completely disables console logging.
 
 By default, NeuronX Runtime expects the NeuronCore to complete execution of any model with in 2 seconds.
-If NeuronCore didnt complete the execution within 2 seconds then runtime would fail the execution with timeout error.
+If NeuronCore didn't complete the execution within 2 seconds then runtime would fail the execution with timeout error.
 Most of the models takes few milliseconds to complete so 2 seconds(2000 milliseconds) is more than adequate.
 However if your model is expected to run more than 2 seconds then you can increase the timeout with NEURON_RT_EXEC_TIMEOUT.
 
@@ -176,7 +176,7 @@ This option is off by default to avoid performance penalty during model load tim
  
 Shared Weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
 --------------------------------------------------------
-By default, NeuronX Runtime will make copies of modle weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with NeuronX Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
+By default, NeuronX Runtime will make copies of model weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight sharing mechanism is possible with NeuronX Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag will allow for more models to be loaded by reducing the memory requirements, but will potentially come at a cost of throughput by forcing the execution across cores to compete for memory bandwidth.
 
 Note: the use of this flag requires the model to be loaded with the multi-instance feature (see :ref:`torch_core_placement_api`).
 

@@ -1,4 +1,0 @@
-
-.. note::
-
-  TensorFlow Neuron support for Training is coming soon.

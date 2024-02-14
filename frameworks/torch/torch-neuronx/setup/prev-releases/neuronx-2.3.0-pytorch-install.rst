@@ -41,7 +41,7 @@ Install PyTorch Neuron (Neuron 2.3.0)
 		sudo apt-get install aws-neuronx-runtime-lib=2.9.64.0 -y
 		sudo apt-get install aws-neuronx-collectives=2.9.86.0 -y
 
-		# Install EFA Driver(only required for multiinstance training)
+		# Install EFA Driver(only required for multi-instance training)
 		
 		curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
 		wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
@@ -108,7 +108,7 @@ Install PyTorch Neuron (Neuron 2.3.0)
 		sudo yum install aws-neuronx-runtime-lib-2.9.64.0  -y
 		sudo yum install aws-neuronx-collectives-2.9.86.0  -y
 
-		# Install EFA Driver(only required for multiinstance training)
+		# Install EFA Driver(only required for multi-instance training)
 		curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
 		wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
 		cat aws-efa-installer.key | gpg --fingerprint
