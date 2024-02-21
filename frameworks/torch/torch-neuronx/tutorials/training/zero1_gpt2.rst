@@ -3,9 +3,6 @@
 ZeRO-1 Tutorial
 ===============
 
-.. note::
-   Update 01/03/24: This tutorial is currently broken and the AWS Neuron team is working on the fix.
-
 What is ZeRO-1?
 ---------------
 
