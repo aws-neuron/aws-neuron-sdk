@@ -44,7 +44,6 @@ spec:
               #        - inf1.6xlarge
               #        - inf1.24xlarge
               #        - inf2.xlarge
-              #        - inf2.4xlarge
               #        - inf2.8xlarge
               #        - inf2.24xlarge
               #        - inf2.48xlarge
@@ -60,7 +59,6 @@ spec:
                       - inf1.6xlarge
                       - inf1.24xlarge
                       - inf2.xlarge
-                      - inf2.4xlarge
                       - inf2.8xlarge
                       - inf2.24xlarge
                       - inf2.48xlarge
