@@ -3,7 +3,7 @@ MarkupSafe==1.1.1
 Sphinx==4.5.0
 ablog==0.10.29
 ipython-genutils==0.2.0
-ipython==7.26.0
+ipython==8.10.0
 nbconvert
 nbformat
 nbsphinx==0.8.9
