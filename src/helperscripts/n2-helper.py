@@ -670,6 +670,7 @@ class manifest:
                     str += '--pre '
                     str += framework_name
                     str += '==' + args.framework_version + '.*'
+                    str += ' mpmath==1.3'
                 else:
                     str += framework_name
                 str += ' torchvision\n'
