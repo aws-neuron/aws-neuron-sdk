@@ -1,6 +1,4 @@
 Model,Scripts,Framework,Inst. Type,Task,Throughput (tokens/second),Latency per Token P50 (ms),Latency per Token P99 (ms),Application Type,Neuron Version,Run Mode,TP Degree,DP Degree,Batch Size,Sequence Length,Input Length,Output Length,Model Data Type,Compilation Autocast Data Type
-Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,240.0,4.17,4.18,Batch,2.17.0,Tensor Parallel,32,1,1,2048,1024,1024,FP16,Matmult-BF16
+Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,240,4.17,4.18,Batch,2.17.0,Tensor Parallel,32,1,1,2048,1024,1024,FP16,Matmult-BF16
 Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,123.1,8.13,8.14,Batch,2.17.0,Tensor Parallel,32,1,1,4096,128,3968,FP16,Matmult-BF16
-Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,2917.0,0.33,0.34,Batch,2.17.0,Tensor Parallel,32,1,1,4096,3968,128,FP16,Matmult-BF16
-Llama-2-70b,:llama-sample:`Sample <llama-70b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,7.5,132.6,132.6,Batch,2.17.0,Tensor Parallel,32,1,1,2304,256,2048,FP16,Matmult-BF16
-Llama-2-70b,:llama-sample:`Sample <llama-70b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,13.5,74.23,74.29,Batch,2.17.0,Tensor Parallel,32,1,1,512,256,256,FP16,Matmult-BF16
+Llama-2-13b,:llama-sample:`Sample <meta-llama-2-13b-sampling>`,Transformers Neuron,trn1.32xlarge,Text Generation,2917,0.33,0.34,Batch,2.17.0,Tensor Parallel,32,1,1,4096,3968,128,FP16,Matmult-BF16
