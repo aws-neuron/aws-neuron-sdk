@@ -8,6 +8,15 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.17.1.0]
+------------------------
+Date: 04/01/2024
+
+Bug fixes
+^^^^^^^^^
+* Fixed potential hang during synchronization step in ``nccom-test``.
+
+
 Neuron Tools  [2.17.0.0]
 ------------------------
 Date: 02/13/2024

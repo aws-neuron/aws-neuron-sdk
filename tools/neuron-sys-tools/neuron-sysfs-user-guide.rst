@@ -40,6 +40,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   │   └── ...
   │   ├── info/
   │   │   ├── notify_delay
+  │   │   ├── serial_number
   │   │   └── architecture/
   │   │       ├── arch_type
   │   │       ├── device_name
@@ -51,21 +52,9 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   └── memory_usage
   │       └── host_mem
   │           ├── application_memory
-  │           │   ├── peak
-  │           │   ├── present
-  │           │   └── total
   │           ├── constants
-  │           │   ├── peak
-  │           │   ├── present
-  │           │   └── total
   │           ├── dma_buffers
-  │           │   ├── peak
-  │           │   ├── present
-  │           │   └── total
   │           └── tensors
-  │               ├── peak
-  │               ├── present
-  │               └── total
   ├── neuron_core0/
   │       ├── info/
   │       │   └── architecture/
@@ -111,7 +100,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   └── ...
 
 
-Each Neuron Device is represented as a directory under ``/sys/devices/virtual/neuron_device/``, where ``neuron0/`` represents Neuron Device 0, ``neuron1/`` represents Neuron Device 1, etc. Each NeuronCore is represented as a directory under a Neuron Device directory, represented as ``neuron_core{0,1,2,...}``. Metrics such as Runtime and Driver info and statistics are collected as per NeuronCore in two directories under the NeuronCore directory, i.e. ``info/`` and ``stats/``.
+Each Neuron Device is represented as a directory under ``/sys/devices/virtual/neuron_device/``, where ``neuron0/`` represents the Neuron Device 0, ``neuron1/`` represents the Neuron Device 1, etc. Each NeuronCore is represented as a directory under a Neuron Device directory, represented as ``neuron_core{0,1,2,...}``. Metrics such as Runtime and Driver info and statistics are collected as per NeuronCore in two directories under the NeuronCore directory, i.e. ``info/`` and ``stats/``.
 
 Most of the metrics belong to a category called “counter.” 
 Each counter is represented as a directory, which holds two numerical values as two files: total and present. Each memory usage counter has an additional value called peak.
@@ -137,49 +126,56 @@ Each counter has the same filesystem structure like this:
 Description for Each Metric
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``info/``: this directory stores hardware information. All of them are not counter types:
+``info/``: This directory stores general information about hardware and software. None of them are counter types.
 
-* ``notify_delay``: Controls delays between notifications from Neuron Device.  Current settings are on (``0``) or off (``-1``).  Off by default. 
-* ``arch_type``: Architecture type of the Neuron Device. Sample architecture types are v1, v2, and v3. You can only read the value but not change it.
-* ``instance_type``: Instance type of the Neuron Device. Sample instance types are Inf1, Inf2, and Trn1. You can only read the value but not change it.
-* ``device_type``: Neuron Device type. Sample Neuron Device types are Inferentia, Inferentia2, and Trainium1. You can only read the value but not change it.
+* ``notify_delay``: The delay between notifications from the Neuron Device.  Current settings are on (``0``) or off (``-1``).  Off by default. 
+
+* ``serial_number``: The unique device identifier.
+
+* ``architecture/``: This directory stores hardware architecture information.
+
+  * ``arch_type``: The architecture type of the Neuron Device. Sample architecture types are v1, v2, and v3. You can only read the value. You cannot change it.
+
+  * ``instance_type``: The instance type of the Neuron Device. Sample instance types are Inf1, Inf2, and Trn1. You can only read the value. You cannot change it.
+
+  * ``device_type``: The Neuron Device type. Sample Neuron Device types are Inferentia, Inferentia2, and Trainium1. You can only read the value. You cannot change it.
 
 
-``stats/``: this directory stores Neuron Runtime and Driver statistics. It contains three subdirectories: ``status/``, ``memory_usage/``, and ``other_info/``.
+``stats/``: This directory stores Neuron Runtime and Driver statistics. It contains three subdirectories: ``status/``, ``memory_usage/``, and ``other_info/``.
 
-* ``status/``: this directory stores the number of each return status of API calls. As explained in :ref:`The LIBNRT API Return Codes <nrt_api>`, every API call returns an NRT_STATUS value, which represents the return status of that API call. Our sysfs filesystem stores all ``NRT_STATUS`` as subdirectories under the ``status/`` directory. They all have the counter structure. Thus each ``NRT_STATUS`` subdirectory holds two values (total and present) and records the number of times you receive a certain ``NRT_STATUS``. The following is description for each ``NRT_STATUS`` subdirectory. You should see the description align with what is described in :ref:`The LIBNRT API Return Codes <nrt_api>`.
+* ``status/``: This directory stores the number of each return status of API calls. As explained in :ref:`The LIBNRT API Return Codes <nrt_api>`, every API call returns an NRT_STATUS value, which represents the return status of that API call. Our sysfs filesystem stores all ``NRT_STATUS`` as subdirectories under the ``status/`` directory. They all have the counter structure. Thus each ``NRT_STATUS`` subdirectory holds two values (total and present) and records the number of times you receive a certain ``NRT_STATUS``. The following is description for each ``NRT_STATUS`` subdirectory. You should see the description align with what is described in :ref:`The LIBNRT API Return Codes <nrt_api>`.
 
-* ``memory_usage/``: this directory contains memory usage statistics for both device and host, represented as counters. In this directory, the total counters indicate the current memory usage, present counters represent the memory allocation or deallocation amount in the previous operation, and peak counters indicate the maximum memory usage observed. Additionally, this directory provides detailed breakdown statistics for device and host memory usage. These memory breakdown details correspond to the :ref:`Memory Usage Summary <neuron_top_mem_usage>` section displayed on in Neuron Monitor.
+* ``memory_usage/``: This directory contains memory usage statistics for both device and host, represented as counters. In this directory, the total counters indicate the current memory usage, present counters represent the memory allocation or deallocation amount in the previous operation, and peak counters indicate the maximum memory usage observed. Additionally, this directory provides detailed breakdown statistics for device and host memory usage. These memory breakdown details correspond to the :ref:`Memory Usage Summary <neuron_top_mem_usage>` section displayed on in Neuron Monitor.
 
-  * ``device_mem/``: the amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
+  * ``device_mem/``: The amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
 
-    * This device memory per Neuron Core is further categorized into five types: ``constants/``, ``model_code/``, ``model_shared_scratchpad/``, ``runtime_memory/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Device Used Memory <neuron_top_device_mem_usage>` section.  Each of these categories has total, present, and peak.
+    * This device memory per NeuronCore is further categorized into five types: ``constants/``, ``model_code/``, ``model_shared_scratchpad/``, ``runtime_memory/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Device Used Memory <neuron_top_device_mem_usage>` section.  Each of these categories has total, present, and peak.
   
-  * ``host_mem/``: the amount of memory that Neuron Runtime uses for input and output tensors.
+  * ``host_mem/``: The amount of memory that Neuron Runtime uses for input and output tensors.
 
     * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
 
-  * ``hardware/``: hardware statistics.
+  * ``hardware/``: Hardware statistics.
 
-    * ``mem_ecc_uncorrected``: the number of uncorrected ECC events in the Neuron device's DRAM.
+    * ``mem_ecc_uncorrected``: The number of uncorrected ECC events in the Neuron device's DRAM.
 
-    * ``sram_ecc_uncorrected``: the  number of uncorrected ECC events in the Neuron device's SRAM.
+    * ``sram_ecc_uncorrected``: The  number of uncorrected ECC events in the Neuron device's SRAM.
 
 
-* ``other_info/``: this directory contains statistics that are not included by ``status/`` and ``memory_usage/``. All of them are not counter types:
+* ``other_info/``: This directory contains statistics that are not included by ``status/`` and ``memory_usage/``. None of them are counter types.
 
-  * ``flop_count``: number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval
+  * ``flop_count``: The number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval
 
-  * ``inference_count``: number of successful inferences
+  * ``inference_count``: The number of successful inferences
 
-  * ``model_load_count``:  number of successful model loads
+  * ``model_load_count``:  The number of successful model loads
 
-  * ``reset_count``: number of successful device resets
+  * ``reset_count``: The number of successful device resets
 
 
 Other metrics:
 
-* ``connected_devices``: a list of connected devices' ids. You should see the same output as neuron-ls's CONNECTED DEVICES.
+* ``connected_devices``: The list of connected devices' ids. You should see the same output as neuron-ls's CONNECTED DEVICES.
 
 
 Read and Write to Metrics
@@ -210,7 +206,7 @@ All files under ``/sys/devices/virtual/neuron_device/neuron0/power`` such as ``r
 How to Troubleshoot via Sysfs
 -----------------------------
 You can perform simple and easy tasks to troubleshoot your ML jobs with one or a few CLIs to read or write the sysfs filesystem.
-You can do aggregations across all NeuronCores and all Neuron Device to get a summarized view using your scripts. 
+You can do aggregations across all the NeuronCores and all the Neuron Device to get a summarized view using your scripts.
 
 
 You can also use the Sysfs notification feature to wait passively (without wasting CPU cycles) for changes to the values of Sysfs files. To use this feature, you need to implement a user-space program that calls the poll() function on the Sysfs file that you want to wait on. 

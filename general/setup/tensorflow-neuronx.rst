@@ -33,12 +33,15 @@ Tensorflow Neuron (``tensorflow-neuronx``) Setup
 ``tensorflow-neuronx`` setup on Ubuntu 22
 ------------------------------------------
 
+.. card:: Ubuntu 22 (Neuron Multi-Framework DLAMI)
+        :link: setup-ubuntu22-multi-framework-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
 .. card:: Ubuntu 22 (Ubuntu22 AMI)
         :link: setup-tensorflow-neuronx-u22
         :link-type: ref
         :class-body: sphinx-design-class-title-small
-
-
 
 ``tensorflow-neuronx`` setup on Amazon Linux 2 (AL2)
 -----------------------------------------------------

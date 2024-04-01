@@ -1,12 +1,26 @@
-.. tab-set:: 
+.. tab-set::
 
-    .. tab-item:: Latest Neuron DLC images
+    .. tab-item:: Introduction
 
+        The Pytorch Neuron DLC images are published to ECR Public, which is the recommended URL to use for most cases. If you are working within AWS SageMaker, you should use the Amazon ECR URL instead of the Amazon ECR Public one because of the restriction of Sagemaker. TensorFlow DLCs are not updated with the latest release. For earlier releases please check `here <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#neuron-containers>`_.
+
+.. tab-set::
+
+    .. tab-item:: Neuron DLC images in Amazon ECR Public
+
+        .. df-table::
+         :header-rows: 1
+
+         df = pd.read_csv('neuron_dlc_images.csv')
+
+.. tab-set::
+
+    .. tab-item:: Latest Neuron DLC images in Amazon ECR
 
         Find latest `Neuron DLC images <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#user-content-neuron-containers>`_.
 
-.. tab-set:: 
+.. tab-set::
 
-    .. tab-item:: Locate specific Neuron DLC release
+    .. tab-item:: Locate specific Neuron DLC release in Amazon ECR
 
         In the `DLC release page <https://github.com/aws/deep-learning-containers/releases>`_ do a search for Neuron to get the ECR repo location of specific Neuron DLC release.

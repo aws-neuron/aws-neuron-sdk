@@ -1207,6 +1207,7 @@ The Tensor API
 
     Allocates a new tensor, placing it in either host virtual memory or device memory (based on the ``tensor_placement`` argument), on the specified NeuronCore index, of a given size, and attaches the given name to it - the name is only used for log messages.
     For applications running on Inferentia, ``tensor_placement`` should always be ``NRT_TENSOR_PLACEMENT_VIRTUAL``. For all other cases, ``NRT_TENSOR_PLACEMENT_DEVICE`` should be used. If successful, the ``tensor`` address will contain a valid pointer to the newly allocated ``nrt_tensor_t``.
+    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.  
 
     :param tensor_placement: Controls where the tensor will be placed, the definition of the ``nrt_tensor_placement_t`` enum is as follows:
 
@@ -1214,7 +1215,7 @@ The Tensor API
 
             typedef enum {
                 NRT_TENSOR_PLACEMENT_DEVICE,    // the tensor is allocated directly in device memory
-                NRT_TENSOR_PLACEMENT_HOST,      // the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
+                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
                 NRT_TENSOR_PLACEMENT_VIRTUAL    // the tensor is allocated in host memory
             } nrt_tensor_placement_t;
 

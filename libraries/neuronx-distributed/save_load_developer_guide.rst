@@ -25,6 +25,7 @@ A sample usage:
        scheduler=lr_scheduler,
        user_content={"total_steps": total_steps, "batch_idx": batch_idx, "cli_args": args.__dict__},
        use_xser=True,
+       async_save=True,
    )
 
 Users can choose to not save every thing. For example, model states only:
@@ -36,6 +37,7 @@ Users can choose to not save every thing. For example, model states only:
        tag=f"step_{total_steps}",  # tag, sub-directory under checkpoint path
        model=model,
        use_xser=True,
+       async_save=True,
    )
 
 To only keep several checkpoints (e.g. 5), just use :code:`num_kept_ckpts=5`.

@@ -196,17 +196,11 @@ then
 Known Issues, **Work-arounds and Limitations**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Activation checkpointing + Custom FAL Dropout: We have implemented a
-   version of dropout that caches the masks obtained during the first
-   forward pass which will be reused again during the forward pass when
-   activation checkpointing is enabled. All the scripts have the
-   following flag turned on: export NEURON_ENABLE_NOSEED_DROPOUT=1.
-
-2. Error message: ``ValueError: invalid literal for int() with base 10: ''``.
+1. Error message: ``ValueError: invalid literal for int() with base 10: ''``.
    Simply re-run the script can solve this issue. This issue is already solved
    in the newer versions of transformers, see https://github.com/huggingface/transformers/pull/22427.
 
-3. Accelerator API workarounds:
+2. Accelerator API workarounds:
 
    -  Error message: "Gradient accumulation is not supported on TPU.
       Please set gradient_accumulation_steps to 1 and don’t pass in a

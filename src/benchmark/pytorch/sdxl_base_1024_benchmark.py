@@ -117,16 +117,41 @@ class TextEncoderOutputWrapper(nn.Module):
         return CLIPTextModelOutput(text_embeds=out_tuple[0], last_hidden_state=out_tuple[1], hidden_states=out_tuple[2])
     
     
+class TextEncoderOutputWrapper(nn.Module):
+    def __init__(self, traceable_text_encoder, original_text_encoder):
+        super().__init__()
+        self.traceable_text_encoder = traceable_text_encoder
+        self.config = original_text_encoder.config
+        self.dtype = original_text_encoder.dtype
+        self.device = original_text_encoder.device
+
+    def forward(self, text_input_ids, output_hidden_states=True):
+        out_tuple = self.traceable_text_encoder(text_input_ids)
+        return CLIPTextModelOutput(text_embeds=out_tuple[0], last_hidden_state=out_tuple[1], hidden_states=out_tuple[2])
+    
+class TraceableTextEncoder(nn.Module):
+    def __init__(self, text_encoder):
+        super().__init__()
+        self.text_encoder = text_encoder
+
+    def forward(self, text_input_ids):
+        out_tuple = self.text_encoder(text_input_ids, output_hidden_states=True, return_dict=False)
+        return out_tuple
+
+
+    
 # --- Load all compiled models and run pipeline ---
 COMPILER_WORKDIR_ROOT = 'sdxl_base_compile_dir_1024'
 model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+text_encoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder/model.pt')
+text_encoder_2_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder_2/model.pt')
 decoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_decoder/model.pt')
 unet_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'unet/model.pt')
 post_quant_conv_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'vae_post_quant_conv/model.pt')
 text_encoder_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder/model.pt')
 text_encoder_2_filename = os.path.join(COMPILER_WORKDIR_ROOT, 'text_encoder_2/model.pt')
 
-pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE, low_cpu_mem_usage=True)
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=DTYPE)
 
 # Load the compiled UNet onto two neuron cores.
 pipe.unet = NeuronUNet(UNetWrap(pipe.unet))
@@ -143,3 +168,5 @@ pipe.text_encoder_2 = TextEncoderOutputWrapper(torch.jit.load(text_encoder_2_fil
 prompt = "a photo of an astronaut riding a horse on mars"
 n_runs = 20
 benchmark(n_runs, "stable_diffusion_1024", pipe, prompt)
+
+

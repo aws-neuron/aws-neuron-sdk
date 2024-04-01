@@ -3,6 +3,10 @@
 PyTorch Neuron for Trainium Hugging Face BERT MRPC task finetuning using Hugging Face Trainer API
 =================================================================================================
 
+.. note::
+
+   Please use Hugging Face `Optimum-Neuron<https://huggingface.co/docs/optimum-neuron/index>` for best coverage and support of Hugging Face models running on Trainium and Inferentia devices.
+
 In this tutorial, we show how to run a Hugging Face script that uses Hugging Face Trainer API
 to do fine-tuning on Trainium. The example follows the `text-classification
 example <https://github.com/huggingface/transformers/tree/master/examples/pytorch/text-classification>`__
@@ -69,6 +73,7 @@ First, paste the following script into your terminal to create a “run.sh” fi
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
     --num_train_epochs 5 \\
+    --save_total_limit 1 \\
     --overwrite_output_dir \\
     --output_dir /tmp/\$TASK_NAME/ |& tee log_run
     EOF
@@ -132,6 +137,7 @@ Paste the following script into your terminal to create a “run_2w.sh” file a
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
     --num_train_epochs 5 \\
+    --save_total_limit 1 \\
     --overwrite_output_dir \\
     --output_dir /tmp/\$TASK_NAME/ |& tee log_run_2w
     EOF
@@ -214,6 +220,7 @@ Paste the following script into your terminal to create a “run_converted.sh”
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
     --num_train_epochs 5 \\
+    --save_total_limit 1 \\
     --overwrite_output_dir \\
     --output_dir /tmp/\$TASK_NAME/ |& tee log_run_converted
     EOF
@@ -276,6 +283,8 @@ Known issues and limitations
 
 The following are currently known issues:
 
+-  With torch-neuronx 2.1, HF Trainer API's use of XLA function ``xm.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. This is an issue with the trial execution of empty NEFFs and should not affect the normal execution of the training script.
+-  Multi-worker training using Trainer API resulted in too many graph compilations for HF transformers>=4.35: This is resolved with HF transformers>=4.37 with the additional workarounds as shown in `the ticket<https://github.com/aws-neuron/aws-neuron-sdk/issues/813>`.
 -  Long compilation times: this can be alleviated with
    ``neuron_parallel_compile`` tool to extract graphs from a short trial run and
    compile them in parallel ahead of the actual run, as shown above.

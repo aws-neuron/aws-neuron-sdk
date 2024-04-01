@@ -61,8 +61,7 @@ is an example to evenly partition the layers for all stages:
         return pipeline_cuts
 
 Note that the pipeline cuts should be at the transformer layer module name, which 
-in Llama model is indicated as ``model.layers.i`` where ``i`` is the layer index. Currently user is required to provide the pipeline cuts. 
-In the future release, automated partitioning will be supported.
+in Llama model is indicated as ``model.layers.i`` where ``i`` is the layer index. Users have the option to either provide the pipeline cuts, or set ``auto_partition`` to ``True`` to automatically determine the pipeline cuts to use.
 After pipeline cuts are decided, pipeline model wrapper is applied. Let's take a deeper look into each input of the model wrapper
 
 - ``model``: The original Pytorch module, could be TPfied.
@@ -333,3 +332,10 @@ However, please be aware that Hugging Face's tracer will check if the model clas
     # Keep the same class name as original one
     class LlamaForCausalLM(LlamaForCausalLMHF):
         ...
+
+
+Auto partition
+-------------
+Setting the ``auto_partition`` parameter to ``True`` means that the transformer layers are automatically partitioned by evenly splitting the transformer layers between the PP ranks. If the transformer layers are not evenly divisible by the PP ranks, the remaining layers are distributed to the latter pipeline ranks.
+The partitions are created on the basis of the transformer layer names. The transformer layer names are determined by recursively traversing the original torch module to find the layer names of modules that are of the ``transformer_layer_cls`` type in the model.
+If the user does not want to partition the model in this way, they can set the partitions to use by specifying the ``pipeline_cuts``. Note that the pipeline cuts should be at the transformer layer module name, which in the Llama model is given by ``model.layers.i`` where ``i`` is the layer index.

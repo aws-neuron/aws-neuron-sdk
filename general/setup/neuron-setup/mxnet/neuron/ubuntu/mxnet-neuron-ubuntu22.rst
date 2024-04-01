@@ -39,3 +39,5 @@ This section provide links that will assist you to quickly start with a fresh in
     .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
 
 .. include:: /general/quick-start/tab-inference-mxnet-neuron-u22.txt
+
+.. include:: /frameworks/mxnet-neuron/setup/mxnet-install-prev-u22.rst

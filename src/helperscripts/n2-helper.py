@@ -161,6 +161,9 @@ class manifest:
             # dlami instructions
             str_dlami = self.install_dlami(args)
             return str_dlami
+        elif args.ami == 'dlami-neuron':
+            str_dlami = self.install_neuron_dlami(args)
+            return str_dlami
         elif args.category == 'all':
             if args.instance == 'trn1':
                 str_runtime += str_efa
@@ -201,6 +204,29 @@ class manifest:
             str_dlami += self.jupyter_notebook(args)
             str_dlami += self.set_pip_repository()
             str_dlami += self.install_neuron_compiler_and_framework(args)
+        return str_dlami
+
+
+    def install_neuron_dlami(self, args):
+        str_dlami = ""
+        if ((args.instance == 'trn1' or args.instance == 'inf2') and args.category == "transformers-neuronx"):
+            str_dlami = '\n# Activate Python venv for Transformers-NeuronX \n'
+            str_dlami += "source /opt/aws_neuronx_venv_transformers_neuronx/bin/activate"
+        elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "pytorch" and args.framework_version == "1.13.1"):
+            str_dlami = '\n# Activate Python venv for Pytorch 1.13 \n'
+            str_dlami += "source /opt/aws_neuronx_venv_pytorch_1_13/bin/activate"
+        elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "pytorch" and args.framework_version == "2.1"):
+            str_dlami = '\n# Activate Python venv for Pytorch 2.1 \n'
+            str_dlami += "source /opt/aws_neuronx_venv_pytorch_2_1/bin/activate"
+        elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "tensorflow" and args.framework_version == "2.10.1"):
+            str_dlami = '\n# Activate Python venv for Tensorflow 2.10 \n'
+            str_dlami += "source /opt/aws_neuronx_venv_tensorflow_2_10/bin/activate"
+        elif (args.instance == 'inf1' and args.framework == "tensorflow" and args.framework_version == "2.10.1"):
+            str_dlami = '\n# Activate Python venv for Tensorflow 2.10 \n'
+            str_dlami += "source /opt/aws_neuron_venv_tensorflow_2_10_inf1/bin/activate"
+        elif (args.instance == 'inf1' and args.framework == "pytorch" and args.framework_version == "1.13.1"):
+            str_dlami = '\n# Activate Python venv for Pytorch 1.13 \n'
+            str_dlami += "source /opt/aws_neuron_venv_pytorch_1_13_inf1/bin/activate"
         return str_dlami
 
     def jupyter_notebook(self, args):
@@ -561,7 +587,10 @@ class manifest:
                 str += 'sudo apt-get install -y python' + target_python_version + '-venv g++ \n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += '\n# Install Python venv \n'
-                str += 'sudo yum install -y python' + target_python_version + '-venv gcc-c++ \n'
+                if args.os == 'amazonlinux2':
+                    str += 'sudo yum install -y python' + target_python_version + '-venv gcc-c++ \n'
+                else:
+                    str += 'sudo yum install -y gcc-c++ \n'
 
             # when venv_install_type is parellel cluster, we need to change the directory
             if args.venv_install_type == 'parallel-cluster':
@@ -666,13 +695,13 @@ class manifest:
                                             framework_version=args.framework_version)
         else:  # fresh install
             if args.framework == 'pytorch':
-                if "2." in args.framework_version:  # in case of PT2.x beta version
-                    str += '--pre '
-                    str += framework_name
-                    str += '==' + args.framework_version + '.*'
-                    str += ' mpmath==1.3'
-                else:
-                    str += framework_name
+                str += framework_name
+                if args.framework_version == "1.13.1":   # Work around to pin the version in case of 1.13
+                    str += '=='
+                    str += "1.13.*"
+                    # str += self.get_package_version(category=args.framework, name=framework_name,
+                    #                         neuron_version=args.neuron_version,
+                    #                         framework_version=args.framework_version)
                 str += ' torchvision\n'
             else:
                 str += framework_name
@@ -1042,11 +1071,11 @@ def cli_parse_arguments():
                                            + 'python3 %(prog)s --install-type={install,update}\n'
                                            + 'python3 %(prog)s --instance={inf1,trn1,inf2}\n'
                                            + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023}\n'
-                                           + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework}\n'
+                                           + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework,dlami-neuron}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
                                            + 'python3 %(prog)s --framework-version=[X.Y.Z] [options]\n'
                                            + 'python3 %(prog)s --mode={develop,compile,deploy} [options]\n'
-                                           + 'python3 %(prog)s --category={framework,driver,runtime,compiler,tools,all,driver_runtime_tools,compiler_framework,efa}\n'
+                                           + 'python3 %(prog)s --category={framework,driver,runtime,compiler,tools,all,driver_runtime_tools,compiler_framework,efa, transformers-neuronx}\n'
                                            + 'options= [--file=FILE]\n'
                                      , description='Installer helper for Neuron SDK')
 
@@ -1056,12 +1085,12 @@ def cli_parse_arguments():
     group.add_argument("--install-type", choices=['install', 'update'])
     parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2'])
     parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023'], )
-    parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework'],
+    parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework', 'dlami-neuron'],
                         default='non-dlami', help='default=non-dlami')
     parser.add_argument("--mode", choices=['develop', 'compile', 'deploy', 'initialize'], default='develop')
     parser.add_argument("--category",
                         choices=['framework', 'driver', 'runtime', 'compiler', 'tools', 'all', 'driver_runtime_tools',
-                                 'compiler_framework', 'efa'])
+                                 'compiler_framework', 'efa', 'transformers-neuronx'])
     parser.add_argument("--framework", choices=['pytorch', 'tensorflow', 'mxnet'])
     parser.add_argument("--framework-version", metavar='X.Y.Z')
     parser.add_argument("--venv-install-type", choices=['single-node', 'parallel-cluster'], default='single-node')

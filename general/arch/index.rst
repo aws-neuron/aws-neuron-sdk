@@ -69,18 +69,6 @@ NeuronCores
             :class-body: sphinx-design-class-title-small 
 
 
-
-Neuron Model Architecture
--------------------------
-
-.. grid:: 2
-
-      .. card:: Neuron Model Architecture Fit Guidelines
-            :link: model_architecture_fit
-            :link-type: ref
-            :class-body: sphinx-design-class-title-small
-
-
 Other
 -----
 

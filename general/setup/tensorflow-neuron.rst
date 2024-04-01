@@ -28,6 +28,10 @@ Tensorflow Neuron (``tensorflow-neuron``) Setup
 
 ``tensorflow-neuron`` setup on Ubuntu 22
 -----------------------------------------
+.. card:: Ubuntu 22 (Neuron Multi-Framework DLAMI)
+        :link: setup-ubuntu22-multi-framework-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
 
 .. card:: Ubuntu 22 (Ubuntu22 AMI)
         :link: setup-tensorflow-neuron-u22

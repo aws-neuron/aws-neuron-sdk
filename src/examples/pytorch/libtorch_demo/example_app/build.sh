@@ -31,4 +31,5 @@ g++ utils.cpp example_app.cpp \
 	-ltorch_cpu \
 	-lc10 \
 	-lpthread \
-	-lnrt
+	-lnrt \
+	-std=c++17

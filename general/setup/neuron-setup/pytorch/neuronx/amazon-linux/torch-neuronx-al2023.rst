@@ -42,3 +42,7 @@ This section provide links that will assist you to quickly start with a fresh in
 
 
 .. include:: /general/quick-start/tab-inference-torch-neuronx-al2023.txt
+
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2023.rst
+
+.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2023.rst

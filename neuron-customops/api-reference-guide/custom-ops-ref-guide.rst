@@ -633,16 +633,27 @@ Print statements then appear on the host's terminal with a header message prepen
 Limitations
 ^^^^^^^^^^^
 
-* Performance: using ``printf()`` significantly degrades the operator's performance
-    * The programmer can disable it by unsetting ``NEURON_RT_GPSIMD_STDOUT_QUEUE_SIZE_BYTES`` or setting it to 0
-        * Disabling ``printf()`` is recommended if running the model in a performance-sensitive context
-    * To maximize performance, the programmer should remove calls to ``printf()`` from within the operator
-        * Even if disabled, calling the function incurs overhead
-* Buffer size: output from ``printf()`` is buffered during model execution and read by the Neuron runtime after execution
-    * The model can still execute successfully if the programmer overflows the buffer
-    * Overflowing the buffer will cause the oldest data in it to be overwritten
-* Print statements are processed and printed to the host's terminal at the end of model execution, not in real time
-* ``printf`` is only supported in single core mode, or on GPSIMD core 0 only when using multiple GPSIMD cores.
-* Tensors passed into and returned from CustomOp functions can have up to 8 dimensions, and the maximum size of each dimension is 65535.
-* When using multiple GPSIMD cores, only ``TensorTcmAccessor`` is supported. Usage of other accessors will result in undefined behaviour.
-* Each model can only have one CustomOp library, and the library can have 10 functions registered. For more information on function registration in PyTorch, please refer to section `Implementing an operator in C++` in :ref:`feature-custom-operators-devguide`.
+* Performance: using ``printf()`` significantly degrades the operator's performance.
+
+  * The programmer can disable it by unsetting ``NEURON_RT_GPSIMD_STDOUT_QUEUE_SIZE_BYTES`` or setting it to 0.
+
+    * We recommend that you disable ``printf()`` if you are running the model in a performance-sensitive context.
+
+  * To maximize performance, remove calls to ``printf()`` from within the operator.
+
+    * Even if ``printf()`` is disabled, calling the function incurs overhead.
+* Buffer size: output from ``printf()`` is buffered during model execution and read by the Neuron runtime after execution.
+
+  * The model can still execute successfully if you overflow the buffer.
+  * Overflowing the buffer causes the oldest data in the buffer to be overwritten.
+* Print statements are processed and printed to the host's terminal at the end of model execution, not in real time.
+* ``printf()`` is only supported in single core mode, or on GPSIMD core 0 only when using multiple GPSIMD cores.
+
+Library Limitations
+-------------------
+
+* Tensors passed into and returned from CustomOp functions can either have up to 8 dimensions where the maximum size of each dimension is 65535, or up to 4 dimensions where the maximum size of each dimension is 4294967295.
+* When using multiple GPSIMD cores, only ``TensorTcmAccessor`` is supported. Usage of other accessors results in undefined behaviour.
+* Each model can only have one CustomOp library, and the library can have 10 functions registered. For more information on function registration in PyTorch, see `Implementing an operator in C++` in the :ref:`feature-custom-operators-devguide`.
+
+  * However, models using ``torch.sort`` cannot have any CustomOps.

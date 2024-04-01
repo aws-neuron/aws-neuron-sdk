@@ -12,6 +12,7 @@ Tutorials for NeuronX Distributed (``neuronx-distributed`` )
     Training GPT-NeoX 20B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training-gpt-neox-20b>
     Training Llama2 7B using TP and ZeRO-1 </libraries/neuronx-distributed/tutorials/training_llama2_7b>
     Training Llama2 13B/70B using TP and PP </libraries/neuronx-distributed/tutorials/training_llama2_tp_pp>
+    Training Llama-2-7B/13B/70B using TP and PP with PyTorch-Lightning </libraries/neuronx-distributed/tutorials/training_llama2_tp_pp_ptl>
     /src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb
     /src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb
     

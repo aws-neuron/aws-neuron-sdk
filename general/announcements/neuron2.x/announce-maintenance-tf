@@ -1,0 +1,10 @@
+.. post:: April 1, 2024
+    :language: en
+    :tags: announce-tensorflow-maintenance, tf-versions
+
+.. _announce-tfx-maintenance:
+
+Tensorflow-Neuron versions 2.8.4 and 2.9.3 enter maintenance mode
+-------------------------------------------------------------------
+
+Starting with :ref:`Neuron release 2.18 <neuron-2.18.0-whatsnew>`, tensorflow-neuron versions 2.8.4 and 2.9.3 are entering maintenance mode. Future releases of tensorflow-neuron versions 2.8.4 and 2.9.3 will address critical security issues only. Current users of those versions are advised to migrate to latest tensorflow-neuron version.
