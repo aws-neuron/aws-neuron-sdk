@@ -4,4 +4,4 @@
 * :ref:`ptl_developer_guide`
 * :ref:`model_optimizer_wrapper_developer_guide`
 * :ref:`save_load_developer_guide`
-* :ref:`nxd_inference_developer_guide`
+* :ref:`neuronx_distributed_inference_developer_guide`

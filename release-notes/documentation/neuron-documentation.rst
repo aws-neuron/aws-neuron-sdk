@@ -7,6 +7,34 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.18.0
+-------------
+Date: 04/01/2024
+
+
+- Updated PyTorch NeuronX developer guide with Snapshotting support. See :ref:`torch-neuronx-snapshotting`
+- Updated :ref:`api_guide` and :ref:`pp_developer_guide` with support for ``auto_partition`` API.
+- Updated documentation for ``PyTorch Lightning``  to train models using ``pipeline parallelism`` . See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` 
+- Updated NeuronX Distributed developer guide with :ref:`nxd-inference-devguide-autobucketing`, added :ref:`torch-neuronx-autobucketing-devguide` 
+- Updated :ref:`api_guide` and :ref:`llama2_tp_pp_tutorial` with support for asynchronous checkpointing.
+- Updated Transformers NeuronX Developer guide with support for streamer and stopping criteria APIs. See :ref:`developer guide <transformers_neuronx_developer_guide>`
+- Updated Transformers NeuronX Developer guide with instructions for ``Repeating N-Gram Filtering``. See :ref:`developer guide <transformers_neuronx_developer_guide>`
+- Updated Transformers NeuronX developer guide with Top-K on-device sampling support [Beta]. See :ref:`developer guide <transformers_neuronx_developer_guide>`
+- Updated Transformers NeuronX developer guide with Checkpointing support and automatic model selection. See :ref:`developer guide <transformers_neuronx_developer_guide>`
+- Updated Transformers NeuronX Developer guide with support for speculative sampling [Beta]. See :ref:`developer guide <transformers_neuronx_developer_guide>` 
+- Added sample for training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer with ``neuronx-distributed``. See :ref:`codegen25_7b_tp_zero1_tutorial` 
+- Added Tutorial for codellama/CodeLlama-13b-hf model inference with 16K seq length using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_
+- Added Mixtral-8x7B Inference Sample/Notebook using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_
+- Added Mistral-7B-Instruct-v0.2 Inference inference sample using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mistralai-Mistral-7b-Instruct-v0.2.ipynb>`_
+- Added announcement for Maintenance mode of TensorFlow 1.x. See :ref:`announce-tfx-maintenance`
+- Updated PyTorch 2.1 documentation to reflect stable (out of beta) support. See: :ref:`introduce-pytorch-2-1`
+- Updated PyTorch NeuronX environment variables to reflect stable (out of beta) support. See: :ref:`pytorch-neuronx-envvars`
+- Updated :ref:`latest-neuron-release-artifacts` with supported HuggingFace Transformers versions.
+- Added user guide instructions for ``Neuron DLAMI``. See :ref:`neuron-dlami-overview`
+- Updated :ref:`torch-hf-bert-finetune` tutorial with latest Hugging Face Trainer API.
+- Updated Neuron Runtime API guide with support for ``nr_tensor_allocate``. See :ref:`nrt-api-guide`
+- Updated :ref:`neuron-sysfs-ug` with support for ``serial_number`` unique identifier.
+- Updated :ref:`custom-ops-api-ref-guide` limitations and fixed nested sublists. See :ref:`feature-custom-operators-devguide`
 
 Neuron 2.16.0
 -------------

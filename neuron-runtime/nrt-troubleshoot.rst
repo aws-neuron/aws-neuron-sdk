@@ -376,6 +376,8 @@ For Trn and Inf instances, the following hardware errors are monitored by Neuron
 |                        |                                                           | on Neuron Device 0 NC 0, model xxx.neff, waiting for execution completion notification``                                      |                                                                                                                                                                      |
 +------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Upon any hardware errors, you should also expect to see the error message like the following in ``dmesg``: 
+``NEURON_HW_ERR=SRAM_UNCORRECTABLE_ERROR instance-id=i-0592464924bd45322 hostname=ip-172-31-61-252 nd-id=0 nc-id=0 serial-num=19fcda00f5ff6eb9 action=TERMINATE_INSTANCE``
 
 
 EFA and Collective Communication Errors

@@ -15,6 +15,20 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.16.7.0]
+--------------------------------
+
+Date: 04/01/2024
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed installation issues caused by API changes in Linux 6.3 and 6.4 kernel distributions.
+* Fixed an installation build failure when fault-injection is enabled in the kernel.
+* Fixed an issue where sysfs total peak memory usage metrics can underflow
+* Removed usage of sysfs_emit which is not supported on Linux kernels <= v5.10-rc1
+
+
 Neuron Driver release [2.15.9.0]
 --------------------------------
 

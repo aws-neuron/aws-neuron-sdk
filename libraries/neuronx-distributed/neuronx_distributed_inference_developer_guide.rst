@@ -1,4 +1,4 @@
-.. _nxd_inference_developer_guide:
+.. _neuronx_distributed_inference_developer_guide:
 
 Developer guide for Neuronx-Distributed  Inference (``neuronx-distributed`` )
 =================================================================
@@ -10,7 +10,8 @@ Neuronx-Distributed started with mostly targeting distributed device training wo
 Now, Neuronx-Distributed is now quickly expanding to support distributed device inference workloads. 
 Currently, Tensor Parallelism (TP) is the only supported form of parallelism for Neuronx-Distributed,
 with other forms such as Pipeline Parallelism coming in future releases.
-Beyond this, Neuronx-Distributed inference also supports weight-deduplication amongst TP shards.
+Beyond this, Neuronx-Distributed inference also supports weight separation amongst TP shards, as well as
+autobucketing support for TP models.
 These will be covered in this Developer Guide using BERT, and in the end, there will 
 be two samples (T5 3B and Llama-v2 7B) that showcase Neuronx-Distributed inference for larger models.
 
@@ -169,30 +170,95 @@ saving and loading the traced tp model:
         assert torch.argmax(model(*paraphrase)[0]) == torch.argmax(cpu_model(*paraphrase)[0])
 
 
-Weight Deduplication
+Weight separation
 ^^^^^^^^^^^^^^^^^^^^
 
 One more difference to note is the ``inline_weights_to_neff`` keyword argument. While
 this also exists in ``torch_neuronx.trace`` it's important to note that since
 ``parallel_model_trace`` produces many NEFFs, this means that this keyword argument
-enables weight deduplication, which is done by separating out common weights between
-the shards from the NEFFs. Benefits that can come from weight-deduplication is lower
+enables weight separation, which is done by separating out common weights between
+the shards from the NEFFs. Benefits that can come from weight separation is lower
 memory usage, as well as faster neff loading times.
 
 .. note::
-    It might be confusing to enable weight deduplication by disabling a flag. This is because
+    It might be confusing to enable weight separation by disabling a flag. This is because
     the original way that Neuron models handle weights is by having the weights embedded/inlined
     into the NEFF, making it impossible to replace. To preserve default behavior, the flag is
     set to ``True`` by default. When the flag is set to ``False``, weights are no longer inlined into
     the neff and are now separate, which enables new workflows.
 
-To enable Weight Deduplication, it's as simple as setting ``inline_weights_to_neff=False`` in ``parallel_model_trace``:
+To enable weight separation, set ``inline_weights_to_neff=False`` in ``parallel_model_trace``:
 
 .. code:: ipython3
 
     model = neuronx_distributed.trace.parallel_model_trace(get_model, paraphrase, tp_degree=2, inline_weights_to_neff=False)
 
-The full API reference for all trace related functions can be found :ref:`here <nxd_tracing>`
+The full API reference for all trace related functions can be found :ref:`here <nxd_tracing>`.
+
+.. _nxd-inference-devguide-autobucketing:
+
+Autobucketing
+^^^^^^^^^^^^^
+
+Autobucketing is a feature that enables you to use multiple bucket models. Each bucket model accepts a static input shape and a bucket kernel function. The models are then packaged into a single traced PyTorch model that can accept multiple different input shapes. 
+
+This gives you increased flexibility for inputs into Neuron models without the need to manage multiple Neuron models. The applications of this are extensive, from optimal model selection based on image resolution, to efficient sampling for token generation in language models.
+For more information, see the torch_neuronx section on :ref:`Autobucketing <torch-neuronx-autobucketing>`, and this :ref:`developer guide<torch-neuronx-autobucketing-devguide>`.
+
+``neuronx_distributed`` supports autobucketing via the ``bucket_config`` parameter. The following example shows how to use this with BERT to bucket it on sequence length:
+
+.. code:: python
+
+    def sequence_length_bucket_kernel(tensor_list: List[torch.Tensor]):
+        x = tensor_list[0]
+        bucket_dim = 1
+        x_shape = x.shape
+        tensor_sequence_length = x_shape[bucket_dim]
+        batch_size = x_shape[bucket_dim - 1]
+        buckets = [128, 512]
+        idx = 0
+        num_inputs = 3
+        bucket = buckets[0]
+        reshaped_tensors: List[torch.Tensor] = []
+        bucket_idx = 0
+        for idx, bucket in enumerate(buckets):
+            if tensor_sequence_length <= bucket:
+                bucket_idx = idx
+                for tensor in tensor_list:
+                    if num_inputs == 0:
+                        break
+                    delta = bucket - tensor_sequence_length
+                    padding_shape: List[int] = [batch_size, delta]
+                    zeros = torch.zeros(padding_shape, dtype=x.dtype)
+                    reshaped_tensors.append(torch.cat([tensor, zeros], dim=bucket_dim))
+                    num_inputs -= 1
+                break
+        return reshaped_tensors, torch.tensor([bucket_idx])
+
+    def get_bucket_kernel(*_):
+        bk = torch.jit.script(sequence_length_bucket_kernel)
+        return bk
+    
+    # same encode function
+    paraphrase = encode(tokenizer, sequence_1, sequence_2)
+    paraphrase_long = encode(tokenizer, sequence_1, sequence_2,max_length=512)
+    
+    if __name__ == '__main__':
+        #same as original main function
+
+        bucket_config = torch_neuronx.BucketModelConfig(get_bucket_kernel)
+
+        # note: inline_weights_to_neff must be set to False, otherwise a ValueError is raised
+        model = neuronx_distributed.trace.parallel_model_trace(get_model, [paraphrase, paraphrase_long], inline_weights_to_neff=False, bucket_config=bucket_config, tp_degree=2)
+
+        #rest is the same
+
+With the above example, we can supply inputs of sequence length from 1-512 without pre-padding, as the bucket kernel takes care of that. Autobucketing is useful for latency sensitive applications where using smaller and large inputs on small and large models respectively.
+
+.. note::
+    We do not yet have autobucketing integrated with our NxD Llama2 example, and
+    will be done so in an upcoming release.
+
 
 Conclusion
 ^^^^^^^^^^

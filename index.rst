@@ -33,7 +33,6 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    Samples and Tutorials </general/models/index>
    Performance </general/benchmarks/index>
    What’s New </release-notes/index>
-   /general/announcements/blogs
    Announcements </general/announcements/index>
 
 .. toctree::
@@ -65,6 +64,7 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    Neuron Tools </tools/index>
    Neuron Calculator </general/calculator/neuron-calculator>
    Setup Guide </general/setup/index>
+   Neuron DLAMI </dlami/index>
    Containers Deployment </containers/index>
    Developer Flows </general/devflows/index>
 

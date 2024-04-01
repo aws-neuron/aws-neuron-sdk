@@ -39,3 +39,5 @@ This section provide links that will assist you to quickly start with a fresh in
 
 
 .. include:: /general/quick-start/tab-inference-tensorflow-neuron-al2023.txt
+
+.. include:: /frameworks/tensorflow/tensorflow-neuron/setup/tensorflow-install-prev-al2023.rst

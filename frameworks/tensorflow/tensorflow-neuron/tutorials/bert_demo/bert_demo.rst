@@ -1,6 +1,6 @@
 .. _tensorflow-bert-demo:
 
-Running TensorFlow BERT-Large with AWS Neuron
+[Broken] Running TensorFlow BERT-Large with AWS Neuron
 =============================================
 
 This example shows a Neuron compatible BERT-Large implementation that is
@@ -54,6 +54,8 @@ following :
    git clone https://github.com/aws/aws-neuron-sdk
    cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
    export BERT_LARGE_SAVED_MODEL="/path/to/user/bert-large/savedmodel"
+   pip install tensorflow_neuron==1.15.5.2.8.9.0 --extra-index-url=https://pip.repos.neuron.amazonaws.com/
+   pip install neuron_cc==1.13.5.0 --extra-index-url=https://pip.repos.neuron.amazonaws.com
    python bert_model.py --input_saved_model $BERT_LARGE_SAVED_MODEL --output_saved_model ./bert-saved-model-neuron --batch_size=6 --aggressive_optimizations
 
 This compiles BERT-Large pointed to by $BERT_LARGE_SAVED_MODEL for an
@@ -87,6 +89,7 @@ BERT-Large demo server :
 .. code:: bash
 
    cd ~/aws-neuron-sdk/src/examples/tensorflow/bert_demo/
+   pip install tensorflow_neuron==1.15.5.2.8.9.0 --extra-index-url=https://pip.repos.neuron.amazonaws.com/
    python bert_server.py --dir bert-saved-model-neuron --batch 6 --parallel 4
 
 This loads 4 BERT-Large models, one into each of the 4 NeuronCores found

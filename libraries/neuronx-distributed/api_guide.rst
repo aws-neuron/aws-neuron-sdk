@@ -280,6 +280,7 @@ Neuron Distributed Pipeline Model
         param_init_fn: Optional[Any] = None,
         trace_file_path: Optional[str] = None,
         use_zero1_optimizer: bool = False,
+        auto_partition: Optional[bool] = False,
    )
 
 Parameters:
@@ -326,7 +327,12 @@ Parameters:
       delayed parameter initialization. param_init_fn should take a module as input and initialize the
       parameters that belongs to this module only (not for submodules).
 
-- ``use_zero1_optimizer``: Whether to use the zero1 optimizer. When setting to True the gradient average will be handled over.
+- ``use_zero1_optimizer``: Whether to use the zero1 optimizer. When setting to True the gradient average will be handed over.
+
+- ``auto_partition``:
+      Boolean to indicate whether to use auto_partition for the model. When set to True, the pipeline
+      cuts used as the pipeline stage boundaries to partition the model are automatically determined. When set to
+      True, the pipeline_cuts parameter should not be set. The pipeline_cuts are chosen on the basis of the transformer layer names.
 
 Common used APIs
 
@@ -667,6 +673,11 @@ optimizer states are also saved like this; while when ZeRO-1 optimizer is turned
 are saved on all ranks. Scheduler and user contents are saved on master rank only. Besides,
 users can use ``use_xser=True`` to boost saving performance and avoid host OOM. It's achieved
 by saving tensors one by one simultaneously and keeping the original data structure.
+However, the resulted checkpoint cannot be loaded using ``load`` api of PyTorch. Users
+can also use ``async_save=True`` to further boost saving performance. It's achieved by saving tensors
+in separate processes along with computation. Setting ``async_save`` to true will result
+in more host memory being used, therefore increase the risk of application crash due to system
+ran out of memory.
 
 ::
 
@@ -680,6 +691,7 @@ by saving tensors one by one simultaneously and keeping the original data struct
        num_workers=8,
        use_xser=False,
        num_kept_ckpts=None,
+       async_save=False
    )
 
 Parameters:
@@ -695,7 +707,7 @@ Parameters:
 - ``use_xser (bool)``: whether to use torch-xla serialization. When enabled, ``num_workers``
   will be ignored and maximum num of workers will be used. Default: :code:`False`.
 - ``num_kept_ckpts (int)``: number of checkpoints to keep on disk, optional. Default: :code:`None`.
-
+- ``async_save (bool)``: whether to use asynchronous saving method. Default: :code:`False`.
 Load Checkpoint:
 ''''''''''''''''
 
@@ -828,7 +840,7 @@ following set of APIs for running distributed inference:
 
 ::
 
-   def neuronx_distributed.trace.parallel_model_trace(func, inputs, tp_degree=1)
+   def neuronx_distributed.trace.parallel_model_trace(func, example_inputs, compiler_workdir=None, compiler_args=None, inline_weights_to_neff=True, bucket_config=None, tp_degree=1, max_parallel_compilations=None)
 
 This API would launch tensor parallel workers, where each worker would
 trace its own model. These traced models would be wrapped with a single
@@ -840,15 +852,30 @@ model.
 Parameters:
 
 
--  ``func : (Function)``: This is a function that returns a ``Model``
+-  ``func : Callable``: This is a function that returns a ``Model``
    object and a dictionary of states. The ``parallel_model_trace`` API would call this function
    inside each worker and run trace against them. Note: This differs
    from the ``torch_neuronx.trace`` where the ``torch_neuronx.trace``
    requires a model object to be passed.
--  ``inputs: (torch tensors)`` : The inputs that needs to be passed to
-   the model.
+-  ``example_inputs: (torch.Tensor like)`` : The inputs that needs to be passed to
+   the model. If you are using ``bucket_config``, then this must be a list of inputs for
+   each bucket model. This configuration is similar to :func:`torch_neuronx.bucket_model_trace`
+-  ``compiler_workdir: Optional[str,pathlib.Path]`` : Work directory used by
+   |neuronx-cc|. This can be useful for debugging and inspecting
+   intermediary |neuronx-cc| outputs.
+-  ``compiler_args: Optional[Union[List[str],str]]`` : List of strings representing
+   |neuronx-cc| compiler arguments. See :ref:`neuron-compiler-cli-reference-guide`
+   for more information about compiler options.
+-  ``inline_weights_to_neff: bool`` : A boolean indicating whether the weights should be
+   inlined to the NEFF. If set to False, weights will be separated from the NEFF.
+   The default is ``True``.
+-  ``bucket_config: torch_neuronx.BucketModelConfig`` : The config object that defines
+   bucket selection behavior. See :func:`torch_neuronx.BucketModelConfig` for more details.
 -  ``tp_degree: (int)`` : How many devices to be used when performing
    tensor parallel sharding
+-  ``max_parallel_compilations: Optional[int]`` : If specified, this function will only trace these numbers
+   of models in parallel, which can be necessary to prevent OOMs while tracing. The default
+   is None, which means the number of parallel compilations is equal to the ``tp_degree``.
 
 Trace Model Save/Load:
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -907,6 +934,7 @@ Inherited from `LightningModule <https://lightning.ai/docs/pytorch/stable/common
       scheduler_args: Tuple = (),
       scheduler_kwargs: Dict = {},
       grad_accum_steps: int = 1,
+      log_rank0: bool = False,
       manual_opt: bool = True,
    )
 
@@ -933,6 +961,8 @@ Parameters:
 - ``scheduler_args``: Dict of keyworded args fed to scheduler callable
 
 - ``grad_accum_steps``: Grad accumulation steps
+
+- ``log_rank0``: Log at rank 0 (by default it will log at the last PP rank). Note that setting this to True will introduce extra communication per step hence causing performance drop
 
 - ``manual_opt``: Whether to do manual optimization, note that currently NeuronLTModule doesn't support auto optimization so this should always set to True
 
@@ -992,3 +1022,6 @@ Inherited from `TensorBoardLogger <https://lightning.ai/docs/pytorch/stable/exte
 Parameters:
 
 - ``save_dir``: Directory to save the log files
+
+
+.. |neuronx-cc| replace:: :ref:`neuronx-cc <neuron-compiler-cli-reference-guide>`

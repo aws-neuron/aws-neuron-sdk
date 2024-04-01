@@ -40,7 +40,9 @@ If you want to pre-train Llama 70B, you would need to run the following steps -
 
     wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_70b_tp_pp.sh
     chmod +x run_llama_70b_tp_pp.sh
+    mkdir 70B_config && cd 70B_config
     wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/70B_config/config.json
+    cd .. && cp 70B_config/config.json .
 
 If you want to pre-train Llama 13B, you would need to run the following steps -
 
@@ -49,7 +51,9 @@ If you want to pre-train Llama 13B, you would need to run the following steps -
 
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_13B_tp_pp.sh
    chmod +x run_llama_13B_tp_pp.sh
+   mkdir 13B_config && cd 13B_config
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/13B_config/config.json
+   cd .. && cp 13B_config/config.json .
 
 The below tutorial uses ``Llama70B`` as an example. To run 13B, simply change the script from ``run_llama_70b_tp_pp.sh`` to ``run_llama_13B_tp_pp.sh``.
 
@@ -77,6 +81,12 @@ In case you see an error of the following form when downloading data: ``huggingf
 .. code:: ipython3
 
    sudo rm -rf /home/ubuntu/.cache/
+
+In case you see an error of the following form when downloading data: ```NotImplementedError: Loading a dataset cached in a LocalFileSystem is not supported.``` Try upgrading pip:
+
+.. code:: ipython3
+
+   pip install -U datasets
 
 
 At this point, you are all set to start training.
@@ -145,16 +155,16 @@ we do not need this change.
 To enable checkpoint saving, add the following flags to ``run_llama_70b_tp_pp.sh``:
 
 * ``--checkpoint_freq`` Number of steps to save a checkpoint, set to -1 to disable saving checkpoint, should set as -1 when pre-compling graph
-* ``--checkpoint_dir`` Direction to save the checkpoint 
+* ``--checkpoint_dir`` Direction to save the checkpoint
 * ``--num_kept_checkpoint`` Number of checkpoints to save, older checkpoint will be deleted manually, set to -1 to keep all saved checkpoints.
 * ``--save_load_xser`` Save with torch xla serialization to reduce time saving, it's recommended to enable xser for significantly faster save/load 
+* ``--async_checkpoint_saving`` Whether to use asynchronous checkpoint saving to reduce saving time.
 
 To enable checkpoint loading, add the following flags to ``run_llama_70b_tp_pp.sh``:
 
-* ``--loading_step`` Step to retrieve checkpoint from, set to -1 to disable checkpoint loading
+* ``--loading_step`` Step to retrieve checkpoint from, set to -1 to disable checkpoint loading. Set to ``latest_if_exists`` to load the latest checkpoint under ``checkpoint_dir``.
 * ``--checkpoint_dir`` Direction to load the checkpoint from
 * ``--save_load_xser`` load with torch xla serialization to reduce time saving, it's recommended to enable xser for significantly faster save/load. Note that if the chekpoint is saved with xser, it can only be loaded with xser, vice versa. 
-
 
 Load pretrained model:
 

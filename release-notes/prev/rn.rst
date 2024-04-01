@@ -8,6 +8,27 @@ Previous Releases Notes (Neuron 2.x)
    :depth: 1
 
 
+.. _neuron-2.17.0-whatsnew:
+
+
+
+Neuron 2.17.0 (02/13/2024)
+--------------------------
+
+What's New
+^^^^^^^^^^
+
+Neuron 2.17 release improves small collective communication operators (smaller than 16MB) by up to 30%, which improves large language model (LLM) Inference performance by up to 10%.
+This release also includes improvements in :ref:`Neuron Profiler <neuron-profile-ug>` and other minor enhancements and bug fixes.
+
+For more detailed release notes of the new features and resolved issues, see :ref:`components-rn`.
+
+To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_architecture_fit`.
+
+
+
+
+
 .. _neuron-2.16.0-whatsnew:
 
 

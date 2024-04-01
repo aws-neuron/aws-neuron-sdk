@@ -86,6 +86,39 @@ Model features
      - Yes
 
 
+Release [0.10.0.21]
+----------------------
+Date: 04/01/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for on device log-softmax and on device sampling for TopK
+- Added support for on device embedding for all models.
+- Added support for Speculative Decoding
+- [Beta] Added support for Mixtral-8x7b MoE
+- [Beta] Added support for mistralai/Mistral-7B-Instruct-v0.2 with no sliding window
+- Added faster checkpoint loading support for both sharded and whole checkpoints
+- Added the ability to download checkpoints directly from huggingface hub repositories
+- Added NeuronAutoModelForCausalLM class which automatically loads architecture-specific classes
+- Added a warmup to all kernels to avoid unexpected initialization latency spikes
+  
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Users no longer need a copy of the original checkpoint and can use safetensor checkpoints for optimal speed.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- There is a known compiler issue for inference of some configurations of LLaMA-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if LLaMA-2 70B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of LLaMA-2 13B that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if LLaMA-2 13B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of GPT-2 that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if GPT-2 accuracy issues occur.
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+
 Release [0.9.474]
 ----------------------
 Date: 12/21/2023
@@ -96,12 +129,12 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [Llama] [Beta] Added support for Llama-2 70b.
-- [Mistral] [Beta] Added support for Mistral 7b.
+- [LLaMA] [Beta] Added support for LLaMA-2 70B.
+- [Mistral] [Beta] Added support for Mistral 7B.
 - [Beta] Added support for PyTorch 2.1.
 - [Beta] Added support for Grouped Query Attention (GQA).
 - [Beta] Added support for ``safetensors`` serialization.
-- [Llama] [Beta] Added support for early stopping in the ``sample_llama`` function.
+- [LLaMA] [Beta] Added support for early stopping in the ``sample_llama`` function.
 - [GPT2] [Beta] Added sparse attention support.
 - [Stable] Added support for ``BatchNorm``.
 - Use the ``--auto-cast=none`` compiler flag by default for all models. This flag improves accuracy for ``float32`` operations.
@@ -114,7 +147,7 @@ Resolved Issues
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- There is a known compiler issue for inference of some configurations of Llama-2 70b that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70b accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of LLaMA-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if LLaMA-2 70B accuracy issues occur.
 - There are known compiler issues impacting inference accuracy of certain model configurations of ``Llama-2-13b`` when ``amp = fp16`` is used. If this issue is observed, ``amp=fp32`` should be used as a work around.  This issue will be addressed in future Neuron releases.
 
 Release [0.8.268]
@@ -176,7 +209,7 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70b) [Beta]
+- Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70B) [Beta]
 - Improved the performance of BLOOM and LLaMA models [Beta]
 - Reduced execution latency of token generation in tensor parallel models by improving thread synchronization. (supported in LLaMA only) 
 - Added an optimized vector implementation of RoPE positional embedding. (supported in LLaMA only)

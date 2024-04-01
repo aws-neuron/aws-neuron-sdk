@@ -32,6 +32,19 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [PATCH 2.20.22.0]
+----------------------------------------
+Date: 04/01/2024
+
+Bug fixes
+^^^^^^^^^
+* Fixed a bug where setting `NEURON_SCRATCHPAD_PAGE_SIZE` to a non-power of two value could lead to unnecessary Neuron memory allocations.
+* Fixed messaging so that logs of benign numerical errors do not include a full dump of runtime state.
+* Fixed a bug that was causing Neuron Collectives to consume excessive amount of Neuron memory, causing out of memory errors during model load.
+* Fixed a bug where the Runtime would fail to report a hardware error while the status API reported instance retirement.
+* Fixed a hang in Neuron Collectives that could occur when subgraphs running on different workers had a different number of replicas.
+
+
 Neuron Runtime Library [2.20.11.0]
 ---------------------------------
 Date: 02/13/2024

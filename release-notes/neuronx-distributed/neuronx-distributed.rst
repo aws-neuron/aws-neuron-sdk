@@ -10,6 +10,28 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+Neuron Distributed [0.7.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 04/01/2024
+
+New in this release
+-------------------
+
+* Added support for Pipeline-parallelism training using PyTorch-lightning
+* Added support for fine-tuning a model and running evaluation on the fine-tuned model using optimum-neuron
+* Added support for auto-partitioning the pipeline parallel stages for training large models
+* Added support for async checkpointing, optimizing the checkpoint saving time.
+* Added support for auto-resume from a checkpoint, in case training job crashes.
+* Added support for sequence length autobucketing in inference
+* Added support for inference with bfloat16
+* Improved performance for Llama-2-7b inference example.
+
+Known Issues and Limitations
+----------------------------
+
+* Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
+
 Neuron Distributed [0.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

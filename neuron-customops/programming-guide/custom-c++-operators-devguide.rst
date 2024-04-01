@@ -83,7 +83,7 @@ The kernel function contains the C++ implementation of the CustomOp, as shown in
 The kernel function is the main computational code for the operator. We support a subset of the input types usable by regular PyTorch Custom Operators: ``torch::Tensor``, ``torch::Scalar``, ``double``, and ``int64_t``. However we do not support ``std::vector`` or ``std::tuple`` of these types at this time. Note that similar to regular PyTorch Custom Operators, only ``double`` and not ``float``, and only ``int64_t`` and not other integral types such as ``int``, ``short`` or ``long`` are supported. The return value must be a ``torch::Tensor``.
 
 .. warning::
-   Tensors passed into and returned from CustomOp functions can have up to 8 dimensions, and the maximum size of each dimension is 65535.
+   Tensors passed into and returned from CustomOp functions can either have up to 8 dimensions where the maximum size of each dimension is 65535, or up to 4 dimensions where the maximum size of each dimension is 4294967295.
 
 The body of the kernel function may exercise C/C++ libraries, ``torch::Tensor`` classes, and select aTen operators, as is customary for Torch programming.  For high performance, feature offerings provide faster memory access, via new Tensor Accessor classes and stack management compiler flags. Additionally, higher performance can be obtained by parallelizing execution of the kernel over multiple GPSIMD cores. See the :ref:`custom-ops-api-ref-guide` for more details.
 
@@ -137,7 +137,7 @@ Similar to PyTorch, Neuron Custom C++ Operators are grouped into libraries defin
 Notice that the ``NEURON_LIBRARY`` macro is used in the same C++ file as the shape function. This is because the registration is loaded on the host.
 
 .. warning::
-   Each model can only have one CustomOp library, and the library can have 10 functions registered.
+   Each model can only have one CustomOp library, and the library can have 10 functions registered. However, models using ``torch.sort`` cannot have any CustomOps.
 
 The custom op library is built by calling the ``load`` API in Python like:
 ::
@@ -146,13 +146,16 @@ The custom op library is built by calling the ``load`` API in Python like:
    from torch_neuronx.xla_impl import custom_op
 
    custom_op.load(
-      name=name,
+      name='my_ops',
       compute_srcs=['kernel.cpp'],
       shape_srcs=['shape.cpp'],
       multicore=False
    )
 
 In the example above, name refers to the name of the library file to be created (i.e. ``libmy_ops.so``) and the ``compute_srcs`` and ``shape_srcs`` are lists of files to be compiled. After the ``load`` API completes, the library will have been compiled and loaded into the current PyTorch process. 
+
+.. warning::
+   The library file name should not be "builtin" as it is a reserved keyword.
 
 CustomOp also supports multicore execution mode. If you want to the library to run in multicore mode, pass the flag ``multicore=True`` into the ``load`` API. Notice that the execution mode is specified at the library level, so all the functions in the library run in the same mode. For more details of multicore CustomOp, please refer to `Using multiple GPSIMD cores` section in :ref:`custom-ops-api-ref-guide`.
 
@@ -174,7 +177,7 @@ The library can also be built ahead of time or in a separate process and loaded 
    from torch_neuronx.xla_impl import custom_op
 
    custom_op.load(
-      name=name,
+      name='my_ops',
       compute_srcs=['kernel.cpp'],
       shape_srcs=['shape.cpp'],
       build_directory*=*os.getcwd(),

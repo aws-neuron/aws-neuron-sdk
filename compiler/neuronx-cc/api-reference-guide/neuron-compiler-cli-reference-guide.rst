@@ -60,6 +60,7 @@ Available Commands:
      [--auto-cast-type <data_type>]
      [--distribution-strategy <distribution_type>]
      [--optlevel <opt-level>], or [-O <opt-level>]
+     [--enable-mixed-precision-accumulation]
      [--enable-saturate-infinity]
      [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
@@ -135,7 +136,9 @@ Available Commands:
 
     .. note:: This option supercedes, and deprecates, the ``—enable-experimental-O1`` option introduced in an earlier release.
 
-  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for certain computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
+  - :option:`--enable-mixed-precision-accumulation`: Perform intermediate calculations of accumulation operators (such as softmax and layernorm) in FP32 and cast the result to the model-designated datatype. This improves the operator's resulting accuracy.
+
+  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for compiler-introduced matrix-multiply transpose computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
 
   - :option:`--enable-fast-context-switch`: Optimize for faster model switching rather than execution latency.
       This option will defer loading some weight constants until the start of model execution. This results in overall faster system performance when your application switches between models frequently on the same Neuron Core (or set of cores).

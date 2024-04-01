@@ -50,6 +50,7 @@ Neuron Quick Links
             * :ref:`neuron_c++customops`
             * :ref:`neuron-tools`
             * :ref:`setup-guide-index`
+            * :ref:`neuron-dlami-overview`
             * :ref:`neuron_containers`
             * :ref:`neuron-devflows`
 

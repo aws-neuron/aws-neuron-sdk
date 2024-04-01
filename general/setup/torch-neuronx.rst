@@ -32,6 +32,11 @@ PyTorch Neuron (``torch-neuronx``) Setup
 ``torch-neuronx`` setup on Ubuntu 22
 ------------------------------------
 
+.. card:: Ubuntu 22 (Neuron Multi-Framework DLAMI)
+        :link: setup-ubuntu22-multi-framework-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
 .. card:: Ubuntu 22 (Ubuntu22 AMI)
         :link: setup-torch-neuronx-ubuntu22
         :link-type: ref

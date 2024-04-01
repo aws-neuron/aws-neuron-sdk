@@ -1,5 +1,5 @@
 
-.. tensorflow-neuronx-u20-update:
+.. tensorflow-neuronx-u22-update:
 
 Update to latest TensorFlow Neuron  (``tensorflow-neuronx``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
