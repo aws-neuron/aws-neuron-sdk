@@ -56,7 +56,7 @@ Starting with ``PyTorch/XLA 2.1``, functionalization changes result in new graph
 How can I install PyTorch NeuronX 2.1?
 --------------------------------------------
 
-To install PyTorch NeuronX 2.1 please follow the :ref:`setup-torch-neuronx` guides for AL2023, Ubuntu 20 AMI and Ubuntu 22 AMI. Please also refer to the Neuron multi framework DLAMI :ref:`setup-ubuntu22-multi-framework-dlami` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.1 that you can use to easily get started. PyTorch NeuronX 2.1 can be installed using the following:
+To install PyTorch NeuronX 2.1 please follow the :ref:`setup-torch-neuronx` guides for AL2023, Ubuntu 20 AMI and Ubuntu 22 AMI. Please also refer to the Neuron multi framework DLAMI :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.1 that you can use to easily get started. PyTorch NeuronX 2.1 can be installed using the following:
 
 .. code::
 

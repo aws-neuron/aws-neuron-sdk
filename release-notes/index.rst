@@ -56,7 +56,7 @@ More release content can be found in the table below and each component release 
      - Inf2, Trn1/Trn1n
 
    * - NeuronX Distributed (neuronx-distributed) for Training
-     - * Support for Pipeline Parallelism training using PyTorch Lightning. See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` and :ref:`tutorial <llama2_7b_tp_zero1_ptl_tutorial>`
+     - * Support for Pipeline Parallelism training using PyTorch Lightning. See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` and :ref:`tutorial <llama2_tp_pp_ptl_tutorial>`
        * Support for auto partitioning pipeline parallel stages when training large models.  See :ref:`api guide <api_guide>` and :ref:`pp_developer_guide`
        * Support for asynchronous checkpointing to improve the time it takes to save the checkpoint.  See :ref:`api guide <api_guide>` , :ref:`save_load_developer_guide` and :ref:`llama2_tp_pp_tutorial`
        * Tutorial to fine-tune Llama-2-7B model using PyTorch Lightning and running evaluation on the fine-tuned model using Hugging Face optimum-neuron. See :ref:`tutorial <llama2_7b_tp_zero1_ptl_finetune_tutorial>`
@@ -89,8 +89,8 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n,Inf2
 
    * - Neuron DLAMI and DLC
-     - * New Neuron Multi Framework Deep Learning AMI (DLAMI) for Ubuntu 22 with separate virtual environments for PyTorch 2.1, PyTorch 1.13, Transformers NeuronX and Tensorflow 2.10.  See :ref:`setup-ubuntu22-multi-framework-dlami` and :ref:`neuron-dlami-overview`
-       * Neuron Multi Framework Deep Learning AMI (DLAMI) is now the default Neuron AMI in QuickStart AMI list when launching Neuron instances for Ubuntu through AWS console. See :ref:`setup-ubuntu22-multi-framework-dlami`
+     - * New Neuron Multi Framework Deep Learning AMI (DLAMI) for Ubuntu 22 with separate virtual environments for PyTorch 2.1, PyTorch 1.13, Transformers NeuronX and Tensorflow 2.10.  See :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` and :ref:`neuron-dlami-overview`
+       * Neuron Multi Framework Deep Learning AMI (DLAMI) is now the default Neuron AMI in QuickStart AMI list when launching Neuron instances for Ubuntu through AWS console. See :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`
        * Neuron DLAMIs for PyTorch 1.13 and Tensorflow 2.10 are updated with 2.18 Neuron SDK for both Ubuntu 20 and AL2. See :ref:`neuron-dlami-overview`
        * SSM parameter support for Neuron DLAMIs to find the DLAMI id with latest Neuron release SDK. See :ref:`neuron-dlami-overview`
        * New Neuron Deep Learning Containers(DLCs) for PyTorch 2.1 Inference and Training.  See :ref:`neuron_containers`
