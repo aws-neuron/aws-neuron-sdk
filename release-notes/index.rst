@@ -101,7 +101,7 @@ More release content can be found in the table below and each component release 
   
    * - Other Documentation Updates
      - * App Note on snapshotting models with PyTorch NeuronX 2.1 to support dumping debug information. See :ref:`pytorch-neuronx-debug`
-       * Added announcement for Maintenance mode of TensorFlow 1.x. See :ref:`announce-maintenance-tensorflow1.x`
+       * Added announcement for Maintenance mode of TensorFlow 1.x. See :ref:`announce-tfx-maintenance`
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
