@@ -59,7 +59,6 @@ Encoders
 
 .. _decoder_model_samples_inference_inf2_trn1:
 
-
 Decoders
 --------
 
@@ -81,17 +80,31 @@ Decoders
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-2-13b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
 
+
    * - meta-llama/Llama-2-70b
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-2-70b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_
+       *  `Run speculative sampling on Meta Llama models [Beta] <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/speculative_sampling.ipynb>`_
 
    * - meta-llama/Llama-2-7b
      - neuronx-distributed
      - * Run Hugging Face meta-llama/Llama-2-7b autoregressive sampling on Inf2 & Trn1 (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
 
-   * - Mistral-7B-Instruct-v0.1
+   * - mistralai/Mistral-7B-Instruct-v0.1
      - transformers-neuronx
      - * :ref:`Run Mistral-7B-Instruct-v0.1 autoregressive sampling on Inf2 & Trn1 <mistral_gqa_code_sample>`
+
+   * - mistralai/Mistral-7B-Instruct-v0.2
+     - transformers-neuronx
+     - * `Run Hugging Face mistralai/Mistral-7B-Instruct-v0.2 autoregressive sampling on Inf2 & Trn1 [Beta] <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/mistralai-Mistral-7b-Instruct-v0.2.ipynb>`_
+
+   * - Mixtral-8x7B-v0.1
+     - transformers-neuronx
+     - * `Run Hugging Face mistralai/Mixtral-8x7B-v0.1 autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_
+
+   * - codellama/CodeLlama-13b-hf
+     - transformers-neuronx
+     - * `Run Hugging Face codellama/CodeLlama-13b-hf autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_
 
 .. _encoder_decoder_model_samples_inference_inf2_trn1:
 
