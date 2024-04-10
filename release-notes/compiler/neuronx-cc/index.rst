@@ -7,6 +7,15 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+
+
+Neuron Compiler [2.13.68.0]
+----------------------------
+Date: 04/10/2024
+
+* This release fixes hang issues related to Triton Inference Server.
+
+
 Neuron Compiler [2.13.66.0]
 ----------------------------
 Date: 04/01/2024
