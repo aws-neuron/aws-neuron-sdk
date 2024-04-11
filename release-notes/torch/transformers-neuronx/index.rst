@@ -85,6 +85,27 @@ Model features
      - Yes
      - Yes
 
+Release [0.10.0.332]
+----------------------
+Date: 04/10/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- [Beta] Added support for continuous batching and a reference integration with vLLM (LLaMA models only)
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- There is a known compiler issue for inference of some configurations of LLaMA-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if LLaMA-2 70B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of LLaMA-2 13B that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if LLaMA-2 13B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of GPT-2 that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if GPT-2 accuracy issues occur.
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use constants.LAYOUT_SBH instead.
+
 
 Release [0.10.0.21]
 ----------------------
