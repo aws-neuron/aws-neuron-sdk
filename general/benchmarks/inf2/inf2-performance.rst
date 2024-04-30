@@ -7,7 +7,7 @@ Inf2 Inference Performance
    :local:
    :depth: 1
 
-*Last update: April 11th, 2024*
+*Last update: April 30th, 2024*
 
 .. _inf2_inference_perf:
 
@@ -64,7 +64,7 @@ Decoder Models
 
             df['Cost per 1M tokens'] = ((1.0e6 / df['Output Token Throughput (tokens/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
-            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type', 'Task','Scripts']
+            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type', 'Weight Storage Data Type','Task','Scripts']
 
             df['Output Token Throughput (tokens/sec)'] = df['Output Token Throughput (tokens/sec)'].round(2).astype('float',copy=True)
             int_cols = ['TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)']
@@ -82,7 +82,7 @@ Decoder Models
 
             df['Cost per 1M tokens'] = ((1.0e6 / df['Output Token Throughput (tokens/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
-            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type', 'Task','Scripts']
+            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type','Weight Storage Data Type', 'Task','Scripts']
 
             df['Output Token Throughput (tokens/sec)'] = df['Output Token Throughput (tokens/sec)'].round(2).astype('float',copy=True)
             int_cols = ['TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)']
