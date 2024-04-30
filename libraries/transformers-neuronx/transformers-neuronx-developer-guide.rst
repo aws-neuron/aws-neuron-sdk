@@ -752,3 +752,88 @@ In the following example, we demonstrate how to perform speculative sampling usi
     print(f"\nDecoded tokens: {generated_text}")
 
 
+QKV Weight Fusion 
+--------------------------------------
+
+Concatenating a model's query, key and value weight matrices often achieves better performance because larger matrices allow
+for more efficient data movement and compute. QKV weight fusion can be enabled by setting `fuse_qkv=True` in the `NeuronConfig`:
+
+.. code-block:: python
+
+    neuron_config = NeuronConfig(fuse_qkv=True)
+
+Bucketing
+------------------
+LLM inference is a generate process that can produce variable length sequences. 
+This poses a problem since the Neuron compiler produces executables which expect statically shaped inputs and outputs.
+To make LLM work with different shapes, transformers_neuronx generates buckets 
+and applies padding wherever it is required. 
+
+There are at least two set of buckets for each LLM inference that can be set by user: 
+1) Context encoding (pre-fill) buckets and 2) output token generation buckets.
+
+
+**Token generation buckets**
+
+In token generation, tokens are generated iteratively. 
+At each token position, transformer need to attend to the previous tokens only.
+But in the naive implementation with static shapes, one may attend to all KV-cache (full sequence length).
+To solve this problem, we use token generation buckets.
+Token generation buckets determine the attention lengths.
+For instance, if the max sequence length is 1024 tokens and current token 
+is at position 120, there is no need to attend to all 1024 tokens in the current step. 
+We can use token generation buckets to attend to different portions of KV-cache. 
+By default, token generation buckets which are powers of 2 starting from 128 
+tokens are used (i.e. 128, 256, 512, up to sequence length). In the example above, 
+bucket 128 would be used for position 120 which would reduce the wasted compute significantly. 
+User can change these buckets by setting a list for ``n_positions`` (see example below). 
+Otherwise, if a number is given for ``n_positions`` (sequence length), instead of a list, 
+then the powers of 2 buckets starting from 128 will be used. 
+The last bucket would be ``n_positions`` (sequence length), even if it is not a power of 2.
+
+**Context encoding buckets**
+
+The prompt tokens can be processed in parallel. 
+As a result, we need to set the bucket sizes for different estimated length of 
+input prompts. We can specify these context bucket sizes using the ``context_length_estimate`` argument.
+In general, it is better to have all the bucket to be multiples of 256 tokens.
+But adding too many buckets would increase device memory consumption and add extra latency
+for bucket switching.
+Usually, the powers of 2 starting from 128 tokens are used for 
+context encoding buckets. If the total sequence length (``n_positions``) is beyond 2048 
+tokens, it is desirable to add extra buckets with multiple of 512 or 1024 tokens. 
+It is not recommended to add buckets of multiples of 256 tokens or smaller for context buckets beyond 2k to avoid bucket switching latency.
+At runtime, the smallest bucket which fits the input context will be used. 
+By default, the context encoding buckets set to half of output-token buckets. 
+Adding extra context buckets would reduce the wasted compute and improves performance. 
+However, the extra executables would reduce memory space since executables require device memory space. 
+
+Notice that the default output token generation buckets work well for wide range 
+of applications. However, ideal context encoding buckets depends on the specific use case. 
+For instance, if all the requests have a context length of about 1500 +/- 500 tokens, 
+adding more buckets closer to 1500 might help context encoding time. 
+In this example, adding buckets of 1024, 1280, 1536, 1792, 2048 tokens (distance of 256 tokens) could help.
+Moreover, the largest context encoding bucket should be larger than the largest context length. 
+Otherwise, the performance would degrade significantly.
+
+
+To set context encoding and token generation buckets manually:
+
+.. code-block:: python
+
+    context_length_estimate = [1024, 1280, 1536, 1792, 2048]    # The best context estimate depends on the use case
+    n_positions = [128, 256, 512, 1024, 2048, 3072]             # Usually default buckets are appropriate
+
+    model = NeuronAutoModelForCausalLM.from_pretrained(
+        'gpt2',                      
+        batch_size=1,                
+        n_positions=n_positions,             
+        tp_degree=2,                 
+        amp='f16',                   
+        context_length_estimate=context_length_estimate,
+    )
+    
+Long Sequence length support up to 32k
+---------------------------------------
+
+With the integration of FlashAttention kernel, developers can use longer sequence lengths for LLAMA models. The Flash Attention kernel is automatically used when the input sequence length is greater than 8k without any additional configuration. Refer to `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb>`_ for usage of 32k sequence length on a variation of LLAMA3-8B Model.

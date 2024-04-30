@@ -29,6 +29,7 @@ Let's take a look at our Llama example:
         model,
         transformer_layer_cls=LlamaDecoderLayer,
         num_microbatches=args.num_microbatches,
+        virtual_pipeline_size=1,
         output_loss_value_spec=(True, False),
         input_names=["input_ids", "attention_mask", "labels"],
         pipeline_cuts=pipeline_cuts,
@@ -36,6 +37,7 @@ Let's take a look at our Llama example:
         leaf_module_cls=[LlamaRMSNorm.__name__],
         autowrap_modules=[mappings],
         use_zero1_optimizer=args.use_zero1_optimizer,
+        deallocate_pipeline_outputs=False,
     )
     model.move_model_to_device()
 
@@ -67,12 +69,16 @@ After pipeline cuts are decided, pipeline model wrapper is applied. Let's take a
 - ``model``: The original Pytorch module, could be TPfied.
 - ``transformer_layer_cls=LlamaDecoderLayer``: The transformer layer class, we will use it for partition
 - ``num_microbatches=args.num_microbatches``: The number of microbatches we used for pipeline execution.
+- ``virtual_pipeline_size``: Virtual pipeline size if greater than 1 we will use the interleaved pipeline schedule.
 - ``output_loss_value_spec=(True, False)``: This tells ``NxDPPModel`` how to get the loss from the model output. In this case output is a tuple, where first value is loss and second value is something else. ``NxDPPModel`` will use loss to run backward and return loss as the output.
 - ``input_names=["input_ids", "attention_mask", "labels"]``: The model input names that we will use to run training. As our partition uses FX symbolic trace to trace the model, we will use these input names to create ``concrete_args``. Usually this will be the same input as you will feed into model for the execution. For details please check https://pytorch.org/docs/stable/fx.html#torch.fx.symbolic_trace
 - ``pipeline_cuts=pipeline_cuts``: The pipeline cuts to decide the stages
 - ``leaf_module_cls=[LlamaRMSNorm.__name__]``: We can add some pytorch modules as leaf module so that FX symbolic trace won't trace it through. Here we mark the ``LlamaRMSNorm`` as one leaf module. If you hit any issue about tracing you can skip tracing that part by add the module as a leaf module here. The transformer layer module will be a leaf module by default.
 - ``autowrap_modules``: This serves as the same functionality to simplify FX tracing. User can provide a **python** module here and all the methods from this python module will not be traced.
 - ``use_zero1_optimizer``: When zero-1 optimizer is used, set this to True, so the PP model will understand that zero-1 optimizer will handle data parallel gradient averaging.
+- ``deallocate_pipeline_outputs``: 
+    Whether to deallocate the pipeline outputs after send. After send the output tensor is only useful for its 
+    '.grad_fn' field, and not its '.data'.
 
 After applying model wrapper, ``NxDPPModel`` will partition the model based on the pipeline cuts. If the original model is not yet moved to device, we can call
 ``model.move_model_to_device()`` so that ``NxDPPModel`` will only move the local module to device.
@@ -83,6 +89,15 @@ Runtime execution:
 To use pipeline runtime, user simply needs to replace their original model call with ``NxDPPModel.run_train``, rest will remain unchanged. 
 Please note that the pipeline runtime will take care of both forward and backward call, so user will not need to explicitly make backward calls. 
 The ``NxDPPModel.run_train`` call will return the loss that is achieved from ``output_loss_value_spec``.
+
+Interleaved Pipeline-Parallelism:
+---------------------------------
+
+To use interleaved pipeline parallel, one has to set `virtual_pipeline_size` greater than 1. The value of the 
+`virtual_pipeline_size` * `pipeline_parallel_size` should be equal to the number of layers in the models. Interleave pipeline can 
+help to reduce the pipeline bubble size and improve performance especially in cases when the number of microbatches 
+per data-parallel rank is small. More information can be found `here <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/#interleaved_schedule>__`
+
 
 Mixed precision training
 ------------------------

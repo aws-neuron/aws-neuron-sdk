@@ -10,8 +10,6 @@ BERT TorchServe Tutorial
 
 Overview
 --------
-Update 10/02:This tutorial is currently broken and the AWS Neuron team is working on providing the fix.
-
 This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ with Neuron, the SDK for EC2 Inf2 and Trn1 instances. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf2/Trn1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
 .. _torchserve-compile:
@@ -26,10 +24,9 @@ You should now have a compiled ``bert_neuron_b6.pt`` file, which is required goi
 
 Open a shell on the instance you prepared earlier, create a new directory named ``torchserve``. Copy your compiled model from the previous tutorial into this new directory.
 
-.. code:: bash
-
-  cd torchserve
-  ls
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+   :language: bash
+   :lines: 4-6
 
 ::
 
@@ -37,9 +34,9 @@ Open a shell on the instance you prepared earlier, create a new directory named 
 
 Prepare a new Python virtual environment with the necessary Neuron and TorchServe components. Use a virtual environment to keep (most of) the various tutorial components isolated from the rest of the system in a controlled way.
 
-.. code:: bash
-
-  pip install transformers==4.26.0 torchserve==0.7.0 torch-model-archiver==0.7.0 captum==0.6.0
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+   :language: bash
+   :lines: 8
 
 Install the system requirements for TorchServe.
 
@@ -55,9 +52,9 @@ Install the system requirements for TorchServe.
 
    .. tab-item:: Ubuntu 20 DLAMI Base
 
-      .. code-block:: bash
-
-        sudo apt -y install openjdk-11-jdk
+      .. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+        :language: bash
+        :lines: 10
 
 
 .. code:: bash
@@ -121,13 +118,9 @@ Download the `custom handler script <https://pytorch.org/serve/custom_service.ht
 
 Next, we need to associate the handler script with the compiled model using ``torch-model-archiver``. Run the following commands in your terminal:
 
-.. code:: bash
-
-  mkdir model_store
-  MAX_LENGTH=$(jq '.max_length' config.json)
-  BATCH_SIZE=$(jq '.batch_size' config.json)
-  MODEL_NAME=bert-max_length$MAX_LENGTH-batch_size$BATCH_SIZE
-  torch-model-archiver --model-name "$MODEL_NAME" --version 1.0 --serialized-file ./bert_neuron_b6.pt --handler "./handler_bert_neuronx.py" --extra-files "./config.json" --export-path model_store
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 12-16
 
 .. note::
 
@@ -135,9 +128,9 @@ Next, we need to associate the handler script with the compiled model using ``to
 
 The result of the above will be a ``mar`` file inside the ``model_store`` directory.
 
-.. code:: bash
-
-  $ ls model_store
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 18
 
 ::
 
@@ -167,15 +160,15 @@ Run TorchServe
 
 It's time to start the server. Typically we'd want to launch this in a separate console, but for this demo we’ll just redirect output to a file.
 
-.. code:: bash
-
-  torchserve --start --ncs --model-store model_store --ts-config torchserve.config 2>&1 >torchserve.log
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 20
 
 Verify that the server seems to have started okay.
 
-.. code:: bash
-
-  curl http://127.0.0.1:8080/ping
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 22
 
 ::
 
@@ -222,11 +215,9 @@ First, determine the number of NeuronCores available based on your instance size
           - 32
 
 
-.. code:: bash
-
-  MAX_BATCH_DELAY=5000 # ms timeout before a partial batch is processed
-  INITIAL_WORKERS=<number of NeuronCores from table above>
-  curl -X POST "http://localhost:8081/models?url=$MODEL_NAME.mar&batch_size=$BATCH_SIZE&initial_workers=$INITIAL_WORKERS&max_batch_delay=$MAX_BATCH_DELAY"
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 24-26
 
 ::
 
@@ -258,9 +249,9 @@ This script will send a ``batch_size`` number of requests to our model. In this 
 
 Execute the script in your terminal.
 
-.. code:: bash
-
-  $ python infer_bert.py
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 28
 
 ::
 
@@ -288,9 +279,9 @@ We've seen how to perform a single batched inference, but how many inferences ca
 
 Run the benchmarking script.
 
-.. code:: bash
-
-  python benchmark_bert.py
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 30
 
 ::
 
@@ -311,7 +302,7 @@ Run the benchmarking script.
 
 You can now shutdown torchserve.
 
-.. code:: bash
-
-  torchserve --stop
+.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+    :language: bash
+    :lines: 32
 

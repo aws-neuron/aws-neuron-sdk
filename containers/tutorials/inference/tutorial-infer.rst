@@ -23,7 +23,6 @@ Setup Environment
 -----------------
 
 1. Launch an Inf1 Instance
-	.. include:: /general/setup/install-templates/launch-inf1.txt
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 

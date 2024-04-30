@@ -9,8 +9,8 @@ Announcing end of support for Neuron virtual environments in AWS Deep Learning A
 
 :ref:`Neuron release 2.18.2 <neuron-2.18.2-whatsnew>` will be the last release that will include support for the following virtual environments in AWS Deep Learning AMI (Amazon Linux 2):
 
-``aws_neuron_pytorch_p38: PyTorch 1.13, Python 3.8``
-``aws_neuron_tensorflow2_p38: TensorFlow 2.10, Python 3.8``
+- ``aws_neuron_pytorch_p38: PyTorch 1.13, Python 3.8``
+- ``aws_neuron_tensorflow2_p38: TensorFlow 2.10, Python 3.8``
 
 Future releases will not include Neuron support for these virtual environments.
 

@@ -1,0 +1,48 @@
+apiVersion: v1
+data:
+  kernel-monitor.json: |
+    {
+        "plugin": "kmsg",
+        "logPath": "/dev/kmsg",
+        "lookback": "5m",
+        "bufferSize": 10,
+        "source": "kernel-monitor",
+        "conditions": [
+            {
+                "type": "NeuronHealth",
+                "reason": "NeuronHasNoError",
+                "message": "Neuron has no error"
+            }
+        ],
+        "rules": [
+            {
+                "type": "permanent",
+                "condition": "NeuronHealth",
+                "reason": "NeuronHasError_SRAM_UNCORRECTABLE_ERROR",
+                "pattern": ".* NEURON_HW_ERR=SRAM_UNCORRECTABLE_ERROR .*"
+            },
+            {
+                "type": "permanent",
+                "condition": "NeuronHealth",
+                "reason": "NeuronHasError_NC_UNCORRECTABLE_ERROR",
+                "pattern": ".* NEURON_HW_ERR=NC_UNCORRECTABLE_ERROR .*"
+            },
+            {
+                "type": "permanent",
+                "condition": "NeuronHealth",
+                "reason": "NeuronHasError_HBM_UNCORRECTABLE_ERROR",
+                "pattern": ".* NEURON_HW_ERR=HBM_UNCORRECTABLE_ERROR .*"
+            },
+            {
+                "type": "permanent",
+                "condition": "NeuronHealth",
+                "reason": "NeuronHasError_DMA_ERROR",
+                "pattern": ".* NEURON_HW_ERR=DMA_ERROR .*"
+            }
+        ]
+    }
+kind: ConfigMap
+metadata:
+  name: node-problem-detector-config
+  namespace: neuron-healthcheck-system
+

@@ -125,7 +125,7 @@ graph in the background and the graph is executed in hardware only when the tens
 .. code:: shell
 
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-   neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
+   XLA_DOWNCAST_BF16=1 neuron_parallel_compile torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --steps_this_run 10 \
    --batch_size 16 \
@@ -306,7 +306,7 @@ following commands in your SSH session:
    tensorboard --logdir ./output
 
 Once running, open a new SSH connection to the instance and port-forward
-TCP port 6006 (ex: ``-L 6006:127.0.0.1:6006``). Once the tunnel is
+TCP port 6006 (ex: ``ssh -L 6006:127.0.0.1:6006 user_name@remote_ip``). Once the tunnel is
 established, TensorBoard can then be accessed via web browser at the
 following URL: `http://localhost:6006 <http://localhost:6006/>`__.
 Please note that you will not be able to access TensorBoard if you

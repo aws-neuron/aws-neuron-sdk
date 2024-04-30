@@ -34,6 +34,34 @@ To Pull the Images from ECR:
    docker pull  public.ecr.aws/neuron/neuron-device-plugin:2.x.y.z
    docker pull  public.ecr.aws/neuron/neuron-scheduler:2.x.y.z
 
+
+.. _1623:
+
+Neuron K8 release [2.21.14.0]
+=============================
+
+Date: 07/03/2024
+
+Critical Security Patch
+-----------------------
+
+We updated the dependencies used by the Neuron Device Plugin and the Neuron Kubernetes Scheduler to fix several important
+security vulnerabilities.
+This update fixes all security vulnerabilities reported in https://github.com/aws-neuron/aws-neuron-sdk/issues/852.
+Please see the ticket for all impacted dependencies and their associated vulnerabilities.
+
+
+New Features
+------------------
+
+- This release introduces Neuron Node Problem Detector And Recovery artifact to enable fast error detection and recovery in Kubernetes environment. Current version supports EKS managed and self-managed node groups for all EKS supported Kubernetes versions.
+- This release introduces a container image for neuron monitor to make it easy to run neuron monitor along with Prometheus and Grafana to monitor neuron metrics in Kubernetes environments.
+
+Bug fixes
+------------------
+
+- This release contains changes to improve performance of the device plugin at scale.
+
 .. _1622:
 
 Neuron K8 release [2.20.13.0]

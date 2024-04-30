@@ -7,3 +7,4 @@
 * :ref:`llama2_7b_tp_zero1_ptl_finetune_tutorial`
 * T5 inference tutorial :ref:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`
 * Llama inference tutorial :ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`
+* CodeLlama-13b Inference with 16k sequence length :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/codellama_16k_inference.ipynb>`

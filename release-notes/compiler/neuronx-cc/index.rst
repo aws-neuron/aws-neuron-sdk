@@ -8,6 +8,13 @@ Neuron Compiler (``neuronx-cc``) release notes
    :depth: 2
 
 
+Neuron Compiler [2.14.213.0]
+----------------------------
+Date: 07/03/2024
+
+* Minor bug fixes and performance enhancements. Improved flash attention kernel performance.
+
+
 Neuron Compiler [2.13.72.0]
 ----------------------------
 Date: 04/25/2024

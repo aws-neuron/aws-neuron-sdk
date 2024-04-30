@@ -60,7 +60,7 @@
                sudo yum install -y docker.io
                sudo usermod -aG docker $USER
 
-               Logout and log back in to refresh membership.
+            Logout and log back in to refresh membership.
 
       .. dropdown:: Verify Docker
             :class-title: sphinx-design-class-title-small
@@ -97,32 +97,32 @@
                https://docs.docker.com/get-started/
 
       .. dropdown:: Verify Neuron Component
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
+           :class-title: sphinx-design-class-title-small
+           :class-body: sphinx-design-class-body-small
+           :animate: fade-in
 
-            Once the environment is setup, a container can be started with
-            --device=/dev/neuron# to specify desired set of Inferentia/Trainium devices to be
-            exposed to the container. To find out the available neuron devices on
-            your instance, use the command ``ls /dev/neuron*``.
+           Once the environment is setup, a container can be started with
+           --device=/dev/neuron# to specify desired set of Inferentia/Trainium devices to be
+           exposed to the container. To find out the available neuron devices on
+           your instance, use the command ``ls /dev/neuron*``.
 
-            When running neuron-ls inside a container, you will only see the set of
-            exposed Trainiums. For example:
+           When running neuron-ls inside a container, you will only see the set of
+           exposed Trainiums. For example:
 
-            .. code:: bash
+           .. code:: bash
 
-               docker run --device=/dev/neuron0 neuron-test neuron-ls
+             docker run --device=/dev/neuron0 neuron-test neuron-ls
 
-               Would produce the following output in trn1.32xlarge:
+           Would produce the following output in trn1.32xlarge:
 
-               ::
+           ::
 
-                  +--------+--------+--------+---------+
-                  | NEURON | NEURON | NEURON |   PCI   |
-                  | DEVICE | CORES  | MEMORY |   BDF   |
-                  +--------+--------+--------+---------+
-                  | 0      | 2      | 32 GB  | 10:1c.0 |
-                  +--------+--------+--------+---------+
+             +--------+--------+--------+---------+
+             | NEURON | NEURON | NEURON |   PCI   |
+             | DEVICE | CORES  | MEMORY |   BDF   |
+             +--------+--------+--------+---------+
+             | 0      | 2      | 32 GB  | 10:1c.0 |
+             +--------+--------+--------+---------+
 
       .. dropdown:: Build and Run Docker Image
             :class-title: sphinx-design-class-title-small
@@ -146,8 +146,7 @@
             :class-title: sphinx-design-class-title-small
             :class-body: sphinx-design-class-body-small
             :animate: fade-in
-
-            .. include:: /general/setup/install-templates/launch-inf1.txt
+                  .. include:: /general/setup/install-templates/launch-inf1.txt
 
       .. dropdown:: Install Drivers
             :class-title: sphinx-design-class-title-small
@@ -195,7 +194,7 @@
                sudo yum install -y docker.io
                sudo usermod -aG docker $USER
 
-               Logout and log back in to refresh membership.
+            Logout and log back in to refresh membership.
 
       .. dropdown:: Verify Docker
             :class-title: sphinx-design-class-title-small
@@ -233,32 +232,32 @@
 
 
       .. dropdown:: Verify Neuron Component
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
+           :class-title: sphinx-design-class-title-small
+           :class-body: sphinx-design-class-body-small
+           :animate: fade-in
 
-            Once the environment is setup, a container can be started with
-            --device=/dev/neuron# to specify desired set of Inferentia/Trainium devices to be
-            exposed to the container. To find out the available neuron devices on
-            your instance, use the command ``ls /dev/neuron*``.
+           Once the environment is setup, a container can be started with
+           --device=/dev/neuron# to specify desired set of Inferentia/Trainium devices to be
+           exposed to the container. To find out the available neuron devices on
+           your instance, use the command ``ls /dev/neuron*``.
 
-            When running neuron-ls inside a container, you will only see the set of
-            exposed Inferentias. For example:
+           When running neuron-ls inside a container, you will only see the set of
+           exposed Inferentias. For example:
 
-            .. code:: bash
+           .. code:: bash
 
-               docker run --device=/dev/neuron0 neuron-test neuron-ls
+             docker run --device=/dev/neuron0 neuron-test neuron-ls
 
-               Would produce the following output in inf1.xlarge:
+           Would produce the following output in inf1.xlarge:
 
-               ::
+           ::
 
-                  +--------------+---------+--------+-----------+-----------+------+------+
-                  |   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
-                  |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
-                  +--------------+---------+--------+-----------+-----------+------+------+
-                  | 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
-                  +--------------+---------+--------+-----------+-----------+------+------+
+		     +--------------+---------+--------+-----------+-----------+------+------+
+		     |   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+		     |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
+		     +--------------+---------+--------+-----------+-----------+------+------+
+		     | 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
+		     +--------------+---------+--------+-----------+-----------+------+------+
 
       .. dropdown::  Run Tutorial
             :class-title: sphinx-design-class-title-small

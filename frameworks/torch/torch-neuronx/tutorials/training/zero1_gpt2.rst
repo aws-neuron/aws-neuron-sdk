@@ -81,11 +81,21 @@ gradient reduction will be handle by ZeRO-1.
 ZeRO-1 optimizer also provides some additional features, user can pass
 these arguments to the wrapper constructor:
 
--  change ``optimizer_dtype`` to choose data used by optimizer, default
-   is ``torch.float32``
--  change ``grad_clipping`` to enable grad clipping, default is true
--  change ``max_norm`` to determine the maximum norm value used by grad
-   clipping, default is 1.0
+-  Change ``optimizer_dtype`` to choose data dtype used by optimizer, default
+   is ``torch.float32``. For example, when parameter data type is bfloat16,
+   set ``optimizer_dtype`` to be float32 to enable 'master weight'.
+-  Change ``grad_clipping`` to enable grad clipping, default is ``True``.
+-  Change ``max_norm`` to determine the maximum norm value used by grad
+   clipping, default is ``1.0``.
+-  Change ``use_grad_acc_hook`` to enable using buffers to store gradients,
+   it will use the same data type as ``optimizer_dtype`` to accumulate gradients.
+   (Added in neuron 2.19.0 release).
+-  Change ``higher_cc_precision`` to force reduce-scatter operator to use the same
+   data type as ``optimizer_dtype``, default is ``False``. When ``use_grad_acc_hook``
+   is ``True``, it has no effects. (Added in neuron 2.19.0 release).
+
+Note: ZeRO-1 optimizer now forces to use the same data type as parameters for
+all-gather operator. (Changed in neuron 2.19.0 release)
 
 GPT2-XL Pretraining Tutorial
 ----------------------------

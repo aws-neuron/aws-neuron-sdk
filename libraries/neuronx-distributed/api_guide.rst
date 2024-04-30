@@ -265,9 +265,11 @@ Neuron Distributed Pipeline Model
 
 ::
 
-   class NxDPPModel(module: torch.nn.Module,
+   class NxDPPModel(
+        module: torch.nn.Module,
         transformer_layer_cls: Optional[Any] = None,
         num_microbatches: int = 1,
+        virtual_pipeline_size: int = 1,
         output_loss_value_spec: Optional[Union[Dict, Tuple]] = None,
         return_mb_loss: bool = False,
         broadcast_and_average_loss: bool = False,
@@ -281,6 +283,7 @@ Neuron Distributed Pipeline Model
         trace_file_path: Optional[str] = None,
         use_zero1_optimizer: bool = False,
         auto_partition: Optional[bool] = False,
+        deallocate_pipeline_outputs: bool = False,
    )
 
 Parameters:
@@ -290,6 +293,8 @@ Parameters:
 - ``transformer_layer_cls``: The module class of transformer layers
 
 - ``num_microbatches``: Number of pipeline microbatchs
+
+- ``virtual_pipeline_size``: Virtual pipeline size if greater than 1 we will use the interleaved pipeline schedule.
 
 - ``output_loss_value_spec``:
       The ``output_loss_value_spec`` value can be specified to disambiguate
@@ -333,6 +338,10 @@ Parameters:
       Boolean to indicate whether to use auto_partition for the model. When set to True, the pipeline
       cuts used as the pipeline stage boundaries to partition the model are automatically determined. When set to
       True, the pipeline_cuts parameter should not be set. The pipeline_cuts are chosen on the basis of the transformer layer names.
+
+- ``deallocate_pipeline_outputs``: 
+      Whether to deallocate the pipeline outputs after send. After send the output tensor is only useful for its 
+      '.grad_fn' field, and not its '.data'.
 
 Common used APIs
 
@@ -691,7 +700,8 @@ ran out of memory.
        num_workers=8,
        use_xser=False,
        num_kept_ckpts=None,
-       async_save=False
+       async_save=False,
+       zero1_optimizer=False
    )
 
 Parameters:
@@ -708,6 +718,8 @@ Parameters:
   will be ignored and maximum num of workers will be used. Default: :code:`False`.
 - ``num_kept_ckpts (int)``: number of checkpoints to keep on disk, optional. Default: :code:`None`.
 - ``async_save (bool)``: whether to use asynchronous saving method. Default: :code:`False`.
+- ``zero1_optimizer (bool):`` : whether the optimizer state is from a zero1 optimizer, used when optimizer is a dict
+
 Load Checkpoint:
 ''''''''''''''''
 

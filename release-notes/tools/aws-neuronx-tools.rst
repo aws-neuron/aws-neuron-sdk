@@ -8,6 +8,27 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.18.3.0]
+------------------------
+Date: 07/03/2024
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Profile captured with Neuron Runtime 2.20+ now includes annotations with additional information such as duration, size, and replica groups around collective operations.
+* Running `neuron-profile capture` for workloads with collectives will now attempt to use the required number of workers if `--collectives-workers-per-node` or `--collectives-worker-count` is not set.
+* Profiler UI now persists searched information in the URL and provides a summary of the search results.
+* Updating sampling approach to show more representative data in the profiler UI when zoomed out.
+* Updated groupings for displayed info on click in the profiler UI.
+* Added `neuron_device_type` and `neuron_device_memory_size` to `neuron-monitor`'s hardware information output.
+
+Bug fixes
+^^^^^^^^^
+* Resolved issue where `NaN` would be seen in the JSON output of `neuron-profile` and result in parsing errors.
+* Resolved inconsistent timeline display issues in profiler UI that depended on when the profile was processed.
+* `neuron-profile view --output-format summary-text` will now display in a fixed order.
+* Updated accuracy of pending DMA count in the profiler UI.
+* Removed unnecessary calls to `exec` when capturing memory utilization metrics in `neuron-monitor`.
+
 Neuron Tools  [2.17.1.0]
 ------------------------
 Date: 04/01/2024

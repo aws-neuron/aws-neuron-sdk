@@ -44,7 +44,7 @@ PyTorch NeuronX Analyze API for Inference
 
       Note that this API does not return a traced model.
       
-      Just like torch.neuronx.trace, this API can be used on any EC2 machine with sufficient memory and compute resources.
+      Just like torch_neuronx.trace, this API can be used on any EC2 machine with sufficient memory and compute resources.
 
 
    .. rubric:: Examples

@@ -259,6 +259,16 @@ With the above example, we can supply inputs of sequence length from 1-512 witho
     We do not yet have autobucketing integrated with our NxD Llama2 example, and
     will be done so in an upcoming release.
 
+Speculative Decoding (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuronx-Distributed supports naive speculative decoding, which allows you to assist the token generation process by predicting tokens with a draft model and verifying the predicted tokens with the original target model. To use this feature, in addition to tracing the target model, you also need to trace the draft model. Then, you just need to provide the draft model to the generation API. Note that only batch size = 1 is supported right now.
+
+.. code:: python
+
+    target_runner.generate_on_neuron(prompt, target_model, draft_model=draft_model)
+
+For a complete example, please refer to this :ref:`[file] <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/run_llama_speculative.py>`.
 
 Conclusion
 ^^^^^^^^^^

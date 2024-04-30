@@ -10,6 +10,29 @@ AWS Neuron Reference for Nemo Megatron(``neuronx-nemo-megatron``) Release Notes
 
 This document lists the release notes for ``neuronx-nemo-megatron`` library.
 
+``neuronx-nemo-megatron`` [0.6.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 07/03/2024
+
+New in this release
+-------------------
+
+* Added support for fp32 gradient accumulation.
+* Added support for flash attention kernel.
+* Added option for zero1 with master weights.
+* Checkpoint conversion script improvements.
+* S3 checkpointing improvements.
+* Zero1 checkpointing improvements
+* Various bug fixes and improvements.
+
+
+Known Issues and Limitations
+----------------------------
+
+None at this time.
+
+
 ``neuronx-nemo-megatron`` [0.5.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
