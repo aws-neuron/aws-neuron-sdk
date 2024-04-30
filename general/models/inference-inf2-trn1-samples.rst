@@ -76,6 +76,15 @@ Decoders
      - torch-neuronx
      - * `HuggingFace Pretrained GPT2 Feature Extraction on Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_gpt2_feature_extraction_on_trn1.ipynb>`_
   
+   * - meta-llama/Llama-3-8b
+     - transformers-neuronx
+     - * `Run Hugging Face meta-llama/Llama-3-8b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3-8b-sampling.ipynb>`_
+
+   * - meta-llama/Llama-3-70b
+     - transformers-neuronx
+     - * `Run Hugging Face meta-llama/Llama-3-70b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3-70b-sampling.ipynb>`_
+
+
    * - meta-llama/Llama-2-13b
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-2-13b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
