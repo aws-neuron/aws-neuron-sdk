@@ -81,6 +81,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'local_documenter',
     'archive',
+    "sphinx_copybutton",
 ]
 
 
@@ -96,6 +97,10 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build','**.ipynb_checkpoints','.venv']
 html_extra_path = ['static']
+
+# remove bash/python/ipython/jupyter prompts and continuations
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
 
 # nbsphinx_allow_errors = True
 nbsphinx_execute = 'never'
