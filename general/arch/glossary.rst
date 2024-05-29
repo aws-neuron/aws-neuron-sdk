@@ -53,6 +53,10 @@ Neuron powered Instances
      - Inferentia powered accelerated compute EC2 instance
 
    * - .. glossary::
+          Inf2
+     - 2nd Generation Inferentia powered accelerated compute EC2 instance
+
+   * - .. glossary::
           Trn1
      - Trainium powered accelerated compute EC2 instance
 
