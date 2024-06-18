@@ -79,6 +79,16 @@ Download the Llama2-7B pre-trained checkpoint from HuggingFace.
    python3 get_model.py
    python3 convert_checkpoints.py --tp_size 8 --convert_from_full_model --config config.json --input_dir llama-7b-hf-pretrained.pt --output_dir llama7B-pretrained/pretrained_weight
 
+Alternatively you can run the ``get_model.py`` on the head node and submit the conversion command as an ``sbatch`` job to a compute node, this is especially useful when no compute node is running yet.
+
+.. code:: ipython3
+
+   python3 get_model.py
+   sbatch --exclusive \
+   --nodes 1 \
+   --wrap="srun python3 convert_checkpoints.py --tp_size 8 --convert_from_full_model --config config.json --input_dir llama-7b-hf-pretrained.pt --output_dir llama7B-pretrained/pretrained_weight"
+
+
 3. (Optional) If you are loading checkpoint from different directory, set the checkpoint path by adding the following flag to ``tp_zero1_llama2_7b_hf_finetune_ptl.sh``:
 
    * ``--pretrained_ckpt``.
