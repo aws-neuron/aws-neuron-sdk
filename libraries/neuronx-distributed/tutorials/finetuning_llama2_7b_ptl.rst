@@ -88,7 +88,7 @@ Alternatively you can run the ``get_model.py`` on the head node and submit the c
    --nodes 1 \
    --wrap="srun python3 convert_checkpoints.py --tp_size 8 --convert_from_full_model --config config.json --input_dir llama-7b-hf-pretrained.pt --output_dir llama7B-pretrained/pretrained_weight"
 
-You can find other useful Slurm commands (``squeue``, ``scontrol show``, ``scancel``) to list, describe and cancel jobs `here <https://curc.readthedocs.io/en/latest/running-jobs/slurm-commands.html>`.
+You can find other useful Slurm commands (``squeue``, ``scontrol show``, ``scancel``) to list, describe and cancel jobs `here <https://curc.readthedocs.io/en/latest/running-jobs/slurm-commands.html>`__.
 
 3. (Optional) If you are loading checkpoint from different directory, set the checkpoint path by adding the following flag to ``tp_zero1_llama2_7b_hf_finetune_ptl.sh``:
 
