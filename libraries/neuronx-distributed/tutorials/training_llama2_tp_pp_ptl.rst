@@ -36,23 +36,23 @@ Let’s download the scripts for pretraining:
 
 .. code:: ipython3
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/data_module.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/module_llama.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/run_llama_nxd_ptl.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/data_module.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/module_llama.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_nxd_ptl.py
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lr.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/requirements.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/requirements_ptl.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/training_utils.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/get_dataset.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lr.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/modeling_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements_ptl.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/training_utils.py
 
 If you want to pre-train Llama 7B, you would need to run the following steps -
 
 .. code:: ipython3
 
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/run_llama_7b_tp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/tp_zero1_llama2_7b_hf_pretrain/config.json
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_7b_tp_ptl.sh
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_zero1_llama_hf_pretrain/7B_config_llama2/config.json
     chmod +x run_llama_7b_tp_ptl.sh
 
 If you want to pre-train Llama 13B, you would need to run the following steps -
@@ -60,8 +60,8 @@ If you want to pre-train Llama 13B, you would need to run the following steps -
 .. code:: ipython3
 
     mkdir -p ~/examples/llama2_lightning/13B_config
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/run_llama_13b_tp_pp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/tp_pp_llama2_hf_pretrain/13B_config/config.json -P 13B_config/
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_13b_tp_pp_ptl.sh
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_pp_llama_hf_pretrain/13B_config_llama2/config.json -P 13B_config/
     chmod +x run_llama_13b_tp_pp_ptl.sh
 
 If you want to pre-train Llama 70B, you would need to run the following steps -
@@ -69,8 +69,8 @@ If you want to pre-train Llama 70B, you would need to run the following steps -
 .. code:: ipython3
 
     mkdir -p ~/examples/llama2_lightning/70B_config
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/run_llama_70b_tp_pp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/tp_pp_llama2_hf_pretrain/70B_config/config.json -P 70B_config/
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_70b_tp_pp_ptl.sh
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_pp_llama_hf_pretrain/70B_config_llama2/config.json -P 70B_config/
     chmod +x run_llama_70b_tp_pp_ptl.sh
 
 3. Installing the additional requirements and giving the right permissions to our shell script
@@ -95,7 +95,7 @@ Next let’s download and pre-process the dataset:
 .. code:: ipython3
 
    cd ~/examples/llama2_lightning
-   python3 get_dataset.py
+   python3 get_dataset.py --llama-version 2  # currently we only support Llama-2 models
 
 `Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/llama2_lightning'. Use `repo_type` argument if needed.`` 
 This could be because of a stale cache. Try deleting the cache using: 

@@ -8,26 +8,10 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
-.. _neuron-2.18.0-whatsnew:
+.. _neuron-2.19.0-whatsnew:
 
-
-Neuron 2.18.2 (04/25/2024)
---------------------------
-Patch release with minor Neuron Compiler bug fixes and enhancements. See more in  :ref:`neuronx-cc-rn`
-
-
-
-Neuron 2.18.1 (04/10/2024)
---------------------------
-
-Neuron 2.18.1 release introduces :ref:`Continuous batching(beta) <transformers_neuronx_developer_guide_for_cb>` and Neuron vLLM integration(beta) support in Transformers NeuronX library that improves LLM inference throughput. This release also fixes hang issues related to Triton Inference Server as well as updating Neuron DLAMIs and DLCs with this release(2.18.1). 
-See more in  :ref:`transformers-neuronx-rn` and :ref:`neuronx-cc-rn` 
-
-
-
-Neuron 2.18.0 (04/01/2024)
---------------------------
-
+Neuron 2.19.0 (07/03/2024)
+---------------------------
 .. contents:: Table of contents
    :local:
    :depth: 3
@@ -35,17 +19,27 @@ Neuron 2.18.0 (04/01/2024)
 What's New
 ^^^^^^^^^^
 
-Neuron 2.18 release introduces stable support (out of beta) for PyTorch 2.1, introduces new features and performance improvements to LLM training and inference, and updates Neuron DLAMIs and Neuron DLCs to support this release (Neuron 2.18).
+Neuron 2.19 release adds Llama 3 training support and introduces Flash Attention kernel support to enable LLM training and inference for
+large sequence lengths. Neuron 2.19 also introduces new features and performance
+improvements to LLM training, improves LLM inference performance for Llama 3 model by upto 20%, and adds tools for monitoring, problem detection and recovery in Kubernetes (EKS) environments, improving efficiency and reliability.
 
-**Training highlights**: LLM model training user experience using NeuronX Distributed (NxD) is improved by introducing asynchronous checkpointing. This release also adds support for auto partitioning pipeline parallelism in NxD and introduces Pipeline Parallelism in PyTorch Lightning Trainer (beta).
+**Training highlights**: LLM model training user experience using
+NeuronX Distributed (NxD) is improved by support for Flash Attention to
+enable training with longer sequence lengths >= 8K. Neuron 2.19 adds support for Llama 3 model training. This release also
+adds support for Interleaved pipeline parallelism to reduce idle time
+(bubble size) and enhance training efficiency and resource utilization for large cluster sizes.
 
-**Inference highlights**: Speculative Decoding support (beta) in TNx library improves LLM inference throughput and output token latency(TPOT) by up to 25% (for LLMs such as Llama-2-70B). TNx also improves weight loading performance by adding support for SafeTensor checkpoint format. Inference using Bucketing in PyTorch NeuronX and NeuronX Distributed is improved by introducing auto-bucketing feature.
-This release also adds a new sample for ``Mixtral-8x7B-v0.1`` and ``mistralai/Mistral-7B-Instruct-v0.2`` in TNx.
+**Inference highlights**: Flash Attention kernel support in the Transformers NeuronX library enables LLM inference for context lengths of up to 32k. This release also adds [Beta] support for continuous batching with ``mistralai/Mistral-7B-v0.2`` in Transformers NeuronX.
 
-**Neuron DLAMI and Neuron DLC support highlights**: This release introduces new Multi Framework DLAMI for Ubuntu 22 that customers can use to easily get started with latest Neuron SDK on multiple frameworks that Neuron supports as well as SSM parameter support for DLAMIs to automate the retrieval of latest DLAMI ID in cloud automation flows. Support for new Neuron Training and Inference Deep Learning containers (DLCs) for PyTorch 2.1, as well as a new dedicated GitHub repository to host Neuron container dockerfiles and a public Neuron container registry to host Neuron container images.
+**Tools and Neuron DLAMI/DLC highlights**: This release introduces the new Neuron Node
+Problem Detector and Recovery plugin in EKS supported Kubernetes
+environments:a tool to monitor the health of Neuron instances and
+triggers automatic node replacement upon detecting an unrecoverable
+error. Neuron 2.19 introduces the new Neuron Monitor container to
+enable easy monitoring of Neuron metrics in Kubernetes, and adds monitoring support with Prometheus and Grafana.
+This release also introduces new PyTorch 2.1 and PyTorch 1.13 single framework DLAMIs for Ubuntu 22. Neuron DLAMIs and Neuron DLCs are also updated to support this release (Neuron 2.19).
 
 More release content can be found in the table below and each component release notes.
-
 
 .. list-table::
    :widths: auto
@@ -57,88 +51,90 @@ More release content can be found in the table below and each component release 
      - Details
      - Instances
 
+   * - Known Issues and Limitations
+     - * See :ref:`neuron-2.19.0-known-issues`
+     - Trn1/Trn1n , Inf2, Inf1
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * [Beta] Support for Speculative Decoding API. See :ref:`developer guide <transformers_neuronx_developer_guide>` and  `Llama-2-70B sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/speculative_sampling.ipynb>`_ 
-       * Support for SafeTensors checkpoint format with improved weight loading performance.  See :ref:`developer guide <transformers_neuronx_developer_guide>` 
-       * Support for running  Top-K sampling on Neuron Device for improved performance.  See :ref:`developer guide <transformers_neuronx_developer_guide>` 
-       * Code Llama model inference sample with 16K input seq length. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_
-       * [Beta] Support for streaming API and stopping criteria API. See :ref:`developer guide <transformers_neuronx_developer_guide>`
-       * Support for ``Mixtral-8x7B-v0.1`` model inference. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_
-       * [Beta] Support for ``mistralai/Mistral-7B-Instruct-v0.2`` model inference. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mistralai-Mistral-7b-Instruct-v0.2.ipynb>`_
+     - * Support for Flash Attention kernel in Llama models to enable inference for higher sequence lengths. See :ref:`developer guide <transformers_neuronx_developer_guide>` and `Llama-3-8B model sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb>`_.
+       * Support for running Top-K sampling on Neuron device for generation in Mixtral models. See ``Mixtral-8x7b`` `sample <https://github.com/aws-neuron/transformers-neuronx/blob/main/src/transformers_neuronx/mixtral/model.py>`_.
+       * [Beta] Support for Continuous batching with ``mistralai/Mistral-7B-Instruct-v0.2`` model inference. See :ref:`developer guide <transformers_neuronx_developer_guide_for_cb>`.
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
    * - NeuronX Distributed (neuronx-distributed) for Training
-     - * Support for Pipeline Parallelism training using PyTorch Lightning. See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` and :ref:`tutorial <llama2_tp_pp_ptl_tutorial>`
-       * Support for auto partitioning pipeline parallel stages when training large models.  See :ref:`api guide <api_guide>` and :ref:`pp_developer_guide`
-       * Support for asynchronous checkpointing to improve the time it takes to save the checkpoint.  See :ref:`api guide <api_guide>` , :ref:`save_load_developer_guide` and :ref:`llama2_tp_pp_tutorial`
-       * Tutorial to fine-tune Llama-2-7B model using PyTorch Lightning and running evaluation on the fine-tuned model using Hugging Face optimum-neuron. See :ref:`tutorial <llama2_7b_tp_zero1_ptl_finetune_tutorial>`
-       * ``codegen25-7b-mono`` model training tutorial and script. See :ref:`codegen25_7b_tp_zero1_tutorial` 
+     - * Support for Interleaved pipeline parallelism to reduce idle time (bubble size) and enhance training efficiency and resource utilization for large cluster sizes. See :ref:`api guide <api_guide>` , :ref:`developer guide <pp_developer_guide>`
+       * Support for Flash Attention kernel to enable training with longer sequence lengths. See :ref:`Llama-3 sample with 8K sequence length training <llama2_7b_tp_zero1_tutorial>`.
        * See more at :ref:`neuronx-distributed-rn` 
      - Trn1/Trn1n
 
    * - NeuronX Distributed (neuronx-distributed) for Inference
-     - * Support for auto bucketing in inference using a custom bucket kernel that can be passed as a bucket configuration to Tracing API. See :ref:`api guide <api_guide>` and :ref:`neuronx_distributed_inference_developer_guide`
-       * Support for inference with bf16 data type using XLA_USE_BF16=1 flag. See sample (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
+     - * Support for Flash Attention kernel for longer sequence length inference. See :pytorch-neuron-src:`[CodeLlama-13b Inference with 16k sequence length] <neuronx_distributed/llama/codellama_16k_inference.ipynb>`
+       * [Beta] Support for speculative decoding. See :ref:`developer guide <neuronx_distributed_inference_developer_guide>`.
        * See more at :ref:`neuronx-distributed-rn` 
      - Inf2,Trn1/Trn1n
 
    * - PyTorch NeuronX (torch-neuronx)
-     - * PyTorch 2.1 support is now stable (out of beta).  See updated :ref:`App Note <introduce-pytorch-2-1>` and :ref:`release notes <torch-neuronx-rn>` for known issues.
-       * Support for auto bucketing in inference using a custom bucket kernel that can be passed as a bucket configuration to Tracing API. See :ref:`torch-neuronx-autobucketing-devguide`
+     - * Support for FP32 master weights and BF16 all-gather during Zero1 training to enhance training efficiency.
+       * Support to add custom SILU activation functions by configuring NEURON_CUSTOM_SILU variable
        * See more at :ref:`torch-neuronx-rn`
      - Trn1/Trn1n,Inf2
 
    * - NeuronX Nemo Megatron for Training
-     - * Support for LoRa finetuning. See `sample script <https://github.com/aws-neuron/neuronx-nemo-megatron/tree/main/nemo/examples/nlp/language_modeling/test_llama_lora.sh>`_
-       * Support for Mistral-7B training. See `sample script <https://github.com/aws-neuron/neuronx-nemo-megatron/tree/main/nemo/examples/nlp/language_modeling/test_mistral.sh>`_
-       * Support for asynchronous checkpointing to improve the time it takes to save the checkpoint.
+     - * Support for FP32 gradient accumulation enhancing accuracy for large model training.
+       * Support for Zero1 training with master weights
+       * Support for Flash Attention kernel to train with longer sequence lengths (greater than 8K)
        * See more at `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_  and  :ref:`neuronx-nemo-rn`
      - Trn1/Trn1n,Inf2
 
    * - Neuron Compiler (neuronx-cc)
-     - * New ``--enable-mixed-precision-accumulation`` compiler option to perform intermediate computations of an operation in FP32 regardless of the operation's defined datatype. See :ref:`neuron-compiler-cli-reference-guide`
+     - * Support for Flash Attention kernel to enable usage of long sequence lengths during training and inference.
        * See more at :ref:`neuronx-cc-rn`
      - Trn1/Trn1n,Inf2
 
    * - Neuron DLAMI and DLC
-     - * New Neuron Multi Framework Deep Learning AMI (DLAMI) for Ubuntu 22 with separate virtual environments for PyTorch 2.1, PyTorch 1.13, Transformers NeuronX and Tensorflow 2.10.  See :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` and :ref:`neuron-dlami-overview`
-       * Neuron Multi Framework Deep Learning AMI (DLAMI) is now the default Neuron AMI in QuickStart AMI list when launching Neuron instances for Ubuntu through AWS console. See :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`
-       * Neuron DLAMIs for PyTorch 1.13 and Tensorflow 2.10 are updated with 2.18 Neuron SDK for both Ubuntu 20 and AL2. See :ref:`neuron-dlami-overview`
-       * SSM parameter support for Neuron DLAMIs to find the DLAMI id with latest Neuron release SDK. See :ref:`neuron-dlami-overview`
-       * New Neuron Deep Learning Containers(DLCs) for PyTorch 2.1 Inference and Training.  See :ref:`neuron_containers`
-       * PyTorch 1.13 Inference and Training DLCs are updated with latest 2.18 Neuron SDK and now also comes with pre-installed NeuronX Distributed library. See :ref:`neuron_containers`
-       * Neuron DLCs are now hosted both in public Neuron ECR and as private images. Private images are only needed when using with Sagemaker. See :ref:`neuron_containers`
-       * New Neuron Github Repository to host dockerfiles for Neuron DLCs. See `neuron deep learning containers github repo <https://github.com/aws-neuron/deep-learning-containers>`_
+     - * Neuron DLAMIs are updated with latest 2.19 Neuron SDK. See :ref:`neuron-dlami-overview`
+       * New Neuron Single Framework DLAMIs with PyTorch-2.1 and PyTorch-1.13 for Ubuntu 22. See :ref:`neuron-dlami-overview`
+       * New Base Deep Learning AMI (DLAMI) for Ubuntu 22. See :ref:`neuron-dlami-overview`
+       * PyTorch 1.13 and PyTorch 2.1 Inference and Training DLCs are updated with latest 2.19 Neuron SDK. See :ref:`neuron_containers`
+       * PyTorch 1.13 Inference and PyTorch 2.1 Inference DLCs are updated with TorchServe v0.11.0. See :ref:`neuron_containers`
+     - Inf1,Inf2,Trn1/Trn1n
+
+   * - Neuron Tools
+     - * Support for new Neuron Node Problem Detector and Recovery plugin in EKS supported kubernetes environments that monitors health of Neuron instances and triggers automatic node replacement upon detecting an unrecoverable error. See :ref:`configuration < k8s-neuron-problem-detector-and-recovery-irsa>` and :ref:`tutorial <k8s-neuron-problem-detector-and-recovery>`.
+       * Support for new Neuron Monitor container to enable easy monitoring of Neuron metrics in Kubernetes. Supports monitoring with Prometheus and Grafana. See :ref:`tutorial <k8s-neuron-monitor>`
+       * Support for Neuron scheduler extension to enforce allocation of contiguous Neuron Devices for the pods based on the Neuron instance type. See :ref:`tutorial <neuron_scheduler>`
+       * Neuron Profiler bugfixes and UI updates, including improvements to visualizing collective operations and to the consistency of information being displayed
+       * Added memory usage metrics and device count information to neuron-monitor 
+       * See more at :ref:`neuron-tools-rn`
+     - Inf1,Inf2,Trn1/Trn1n
+
+   * - Neuron Runtime
+     - * Support for dynamic Direct Memory Access (DMA) that reduces memory usage during runtime.
+       * Runtime Enhancements that improve collectives performance
+       * See more at :ref:`neuron-runtime-rn`
      - Inf1,Inf2,Trn1/Trn1n
   
    * - Other Documentation Updates
-     - * App Note on snapshotting models with PyTorch NeuronX 2.1 to support dumping debug information. See :ref:`pytorch-neuronx-debug`
-       * Added announcement for Maintenance mode of TensorFlow 1.x. See :ref:`announce-tfx-maintenance`
+     - * Announced maintenance mode of MxNet. See :ref:`announce-mxnet-maintenance`
+       * Announced End of support of Neuron TensorFlow 1.x (Inf1). See :ref:`announce-tfx-eos`
+       * Announce End of support for AL2. See :ref:`announce-eos-al2`
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
    * - Minor enhancements and bug fixes.
      - * See :ref:`components-rn`
      - Trn1/Trn1n , Inf2, Inf1
-   
-   * - Known Issues and Limitations
-     - * See :ref:`neuron-2.18.0-known-issues`
-     - Trn1/Trn1n , Inf2, Inf1
 
    * - Release Artifacts
      - * see :ref:`latest-neuron-release-artifacts`
      - Trn1/Trn1n , Inf2, Inf1
 
+.. _neuron-2.19.0-known-issues:
 
-.. _neuron-2.18.0-known-issues:
-
-2.18.0 Known Issues and Limitations 
+2.19.0 Known Issues and Limitations 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* For PyTorch 2.1 (NeuronX), slow convergence for LLaMA-2 70B training when using Zero Redundancy Optimizer (ZeRO1) can be resolved by removing all compiler flags.
-* For PyTorch 2.1 (NeuronX), torch-xla 2.1 is incompatible with the default GLibC on AL2. Users are advised to migrate to Amazon Linux 2023 , Ubuntu 22 or Ubuntu 20 Operating systems.
+* Known issues when using ``on_device_generation`` flag in Transformers NeuronX config for Llama models. Customers are advised not to use the flag when they see an issue. See more at :ref:`transformers-neuronx-rn`  
 * See component release notes below for any additional known issues.
 
 
@@ -174,7 +170,7 @@ Inf1, Trn1/Trn1n and Inf2 common packages
    * - Neuron Runtime Driver
      - Trn1/Trn1n, Inf1, Inf2
      - * ``aws-neuronx-dkms``  (.deb, .rpm)
-       
+
      - * :ref:`neuron-driver-release-notes`
 
    * - Neuron System Tools
@@ -182,6 +178,15 @@ Inf1, Trn1/Trn1n and Inf2 common packages
      - * ``aws-neuronx-tools``  (.deb, .rpm)
      - * :ref:`neuron-tools-rn`
 
+   * - Neuron DLAMI
+     - Trn1/Trn1n, Inf1, Inf2
+     - * 
+     - * `Neuron DLAMI Release Notes <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/dlami/index.html>`_.
+
+   * - Neuron DLC
+     - Trn1/Trn1n, Inf1, Inf2
+     - *
+     - * :ref:`neuron-dlc-release-notes`
 
    * - Containers
      - Trn1/Trn1n, Inf1, Inf2
@@ -199,7 +204,6 @@ Inf1, Trn1/Trn1n and Inf2 common packages
      - Trn1/Trn1n, Inf1, Inf2
      - * ``neuronperf`` (.whl)
      - * :ref:`neuronperf_rn`
-
 
    * - TensorFlow Model Server Neuron
      - Trn1/Trn1n, Inf1, Inf2
@@ -349,27 +353,27 @@ Release Artifacts
 Trn1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.18.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.19.0
 
 Inf2 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.18.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.19.0
 
 Inf1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.18.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.19.0
 
 Supported Python Versions for Inf1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.18.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.19.0
 
 Supported Python Versions for Inf2/Trn1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.18.2
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.19.0
 
 Supported Numpy Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^

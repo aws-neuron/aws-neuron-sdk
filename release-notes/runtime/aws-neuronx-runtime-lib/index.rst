@@ -12,10 +12,9 @@ Neuron Runtime consists of a kernel mode driver and C/C++ libraries which provid
 Known issues
 ------------
 
-Updated : 04/29/2022
+Updated : 07/03/2024
 
-- In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
-
+- The ``nrt_tensor_allocate`` APIs do not support more then 4 GB (>= 4GB) sizes. Passing in a size larger than or equal to 4GB will result in datatype overflow leading to undefined behavior.
 
 NEFF Support Table:
 -------------------
@@ -31,6 +30,21 @@ NEFF Version Runtime Version Range Notes
 1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs 
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
+
+Neuron Runtime Library [2.21.41.0]
+---------------------------------
+Date: 07/03/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved collectives performance on small buffers
+* Improved memory utilization by reducing the size of collective buffers
+* Logging improvements including improvements for HW errors, out of bounds issues, and collectives
+* Added fine grained NRT error return codes for execution errors (`reference <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot.html?highlight=hardware%20errors#hardware-errors>`_)
+
+Bug fixes
+^^^^^^^^^
+* Fixed bug where runtime was incorrectly reporting instruction offsets to the profiler
 
 Neuron Runtime Library [PATCH 2.20.22.0]
 ----------------------------------------

@@ -141,7 +141,7 @@ PyTorch NeuronX Tracing API for Inference
             return 2 * x + y
         example_inputs = torch.rand(3), torch.rand(3)
         # Runs `func` with the provided inputs and records the tensor operations
-        trace = torch.neuronx.trace(func, example_inputs)
+        trace = torch_neuronx.trace(func, example_inputs)
         # `trace` can now be run with the TorchScript interpreter or saved
         # and loaded in a Python-free environment
         torch.jit.save(trace, 'func.pt')

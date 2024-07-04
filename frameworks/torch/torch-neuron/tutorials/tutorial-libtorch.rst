@@ -13,6 +13,8 @@ Overview
 
 This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1, Inf2 and Trn1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1, Inf2 and Trn1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
+Verify that this tutorial is running in a virtual environement that was set up according to the `Torch-Neuronx Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>` or `Torch-Neuron Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuron.html#setup-torch-neuron>`
+
 Notes
 -----
 
@@ -30,8 +32,8 @@ Right-click and copy :download:`this link address to the tutorial archive</src/e
 
 .. code:: bash
 
-  $ wget <paste archive URL>
-  $ tar xvf libtorch_demo.tar.gz
+  wget <paste archive URL>
+  tar xvf libtorch_demo.tar.gz
 
 Your directory tree should now look like this:
 
@@ -76,16 +78,15 @@ Install Cargo, the package manager for the Rust programming language.
  +----------------------------------+----------------------------------+
  | .. code-block:: bash             | .. code-block:: bash             |
  |                                  |                                  |
- |    $ sudo apt install -y cargo   |    $ sudo yum install -y cargo   |
+ |    sudo apt install -y cargo   |    sudo yum install -y cargo   |
  +----------------------------------+----------------------------------+
 
 
 Run the setup script to download additional depdendencies and build the app. (This may take a few minutes to complete.)
 
-.. code:: bash
-
-  $ cd libtorch_demo
-  $ chmod +x setup.sh && ./setup.sh
+.. literalinclude:: tutorial_source_instructions/run_libtorch.sh
+   :language: bash
+   :lines: 6-7
 
 ::
 
@@ -101,9 +102,9 @@ Benchmark
 
 The setup script should have compiled and saved a PyTorch model compiled for neuron (bert_neuron_b6.pt).  Run the provided sanity tests to ensure everything is working properly.
 
-.. code:: bash
-
-  $ ./run_tests.sh bert_neuron_b6.pt
+.. literalinclude:: tutorial_source_instructions/run_libtorch.sh
+   :language: bash
+   :lines: 10
 
 ::
 
@@ -139,9 +140,9 @@ Finally, run the example app directly to benchmark the BERT model.
 
   You can safely ignore the warning about ``None of PyTorch, Tensorflow >= 2.0, ...``. This occurs because the test runs in a small virtual environment that doesn't require the full frameworks.
 
-.. code:: bash
-
-  $ ./example-app bert_neuron_b6.pt
+.. literalinclude:: tutorial_source_instructions/run_libtorch.sh
+   :language: bash
+   :lines: 13
 
 ::
 

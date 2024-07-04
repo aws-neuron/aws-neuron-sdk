@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: neuron-monitor
+  namespace: neuron-monitor
+  labels:
+    app: neuron-monitor
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: neuron-monitor
+  template:
+    metadata:
+      labels:
+        app: neuron-monitor
+        version: v1
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                      - trn1.2xlarge
+                      - trn1.32xlarge
+                      - trn1n.32xlarge
+                      - inf1.xlarge
+                      - inf1.2xlarge
+                      - inf1.6xlarge
+                      - inf2.xlarge
+                      - inf2.8xlarge
+                      - inf2.24xlarge
+                      - inf2.48xlarge
+      containers:
+        - name: neuron-monitor
+          image: public.ecr.aws/neuron/neuron-monitor:1.0.0
+          ports:
+            - containerPort: 8000
+          command:
+             - "/opt/bin/entrypoint.sh"
+          args: 
+            - "--port"
+            - "8000"  
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 256m
+              memory: 128Mi
+          env:
+          - name: GOMEMLIMIT
+            value: 160MiB
+          securityContext:
+            privileged: true

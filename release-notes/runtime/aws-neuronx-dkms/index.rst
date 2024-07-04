@@ -15,6 +15,22 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.17.17.0]
+--------------------------------
+
+Date: 07/03/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved detection and reporting of DMA errors
+* Added more fine grained sysfs metrics to track memory allocation types
+* Logging improvements
+
+Bug Fixes
+^^^^^^^^^
+* Fixed compatibility issues for the Linux 6.3 kernel
+
+
 Neuron Driver release [2.16.7.0]
 --------------------------------
 

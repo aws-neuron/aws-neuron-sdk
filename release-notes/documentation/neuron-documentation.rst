@@ -7,6 +7,37 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.19.0
+-------------
+Date: 07/03/2024
+
+
+- Updated Transformers NeuronX Developer guide with support for inference for longer sequence lengths with Flash Attention kernel. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX developer guide with QKV Weight Fusion support. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX continuous batching developer guide with updated vLLM instructions and models supported. See :ref:`Developer Guide <transformers_neuronx_developer_guide_for_cb>`.
+- Updated Neuronx Distributed User guide with interleaved pipeline support. See :ref:`api_guide`
+- Added Codellama 13b 16k tutorial with NeuronX Distributed Inference library. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_ 
+- Updated PyTorch NeuronX Environment variables with custom SILU enabled via NEURON_CUSTOM_SILU. See :ref:`pytorch-neuronx-envvars`
+- Updated ZeRO1 support to have FP32 master weights support and BF16 all-gather. See :ref:`zero1-gpt2-pretraining-tutorial`.
+- Updated PyTorch 2.1 Appplication note with workaround for slower loss convergence for NxD LLaMA-3 70B pretraining using ZeRO1 tutorial. See :ref:`introduce-pytorch-2-1`.
+- Updated Neuron DLAMI guide with support for new 2.19 DLAMIs. See :ref:`neuron-dlami-overview`.
+- Updated HF-BERT pre-training documentation for port forwarding. See :ref:`hf-bert-pretraining-tutorial`
+- Updated T5 inference tutorial with transformer flag. See  `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/torch-neuronx/t5-inference-tutorial.html>`_ 
+- Added support for Llama3 model training. See :ref:`llama3_tp_pp_tutorial` and :ref:`llama2_7b_tp_zero1_tutorial`
+- Added support for Flash Attention kernel for training longer sequences in NeuronX Distributed. See :ref:`llama2_7b_tp_zero1_tutorial` and :ref:`api_guide`
+- Updated Llama2 inference tutorial using NxD Inference library. See `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/llama/llama2_inference.html>`_ 
+- Added new guide for Neuron node problem detection and recovery tool. See :ref:`configuration < k8s-neuron-problem-detector-and-recovery-irsa>` and :ref:`tutorial <k8s-neuron-problem-detector-and-recovery>`.
+- Added new guide for Neuron Monitor container to enable easy monitoring of Neuron metrics in Kubernetes. Supports monitoring with Prometheus and Grafana. See :ref:`tutorial <k8s-neuron-monitor>`
+- Updated Neuron scheduler extension documentation about enforcing allocation of contiguous Neuron Devices for the pods based on the Neuron instance type. See :ref:`tutorial <neuron_scheduler>`
+- Updated Neuron Profiler User Guide with various UI enhancements. See :ref:`neuron-profile-ug`
+- Added NeuronPerf support in Llama2 inference tutorial in NeuronX Distributed. See `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/llama/llama2_inference.html>`_ 
+- Added announcement for maintenance mode of MxNet. See :ref:`announce-mxnet-maintenance`
+- Added announcement for end of support of Neuron TensorFlow 1.x (Inf1). See :ref:`announce-tfx-eos`
+- Added announcement for end of support of AL2. See :ref:`announce-eos-al2`
+- Added announcement for end of support of 'neuron-device-version' field in neuron-monitor. See :ref:`announce-eos-neuron-device-version`
+- Added announcement for end of support of 'neurondevice' resource name in Neuron Device K8s plugin. See :ref:`announce-eos-neurondevice`
+- Added announcement for end of support for Probuf versions <= 3.19 for PyTorch NeuronX. See :ref:`announce-eos-probuf319`
+
 Neuron 2.18.0
 -------------
 Date: 04/01/2024

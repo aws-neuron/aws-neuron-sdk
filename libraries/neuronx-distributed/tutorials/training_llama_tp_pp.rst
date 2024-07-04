@@ -1,9 +1,10 @@
 .. _llama2_tp_pp_tutorial:
+.. _llama3_tp_pp_tutorial:
 
-Training Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism (``neuronx-distributed`` )
-=========================================================================================
+Training Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism (``neuronx-distributed`` )
+================================================================================================================
 
-In this section, we showcase to pretrain a Llama2 13B and 70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
+In this section, we showcase to pretrain Llama3 70B and Llama2 13B/70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
 checkpoint as well as constant mask optimization in the ``neuronx-distributed`` package.
 
 Setting up environment:
@@ -22,59 +23,94 @@ Let’s download the scripts for pretraining:
 
 .. code:: ipython3
 
-   mkdir -p ~/examples/tp_pp_llama2_hf_pretrain
-   cd ~/examples/tp_pp_llama2_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/activation_checkpoint.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/logger.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/lr.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/training_utils.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/convert_checkpoints.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/requirements.txt
+   mkdir -p ~/examples/tp_pp_llama_hf_pretrain
+   cd ~/examples/tp_pp_llama_hf_pretrain
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/activation_checkpoint.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/logger.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/lr.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/run_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/training_utils.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/convert_checkpoints.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/modeling_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/requirements.txt
 
-If you want to pre-train Llama 70B, you would need to run the following steps -
-
-.. code:: ipython3
-
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_70b_tp_pp.sh
-    chmod +x run_llama_70b_tp_pp.sh
-    mkdir 70B_config && cd 70B_config
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/70B_config/config.json
-    cd .. && cp 70B_config/config.json .
-
-If you want to pre-train Llama 13B, you would need to run the following steps -
-
+If you want to pre-train Llama3 70B, you would need to run the following steps -
 
 .. code:: ipython3
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/run_llama_13B_tp_pp.sh
-   chmod +x run_llama_13B_tp_pp.sh
-   mkdir 13B_config && cd 13B_config
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_pp_llama2_hf_pretrain/13B_config/config.json
-   cd .. && cp 13B_config/config.json .
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/run_llama3_70B_tp_pp.sh
+    chmod +x run_llama3_70B_tp_pp.sh
+    mkdir 70B_config_llama3 && cd 70B_config_llama3
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/70B_config_llama3/config.json
+    cd ..
 
-The below tutorial uses ``Llama70B`` as an example. To run 13B, simply change the script from ``run_llama_70b_tp_pp.sh`` to ``run_llama_13B_tp_pp.sh``.
+
+For llama2 13B, you would need to run the following steps -
+
+.. code:: ipython3
+
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/run_llama2_13B_tp_pp.sh
+    chmod +x run_llama2_13B_tp_pp.sh
+    mkdir 13B_config_llama2 && cd 13B_config_llama2
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/13B_config_llama2/config.json
+    cd .. 
+
+
+If you want to pre-train Llama2 70B, you would need to run the following steps -
+
+
+.. code:: ipython3
+
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/run_llama2_70B_tp_pp.sh
+   chmod +x run_llama2_70B_tp_pp.sh
+   mkdir 70B_config_llama2 && cd 70B_config_llama2
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/70B_config_llama2/config.json
+   cd ..
+
+
+
+The below tutorial uses ``Llama3 70B`` as an example. To run Llama2 70B or 13B, simply change the script from ``run_llama3_70B_tp_pp.sh`` to ``run_llama2_70B_tp_pp.sh`` or ``run_llama2_13B_tp_pp.sh``.
 
 First, let's get all the needed dependencies
 
 .. code:: ipython3
 
     python3 -m pip install -r requirements.txt
+    
 
-To tokenize the data, we must request the tokenizer from hugging face and meta by following the instructions at the following link: `HuggingFace Llama 2 7B Model <https://huggingface.co/meta-llama/Llama-2-7b>`__ . 
+To tokenize the data, we must request the tokenizer from hugging face and meta by following the instructions at the following link: `HuggingFace Llama 3 8B Model <https://huggingface.co/meta-llama/Meta-Llama-3-8B>`__ . 
 
-Use of the Llama 2 model is governed by the Meta license. In order to download the model weights and tokenizer, please visit the above website and accept their License before requesting access. After access has been granted, you may use the download scripts provided by Meta to download the model weights and tokenizer to your cluster.
+Use of the Llama models is governed by the Meta license. In order to download the model weights and tokenizer, please visit the above website and accept their License before requesting access. After access has been granted, you may use the following python3 script along with your own hugging face token to download and save required tokenizer.
 
-Once you have downloaded the tokenizer and model weights, you can copy the ``tokenizer.model`` to the ``~/examples/tp_pp_llama2_hf_pretrain`` directory.
+Run the following from ``~/examples/tp_pp_llama_hf_pretrain`` directory:
+
+.. code:: ipython3
+
+   from transformers import AutoTokenizer
+
+   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B', token='your_own_hugging_face_token')  
+   # For llama2 uncomment line below
+   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf', token='your_own_hugging_face_token') 
+
+   tokenizer.save_pretrained(".")
+
+For Llama3, make sure your ``~/examples/tp_pp_llama2_hf_pretrain`` directory has the following files:
+
+.. code:: ipython3
+
+   './tokenizer_config.json', './special_tokens_map.json', './tokenizer.json'
+
+
+For Llama2, you can just copy the ``tokenizer.model`` to the ``~/examples/tp_pp_llama2_hf_pretrain`` directory.
+
 
 Next let’s download and pre-process the dataset:
 
 .. code:: ipython3
 
-   cd ~/examples/tp_pp_llama2_hf_pretrain
-   python3 get_dataset.py
+   cd ~/examples/tp_pp_llama_hf_pretrain
+   python3 get_dataset.py --llama-version 3  # change the version number to 2 for Llama-2 models
 
 In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/tp_pp_llama2_hf_pretrain'. Use `repo_type` argument if needed.`` This could be because of a stale cache. Try deleting the cache using: 
 
@@ -101,7 +137,7 @@ We first pre-compile the graphs using the ``neuron_parallel_compile``. Let’s r
    sbatch --exclusive \
    --nodes 32 \
    --cpus-per-task 128 \
-   --wrap="srun neuron_parallel_compile bash $(pwd)/run_llama_70b_tp_pp.sh"
+   --wrap="srun neuron_parallel_compile bash $(pwd)/run_llama3_70B_tp_pp.sh"
 
 This script uses a tensor-parallel size of 8, pipeline-parallel size of 8
 To run the training, we just use the above command but without ``neuron_parallel_compile``.
@@ -111,7 +147,7 @@ To run the training, we just use the above command but without ``neuron_parallel
    sbatch --exclusive \
    --nodes 32 \
    --cpus-per-task 128 \
-   --wrap="srun bash $(pwd)/run_llama_70b_tp_pp.sh"
+   --wrap="srun bash $(pwd)/run_llama3_70B_tp_pp.sh"
 
 
 To achieve better performance, the script applies few techniques:
@@ -149,6 +185,11 @@ The above changes are already included in the `run_llama_70b_tp_pp.sh`. For Llam
 we do not need this change.
 
 
+`Flash Attention:`
+
+We're introducing flash attention function for better performance/memory efficiency. Currently it's enabled by default, to disable it
+set ``--use_flash_attention 0`
+
 
 `Save/Load Checkpoint` (refer to :ref:`API GUIDE<api_guide>` for more context about checkpoint APIs):
 
@@ -181,4 +222,4 @@ Convert sharded model to full model with ``convert_checkpoints.py``:
 
 .. code:: ipython3
 
-   python3 convert_checkpoints.py --tp_size <tp_size> --pp_size <pp_size> --n_layers <number_of_layers>  --input_dir  <sharded_model_dir> --output_dir <full_model_dir> --convert_to_full_model --kv_size_multiplier <kv_size_multiplier> --config config.json
+   python3 convert_checkpoints.py --tp_size <tp_size> --pp_size <pp_size> --n_layers <number_of_layers>  --input_dir  <sharded_model_dir> --output_dir <full_model_dir> --convert_to_full_model --kv_size_multiplier <kv_size_multiplier> --config config.json --qkv_linear True --load_xser True

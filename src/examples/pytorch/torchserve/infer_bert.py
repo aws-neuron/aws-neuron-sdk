@@ -18,8 +18,20 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=batch_size) as executor:
     def worker_thread(worker_index):
         # we'll send half the requests as not_paraphrase examples for sanity
         data = paraphrase if worker_index < batch_size//2 else not_paraphrase
-        response = requests.post(url, data=data)
-        print(worker_index, response.json())
+        try:
+            response = requests.post(url, data=data)
+
+            # Check if the response status code indicates success
+            if response.status_code == 200:
+                print(worker_index, response.json())
+            else:
+                # If the response is not successful, raise an exception with the status code and error message
+                error_message = response.json().get('message', 'Unknown Error')
+                raise Exception(f"Failed request with status code {response.status_code}: {error_message}")
+        except Exception as e:
+            # Catch all other exceptions that may be raised
+            print(f"An unexpected error occurred: {e}")
+            raise
 
     for worker_index in range(batch_size):
         executor.submit(worker_thread, worker_index)

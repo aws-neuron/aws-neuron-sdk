@@ -10,6 +10,28 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+Neuron Distributed [0.8.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 07/03/2024
+
+New in this release
+-------------------
+
+* Added support for Interleave pipeline parallel. At large cluster sizes, interleave pipeline schedule should help to reduce the pipeline bubble, thereyby increasing training throughput.
+* Added integration with flash attention kernel for longer sequence length training. See :ref:`Llama3 8K sequence-length training sample<llama2_7b_tp_zero1_tutorial>`.
+* Added support for naive speculative decoding, enabling assistance during the token generation process by predicting tokens with a draft model and verifying the predicted tokens with the original target model. Refer to the Neuronx Distributed inference developer guide for an example. 
+* Added integration with flash attention kernel for longer sequence length inference. See an end to end example of CodeLlama-13b model with 16K sequence length.
+* Added support for scaled inference to run for Llama-2 70b or similar sized models
+
+Known Issues and Limitations
+----------------------------
+
+* Model checkpointing saves sharded checkpoints. Users will have to write a script to combine the shards
+* Validation/Evaluation with interleaved pipeline feature is not supported.
+* Due to weights not being able to be shared across context encoding and token generation trace, inference scale is tested for models up to size Llama-2-70b. For model configurations above this, there is a risk of OOM errors.
+* Tracing Llama-2-70b sized models for inference and loading them to device can take close to two hours. This is due to duplicate sharding of weights for both context encoding and token generation traces.
+
 Neuron Distributed [0.7.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

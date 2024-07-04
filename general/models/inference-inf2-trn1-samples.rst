@@ -99,6 +99,10 @@ Decoders
      - neuronx-distributed
      - * Run Hugging Face meta-llama/Llama-2-7b autoregressive sampling on Inf2 & Trn1 (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
 
+   * - meta-llama/codellama-13b
+     - neuronx-distributed
+     - * `Run meta-llama/codellama-13b-16k-sampling <https://github.com/aws-neuron/aws-neuron-samples/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_
+
    * - mistralai/Mistral-7B-Instruct-v0.1
      - transformers-neuronx
      - * :ref:`Run Mistral-7B-Instruct-v0.1 autoregressive sampling on Inf2 & Trn1 <mistral_gqa_code_sample>`

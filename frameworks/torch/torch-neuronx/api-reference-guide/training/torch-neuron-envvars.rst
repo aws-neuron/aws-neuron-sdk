@@ -58,9 +58,21 @@ PyTorch Neuron are (beta ones are noted):
   a crash in the training script would be ignored and the graphs collected up to the crash would be
   compiled.
 
+``NEURON_PARALLEL_COMPILE_DUMP_RESULTS``
+
+- When set to 1, neuron_parallel_compile would report compilation time results in the final JSON output.
+
 ``NEURON_FUSE_SOFTMAX``
 
 - Enable custom lowering for Softmax operation to enable compiler optimizations.
+
+``NEURON_CUSTOM_SILU``
+
+- Enable custom lowering for SILU operation to enable compiler optimizations.
+
+``NEURON_TRANSFER_WITH_STATIC_RING_OPS``
+
+- The list of torch.nn.Modules that will have all parameter input buffers marked as static to enable runtime optimizations. The default is "Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d".
 
 ``NEURONCORE_NUM_DEVICES`` **[Use only with xmp.spawn]**
 
@@ -92,6 +104,10 @@ PyTorch Neuron are (beta ones are noted):
 
 - When set to ``"--xla_dump_hlo_snapshots --xla_dump_to=<dir>"``, this environmental variable enables dumping snapshots in ``<dir>`` directory. See :ref:`torch-neuronx-snapshotting` section for more information.
 
+``XLA_USE_DUMMY_STORE`` **[PyTorch XLA]**
+
+- When set to 1 along with ``TORCH_DIST_INIT_BARRIER=0``, PJRT process group initialization will use DummyStore instead of TCPStore. This reduces the number of open file descriptors and enables scaling training up to a large number of nodes.
+
 ``XLA_USE_BF16`` **[PyTorch XLA]**
 
 - When ``XLA_USE_BF16=1``, PyTorch Neuron will automatically map both torch.float and torch.double tensors
@@ -105,6 +121,15 @@ PyTorch Neuron are (beta ones are noted):
   to float32 tensors and turn on Stochastic Rounding mode. This can both reduce memory footprint and improve performance, while preserving some tensors in float32.
   Example: to enable float to bfloat16 and double to float autocasting and stochastic rounding, set XLA_DOWNCAST_BF16=1 only, as
   stochastic rounding mode is on by default when XLA_DOWNCAST_BF16=1. If you want to cast both torch.float and torch.double to bfloat16, please see ``XLA_USE_BF16`` above.
+
+``XLA_DISABLE_FUNCTIONALIZATION`` **[PyTorch XLA 2.1+]**
+
+- When ``XLA_DISABLE_FUNCTIONALIZATION=0``, PyTorch XLA will enable the functionalization feature which makes graphs more compilable by removing mutations from functions. In PyTorch XLA 2.1 functionalization causes 15% performance degradations for BERT due to missing aliasing for gradient accumulation https://github.com/pytorch/xla/issues/7174 so it is off by default (``XLA_DISABLE_FUNCTIONALIZATION=1``). Enabling functionalization can improve convergence for LLaMA 70B with ZeRO1 (when used with release 2.19 compiler).
+
+
+``XLA_ENABLE_PARAM_ALIASING`` **[PyTorch XLA]**
+
+- When ``XLA_ENABLE_PARAM_ALIASING=0``, PyTorch Neuron will disable parameter aliasing in HLO graphs. This can be useful for debug. However, it would lead to increased device memory usage due to extra allocation of buffers (so higher chance of out-of-device memory errors) and decreased performance. When not set, parameter aliasing is enabled by default.
 
 ``NEURON_RT_STOCHASTIC_ROUNDING_EN`` **[Neuron Runtime]**
 

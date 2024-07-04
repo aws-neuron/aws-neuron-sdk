@@ -5,6 +5,13 @@
 
         .. include:: /containers/tutorials/k8s-prerequisite.rst
 
+.. dropdown:: Prerequisite for Neuron Problem Detector Plugin
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-neuron-problem-detector-and-recovery-irsa.rst
+
 .. dropdown:: Deploy Neuron Device Plugin
         :class-title: sphinx-design-class-title-small
         :class-body: sphinx-design-class-body-small
@@ -18,3 +25,17 @@
         :animate: fade-in
 
         .. include:: /containers/tutorials/k8s-neuron-scheduler.rst
+
+.. dropdown:: Deploy Neuron Problem Detector And Recovery
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-neuron-problem-detector-and-recovery.rst
+
+.. dropdown:: Deploy Neuron Monitor Daemonset
+        :class-title: sphinx-design-class-title-small
+        :class-body: sphinx-design-class-body-small
+        :animate: fade-in
+
+        .. include:: /containers/tutorials/k8s-neuron-monitor.rst

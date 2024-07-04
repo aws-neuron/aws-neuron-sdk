@@ -303,8 +303,9 @@ The following are some useful features that may help with navigating a profile:
   - Markers can be saved and loaded by using a provided name for the marker set.
   - Individual markers can be renamed or deleted in this menu as well.
 
+- The "Search" tab can be used to find and highlight specific points in the profile related to the queried field(s).
 - Click on the "Box Select" button in the top-right corner of the timeline and then click and drag on any region of the plot to select all events in that region and get summary statistics such as total duration and breakdowns of opcodes, transfer_sizes, and more.
-- The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.
+- The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
 
 Additionally, there are various summary buttons that can be clicked to provide more information on the model/NEFF, such as the input and output tensors,
 number of FLOPs, and the start and end of a framework layer.
@@ -314,6 +315,23 @@ number of FLOPs, and the start and end of a framework layer.
 Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times. Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
 
 |neuron-profile-tensor-reload-annotation|
+
+For models involving collective operations, the timeline will show a box around all data points related to each operation.  Hovering the top left of the box will reveal more information associated with the operation.
+Note: this feature requires profiles to be captured with Neuron Runtime 2.20 or higher.
+
+|neuron-profile-cc-op-annotation|
+
+The information when a point is clicked is grouped by categories such as `Timing` or `IDs` for convenience.
+Each row will also include a tool tip on the right side, which can be hovered for an explanation on what the field represents.
+For instruction `Operands` specifically, clicking on the tooltip will reveal a breakdown of fields that compose an operand, as well as a generic example for reference.  The examples may not apply directly to the currently viewed profile.
+
+|neuron-profile-click-tooltip|
+
+Searching helps identify specific data points that may be worth investigating, such as all instructions related to a specific layer or operation.
+In the "Search" tab, select the corresponding field of interest and enter the value to search for.  Multiple fields can be searched together.  Please refer to the tooltip within the tab for more help on the query syntax.
+The search results will also include a summary of all data points found within the current time range.
+
+|neuron-profile-search-summary|
 
 
 CLI reference
@@ -419,6 +437,9 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
 .. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
+.. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png
+.. |neuron-profile-click-tooltip| image:: /images/neuron-profile-click-tooltip.png
+.. |neuron-profile-search-summary| image:: /images/neuron-profile-search-summary.png
 
 When viewing UI "FATAL - Failed metadata query"
 ~~~~~~~~~~~~~~~~~~~

@@ -125,6 +125,10 @@ Decoders
        * `Training GPT-NEOX 6.9B model using neuronx-distributed		 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain>`_
        * `Pre-train GPT Neox 6.9b on Wikicorpus dataset using Neuronx Distributed library <https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow/blob/master/examples/neuronx-distributed/gpt_neox_6.9b/README.md#pre-train-gpt-neox-69b-on-wikicorpus-dataset-using-neuronx-distributed-library>`_
 
+   * - meta-llama/Llama-3-8b
+     - neuronx-distributed
+     - * :ref:`Training Llama3 8B Model with Tensor Parallelism and ZeRO-1 Optimizer <llama2_7b_tp_zero1_tutorial>`
+            
    * - meta-llama/Llama-2-7b
      - neuronx-distributed
      - * :ref:`llama2_7b_tp_zero1_tutorial`

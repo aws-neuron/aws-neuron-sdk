@@ -26,7 +26,7 @@ following command:
 
    python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
 
-Make sure the transformers version is set to ``4.26.0``
+Make sure the transformers version is set to ``4.26.0`` (Note: If you have transformers-neuronx in your environment, you need to uninstall it to avoid a conflict with the transformers version.)
 
 Let’s download the scripts and datasets for pretraining.
 
@@ -62,7 +62,8 @@ tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tor
 .. code:: ipython3
 
    cd ~/examples/tp_dp_bert_hf_pretrain
-   neuron_parallel_compile XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
+   export XLA_DOWNCAST_BF16=1
+   neuron_parallel_compile torchrun --nproc_per_node=32 \
    tp_dp_bert_large_hf_pretrain_hdf5.py \
    --tensor_parallel_size 8 \
    --steps_this_run 10 \
