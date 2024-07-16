@@ -96,7 +96,7 @@ In the activation memory equation, we have a quadratic term of `5abs^2`. As the 
 faster rate. This quadratic term comes from the softmax computation. `Vijay Korthikanti et.al <https://browse.arxiv.org/pdf/2205.05198.pdf>`__ 
 propose `Selective activation checkpointing` where they only recompute the softmax and attention computation and thereby avoid saving the activations coming 
 from softmax and attention computation. This completely gets rid of the quadratic term and brings down the activation memory per layer to 
-`34sbh/t`. The LLama-7B example in `this tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html#llama2-7b-tp-zero1-tutorial>`__ 
+`34sbh/t`. The LLama-7B example in `this tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama_tp_zero1.html#llama2-7b-tp-zero1-tutorial>`__
 used selective activation checkpointing.
 
 

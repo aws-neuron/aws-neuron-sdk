@@ -3,7 +3,7 @@
 Training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed``)
 ==============================================================================================
 
-In this tutorial, we showcase how to pretrain a CodeGen2.5 7B model for program synthesis. Since Codegen2.5's architecture is identical to the one of Llama2, you may want to take a look at our `Llama2 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html>`__ first.
+In this tutorial, we showcase how to pretrain a CodeGen2.5 7B model for program synthesis. Since Codegen2.5's architecture is identical to the one of Llama2, you may want to take a look at our `Llama2 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama_tp_zero1.html>`__ first.
 
 After setting up the environment and installing ``neuronx-distributed``, we need to download a data set containing source code (in this case Java code) and then preprocess and tokenize it to match the code-infill format (more about this below). Use the following commands to download the required files. Note, that we reuse our llama2 training files.
 
