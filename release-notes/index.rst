@@ -10,6 +10,14 @@ What's New
 .. _latest-neuron-release:
 .. _neuron-2.19.0-whatsnew:
 
+Neuron 2.19.1 (07/19/2024)
+---------------------------
+
+This release (Neuron 2.19.1) addresses an issue with the Neuron Persistent Cache that was introduced in the previous release, Neuron 2.19. The issue resulted in a cache-miss scenario when attempting to load a previously compiled Neuron Executable File Format (NEFF) from a different path or Python environment than the one used for the initial Neuron SDK installation and NEFF compilation. This release resolves the cache-miss problem, ensuring that NEFFs can be loaded correctly regardless of the path or Python environment used to install the Neuron SDK, as long as they were compiled using the same Neuron SDK version.
+
+
+
+
 Neuron 2.19.0 (07/03/2024)
 ---------------------------
 .. contents:: Table of contents
