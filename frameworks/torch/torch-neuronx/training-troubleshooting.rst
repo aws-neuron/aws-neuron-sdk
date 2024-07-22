@@ -171,7 +171,7 @@ Currently, NeuronCache default root directory is /var/tmp which is local to the 
 
 .. code:: bash
 
-    KeyError: 'neff_cache2/neuron-compile-cache/USER_neuroncc-1.0.48875.0+7437fbf18/MODULE_7223055628515330524/MODULE_0_SyncTensorsGraph.14_7223055628515330524_compute1-dy-kaena-training-2-1-e859998e-3035-5df63dab5ce63'
+    KeyError: 'neff_cache2/neuron-compile-cache/USER_neuroncc-1.0.48875.0+7437fbf18/MODULE_7223055628515330524/MODULE_0_SyncTensorsGraph.14_7223055628515330524_compute1-dy-training-2-1-e859998e-3035-5df63dab5ce63'
 
 This is a result of limitations to file locking on NFS. EFS/FSx also exhibit similar limitation. The workaround is to setup separate NeuronCache root directories for each worker instance, such as ``NEURON_CC_FLAGS="--cache_dir=$HOME/neuron_cache/bert/`hostname`"``, where the home directory is shared among worker instances as in ParallelCluster.
 

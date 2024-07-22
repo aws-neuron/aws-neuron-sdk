@@ -12,7 +12,6 @@ You can install the ``neuronx-distributed`` package using the following command:
 
    python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
 
-Make sure the transformers version is set to ``4.26.0``
 
 
 
