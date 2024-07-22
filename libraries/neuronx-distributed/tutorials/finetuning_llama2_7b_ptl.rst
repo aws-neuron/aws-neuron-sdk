@@ -73,7 +73,7 @@ Download the Llama2-7B pre-trained checkpoint from HuggingFace.
 
 .. code:: ipython3
 
-   ssh compute1-dy-kaena-training-0-1
+   ssh compute1-dy-training-0-1
    source ~/aws_neuron_venv_pytorch/bin/activate
    cd ~/examples/tp_zero1_llama2_7b_hf_finetune_ptl
    python3 get_model.py

@@ -597,7 +597,7 @@ Name resolution failure
 
 .. code:: bash
    
-     WARN Invalid NCCL_COMM_ID [compute1-st-kaena-training-0-1.pcluster-trn1-24-pdx80-2n.pcluster:41211], please use format: <ipv4>:<port> or [<ipv6>]:<port>
+     WARN Invalid NCCL_COMM_ID [compute1-dy-training-0-1.pcluster-trn1-24-pdx80-2n.pcluster:41211], please use format: <ipv4>:<port> or [<ipv6>]:<port>
 
 .. _solution-11:
 

@@ -74,7 +74,7 @@ If you want to pre-train Llama2 7B, run the following steps -
 .. code:: ipython3
 
    python3 -m pip install -r requirements.txt
-   chmod +x tp_zero1_llama2_7b_hf_pretrain.sh
+   chmod +x tp_zero1_llama2_7B_hf_pretrain.sh
 
 
 To tokenize the data, we must request the tokenizer from hugging face and meta by following the instructions at the following link: `HuggingFace Llama 3 8B Model <https://huggingface.co/meta-llama/Meta-Llama-3-8B>`__ . 
@@ -105,10 +105,10 @@ Next let’s download and pre-process the dataset:
 
 .. code:: ipython3
 
-   cd ~/examples/tp_zero1_llama2_7b_hf_pretrain
+   cd ~/examples/tp_zero1_llama_hf_pretrain
    python3 get_dataset.py --llama-version 3  # change the version number to 2 for Llama-2 models
 
-`Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/tp_zero1_llama2_7b_hf_pretrain'. Use `repo_type` argument if needed.`` 
+`Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/tp_zero1_llama_hf_pretrain'. Use `repo_type` argument if needed.`` 
 This could be because of a stale cache. Try deleting the cache using: 
 
 .. code:: ipython3
