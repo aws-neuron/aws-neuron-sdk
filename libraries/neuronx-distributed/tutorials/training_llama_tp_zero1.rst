@@ -1,9 +1,9 @@
 .. _llama2_7b_tp_zero1_tutorial:
 
-Training Llama2 7B and Llama3 8B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
+Training Llama3.1-8B, Llama3-8B and Llama2-7B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
 ========================================================================================================
 
-In this section, we showcase how to pre-train Llama3 8B and Llama2 7B model on four Trn1.32xlarge instances 
+In this section, we showcase how to pre-train Llama3.1-8B, Llama3 8B and Llama2 7B model on four Trn1.32xlarge instances 
 using the Neuron Distributed library. We will use AWS ParallelCluster to orchestrate the training jobs. 
 To train the LLama model in this example, we will apply the following optimizations using the 
 Neuron Distributed library:
@@ -50,6 +50,15 @@ Let’s download the scripts for pretraining:
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/requirements.txt
 
+If you want to pre-train Llama3.108B, you would need to run the following steps -
+
+.. code:: ipython3
+
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama3_8B_hf_pretrain.sh
+   mkdir 8B_config_llama3 && cd 8B_config_llama3
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/8B_config_llama3.1/config.json
+   cd ..
+
 If you want to pre-train Llama3 8B, you would need to run the following steps -
 
 .. code:: ipython3
@@ -93,7 +102,7 @@ Run the following from ``~/examples/tp_zero1_llama_hf_pretrain`` directory:
 
    tokenizer.save_pretrained(".")
 
-For Llama3, make sure your ``~/examples/tp_zero1_llama_hf_pretrain`` directory has the following files:
+For Llama3.1/Llama3, make sure your ``~/examples/tp_zero1_llama_hf_pretrain`` directory has the following files:
 
 .. code:: ipython3
 

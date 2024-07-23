@@ -1,10 +1,10 @@
 .. _llama2_tp_pp_tutorial:
 .. _llama3_tp_pp_tutorial:
 
-Training Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism (``neuronx-distributed`` )
+Training Llama-3.1-70B, Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism (``neuronx-distributed`` )
 ================================================================================================================
 
-In this section, we showcase to pretrain Llama3 70B and Llama2 13B/70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
+In this section, we showcase to pretrain Llama 3.1, Llama3 70B and Llama2 13B/70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
 checkpoint as well as constant mask optimization in the ``neuronx-distributed`` package.
 
 Setting up environment:
@@ -34,6 +34,18 @@ Let’s download the scripts for pretraining:
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/modeling_llama_nxd.py
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/requirements.txt
+
+
+
+If you want to pre-train Llama3.1 70B, you would need to run the following steps -
+
+.. code:: ipython3
+
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/run_llama3_70B_tp_pp.sh
+    chmod +x run_llama3_70B_tp_pp.sh
+    mkdir 70B_config_llama3 && cd 70B_config_llama3
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_pp_llama_hf_pretrain/70B_config_llama3.1/config.json
+    cd ..
 
 If you want to pre-train Llama3 70B, you would need to run the following steps -
 
@@ -70,7 +82,7 @@ If you want to pre-train Llama2 70B, you would need to run the following steps -
 
 
 
-The below tutorial uses ``Llama3 70B`` as an example. To run Llama2 70B or 13B, simply change the script from ``run_llama3_70B_tp_pp.sh`` to ``run_llama2_70B_tp_pp.sh`` or ``run_llama2_13B_tp_pp.sh``.
+The below tutorial uses ``Llama3.1 70B`` as an example. To run Llama2 70B or 13B, simply change the script from ``run_llama3_70B_tp_pp.sh`` to ``run_llama2_70B_tp_pp.sh`` or ``run_llama2_13B_tp_pp.sh``.
 
 First, let's get all the needed dependencies
 
@@ -95,7 +107,7 @@ Run the following from ``~/examples/tp_pp_llama_hf_pretrain`` directory:
 
    tokenizer.save_pretrained(".")
 
-For Llama3, make sure your ``~/examples/tp_pp_llama2_hf_pretrain`` directory has the following files:
+For Llama3.1/Llama3, make sure your ``~/examples/tp_pp_llama2_hf_pretrain`` directory has the following files:
 
 .. code:: ipython3
 
