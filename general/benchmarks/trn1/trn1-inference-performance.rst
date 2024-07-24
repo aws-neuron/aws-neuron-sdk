@@ -54,46 +54,6 @@ Encoder Models
          int_cols = ['Latency P50 (ms)', 'Latency P99 (ms)']
          df[int_cols] = df[int_cols].round(2).astype('float',copy=True)
 
-Decoder Models
---------------
-
-.. tab-set::
-
-    .. tab-item:: Throughput optimized
-
-        .. df-table::
-            :header-rows: 1
-
-            df = pd.read_csv('throughput_data_decoder.csv')
-            df_prices = pd.read_csv('trn1_instance_prices.csv')
-            df = pd.merge(df,df_prices,on='Inst. Type')
-
-            df['Cost per 1M tokens'] = ((1.0e6 / df['Output Token Throughput (tokens/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
-
-            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type','Weight Storage Data Type', 'Task','Scripts']
-
-            df['Output Token Throughput (tokens/sec)'] = df['Output Token Throughput (tokens/sec)'].round(2).astype('float',copy=True)
-            int_cols = ['TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)']
-            df[int_cols] = df[int_cols].round(2).astype('float',copy=True)
-
-
-    .. tab-item:: Latency optimized
-
-        .. df-table::
-            :header-rows: 1
-
-            df = pd.read_csv('latency_data_decoder.csv')
-            df_prices = pd.read_csv('trn1_instance_prices.csv')
-            df = pd.merge(df,df_prices,on='Inst. Type')
-
-            df['Cost per 1M tokens'] = ((1.0e6 / df['Output Token Throughput (tokens/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
-
-            cols_to_show = ['Model','Framework', 'Inst. Type', 'Output Token Throughput (tokens/sec)', 'TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)', 'Cost per 1M tokens', 'Application Type', 'Neuron Version', 'Run Mode', 'TP Degree',	'Batch Size', 'Sequence Length', 'Input Length', 'Output Length', 'Model Data Type','Compilation Autocast Data Type','Weight Storage Data Type', 'Task','Scripts']
-
-            df['Output Token Throughput (tokens/sec)'] = df['Output Token Throughput (tokens/sec)'].round(2).astype('float',copy=True)
-            int_cols = ['TTFT Latency P50 (ms)', 'TTFT Latency P99 (ms)', 'TPOT Latency P50 (ms)', 'TPOT Latency P99 (ms)']
-            df[int_cols] = df[int_cols].round(2).astype('float',copy=True)
-
 Encoder-Decoder Models
 ----------------------
 
