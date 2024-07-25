@@ -97,6 +97,7 @@ More release content can be found in the table below and each component release 
 
    * - Neuron Compiler (neuronx-cc)
      - * Support for Flash Attention kernel to enable usage of long sequence lengths during training and inference.
+       * [Beta] Descriptor Generation Engine (DGE) - Ability to generate generates memory copy descriptors on the fly.
        * See more at :ref:`neuronx-cc-rn`
      - Trn1/Trn1n,Inf2
 
