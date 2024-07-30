@@ -12,9 +12,8 @@ Neuron Compiler [2.14.213.0]
 ----------------------------
 Date: 07/03/2024
 
-* [Beta] This release introduces the Descriptor Generation Engine (DGE) feature. DGE is a beta feature that enables generating memory copy descriptors on the fly instead of generating them ahead of time before the model's execution starts. By generating descriptors on-the-fly, DGE reduces the amount of memory consumed by descriptors in Neuron High Bandwidth Memory (HBM). This feature enables models to fit within the available memory when otherwise there might not be enough memory for the models to load and run.  Long sequence lengths models is one example where DGE might be beneficial.  DGE is disabled by default in this release and will be enabled by default in future releases. 
-It is recommended to enable DGE in cases where the model will not fit within available memory (out of memory) and check if this feature helps. To enable DGE in 2.19, use the following compiler flag: --enable-internal-io-dge. 
-
+* Minor bug fixes and performance enhancements.
+* Improved flash attention kernel performance.
 
 Neuron Compiler [2.13.72.0]
 ----------------------------
