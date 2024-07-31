@@ -66,21 +66,24 @@ The EFA devices are exposed to the container using the --device option
 
    --device /dev/infiniband/uverbs0 
 
-In the kubernetes environment the EFA device plugin is used to detect and advertise 
-EFA interfaces. 
-
-::
-   kubectl apply -f https://raw.githubusercontent.com/aws-samples/aws-efa-eks/main/manifest/efa-k8s-device-plugin.yml
-
-Application can use the resource type vpc.amazonaws.com/efa in a pod request spec
+In a Kubernetes environment, the EFA device plugin is used to detect and advertise 
+the available EFA interfaces. The EFA device plugin can be installed using the `Helm chart provided by Amazon EKS <https://github.com/aws/eks-charts/tree/master/stable/aws-efa-k8s-device-plugin>`_
 
 ::
 
-   vpc.amazonaws.com/efa: 4
+   helm repo add eks https://aws.github.io/eks-charts
+   helm install aws-efa-k8s-device-plugin --namespace kube-system eks/aws-efa-k8s-device-plugin
 
+Once the plugin is deployed, applications can use the resource type vpc.amazonaws.com/efa in a pod request spec
+
+::
+
+   resources:
+      limits:
+         vpc.amazonaws.com/efa: 4
 
 
 Can distributed training jobs be run without EFA devices in container
 ---------------------------------------------------------------------
-No. For distributed training jobs in Trainium all the EFA inrerfaces in trn1.32xlarge needs to be
-exposed to the containers
+No. For distributed training jobs on Trainium, all EFA interfaces provided by trn1.32xlarge need to be
+attached to the container
