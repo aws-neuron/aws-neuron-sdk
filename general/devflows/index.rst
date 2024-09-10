@@ -25,7 +25,7 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
          :class-body: sphinx-design-class-body-small
          :animate: fade-in
 
-         .. include:: /general/devflows/containers-flows.txt
+         .. include:: /containers/developerflows.txt
 
 
    .. dropdown::  AWS EC2
