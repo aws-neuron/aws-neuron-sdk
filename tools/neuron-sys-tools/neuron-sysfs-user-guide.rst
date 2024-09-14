@@ -81,17 +81,17 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │       │   │   └── timeout
   │       │   ├── memory_usage/
   │       │   │   ├── device_mem/
-  │       │   │   │   ├── collectives
-  │       │   │   │   ├── constants
-  │       │   │   │   ├── dma_rings
-  │       │   │   │   ├── driver_memory
-  │       │   │   │   ├── model_code
-  │       │   │   │   ├── model_shared_scratchpad
-  │       │   │   │   ├── nonshared_scratchpad
-  │       │   │   │   ├── notifications
-  │       │   │   │   ├── runtime_memory
-  │       │   │   │   ├── tensors
-  │       │   |   │   └── uncategorized
+  │       │   │   │    ├── collectives
+  │       │   │   │    ├── constants
+  │       │   │   │    ├── dma_rings
+  │       │   │   │    ├── driver_memory
+  │       │   │   │    ├── model_code
+  │       │   │   │    ├── model_shared_scratchpad
+  │       │   │   │    ├── nonshared_scratchpad
+  │       │   │   │    ├── notifications
+  │       │   │   │    ├── runtime_memory
+  │       │   │   │    ├── tensors
+  │       │   │   │    └── uncategorized
   │       │   │   └── host_mem
   │       │   └── other_info/
   │       │       ├── flop_count
@@ -161,7 +161,18 @@ Description for Each Field
 
   * ``device_mem/``: The amount of memory that Neuron Runtime uses for weights, instructions and DMA rings.
 
-    * This device memory per NeuronCore is further categorized into five types: ``constants/``, ``model_code/``, ``model_shared_scratchpad/``, ``runtime_memory/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Device Used Memory <neuron_top_device_mem_usage>` section.  Each of these categories has total, present, and peak.
+    * This device memory per NeuronCore is further categorized into five types: ``collectives/``, ``constants/``, ``dma_rings/``, ``driver_memory/``, ``model_code/``, ``model_shared_scratchpad/``, ``nonshared_scratchpad/``, ``notifications/``, ``runtime_memory/``, ``tensors/``, and ``uncategorized/``. Each of these categories has total, present, and peak.
+        * ``collectives`` - amount of device memory used for collective communication between workers
+        * ``constants`` - amount of device memory used for constants (for applications running training) or weights (for applications running inferences)
+        * ``dma_rings`` - amount of device memory used for storing model executable code used for data movements
+        * ``driver_memory`` - amount of device memory used by the Neuron Driver
+        * ``model_code`` - amount of device memory used for storing model executable code
+        * ``model_shared_scratchpad`` - amount of device memory used for the shared model scratchpad, a buffer shared between models on the same Neuron Core used for internal model variables and other auxiliary buffers
+        * ``nonshared_scratchpad`` - amount of device memory used for non-shared model scratchpad, a buffer used by a single model for internal model variables and other auxiliary buffers
+        * ``notifications`` - amount of device memory used to store instruction level trace information used to profile workloads ran on the device
+        * ``runtime_memory`` - amount of device memory used by the Neuron Runtime (outside of the previous categories)
+        * ``tensors`` - amount of device memory used for tensors
+        * ``uncategorized`` - amount of device memory that does not belong in any other catagory in this list
   
   * ``host_mem/``: The amount of memory that Neuron Runtime uses for input and output tensors.
 
