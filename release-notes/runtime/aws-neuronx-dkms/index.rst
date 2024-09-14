@@ -42,6 +42,7 @@ New in this release
 Bug Fixes
 ^^^^^^^^^
 * Fixed compatibility issues for the Linux 6.3 kernel
+* Resolved issue where device reset handling code was not properly checking the failure metric
 
 
 Neuron Driver release [2.16.7.0]

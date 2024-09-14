@@ -31,6 +31,19 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.22.14.0]
+---------------------------------
+Date: 09/16/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved the inter-node mesh algorithm to scales better for larger number of nodes and larger allreduce problem sizes
+
+Bug fixes
+^^^^^^^^^
+* Implemented a fix that differentiate between out-of-memory (OOM) conditions occurring on the host system versus the device when an OOM event occurs
+* Resolved a performance issue with transpose operations, which was caused by an uneven distribution of work across DMA engines
+
 Neuron Runtime Library [2.21.41.0]
 ---------------------------------
 Date: 07/03/2024
