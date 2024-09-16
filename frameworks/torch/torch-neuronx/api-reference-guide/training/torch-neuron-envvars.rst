@@ -72,7 +72,7 @@ PyTorch Neuron are (beta ones are noted):
 
 ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``
 
-- The list of torch.nn.Modules that will have all parameter input buffers marked as static to enable runtime optimizations. The default is "Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d".
+- The list of torch.nn.Modules that will have all parameter input buffers marked as static to enable runtime optimizations. The default is "Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d" for torch-neuronx 1.13/2.1 and "Embedding" for torch-neuronx 2.1 starting in SDK release 2.20.
 
 ``NEURONCORE_NUM_DEVICES`` **[Use only with xmp.spawn]**
 

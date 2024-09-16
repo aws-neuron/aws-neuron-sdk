@@ -1,6 +1,6 @@
 .. _gpt_neox_tp_zero1_tutorial:
 
-Training GPT-NeoX 6.9B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
+Training GPT-NeoX 6.9B with Tensor Parallelism and ZeRO-1 Optimizer
 =========================================================================================
 
 In this section, we showcase to pretrain a GPT-NeoX 6.9B model by using tensor parallelism

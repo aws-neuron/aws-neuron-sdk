@@ -1,6 +1,6 @@
 .. _llama2_7b_tp_zero1_tutorial:
 
-Training Llama3.1-8B, Llama3-8B and Llama2-7B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
+Training Llama3.1-8B, Llama3-8B and Llama2-7B with Tensor Parallelism and ZeRO-1 Optimizer
 ========================================================================================================
 
 In this section, we showcase how to pre-train Llama3.1-8B, Llama3 8B and Llama2 7B model on four Trn1.32xlarge instances 
@@ -94,11 +94,14 @@ Run the following from ``~/examples/tp_zero1_llama_hf_pretrain`` directory:
 
 .. code:: ipython3
 
+   from huggingface_hub import login
    from transformers import AutoTokenizer
 
-   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B', token='your_own_hugging_face_token')  
+   login(token='your_own_hugging_face_token')
+
+   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B')  
    # For llama2 uncomment line below
-   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf', token='your_own_hugging_face_token') 
+   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf') 
 
    tokenizer.save_pretrained(".")
 

@@ -213,6 +213,27 @@ In PyTorch 2.1, users might face the error shown below due to incompatible ``lib
 
 Check that the version of ``libneuronxla`` is ``2.0.*``. If not, then uninstall ``libneuronxla`` using ``pip uninstall libneuronxla`` and then reinstall the packages following the installation guide :ref:`installation guide <install_pytorch_neuron_2_1>`
 
+
+Error ``cannot import name 'builder' from 'google.protobuf.internal'`` after installing compiler from earlier releases (2.19 or earlier)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using release 2.20 packages and you choose to install compiler from an earlier release (2.19 or earlier), you may see the error ``cannot import name 'builder' from 'google.protobuf.internal`` with the earlier compiler's dependency on protobuf version 3.19. To work-around this issue, please install protobuf 3.20.3 (``pip install protobuf==3.20.3``, ignoring the pip dependency check error due to earlier compiler's dependency on protobuf version 3.19).
+
+.. code:: bash
+
+    File "/home/ubuntu/aws_neuron_venv_pytorch/lib/python3.11/site-packages/torch_neuronx/proto/metaneff_pb2.py", line 5, in <module> from google.protobuf.internal import builder as _builder
+    ImportError: cannot import name 'builder' from 'google.protobuf.internal' (/home/ubuntu/aws_neuron_venv_pytorch/lib/python3.11/site-packages/google/protobuf/internal/__init__.py)
+
+Lower accuracy when fine-tuning Roberta
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently with release 2.20, we see lower accuracy (68% vs expected 89%) when fine-tuning Roberta-large and MRPC. This will be fixed in a future release. To work-around, you may use the compiler from release 2.19, noting the ``protobuf`` issue above:
+
+.. code:: bash
+
+    python3 -m pip install neuronx-cc==2.14.227.0+2d4f85be protobuf==3.20.3
+
+
 Slower loss convergence for NxD LLaMA-3 70B pretraining using ZeRO1 tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -317,11 +338,6 @@ Currently, with torch-neuronx 2.1, we are seeing the following compiler assertio
 
     ERROR 222163 [NeuronAssert]: Assertion failure in usr/lib/python3.8/concurrent/futures/process.py at line 239 with exception:
     too many partition dims! {{0,+,960}[10],+,10560}[10]
-
-Lower performance for BERT-Large
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Currently we see 8% less performance when running the BERT-Large pre-training tutorial with Torch-NeuronX 2.1 as compared to Torch-NeuronX 1.13.
 
 
 Frequently Asked Questions (FAQ)

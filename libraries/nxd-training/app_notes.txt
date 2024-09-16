@@ -1,0 +1,4 @@
+* :ref:`introduce-nxd-training`
+* :ref:`nxd_training_tp_appnote`
+* :ref:`nxd_training_pp_appnote`
+* :ref:`nxd_training_amr_appnote`

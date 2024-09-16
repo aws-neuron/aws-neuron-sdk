@@ -1,6 +1,6 @@
 .. _pp_developer_guide:
 
-Developer guide for Pipeline Parallelism (``neuronx-distributed`` )
+Developer guide for Pipeline Parallelism 
 =====================================================================
 
 Training
@@ -93,10 +93,10 @@ The ``NxDPPModel.run_train`` call will return the loss that is achieved from ``o
 Interleaved Pipeline-Parallelism:
 ---------------------------------
 
-To use interleaved pipeline parallel, one has to set `virtual_pipeline_size` greater than 1. The value of the 
-`virtual_pipeline_size` * `pipeline_parallel_size` should be equal to the number of layers in the models. Interleave pipeline can 
+To use interleaved pipeline parallel, one has to set ``virtual_pipeline_size`` greater than 1. The value of the 
+``virtual_pipeline_size * pipeline_parallel_size`` should be equal to the number of layers in the models. Interleave pipeline can 
 help to reduce the pipeline bubble size and improve performance especially in cases when the number of microbatches 
-per data-parallel rank is small. More information can be found `here <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/#interleaved_schedule>__`
+per data-parallel rank is small. More information can be found `here <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/#interleaved_schedule>`__
 
 
 Mixed precision training
@@ -336,7 +336,7 @@ also marks the `LlamaRMSNorm` as leaf module for Llama model.
 
 Special treatment for Hugging Face models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is `transformers.PreTrainedModel`), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
+Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is ``transformers.PreTrainedModel``), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
 The Hugging Face's tracer has implementation of many functionalities to help tracing, for details please refer to `here <https://github.com/huggingface/transformers/blob/main/src/transformers/utils/fx.py>`__.
 However, please be aware that Hugging Face's tracer will check if the model class name belongs to one of the Hugging Face models. So if you create your model class based on some Huggingface model class, it is important to maintain the same class name. Below is an example:
 

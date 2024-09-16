@@ -1,6 +1,9 @@
 .. _k8s-neuron-device-plugin:
 
-Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource. aws.amazon.com/neuroncore, aws.amazon.com/neurondevice, aws.amazon.com/neuron are the resources that the neuron device plugin registers with the kubernetes. aws.amazon.com/neuroncore is used for allocating neuron cores to the container. aws.amazon.com/neurondevice is used for allocating neuron devices to the container. When neurondevice is used all the cores belonging to the device will be allocated to container. aws.amazon.com/neuron also allocates neurondevices. Resource name 'neuron' is recommended for allocating devices to the container. Neuron will be ending support of resource name 'neurondevice' in a future release. Please check announcements for updates.
+Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource. aws.amazon.com/neuroncore and aws.amazon.com/neuron are the resources that the neuron device plugin registers with the kubernetes. aws.amazon.com/neuroncore is used for allocating neuron cores to the container. aws.amazon.com/neuron is used for allocating neuron devices to the container. When resource name 'neuron' is used, all the cores belonging to the device will be allocated to container.
+
+Deploy Neuron Device Plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Make sure :ref:`prequisite<k8s-prerequisite>` are satisified
 * Download the neuron device plugin yaml file. :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`
@@ -11,7 +14,7 @@ Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource.
 
         kubectl apply -f k8s-neuron-device-plugin-rbac.yml
         kubectl apply -f k8s-neuron-device-plugin.yml
- 
+
 * Verify that neuron device plugin is running
 
     .. code:: bash
@@ -29,7 +32,7 @@ Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource.
 
     .. code:: bash
 
-        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronCore:.status.allocatable.aws\.amazon\.com/neuroncore"    
+        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronCore:.status.allocatable.aws\.amazon\.com/neuroncore"
 
     Expected result:
 
@@ -41,7 +44,7 @@ Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource.
 
     .. code:: bash
 
-        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronDevice:.status.allocatable.aws\.amazon\.com/neurondevice"    
+        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronDevice:.status.allocatable.aws\.amazon\.com/neuron"  
 
     Expected result:
 

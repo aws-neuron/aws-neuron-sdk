@@ -1,14 +1,11 @@
 .. _k8s-neuron-problem-detector-and-recovery-irsa:
 
-Neuron node problem detection and recovery irsa
-================================================
-
 Neuron node problem detection and recovery is authorized via IAM roles for service accounts. For more information, see `IAM roles for service accounts <https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html>`__ in the Amazon EKS User Guide. This documentation shows how to configure an IAM role for service accounts using the command line tool eksctl. Follow the instructions below to configure IAM authorization for service accounts:
 
 * Install the eksctl CLI using instructions listed at https://eksctl.io/installation/.
 * Create a policy as shown below:
 
-    Policy template 
+    Policy template
 
     .. code:: bash
 
@@ -58,6 +55,11 @@ Neuron node problem detection and recovery is authorized via IAM roles for servi
           --policy-name NeuronProblemDetectorPolicy \
           --policy-document file://npd-policy-trimmed.json
 
+* Create a namespace for the Neuron Node Problem Detector and its service account:
+
+    .. code:: bash
+
+        kubectl create ns neuron-healthcheck-system
 
 * Associate the authorization with the service account using the following script:
 
@@ -67,7 +69,7 @@ Neuron node problem detection and recovery is authorized via IAM roles for servi
         CLUSTER_NAME=<eks cluster name>
         REGION_CODE=$(aws configure get region)
         POLICY_ARN=<policy arn for NeuronProblemDetectorPolicy>
-        
+
         eksctl create iamserviceaccount \
             --name node-problem-detector \
             --namespace neuron-healthcheck-system \

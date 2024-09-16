@@ -23,7 +23,7 @@ add_inf1_tag = ['general/arch',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
 add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx']
-add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','general/setup/tensorflow-neuronx']
+add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','neuronx-distributed/nxd-training', 'general/setup/tensorflow-neuronx']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -74,7 +74,8 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                  'general/setup/neuron-setup/tensorflow/neuronx/',
                  'general/setup/neuron-setup/pytorch/neuronx/',
                  'general/models/inference-inf2-trn1-samples',
-                 'general/models/training-trn1-samples'
+                 'general/models/training-trn1-samples',
+                 'general/nki/',
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
@@ -84,7 +85,8 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'general/arch/neuron-hardware/trn1-arch',
                   'general/arch/neuron-hardware/trainium',
                   'general/benchmarks/trn1/trn1-inference-performance',
-                  'general/benchmarks/trn1/trn1-training-performance'
+                  'general/benchmarks/trn1/trn1-training-performance',
+                  'neuronx-distributed/nxd-training'
                ]
 
 clear_trn1_tag = [ 'general/arch/neuron-hardware/inf2-arch', 

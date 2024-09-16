@@ -1,6 +1,6 @@
 .. _tp_training_tutorial:
 
-Training with Tensor Parallelism (``neuronx-distributed`` )
+Training with Tensor Parallelism 
 ===========================================================
 
 Keeping the above changes made in :ref:`Developer guide <tp_developer_guide>`, let’s now run an end-to-end training

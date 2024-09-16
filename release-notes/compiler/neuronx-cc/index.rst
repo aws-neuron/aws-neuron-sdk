@@ -7,6 +7,11 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.15.128.0]
+----------------------------
+Date: 09/16/2024
+
+* This release introduces memory optimization that will reduce the generated compiler artifacts size (i.e., NEFFs) and the models' memory footprint. It is possible that some models may experience unexpected performance degradation. If this occurs, these optimizations can be disabled using the --disable-dge compiler command line option or the framework-level option ``additional_compile_opt=" --disable-dge"``
 
 Neuron Compiler [2.14.213.0]
 ----------------------------

@@ -9,6 +9,18 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.22.26.0]
+------------------------------
+Date: 09/16/2024
+
+New in this release:
+^^^^^^^^^^^^^^^^^^^^
+* Added check to print out an error message on invalid ``NEURON_RT_ROOT_COMM_ID`` configurations
+
+Bug fixes
+^^^^^^^^^
+* Resolved an issue where the ``libnccom.so`` filename was versioned incorrectly as ``libnccom.so.2.y.y``. Will be correctly versioned as ``libnccom.so.2.22.26`` in this release.
+
 Neuron Collectives [2.21.46.0]
 ------------------------------
 Date: 07/03/2024

@@ -23,11 +23,10 @@ Apply the Neuron node problem detector and recovery as a DaemonSet on the cluste
 
     .. code:: bash
 
-        kubectl create ns neuron-healthcheck-system
         kubectl apply -f k8s-neuron-problem-detector-and-recovery-rbac.yml
         kubectl apply -f k8s-neuron-problem-detector-and-recovery-config.yml
         kubectl apply -f k8s-neuron-problem-detector-and-recovery.yml
- 
+
 Verify that the Neuron device plugin is running:
 
     .. code:: bash

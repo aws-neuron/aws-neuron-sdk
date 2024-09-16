@@ -5,7 +5,7 @@
 .. _announce-eos-dlami:
 
 Announcing end of support for Neuron Release 2.18.0 Deep Learning AMIs 
----------------------------------------------------------------------
+------------------------------------------------------------------------
 
 We are announcing end of support for :ref:`Neuron release 2.18.0 <neuron-2.18.0-whatsnew>` Deep Learning AMIs. DLAMIs released between March 26,2024 (2024-03-26) and April 10, 2024 (2024-04-10) were shipped without the audit package. The following are the affected DLAMIs:
 

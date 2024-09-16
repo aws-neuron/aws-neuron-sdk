@@ -12,7 +12,7 @@ Introduction
 ------------
 
 The `Transformers NeuronX repository <https://github.com/aws-neuron/transformers-neuronx>`_
-contains the source code of the AWS Neuron Transformers integration project. 
+contains the source code of the AWS Neuron Transformers integration project.
 As it stands now, it mainly serves the purpose of
 running transformer decoder inference (autoregressive sampling)
 workflows on the Neuron platform.
@@ -415,19 +415,19 @@ to generate 5 outputs for a single input.
         print(tokenizer.decode(output))
 
 
-Serialization support [Beta]
-----------------------------
+Serialization support
+---------------------
 
-Transformers Neuron supports model serialization (model saving and loading) for
+Transformers NeuronX supports model serialization (model saving and loading) for
 all models except the ``GPTJForSampling`` and ``GPTNeoXForSampling``` model
-classes. In the following example we demonstrate how to save and load the
-``GPT2`` model:
+classes. In the following example we demonstrate how to save and load 
+the compiled artifacts for the ``GPT2`` model:
 
 .. code-block:: python
 
     import torch
     from transformers import AutoTokenizer
-    from transformers_neuronx import GPT2ForSamplingWithContextBroadcasting, HuggingFaceGenerationModelAdapter
+    from transformers_neuronx import GPT2ForSamplingWithContextBroadcasting
 
     # Create and compile the Neuron model
     model = GPT2ForSamplingWithContextBroadcasting.from_pretrained('gpt2')
@@ -452,6 +452,38 @@ classes. In the following example we demonstrate how to save and load the
     with torch.inference_mode():
         generated_sequence = model.sample(encoded_input.input_ids, sequence_length=256, start_ids=None)
     print([tokenizer.decode(tok) for tok in generated_sequence])
+
+Transformers NeuronX also supports the serialization of presharded weights. 
+This reduces future model load time by saving a transformed and sharded
+set of weights as a new safetensors checkpoint. When this checkpoint is loaded, 
+sharding and transformations normally done by Transformers NeuronX will be skipped, 
+reducing model load time significantly. The saving of presharded weights is only 
+available when ``on_device_embedding`` is true. In the following example we 
+demonstrate how to save and load presharded weights along with compiled artifacts on a Llama model:
+
+.. code-block:: python
+
+    from transformers_neuronx import LlamaForSampling
+    from transformers_neuronx import NeuronConfig
+    from transformers import AutoTokenizer
+
+    neuron_config = NeuronConfig(on_device_embedding=True)
+
+    # Create and compile the Neuron model
+    model_neuron = LlamaForSampling.from_pretrained('openlm-research/open_llama_3b', batch_size=1, tp_degree=8, n_positions=128, neuron_config=neuron_config)
+    model_neuron.to_neuron()
+
+    # save the presharded weights and compiled artifacts to a directory
+    model_neuron.save('llama-artifacts', sharded_weights=True)
+
+    del model_neuron
+
+    # use the presharded checkpoint to reduce model load time
+    model_neuron_presharded = LlamaForSampling.from_pretrained('llama-artifacts', batch_size=1, tp_degree=8, n_positions=128, neuron_config=neuron_config)
+
+    # load in the compiled artifcats to skip compilation
+    model_neuron_presharded.load('llama-artifacts')
+    model_neuron_presharded.to_neuron()
 
 
 Grouped-query attention (GQA) support [Beta]
@@ -504,12 +536,20 @@ Repeated Ngram Filtering
 Repeated Ngram Filtering reduces redundant ngram phrases within the generated text. It uses the same API as :ref:`HuggingFace API for NoRepeatedNGram <https://huggingface.co/docs/transformers/v4.38.2/en/internal/generation_utils#transformers.NoRepeatNGramLogitsProcessor>`. Set the parameter no_repeat_ngram_size to the size of ngram phrases to be filtered and pass it to the sampling function as in the example ``model.sample(inputs_ids, no_repeat_ngram_size=3)``
 
 
+On-device sampling support [Beta]
+--------------------------------------
+
+Transformers-neuronx supports on-device sampling for all models except Mixtral models. The features
+can be enabled by setting ``on_device_generation`` in ``NeuronConfig`` to an instance of ``GenerationConfig``.
+
+In the following example, we demonstrate how to use on-device generation for a ``Llama`` model using 
+``top_k``, ``top_p``, ``top_p_min_tokens`` and ``temperature``. 
 
 
 Top-K on-device sampling support [Beta]
 --------------------------------------
-Transformers Neuron supports Top-K Sampling on-device for all models except Mixtral models. 
-In the following example, we demonstrate how to use on-device Top-K for the ``Llama`` model via 
+Transformers Neuron supports Top-K Sampling on-device for all models except Mixtral models.
+In the following example, we demonstrate how to use on-device Top-K for the ``Llama`` model via
 the ``GenerationConfig`` and ``NeuronConfig`` configs.
 
 .. code-block:: python
@@ -520,7 +560,7 @@ the ``GenerationConfig`` and ``NeuronConfig`` configs.
     from transformers import AutoTokenizer
 
     neuron_config = NeuronConfig(
-        on_device_generation=GenerationConfig(max_length=128, top_k=10, do_sample=True)
+        on_device_generation=GenerationConfig(max_length=128, top_k=10, top_p=0.9, top_p_min_tokens=1, temperature=0.9, do_sample=True)
     )
 
     # Create and compile the Neuron model
@@ -538,6 +578,70 @@ the ``GenerationConfig`` and ``NeuronConfig`` configs.
         print([tokenizer.decode(tok) for tok in generated_sequence])
 
 
+By default, transformers-neuronx uses the same, fixed sampling parameters for all sequences across all invocations
+of the model when on-device generation is enabled. It is possible to provide new sampling parameters per
+model invocation by enabling the ``dynamic`` feature in the ``GenerationConfig``. It is also possible to provide
+different sampling parameters for each sequence in the batch by using the ``per_batch_line`` feature. 
+When using this feature, it is recommended to limit the number of tokens that are considered during 
+sampling across all sequences by setting ``global_top_k`` to a reasonably low number e.g. 250 to prevent 
+poor performance when computing ``top_p`` tokens over a large vocabulary without any prior filtering. When using 
+``per_batch_line``, ``top_k``, ``top_p``, ``top_p_min_tokens`` and ``temperature`` accept lists with value per
+sequence in the batch.
+
+
+In the following example, we demonstrate how to use the ``dynamic`` and ``per_batch_line`` features together.
+
+.. code-block:: python
+
+    import torch
+    from transformers_neuronx import LlamaForSampling
+    from transformers_neuronx.config import NeuronConfig, GenerationConfig
+    from transformers import AutoTokenizer
+
+    batch_size = 2
+    generation_config = GenerationConfig(
+            max_length=128, dynamic=True, per_batch_line=True, do_sample=True,
+            top_k=[1] * batch_size,
+            top_p=[1.0] * batch_size, 
+            top_p_min_tokens=[1] * batch_size,
+            temperature=[1.0] * batch_size,
+            global_top_k=256
+        )
+
+    neuron_config = NeuronConfig(
+        on_device_generation=generation_config
+    )
+
+    # Create and compile the Neuron model
+    model_neuron = LlamaForSampling.from_pretrained('openlm-research/open_llama_3b', batch_size=2, tp_degree=8, n_positions=128, neuron_config=neuron_config)
+    model_neuron.to_neuron()
+
+    # Get a tokenizer and exaple input
+    tokenizer = AutoTokenizer.from_pretrained('openlm-research/open_llama_3b')
+    tokenizer.pad_token = tokenizer.eos_token
+    text = ["Hello, I'm a language model,", "Hello, I'm also a language model,"]
+    encoded_input = tokenizer(text, return_tensors='pt')
+
+    # Run inference
+    with torch.inference_mode():
+        generated_sequence = model_neuron.sample(encoded_input.input_ids, sequence_length=128)
+        print([tokenizer.decode(tok) for tok in generated_sequence])
+
+        # Use different settings for each sequence in the batch
+        # Supported because we use `generation_config.per_batch_line = True`
+        generation_config.top_k = [1, 20]
+        generation_config.top_p = [1.0, 0.9]
+        generation_config.top_p_min_tokens = [1, 1]
+        generation_config.temperature = [1.0, 0.9]
+
+        # Update the generation configuration dynamically 
+        # Supported because we use `generation_config.dynamic = True`
+        model_neuron.update_generation_config(generation_config)
+
+        generated_sequence = model_neuron.sample(encoded_input.input_ids, sequence_length=128)
+        print([tokenizer.decode(tok) for tok in generated_sequence])
+
+
 
 Running inference with multiple models
 --------------------------------------
@@ -545,30 +649,30 @@ Running inference with multiple models
 Multiple transformers-neuronx models can be loaded at the same time as long
 as the total number of consumed NeuronCores is less than or equal to the total
 number of NeuronCores on the instance. For example, three tp-degree=8 models can be
-loaded and run in parallel on an inf2.48xlarge which has 24 NeuronCores. The 
+loaded and run in parallel on an inf2.48xlarge which has 24 NeuronCores. The
 ``NEURON_RT_NUM_CORES`` and ``NEURON_RT_VISIBLE_CORES`` environment variables
 can be used to allocate the necessary number of NeuronCores to each process
 to run multiple transformers-neuronx models in parallel. See the
 :ref:`torch_neuronx_core_placement_guide` section for additional information
 about how to use these environment variables.
 
-It is important to notice that when multiple models are used on a single instance, 
-the number of threads should be reduced to avoid race condition on host side. 
-Assume the neuron instance (i.e. trn1) has 192 CPU cores. 
-If one of the models keeps all CPU cores busy, there would be significant performance 
+It is important to notice that when multiple models are used on a single instance,
+the number of threads should be reduced to avoid race condition on host side.
+Assume the neuron instance (i.e. trn1) has 192 CPU cores.
+If one of the models keeps all CPU cores busy, there would be significant performance
 degradation in the rest of models. As a result, the number of threads for each model
 should be limited to part of available cores. To do this, ``OMP_NUM_THREADS`` environment
-variable can be set. For example, if there are 192 CPU cores available and four tp-degree=8 
+variable can be set. For example, if there are 192 CPU cores available and four tp-degree=8
 models are used, one can export OMP_NUM_THREADS=48 to avoid race condition.
 
 
 Streamer
 ----------------------------
 
-LLMs generate tokens in auto-regressive loop. A model.sample call waits till 
+LLMs generate tokens in auto-regressive loop. A model.sample call waits till
 the end of full sequence generation before returning the generated response.
-It is possible to output an output token as soon as it is generated. To do this, 
-a streamer object can be used. Streamer is an object which has 2 methods: put and end. 
+It is possible to output an output token as soon as it is generated. To do this,
+a streamer object can be used. Streamer is an object which has 2 methods: put and end.
 There are several predefined streamer in transformers library such as TextIteratorStreamer.
 The following example shows how to define a streamer and use it in transformers-neuronx:
 
@@ -622,7 +726,7 @@ The following example shows how to define a streamer and use it in transformers-
 Stopping Criteria
 ------------------
 We can define custom stopping criteria to stop autoregressive loop. For example, if
-we want to limit autoregressive loop after 0.5s, we can define and use stopping criteria 
+we want to limit autoregressive loop after 0.5s, we can define and use stopping criteria
 class as follows:
 
 
@@ -706,11 +810,11 @@ Speculative sampling [Beta]
 ---------------------------
 
 Transformers Neuron supports speculative sampling for the ``Llama`` and ``GPT2``
-model classes. In speculative sampling, we use use a smaller draft model to speculate future tokens. 
-These are then sent to the larger target model, which accepts or rejects these tokens. 
-For more detailed information, see the original proposal by 
+model classes. In speculative sampling, we use use a smaller draft model to speculate future tokens.
+These are then sent to the larger target model, which accepts or rejects these tokens.
+For more detailed information, see the original proposal by
 DeepMind titled :ref:`Accelerating Large Language Model Decoding with Speculative Sampling <https://arxiv.org/abs/2302.01318>`.
-Speculative sampling is currently supported for batch size 1. 
+Speculative sampling is currently supported for batch size 1.
 
 In the following example, we demonstrate how to perform speculative sampling using the ``Llama`` model.
 
@@ -720,7 +824,7 @@ In the following example, we demonstrate how to perform speculative sampling usi
     from transformers import LlamaTokenizer
     from transformers_neuronx import LlamaForSampling
     from transformers_neuronx.speculation import SpeculativeGenerator
-    
+
     # Load draft model
     draft_neuron_model = LlamaForSampling.from_pretrained('openlm-research/open_llama_3b', n_positions=256, batch_size=1, tp_degree=8, amp='f32')
     # Compile the model
@@ -752,68 +856,85 @@ In the following example, we demonstrate how to perform speculative sampling usi
     print(f"\nDecoded tokens: {generated_text}")
 
 
-QKV Weight Fusion 
+QKV Weight Fusion
 --------------------------------------
 
 Concatenating a model's query, key and value weight matrices often achieves better performance because larger matrices allow
-for more efficient data movement and compute. QKV weight fusion can be enabled by setting `fuse_qkv=True` in the `NeuronConfig`:
+for more efficient data movement and compute. QKV weight fusion can be enabled by setting ``fuse_qkv=True`` in the ``NeuronConfig``:
 
 .. code-block:: python
 
     neuron_config = NeuronConfig(fuse_qkv=True)
 
+
+Attention Layout
+--------------------------------------
+
+The intermediate tensor layouts in a model's attention layer can impact the
+compiler's optimization opportunities and thus can impact a model's performance.
+Using ``(batch, sequence, hidden)`` (or ``BSH``) layout for attention often
+achieves better performance since it can enable better overlapping of compute
+with collectives and can reduce transposes. We intend to enable ``BSH``
+attention by default in a future release. For now, ``BSH`` attention layout can
+be enabled by setting ``attention_layout="BSH"`` in the ``NeuronConfig``:
+
+.. code-block:: python
+
+    neuron_config = NeuronConfig(attention_layout="BSH")
+
+
 Bucketing
 ------------------
-LLM inference is a generate process that can produce variable length sequences. 
+LLM inference is a generate process that can produce variable length sequences.
 This poses a problem since the Neuron compiler produces executables which expect statically shaped inputs and outputs.
-To make LLM work with different shapes, transformers_neuronx generates buckets 
-and applies padding wherever it is required. 
+To make LLM work with different shapes, transformers_neuronx generates buckets
+and applies padding wherever it is required.
 
-There are at least two set of buckets for each LLM inference that can be set by user: 
+There are at least two set of buckets for each LLM inference that can be set by user:
 1) Context encoding (pre-fill) buckets and 2) output token generation buckets.
 
 
 **Token generation buckets**
 
-In token generation, tokens are generated iteratively. 
+In token generation, tokens are generated iteratively.
 At each token position, transformer need to attend to the previous tokens only.
 But in the naive implementation with static shapes, one may attend to all KV-cache (full sequence length).
 To solve this problem, we use token generation buckets.
 Token generation buckets determine the attention lengths.
-For instance, if the max sequence length is 1024 tokens and current token 
-is at position 120, there is no need to attend to all 1024 tokens in the current step. 
-We can use token generation buckets to attend to different portions of KV-cache. 
-By default, token generation buckets which are powers of 2 starting from 128 
-tokens are used (i.e. 128, 256, 512, up to sequence length). In the example above, 
-bucket 128 would be used for position 120 which would reduce the wasted compute significantly. 
-User can change these buckets by setting a list for ``n_positions`` (see example below). 
-Otherwise, if a number is given for ``n_positions`` (sequence length), instead of a list, 
-then the powers of 2 buckets starting from 128 will be used. 
+For instance, if the max sequence length is 1024 tokens and current token
+is at position 120, there is no need to attend to all 1024 tokens in the current step.
+We can use token generation buckets to attend to different portions of KV-cache.
+By default, token generation buckets which are powers of 2 starting from 128
+tokens are used (i.e. 128, 256, 512, up to sequence length). In the example above,
+bucket 128 would be used for position 120 which would reduce the wasted compute significantly.
+User can change these buckets by setting a list for ``n_positions`` (see example below).
+Otherwise, if a number is given for ``n_positions`` (sequence length), instead of a list,
+then the powers of 2 buckets starting from 128 will be used.
 The last bucket would be ``n_positions`` (sequence length), even if it is not a power of 2.
 
 **Context encoding buckets**
 
-The prompt tokens can be processed in parallel. 
-As a result, we need to set the bucket sizes for different estimated length of 
+The prompt tokens can be processed in parallel.
+As a result, we need to set the bucket sizes for different estimated length of
 input prompts. We can specify these context bucket sizes using the ``context_length_estimate`` argument.
 In general, it is better to have all the bucket to be multiples of 256 tokens.
 But adding too many buckets would increase device memory consumption and add extra latency
 for bucket switching.
-Usually, the powers of 2 starting from 128 tokens are used for 
-context encoding buckets. If the total sequence length (``n_positions``) is beyond 2048 
-tokens, it is desirable to add extra buckets with multiple of 512 or 1024 tokens. 
+Usually, the powers of 2 starting from 128 tokens are used for
+context encoding buckets. If the total sequence length (``n_positions``) is beyond 2048
+tokens, it is desirable to add extra buckets with multiple of 512 or 1024 tokens.
 It is not recommended to add buckets of multiples of 256 tokens or smaller for context buckets beyond 2k to avoid bucket switching latency.
-At runtime, the smallest bucket which fits the input context will be used. 
-By default, the context encoding buckets set to half of output-token buckets. 
-Adding extra context buckets would reduce the wasted compute and improves performance. 
-However, the extra executables would reduce memory space since executables require device memory space. 
+At runtime, the smallest bucket which fits the input context will be used.
+By default, the context encoding buckets set to half of output-token buckets.
+Adding extra context buckets would reduce the wasted compute and improves performance.
+However, the extra executables would reduce memory space since executables require device memory space.
 
-Notice that the default output token generation buckets work well for wide range 
-of applications. However, ideal context encoding buckets depends on the specific use case. 
-For instance, if all the requests have a context length of about 1500 +/- 500 tokens, 
-adding more buckets closer to 1500 might help context encoding time. 
+Notice that the default output token generation buckets work well for wide range
+of applications. However, ideal context encoding buckets depends on the specific use case.
+For instance, if all the requests have a context length of about 1500 +/- 500 tokens,
+adding more buckets closer to 1500 might help context encoding time.
 In this example, adding buckets of 1024, 1280, 1536, 1792, 2048 tokens (distance of 256 tokens) could help.
-Moreover, the largest context encoding bucket should be larger than the largest context length. 
+Moreover, the largest context encoding bucket should be larger than the largest context length.
 Otherwise, the performance would degrade significantly.
 
 
@@ -825,15 +946,160 @@ To set context encoding and token generation buckets manually:
     n_positions = [128, 256, 512, 1024, 2048, 3072]             # Usually default buckets are appropriate
 
     model = NeuronAutoModelForCausalLM.from_pretrained(
-        'gpt2',                      
-        batch_size=1,                
-        n_positions=n_positions,             
-        tp_degree=2,                 
-        amp='f16',                   
+        'gpt2',
+        batch_size=1,
+        n_positions=n_positions,
+        tp_degree=2,
+        amp='f16',
         context_length_estimate=context_length_estimate,
     )
-    
-Long Sequence length support up to 32k
+
+
+
+
+Multi-node inference support (TP/PP)
 ---------------------------------------
 
+Prerequisite: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution.html
+
+When models are too large to fit on single node, Transformers NeuronX multi-node inference (tensor parallel and pipeline parallel) can be used to shard model weights across multiple Neuron instances (only supported on Trn1 and Trn1n). Single node inference code can easily be extended to multi-node inference.
+
+Note that Transformers Neuronx currently doesn't support multi-node Tensor Parallel and Pipeline Parallel at same time, when Pipeline Parallel is used, the Tensor Parallel has to be within a node (TP<=32 on Trn1/Trn1n).
+
+In the below sections, we first outline the sample code for single node execution and then provide instructions to migrate the code to use multi-node tensor parallel or multi-node pipeline parallel. To start with, the code below is for single node script, running llama2-3b model with tensor parallel degree as 32.
+
+.. code-block:: python
+
+    import torch
+    from transformers import AutoTokenizer, AutoConfig
+    from transformers_neuronx import  LlamaForSampling, HuggingFaceGenerationModelAdapter
+
+    # Create and compile the Neuron model
+    model = LlamaForSampling.from_pretrained("openlm-research/open_llama_3b", tp_degree=32)
+    model.to_neuron()
+
+    # Use the `HuggingFaceGenerationModelAdapter` to access the generate API
+    config = AutoConfig.from_pretrained("openlm-research/open_llama_3b")
+    model = HuggingFaceGenerationModelAdapter(config, model)
+
+    # Get a tokenizer and example input
+    tokenizer = AutoTokenizer.from_pretrained("openlm-research/open_llama_3b")
+    tokenizer.pad_token_id = tokenizer.eos_token_id
+    tokenizer.padding_side = 'left'
+    text = "Hello, I'm a language model,"
+    encoded_input = tokenizer(text, return_tensors='pt', padding=True)
+
+
+
+    # Run inference using temperature
+    with torch.inference_mode():
+        model.reset_generation()
+        generated_sequence = model.generate(
+            input_ids=encoded_input.input_ids,
+            attention_mask=encoded_input.attention_mask,
+            do_sample=True,
+            max_length=256,
+            temperature=0.7,
+        )
+
+    print([tokenizer.decode(tok) for tok in generated_sequence])
+
+command line:
+
+.. code-block:: bash
+
+    python3 multi_node_dev_example.py
+
+**Multi-Node Tensor Parallel**
+
+Compared to single node tensor parallel, multi-node tensor parallel shards the model weights in the same way but having mores cores across nodes. In the meantime, it requires each node’s ``model.forward()`` receives the exact same input, otherwise there would be unexpected behaviors (runtime failure, wrong output).
+
+Configurations (environment variables to be configured on each node):
+
+- ``NEURON_RT_ROOT_COMM_ID``: the master node's ``<IP address>:<port>``
+- ``NEURON_RANK_ID``: rank of the node, 0 means master node
+- ``NEURON_LOCAL_TP``: the local tensor parallel degree on each node
+
+example:
+
+Change the single node script to use ``tp=64`` (2 node). Set the ``torch.manual_seed`` to ensure the sampling loop running on each node will sample same token as next input.
+
+
+Node 1 command line:
+
+.. code-block:: bash
+
+    NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=0 NEURON_LOCAL_TP=32 python3 multi_node_dev_example.py
+
+Node 2 command line (same as Node 1 but set ``NEURON_RANK_ID`` as 1):
+
+.. code-block:: bash
+
+    NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=1 NEURON_LOCAL_TP=32 python3 multi_node_dev_example.py
+
+You can also refer to  `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_ to run lama 3.1 405b multinode 16k tutorial with multi-node tensor parallel.
+
+**Multi-Node Pipeline Parallel**
+
+While having the weight tensor sharded as tensor pararallel, one can utilize pipeline parallel to partition the layers across different node, the intermediate tensor (hidden) will be transferred from one pipeline stage (nodes) to the next pipeline stage (nodes). The final output will be sent from last pipeline stage back to first pipeline stage.
+
+Compared to multi-node tensor parallel, for non-zero rank, the ``model.forward`` in pipeline parallel will fallback to while loop and block on the input broadcasting from master.
+
+Configurations (environment variables to be configured on each node):
+
+- ``NEURON_RT_ROOT_COMM_ID``: the master node's ``<IP address>:<port>``
+- ``CPU_COMM_ID``: similar to NEURON_RT_ROOT_COMM_ID , but need to set with different port
+- ``NEURON_RANK_ID``: rank of the node, 0 means master node
+- ``NEURON_PP_STAGES``: number of pipeline stages (nodes)
+
+example:
+
+Keep the original single node script with tp=32.
+
+Node 1 command line:
+
+.. code-block:: bash
+
+    NEURON_PP_STAGES=2 CPU_COMM_ID=10.1.201.64:8989 NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=0 python3 multi_node_dev_example.py
+
+Node 2 command line (same as Node 1 but set ``NEURON_RANK_ID`` as 1):
+
+.. code-block:: bash
+
+    NEURON_PP_STAGES=2 CPU_COMM_ID=10.1.201.64:8989 NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=1 python3 multi_node_dev_example.py
+
+
+Long Sequence length support up to 32k
+---------------------------------------
+**Flash Attention**
+
 With the integration of FlashAttention kernel, developers can use longer sequence lengths for LLAMA models. The Flash Attention kernel is automatically used when the input sequence length is greater than 8k without any additional configuration. Refer to `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb>`_ for usage of 32k sequence length on a variation of LLAMA3-8B Model.
+
+**Flash Decoding**
+
+Flash Decoding (FD) is a technique that significantly speeds up attention during inference, especially for long-context
+tasks in large language models (LLMs) with GQA.
+
+.. image:: libraries/transformers-neuronx/flash_decoding.gif
+   :alt: Flash Decoding
+   :width: 300px
+   :align: center
+
+With integration of FD, developers can achieve faster inference with larger sequence
+and batch size by reducing the KV cache replication.
+Refer to `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx
+/inference/llama-3.1-8b-128k-sampling.ipynb>`_ on flash decoding usage for 128k sequence length sampling. Flash decoding
+can be enabled by setting the flag `shard_over_sequence=True` in `NeuronConfig`
+
+.. code-block:: python
+
+    neuron_config = NeuronConfig(shard_over_sequence=True)
+
+**Known limitations and FAQs**
+
+- Flash decoding is expected to have performance degradation (PTL) for smaller sequence and batch sizes. We recommend flash decoding when **batch-size x sequence length > 16k**
+- Flash decoding support is not enabled for the following features
+ - Speculative Decoding
+ - Multi Head Attention (MHA) models
+
+

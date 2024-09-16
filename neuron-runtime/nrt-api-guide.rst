@@ -254,6 +254,7 @@ Profiling an execution is another feature of the Neuron Runtime - which provides
 as well as saving the profile data to a file, which can be used by tools such as the Neuron Tensorboard. This API is
 documented in :ref:`api_profile` section.
 
+.. _neff-format:
 
 The NEFF format and NEFF Parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

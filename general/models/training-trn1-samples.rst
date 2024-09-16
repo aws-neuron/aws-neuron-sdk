@@ -128,6 +128,7 @@ Decoders
    * - meta-llama/Llama-3-8b
      - neuronx-distributed
      - * :ref:`Training Llama3 8B Model with Tensor Parallelism and ZeRO-1 Optimizer <llama2_7b_tp_zero1_tutorial>`
+       * :ref:`Tutorial for Fine-tuning Llama3 8B with tensor parallelism and LoRA using Neuron PyTorch-Lightning with NeuronX Distributed <llama3_8b_tp_ptl_lora_finetune_tutorial>`
             
    * - meta-llama/Llama-2-7b
      - neuronx-distributed

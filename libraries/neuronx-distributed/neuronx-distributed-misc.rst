@@ -1,4 +1,4 @@
-Misc (``neuronx-distributed``)
+Misc 
 ===============================
 
 .. toctree::

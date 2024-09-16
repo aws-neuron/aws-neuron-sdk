@@ -1,0 +1,153 @@
+Neuron node problem detector and recovery artifact checks the health of Neuron devices on each ECS instance. After detecting an unrecoverable Neuron error, it triggers an instance replacement. In order to get started with Neuron node problem detector and recovery, make sure that the following requirements are satisfied:
+
+* The Neuron node problem detector and recovery requires Neuron driver 2.15+, and it requires the runtime to be at SDK 2.18 or later.
+
+Creating a Task Definition
+--------------------------
+
+Configuration
+~~~~~~~~~~~~~
+
+The task definition includes two containers:
+
+- **npd-container**: This container is responsible for enabling Problem detection functionality in the ECS cluster.
+- **recovery-container**: This container handles recovery operations in case of failures detected by Neuron Problem Detector.
+
+The **recovery-container** has an environment variable called ``ENABLE_RECOVERY`` that controls whether recovery is enabled or disabled. Set the value to ``true`` to enable recovery, or ``false`` to disable it.
+
+Follow these steps to create a task definition for NPD and recovery:
+
+1. Go to the `ECS console <https://console.aws.amazon.com/ecs/>`_ and select **Task Definitions** in the navigation pane.
+2. Click **Create new Task Definition** and choose **Create new Task Definition with JSON**.
+3. Paste the task definition JSON provided, replacing the placeholders with your account-specific values.
+
+    .. code-block:: json
+
+        {
+            "family": "neuron-npd-and-recovery",
+            "containerDefinitions": [
+                {
+                    "name": "npd",
+                    "image": "registry.k8s.io/node-problem-detector/node-problem-detector:v0.8.19",
+                    "cpu": 0,
+                    "portMappings": [
+                        {
+                            "name": "npd-80-tcp",
+                            "containerPort": 80,
+                            "hostPort": 80,
+                            "protocol": "tcp",
+                            "appProtocol": "http"
+                        }
+                    ],
+                    "essential": true,
+                    "entryPoint": [
+                        "/bin/sh",
+                        "-c"
+                    ],
+                    "command": [
+                        "echo '{\"plugin\":\"kmsg\",\"logPath\":\"/dev/kmsg\",\"lookback\":\"5m\",\"bufferSize\":10,\"source\":\"kernel-monitor\",\"conditions\":[{\"type\":\"NeuronHealth\",\"reason\":\"NeuronHasNoError\",\"message\":\"Neuronhasnoerror\"}],\"rules\":[{\"type\":\"permanent\",\"condition\":\"NeuronHealth\",\"reason\":\"NeuronHasError_SRAM_UNCORRECTABLE_ERROR\",\"pattern\":\".*NEURON_HW_ERR=SRAM_UNCORRECTABLE_ERROR.*\"},{\"type\":\"permanent\",\"condition\":\"NeuronHealth\",\"reason\":\"NeuronHasError_NC_UNCORRECTABLE_ERROR\",\"pattern\":\".*NEURON_HW_ERR=NC_UNCORRECTABLE_ERROR.*\"},{\"type\":\"permanent\",\"condition\":\"NeuronHealth\",\"reason\":\"NeuronHasError_HBM_UNCORRECTABLE_ERROR\",\"pattern\":\".*NEURON_HW_ERR=HBM_UNCORRECTABLE_ERROR.*\"},{\"type\":\"permanent\",\"condition\":\"NeuronHealth\",\"reason\":\"NeuronHasError_DMA_ERROR\",\"pattern\":\".*NEURON_HW_ERR=DMA_ERROR.*\"}]}' > /config/kernel-monitor.json && /node-problem-detector --v=2 --logtostderr --enable-k8s-exporter=false --config.system-log-monitor=/config/kernel-monitor.json"
+                    ],
+                    "environment": [],
+                    "mountPoints": [],
+                    "volumesFrom": [],
+                    "linuxParameters": {
+                        "devices": [
+                            {
+                                "hostPath": "/dev/kmsg",
+                                "containerPath": "/dev/kmsg",
+                                "permissions": [
+                                    "read",
+                                    "write"
+                                ]
+                            }
+                        ]
+                    },
+                    "privileged": true,
+                    "logConfiguration": {
+                        "logDriver": "awslogs",
+                        "options": {
+                            "awslogs-group": "/ecs/npd",
+                            "awslogs-create-group": "true",
+                            "awslogs-region": "us-west-2",
+                            "awslogs-stream-prefix": "ecs"
+                        },
+                        "secretOptions": []
+                    },
+                    "systemControls": []
+                },
+                {
+                    "name": "recovery",
+                    "image": "public.ecr.aws/neuron/neuron-node-recovery:1.2.0",
+                    "cpu": 0,
+                    "portMappings": [],
+                    "essential": true,
+                    "entryPoint": [
+                        "/bin/sh",
+                        "-c"
+                    ],
+                    "command": [
+                        "python scripts/check-health.py"
+                    ],
+                    "environment": [
+                        {
+                            "name": "ENABLE_RECOVERY",
+                            "value": "false"
+                        }
+                    ],
+                    "mountPoints": [],
+                    "volumesFrom": [],
+                    "readonlyRootFilesystem": true,
+                    "logConfiguration": {
+                        "logDriver": "awslogs",
+                        "options": {
+                            "awslogs-create-group": "true",
+                            "awslogs-group": "/ecs/recovery",
+                            "awslogs-region": "us-west-2",
+                            "awslogs-stream-prefix": "ecs"
+                        }
+                    },
+                    "systemControls": []
+                }
+            ],
+            "executionRoleArn": "arn:aws:iam::012345678910:role/ecsTaskExecutionRole",
+            "taskRoleArn": "arn:aws:iam::012345678910:role/ecsTaskExecutionRole",
+            "networkMode": "awsvpc",
+            "requiresCompatibilities": [
+                "EC2"
+            ],
+            "cpu": "1024",
+            "memory": "3072",
+            "runtimePlatform": {
+                "cpuArchitecture": "X86_64",
+                "operatingSystemFamily": "LINUX"
+            }
+        }
+
+4. Review the task definition and click **Create**.
+
+For more details on task definitions, refer to the `AWS documentation <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html>`_.
+
+.. _deploy-service:
+
+Deploying the Service
+---------------------
+
+After creating the task definition, follow these steps to deploy the service:
+
+1. In the ECS console, select the task definition and click **Deploy** → **Create Service**.
+2. Select your ECS cluster, set the launch type to **EC2**, and the service type to **Daemon**.
+3. Click **Create** to deploy the service.
+
+For more details on deploying services, refer to the `AWS documentation <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/services.html>`_.
+
+Permissions
+~~~~~~~~~~~
+
+Ensure the ECS task execution role and task role have permissions to:
+
+- Publish metrics to CloudWatch
+- Read and set health status of EC2 instances in the Auto Scaling group
+
+Refer to the `AWS documentation on IAM roles for ECS tasks <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html>`_ for more information.
+
+When any unrecoverable error occurs, Neuron node problem detector and recovery publishes a metric under the CloudWatch namespace NeuronHealthCheck. It also reflects in NodeCondition and can be seen with kubectl describe node.

@@ -1,6 +1,6 @@
 .. _llama2_tp_pp_ptl_tutorial:
 
-Training Llama-2-7B/13B/70B using Tensor Parallelism and Pipeline Parallelism with Neuron PyTorch-Lightning (``neuronx-distributed`` )
+Training Llama-2-7B/13B/70B using Tensor Parallelism and Pipeline Parallelism with Neuron PyTorch-Lightning 
 =========================================================================================
 
 In this section, we showcase to pretrain a Llama2 7B/13B/70B with Tensor Parallelism and Pipeline Parallel using Neuron PyTorch-Lightning APIs, please refer to :ref:`Llama2 7B Tutorial <llama2_7b_tp_zero1_tutorial>`, :ref:`Llama2 13B/70B Tutorial <llama2_tp_pp_tutorial>`
@@ -82,7 +82,7 @@ If you want to pre-train Llama 70B, you would need to run the following steps -
 
 
 Next, we tokenize our dataset. 
-`Note:`` To tokenize the data, we must request the tokenizer from `HuggingFace` and `Meta` by following 
+``Note``: To tokenize the data, we must request the tokenizer from `HuggingFace` and `Meta` by following 
 the instructions at the following link: `HuggingFace Llama 2 7B Model <https://huggingface.co/meta-llama/Llama-2-7b>`__ .
 Use of the Llama 2 model is governed by the Meta license. In order to download the model weights and tokenizer, please 
 visit the above website and accept their License before requesting access. After access has been granted, 
@@ -97,7 +97,7 @@ Next let’s download and pre-process the dataset:
    cd ~/examples/llama2_lightning
    python3 get_dataset.py --llama-version 2  # currently we only support Llama-2 models
 
-`Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/llama2_lightning'. Use `repo_type` argument if needed.`` 
+``Note``: In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/llama2_lightning'. Use `repo_type` argument if needed.`` 
 This could be because of a stale cache. Try deleting the cache using: 
 
 .. code:: ipython3
@@ -124,7 +124,7 @@ Let’s run the command below:
 This script uses a tensor-parallel size of 8.
 This will automatically set the zero-1 sharding degree to 16 (4 * 32 workers / tensor_parallel_size). 
 
-`Note`: You can use any number of nodes in this case, would just need to adjust the number of nodes in the above 
+``Note``: You can use any number of nodes in this case, would just need to adjust the number of nodes in the above 
 slurm command accordingly. Also, the number of nodes used in parallel_compile command should be same as the actual 
 training run. This is because, as the number of nodes change, the data-parallel degree would change too. This would 
 result in more workers participating in operations like `gradient all-reduce` which would result in new graphs getting 

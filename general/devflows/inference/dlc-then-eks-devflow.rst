@@ -1,7 +1,7 @@
 .. _dlc-then-eks-devflow:
 
-Deploy  Neuron Container on Elastic Kubernetes Service (EKS)
-============================================================
+Deploy Neuron Container on Elastic Kubernetes Service (EKS) for Inference
+=========================================================================
 
 .. contents:: Table of Contents
    :local:
@@ -29,22 +29,15 @@ You can use the Neuron version of the `AWS Deep Learning Containers <https://doc
 Setup Environment
 -----------------
 
-1. Install pre-requisits:
-	Follow `these instruction <https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html>`_ to install or upgrade the *eksctl* command line utility on your local computer.
+Please add inferentia nodes using instructions at :ref:`tutorial-k8s-env-setup-for-neuron` . 
 
-	Follow `these instruction <https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html>`_ to install *kubectl* in the same computer. *kubectl* is a command line tool for working with Kubernetes clusters.
-
-
-2. Follow the instructions in this `EKS documentation link <https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html>`_ to set up AWS Inferentia on your EKS cluster.
-   Using the YML deployment manifest shown `in the same link <https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html#deploy-tensorflow-serving-application>`_, replace the `image` in the `containers` specification with the one you built using :ref:`how-to-build-neuron-container` above.
+Using the YML deployment manifest shown `in the EKS documentation for inferentia <https://docs.aws.amazon.com/eks/latest/userguide/inferentia-support.html#deploy-tensorflow-serving-application>`_, replace the `image` in the `containers` specification with the one you built using :ref:`how-to-build-neuron-container`.
 
    .. note::
 
-     Before deploying your task definition to your EKS cluster, make sure to push the image to ECR. Refer to `Pushing a Docker image <https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html>`_ for more information.
+     Before deploying the yaml to your EKS cluster, make sure to push the image to ECR. Refer to `Pushing a Docker image <https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html>`_ for more information.
 
 
-Self-managed Kubernetes
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Please refer to :ref:`tutorial-k8s-env-setup-for-neuron`. In :ref:`example-deploy-rn50-as-k8s-service`, the
-container image referenced in the YML manifest is created using :ref:`how-to-build-neuron-container`.
+Inference Example
+-----------------
+Please refer to :ref:`example-deploy-rn50-as-k8s-service` run a simple inference example. Note that the container image referenced in the YML manifest is created using :ref:`how-to-build-neuron-container`.

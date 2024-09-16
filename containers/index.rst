@@ -1,70 +1,36 @@
 .. _neuron_containers:
 
-Deploy Containers with Neuron
-=============================
+Neuron Containers
+=================
 
 .. toctree::
     :maxdepth: 1
-    :hidden:
 
-    Locate Neuron DLC Image </containers/locate-neuron-dlc-image>
-    Getting Started </containers/getting-started>
-    Kubernetes Getting Started </containers/kubernetes-getting-started>
-    Tutorials </containers/tutorials>
-    Developer Flows </containers/developerflows>
-    FAQ, Troubleshooting and Release Note </containers/faq-troubleshooting-releasenote>
+    /containers/getting-started
+    /containers/locate-neuron-dlc-image
+    /containers/dlc-then-customize-devflow
+    /containers/neuron-plugins
+    /containers/faq
 
 
+In this section, you'll find resources to help you use containers for accelerating your deep learning models on Inferentia and Trainium instances.
 
-In this section you will find resources to help you use containers for your accelerated deep learning model acceleration on top of Inferentia and Trainium enabled instances. 
+Getting started with Neuron DLC using Docker
+--------------------------------------------
+AWS Neuron Deep Learning Containers (DLCs) are a set of Docker images for training and serving models on AWS Trainium and Inferentia instances using AWS Neuron SDK. To build a Neuron container using Docker, please refer to :ref:`containers-getting-started`.
 
-The section is organized based on the target deployment environment
-and use case.  In most cases, it is recommended to use a preconfigured
-`Deep Learning Container (DLC) <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/what-is-dlc.html>`_ from AWS.
-Each DLC is pre-configured to have all of the Neuron components installed and is specific to the chosen ML Framework.
+Neuron Deep Learning Containers
+-------------------------------
+In most cases, it is recommended to use a preconfigured `Deep Learning Container (DLC) <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/what-is-dlc.html>`_ from AWS. Each DLC is pre-configured to have all of the Neuron components installed and is specific to the chosen ML Framework. For more details on Neuron Deep Learning Containers, please refer to :ref:`locate-neuron-dlc-image`.
 
-.. dropdown::  Locate Neuron DLC image
-         :class-title: sphinx-design-class-title-med
-         :class-body: sphinx-design-class-body-small
-         :animate: fade-in
+Customize Neuron DLC
+---------------------
+Neuron DLC can be customized as needed. To learn more about how to customize  the Neuron Deep Learning Container (DLC) to fit your specific project needs, please refer to :ref:`containers-dlc-then-customize-devflow`.
 
-         .. include:: /containers/locate-neuron-dlc-image.txt
+Neuron Plugins for Containerized Environments
+---------------------------------------------
+Neuron provides plugins for better observability and fault tolerance. For more information on the plugins, please refer to :ref:`neuron-container-plugins`.
 
-.. dropdown::  Getting Started
-         :class-title: sphinx-design-class-title-med
-         :class-body: sphinx-design-class-body-small
-         :animate: fade-in
-
-         .. include:: /containers/getting-started.txt
-
-.. dropdown::  Kubernetes Getting Started
-         :class-title: sphinx-design-class-title-med
-         :class-body: sphinx-design-class-body-small
-         :animate: fade-in
-
-         .. include:: /containers/kubernetes-getting-started.txt
-
-
-.. dropdown::  Tutorials
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        .. include:: /containers/tutorials.txt
-
-
-.. dropdown::  Developer Flows
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        .. include:: /containers/developerflows.txt
-
-
-.. dropdown::  FAQ, Troubleshooting and Release Note
-         :class-title: sphinx-design-class-title-med
-         :class-body: sphinx-design-class-body-small
-         :animate: fade-in
-         :open:
-
-         .. include:: /containers/faq-troubleshooting-releasenote.txt
+Neuron Containers FAQ
+----------------------
+For frequently asked questions and troubleshooting, please refer to :ref:`container-faq`

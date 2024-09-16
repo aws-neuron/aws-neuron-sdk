@@ -1,6 +1,6 @@
 Welcome to AWS Neuron
 =====================
-
+  
 .. meta::
    :description: Neuron SDK is powering AWS Inferentia and Trainium based instances, natively integrated into PyTorch and TensorFlow. Enabling you to quicky start with Amazon EC2, AWS Sagemaker, ECS and EKS.
 
@@ -40,33 +40,49 @@ Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for lates
    :caption: ML Frameworks
 
    PyTorch Neuron </frameworks/torch/index>
+   JAX Neuron </frameworks/jax/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
    Apache MXNet </frameworks/mxnet-neuron/index>
 
+.. toctree::
+   :maxdepth: 1
+   :caption: NeuronX Distributed (NxD)
+
+   NxD Training (Beta) </libraries/nxd-training/index>
+   NxD Core </libraries/neuronx-distributed/index>
+   
 
 .. toctree::
    :maxdepth: 1
-   :caption: ML Libraries
+   :caption: Additional Libraries
 
    Transformers Neuron </libraries/transformers-neuronx/index>
-   Neuron Distributed </libraries/neuronx-distributed/index>
    AWS Neuron Reference for NeMo Megatron </libraries/nemo-megatron/index>
-
-
 
 .. toctree::
    :maxdepth: 1
-   :caption: User Guide
+   :caption: Developer Flows
+
+   Neuron DLAMI </dlami/index>
+   Neuron Containers </containers/index>
+   Workload Orchestration </general/devflows/index>
+   Setup Guide </general/setup/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Runtime & Tools
 
    Neuron Runtime </neuron-runtime/index>
-   Neuron Compiler </compiler/index>
-   Neuron C++ Custom Operators </neuron-customops/index>
    Neuron Tools </tools/index>
    Neuron Calculator </general/calculator/neuron-calculator>
-   Setup Guide </general/setup/index>
-   Neuron DLAMI </dlami/index>
-   Containers Deployment </containers/index>
-   Developer Flows </general/devflows/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Compiler
+
+   Neuron Compiler </compiler/index>
+   Neuron Kernel Interface (Beta) <general/nki/index>
+   Neuron C++ Custom Operators </neuron-customops/index>
 
 .. toctree::
    :maxdepth: 1

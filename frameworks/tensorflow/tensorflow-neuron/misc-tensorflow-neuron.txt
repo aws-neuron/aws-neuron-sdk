@@ -1,4 +1,2 @@
-* :ref:`tensorflow-neuron-release-notes`
 * :ref:`tensorflow-neuron-rn-v2`
 * :ref:`tensorflow-ref-neuron-accelerated-ops`
-* :ref:`neuron-cc-ops-tensorflow`

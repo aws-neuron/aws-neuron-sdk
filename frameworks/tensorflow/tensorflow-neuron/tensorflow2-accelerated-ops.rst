@@ -1,6 +1,6 @@
 .. _tensorflow-ref-neuron-accelerated-ops:
 
-TensorFlow Neuron (``tensorflow-neuron (TF2.x)``) Accelerated (torch-neuron) Python APIs and Graph Ops
+TensorFlow 2.x (``tensorflow-neuron``) Accelerated (``torch-neuron``) Python APIs and Graph Ops
 ======================================================================================================
 
 This page lists TensorFlow 2.x Python APIs and graph operators that are

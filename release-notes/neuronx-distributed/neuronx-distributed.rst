@@ -1,7 +1,7 @@
 .. _neuronx-distributed-rn:
 
 
-Neuron Distributed Release Notes (``neuronx-distributed``)
+NxD Core Release Notes (``neuronx-distributed``)
 ==========================================================
 
 .. contents:: Table of contents
@@ -10,7 +10,31 @@ Neuron Distributed Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
-Neuron Distributed [0.8.0]
+.. _neuronx-distributed-rn-0-9-0:
+
+NxD Core [0.9.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 09/16/2024
+
+New in this release
+-------------------
+
+**Training:**
+
+* Added LoRA adaptor support
+* Added support for GPU compatible precision support using ZeRO-1
+
+**Inference:**
+
+* Added inference example for DBRX, and Mixtral models
+* Improved inference performance with sequence length autobucketing
+* Improved trace time for inference examples
+* Reduced memory usage by sharing weights across prefill and decode traced models
+
+
+
+NxD Core [0.8.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 07/03/2024
@@ -32,7 +56,7 @@ Known Issues and Limitations
 * Due to weights not being able to be shared across context encoding and token generation trace, inference scale is tested for models up to size Llama-2-70b. For model configurations above this, there is a risk of OOM errors.
 * Tracing Llama-2-70b sized models for inference and loading them to device can take close to two hours. This is due to duplicate sharding of weights for both context encoding and token generation traces.
 
-Neuron Distributed [0.7.0]
+NxD Core [0.7.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 04/01/2024
@@ -54,7 +78,7 @@ Known Issues and Limitations
 
 * Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
 
-Neuron Distributed [0.6.0]
+NxD Core [0.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 12/21/2023
@@ -76,7 +100,7 @@ Known Issues and Limitations
 * Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
 * Pipeline-parallelism is not supported as part of PyTorch-lightning integration.
 
-Neuron Distributed [0.5.0]
+NxD Core [0.5.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 10/26/2023
@@ -95,7 +119,7 @@ Known Issues and Limitations
 
 * Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
 
-Neuron Distributed [0.4.0]
+NxD Core [0.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 9/15/2023
@@ -113,7 +137,7 @@ Known Issues and Limitations
 
 * Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
 
-Neuron Distributed [0.3.0]
+NxD Core [0.3.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 8/28/2023
@@ -131,7 +155,7 @@ Known Issues and Limitations
 
 * Currently the model checkpointing saves a sharded checkpoint, and users have to write a script to combine the shards.
 
-Neuron Distributed [0.2.0]
+NxD Core [0.2.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 7/19/2023

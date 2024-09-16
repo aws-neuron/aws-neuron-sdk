@@ -1,7 +1,7 @@
 .. _tf-neuronx-ref-auto-replication-python-api:
 
-TensorFlow Neuron (``tensorflow-neuronx``) Auto Multicore Replication (Beta)
-===================================================================================
+TensorFlow 2.x (``tensorflow-neuronx``) Auto Multicore Replication (Beta)
+===========================================================================
 
 The Neuron auto multicore replication Python API enables modifying TensorFlow 2.x
 models trace by ```tensorflow_neuronx.trace``` so that they can be automatically replicated across multiple cores.
@@ -10,8 +10,8 @@ models trace by ```tensorflow_neuronx.trace``` so that they can be automatically
    :local:
    :depth: 1
 
-TensorFlow Neuron TF 2.x (``tensorflow-neuron TF2.x``) Auto Multicore Replication Python API (Beta)
------------------------------------------------------------------------------------------------------------
+TensorFlow 2.x (``tensorflow-neuron TF2.x``) Auto Multicore Replication Python API (Beta)
+-------------------------------------------------------------------------------------------
 
 Method
 ^^^^^^

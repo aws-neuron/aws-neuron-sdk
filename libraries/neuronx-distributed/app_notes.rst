@@ -1,6 +1,6 @@
 .. _neuronx_distributed_appnotes:
 
-App Notes (``neuronx-distributed`` )
+App Notes 
 ====================================
 
 .. toctree::

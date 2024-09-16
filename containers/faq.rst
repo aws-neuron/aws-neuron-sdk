@@ -70,6 +70,7 @@ In the kubernetes environment the EFA device plugin is used to detect and advert
 EFA interfaces. 
 
 ::
+
    kubectl apply -f https://raw.githubusercontent.com/aws-samples/aws-efa-eks/main/manifest/efa-k8s-device-plugin.yml
 
 Application can use the resource type vpc.amazonaws.com/efa in a pod request spec

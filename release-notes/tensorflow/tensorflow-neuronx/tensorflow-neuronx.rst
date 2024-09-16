@@ -1,6 +1,6 @@
 .. _tensorflow-neuronx-release-notes:
 
-TensorFlow Neuron (``tensorflow-neuronx``) Release Notes
+TensorFlow 2.x (``tensorflow-neuronx``) Release Notes
 ========================================================
 
 .. contents:: Table of contents

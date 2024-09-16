@@ -1,6 +1,6 @@
 .. _codegen25_7b_tp_zero1_tutorial:
 
-Training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed``)
+Training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer 
 ==============================================================================================
 
 In this tutorial, we showcase how to pretrain a CodeGen2.5 7B model for program synthesis. Since Codegen2.5's architecture is identical to the one of Llama2, you may want to take a look at our `Llama2 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama_tp_zero1.html>`__ first.
@@ -11,9 +11,9 @@ After setting up the environment and installing ``neuronx-distributed``, we need
 
    mkdir -p ~/examples/tp_zero1_codegen25_7b_hf_pretrain
    cd ~/examples/tp_zero1_codegen25_7b_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_zero1_llama2_7b_hf_pretrain/tp_zero1_llama2_7b_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama2/tp_zero1_llama2_7b_hf_pretrain/logger.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/modeling_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama_hf_pretrain.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/logger.py
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/codegen25/tp_zero1_codegen25_7b_hf_pretrain.sh
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/codegen25/get_dataset_infill.py
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/codegen25/get_dataset_infill.sh

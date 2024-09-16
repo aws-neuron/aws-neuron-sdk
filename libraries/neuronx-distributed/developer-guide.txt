@@ -1,7 +1,2 @@
-* :ref:`tp_developer_guide`
-* :ref:`pp_developer_guide`
-* :ref:`activation_memory_reduction_developer_guide`
-* :ref:`ptl_developer_guide`
-* :ref:`model_optimizer_wrapper_developer_guide`
-* :ref:`save_load_developer_guide`
-* :ref:`neuronx_distributed_inference_developer_guide`
+* :ref:`neuronx_distributed_developer_guide_training`
+* :ref:`neuronx_distributed_developer_guide_inference`

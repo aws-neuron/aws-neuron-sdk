@@ -95,5 +95,5 @@ Neuron core i might perform (forward or backward) computation on microbatch b wh
 computation on microbatch b+1, thereby keeping both Neuron cores active at the same time. An example taken from
 Megatron paper is showed as below
 
-.. image:: images/pp_schedule.png
+.. image:: /libraries/neuronx-distributed/images/pp_schedule.png
    :alt: Image: image.png

@@ -189,14 +189,10 @@ technique increases the achievable throughput by hiding the
 framework-to-neuron overhead, and amortizing it over a larger batch
 size.
 
+.. seealso::
 
-During inference, dynamic batching can be used to process a larger
-client-side inference batch-size, and allow the framework to
-automatically break up the user-batch into smaller batch sizes, to match
-the compiled batch-size. This technique increases the achievable
-throughput by hiding the framework-to-neuron overhead, and amortizing it
-over a larger batch size. See :ref:`torch-neuronx-dynamic-batching`  
-in ``torch-neuronx`` and :ref:`tensorflow-neuronx-special-flags` in ``tensorflow-neuronx``.
+  - :ref:`torch-neuronx-dynamic-batching` in ``torch-neuronx``
+  - :ref:`tensorflow-neuronx-special-flags` in ``tensorflow-neuronx``.
 
 
 Batching in training workloads
@@ -205,6 +201,33 @@ Batching in training workloads
 Unlike inference workloads, training is inherently an offline process,
 and thus doesn’t have latency requirements. This means that training is
 almost always batched to some degree.
+
+Batch-size naming
+^^^^^^^^^^^^^^^^^
+
+For distributed processing, defining the batch size depends on the observation
+level. There are multiple terms you should be aware of when running
+a distributed training job, especially global batch size (GBS) and micro-batch.
+Knowing the batch size in advance is crucial for precompiling the computational
+graph and for setting the hyperparameters.
+
+  global batch-size
+    Number of total samples used for an update of the optimizer.
+    This includes all the repsective gradients that get added up from
+    data-parallel processing or gradient accumulation.
+
+  micro-batch size
+    Smallest unit of the number of samples getting processed in a single step
+    in the accelerator. For very large models, it is frequently chosen to be 1.
+    
+  mini-batch or replica-batch size
+    Number of samples that contribute to a gradient within one data-parallel rank.
+    A mini-batch gradient is obtained by aggregating multiple
+    micro-batch gradients within or without a pipeline (aka. gradient accumulation).
+
+  worker batch
+     The portion of mini-batch samples processed by a worker.
+    
 
 How to determine the optimal batch-size for training workloads?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

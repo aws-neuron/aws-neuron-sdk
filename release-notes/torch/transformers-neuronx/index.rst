@@ -80,10 +80,45 @@ Model features
      - Yes
      - Yes
 
+   * - Llama 3.1
+     - Yes
+     - Yes
+     - Yes     
+
    * - Mistral
      - Yes
      - Yes
      - Yes
+
+Release [0.12.313]
+----------------------
+Date: 09/16/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support for model serialization (save and load) of all models except the ``GPTJForSampling`` and ``GPTNeoXForSampling``` model classes, which reduces future model load time by saving a transformed and sharded set of weights as a new safetensors checkpoint.
+- Support for on device sampling (Top P) with Continuous batching
+- Support for Scaled RoPE for LLAMA 3.1 models
+- Support for multi-node inference for LLAMA 3.1 405B model for specific sequence lengths
+- Support for FlashDecoding (using ``shard_over_sequence``) for supporting long context lengths upto 128k   `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`__
+
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Fixes to handle ``seq_ids`` consistently across vLLM versions
+- Fixes for KV head full replication logic errors
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use ``constants.LAYOUT_SBH`` instead.
+
 
 Release [0.11.351.0]
 ----------------------

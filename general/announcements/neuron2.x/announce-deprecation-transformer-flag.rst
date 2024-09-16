@@ -5,7 +5,7 @@
 .. _announce-deprecation-transformer-flag:
 
 Announcing deprecation for ``--model-type=transformer-inference`` compiler flag
--------------------------------------------
+---------------------------------------------------------------------------------
 
 Starting with :ref:`Neuron release 2.14 <neuron-2.14.0-whatsnew>`, the ``--model-type=transformer-inference`` compiler flag is deprecated.
 

@@ -54,7 +54,11 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │           ├── application_memory
   │           ├── constants
   │           ├── dma_buffers
-  │           └── tensors
+  │           ├── dma_rings
+  │           ├── driver_memory
+  │           ├── notifications
+  │           ├── tensors
+  │           └── uncategorized
   ├── neuron_core0/
   │       ├── info/
   │       │   └── architecture/
@@ -69,6 +73,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │       │   │   ├── failure
   │       │   │   ├── infer_completed_with_error
   │       │   │   ├── invalid_error
+  │       │   │   ├── oob_error
   │       │   │   ├── success
   │       │   │   ├── generic_error
   │       │   │   ├── infer_completed_with_num_error
@@ -76,17 +81,24 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │       │   │   └── timeout
   │       │   ├── memory_usage/
   │       │   │   ├── device_mem/
-  │       │   │   │    ├── constants
-  │       │   │   │    ├── model_code
-  │       │   │   │    ├── model_shared_scratchpad
-  │       │   │   │    ├── runtime_memory
-  │       │   │   │    └── tensors
+  │       │   │   │   ├── collectives
+  │       │   │   │   ├── constants
+  │       │   │   │   ├── dma_rings
+  │       │   │   │   ├── driver_memory
+  │       │   │   │   ├── model_code
+  │       │   │   │   ├── model_shared_scratchpad
+  │       │   │   │   ├── nonshared_scratchpad
+  │       │   │   │   ├── notifications
+  │       │   │   │   ├── runtime_memory
+  │       │   │   │   ├── tensors
+  │       │   |   │   └── uncategorized
   │       │   │   └── host_mem
   │       │   └── other_info/
   │       │       ├── flop_count
   │       │       ├── inference_count
   │       │       ├── model_load_count
-  │       │       └── reset_count
+  │       │       ├── reset_fail_count
+  │       │       └── reset_req_count
   │       └── ...
   │── neuron_core1/
   │   │   ├── info/
@@ -123,7 +135,7 @@ Each counter has the same filesystem structure like this:
 
 
 
-Description for Each Metric
+Description for Each Field
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``info/``: This directory stores general information about hardware and software. None of them are counter types.
@@ -153,7 +165,7 @@ Description for Each Metric
   
   * ``host_mem/``: The amount of memory that Neuron Runtime uses for input and output tensors.
 
-    * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, and ``tensors/``. Definitions for these categories can be found in the :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
+    * The host memory per Neuron Device is further categorized into four types: ``application_memory/``, ``constants/``, ``dma_buffers/``, ``dma_rings/``, ``driver_memory/``, ``notifications/``, ``tensors/``, ``uncategorized/``.  These categories provide more granular host memory classification compared to :ref:`Host Used Memory <neuron_top_host_mem_usage>` section. Each of these categories has total, present, and peak
 
   * ``hardware/``: Hardware statistics.
 
@@ -170,15 +182,19 @@ Description for Each Metric
 
   * ``model_load_count``:  The number of successful model loads
 
-  * ``reset_count``: The number of successful device resets
+  * ``reset_fail_count``: The number of failed device resets
+
+  * ``reset_req_count``:  The number of device resets requests
 
 
-Other metrics:
+Other fields:
 
 * ``connected_devices``: The list of connected devices' ids. You should see the same output as neuron-ls's CONNECTED DEVICES.
 
+* ``reset``: write to this file resets corresponding the Neuron Device.
 
-Read and Write to Metrics
+
+Read and Write to Sysfs
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Reading a sysfs file gives the value for the corresponding metric. You can use the cat command to view the contents of the sysfs files.: 
@@ -195,6 +211,14 @@ Sysfs metrics of counter type are write to clear. You can write any value to the
 .. code-block:: bash
 
   ubuntu@ip-xxx-xx-xx-xxx:~$ echo 1 | sudo tee /sys/devices/virtual/neuron_device/neuron0/neuron_core0/stats/status/failure/total 
+  1
+
+
+Writing to ``reset`` resets the corresponding Neuron Device. E.g. the below resets Neuron Device 0:
+
+.. code-block:: bash
+
+  ubuntu@ip-xxx-xx-xx-xxx:~$ echo 1 | sudo tee /sys/devices/virtual/neuron_device/neuron0/reset
   1
 
 Note

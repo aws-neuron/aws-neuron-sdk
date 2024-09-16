@@ -76,6 +76,21 @@ Decoders
      - torch-neuronx
      - * `HuggingFace Pretrained GPT2 Feature Extraction on Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_gpt2_feature_extraction_on_trn1.ipynb>`_
   
+   * - meta-llama/Llama-3.1-8b
+     - transformers-neuronx
+     - * `Run Hugging Face Llama 3.1 8B autoregressive sampling on Inf2 & Trn1 with 32k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-32k-sampling.ipynb>`_
+       * `Run Hugging Face Llama 3.1 8B autoregressive sampling on Inf2 & Trn1 with 128k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`_
+       * `Run meta-llama/Meta-Llama-3.1-8B autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3.1-8b-sampling.ipynb>`_
+   
+   * - meta-llama/Llama-3.1-70b
+     - transformers-neuronx
+     - * `Run Hugging Face Llama 3.1 70B autoregressive sampling on Trn1 with 64k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-64k-sampling.ipynb>`_
+       * `Run Hugging Face meta-llama/Meta-Llama-3.1-70B autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3.1-70b-sampling.ipynb>`_
+
+   * - meta-llama/Llama-3.1-405b
+     - transformers-neuronx
+     - * `Run Hugging Face Llama 3.1 405B autoregressive sampling on Trn1/Trn1n with 16k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_
+
    * - meta-llama/Llama-3-8b
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-3-8b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3-8b-sampling.ipynb>`_
@@ -84,11 +99,9 @@ Decoders
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-3-70b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3-70b-sampling.ipynb>`_
 
-
    * - meta-llama/Llama-2-13b
      - transformers-neuronx
      - * `Run Hugging Face meta-llama/Llama-2-13b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
-
 
    * - meta-llama/Llama-2-70b
      - transformers-neuronx
@@ -114,6 +127,15 @@ Decoders
    * - Mixtral-8x7B-v0.1
      - transformers-neuronx
      - * `Run Hugging Face mistralai/Mixtral-8x7B-v0.1 autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_
+
+   * - Mixtral-8x7B
+     - neuronx-distributed
+     - * `Mixtral inference with NeuronX Distributed on Inf2 & Trn1 <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/mixtral>`_
+
+
+   * - DBRX
+     - neuronx-distributed
+     - * `DBRX inference with NeuronX Distributed on Inf2 & Trn1 <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/dbrx>`_  
 
    * - codellama/CodeLlama-13b-hf
      - transformers-neuronx
@@ -251,6 +273,51 @@ Stable Diffusion
    * - stable-diffusion-2-inpainting
      - torch-neuronx
      - * `stable-diffusion-2-inpainting model Inference on Trn1 / Inf2 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_sd2_inpainting_936_624_inference.ipynb>`_
+
+
+.. _diffusion_transformers_samples_inference_inf2_trn1:
+Diffusion Transformers
+----------------------
+
+.. list-table::
+   :widths: 20 15 45 
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - Model
+     - Frameworks/Libraries
+     - Samples and Tutorials
+
+   * - pixart-alpha
+     - torch-neuronx
+     - * `HuggingFace PixArt Alpha (256x256, 512x512 square resolution) Inference on Trn1 / Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_pixart_alpha_inference_on_inf2.ipynb>`_
+
+   * - pixart-sigma
+     - torch-neuronx
+     - * `HuggingFace PixArt Sigma (256x256, 512x512 square resolution) Inference on Trn1 / Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_pixart_sigma_inference_on_inf2.ipynb>`_
+
+   
+
+.. _audio_model_samples_inference_inf2_trn1:
+
+Audio
+-----
+
+.. list-table::
+   :widths: 20 15 45 
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - Model
+     - Frameworks/Libraries
+     - Samples and Tutorials
+       
+   * - wav2vec2-conformer
+     - torch-neuronx
+     - * `Run HuggingFace Pretrained Wav2Vec2-Conformer with Rotary Position Embeddings Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_wav2vec2_conformer_rope_inference_on_inf2.ipynb>`_
+       * `Run HuggingFace Pretrained Wav2Vec2-Conformer with Relative Position Embeddings Inference on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_wav2vec2_conformer_relpos_inference_on_inf2.ipynb>`_
 
 
 

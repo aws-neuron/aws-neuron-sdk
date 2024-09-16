@@ -15,6 +15,8 @@ import sys
 import datetime
 
 sys.path.append(os.path.abspath("./_ext"))
+sys.path.append(os.path.abspath("./general/nki/api"))
+sys.path.append(os.path.abspath("./frameworks/torch/torch-neuron/"))
 #sys.path.append(os.path.abspath("./_static"))
 
 # get environment variables
@@ -79,6 +81,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'local_documenter',
     'archive',
     "sphinx_copybutton",
@@ -90,7 +93,7 @@ html_sidebars = {
 }
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['_templates', 'general/nki/_templates/']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -108,6 +111,14 @@ nbsphinx_execute = 'never'
 html_logo = 'images/Site-Merch_Neuron-ML-SDK_Editorial.png'
 
 napoleon_google_docstring = True
+
+# Turn on figure/table numbering
+numfig = True
+
+# -- autodoc/autosummary options -------------------------------------------------
+
+autosummary_generate = True  # Turn on sphinx.ext.autosummary
+
 
 # -- more options -------------------------------------------------
 
@@ -135,10 +146,10 @@ extlinks = {
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
     'torch': ('https://pytorch.org/docs/master/', None),
     'transformers': ('https://huggingface.co/docs/transformers/master/en/', None),
 }
-
 
 # -- Options for Theme  -------------------------------------------------
 
@@ -146,7 +157,7 @@ intersphinx_mapping = {
 
 #top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
 
-top_banner_message="Neuron 2.19.1 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
+top_banner_message="Neuron 2.20.0 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
@@ -159,8 +170,13 @@ html_theme_options = {
     "home_page_in_toc": False,
     "repository_branch" : branch_name,
     "announcement": top_banner_message,
+    # "max_navbar_depth": 2, # needs sphinx_book_theme >= v1.1.0
 }
 
+html_context = {
+   # ...
+   "default_mode": "light"
+}
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -239,4 +255,4 @@ linkcheck_ignore = [r'http://localhost:\d+/',r'https://awsdocs-neuron.readthedoc
 ,r'https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/examples/pytorch/torch-neuronx/t5-inference-tutorial.ipynb',r'https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md',r'https://github.com/pytorch/PiPPy/blob/main/pippy/IR.py#L697', r'https://github.com/pytorch/pytorch/blob/main/torch/fx/_symbolic_trace.py#L241', r'https://github.com/pytorch/xla/blob/master/torch_xla/utils/checkpoint.py#L129', r'https://github.com/aws-neuron/neuronx-distributed/blob/main/src/neuronx_distributed/parallel_layers/layer_norm.py#L32', r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.py#L273C1-L289C55'
 ,r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install',r'https://github.com/google-research/bert#user-content-pre-trained-models',r'https://github.com/google-research/bert#user-content-sentence-and-sentence-pair-classification-tasks', r'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-retirement.html', r'https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events', r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/modeling_gpt_neox_nxd.py',r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.py',r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb']
 linkcheck_exclude_documents = [r'src/examples/.*', 'general/announcements/neuron1.x/announcements', r'release-notes/.*',r'containers/.*',r'general/.*']
-nitpicky = True
+nitpicky = False
