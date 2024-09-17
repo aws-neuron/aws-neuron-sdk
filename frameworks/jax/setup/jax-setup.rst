@@ -38,8 +38,8 @@ pip repository.
     Amazon Linux 2023
 
     .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 218
-        :end-line: 219
+        :start-line: 221
+        :end-line: 222
 
 .. dropdown::  Install the JAX Neuron Plugin
     :class-title: sphinx-design-class-title-small
