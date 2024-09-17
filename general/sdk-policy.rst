@@ -163,7 +163,7 @@ The following table outlines the details for each phase for Neuron software:
 |                               | This phase is usually short and during it AWS will provide for Neuron Software on an as-needed basis.                | and Neuron components                            |
 +-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
 | General Availability (Stable) | During this phase, AWS releases :ref:`regular <neuron-regular-updates>`updates for the Neuron Software based         |                                                  |
-|                               | on a predefined release cadence of the Neuron SDK or provides :ref:`maintenance updates <neuron-maintenance-updates>` |                                                  |
+|                               | on a predefined release cadence of the Neuron SDK or provides :ref:`maintenance updates <neuron-maintenance-updates>`|                                                  |
 |                               | for Neuron Software on an as-needed basis.                                                                           |                                                  |
 |                               | See :ref:`Neuron Software Classification <sdk-classification>` for more information                                  |                                                  |
 +-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
