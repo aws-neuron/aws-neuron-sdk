@@ -1,7 +1,7 @@
 .. _inference-mxnet-neuron:
 
-Inference (mxnet-neuron)
-========================
+Inference (mxnet-neuron) (maintenance)
+=======================================
 
 .. toctree::
     :maxdepth: 1

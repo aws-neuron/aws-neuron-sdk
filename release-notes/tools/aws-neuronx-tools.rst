@@ -8,6 +8,21 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.19.0.0]
+------------------------
+Date: 09/16/2024
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Added support for Neuron Kernel Interface (NKI).  Please see :ref:`neuron_profile_for_nki` for more info.
+* Updated ``neuron-profile`` JSON output to include information regarding instruction dependencies, DMA throughput, and SRAM usage.  See :ref:`neuron-profile-ug-alternative-outputs` on how to generate this output.
+* Updated Neuron Profiler UI to display transpose information for DMAs (when applicable).  Hover over the tooltip for further details (see :ref:`neuron-profile-ug-features` on using tooltips).
+
+Bug fixes
+^^^^^^^^^
+* Fixed error handling in neuron-top to exit gracefully when passing an unknown argument
+
+
 Neuron Tools  [2.18.3.0]
 ------------------------
 Date: 07/03/2024

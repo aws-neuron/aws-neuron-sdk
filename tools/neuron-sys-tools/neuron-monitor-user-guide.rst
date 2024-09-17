@@ -281,7 +281,6 @@ Contains basic information about the Neuron hardware.
 
      "neuron_hardware_info": {
        "neuron_device_type": "trainium",
-       "neuron_device_version": "v2",
        "neuroncore_version": "v2",
        "neuron_device_count": 16,
        "neuron_device_memory_size": 34359738368,
@@ -290,7 +289,6 @@ Contains basic information about the Neuron hardware.
      }
 
 -  ``neuron_device_type``: type of the Neuron Devices on the instance
--  ``neuron_device_version``: version of the Neuron Devices on the instance - **please note Neuron will end support for this field in an upcoming release**
 -  ``neuroncore_version``: version of the NeuronCores on the instance
 -  ``neuron_device_count`` : number of available Neuron Devices
 -  ``neuron_device_memory_size``: total memory available on each Neuron Device

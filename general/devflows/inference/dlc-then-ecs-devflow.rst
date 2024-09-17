@@ -1,7 +1,7 @@
-.. _dlc-then-ecs-devflow:
+.. _inference-dlc-then-ecs-devflow:
 
-Deploy  Neuron Container on Elastic Container Service (ECS)
-===========================================================
+Deploy Neuron Container on Elastic Container Service (ECS) for Inference
+========================================================================
 
 .. contents:: Table of Contents
    :local:
@@ -18,13 +18,13 @@ Description
    :alt: Neuron developer flow for DLC on ECS
    :align: middle
 
-You can use the Neuron version of the `AWS Deep Learning Containers <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ecs-tutorials-inference.html>`_ to run inference on Amazon Elastic Container Service (ECS). In this developer flow, you set up an ECS cluster with inf1 instances, create a task description for your inference service and deploy it to your cluster. This developer flow assumes:
+You can use the Neuron version of the `AWS Deep Learning Containers <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ecs-tutorials-inference.html>`_ to run inference on Amazon Elastic Container Service (ECS). In this developer flow, you set up an ECS cluster with inf1/inf2 instances, create a task description for your inference service and deploy it to your cluster. This developer flow assumes:
 
 1. The model has already been compiled through :ref:`Compilation with Framework API on EC2 instance <ec2-then-ec2-devflow>` or through :ref:`Compilation with Sagemaker Neo <neo-then-hosting-devflow>`. 
 
 2. You already set up your container to retrieve it from storage.
 
-.. _dlc-then-ecs-setenv:
+.. _inference-dlc-then-ecs-setenv:
 
 Setup Environment
 -----------------
@@ -36,12 +36,12 @@ Setup Environment
 2. Define an Inference Task:
 	Use the instruction on the `DLC Inference on ECS Tutorial <https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/deep-learning-containers-ecs-tutorials-inference.html>`_ to define a task and create a service for the appropriate framework.
 
-	When creating tasks for inf1 instances on ECS, be aware of the considerations and requirements listed in `Working with inference workloads on Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html>`_. 
+	When creating tasks for inferentia instances on ECS, be aware of the considerations and requirements listed in `Working with inference workloads on Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html>`_. 
 
 
 3. Use the container image created using :ref:`how-to-build-neuron-container` as the ``image`` in your task definition.
 
-   .. _push_to_ecr_note:
+   .. _inference-push_to_ecr_note:
 
    .. note::
 

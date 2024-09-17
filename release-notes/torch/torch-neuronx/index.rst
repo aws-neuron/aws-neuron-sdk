@@ -14,6 +14,238 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [2.1.2.2.3.0]
+---------------------
+Date: 09/16/2024
+
+Summary
+~~~~~~~
+This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and protobuf versions 3.20+, as well as improved BERT performance.
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for Neuron Kernel Interface (NKI). Please see [NKI documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html) for more information.
+- Added support for Python 3.11.
+- Added support for protobuf versions 3.20+.
+- (Training) Increased performance for BERT-Large pretraining by changing ``NEURON_TRANSFER_WITH_STATIC_RING_OPS`` default.
+- (Training) Improved Neuron Cache locking mechanism for better Neuron Cache performance during multi-node training
+- (Inference) Added support for weight separated models for DataParallel class.
+
+Known limitations
+~~~~~~~~~~~~~~~~~
+The following features are not yet supported in this version of Torch-Neuronx 2.1:
+* (Training) GSPMD
+* (Training/Inference) TorchDynamo (torch.compile)
+* (Training) DDP/FSDP
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+Better performance for BERT-Large pretraining
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see about 20% better trn1.32xlarge performance for BERT-Large BF16 pre-training with PyTorch 2.1 (torch-neuronx) when ``NEURON_TRANSFER_WITH_STATIC_RING_OPS="Embedding"`` (the new default) instead of the previous default ``"Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d"``. No action is needed from users when using release 2.20's torch-neuronx which includes the new default. See :ref:`list of environment variables<pytorch-neuronx-envvars>` regarding information about ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``.
+
+Known issues
+~~~~~~~~~~~~
+
+Please see the :ref:`Introducing PyTorch 2.1 Support<introduce-pytorch-2-1>` for a full list of known issues.
+
+Error ``cannot import name 'builder' from 'google.protobuf.internal'`` after installing compiler from earlier releases (2.19 or earlier)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using torch-neuronx from Neuron SDK release 2.20 and installing the compiler from an earlier release (Neuron SDK release 2.19 or earlier), you may encounter the error ``ImportError: cannot import name 'builder' from 'google.protobuf.internal``. This issue is caused by the compiler's dependency on protobuf version 3.19 in the Neuron SDK release 2.19 or earlier.
+
+To work-around this issue, please install protobuf 3.20.3:
+
+.. code:: bash
+
+    pip install protobuf==3.20.3
+
+Ignore the pip dependency check error that may occur due to the earlier compiler's dependency on protobuf version 3.19.
+
+
+Lower accuracy when fine-tuning Roberta
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the current Neuron SDK release 2.20, we have observed lower accuracy (68% vs expected 89%) when fine-tuning the RoBERTa-large model on the MRPC dataset. This issue will be addressed in a future release.
+
+To work around this problem, you can use the compiler from Neuron SDK release 2.19, while also installing the correct version of the protobuf library. Run the following command:
+
+.. code:: bash
+
+   python3 -m pip install neuronx-cc==2.14.227.0+2d4f85be protobuf==3.20.3
+
+Please note the protobuf version requirement mentioned in the previous section, as it is necessary to address the compatibility issue between the Neuron SDK 2.19 compiler and the protobuf library.
+
+Slower loss convergence for NxD LLaMA-3 70B pretraining using ZeRO1 tutorial
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`LLaMA-3 70B tutorial for neuronx-distributed<llama3_tp_pp_tutorial>` when using the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``). To work-around this issue, please only use ``--model-type transformer`` flag (``NEURON_CC_FLAGS="--model-type transformer"``).
+
+GlibC error on Amazon Linux 2
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If using PyTorch 2.1 (torch-neuronx) on Amazon Linux 2, you will see a GlibC error below. Please switch to a newer supported OS such as Ubuntu 20, Ubuntu 22, or Amazon Linux 2023.
+
+.. code:: bash
+
+    ImportError: /lib64/libc.so.6: version `GLIBC_2.27' not found (required by /tmp/debug/_XLAC.cpython-38-x86_64-linux-gnu.so)
+
+
+``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With PyTorch 2.1 (torch-neuronx), HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. To work-around this issue, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
+
+.. code:: python
+
+    import copy
+    import torch_xla.core.xla_model as xm
+    def mesh_reduce(tag, data, reduce_fn):
+        xm.rendezvous(tag)
+        xdatain = copy.deepcopy(data)
+        xdatain = xdatain.to("xla")
+        xdata = xm.all_gather(xdatain, pin_layout=False)
+        cpu_xdata = xdata.detach().to("cpu")
+        cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
+        xldata = [x for x in cpu_xdata_split]
+        return reduce_fn(xldata)
+    xm.mesh_reduce = mesh_reduce
+
+
+
+``Check failed: tensor_data`` error during when using ``torch.utils.data.DataLoader`` with ``shuffle=True``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With PyTorch 2.1 (torch-neuronx), using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
+
+.. code:: bash
+
+    RuntimeError: torch_xla/csrc/xla_graph_executor.cpp:562 : Check failed: tensor_data
+
+This is due to ``synchronize_rng_states`` using ``xm.mesh_reduce`` to synchronize RNG states. ``xm.mesh_reduce`` in turn uses ``xm.rendezvous()`` with payload, which as noted in 2.x migration guide, would result in extra graphs that could lead to lower performance due to change in ``xm.rendezvous()`` in torch-xla 2.x. In the case of :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`, using ``xm.rendezvous()`` with payload also lead to the error above. This limitation will be fixed in an upcoming release. For now, to work around the issue, please disable shuffle in DataLoader when ``NEURON_EXTRACT_GRAPHS_ONLY`` environment is set automatically by Neuron Parallel Compile:
+
+.. code:: python
+
+    train_dataloader = DataLoader(
+        train_dataset, shuffle=(os.environ.get("NEURON_EXTRACT_GRAPHS_ONLY", None) == None), collate_fn=default_data_collator, batch_size=args.per_device_train_batch_size
+    )
+
+Additionally, as in the previous section, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
+
+.. code:: python
+
+    import copy
+    import torch_xla.core.xla_model as xm
+    def mesh_reduce(tag, data, reduce_fn):
+        xm.rendezvous(tag)
+        xdatain = copy.deepcopy(data)
+        xdatain = xdatain.to("xla")
+        xdata = xm.all_gather(xdatain, pin_layout=False)
+        cpu_xdata = xdata.detach().to("cpu")
+        cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
+        xldata = [x for x in cpu_xdata_split]
+        return reduce_fn(xldata)
+    xm.mesh_reduce = mesh_reduce
+
+Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
+
+Compiler assertion error when running Stable Diffusion training
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, with PyTorch 2.1 (torch-neuronx), we are seeing the following compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*`` or disable gradient accumulation in torch-neuronx 2.1.
+
+.. code:: bash
+
+    ERROR 222163 [NeuronAssert]: Assertion failure in usr/lib/python3.8/concurrent/futures/process.py at line 239 with exception:
+    too many partition dims! {{0,+,960}[10],+,10560}[10]
+
+
+Release [1.13.1.1.16.0]
+-----------------------
+Date: 09/xx/2024
+
+Summary
+~~~~~~~
+This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and protobuf versions 3.20+.
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for Neuron Kernel Interface (NKI). Please see [NKI documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html) for more information.
+- Added support for Python 3.11.
+- Added support for protobuf versions 3.20+.
+- (Inference) Added support for weight separated models for DataParallel class.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Error ``cannot import name 'builder' from 'google.protobuf.internal'`` after installing compiler from earlier releases (2.19 or earlier)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using torch-neuronx from Neuron SDK release 2.20 and installing the compiler from an earlier release (Neuron SDK release 2.19 or earlier), you may encounter the error ``ImportError: cannot import name 'builder' from 'google.protobuf.internal``. This issue is caused by the compiler's dependency on protobuf version 3.19 in the Neuron SDK release 2.19 or earlier.
+
+To work-around this issue, please install protobuf 3.20.3:
+
+.. code:: bash
+
+    pip install protobuf==3.20.3
+
+Ignore the pip dependency check error that may occur due to the earlier compiler's dependency on protobuf version 3.19.
+
+Hang while training Stable Diffusion v1.5 with PyTorch 1.13 (torch-neuronx)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this release, training Stable Diffusion v1.5 at 512x512 resolution using PyTorch 1.13 (torch-neuronx) currently results in a hang. The fix will be available in an upcoming release. To work-around, you can install compiler from release 2.19 (noting the ``protobuf`` issue mentioned above).
+
+.. code:: bash
+
+    python3 -m pip install neuronx-cc==2.14.227.0+2d4f85be protobuf==3.20.3
+
+Stable Diffusion v2.1 training is unaffected.
+
+Memory leaking in ``glibc``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``glibc`` malloc memory leaks affect Neuron and may be temporarily limited by
+setting ``MALLOC_ARENA_MAX`` or using ``jemalloc`` library (see https://github.com/aws-neuron/aws-neuron-sdk/issues/728).
+
+DDP shows slow convergence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently we see that the models converge slowly with DDP when compared to the
+scripts that don't use DDP. We also see a throughput drop with DDP. This is a
+known issue with torch-xla: https://pytorch.org/xla/release/1.13/index.html#mnist-with-real-data
+
+Runtime crash when we use too many workers per node with DDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, if we use 32 workers with DDP, we see that each worker generates its
+own graph. This causes an error in the runtime, and you may see errors that
+look like this:
+
+::
+
+    bootstrap.cc:86 CCOM WARN Call to accept failed : Too many open files``.
+
+Hence, it is recommended to use fewer workers per node with DDP.
+
+Known Issues and Limitations (Inference)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Torchscript serialization error with compiled artifacts larger than 4GB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using :func:`torch_neuronx.trace`, compiled artifacts which exceed 4GB
+cannot be serialized. Serializing the torchscript artifact will trigger a
+segfault. This issue is resolved in torch but is not yet
+released: https://github.com/pytorch/pytorch/pull/99104
+
 
 Release [2.1.2.2.2.0]
 ---------------------
@@ -44,12 +276,12 @@ Resolved Issues
 Resolved an issue with slower loss convergence for GPT-2 pretraining using ZeRO1 tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Previously with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`. This issue is now resolved. Customer can now run the tutorial with the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``).
+Previously with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`. This issue is now resolved. Customer can now run the tutorial with the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``).
 
 Resolved an issue with slower loss convergence for NxD LLaMA-2 70B pretraining using ZeRO1 tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Previously with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`LLaMA-2 70B tutorial for neuronx-distributed<llama2_tp_pp_tutorial>`. This issue is now resolved. Customer can now run the tutorial with the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``) and turning on functionalization (``XLA_DISABLE_FUNCTIONALIZATION=0``). Turning on functionalization results in slightly higher device memory usage and ~11% lower in performance due to a known issue with torch-xla 2.1 (https://github.com/pytorch/xla/issues/7174). The higher device memory usage also limits LLaMA-2 70B tutorial to run on 16 trn1.32xlarge nodes at the minimum, and running on 8 nodes would result in out-of-memory error. See the :ref:`list of environment variables<>` for more information about ``XLA_DISABLE_FUNCTIONALIZATION``.
+Previously with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`LLaMA-2 70B tutorial for neuronx-distributed<llama2_tp_pp_tutorial>`. This issue is now resolved. Customer can now run the tutorial with the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``) and turning on functionalization (``XLA_DISABLE_FUNCTIONALIZATION=0``). Turning on functionalization results in slightly higher device memory usage and ~11% lower in performance due to a known issue with torch-xla 2.1 (https://github.com/pytorch/xla/issues/7174). The higher device memory usage also limits LLaMA-2 70B tutorial to run on 16 trn1.32xlarge nodes at the minimum, and running on 8 nodes would result in out-of-memory error. See the :ref:`list of environment variables<>` for more information about ``XLA_DISABLE_FUNCTIONALIZATION``.
 
 Resolved an issue where upon a compiler error during XLA JIT execution, the framework process exits with a stack dump followed by a core dump
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,7 +349,7 @@ With release 2.19 compiler, the MRPC dataset accuracy for BERT-base finetuning a
 Resolved the issue with increased in Neuron Parallel Compile time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Torch-NeuronX 2.1, the time to run Neuron Parallel Compile for some model configuration has decreased.
+PyTorch 2.1 (torch-neuronx), the time to run Neuron Parallel Compile for some model configuration has decreased.
 
 Known issues
 ~~~~~~~~~~~~
@@ -127,17 +359,17 @@ Please see the :ref:`Introducing PyTorch 2.1 Support<introduce-pytorch-2-1>` for
 Slower loss convergence for NxD LLaMA-3 70B pretraining using ZeRO1 tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`LLaMA-3 70B tutorial for neuronx-distributed<llama3_tp_pp_tutorial>` when using the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``). To work-around this issue, please only use ``--model-type transformer`` flag (``NEURON_CC_FLAGS="--model-type transformer"``).
+Currently, with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`LLaMA-3 70B tutorial for neuronx-distributed<llama3_tp_pp_tutorial>` when using the recommended flags (``NEURON_CC_FLAGS="--distribution-strategy llm-training --model-type transformer"``). To work-around this issue, please only use ``--model-type transformer`` flag (``NEURON_CC_FLAGS="--model-type transformer"``).
 
 Gradient accumulation is not yet supported for Stable Diffusion due to a compiler error
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with torch-neuronx 2.1, we are seeing a compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. To train Stable Diffusion with gradient accumulation, please use torch-neuronx 1.13 instead of 2.1.
+Currently, with PyTorch 2.1 (torch-neuronx), we are seeing a compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. To train Stable Diffusion with gradient accumulation, please use PyTorch 1.13 (torch-neuronx) instead of PyTorch 2.1 (torch-neuronx).
 
 Enabling functionalization (``XLA_DISABLE_FUNCTIONALIZATION=0``) results in 15% lower performance and non-convergence for the BERT pretraining tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with torch-neuronx 2.1, enabling functionalization (``XLA_DISABLE_FUNCTIONALIZATION=0``) would result in 15% lower performance and non-convergence for the BERT pretraining tutorial. The lower performance is due to missing aliasing for gradient accumulation and is a known issue with torch-xla 2.1 (https://github.com/pytorch/xla/issues/7174). The non-convergence is due to an issue in marking weights as static (buffer address not changing), which can be worked around by setting ``NEURON_TRANSFER_WITH_STATIC_RING_OPS`` to empty string (``NEURON_TRANSFER_WITH_STATIC_RING_OPS=""``. See the :ref:`list of environment variables<>` for more information about ``XLA_DISABLE_FUNCTIONALIZATION``. and ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``.
+Currently, with PyTorch 2.1 (torch-neuronx), enabling functionalization (``XLA_DISABLE_FUNCTIONALIZATION=0``) would result in 15% lower performance and non-convergence for the BERT pretraining tutorial. The lower performance is due to missing aliasing for gradient accumulation and is a known issue with torch-xla 2.1 (https://github.com/pytorch/xla/issues/7174). The non-convergence is due to an issue in marking weights as static (buffer address not changing), which can be worked around by setting ``NEURON_TRANSFER_WITH_STATIC_RING_OPS`` to empty string (``NEURON_TRANSFER_WITH_STATIC_RING_OPS=""``. See the :ref:`list of environment variables<>` for more information about ``XLA_DISABLE_FUNCTIONALIZATION``. and ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``.
 
 .. code:: bash
 
@@ -146,7 +378,7 @@ Currently, with torch-neuronx 2.1, enabling functionalization (``XLA_DISABLE_FUN
 GlibC error on Amazon Linux 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If using Torch-NeuronX 2.1 on Amazon Linux 2, you will see a GlibC error below. Please switch to a newer supported OS such as Ubuntu 20, Ubuntu 22, or Amazon Linux 2023.
+If using PyTorch 2.1 (torch-neuronx) on Amazon Linux 2, you will see a GlibC error below. Please switch to a newer supported OS such as Ubuntu 20, Ubuntu 22, or Amazon Linux 2023.
 
 .. code:: bash
 
@@ -156,7 +388,7 @@ If using Torch-NeuronX 2.1 on Amazon Linux 2, you will see a GlibC error below. 
 ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With torch-neuronx 2.1, HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. To work-around this issue, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
+With PyTorch 2.1 (torch-neuronx), HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. To work-around this issue, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
 
 .. code:: python
 
@@ -178,7 +410,7 @@ With torch-neuronx 2.1, HF Trainer API's use of XLA function ``.mesh_reduce`` ca
 ``Check failed: tensor_data`` error during when using ``torch.utils.data.DataLoader`` with ``shuffle=True``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With torch-neuronx 2.1, using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
+With PyTorch 2.1 (torch-neuronx), using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
 
 .. code:: bash
 
@@ -212,12 +444,12 @@ Additionally, as in the previous section, you can add the following code snippet
 Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently with torch-neuronx 2.1, using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
+Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
 
 Compiler assertion error when running Stable Diffusion training
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with torch-neuronx 2.1, we are seeing the following compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*`` or disable gradient accumulation in torch-neuronx 2.1.
+Currently, with PyTorch 2.1 (torch-neuronx), we are seeing the following compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*`` or disable gradient accumulation in torch-neuronx 2.1.
 
 .. code:: bash
 
@@ -229,10 +461,10 @@ Currently, with torch-neuronx 2.1, we are seeing the following compiler assertio
 Lower performance for BERT-Large
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently we see 8% less performance when running the BERT-Large pre-training tutorial with Torch-NeuronX 2.1 as compared to Torch-NeuronX 1.13.
+Currently we see 8% less performance when running the BERT-Large pre-training tutorial with PyTorch 2.1 (torch-neuronx) as compared to PyTorch 1.13 (torch-neuronx).
 
 
-Release [1.13.1.2.10.12.0]
+Release [1.13.1.1.15.0]
 -----------------------
 Date: 07/03/2024
 
@@ -303,7 +535,7 @@ This release of 2.1 includes support for Neuron Profiler, multi-instance distrib
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to previously supported features (Transformers-NeuronX, Torch-NeuronX Trace API, Torch-NeuronX training, NeuronX-Distributed training), torch-neuronx 2.1 now includes support for:
+In addition to previously supported features (Transformers-NeuronX, Torch-NeuronX Trace API, Torch-NeuronX training, NeuronX-Distributed training), PyTorch 2.1 (torch-neuronx) now includes support for:
 
 * (Inference) NeuronX-Distributed inference
 * (Training/Inference) Neuron Profiler
@@ -317,7 +549,7 @@ Additionally, auto-bucketing is a new feature for torch-neuronx and Neuronx-Dist
 Known limitations
 ~~~~~~~~~~~~~~~~~
 
-The following features are not yet supported in this version of Torch-NeuronX 2.1:
+The following features are not yet supported in this version of PyTorch 2.1 (torch-neuronx):
 
 * (Training) GSPMD
 * (Training) TorchDynamo (torch.compile)
@@ -357,7 +589,7 @@ Please see the :ref:`Introducing PyTorch 2.1 Support<introduce-pytorch-2-1>` for
 GlibC error on Amazon Linux 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If using Torch-NeuronX 2.1 on Amazon Linux 2, you will see a GlibC error below. Please switch to a newer supported OS such as Ubuntu 20, Ubuntu 22, or Amazon Linux 2023.
+If using PyTorch 2.1 (torch-neuronx) on Amazon Linux 2, you will see a GlibC error below. Please switch to a newer supported OS such as Ubuntu 20, Ubuntu 22, or Amazon Linux 2023.
 
 .. code:: bash
 
@@ -367,12 +599,12 @@ If using Torch-NeuronX 2.1 on Amazon Linux 2, you will see a GlibC error below. 
 ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With torch-neuronx 2.1, HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. This is an issue with the trial execution of empty NEFFs and should not affect the normal execution of the training script.
+With PyTorch 2.1 (torch-neuronx), HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. This is an issue with the trial execution of empty NEFFs and should not affect the normal execution of the training script.
 
 ``Check failed: tensor_data`` error during when using ``torch.utils.data.DataLoader`` with ``shuffle=True``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With torch-neuronx 2.1, using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
+With PyTorch 2.1 (torch-neuronx), using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
 
 .. code:: bash
 
@@ -406,13 +638,13 @@ Additionally, you can add the following code snippet (after python imports) to r
 Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently with torch-neuronx 2.1, using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
+Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
 
 
 Compiler assertion error when running Stable Diffusion training
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with torch-neuronx 2.1, we are seeing the following compiler assertion error with Stable Diffusion training. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*``.
+Currently, with PyTorch 2.1 (torch-neuronx), we are seeing the following compiler assertion error with Stable Diffusion training. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*``.
 
 .. code:: bash
 
@@ -422,7 +654,7 @@ Currently, with torch-neuronx 2.1, we are seeing the following compiler assertio
 Compiler assertion error when training using Hugging Face ``deepmind/language-perceiver`` model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with torch-neuronx 2.1, we are seeing the following compiler assertion error when training with Hugging Face ``deepmind/language-perceiver`` model. This will be fixed in an upcoming release. For now, if you would like to train Hugging Face ``deepmind/language-perceiver`` model with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*``.
+Currently, with PyTorch 2.1 (torch-neuronx), we are seeing the following compiler assertion error when training with Hugging Face ``deepmind/language-perceiver`` model. This will be fixed in an upcoming release. For now, if you would like to train Hugging Face ``deepmind/language-perceiver`` model with Neuron SDK release 2.18, please use ``torch-neuronx==1.13.*``.
 
 .. code:: bash
 
@@ -432,12 +664,12 @@ Currently, with torch-neuronx 2.1, we are seeing the following compiler assertio
 Lower performance for BERT-Large
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently we see 8% less performance when running the BERT-Large pre-training tutorial with Torch-NeuronX 2.1 as compared to Torch-NeuronX 1.13.
+Currently we see 8% less performance when running the BERT-Large pre-training tutorial with PyTorch 2.1 (torch-neuronx) as compared to PyTorch 1.13 (torch-neuronx).
 
 Slower loss convergence for GPT-2 pretraining using ZeRO1 tutorial when using recommended compiler flags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` when using recommended compiler flags. To work-around this issue and restore faster convergence, please replace the ``NEURON_CC_FLAGS`` as below:
+Currently with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` when using recommended compiler flags. To work-around this issue and restore faster convergence, please replace the ``NEURON_CC_FLAGS`` as below:
 
 .. code:: python
 
@@ -447,7 +679,7 @@ Currently with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`Ze
 Slower loss convergence for NxD LLaMA 70B pretraining using ZeRO1 tutorial when using recommended compiler flags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`LLaMA-2 70B tutorial for neuronx-distributed<llama2_tp_pp_tutorial>` when using recommended compiler flags. To work-around this issue and restore faster convergence, please replace the ``NEURON_CC_FLAGS`` as below:
+Currently with PyTorch 2.1 (torch-neuronx), we see slower loss convergence in the :ref:`LLaMA-2 70B tutorial for neuronx-distributed<llama2_tp_pp_tutorial>` when using recommended compiler flags. To work-around this issue and restore faster convergence, please replace the ``NEURON_CC_FLAGS`` as below:
 
 .. code:: python
 
@@ -458,12 +690,12 @@ Currently with Torch-NeuronX 2.1, we see slower loss convergence in the :ref:`LL
 Lower accuracy for BERT-base finetuning using HF Trainer API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with Torch-NeuronX 2.1, MRPC dataset accuracy for BERT-base finetuning after 5 epochs is 83% instead of 87%. A work-around is to remove the option ``--model-type=transformer`` from ``NEURON_CC_FLAGS``. This will be fixed in an upcoming release.
+Currently, with PyTorch 2.1 (torch-neuronx), MRPC dataset accuracy for BERT-base finetuning after 5 epochs is 83% instead of 87%. A work-around is to remove the option ``--model-type=transformer`` from ``NEURON_CC_FLAGS``. This will be fixed in an upcoming release.
 
 Increased in Neuron Parallel Compile time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, with Torch-NeuronX 2.1, the time to run Neuron Parallel Compile for some model configuration is increased. In one example, the Neuron Parallel Compile time for NeuronX Nemo-Megatron LLaMA 13B is 2x compared to when using Torch-NeuronX 1.13. This will be fixed in an upcoming release.
+Currently, with PyTorch 2.1 (torch-neuronx), the time to run Neuron Parallel Compile for some model configuration is increased. In one example, the Neuron Parallel Compile time for NeuronX Nemo-Megatron LLaMA 13B is 2x compared to when using PyTorch 1.13 (torch-neuronx). This will be fixed in an upcoming release.
 
 
 Release [1.13.1.1.14.0]
@@ -538,7 +770,7 @@ Introducing the beta release of Torch-NeuronX with PyTorch 2.1 support.
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This version of Torch-NeuronX 2.1 supports:
+This version of PyTorch 2.1 (torch-neuronx) supports:
 
 * (Inference) Transformers-NeuronX
 * (Inference) Torch-NeuronX Trace API
@@ -549,7 +781,7 @@ This version of Torch-NeuronX 2.1 supports:
 Known limitations
 ~~~~~~~~~~~~~~~~~
 
-The following features are not yet supported in this version of Torch-NeuronX 2.1:
+The following features are not yet supported in this version of PyTorch 2.1 (torch-neuronx):
 
 * (Training/Inference) Neuron Profiler
 * (Inference) NeuronX-Distributed inference
@@ -569,7 +801,7 @@ Please see the :ref:`Introducing PyTorch 2.1 Support (Beta)<introduce-pytorch-2-
 Lower performance for BERT-Large
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently we see 8% less performance when running the BERT-Large pre-training tutorial with Torch-NeuronX 2.1 as compared to Torch-NeuronX 1.13.
+Currently we see 8% less performance when running the BERT-Large pre-training tutorial with PyTorch 2.1 (torch-neuronx) as compared to PyTorch 1.13 (torch-neuronx).
 
 Divergence (non-convergence) of loss for BERT/LLaMA when using release 2.16 compiler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

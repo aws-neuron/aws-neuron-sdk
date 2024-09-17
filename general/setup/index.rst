@@ -7,9 +7,11 @@ Setup Guide
     :maxdepth: 1
     :hidden:
 
-    PyTorch Neuron (torch-neuronx) </general/setup/torch-neuronx>
+    Launching Inf/Trn instances on Amazon EC2 </general/devflows/ec2-flows>
+    PyTorch NeuronX (torch-neuronx) </general/setup/torch-neuronx>
     PyTorch Neuron (torch-neuron) </general/setup/torch-neuron>
-    Tensorflow Neuron (tensorflow-neuronx) </general/setup/tensorflow-neuronx>
+    JAX NeuronX </frameworks/jax/index.rst>
+    Tensorflow NeuronX (tensorflow-neuronx) </general/setup/tensorflow-neuronx>
     Tensorflow Neuron (tensorflow-neuron) </general/setup/tensorflow-neuron>
     MxNet Neuron (mxnet-neuron) </general/setup/mxnet-neuron>
 
@@ -18,7 +20,12 @@ Setup Guide
 This section walks you through the various options to install and upgrade Neuron. You have to install Neuron on Trainium and Inferentia powered instances to enable deep-learning acceleration. 
 
 
-.. card:: PyTorch Neuron (``torch-neuronx``) Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
+.. card:: Launching Inf/Trn instances on Amazon EC2
+            :link: amazon-ec2
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
+
+.. card:: PyTorch NeuronX (``torch-neuronx``) Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
             :link: setup-torch-neuronx
             :link-type: ref
             :class-body: sphinx-design-class-title-small
@@ -29,6 +36,10 @@ This section walks you through the various options to install and upgrade Neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
+.. card:: JAX Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
+            :link: setup-jax-neuronx
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small
 
 .. card:: Tensorflow Neuron (``tensorflow-neuronx``) Setup for ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
             :link: setup-tensorflow-neuronx
@@ -47,3 +58,8 @@ This section walks you through the various options to install and upgrade Neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
+
+.. card:: PyTorch Neuron Setup Guides for Rocky Linux 9 (``Inf2`` & ``Trn1`` / ``Trn1n``) Instances
+            :link: setup-rocky-linux-9
+            :link-type: ref
+            :class-body: sphinx-design-class-title-small

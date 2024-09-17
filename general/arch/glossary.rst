@@ -28,7 +28,7 @@ Neuron Devices (Accelerated Machine Learning chips)
      - AWS first generation accelerated machine learning chip supporting inference only
 
    * - .. glossary::
-          Trainium
+          Trainium/Inferentia2
      - AWS second generation accelerated machine learning chip supporting training and inference
 
    * - .. glossary::
@@ -56,6 +56,10 @@ Neuron powered Instances
           Trn1
      - Trainium powered accelerated compute EC2 instance
 
+   * - .. glossary::
+          Inf2
+     - Inferentia2 powered accelerated compute EC2 instance
+
 
 NeuronCore terms
 ^^^^^^^^^^^^^^^^
@@ -81,7 +85,7 @@ NeuronCore terms
 
    * - .. glossary::
           NeuronCore-v2
-     - Neuron Core within Trainium
+     - Neuron Core within Trainium/Inferentia2
 
    * - .. glossary::
           Tensor Engine
@@ -108,6 +112,18 @@ NeuronCore terms
      - Dedicated engine for collective communication, allows for overlapping computation and communication
 
    * - .. glossary::
+          High Bandwidth Memory
+     - `High Bandwidth Memory <https://en.wikipedia.org/wiki/High_Bandwidth_Memory>`_, used as device memory for NeuronCore-v2 and beyond.
+   
+   * - .. glossary::
+          State Buffer
+     - The main software-managed on-chip memory in NeuronCore-v1 and beyond.
+
+   * - .. glossary::
+          Partial Sum Buffer
+     - A second software-managed on-chip memory in NeuronCore-v1 and beyond, with near-memory accumulation support for TensorE output data.
+    
+   * - .. glossary::
           NeuronLink
      - Interconnect between NeuronCores
 
@@ -117,7 +133,26 @@ NeuronCore terms
 
    * - .. glossary::
           NeuronLink-v2
-     - Interconnect between NeuronCores in Trainium device
+     - Interconnect between NeuronCores in Trainium/Inferentia2 device
+
+
+Neuron SDK terms
+^^^^^^^^^^^^^^^^
+
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+      
+
+   * - Term
+     - Description
+
+
+   * - .. glossary::
+          Neuron Kernel Interface
+     - A bare-metal language and compiler for directly programming Neuron devices available on AWS Trainium/Inferentia2 and beyond devices.
 
 
 Abbreviations
@@ -132,6 +167,13 @@ Abbreviations
    * - Abbreviation
      - Description
 
+   * - .. glossary::
+          NxD Core
+     - NeuronX Distributed Core Library
+
+   * - .. glossary::
+          NxD Training
+     - NeuronX Distributed Training Library
 
    * - .. glossary::
           NC
@@ -150,24 +192,36 @@ Abbreviations
      - Neuron Device
 
    * - .. glossary::
-          TensEng
+          TensorE
      - Tensor Engine
 
    * - .. glossary::
-          ScalEng
+          ScalarE
      - Scalar Engine
 
    * - .. glossary::
-          VecEng
+          VectorE
      - Vector Engine
 
    * - .. glossary::
-          SyncEng
-     - Sync Engine
+          GpSimdE
+     - GpSimd Engine
 
    * - .. glossary::
           CCE
      - Collective Communication Engine
+
+   * - .. glossary::
+          HBM
+     - High Bandwidth Memory
+
+   * - .. glossary::
+          SBUF
+     - State Buffer 
+
+   * - .. glossary::
+          PSUM
+     - Partial Sum Buffer
 
    * - .. glossary::
           FP32
@@ -196,6 +250,10 @@ Abbreviations
    * - .. glossary::
           SR
      - Stochastic Rounding
+
+   * - .. glossary::
+          NKI
+     - Neuron Kernel Interface
 
    * - .. glossary::
           CustomOps
@@ -228,4 +286,3 @@ Abbreviations
    * - .. glossary::
           PPr
      - Pipeline Parallel degree
-

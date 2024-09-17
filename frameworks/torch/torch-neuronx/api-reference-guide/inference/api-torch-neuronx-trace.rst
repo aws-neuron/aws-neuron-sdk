@@ -86,7 +86,9 @@ PyTorch NeuronX Tracing API for Inference
 
       One small exception is models traced with ``inline_weights_to_neff=False``. For these models,
       the NEFF is loaded onto the NeuronCore automatically, but the weights are not moved automatically. To move
-      the weights to the NeuronCore, call ``torch_neuronx.move_trace_to_device(trace, device_id)``.
+      the weights to the NeuronCore, call :func:`torch_neuronx.move_trace_to_device`. If this is not
+      done, a perfomance penalty is incurred per inference, because on every inference call, the weights move from CPU
+      to Neuron.
 
     Furthermore, the Neuron traced :class:`~torch.jit.ScriptModule` expects
     to consume CPU tensors and produces CPU tensors. The underlying operation
@@ -202,12 +204,35 @@ PyTorch NeuronX Tracing API for Inference
 
         # Executes on a NeuronCore like a normally traced model
         loaded = torch.jit.load('model.pt')
-        torch_neuronx.move_trace_to_device(loaded,0)
+        torch_neuronx.move_trace_to_device(loaded,0) # necessary for performance
         loaded(torch.rand(1, 1, 3, 3))
     
     .. note::
 
       Weight Separated models can have its weights replaced via the `torch_neuronx.replace_weights` API.
+
+.. _torch-neuronx-device-movement:
+
+Moving a Traced Module to a Neuron Core
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+  This function will be deprecated in a future release, and instead, :func:`torch_neuronx.experimental.set_neuron_cores` will move out of experimental, and become a stable API.
+
+.. py:function:: torch_neuronx.move_trace_to_device(trace, device_id)
+
+  This function moves a model traced with :func:`torch_neuronx.trace`, to a Neuron Core. Here are some reasons to use this function|colon|
+
+  1. Explicit control of device placement for models
+    By default, the Neuron Runtime assigns neffs to devices in a Round Robin manner, meaning it will allocate a neff onto Neuron Core 0, then 1, 2, and then loop around.
+  2. Allocating Weights onto the Neuron Core for Weight Separated models.
+    This is necessary for performance reasons. If this is not done, the weights would remain on CPU and would need to move to device on every inference call, which is an expensive operation.
+
+  :arg ~torch.jit.ScriptModule trace: This is the torchscript model returned from :func:`torch_neuronx.trace`
+  :arg int device_id: The Neuron Core to move the traced model to. This number will need to be between 0 to the max number of NCs on the instance - 1. For example, a trn1.32xlarge has 32 Neuron Cores, so the acceptable values are from 0-31.
+
+  :returns: Nothing, the movement of the model happens in-place. 
+  :rtype: None
 
 .. _torch-neuronx-autobucketing:
 

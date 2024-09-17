@@ -66,7 +66,7 @@ if [ ! -e "libtorch" ]; then
 fi
 
 # get libneuron_op.so and install into libtorch
-pip install --upgrade "transformers==4.34.1"
+pip install --upgrade "transformers==4.40.0
 python bert_neuronx/compile.py
 
 if [ "$OLD_TOOL_CHAIN" == "True" ]

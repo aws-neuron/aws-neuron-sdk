@@ -1,6 +1,6 @@
 .. _llama2_7b_tp_zero1_ptl_finetune_tutorial:
 
-Fine-tuning Llama2 7B with tensor parallelism and ZeRO-1 optimizer using Neuron PyTorch-Lightning (``neuronx-distributed`` )
+Fine-tuning Llama2 7B with tensor parallelism and ZeRO-1 optimizer using Neuron PyTorch-Lightning 
 =========================================================================================
 
 This tutorial shows how to fine-tune Llama2 7B with tensor parallelism and ZeRO-1 using Neuron PyTorch-Lightning APIs. For pre-training information and additional context, see the :ref:`Llama2 7B Tutorial <llama2_7b_tp_zero1_ptl_tutorial>`
@@ -35,17 +35,17 @@ Next, download the scripts for fine-tuning.
 
 .. code:: ipython3
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/data_module.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/module_llama.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/tp_zero1_llama2_7b_hf_finetune_ptl.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/tp_zero1_llama2_7b_hf_finetune_ptl.sh
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lightning/finetune_config/config.json
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/lr.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/requirements.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/requirements_ptl.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/training_utils.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama2/convert_checkpoints.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/data_module.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/module_llama.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/tp_zero1_llama2_7b_hf_finetune_ptl.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/tp_zero1_llama2_7b_hf_finetune_ptl.sh
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/finetune_config/config.json
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lr.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/modeling_llama_nxd.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements_ptl.txt
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/training_utils.py
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/convert_checkpoints.py
 
 3. Install the additional requirements and give the right permissions to the shell script.
 

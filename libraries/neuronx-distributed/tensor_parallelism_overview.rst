@@ -19,7 +19,7 @@ result and concatenate the tensor along the column dimension. In this
 way, we are able to distribute the tensor over devices while making sure
 the computation flow remains correct.
 
-.. image:: images/tp.png
+.. image:: /libraries/neuronx-distributed/images/tp.png
    :alt: Image: image.png
 
 Fig and TP explanation is borrowed from https://colossalai.org/docs/concepts/paradigms_of_parallelism/#tensor-parallel
@@ -39,7 +39,7 @@ arbitrary depth until the need to operate on the whole output tensor, in
 which case we would have to construct the output but gathering it from
 all devices.
 
-.. image:: images/mlp.png
+.. image:: /libraries/neuronx-distributed/images/mlp.png
    :alt: Image: image.png
 
 Here is an illustration from the Megatron-LM paper In the above case, as
@@ -60,7 +60,7 @@ Tensor Parallelism for Transformers:
 
 A transformer block
 
-.. image:: images/self-attention.png
+.. image:: /libraries/neuronx-distributed/images/self-attention.png
    :alt: Image: image.png
 
 Fig: Taken from Megatron-LM paper.

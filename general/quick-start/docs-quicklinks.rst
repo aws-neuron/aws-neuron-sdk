@@ -26,6 +26,7 @@ Neuron Quick Links
             :open:
 
             * :ref:`pytorch-neuronx-main`
+            * :ref:`jax-neuron-main`
             * :ref:`tensorflow-neuron-main`
             * :ref:`mxnet-neuron-main`
 
@@ -35,8 +36,10 @@ Neuron Quick Links
             :animate: fade-in
             :open:
 
-            * :ref:`transformers_neuronx_readme`
+            * :ref:`nxdt`
             * :ref:`neuronx-distributed-index`
+            * :ref:`transformers_neuronx_readme`
+            * :ref:`nemo-megatron-index`
         
              
     .. dropdown::  User Guide
@@ -47,13 +50,14 @@ Neuron Quick Links
 
             * :ref:`neuron_runtime`
             * :ref:`neuron_cc`
+            * :ref:`neuron-nki`
             * :ref:`neuron_c++customops`
             * :ref:`neuron-tools`
             * :ref:`setup-guide-index`
             * :ref:`neuron-dlami-overview`
             * :ref:`neuron_containers`
             * :ref:`neuron-devflows`
-
+            
 
     .. dropdown::  Learn Neuron
             :class-title: sphinx-design-class-title-small

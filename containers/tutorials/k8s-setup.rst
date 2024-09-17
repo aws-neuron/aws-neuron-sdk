@@ -1,4 +1,4 @@
-.. _tutorial-k8s-env-setup-for-neuron:
+.. _tutorial-k8s-env-setup-for-neuron-to-remove:
 
 Kubernetes environment setup for Neuron
 =======================================

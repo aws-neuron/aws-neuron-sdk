@@ -37,10 +37,6 @@ Encoders
    * - bert-large-uncased
      - torch-neuron
      - * `BertLargeUncased Inference on Inf1 instances <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuron/inference/bertlargeuncased/BertLargeUncased.ipynb>`_
-      
-   * - bert-large
-     - tensorflow-neuron
-     - * Tensorflow 1.x - Running TensorFlow BERT-Large with AWS Neuron :ref:`[html] <tensorflow-bert-demo>`
    
    * - roberta-base
      - torch-neuron
@@ -74,10 +70,6 @@ Vision Transformers
    * - ssd
      - torch-neuron
      - * `Inference of SSD model on inf1 instances <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuron/inference/ssd/SSD300VGG16.ipynb>`_
-
-   * - ssd
-     - tensorflow-neuron
-     - * Tensorflow 1.x - SSD300 tutorial :ref:`[html] <tensorflow-ssd300>`
  
 
    * - TrOCR
@@ -140,9 +132,7 @@ Convolutional Neural Networks(CNN)
 
    * - resnet
      - tensorflow-neuron
-     - * Tensorflow 1.x - ResNet-50 tutorial :ref:`[html] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb>`
-       * Tensorflow 1.x - Keras ResNet-50 optimization tutorial :ref:`[html] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>` :github:`[notebook] </src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb>`
-       * Tensorflow 1.x & 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial.rst>`
+     - * Tensorflow 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial.rst>`
    
    * - resnet
      - mxnet-neuron
@@ -154,21 +144,11 @@ Convolutional Neural Networks(CNN)
    * - Resnext
      - torch-neuron
      - * `Inference of Resnext model on Inf1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuron/inference/resnext/Resnext.ipynb>`_
-   
-
-   * - Yolov3
-     - tensorflow-neuron
-     - * Tensorflow 1.x - YOLOv3 tutorial :ref:`[html] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>` :github:`[notebook] </src/examples/tensorflow/yolo_v3_demo/yolo_v3.ipynb>`
 
 
    * - Yolov4
      - torch-neuron 
      - * PyTorch YOLOv4 tutorial :ref:`[html] </src/examples/pytorch/yolo_v4.ipynb>` :pytorch-neuron-src:`[notebook] <yolo_v4.ipynb>`
-
-   * - Yolov4
-     - tensorflow-neuron 
-     - * Tensorflow 1.x - YOLOv4 tutorial :ref:`[html] <tensorflow-yolo4>` :github:`[notebook] </src/examples/tensorflow/yolo_v4_demo/evaluate.ipynb>`
-
 
    * - Yolov5
      - torch-neuron
@@ -192,14 +172,9 @@ Convolutional Neural Networks(CNN)
      - torch-neuron
      - * `Inference of fairseq model on Inf1 <https://github.com/aws-neuron/aws-neuron-samples-staging/tree/master/torch-neuron/inference/fairseq>`_
 
-   * - openpose
-     - tensorflow-neuron
-     - * Tensorflow 1.x - OpenPose tutorial :ref:`[html] </src/examples/tensorflow/openpose_demo/openpose.ipynb>` :github:`[notebook] </src/examples/tensorflow/openpose_demo/openpose.ipynb>`
-
    * - unet
      - tensorflow-neuron
      - * `Unet - Tensorflow 2.x tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/tensorflow-neuron/inference/unet>`_
-
 
 
 

@@ -1,7 +1,7 @@
 
 .. _save_load_developer_guide:
 
-Developer guide for save/load checkpoint (``neuronx-distributed`` )
+Developer guide for save/load checkpoint
 ===================================================================
 
 This document will introduce how to use `nxd.save_checkpoint` and `nxd.load_checkpoint`

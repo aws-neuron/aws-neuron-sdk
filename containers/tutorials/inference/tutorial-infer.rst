@@ -1,6 +1,6 @@
 .. _tutorial-infer:
 
-Run inference in pytorch neuron container
+Run Inference in PyTorch Neuron Container
 ==========================================
 
 .. contents:: Table of Contents
@@ -28,7 +28,7 @@ Setup Environment
 
 3. A sample Dockerfile for for torch-neuron can be found here :ref:`inference-dlc-dockerfile`.
 This dockerfile needs the torchserve entrypoint found here :ref:`torchserve-neuron` and torchserve
-config.properties found here :ref:`torchserve-config-properties`. 
+config.properties found here :ref:`torchserve-config-properties`.
 
 With the files in a dir, build the image with the following command:
 

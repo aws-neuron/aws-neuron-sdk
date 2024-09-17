@@ -1,6 +1,6 @@
 .. _neuronx_distributed_inference_developer_guide:
 
-Developer guide for Neuronx-Distributed  Inference (``neuronx-distributed`` )
+Developer guide for Neuronx-Distributed  Inference 
 =================================================================
 
 Overview
@@ -256,7 +256,7 @@ For more information, see the torch_neuronx section on :ref:`Autobucketing <torc
 With the above example, we can supply inputs of sequence length from 1-512 without pre-padding, as the bucket kernel takes care of that. Autobucketing is useful for latency sensitive applications where using smaller and large inputs on small and large models respectively.
 
 .. note::
-    We do not yet have autobucketing integrated with our NxD Llama2 example, and
+    We do not yet have autobucketing integrated with our NxD Core Llama2 example, and
     will be done so in an upcoming release.
 
 Speculative Decoding (Beta)

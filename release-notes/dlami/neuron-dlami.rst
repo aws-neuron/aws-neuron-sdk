@@ -7,6 +7,13 @@ Neuron DLAMI Release Notes
    :local:
    :depth: 1
 
+Neuron 2.20.0
+-------------
+
+Date: 09/16/2024
+
+- Add neuronx-distributed-training library to PyTorch virtual enviornments. See :ref:`neuron-dlami-overview`
+- Updated existing Neuron supported DLAMIs with Neuron 2.20 SDK release.
 
 Neuron 2.19.0
 -------------

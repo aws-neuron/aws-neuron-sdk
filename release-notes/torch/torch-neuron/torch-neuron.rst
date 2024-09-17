@@ -72,7 +72,14 @@ properly recorded at inference time, resulting in an error such as:
 This error typically occurs when ``aten::size`` operators are partitioned to
 CPU. We are investigating a fix for this issue.
 
-PyTorch Neuron release [package ver. 1.13.1.2.10.12.0, SDK ver. 2.19.0]
+PyTorch Neuron release [package ver. 1.*.*.2.11.6.0, SDK ver. 2.20.0]
+--------------------------------------------------------------------
+
+Date: 09/16/2024
+
+* Minor updates.
+
+PyTorch Neuron release [package ver. 1.*.*.2.10.12.0, SDK ver. 2.19.0]
 --------------------------------------------------------------------
 
 Date: 07/03/2024

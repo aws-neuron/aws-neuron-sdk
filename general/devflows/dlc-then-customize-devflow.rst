@@ -1,4 +1,4 @@
-.. _dlc-then-ec2-devflow:
+.. _dlc-then-customize-devflow:
 
 Customize Neuron DLC
 ==============================

@@ -102,6 +102,9 @@ class manifest:
 
         str_preamble = ''
 
+        # Install and enable EPEL (required only for rocky linux 9 currently)
+        str_preamble += self.install_and_enable_epel(args)
+        
         # Configure Neuron repository
         str_preamble += self.config_neuron_repository(args)
 
@@ -251,6 +254,16 @@ class manifest:
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
         return str_jupiter
+    
+    def install_and_enable_epel(self, args):
+        str = ''
+        if args.mode != 'compile':
+            if args.install_type == 'install':
+                if args.os == 'rockylinux9':
+                    str += '\n# Install and enable EPEL\n'
+                    str += 'sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm\n'
+                    str += 'sudo yum config-manager --enable epel\n'
+        return str
 
     def config_neuron_repository(self, args):
         """
@@ -267,7 +280,7 @@ class manifest:
                     str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
                     str += 'EOF' + '\n'
                     str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
-                elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+                elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                     str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
                     str += '[neuron]' + '\n'
                     str += 'name=Neuron YUM Repository' + '\n'
@@ -287,7 +300,7 @@ class manifest:
             str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
             str += 'EOF' + '\n'
             str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
-        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
             str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
             str += '[neuron]' + '\n'
             str += 'name=Neuron YUM Repository' + '\n'
@@ -308,9 +321,11 @@ class manifest:
             str += '\n# Update OS packages \n'
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get update -y' + '\n'
-            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += 'sudo yum update -y' + '\n'
-
+            if args.os == 'rockylinux9':
+                str += '# Reboot instance to ensure kernel is updated\n'
+                str += 'sudo reboot\n'
         return str
 
     def install_os_headers(self, args):
@@ -326,7 +341,7 @@ class manifest:
                 str += '\n# Update OS headers \n'
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
-            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += 'sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
 
         return str
@@ -336,7 +351,7 @@ class manifest:
         str = '\n# Install git \n'
         if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
             str += 'sudo apt-get install git -y\n'
-        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+        elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
             str += 'sudo yum install git -y\n'
 
         return str
@@ -380,7 +395,7 @@ class manifest:
                     str += ' --allow-change-held-packages'
                 str += '\n'
 
-            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os =='rockylinux9':
                 yum_install = 'install' if args.install_type == 'install' else 'update'
 
                 if args.install_type == 'install':
@@ -445,7 +460,7 @@ class manifest:
                         else:
                             str += '\n'
 
-                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                         str += 'sudo yum '
                         if args.install_type == 'install':
                             str += 'install '
@@ -512,7 +527,7 @@ class manifest:
                             str += '=' + self.get_package_version(category='system-tools', name=system_tool,
                                                                   neuron_version=args.neuron_version) + '* -y\n'
 
-                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+                    elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                         str += 'sudo yum '
                         if args.install_type == 'install':
                             str += 'install '
@@ -574,6 +589,8 @@ class manifest:
                 elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                     str += 'sudo yum install -y amazon-linux-extras\n'
                     str += 'sudo yum install python' + target_python_version + '\n'
+                elif args.os == 'rockylinux9':
+                    str += 'sudo yum install python' + target_python_version + '\n'
 
             # Install Python venv
             """
@@ -585,9 +602,9 @@ class manifest:
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += '\n# Install Python venv \n'
                 str += 'sudo apt-get install -y python' + target_python_version + '-venv g++ \n'
-            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
+            elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += '\n# Install Python venv \n'
-                if args.os == 'amazonlinux2':
+                if args.os == 'amazonlinux2' or args.os == 'rockylinux9':
                     str += 'sudo yum install -y python' + target_python_version + '-venv gcc-c++ \n'
                 else:
                     str += 'sudo yum install -y gcc-c++ \n'
@@ -1070,7 +1087,7 @@ def cli_parse_arguments():
                                            + 'python3 %(prog)s --list={pyversions} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --install-type={install,update}\n'
                                            + 'python3 %(prog)s --instance={inf1,trn1,inf2}\n'
-                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023}\n'
+                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023,rockylinux9}\n'
                                            + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework,dlami-neuron}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
                                            + 'python3 %(prog)s --framework-version=[X.Y.Z] [options]\n'
@@ -1084,7 +1101,7 @@ def cli_parse_arguments():
     group.add_argument("--list", choices=['neuron_versions', 'pyversions','packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
     parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2'])
-    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023'], )
+    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023', 'rockylinux9'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework', 'dlami-neuron'],
                         default='non-dlami', help='default=non-dlami')
     parser.add_argument("--mode", choices=['develop', 'compile', 'deploy', 'initialize'], default='develop')

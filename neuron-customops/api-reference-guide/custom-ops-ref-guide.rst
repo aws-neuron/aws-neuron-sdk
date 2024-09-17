@@ -293,7 +293,7 @@ Element-wise add of two 1D tensors using ``TensorAccessor``.
 Memory Architecture
 ^^^^^^^^^^^^^^^^^^^
 
-Tensor data is stored in NeuronCore memory. The various types of accessors enable users to access tensor data from their custom C++ operator code running on the GPSIMD engine.
+Tensor data is stored in HBM. The various types of accessors enable users to access tensor data from their custom C++ operator code running on the GPSIMD engine.
 
 .. image:: /neuron-customops/images/ncorev2_gpsimd_memory.png
     :width: 600
@@ -372,11 +372,11 @@ Member Functions
 Coherence
 ^^^^^^^^^
 
-Stream accessors cache ``Tensor`` data in GPSIMD tightly-coupled memory (TCM), but do not ensure their caches remain coherent. When exactly they read from or write back to NeuronCore memory is opaque to the user (except for ``close()`` which forces a write back).
+Stream accessors cache ``Tensor`` data in GPSIMD tightly-coupled memory (TCM), but do not ensure their caches remain coherent. When exactly they read from or write back to HBM is opaque to the user (except for ``close()`` which forces a write back).
 
 The safest way to use them is to ensure that no stream accessor is active (instantiated and not yet closed) while there is an active write stream accessor on the same ``Tensor``. The user should either have multiple read stream accessors active on the same ``Tensor``, or only have a single write stream accessor active on that ``Tensor``.
 
-The standard tensor accessors read/write NeuronCore memory directly. Therefore, tensor accessors can safely concurrently access the same ``Tensor``, but it is safest not to use them concurrently with stream accessors since NeuronCore memory isn't guaranteed to be coherent with the stream accessor caches.
+The standard tensor accessors read/write HBM directly. Therefore, tensor accessors can safely concurrently access the same ``Tensor``, but it is safest not to use them concurrently with stream accessors since HBM isn't guaranteed to be coherent with the stream accessor caches.
 
 These coarse-grained guidelines are best practices, but it is possible to ignore them with careful usage of the accessors (making sure elements are read before they are written to, elements written to are written back before being read again, etc).
 
@@ -400,7 +400,7 @@ The coherence policy of a ``Tensor`` determines what to do when there is potenti
 TCM Accessor
 ------------
 
-TCM accessors provide the fastest read and write performance. TCM accessors allow the user to manually manage copying data between larger, but slower-access NeuronCore memory to faster GPSIMD tightly-coupled memory (TCM). It may be beneficial to see the diagram under :ref:`custom-ops-ref-guide-mem-arch`. Create a ``TensorTcmAccessor`` from a ``Tensor`` by calling ``Tensor::tcm_accessor()``. Users can allocate and free TCM memory using ``tcm_malloc()`` and ``tcm_free()``. Users have access to a 16KB pool of TCM memory. Note the streaming accessors also allocate from this pool (4KB each). TCM accessors do not do any coherence checks.
+TCM accessors provide the fastest read and write performance. TCM accessors allow the user to manually manage copying data between larger, but slower-access HBM to faster GPSIMD tightly-coupled memory (TCM). It may be beneficial to see the diagram under :ref:`custom-ops-ref-guide-mem-arch`. Create a ``TensorTcmAccessor`` from a ``Tensor`` by calling ``Tensor::tcm_accessor()``. Users can allocate and free TCM memory using ``tcm_malloc()`` and ``tcm_free()``. Users have access to a 16KB pool of TCM memory. Note the streaming accessors also allocate from this pool (4KB each). TCM accessors do not do any coherence checks.
 
 .. note:: 
     See :ref:`neuronx-customop-mlp-perf` for a tutorial on how to use TCM accessors. 

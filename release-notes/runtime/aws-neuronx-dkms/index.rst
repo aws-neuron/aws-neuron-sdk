@@ -15,6 +15,19 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.18.12.0]
+--------------------------------
+
+Date: 09/16/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Introduced a sysfs memory usage counter for DMA rings (:ref:`reference <neuron-sysfs-ug>`)
+
+Bug Fixes
+^^^^^^^^^
+* Resolved an issue where a memory allocation failure caused a hang due to the memory allocation lock not being released
+
 Neuron Driver release [2.17.17.0]
 --------------------------------
 

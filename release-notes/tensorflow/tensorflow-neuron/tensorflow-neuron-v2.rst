@@ -1,7 +1,7 @@
 .. _tensorflow-neuron-rn-v2:
 
-TensorFlow Neuron (``tensorflow-neuron (TF2.x)``) Release Notes
-===============================================================
+TensorFlow 2.x (``tensorflow-neuron``) Release Notes
+=====================================================
 
 .. contents:: Table of contents
    :local:
@@ -47,10 +47,17 @@ Solution: run a ``pip install pip --upgrade`` before upgrading
 
 Solution: Please downgrade `h5py` by `pip install 'h5py<3'`. This is caused by https://github.com/TensorFlow/TensorFlow/issues/44467.
 
+tensorflow-neuron 2.x release [2.12.2.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 09/16/2024
+
+* Minor updates.
+
 tensorflow-neuron 2.x release [2.11.4.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Date: 06/xx/2024
+Date: 07/03/2024
 
 * Minor updates.
 

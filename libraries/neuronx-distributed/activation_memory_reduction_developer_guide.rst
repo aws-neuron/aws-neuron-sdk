@@ -1,6 +1,6 @@
 .. _activation_memory_reduction_developer_guide:
 
-Developer guide for Activation Memory reduction (``neuronx-distributed`` )
+Developer guide for Activation Memory reduction 
 ============================================================================
 
 Sequence Parallelism
@@ -14,7 +14,7 @@ Model changes for Tensor-Parallel block:
 For tensor-parallelism, we replace the linear layers with ColumnParallel and RowParallel Linear 
 layers as mentioned `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tp_developer_guide.html#creating-model>`__.
 To enable sequence-parallel, we need to pass the `sequence_parallel_enabled` for the ColumnParallel and RowParallel linear layers.
-Setting this argument to `true`, the ColumnParallel and RowParallel Linear layers will introduce the `all-gather` and `reduce-scatter` 
+Setting this argument to ``true``, the ColumnParallel and RowParallel Linear layers will introduce the ``all-gather`` and ``reduce-scatter`` 
 operations for gathering and distributing the activations along the sequence dimension.
 
 .. code:: ipython3
@@ -48,8 +48,8 @@ Model changes for Non-Tensor-Parallel block:
 In a transformer module, the non-tensor parallel block contains mainly the Layer-Norm modules. Since we partition 
 the computation along the sequence dimension for the layer-norm, we 
 need to sum up the gradients along the sequence dimension for the Layer-norm. To help us do that, 
-we use the Layer-norm provided from `neuronx-distributed.parallel_layers.layer_norm`. The Layer-norm in 
-neuronx-distributed should uses the same forward and backward as `torch.nn.LayerNorm`, however, it just marks
+we use the Layer-norm provided from ``neuronx-distributed.parallel_layers.layer_norm``. The Layer-norm in 
+neuronx-distributed should uses the same forward and backward as ``torch.nn.LayerNorm``, however, it just marks
 the weights as sequence-parallel weights. This tagging allows us to look for weights with sequence-parallel 
 tagging and reduce those gradients along the tensor-parallel degree. Hence we need to add the following two changes:
 
@@ -122,7 +122,7 @@ also need to partition the inputs along the sequence dimensions such that each t
 .. code:: ipython3
 
     form neuronx_distributed.parallel_layers.mappings import scatter_to_sequence_parallel_region
-    # NxD code change: sequence parallel uses seq_len as the 0-th dim
+    # NxD Core code change: sequence parallel uses seq_len as the 0-th dim
     if self.config.sequence_parallel_enabled:
         hidden_states = hidden_states.transpose(0, 1).contiguous()
         hidden_states = scatter_to_sequence_parallel_region(hidden_states)

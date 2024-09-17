@@ -7,7 +7,8 @@ Trn1/Trn1n Training Performance
    :local:
 
 
-*Last update:  April 11th, 2024*
+*Last update: September 16th, 2024*
+
 
 
 .. _NLP:

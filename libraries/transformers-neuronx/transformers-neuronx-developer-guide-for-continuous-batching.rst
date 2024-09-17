@@ -31,6 +31,28 @@ We support continuous batching for models compatible with the the following Hugg
 - MistralForCausalLM
 
 
+New Features in 2.20 Neuron vLLM integration
+--------------------------------------------
+
+Currently Neuron vLLM integration is tested with Transformers NeuronX using v0.5.0 vLLM that is publicly available.
+As part of 2.20 release, there are several enhancements done in Neuron vLLM integration on top of v0.5.0 vLLM. 
+It is our intention that these features will be upstreamed to vLLM repo as soon as possible after the release.
+Until the features are upstreamed, you can access these features from vLLM upstreaming Neuron fork in our AWS Neuron GitHub 
+repository at https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.5.0-neuron.
+
+Features in v0.5.0 vLLM Neuron Fork
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* On-device generation is now enabled by default. Please note that this feature currently does not support producing log probabilities in the vllm integration. Furthermore, we restrict sampling to at most top 256 tokens by default. It can be changed by editing ``global_top_k`` in the ``GenerationConfig``. 
+* Multi-node inference to support larger models. Example scripts are included in the `commit <https://github.com/vllm-project/vllm/commit/e5a3c0904799ec8e04e25ac25e66024004a61533>`_ .
+* Directly load HuggingFace compatible checkpoints without creation of ``-split`` directory.
+* Fix AssertionError when running offline examples i.e. no need to apply the patch mentioned below.
+
+Some features have already been upstreamed to vllm v0.6.0 and are not included in our v0.5.0 vLLM Neuron fork:
+
+* Configure bucketing and NeuronConfig throught vLLM interface instead of requiring code changes
+
+
 Installing vLLM and running a simple offline script
 ---------------------------------------------------
 

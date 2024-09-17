@@ -1,6 +1,6 @@
 .. _model_optimizer_wrapper_developer_guide:
 
-Developer guide for model and optimizer wrapper (``neuronx-distributed`` )
+Developer guide for model and optimizer wrapper 
 ==========================================================================
 
 Model and optimizer wrapper are useful tools to wrap original model and optimizer

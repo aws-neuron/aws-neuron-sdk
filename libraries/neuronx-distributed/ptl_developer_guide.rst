@@ -1,6 +1,6 @@
 .. _ptl_developer_guide:
 
-Developer guide for Neuron-PT-Lightning (``neuronx-distributed`` )
+Developer guide for Neuron-PT-Lightning 
 =================================================================
 
 Training

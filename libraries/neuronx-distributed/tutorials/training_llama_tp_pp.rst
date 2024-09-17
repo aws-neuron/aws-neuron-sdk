@@ -1,7 +1,7 @@
 .. _llama2_tp_pp_tutorial:
 .. _llama3_tp_pp_tutorial:
 
-Training Llama-3.1-70B, Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism (``neuronx-distributed`` )
+Training Llama-3.1-70B, Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism 
 ================================================================================================================
 
 In this section, we showcase to pretrain Llama 3.1, Llama3 70B and Llama2 13B/70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
@@ -99,11 +99,14 @@ Run the following from ``~/examples/tp_pp_llama_hf_pretrain`` directory:
 
 .. code:: ipython3
 
+   from huggingface_hub import login
    from transformers import AutoTokenizer
 
-   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B', token='your_own_hugging_face_token')  
+   login(token='your_own_hugging_face_token')
+
+   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B')  
    # For llama2 uncomment line below
-   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf', token='your_own_hugging_face_token') 
+   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf')
 
    tokenizer.save_pretrained(".")
 
