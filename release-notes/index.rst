@@ -26,12 +26,12 @@ Neuron 2.20 also adds inference support for Pixart-alpha and Pixart-sigma Diffus
 **Neuron Kernel Interface**: NKI is a programming interface enabling developers to build optimized compute custom kernels on top of Trainium and Inferentia. NKI empowers developers to enhance deep learning models with new capabilities, performance optimizations, and scientific innovation. It natively integrates with PyTorch and JAX, providing a Python-based programming environment with Triton-like syntax and tile-level semantics, offering a familiar programming experience for developers. 
 All of our NKI work is shared as open source, enabling the community developers to collaborate and use these kernels in their projects, improve existing kernels, and contribute new NKI kernels. The list of kernels we are introducing includes Optimized Flash Attention NKI kernel (``flash_attention``), a NKI kernel with an optimized implementation of Mamba model architecture (``mamba_nki_kernels``) and Optimized Stable Diffusion Attention kernel (``fused_sd_attention_small_head``). In addition to NKI kernel samples for ``average_pool2d``, ``rmsnorm``, ``tensor_addition``, ``layernorm``, ``transpose_2d``, and ``matrix_multiplication``.
 
-For more information see :ref:`NKI section <neuron-nki>`.
+For more information see :ref:`NKI section <neuron-nki>` and check the NKI samples Github repository: https://github.com/aws-neuron/nki-samples
 
 **NxD Training (NxDT)**: NxDT is a PyTorch-based library that adds support for user-friendly distributed training experience through a YAML configuration file compatible with NeMo,, allowing users to easily set up their training workflows. At the same time, NxDT maintains flexibility, enabling users to choose between using the YAML configuration file, PyTorch Lightning Trainer, or writing their own custom training script using the NxD Core.
 The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing compatability with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.
 
-For more information see :ref:`NxD Training (beta) <nxdt>`
+For more information see :ref:`NxD Training (beta) <nxdt>` and check the NxD Training Github repository: https://github.com/aws-neuron/neuronx-distributed-training 
 
 **Training Highlights**: This release adds support for Llama 3.1 8B and 70B model training up to 32K sequence length (beta). It also adds support for torch.autocast() for native PyTorch mixed precision support and PEFT LoRA model training.
 
@@ -43,6 +43,9 @@ Furthermore, this release improves model loading in Transformers Neuronx for mod
 **System Tools**: As for the Neuron Tools, it enables NKI profiling support in the Neuron Profiler and introduces improvements to the Neuron Profiler UI.
 
 **Neuron Driver**: This release adds support for the Rocky Linux 9.0 operating system. 
+
+**Neuron Containers**: This release introduces Neuron Helm Chart, which helps streamline the deployment of AWS Neuron components on Amazon EKS. See Neuron Helm Chart Github repository: https://github.com/aws-neuron/neuron-helm-charts. 
+Additionaly, this release adds ECS support for the "Neuron Node Problem Detector and Recovery" artifact. See :ref:`ecs-neuron-problem-detector-and-recovery`.
 
 **Neuron DLAMIs and DLCs**: This release includes the addition of the NxDT package to various Neuron DLAMIs (Multi-Framework Neuron DLAMI, PyTorch 1.13 Neuron DLAMI, and PyTorch 2.1 Neuron DLAMI) and the inclusion of NxDT in the PyTorch 1.13 Training Neuron DLC and PyTorch 2.1 Training Neuron DLC.
 
@@ -62,7 +65,7 @@ More release content can be found in the table below and each component release 
      - Instances
 
    * - Known Issues and Limitations
-     - * See :ref:`neuron-2.19.0-known-issues`
+     - * See :ref:`neuron-2.20.0-known-issues`
      - Trn1/Trn1n , Inf2, Inf1
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
