@@ -37,7 +37,7 @@ Date: 09/16/2024
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
-* Improved the inter-node mesh algorithm to scales better for larger number of nodes and larger allreduce problem sizes
+* Improved the inter-node mesh algorithm to scale better for larger number of nodes and larger allreduce problem sizes
 
 Bug fixes
 ^^^^^^^^^
