@@ -215,7 +215,6 @@
 # U22 Neuron DLAMI - Tensorflow-Neuron- 2.10.1
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=inf1 --ami=dlami-neuron
 
-
 # Rocky Linux 9 Driver and Tools
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=rockylinux9 --instance=trn1 --ami=non-dlami --category=driver_runtime_tools
 

@@ -1,3 +1,4 @@
 * :ref:`megatron_gpt_pretraining`
+* :ref:`hf_llama3_8B_pretraining`
 * :ref:`hf_llama3_8B_SFT`
 * :ref:`checkpoint_conversion`

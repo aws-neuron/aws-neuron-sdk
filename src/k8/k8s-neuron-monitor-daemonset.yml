@@ -40,7 +40,7 @@ spec:
                       - inf2.48xlarge
       containers:
         - name: neuron-monitor
-          image: public.ecr.aws/neuron/neuron-monitor:1.0.0
+          image: public.ecr.aws/neuron/neuron-monitor:1.1.0
           ports:
             - containerPort: 8000
           command:

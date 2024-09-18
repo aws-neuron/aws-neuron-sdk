@@ -112,20 +112,10 @@ Single Framework DLAMIs supported
       - Inf1, Inf2, Trn1, Trn1n 
       - Deep Learning AMI Neuron PyTorch 1.13 (Ubuntu 20.04)
 
-    * - PyTorch 1.13
-      - Amazon Linux 2
-      - Inf1, Inf2, Trn1, Trn1n 
-      - Deep Learning AMI Neuron PyTorch 1.13 (Amazon Linux 2) 
-
     * - Tensorflow 2.10
       - Ubuntu 20.04
       - Inf2, Trn1, Trn1n 
       - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 20.04) 
-
-    * - TensorFlow 2.10 
-      - Amazon Linux 2
-      - Inf2, Trn1, Trn1
-      - Deep Learning AMI Neuron TensorFlow 2.10 (Amazon Linux 2)  
 
 
 

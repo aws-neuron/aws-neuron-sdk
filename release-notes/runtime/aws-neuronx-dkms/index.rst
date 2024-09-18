@@ -27,6 +27,7 @@ New in this release
 Bug Fixes
 ^^^^^^^^^
 * Resolved an issue where a memory allocation failure caused a hang due to the memory allocation lock not being released
+* Resolved an issue where the driver was allocating more memory than needed for aligned device allocations
 
 Neuron Driver release [2.17.17.0]
 --------------------------------
@@ -42,6 +43,7 @@ New in this release
 Bug Fixes
 ^^^^^^^^^
 * Fixed compatibility issues for the Linux 6.3 kernel
+* Resolved issue where device reset handling code was not properly checking the failure metric
 
 
 Neuron Driver release [2.16.7.0]
