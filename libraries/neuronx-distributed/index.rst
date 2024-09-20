@@ -4,7 +4,7 @@
 NxD Core
 ===================
 NeuronX Distributed Core (NxD Core) is a package for supporting different distributed
-training/inference mechanism for Neuron devices. It would provide xla
+training/inference mechanisms for Neuron devices. It would provide xla
 friendly implementations of some of the more popular distributed
 training/inference techniques. As the size of the model scales, fitting
 these models on a single device becomes impossible and hence we have to
