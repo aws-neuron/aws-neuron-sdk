@@ -45,7 +45,6 @@ NeuronX Distributing Training (NxDT)
 
 NeuronX Distributed Core (NxD Core)
 
-- Updated NeuronX Distributed API guide with Distributed Checkpoint (DCP) support. See :ref:`api_guide`
 - Updated Developer guide for save/load checkpoint (neuronx-distributed ) with ZeRO-1 Optimizer State Offline Conversion. See :ref:`save_load_developer_guide`
 - Added Developer guide for Standard Mixed Precision with NeuronX Distributed. See :ref:`standard_mixed_precision`
 - Updated NeuronX Distributed API Guide LoRA finetuning support. See :ref:`api_guide`

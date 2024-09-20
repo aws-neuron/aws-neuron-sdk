@@ -2,11 +2,15 @@
 .. _save_load_developer_guide:
 
 Developer guide for save/load checkpoint
-===================================================================
+========================================
 
 This document will introduce how to use `nxd.save_checkpoint` and `nxd.load_checkpoint`
 to save and load checkpoint for distributed model training. This two methods handle all
 checkpoint in a single method: model, optimize, learning rate scheduler and any user contents.
+
+Model states are saved on data parallel rank-0 only. When ZeRO-1 optimizer is not turned on,
+optimizer states are also saved like this; while when ZeRO-1 optimizer is turned on, states
+are saved on all ranks. Scheduler and user contents are saved on master rank only.
 
 For a complete api guide, refer to :ref:`API GUIDE<api_guide>`.
 
@@ -68,3 +72,17 @@ latest checkpoint.
        optimizer=optimizer,
        scheduler=lr_scheduler,
    )
+
+ZeRO-1 Optimizer State Offline Conversion:
+''''''''''''''''''''''''''''''''''''''''''
+
+ZeRO-1 optimizer checkpoint are sharded states stored for each rank. When user want to
+load ZeRO-1 optimizer states with different cluster setting (e.g. with DP degree changed),
+they can run the offline ZeRO-1 optimizer checkpoint conversion tool. This tool supports
+conversion from sharded states to full states, from full to sharded, and from sharded to sharded.
+
+.. code:: ipython3
+   # sharded to sharded or full to sharded
+   nxd_convert_zero_checkpoints --input_dir <input path> --output_dir <output path> --convert_to_sharded --dp_size <new dp degree>
+   # sharded to full
+   nxd_convert_zero_checkpoints --input_dir <input path> --output_dir <output path> --convert_to_full

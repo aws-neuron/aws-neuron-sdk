@@ -84,7 +84,6 @@ More release content can be found in the table below and each component release 
      - **Training:**
 
        * Support for LoRA finetuning
-       * Support for Distributed Checkpointing
        * Support for Mixed precision enhancements
 
        **Inference:**
