@@ -1080,9 +1080,9 @@ With the integration of FlashAttention kernel, developers can use longer sequenc
 Flash Decoding (FD) is a technique that significantly speeds up attention during inference, especially for long-context
 tasks in large language models (LLMs) with GQA.
 
-.. image:: libraries/transformers-neuronx/flash_decoding.gif
+.. image:: ./flash_decoding.gif
    :alt: Flash Decoding
-   :width: 300px
+   :width: 800px
    :align: center
 
 With integration of FD, developers can achieve faster inference with larger sequence
