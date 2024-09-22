@@ -438,14 +438,14 @@ in a pipeline fashion. Mathematically, ScalarE implements:
    # Input: 2D in_tile, 1D scale, 1D bias
    # Output: 2D out_tile
    for lane_id in range(in_tile.shape[0]):
-      for k in range(in_tile.shape[1])
-       out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale[lane_id]
+      for k in range(in_tile.shape[1]):
+        out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale[lane_id]
                                        + bias[lane_id])
 
    # Case 2: scale is a compile constant in the instruction
    for lane_id in range(in_tile.shape[0]):
-      for k in range(in_tile.shape[1])
-       out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale
+      for k in range(in_tile.shape[1]):
+        out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale
                                        + bias[lane_id])
 
 This functionality can be invoked using the :doc:`nki.isa.activation <api/generated/nki.isa.activation>`
