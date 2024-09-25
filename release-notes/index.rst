@@ -454,6 +454,10 @@ Supported Probuf Versions
 | tensorflow-neuron                | < 3.20                           |
 +----------------------------------+----------------------------------+
 
+Supported Linux Kernel Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron Driver (``aws-neuronx-dkms``) supports Linux kernel versions >= 5.10
+
 Previous Releases
 -----------------
 
