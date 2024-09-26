@@ -84,7 +84,6 @@ More release content can be found in the table below and each component release 
      - **Training:**
 
        * Support for LoRA finetuning
-       * Support for Distributed Checkpointing
        * Support for Mixed precision enhancements
 
        **Inference:**
@@ -454,6 +453,10 @@ Supported Probuf Versions
 +----------------------------------+----------------------------------+
 | tensorflow-neuron                | < 3.20                           |
 +----------------------------------+----------------------------------+
+
+Supported Linux Kernel Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron Driver (``aws-neuronx-dkms``) supports Linux kernel versions >= 5.10
 
 Previous Releases
 -----------------
