@@ -1069,7 +1069,7 @@ Node 2 command line (same as Node 1 but set ``NEURON_RANK_ID`` as 1):
     NEURON_PP_STAGES=2 CPU_COMM_ID=10.1.201.64:8989 NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=1 python3 multi_node_dev_example.py
 
 
-Long Sequence length support up to 32k
+Long Sequence length support up to 128k
 ---------------------------------------
 **Flash Attention**
 
