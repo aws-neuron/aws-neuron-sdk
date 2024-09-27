@@ -1354,8 +1354,8 @@ The Execution API
     Runs one execution of the given ``nrt_model_t`` using the provided input tensor set and writing the results to the provided output tensor set.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensorset containing input data.
-    :param input_set: Tensor set where the output data will be written to.
+    :param input_set: Tensor set containing input data.
+    :param output_set: Tensor set where the output data will be written to.
 
 
 .. c:function:: NRT_STATUS nrt_execute_repeat(nrt_model_t *model, const nrt_tensor_set_t *input_set, nrt_tensor_set_t *output_set, int repeat_count)
@@ -1364,8 +1364,8 @@ The Execution API
     This requires a specially compiled NEFF and it's not a commonly used call.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensorset containing input data.
-    :param input_set: Tensor set where the output data will be written to.
+    :param input_set: Tensor set containing input data.
+    :param output_set: Tensor set where the output data will be written to.
     :param repeat_count:  Number of times to repeat this execution.
 
 
