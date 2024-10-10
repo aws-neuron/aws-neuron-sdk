@@ -30,14 +30,14 @@ Please see the following installation guide for installing ``NxDT``:
 Download the dataset
 --------------------
 
-Let's downloadtraining-data scripts for our experiments
+Let's download training-data scripts for our experiments
 
 .. code:: ipython3
 
    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
 
 
-To tokenize the data, we must request the tokenizer from hugging face and meta by following the
+To tokenize the data, we must request the tokenizer from Hugging Face and Meta by following the
 instructions at the following link: `HuggingFace Llama 3 8B Model <https://huggingface.co/meta-llama/Meta-Llama-3-8B>`__ . 
 
 Use of the Llama models is governed by the Meta license.
