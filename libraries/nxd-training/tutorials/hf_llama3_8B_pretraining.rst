@@ -30,17 +30,53 @@ Please see the following installation guide for installing ``NxDT``:
 Download the dataset
 --------------------
 
-This tutorial makes use of a preprocessed and tokenized Wikicorpus
-dataset that is stored in S3.
-The dataset can be downloaded to your cluster or instance by running
-the following AWS CLI commands on the head node or your Trn1 instance:
+Let's downloadtraining-data scripts for our experiments
 
-.. code-block:: bash
+.. code:: ipython3
 
-    export DATA_DIR=~/examples_datasets/
-    mkdir -p ${DATA_DIR} && cd ${DATA_DIR}
-    aws s3 cp s3://neuron-s3/training_datasets/llama3/wikicorpus_llama3_tokenized_8k .  --no-sign-request
-    aws s3 cp s3://neuron-s3/training_datasets/llama3/llama3_8B_config.json ~/config.json  --no-sign-request
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
+
+
+To tokenize the data, we must request the tokenizer from hugging face and meta by following the
+instructions at the following link: `HuggingFace Llama 3 8B Model <https://huggingface.co/meta-llama/Meta-Llama-3-8B>`__ . 
+
+Use of the Llama models is governed by the Meta license.
+In order to download the model weights and tokenizer, please visit the above website
+and accept their License before requesting access. After access has been granted,
+you may use the following python3 script along with your own hugging face token to download and save the tokenizer.
+
+
+.. code:: ipython3
+
+   from huggingface_hub import login
+   from transformers import AutoTokenizer
+
+   login(token='your_own_hugging_face_token')
+
+   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B')  
+
+   tokenizer.save_pretrained(".")
+
+For Llama3.1/Llama3, make sure your base directory has the following files:
+
+.. code:: ipython3
+
+   './tokenizer_config.json', './special_tokens_map.json', './tokenizer.json'
+
+Next let’s download and pre-process the dataset:
+
+.. code:: ipython3
+
+   mkdir ~/examples_datasets/ && cd ~/examples_datasets/
+   python3 /home/ubuntu/get_dataset.py --llama-version 3
+
+
+`Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name'. Use `repo_type` argument if needed.`` 
+This could be because of a stale cache. Try deleting the cache using: 
+
+.. code:: ipython3
+
+   sudo rm -rf /home/ubuntu/.cache/
 
 
 Pre-compile the model
