@@ -1,7 +1,7 @@
 .. _nxd-training-overview:
 
-NxD Training Overview
-=====================
+Overview
+=========
 .. contents:: Table of contents
    :local:
    :depth: 2
@@ -10,15 +10,12 @@ NxD Training
 -------------------
 
 NxD Training (where NxD stands for NeuronX Distributed) library is a collection of open-source tools and libraries 
-designed to empower customers to train PyTorch models on AWS Trainium instances. 
-:ref:`Introduced with Neuron 2.20 release <introduce-nxd-training>`, it combines both ease-of-use and access to 
-most advanced features through additional features built on top of :ref:`NxD Core<neuronx-distributed-index>` library. 
-Additionally, NxD training addresses the needs of a broad range of users including those looking to create their training 
-jobs from scratch to ones with existing workflows in other frameworks. It is compatible with
-training platforms like NVIDIA’s NeMo and provides users a migration path to switch their NeMo workflows to NxD Training.
+designed to empower customers to train PyTorch models on AWS Trainium instances. It is
+:ref:`introduced with Neuron 2.20 release <introduce-nxd-training>` as a beta software. NxD Training combines both ease-of-use and access to
+features built on top of :ref:`NxD Core<neuronx-distributed-index>` library. It is compatible with
+training platforms like NVIDIA’s NeMo.
 
-Specifically, :ref:`NxD Training <nxdt_figure>` opens a world of benefits to ML developers by offering a rich 
-feature set and greater productivity through:
+Specifically, :ref:`NxD Training <nxdt_figure>` offers the following features and productivity flows:
 
 *  **Training Workflows**: Developers benefit from turnkey support for multiple workflows such as model Pre-training, Supervised Finetuning (SFT),  
    and Parameter Efficient Finetuning (PEFT) using Low Rank Adapters (LoRA) [#f1]_. For these workflows, precision types supported include  
@@ -40,12 +37,12 @@ feature set and greater productivity through:
    multiple options
    for optimally loading/saving checkpoints such as sharded checkpoints, last-K checkpoints, asynchronous checkpoints, auto-resume from checkpoints and storage in S3 buckets.
 
-*  **PyTorch Lightning**: The library has support for training frameworks like PyTorch Lightning that help with organizing training code. 
+*  **PyTorch Lightning**: NxD Training is integrated with training frameworks like like PyTorch Lightning that help with organizing training code.
 
 *  **Models**: Users can start on NxD Training with ready-to-use samples based on HuggingFace and Megatron-LM model formats. It has support for advanced LLM architecture blocks such as 
    `Grouped Query Attention layer <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`_. 
 
-*  **SW Releases**: Availability on GitHub, both as pip wheel and source code, serves the developer needs for usage of and modifications to the library.
+*  **SW Releases**: NxD code is available on `GitHub <https://github.com/aws-neuron/neuronx-distributed-training/tree/main>`_, both as pip wheel and source code.
 
 .. _nxdt_figure:
 
@@ -77,13 +74,13 @@ Configuration File
 ^^^^^^^^^^^^^^^^^^
 
 NxD Training supports a top-level access for distributed training using YAML based configuration files. 
-This option is available for models that are available in the model zoo or custom ones enabled after following 
+This option is available for models that are available in the model hub or custom ones enabled after following
 the steps listed in :ref:`model integration guide <nxdt_developer_guide_integrate_new_model>` inside NxD Training. With this usage model, only the configuration parameters 
 inside the YAML file need to be set and no further code changes are necessary. This facilitates easy experimentation with various configuration settings and automating the workflow.
 Figure below shows the major 
 settings available inside YAML configuration file and more details on how to exercise these options are in 
 :ref:`YAML Configuration Settings <nxdt_config_overview>`. Existing users of NeuronX NeMo Megatron (NNM) or NVIDIA NeMo 
-can review :ref:`NNM <nxdt_developer_guide_migration_nnm_nxdt>` amd :ref:`NeMo <nxdt_developer_guide_migration_nemo_nxdt>` 
+can review :ref:`NNM <nxdt_developer_guide_migration_nnm_nxdt>` and :ref:`NeMo <nxdt_developer_guide_migration_nemo_nxdt>`
 migration guides, respectively, to map the configuration parameters to NxD Training.
 
 .. figure:: ./images/yaml_parts.jpg

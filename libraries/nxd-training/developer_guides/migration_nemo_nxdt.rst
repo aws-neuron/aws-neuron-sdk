@@ -1,16 +1,16 @@
 .. _nxdt_developer_guide_migration_nemo_nxdt:
 
-Migrating from NeMo to Neuronx Distributed Training
-===================================================
+NxD Training Compatibility with NeMo
+====================================
 
-Neuronx Distributed Training (NxDT) is built on top of `NeMo-1.14 <https://github.com/NVIDIA/NeMo/tree/v1.14.0>`_.
+NxD Training (NxDT) is built on top of `NeMo-1.14 <https://github.com/NVIDIA/NeMo/tree/v1.14.0>`_.
 The framework reuses modules from NeMo and exposes them via similar config interface.
 
 .. note::
 
     At the moment, NxDT only allows running training of decoder LLM models.
 
-This document goes over steps on how to migrate the NeMo training workload to NxDT training workload.
+This document goes over steps on how to run the NeMo training workloads inside NxDT.
 
 .. contents:: Table of contents
    :local:
@@ -23,7 +23,7 @@ Model Integration
 **Model already Exists in NxDT Model Hub:**
 
 If the model you want to train is already included in the NxDT model hub, and the training workflow
-(e.g., pre-training, fine-tuning) is supported in NxDT, migrate your NeMo YAML configuration file to
+(e.g., pre-training, fine-tuning) is supported in NxDT, you need to modify NeMo YAML configuration file to
 the NxDT YAML file. Follow the mapping table in the :ref:`nxdt_nemo_nxdt_config_mapping`.
 
 **Custom/New Model**
@@ -55,7 +55,7 @@ Optimal Partitioning
 --------------------
 
 NxDT is built on top of
-`NeuronxDistributed (NxD) <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/index.html>`_
+`NxD Core <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/index.html>`_
 primitives and exposes different model parallelism techniques. All of them can be configured using
 the ``distributed_strategy`` config.
 

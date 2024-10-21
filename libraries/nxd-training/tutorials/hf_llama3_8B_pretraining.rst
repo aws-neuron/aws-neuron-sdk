@@ -58,7 +58,14 @@ the compute graphs are first identified and extracted during a short simulated t
 and the extracted graphs are then compiled and cached using parallel compilation,
 which is considerably faster than the JIT flow.
 
-First, ensure that you are using the proper config file in the ``conf/`` directory.
+First, clone the open-source ``neuronx-distributed-training`` library
+
+.. code:: ipython3
+
+   git clone https://github.com/aws-neuron/neuronx-distributed-training
+   cd neuronx-distributed-training/examples
+
+Now, ensure that you are using the proper config file in the ``conf/`` directory.
 In the ``train.sh`` file, ensure that the ``CONF_FILE`` variable is properly
 set to the config for the model you want to use. In our case,
 it will be ``hf_llama3_8B_config``. The default config here is a 8B parameter model,
@@ -70,7 +77,6 @@ Next, run the following commands to launch an AOT pre-compilation job on your in
 
 .. code-block:: bash
 
-    cd ~/neuronx-distributed-training/examples
     export COMPILE=1
     ./train.sh
 
