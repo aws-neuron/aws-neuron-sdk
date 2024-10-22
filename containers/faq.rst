@@ -38,8 +38,8 @@ Neuron Device: Represents the number of Inferentia/Trainium chips in the instanc
 
 How to expose Neuron Cores to Container
 ---------------------------------------
-Neuron Core: Represents the number of Neuron Cores in the instance. Refer :ref:`Container Cores <container-cores>` for more details. Each Inferentia
-Chip has 4 Neuron Cores and each Trainium chip has 2 Neuron Cores.
+Neuron Core: Represents the number of Neuron Cores in the instance. Refer :ref:`Container Cores <container-cores>` for more details. Each Inferentia1
+device has 4 Neuron Cores and each Inferentia2 and Trainium1 device has 2 Neuron Cores.
 When the devices are exposed to the containers all the cores in the device are available
 for use in the container.  Please refer :ref:`nrt-configuration` to see how the environment variables NEURON_RT_VISIBLE_CORES and NEURON_RT_NUM_CORES 
 can be used to assign core to containers
