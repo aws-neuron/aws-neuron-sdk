@@ -82,13 +82,13 @@ Devices
         docker run -e “AWS_NEURON_VISIBLE_DEVICES=0,1”
         docker run -e “AWS_NEURON_VISIBLE_DEVICES=ALL”
 
-- In kubernetes environment, the neuron device plugin is used for exposing the neuron device to the containers in the pod. The number of devices can be adjusted using the *aws.amazon.com/neurondevice* resource in the pod specification. Refer :ref:`K8s setup <tutorial-k8s-env-setup-for-neuron>` for more details
+- In kubernetes environment, the neuron device plugin is used for exposing the neuron device to the containers in the pod. The number of devices can be adjusted using the *aws.amazon.com/neuron* resource in the pod specification. Refer :ref:`K8s setup <tutorial-k8s-env-setup-for-neuron>` for more details
 
     .. code:: bash
 
          resources:
             limits:
-            aws.amazon.com/neurondevice: 1
+            aws.amazon.com/neuron: 1
 
    .. note::
 
