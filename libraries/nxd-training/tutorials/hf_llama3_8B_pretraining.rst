@@ -68,7 +68,7 @@ Next let’s download and pre-process the dataset:
 .. code:: ipython3
 
    mkdir ~/examples_datasets/ && cd ~/examples_datasets/
-   python3 /home/ubuntu/get_dataset.py --llama-version 3
+   python3 ~/get_dataset.py --llama-version 3
 
 
 `Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name'. Use `repo_type` argument if needed.`` 
@@ -76,7 +76,7 @@ This could be because of a stale cache. Try deleting the cache using:
 
 .. code:: ipython3
 
-   sudo rm -rf /home/ubuntu/.cache/
+   sudo rm -rf ~/.cache/
 
 
 Pre-compile the model
