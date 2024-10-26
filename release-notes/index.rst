@@ -10,6 +10,19 @@ What's New
 .. _latest-neuron-release:
 .. _neuron-2.20.0-whatsnew:
 
+
+Neuron 2.20.1 (10/25/2024)
+---------------------------
+
+Neuron 2.20.1 release addresses an issue with the Neuron Persistent Cache that was brought forth in 2.20 release. In the 2.20 release, the Neuron persistent cache issue resulted in a cache-miss scenario when attempting to load a previously compiled Neuron Executable File Format (NEFF) from a different path or Python environment than the one used for the initial Neuron SDK installation and NEFF compilation. This release resolves the cache-miss problem, ensuring that NEFFs can be loaded correctly regardless of the path or Python environment used to install the Neuron SDK, as long as they were compiled using the same Neuron SDK version.
+
+This release also addresses the excessive lock wait time issue during neuron_parallel_compile graph extraction for large cluster training. See :ref:`torch-neuronx-rn` and :ref:`libneuronxla-rn`.
+
+Additionally, Neuron 2.20.1 introduces new Multi Framework DLAMI for Amazon Linux 2023 (AL2023) that customers can use to easily get started with latest Neuron SDK on multiple frameworks that Neuron supports. See :ref:`neuron-dlami-release-notes`.
+
+Neuron 2.20.1 Training DLC is also updated to pre-install the necessary dependencies and support NxD Training library out of the box. See :ref:`neuron-dlc-release-notes`
+
+
 Neuron 2.20.0 (09/16/2024)
 ---------------------------
 .. contents:: Table of contents
@@ -386,27 +399,27 @@ Release Artifacts
 Trn1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.1
 
 Inf2 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.1
 
 Inf1 packages
 ^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.1
 
 Supported Python Versions for Inf1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.1
 
 Supported Python Versions for Inf2/Trn1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.20.1
 
 Supported Numpy Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^

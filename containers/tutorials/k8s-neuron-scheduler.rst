@@ -25,13 +25,16 @@ could be assigned to a container given a request for 2 devices.
 
 Devices on Trn1.32xlarge and Trn1n.32xlarge nodes are connected via a 2D torus topology. On Trn1 nodes
 containers can request 1, 4, 8, or all 16 devices.  In the case you request an invalid number of devices, such as 7,
-your pod will not be scheduled and you will receive a warning
-``Instance type trn1.32xlarge does not support requests for device: 7. Please request a different number of devices.```.
+your pod will not be scheduled and you will receive a warning:
+
+``Instance type trn1.32xlarge does not support requests for device: 7. Please request a different number of devices.``
 
 When requesting 4 devices, your container will be allocated one of the following sets of devices if they are available.
+
 |eks-trn1-device-set4|
 
 When requesting 8 devices, your container will be allocated one of the following sets of devices if they are available.
+
 |eks-trn1-device-set8|
 
 For all instance types, requesting one or all Neuron cores or devices is valid.

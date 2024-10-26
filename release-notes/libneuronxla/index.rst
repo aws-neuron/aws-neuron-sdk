@@ -15,6 +15,15 @@ the `PJRT <https://openxla.org/xla/pjrt_integration>`__ runtime, built using
 the `PJRT C-API plugin <https://github.com/openxla/xla/blob/5564a9220af230c6c194e37b37938fb40692cfc7/xla/pjrt/c/docs/pjrt_integration_guide.md>`__
 mechanism.
 
+Release [2.0.4986.0]
+--------------------
+Date: 10/25/2024
+
+Summary
+~~~~~~~
+
+This patch release removes the excessive lock wait time during neuron_parallel_compile graph extraction for large cluster training.
+
 Release [2.0.4115.0]
 ----------------------
 Date: 09/16/2024

@@ -6,27 +6,25 @@ Deploy Neuron Device Plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Make sure :ref:`prequisite<k8s-prerequisite>` are satisified
-* Download the neuron device plugin yaml file. :download:`k8s-neuron-device-plugin.yml </src/k8/k8s-neuron-device-plugin.yml>`
-* Download the neuron device plugin rbac yaml file. This enables permissions for device plugin to update the node and Pod annotations. :download:`k8s-neuron-device-plugin-rbac.yml </src/k8/k8s-neuron-device-plugin-rbac.yml>`
 * Apply the Neuron device plugin as a daemonset on the cluster with the following command
 
     .. code:: bash
 
-        kubectl apply -f k8s-neuron-device-plugin-rbac.yml
-        kubectl apply -f k8s-neuron-device-plugin.yml
+        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+            --set "npd.enabled=false"
 
 * Verify that neuron device plugin is running
 
     .. code:: bash
 
-        kubectl get ds neuron-device-plugin-daemonset --namespace kube-system
+        kubectl get ds neuron-device-plugin -n kube-system
 
     Expected result (with 2 nodes in cluster):
 
     .. code:: bash
 
-        NAME                             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-        neuron-device-plugin-daemonset   2         2         2       2            2           <none>          27h
+        NAME                   DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+        neuron-device-plugin   2         2         2       2            2           <none>          18h
 
 * Verify that the node has allocatable neuron cores and devices with the following command
 
