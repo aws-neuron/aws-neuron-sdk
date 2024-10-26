@@ -5,35 +5,28 @@ In cluster environments where there is no access to default scheduler, the neuro
 use this new scheduler. Neuron scheduler extension is added to this new scheduler. EKS natively does not yet support the neuron scheduler extension and so in the EKS environment this is the only way to add the neuron scheduler extension.
 
 * Make sure :ref:`Neuron device plugin<k8s-neuron-device-plugin>` is running
-* Download the my scheduler :download:`my-scheduler.yml </src/k8/my-scheduler.yml>`
-* Download the scheduler extension :download:`k8s-neuron-scheduler-eks.yml </src/k8/k8s-neuron-scheduler-eks.yml>`
-* Apply the neuron-scheduler-extension
+* Install the neuron-scheduler-extension
 
-    ::
+    .. code:: bash
 
-        kubectl apply -f k8s-neuron-scheduler-eks.yml
-
-
-* Apply the my-scheduler.yml
-
-    ::
-
-        kubectl apply -f my-scheduler.yml
+        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+            --set "scheduler.enabled=true" \
+            --set "npd.enabled=false"
 
 * Check there are no errors in the my-scheduler pod logs and the k8s-neuron-scheduler pod is bound to a node
 
-    ::
+    .. code:: bash
 
         kubectl logs -n kube-system my-scheduler-79bd4cb788-hq2sq
 
-    ::
+    .. code:: bash
 
         I1012 15:30:21.629611       1 scheduler.go:604] "Successfully bound pod to node" pod="kube-system/k8s-neuron-scheduler-5d9d9d7988-xcpqm" node="ip-192-168-2-25.ec2.internal" evaluatedNodes=1 feasibleNodes=1
 
 
 * When running new pod's that need to use the neuron scheduler extension, make sure it uses the my-scheduler as the scheduler. Sample pod spec is below
 
-    ::
+    .. code:: bash
 
         apiVersion: v1
         kind: Pod
@@ -57,20 +50,19 @@ use this new scheduler. Neuron scheduler extension is added to this new schedule
 
 * Once the neuron workload pod is run, make sure logs in the k8s neuron scheduler has successfull filter/bind request
 
-
-    ::
+    .. code:: bash
 
         kubectl logs -n kube-system k8s-neuron-scheduler-5d9d9d7988-xcpqm
 
 
-    ::
+    .. code:: bash
 
         2022/10/12 15:41:16 POD nrt-test-5038 fits in Node:ip-192-168-2-25.ec2.internal
         2022/10/12 15:41:16 Filtered nodes: [ip-192-168-2-25.ec2.internal]
         2022/10/12 15:41:16 Failed nodes: map[]
         2022/10/12 15:41:16 Finished Processing Filter Request...
 
-    ::
+    .. code:: bash
 
         2022/10/12 15:41:16 Executing Bind Request!
         2022/10/12 15:41:16 Determine if the pod %v is NeuronDevice podnrt-test-5038
@@ -96,6 +88,3 @@ use this new scheduler. Neuron scheduler extension is added to this new schedule
         2022/10/12 15:41:16 Return aws.amazon.com/neuroncore
         2022/10/12 15:41:16 Succesfully updated the DevUsageMap [true true true true true true true true true false false false false false false false]  and otherDevUsageMap [true true true false] after alloc for node ip-192-168-2-25.ec2.internal
         2022/10/12 15:41:16 Finished executing Bind Request...
-
-
-

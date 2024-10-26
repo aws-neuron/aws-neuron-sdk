@@ -8,6 +8,13 @@ Neuron DLC Release Notes
    :depth: 1
 
 
+Neuron 2.20.1
+-------------
+
+Date: 10/25/2024
+- Neuron 2.20.1 DLC includes prerequisites for `Neuronx Distributed Training framework <https://github.com/aws-neuron/neuronx-distributed-training/blob/main/docs/general/installation_guide.rst#building-apex>`. Customers can expect to use NxDT out of the box.
+
+
 Neuron 2.20.0
 -------------
 

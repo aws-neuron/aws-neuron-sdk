@@ -78,7 +78,7 @@ spec:
         - /bin/sh
         - -c
         - "sleep 60 && /scripts/check-health.py"
-        image: public.ecr.aws/neuron/neuron-node-recovery:1.2.0
+        image: public.ecr.aws/neuron/neuron-node-recovery:1.3.0
         resources:
           limits:
             cpu: 10m
