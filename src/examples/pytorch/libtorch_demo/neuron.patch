@@ -1,17 +1,12 @@
+
 From 3f126613c47e4261d0e86520cb6e85c5713e2b15 Mon Sep 17 00:00:00 2001
 From: Stephen Dunn <stdun@amazon.com>
 Date: Tue, 26 Jan 2021 22:55:40 +0000
 Subject: [PATCH] Adds AWS Neuron native C++ interface
 
 ---
- tokenizers/Cargo.toml    |  1 +
- tokenizers/src/lib.rs    |  2 ++
- tokenizers/src/neuron.rs | 26 ++++++++++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 tokenizers/src/neuron.rs
-
 diff --git a/tokenizers/Cargo.toml b/tokenizers/Cargo.toml
-index c264f48..ade2c8c 100644
+index c0f1aff..9767da7 100644
 --- a/tokenizers/Cargo.toml
 +++ b/tokenizers/Cargo.toml
 @@ -19,6 +19,7 @@ exclude = [ "rust-toolchain", "target/*", "Cargo.lock", "benches/*.txt", "benche
@@ -19,22 +14,25 @@ index c264f48..ade2c8c 100644
  path = "src/lib.rs"
  bench = false
 +crate-type = ["rlib", "cdylib"]
-
- [[bin]]
- name = "cli"
+ 
+ [[bench]]
+ name = "bpe_benchmark"
 diff --git a/tokenizers/src/lib.rs b/tokenizers/src/lib.rs
-index 41ad4ca..847b673 100644
+index eb89b93..2392f28 100644
 --- a/tokenizers/src/lib.rs
 +++ b/tokenizers/src/lib.rs
-@@ -128,3 +128,5 @@ pub use tokenizer::*;
-
+@@ -145,6 +145,8 @@ pub mod tokenizer;
+ // Re-export from tokenizer
+ pub use tokenizer::*;
+ 
++mod neuron;
++
  // Re-export also parallelism utils
  pub use utils::parallelism;
-+
-+mod neuron;
-diff --git a/tokenizers/src/neuron.rs b/tokenizers/src/neuron.rs
+ 
+diff --git a/b_tokenizers/tokenizers/src/neuron.rs b/tokenizers/src/neuron.rs
 new file mode 100644
-index 0000000..6dd106d
+index 0000000..af4a679
 --- /dev/null
 +++ b/tokenizers/src/neuron.rs
 @@ -0,0 +1,25 @@
@@ -63,5 +61,4 @@ index 0000000..6dd106d
 +        output[i] = *token;
 +    }
 +}
---
-2.23.3
+\ No newline at end of file

@@ -42,3 +42,5 @@ This section provide links that will assist you to quickly start with a fresh in
 
 
 .. include:: /general/quick-start/tab-inference-tensorflow-neuronx-al2023.txt
+
+.. include:: /frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-install-prev-al2023.rst

@@ -12,10 +12,9 @@ Neuron Runtime consists of a kernel mode driver and C/C++ libraries which provid
 Known issues
 ------------
 
-Updated : 04/29/2022
+Updated : 07/03/2024
 
-- In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
-
+- The ``nrt_tensor_allocate`` APIs do not support more then 4 GB (>= 4GB) sizes. Passing in a size larger than or equal to 4GB will result in datatype overflow leading to undefined behavior.
 
 NEFF Support Table:
 -------------------
@@ -31,6 +30,47 @@ NEFF Version Runtime Version Range Notes
 1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs 
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
+
+Neuron Runtime Library [2.22.14.0]
+---------------------------------
+Date: 09/16/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved the inter-node mesh algorithm to scale better for larger number of nodes and larger allreduce problem sizes
+
+Bug fixes
+^^^^^^^^^
+* Implemented a fix that differentiate between out-of-memory (OOM) conditions occurring on the host system versus the device when an OOM event occurs
+* Resolved a performance issue with transpose operations, which was caused by an uneven distribution of work across DMA engines
+
+Neuron Runtime Library [2.21.41.0]
+---------------------------------
+Date: 07/03/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Improved collectives performance on small buffers
+* Improved memory utilization by reducing the size of collective buffers
+* Logging improvements including improvements for HW errors, out of bounds issues, and collectives
+* Added fine grained NRT error return codes for execution errors (`reference <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot.html?highlight=hardware%20errors#hardware-errors>`_)
+
+Bug fixes
+^^^^^^^^^
+* Fixed bug where runtime was incorrectly reporting instruction offsets to the profiler
+
+Neuron Runtime Library [PATCH 2.20.22.0]
+----------------------------------------
+Date: 04/01/2024
+
+Bug fixes
+^^^^^^^^^
+* Fixed a bug where setting `NEURON_SCRATCHPAD_PAGE_SIZE` to a non-power of two value could lead to unnecessary Neuron memory allocations.
+* Fixed messaging so that logs of benign numerical errors do not include a full dump of runtime state.
+* Fixed a bug that was causing Neuron Collectives to consume excessive amount of Neuron memory, causing out of memory errors during model load.
+* Fixed a bug where the Runtime would fail to report a hardware error while the status API reported instance retirement.
+* Fixed a hang in Neuron Collectives that could occur when subgraphs running on different workers had a different number of replicas.
+
 
 Neuron Runtime Library [2.20.11.0]
 ---------------------------------

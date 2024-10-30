@@ -39,3 +39,5 @@ This section provide links that will assist you to quickly start with a fresh in
 
 
 .. include:: /general/quick-start/tab-inference-mxnet-neuron-al2023.txt
+
+.. include:: /frameworks/mxnet-neuron/setup/mxnet-install-prev-al2023.rst

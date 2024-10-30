@@ -10,3 +10,4 @@ src/examples/pytorch/libtorch_demo.tar.gz
 *-checkpoint.ipynb
 .idea/
 .vscode/
+*/nki/*/generated/

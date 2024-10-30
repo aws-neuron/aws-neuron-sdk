@@ -32,8 +32,8 @@ Model classes status
 -  `GPT2 <https://huggingface.co/docs/transformers/model_doc/gpt2>`__: [Beta]
 -  `GPT-J <https://huggingface.co/docs/transformers/model_doc/gptj>`__: [Beta]
 -  `GPT-Neox <https://huggingface.co/docs/transformers/model_doc/gpt_neox>`__: [Beta]
--  `LLaMA <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Beta]
--  `LLaMA 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Beta]
+-  `Llama <https://huggingface.co/docs/transformers/main/model_doc/llama>`__: [Beta]
+-  `Llama 2 <https://huggingface.co/docs/transformers/main/model_doc/llama2>`__: [Beta]
 -  `Mistral <https://huggingface.co/docs/transformers/main/model_doc/mistral>`__: [Beta]
 
 
@@ -70,21 +70,144 @@ Model features
      - No
      - No
 
-   * - LLaMA
+   * - Llama
      - Yes
      - Yes
      - Yes
 
-   * - LLaMA 2
+   * - Llama 2
      - Yes
      - Yes
      - Yes
+
+   * - Llama 3.1
+     - Yes
+     - Yes
+     - Yes     
 
    * - Mistral
      - Yes
      - Yes
      - Yes
 
+Release [0.12.313]
+----------------------
+Date: 09/16/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support for model serialization (save and load) of all models except the ``GPTJForSampling`` and ``GPTNeoXForSampling``` model classes, which reduces future model load time by saving a transformed and sharded set of weights as a new safetensors checkpoint.
+- Support for on device sampling (Top P) with Continuous batching
+- Support for Scaled RoPE for LLAMA 3.1 models
+- Support for multi-node inference for LLAMA 3.1 405B model for specific sequence lengths
+- Support for FlashDecoding (using ``shard_over_sequence``) for supporting long context lengths upto 128k   `Tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`__
+
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Fixes to handle ``seq_ids`` consistently across vLLM versions
+- Fixes for KV head full replication logic errors
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use ``constants.LAYOUT_SBH`` instead.
+
+
+Release [0.11.351.0]
+----------------------
+Date: 07/03/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support for compiler optimized flash attention kernel to support context lengths of 16k/32k for Llama models
+- Streamer support enabled for BLOOM, GPTJ, GPT2, GPT-NeoX and LLAMA models
+- Support for on device generation for TopK in Mixtral models
+- Continuous batching support for Mistral v0.2
+- Minor API improvements with type annotations for NeuronConfig, deprecation warnings for old arguments, and exposing top-level configurations
+
+- Performance improvements such as an optimized logit ordering for continuous batching in Llama models, optimized QKV padding for certain GQA models, faster implementation of cumsum operation to improve TopP performance
+  
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Removed ``start_ids=None`` from ``generate()``
+- Mistral decoding issue that occurs during multiple sampling runs
+- Mistralv0.1 sliding window error
+- Off-by-one error in window context encoding
+- Better error messaging
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- ``on_device_generation=GenerationConfig(do_sample=True)`` has some known failures for Llama models. Customers are advised not to use ``on_device_generation`` in such cases.
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use ``constants.LAYOUT_SBH`` instead.
+
+Release [0.10.0.332]
+----------------------
+Date: 04/10/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- [Beta] Added support for continuous batching and a reference integration with vLLM (Llama models only)
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- There is a known compiler issue for inference of some configurations of Llama-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of Llama-2 13B that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if Llama-2 13B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of GPT-2 that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if GPT-2 accuracy issues occur.
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use constants.LAYOUT_SBH instead.
+
+
+Release [0.10.0.21]
+----------------------
+Date: 04/01/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for on device log-softmax and on device sampling for TopK
+- Added support for on device embedding for all models.
+- Added support for Speculative Decoding
+- [Beta] Added support for Mixtral-8x7b MoE
+- [Beta] Added support for mistralai/Mistral-7B-Instruct-v0.2 with no sliding window
+- Added faster checkpoint loading support for both sharded and whole checkpoints
+- Added the ability to download checkpoints directly from huggingface hub repositories
+- Added NeuronAutoModelForCausalLM class which automatically loads architecture-specific classes
+- Added a warmup to all kernels to avoid unexpected initialization latency spikes
+  
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Users no longer need a copy of the original checkpoint and can use safetensor checkpoints for optimal speed.
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- There is a known compiler issue for inference of some configurations of Llama-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of Llama-2 13B that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if Llama-2 13B accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of GPT-2 that can cause accuracy degredation. Customers are advised to use the ``--enable-saturate-infinity --enable-mixed-precision-accumulation`` compiler flags if GPT-2 accuracy issues occur.
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
 
 Release [0.9.474]
 ----------------------
@@ -96,8 +219,8 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [Llama] [Beta] Added support for Llama-2 70b.
-- [Mistral] [Beta] Added support for Mistral 7b.
+- [Llama] [Beta] Added support for Llama-2 70B.
+- [Mistral] [Beta] Added support for Mistral 7B.
 - [Beta] Added support for PyTorch 2.1.
 - [Beta] Added support for Grouped Query Attention (GQA).
 - [Beta] Added support for ``safetensors`` serialization.
@@ -114,7 +237,7 @@ Resolved Issues
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- There is a known compiler issue for inference of some configurations of Llama-2 70b that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70b accuracy issues occur.
+- There is a known compiler issue for inference of some configurations of Llama-2 70B that can cause accuracy degredation. Customers are advised to use the ``--enable-mixed-precision-accumulation`` compiler flag if Llama-2 70B accuracy issues occur.
 - There are known compiler issues impacting inference accuracy of certain model configurations of ``Llama-2-13b`` when ``amp = fp16`` is used. If this issue is observed, ``amp=fp32`` should be used as a work around.  This issue will be addressed in future Neuron releases.
 
 Release [0.8.268]
@@ -127,7 +250,7 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [LLaMA] [Beta] Added support for ``int8`` quantization for LLaMA.
+- [Llama] [Beta] Added support for ``int8`` quantization for Llama.
 - [BLOOM] [Beta] Added multi bucket context encoding support for BLOOM.
 - [Beta] Added model Serialization for all supported models (except GPT-J and GPT-NeoX).
 - [Beta] Added the ability to return output logit scores during sampling.
@@ -163,8 +286,8 @@ Resolved Issues
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Some configurations of LLaMA and LLaMA-2 inference models fail compilation with the error ``IndirectLoad/Save requires contiguous indirect access per partition``. This is fixed in the compiler version 2.10.0.35 (Neuron SDK 2.14.1).
-- Some configurations of LLaMA and LLaMA-2 inference model fail compilation with the error ``Too many instructions after unroll for function sg0000``. To mitigate this, please try with ``-O1`` compiler option (or ``--optlevel 1``) by adding ``os.environ["NEURON_CC_FLAGS"] = "-O1"`` to your script or set in the environment. A complete fix will be coming in the future release which will not require this option. Note: Using -O1 in the LLaMA-2 13B tutorial results in about 50% increase in latency compared to Neuron SDK 2.13.2. If this is not acceptable, please use compiler version from Neuron SDK 2.13.2.
+- Some configurations of Llama and Llama-2 inference models fail compilation with the error ``IndirectLoad/Save requires contiguous indirect access per partition``. This is fixed in the compiler version 2.10.0.35 (Neuron SDK 2.14.1).
+- Some configurations of Llama and Llama-2 inference model fail compilation with the error ``Too many instructions after unroll for function sg0000``. To mitigate this, please try with ``-O1`` compiler option (or ``--optlevel 1``) by adding ``os.environ["NEURON_CC_FLAGS"] = "-O1"`` to your script or set in the environment. A complete fix will be coming in the future release which will not require this option. Note: Using -O1 in the Llama-2 13B tutorial results in about 50% increase in latency compared to Neuron SDK 2.13.2. If this is not acceptable, please use compiler version from Neuron SDK 2.13.2.
 
 Release [0.6.106]
 ----------------------
@@ -176,18 +299,18 @@ Summary
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for LLaMA 2 (excluding grouped/multi-query versions, such as LLaMA 2 70b) [Beta]
-- Improved the performance of BLOOM and LLaMA models [Beta]
-- Reduced execution latency of token generation in tensor parallel models by improving thread synchronization. (supported in LLaMA only) 
-- Added an optimized vector implementation of RoPE positional embedding. (supported in LLaMA only)
-- Added support for faster context encoding on sequences of varying lengths. This is implemented by allowing multiple buckets for parallel context encoding. During inference the best fit bucket is chosen. (supported in LLaMA/GPT-2 only)
+- Added support for Llama 2 (excluding grouped/multi-query versions, such as Llama 2 70B) [Beta]
+- Improved the performance of BLOOM and Llama models [Beta]
+- Reduced execution latency of token generation in tensor parallel models by improving thread synchronization. (supported in Llama only) 
+- Added an optimized vector implementation of RoPE positional embedding. (supported in Llama only)
+- Added support for faster context encoding on sequences of varying lengths. This is implemented by allowing multiple buckets for parallel context encoding. During inference the best fit bucket is chosen. (supported in Llama/GPT-2 only)
 - Added the Neuron Persistent Cache for compilation to automatically load pre-compiled model artifacts. (supported by all models)
 - Improved compilation time by compiling models used for different sequence length buckets in parallel. (not supported in GPT-NeoX/GPT-J)
 
 Resolved Issues
 ~~~~~~~~~~~~~~~
 
-- [LLaMA] Fixed an issue in the parallel context encoding network where incorrect results could be generated if the context length is shorter than the context length estimate
+- [Llama] Fixed an issue in the parallel context encoding network where incorrect results could be generated if the context length is shorter than the context length estimate
 - [GPT2 / OPT] Fixed an issue in the parallel context encoding network where incorrect results could be generated
 
 Known Issues and Limitations
@@ -209,7 +332,7 @@ What's new in this release
 
 - Added support for GPT-NeoX models [Beta].
 - Added support for BLOOM models [Beta].
-- Added support for LLaMA models [Alpha].
+- Added support for Llama models [Alpha].
 - Added support for more flexible tensor-parallel configurations to GPT2, OPT, and BLOOM. The attention heads doesn't need to be evenly divisible by `tp_degree` anymore. (Note: The `tp_degree` still needs to satisfy the runtime topologies constraint for collective communication (i.e Allreduce). For more details on supported topologies, see: `Tensor-parallelism-support`_ and https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-features/collective-communication.html.)
 - Added multi-query / multi-group attention support for GPT2.
 

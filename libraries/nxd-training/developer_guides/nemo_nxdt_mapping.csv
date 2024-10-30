@@ -1,0 +1,87 @@
+﻿NeMo param,NxDT param mapping,Comments
+name,name,
+restore_from_path,Not supported,
+**trainer**,,
+devices,devices,
+num_nodes,num_nodes,
+accelerator,Not required,"We made the default as TPU which maps to Neuron internally, so users no longer have to add it."
+precision,replaced by ``precision_config``,There is a separate `precision` config to control the precision of model and optimizer.
+logger,Not required,"We set default value of logger to False."
+enable_checkpointing,Separate ``exp_manager`` config,"All checkpointing is controlled by exp_manager config."
+use_distributed_sampler,Not supported,
+max_epochs,max_epochs,
+max_steps,max_steps,
+log_every_n_steps,log_every_n_steps,
+val_check_interval,val_check_interval,
+limit_val_batches,limit_val_batches,
+limit_test_batches,limit_test_batches,
+accumulate_grad_batches,Removed,"This is automatically configured based on global_batchsize, micro-batchsize and distributed config."
+gradient_clip_val,gradient_clip_val,
+benchmark,Not supported,
+enable_model_summary,Not supported,
+**exp_manager**,,
+log_local_rank_0_only,log_local_rank_0_only,
+create_tensorboard_logger,create_tensorboard_logger,
+explicit_log_dir,explicit_log_dir,
+exp_dir,exp_dir,
+name,name,
+create_wandb_logger,Not supported,"This was not supported under NNM, either. We have removed this argument from NxDT."
+wandb_logger_kwargs,Not supported,
+resume_if_exists,resume_if_exists,
+resume_ignore_no_checkpoint,resume_ignore_no_checkpoint,
+create_checkpoint_callback,create_checkpoint_callback,
+checkpoint_callback_params,checkpoint_callback_params,
+**model**,,
+mcore_gpt,Not supported,NxDT has its own implementation of megatron_gpt_model which is based on v1.14 version of NeMo
+tensor_model_parallel_size,``distributed_strategy.tensor_model_parallel_size``,All the parallelism config are moved to distributed_strategy config
+pipeline_model_parallel_size,``distributed_strategy.pipeline_model_parallel_size``,
+virtual_pipeline_model_parallel_size,``distributed_strategy.virtual_pipeline_model_parallel_size``,
+sequence_parallel,``distributed_strategy.sequence_parallel``,
+micro_batch_size,``data.micro_batch_size``,All the dataset/dataloader/tokenizer configuration are now part of a separate config called data
+global_batch_size,``data.global_batch_size``,
+tokenizer,``data.tokenizer``,
+data,Moved to ``data`` at the same level as model,"The entire ``data`` key now controls a ``DataModule`` and is placed at the same level as ``model`` key in the config structure."
+encoder_seq_length,encoder_seq_length,
+max_position_embeddings,max_position_embeddings,
+make_vocab_size_divisible_by,make_vocab_size_divisible_by,
+pre_process,Not supported,NxDT by default adds embedding layer at the start of the transformer block.
+post_process,Not supported,NxDT by default adds a LM-head at the end of the transformer block.
+persist_layer_norm,persist_layer_norm,
+share_embeddings_and_output_weights,share_embeddings_and_output_weights,
+position_embedding_type,position_embedding_type,
+rotary_percentage,rotary_percentage,
+transformer_block_type,transformer_block_type,
+has_bias,has_bias,
+num_query_groups,Not required,query group attention can be configured using ``num_kv_heads`` parameter.
+native_amp_init_scale,Not Required,
+native_amp_growth_interval,Not Required,"GPU optimizations which were not supported in NNM, have been removed from NxDT. Most of these fusion ops, the neuron compiler handles on its own. For Attention and Softmax, Neuron uses NKI kernels and custom ops to implement them"
+hysteresis,Not Required,
+fp32_residual_connection,Not Required,
+fp16_lm_cross_entropy,Not Required,
+megatron_amp_O2,Not Required,
+grad_div_ar_fusion,Not Required,
+gradient_accumulation_fusion,Not Required,
+bias_activation_fusion,Not Required,
+bias_dropout_add_fusion,Not Required,
+masked_softmax_fusion,``fusions.softmax``,
+seed,seed is moved out of model and at the same level as model,
+resume_from_checkpoint,``exp_manager.resume_from_checkpoint``,
+use_cpu_initialization,use_cpu_initialization,
+onnx_safe,Not supported,"This was not supported under NNM too, we have removed this argument from NxDT."
+apex_transformer_log_level,Not supported,
+gradient_as_bucket_view,Not supported,
+sync_batch_comm,Not supported,
+activations_checkpoint_granularity,activations_checkpoint_granularity,By default NxDT checkpoints attention module in case of selective and a single layer in case of full checkpointing.
+activations_checkpoint_method,Not supported,
+activations_checkpoint_num_layers,Not supported,
+num_micro_batches_with_partial_activation_checkpoints,Not supported,
+activations_checkpoint_layers_per_pipeline,Not supported,
+disable_layer_norm_checkpointing,Not supported,
+transformer_engine,Not supported,This is specifically built for NVIDIA GPUs.
+fp8,Not supported,fp8 training is not supported on Neuron (both NNM and NxDT).
+fp8_e4m3,Not supported,
+fp8_hybrid,Not supported,
+fp8_margin,Not supported,
+use_emha,Not supported,
+nsys_profile,Not supported,This is specifically built for NVIDIA GPUs.
+optim,optim,

@@ -280,16 +280,18 @@ Contains basic information about the Neuron hardware.
 ::
 
      "neuron_hardware_info": {
-       "neuron_device_version": "v2",
+       "neuron_device_type": "trainium",
        "neuroncore_version": "v2",
        "neuron_device_count": 16,
-       "neuroncore_per_device_count": 4,
+       "neuron_device_memory_size": 34359738368,
+       "neuroncore_per_device_count": 2,
        "error": ""
      }
 
--  ``neuron_device_version``: version of the Neuron Devices on the instance,
--  ``neuroncore_version``: version of the NeuronCores on the instance,
+-  ``neuron_device_type``: type of the Neuron Devices on the instance
+-  ``neuroncore_version``: version of the NeuronCores on the instance
 -  ``neuron_device_count`` : number of available Neuron Devices
+-  ``neuron_device_memory_size``: total memory available on each Neuron Device
 -  ``neuroncore_per_device_count`` : number of NeuronCores present on each Neuron Device
 -  ``error`` : will contain an error string if any occurred when getting this information
    (usually due to the Neuron Driver not being installed or not running).
@@ -795,3 +797,8 @@ If your data visualization framework is Grafana, we provided a :download:`Grafan
 which integrates with Prometheus and this script.
 
 .. |image| image:: ../../images/nm-img2.png
+
+Running neuron monitor in Kubernetes environment
+-----------------------------------------
+
+For running neuron monitor in Kubernetes environment, please refer to instructions `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/kubernetes-getting-started.html>`_.

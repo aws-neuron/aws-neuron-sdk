@@ -55,7 +55,7 @@ sequence dimension. The main advantage of sharding these non-tensor parallel blo
 We can use the same tensor-parallel degree to partition, thereby reducing the overall activation memory by a factor of `t`.
 However, this partitioning comes at a cost. Since we are partitionining the non-tensor parallel region along sequence dimnesion,
 we have to collect the activations before we feed to the tensor-parallel block. This requires an introduction of 
-`all-gather <https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html#allgather>`__ collecive 
+`all-gather <https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html#allgather>`__ collective 
 operation which would gather the activations along the sequence dimension. Similarly, after the tensor-parallel block, since 
 we would have to split the activations along the sequence dimension and distribute among the devices. Since, the tensor-parallel 
 block in the transformer module already uses an all-reduce (Row-parallel linear layer used for MLP), we can replace the 
@@ -96,7 +96,7 @@ In the activation memory equation, we have a quadratic term of `5abs^2`. As the 
 faster rate. This quadratic term comes from the softmax computation. `Vijay Korthikanti et.al <https://browse.arxiv.org/pdf/2205.05198.pdf>`__ 
 propose `Selective activation checkpointing` where they only recompute the softmax and attention computation and thereby avoid saving the activations coming 
 from softmax and attention computation. This completely gets rid of the quadratic term and brings down the activation memory per layer to 
-`34sbh/t`. The LLama-7B example in `this tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html#llama2-7b-tp-zero1-tutorial>`__ 
+`34sbh/t`. The LLama-7B example in `this tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama_tp_zero1.html#llama2-7b-tp-zero1-tutorial>`__
 used selective activation checkpointing.
 
 

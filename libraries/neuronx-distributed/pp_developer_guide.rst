@@ -1,6 +1,6 @@
 .. _pp_developer_guide:
 
-Developer guide for Pipeline Parallelism (``neuronx-distributed`` )
+Developer guide for Pipeline Parallelism 
 =====================================================================
 
 Training
@@ -29,6 +29,7 @@ Let's take a look at our Llama example:
         model,
         transformer_layer_cls=LlamaDecoderLayer,
         num_microbatches=args.num_microbatches,
+        virtual_pipeline_size=1,
         output_loss_value_spec=(True, False),
         input_names=["input_ids", "attention_mask", "labels"],
         pipeline_cuts=pipeline_cuts,
@@ -36,6 +37,7 @@ Let's take a look at our Llama example:
         leaf_module_cls=[LlamaRMSNorm.__name__],
         autowrap_modules=[mappings],
         use_zero1_optimizer=args.use_zero1_optimizer,
+        deallocate_pipeline_outputs=False,
     )
     model.move_model_to_device()
 
@@ -61,19 +63,22 @@ is an example to evenly partition the layers for all stages:
         return pipeline_cuts
 
 Note that the pipeline cuts should be at the transformer layer module name, which 
-in Llama model is indicated as ``model.layers.i`` where ``i`` is the layer index. Currently user is required to provide the pipeline cuts. 
-In the future release, automated partitioning will be supported.
+in Llama model is indicated as ``model.layers.i`` where ``i`` is the layer index. Users have the option to either provide the pipeline cuts, or set ``auto_partition`` to ``True`` to automatically determine the pipeline cuts to use.
 After pipeline cuts are decided, pipeline model wrapper is applied. Let's take a deeper look into each input of the model wrapper
 
 - ``model``: The original Pytorch module, could be TPfied.
 - ``transformer_layer_cls=LlamaDecoderLayer``: The transformer layer class, we will use it for partition
 - ``num_microbatches=args.num_microbatches``: The number of microbatches we used for pipeline execution.
+- ``virtual_pipeline_size``: Virtual pipeline size if greater than 1 we will use the interleaved pipeline schedule.
 - ``output_loss_value_spec=(True, False)``: This tells ``NxDPPModel`` how to get the loss from the model output. In this case output is a tuple, where first value is loss and second value is something else. ``NxDPPModel`` will use loss to run backward and return loss as the output.
 - ``input_names=["input_ids", "attention_mask", "labels"]``: The model input names that we will use to run training. As our partition uses FX symbolic trace to trace the model, we will use these input names to create ``concrete_args``. Usually this will be the same input as you will feed into model for the execution. For details please check https://pytorch.org/docs/stable/fx.html#torch.fx.symbolic_trace
 - ``pipeline_cuts=pipeline_cuts``: The pipeline cuts to decide the stages
 - ``leaf_module_cls=[LlamaRMSNorm.__name__]``: We can add some pytorch modules as leaf module so that FX symbolic trace won't trace it through. Here we mark the ``LlamaRMSNorm`` as one leaf module. If you hit any issue about tracing you can skip tracing that part by add the module as a leaf module here. The transformer layer module will be a leaf module by default.
 - ``autowrap_modules``: This serves as the same functionality to simplify FX tracing. User can provide a **python** module here and all the methods from this python module will not be traced.
 - ``use_zero1_optimizer``: When zero-1 optimizer is used, set this to True, so the PP model will understand that zero-1 optimizer will handle data parallel gradient averaging.
+- ``deallocate_pipeline_outputs``: 
+    Whether to deallocate the pipeline outputs after send. After send the output tensor is only useful for its 
+    '.grad_fn' field, and not its '.data'.
 
 After applying model wrapper, ``NxDPPModel`` will partition the model based on the pipeline cuts. If the original model is not yet moved to device, we can call
 ``model.move_model_to_device()`` so that ``NxDPPModel`` will only move the local module to device.
@@ -84,6 +89,15 @@ Runtime execution:
 To use pipeline runtime, user simply needs to replace their original model call with ``NxDPPModel.run_train``, rest will remain unchanged. 
 Please note that the pipeline runtime will take care of both forward and backward call, so user will not need to explicitly make backward calls. 
 The ``NxDPPModel.run_train`` call will return the loss that is achieved from ``output_loss_value_spec``.
+
+Interleaved Pipeline-Parallelism:
+---------------------------------
+
+To use interleaved pipeline parallel, one has to set ``virtual_pipeline_size`` greater than 1. The value of the 
+``virtual_pipeline_size * pipeline_parallel_size`` should be equal to the number of layers in the models. Interleave pipeline can 
+help to reduce the pipeline bubble size and improve performance especially in cases when the number of microbatches 
+per data-parallel rank is small. More information can be found `here <https://developer.nvidia.com/blog/scaling-language-model-training-to-a-trillion-parameters-using-megatron/#interleaved_schedule>`__
+
 
 Mixed precision training
 ------------------------
@@ -322,7 +336,7 @@ also marks the `LlamaRMSNorm` as leaf module for Llama model.
 
 Special treatment for Hugging Face models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is `transformers.PreTrainedModel`), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
+Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is ``transformers.PreTrainedModel``), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
 The Hugging Face's tracer has implementation of many functionalities to help tracing, for details please refer to `here <https://github.com/huggingface/transformers/blob/main/src/transformers/utils/fx.py>`__.
 However, please be aware that Hugging Face's tracer will check if the model class name belongs to one of the Hugging Face models. So if you create your model class based on some Huggingface model class, it is important to maintain the same class name. Below is an example:
 
@@ -333,3 +347,10 @@ However, please be aware that Hugging Face's tracer will check if the model clas
     # Keep the same class name as original one
     class LlamaForCausalLM(LlamaForCausalLMHF):
         ...
+
+
+Auto partition
+-------------
+Setting the ``auto_partition`` parameter to ``True`` means that the transformer layers are automatically partitioned by evenly splitting the transformer layers between the PP ranks. If the transformer layers are not evenly divisible by the PP ranks, the remaining layers are distributed to the latter pipeline ranks.
+The partitions are created on the basis of the transformer layer names. The transformer layer names are determined by recursively traversing the original torch module to find the layer names of modules that are of the ``transformer_layer_cls`` type in the model.
+If the user does not want to partition the model in this way, they can set the partitions to use by specifying the ``pipeline_cuts``. Note that the pipeline cuts should be at the transformer layer module name, which in the Llama model is given by ``model.layers.i`` where ``i`` is the layer index.

@@ -10,14 +10,16 @@ Neuron Profile User Guide
 Overview
 --------
 
-**neuron-profile** is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler
+``neuron-profile`` is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler
 and run on NeuronDevices.
 
 .. note::
 
     Please use the ``aws-neuronx-tools`` package from Neuron SDK 2.11 or higher.
 
-neuron-profile helps developers identify performance bottlenecks and optimize their workloads for NeuronDevices. neuron-profile provides insights into NeuronDevice activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. NeuronDevice activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling typically has near zero overhead because NeuronDevices have dedicated on-chip hardware profiling.
+``neuron-profile`` helps developers identify performance bottlenecks and optimize their workloads for NeuronDevices. neuron-profile provides insights into NeuronDevice activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. NeuronDevice activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling typically has near zero overhead because NeuronDevices have dedicated on-chip hardware profiling.
+
+Additionally, ``neuron-profile`` supports Neuron Kernel Interface (NKI) developers in profiling their kernels. For more information, please refer to :ref:`neuron_profile_for_nki`
 
 Installation
 ------------
@@ -54,39 +56,6 @@ Ubuntu
     influx setup
     # Fill in the information to finish the setup
 
-AL2
-~~~
-
-::
-
-    # Install Neuron Profile
-    sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
-    [neuron]
-    name=Neuron YUM Repository
-    baseurl=https://yum.repos.neuron.amazonaws.com
-    enabled=1
-    metadata_expire=0
-    EOF
-
-    sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
-    sudo yum install aws-neuronx-runtime-lib aws-neuronx-dkms -y
-    sudo yum install aws-neuronx-tools -y
-
-    # Install InfluxDB
-    cat <<EOF | sudo tee /etc/yum.repos.d/influxdata.repo
-    [influxdata]
-    name = InfluxData Repository - Stable
-    baseurl = https://repos.influxdata.com/stable/\$basearch/main
-    enabled = 1
-    gpgcheck = 1
-    gpgkey = https://repos.influxdata.com/influxdata-archive_compat.key
-    EOF
-
-    sudo yum install influxdb2 influxdb2-cli -y
-    sudo systemctl start influxdb
-    influx setup
-    # Fill in the information to finish the setup
-
 
 
 Capturing a profile
@@ -118,43 +87,6 @@ A profile is saved for each worker in the output directory.
     $ ls output
     profile_rank_0.ntff   profile_rank_2.ntff  profile_rank_6.ntff profile_rank_1.ntff   profile_rank_3.ntff  profile_rank_7.ntff
     profile_rank_10.ntff  profile_rank_4.ntff  profile_rank_8.ntff profile_rank_11.ntff  profile_rank_5.ntff  profile_rank_9.ntff
-
-You can see a summary of each profile using the command ``neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_<i>.ntff``. This output
-includes summary metrics and fields for the NeuronCore (``nc_idx``) and NeuronDevice (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
-device 3 and took 0.017 seconds (17 ms) to run the model.
-
-::
-
-    $ neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_5.ntff | grep -e "nd_idx" -e "nc_idx" -e "total_time"
-    nc_idx      1
-    nd_idx      2
-    total_time  0.017
-
-
-You can also view the profile summary and all post-processed profiler events as json. To do that, use the ``--output-format json`` option.
-
-::
-
-    $ neuron-profile view --output-format json --output-file profile.json -n file.neff -s output/profile_rank_5.ntff
-    $ cat profile.json
-    {
-    "summary": [
-        {
-            "total_time": 0.017,
-            "event_count": 11215
-            [...]
-        }
-        "instruction": [
-            {
-                "timestamp": 10261883214,
-                "duration": 148,
-                "label": "TensorMatrix",
-                "hlo_name": "%add.1 = add(%dot, %custom-call.44)",
-                "opcode": "MATMUL",
-                "operands": "S[5] (Tensor)++@complete acc_flags=3 row_grp=q0 src=fp16@0x5600[1,0,0][3,1,1] dst=0x2000000[1,0,0][3,1,1] 3*128 "
-            },
-        [...]
-    }
 
 It is also possible to run a distributed job while only capturing a profile for a specific worker instead of all workers. To do that, use the ``--collectives-profile-id`` option.
 
@@ -262,6 +194,60 @@ InfluxDB port).  Then in the browser, go to ``localhost:3001`` to view the profi
     $ ssh <user>@<ip> -L 3001:localhost:3001 -L 8086:localhost:8086
 
 
+.. _neuron-profile-ug-alternative-outputs:
+
+Alternative output formats
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Besides the web view mentioned above, ``neuron-profile`` also supports other output formats such as ``summary-text`` and ``summary-json`` for viewing overall metrics of the profile,
+as well as ``json`` for a parsable alternative.
+
+Profile summary
+^^^^^^^^^^^^^^^
+
+You can see a summary of each profile using the command ``neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_<i>.ntff``. This output
+includes summary metrics and fields for the NeuronCore (``nc_idx``) and NeuronDevice (``nd_idx``) on which the worker was run. For example, the following shows worker 5 used core 1 on
+device 3 and took 0.017 seconds (17 ms) to run the model.
+
+::
+
+    $ neuron-profile view --output-format summary-text -n file.neff -s output/profile_rank_5.ntff | grep -e "nd_idx" -e "nc_idx" -e "total_time"
+    nc_idx      1
+    nd_idx      2
+    total_time  0.017
+
+This summary is also available as JSON using ``--output-format summary-json``.
+
+JSON
+^^^^
+
+You can also view the profile summary and all post-processed profiler events together as a single JSON. To do that, use the ``--output-format json`` option.
+
+::
+
+    $ neuron-profile view --output-format json --output-file profile.json -n file.neff -s output/profile_rank_5.ntff
+    $ cat profile.json
+    {
+        "summary": [
+            {
+                "total_time": 0.017,
+                "event_count": 11215
+                [...]
+            }
+        ],
+        "instruction": [
+            {
+                "timestamp": 10261883214,
+                "duration": 148,
+                "label": "TensorMatrix",
+                "hlo_name": "%add.1 = add(%dot, %custom-call.44)",
+                "opcode": "MATMUL",
+                "operands": "S[5] (Tensor)++@complete acc_flags=3 row_grp=q0 src=fp16@0x5600[1,0,0][3,1,1] dst=0x2000000[1,0,0][3,1,1] 3*128 "
+            },
+            [...]
+        ]
+    }
+
 Understanding a Neuron profile
 ------------------------------
 
@@ -289,6 +275,8 @@ Towards the top is the DMA activity.  These can include the transfers of input a
 additional spilling or loading to and from the on-chip SRAM memory.
 
 
+.. _neuron-profile-ug-features:
+
 Features
 ~~~~~~~~
 
@@ -303,8 +291,9 @@ The following are some useful features that may help with navigating a profile:
   - Markers can be saved and loaded by using a provided name for the marker set.
   - Individual markers can be renamed or deleted in this menu as well.
 
+- The "Search" tab can be used to find and highlight specific points in the profile related to the queried field(s).
 - Click on the "Box Select" button in the top-right corner of the timeline and then click and drag on any region of the plot to select all events in that region and get summary statistics such as total duration and breakdowns of opcodes, transfer_sizes, and more.
-- The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.
+- The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
 
 Additionally, there are various summary buttons that can be clicked to provide more information on the model/NEFF, such as the input and output tensors,
 number of FLOPs, and the start and end of a framework layer.
@@ -314,6 +303,23 @@ number of FLOPs, and the start and end of a framework layer.
 Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times. Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
 
 |neuron-profile-tensor-reload-annotation|
+
+For models involving collective operations, the timeline will show a box around all data points related to each operation.  Hovering the top left of the box will reveal more information associated with the operation.
+Note: this feature requires profiles to be captured with Neuron Runtime 2.20 or higher.
+
+|neuron-profile-cc-op-annotation|
+
+The information when a point is clicked is grouped by categories such as `Timing` or `IDs` for convenience.
+Each row will also include a tool tip on the right side, which can be hovered for an explanation on what the field represents.
+For instruction `Operands` specifically, clicking on the tooltip will reveal a breakdown of fields that compose an operand, as well as a generic example for reference.  The examples may not apply directly to the currently viewed profile.
+
+|neuron-profile-click-tooltip|
+
+Searching helps identify specific data points that may be worth investigating, such as all instructions related to a specific layer or operation.
+In the "Search" tab, select the corresponding field of interest and enter the value to search for.  Multiple fields can be searched together.  Please refer to the tooltip within the tab for more help on the query syntax.
+The search results will also include a summary of all data points found within the current time range.
+
+|neuron-profile-search-summary|
 
 
 CLI reference
@@ -356,6 +362,10 @@ CLI reference
 
     - :option:`-d,--session-dir` (string): directory containing profile files for multi-worker runs
 
+    - :option:`--output-format` (string): how the processed profile should be presented. ``db`` writes processed data to the database. ``summary-text`` and ``summary-json`` prints the summary data as a table or json, respectively.  ``json`` writes all post-processed events to a JSON file instead of to the database. (default: ``db``)
+
+    - :option:`--output-file` (string): file path to write results to, if applicable for the given output format
+
     - :option:`--db-endpoint` (string): the endpoint of InfluxDB (default: ``http://localhost:8086``)
 
     - :option:`--db-org` (string): the org name of InfluxDB
@@ -365,6 +375,8 @@ CLI reference
     - :option:`--port` (int): the port number of the http server (default: ``3001``)
 
     - :option:`--force`: force overwrite an existing profile in the database
+
+    - :option:`--terminology`: print a helpful table of terminology used by the profiler
 
 
 Troubleshooting
@@ -419,6 +431,9 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
 .. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
+.. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png
+.. |neuron-profile-click-tooltip| image:: /images/neuron-profile-click-tooltip.png
+.. |neuron-profile-search-summary| image:: /images/neuron-profile-search-summary.png
 
 When viewing UI "FATAL - Failed metadata query"
 ~~~~~~~~~~~~~~~~~~~

@@ -9,6 +9,7 @@ Containers - Developer Flows
     /containers/dlc-then-ecs-devflow
     /containers/dlc-then-eks-devflow
     /containers/container-sm-hosting-devflow
+    /containers/dlc-then-customize-devflow
 
 
 

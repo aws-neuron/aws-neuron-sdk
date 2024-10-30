@@ -1,6 +1,6 @@
 .. _tutorial-training:
 
-Run training in Pytorch Neuron container
+Run Training in PyTorch Neuron Container
 ========================================
 
 .. contents:: Table of Contents
@@ -23,12 +23,12 @@ Setup Environment
 -----------------
 
 1. Launch an Trn1 Instance
-	.. include:: /general/setup/install-templates/launch-trn1.txt
+         .. include:: /general/setup/install-templates/launch-trn1.txt
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 
 3. A sample Dockerfile for for torch-neuron can be found here :ref:`trainium-dlc-dockerfile`.
-This dockerfile needs the mlp train script found here  :ref:`mlp-train` 
+This dockerfile needs the mlp train script found here  :ref:`mlp-train`
 
 With the files in a dir, build the image with the following command:
 

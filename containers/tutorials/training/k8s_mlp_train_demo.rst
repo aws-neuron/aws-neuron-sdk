@@ -4,7 +4,7 @@ Deploy a simple mlp training script as a Kubernetes job
 ----------------------------------------------------------
 
 This tutorial uses mlp train as a teaching example on how to deploy an
-training application using Kubernetes on the Trn1 instances.
+training application using Kubernetes on the Trn1 instances. For more advanced example, please refer to `Tutorial: Launch a Multi-Node PyTorch Neuron Training Job on Trainium Using TorchX and EKS <https://github.com/aws-neuron/aws-neuron-eks-samples/tree/master/dp_bert_hf_pretrain>`__
 
 Prerequisite:
 ^^^^^^^^^^^^^

@@ -254,6 +254,7 @@ Profiling an execution is another feature of the Neuron Runtime - which provides
 as well as saving the profile data to a file, which can be used by tools such as the Neuron Tensorboard. This API is
 documented in :ref:`api_profile` section.
 
+.. _neff-format:
 
 The NEFF format and NEFF Parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1207,6 +1208,7 @@ The Tensor API
 
     Allocates a new tensor, placing it in either host virtual memory or device memory (based on the ``tensor_placement`` argument), on the specified NeuronCore index, of a given size, and attaches the given name to it - the name is only used for log messages.
     For applications running on Inferentia, ``tensor_placement`` should always be ``NRT_TENSOR_PLACEMENT_VIRTUAL``. For all other cases, ``NRT_TENSOR_PLACEMENT_DEVICE`` should be used. If successful, the ``tensor`` address will contain a valid pointer to the newly allocated ``nrt_tensor_t``.
+    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.  
 
     :param tensor_placement: Controls where the tensor will be placed, the definition of the ``nrt_tensor_placement_t`` enum is as follows:
 
@@ -1214,7 +1216,7 @@ The Tensor API
 
             typedef enum {
                 NRT_TENSOR_PLACEMENT_DEVICE,    // the tensor is allocated directly in device memory
-                NRT_TENSOR_PLACEMENT_HOST,      // the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
+                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
                 NRT_TENSOR_PLACEMENT_VIRTUAL    // the tensor is allocated in host memory
             } nrt_tensor_placement_t;
 
@@ -1352,8 +1354,8 @@ The Execution API
     Runs one execution of the given ``nrt_model_t`` using the provided input tensor set and writing the results to the provided output tensor set.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensorset containing input data.
-    :param input_set: Tensor set where the output data will be written to.
+    :param input_set: Tensor set containing input data.
+    :param output_set: Tensor set where the output data will be written to.
 
 
 .. c:function:: NRT_STATUS nrt_execute_repeat(nrt_model_t *model, const nrt_tensor_set_t *input_set, nrt_tensor_set_t *output_set, int repeat_count)
@@ -1362,8 +1364,8 @@ The Execution API
     This requires a specially compiled NEFF and it's not a commonly used call.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensorset containing input data.
-    :param input_set: Tensor set where the output data will be written to.
+    :param input_set: Tensor set containing input data.
+    :param output_set: Tensor set where the output data will be written to.
     :param repeat_count:  Number of times to repeat this execution.
 
 

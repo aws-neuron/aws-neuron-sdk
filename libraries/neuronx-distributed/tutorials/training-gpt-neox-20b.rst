@@ -1,6 +1,6 @@
 .. _gpt_neox_20b_tp_zero1_tutorial:
 
-Training GPT-NeoX 20B with Tensor Parallelism and ZeRO-1 Optimizer (``neuronx-distributed`` )
+Training GPT-NeoX 20B with Tensor Parallelism and ZeRO-1 Optimizer 
 =========================================================================================
 
 In this section, we showcase to pretrain a GPT-NeoX 20B model by using the sequence parallel optimization

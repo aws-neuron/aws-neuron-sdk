@@ -34,10 +34,69 @@ To Pull the Images from ECR:
    docker pull  public.ecr.aws/neuron/neuron-device-plugin:2.x.y.z
    docker pull  public.ecr.aws/neuron/neuron-scheduler:2.x.y.z
 
-.. _1622:
+
+Neuron K8 release [2.22.4.0]
+============================
+
+Date: 09/16/2024
+
+New Features
+------------------
+
+- This release introduces the Neuron Helm Chart, which helps streamline the deployment of AWS Neuron components on Amazon EKS.
+  More information can be found in the GitHub repo: https://github.com/aws-neuron/neuron-helm-charts.
+- Adds ECS support for the "Neuron Node Problem Detector and Recovery" artifact.
+  More information can be found in the Neuron docs: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/plugins/npd-ecs-flows.html#ecs-neuron-problem-detector-and-recovery.
+
+Improvements
+------------
+
+- Improves scalability and performance of the Neuron Device Plugin and Neuron Scheduler Extension by skipping "list" calls from the device plugin to the scheduler in situations where the pod allocation request either needs one or all the available resources in the node.
+
+End of Support
+--------------
+
+- Ends support for resource name ‘neurondevice’ with the Neuron Device Plugin.
+  More information can be found in the announcement: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/announce-eos-neurondevice.html
+
+Neuron K8 release [2.21.14.0]
+=============================
+
+Date: 07/03/2024
+
+Critical Security Patch
+-----------------------
+
+We updated the dependencies used by the Neuron Device Plugin and the Neuron Kubernetes Scheduler to fix several important
+security vulnerabilities.
+This update fixes all security vulnerabilities reported in https://github.com/aws-neuron/aws-neuron-sdk/issues/852.
+Please see the ticket for all impacted dependencies and their associated vulnerabilities.
+
+New Features
+------------------
+
+- This release introduces Neuron Node Problem Detector And Recovery artifact to enable fast error detection and recovery in Kubernetes environment. Current version supports EKS managed and self-managed node groups for all EKS supported Kubernetes versions.
+- This release introduces a container image for neuron monitor to make it easy to run neuron monitor along with Prometheus and Grafana to monitor neuron metrics in Kubernetes environments.
+
+Bug fixes
+------------------
+
+- This release contains changes to improve performance of the device plugin at scale.
+
+
+Neuron K8 release [2.20.13.0]
+=============================
+
+Date: 04/01/2024
+
+Summary
+-------
+
+- Minor updates.
+
 
 Neuron K8 release [2.19.16.0]
-===========================
+=============================
 
 Date: 01/18/2024
 
@@ -50,17 +109,16 @@ This update fixes all security vulnerabilities reported in https://github.com/aw
 Please see the ticket for all impacted dependencies and their associated vulnerabilities.
 
 
-.. _1622:
-
 Neuron K8 release [2.16.18.0]
-===========================
+=============================
 
 Date: 09/01/2023
 
 Major New Features
 ------------------
 
-- Previously, the Neuron Device indexing was assigned randomly, which made programming difficult.  Changed to using 0-based indexing for Neuron Devices and NeuronCores in EKS container environments; requires Neuron Driver version 2.12.14 or newer.  
+- This release enables easier programmability by using 0-based indexing for Neuron Devices and NeuronCores in EKS container environments.
+  Previously, the Neuron Device indexing was assigned randomly. This change requires Neuron Driver version 2.12.14 or newer.
 - Improved logging when Neuron Driver not installed/present.
 
 Bug Fixes
@@ -70,8 +128,6 @@ Bug Fixes
 - Fixed issue where pods fail to deploy when multiple containers are requesting Neuron resources.
 - Fixed issue where launching many pods each requesting Neuron cores fails to deploy.
 
-
-.. _1622:
 
 Neuron K8 release [2.1.0.0]
 ===========================
@@ -83,7 +139,6 @@ Summary
 
 - Added support for NeuronCore based scheduling to the Neuron Kubernetes Scheduler.  Learn more about how to use NeuronCores for finer grain control over container scheduling by following the K8 tutorials documentation in the :ref:`containers section <neuron_containers>`.
 
-.. _1622:
 
 Neuron K8 release [2.0.0.0]
 ===========================
@@ -162,7 +217,7 @@ Minor updates
 
 
 [1.6.22.0]
-=========
+==========
 
 Date: 08/30/2021
 
@@ -175,7 +230,7 @@ Minor updates.
 .. _1615:
 
 [1.6.15.0]
-=========
+==========
 
 Date: 08/06/2021
 
@@ -314,7 +369,7 @@ Major New Features
       and/or inf1.24xlarge
 
 -  With this release the device plugin now requires RBAC permission
-   changes to get/patch NODE/POD objects. Please apply the 
+   changes to get/patch NODE/POD objects. Please apply the
    :github:`k8s-neuron-device-plugin-rbac.yml </src/k8/k8s-neuron-device-plugin-rbac.yml>`
    before using the new device plugin.
 

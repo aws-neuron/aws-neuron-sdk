@@ -7,6 +7,174 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.20.0
+---------------
+Date: 09/16/2024
+
+Neuron Compiler
+
+- Added Getting Started with NKI guide for implementing a simple “Hello World” style NKI kernel and running it on a Neuron Device (Trainium/Inferentia2). See :ref:`nki_getting_started`
+- Added NKI Programming Model guide for explaining the three main stages of the NKI programming model. See :ref:`nki_programming_model`
+- Added NKI Kernel as a Framework Custom Operator guide for explaining how to insert a NKI kernel as a custom operator into a PyTorch or JAX model using simple code examples. See :ref:`nki_framework_custom_op`
+- Added NKI Tutorials for the following kernels: Tensor addition, Transpose2D, AveragePool2D, Matrix multiplication, RMSNorm, Fused Self Attention, LayerNorm, and Fused Mamba. See :ref:`nki_kernels`
+- Added NKI Kernels guide for optimized kernel examples. See :ref:`nki_kernels`
+- Added Trainium/Inferentia2 Architecture Guide for NKI. See :ref:`trainium_inferentia2_arch`
+- Added Profiling NKI kernels with Neuron Profile. See :ref:`neuron_profile_for_nki`
+- Added NKI Performance Guide for explaining a recipe to find performance bottlenecks of NKI kernels and apply common software optimizations to address such bottlenecks. See :ref:`nki_perf_guide`
+- Added NKI API Reference Manual with nki framework and types, nki.language, nki.isa, NKI API Common Fields, and NKI API Errors. See :ref:`nki_api_reference`
+- Added NKI FAQ. See :ref:`nki_faq`
+- Added NKI Known Issues. See :ref:`nki_known_issues`
+- Updated Neuron Glossary with NKI terms. See :ref:`neuron_hw_glossary`
+- Added new :ref:`NKI samples repository <https://github.com/aws-neuron/nki-samples>`
+- Added average_pool2d, fused_mamba, layernorm, matrix_multiplication, rms_norm, sd_attention, tensor_addition, and transpose_2d kernel tutorials to the NKI samples respository. See :ref:`NKI samples repository <https://github.com/aws-neuron/nki-samples>`
+- Added unit and integration tests for each kernel. See `NKI samples repository <https://github.com/aws-neuron/nki-samples>`_
+- Updated Custom Operators API Reference Guide with updated terminology (HBM). See :ref:`custom-ops-api-ref-guide`
+
+NeuronX Distributing Training (NxDT)
+
+- Added NxDT (Beta) Developer Guide. See :ref:`nxdt_developer_guide`
+- Added NxDT Developer Guide for Migrating from NeMo to Neuronx Distributed Training. See :ref:`nxdt_developer_guide_migration_nemo_nxdt`
+- Added NxDT Developer Guide for Migrating from Neuron-NeMo-Megatron to Neuronx Distributed Training. See :ref:`nxdt_developer_guide_migration_nnm_nxdt`
+- Added NxDT Developer Guide for Integrating a new dataset/dataloader. See :ref:`nxdt_developer_guide_integrate_new_dataloader`
+- Added NxDT Developer Guide for Integrating a new model. See :ref:`nxdt_developer_guide_integrate_new_model`
+- Added NxDT Developer Guide for Registering an optimizer and LR scheduler. See :ref:`Registering an optimizer and LR scheduler`
+- Added NxDT YAML Configuration Overview. See :ref:`nxdt_config_overview`
+- Added Neuronx Distributed Training Library Features documentation. See :ref:`nxdt_features`
+- Added Installation instructions for NxDT. See :ref:`nxdt_installation_guide`
+- Added Known Issues and Workarounds for NxDT. See :ref:`nxdt_known_issues`
+
+NeuronX Distributed Core (NxD Core)
+
+- Updated Developer guide for save/load checkpoint (neuronx-distributed ) with ZeRO-1 Optimizer State Offline Conversion. See :ref:`save_load_developer_guide`
+- Added Developer guide for Standard Mixed Precision with NeuronX Distributed. See :ref:`standard_mixed_precision`
+- Updated NeuronX Distributed API Guide LoRA finetuning support. See :ref:`api_guide`
+- Added Developer guide for LoRA finetuning with NeuronX Distributed. See :ref:`lora_finetune_developer_guide`
+- Updated CodeLlama tutorial with latest package versions. See `tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/llama/codellama_16k_inference.html>`_
+- Added tutorial for Fine-tuning Llama3 8B with tensor parallelism and LoRA using Neuron PyTorch-Lightning with NeuronX Distributed. See :ref:`llama3_8b_tp_ptl_lora_finetune_tutorial`
+- Updated links in Llama2 NxD Finetuning tutorial. See :ref:`llama2_7b_tp_zero1_ptl_finetune_tutorial`
+- Updated tokenizer download command in tutorials. See :ref:`llama2_7b_tp_zero1_tutorial`, :ref:`llama2_tp_pp_tutorial`, and :ref:`codegen25_7b_tp_zero1_tutorial`
+
+JAX Neuron
+
+- Added JAX Neuron Main page. See :ref:`jax-neuron-main`
+- Added JAX Neuron plugin instructions. See :ref:`jax-neuronx-setup`
+- Added JAX Neuron setup instructions. See :ref:`setup-jax-neuronx`
+
+PyTorch NeuronX
+
+- Updated Developer Guide for Training with PyTorch NeuronX with support for convolution in AMP. See :ref:`pytorch-neuronx-programming-guide`.
+- Added inference samples for Wav2Vec2 conformer models with Relative Position Embeddings and Rotary Position Embedding. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_wav2vec2_conformer_relpos_inference_on_inf2.ipynb>`_ and `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_wav2vec2_conformer_rope_inference_on_inf2.ipynb>`_.
+- Updated the ViT sample with updated accelerate version. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_image_classification/vit.ipynb>`_
+- Updated PyTorch NeuronX Environment Variables with ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``. See :ref:`pytorch-neuronx-envvars`
+- Added inference samples for Pixart Alpha and PixArt Sigma models. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/inference/hf_pretrained_pixart_alpha_inference_on_inf2.ipynb>`_ and `sample <torch-neuronx/inference/hf_pretrained_pixart_sigma_inference_on_inf2.ipynb>`_
+- Added benchmarking scripts for PixArt alpha. See `benchmarking script <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/benchmark/pytorch/pixart_alpha_benchmark.py>`_
+
+Transformers NeuronX
+
+- Updated Transformers NeuronX Developer Guide with Multi-node inference support (TP/PP). See :ref:`transformers_neuronx_developer_guide`
+- Updated Transformers NeuronX Developer Guide with BDH layout support. See :ref:`transformers_neuronx_developer_guide`
+- Updated Transformers NeuronX Developer Guide with Flash Decoding to support long sequence lengths up to 128k. See :ref:`transformers_neuronx_developer_guide`
+- Updated Transformers NeuronX Developer Guide with presharded weights support. See :ref:`transformers_neuronx_developer_guide`
+- Added Llama 3.1 405b sample with 16k sequence length. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_
+- Added Llama 3.1 70b 64k tutorial. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-64k-sampling.ipynb>`_
+- Added Llama 3.1 8b 128k tutorial. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`_
+- Removed the sample llama-3-8b-32k-sampling.ipynb and replaced it with Llama-3.1-8B model sample llama-3.1-8b-32k-sampling.ipynb. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-32k-sampling.ipynb>`_
+
+Neuron Runtime
+
+- Updated Neuron Runtime Troubleshooting guide with the latest hardware error codes and logs and with Neuron Runtime execution fails at out-of-bound access. See :ref:`nrt-troubleshooting`
+- Updated Neuron Sysfs User Guide with new sysfs entries and device reset instructions. See :ref:`neuron-sysfs-ug`
+- Added Neuron Runtime Input Dump on Trn1 documentation. See :ref:`nrt-input-dumps`
+
+Containers
+
+- Added Neuron Helm Chart repository to help streamline the deployment of AWS Neuron components on Amazon EKS. See `repo <https://github.com/aws-neuron/neuron-helm-charts>`_
+- Updated Kubernetes container deployment process with Neuron Helm Chart documentation. See :ref:`k8s-neuron-helm-chart`
+- Added guide for Deploying Neuron Container on Elastic Container Service (ECS). See :ref:`training-dlc-then-ecs-devflow`
+- Added documentation for Neuron Plugins for Containerized Environments. See :ref:`neuron-container-plugins`
+- Updated guide for locating DLC images. See :ref:`locate-neuron-dlc-image`
+
+Neuron Tools
+
+- Updated Neuron Profiler User Guide with Alternative output formats. See :ref:`neuron-profile-ug`
+
+Software Maintenance and Misc
+
+- Updated the Neuron Software Maintenance Policy. See :ref:`sdk-maintenance-policy`
+- Added announcement and updated documentation for end of support start for Tensorflow-Neuron 1.x. See :ref:`announce-tfx-no-support`
+- Added announcement and updated documentation for end of support start for 'neuron-device-version' field. See :ref:`eos-neuron-device-version`
+- Added announcement and updated documentation for end of support start for ‘neurondevice’ resource name. See :ref:`eos-neurondevice`
+- Added announcement and updated documentation for end of support start for AL2. See :ref:`eos-al2`
+- Added announcement for maintenance mode for torch-neuron versions 1.9 and 1.10. See :ref:`announce-torch-neuron-eos`
+- Added supported Protobuf versions to the Neuron Release Artifacts. See :ref:`latest-neuron-release-artifacts`
+- Updated Neuron Github Roadmap. See :ref:`neuron_roadmap`
+
+Neuron 2.19.0
+-------------
+Date: 07/03/2024
+
+
+- Updated Transformers NeuronX Developer guide with support for inference for longer sequence lengths with Flash Attention kernel. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX developer guide with QKV Weight Fusion support. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX continuous batching developer guide with updated vLLM instructions and models supported. See :ref:`Developer Guide <transformers_neuronx_developer_guide_for_cb>`.
+- Updated Neuronx Distributed User guide with interleaved pipeline support. See :ref:`api_guide`
+- Added Codellama 13b 16k tutorial with NeuronX Distributed Inference library. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_ 
+- Updated PyTorch NeuronX Environment variables with custom SILU enabled via NEURON_CUSTOM_SILU. See :ref:`pytorch-neuronx-envvars`
+- Updated ZeRO1 support to have FP32 master weights support and BF16 all-gather. See :ref:`zero1-gpt2-pretraining-tutorial`.
+- Updated PyTorch 2.1 Appplication note with workaround for slower loss convergence for NxD LLaMA-3 70B pretraining using ZeRO1 tutorial. See :ref:`introduce-pytorch-2-1`.
+- Updated Neuron DLAMI guide with support for new 2.19 DLAMIs. See :ref:`neuron-dlami-overview`.
+- Updated HF-BERT pre-training documentation for port forwarding. See :ref:`hf-bert-pretraining-tutorial`
+- Updated T5 inference tutorial with transformer flag. See  `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/torch-neuronx/t5-inference-tutorial.html>`_ 
+- Added support for Llama3 model training. See :ref:`llama3_tp_pp_tutorial` and :ref:`llama2_7b_tp_zero1_tutorial`
+- Added support for Flash Attention kernel for training longer sequences in NeuronX Distributed. See :ref:`llama2_7b_tp_zero1_tutorial` and :ref:`api_guide`
+- Updated Llama2 inference tutorial using NxD Inference library. See `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/llama/llama2_inference.html>`_ 
+- Added new guide for Neuron node problem detection and recovery tool. See :ref:`configuration < k8s-neuron-problem-detector-and-recovery-irsa>` and :ref:`tutorial <k8s-neuron-problem-detector-and-recovery>`.
+- Added new guide for Neuron Monitor container to enable easy monitoring of Neuron metrics in Kubernetes. Supports monitoring with Prometheus and Grafana. See :ref:`tutorial <k8s-neuron-monitor>`
+- Updated Neuron scheduler extension documentation about enforcing allocation of contiguous Neuron Devices for the pods based on the Neuron instance type. See :ref:`tutorial <neuron_scheduler>`
+- Updated Neuron Profiler User Guide with various UI enhancements. See :ref:`neuron-profile-ug`
+- Added NeuronPerf support in Llama2 inference tutorial in NeuronX Distributed. See `sample <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/src/examples/pytorch/neuronx_distributed/llama/llama2_inference.html>`_ 
+- Added announcement for maintenance mode of MxNet. See :ref:`announce-mxnet-maintenance`
+- Added announcement for end of support of Neuron TensorFlow 1.x (Inf1). See :ref:`announce-tfx-eos`
+- Added announcement for end of support of AL2. See :ref:`announce-eos-al2`
+- Added announcement for end of support of 'neuron-device-version' field in neuron-monitor. See :ref:`announce-eos-neuron-device-version`
+- Added announcement for end of support of 'neurondevice' resource name in Neuron Device K8s plugin. See :ref:`announce-eos-neurondevice`
+- Added announcement for end of support for Probuf versions <= 3.19 for PyTorch NeuronX. See :ref:`announce-eos-probuf319`
+
+Neuron 2.18.0
+-------------
+Date: 04/01/2024
+
+
+- Updated PyTorch NeuronX developer guide with Snapshotting support. See :ref:`torch-neuronx-snapshotting`.
+- Updated :ref:`api_guide` and :ref:`pp_developer_guide` with support for ``auto_partition`` API.
+- Updated :ref:`api_guide` with enhanced checkpointing support with ``load`` API and ``async_save`` API.
+- Updated documentation for ``PyTorch Lightning``  to train models using ``pipeline parallelism`` . See :ref:`API guide <api_guide>` and :ref:`Developer Guide <ptl_developer_guide>`.
+- Updated NeuronX Distributed developer guide with support for :ref:`Autobucketing <nxd-inference-devguide-autobucketing>`
+- Added PyTorch NeuronX developer guide for :ref:`Autobucketing <torch-neuronx-autobucketing-devguide>`.
+- Updated :ref:`api_guide` and :ref:`llama2_tp_pp_tutorial` with support for asynchronous checkpointing.
+- Updated Transformers NeuronX Developer guide with support for streamer and stopping criteria APIs. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX Developer guide with instructions for ``Repeating N-Gram Filtering``. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX developer guide with Top-K on-device sampling support [Beta]. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX developer guide with Checkpointing support and automatic model selection. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX Developer guide with support for speculative sampling [Beta]. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Added sample for training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer with ``neuronx-distributed``. See :ref:`codegen25_7b_tp_zero1_tutorial`.
+- Added Tutorial for codellama/CodeLlama-13b-hf model inference with 16K seq length using Transformers Neuronx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_.
+- Added Mixtral-8x7B Inference Sample/Notebook using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_.
+- Added Mistral-7B-Instruct-v0.2 Inference inference sample using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mistralai-Mistral-7b-Instruct-v0.2.ipynb>`_.
+- Added announcement for Maintenance mode of TensorFlow 1.x. See :ref:`announce-tfx-maintenance`.
+- Updated PyTorch 2.1 documentation to reflect stable (out of beta) support. See :ref:`introduce-pytorch-2-1`.
+- Updated PyTorch NeuronX environment variables to reflect stable (out of beta) support. See :ref:`pytorch-neuronx-envvars`.
+- Updated :ref:`latest-neuron-release-artifacts` with supported HuggingFace Transformers versions.
+- Added user guide instructions for ``Neuron DLAMI``. See :ref:`neuron-dlami-overview`.
+- Updated :ref:`torch-hf-bert-finetune` tutorial with latest Hugging Face Trainer API.
+- Updated Neuron Runtime API guide with support for ``nr_tensor_allocate``. See :ref:`nrt-api-guide`.
+- Updated :ref:`neuron-sysfs-ug` with support for ``serial_number`` unique identifier.
+- Updated :ref:`custom-ops-api-ref-guide` limitations and fixed nested sublists. See :ref:`feature-custom-operators-devguide`.
+- Fixed issue in :ref:`zero1-gpt2-pretraining-tutorial`.
+- Fixed potential hang during synchronization step in ``nccom-test``. See :ref:`nccom-test`.
+- Updated troubleshooting guide with an additional hardware error messaging. See :ref:`nrt-troubleshooting`.
+- Updated DLC documentation. See :ref:`containers-dlc-then-customize-devflow` and :ref:`dlc-then-ec2-devflow`.
+
 
 Neuron 2.16.0
 -------------

@@ -126,7 +126,7 @@ spec:
         - --v=2
         command:
         - /usr/local/bin/kube-scheduler
-        image: registry.k8s.io/kube-scheduler:v1.28.5
+        image: public.ecr.aws/eks-distro/kubernetes/kube-scheduler:v1.28.5-eks-1-28-latest
         # or use below for your version of k8s
         # image: registry.k8s.io/kube-scheduler:<version>
         livenessProbe:

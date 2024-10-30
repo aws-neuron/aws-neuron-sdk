@@ -7,6 +7,40 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.15.128.0]
+----------------------------
+Date: 09/16/2024
+
+* This release introduces memory optimization that will reduce the generated compiler artifacts size (i.e., NEFFs) and the models' memory footprint. It is possible that some models may experience unexpected performance degradation. If this occurs, these optimizations can be disabled using the --disable-dge compiler command line option or the framework-level option ``additional_compile_opt=" --disable-dge"``
+
+Neuron Compiler [2.14.213.0]
+----------------------------
+Date: 07/03/2024
+
+* Minor bug fixes and performance enhancements.
+* Improved flash attention kernel performance.
+
+Neuron Compiler [2.13.72.0]
+----------------------------
+Date: 04/25/2024
+
+* Minor bug fixes and enhancements
+
+
+Neuron Compiler [2.13.68.0]
+----------------------------
+Date: 04/10/2024
+
+* This release fixes hang issues related to Triton Inference Server.
+
+
+Neuron Compiler [2.13.66.0]
+----------------------------
+Date: 04/01/2024
+
+* This release introduces a new ``--enable-mixed-precision-accumulation`` compiler option. This option instructs the compiler to perform intermediate calculations of reduction operators (such as the dot or reduce operators) in FP32 regardless of the operation's defined datatype. The final result of the operator will be cast from FP32 to the model-designated datatype (e.g., BF16). This helps to improve the operator's resulting acccuracy.
+
+
 Neuron Compiler [2.12.68.0]
 ----------------------------
 Date: 01/18/2024
@@ -45,7 +79,7 @@ Date: 09/26/2023
 
 * This release addresses a compilation regression for certain configurations of Llama and Llama-2 inference models when it fails compilation with this error "IndirectLoad/Save requires contiguous indirect access per partition" .
 
-There is still a known issue for some configurations of the model with the error "Too many instructions after unroll for function sg0000" . To mitigate this, please try with -O1 compiler option (or --optlevel 1) . A complete fix will be coming in the future release which will not require this option
+There is still a known issue for some configurations of the model with the error "Too many instructions after unroll for function sg0000" . To mitigate this, recompile using the ``--optlevel 1 (-O1)`` option. A complete fix will be coming in the future release which will not require this option
 
 Neuron Compiler [2.10.0.34]
 -----------------------------

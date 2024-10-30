@@ -8,7 +8,7 @@ Inf1 Inference Performance
 
 The following tables contain the reference inference performance for models in the tutorials. Follow the links on each row to replicate similar results in your own environment. Refer to :ref:`ec2-then-ec2-setenv` documentation to create a new environment based on the latest Neuron release.
 
-*Last update: February 13th, 2024*
+*Last update: September 16th, 2024*
 
 
 .. _NLP:
@@ -26,7 +26,7 @@ Encoder Models
          df_prices = pd.read_csv('instance_prices.csv')
          df = pd.merge(df,df_prices,on='Inst. Type')
 
-         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
+         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['RI-Effective hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
          cols_to_show = ['Model', 'Scripts', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
          df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
@@ -43,7 +43,7 @@ Encoder Models
          df_prices = pd.read_csv('instance_prices.csv')
          df = pd.merge(df,df_prices,on='Inst. Type')
 
-         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
+         df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['RI-Effective hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
          cols_to_show = ['Model', 'Scripts', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
          df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences'])
@@ -67,7 +67,7 @@ Convolutional Neural Networks (CNN) Models
    df_prices = pd.read_csv('instance_prices.csv')
    df = pd.merge(df,df_prices,on='Inst. Type').query('`Application`=="CV"')
 
-   df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['On-Demand hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
+   df['Cost per 1M inferences'] = ((1.0e6 / df['Avg Throughput (/sec)']) * (df['RI-Effective hourly rate'] / 3.6e3 )).map('${:,.3f}'.format)
 
    cols_to_show = ['Model', 'Tutorial', 'Framework', 'Inst. Type', 'Avg Throughput (/sec)', 'Latency P50 (ms)', 'Latency P99 (ms)', 'Cost per 1M inferences', 'Application Type', 'Neuron Version', 'Run Mode', 'Batch Size', 'Model details' ]
    df = df[cols_to_show].sort_values(['Model', 'Cost per 1M inferences']).groupby('Model').head(2)
@@ -79,6 +79,6 @@ Convolutional Neural Networks (CNN) Models
     Throughput and latency numbers in this table were generated using Neuron Tutorials.
 
 .. note::
-   **Cost per 1M inferences** is calculated using US East (N. Virginia) On-Demand hourly rate.
+   **Cost per 1M inferences** is calculated using US East (N. Virginia) RI-Effective hourly rate.
 
    **Real Time** application refers to batch size 1 inference for minimal latency. **Batch** application refers to maximum throughput with minimum cost-per-inference.

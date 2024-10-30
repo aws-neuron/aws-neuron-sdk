@@ -1,12 +1,11 @@
-AWS Batch Flows
-===============
+.. _aws_batch_flow:
+
+AWS Batch
+=========
 
 .. toctree::
     :maxdepth: 1
-    :hidden:
 
-    Inference </general/devflows/inference/aws-batch-flows>
-    Training </general/devflows/training/aws-batch-flows>
-    
+    /general/devflows/training/batch/batch-training
 
-.. include:: /general/devflows/aws-batch-flows.txt
+              

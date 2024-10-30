@@ -16,7 +16,7 @@
 
     .. tab-set::
 
-        .. tab-item:: torch-neuronx(1.13.1)
+        .. tab-item:: PyTorch 1.13.1
 
             .. include :: /src/helperscripts/installationScripts/python_instructions.txt
                 :start-line: 8

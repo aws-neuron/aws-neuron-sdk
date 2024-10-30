@@ -1,5 +1,19 @@
 User-agent: *
 
+Disallow: /en/v2.20.1/
+
+Disallow: /en/v2.20.0/
+
+Disallow: /en/v2.19.1/
+
+Disallow: /en/v2.19.0/
+
+Disallow: /en/v2.18.2/
+
+Disallow: /en/v2.18.1/
+
+Disallow: /en/v2.18.0/
+
 Disallow: /en/v2.17.0/
 
 Disallow: /en/v2.16.1/

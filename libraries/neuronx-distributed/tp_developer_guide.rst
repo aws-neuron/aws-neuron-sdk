@@ -1,6 +1,6 @@
 .. _tp_developer_guide:
 
-Developer guide for Tensor Parallelism (``neuronx-distributed`` )
+Developer guide for Tensor Parallelism 
 =================================================================
 
 Training

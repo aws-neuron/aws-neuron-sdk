@@ -235,8 +235,6 @@ do the casting. PyTorch's BF16 mixed-precision is achieved by casting
 certain operations to operate BF16. We currently use CUDA's list of
 operations that can operate in BF16:
 
-(NOTE: Although convolution is in the list below, it is currently unsupported by Neuron. See :ref:`model-architecture-fit`)
-
 .. code:: bash
 
    _convolution

@@ -1,0 +1,5 @@
+Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
+PixArt Alpha,256x256,:benchmark-pt:`Benchmark <pixart_alpha>`,PyTorch 2.1,Inf2.xlarge,Image Generation,1.975,502.587,537.258,Real Time,2.20,Data Parallel,1,"""FP32, BF16""",Matmult-BF16
+PixArt Alpha,512x512,:benchmark-pt:`Benchmark <pixart_alpha>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.565,1769.756,1775.697,Real Time,2.20,Data Parallel,1,"""FP32, BF16""",Matmult-BF16
+PixArt Sigma,256x256,:benchmark-pt:`Benchmark <pixart_sigma>`,PyTorch 2.1,Inf2.xlarge,Image Generation,1.86,540.832,548.41,Real Time,2.20,Data Parallel,1,"""FP32, BF16""",Matmult-BF16
+PixArt Sigma,512x512,:benchmark-pt:`Benchmark <pixart_sigma>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.543,1841.882,1850.683,Real Time,2.20,Data Parallel,1,"""FP32, BF16""",Matmult-BF16

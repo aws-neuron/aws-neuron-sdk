@@ -1,6 +1,6 @@
 .. _pytorch-neuronx-debug:
 
-How to debug models in PyTorch NeuronX 
+How to debug models in PyTorch NeuronX
 =======================================
 
 .. contents:: Table of Contents
@@ -13,7 +13,7 @@ the users request (print) for the output or a mark_step is encountered.
 To effectively debug training scripts with torch-xla, please use one of
 the approaches mentioned below:
 
-**Printing Metrics**
+**Printing metrics**
 ~~~~~~~~~~~~~~~~~~~~
 
 Torch-xla provides a utility that records metrics of different sections
@@ -98,7 +98,7 @@ xla lowering. All operators with prefix ``xla::`` would run on an XLA device. No
 that do not have xla lowering would result in a graph fragmentation and might end up slowing down the
 entire execution. If you encounter such operators, create a request for operator support.
 
-**Printing Tensors**
+**Printing tensors**
 ~~~~~~~~~~~~~~~~~~~~
 
 Users can print tensors in their script as below:
@@ -134,7 +134,7 @@ graph is cut and you would see another evaluation. To avoid multiple evaluations
 
 Torch-XLA provides an api called ``mark_step`` which evaluates a graph
 collected up to that point. While this is similar to printing of an output tensor
-wherein a graph is also evaluated, there is a difference. When 
+wherein a graph is also evaluated, there is a difference. When
 an output tensor is printed, only the graph associated with that specific tensor is
 evaluated, whereas mark_step enables all the output tensors up to ``mark_step`` call to be evaluated
 in a single graph. Hence, any tensor print after ``mark_step`` would be
@@ -183,7 +183,7 @@ https://github.com/pytorch/xla/blob/master/test/test_train_mp_mnist.py#L133
 Eager debug mode provides a convenient utility to step through the code and evaluate operators one by one for correctness. Eager debug mode is useful to inspect your models the way you would do in eager-mode frameworks like PyTorch and Tensorflow. With Eager Debug Mode operations are executed eagerly. As soon as an operation is registered with torch-xla, it would be sent for compilation and
 execution. Since compiling a single operation, the time spent
 would be minimal. Moreover, the chances of hitting the framework compilation cache
-increases as models would have repeated operations throughout. 
+increases as models would have repeated operations throughout.
 Consider example 1 below:
 
 .. code:: python
@@ -292,7 +292,7 @@ the ``INFO`` logs for compiler using:
 
    os.environ["NEURON_CC_FLAGS"] = "--log_level=INFO"
 
-**Profiling Model Run**
+**Profiling model run**
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Profiling model run can help to identify different bottlenecks and
@@ -372,23 +372,125 @@ eg. ``docker run --network host my_image:my_tag``
 
 .. _torch-neuronx-snapshotting:
 
-**Snapshotting**
-~~~~~~~~~~~~~~~~
+**Snapshotting With Torch-Neuronx 2.1**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Snapshotting models can be used to dump debug information that can then be sent 
+Snapshotting models can be used to dump debug information that can then be sent
 to the Neuron team. Neuron execution relies on a series of compiled graphs. Internally,
-graph HLOs are used as an intermediate representation which is then compiled. Then, during 
-execution, the graph inputs are passed to the Neuron runtime, which produces 
-outputs using the compiled graph. Snapshotting saves the inputs to a graph 
-execution, executes the graphs, saves the outputs of the execution, and then 
-bundles and dumps the inputs, outputs and graph HLO in one file. This is 
+graph HLOs are used as an intermediate representation which is then compiled. Then, during
+execution, the graph inputs are passed to the Neuron runtime, which produces
+outputs using the compiled graph. Snapshotting saves the inputs to a graph
+execution, executes the graphs, saves the outputs of the execution, and then
+bundles and dumps the inputs, outputs and graph HLO in one file. This is
 illustrated here:
 
 .. image :: /images/./snapshot-diagram.png
    :alt: Image: snapshot-diagram.png
 
-This feature can be enabled using the following environment variables, 
-which can be set at the beginning of your script as follows. 
+This feature can be enabled using the following environment variables,
+which can be set at the beginning of your script as follows (``./dump`` is the snapshot
+dump directory that will be created):
+
+.. code:: python
+
+   ....
+   os.environ["XLA_FLAGS"] = "--xla_dump_hlo_snapshots --xla_dump_to=./dump"
+   ....
+
+This environment variable will produce snapshots in the ``./dump``
+folder with the extension ``.decomposed_hlo_snapshot``
+at every iteration for every process. For example, files that look like the following would
+be produced.
+
+.. code:: bash
+
+   SyncTensorsGraph.27737-process000000-executable000003-device000000-execution000496.inputs.decomposed_hlo_snapshot
+
+Note that ``NEURON_FRAMEWORK_DEBUG`` does not need to be set, as in torch-neuronx 1.13. Also note that ``NEURON_DUMP_HLO_SNAPSHOT`` and ``NEURON_NC0_ONLY_SNAPSHOT`` environment variables used in torch-neuronx 1.13 are now no longer used to control snapshot dumping.
+
+Snapshots can take up a large amount of disk space. To avoid running out of disk space, you can limit the snapshoting for a certain rank, such as rank 0. The following example code would work with ``torchrun`` utility which sets the ``RANK`` environment variable for each process:
+
+.. code:: python
+
+    if os.environ.get("RANK", "0") == "0":
+        os.environ["XLA_FLAGS"]="--xla_dump_hlo_snapshots --xla_dump_to=./dump"
+
+or if not using torchrun:
+
+.. code:: python
+
+    import torch_xla.core.xla_model as xm
+
+    ....
+    if xm.is_master_ordinal():
+        os.environ["XLA_FLAGS"]="--xla_dump_hlo_snapshots --xla_dump_to=./dump"
+    ....
+
+Torch-NeuronX 2.1+ provides a ``register_hlo_snapshot_callback`` API to allow more control over when to dump the snapshot.
+By default, Torch-NeuronX 2.1+ includes the following callback function:
+
+.. code:: python
+
+    def _dump_hlo_snapshot_callback(name: str, addressable_device_index: int, execution_count: int) -> str:
+        return 'inputs'
+
+As the return value is always 'inputs', the backend will always dump snapshot files containing HLO and input data only. Recognized return value keywords are 'inputs' and 'outputs'.  If the return value is an empty string '', then the backend will skip this dump. If the return value is 'inputs outputs', then the backend will dump two snapshot files for each execution, one holding inputs, and another one holding outputs.
+
+To implement selective dumping, we can make use of the callback function's parameters name, addressable_device_index, execution_count , where:
+
+* ``name`` is a string that stands for the HLO graph's name.
+* ``addressable_device_index`` is an integer that refers to the index of the addressable Neuron device as one NEFF can load onto multiple addressable Neuron devices (NeuronCores) for SPMD executions. Note that this is not the same as the worker process rank in multi-process execution, in which ``RANK``/``xm.get_ordinal()`` or ``LOCAL_RANK``/``xm.get_local_ordinal()`` should be used. See examples above.
+* ``execution_count`` is an integer that indicates the value of an internal execution counter that increments by one for each execution of a compiled graph when HloSnapshot dumping is requested. Note that each compiled graph maintains multiple execution counters, one for each addressable device that it loads onto.
+
+For example, the following will dump snapshot files containing outputs at execution #2 (Note that this is graph execution number, not the iteration or step; for iteration or step, see the next example):
+
+.. code:: python
+
+    def callback(name, addressable_device_index, execution_count):
+        if execution_count == 2:
+            return 'outputs'
+        else:
+            return ''
+
+    import libneuronxla
+    old_callback = libneuronxla.register_hlo_snapshot_callback(callback)
+
+Callback functions can be use to dump at a certain condition, such as when the global step count equal a value:
+
+.. code:: python
+
+    step = 0
+    def callback(name, addressable_device_index, execution_count):
+        if step == 5:
+            return 'inputs'
+        else:
+            return ''
+
+    import libneuronxla
+    old_callback = libneuronxla.register_hlo_snapshot_callback(callback)
+
+    ...
+    for epoch in range(EPOCHS):
+        for idx, (train_x, train_label) in enumerate(train_loader):
+            step += 1
+    ...
+
+.. note::
+
+   Snapshot dumping triggered by a runtime error such as NaN is not yet available. It will be available in a feature release.
+
+
+.. _torch-neuronx-snapshotting_1.13:
+
+**Snapshotting with Torch-Neuronx 1.13**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+   If you are using Torch-NeuronX 2.1, please see :ref:`torch-neuronx-snapshotting`
+
+With Torch-Neuronx 1.13, the snapshotting feature can be enabled using the following environment variables,
+which can be set at the beginning of your script as follows.
 
 .. code:: python
 
@@ -399,16 +501,16 @@ which can be set at the beginning of your script as follows.
    ....
 
 
-This set of environment variables will produce snapshots under the dump 
-folder with the extensions ``.hlo.snapshot.pb`` or ``.decomposed_hlo_snapshot`` 
-at every iteration. For example a file that looks like the following would 
+This set of environment variables will produce snapshots under the dump
+folder with the extensions ``.hlo.snapshot.pb`` or ``.decomposed_hlo_snapshot``
+at every iteration. For example a file that looks like the following would
 be produced.
 
 .. code:: bash
 
    dump/module_SyncTensorsGraph.387.pid_12643.execution_7496.hlo_snapshot.pb
 
-The dumping environment variable can be set and unset at specific 
+The dumping environment variable can be set and unset at specific
 iterations as shown in the following example.
 
 .. code:: python
@@ -428,7 +530,7 @@ iterations as shown in the following example.
     ....
 
 
-Additionally, we provide capabilities to snapshot graphs automatically. 
+Additionally, we provide capabilities to snapshot graphs automatically.
 The environment variables above can be set as follows:
 
 .. code:: python
@@ -439,15 +541,15 @@ The environment variables above can be set as follows:
     os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR"
     ....
 
-When unexpected errors such as a graph execution producing NaNs occurs, 
-snapshots will be automatically produced and execution will be terminated. 
-Occasionally, for larger models, automatic snapshotting may not capture 
-snapshots due to the device memory being exhausted. In this case, the above 
-flag can be set to 
-``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_HYBRID"``, this 
-will allocate memory for inputs on both the device and host memory. 
-In some additional cases, this may still go out of memory and may need to be 
-set to ``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_CPU"`` to 
+When unexpected errors such as a graph execution producing NaNs occurs,
+snapshots will be automatically produced and execution will be terminated.
+Occasionally, for larger models, automatic snapshotting may not capture
+snapshots due to the device memory being exhausted. In this case, the above
+flag can be set to
+``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_HYBRID"``, this
+will allocate memory for inputs on both the device and host memory.
+In some additional cases, this may still go out of memory and may need to be
+set to ``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_CPU"`` to
 avoid allocating any memory on the device at all for automatic snapshotting.
 
 **Snapshot FAQs:**
@@ -455,41 +557,63 @@ avoid allocating any memory on the device at all for automatic snapshotting.
 
 **When should I use this features?**
 
-This feature should be used when debugging errors that requires interfacing 
-with and providing debug data to the Neuron team. Snapshotting may be redundant 
-and unnecessary in some situations. For example, when only the model weights are 
+This feature should be used when debugging errors that requires interfacing
+with and providing debug data to the Neuron team. Snapshotting may be redundant
+and unnecessary in some situations. For example, when only the model weights are
 necessary for debugging, methods such as checkpointing may be more convenient to use.
 
 **What sort of data is captured with these snapshots?**
 
-The type of data captured by these snapshots may include model graphs in HLO form, 
-weights/parameters, optimizer states, intermediate tensors and gradients. 
-This data may be considered sensitive and this should be taken into account before 
+The type of data captured by these snapshots may include model graphs in HLO form,
+weights/parameters, optimizer states, intermediate tensors and gradients.
+This data may be considered sensitive and this should be taken into account before
 sending the data to the Neuron team.
 
 **What is the size of these snapshots?**
 
-The size of snapshots can be significant for larger models such as GPT or BERT 
-with several GBs worth of data for larger graphs, so it is recommended to check 
-that sufficient disk space exists before using snapshotting. In addition, limiting 
-the amount of snapshots taken in a run will help to preserve disk space. 
+The size of snapshots can be significant for larger models such as GPT or BERT
+with several GBs worth of data for larger graphs, so it is recommended to check
+that sufficient disk space exists before using snapshotting. In addition, limiting
+the amount of snapshots taken in a run will help to preserve disk space.
 
 **Will snapshotting add overhead to my execution?**
 
-Snapshotting does add a small overhead to the execution in most cases. This 
-overhead can be significant if snapshots are dumped at every iteration. In 
-order to alleviate some of this overhead, in the case that snapshotting is 
-not necessary on all cores the following environment variable can be set to 
-collect snapshots only on the first core. In addition, checkpointing in tandem 
-with snapshotting can be useful to reduce overhead. A checkpoint close to 
-the problem iteration can be captured, then execution resumed with 
-snapshots enabled. 
+Snapshotting does add a small overhead to the execution in most cases. This
+overhead can be significant if snapshots are dumped at every iteration. In
+order to alleviate some of this overhead, in the case that snapshotting is
+not necessary on all cores the following environment variable can be set to
+collect snapshots only on the first core in torch-neuronx 1.13:
 
 .. code:: python
 
     ....
     os.environ["NEURON_NC0_ONLY_SNAPSHOT"] = "1"
     ....
+
+In torch-neuronx 2.1, use ``RANK`` environmental variable when using torchrun or ``xm.is_master_ordinal()`` to limit dumping to the first process (see above):
+
+.. code:: python
+
+    ....
+    if os.environ.get("RANK", "0") == "0":
+        os.environ["XLA_FLAGS"]="--xla_dump_hlo_snapshots --xla_dump_to=./dump"
+    ....
+
+or (not using torchrun):
+
+.. code:: python
+
+    import torch_xla.core.xla_model as xm
+
+    ....
+    if xm.is_master_ordinal():
+        os.environ["XLA_FLAGS"]="--xla_dump_hlo_snapshots --xla_dump_to=./dump"
+    ....
+
+In addition, checkpointing in tandem
+with snapshotting can be useful to reduce overhead. A checkpoint close to
+the problem iteration can be captured, then execution resumed with
+snapshots enabled.
 
 **How can I share snapshots with the Neuron team?**
 

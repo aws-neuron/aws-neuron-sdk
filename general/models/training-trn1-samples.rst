@@ -110,24 +110,32 @@ Decoders
      - * `Launch a GPT-3 23B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-gpt-job.md>`_
        * `Launch a GPT-3 46B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-gpt-job.md>`_
        * `Launch a GPT-3 175B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-gpt-job.md>`_
-    
+
 
    * - GPT-NEOX-20B
      - neuronx-distributed
      - * :ref:`gpt_neox_20b_tp_zero1_tutorial`
        * `Training GPT-NEOX 20B model using neuronx-distributed	 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain>`_
+       * `Pre-train GPT Neox 20b on Wikicorpus dataset using Neuronx Distributed library <https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow/blob/master/examples/neuronx-distributed/gpt_neox_20b/README.md>`_
 
    
    * - GPT-NEOX-6.9B
      - neuronx-distributed
      - * :ref:`gpt_neox_tp_zero1_tutorial`
        * `Training GPT-NEOX 6.9B model using neuronx-distributed		 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain>`_
+       * `Pre-train GPT Neox 6.9b on Wikicorpus dataset using Neuronx Distributed library <https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow/blob/master/examples/neuronx-distributed/gpt_neox_6.9b/README.md#pre-train-gpt-neox-69b-on-wikicorpus-dataset-using-neuronx-distributed-library>`_
 
-
+   * - meta-llama/Llama-3-8b
+     - neuronx-distributed
+     - * :ref:`Training Llama3 8B Model with Tensor Parallelism and ZeRO-1 Optimizer <llama2_7b_tp_zero1_tutorial>`
+       * :ref:`Tutorial for Fine-tuning Llama3 8B with tensor parallelism and LoRA using Neuron PyTorch-Lightning with NeuronX Distributed <llama3_8b_tp_ptl_lora_finetune_tutorial>`
+            
    * - meta-llama/Llama-2-7b
      - neuronx-distributed
      - * :ref:`llama2_7b_tp_zero1_tutorial`
        * `Training Llama2 7B Model with AWS Batch and Trainium <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/aws-batch/llama2/README.md>`_
+       * :ref:`llama2_7b_tp_zero1_ptl_finetune_tutorial`
+       * `Pre-train Llama2-7B on Wikicorpus dataset using Neuronx Distributed library <https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow/blob/master/examples/neuronx-distributed/llama2_7b/README.md>`_
 
    * - meta-llama/Llama-2-13b
      - neuronx-distributed
@@ -137,11 +145,19 @@ Decoders
      - neuronx-distributed
      - * :ref:`llama2_tp_pp_tutorial`
 
+   * - codegen25-7b-mono
+     - neuronx-distributed
+     - * :ref:`codegen25_7b_tp_zero1_tutorial`
+
    * - meta-llama/Llama-2
      - neuronx-nemo-megatron
      - * `Launch a Llama-2-7B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
        * `Launch a Llama-2-13B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
        * `Launch a Llama-2-70B pretraining job using neuronx-nemo-megatron <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md>`_
+
+   * - Mistral-7B
+     - neuronx-nemo-megatron
+     - * `Training Mistral-7B <https://github.com/aws-neuron/neuronx-nemo-megatron/blob/main/nemo/examples/nlp/language_modeling/test_mistral.sh>`_
 
 .. _encoder_decoder_model_samples_training_trn1:
 
@@ -167,7 +183,6 @@ Encoder-Decoders
    * - facebook/bart-large
      - * torch-neuronx
      - * `How to fine-tune a "Bart-Large" PyTorch model with AWS Trainium (trn1 instances) <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/hf_summarization/BartLarge.ipynb>`_
-
 
 
 .. _vision_transformer_model_samples_training_trn1:

@@ -2,7 +2,7 @@ Utilizing Neuron Capabilities Tutorials (``tensorflow-neuron``)
 ===============================================================
 
 
-*  Tensorflow 1.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
+*  Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] <tensorflow-serving-neuronrt-visible-cores>`
 
 .. toctree::
     :hidden:

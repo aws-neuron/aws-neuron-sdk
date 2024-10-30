@@ -1,108 +1,482 @@
-.. _neuron-maintenance-policy:
+.. _sdk-maintenance-policy:
 
-SDK Maintenance Policy
-======================
+Neuron Software Maintenance policy
+==================================
 
 .. contents:: Table of Contents
    :local:
-   :depth: 2
+   :depth: 3
 
 Overview
 --------
 
-This document outlines the maintenance policy for AWS Neuron Software Development Kit (SDK) and its underlying dependencies. AWS regularly provides the Neuron SDK with updates that may contain support for new or updated APIs, new features, enhancements, bug fixes, security patches, or documentation updates. Updates may also address changes with dependencies, language runtimes, and operating systems. Neuron SDK releases are available as Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) and Pip Packages that can be installed within Amazon Machine Images (AMIs). 
+This document outlines software maintenance policy for AWS Neuron
+Software Development Kit (SDK), Neuron Components, both extension and
+standalone components, supported model classes, features, APIs, DLAMIs
+and DLCs, and dependency software. AWS Neuron is the SDK for Amazon EC2
+`Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__ and
+Amazon EC2
+`Trainium <https://aws.amazon.com/machine-learning/trainium/>`__ based
+instances purpose-built for deep learning. Neuron integrates with
+popular Machine Learning (ML) frameworks like PyTorch, JAX, and
+TensorFlow and includes a compiler, runtime, driver, profiling tools,
+and libraries to support high performance training of generative AI
+models on Trainium and Inferentia powered instances.
 
-We recommend users to stay up-to-date with SDK releases to keep up with the latest features, security updates, and underlying dependencies. Continued use of an unsupported SDK version is not recommended and is done at the user’s discretion.
+This document addresses Neuron Software life-cycle and the Neuron SDK
+release versioning.
+
+.. _neuron-software-definitions:
+
+Neuron Software Definitions
+---------------------------
+
+Neuron Software refers to the complete set of software elements
+provided by AWS Neuron, including:
 
 Neuron SDK
-----------
+~~~~~~~~~~
 
-AWS Neuron is the SDK for `AWS Inferentia <https://aws.amazon.com/machine-learning/inferentia/>`__, the custom designed machine learning chips enabling high-performance deep learning inference applications on `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__. Neuron includes a deep learning compiler, runtime and tools that are natively integrated into TensorFlow, PyTorch and MXNet. With Neuron, you can develop, profile, and deploy high-performance inference applications on top of `EC2 Inf1 instances <https://aws.amazon.com/ec2/instance-types/inf1/>`__.
+The core software development kit that enables users to build, train,
+and deploy machine learning models on Inferentia and Trainium based
+instances. The Neuron SDK encompasses the entire set of components,
+features, APIs, and other elements that are bundled together and made
+available in a particular version of the Neuron SDK release.
 
-The Neuron SDK release versions are in the form of X.Y.Z where X represents the major version and Y represent the minor version. Increasing the major version of an SDK indicates that this SDK underwent significant and substantial changes, and some of those changes may not maintain the same programming model. 
-Increasing the minor version of an SDK indicates that this SDK underwent addition of new features, support of new dependency software versions, end-of-support of certain dependency software, enhancement and/or bugfixes.
-Applications may need to be updated in order for them to work with the newest SDK version. It is important to update major versions carefully and in accordance with the upgrade guidelines provided by AWS.
+Neuron components
+~~~~~~~~~~~~~~~~~
 
+Neuron components refer to any packages or libraries within the Neuron
+SDK that offer specific functionality. These components are typically
+accessible through PIP, RPM, or Debian packages for easy installation
+and usage. There are two main categories of Neuron components: Neuron
+extension components and Neuron standalone components.
 
-Dependency Software
--------------------
+Neuron extension components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Neuron SDK has underlying dependencies, such as language runtimes, operating systems, or third party libraries and machine learning frameworks. These dependencies are typically tied to the language community or the vendor who owns that particular component. The following terms are used to classify underlying dependencies:
+Neuron extension components are components that integrate Neuron support
+into open source machine learning frameworks, libraries or tools
+enhancing their functionality and extending their capabilities as
+necessary. When referring to Neuron extension components, we are also
+referring to the parts of the open source machine learning framework or
+library that are supported by Neuron. The software life-cycle of the
+open source machine learning frameworks, libraries or tools that are
+extended by Neuron is managed and maintained by their respective
+communities or the vendors responsible for those specific components.
+Examples for Neuron extension components are:
 
-* Operating system (OS): Examples include Amazon Linux AMI, Amazon Linux 2.
+-  **Third party ML Library**: Examples include Neuron Nemo Megatron.
+-  **Third party ML Framework**: Examples include PyTorch NeuronX and
+   TensorFlow Neuron.
 
-* Language runtime: Examples include Python.
+Neuron standalone components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Third party library / framework: Examples include PyTorch, TensorFlow, MXNet and ONNX.
+Neuron standalone components are self-contained components within the
+Neuron SDK. Examples of such components are Neuron Compiler, Neuron
+Tools and Neuron Runtime.
 
-Each community or vendor maintains their own versioning policy and publishes their own end-of-support schedule for their product.
+Neuron Model Classes
+~~~~~~~~~~~~~~~~~~~~
 
+A Neuron supported model class is tightly coupled with a specific Neuron
+extension component (e.g. PyTorch NeuronX) or Neuron library (e.g.
+NeuronX Distributed) and the workload type (e.g. Training or Inference).
+For example a model can be supported at Beta level in PyTorch NeuronX
+for training and Stable level in PyTorch NeuronX for inference.
 
-Neuron SDK version life-cycle
+Neuron features
+~~~~~~~~~~~~~~~
+
+A Neuron feature refers to any functionality or attribute that is part
+of the Neuron SDK, whether it belongs to the entire Neuron SDK or to one
+of its specific components.
+
+For example, a Neuron feature is `Neuron Persistent
+Cache <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#neuron-persistent-cache>`__
+in the :ref:`Transformers Neuronx library <transformers_neuronx_developer_guide>`
+
+Neuron APIs
+~~~~~~~~~~~
+
+A Neuron API refers to any API, CLI, environment variables, or flag that
+belong to to the entire Neuron SDK or to one the Neuron components. A
+Neuron API allows developers to interact with and leverage the
+capabilities of the Neuron SDK and its components.
+
+Examples include :ref:`Neuron Trace API <torch_neuron_trace_api>` and :ref:`Neuron Compiler flags <neuron-compiler-cli-reference-guide>`
+
+Dependency software components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+External software components or frameworks that the Neuron
+SDK and its components rely on for proper functioning and compatibility,
+such as language runtimes or operating systems.
+
+The software life-cycle of the dependency software components, is
+managed and maintained by their respective communities or the vendors
+responsible for those specific dependency software components. The
+following terms are examples of underlying dependency software
+components:
+
+-  **Operating System (OS)**: Examples include Ubuntu 22 and Amazon
+   Linux 2023
+-  **Language Runtime**: Examples include Python 3.10
+
+Neuron Deep Learning AMIs and Deep Learning Containers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:ref:`Neuron Deep Learning AMIs
+(DLAMIs) <neuron-dlami-overview>`
+and :ref:`Neuron Deep Learning Containers
+(DLCs) <neuron_containers>` are pre-configured Amazon Machine Images and Docket container that
+come with the Neuron SDK and necessary dependencies pre-installed,
+providing a ready-to-use environment for machine learning development.
+
+.. _neuron-software-lifecycle:
+
+Neuron Software Life-cycle
+--------------------------
+
+The typical life-cycle for Neuron software consists of several phases, though not all phases are applicable to every type of Neuron software. The phases are as follows:
+
+-  **Developer Preview or Beta** (these terms are used interchangeably in
+   Neuron collaterals)
+-  **Release Candidate (RC)**
+-  **General Availability (GA) or Stable** (these terms are used
+   interchangeably in Neuron collaterals)
+-  **Maintenance**
+-  **End-of-Support (EOS)**
+
+The following table outlines the details for each phase for Neuron software:
+
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+|                               | Description                                                                                                          | Comments                                         |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Developer Preview (Beta)      | In this phase, Neuron Software is not supported, should not be used in production environments,                      |                                                  |
+|                               | and is meant for early access and feedback purposes only. It is possible for future releases                         |                                                  |
+|                               | to introduce breaking changes.                                                                                       |                                                  |
+|                               | See :ref:`Neuron Software Classification <sdk-classification>` for more information                                  |                                                  |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Release Candidate (RC)        | Once AWS identifies a release to be a stable product, it may be marked as a Release Candidate (RC).                  | This phase applies only to Neuron SDK            |
+|                               | This phase is usually short and during it AWS will provide for Neuron Software on an as-needed basis.                | and Neuron components                            |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| General Availability (Stable) | During this phase, AWS releases :ref:`regular <neuron-regular-updates>`updates for the Neuron Software based         |                                                  |
+|                               | on a predefined release cadence of the Neuron SDK or provides :ref:`maintenance updates <neuron-maintenance-updates>`|                                                  |
+|                               | for Neuron Software on an as-needed basis.                                                                           |                                                  |
+|                               | See :ref:`Neuron Software Classification <sdk-classification>` for more information                                  |                                                  |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Maintenance                   | During the maintenance phase, AWS will provide :ref:`maintenance updates <neuron-maintenance-updates>`               | This phase does not apply to Dependency Software |
+|                               | for Neuron Software on an as-needed basis. Any new PIP, RPM, and Debian packages for the Neuron                      | Components, Neuron DLCs,                         |
+|                               | Software, as well as updated versions of the Neuron DLAMIs and Neuron DLCs, will be released                         | Neuron DLAMIs, Neuron Features and APIs          |
+|                               | only when deemed necessary by the AWS Neuron team.                                                                   |                                                  |
+|                               | Users can expect updates to be less frequent compared to :ref:`regular <neuron-regular-updates>`                     |                                                  |
+|                               | as the focus will be on addressing critical issues and ensuring the stability of the software.                       |                                                  |
+|                               |                                                                                                                      |                                                  |
+|                               | Maintenance Announcement: AWS will make a public :ref:`announcement <neuron-communication>` at least one month       |                                                  |
+|                               | before the Neuron Software enters Maintenance phase.                                                                 |                                                  |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| End of Support (EOS)          | When Neuron Software reaches the end of its support lifecycle, it will no longer receive                             |                                                  |
+|                               | :ref:`regular <neuron-regular-updates>` updates and :ref:`maintenance updates <neuron-maintenance-updates>`          |                                                  |
+|                               | (including security updates). While AWS will continue to provide access to all previously released                   |                                                  |
+|                               | PIP, RPM, and Debian packages for the Neuron Software, as well as earlier versions of the Neuron DLAMIs              |                                                  |
+|                               | and Neuron DLCs, it's important to note that these older versions will not receive any updates or support.           |                                                  |
+|                               | Customers can still use these resources at their own discretion, but it is highly recommended to upgrade             |                                                  |
+|                               | to the latest available versions                                                                                     |                                                  |
+|                               |                                                                                                                      |                                                  |
+|                               | End of Support Announcement: AWS will make a public :ref:`announcement <neuron-communication>` at least one month    |                                                  |                                     
+|                               | before a Neuron Software enters End of Support.                                                                      |                                                  |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+
+.. _neuron-regular-updates:
+
+Neuron Software Regular Updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regular updates for Neuron Software address the following areas: new
+features, feature improvements, performance enhancements, bug
+resolution, security vulnerability fixes, upgrades to Neuron dependency
+software components and upgrades to Neuron extension components. To
+handle these regular updates, AWS will release a new version of the
+Neuron SDK, incrementing the minor version (the second digit in the
+version number) for a minor release or incrementing the major version
+(the first digit in the version number) for a major release when
+significant changes that break compatibility are introduced. It's
+important to note that any bug-fixes or security issues in regular
+updates are not applied retroactively to previous versions of the Neuron
+SDK. To benefit from these updates, users must adopt the latest release.
+
+For more information see:
+
+-  :ref:`Neuron DLAMIs and DLCs Updates <neuron-dlami-dlc-updates>`
+-  :ref:`Neuron Extension Components Updates <neuron-extension-components-updates>`
+-  :ref:`Neuron Software Versioning <neuron-software-versioning>`
+
+**Neuron SDK Installation and Update instructions**
+To install and update to the latest Neuron packages, customers need to pin the major
+version of the Neuron package. For example, to install latest Neuron
+tools package, call ``sudo apt-get install aws-neuronx-tools=2.*`` and
+to install latest PyTorch Neuron package for Trn1, call
+``pip install torch-neuronx==2.1.0.1.*``. This is done to future-proof
+instructions for new, backwards-incompatible major version releases.
+
+.. _neuron-maintenance-updates:
+
+Neuron Software Maintenance Updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Maintenance updates for Neuron Software address three key areas:
+resolving bugs, fixing security vulnerabilities, and upgrading
+dependency software components. At AWS discretion, additional critical
+features or performance enhancement may also be included. To handle
+these maintenance updates, AWS will release a new version of the Neuron
+SDK, incrementing the patch number (the last digit in the version
+number) to indicate a patch release. Major or minor releases may also
+contain maintenance updates. It's important to note that these
+maintenance updates are not applied retroactively to previous versions
+of the Neuron SDK. To take advantage of these updates, users must adopt
+the latest patch release.
+
+For more information see:
+
+-  :ref:`Neuron DLAMIs and DLCs Updates <neuron-dlami-dlc-updates>`
+-  :ref:`Neuron Extension Components Updates <neuron-extension-components-updates>`
+-  :ref:`Neuron Software Versioning <neuron-software-versioning>`
+
+.. _neuron-dlami-dlc-updates:
+
+Neuron DLAMIs and DLCs Updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+AWS will address :ref:`regular <neuron-regular-updates>` updates, life-cycle changes, maintenance
+updates, and security issues related to any third-party software
+included in the Neuron DLAMI or DLCs by releasing new versions of the
+Neuron DLAMI or DLCs. However, updates won't be applied retroactively to
+older versions of the Neuron DLAMI or DLCs. Instead, users will need to
+use the new versions to get the latest updates.
+
+For more information see:
+
+-  :ref:`Neuron Extension Components Updates <neuron-extension-components-updates>`
+-  :ref:`Neuron Software Versioning <neuron-software-versioning>`
+
+.. _neuron-extension-components-updates:
+
+Neuron Extension Components Updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a new version of an open source ML framework (e.g. PyTorch) is
+supported by a Neuron extension component (e.g., PyTorch NeuronX), the
+Neuron extension component for the latest supported ML framework version
+will become the default for installation. If users wish to use a Neuron
+extension component for an earlier supported ML framework version, they
+will need to explicitly specify the desired version during installation.
+After upgrading a Neuron extension component to support a newer version
+of an ML framework, AWS will continue to provide :ref:`regular updates <neuron-regular-updates>`
+for the Neuron extension component that supports the earlier ML
+framework version for a minimum of 6 months. After the 6 months period,
+the Neuron extension component for the earlier supported ML framework
+version may transition into a maintenance mode. In the maintenance mode,
+updates for the older Neuron extension component versions will be
+provided on an as-needed basis, focusing on critical bug fixes and
+security patches. For more information see: :ref:`Neuron extension component versioning <neuron-extension-components-versioning>`
+
+.. _neuron-communication:
+
+Communication methods
+~~~~~~~~~~~~~~~~~~~~~
+
+Neuron software classification and lifecycle announcements are
+communicated as follows:
+
+-  Neuron SDK documentation under
+   `Announcements <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html>`__
+
+To see the list of available Neuron SDK versions and supported
+dependency software components versions:
+
+-  Neuron SDK documentation under `Release
+   Content <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html#neuron-release-content>`__
+-  Neuron SDK documentation under `What’s
+   New <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#neuron-whatsnew>`__
+
+.. _neuron-software-versioning:
+
+Neuron Software Versioning
+--------------------------
+
+Neuron SDK Documentation Versioning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Neuron SDK documentation is versioned and maps to the corresponding
+Neuron SDK version. Users can switch to earlier versions of the Neuron
+SDK documentation by selecting the version from the dropdown in bottom
+left portion of the side bar.
+
+Neuron SDK Versioning
+~~~~~~~~~~~~~~~~~~~~~
+
+The AWS SDK release versions are in the form of ``[A.B.C]`` where
+``(A)`` represents the major version, ``(B)`` represents
+the minor version, and ``(C)`` represents the patch version.
+
+.. _neuron-extension-components-versioning:
+
+Neuron extension components Versioning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Neuron extension components versioning (like PyTorch NeuronX) is in the
+form ``[X.Y.Z].[A.B.C]``, where ``[X.Y.Z]`` represents the
+third party component’s major (``X``), minor (``Y``), and patch
+(``Z``) versions and ``[A.B.C]`` represents the Neuron extension
+components (``A``), minor (``B``), and patch (``C``)
+versions.
+
+Neuron Standalone Component Versioning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Neuron Component versioning (except of Neuron extension components like
+PyTorch NeuronX) is in the form ``[A.B.C.D]``, where ``A``
+represents the major version, ``B`` represents the minor version,
+and ``C.D`` represents the patch version.
+
+.. _neuron-releases-types:
+
+Neuron Software Release Types
 -----------------------------
 
-The life-cycle for Neuron SDK version consists of 3 phases, which are outlined below.
+Major release
+~~~~~~~~~~~~~~~~~
 
-- **Supported (Phase 1)**
-  
-  During this phase, AWS will provide critical bugfixes and security patches. Usually AWS will support each Neuron SDK version for at least 12 months, but AWS reserves the right to stop supporting an SDK version before the 12 months period.
+Increasing the major version indicates that the Neuron software
+underwent significant and substantial changes in an incompatible manner.
+Applications need to be updated in order for them to work with the
+newest SDK version. It is important to update major versions carefully
+and in accordance with the upgrade guidelines provided by AWS. After
+increasing the major version, the Neuron software may not maintain
+compatibility with previous supported versions of :ref:`Neuron
+Runtime <nrt-api-guide>`, :ref:`Neuron Compiler <neuron_cc>`, and
+:ref:`NEFF <neff-format>`.
 
-  .. note::
+Minor release
+~~~~~~~~~~~~~~~~~
 
-   AWS will address new features or Dependency Software updates by publishing a new version with an increment in the Neuron SDK minor version.
+Increasing the minor version indicates that the Neuron software added
+functionality in a backwards compatible manner.
 
+Patch release
+~~~~~~~~~~~~~~~~~
 
-- **End-of-Support Announcement (Phase 2)**
-  
-  AWS will announce the End-of-Support phase at least 3 months before a specific Neuron SDK version enters End-of-Support phase. During this period, the SDK will continue to be supported.
+Increasing the patch version indicates that the Neuron software
+added backward compatible bug or security fixes. A bug fix is defined as
+an internal change that fixes incorrect behavior.
 
-- **End-of-Support (Phase 3)**
-  
-  When a Neuron SDK version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Neuron SDK versions will continue to be available via Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages.
-  Use of an SDK version which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the latest Neuron SDK version.
+Pre-releases
+~~~~~~~~~~~~~~~~
 
+-  **Developer Preview (Beta)**: During this phase, the Neuron software
+   is not supported, should not be used in production environments, and
+   is meant for early access and feedback purposes only. It is possible
+   for future releases to introduce breaking changes. In the case of a
+   Developer Preview (Beta) release, the minor version will include a
+   lower case ``b`` along with a (Beta) tag.
+-  **Release Candidate (RC)**: Once Neuron identifies a release to be a
+   stable product, it may mark it as a Release Candidate. Release
+   Candidates are ready for GA release unless significant bugs emerge,
+   and will receive full AWS Neuron support. In the case of a RC
+   release, the minor version will include a lower case ``rc``
+   along with a (RC) tag.
 
-Dependency Software version life-cycle
---------------------------------------
+.. _sdk-classification:
 
-The life-cycle for Dependency Software version consists of 4 phases, but there may not be a Phase 3 (Maintenance) period in some cases. The phases are outlined below.
+Neuron Software Classification
+------------------------------
 
-- **Supported (Phase 1)**
-  
-  During this phase, Dependency Software version is supported. AWS will provide regular updates, bug fixes and/or security patches to the Dependency Software version, AWS will address those updates and bug fixes by including them in a new Neuron SDK version with an increment in the Neuron SDK minor version.  There is no minimum support period for a Dependency Software version.
+This section explains the Neuron software classification for APIs,
+libraries, packages, features, and Neuron supported model classes
+mentioned in the Neuron documentation.
 
-- **Maintenance and/or End-of-Support Announcement (Phase 2)**
-  
-  AWS will announce the Maintenance phase or the End-of-Support phase of Dependency Software version.
-  
-  Since each community or vendor maintains their own versioning policy and publishes their own end-of-support schedule for their product, there is no minimum duration to do the announcement before Dependency Software version enters Maintenance phase or End-of-Support phase and in some cases the announcement can happen at the same time when the Dependency Software version enters Maintenance phase or End-of-Support phase.
-  
-  During this period, the Dependency Software version will continue to be supported.
+Neuron SDK and Neuron components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- **Maintenance (Phase 3)**
-  
-  During the maintenance phase, AWS limits Dependency Software version to address critical bug fixes and security issues only. There is no minimum Maintenance period.
++-----------------+-----------------+-----------------+-------------+
+|                 | Testing         | Features        | Performance |
++=================+=================+=================+=============+
+| Developer       | Basic           | Minimal Viable  |             |
+| Preview (Beta)  |                 | Product (MVP) \*|             |
++-----------------+-----------------+-----------------+-------------+
+| Release         | Basic           | Minimal Viable  | Tested      |
+| Candidate (RC)  |                 | Product (MVP)\* |             |
++-----------------+-----------------+-----------------+-------------+
+| GA (Stable)     | Standard        | Incremental     | Tested      |
+|                 | Product Testing | additions or    |             |
+|                 |                 | changes         |             |
+|                 |                 | in new releases |             |
++-----------------+-----------------+-----------------+-------------+
 
-  This phase is optional and AWS will reserve the right to skip it for specific Dependency Software products.
+\* A minimum viable product (MVP) for a Neuron Component contains just
+enough features to be usable by early customers who can then provide
+feedback for future development. MVP can be different per use case
+and depends on the specific package/library of interest. Please note
+that in many cases, an MVP can also represent an advanced level of
+features.
 
-- **End-of-Support (Phase 4)**
-  
-  When a Dependency Software version reaches end-of support, it will no longer receive updates or releases. Previously published releases will continue to be available via Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages. Use of an SDK which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the new major version.
+.. _neuron-apis-classification:
 
-  When a Dependency Software version reaches end-of support, it will no longer receive critical bugfixes and security patches. Previously published Dependency Software versions will continue to be available via Neuron SDK Conda ( up to :ref:`Neuron 1.13.0 <eol-conda-packages>` ) or Pip packages.
+Neuron APIs
+~~~~~~~~~~~
 
-  Use of a Dependency Software version which has reached end-of-support is done at the user’s discretion. We recommend users to upgrade to the latest Neuron SDK version that include the latest Dependency Software versions.
++----------------------+----------------------+----------------------+
+|                      | API Contract         | API Backward         |
+|                      |                      | Compatibility        |
++======================+======================+======================+
+| Developer Preview    | Major changes may    | No                   |
+| (Beta)               | happen               |                      |
++----------------------+----------------------+----------------------+
+| GA (Stable)          | Incremental changes  | Yes \*               |
+|                      | in new releases      |                      |
+|                      | (without breaking    |                      |
+|                      | the API contract)    |                      |
++----------------------+----------------------+----------------------+
 
+\* In certain cases, when necessary, AWS may introduce API changes that may break compatibility, with notice provided ahead of time.
 
-.. note::
+.. _neuron-features-classification:
 
-   AWS reserves the right to stop support for an underlying dependency without a maintenance phase.
+Neuron Features
+~~~~~~~~~~~~~~~
 
-Communication
--------------
++-----------------+-----------------+-----------------+-------------+
+|                 | Testing         | Functionality   | Performance |
++=================+=================+=================+=============+
+| Developer       | Basic           | Minimal Viable  |             |
+| Preview (Beta)  |                 | Product (MVP) \*|             |
++-----------------+-----------------+-----------------+-------------+
+| GA (Stable)     | Standard        | Incremental     | Tested      |
+|                 | Product Testing | additions       |             |
+|                 |                 | or changes      |             |
+|                 |                 | in new releases |             |
++-----------------+-----------------+-----------------+-------------+
 
-Maintenance and End-Of-Support announcements are communicated as follows:
+\* A minimum viable product (MVP) for a Neuron Feature contains just
+enough functionality to be usable by early customers who can then
+provide feedback for future development. MVP can be different per use
+case and depends on the specific feature of interest. Please note
+that in many cases, an MVP can also represent an advanced level of
+functionality.
 
-* Neuron SDK documentation.
+.. _neuron-models-classification:
 
-To see the list of available Neuron SDK versions and supported Dependency Software versions see :ref:`neuron-release-content` and :ref:`neuron-whatsnew` in latest Neuron version.
+Neuron Supported Model Classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++----------------------+----------------------+----------------------+
+|                      | Accuracy /           | Throughput / Latency |
+|                      | Convergence          |                      |
++======================+======================+======================+
+| Developer Preview    | Validated            | Tested               |
+| (Beta)               |                      |                      |
++----------------------+----------------------+----------------------+
+| GA (Stable)          | Validated            | Tested               |
++----------------------+----------------------+----------------------+

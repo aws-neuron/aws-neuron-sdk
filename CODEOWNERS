@@ -8,18 +8,18 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @aws-mesharma @rgrandhiamzn
+*       @aws-maens @micwade-aws @musunita @aws-sadaf @natemail-aws @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @aws-trsharma @PrashantSaraf @shadis @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws
 
-src/examples/mxnet/ @aws-rhsoln  @aws-sadaf @aws-maens
-neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens
-neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @kct22aws  @musunita @aws-rhsoln @aws-maens 
+src/examples/mxnet/ @aws-rhsoln  @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/mxnet-neuron/tutorials/ @musunita @aws-rhsoln @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 
-src/examples/tensorflow/  @awshaichen  @aws-sadaf @aws-maens
-neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen @aws-maens
-neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @kct22aws  @musunita @awshaichen @aws-maens 
+src/examples/tensorflow/  @awshaichen  @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/tensorflow-neuron/ @awshaichen @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @musunita @awshaichen @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 
 
-src/examples/pytorch/ @jluntamazon @aws-sadaf @aws-maens
-neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens
-neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @kct22aws  @musunita @jluntamazon @aws-maens 
+src/examples/pytorch/ @jluntamazon @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
+neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @musunita @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 

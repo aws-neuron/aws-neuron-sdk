@@ -9,7 +9,7 @@ inference application using Kubernetes on the Inf1 instances.
 Prerequisite:
 ^^^^^^^^^^^^^
 
--  :ref:`tutorial-k8s-env-setup-for-neuron`: to setup k8s support on your cluster.
+-  Please follow instructions at :ref:`tutorial-k8s-env-setup-for-neuron` to setup k8s support on your cluster.
 -  Inf1 instances as worker nodes with attached roles allowing:
 
    -  ECR read access policy to retrieve container images from ECR:
