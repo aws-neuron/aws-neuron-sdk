@@ -36,6 +36,7 @@ Install the neuron packages using the command:
 
 .. code-block :: shell
 
+    pip install -U pip
     pip install --upgrade neuronx-cc==2.* torch-neuronx torchvision neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 .. _nxdt_nemo_deps:
