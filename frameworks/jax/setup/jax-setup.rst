@@ -1,4 +1,4 @@
-.. _jax-neuronx-setup:
+.. _jax-neuron-setup:
 
 JAX Neuron plugin Setup
 ------------------------------
