@@ -16,5 +16,5 @@ a tested combination of the ``jax-neuronx``, ``jax``, ``jaxlib``, ``libneuronxla
         /frameworks/jax/setup/jax-setup
         /frameworks/jax/setup/jax-neuronx-known-issues
 
-* :ref:`jax-neuronx-setup`
-* :ref:`jax_neuronx-known-issues`
+* :ref:`jax-neuron-setup`
+* :ref:`jax_neuron-known-issues`
