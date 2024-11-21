@@ -7,11 +7,18 @@ Neuron DLC Release Notes
    :local:
    :depth: 1
 
+Neuron 2.20.2
+-------------
+Date: 11/20/2024
+
+- Neuron 2.20.2 DLC fixes dependency bug for NxDT use case by pinning the correct torch version. 
+
 
 Neuron 2.20.1
 -------------
 
 Date: 10/25/2024
+
 - Neuron 2.20.1 DLC includes prerequisites for :ref:`nxdt_installation_guide`. Customers can expect to use NxDT out of the box.
 
 

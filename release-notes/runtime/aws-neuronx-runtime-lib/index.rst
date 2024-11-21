@@ -31,6 +31,14 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.22.19.0]
+---------------------------------
+Date: 11/20/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Minor improvements and bug fixes
+
 Neuron Runtime Library [2.22.14.0]
 ---------------------------------
 Date: 09/16/2024

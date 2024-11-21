@@ -15,6 +15,15 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+
+Neuron Driver release [2.18.20.0]
+--------------------------------
+Date: 11/20/2024
+
+Bug Fixes
+^^^^^^^^^
+* This release addresses an issue with Neuron Driver that can lead to a user-space application either gaining access to kernel addresses or providing the driver with spoofed memory handles (kernel addresses) that can be potentially used to gain elevated privileges. We would like to thank `Cossack9989 <https://github.com/Cossack9989>`_ for reporting and collaborating on this issue.
+
 Neuron Driver release [2.18.12.0]
 --------------------------------
 

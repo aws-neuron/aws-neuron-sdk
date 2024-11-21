@@ -10,14 +10,25 @@ NxD Training Release Notes (``neuronx-distributed-training``)
 
 This document lists the release notes for Neuronx Distributed Training library.
 
-.. _neuronx-distributed-rn-1-0-0:
+.. _neuronx-distributed-training-rn-1-0-1:
+
+Neuronx Distributed Training [1.0.1]
+
+Date: 11/20/2024
+
+Features in this release
+------------------------
+
+* Added support for transformers 4.36.0
+
+.. _neuronx-distributed-training-rn-1-0-0:
 
 Neuronx Distributed Training [1.0.0]
 
 Date: 09/16/2024
 
-Features this release
----------------------
+Features in this release
+------------------------
 
 This is the first release of NxD Training (NxDT), NxDT is a PyTorch-based library that adds support for user-friendly distributed training experience through a YAML configuration file compatible with NeMo,, allowing users to easily set up their training workflows. At the same time, NxDT maintains flexibility, enabling users to choose between using the YAML configuration file, PyTorch Lightning Trainer, or writing their own custom training script using the NxD Core.
 The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing a compatability with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.

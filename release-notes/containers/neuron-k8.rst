@@ -35,6 +35,16 @@ To Pull the Images from ECR:
    docker pull  public.ecr.aws/neuron/neuron-scheduler:2.x.y.z
 
 
+Neuron K8 release [2.22.20.0]
+=============================
+
+Date: 11/20/2024
+
+Bug fixes
+---------
+
+- This release addresses a stability issue in the Neuron Scheduler Extension that previously caused crashes shortly after installation.
+
 Neuron K8 release [2.22.4.0]
 ============================
 
