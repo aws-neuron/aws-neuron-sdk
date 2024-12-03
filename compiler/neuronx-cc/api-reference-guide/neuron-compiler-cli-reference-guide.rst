@@ -59,11 +59,10 @@ Available Commands:
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
      [--distribution-strategy <distribution_type>]
-     [--logical-nc-config <shard_degree>], or [-lnc <shard_degree>]
-     [--optlevel <opt_level>], or [-O <opt_level>]
+     [--optlevel <opt-level>], or [-O <opt-level>]
      [--enable-mixed-precision-accumulation]
      [--enable-saturate-infinity]
-     [--enable-fast-context-switch]
+     [--enable-fast-context-switch>]
      [--enable-fast-loading-neuron-binaries]
      [--logfile <filename>]
      [--output <filename>]
@@ -88,7 +87,6 @@ Available Commands:
     - ``inf2``
     - ``trn1``
     - ``trn1n``
-    - ``trn2``
 
   - :option:`--model-type <model>`: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
@@ -127,13 +125,6 @@ Available Commands:
     Valid values:
 
     - ``llm-training``: Enable the compiler to perform optimizations applicable to large language model (LLMS) training runs that  shard parameters, gradients, and optimizer states across data-parallel workers. This is equivalent to the previously documented option argument value of ``NEMO``, which will be deprecated in a future release.
-
-  - :option:`--logical-nc-config <shard_degree>`: Instructs the compiler to shard the input graph across physical NeuronCore devices. Possible numeric values are {1, 2}. (only available on trn2; Default: ``2``)
-
-    Valid values:
-
-    - ``1``: instructs the compiler to shard the input graph across 1 physical NeuronCore, i.e., do not perform any input graph sharding.
-    - ``2``: [default on trn2] instructs the compiler to shard the input graph across 2 physical NeuronCores.
 
   - :option:`--optlevel <opt_level>`: Specify the level of optimization the compiler should perform. Possible numeric values are {1, 2, 3}. (Default: ``2``)
 
