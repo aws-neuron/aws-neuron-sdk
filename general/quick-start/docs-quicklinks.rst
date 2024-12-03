@@ -4,82 +4,55 @@ Neuron Quick Links
 ==================
 
 .. grid:: 2
+        :gutter: 2
 
+        .. grid-item-card:: Overview
+                
+                * :ref:`neuron-quickstart`
+                * :ref:`amazon-q-dev`
+                * :ref:`model_samples_tutorials`
+                * :ref:`benchmark`
+                * :ref:`neuron-whatsnew`
+                * :ref:`announcements-main`
 
-    .. dropdown::  Overview
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
+        .. grid-item-card:: ML frameworks
+                
+                * :ref:`pytorch-neuronx-main`
+                * :ref:`jax-neuron-main`
+                * :ref:`tensorflow-neuron-main`
+                * :ref:`mxnet-neuron-main`
 
-            * :ref:`neuron-quickstart`
-            * :ref:`model_samples_tutorials`
-            * :ref:`benchmark`
-            * :ref:`neuron-whatsnew`
-            * :ref:`announcements-main`
-            
+        .. grid-item-card:: ML libraries
 
-    .. dropdown::  ML Frameworks
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
+                * :ref:`nxdt`
+                * :ref:`NxD Inference (beta)<nxdi-index>`
+                * :ref:`neuronx-distributed-index`
+                * :ref:`transformers_neuronx_readme`
+                * :ref:`nemo-megatron-index`
 
-            * :ref:`pytorch-neuronx-main`
-            * :ref:`jax-neuron-main`
-            * :ref:`tensorflow-neuron-main`
-            * :ref:`mxnet-neuron-main`
+        .. grid-item-card:: User guides
+                
+                * :ref:`neuron_runtime`
+                * :ref:`neuron_cc`
+                * :ref:`Neuron Kernel Interface (NKI) (beta)<neuron-nki>`
+                * :ref:`Neuron Custom C++ Operators (beta)<neuron_c++customops>`
+                * :ref:`neuron-tools`
+                * :ref:`setup-guide-index`
+                * :ref:`neuron-dlami-overview`
+                * :ref:`neuron_containers`
+                * :ref:`neuron-devflows`
 
-    .. dropdown::  ML Libraries
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
+        .. grid-item-card:: Learn AWS Neuron
 
-            * :ref:`nxdt`
-            * :ref:`neuronx-distributed-index`
-            * :ref:`transformers_neuronx_readme`
-            * :ref:`nemo-megatron-index`
-        
-             
-    .. dropdown::  User Guide
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
+                * :ref:`neuron-architecture-index`
+                * :ref:`neuron-features-index`
+                * :ref:`neuron-appnotes-index`
+                * :ref:`neuron_faq`
+                * :ref:`general-troubleshooting`
 
-            * :ref:`neuron_runtime`
-            * :ref:`neuron_cc`
-            * :ref:`neuron-nki`
-            * :ref:`neuron_c++customops`
-            * :ref:`neuron-tools`
-            * :ref:`setup-guide-index`
-            * :ref:`neuron-dlami-overview`
-            * :ref:`neuron_containers`
-            * :ref:`neuron-devflows`
-            
+        .. grid-item-card:: About AWS Neuron
 
-    .. dropdown::  Learn Neuron
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
-            
-            * :ref:`neuron-architecture-index`
-            * :ref:`neuron-features-index`
-            * :ref:`neuron-appnotes-index`
-            * :ref:`neuron_faq`
-            * :ref:`general-troubleshooting`
-
-
-    .. dropdown::  About Neuron
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-            :open:
-
-            * :ref:`latest-release`
-            * :ref:`neuron_roadmap`
-            * :ref:`neuron_support`  
-
+                * :ref:`latest-release`
+                * :ref:`neuron_roadmap`
+                * :ref:`neuron_support` 
 

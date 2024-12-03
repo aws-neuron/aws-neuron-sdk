@@ -5,11 +5,11 @@ RMSNorm NKI PyTorch implementation.
 
 """
 
-from torch_neuronx.xla_impl.ops import nki_jit
 import torch
 import os
 from rmsnorm_nki_kernels import nki_rmsnorm_kernel
 
+# NKI_EXAMPLE_43_BEGIN
 # Reference torch implementation
 def torch_rmsnorm_kernel(a_tensor, g_tensor):
   # Square the tensor (element-wise)
@@ -25,13 +25,10 @@ def torch_rmsnorm_kernel(a_tensor, g_tensor):
 from torch_xla.core import xla_model as xm
 device = xm.xla_device()
 
-nki_rmsnorm_kernel = nki_jit(nki_rmsnorm_kernel)
-
 a_tensor = torch.rand((250, 512), dtype=torch.float32).to(device=device)
 g_tensor = torch.rand((512), dtype=torch.float32).to(device=device)
-output_nki = torch.zeros((250, 512), dtype=torch.float32).to(device=device)
 
-nki_rmsnorm_kernel(a_tensor, g_tensor, output_nki)
+output_nki = nki_rmsnorm_kernel(a_tensor, g_tensor)
 print(f"output_nki={output_nki}")
 
 output_torch = torch_rmsnorm_kernel(a_tensor, g_tensor)
@@ -41,3 +38,4 @@ if torch.allclose(output_torch, output_nki, atol=1e-5, rtol=1e-3):
   print("NKI and Torch match")
 else:
   print("NKI and Torch differ")
+# NKI_EXAMPLE_43_END

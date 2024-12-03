@@ -40,22 +40,21 @@ PyTorch
 Compute kernel
 ^^^^^^^^^^^^^^
 
-.. literalinclude:: ../examples/transpose2d/transpose2d_nki_kernels.py
+.. nki_example:: ../examples/transpose2d/transpose2d_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-65
+   :marker: NKI_EXAMPLE_33
 
 Launching kernel and testing correctness
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To execute the kernel, we prepare tensors ``a`` and an empty tensor
-``a_t_nki``, and call the ``tensor_transpose2D_kernel_``:
+To execute the kernel, we prepare tensors ``a`` and call ``tensor_transpose2D_kernel_``:
 
 
-.. literalinclude:: ../examples/transpose2d/transpose2d_torch.py
+.. nki_example:: ../examples/transpose2d/transpose2d_torch.py
    :language: python
    :linenos:
-   :lines: 7-9, 14-34
+   :marker: NKI_EXAMPLE_34
 
 
 JAX
@@ -66,31 +65,25 @@ Compute kernel
 
 We can reuse the same NKI compute kernel defined for PyTorch above.
 
-.. literalinclude:: ../examples/transpose2d/transpose2d_nki_kernels.py
+.. nki_example:: ../examples/transpose2d/transpose2d_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-65
+   :marker: NKI_EXAMPLE_33
 
-We also define ``transpose2D`` as a caller to the NKI kernel. We create
-a partial function ``partial(tensor_transpose2D_kernel_, shape2D=shape2D)``
-in order for JAX to be able to pass a Python object to the kernel function.
-
-.. literalinclude:: ../examples/transpose2d/transpose2d_jax.py
-   :language: python
-   :linenos:
-   :lines: 8, 10-11, 14-20
 
 Launching kernel and testing correctness
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To execute the kernel, we prepare array ``a`` and
-call the caller function ``transpose2D``:
+To execute the kernel, we prepare array ``a`` and call ``tensor_transpose2D_kernel_``:
 
-.. literalinclude:: ../examples/transpose2d/transpose2d_jax.py
+.. nki_example:: ../examples/transpose2d/transpose2d_jax.py
    :language: python
    :linenos:
-   :lines: 8-9, 23-37
+   :marker: NKI_EXAMPLE_36
 
+.. note::
+   We pass ``shape2D`` as kwargs to pass the shape as a compile-time constant
+   to the kernel function.
 
 .. _tutorial_transpose2d_code:
 
@@ -108,7 +101,7 @@ discussed in this tutorial.
     * You must also download :download:`transpose2d_nki_kernels.py <../examples/transpose2d/transpose2d_nki_kernels.py>`
       into the same folder to run this JAX script.
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/transpose2d/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/transpose2d/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,10 +1,6 @@
-.. _feature-control-flow:
+.. _logica-neuroncore-config:
 
-Neuron Control Flow
-===================
+Logical NeuronCore configuration
+================================
 
-.. note::
-
-    This feature is supported in :ref:`neuroncores-v2-arch`, the NeuronCore that exists in :ref:`Trainium <trainium-arch>`, however it is still not implemented by the Neuron Compiler.
-
-    Stay tuned and follow the :ref:`Neuron Roadmap <neuron_roadmap>`
+PLACEHOLDER

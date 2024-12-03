@@ -15,6 +15,7 @@ Summary of different NKI API sets:
   (instruction set architecture) designed to provide fine
   control over the hardware. These APIs expose all the programmable input parameters of the corresponding
   hardware instructions and also enforce the same tile-size and layout requirements as specified in NeuronDevice ISA.
+* **nki.compiler** consists of features that control the compilation process of a NKI kernel.
 
 * Other documents:
 
@@ -30,5 +31,6 @@ Summary of different NKI API sets:
     nki
     nki.language
     nki.isa
+    nki.compiler
     nki.api.shared
     nki.errors

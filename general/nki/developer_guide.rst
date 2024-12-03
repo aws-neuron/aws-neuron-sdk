@@ -1,6 +1,6 @@
 .. _nki_developer_guide:
 
-NKI Developer Guide
+NKI Developer Guides
 ====================================
 
 .. toctree::
@@ -12,3 +12,4 @@ NKI Developer Guide
       trainium_inferentia2_arch
       neuron_profile_for_nki
       nki_perf_guide
+      nki_direct_allocation_guide

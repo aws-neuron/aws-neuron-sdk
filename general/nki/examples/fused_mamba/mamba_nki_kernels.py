@@ -4,16 +4,19 @@ Copyright (C) 2024, Amazon.com. All Rights Reserved
 Mamba-v1 NKI kernel implementation.
 
 """
+# NKI_EXAMPLE_25_BEGIN
 import neuronxcc.nki as nki
 import neuronxcc.nki.language as nl
 import neuronxcc.nki.isa as nisa
 import numpy as np
+# NKI_EXAMPLE_25_END
 import os
 import argparse
 import itertools
 
-
-def mamba_v1(delta, u, A, B, C, output):
+# NKI_EXAMPLE_25_BEGIN
+@nki.jit
+def mamba_v1(delta, u, A, B, C):
     """Computes the SSM operation in the Mamba model.
 
     :param delta: (batch_size, channels, seq_len)
@@ -24,6 +27,9 @@ def mamba_v1(delta, u, A, B, C, output):
     :return: (batch_size, channels, seq_len)
     """
     batch_size, channels, seq_len = delta.shape
+    output = nl.ndarray((batch_size, channels, seq_len), dtype=delta.dtype,
+                        buffer=nl.shared_hbm)
+
     _, state_size = A.shape
 
     # We can relax this using mask paramters in all the NKI API calls
@@ -84,8 +90,12 @@ def mamba_v1(delta, u, A, B, C, output):
             nl.store(output[i_batch, channel_start:channel_start+channel_psize, 0:seq_len],
                     scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len])
 
+    return output
+# NKI_EXAMPLE_25_END
 
-def mamba_v2(delta, u, A, B, C, output):
+# NKI_EXAMPLE_26_BEGIN
+@nki.jit
+def mamba_v2(delta, u, A, B, C):
     """Computes the SSM operation in the Mamba model.
 
     :param delta: (batch_size, channels, seq_len)
@@ -96,6 +106,8 @@ def mamba_v2(delta, u, A, B, C, output):
     :return: (batch_size, channels, seq_len)
     """
     batch_size, channels, seq_len = delta.shape
+    output = nl.ndarray((batch_size, channels, seq_len), dtype=delta.dtype,
+                        buffer=nl.shared_hbm)
     _, state_size = A.shape
 
     assert channels % 128 == 0
@@ -153,8 +165,12 @@ def mamba_v2(delta, u, A, B, C, output):
             nl.store(output[i_batch, channel_start:channel_start+channel_psize, 0:seq_len],
                     scanC_accum[0:channel_psize, 0:seq_len])
 
+    return output
+# NKI_EXAMPLE_26_END
 
-def mamba_v3(delta, u, A, B, C, output):
+
+@nki.jit
+def mamba_v3(delta, u, A, B, C):
     """Computes the SSM operation in the Mamba model.
 
     :param delta: (batch_size, channels, seq_len)
@@ -165,6 +181,8 @@ def mamba_v3(delta, u, A, B, C, output):
     :return: (batch_size, channels, seq_len)
     """
     batch_size, channels, seq_len = delta.shape
+    output = nl.ndarray((batch_size, channels, seq_len), dtype=delta.dtype,
+                        buffer=nl.shared_hbm)
     _, state_size = A.shape
 
     # Map channels to the partition dimension
@@ -239,6 +257,7 @@ def mamba_v3(delta, u, A, B, C, output):
             # Store scanC_accum for a single batch to output
             nl.store(output[i_batch, channel_start:channel_start+channel_psize, 0:seq_len],
                     scanC_accum[0:channel_psize, 0:seq_len])
+    return output
 
 
 def parse_args():
@@ -310,9 +329,7 @@ if __name__ == "__main__":
         if args.mode == "accuracy":
             # v1: reference kernel
             print(f">>>> Running v1 (reference).")
-            nki_out_v1 = np.empty((batch, channels, seq_len), dtype=dtype)
-            nki.baremetal(mamba_v1)\
-                         (delta, u, A, B, C, nki_out_v1)
+            nki_out_v1 = mamba_v1(delta, u, A, B, C)
 
             for version in args.version:
                 if version == "v1":
@@ -321,9 +338,7 @@ if __name__ == "__main__":
 
                 print(f">>>> Running version {version}.")
                 func = func_dict[version]
-                nki_out_test = np.empty((batch, channels, seq_len), dtype=dtype)
-                nki.baremetal(func)\
-                             (delta, u, A, B, C, nki_out_test)
+                nki_out_test = func(delta, u, A, B, C)
                 print(f">>>> mamba {version} matches?", np.all(nki_out_test == nki_out_v1))
                 assert np.all(nki_out_test == nki_out_v1)
 
@@ -333,11 +348,10 @@ if __name__ == "__main__":
             for version in args.version:
                 print(f">>>> Running version {version}.")
                 func = func_dict[version]
-                nki_out_test = np.empty((batch, channels, seq_len), dtype=dtype)
                 nki.benchmark(func,
                               save_neff_name='file.neff',
                               save_trace_name='profile.ntff')\
-                             (delta, u, A, B, C, nki_out_test)
+                             (delta, u, A, B, C)
                 # TODO: rename neff/ntff (bug in nki.benchmark with neff name)
                 os.rename("file.neff", f"{version}_b{batch}_sl{seq_len}_c{channels}_ss{state_size}.neff")
                 os.rename("profile.ntff", f"{version}_b{batch}_sl{seq_len}_c{channels}_ss{state_size}.ntff")

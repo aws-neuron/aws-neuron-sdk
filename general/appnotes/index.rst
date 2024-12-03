@@ -14,6 +14,7 @@ Neuron Application Notes
          .. toctree::
             :maxdepth: 1
 
+            /general/announcements/neuron2.x/announce-neuron-trn2
             /general/announcements/neuron2.x/neuron2-intro
 
 .. dropdown::  Neuron Runtime library

@@ -602,6 +602,7 @@ Parameters:
    in parallel.
 
 
+.. _pytorch-lightning:
 
 Neuron PyTorch-Lightning
 ^^^^^^^^^^^^^^^^^^^^^^^^

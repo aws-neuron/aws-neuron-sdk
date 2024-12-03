@@ -5,44 +5,45 @@ Neuron Features
 Neuron features provide insights into Neuron capabilities that enable high-performance and improve usability of developing and deploying deep learning acceleration on top of Inferentia and Trainium based instances.
 
 .. grid:: 2
+      :gutter: 2
 
 
-      .. card:: Data Types
+      .. grid-item-card:: Data types
             :link: neuron-data-types
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-      .. card:: Neuron Rounding Modes
+      .. grid-item-card:: Neuron rounding modes
             :link: neuron-rounding-modes
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-      .. card:: Neuron Batching
+      .. grid-item-card:: Neuron batching
             :link: neuron-batching
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-      .. card:: NeuronCore Pipeline
+      .. grid-item-card:: NeuronCore pipeline
             :link: neuroncore-pipeline
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-      .. card:: Neuron Persistent Cache
+      .. grid-item-card:: Neuron persistent cache
             :link: neuron-caching
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-      .. card:: Neuron Collective Communication
+      .. grid-item-card:: Neuron collective communication
             :link: feature_cccom
             :link-type: ref
             :class-body: sphinx-design-class-title-small                  
 
-      .. card:: Neuron Control Flow
-            :link: feature-control-flow
+      .. grid-item-card:: Logical NeuronCore configuration
+            :link: logical-neuroncore-config
             :link-type: ref
             :class-body: sphinx-design-class-title-small  
 
-      .. card:: Neuron Custom C++ Operators
+      .. grid-item-card:: Neuron custom C++ operators
             :link: feature-custom-c++-operators
             :link-type: ref
             :class-body: sphinx-design-class-title-small 
@@ -51,15 +52,14 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
     :maxdepth: 1
     :hidden:
 
-
-    Data Types <data-types>
-    Rounding Modes <rounding-modes>
-    Neuron Batching </general/arch/neuron-features/neuroncore-batching>
-    NeuronCore Pipeline </general/arch/neuron-features/neuroncore-pipeline>    
-    Neuron Persistent Cache <neuron-caching>
-    Collective Communication <collective-communication>
-    control-flow
-    custom-c++-operators
+    Data types <data-types>
+    Rounding modes <rounding-modes>
+    Neuron batching </general/arch/neuron-features/neuroncore-batching>
+    NeuronCore pipeline </general/arch/neuron-features/neuroncore-pipeline>    
+    Neuron persistent cache <neuron-caching>
+    Collective communication <collective-communication>
+    Logical NeuronCore configuration <logical-neuroncore-config>
+    Custom C++ operators <custom-c++-operators>
 
 
 

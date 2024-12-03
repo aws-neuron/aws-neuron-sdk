@@ -1,7 +1,7 @@
 .. _neuron-devflows:
 
-Workload Orchestration
-======================
+AWS Workload Orchestration
+==========================
 
 Neuron can be used in a wide selection of development flows. Each flow has its own starting point and requirements which are required to enable deep learning acceleration with AWS Neuron.
 
@@ -12,7 +12,6 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
 
     /general/devflows/eks-flows
     /general/devflows/ecs-flows
-    /general/devflows/sagemaker-flows
     /general/devflows/parallelcluster-flows
     /general/devflows/aws-batch-flows
 
@@ -41,13 +40,6 @@ Neuron can be used in a wide selection of development flows. Each flow has its o
             :animate: fade-in
 
             .. include:: /general/devflows/ecs-flows.txt
-
-      .. dropdown::  Amazon SageMaker
-            :class-title: sphinx-design-class-title-med
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-
-            .. include:: /general/devflows/sagemaker-flows.txt
 
       .. dropdown::  AWS ParallelCluster
             :class-title: sphinx-design-class-title-med

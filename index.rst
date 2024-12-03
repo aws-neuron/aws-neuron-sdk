@@ -4,102 +4,136 @@ Welcome to AWS Neuron
 .. meta::
    :description: Neuron SDK is powering AWS Inferentia and Trainium based instances, natively integrated into PyTorch and TensorFlow. Enabling you to quicky start with Amazon EC2, AWS Sagemaker, ECS and EKS.
 
-AWS Neuron is the SDK used to run deep learning workloads on AWS Inferentia and AWS Trainium based instances. It supports customers in their end-to-end ML development lifecycle to build new models, train and optimize these models, and then deploy them for production. To learn about the model architectures currently supported on Inf1, Inf2, Trn1 and Trn1n instances, please see :ref:`model_samples_tutorials`. To learn about upcoming capabilities, please view the :ref:`neuron_roadmap`.
+AWS Neuron is the software development kit (SDK) used to run deep learning and generative AI workloads on `AWS Inferentia <https://aws.amazon.com/ai/machine-learning/inferentia/>`_ and `AWS Trainium <https://aws.amazon.com/ai/machine-learning/trainium/>`_ powered Amazon EC2 instances (Amazon EC2 `Inf1 <https://aws.amazon.com/ec2/instance-types/inf1/>`_, `Inf2 <https://aws.amazon.com/ec2/instance-types/inf2/>`_, `Trn1 <https://aws.amazon.com/ec2/instance-types/trn1/>`_ and `Trn2 <https://aws.amazon.com/ec2/instance-types/trn2/>`_ instances). It includes a compiler, runtime, training and inference libraries, and profiling tools. Neuron supports customers in their end-to-end ML development lifecycle including building and deploying deep learning and AI models.
 
-AWS Neuron includes a deep learning compiler, runtime, and tools that are natively integrated into TensorFlow, PyTorch and Apache MXNet. The EC2 Trn1/Trn1n instances are optimized for the highest performance and best price-performance training in AWS. The EC2 Inf2 instances are designed for high-performance deep learning inference applications. With Neuron, customers can quickly start using Inf/Trn instances through services like Amazon Sagemaker, Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS), AWS Batch, and AWS Parallel Cluster. 
-
-Check :ref:`announcements-main` and check :ref:`latest-neuron-release` for latest release.
+* **ML Frameworks and Libraries** - Neuron integrates with :ref:`PyTorch  <pytorch-neuronx-main>` and :ref:`JAX <jax-neuron-main>`, and offers :ref:`NxD Training <nxdt>` and :ref:`NxD Inference <nxdi-index>` PyTorch libraries for distributed workflows. It also supports `Hugging Face Optimum Neuron <https://huggingface.co/docs/optimum-neuron/en/index>`_, `PyTorch Lightning <https://lightning.ai/lightning-ai/studios/finetune-llama-90-cheaper-on-aws-trainium~01hh3kj60fs8b8x91rv9n9fn2j?section=featured>`_, and `AXLearn library <https://github.com/apple/axlearn>`_ for JAX model training.
 
 
-.. grid:: 2
+* **Developer Tools** - Neuron provides :ref:`health monitoring, observability <monitoring_tools>`, and :ref:`profiling tools <profiling-tools>` for AWS Inferentia and Trainium instances. It tracks hardware utilization, model execution metrics, and device information. The Neuron Profiler identifies performance bottlenecks. Neuron also integrates with :ref:`third-party  <third-party-tool-solutions>`  monitoring tools like Datadog and Weights and Biases.
+
+* **Compute Kernels** - :ref:`Neuron Kernel Interface (NKI) <neuron-nki>` provides direct hardware access on AWS Trainium and Inferentia, enabling customer to write optimized kernel. NKI provides a Python-based environment with Triton-like syntax. Neuron supports custom C++ operators, allowing developers to extend functionality and enhance deep learning models.
 
 
-   .. card:: Get Started with Neuron
-         :link: neuron-quickstart
-         :link-type: ref
+* **Workloads Orchestrations and Managed Services**  - Neuron enables you to use Trainium and Inferentia-based instances with Amazon services such as SageMaker, EKS, ECS, ParallelCluster, and Batch. and :ref:`third-party solutions <third-party-devflow-solutions>` like Ray (Anyscale) and Domino Data Lab.
 
 
-   .. card:: Neuron Quick Links
-         :link: docs-quick-links
-         :link-type: ref
+* **Architecture**  - To understand the architecture of AWS AI Chips, Trn/Inf instances, and NeuronCores visit :ref:`neuroninstances-arch`, :ref:`neurondevices-arch` and :ref:`neuroncores-arch`.
+
+
+For more information about the latest AWS Neuron release, see :ref:`latest-neuron-release` and check the :ref:`announcements-main` page.
+
+For list of AWS Neuron model samples and tutorials on Amazon EC2 ``Inf1``, ``Inf2``, ``Trn1``, and ``Trn2`` instances, 
+see :ref:`model_samples_tutorials`.
+
+
+.. card:: Get Started with Neuron
+      :link: neuron-quickstart
+      :link-type: ref
+
+
+.. card:: Neuron Quick Links
+      :link: docs-quick-links
+      :link-type: ref
 
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: Overview
    
    Quick Links </general/quick-start/docs-quicklinks>
+   Ask Q Developer </general/amazonq-getstarted>
    Get Started with Neuron </general/quick-start/index>
    Samples and Tutorials </general/models/index>
    Performance </general/benchmarks/index>
-   What’s New </release-notes/index>
+   What’s new </release-notes/index>
    Announcements </general/announcements/index>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
-   :caption: ML Frameworks
+   :caption: ML frameworks
 
    PyTorch Neuron </frameworks/torch/index>
    JAX Neuron </frameworks/jax/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
-   Apache MXNet </frameworks/mxnet-neuron/index>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: NeuronX Distributed (NxD)
 
    NxD Training (Beta) </libraries/nxd-training/index>
+   NxD Inference (Beta) </libraries/nxd-inference/index>
    NxD Core </libraries/neuronx-distributed/index>
    
-
 .. toctree::
+   :hidden:
    :maxdepth: 1
-   :caption: Additional Libraries
+   :caption: Additional ML Libraries
 
+   Third Party libraries </libraries/third-party-libraries/third-party-libraries>
    Transformers Neuron </libraries/transformers-neuronx/index>
-   AWS Neuron Reference for NeMo Megatron </libraries/nemo-megatron/index>
+   AWS Neuron reference for NeMo Megatron </libraries/nemo-megatron/index>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
-   :caption: Developer Flows
+   :caption: Developer flows
 
    Neuron DLAMI </dlami/index>
-   Neuron Containers </containers/index>
-   Workload Orchestration </general/devflows/index>
-   Setup Guide </general/setup/index>
+   Neuron containers </containers/index>
+   AWS Workload orchestration </general/devflows/index>
+   Amazon SageMaker </general/devflows/sagemaker-flows>
+   Third-party solutions <general/devflows/third-party-solutions>
+   Setup guide </general/setup/index>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: Runtime & Tools
 
-   Neuron Runtime </neuron-runtime/index>
-   Neuron Tools </tools/index>
-   Neuron Calculator </general/calculator/neuron-calculator>
+   Neuron runtime </neuron-runtime/index>
+   Monitoring Tools </general/monitoring-tools>
+   Profiling Tools </general/profiling-tools>
+   Third-party solutions <tools/third-party-solutions>
+   Other Tools </general/other-tools>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: Compiler
 
-   Neuron Compiler </compiler/index>
+   Neuron compiler </compiler/index>
    Neuron Kernel Interface (Beta) <general/nki/index>
    Neuron C++ Custom Operators </neuron-customops/index>
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: Learning Neuron
 
    Architecture </general/arch/index>
    Features </general/arch/neuron-features/index>
-   Application Notes </general/appnotes/index>
+   Application notes </general/appnotes/index>
    FAQ </general/faq>
    Troubleshooting </general/troubleshooting>
+   AWS Neuron glossary </general/arch/glossary>
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :caption: Legacy Software
+
+   Apache MXNet </frameworks/mxnet-neuron/index>
 
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: About Neuron
-   
-   /release-notes/release
+
+   Release details </release-notes/release>
    Roadmap </general/roadmap-readme>
    Support </general/support>
 

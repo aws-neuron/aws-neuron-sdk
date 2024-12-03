@@ -27,14 +27,20 @@ Which hardware engines are supported?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following AWS Trainium and Inferentia hardware engines are
-supported: Tensor Engine, Vector Engine, Scalar Engine, and GpSIMD
-Engine. For more details, see the :ref:`Trainium/Inferentia2 Architecture Guide <trainium_inferentia2_arch>`.
+supported: Tensor Engine, Vector Engine, Scalar Engine, and GpSimd Engine. 
+For more details, see the :ref:`Trainium/Inferentia2 Architecture Guide <trainium_inferentia2_arch>`,
+and refer to :doc:`nki.isa <api/nki.isa>` APIs to identify which engines are utilized for each instruction.
 
 What ML Frameworks support NKI kernels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 NKI is integrated with :ref:`nki_framework_custom_op_pytorch` and :ref:`nki_framework_custom_op_jax`
 frameworks. For more details, see the :ref:`nki_framework_custom_op`.
+
+What Neuron software does not currently support NKI?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NKI does not currently support integration with 
+Neuron Custom C++ Operators, Transformers NeuronX, and Neuron Collective Communication.
 
 Where can I find NKI sample kernels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,7 +57,7 @@ Refer to :doc:`NKI Error Manual <api/nki.errors>` for a detailed guidance on how
 to resolve some of the common NKI compilation errors.
 
 If you encounter compilation errors from Neuron Compiler that you cannot understand or
-resolve, you may check out NKI sample `Github issues <https://github.com/aws-neuron/nki-samples/issues>`__
+resolve, you may check out NKI sample `GitHub issues <https://github.com/aws-neuron/nki-samples/issues>`__
 and open an issue if no similar issues exist.
 
 How can I debug numerical issues in NKI kernels?

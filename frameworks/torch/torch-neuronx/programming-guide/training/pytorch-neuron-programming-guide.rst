@@ -9,7 +9,7 @@ Developer Guide for Training with PyTorch NeuronX
    :depth: 2
 
 
-Trainium is designed to speed up model training and reduce training cost. It is available on the Trn1 instances. Each Trainium accelerator has two NeuronCores, which are the main neural network compute units.
+Trainium is designed to speed up model training and reduce training cost. It is available on the Trn1 and Trn2 instances. On Trn1, each Trainium accelerator has two NeuronCores (default two Logical NeuronCores), which are the main neural network compute units. On Trn2, each Trainium accelerator has 8 NeuronCores (default 4 Logical NeuronCores). The examples in this guide applies to Trn1 and can be extened to run Trn2.
 
 PyTorch NeuronX enables PyTorch users to train their models on Trainium's
 NeuronCores with little code change to their training code. It is based
@@ -24,7 +24,7 @@ PyTorch NeuronX
 Neuron XLA device
 ~~~~~~~~~~~~~~~~~
 
-With PyTorch NeuronX the default XLA device is mapped to a NeuronCore. By default, one NeuronCore is configured. To use Neuron XLA device, specify
+With PyTorch NeuronX the default XLA device is mapped to a :ref:`Logical NeuronCore<logical-neuroncore-config>`. By default, one Logical NeuronCore is configured by a process. To use the Neuron XLA device, specify
 the device as ``xm.xla_device()`` or ``'xla'``:
 
 .. code:: python
@@ -75,9 +75,9 @@ use XLA device:
    # or
    device = 'xla'
 
-The NeuronCore is mapped to an XLA device. On Trainium instance, the XLA device is automatically mapped to the first available NeuronCore.
+The Logical NeuronCore is mapped to an XLA device. On Trainium instance, the XLA device is automatically mapped to the first available Logical NeuronCore. You can use :ref:`NEURON_RT_VISIBLE_CORES<nrt-configuration>` to select specific Logical NeuronCore to use.
 
-By default the above steps will enable the training or evaluation script to run on one
+By default the above steps will enable the training or evaluation script to run on one Logical
 NeuronCore. NOTE: Each process is mapped to one NeuronCore.
 
 Finally, add ``mark_step`` at the end of the training or evaluation step to compile
@@ -156,7 +156,7 @@ and xm.get_ordinal to get the global rank of the current process.
 Then run use `PyTorch
 torchrun <https://pytorch.org/docs/stable/elastic/run.html#launcher-api>`__
 utility to run the script. For example, to run 32 worker data parallel
-training:
+training on trn1.32xlarge:
 
 ``torchrun --nproc_per_node=32 <script and options>``
 
@@ -175,6 +175,10 @@ On another Trn1 host, run with --node_rank=1 :
     torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=<root port> <script and options>
 
 It is important to launch rank-0 worker with --node_rank=0  to avoid hang.
+
+For trn2.48xlarge, use ``--nproc_per_node=64`` for 64 Logical NeuronCores default (each Logical NeuronCores using two physical NeuronCores).
+
+To train on multiple instances, it is recommended to use a ParallelCluster. For a ParallelCluster example, please see `Train a model on AWS Trn1 ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`__.
 
 More information about torchrun can be found PyTorch documentation at
 https://pytorch.org/docs/stable/elastic/run.html#launcher-api .

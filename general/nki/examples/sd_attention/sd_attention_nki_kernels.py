@@ -12,7 +12,9 @@ import numpy as np
 import argparse
 from scipy.special import softmax
 
-def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, out_ref, use_causal_mask=False,
+# NKI_EXAMPLE_31_BEGIN
+@nki.jit
+def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False,
                                            mixed_percision=True):
   """
   Fused self attention kernel for small head dimension Stable Diffusion workload, 
@@ -44,7 +46,7 @@ def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, out_ref, use_cau
   # Assume all IO tensors have the same dtype
   kernel_dtype = q_ref.dtype
   pe_in_dt = nl.bfloat16 if mixed_percision else np.float32
-  assert q_ref.dtype == k_ref.dtype == v_ref.dtype == out_ref.dtype
+  assert q_ref.dtype == k_ref.dtype == v_ref.dtype
 
   # Shape checking
   seqlen, d_head = q_ref.shape
@@ -53,7 +55,7 @@ def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, out_ref, use_cau
   assert tuple(k_ref.shape) == (seqlen, d_head), 'Input shape mismatch!'
   assert tuple(v_ref.shape) == (seqlen,d_head), \
   f'Input shape mismatch! Expected: {(seqlen, d_head)} Actual: {tuple(v_ref.shape)}'
-  assert tuple(out_ref.shape) == (seqlen, d_head), 'Output shape mismatch!'
+  out_ref = nl.ndarray((seqlen, d_head), dtype=q_ref.dtype, buffer=nl.shared_hbm)
 
   # Softmax scaling factor, multiplied onto Q
   softmax_scale = 0.125
@@ -210,58 +212,61 @@ def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, out_ref, use_cau
       out_ref[i_q_seq_tile * q_seq_tile_size + if_out, ip_out],
       value=attn_res_div)
 
+  return out_ref
+# NKI_EXAMPLE_31_END
+
 
 def parse_args():
-    parser = argparse.ArgumentParser("Run Stable Diffusion Attention NKI kernel.")
-    parser.add_argument("--mode",
-                        choices=["accuracy", "perf"],
-                        default="accuracy",
-                        help="""Do accuracy test or perf test.
-                                Accuracy test uses cpu golden output as golden reference.
-                             """)
+  parser = argparse.ArgumentParser("Run Stable Diffusion Attention NKI kernel.")
+  parser.add_argument("--mode",
+                      choices=["accuracy", "perf"],
+                      default="accuracy",
+                      help="""Do accuracy test or perf test.
+                              Accuracy test uses cpu golden output as golden reference.
+                           """)
 
-    args = parser.parse_args()
-    return args
+  args = parser.parse_args()
+  return args
+
 
 def cpu_golden_attn(q, k, v):
-    softmax_scale = 0.125
+  softmax_scale = 0.125
 
-    q_scaled = q * softmax_scale
-    raw_score = np.matmul(q_scaled, k.transpose())
-    norm_score = softmax(raw_score, axis=-1)
+  q_scaled = q * softmax_scale
+  raw_score = np.matmul(q_scaled, k.transpose())
+  norm_score = softmax(raw_score, axis=-1)
 
-    return np.matmul(norm_score, v)
+  return np.matmul(norm_score, v)
 
 
 if __name__ == "__main__":
-    args = parse_args()
+  args = parse_args()
 
-    print(f"Running {args.mode} mode.")
+  print(f"Running {args.mode} mode.")
 
-    seqlen, d_head = 4096, 64
-    
-    # Set up input tensors
-    dtype = np.float32
-    q_tensor = np.random.rand(seqlen, d_head).astype(dtype)
-    k_tensor = np.random.rand(seqlen, d_head).astype(dtype)
-    v_tensor = np.random.rand(seqlen, d_head).astype(dtype)
-    output_nki = np.empty((seqlen, d_head), dtype=dtype)
-    output_golden = cpu_golden_attn(q_tensor, k_tensor, v_tensor)
-    
-    if args.mode == "accuracy":
-        nki.baremetal(fused_self_attn_for_SD_small_head_size)\
-                        (q_tensor, k_tensor, v_tensor, output_nki)
-        allclose = np.allclose(output_nki, output_golden, atol=1e-5, rtol=1e-3)
-        print(f">>>> SD attention matches CPU reference? {allclose}")
-        assert allclose, "Accuracy check fails!"
+  seqlen, d_head = 4096, 64
 
-    else:
-        benchmark_func = nki.benchmark(fused_self_attn_for_SD_small_head_size,
-                        save_neff_name='file.neff',
-                        save_trace_name='profile.ntff')
-        benchmark_func(q_tensor, k_tensor, v_tensor, output_nki)
-        
-        metrics = benchmark_func.benchmark_result.nc_latency
-        print(">>>> SD attention benchmark results")
-        print("latency.p50 = " + str(metrics.get_latency_percentile(50)))
-        print("latency.p99 = " + str(metrics.get_latency_percentile(99)))
+  # Set up input tensors
+  dtype = np.float32
+  q_tensor = np.random.rand(seqlen, d_head).astype(dtype)
+  k_tensor = np.random.rand(seqlen, d_head).astype(dtype)
+  v_tensor = np.random.rand(seqlen, d_head).astype(dtype)
+  output_nki = np.empty((seqlen, d_head), dtype=dtype)
+  output_golden = cpu_golden_attn(q_tensor, k_tensor, v_tensor)
+
+  if args.mode == "accuracy":
+    output_nki = fused_self_attn_for_SD_small_head_size(q_tensor, k_tensor, v_tensor)
+    allclose = np.allclose(output_nki, output_golden, atol=1e-5, rtol=1e-3)
+    print(f">>>> SD attention matches CPU reference? {allclose}")
+    assert allclose, "Accuracy check fails!"
+
+  else:
+    benchmark_func = nki.benchmark(fused_self_attn_for_SD_small_head_size,
+                                   save_neff_name='file.neff',
+                                   save_trace_name='profile.ntff')
+    benchmark_func(q_tensor, k_tensor, v_tensor)
+
+    metrics = benchmark_func.benchmark_result.nc_latency
+    print(">>>> SD attention benchmark results")
+    print("latency.p50 = " + str(metrics.get_latency_percentile(50)))
+    print("latency.p99 = " + str(metrics.get_latency_percentile(99)))

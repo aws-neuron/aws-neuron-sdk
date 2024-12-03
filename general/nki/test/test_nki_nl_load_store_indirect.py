@@ -6,20 +6,25 @@ import unittest
 
 import numpy as np
 import neuronxcc.nki as nki
+# NKI_EXAMPLE_17_BEGIN NKI_EXAMPLE_13_BEGIN
 import neuronxcc.nki.isa as nisa
+# NKI_EXAMPLE_16_BEGIN NKI_EXAMPLE_12_BEGIN
 import neuronxcc.nki.language as nl
 ...
 
-nki_jit = nki.trace
-simulate_kernel = nki.simulate_kernel
+# NKI_EXAMPLE_12_END NKI_EXAMPLE_13_END NKI_EXAMPLE_16_END NKI_EXAMPLE_17_END
 
 ########################################################################
 # NOTE: if you modify this file, make sure to update the source .py with
 # NOTE: the correct line numbers under .. literalinclude:: directive
 ########################################################################
 
-@nki_jit
-def example_indirect_load_1(data_tensor, idx_tensor, out_tensor):
+
+@nki.jit(mode="simulation")
+def example_indirect_load_1(data_tensor, idx_tensor):
+  out_tensor = nl.ndarray([64, 512], dtype=data_tensor.dtype,
+                          buffer=nl.shared_hbm)
+  # NKI_EXAMPLE_12_BEGIN
   ############################################################################################
   # Indirect DMA read example 1:
   # - data_tensor on HBM has shape [128 x 512].
@@ -34,13 +39,18 @@ def example_indirect_load_1(data_tensor, idx_tensor, out_tensor):
   idx_tile = nl.load(idx_tensor[i_p]) # indices have to be in SBUF
   data_tile = nl.load(data_tensor[idx_tile[i_p, 0], i_f]) 
   ...
-
+  # NKI_EXAMPLE_12_END
   nl.store(out_tensor, value=data_tile)
+  return out_tensor
 
-@nki_jit
-def example_indirect_load_2(data_tensor, out_tensor):
+
+@nki.jit(mode="simulation")
+def example_indirect_load_2(data_tensor):
+  out_tensor = nl.ndarray([64, 512], dtype=data_tensor.dtype,
+                          buffer=nl.shared_hbm)
   n, m = data_tensor.shape
   assert n == 128 and m == 512
+  # NKI_EXAMPLE_13_BEGIN
   ############################################################################################
   # Indirect DMA read example 2:
   # - data_tensor on HBM has shape [128 x 512].
@@ -54,13 +64,19 @@ def example_indirect_load_2(data_tensor, out_tensor):
   idx_tile = nisa.iota(idx_expr, dtype=np.int32)
   data_tile = nl.load(data_tensor[idx_tile, i_f]) 
   ...
+  # NKI_EXAMPLE_13_END
 
   nl.store(out_tensor, value=data_tile)
+  return out_tensor
 
-@nki_jit
-def example_indirect_save_1(in_tensor, idx_tensor, data_tensor):
+
+@nki.jit(mode="simulation")
+def example_indirect_save_1(in_tensor, idx_tensor):
+  data_tensor = nl.ndarray([128, 512], dtype=in_tensor.dtype,
+                           buffer=nl.shared_hbm)
   data_tile = nl.load(in_tensor)
   ...
+  # NKI_EXAMPLE_16_BEGIN
   ##################################################################################
   # Indirect DMA write example 1:
   #  - data_tensor has shape [128 x 512].
@@ -74,15 +90,20 @@ def example_indirect_save_1(in_tensor, idx_tensor, data_tensor):
   idx_tile = nl.load(idx_tensor[i_p]) # indices have to be in SB
 
   nl.store(data_tensor[idx_tile[i_p, 0], i_f], value=data_tile[0:64, 0:512])
+  # NKI_EXAMPLE_16_END
+  return data_tensor
 
 
-@nki_jit
-def example_indirect_save_2(in_tensor, data_tensor):
+@nki.jit(mode="simulation")
+def example_indirect_save_2(in_tensor):
+  data_tensor = nl.ndarray([128, 512], dtype=in_tensor.dtype,
+                           buffer=nl.shared_hbm)
   n, m = in_tensor.shape
   i_f = nl.arange(m)[None, :]
   data_tile = nl.load(in_tensor)
   assert n == 64 and m == 512
   ...
+  # NKI_EXAMPLE_17_BEGIN
   #############################################################################################
   # Indirect DMA write example 2:
   #  - data_tensor has shape [128 x 512].
@@ -94,40 +115,38 @@ def example_indirect_save_2(in_tensor, data_tensor):
   idx_tile = nisa.iota(idx_expr, dtype=np.int32)
   
   nl.store(data_tensor[idx_tile, i_f], value=data_tile[0:64, 0:512]) 
+  # NKI_EXAMPLE_17_END
+  return data_tensor
 
 
 class TestNkiExampleNlLoadStoreIndirect(unittest.TestCase):
   def test_indirect_load_1(self):
     in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
-    out_tensor = np.random.random_sample([64, 512]).astype(np.float32)
     idx_tensor = 2*np.arange(64, dtype=np.int32)
     golden = in_tensor[idx_tensor]
 
-    nki.simulate_kernel(example_indirect_load_1, in_tensor, idx_tensor, out_tensor)
+    out_tensor = example_indirect_load_1(in_tensor, idx_tensor)
     self.assertTrue(np.allclose(out_tensor, golden))
 
   def test_indirect_load_2(self):
     in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
-    out_tensor = np.random.random_sample([64, 512]).astype(np.float32)
     idx_tensor = 2*np.arange(64, dtype=np.int32)
     golden = in_tensor[idx_tensor]
 
-    nki.simulate_kernel(example_indirect_load_2, in_tensor, out_tensor)
+    out_tensor = example_indirect_load_2(in_tensor)
     self.assertTrue(np.allclose(out_tensor, golden))
 
   def test_indirect_save_1(self):
     in_tensor = np.random.random_sample([64, 512]).astype(np.float32)
-    out_tensor = np.random.random_sample([128, 512]).astype(np.float32)
     idx_tensor = 2*np.arange(64, dtype=np.int32)
 
-    nki.simulate_kernel(example_indirect_save_1, in_tensor, idx_tensor, out_tensor)
+    out_tensor = example_indirect_save_1(in_tensor, idx_tensor)
     self.assertTrue(np.allclose(out_tensor[idx_tensor], in_tensor))
 
   def test_indirect_save_2(self):
     in_tensor = np.random.random_sample([64, 512]).astype(np.float32)
-    out_tensor = np.random.random_sample([128, 512]).astype(np.float32)
     idx_tensor = 2*np.arange(64, dtype=np.int32)
 
-    nki.simulate_kernel(example_indirect_save_2, in_tensor, out_tensor)
+    out_tensor = example_indirect_save_2(in_tensor)
     self.assertTrue(np.allclose(out_tensor[idx_tensor], in_tensor))
    

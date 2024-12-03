@@ -1,7 +1,7 @@
 import numpy as np
 import ml_dtypes
 
-def abs(x, dtype=None, mask=None, **kwargs):
+def abs(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Absolute value of the input, element-wise. 
 
@@ -12,7 +12,7 @@ def abs(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def add(x, y, dtype=None, mask=None, **kwargs):
+def add(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Add the inputs, element-wise.
 
@@ -26,9 +26,9 @@ def add(x, y, dtype=None, mask=None, **kwargs):
 
   Examples:
 
-  .. literalinclude:: ../../test/test_nki_nl_add.py
+  .. nki_example:: ../../test/test_nki_nl_add.py
    :language: python
-   :lines: 8, 18-66
+   :marker: NKI_EXAMPLE_20
 
   .. note::
     Broadcasting in the partition dimension is generally more expensive than broadcasting in free dimension. It is recommended to align your data to perform free dimension broadcast whenever possible.
@@ -36,7 +36,7 @@ def add(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def affine_range(*args):
+def affine_range(*args, **kwargs):
   r"""
   Create a sequence of numbers for use as **parallel** loop iterators in NKI. ``affine_range`` should be the default
   loop iterator choice, when there is **no** loop carried dependency. Note, associative reductions are **not** considered
@@ -95,7 +95,7 @@ def affine_range(*args):
   """
   ...
 
-def all(x, axis, dtype=bool, mask=None, **kwargs):
+def all(x, axis, *, dtype=bool, mask=None, **kwargs):
   r"""
   Whether all elements along the specified axis (or axes) evaluate to True.
 
@@ -109,7 +109,7 @@ def all(x, axis, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def all_reduce(x, op, program_axes, dtype=None, mask=None, parallel_reduce=True, asynchronous=False, **kwargs):
+def all_reduce(x, op, program_axes, *, dtype=None, mask=None, parallel_reduce=True, asynchronous=False, **kwargs):
   r"""
   Apply reduce operation over multiple SPMD programs. 
 
@@ -138,7 +138,7 @@ def arange(*args):
   """
   ...
 
-def arctan(x, dtype=None, mask=None, **kwargs):
+def arctan(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Inverse tangent of the input, element-wise.
 
@@ -151,7 +151,7 @@ def arctan(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def atomic_rmw(dst, value, op, mask=None, **kwargs):
+def atomic_rmw(dst, value, op, *, mask=None, **kwargs):
   r"""
   Perform an atomic read-modify-write operation on HBM data ``dst = op(dst, value)``
 
@@ -161,61 +161,61 @@ def atomic_rmw(dst, value, op, mask=None, **kwargs):
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return:
 
-  .. literalinclude:: ../../test/test_nki_nl_atomic_rmw.py  
+  .. nki_example:: ../../test/test_nki_nl_atomic_rmw.py  
    :language: python
-   :lines: 9-11, 22-23, 35-43
+   :marker: NKI_EXAMPLE_18
 
   """
   ...
 
 bfloat16 = np.dtype('bfloat16')
-r"""16-bit custom floating-point number"""
+r"""16-bit floating-point number (1S,8E,7M)"""
 
-def bitwise_and(x, y, dtype=None, mask=None, **kwargs):
+def bitwise_and(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
-  Bit-wise AND of the two inputs, element-wise.
+  Bitwise AND of the two inputs, element-wise.
 
   ((Similar to `numpy.bitwise_and <https://numpy.org/doc/stable/reference/generated/numpy.bitwise_and.html>`_))
 
   Computes the bit-wise AND of the underlying binary representation of the integers
   in the input tiles. This function implements the C/Python operator ``&``
 
-  :param x: a tile or a scalar value.
-  :param y: a tile or a scalar value. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param x: a tile or a scalar value of integer type.
+  :param y: a tile or a scalar value of integer type. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: a tile that has values ``x & y``.
   """
   ...
 
-def bitwise_or(x, y, dtype=None, mask=None, **kwargs):
+def bitwise_or(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
-  Bit-wise OR of the two inputs, element-wise.
+  Bitwise OR of the two inputs, element-wise.
 
   ((Similar to `numpy.bitwise_or <https://numpy.org/doc/stable/reference/generated/numpy.bitwise_or.html>`_))
 
   Computes the bit-wise OR of the underlying binary representation of the integers
   in the input tiles. This function implements the C/Python operator ``|``
 
-  :param x: a tile or a scalar value.
-  :param y: a tile or a scalar value. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param x: a tile or a scalar value of integer type.
+  :param y: a tile or a scalar value of integer type. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: a tile that has values ``x | y``.
   """
   ...
 
-def bitwise_xor(x, y, dtype=None, mask=None, **kwargs):
+def bitwise_xor(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
-  Bit-wise XOR of the two inputs, element-wise.
+  Bitwise XOR of the two inputs, element-wise.
 
   ((Similar to `numpy.bitwise_xor <https://numpy.org/doc/stable/reference/generated/numpy.bitwise_xor.html>`_))
 
   Computes the bit-wise XOR of the underlying binary representation of the integers
   in the input tiles. This function implements the C/Python operator ``^``
 
-  :param x: a tile or a scalar value.
-  :param y: a tile or a scalar value. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param x: a tile or a scalar value of integer type.
+  :param y: a tile or a scalar value of integer type. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: a tile that has values ``x ^ y``.
@@ -225,7 +225,7 @@ def bitwise_xor(x, y, dtype=None, mask=None, **kwargs):
 bool_ = np.bool_
 r"""Boolean type (True or False), stored as a byte. Same as `numpy.bool_`."""
 
-def ceil(x, dtype=None, mask=None, **kwargs):
+def ceil(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Ceiling of the input, element-wise.
 
@@ -240,7 +240,7 @@ def ceil(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def copy(src, mask=None, dtype=None, **kwargs):
+def copy(src, *, mask=None, dtype=None, **kwargs):
   r"""
   Create a copy of the src tile.
 
@@ -252,7 +252,7 @@ def copy(src, mask=None, dtype=None, **kwargs):
   """
   ...
 
-def cos(x, dtype=None, mask=None, **kwargs):
+def cos(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Cosine of the input, element-wise.
 
@@ -265,7 +265,7 @@ def cos(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def device_print(prefix, x, mask=None, **kwargs):
+def device_print(prefix, x, *, mask=None, **kwargs):
   r"""
   Print a message with a String ``prefix`` followed by the value of a tile ``x``.
   Printing is currently only supported in kernel simulation mode
@@ -278,7 +278,7 @@ def device_print(prefix, x, mask=None, **kwargs):
   """
   ...
 
-def divide(x, y, dtype=None, mask=None, **kwargs):
+def divide(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Divide the inputs, element-wise.
 
@@ -292,7 +292,7 @@ def divide(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def dropout(x, rate, dtype=None, mask=None, **kwargs):
+def dropout(x, rate, *, dtype=None, mask=None, **kwargs):
   r"""
   Randomly zeroes some of the elements of the input tile given a probability rate.
 
@@ -304,7 +304,18 @@ def dropout(x, rate, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def equal(x, y, dtype=bool, mask=None, **kwargs):
+def ds(start, size):
+  r"""
+  Construct a dynamic slice for simple tensor indexing.
+
+  .. nki_example:: ../../test/test_nki_nl_dslice.py
+   :language: python
+   :marker: NKI_EXAMPLE_1
+
+  """
+  ...
+
+def equal(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x == y.
 
@@ -318,7 +329,7 @@ def equal(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def erf(x, dtype=None, mask=None, **kwargs):
+def erf(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Error function of the input, element-wise. 
   
@@ -333,7 +344,7 @@ def erf(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def erf_dx(x, dtype=None, mask=None, **kwargs):
+def erf_dx(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Derivative of the Error function (erf) on the input, element-wise.
 
@@ -344,7 +355,7 @@ def erf_dx(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def exp(x, dtype=None, mask=None, **kwargs):
+def exp(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Exponential of the input, element-wise.
 
@@ -383,9 +394,12 @@ float32 = np.float32
 r"""Single-precision floating-point number type, compatible with C ``float``. Same as `numpy.float32`."""
 
 float8_e4m3 = np.dtype('|V1')
-r"""8-bit custom floating-point number"""
+r"""8-bit floating-point number (1S,4E,3M)"""
 
-def floor(x, dtype=None, mask=None, **kwargs):
+float8_e5m2 = np.dtype('float8_e5m2')
+r"""8-bit floating-point number (1S,5E,2M)"""
+
+def floor(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Floor of the input, element-wise.
 
@@ -400,7 +414,7 @@ def floor(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def full(shape, fill_value, dtype, buffer=None, name="", **kwargs):
+def full(shape, fill_value, dtype, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of given shape and dtype on the specified buffer, filled with initial value.
 
@@ -415,7 +429,7 @@ def full(shape, fill_value, dtype, buffer=None, name="", **kwargs):
   """
   ...
 
-def gelu(x, dtype=None, mask=None, **kwargs):
+def gelu(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Gaussian Error Linear Unit activation function on the input, element-wise.
 
@@ -428,7 +442,7 @@ def gelu(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def gelu_apprx_tanh(x, dtype=None, mask=None, **kwargs):
+def gelu_apprx_tanh(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Gaussian Error Linear Unit activation function on the input, element-wise, with tanh approximation.
 
@@ -439,7 +453,7 @@ def gelu_apprx_tanh(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def gelu_dx(x, dtype=None, mask=None, **kwargs):
+def gelu_dx(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Derivative of Gaussian Error Linear Unit (gelu) on the input, element-wise.
 
@@ -459,7 +473,7 @@ def gemm_stationary_grid():
   r""" Tile definition for stationary operand of Matrix Multiplication on Tensor Engine."""
   ...
 
-def greater(x, y, dtype=bool, mask=None, **kwargs):
+def greater(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x > y.
 
@@ -473,7 +487,7 @@ def greater(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def greater_equal(x, y, dtype=bool, mask=None, **kwargs):
+def greater_equal(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x >= y.
 
@@ -499,9 +513,9 @@ r"""Signed integer type, compatible with C ``int``. Same as `numpy.int32`."""
 int8 = np.int8
 r"""Signed integer type, compatible with C ``char``. Same as `numpy.int8`."""
 
-def invert(x, dtype=None, mask=None, **kwargs):
+def invert(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Bit-wise NOT of the input, element-wise.
+  Bitwise NOT of the input, element-wise.
 
   ((Similar to `numpy.invert <https://numpy.org/doc/stable/reference/generated/numpy.invert.html>`_))
 
@@ -515,7 +529,24 @@ def invert(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def less(x, y, dtype=bool, mask=None, **kwargs):
+def left_shift(x, y, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Bitwise left-shift x by y, element-wise.
+
+  ((Similar to `numpy.left_shift <https://numpy.org/doc/stable/reference/generated/numpy.left_shift.html>`_))
+  
+  Computes the bit-wise left shift of the underlying binary representation of the integers
+  in the input tiles. This function implements the C/Python operator ``<<``
+
+  :param x: a tile or a scalar value of integer type.
+  :param y: a tile or a scalar value of integer type. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has values ``x << y``.
+  """
+  ...
+
+def less(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x < y.
 
@@ -529,7 +560,7 @@ def less(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def less_equal(x, y, dtype=bool, mask=None, **kwargs):
+def less_equal(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x <= y.
 
@@ -543,7 +574,7 @@ def less_equal(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def load(src, mask=None, dtype=None, **kwargs):
+def load(src, *, mask=None, dtype=None, **kwargs):
   r"""
   Load a tensor from device memory (HBM) into on-chip memory (SBUF).
 
@@ -554,9 +585,9 @@ def load(src, mask=None, dtype=None, **kwargs):
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :return: a new tile on SBUF with values from ``src``.
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store.py
+  .. nki_example:: ../../test/test_nki_nl_load_store.py
    :language: python
-   :lines: 9, 19-25
+   :marker: NKI_EXAMPLE_10
 
   .. note:: 
     Partition dimension size can't exceed the hardware limitation of ``nki.language.tile_size.pmax``,
@@ -565,23 +596,23 @@ def load(src, mask=None, dtype=None, **kwargs):
   Partition dimension has to be the first dimension in the index tuple of a tile.
   Therefore, data may need to be split into multiple batches to load/store, for example: 
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store.py
+  .. nki_example:: ../../test/test_nki_nl_load_store.py
    :language: python
-   :lines: 9, 32-41
+   :marker: NKI_EXAMPLE_11
 
   Also supports indirect DMA access with dynamic index values:
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store_indirect.py
+  .. nki_example:: ../../test/test_nki_nl_load_store_indirect.py
    :language: python
-   :lines: 10-12, 23-36
+   :marker: NKI_EXAMPLE_12
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store_indirect.py
+  .. nki_example:: ../../test/test_nki_nl_load_store_indirect.py
    :language: python
-   :lines: 9-12, 44-56
+   :marker: NKI_EXAMPLE_13
   """
   ...
 
-def load_transpose2d(src, mask=None, dtype=None, **kwargs):
+def load_transpose2d(src, *, mask=None, dtype=None, **kwargs):
   r"""
   Load a tensor from device memory (HBM) and 2D-transpose the data before storing into on-chip memory (SBUF).
 
@@ -590,9 +621,9 @@ def load_transpose2d(src, mask=None, dtype=None, **kwargs):
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :return: a new tile on SBUF with values from ``src`` 2D-transposed.
 
-  .. literalinclude:: ../../test/test_nki_nl_load_transpose2d.py
+  .. nki_example:: ../../test/test_nki_nl_load_transpose2d.py
    :language: python
-   :lines: 9-11, 20-25
+   :marker: NKI_EXAMPLE_19
 
   .. note:: 
     Partition dimension size can't exceed the hardware limitation of ``nki.language.tile_size.pmax``,
@@ -601,7 +632,7 @@ def load_transpose2d(src, mask=None, dtype=None, **kwargs):
   """
   ...
 
-def log(x, dtype=None, mask=None, **kwargs):
+def log(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Natural logarithm of the input, element-wise.
 
@@ -617,7 +648,7 @@ def log(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def logical_and(x, y, dtype=bool, mask=None, **kwargs):
+def logical_and(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x AND y.
 
@@ -631,7 +662,7 @@ def logical_and(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def logical_not(x, dtype=bool, mask=None, **kwargs):
+def logical_not(x, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of NOT x.
 
@@ -644,7 +675,7 @@ def logical_not(x, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def logical_or(x, y, dtype=bool, mask=None, **kwargs):
+def logical_or(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x OR y.
 
@@ -658,7 +689,7 @@ def logical_or(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def logical_xor(x, y, dtype=bool, mask=None, **kwargs):
+def logical_xor(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x XOR y.
 
@@ -672,7 +703,7 @@ def logical_xor(x, y, dtype=bool, mask=None, **kwargs):
   """
   ...
 
-def loop_reduce(x, op, loop_indices, dtype=None, mask=None, **kwargs):
+def loop_reduce(x, op, loop_indices, *, dtype=None, mask=None, **kwargs):
   r"""
   Apply reduce operation over a loop. This is an ideal instruction to compute a
   high performance reduce_max or reduce_min. 
@@ -715,7 +746,7 @@ def loop_reduce(x, op, loop_indices, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def matmul(x, y, transpose_x=False, mask=None, **kwargs):
+def matmul(x, y, *, transpose_x=False, mask=None, **kwargs):
   r"""
   ``x @ y`` matrix multiplication of ``x`` and ``y``.
 
@@ -747,7 +778,7 @@ def matmul(x, y, transpose_x=False, mask=None, **kwargs):
   """
   ...
 
-def max(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
+def max(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Maximum of elements along the specified axis (or axes) of the input.
 
@@ -764,7 +795,7 @@ def max(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
   """
   ...
 
-def maximum(x, y, dtype=None, mask=None, **kwargs):
+def maximum(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Maximum of the inputs, element-wise.
 
@@ -778,7 +809,7 @@ def maximum(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def mean(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
+def mean(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Arithmetic mean along the specified axis (or axes) of the input.
 
@@ -805,17 +836,17 @@ r"""
 
   ((Similar to `numpy.mgrid <https://numpy.org/doc/stable/reference/generated/numpy.mgrid.html>`_))
 
-  .. literalinclude:: ../../test/test_nki_nl_mgrid.py
+  .. nki_example:: ../../test/test_nki_nl_mgrid.py
    :language: python
-   :lines: 9-11, 22-26
+   :marker: NKI_EXAMPLE_8
 
-  .. literalinclude:: ../../test/test_nki_nl_mgrid.py
+  .. nki_example:: ../../test/test_nki_nl_mgrid.py
    :language: python
-   :lines: 9-11, 30-33
+   :marker: NKI_EXAMPLE_9
 
   """
 
-def min(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
+def min(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Minimum of elements along the specified axis (or axes) of the input.
 
@@ -832,7 +863,7 @@ def min(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
   """
   ...
 
-def minimum(x, y, dtype=None, mask=None, **kwargs):
+def minimum(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Minimum of the inputs, element-wise.
 
@@ -846,7 +877,7 @@ def minimum(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def mish(x, dtype=None, mask=None, **kwargs):
+def mish(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Mish activation function on the input, element-wise.
 
@@ -864,7 +895,7 @@ def mish(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def multiply(x, y, dtype=None, mask=None, **kwargs):
+def multiply(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Multiply the inputs, element-wise.
 
@@ -878,7 +909,37 @@ def multiply(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def ndarray(shape, dtype, buffer=None, name="", **kwargs):
+nc = ...
+r""" Create a logical neuron core dimension in launch grid.
+
+  The instances of spmd kernel will be distributed to different physical neuron
+  cores on the annotated dimension.
+
+  .. code-block:: python
+
+    # Let compiler decide how to distribute the instances of spmd kernel
+    c = kernel[2, 2](a, b)
+
+    import neuronxcc.nki.language as nl
+
+    # Distribute the kernel to physical neuron cores around the first dimension
+    # of the spmd grid.
+    c = kernel[nl.nc(2), 2](a, b)
+    # This means:
+    # Physical NC [0]: kernel[0, 0], kernel[0, 1]
+    # Physical NC [1]: kernel[1, 0], kernel[1, 1]
+
+  Sometimes the size of a spmd dimension is bigger than the number of available
+  physical neuron cores. We can control the distribution with the following
+  syntax:
+
+  .. nki_example:: ../../test/test_nki_spmd_grid.py
+   :language: python
+   :marker: NKI_EXAMPLE_0
+
+  """
+
+def ndarray(shape, dtype, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of given shape and dtype on the specified buffer.
 
@@ -892,7 +953,7 @@ def ndarray(shape, dtype, buffer=None, name="", **kwargs):
   """
   ...
 
-def negative(x, dtype=None, mask=None, **kwargs):
+def negative(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Numerical negative of the input, element-wise.
 
@@ -905,7 +966,7 @@ def negative(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def not_equal(x, y, dtype=bool, mask=None, **kwargs):
+def not_equal(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x != y.
 
@@ -929,7 +990,7 @@ def num_programs(axes=None):
   """
   ...
 
-def ones(shape, dtype, buffer=None, name="", **kwargs):
+def ones(shape, dtype, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of given shape and dtype on the specified buffer, filled with ones.
 
@@ -947,7 +1008,7 @@ par_dim = ...
 r""" Mark a dimension explicitly as a partition dimension.
   """
 
-def power(x, y, dtype=None, mask=None, **kwargs):
+def power(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Elements of x raised to powers of y, element-wise.
 
@@ -964,7 +1025,7 @@ def power(x, y, dtype=None, mask=None, **kwargs):
 private_hbm = ...
 r"""HBM - Only visible to each individual kernel instance in the SPMD grid"""
 
-def prod(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
+def prod(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Product of elements along the specified axis (or axes) of the input.
 
@@ -999,7 +1060,7 @@ def program_ndim():
   ...
 
 psum = ...
-r"""PSUM - Only visible to each individual kernel instance in the SPMD grid"""
+r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.psum.auto_alloc()``"""
 
 def rand(shape, dtype=np.float32, **kwargs):
   r"""
@@ -1012,7 +1073,7 @@ def rand(shape, dtype=np.float32, **kwargs):
   """
   ...
 
-def random_seed(seed, mask=None, **kwargs):
+def random_seed(seed, *, mask=None, **kwargs):
   r"""
   Sets a seed, specified by user, to the random number generator on HW.
   Using the same seed will generate the same sequence of random numbers when using
@@ -1024,7 +1085,7 @@ def random_seed(seed, mask=None, **kwargs):
   """
   ...
 
-def relu(x, dtype=None, mask=None, **kwargs):
+def relu(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Rectified Linear Unit activation function on the input, element-wise.
 
@@ -1039,7 +1100,24 @@ def relu(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def rms_norm(x, w, axis, n, epsilon=1e-06, dtype=None, compute_dtype=None, mask=None, **kwargs):
+def right_shift(x, y, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Bitwise right-shift x by y, element-wise.
+
+  ((Similar to `numpy.right_shift <https://numpy.org/doc/stable/reference/generated/numpy.right_shift.html>`_))
+
+  Computes the bit-wise right shift of the underlying binary representation of the integers
+  in the input tiles. This function implements the C/Python operator ``>>``
+
+  :param x: a tile or a scalar value of integer type.
+  :param y: a tile or a scalar value of integer type. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has values ``x >> y``.
+  """
+  ...
+
+def rms_norm(x, w, axis, n, epsilon=1e-06, *, dtype=None, compute_dtype=None, mask=None, **kwargs):
   r"""
   Apply Root Mean Square Layer Normalization.
 
@@ -1056,7 +1134,7 @@ def rms_norm(x, w, axis, n, epsilon=1e-06, dtype=None, compute_dtype=None, mask=
   """
   ...
 
-def rsqrt(x, dtype=None, mask=None, **kwargs):
+def rsqrt(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Reciprocal of the square-root of the input, element-wise. 
   
@@ -1072,9 +1150,9 @@ def rsqrt(x, dtype=None, mask=None, **kwargs):
   ...
 
 sbuf = ...
-r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid"""
+r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
 
-def sequential_range(*args):
+def sequential_range(*args, **kwargs):
   r"""
   Create a sequence of numbers for use as **sequential** loop iterators in NKI. ``sequential_range``
   should be used when there is a loop carried dependency. Note, associative reductions are **not** considered
@@ -1139,7 +1217,22 @@ def shared_constant(constant, dtype=None, **kwargs):
 shared_hbm = ...
 r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
 
-def sigmoid(x, dtype=None, mask=None, **kwargs):
+def shared_identity_matrix(n, dtype=np.uint8, **kwargs):
+  r"""
+  Create a new identity tensor with specified data type. 
+
+  This function has the same behavior to :doc:`nki.language.shared_constant <nki.language.shared_constant>` but 
+  is preferred if the constant matrix is an identity matrix. The 
+  compiler will reuse all the identity matrices of the same 
+  dtype in the graph to save space.
+  
+  :param n: the number of rows(and columns) of the returned identity matrix
+  :param dtype: the data type of the tensor, default to be ``np.uint8`` (see :ref:`nki-dtype` for more information).
+  :return: a tensor which contains the identity tensor
+  """
+  ...
+
+def sigmoid(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Logistic sigmoid activation function on the input, element-wise. 
   
@@ -1154,7 +1247,7 @@ def sigmoid(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def sign(x, dtype=None, mask=None, **kwargs):
+def sign(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Sign of the numbers of the input, element-wise.
 
@@ -1169,7 +1262,31 @@ def sign(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def sin(x, dtype=None, mask=None, **kwargs):
+def silu(x, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Sigmoid Linear Unit activation function on the input, element-wise.
+
+  ((Similar to `torch.nn.functional.silu <https://pytorch.org/docs/stable/generated/torch.nn.functional.silu.html>`_))
+
+  :param x: a tile.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has silu of ``x``.
+  """
+  ...
+
+def silu_dx(x, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Derivative of Sigmoid Linear Unit activation function on the input, element-wise.
+
+  :param x: a tile.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has silu_dx of ``x``.
+  """
+  ...
+
+def sin(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Sine of the input, element-wise.
 
@@ -1182,7 +1299,7 @@ def sin(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def softmax(x, axis, dtype=None, compute_dtype=None, mask=None, **kwargs):
+def softmax(x, axis, *, dtype=None, compute_dtype=None, mask=None, **kwargs):
   r"""
   Softmax activation function on the input, element-wise. 
   
@@ -1198,7 +1315,7 @@ def softmax(x, axis, dtype=None, compute_dtype=None, mask=None, **kwargs):
   """
   ...
 
-def softplus(x, dtype=None, mask=None, **kwargs):
+def softplus(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Softplus activation function on the input, element-wise.
 
@@ -1213,7 +1330,22 @@ def softplus(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def sqrt(x, dtype=None, mask=None, **kwargs):
+spmd_dim = ...
+r""" Create a dimension in the SPMD launch grid of a NKI kernel with sub-dimension tiling.
+
+  A key use case for ``spmd_dim`` is to shard an existing NKI kernel over multiple
+  NeuronCores without modifying the internal kernel implementation. Suppose we
+  have a kernel, ``nki_spmd_kernel``, which is launched with a 2D SPMD grid,
+  (4, 2). We can shard the first dimension of the launch grid (size 4) over two
+  physical NeuronCores by directly manipulating the launch grid as follows:
+
+  .. nki_example:: ../../test/test_nki_spmd_grid.py
+   :language: python
+   :marker: NKI_EXAMPLE_0
+
+  """
+
+def sqrt(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Non-negative square-root of the input, element-wise.
 
@@ -1226,7 +1358,7 @@ def sqrt(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def square(x, dtype=None, mask=None, **kwargs):
+def square(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Square of the input, element-wise.
 
@@ -1263,7 +1395,7 @@ def static_range(*args):
   """
   ...
 
-def store(dst, value, mask=None, **kwargs):
+def store(dst, value, *, mask=None, **kwargs):
   r"""
   Store into a tensor on device memory (HBM) from on-chip memory (SBUF).
   
@@ -1274,9 +1406,9 @@ def store(dst, value, mask=None, **kwargs):
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return:
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store.py
+  .. nki_example:: ../../test/test_nki_nl_load_store.py
    :language: python
-   :lines: 9, 19-21, 26-29
+   :marker: NKI_EXAMPLE_14
   
   .. note:: 
     Partition dimension size can't exceed the hardware limitation of ``nki.language.tile_size.pmax``,
@@ -1285,24 +1417,24 @@ def store(dst, value, mask=None, **kwargs):
   Partition dimension has to be the first dimension in the index tuple of a tile.
   Therefore, data may need to be split into multiple batches to load/store, for example: 
 
-  .. literalinclude:: ../../test/test_nki_nl_load_store.py
+  .. nki_example:: ../../test/test_nki_nl_load_store.py
    :language: python
-   :lines: 9, 32-36, 41-45
+   :marker: NKI_EXAMPLE_15
 
   Also supports indirect DMA access with dynamic index values:
    
-  .. literalinclude:: ../../test/test_nki_nl_load_store_indirect.py
+  .. nki_example:: ../../test/test_nki_nl_load_store_indirect.py
    :language: python
-   :lines: 10-12, 64-76
+   :marker: NKI_EXAMPLE_16
   
-  .. literalinclude:: ../../test/test_nki_nl_load_store_indirect.py
+  .. nki_example:: ../../test/test_nki_nl_load_store_indirect.py
    :language: python
-   :lines: 9-12, 86-96
+   :marker: NKI_EXAMPLE_17
 
   """
   ...
 
-def subtract(x, y, dtype=None, mask=None, **kwargs):
+def subtract(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Subtract the inputs, element-wise.
 
@@ -1316,7 +1448,7 @@ def subtract(x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def sum(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
+def sum(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Sum of elements along the specified axis (or axes) of the input.
 
@@ -1333,7 +1465,20 @@ def sum(x, axis, dtype=None, mask=None, keepdims=False, **kwargs):
   """
   ...
 
-def tanh(x, dtype=None, mask=None, **kwargs):
+def tan(x, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Tangent of the input, element-wise.
+
+  ((Similar to `numpy.tan <https://numpy.org/doc/stable/reference/generated/numpy.tan.html>`_))
+
+  :param x: a tile.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has tangent values of ``x``.
+  """
+  ...
+
+def tanh(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Hyperbolic tangent of the input, element-wise.
 
@@ -1347,7 +1492,7 @@ def tanh(x, dtype=None, mask=None, **kwargs):
   ...
 
 tfloat32 = np.dtype('|V4')
-r"""32-bit custom floating-point number"""
+r"""32-bit floating-point number (1S,8E,10M)"""
 
 class tile_size: 
   r""" Tile size constants. """
@@ -1377,7 +1522,17 @@ class tile_size:
     r"""Maximum free dimension of a tile on PSUM buffer."""
     ...
 
-def transpose(x, dtype=None, mask=None, **kwargs):
+  @property
+  def psum_min_align(self):
+    r"""The minimum byte alignment requirement for PSUM free dimension address."""
+    ...
+
+  @property
+  def sbuf_min_align(self):
+    r"""The minimum byte alignment requirement for SBUF free dimension address."""
+    ...
+
+def transpose(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Transposes a 2D tile between its partition and free dimension.
 
@@ -1388,7 +1543,7 @@ def transpose(x, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def trunc(x, dtype=None, mask=None, **kwargs):
+def trunc(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Truncated value of the input, element-wise.
 
@@ -1413,7 +1568,7 @@ r"""Unsigned integer type, compatible with C ``unsigned int``. Same as `numpy.ui
 uint8 = np.uint8
 r"""Unsigned integer type, compatible with C ``unsigned char``. Same as `numpy.uint8`."""
 
-def var(x, axis, dtype=None, mask=None, **kwargs):
+def var(x, axis, *, dtype=None, mask=None, **kwargs):
   r"""
   Variance along the specified axis (or axes) of the input.
 
@@ -1428,7 +1583,7 @@ def var(x, axis, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def where(condition, x, y, dtype=None, mask=None, **kwargs):
+def where(condition, x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Return elements chosen from x or y depending on condition.
 
@@ -1443,7 +1598,7 @@ def where(condition, x, y, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def zeros(shape, dtype, buffer=None, name="", **kwargs):
+def zeros(shape, dtype, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of given shape and dtype on the specified buffer, filled with zeros.
 
@@ -1457,7 +1612,7 @@ def zeros(shape, dtype, buffer=None, name="", **kwargs):
   """
   ...
 
-def zeros_like(a, dtype=None, buffer=None, name="", **kwargs):
+def zeros_like(a, dtype=None, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of zeros with the same shape and type as a given tensor.
 

@@ -16,10 +16,16 @@ NKI ISA
    nc_matmul
    nc_transpose
    activation
+   activation_reduce
    tensor_reduce
+   tensor_partition_reduce
    tensor_tensor
    tensor_tensor_scan
+   scalar_tensor_tensor
    tensor_scalar
+   tensor_scalar_reduce
+   tensor_copy
+   tensor_copy_dynamic_src
    reciprocal
    iota
    dropout
@@ -28,6 +34,7 @@ NKI ISA
    bn_stats
    bn_aggr
    local_gather
+   dma_copy
 
 
 Engine Types
@@ -43,3 +50,14 @@ Engine Types
    gpsimd_engine
    dma_engine
    unknown_engine
+
+
+Target
+-------------
+
+.. autosummary::
+   :toctree: generated
+   :nosignatures:
+
+   nc_version
+   get_nc_version

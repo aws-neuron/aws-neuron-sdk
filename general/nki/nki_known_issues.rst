@@ -15,9 +15,6 @@ Unsupported Syntax:
    before use, and output tensors must be stored from SBUF back into HBM. 
    See :doc:`nl.load <api/generated/nki.language.load>` and :doc:`nl.store <api/generated/nki.language.store>`.
 
-#. Top-level input and output tensors have to be distinct. We do not support reading and writing to the same tensor.
-   See corresponding :ref:`error message <nki-errors-err_read_modify_write_on_kernel_parameter>` for more info.
-
 #. Indexing:
 
    * Tile on SBUF/PSUM must have at least 2 dimensions as described :ref:`here <nki-fig-pm-memory>`. If using a 1D tile on SBUF/PSUM, 
@@ -44,8 +41,18 @@ Unsupported Syntax:
 #. :doc:`nisa.bn_stats <api/generated/nki.isa.bn_stats>` does not support mask on the reduce dimension, 
    the mask sent to ``bn_stats`` could not contain any indices from the reduction dimension.
 
-#. Partition dimension broadcasting is not supported on operator overloads (i.e, ``+``, ``-``, ``*``, ``/``),
+#. Partition dimension broadcasting is not supported on operator overloads (i.e, ``+``, ``-``, ``*``, ``/``, ``<<``, ``>>``, etc),
    use ``nki.language`` APIs instead (i.e, ``nl.add``, ``nl.multiply``, ...).
+
+#. When direct allocation API is used, non-IO HBM tensors are not supported.
+
+   * All tensors declared with ``buffer=nl.shared_hbm`` must be returned as the result of the kernel.
+
+   * Tensors declared with ``buffer=nl.hbm`` or ``buffer=nl.private_hbm`` are not allowed.
+
+   * An error "``[NKI005] (float32 [128, 512] %'<name of the hbm tensor>':5)0: DRAM location of kind 
+     Internal mapping failed. Only input/output/const DRAM location is supported!``" will be thrown when such 
+     tensor is encountered.
 
 
 Unexpected Behavior:
@@ -53,7 +60,7 @@ Unexpected Behavior:
 
 #. Simulation using :doc:`nki.simulate_kernel <api/generated/nki.simulate_kernel>`:
 
-   *  Custom data types like ``nl.float32r``, ``nl.bfloat16``, and ``nl.float8_e4m3`` simulate 
+   *  Custom data types like ``nl.float32r``, ``nl.bfloat16``, ``nl.float8_e4m3``, and ``nl.float8_e5m2`` simulate
       in ``fp32`` precision. Also, NumPy API calls outside of the NKI kernel, such as ``np.allclose`` 
       may not work with the above types.
 
@@ -90,6 +97,3 @@ Unexpected Behavior:
    *  NKI ISA API may not be one-to-one with generated hardware ISA instructions. The compiler 
       may aid in the support of these instruction calls by adding additional instructions.
   
-   *  NKI ISA :doc:`nisa.nc_transpose <api/generated/nki.isa.nc_transpose>` API's ``engine`` 
-      param may not be respected in some corner cases, such as if the transpose is merged 
-      with load/store into intermediate operations during compilation.

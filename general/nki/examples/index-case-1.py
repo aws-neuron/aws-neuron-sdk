@@ -1,9 +1,9 @@
+from neuronxcc import nki
 import neuronxcc.nki.language as nl
-from torch_neuronx import nki_jit
 import math
 
-@nki_jit
-def tensor_split_kernel_(in_tensor, out_tensor_even, out_tensor_odd):
+@nki.jit
+def tensor_split_kernel_(in_tensor):
   """NKI kernel to split an input tensor into two output tensors, along the column axis.
 
   The even columns of the input tensor will be gathered into the first output tensor,
@@ -11,13 +11,17 @@ def tensor_split_kernel_(in_tensor, out_tensor_even, out_tensor_odd):
 
   Args:
       in_tensor: an input tensor
+  Returns:
       out_tensor_even: a first output tensor (will hold the even columns of the input tensor)
       out_tensor_odd: a second output tensor (will hold the odd columns of the input tensor)
   """
 
   # Extract tile sizes.
   sz_p, sz_f = in_tensor.shape
-  sz_fout_even, sz_fout_odd = out_tensor_even.shape[1], out_tensor_odd.shape[1]
+  sz_fout_even = sz_f - sz_f // 2
+  sz_fout_odd = sz_f // 2
+  out_tensor_even = nl.ndarray((sz_p, sz_fout_even), dtype=in_tensor.dtype, buffer=nl.shared_hbm)
+  out_tensor_odd = nl.ndarray((sz_p, sz_fout_odd), dtype=in_tensor.dtype, buffer=nl.shared_hbm)
 
   # We assume that all three tensors have the same partition dimension size
   # and it does not exceed pmax
@@ -52,6 +56,8 @@ def tensor_split_kernel_(in_tensor, out_tensor_even, out_tensor_odd):
   nl.store(out_tensor_even[i_p, i_fout_even], value=out_tile_even)
   nl.store(out_tensor_odd[i_p, i_fout_odd], value=out_tile_odd)
 
+  return out_tensor_even, out_tensor_odd
+
 
 if __name__ == "__main__":
     import torch
@@ -62,8 +68,5 @@ if __name__ == "__main__":
     X, Y = 4, 5
     in_tensor = torch.arange(X * Y, dtype=torch.bfloat16).reshape(X, Y).to(device=device)
 
-    out1_tensor = torch.zeros((X, Y-Y//2), dtype=torch.bfloat16).to(device=device)
-    out2_tensor = torch.zeros((X, Y//2), dtype=torch.bfloat16).to(device=device)
-
-    tensor_split_kernel_(in_tensor, out1_tensor, out2_tensor)
+    out1_tensor, out2_tensor = tensor_split_kernel_(in_tensor)
     print(in_tensor, out1_tensor, out2_tensor)

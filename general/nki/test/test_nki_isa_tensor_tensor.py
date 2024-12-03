@@ -4,42 +4,46 @@ Copyright (C) 2024, Amazon.com. All Rights Reserved
 """
 import unittest
 
+import numpy as np
 import neuronxcc.nki as nki
+# NKI_EXAMPLE_3_BEGIN
 import neuronxcc.nki.isa as nisa
 import neuronxcc.nki.language as nl
-import numpy as np
+from neuronxcc.nki.typing import tensor
 ...
-nki_jit = nki.trace
-simulate_kernel = nki.simulate_kernel
+# NKI_EXAMPLE_3_END
 
 ########################################################################
 # NOTE: if you modify this file, make sure to update nki.isa .py file with
 # NOTE: the correct line numbers under .. literalinclude:: directive
 ########################################################################
 
-@nki_jit
-def nki_tensor_tensor(a_tensor, b_tensor, c_tensor):
+
+@nki.jit(mode="simulation")
+def nki_tensor_tensor(a_tensor, b_tensor):
+  c_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype,
+                        buffer=nl.shared_hbm)
+
+  # NKI_EXAMPLE_3_BEGIN
   ##################################################################
   # Example 1: add two tiles, a and b, of the same
   # shape (128, 512) element-wise and get
   # the addition result in tile c
   ##################################################################
-  i_p = nl.arange(128)[:, None]
-  i_f = nl.arange(512)[None, :]
-  a = nl.load(a_tensor[i_p, i_f])  
-  b = nl.load(b_tensor[i_p, i_f])
+  a: tensor[128, 512] = nl.load(a_tensor)
+  b: tensor[128, 512] = nl.load(b_tensor)
 
-  c = nisa.tensor_tensor(a[i_p, i_f], b[i_p, i_f], np.add)
+  c: tensor[128, 512] = nisa.tensor_tensor(a, b, op=nl.add)
 
-  nl.store(c_tensor[i_p, i_f], c)
-  
-      
+  # NKI_EXAMPLE_3_END
+  nl.store(c_tensor, c)
+  return c_tensor
+
+
 class TestNkiIsaExamplesTensorTensor(unittest.TestCase):
   def test_tensor_tensor(self):
     a = np.random.random_sample([128, 512]).astype(np.float32)
     b = np.random.random_sample([128, 512]).astype(np.float32)
-    c = np.ndarray(shape=(128, 512), dtype=np.float32)
-    simulate_kernel(nki_tensor_tensor, a, b, c)
+    c = nki_tensor_tensor(a, b)
     
     self.assertTrue(np.allclose(c, np.add(a, b)))
- 

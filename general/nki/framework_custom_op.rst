@@ -18,12 +18,12 @@ multiply the result by the two input tensors element-wise.
 This effectively calculates: ``a * b * (a + b)``.
 
 We define a common NKI kernel for addition. For more information on the kernel, see
-:doc:`Tensor Addition <tutorials/tensor_addition>`.
+:doc:`SPMD Tensor Addition <tutorials/spmd_tensor_addition>`.
 
-.. literalinclude:: examples/tensor_addition/tensor_addition_nki_kernels.py
+.. nki_example:: examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-40
+   :marker: NKI_EXAMPLE_27
 
 ^^^^^^^
 PyTorch
@@ -47,46 +47,19 @@ We can perform ``(a + b) * a * b`` using native PyTorch code.
 Now let's replace the tensor addition (``c = a + b``) with a NKI
 kernel.
 To do this we replace the ``+`` operator with a call to the NKI kernel
-caller (``nki_tensor_add_pytorch``), and everything else works as before. We wrap
-the addition kernel (``nki_tensor_add_kernel_``) by using the ``nki_jit`` decorator.
+caller (``nki_tensor_add``), and everything else works as before.
+
+.. nki_example:: examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
+   :language: python
+   :linenos:
+   :marker: NKI_EXAMPLE_28
 
 ::
-
-   import torch
-   import torch_xla.core.xla_model as xm
-   import neuronxcc.nki.language as nl
-   from torch_neuronx import nki_jit
-
-   nki_tensor_add_kernel_ = nki_jit(nki_tensor_add_kernel_)
-
-   def nki_tensor_add_pytorch(a_input, b_input):
-     """NKI kernel caller to compute element-wise addition of two input tensors
-
-     This kernel caller lifts tile-size restriction, by applying the kernel on tiles
-     of the inputs/outputs
-
-     Args:
-         a_input:  a first input tensor, of shape [N*128, M*512]
-         b_input:  a second input tensor, of shape [N*128, M*512]
-
-     Returns:
-         a tensor of shape [N*128, M*512], the result of a_input + b_input
-     """
-
-     # The SPMD launch grid denotes the number of kernel instances.
-     # In this case, we use a 2D grid where the size of each invocation is 128x512
-     grid_x = a_input.shape[0] // 128
-     grid_y = a_input.shape[1] // 512
-     c_output = torch.zeros(a_input.shape, dtype=a_input.dtype).to(device=device)
-
-     nki_tensor_add_kernel_[grid_x, grid_y](a_input, b_input, c_output)
-
-     return c_output
 
    device = xm.xla_device()
    a = torch.randn(256, 1024, dtype=torch.float32).to(device)
    b = torch.randn(256, 1024, dtype=torch.float32).to(device)
-   c = nki_tensor_add_pytorch(a, b) # calling a NKI kernel, instead of the built-in torch op
+   c = nki_tensor_add(a, b) # calling a NKI kernel, instead of the built-in torch op
    out = a * b * c
    print(out)
 
@@ -157,40 +130,21 @@ We can perform ``(a + b) * a * b`` using native JAX code.
 
 Similar to the PyTorch example above, let's replace the tensor addition ``(c = a + b)`` with
 the addition NKI kernel. To do this we replace the ``+`` operator with a call to the NKI kernel
-caller (``nki_tensor_add_jax``), and everything else works as before.
+caller (``nki_tensor_add``), and everything else works as before.
+
+.. nki_example:: examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
+   :language: python
+   :linenos:
+   :marker: NKI_EXAMPLE_28
 
 ::
 
    import jax
    import jax.numpy as jnp
-   from jax_neuronx import nki_call
-
-   def nki_tensor_add_jax(a_input, b_input):
-      """NKI kernel caller to compute element-wise addition of two input tensors
-      This kernel caller lifts tile-size restriction, by applying the kernel on tiles
-      of the inputs/outputs
-      Args:
-            a_input:  a first input tensor, of shape [N*128, M*512]
-            b_input:  a second input tensor, of shape [N*128, M*512]
-      Returns:
-            a tensor of shape [N*128, M*512], the result of a_input + b_input
-      """
-
-      # The SPMD launch grid denotes the number of kernel instances.
-      # In this case, we use a 2D grid where the size of each invocation is 128x512
-      grid_x = a_input.shape[0] // 128
-      grid_y = a_input.shape[1] // 512
-      return nki_call(
-         nki_tensor_add_kernel_,
-         a_input,
-         b_input,
-         grid=(grid_x, grid_y),
-         out_shape=jax.ShapeDtypeStruct((a_input.shape[0], a_input.shape[1]), dtype=a_input.dtype),
-      )
 
    @jax.jit
    def jax_customop_tutorial(a, b):
-      c = nki_tensor_add_jax(a, b) # calling a NKI kernel, instead of the built-in jax op
+      c = nki_tensor_add(a, b) # calling a NKI kernel, instead of the built-in jax op
       out = a * b * c
       return out
 
@@ -257,7 +211,7 @@ you can create a ``custom_vjp`` rule (vjp stands for Vector-Jacobian product), w
 `Autodiff Cookbook <https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html>`__ in
 the JAX Docs for instructions on doing this.
 
-Let's reuse the ``nki_tensor_add_pytorch`` and ``nki_tensor_add_jax`` kernels from before and demonstrate how to train a
+Let's reuse the ``nki_tensor_add`` kernels from before and demonstrate how to train a
 simple compute graph ``(a+b)*a*b`` in both PyTorch and JAX.
 
 .. _nki_framework_custom_op_pytorch:
@@ -267,7 +221,7 @@ PyTorch
 ^^^^^^^
 
 We define a ``NkiAddFunc``
-class, which leverages the ``nki_tensor_add_pytorch`` kernel in its ``forward()``
+class, which leverages the ``nki_tensor_add`` kernel in its ``forward()``
 function. The gradients of both input tensors in ``y = a + b`` are
 ones, so the ``backward()`` function
 propagates the ``dy`` gradients from the previous backward function.
@@ -281,7 +235,7 @@ propagates the ``dy`` gradients from the previous backward function.
    class NkiAddFunc(torch.autograd.Function):
      @staticmethod
      def forward(ctx, a, b):
-       return nki_tensor_add_pytorch(a, b)
+       return nki_tensor_add(a, b)
 
      @staticmethod
      def backward(ctx, dy, *args):
@@ -308,7 +262,7 @@ JAX
 
 We define a ``custom_vjp`` function ``nki_add_func`` by using
 the ``@jax.custom_vjp`` decorator which directly calls
-the ``nki_tensor_add_jax`` kernel. We then define and register
+the ``nki_tensor_add`` kernel. We then define and register
 the ``forward()`` and ``backward()`` implementations of the
 ``nki_add_func`` function via ``defvjp()``. Just like the PyTorch
 example before, the ``backward()`` implementation simply passes
@@ -320,7 +274,7 @@ To get the gradients, we call ``jax.grad`` directly with a loss function.
 
    @jax.custom_vjp
    def nki_add_func(a, b):
-      return nki_tensor_add_jax(a, b)
+      return nki_tensor_add(a, b)
 
    def f_forward(a, b):
       # operator output and residual (same as input here)

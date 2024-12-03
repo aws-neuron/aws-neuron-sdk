@@ -20,6 +20,8 @@ Memory operations
    copy
 
 
+.. _nl_creation:
+
 Creation operations
 --------------------
 
@@ -35,6 +37,7 @@ Creation operations
    rand
    random_seed
    shared_constant
+   shared_identity_matrix
 
 
 .. _nki-lang-math:
@@ -70,6 +73,7 @@ Math operations
    log
    cos
    sin
+   tan
    tanh
    arctan
    sqrt
@@ -79,6 +83,8 @@ Math operations
    gelu
    gelu_dx
    gelu_apprx_tanh
+   silu
+   silu_dx
    erf
    erf_dx
    softplus
@@ -103,6 +109,8 @@ Bitwise operations
    bitwise_or
    bitwise_xor
    invert
+   left_shift
+   right_shift
 
 
 Logical operations
@@ -131,6 +139,7 @@ Tensor manipulation operations
    :toctree: generated
    :nosignatures:
 
+   ds
    arange
    mgrid
    expand_dims
@@ -198,6 +207,8 @@ Others
    program_id
    num_programs
    program_ndim
+   spmd_dim
+   nc
    device_print
    loop_reduce
 
@@ -214,6 +225,7 @@ Data Types
    bfloat16
    .. float16
    float8_e4m3
+   float8_e5m2
    .. int32
    .. uint32
    .. int16
@@ -228,6 +240,7 @@ Constants
 
 .. autosummary::
    :toctree: generated
+   :template: nki-custom-class-attr-only-template.rst
    :nosignatures:
 
    tile_size

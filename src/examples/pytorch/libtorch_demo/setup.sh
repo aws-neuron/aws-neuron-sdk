@@ -3,7 +3,7 @@
 # fail on error
 set -e
 
-TORCH_VERSION="2.1.0"
+TORCH_VERSION=$(python -c "import torch; v=torch.__version__.split('+')[0]; print(f'{v}')")
 
 #Parse cli
 while [ "$1" != "" ]; do

@@ -74,6 +74,8 @@ class FrameworkKernel:
     kernel attributes as key to identify the identical backend_config.
 
     Otherwise, `dump_config` will always generate new backend_config.
+
+    # NOTE: THis is still used by legacy framework code, dont change the signature
     """
     ...
 
@@ -110,7 +112,7 @@ class FrameworkKernel:
   def translate_to_neuron_dtype(self, _dtype):
     r"""
     Translate a framework dtype to neuron specific dtype representation in numpy
-    or neuron specific dtype.
+     or neuron specific dtype.
 
     As an example, for PyTorch,
 
@@ -168,7 +170,9 @@ def baremetal(kernel=None, **kwargs):
     import numpy as np
 
     @baremetal(save_neff_name='file.neff', save_trace_name='profile.ntff')
-    def nki_tensor_tensor_add(a_tensor, b_tensor, c_tensor):
+    def nki_tensor_tensor_add(a_tensor, b_tensor):
+      c_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype, buffer=nl.shared_hbm)
+
       a = nl.load(a_tensor)
       b = nl.load(b_tensor)
 
@@ -176,12 +180,13 @@ def baremetal(kernel=None, **kwargs):
 
       nl.store(c_tensor, c)
 
+      return c_tensor
+
     a = np.zeros([128, 1024], dtype=np.float32)
     b = np.random.random_sample([128, 1024]).astype(np.float32)
-    c = np.ndarray(shape=(128, 1024), dtype=np.float32)
-    nki_tensor_tensor_add(a, b, c)
+    c = nki_tensor_tensor_add(a, b)
 
-    assert np.allclose(c, b)
+    assert np.allclose(c, a + b)
   """
   ...
 
@@ -199,8 +204,7 @@ def benchmark(kernel=None, **kwargs):
     # on Amazon Linux
     sudo yum install aws-neuronx-tools-2.* -y
 
-  This decorator invokes ``nki.baremetal`` to compile the NKI kernel into an executable on NeuronDevices (``NEFF``) and
-  collect an execution trace (``NTFF``) under the hood. You may specify a path to save your NEFF file through input
+  You may specify a path to save your NEFF file through input
   parameter ``save_neff_name`` and a path to save your NTFF file through ``save_trace_name``.
   See :doc:`Profiling NKI kernels with Neuron Profile <../../neuron_profile_for_nki>` for more information on how to
   visualize the execution trace for profiling purposes.
@@ -210,7 +214,7 @@ def benchmark(kernel=None, **kwargs):
     Similar to ``nki.baremetal``, The decorated function using ``nki.benchmark`` expects
     `numpy.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_ as input/output
     tensors instead of ML framework tensor objects.
-
+  
   In additional to generating NEFF/NTFF files, this decorator also invokes ``neuron-bench`` to collect
   execution latency statistics of the NEFF file and prints the statistics to the console.
 
@@ -244,7 +248,9 @@ def benchmark(kernel=None, **kwargs):
     import numpy as np
 
     @benchmark(warmup=10, iters = 100, save_neff_name='file.neff', save_trace_name='profile.ntff')
-    def nki_tensor_tensor_add(a_tensor, b_tensor, c_tensor):
+    def nki_tensor_tensor_add(a_tensor, b_tensor):
+      c_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype, buffer=nl.shared_hbm)
+
       a = nl.load(a_tensor)
       b = nl.load(b_tensor)
 
@@ -252,14 +258,116 @@ def benchmark(kernel=None, **kwargs):
 
       nl.store(c_tensor, c)
 
+      return c_tensor
+
     a = np.zeros([128, 1024], dtype=np.float32)
     b = np.random.random_sample([128, 1024]).astype(np.float32)
-    c = np.ndarray(shape=(128, 1024), dtype=np.float32)
-    nki_tensor_tensor_add(a, b, c)
+    c = nki_tensor_tensor_add(a, b)
 
     metrics = nki_tensor_tensor_add.benchmark_result.nc_latency
     print("latency.p50 = " + str(metrics.get_latency_percentile(50)))
     print("latency.p99 = " + str(metrics.get_latency_percentile(99)))
+
+  .. note::
+
+    ``nki.benchmark`` does not use the actual inputs passed into the benchmarked function when running the 
+    neff file. For instance, in the above example, the output c tensor is undefined and should not be used 
+    for numerical accuracy checks.
+  """
+  ...
+
+def jit(func=None, mode="auto", **kwargs):
+  r"""
+  This decorator compiles a function to run on NeuronDevices.
+
+  This decorator tries to automatically detect the current framework and compile
+  the function as a custom operator of the current framework. To bypass the
+  framework detection logic, you may specify the ``mode`` parameter explicitly.
+
+  :param func:               The function that define the custom op
+  :param mode:               The compilation mode, possible values: "jax", "torchxla",
+                             "baremetal", "benchmark", "simulation" and "auto"
+
+  .. code-block:: python
+    :caption: An Example
+
+    from neuronxcc import nki
+    import neuronxcc.nki.language as nl
+
+    @nki.jit
+    def nki_tensor_tensor_add(a_tensor, b_tensor):
+      c_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype, buffer=nl.shared_hbm)
+
+      a = nl.load(a_tensor)
+      b = nl.load(b_tensor)
+
+      c = a + b
+
+      nl.store(c_tensor, c)
+
+      return c_tensor
+
+  """
+  ...
+
+def profile(func=None, **kwargs):
+  r"""
+  Profile a NKI kernel on a NeuronDevice by using ``nki.profile`` as a decorator. 
+
+  .. note::
+
+    Similar to ``nki.baremetal``, The decorated function using ``nki.benchmark`` expects
+    `numpy.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_ as input/output
+    tensors instead of ML framework tensor objects.
+
+  :param working_directory: A path to working directory where profile artifacts are saved,
+                            This must be specified and must also be an absolute path.
+  :param save_neff_name: Name of the saved neff file if specified
+                         (file.neff by default).
+  :param save_trace_name: Name of the saved trace (profile) file if specified
+                          (profile.ntff by default)
+  :param additional_compile_opt: Additional Neuron compiler flags to pass in
+                                 when compiling the kernel.
+  :param overwrite: Overwrite existing profile artifacts if set to True.
+                    Default is False.
+  :param profile_nth: Profiles the `profile_nth` execution.
+                      Default is 1.
+  :return: None
+
+  .. code-block:: python
+    :caption: An Example
+
+    from neuronxcc import nki
+    import neuronxcc.nki.language as nl
+
+    @nki.profile(working_directory="/home/ubuntu/profiles", save_neff_name='file.neff', save_trace_name='profile.ntff')
+    def nki_tensor_tensor_add(a_tensor, b_tensor):
+      c_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype, buffer=nl.shared_hbm)
+
+      a = nl.load(a_tensor)
+      b = nl.load(b_tensor)
+
+      c = a + b
+
+      nl.store(c_tensor, c)
+
+      return c_tensor
+
+  ``nki.profile`` will save file.neff, profile.ntff, along with json files containing a profile summary
+  inside of the working_directory.
+
+  See `Profiling NKI kernels with Neuron Profile <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/neuron_profile_for_nki.html#neuron-profile-for-nki>`_ 
+  for more information on how to visualize the execution trace for profiling purposes.
+  
+  In addition, more information about `neuron-profile` can be found in its 
+  `documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-profile-user-guide.html>`_.
+
+  .. note::
+	  
+	     ``nki.profile`` does not use the actual inputs passed into the profiled function when running the 
+	     neff file. For instance, in the above example, the output c tensor is undefined and should not be used 
+	     for numerical accuracy checks. The input tensors are used mainly to specify the shape of inputs.
+
   """
   ...
 
@@ -286,7 +394,7 @@ def simulate_kernel(kernel, *args, **kwargs):
 
   Examples:
 
-  .. literalinclude:: ../../test/test_nki_simulate_kernel.py
+  .. nki_example:: ../../test/test_nki_simulate_kernel.py
    :language: python
   """
   ...
@@ -329,9 +437,7 @@ class tensor:
   @property
   def dtype(self):
     r"""
-    Get the data type of the tensor.
-
-    :return: The data type of the tensor.
+    Data type of the tensor.
     """
     ...
 
@@ -345,9 +451,16 @@ class tensor:
     ...
 
   @property
+  def itemsize(self):
+    r"""
+    Length of one tensor element in bytes.
+    """
+    ...
+
+  @property
   def ndim(self):
     r"""
-    Get the number of dimensions of the tensor.
+    Number of dimensions of the tensor.
     """
     ...
 
@@ -363,9 +476,7 @@ class tensor:
   @property
   def shape(self):
     r"""
-    Get the shape of the tensor.
-
-    :return: The shape of the tensor.
+    Shape of the tensor.
     """
     ...
 

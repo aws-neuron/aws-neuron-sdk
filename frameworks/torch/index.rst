@@ -4,12 +4,13 @@
 PyTorch Neuron
 ==============
 
-PyTorch Neuron unlocks high-performance and cost-effective deep learning acceleration on AWS Trainium-based and Inferentia-based Amazon EC2 instances.
+PyTorch Neuron unlocks high-performance and cost-effective deep learning acceleration on AWS Trainium-based and AWS Inferentia-based Amazon EC2 instances.
 
-PyTorch Neuron plugin architecture enables native PyTorch models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes. 
+The PyTorch Neuron plugin architecture enables native PyTorch models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes. 
  
-.. _pytorch-neuronx-training:
+For help selecting a framework type for inference, see :ref:`torch-neuron_vs_torch-neuronx`
 
+.. _pytorch-neuronx-training:
 
 .. toctree::
     :maxdepth: 1
@@ -22,7 +23,7 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
     :maxdepth: 1
     :hidden:
 
-    Inference (Inf2 & Trn1) </frameworks/torch/inference-torch-neuronx>
+    Inference (Inf2, Trn1, Trn2) </frameworks/torch/inference-torch-neuronx>
     Inference (Inf1) </frameworks/torch/inference-torch-neuron>
 
 
@@ -32,26 +33,25 @@ PyTorch Neuron plugin architecture enables native PyTorch models to be accelerat
     
     Training </frameworks/torch/training-torch-neuronx>
 
+"""""""""""""""
+PyTorch NeuronX
+"""""""""""""""
+ 
+.. card:: PyTorch NeuronX for training on Trn1 and Trn2
+    :link: training-torch-neuronx
+    :link-type: ref
+    :class-body: sphinx-design-class-title-small
 
-.. note::
-
-    For help selecting a framework type for Inference, see:
-
-    :ref:`torch-neuron_vs_torch-neuronx`
-
-.. card:: PyTorch NeuronX for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
+.. card:: Pytorch NeuronX for inference on Inf2, Trn1, and Trn2 
     :link: inference-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
+""""""""""""""
+PyTorch Neuron
+""""""""""""""
 
-.. card:: PyTorch Neuron for Inference on ``Inf1``
+.. card:: PyTorch Neuron for inference on Inf1
     :link: inference-torch-neuron
-    :link-type: ref
-    :class-body: sphinx-design-class-title-small
-
-    
-.. card:: PyTorch NeuronX for Training on ``Trn1`` / ``Trn1n``
-    :link: training-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small

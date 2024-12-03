@@ -1,5 +1,7 @@
-Tensor addition
-===============
+.. _nki-tutorial-spmd-tensor-addition:
+
+Single program, multiple data tensor addition
+=============================================
 
 In this tutorial we write a simple tensor addition kernel using NKI in PyTorch and JAX. In
 doing so, we learn about:
@@ -21,66 +23,66 @@ PyTorch
 Compute kernel
 ^^^^^^^^^^^^^^
 
-We start by defining the compute kernel, that operates on a tile size of
-``[128, 512]``. The partition dimension tile size is chosen according to the tile size
+We start by defining the compute kernel that has large tensor inputs,
+but operates on a subset of the tensor at a tile size of ``[128, 512]``.
+The partition dimension tile size is chosen according to the tile size
 restrictions (:doc:`nki.language.tile_size.pmax <../api/generated/nki.language.tile_size>`),
 while the free dimension tile size is chosen arbitrarily (``512``).
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_nki_kernels.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-40
+   :marker: NKI_EXAMPLE_27
 
 In this example:
 
-1. We define the NKI kernel in ``nki_tensor_add_kernel_``.
-2. Inside, we first define offsets into the tensors, based on the ID of
+1. We define the NKI kernel in ``nki_tensor_add_kernel_``, decorate it with the
+   `nki.jit` decorator to call the nki compiler to compile the kernel.
+2. Inside, we first allocate tensor ``c_output`` as the result of the kernel
+3. Next, we define offsets into the tensors, based on the ID of
    the worker executing the code (``nl.program_id``), and generate tile
    indices using these offsets with ``nl.arange``. We use advanced indexing here to showcase
    how it works. Basic indexing with slicing can also work.
    See :ref:`NKI Programming Model <nki-tensor-indexing>` for more information on different tensor indexing modes.
-3. We use ``nl.program_id`` to enable SPMD execution (single-program,
+4. We use ``nl.program_id`` to enable SPMD execution (single-program,
    multiple-data, see :ref:`SPMD: Launching Multiple Instances of a Kernel <nki-pm-spmd>`),
    where each worker only operates on a (sub-tensor) tile of the
    input/output tensors. By accessing its own ``program_id``, each
    worker can calculate the offsets it needs to access the correct
    tiles.
-4. The first axis of the tensor (mapped to the partition-dimension) is
+5. The first axis of the tensor (mapped to the partition-dimension) is
    tiled into blocks of 128, based on hardware restrictions (see :ref:`Tile
    Size Considerations <nki-pm-tile>`).
-   The second axis (mapped to the free-dimension) is tiled into blocks
-   of 512 (no tile-size constraint, except for on-chip memory capacity
-   constraints).
-5. We then load sub-tensors data from tensors ``a_input`` and
+   The second axis (mapped to the free-dimension) is tiled into blocks of 512 (no tile-size constraint, 
+   since the addition operation is performed on the Vector engine, the only restriction is on-chip memory capacity).
+6. We then load sub-tensors data from tensors ``a_input`` and
    ``b_input`` using ``nl.load``, to place the tiles ``a_tile`` and
    ``b_tile`` in the on-chip memory (SBUF)
-6. We sum them to compute ``c_tile``, and store it back to DRAM in the
+7. We sum them to compute ``c_tile``, and store it back to DRAM in the
    relevant portion of the ``c_output`` tensor, using ``nl.store``.
    Since both inputs and output are the same shape, we can use the same
    set of indices to access all three tensors.
+8. At the end, we use ``return`` statement to transfer the ownership of
+   tensor ``c_output`` to the caller of the kernel.
 
 SPMD execution
 ^^^^^^^^^^^^^^
 
-We declare a helper function, to allocate the result
-tensor, and launch the compute-kernel with appropriate grid/block sizes,
-to perform the computation. We wrap the ``nki_tensor_add_kernel_`` kernel
-with a ``nki_jit`` decorator so that the kernel can be traced and called from PyTorch.
+We declare a helper function, to launch the compute-kernel with appropriate
+grid/block sizes, to perform the computation over the whole input tensors.
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_torch.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 7, 9, 14-37
+   :marker: NKI_EXAMPLE_28
 
 We are using a two-dimensional grid, where the first dimension of the
 tensor is tiled in the X dimension of the grid, while the second
 dimension is tiled in the Y dimension of the grid. In this scenario we
 assume that tensor sizes are a multiple of maximum tile sizes allowed,
-so we do not need to handle partial tiles. We explicitly initialize
-``c_output`` to zeros using ``torch.zeros``. Note, we cannot use
-``nl.zeros`` here as this function is not traced as a NKI kernel with ``nki_jit``.
+so we do not need to handle partial tiles.
 
-.. _nki-tutorial-tensor-add-launching-pytorch:
+.. _nki-tutorial-spmd-tensor-add-launching-pytorch:
 
 Launching kernel and testing correctness
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -89,10 +91,10 @@ To execute the kernel, we prepare tensors ``a`` and ``b``, and call the
 ``nki_tensor_add`` helper function. We also verify the correctness of the NKI kernel against, torch by
 comparing the outputs of both, using ``torch.allclose``:
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_torch.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_torch.py
    :language: python
    :linenos:
-   :lines: 7-8, 39-57
+   :marker: NKI_EXAMPLE_29
 
 
 Output:
@@ -143,31 +145,29 @@ Compute kernel
 
 We can reuse the same NKI compute kernel defined for PyTorch above.
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_nki_kernels.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-40
+   :marker: NKI_EXAMPLE_27
 
 SPMD execution
 ^^^^^^^^^^^^^^
 
-Now we can also declare a helper function, to allocate the result
-tensor, and launch the compute-kernel with appropriate grid/block sizes,
-to perform the computation:
+Now we can also declare a helper function, to launch the compute-kernel with
+appropriate grid/block sizes, to perform the computation:
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_jax.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 7, 9, 14-40
+   :marker: NKI_EXAMPLE_28
 
 We are using a two-dimensional grid, where the first dimension of the
 tensor is tiled in the X dimension of the grid, while the second
 dimension is tiled in the Y dimension of the grid. In this scenario we
 assume that tensor sizes are a multiple of maximum tile sizes allowed,
-so we do not need to handle partial tiles. We initialize ``out_shape``
-representing the shape of the output using ``jax.ShapeDtypeStruct``.
+so we do not need to handle partial tiles.
 
-.. _nki-tutorial-tensor-add-launching-jax:
+.. _nki-tutorial-spmd-tensor-add-launching-jax:
 
 Launching kernel and testing correctness
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -176,10 +176,10 @@ To execute the kernel, we prepare arrays ``a`` and ``b``, and call the
 ``nki_tensor_add`` helper function. We also verify the correctness of the NKI kernel against, JAX by
 comparing the outputs of both, using ``jax.numpy.allclose``:
 
-.. literalinclude:: ../examples/tensor_addition/tensor_addition_jax.py
+.. nki_example:: ../examples/tensor_addition/spmd_tensor_addition_jax.py
    :language: python
    :linenos:
-   :lines: 7-8, 43-61
+   :marker: NKI_EXAMPLE_30
 
 Output:
 
@@ -222,15 +222,15 @@ Download All Source Code
 Click the links to download source code of the kernels and the testing code
 discussed in this tutorial.
 
-* NKI baremetal implementation: :download:`tensor_addition_nki_kernels.py <../examples/tensor_addition/tensor_addition_nki_kernels.py>`
-* PyTorch implementation: :download:`tensor_addition_torch.py <../examples/tensor_addition/tensor_addition_torch.py>`
-    * You must also download :download:`tensor_addition_nki_kernels.py <../examples/tensor_addition/tensor_addition_nki_kernels.py>`
+* NKI baremetal implementation: :download:`spmd_tensor_addition_nki_kernels.py <../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py>`
+* PyTorch implementation: :download:`spmd_tensor_addition_torch.py <../examples/tensor_addition/spmd_tensor_addition_torch.py>`
+    * You must also download :download:`spmd_tensor_addition_nki_kernels.py <../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py>`
       into the same folder to run this PyTorch script.
-* JAX implementation: :download:`tensor_addition_jax.py <../examples/tensor_addition/tensor_addition_jax.py>`
-    * You must also download :download:`tensor_addition_nki_kernels.py <../examples/tensor_addition/tensor_addition_nki_kernels.py>`
+* JAX implementation: :download:`spmd_tensor_addition_jax.py <../examples/tensor_addition/spmd_tensor_addition_jax.py>`
+    * You must also download :download:`spmd_tensor_addition_nki_kernels.py <../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py>`
       into the same folder to run this PyTorch script.
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/tensor_addition/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/tensor_addition/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,16 +239,16 @@ Run NKI baremetal implementation:
 
 .. code-block::
 
-   python3 tensor_addition_nki_kernels.py
+   python3 spmd_tensor_addition_nki_kernels.py
 
 Run PyTorch implementation:
 
 .. code-block::
 
-   python3 tensor_addition_torch.py
+   python3 spmd_tensor_addition_torch.py
 
 Run JAX implementation:
 
 .. code-block::
 
-   python3 tensor_addition_jax.py
+   python3 spmd_tensor_addition_jax.py

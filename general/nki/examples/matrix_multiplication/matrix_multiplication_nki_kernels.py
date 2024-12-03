@@ -12,7 +12,9 @@ import neuronxcc.nki.typing as nt
 import numpy as np
 
 
-def nki_matmul_basic_(lhsT, rhs, result):
+# NKI_EXAMPLE_16_BEGIN
+@nki.jit
+def nki_matmul_basic_(lhsT, rhs):
   """NKI kernel to compute a 64x128x512 matrix multiplication operation
 
   Args:
@@ -20,8 +22,11 @@ def nki_matmul_basic_(lhsT, rhs, result):
         matrix multiplication, delivered transposed for optimal performance
       rhs: an input tensor of shape [128,512], a right hand side argument of the
         matrix multiplication
+  Returns:
       result: the resulting output tensor of shape [64,512]
   """
+  result = nl.ndarray((64, 512), dtype=lhsT.dtype, buffer=nl.shared_hbm)
+
   # Defining indexes for input LHS.T
   # - Note: here we take LayoutConstraint #1 into account:
   # "For MatMult, contraction axis must be mapped to P-dim"
@@ -53,8 +58,13 @@ def nki_matmul_basic_(lhsT, rhs, result):
   # This dictates which indices to use to address the result tile.
   nl.store(result[i_out_p, i_out_f], value=result_sbuf)
 
+  return result
+  # NKI_EXAMPLE_16_END
 
-def nki_matmul_tiled_(lhsT, rhs, result):
+
+# NKI_EXAMPLE_18_BEGIN
+@nki.jit
+def nki_matmul_tiled_(lhsT, rhs):
   """NKI kernel to compute a matrix multiplication operation in a tiled manner
 
   Args:
@@ -64,12 +74,14 @@ def nki_matmul_tiled_(lhsT, rhs, result):
       rhs: an input tensor of shape [K,N], where K is a multiple of 128, and N
         is a multiple of 512.  It is the right-hand-side argument of the matrix
         multiplication.
+  Returns:
       result: the resulting output tensor of shape [M,N]
   """
 
   K, M = lhsT.shape
   K_, N = rhs.shape
   assert K == K_, "lhsT and rhs must have the same contraction dimension"
+  result = nl.ndarray((M, N), dtype=lhsT.dtype, buffer=nl.shared_hbm)
 
   TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
   TILE_K = nl.tile_size.pmax  # 128
@@ -100,8 +112,13 @@ def nki_matmul_tiled_(lhsT, rhs, result):
       nl.store(result[m * TILE_M:(m + 1) * TILE_M, n * TILE_N:(n + 1) * TILE_N],
                value=res_sb)
 
+  return result
+  # NKI_EXAMPLE_18_END
 
-def nki_matmul_hoist_load_(lhsT, rhs, result):
+
+# NKI_EXAMPLE_19_BEGIN
+@nki.jit
+def nki_matmul_hoist_load_(lhsT, rhs):
   """NKI kernel to compute a matrix multiplication operation in a tiled manner
      while hoisting the load of the lhsT and rhs to outer loops.
 
@@ -112,12 +129,14 @@ def nki_matmul_hoist_load_(lhsT, rhs, result):
       rhs: an input tensor of shape [K,N], where K is a multiple of 128, and N
         is a multiple of 512.  It is the right-hand-side argument of the matrix
         multiplication.
+  Returns:
       result: the resulting output tensor of shape [M,N]
   """
 
   K, M = lhsT.shape
   K_, N = rhs.shape
   assert K == K_, "lhsT and rhs must have the same contraction dimension"
+  result = nl.ndarray((M, N), dtype=lhsT.dtype, buffer=nl.shared_hbm)
 
   TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
   TILE_K = nl.tile_size.pmax  # 128
@@ -163,8 +182,13 @@ def nki_matmul_hoist_load_(lhsT, rhs, result):
       res_sb = nl.copy(res_psum, dtype=result.dtype)
       nl.store(result[m * TILE_M + i_res.p, n * TILE_N + i_res.x], value=res_sb)
 
+  return result
+  # NKI_EXAMPLE_19_END
 
-def nki_matmul_block_free_dimension_(lhsT, rhs, result):
+
+# NKI_EXAMPLE_20_BEGIN
+@nki.jit
+def nki_matmul_block_free_dimension_(lhsT, rhs):
   """NKI kernel to compute a matrix multiplication operation while blocking the
      free dimensions of the LHS and RHS to improve memory access pattern.
 
@@ -175,12 +199,14 @@ def nki_matmul_block_free_dimension_(lhsT, rhs, result):
       rhs: an input tensor of shape [K,N], where K is a multiple of 128, and N
         is a multiple of 512.  It is the right-hand-side argument of the matrix
         multiplication.
+  Returns:
       result: the resulting output tensor of shape [M,N]
   """
 
   K, M = lhsT.shape
   K_, N = rhs.shape
   assert K == K_, "lhsT and rhs must have the same contraction dimension"
+  result = nl.ndarray((M, N), dtype=lhsT.dtype, buffer=nl.shared_hbm)
 
   TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
   TILE_K = nl.tile_size.pmax  # 128
@@ -243,11 +269,15 @@ def nki_matmul_block_free_dimension_(lhsT, rhs, result):
                           (n * TILES_IN_BLOCK_N + bn) * TILE_N + i_res.x],
                    value=res_sb)
 
+  return result
+  # NKI_EXAMPLE_20_END
 
+
+# NKI_EXAMPLE_21_BEGIN
+@nki.jit
 def nki_matmul_fully_optimized_(
     lhsT,
     rhs,
-    result,
     # Meta-parameters
     TILES_IN_BLOCK_M=16,
     TILES_IN_BLOCK_N=2,
@@ -264,13 +294,15 @@ def nki_matmul_fully_optimized_(
       rhs: an input tensor of shape [K,N],  where K is a multiple of 128 *
         TILES_IN_BLOCK_K and N is a multiple of 512 * TILES_IN_BLOCK_N.  It is
         the right-hand-side argument of the matrix multiplication.
-      result: the resulting output tensor of shape [M,N]
       TILES_IN_BLOCK_*: meta parameters to control blocking dimensions
+  Returns:
+      result: the resulting output tensor of shape [M,N]
   """
 
   K, M = lhsT.shape
   K_, N = rhs.shape
   assert K == K_, "lhsT and rhs must have the same contraction dimension"
+  result = nl.ndarray((M, N), dtype=lhsT.dtype, buffer=nl.shared_hbm)
 
   TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
   TILE_K = nl.tile_size.pmax  # 128
@@ -360,16 +392,19 @@ def nki_matmul_fully_optimized_(
                         BLOCK_N * n + i_res_packed.x],
                  value=result_packed[i_res_packed.p, i_res_packed.x])
 
+  return result
+# NKI_EXAMPLE_21_END
 
+
+# NKI_EXAMPLE_23_BEGIN
 if __name__ == "__main__":
   # Benchmarking with large matrices to show the differences more clearly
   lhsT = nt.tensor[[8192, 4096], nl.bfloat16]
   rhs = nt.tensor[[8192, 8192], nl.bfloat16]
-  output = nt.tensor[[4096, 8192], nl.bfloat16]
 
   def benchmark_nki(nki_func):
     bench_func = nki.benchmark(warmup=5, iters=10)(nki_func)
-    bench_func(lhsT, rhs, output)
+    bench_func(lhsT, rhs)
     latency_res = bench_func.benchmark_result.nc_latency
     p99 = latency_res.get_latency_percentile(99)
     print("Latency: {:.2f} ms (P99)".format(p99 / 1000.0))
@@ -385,3 +420,4 @@ if __name__ == "__main__":
 
   print("Benchmarking nki_matmul_fully_optimized")
   benchmark_nki(nki_matmul_fully_optimized_)
+  # NKI_EXAMPLE_23_END

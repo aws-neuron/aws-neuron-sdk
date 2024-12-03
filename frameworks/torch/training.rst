@@ -4,7 +4,7 @@ Training
 .. toctree::
     :maxdepth: 1
 
-    Training with Trn1/Trn1n </frameworks/torch/training-torch-neuronx>
+    Training with Trn1/Trn2 </frameworks/torch/training-torch-neuronx>
 
 
 

@@ -8,6 +8,25 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.20.0.0]
+------------------------
+Date: 12/03/2024
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Added support for Trn2 instance types.
+* Added support for Logical Neuroncores. ``neuron-top``, ``neuron-monitor``, and ``neuron-ls`` now display and aggregate information per Logical Neuroncore based on LNC configuration.
+* Added Neuron Profile 2.0 (Beta). See :ref:`neuron-profiler-2-0-guide` for more information.
+
+Neuron Profile 2.0 (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* System profiles featuring Neuron Runtime API trace and ML framework trace.
+* Option to view system and device profiles using the Perfetto UI
+* Support for native JAX and PyTorch profilers.
+* Support for distributed workloads in environments such as EKS and ParallelCluster.
+* Ability to drill down from high-level system profiles to low-level device profiles.
+* Simplified experience for capturing profiles.
+
 Neuron Tools  [2.19.0.0]
 ------------------------
 Date: 09/16/2024

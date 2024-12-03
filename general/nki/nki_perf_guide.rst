@@ -906,7 +906,7 @@ time by using the search functionality, which will highlight all the DMA activit
 for a detailed discussion on how to eliminate the need of transposes on device memory input data. When the transposes are
 inevitable and the kernel is memory bound, we recommend replacing ``nl.load_transpose2d`` with ``nl.load()`` and ``nisa.nc_transpose()``.
 For example, if you have an ``in_tensor`` of shape [8192, 128] in device memory but you would like an SBUF tile of shape
-[128, 8192] spread across 128 partitions for computation, the following two code snippets can achieve the same functionalities:
+[128, 8192] spread across 128 partitions for computation, the following two code snippets can achieve the same functionality:
 
 .. code-block::
 

@@ -21,6 +21,15 @@ and run on NeuronDevices.
 
 Additionally, ``neuron-profile`` supports Neuron Kernel Interface (NKI) developers in profiling their kernels. For more information, please refer to :ref:`neuron_profile_for_nki`
 
+
+.. note::
+    This page refers to the existing Neuron Profiler feature set focused on capturing and
+    viewing device profiles (hardware activity during graph execution on NeuronCores).
+    Neuron Profiler 2.0 is a set of new features currently in beta that enhance and simplify 
+    capturing and viewing profiles. It is not a replacement for the features described on this page. To learn 
+    more about Neuron Profiler 2.0, please refer to the :ref:`Neuron Profiler 2.0 (Beta) User Guide <neuron-profiler-2-0-guide>`.
+
+.. _neuron-profiler-installation:
 Installation
 ------------
 
@@ -117,8 +126,7 @@ are saved to node 0, and ``profile_rank_2.ntff`` and ``profile_rank_3.ntff`` are
 Processing and viewing the profile results
 ------------------------------------------
 
-The ``view`` subcommand of ``neuron-profile`` will handle post-processing the profiling data and starting up an HTTP server that users can
-navigate to in order to see profiling results.
+To analyze and view the collected profiling data, use the ``view`` subcommand of ``neuron-profile``. This command performs two main functions: it post-processes the profiling data and starts up an HTTP server. Once the server is running, you can access the profiling results through your web browser. Please note: Chrome is the officially supported browser for viewing profiling results
 
 Viewing a single profile
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -322,6 +330,57 @@ The search results will also include a summary of all data points found within t
 |neuron-profile-search-summary|
 
 
+Viewing Profiles with Perfetto
+------------------------------
+
+Perfetto is an open-source trace analysis toolkit with a powerful UI for visualizing and analyzing trace data.
+Users of Neuron Profiler have the option of viewing their profiles in the Perfetto UI.
+
+To process your profile and generate a Perfetto trace file that can be viewed in the Perfetto UI run the following command:
+
+::
+
+    $ neuron-profile view -n file.neff -s profile.ntff --output-format perfetto
+
+This will generate a ntff.pftrace file. Go to https://ui.perfetto.dev/ in your browser and open the ntff.pftrace file to view your profile in Perfetto.
+
+.. note::
+    When loading trace files in the Perfetto UI, your data is processed locally and not uploaded to Perfetto’s servers.
+
+
+|neuron-profile-perfetto-device|
+
+.. _neuron-profile-large-perfetto-profiles:
+
+Viewing Large Profiles In Perfetto
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Your browser may run out of memory when viewing ``ntff.pftrace`` (Perfetto trace) files that are more than a few hundred MB.
+To get around this problem you can use the trace processor script by running the following command on your local system where you wish to view the profile
+
+::
+
+    curl -LO https://get.perfetto.dev/trace_processor
+    chmod +x ./trace_processor
+    ./trace_processor --httpd ntff.pftrace
+
+Now go to  https://ui.perfetto.dev/ in your browser and in the dialog box that pops up click the  “YES, use loaded trace” button.
+
+For more information on using the trace processor script and viewing large traces, please refer to the 
+Perfetto documentation at https://perfetto.dev/docs/visualization/large-traces.
+
+Showing Dependencies In Perfetto
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default Neuron Profiler does not process dependencies for profiles to be viewed in Perfetto because Perfetto renders 
+the full dependency chain which can be visually overwhelming. To include dependencies that can be viewed when clicking 
+instructions and DMAs in the Perfetto UI, use the ``--show-perfetto-flows`` flag when processing your profile.
+
+::
+
+    $ neuron-profile view -n file.neff -s profile.ntff --output-format perfetto --show-perfetto-flows
+
+
 CLI reference
 -------------
 
@@ -362,7 +421,7 @@ CLI reference
 
     - :option:`-d,--session-dir` (string): directory containing profile files for multi-worker runs
 
-    - :option:`--output-format` (string): how the processed profile should be presented. ``db`` writes processed data to the database. ``summary-text`` and ``summary-json`` prints the summary data as a table or json, respectively.  ``json`` writes all post-processed events to a JSON file instead of to the database. (default: ``db``)
+    - :option:`--output-format` (string): how the processed profile should be presented. The default ``db`` write processed data to the database. ``summary-text`` and ``summary-json`` print the summary data as a table or json, respectively, without writing to the datebase. The ``perfetto`` option writes processed data to Perfetto's native protobuf based tracing format, and can be visualized in the Perfetto UI. The ``JSON`` option writes processed data to human-readable JSON. (default: ``db``)
 
     - :option:`--output-file` (string): file path to write results to, if applicable for the given output format
 
@@ -434,6 +493,7 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png
 .. |neuron-profile-click-tooltip| image:: /images/neuron-profile-click-tooltip.png
 .. |neuron-profile-search-summary| image:: /images/neuron-profile-search-summary.png
+.. |neuron-profile-perfetto-device| image:: /images/neuron-profiler2-perfetto-device.png
 
 When viewing UI "FATAL - Failed metadata query"
 ~~~~~~~~~~~~~~~~~~~
@@ -443,3 +503,9 @@ If you are SSH port forwarding the web UI from a remote machine to your local de
 ::
 
     ssh -L 3001:localhost:3001 -L 8086:localhost:8086 remote_machine
+
+Visual Artifacts when viewing profiles
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some users have reported visual artifacts when viewing certain profiles in browsers other than Chrome. If you encounter this issue, please try using Chrome. 
+For more details, refer to the GitHub issue: https://github.com/aws-neuron/aws-neuron-sdk/issues/1033

@@ -34,6 +34,46 @@ Or using simple slicing:
   tmp = nl.zeros((128, 1), dtype=nl.float32, buffer=nl.sbuf)
   c = nl.exp(tmp[0:64, 0])
 
+.. _nki-errors-err_activation_bias_invalid_type:
+
+err_activation_bias_invalid_type
+--------------------------------
+
+Bias parameter of activation or activation_reduce must be a vector of type float32, float16, or bfloat16.
+
+.. code-block:: python
+
+  nisa.activation(op=nl.exp, data=data[...], bias=nisa.memset((128, 1), 1.2, dtype=np.float32))  # ok
+  nisa.activation(op=nl.exp, data=data[...], bias=nisa.memset((128, 1), 1.2, dtype=nl.bfloat16)) # ok
+  nisa.activation(op=nl.exp, data=data[...], bias=nisa.memset((128, 1), 1.2, dtype=np.int8))     # not supported
+
+.. _nki-errors-err_activation_scale_invalid_type:
+
+err_activation_scale_invalid_type
+---------------------------------
+
+Scale parameter of activation or activation_reduce must be a scalar or vector of type float32.
+
+.. code-block:: python
+
+  nisa.activation(op=nl.exp, data=data[...], scale=1.2) # ok 
+  nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((128, 1), 1.2, dtype=np.float32)) # ok
+  nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((128, 1), 1.2, dtype=np.float16)) # not supported
+
+.. _nki-errors-err_activation_scale_scalar_or_vector:
+
+err_activation_scale_scalar_or_vector
+-------------------------------------
+
+Scale parameter of activation must be either a scalar value or a 1D vector spanning the partition dimension.
+
+.. code-block:: python
+
+  nisa.activation(op=nl.exp, data=data[...], scale=1.2) # ok 
+  nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((128, 1), 1.2, dtype=np.float32)) # ok
+  nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((1, 128), 1.2, dtype=np.float32)) # not supported
+  nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((128, 128), 1.2, dtype=np.float32)) # not supported
+
 .. _nki-errors-err_annotation_shape_mismatch:
 
 err_annotation_shape_mismatch
@@ -51,6 +91,23 @@ For example:
   import neuronxcc.nki.typing as nt
   data: nt.tensor[128, 512] = nl.zeros((par_dim(128), 128), dtype=np.float32) # Error: shape of `data[128, 128]` does not match the expected shape of [128, 512]
 
+.. _nki-errors-err_bias_tensor_must_be_specified_in_allocation:
+
+err_bias_tensor_must_be_specified_in_allocation
+-----------------------------------------------
+
+Bias tensor of an activation op must be specified in allocated NKI kernels.
+
+.. code-block:: python
+
+  data = .... # assume data is of shape (128, 128)
+  exp = nl.ndarray((par_dim(128), 512), dtype=nl.bfloat16, buffer=ncc.sbuf.mod_alloc(base_addr=0))
+  exp[...] = nisa.activation(np.exp,
+                            data=data[...]) # Error, bias argument must also be specified
+  
+  exp[...] = nl.exp(data=data[...]) 
+  # Error, nl.exp maps to the the instruction as nisa.activation, must use nisa.activation and specify bias tensor in allocation kernels
+
 .. _nki-errors-err_cannot_assign_to_index:
 
 err_cannot_assign_to_index
@@ -65,6 +122,45 @@ An `index` tensor does not support item assignment. You may explicitly call
     x[0, 5] = 1024   # Error: 'index' tensor does not support item assignment
     y = nisa.iota(x, dtype=nl.uint32)
     y[0, 5] = 1024   # works
+
+.. _nki-errors-err_cannot_update_immutable_parameter:
+
+err_cannot_update_immutable_parameter
+-------------------------------------
+
+Cannot update immutable parameter
+
+By default all parameters to the top level nki kernels are immutable, updating
+immutable parameters in the kernel is not allowed.
+
+.. code-block:: python
+
+  def kernel(in_tensor):
+    x = nl.load(in_tensor)
+    y = x + 1
+    # Parameter `in_tensor` is immutable by default, cannot modify immutable parameter
+    nl.store(in_tensor, value=y) # Error: Cannot update immutable parameter
+
+    return in_tensor
+
+To fix this error, you could copy the parameter to a temp buffer and modify the buffer instead:
+
+.. code-block:: python
+
+  import neuronxcc.nki.isa as nisa
+  import neuronxcc.nki.language as nl
+
+  def kernel(in_tensor):
+    out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
+                            buffer=nl.shared_hbm)
+
+    nisa.dma_copy(dst=out_tensor, src=in_tensor)
+
+    x = nl.load(out_tensor)
+    y = x + 1
+    nl.store(out_tensor, value=y) # ok
+
+    return out_tensor
 
 .. _nki-errors-err_control_flow_condition_depending_on_arange:
 
@@ -261,8 +357,7 @@ err_nki_api_outside_of_nki_kernel
 
 Calling NKI API outside of NKI kernels is not supported.
 
-Make sure the NKI kernel function is wrapped with the respective framework decorators
-or nki.baremetal.
+Make sure the NKI kernel function decorated with `nki.jit`.
 
 .. _nki-errors-err_num_partition_exceed_arch_limit:
 
@@ -299,35 +394,41 @@ For example, the nki.isa.tensor_tensor() requires all operands to have the same 
   y1 = y0.broadcast_to([128, 512])         # Call `broadcast_to` to explicitly broadcast on the partition dimension
   z = nisa.tensor_tensor(x, y0, op=nl.add) # works because x and y1 has the same number of partitions
 
-.. _nki-errors-err_read_modify_write_on_kernel_parameter:
+.. _nki-errors-err_shared_hbm_must_in_kernel_level:
 
-err_read_modify_write_on_kernel_parameter
------------------------------------------
+err_shared_hbm_must_in_kernel_level
+-----------------------------------
 
-Read-modify-write on kernel parameter is not supported.
+shared_hbm tensor can only be created in top level kernel scope
 
-.. code-block:: python
+Creating shared_hbm tensors inside a loop, under if condition
+ or inside another function called by the top-level nki kernel
+ is not supported.
 
-  def kernel(tensor_ref):
-    a = nl.load(tensor_ref)
-    b = a + 1
-    nl.store(tensor_ref, a)  # Error: read-modify-write on kernel parameter `tensor_ref` is not supported
-
-Consider doing the following:
-
-1. introduce distinct input and output parameters, since NKI doesn't support inplace update on parameters
-2. copy the kernel input parameter to a local variable,
-3. modify the local variable
-4. copy the local variable back to the output kernel parameter.
-
-Specifically, the workaround looks like this:
+Consider hoist the creation of shared_hbm tensors to the top
+ level kernel scope.
 
 .. code-block:: python
 
-  def kernel(tensor_in_ref, tensor_out_ref):
-    a = nl.load(tensor_in_ref)
-    b = a + 1
-    nl.store(tensor_out_ref, a)
+  @nki.jit
+  def kernel(...):
+    a = nl.ndarray((128, 512), dtype=nl.float32,
+                   buffer=nl.shared_hbm) # works
+
+    for i in range(8):
+      b = nl.ndarray((128, 512), dtype=nl.float32,
+                     buffer=nl.shared_hbm) # Error: shared_hbm buffer can only be created top level kernel scope
+
+    if nl.program_id(0) >= 1:
+      c = nl.ndarray((128, 512), dtype=nl.float32,
+                     buffer=nl.shared_hbm) # Error: shared_hbm buffer can only be created top level kernel scope
+
+    # Call another function
+    func(...)
+
+  def func(...):
+    d = nl.ndarray((128, 512), dtype=nl.float32,
+             buffer=nl.shared_hbm) # Error: shared_hbm buffer can only be created top level kernel scope
 
 .. _nki-errors-err_size_of_dimension_exceed_arch_limit:
 
@@ -397,6 +498,18 @@ providing a proper mask:
     nl.store(x[tile.p, i * 512 + tile.x], value=0,
               mask=i * 512 + tile.x < 4000)  # Ok
 
+.. _nki-errors-err_tensor_creation_on_scratchpad_with_init_value_not_allowed:
+
+err_tensor_creation_on_scratchpad_with_init_value_not_allowed
+-------------------------------------------------------------
+
+Creating SBUF/PSUM tensor with init value is not supported in allocated NKI kernels.
+
+.. code-block:: python
+
+  t = nl.full((3, par_dim(128), 512), fill_value=1.0, buffer=ncc.sbuf.mod_alloc(base_addr=0)) # t is allocated and has a init value
+  # Error: Creating SBUF/PSUM tensor with init value is not supported in allocated NKI kernels.
+
 .. _nki-errors-err_tensor_output_not_written_to:
 
 err_tensor_output_not_written_to
@@ -450,6 +563,30 @@ Consider doing the following:
     while cnd: # Ok even if the value of `cnd` is False
       a = nl.load(tensor_in)
       nl.store(tensor_out, value=a)
+
+.. _nki-errors-err_transpose_on_tensor_engine_not_allowed_in_allocated_kernel:
+
+err_transpose_on_tensor_engine_not_allowed_in_allocated_kernel
+--------------------------------------------------------------
+
+Unsupported transpose case in allocated NKI kernels:
+
+- nisa.nc_transpose() with TensorEngine, or
+- nl.matmul() without setting transpose_x=True.
+
+User must use their own allocated identity matrix, and call nisa.nc_matmul() explicitly to perform
+transpose on TensorEngine.
+
+.. code-block:: python
+
+  a = .... # assume a has shape [128, 128]
+  result_a = nl.ndarray((par_dim(128), 128), dtype=nl.bfloat16, buffer=ncc.psum.mod_alloc(byte_addr=0))
+  result_a[...] = nisa.nc_transpose(a[...]) # Error, calling nc_transpose() with TensorEngine is not allowed in allocated kernels
+
+  b = ... # assume b has shape [32, 32]
+  result_b = nl.ndarray((par_dim(32), 32), dtype=nl.bfloat16, buffer=ncc.psum.mod_alloc(byte_addr=0))
+  result_b[...] = nisa.nc_transpose(b[...]) # Error, must specify engine=NeuronEngine.Vector
+  result_b[...] = nisa.nc_transpose(b[...], engine=NeuronEngine.Vector) # pass
 
 .. _nki-errors-err_unexpected_output_dependencies:
 

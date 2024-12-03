@@ -11,17 +11,12 @@ NCCOM-TEST User Guide
 Overview
 --------
 
-**nccom-test** is a benchmarking tool for quickly evaluating the performance of Collective Communication operations
-on one or more Neuron instances (it is compatible with both trn1 and inf2 instance types) or just for a fast sanity check
-of the environment before attempting to run a more complex workload.
-
+**nccom-test** is a benchmarking tool for evaluating Collective Communication operations on AWS Trainium and Inferentia instances. It supports Trn1, Trn2, and Inf2 instance types. The tool can assess performance across multiple instances or perform quick environment sanity checks before running more complex workloads. While single-instance benchmarking is supported for all compatible instance types, multi-instance benchmarking is limited to Trainium instances (Trn1 and Trn2). 
 
 .. note::
 
-    On inf2 instances, only single-instance benchmarking is supported. Running a multi-node nccom-test benchmark
+    On Inf2 instances, only single-instance benchmarking is supported. Running a multi-node nccom-test benchmark
     will result in an error.
-
-
 
 Using nccom-test
 ----------------

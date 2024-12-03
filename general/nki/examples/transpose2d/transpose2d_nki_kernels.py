@@ -5,11 +5,13 @@ NKI baremetal implementation for transpose2d NKI tutorial.
 """
 
 import numpy as np
+# NKI_EXAMPLE_33_BEGIN
 import neuronxcc.nki as nki
 import neuronxcc.nki.language as nl
 
 
-def tensor_transpose2D_kernel_(in_tensor, out_tensor, shape2D):
+@nki.jit
+def tensor_transpose2D_kernel_(in_tensor, shape2D):
   """
   NKI kernel to reorder the elements on axis[1] of the input tensor.
 
@@ -36,6 +38,8 @@ def tensor_transpose2D_kernel_(in_tensor, out_tensor, shape2D):
     shape2D: tuple representing the dimensions to be transposed: (#rows, #cols)
     out_tensor: an output (transposed) tensor
   """
+  out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
+                          buffer=nl.shared_hbm)
   # Gather input shapes
   sz_p, _ = in_tensor.shape
 
@@ -64,14 +68,15 @@ def tensor_transpose2D_kernel_(in_tensor, out_tensor, shape2D):
   # Finally, we store out_tile to external memory
   nl.store(out_tensor, value=out_tile)
 
+  return out_tensor
+  # NKI_EXAMPLE_33_END
+
 
 if __name__ == "__main__":
   P, X, Y = 5, 3, 4
   a = np.arange(P*X*Y, dtype=np.int8).reshape((P, X*Y))
-  a_t_nki = np.zeros((P, Y*X), dtype=np.int8)
 
-  tensor_transpose2D_kernel_torch = nki.baremetal(tensor_transpose2D_kernel_)
-  tensor_transpose2D_kernel_torch(a, a_t_nki, (X, Y))
+  a_t_nki = tensor_transpose2D_kernel_(a, (X, Y))
 
   a_t_np = np.transpose(a.reshape(P, X, Y), (0, 2, 1)).reshape(P, X * Y)
 

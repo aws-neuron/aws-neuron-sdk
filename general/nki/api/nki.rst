@@ -3,29 +3,19 @@ nki
 
 .. currentmodule:: nki
 
-Framework
----------
+Decorators
+----------
+
 
 .. autosummary::
    :toctree: generated
    :nosignatures:
 
-   simulate_kernel
-
-.. autosummary::
-   :toctree: generated
-   :nosignatures:
-
+   jit
    benchmark
    baremetal
+   simulate_kernel
 
-.. autosummary::
-   :toctree: generated
-   :template: nki-custom-class-template.rst
-   :nosignatures:
-   :recursive:
-
-   FrameworkKernel
 
 Types
 ---------

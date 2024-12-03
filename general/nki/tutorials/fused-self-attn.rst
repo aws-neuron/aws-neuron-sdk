@@ -53,7 +53,7 @@ softmax. This leads to lots of data movements between HBM and SBUF, degrading pe
 
 Fusion to Save SBUF Space
 -------------------------
-To avoid exausting SBUF space, we would like to avoid computing the entirety of the multication 
+To avoid exhausting SBUF space, we would like to avoid computing the entirety of the multiplication 
 of ``Q`` and ``K.T`` at once. One way is to fuse the softmax computation with the second
 matrix multiplication.
 
@@ -70,7 +70,7 @@ the block ``r1`` in the final result.
 
 Recall the TensorEngine on NeuronCore-v2 can process a maximum 128 contraction dimension, 
 and the free dimension of the left hand side matrix has a maximum of 128. 
-In the matrix multiplication ``S1 = q1 * K.T``, as labelled 
+In the matrix multiplication ``S1 = q1 * K.T``, as labeled 
 in :numref:`Fig. %s <nki-fig-attn-fusion>`, the size of the free dimension of ``q1`` should 
 be 128 and ``S1`` has a shape of ``[128, 4096]``. Therefore, the size of ``S1`` 
 is ``128 * 4096 * 2 bytes=1MB``, which is 32 times smaller than computing the full intermediate matrix.
@@ -98,16 +98,16 @@ can delay the division to after we compute r1 due to the associativity of scalar
 Since ``rs`` is smaller than ``r1``, we save FLOPS by delaying the division. This is also a major 
 optimization deployed in `FlashAttention-v2 <https://arxiv.org/abs/2307.08691>`__.
 
-We finally multiply ``s_i`` and ``v_i``, and sum them togehter to get ``r1``. By looping 
+We finally multiply ``s_i`` and ``v_i``, and sum them together to get ``r1``. By looping 
 over tiles in Q, we produce the entire result ``R``.
 
 Compute kernel
 --------------
 
-.. literalinclude:: ../examples/sd_attention/sd_attention_nki_kernels.py
+.. nki_example:: ../examples/sd_attention/sd_attention_nki_kernels.py
     :language: python
     :linenos:
-    :lines: 15-212
+    :marker: NKI_EXAMPLE_31
 
 Launching kernel and testing correctness
 ----------------------------------------
@@ -115,10 +115,10 @@ Launching kernel and testing correctness
 Below we write a reference PyTorch implementation of the attention and verify our
 NKI kernel output against the reference in the same script as the kernel.
 
-.. literalinclude:: ../examples/sd_attention/sd_attention_torch.py
+.. nki_example:: ../examples/sd_attention/sd_attention_torch.py
     :language: python
     :linenos:
-    :lines: 8-45
+    :marker: NKI_EXAMPLE_32
 
 Download All Source Code
 --------------------------
@@ -129,7 +129,7 @@ discussed in this tutorial.
 * Kernel Definition, accuracy testing and performance benchmark using baremetal mode: :download:`sd_attention_nki_kernels.py <../examples/sd_attention/sd_attention_nki_kernels.py>` 
 * Use the kernel in PyTorch: :download:`sd_attention_torch.py <../examples/sd_attention/sd_attention_torch.py>`
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/sd_attention/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/sd_attention/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

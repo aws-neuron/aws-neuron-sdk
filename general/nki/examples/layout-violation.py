@@ -1,14 +1,19 @@
 import neuronxcc.nki.language as nl
-from torch_neuronx import nki_jit
+from neuronxcc import nki
 
-@nki_jit
-def tensor_exp_kernel_(in_tensor, out_tensor):
+
+@nki.jit
+def tensor_exp_kernel_(in_tensor):
   """NKI kernel to compute elementwise exponential of an input tensor
 
   Args:
       in_tensor: an input tensor of shape [128,512]
+  Returns:
       out_tensor: an output tensor of shape [128,512]
   """
+  out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
+                          buffer=nl.shared_hbm)
+
   # Generate indices for the input/output tensors
   i_p = nl.arange(256)[:, None] # Previously nl.arange(128)
   i_f = nl.arange(512)[None, :]
@@ -23,6 +28,7 @@ def tensor_exp_kernel_(in_tensor, out_tensor):
   nl.store(out_tensor[i_p, i_f], value=out_tile)
 
 
+# NKI_EXAMPLE_12_BEGIN
 if __name__ == "__main__":
   import torch
   from torch_xla.core import xla_model as xm
@@ -31,7 +37,7 @@ if __name__ == "__main__":
 
   shape = (256, 512) # Previously (128, 512)
   in_tensor = torch.ones(shape,  dtype=torch.bfloat16).to(device=device)
-  out_tensor = torch.zeros(shape, dtype=torch.bfloat16).to(device=device)
-  tensor_exp_kernel_(in_tensor, out_tensor)
+  out_tensor = tensor_exp_kernel_(in_tensor)
 
   print(out_tensor) # an implicit XLA barrier/mark-step
+  # NKI_EXAMPLE_12_END

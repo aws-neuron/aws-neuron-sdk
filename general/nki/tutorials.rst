@@ -4,13 +4,14 @@ NKI Tutorials
 ================================
 
 The full source code of the following tutorials can be also viewed on the 
-`nki-samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/>`_ repository on Github.
+`nki-samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/>`_ repository on GitHub.
 
 .. toctree::
       :maxdepth: 1
       :hidden:
 
-      tutorials/tensor_addition
+      tutorials/spmd_tensor_addition
+      tutorials/spmd_multiple_nc_tensor_addition
       tutorials/transpose2d
       tutorials/average_pool2d
       tutorials/matrix_multiplication
@@ -21,7 +22,8 @@ The full source code of the following tutorials can be also viewed on the
 
 
 
-* :doc:`Tensor addition <tutorials/tensor_addition>`
+* :doc:`SPMD Tensor addition <tutorials/spmd_tensor_addition>`
+* :doc:`SPMD Tensor addition with multiple Neuron Cores <tutorials/spmd_multiple_nc_tensor_addition>`
 * :doc:`Transpose2D <tutorials/transpose2d>`
 * :doc:`AveragePool2D <tutorials/average_pool2d>`
 * :doc:`Matrix multiplication <tutorials/matrix_multiplication>`

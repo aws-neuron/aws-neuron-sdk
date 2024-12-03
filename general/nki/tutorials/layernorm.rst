@@ -54,10 +54,10 @@ Next, we will present two versions of LayerNorm implementation, starting from a 
 Version 1: nki.language APIs only
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../examples/layernorm/layernorm_nki_kernel.py
+.. nki_example:: ../examples/layernorm/layernorm_nki_kernel.py
    :language: python
    :linenos:
-   :lines: 7-11, 16-59
+   :marker: NKI_EXAMPLE_45
 
 * To adhere to NKI's tile-size considerations (:ref:`Tile Size Considerations <nki-tile-size>`),
   we limit the partition axis size of ``input_tensor`` tile to be 128 (nl.tile_size.pmax).
@@ -83,10 +83,10 @@ Next, we will optimize the above implementation using ``nki.isa`` APIs in versio
 Version 2: ``nki.isa`` APIs to calculate mean/variance and perform shift/scale
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../examples/layernorm/layernorm_nki_kernel.py
+.. nki_example:: ../examples/layernorm/layernorm_nki_kernel.py
    :language: python
    :linenos:
-   :lines: 61-123
+   :marker: NKI_EXAMPLE_46
 
 
 * Considering the free dimension size limit of :doc:`nki.isa.bn_stats <../api/generated/nki.isa.bn_stats>`, which is 512(nl.tile_size.bn_stats_fmax),
@@ -141,10 +141,10 @@ Launching kernel and testing correctness
 
 Below is a reference PyTorch implementation of LayerNorm, which we use to verify our NKI kernel output against the reference output
 
-.. literalinclude:: ../examples/layernorm/layernorm_torch.py
+.. nki_example:: ../examples/layernorm/layernorm_torch.py
    :language: python
    :linenos:
-   :lines: 7-88
+   :marker: NKI_EXAMPLE_47
 
 Download All Source Code
 --------------------------
@@ -155,7 +155,7 @@ discussed in this tutorial.
 * PyTorch reference implementation: :download:`layernorm_torch.py <../examples/layernorm/layernorm_torch.py>`
 * Two versions of NKI kernels: :download:`layernorm_nki_kernel.py <../examples/layernorm/layernorm_nki_kernel.py>`
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/layernorm/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/layernorm/>`_
 
 Example usage of the scripts
 -----------------------------

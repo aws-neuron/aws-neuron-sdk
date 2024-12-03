@@ -262,15 +262,20 @@ The resulting script is ``train_torchrun.py``
 (note again that we import the MLP model from ``model.py``):
 
 Next we use the ``torchrun`` utility that is included with torch
-installation to run multiple processes, each using one NeuronCore. Use
+installation to run multiple processes, each using one Logical NeuronCore. Use
 the option ``nproc_per_node`` to indicate the number of processes to launch.
-For example, to run on two NeuronCores on one Trn1 instance only, do:
+For example, to run on two Logical NeuronCores on one Trn1/Trn2 instance only, do:
 
 .. code:: bash
 
    torchrun --nproc_per_node=2 train_torchrun.py
 
-NOTE: Currently we only support 1 and 2 worker configurations on trn1.2xlarge and 1, 2, 8, and 32-worker configurations on trn1.32xlarge.
+.. note::
+
+    Currently we only support:
+    - 1 and 2 worker configurations on trn1.2xlarge (default Logic NeuronCores size of 1)
+    - 1, 2, 8, and 32-worker configurations on trn1.32xlarge (default Logic NeuronCores size of 1)
+    - 1, 4, 16 and 64-worker configurations on trn2.48xlarge (default Logic NeuronCores size of 2)
 
 Expected output on trn1.32xlarge (second run to avoid compilations):
 
@@ -306,6 +311,8 @@ On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set
    torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 train_torchrun.py
 
 It is important to launch rank-0 worker with ``--node_rank=0`` to avoid hang.
+
+For trn2.48xlarge, use ``--nproc_per_node=64`` for 64 Logical NeuronCores default (each Logical NeuronCores using two physical NeuronCores).
 
 To train on multiple instances, it is recommended to use a ParallelCluster. For a ParallelCluster example, please see `Train a model on AWS Trn1 ParallelCluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples>`__.
 

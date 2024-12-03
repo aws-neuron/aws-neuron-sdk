@@ -66,9 +66,9 @@ running the following command:
 Implementing your first NKI kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In current NKI release, all input and output tensors must be passed into the kernel as device memory (HBM) tensors
-on a NeuronDevice. The body of the kernel typically consists of
-three main phases:
+In current NKI release, all input tensors must be passed into the kernel as device memory (HBM) tensors
+on a NeuronDevice. Similarly, output tensors returned from the kernel must also reside in device memory.
+The body of the kernel typically consists of three main phases:
 
 1. Load the inputs from device memory to on-chip memory (SBUF).
 2. Perform the desired computation.
@@ -86,10 +86,10 @@ produce an output tensor of the same shape.
 
 .. *nki_tensor_add.py:*
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
    :linenos:
-   :lines: 1, 5-24
+   :marker: NKI_EXAMPLE_0
 
 
 Now let us walk through the above code:
@@ -99,17 +99,17 @@ Now let us walk through the above code:
 Importing NKI
 ^^^^^^^^^^^^^^^^^^^^
 
-We start by importing :doc:`neuronxcc.nki.language <api/nki.language>`,
-which implements the
+We start by importing :doc:`neuronxcc.nki<api/nki>` which includes function decorators to compile
+NKI kernels and also :doc:`neuronxcc.nki.language <api/nki.language>` which implements the
 NKI language. We will go into more detail regarding the NKI language
 in :doc:`NKI Programming Model <programming_model>`,
 but for now you can think of it as a tile-level
 domain-specific language.
 
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 1
+   :marker: NKI_EXAMPLE_1
 
 .. _defining-a-kernel:
 
@@ -117,17 +117,15 @@ Defining a kernel
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next we define the ``nki_tensor_add_kernel`` Python function, which contains the NKI kernel code.
-Note, this kernel function must be decorated appropriately to allow Neuron compiler to recognize this
-is NKI kernel code and trace it correctly. We will provide more information about
-what `decorator <https://www.geeksforgeeks.org/decorators-in-python/>`__ to use
-later in :ref:`Running the kernel <running-the-kernel>` section.
+The kernel is `decorated <https://www.geeksforgeeks.org/decorators-in-python/>`__
+with :doc:`nki.jit <api/generated/nki.jit>`, which allows Neuron compiler to recognize this
+is NKI kernel code and trace it correctly.
+Input tensors (``a_input`` and ``b_input``) are passed by reference into the
+kernel, just like any other Python function input parameters.
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 5
-
-Note that all NKI kernel inputs and outputs are passed
-by reference into the function, so there is no explicit return value from the function.
+   :marker: NKI_EXAMPLE_2
 
 .. This instructs the NKI toolset to translate this Python function into an
 .. intermediate representation, which is then passed to the Neuron
@@ -183,9 +181,9 @@ tensor broadcasting/reshape and tensor tiling with loops in NKI. For more kernel
 :doc:`NKI tutorials <tutorials>`.
 
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 9-14
+   :marker: NKI_EXAMPLE_3
 
 
 .. _loading-inputs:
@@ -197,9 +195,9 @@ Most NKI kernels start by loading inputs from device memory to on-chip
 memory. We need to do that because
 computation can only be performed on data in the on-chip memory.
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 17-18
+   :marker: NKI_EXAMPLE_4
 
 
 .. _5-defining-the-desired-computation:
@@ -212,9 +210,9 @@ computation. In this case, we perform a simple element-wise addition
 between two tiles:
 
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 21
+   :marker: NKI_EXAMPLE_5
 
 
 Note that ``c_tile = a_tile + b_tile`` will also work, as NKI overloads
@@ -224,26 +222,46 @@ complete set of available NKI APIs, refer to
 
 .. _storing-outputs:
 
-Storing outputs
-^^^^^^^^^^^^^^^^^^^^^^
+Storing and returning outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Every NKI kernel ends by storing its output tiles from the on-chip memory
-to device memory, where the host can access them:
+To return the output tensor of the kernel, we first declare a NKI tensor ``c_output`` in
+device memory (HBM) and then store the output tile ``c_tile`` from on-chip memory to
+``c_output`` using :doc:`nl.store <api/generated/nki.language.store>`.
+We end the kernel execution by returning ``c_output`` using a standard Python return call.
+This will allow the host to access the output tensor.
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
-   :lines: 24
+   :marker: NKI_EXAMPLE_6
 
 .. _running-the-kernel:
 
 Running the kernel
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Next, we will cover three unique ways to run the above NKI kernel:
+Next, we will cover three unique ways to run the above NKI kernel on a NeuronDevice:
 
-1. NKI baremetal mode: run NKI kernel with no ML framework involvement
+1. NKI baremetal: run NKI kernel with no ML framework involvement
 2. PyTorch: run NKI kernel as a PyTorch operator
 3. JAX: run NKI kernel as a JAX operator
+
+All three run modes can call the same kernel function decorated with the
+``nki.jit`` decorator as discussed above:
+
+.. nki_example:: examples/getting_started_baremetal.py
+   :language: python
+   :linenos:
+   :marker: NKI_EXAMPLE_2
+
+The ``nki.jit`` decorator automatically chooses the correct run mode by checking the incoming
+tensor type:
+
+1. NumPy arrays as input: run in NKI baremetal mode
+2. PyTorch tensors as input: run in PyTorch mode
+3. JAX tensors: run in JAX mode
+
+See :doc:`nki.jit <api/generated/nki.jit>` API doc for more details.
 
 .. note::
    NKI baremetal mode is the most convenient way to prototype and optimize performance
@@ -257,53 +275,33 @@ Next, we will cover three unique ways to run the above NKI kernel:
 NKI baremetal
 ^^^^^^^^^^^^^^^^^^
 
-To run the above ``nki_tensor_add_kernel`` kernel in baremetal mode, we can decorate the function
-with ``@baremetal`` as follows:
+Baremetal mode expects input tensors of the NKI kernel to be **NumPy arrays**. The kernel also
+converts its NKI output tensors to **NumPy arrays**. To invoke the kernel, we first initialize the
+two input tensors ``a`` and ``b`` as NumPy arrays. Finally, we call the NKI kernel just like any
+other Python function:
 
-.. literalinclude:: examples/getting_started_baremetal.py
+.. nki_example:: examples/getting_started_baremetal.py
    :language: python
    :linenos:
-   :lines: 2-5
+   :marker: NKI_EXAMPLE_8
 
-
-See :doc:`nki.baremetal <api/generated/nki.baremetal>` API doc for available input arguments to the decorator.
-``nki.baremetal`` expects input and output tensors of the NKI kernel to be **NumPy arrays**. To invoke the
-kernel, we first initialize the two
-input tensors ``a`` and ``b`` and the output tensor ``c`` as NumPy arrays.
-In this scenario, it's not necessary to zero out the output tensor, as it will be
-completely overwritten by the result of the addition. However, in some
-cases, a kernel might overwrite only a part of the output tensor, and the
-user might want to reset it beforehand to avoid garbage data.
-Finally, we call the NKI kernel just like any other Python function
-
-.. literalinclude:: examples/getting_started_baremetal.py
-   :language: python
-   :linenos:
-   :lines: 27-37
-
-
-In current NKI release, an output tensor cannot be an input tensor at the
-same time; therefore, in-out parameters are not supported.
+.. note::
+   Alternatively, we can decorate the kernel with :doc:`nki.baremetal <api/generated/nki.baremetal>` or pass
+   the ``mode`` parameter to the ``nki.jit`` decorator, ``@nki.jit(mode='baremetal')``, to bypass
+   the dynamic mode detection. See
+   :doc:`nki.baremetal <api/generated/nki.baremetal>` API doc for more available input arguments for the
+   baremetal mode.
 
 PyTorch
 ^^^^^^^^^
 
-To run the above ``nki_tensor_add_kernel`` kernel using PyTorch, we can decorate the function
-with ``@nki_jit`` as follows:
+To run the above ``nki_tensor_add_kernel`` kernel using PyTorch, we initialize
+the input and output tensors as PyTorch ``device`` tensors instead.
 
-.. literalinclude:: examples/getting_started_torch.py
+.. nki_example:: examples/getting_started_torch.py
    :language: python
    :linenos:
-   :lines: 2-5
-
-
-The kernel caller code is highly similar to NKI baremetal mode, except the input and output tensors
-must now be initialized as PyTorch ``device`` tensors instead.
-
-.. literalinclude:: examples/getting_started_torch.py
-   :language: python
-   :linenos:
-   :lines: 27-39
+   :marker: NKI_EXAMPLE_10
 
 Running the above code for the first time will trigger compilation of the NKI kernel, which might
 take a few minutes before printing any output. The printed output should be as follows:
@@ -315,16 +313,23 @@ take a few minutes before printing any output. The printed output should be as f
            [2., 2., 2.],
            [2., 2., 2.]], device='xla:1', dtype=torch.float16)
 
+.. note::
+   Alternatively, we can pass the ``mode='torchxla'`` parameter into the ``nki.jit`` decorator to
+   bypass the dynamic mode detection.
+
 JAX
 ^^^^^^^^^
-To run the above ``nki_tensor_add_kernel`` kernel using JAX, we can initialize the input/output tensors
-as JAX tensors and call the kernel directly using
-a ``nki_call`` (imported from ``neuorn_jax``):
+To run the above ``nki_tensor_add_kernel`` kernel using JAX, we initialize the input tensors
+as JAX tensors:
 
-.. literalinclude:: examples/getting_started_jax.py
+.. nki_example:: examples/getting_started_jax.py
    :language: python
    :linenos:
-   :lines: 25-36
+   :marker: NKI_EXAMPLE_11
+
+.. note::
+   Alternatively, we can pass the ``mode='jax'`` parameter into the ``nki.jit`` decorator to
+   bypass the dynamic mode detection.
 
 Download links
 ~~~~~~~~~~~~~~~~~

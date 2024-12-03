@@ -3,7 +3,7 @@
 Pytorch Neuron Setup
 ====================
 
-.. card:: PyTorch Neuron (``torch-neuronx``) Setup for  Inf2, Trn1/Trn1n Instances
+.. card:: PyTorch Neuron (``torch-neuronx``) Setup for  Inf2, Trn1, and Trn2 Instances
             :link: setup-torch-neuronx
             :link-type: ref
             :class-body: sphinx-design-class-title-small

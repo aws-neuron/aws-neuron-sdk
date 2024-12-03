@@ -34,22 +34,21 @@ PyTorch
 Compute kernel
 ^^^^^^^^^^^^^^
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_nki_kernels.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-10, 12-60
+   :marker: NKI_EXAMPLE_37
 
 
 Launching kernel and testing correctness
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To execute the kernel, we prepare tensors ``in_tensor`` and an empty tensor
-``out_nki``, and call ``tensor_avgpool_kernel_``:
+To execute the kernel, we prepare tensors ``in_tensor`` and call ``tensor_avgpool_kernel``:
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_torch.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_torch.py
    :language: python
    :linenos:
-   :lines: 7-10, 14-35
+   :marker: NKI_EXAMPLE_38
 
 JAX
 -------
@@ -59,27 +58,24 @@ Compute kernel
 
 Let's reuse the same NKI kernel implementation defined for PyTorch above:
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_nki_kernels.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-10, 12-60
+   :marker: NKI_EXAMPLE_37
 
-We define ``tensor_avgpool_kernel`` as a caller to the NKI kernel.  We create
-a partial function ``partial(tensor_avgpool_kernel_, pool_size=pool_size)``
-in order for JAX to be able to pass a Python object to the kernel function.
+In order to pass ``pool_size`` as a compile time constant, we pass ``pool_size`` as kwargs.
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_jax.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_jax.py
    :language: python
-   :linenos:
-   :lines: 7, 9, 11, 15-20
+   :marker: NKI_EXAMPLE_39
 
 We write a reference JAX implementation of ``AveragePool2D`` as JAX does
 not have a primitive for it.
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_jax.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_jax.py
    :language: python
    :linenos:
-   :lines: 10-11, 23-27
+   :marker: NKI_EXAMPLE_40
 
 
 Launching kernel and testing correctness
@@ -87,10 +83,10 @@ Launching kernel and testing correctness
 
 To execute the kernel, we prepare array ``in_array`` and invoke the kernel caller function ``tensor_avgpool_kernel``:
 
-.. literalinclude:: ../examples/average_pool2d/average_pool2d_jax.py
+.. nki_example:: ../examples/average_pool2d/average_pool2d_jax.py
    :language: python
    :linenos:
-   :lines: 30-45
+   :marker: NKI_EXAMPLE_41
 
 
 Download All Source Code
@@ -107,7 +103,7 @@ discussed in this tutorial.
     * You must also download :download:`average_pool2d_nki_kernels.py <../examples/average_pool2d/average_pool2d_nki_kernels.py>`
       into the same folder to run this JAX script.
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/average_pool2d/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/average_pool2d/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

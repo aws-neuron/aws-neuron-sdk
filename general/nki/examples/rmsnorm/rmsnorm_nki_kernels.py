@@ -6,20 +6,23 @@ RMSNorm NKI kernel implementation.
 """
 
 import numpy as np
+# NKI_EXAMPLE_42_BEGIN
 import math
 import neuronxcc.nki as nki
 import neuronxcc.nki.language as nl
 
 
-def nki_rmsnorm_kernel(a_tensor, g_tensor, out_tensor):
+@nki.jit
+def nki_rmsnorm_kernel(a_tensor, g_tensor):
   # Calculate out_tensor = a_tensor/RMS(a_tensor) * g_tensor
   # Where RMS(a_tensor) = sqrt((1/N) * sum(a_tensor * a_tensor))
   # and N = a_tensor.shape[1]
   # Reduction (mean) is performed in the free (2nd) dimension
+  out_tensor = nl.ndarray(a_tensor.shape, dtype=a_tensor.dtype,
+                          buffer=nl.shared_hbm)
 
   # Make sure shapes match
   assert a_tensor.shape[1] == g_tensor.shape[0]
-  assert a_tensor.shape == out_tensor.shape
 
   # Generate tensor indices to index input tensor
   ix = nl.arange(128)[:, None]
@@ -68,14 +71,15 @@ def nki_rmsnorm_kernel(a_tensor, g_tensor, out_tensor):
     nl.store(out_tensor[i * 128 + ix, iy], value=out_tile,
             mask=(i * 128 + ix < num_rows))
 
+  return out_tensor
+  # NKI_EXAMPLE_42_END
+
 
 if __name__ == "__main__":
   a = np.random.rand(128, 512).astype(np.float32)
   g = np.random.rand(512).astype(np.float32)
-  output_nki  = np.zeros(a.shape, dtype=a.dtype)
 
-  nki_rmsnorm_kernel_baremetal = nki.baremetal(nki_rmsnorm_kernel)
-  nki_rmsnorm_kernel_baremetal(a, g, output_nki)
+  output_nki = nki_rmsnorm_kernel(a, g)
   print(f"output_nki={output_nki}")
 
   # One-line numpy RMSNorm

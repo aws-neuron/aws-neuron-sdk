@@ -13,40 +13,42 @@ a ``NumPy`` equivalent type or a ``nki.language`` data type.
 
 .. _tbl-dtype:
 
-.. table:: Table 1: Supported Data Types by NKI
+.. table:: Supported Data Types by NKI
 
-  +------------------------+----------------------------+-------------------------------------------------+
-  |                        | Data Type                  | Accepted ``dtype`` Field by NKI APIs            |
-  +========================+============================+=================================================+
-  |                        | 8-bit unsigned integer     | ``nki.language.uint8`` or ``numpy.uint8``       |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | 8-bit signed integer       | ``nki.language.int8`` or ``numpy.int8``         |
-  |                        +----------------------------+-------------------------------------------------+
-  | Integer                | 16-bit unsigned integer    | ``nki.language.uint16`` or ``numpy.uint16``     |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | 16-bit signed integer      | ``nki.language.int16`` or ``numpy.int16``       |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | 32-bit unsigned integer    | ``nki.language.uint32`` or ``numpy.uint32``     |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | 32-bit signed integer      | ``nki.language.int32`` or ``numpy.int32``       |
-  +------------------------+----------------------------+-------------------------------------------------+
-  |                        | float8 (1S,4E,3M) [#1]_    | ``nki.language.float8_e4m3``                    |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | float16 (1S,5E,10M)        | ``nki.language.float16`` or ``numpy.float16``   |
-  |                        +----------------------------+-------------------------------------------------+
-  | Float                  | bfloat16 (1S,8E,7M)        | ``nki.language.bfloat16``                       |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | tfloat32 (1S,8E,10M)       | ``nki.language.tfloat32``                       |
-  |                        +----------------------------+-------------------------------------------------+
-  |                        | float32 (1S,8E,23M)        | ``nki.language.float32`` or ``numpy.float32``   |
-  +------------------------+----------------------------+-------------------------------------------------+
-  | Boolean                | boolean stored as uint8    | ``nki.language.bool_`` or ``numpy.bool``        |
-  +------------------------+----------------------------+-------------------------------------------------+
+  +------------------------+------------------------------+-------------------------------------------------+
+  |                        | Data Type                    | Accepted ``dtype`` Field by NKI APIs            |
+  +========================+==============================+=================================================+
+  |                        | 8-bit unsigned integer       | ``nki.language.uint8`` or ``numpy.uint8``       |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | 8-bit signed integer         | ``nki.language.int8`` or ``numpy.int8``         |
+  |                        +------------------------------+-------------------------------------------------+
+  | Integer                | 16-bit unsigned integer      | ``nki.language.uint16`` or ``numpy.uint16``     |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | 16-bit signed integer        | ``nki.language.int16`` or ``numpy.int16``       |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | 32-bit unsigned integer      | ``nki.language.uint32`` or ``numpy.uint32``     |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | 32-bit signed integer        | ``nki.language.int32`` or ``numpy.int32``       |
+  +------------------------+------------------------------+-------------------------------------------------+
+  |                        | float8_e4m3 (1S,4E,3M) [#1]_ | ``nki.language.float8_e4m3``                    |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | float8_e5m2 (1S,5E,2M)       | ``nki.language.float8_e5m2``                    |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | float16 (1S,5E,10M)          | ``nki.language.float16`` or ``numpy.float16``   |
+  |                        +------------------------------+-------------------------------------------------+
+  | Float                  | bfloat16 (1S,8E,7M)          | ``nki.language.bfloat16``                       |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | tfloat32 (1S,8E,10M)         | ``nki.language.tfloat32``                       |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | float32 (1S,8E,23M)          | ``nki.language.float32`` or ``numpy.float32``   |
+  +------------------------+------------------------------+-------------------------------------------------+
+  | Boolean                | boolean stored as uint8      | ``nki.language.bool_`` or ``numpy.bool``        |
+  +------------------------+------------------------------+-------------------------------------------------+
 
 .. _nki-aluop:
 
-Supported Math Operators
-============================
+Supported Math Operators for NKI ISA
+====================================
 
 :ref:`tbl-aluop` below lists all the mathematical operator primitives supported by NKI.
 Many :ref:`nki.isa <nki-isa>` APIs (instructions) supported by Vector Engine
@@ -56,75 +58,75 @@ and treat input elements as bit patterns. On the hand, instructions using *arith
 accept any valid NKI data types and convert input elements into float32 before performing the operators.
 
 .. _tbl-aluop:
-.. table:: Table 2: Supported Math Operators by NKI
+.. table:: Supported Math Operators by NKI ISA
 
-  +------------------------+----------------------------+--------------------------------------+------------------------+
-  |                        | Operator                   | Accepted ``op`` by Vector Engine     | Legal Reduction ``op`` |
-  +========================+============================+======================================+========================+
-  |                        | Bitwise Not                | ``numpy.invert``                     | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Bitwise And                | ``numpy.bitwise_and``                | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Bitwise Or                 | ``numpy.bitwise_or``                 | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  | Bitvec                 | Bitwise Xor                | ``numpy.bitwise_xor``                | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Arithmetic Shift Left      | ``numpy.left_shift``                 | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Arithmetic Shift Right     |  Support coming soon.                | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical Shift Left         | ``numpy.left_shift``                 | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical Shift Right        | ``numpy.right_shift``                | N                      |
-  +------------------------+----------------------------+--------------------------------------+------------------------+
-  |                        | Add                        | ``numpy.add``                        | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Subtract                   | ``numpy.subtract``                   | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Multiply                   | ``numpy.multiply``                   | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Max                        | ``numpy.maximum``                    | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Min                        | ``numpy.minimum``                    | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Is Equal to                | ``numpy.equal``                      | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Is Not Equal to            | ``numpy.not_equal``                  | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  | Arithmetic             | Is Greater than or Equal to| ``numpy.greater_equal``              | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Is Greater than to         | ``numpy.greater``                    | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Is Less than or Equal to   | ``numpy.less_equal``                 | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Is Less than               | ``numpy.less``                       | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical Not                | ``numpy.logical_not``                | N                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical And                | ``numpy.logical_and``                | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical Or                 | ``numpy.logical_or``                 | Y                      |
-  |                        +----------------------------+--------------------------------------+------------------------+
-  |                        | Logical Xor                | ``numpy.logical_xor``                | Y                      |
-  +------------------------+----------------------------+--------------------------------------+------------------------+
+  +------------------------+----------------------------+---------------------------------------------+------------------------+
+  |                        | Operator                   | Accepted ``op`` by Vector Engine            | Legal Reduction ``op`` |
+  +========================+============================+=============================================+========================+
+  |                        | Bitwise Not                | ``nki.language.invert``                     | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Bitwise And                | ``nki.language.bitwise_and``                | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Bitwise Or                 | ``nki.language.bitwise_or``                 | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  | Bitvec                 | Bitwise Xor                | ``nki.language.bitwise_xor``                | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Arithmetic Shift Left      | ``nki.language.left_shift``                 | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Arithmetic Shift Right     |  Support coming soon.                       | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical Shift Left         | ``nki.language.left_shift``                 | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical Shift Right        | ``nki.language.right_shift``                | N                      |
+  +------------------------+----------------------------+---------------------------------------------+------------------------+
+  |                        | Add                        | ``nki.language.add``                        | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Subtract                   | ``nki.language.subtract``                   | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Multiply                   | ``nki.language.multiply``                   | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Max                        | ``nki.language.maximum``                    | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Min                        | ``nki.language.minimum``                    | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Is Equal to                | ``nki.language.equal``                      | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Is Not Equal to            | ``nki.language.not_equal``                  | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  | Arithmetic             | Is Greater than or Equal to| ``nki.language.greater_equal``              | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Is Greater than to         | ``nki.language.greater``                    | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Is Less than or Equal to   | ``nki.language.less_equal``                 | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Is Less than               | ``nki.language.less``                       | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical Not                | ``nki.language.logical_not``                | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical And                | ``nki.language.logical_and``                | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical Or                 | ``nki.language.logical_or``                 | Y                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Logical Xor                | ``nki.language.logical_xor``                | Y                      |
+  +------------------------+----------------------------+---------------------------------------------+------------------------+
 
 .. _nki-act-func:
 
-Supported Activation Functions
-==============================
+Supported Activation Functions for NKI ISA
+==========================================
 :ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation`` API. These
 activation functions are approximated with piece-wise polynomials on Scalar Engine.
 
 
 .. _tbl-act-func:
-.. list-table:: Table 3: List of Supported Activation Functions
+.. list-table:: Supported Activation Functions by NKI ISA
    :widths: 25 25
    :header-rows: 1
 
    * - Function Name
      - Accepted ``op`` by Scalar Engine
    * - Identity
-     - Support coming soon.
+     - ``nki.language.copy`` or ``numpy.copy``
    * - Square
      - ``nki.language.square`` or ``numpy.square``
    * - Sigmoid
@@ -138,9 +140,9 @@ activation functions are approximated with piece-wise polynomials on Scalar Engi
    * - Gelu with Tanh Approximation
      - ``nki.language.gelu_apprx_tanh``
    * - Silu
-     - Support coming soon.
+     - ``nki.language.silu``
    * - Silu Derivative
-     - Support coming soon.
+     - ``nki.language.silu_dx``
    * - Tanh
      - ``nki.language.tanh`` or ``numpy.tanh``
    * - Square Root
@@ -162,7 +164,7 @@ activation functions are approximated with piece-wise polynomials on Scalar Engi
    * - Sine
      - ``nki.language.sin`` or ``numpy.sin``
    * - Cosine
-     - ``nki.language.cos`` or ``numpy.cos``
+     - Support coming soon.
    * - Arctan
      - ``nki.language.arctan`` or ``numpy.arctan``
    * - Sign
@@ -183,7 +185,7 @@ any performance overhead in the generated instructions.
 
 The ``mask`` can be created using comparison expressions (e.g., ``a < b``) or multiple
 comparison expressions concatenated with ``&`` (e.g., ``(a < b) & (c > d)``).
-The left- or right-handside expression
+The left- or right-hand side expression
 of each comparator must be an affine expression of ``nki.language.arange()``,
 ``nki.language.affine_range()`` or ``nki.language.program_id()`` .
 Each comparison expression should indicate which range of
@@ -193,9 +195,9 @@ operation on this tile for elements in ``[0:64, 0:256]``, we can invoke the ``nk
 API using the following:
 
 
-.. literalinclude:: ../test/test_nki_mask.py
+.. nki_example:: ../test/test_nki_mask.py
   :language: python
-  :lines: 9, 22-24, 26
+  :marker: NKI_EXAMPLE_15
 
 The above example will be lowered into a hardware ISA instruction that only processes
 64x256 elements by Neuron Compiler.
@@ -311,13 +313,14 @@ following the rules below:
 - ``(np.int32, np.float16) -> np.float16``
 - ``(np.uint16, nl.tfloat32) -> nl.tfloat32``
 
-**(float, float)**: Pick the wider float type. Example:
+**(float, float)**: Pick the wider float type or a new widened type that fits the values range. Example:
 
 - ``(np.float32, nl.tfloat32) -> np.float32``
 - ``(np.float32, nl.bfloat16) -> np.float32``
-- ``(np.float16, nl.bfloat16) -> np.float32``
+- ``(np.float16, nl.bfloat16) -> np.float32`` (new widened type)
 - ``(nl.float8_e4m3, np.float16) -> np.float16``
 - ``(nl.float8_e4m3, nl.bfloat16) -> nl.bfloat16``
+- ``(nl.float8_e4m3, nl.float8_e5m2) -> nl.bfloat16`` (new widened type)
 
 **(int, int)**: Pick the wider type or a new widened type that fits the values range. Example:
 

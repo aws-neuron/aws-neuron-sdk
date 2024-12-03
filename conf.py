@@ -16,6 +16,7 @@ import datetime
 
 sys.path.append(os.path.abspath("./_ext"))
 sys.path.append(os.path.abspath("./general/nki/api"))
+sys.path.append(os.path.abspath("./general/nki/_ext"))
 sys.path.append(os.path.abspath("./frameworks/torch/torch-neuron/"))
 #sys.path.append(os.path.abspath("./_static"))
 
@@ -85,6 +86,7 @@ extensions = [
     'local_documenter',
     'archive',
     "sphinx_copybutton",
+    "nki_directives",
 ]
 
 
@@ -157,7 +159,7 @@ intersphinx_mapping = {
 
 #top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
 
-top_banner_message="Neuron 2.20.2 is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
+top_banner_message="Neuron 2.21.0 Beta is released! check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#latest-neuron-release'> What's New  </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'> Announcements  </a>"
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
@@ -170,7 +172,6 @@ html_theme_options = {
     "home_page_in_toc": False,
     "repository_branch" : branch_name,
     "announcement": top_banner_message,
-    # "max_navbar_depth": 2, # needs sphinx_book_theme >= v1.1.0
 }
 
 html_context = {

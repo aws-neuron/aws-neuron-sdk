@@ -14,7 +14,7 @@ loaded models, and Neuron applications.
 
 .. note::
 
-  ``neuron-top`` fully supports the newly launched inf2 instances.
+  ``neuron-top`` fully supports the newly launched trn2 instances.
 
 .. note::
 
@@ -43,9 +43,17 @@ a single Neuron process:
 
 |overview|
 
+* ``trn2`` instances support two different configurations for logical Neuron Cores (LNC)
+
+  * ``LNC=1`` - There is a 1 to 1 map of logical Neuron Core to physical Neuron Core
+  * ``LNC=2`` - There is a 1 to 2 map of logical Neuron Core to physical Neuron Core
+  * For example, as we can see from the picture above, ``trn2n.48xlarge`` instance with ``LNC=2`` has 16 Neuron Devices with
+    4 LNCs each and a total of 64 LNCs (128 physical NCs)
+
 * The ``NeuronCore <vers> Utilization`` section shows the NeuronCore utilization for the
   currently selected tab. ``<vers>`` is the version of the NeuronCores on the instance (for example,
-  ``v2`` for trn1 instances and inf2 instances).
+  ``v2`` for trn1 instances and inf2 instances, ``v3`` for trn2 instances with ``LNC=1``, ``v3d`` for trn2
+  instances with ``LNC=2``) 
 
   Pressing the 'F' key will toggle between displaying utilization percentages - as seen in the previous image -
   and teraflops (trillion floating point operations per second), as seen in the image below:
@@ -110,7 +118,7 @@ tab shows an aggregated view of all the Neuron processes currently running on th
   The '1'-'9' keys select the current tab. 'a'/'d' selects the previous/next
   tab on the bar.
 
-.. |titleimg| image:: ../../images/nt-title.png
-.. |overview| image:: ../../images/nt-1.png
-.. |flops| image:: ../../images/nt-flops.png
+.. |titleimg| image:: ../../images/trn2-neuron-top-header.png
+.. |overview| image:: ../../images/trn2-neuron-top.png
+.. |flops| image:: ../../images/trn2-neuron-top-nc.png
 .. |tabbar| image:: ../../images/nt-2.png

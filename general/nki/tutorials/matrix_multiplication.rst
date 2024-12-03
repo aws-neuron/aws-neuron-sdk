@@ -30,10 +30,10 @@ The NKI example below implements a compute kernel for a single-tile matrix
 multiplication. It computes a ``64(M) x 128(K) x 512 (N)`` matrix
 multiplication operation.
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 15-54
+   :marker: NKI_EXAMPLE_16
 
 In this example, we define the NKI kernel as ``nki_matmul_basic_:``
 
@@ -62,10 +62,10 @@ We can then execute the kernel and verify correctness against the torch
 implementation as follows. Note that we use `torch.allclose` to tolerate
 numerical error inherent to floating-point arithmetic.
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_torch.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_torch.py
    :language: python
    :linenos:
-   :lines: 16-36
+   :marker: NKI_EXAMPLE_17
 
 
 .. _tutorial_matmul_tiling:
@@ -104,10 +104,10 @@ to LHS_T (``[K,M]``) for optimal performance of the underlying TensorE.
 
 This form of tiling can be achieved in NKI as follows:
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 57-101
+   :marker: NKI_EXAMPLE_18
 
 Note the use of ``nl.mgrid`` to define indices, this is the same as the
 ``mgrid`` in NumPy. It is similar to the other way to define indexes through
@@ -175,10 +175,10 @@ loads through hoisting them out of the innermost loop.
    Memory Pattern After Hoisting Loads Out of the Innermost Loop
 
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 104-164
+   :marker: NKI_EXAMPLE_19
 
 
 Optimization 2: Reuse More Load Through Blocking
@@ -215,10 +215,10 @@ after blocking both free dimensions.
    Memory Pattern After Blocking Free Dimensions
 
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 167-244
+   :marker: NKI_EXAMPLE_20
 
 Optimization 3: Further Blocking and DMA Efficiency Optimization
 ----------------------------------------------------------------
@@ -274,10 +274,10 @@ not actually want the compiler to rewrite this loop during its vectorization and
 other loop-level optimization passes. To communicate this we use 
 ``nl.sequential_range()`` to construct the K blocking loop.
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 247-362
+   :marker: NKI_EXAMPLE_21
 
 Testing Correctness and Benchmarking
 ------------------------------------
@@ -285,10 +285,10 @@ Testing Correctness and Benchmarking
 To test the correctness of the kernels, we compare the result with the
 ``torch.matmul`` with ``torch.allclose``.
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_torch.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_torch.py
    :language: python
    :linenos:
-   :lines: 38-65
+   :marker: NKI_EXAMPLE_22
 
 Output from the test:
 
@@ -307,10 +307,10 @@ To test for performance of each kernel here, we can use NKI's benchmark
 capability to measure the performance of the four different kernels on
 ``[4096,8192] @ [8192,8192]`` matrix multiplication.
 
-.. literalinclude:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
+.. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 364-387
+   :marker: NKI_EXAMPLE_23
 
 
 +-----------------------+---------------+----------------------------------------------+
@@ -342,7 +342,7 @@ discussed in this tutorial.
 * All matrix multiplication NKI kernels: :download:`matrix_multiplication_nki_kernels.py <../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py>`
 * PyTorch implementation: :download:`matrix_multiplication_torch.py <../examples/matrix_multiplication/matrix_multiplication_torch.py>`
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/matrix_multiplication/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/matrix_multiplication/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

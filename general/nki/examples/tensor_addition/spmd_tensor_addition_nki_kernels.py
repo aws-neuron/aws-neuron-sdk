@@ -1,24 +1,30 @@
 """
 Copyright (C) 2024, Amazon.com. All Rights Reserved
 
-NKI implementation for tensor addition NKI tutorial.
+NKI implementation for SPMD tensor addition NKI tutorial.
 
 """
 import numpy as np
+# NKI_EXAMPLE_27_BEGIN
 import neuronxcc.nki as nki
 import neuronxcc.nki.language as nl
 
 
-def nki_tensor_add_kernel_(a_input, b_input, c_output):
+@nki.jit
+def nki_tensor_add_kernel_(a_input, b_input):
   """NKI kernel to compute element-wise addition of two input tensors
 
-  This kernel assumes strict input/output tile-sizes, of up-to [128,512]
+  This kernel assumes strict input/output sizes can be uniformly tiled to [128,512]
 
   Args:
-      a_input: a first input tensor, of shape [128,512]
-      b_input: a second input tensor, of shape [128,512]
-      c_output: an output tensor, of shape [128,512]
+      a_input: a first input tensor
+      b_input: a second input tensor
+
+  Returns:
+      c_output: an output tensor
   """
+  # Create output tensor shared between all SPMD instances as result tensor
+  c_output = nl.ndarray(a_input.shape, dtype=a_input.dtype, buffer=nl.shared_hbm)
 
   # Calculate tile offsets based on current 'program'
   offset_i_x = nl.program_id(0) * 128
@@ -39,7 +45,12 @@ def nki_tensor_add_kernel_(a_input, b_input, c_output):
   # store the addition results back to device memory (c_output)
   nl.store(c_output[ix, iy], value=c_tile)
 
+  # Transfer the ownership of `c_output` to the caller
+  return c_output
+  # NKI_EXAMPLE_27_END
 
+
+# NKI_EXAMPLE_28_BEGIN
 def nki_tensor_add(a_input, b_input):
   """NKI kernel caller to compute element-wise addition of two input tensors
 
@@ -57,13 +68,9 @@ def nki_tensor_add(a_input, b_input):
   # In this case, we use a 2D grid where the size of each invocation is 128x512
   grid_x = a_input.shape[0] // 128
   grid_y = a_input.shape[1] // 512
-  c_output = np.zeros(a_input.shape, dtype=a_input.dtype)
 
-  nki_tensor_add_kernel_baremetal = nki.baremetal(nki_tensor_add_kernel_)
-  nki_tensor_add_kernel_baremetal[grid_x, grid_y](a_input, b_input, c_output)
-
-  return c_output
-
+  return nki_tensor_add_kernel_[grid_x, grid_y](a_input, b_input)
+  # NKI_EXAMPLE_28_END
 
 if __name__ == "__main__":
   a = np.random.rand(256, 1024).astype(np.float16)

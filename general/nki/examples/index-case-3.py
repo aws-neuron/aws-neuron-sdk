@@ -1,20 +1,22 @@
+from neuronxcc import nki
 import neuronxcc.nki.language as nl
-from torch_neuronx import nki_jit
 
-@nki_jit
-def tensor_maxpool_kernel_(in_tensor, out_tensor, pool_size):
+@nki.jit
+def tensor_maxpool_kernel_(in_tensor, pool_size):
   """NKI kernel to compute a 2D max-pool operation
 
   Args:
       in_tensor: an input tensor, of dimensions C x H x W
       pool_size: integer P representing a (square) pool-window size
+  Returns:
       out_tensor: the resulting output tensor, of dimensions C x (H/P) x (W/P)
   """
 
   # Get input/output dimensions
   sz_cin, sz_hin, sz_win = in_tensor.shape
-  sz_cout, sz_hout, sz_wout = out_tensor.shape
-  assert sz_cin == sz_cout
+  sz_hout, sz_wout = sz_hin // pool_size, sz_win // pool_size
+  out_tensor = nl.ndarray((sz_cin, sz_hout, sz_wout), dtype=in_tensor.dtype,
+                          buffer=nl.shared_hbm)
 
   # Set relevant sizes
   sz_p = sz_cin
@@ -52,6 +54,8 @@ def tensor_maxpool_kernel_(in_tensor, out_tensor, pool_size):
   # Store the results back to external memory
   nl.store(out_tensor[i_p, i_hout, i_wout], value=out_tile)
 
+  return out_tensor
+
 
 if __name__ == "__main__":
     import torch
@@ -65,8 +69,6 @@ if __name__ == "__main__":
     HOUT, WOUT = HIN//POOL_SIZE, WIN//POOL_SIZE
 
     in_tensor = torch.arange(C * HIN * WIN, dtype=torch.bfloat16).reshape(C, HIN, WIN).to(device=device)
-    out_tensor = torch.zeros((C, HOUT, WOUT), dtype=torch.bfloat16).to(device=device)
-
-    tensor_maxpool_kernel_(in_tensor, out_tensor, POOL_SIZE)
+    out_tensor = tensor_maxpool_kernel_(in_tensor, POOL_SIZE)
 
     print(in_tensor, out_tensor) # an implicit XLA barrier/mark-step

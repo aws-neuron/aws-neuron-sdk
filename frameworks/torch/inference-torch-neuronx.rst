@@ -1,6 +1,6 @@
 .. _inference-torch-neuronx:
 
-Inference with ``torch-neuronx`` (Inf2 & Trn1/Trn1n)
+Inference with ``torch-neuronx`` (Inf2 & Trn1/Trn2)
 ====================================================
 
 .. toctree::

@@ -26,6 +26,7 @@ g++ utils.cpp example_app.cpp \
 	-Wl,-rpath,libtorch/lib \
 	-Wl,-rpath,tokenizers_binding/lib \
 	-Wl,-rpath,$PATH_NEURON_LIB \
+	-Wl,-no-as-needed \
 	-ltokenizers \
 	-ltorchneuron \
 	-ltorch_cpu \

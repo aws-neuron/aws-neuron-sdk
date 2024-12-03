@@ -74,6 +74,7 @@ Neuron provides debugging and profiling tools with the visualization support of 
         * :ref:`neuronperf`
         * :ref:`nccom-test`
         * :ref:`neuron-profile-ug`
+        * :ref:`neuron-profiler-2-0-guide`
 
                     
 .. dropdown::  Tutorials 

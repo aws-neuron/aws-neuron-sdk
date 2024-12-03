@@ -52,10 +52,10 @@ a partition-axis broadcast and must invoke another instruction for the broadcast
 Compute kernel
 --------------
 
-.. literalinclude:: ../examples/rmsnorm/rmsnorm_nki_kernels.py
+.. nki_example:: ../examples/rmsnorm/rmsnorm_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 9-69
+   :marker: NKI_EXAMPLE_42
 
 In this example, we implement RMSNorm for a 2D input tensor in ``nki_rmsnorm_kernel``:
 
@@ -103,10 +103,10 @@ PyTorch
 Below we write a reference PyTorch implementation of RMSNorm and verify our
 NKI kernel output against the reference in the same script as the kernel.
 
-.. literalinclude:: ../examples/rmsnorm/rmsnorm_torch.py
+.. nki_example:: ../examples/rmsnorm/rmsnorm_torch.py
    :language: python
    :linenos:
-   :lines: 13-43
+   :marker: NKI_EXAMPLE_43
 
 Output:
   
@@ -151,10 +151,10 @@ JAX
 Below we write a reference JAX implementation of RMSNorm and verify our
 NKI kernel output against the reference in the same script as the kernel.
 
-.. literalinclude:: ../examples/rmsnorm/rmsnorm_jax.py
+.. nki_example:: ../examples/rmsnorm/rmsnorm_jax.py
    :language: python
    :linenos:
-   :lines: 13-45
+   :marker: NKI_EXAMPLE_44
 
 
 Download All Source Code
@@ -167,7 +167,7 @@ discussed in this tutorial.
 * PyTorch reference implementation: :download:`rmsnorm_torch.py <../examples/rmsnorm/rmsnorm_torch.py>`
 * JAX reference implementation: :download:`rmsnorm_jax.py <../examples/rmsnorm/rmsnorm_jax.py>`
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/rmsnorm/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/rmsnorm/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -33,7 +33,7 @@ When running, **neuron-monitor** will:
 
 .. note::
 
-  ``neuron-monitor`` fully supports the newly launched inf2 instances.
+  ``neuron-monitor`` fully supports the newly launched Trn2 instances.
 
 .. _using-neuron-monitor:
 
@@ -253,7 +253,7 @@ Contains information about the instance on which neuron-monitor is running.
      "instance_info": {
        "instance_name": "My_Instance",
        "instance_id": "i-0011223344556677a",
-       "instance_type": "inf1.xlarge",
+       "instance_type": "trn2n.48xlarge",
        "instance_availability_zone": "us-west-2b",
        "instance_availability_zone_id": "usw2-az2",
        "instance_region": "us-west-2",
@@ -280,19 +280,22 @@ Contains basic information about the Neuron hardware.
 ::
 
      "neuron_hardware_info": {
-       "neuron_device_type": "trainium",
-       "neuroncore_version": "v2",
+       "neuron_device_type": "trainium2",
+       "neuron_device_version": "v4",
+       "neuroncore_version": "v3d",
        "neuron_device_count": 16,
-       "neuron_device_memory_size": 34359738368,
-       "neuroncore_per_device_count": 2,
+       "neuron_device_memory_size": 103079215104,
+       "neuroncore_per_device_count": 8,
+       "logical_neuroncore_size": 2,
        "error": ""
      }
 
 -  ``neuron_device_type``: type of the Neuron Devices on the instance
--  ``neuroncore_version``: version of the NeuronCores on the instance
+-  ``neuroncore_version``: version of the NeuronCores on the instance, for Trn2 it can be either v3 (when the Logical NeuronCore configuration is set to 1) or v3d (when the Logical NeuronCore configuration is set to 2)
 -  ``neuron_device_count`` : number of available Neuron Devices
 -  ``neuron_device_memory_size``: total memory available on each Neuron Device
 -  ``neuroncore_per_device_count`` : number of NeuronCores present on each Neuron Device
+-  ``logical_neuroncore_size`` : the current Logical NeuronCore configuration - which is the number of physical NeuronCores that make up a single NeuronCore
 -  ``error`` : will contain an error string if any occurred when getting this information
    (usually due to the Neuron Driver not being installed or not running).
 
@@ -325,20 +328,29 @@ neuroncore_counters
              "neuroncores_in_use": {
                "0": {
                  "neuroncore_utilization": 42.01,
-                 "flops": 1234567891011
+                 "flops": 1234567891011,
+                 "v3d": {
+                   "nc_v3.0": {
+                     "neuroncore_utilization": 21.01
+                   },
+                   "nc_v3.1": {
+                     "neuroncore_utilization": 63.01
+                   }
+                 }
                },
                "1": {
                  "neuroncore_utilization": 42.02,
-                 "flops": 1234567891021
+                 "flops": 1234567891021,
+                 "v3d": {
+                   "nc_v3.2": {
+                     "neuroncore_utilization": 21.02
+                   },
+                   "nc_v3.3": {
+                     "neuroncore_utilization": 63.02
+                   }
+                 }
                },
-               "2": {
-                 "neuroncore_utilization": 42.03,
-                 "flops": 1234567891031
-               },
-               "3": {
-                 "neuroncore_utilization": 42.04,
-                 "flops": 1234567891041
-               }
+               [...]
              },
              "error": ""
            }
@@ -351,6 +363,8 @@ neuroncore_counters
       during the captured period
    -  ``"flops"`` - number of floating point operations per second during
       the captured period
+   -  ``"v3d"`` - only available on Trn2 - contains the utilization for every
+      physical NeuronCore that makes up the current NeuronCore
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
@@ -522,22 +536,22 @@ memory_used
 
    -  ``"neuron_runtime_used_bytes"`` - current amount of memory used by
       the Neuron application
-      
+
       -  ``"host"`` - total host DRAM usage in bytes
       -  ``"neuron_device"`` - total Neuron device memory usage in bytes
       -  ``"usage_breakdown"`` - a breakdown of the total memory usage in the other two fields
-      
+
          - ``"host"`` - breakdown of the host memory usage
-         
+
             - ``"application_memory"`` - amount of host memory used by the application - this includes all allocations that are not included
               in the next categories
             - ``"constants"`` - amount of host memory used for constants during training (or weights during inference)
             - ``"dma_buffers"`` - amount of host memory used for DMA transfers
             - ``"tensors"`` - amount of host memory used for tensors
-            
+
          - ``"neuroncore_memory_usage"`` - a breakdown of memory allocated on the Neuron Devices and the NeuronCores for which it was allocated
-         
-            - ``"0"`` - ``"32"`` (for trn1-32xlarge) - NeuronCores for which the memory was allocated
+
+            - ``"0"`` - ``"64"`` (for trn2-48xlarge) - NeuronCores for which the memory was allocated
             - ``"constants"`` - amount of device memory used for constants during training (or weights during inference)
             - ``"model_code"`` - amount of device memory used for models' executable code
             - ``"model_shared_scratchpad"`` - amount of device memory used for the scratchpad shared by the models - a memory region reserved for the models'
@@ -552,28 +566,28 @@ memory_used
    -  ``"model_id"`` - Neuron application-assigned ID for this model
    -  ``"is_running"`` - true if this model is currently started, false otherwise
    -  "``subgraphs"`` - object containing all the subgraphs for the model, indexed by their name: ``"subgraph_name": { subgraph_data }``
-   
+
       -  ``"memory_used_bytes"`` - memory usage for this subgraph
-      
+
          -  ``"host"`` - total host DRAM usage in bytes
          -  ``"neuron_device"`` - total Neuron device DRAM usage in bytes
          -  ``"usage_breakdown"`` - a breakdown of memory allocated at load time for this model
-         
+
             - ``"host"`` - breakdown of host memory allocated for this model
-            
+
                - ``"application_memory"`` - amount of host memory allocated for this model by the Neuron Runtime which doesn't fall in any
                  of the next categories
                - ``"constants"`` - amount of host memory used for constants during training (or weights during inference)
                - ``"dma_buffers"`` - host memory allocated for DMA transfers for this model
                - ``"tensors"`` - amount of device memory used for tensors at model load time
-               
+
             - ``"neuron_device"`` - a breakdown of device memory allocated for this model
-            
+
                - ``"constants"`` - amount of device memory used for constants during training (or weights during inference)
                - ``"model_code"`` - amount of device memory used for the model's executable code
                - ``"runtime_memory"`` - amount of device memory used by the Neuron Runtime for this model
                - ``"tensors"`` - amount of device memory allocated for tensors at this model's load time
-               
+
       -  ``"neuroncore_index"`` - NeuronCore index on which the subgraph is loaded
       -  ``"neuron_device_index"`` - Neuron device index on which the subgraph is loaded
 

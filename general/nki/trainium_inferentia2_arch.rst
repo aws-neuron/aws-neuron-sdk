@@ -429,7 +429,7 @@ must not exceed 128, while the free dimension size can be up to 64K elements for
 Pipelined Multiply-Add
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Each ScalarE compute lane also supports an additional multiply-add before the non-linear function (\ ``func``\ ) is applied
+Each ScalarE compute lane also supports an additional multiply-add **before** the non-linear function (\ ``func``\ ) is applied
 in a pipeline fashion. Mathematically, ScalarE implements:
 
 .. code-block::
@@ -439,13 +439,13 @@ in a pipeline fashion. Mathematically, ScalarE implements:
    # Output: 2D out_tile
    for lane_id in range(in_tile.shape[0]):
       for k in range(in_tile.shape[1])
-       out_tile[lane_id][k] = func(in_tile[lane_id][k] * **scale****[lane_id]**
+       out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale[lane_id]
                                        + bias[lane_id])
 
-   # Case 2: scale is a compile constant in the instruction
+   # Case 2: scale is a compile-time scalar constant in the instruction
    for lane_id in range(in_tile.shape[0]):
       for k in range(in_tile.shape[1])
-       out_tile[lane_id][k] = func(in_tile[lane_id][k] * **scale**
+       out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale
                                        + bias[lane_id])
 
 This functionality can be invoked using the :doc:`nki.isa.activation <api/generated/nki.isa.activation>`
@@ -453,6 +453,39 @@ API by specifying a ``scale`` for multiplication and ``bias`` for addition. The 
 with one element/partition or a compile-time constant. On the other hand, the bias can only be a tile from SBUF/PSUM with
 one element/partition. A useful mental model for this capability is combining a :doc:`nki.isa.tensor_scalar <api/generated/nki.isa.tensor_scalar>`
 instruction with a non-linear function evaluation into a single instruction (2x speed-up than two separate instructions).
+
+Pipelined Reduction
+~~~~~~~~~~~~~~~~~~~~~~
+
+Each ScalarE compute lane also supports reduction **after** the non-linear function (\ ``func``\ ) is applied
+in a pipeline fashion. On NeuronCore-v2, the reduction operator can only be addition.
+
+Mathematically, ScalarE with accumulation enabled implements:
+
+.. code-block::
+   :emphasize-lines: 7
+
+   # Input: 2D in_tile, 1D scale (similarly for scalar scale), 1D bias
+   # Output: 2D out_tile, 1D reduce_res
+   for lane_id in range(in_tile.shape[0]):
+     for k in range(in_tile.shape[1]):
+       out_tile[lane_id][k] = func(in_tile[lane_id][k] * scale[lane_id]
+                                    + bias[lane_id])
+       reduce_res[lane_id] += out_tile[lane_id][k]
+
+This functionality can be invoked using the :doc:`nki.isa.activation_reduce <api/generated/nki.isa.activation_reduce>`
+API by specifying ``reduce_op`` as ``nki.language.add`` and ``reduce_res`` as
+the output reduction tile, passed by reference.
+
+A useful mental model for this capability is combining a :doc:`nki.isa.activation <api/generated/nki.isa.activation>`
+instruction with a :doc:`nki.isa.tensor_reduce <api/generated/nki.isa.tensor_reduce>` into a single API,
+which returns results from **both** APIs. Note,
+:doc:`nki.isa.activation_reduce <api/generated/nki.isa.activation_reduce>`
+invokes two back-to-back ISA instructions on hardware, `Activate` and `ActReadAccumulator`. The `Activate` instruction
+performs the regular computation as specified in :doc:`nki.isa.activation <api/generated/nki.isa.activation>` and also
+reduction at no additional cost. The reduction result is cached inside ScalarE after `Activate`.
+The `ActReadAccumulator` instruction is a low cost (roughly 64 ScalarE cycles on NeuronCore-v2)
+instruction to write the internal reduction result back to SBUF/PSUM, one element per partition.
 
 Performance Consideration
 ~~~~~~~~~~~~~~~~~~~~~~~~~

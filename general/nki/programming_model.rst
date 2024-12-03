@@ -19,8 +19,8 @@ device memory. NKI kernels currently target a single NeuronCore-v2.
 
 As shown in :numref:`Fig. %s <nki-fig-pm-nc>`, a single NeuronCore consists
 of two on-chip SRAMs (SBUF and PSUM)
-and four heterogenous compute engines: the tensor
-engine, vector engine, scalar engine, and GPSIMD engine.
+and four heterogenous compute engines: the Tensor
+Engine, Vector Engine, Scalar Engine, and GpSimd Engine.
 For more information about the compute engine capabilities, see
 :doc:`NeuronCore-v2 Architecture <trainium_inferentia2_arch>`.
 Next, let's dive into the memory hierarchy design of NeuronCore-v2,
@@ -172,6 +172,8 @@ When the cumulative size of live data defined by the NKI
 kernel overflows the capacity of any on-chip memory, the Neuron compiler
 inserts the necessary spills or refills between that memory and
 the next-tier memory in the hierarchy.
+
+.. _pm_represent_data:
 
 Representing data in NKI
 ------------------------
@@ -357,9 +359,10 @@ function to every element of an input tensor. To start, let's write a
 kernel that expects a hard-coded shape of ``(128, 512)`` for both input
 and output tensors:
 
-.. literalinclude:: examples/layout-pass.py
+.. nki_example:: examples/layout-pass.py
    :language: python
    :linenos:
+   :whole-file:
 
 As expected, the output tensor is an element-wise exponentiation of the
 input-tensor (a tensor of ones):
@@ -382,10 +385,10 @@ match the shape of the compute kernel. As an example, we can change the
 input and output tensor shape from ``[128,512]`` to ``[256,512]``:
 
 
-.. literalinclude:: examples/layout-violation.py
+.. nki_example:: examples/layout-violation.py
    :language: python
    :linenos:
-   :lines: 26-37
+   :marker: NKI_EXAMPLE_12
    :emphasize-lines: 7
 
 Since the compute kernel is expecting ``(128, 512)`` input/output
@@ -407,10 +410,11 @@ We could try to fix this by changing the tile size inside the compute
 kernel to ``(256, 512)`` as well, and see what happens: (*NOTE: This
 violates tile-size constraint #1!*):
 
-.. literalinclude:: examples/layout-violation.py
+.. nki_example:: examples/layout-violation.py
    :language: python
    :linenos:
-   :emphasize-lines: 13, 32
+   :emphasize-lines: 18, 37
+   :whole-file:
 
 Here, Neuron compiler identifies the tile-size constraint violation and
 fails compilation with the following exception:
@@ -424,10 +428,11 @@ handles ``(256, 512)`` input/output tensors with a simple loop. We can
 use the ``nki.language.tile_size.pmax`` constant defined in NKI as the maximum
 partition dimension size in a tile.
 
-.. literalinclude:: examples/layout-loop.py
+.. nki_example:: examples/layout-loop.py
    :language: python
    :linenos:
-   :emphasize-lines: 14, 16
+   :emphasize-lines: 18, 20
+   :whole-file:
 
 The ``nl.affine_range(2)`` API call returns a list of integers
 ``[0, 1]``. :doc:`nl.affine_range <api/generated/nki.language.affine_range>`
@@ -449,10 +454,11 @@ rather inflexible since it only supports input shape of
 ``(256, 512)``. Therefore, as a last step, we extend this kernel to handle
 varying input/output sizes:
 
-.. literalinclude:: examples/layout-dynamic-loop.py
+.. nki_example:: examples/layout-dynamic-loop.py
    :language: python
    :linenos:
-   :emphasize-lines: 13, 15, 17, 20
+   :emphasize-lines: 14, 19, 21, 24
+   :whole-file:
 
 The above example handles cases where in_tensor.shape[0] is not a multiple of 128
 by passing a ``mask`` field into the ``nl.load`` and ``nl.store`` API calls.
@@ -557,9 +563,10 @@ below visualizes the input and output tensors.
 
    Tensor split to even and odd columns
 
-.. literalinclude:: examples/index-case-1.py
+.. nki_example:: examples/index-case-1.py
    :language: python
    :linenos:
+   :whole-file:
 
 The main concept in this example is that we introduced the even
 (``i_f_even``) and odd ( ``i_f_odd`` ) indices. Note that both indices
@@ -600,10 +607,10 @@ below illustrates the input and output tensor layouts.
 
    Tensor F1:F2 Transpose
 
-.. literalinclude:: examples/transpose2d/transpose2d_nki_kernels.py
+.. nki_example:: examples/transpose2d/transpose2d_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 8-65
+   :marker: NKI_EXAMPLE_33
 
 The main concept introduced in this example is a 2D memory access
 pattern per partition, via additional indices. We copy ``in_tile`` into
@@ -636,9 +643,10 @@ below illustrates the input and output tensor layouts.
 
    2D-Pooling Operation (reducing on axes F2 and F4)
 
-.. literalinclude:: examples/index-case-3.py
+.. nki_example:: examples/index-case-3.py
    :language: python
    :linenos:
+   :whole-file:
 
 .. _nki-pm-spmd:
 
@@ -702,6 +710,7 @@ which solely performs matmul operations on Tensor Engine
 using :doc:`nki.isa.nc_matmul <api/generated/nki.isa.nc_matmul>` without extra overhead in changing
 input layouts to meet :ref:`LC#1 <nki-pm-layout>`.
 
-.. literalinclude:: examples/mm-nl-spmd.py
+.. nki_example:: examples/mm-nl-spmd.py
    :language: python
    :linenos:
+   :whole-file:

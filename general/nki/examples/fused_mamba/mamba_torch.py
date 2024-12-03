@@ -5,6 +5,7 @@ Mamba-v1 PyTorch Reference Implementation.
 
 """
 
+# NKI_EXAMPLE_24_BEGIN
 import torch
 import torch_neuronx
 import torch_xla.core.xla_model as xm
@@ -99,16 +100,14 @@ if __name__ == "__main__":
     torch_out = mamba_layer(delta, A, B, u, C)
     xm.mark_step()
     print(torch_out)
+    # NKI_EXAMPLE_24_END
 
     if args.mode == "accuracy":
         # Call NKI mamba_v1 kernel to check accuracy
         from mamba_nki_kernels import mamba_v1
-        from torch_neuronx import nki_jit
-
-        nki_out = torch.empty((batch, channels, seq_len), dtype=dtype, device=device)
 
         xm.mark_step()
-        nki_jit(mamba_v1)(delta, u, A, B, C, nki_out)
+        nki_out = mamba_v1(delta, u, A, B, C)
         xm.mark_step()
 
         allclose = torch.allclose(torch_out, nki_out, atol=1e-2, rtol=1e-2)

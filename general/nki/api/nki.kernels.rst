@@ -10,7 +10,7 @@ nki.kernels
 -------------
 
 The source code of the kernels in the `neuronxcc.nki.kernels` namespace 
-is available at the Github Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_. 
+is available at the GitHub Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_. 
 They are optimized kernels from the Neuron Team serving as samples. The repository also contains
 numeric tests, performance benchmarks, as well as scripts to use them in real models.
 
@@ -21,13 +21,15 @@ will automatically invoke the `flash_fwd` kernel listed here. Therefore, replaci
 NKI kernels likely won't result in extra performance benefit.
 
 Please see the `README <https://github.com/aws-neuron/nki-samples>`_ page 
-of the Github Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_ for more details.
+of the GitHub Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_ for more details.
 
 .. autosummary::
    :toctree: generated
    :nosignatures:
 
    fused_self_attn_for_SD_small_head_size
+   allocated_fused_self_attn_for_SD_small_head_size
+   allocated_fused_rms_norm_qkv
    flash_attn_bwd
    resize_nearest_fixed_dma_kernel
    flash_fwd

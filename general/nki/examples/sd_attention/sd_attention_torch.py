@@ -5,8 +5,8 @@ Stable Diffusion Attention NKI kernel implementation.
 
 """
 
+# NKI_EXAMPLE_32_BEGIN
 import torch
-from torch_neuronx.xla_impl.ops import nki_jit
 from torch_xla.core import xla_model as xm
 
 from sd_attention_nki_kernels import fused_self_attn_for_SD_small_head_size
@@ -28,10 +28,8 @@ if __name__ == "__main__":
   q_tensor = torch.rand((4096, 64), dtype=torch.float32).to(device=device)
   k_tensor = torch.rand((4096, 64), dtype=torch.float32).to(device=device)
   v_tensor = torch.rand((4096, 64), dtype=torch.float32).to(device=device)
-  output_nki = torch.zeros((4096, 64), dtype=torch.float32).to(device=device)
 
-  nki_func = nki_jit(func=fused_self_attn_for_SD_small_head_size)
-  nki_func(q_tensor, k_tensor, v_tensor, output_nki)
+  output_nki = fused_self_attn_for_SD_small_head_size(q_tensor, k_tensor, v_tensor)
 
   output_torch = cpu_golden_attn(q_tensor, k_tensor, v_tensor)
 
@@ -43,3 +41,4 @@ if __name__ == "__main__":
     print("NKI and Torch differ")
 
   assert allclose
+  # NKI_EXAMPLE_32_END

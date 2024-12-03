@@ -4,21 +4,27 @@ Copyright (C) 2024, Amazon.com. All Rights Reserved
 LayerNorm NKI kernel implementation.
 
 """
+# NKI_EXAMPLE_45_BEGIN
 import neuronxcc.nki as nki
 import neuronxcc.nki.language as nl
 import neuronxcc.nki.isa as nisa
 import numpy as np
 import math
+# NKI_EXAMPLE_45_END
 import os
 import argparse
 
 
-def nki_layernorm_kernel_v1(input_tensor, epsilon, gamma_vector, beta_vector, output_tensor):
+# NKI_EXAMPLE_45_BEGIN
+@nki.jit
+def nki_layernorm_kernel_v1(input_tensor, epsilon, gamma_vector, beta_vector):
   """Computes LayerNorm.
     Used nki.language APIs only.
   """
+  output_tensor = nl.ndarray(input_tensor.shape, dtype=input_tensor.dtype,
+                             buffer=nl.shared_hbm)
+
   # Ensure that the shapes of tensors match
-  assert input_tensor.shape == output_tensor.shape
   assert input_tensor.shape[1] == gamma_vector.shape[0] == beta_vector.shape[0]
 
   # Generate tile indices for loading/storing data
@@ -58,12 +64,20 @@ def nki_layernorm_kernel_v1(input_tensor, epsilon, gamma_vector, beta_vector, ou
     nl.store(output_tensor[i * nl.tile_size.pmax + i_p_io, i_f_io], value=output_sb,
              mask=(i * nl.tile_size.pmax + i_p_io < num_rows))
 
-def nki_layernorm_kernel_v2(input_tensor, epsilon, gamma_vector, beta_vector, output_tensor):
+  return output_tensor
+  # NKI_EXAMPLE_45_END
+
+
+# NKI_EXAMPLE_46_BEGIN
+@nki.jit
+def nki_layernorm_kernel_v2(input_tensor, epsilon, gamma_vector, beta_vector):
   """Computes LayerNorm.
     Used nki.isa APIs to calculate mean/variance and perform shift/scale.
   """
+  output_tensor = nl.ndarray(input_tensor.shape, dtype=input_tensor.dtype,
+                             buffer=nl.shared_hbm)
+
   # Ensure that the shapes of tensors match
-  assert input_tensor.shape == output_tensor.shape
   assert input_tensor.shape[1] == gamma_vector.shape[0] == beta_vector.shape[0]
 
   # Generate tile indices for loading/storing data
@@ -122,69 +136,66 @@ def nki_layernorm_kernel_v2(input_tensor, epsilon, gamma_vector, beta_vector, ou
     nl.store(output_tensor[i * nl.tile_size.pmax + i_p_io, i_f_io], value=output_sb,
              mask=(i * nl.tile_size.pmax + i_p_io < num_rows))
 
+  return output_tensor
+  # NKI_EXAMPLE_46_END
+
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-    """Run LayerNorm pytorch implementation.
-    """)
-    parser.add_argument("--nrows",
-                        default=4*1024,
-                        type=int,
-                        help="""The number of input rows""")
-    parser.add_argument("--ncols",
-                        default=8*1024,
-                        type=int,
-                        help="""The number of input columns""")
-    parser.add_argument("--mode",
-                        choices=["accuracy", "perf"],
-                        default="accuracy",
-                        help="""Do accuracy test or perf test.
-                                Accuracy test compares LayerNorm kernel against PyTorch implementation.
-                                Perf test will generate a NEFF for the PyTorch implementation in local directory
-                                for a manual run of neuron-profile.
-                             """)
-    args = parser.parse_args()
-    return args
+  parser = argparse.ArgumentParser(
+  """Run LayerNorm pytorch implementation.
+  """)
+  parser.add_argument("--nrows",
+                      default=4*1024,
+                      type=int,
+                      help="""The number of input rows""")
+  parser.add_argument("--ncols",
+                      default=8*1024,
+                      type=int,
+                      help="""The number of input columns""")
+  parser.add_argument("--mode",
+                      choices=["accuracy", "perf"],
+                      default="accuracy",
+                      help="""Do accuracy test or perf test.
+                              Accuracy test compares LayerNorm kernel against PyTorch implementation.
+                              Perf test will generate a NEFF for the PyTorch implementation in local directory
+                              for a manual run of neuron-profile.
+                           """)
+  args = parser.parse_args()
+  return args
 
 if __name__ == "__main__":
-    args = parse_args()
-    func_dict = {"v1": nki_layernorm_kernel_v1,
-                 "v2": nki_layernorm_kernel_v2,
-                 }
+  args = parse_args()
+  func_dict = {"v1": nki_layernorm_kernel_v1,
+               "v2": nki_layernorm_kernel_v2,
+               }
 
-    # Generate toy example
-    num_rows = args.nrows
-    num_cols = args.ncols
-    input_tensor = np.random.rand(num_rows, num_cols).astype(np.float32)
-    gamma_vector = np.random.rand(num_cols).astype(np.float32)
-    beta_vector = np.random.rand(num_cols).astype(np.float32)
-    epsilon = 1e-5
-            
-    if args.mode == "accuracy":
-        # version 1
-        print(f">>>> Running version 1")
-        nki_out_v1 = np.empty((num_rows, num_cols), dtype=np.float32)
-        nki.baremetal(nki_layernorm_kernel_v1)\
-                    (input_tensor, epsilon, gamma_vector, beta_vector, nki_out_v1)
-        # version 2
-        print(f">>>> Running version 2")
-        nki_out_v2 = np.empty((num_rows, num_cols), dtype=np.float32)
-        nki.baremetal(nki_layernorm_kernel_v2)\
-                    (input_tensor, epsilon, gamma_vector, beta_vector, nki_out_v2)
-        # compare
-        np_all = np.all(nki_out_v1 == nki_out_v1)
-        print(f">>>> LayerNorm V1 and V2 matches?", np_all)
-        assert np_all
-                
-    else:
-      # perf mode
-      for version in ["v1", "v2"]:
-          print(f">>>> Running version {version}.")
-          func = func_dict[version]
-          nki_out_test = np.empty((num_rows, num_cols), dtype=np.float32)
-          nki.benchmark(func,
-                        save_neff_name='file.neff',
-                        save_trace_name='profile.ntff')\
-                        (input_tensor, epsilon, gamma_vector, beta_vector, nki_out_test)
-          os.rename("file.neff", f"{version}_{num_rows}_{num_cols}.neff")
-          os.rename("profile.ntff", f"{version}_{num_rows}_{num_cols}.ntff")
+  # Generate toy example
+  num_rows = args.nrows
+  num_cols = args.ncols
+  input_tensor = np.random.rand(num_rows, num_cols).astype(np.float32)
+  gamma_vector = np.random.rand(num_cols).astype(np.float32)
+  beta_vector = np.random.rand(num_cols).astype(np.float32)
+  epsilon = 1e-5
+
+  if args.mode == "accuracy":
+    # version 1
+    print(f">>>> Running version 1")
+    nki_out_v1 = nki_layernorm_kernel_v1(input_tensor, epsilon, gamma_vector, beta_vector)
+    # version 2
+    print(f">>>> Running version 2")
+    nki_out_v2 = nki_layernorm_kernel_v2(input_tensor, epsilon, gamma_vector, beta_vector)
+    # compare
+    np_all = np.all(nki_out_v1 == nki_out_v1)
+    print(f">>>> LayerNorm V1 and V2 matches?", np_all)
+    assert np_all
+
+  else:
+    # perf mode
+    for version in ["v1", "v2"]:
+      print(f">>>> Running version {version}.")
+      func = func_dict[version]
+      benchmark_kernel = nki.benchmark(func, save_neff_name='file.neff',
+                                       save_trace_name='profile.ntff')
+      nki_out_test = benchmark_kernel(input_tensor, epsilon, gamma_vector, beta_vector)
+      os.rename("file.neff", f"{version}_{num_rows}_{num_cols}.neff")
+      os.rename("profile.ntff", f"{version}_{num_rows}_{num_cols}.ntff")

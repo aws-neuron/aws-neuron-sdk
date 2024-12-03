@@ -1,8 +1,9 @@
 import neuronxcc.nki.language as nl
-from torch_neuronx import nki_jit
+from neuronxcc import nki
 
-@nki_jit
-def matmul_128x128x512_spmd(A, B, result):
+
+@nki.jit
+def matmul_128x128x512_spmd(A, B):
   """NKI kernel to compute a 128x128x512 matrix multiplication operation.
      Use SPMD program IDs to index into the full A and B input tensor to get tiles
      for 128x128x512 matrix multiplication.
@@ -12,8 +13,14 @@ def matmul_128x128x512_spmd(A, B, result):
          a left hand side argument of the matrix multiplication,
       B: an input tensor of shape [K=128,N=1024],
          a right hand side argument of the matrix multiplication
-      result: the resulting output tensor of shape [M=128,N=512]
+      result: the resulting output tensor of shape [M=512,N=1024]
   """
+  N, K = A.shape
+  K_, M = B.shape
+  assert K == K_
+  # Create output tensor shared between all SPMD instances as result tensor
+  result = nl.ndarray((N, M), dtype=A.dtype, buffer=nl.shared_hbm)
+
   # Defining starting indexes for input A and B
   i_A_row = nl.program_id(0) * 128
   i_B_col = nl.program_id(1) * 512
@@ -34,6 +41,7 @@ def matmul_128x128x512_spmd(A, B, result):
   # This dictates which indices to use to address the result tile.
   nl.store(result[i_A_row:i_A_row+128, i_B_col:i_B_col+512], value=result_sbuf)
 
+  return result
 
 if __name__ == "__main__":
   from torch_xla.core import xla_model as xm
@@ -43,9 +51,8 @@ if __name__ == "__main__":
 
   A = torch.ones((512, 128), dtype=torch.bfloat16).to(device=device)
   B = torch.ones((128, 1024), dtype=torch.bfloat16).to(device=device)
-  result = torch.zeros((512, 1024), dtype=torch.bfloat16).to(device=device)
 
   # Launch kernel with a 2D grid
-  matmul_128x128x512_spmd[4, 2](A, B, result)
+  result = matmul_128x128x512_spmd[4, 2](A, B)
 
   print(result) # an implicit XLA barrier/mark-step

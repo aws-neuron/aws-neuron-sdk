@@ -21,10 +21,10 @@ PyTorch Reference Implementation
 Before jumping to NKI, let's examine the compute definition of a Mamba-v1 layer using the below PyTorch script
 (``mamba_torch.py``):
 
-.. literalinclude:: ../examples/fused_mamba/mamba_torch.py
+.. nki_example:: ../examples/fused_mamba/mamba_torch.py
    :language: python
    :linenos:
-   :lines: 8-101
+   :marker: NKI_EXAMPLE_24
 
 The input tensor shapes are as follows:
 
@@ -466,10 +466,10 @@ Initial NKI Kernel
 
 Putting all the pieces together from the previous section, we can arrive at the below kernel implementation ``mamba_v1``:
 
-.. literalinclude:: ../examples/fused_mamba/mamba_nki_kernels.py
+.. nki_example:: ../examples/fused_mamba/mamba_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 7-10, 15-86
+   :marker: NKI_EXAMPLE_25
 
 In the above code example,
 
@@ -710,10 +710,10 @@ inside the ``i_channel_tile`` loop and further reduce the ``scanC_accum`` size r
 
 Let's modify our initial NKI kernel implementation accordingly to get ``mamba_v2``:
 
-.. literalinclude:: ../examples/fused_mamba/mamba_nki_kernels.py
+.. nki_example:: ../examples/fused_mamba/mamba_nki_kernels.py
    :language: python
    :linenos:
-   :lines: 88-155
+   :marker: NKI_EXAMPLE_26
 
 We recapture the profile for the new kernel implementation:
 
@@ -767,7 +767,7 @@ SBUF usage peaking at merely 50%. Computation and data movement are also not ove
 utilization in both compute engines and DMA throughput in the overall timeline.
 
 Intuitively, increasing ``seq_len`` of the kernel increases the active tile sizes of input and intermediate tensors in the
-free dimension, which could cause severe fragmentations in SBUF and excessive data movements to spill/reload tensors in
+free dimension, which could cause severe fragmentation in SBUF and excessive data movements to spill/reload tensors in
 SBUF. To mitigate these inefficiencies, we must **tile** the ``seq_len`` dimension in our NKI kernel through a new loop
 level.
 
@@ -936,7 +936,7 @@ discussed in this tutorial.
 * PyTorch reference implementation: :download:`mamba_torch.py <../examples/fused_mamba/mamba_torch.py>`
 * Three versions of NKI kernels: :download:`mamba_nki_kernels.py <../examples/fused_mamba/mamba_nki_kernels.py>`
 
-You can also view the source code in the Github repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/fused_mamba/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/fused_mamba/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

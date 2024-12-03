@@ -1,11 +1,15 @@
+from neuronxcc import nki
 import neuronxcc.nki.language as nl
 
-def nki_tensor_add_kernel(a_input, b_input, c_output):
+@nki.jit
+def nki_tensor_add_kernel(a_input, b_input):
     """NKI kernel to compute element-wise addition of two input tensors
     """
 
+    c_output = nl.ndarray(a_input.shape, dtype=a_input.dtype, buffer=nl.shared_hbm)
+
     # Check all input/output tensor shapes are the same for element-wise operation
-    assert a_input.shape == b_input.shape == c_output.shape
+    assert a_input.shape == b_input.shape
 
     # Check size of the first dimension does not exceed on-chip memory tile size limit,
     # so that we don't need to tile the input to keep this example simple
@@ -21,16 +25,17 @@ def nki_tensor_add_kernel(a_input, b_input, c_output):
     # Store the result to c_output from on-chip memory to device memory
     nl.store(c_output, value=c_tile)
 
+    return c_output
+
 
 if __name__ == "__main__":
-    import jax
+    # NKI_EXAMPLE_11_BEGIN
     import jax.numpy as jnp
-    from jax_neuronx import nki_call
 
     a = jnp.ones((4, 3), dtype=jnp.float16)
     b = jnp.ones((4, 3), dtype=jnp.float16)
 
-    c = nki_call(nki_tensor_add_kernel, a, b,
-                out_shape=jax.ShapeDtypeStruct(a.shape, dtype=a.dtype))
+    c = nki_tensor_add_kernel(a, b)
 
     print(c)
+    # NKI_EXAMPLE_11_END
