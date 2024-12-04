@@ -1,9 +1,9 @@
 .. _aws-inf1-arch:
 
-AWS Inf1 Architecture
-=====================
+Amazon EC2 Inf1 Architecture
+==============================
 
-On this page, we provide an architectural overview of the AWS Inf1
+On this page, we provide an architectural overview of the Amazon EC2 Inf1
 instance and the corresponding :ref:`Inferentia <inferentia-arch>` NeuronDevices that power
 them (:ref:`Inferentia <inferentia-arch>` devices from here on).
 

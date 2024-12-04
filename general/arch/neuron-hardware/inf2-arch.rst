@@ -1,9 +1,9 @@
 .. _aws-inf2-arch:
 
-AWS Inf2 Architecture
-=====================
+Amazon EC2 Inf2 Architecture
+=============================
 
-On this page we provide an architectural overview of the AWS Inf2
+On this page we provide an architectural overview of the Amazon EC2 Inf2
 instances and the corresponding Inferentia2 NeuronDevices that power
 them (Inferentia2 devices from here on).
 

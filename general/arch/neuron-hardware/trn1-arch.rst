@@ -1,7 +1,7 @@
 .. _aws-trn1-arch:
 
-AWS Trn1/Trn1n Architecture
-===========================
+Amazon EC2 Trn1/Trn1n Architecture
+===================================
 
 On this page, we provide an architectural overview of the AWS Trn1/Trn1n
 instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices that power them

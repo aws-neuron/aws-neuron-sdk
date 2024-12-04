@@ -46,7 +46,7 @@ see :ref:`model_samples_tutorials`.
    Get Started with Neuron </general/quick-start/index>
    Samples and Tutorials </general/models/index>
    Performance </general/benchmarks/index>
-   What’s new </release-notes/index>
+   What’s New </release-notes/index>
    Announcements </general/announcements/index>
 
 .. toctree::
@@ -72,7 +72,7 @@ see :ref:`model_samples_tutorials`.
    :maxdepth: 1
    :caption: Additional ML Libraries
 
-   Third Party libraries </libraries/third-party-libraries/third-party-libraries>
+   Third Party Libraries </libraries/third-party-libraries/third-party-libraries>
    Transformers Neuron </libraries/transformers-neuronx/index>
    AWS Neuron reference for NeMo Megatron </libraries/nemo-megatron/index>
 
@@ -82,21 +82,21 @@ see :ref:`model_samples_tutorials`.
    :caption: Developer flows
 
    Neuron DLAMI </dlami/index>
-   Neuron containers </containers/index>
-   AWS Workload orchestration </general/devflows/index>
+   Neuron Containers </containers/index>
+   AWS Workload Orchestration </general/devflows/index>
    Amazon SageMaker </general/devflows/sagemaker-flows>
-   Third-party solutions <general/devflows/third-party-solutions>
-   Setup guide </general/setup/index>
+   Third-party Solutions <general/devflows/third-party-solutions>
+   Setup Guide </general/setup/index>
 
 .. toctree::
    :hidden:
    :maxdepth: 1
    :caption: Runtime & Tools
 
-   Neuron runtime </neuron-runtime/index>
+   Neuron Runtime </neuron-runtime/index>
    Monitoring Tools </general/monitoring-tools>
    Profiling Tools </general/profiling-tools>
-   Third-party solutions <tools/third-party-solutions>
+   Third-party Solutions <tools/third-party-solutions>
    Other Tools </general/other-tools>
 
 .. toctree::
@@ -104,7 +104,7 @@ see :ref:`model_samples_tutorials`.
    :maxdepth: 1
    :caption: Compiler
 
-   Neuron compiler </compiler/index>
+   Neuron Compiler </compiler/index>
    Neuron Kernel Interface (Beta) <general/nki/index>
    Neuron C++ Custom Operators </neuron-customops/index>
 
@@ -118,7 +118,7 @@ see :ref:`model_samples_tutorials`.
    Application notes </general/appnotes/index>
    FAQ </general/faq>
    Troubleshooting </general/troubleshooting>
-   AWS Neuron glossary </general/arch/glossary>
+   Neuron Glossary </general/arch/glossary>
 
 .. toctree::
    :hidden:
@@ -127,13 +127,12 @@ see :ref:`model_samples_tutorials`.
 
    Apache MXNet </frameworks/mxnet-neuron/index>
 
-
 .. toctree::
    :hidden:
    :maxdepth: 1
    :caption: About Neuron
 
-   Release details </release-notes/release>
+   Release Details </release-notes/release>
    Roadmap </general/roadmap-readme>
    Support </general/support>
 

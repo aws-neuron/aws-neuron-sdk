@@ -1,7 +1,7 @@
 .. _trainium2-arch:
 
 ######################
-Trainium2 architecture
+Trainium2 Architecture
 ######################
 
 Trainium2 is the third generation, purpose-built Machine Learning chip from AWS. It powers Amazon EC2 trn2-16.48xlarge instances and 

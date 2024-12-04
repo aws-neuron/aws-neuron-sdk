@@ -1,7 +1,7 @@
 .. _aws-trn2-arch:
 
 ############################
-Amazon EC2 Trn2 architecture
+Amazon EC2 Trn2 Architecture
 ############################
 
 Trn2 is an Amazon EC2 accelerated computing instance, purpose built for high-performance deep learning training and inference. This page provides 

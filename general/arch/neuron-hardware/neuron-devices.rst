@@ -1,9 +1,9 @@
 .. _neurondevices-arch:
 
-AWS AI Chips Architecture
-=========================
+Amazon EC2 AI Chips Architecture
+=================================
 
-AWS AI Chips (Neuron Devices) are the accelerated machine learning chips (e.g. Inferentia or Trainium) that enable Trn and Inf instance.
+Amazon EC2 AI Chips (Neuron Devices) are the accelerated machine learning chips (e.g. Inferentia or Trainium) that enable Trn and Inf instance.
 
 For a detailed description of current Neuron Devices:
 

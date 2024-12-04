@@ -30,13 +30,15 @@ Neuron Quick Links
                 * :ref:`transformers_neuronx_readme`
                 * :ref:`nemo-megatron-index`
 
-        .. grid-item-card:: User guides
+        .. grid-item-card:: User Guides
                 
                 * :ref:`neuron_runtime`
                 * :ref:`neuron_cc`
                 * :ref:`Neuron Kernel Interface (NKI) (beta)<neuron-nki>`
                 * :ref:`Neuron Custom C++ Operators (beta)<neuron_c++customops>`
-                * :ref:`neuron-tools`
+                * :ref:`monitoring_tools`
+                * :ref:`profiling-tools`
+                * :ref:`other-tools`
                 * :ref:`setup-guide-index`
                 * :ref:`neuron-dlami-overview`
                 * :ref:`neuron_containers`

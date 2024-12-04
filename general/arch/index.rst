@@ -1,6 +1,6 @@
 .. _neuron-architecture-index:
 
-Neuron architecture
+Neuron Architecture
 ===================
 
 The Neuron Architecture provides insights into Neuron enabled instances system, software and chip capabilities. 
@@ -13,7 +13,7 @@ NeuronCore versions and capabilities. The Neuron model architecture fit provides
       :hidden:
 
       Trn/Inf Instances </general/arch/neuron-hardware/neuron-instances>
-      AWS AI Chips </general/arch/neuron-hardware/neuron-devices>
+      Amazon EC2 AI Chips </general/arch/neuron-hardware/neuron-devices>
       NeuronCores </general/arch/neuron-hardware/neuroncores-arch>
 
 
