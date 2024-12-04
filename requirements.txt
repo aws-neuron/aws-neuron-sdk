@@ -27,3 +27,4 @@ traitlets
 nbformat
 numpy==1.21.2
 ml_dtypes~=0.2.0
+sphinxcontrib-googleanalytics

@@ -30,4 +30,5 @@ sphinxcontrib-qthelp
 sphinxcontrib-serializinghtml
 traitlets
 ml_dtypes~=0.2.0
+sphinxcontrib-googleanalytics
 

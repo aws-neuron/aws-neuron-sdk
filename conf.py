@@ -87,6 +87,7 @@ extensions = [
     'archive',
     "sphinx_copybutton",
     "nki_directives",
+    'sphinxcontrib.googleanalytics',
 ]
 
 
@@ -233,6 +234,9 @@ post_auto_image = 1
 post_auto_excerpt = 2
 execution_show_tb = "READTHEDOCS" in os.environ
 
+# --- Google Analytics Sphinx extension ---
+
+googleanalytics_id = 'G-2Q13EGB80HID'
 
 # --- for neuron-tag directive ---
 
