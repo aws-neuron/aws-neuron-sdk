@@ -7,6 +7,14 @@ Neuron Kernel Interface (NKI) release notes
 
 ..    :depth: 2
 
+Neuron Kernel Interface (NKI) (Beta)
+--------------------------------------
+
+Date: 12/03/2024
+
+* NKI support for Trainium2, including full integration with Neuron Compiler. 
+  Users can directly shard NKI kernels across multiple Neuron Cores from an SPMD launch grid. 
+  See :doc:`tutorial <tutorials/spmd_multiple_nc_tensor_addition>` for more info.
 
 Neuron Kernel Interface (NKI) (Beta) [2.20]
 -------------------------------------------
