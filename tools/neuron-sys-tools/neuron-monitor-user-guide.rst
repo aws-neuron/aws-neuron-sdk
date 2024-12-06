@@ -285,17 +285,17 @@ Contains basic information about the Neuron hardware.
        "neuroncore_version": "v3d",
        "neuron_device_count": 16,
        "neuron_device_memory_size": 103079215104,
-       "neuroncore_per_device_count": 8,
-       "logical_neuroncore_size": 2,
+       "neuroncore_per_device_count": 4,
+       "logical_neuroncore_config": 2,
        "error": ""
      }
 
 -  ``neuron_device_type``: type of the Neuron Devices on the instance
--  ``neuroncore_version``: version of the NeuronCores on the instance, for Trn2 it can be either v3 (when the Logical NeuronCore configuration is set to 1) or v3d (when the Logical NeuronCore configuration is set to 2)
+-  ``neuroncore_version``: version of the NeuronCores on the instance
 -  ``neuron_device_count`` : number of available Neuron Devices
 -  ``neuron_device_memory_size``: total memory available on each Neuron Device
 -  ``neuroncore_per_device_count`` : number of NeuronCores present on each Neuron Device
--  ``logical_neuroncore_size`` : the current Logical NeuronCore configuration - which is the number of physical NeuronCores that make up a single NeuronCore
+-  ``logical_neuroncore_config`` : the current Logical NeuronCore configuration
 -  ``error`` : will contain an error string if any occurred when getting this information
    (usually due to the Neuron Driver not being installed or not running).
 

@@ -43,13 +43,6 @@ a single Neuron process:
 
 |overview|
 
-* ``trn2`` instances support two different configurations for logical Neuron Cores (LNC)
-
-  * ``LNC=1`` - There is a 1 to 1 map of logical Neuron Core to physical Neuron Core
-  * ``LNC=2`` - There is a 1 to 2 map of logical Neuron Core to physical Neuron Core
-  * For example, as we can see from the picture above, ``trn2n.48xlarge`` instance with ``LNC=2`` has 16 Neuron Devices with
-    4 LNCs each and a total of 64 LNCs (128 physical NCs)
-
 * The ``NeuronCore <vers> Utilization`` section shows the NeuronCore utilization for the
   currently selected tab. ``<vers>`` is the version of the NeuronCores on the instance (for example,
   ``v2`` for trn1 instances and inf2 instances, ``v3`` for trn2 instances with ``LNC=1``, ``v3d`` for trn2
