@@ -20,8 +20,8 @@ Which AWS chips does NKI support?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 NKI supports all families of chips included in AWS custom-built machine
-learning accelerators, Trainium and Inferentia. This includes the second
-generation of NeuronCore-v2 and the following instances: Inf2, Trn1, Trn1n.
+learning accelerators, Trainium and Inferentia. This includes the second generation chips and beyond, 
+available in the following instance types: Inf2, Trn1, Trn1n and Trn2.
 
 Which hardware engines are supported?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,6 +30,19 @@ The following AWS Trainium and Inferentia hardware engines are
 supported: Tensor Engine, Vector Engine, Scalar Engine, and GpSimd Engine. 
 For more details, see the :ref:`Trainium/Inferentia2 Architecture Guide <trainium_inferentia2_arch>`,
 and refer to :doc:`nki.isa <api/nki.isa>` APIs to identify which engines are utilized for each instruction.
+
+How do I launch a NKI kernel onto a logical NeuronCore with Trainium2 from NKI?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A logical NeuronCore (LNC) can consist of multiple physical NeuronCores. In the current Neuron release, an LNC on Trainium2 can have up to two physical NeuronCores (subject to future changes).
+
+For more details on NeuronCore configurations, see 
+`Logical NeuronCore configurations <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-features/logical-neuroncore-config.html#logical-neuroncore-config>`__.
+
+In NKI, users can launch a NKI kernel onto multiple physical NeuronCores within a logical NeuronCore using single program, multiple data (SPMD) grids.
+
+For a step-by-step guide, please refer to the tutorial here:
+:doc:`SPMD Tensor addition with multiple NeuronCores <tutorials/spmd_multiple_nc_tensor_addition>`.
 
 What ML Frameworks support NKI kernels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
