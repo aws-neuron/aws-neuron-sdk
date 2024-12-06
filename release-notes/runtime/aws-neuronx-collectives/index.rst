@@ -9,6 +9,15 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.23.xx.0]
+------------------------------
+Date: 12/03/2024
+
+Improvements
+^^^^^^^^^^^^
+* Improved startup times for large scale training jobs by up to 5 seconds
+* Enhanced error logging for bootstrap failures
+
 Neuron Collectives [2.22.26.0]
 ------------------------------
 Date: 09/16/2024

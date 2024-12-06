@@ -31,6 +31,42 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.23.xx.0]
+---------------------------------
+Date: 12/03/2024
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added Trainium2 support
+* Added runtime support to surface out-of-bound errors from DGE to customers
+* Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N/INF2E
+* Added runtime support to fail in case of out-of-bound memory access in certain use-cases. (:ref:`reference <nrt-input-dump>`)
+* Added new profiling API for capturing system and device profiles. This feature is currently in beta. See the Neuron Profiler 2.0 (Beta) documentation for usage. (:ref:`reference <neuron-profiler-2-0-guide>`)
+
+Improvements
+^^^^^^^^^^^^
+* Reduced runtime host RAM utilization
+* Improved Neff context switch overhead reducing latency by up to 500us
+* Split hardware errors into more granular categories
+   * ``NRT_EXEC_HW_ERR_HBM_UE`` (1201)
+   * ``NRT_EXEC_HW_ERR_NC_UE`` (1202)
+   * ``NRT_EXEC_HW_ERR_DMA_ABORT`` (1203)
+* Updated runtime to breakdown DMA ring memory usage into more detailed categories
+   * dma rings io
+   * dma rings spill
+   * dma rings collectives
+   * dma rings runtime
+* Updated the ``nrt_load`` error path to print a clear error message when failing to load a collectives Neff instead of aborting
+
+Bug fixes
+^^^^^^^^^
+* Fixed multiple memory corruptions and exhaustions on the collectives failure path
+* Fixed bug where incorrect execution status was passed to the async execution callback
+
+End of Support
+^^^^^^^^^^^^^^
+* Removed INF1 Support from Runtime library
+
 Neuron Runtime Library [2.22.19.0]
 ---------------------------------
 Date: 11/20/2024
