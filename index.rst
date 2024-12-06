@@ -8,6 +8,7 @@ AWS Neuron is the software development kit (SDK) used to run deep learning and g
 
 * **ML Frameworks and Libraries** - Neuron integrates with :ref:`PyTorch  <pytorch-neuronx-main>` and :ref:`JAX <jax-neuron-main>`, and offers :ref:`NxD Training <nxdt>` and :ref:`NxD Inference <nxdi-index>` PyTorch libraries for distributed workflows. It also supports `Hugging Face Optimum Neuron <https://huggingface.co/docs/optimum-neuron/en/index>`_, `PyTorch Lightning <https://lightning.ai/lightning-ai/studios/finetune-llama-90-cheaper-on-aws-trainium~01hh3kj60fs8b8x91rv9n9fn2j?section=featured>`_, and `AXLearn library <https://github.com/apple/axlearn>`_ for JAX model training.
 
+* **Frontier Models Support**  - Neuron supports frontier models such as Llama3.3-70b and Llama Llama3.1-405b.
 
 * **Developer Tools** - Neuron provides :ref:`health monitoring, observability <monitoring_tools>`, and :ref:`profiling tools <profiling-tools>` for AWS Inferentia and Trainium instances. It tracks hardware utilization, model execution metrics, and device information. The Neuron Profiler identifies performance bottlenecks. Neuron also integrates with :ref:`third-party  <third-party-tool-solutions>`  monitoring tools like Datadog and Weights and Biases.
 
