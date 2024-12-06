@@ -236,7 +236,7 @@ execution_show_tb = "READTHEDOCS" in os.environ
 
 # --- Google Analytics Sphinx extension ---
 
-googleanalytics_id = 'G-2Q13EGB80HID'
+googleanalytics_id = 'G-2Q13EGB80H'
 
 # --- for neuron-tag directive ---
 
