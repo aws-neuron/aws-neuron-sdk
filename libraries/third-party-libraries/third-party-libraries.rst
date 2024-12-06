@@ -10,6 +10,11 @@ AWS Neuron integrates with multiple third-party partner products that alow you t
 instances powered by AWS Trainium and AWS Inferentia chips. The following list gives an overview of the third-party libraries 
 working with AWS Neuron.
 
+.. contents:: Table of contents
+   :local:
+   :depth: 1
+
+
 Hugging Face Optimum Neuron
 """"""""""""""""""""""""""""
 

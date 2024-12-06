@@ -6,6 +6,10 @@ Amazon SageMaker
 Amazon SageMaker is a fully managed machine learning (ML) platform that streamlines the end-to-end ML workflow at scale. AWS Neuron integrates 
 with Amazon SageMaker to provide optimized performance for ML workloads on AWS Inferentia and AWS Trainium chips.
 
+.. contents:: Table of contents
+   :local:
+   :depth: 1
+
 SageMaker JumpStart
 """""""""""""""""""
 Use `Amazon SageMaker JumpStart <https://aws.amazon.com/sagemaker/jumpstart/>`_ to train and deploy models using Neuron.  SageMaker JumpStart is an ML hub that accelerates model 
