@@ -32,8 +32,8 @@ customers to choose between four instance sizes:
         - Host Memory (GiB)
         - FP16/BF16 TFLOPS
         - INT8 TOPS
-        - Chip Memory (GiB)
-        - Chip Memory bandwidth (GiB/sec)
+        - Device Memory (GiB)
+        - Device Memory bandwidth (GiB/sec)
         - NeuronLink-v1 chip-to-chip bandwidth (GiB/sec/chip)
         - EFA bandwidth (Gbps)
 

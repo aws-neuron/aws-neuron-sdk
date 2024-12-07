@@ -32,8 +32,8 @@ An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>
         - Host Memory (GiB)
         - FP8/FP16/BF16/TF32 TFLOPS
         - FP32 TFLOPS
-        - Chip Memory (GiB)
-        - Chip Memory Bandwidth (GiB/sec)
+        - Device Memory (GiB)
+        - Device Memory Bandwidth (GiB/sec)
         - EFA bandwidth (Gbps)
 
     *   - Trn1.2xlarge

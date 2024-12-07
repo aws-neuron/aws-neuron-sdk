@@ -27,7 +27,7 @@ Each Trainium2 chip consists of the following components:
 |                                  | * 181 FP32 TFLOPS                                   |
 |                                  |                                                     |
 +----------------------------------+-----------------------------------------------------+
-| Chip Memory                      | 96 GiB of chip memory with 2.9 TB/sec of            |
+| Device Memory                    | 96 GiB of device memory with 2.9 TB/sec of          |
 |                                  | bandwidth.                                          |             
 +----------------------------------+-----------------------------------------------------+
 | Data Movement                    | 3.5 TB/sec of DMA bandwidth, with inline            |

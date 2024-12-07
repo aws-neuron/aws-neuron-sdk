@@ -88,10 +88,10 @@ The following table shows the performance metrics for Trainium2 based instances.
     *   - FP32 PFLOPS
         - 2.9
         - 11.6
-    *   - Chip Memory (GiB)
+    *   - Device Memory (GiB)
         - 1,536
         - 6,144
-    *   - Chip Memory Bandwidth (TB/sec)
+    *   - Device Memory Bandwidth (TB/sec)
         - 46.4
         - 185.6
     *   - Intra-instance NeuronLink-v3 bandwidth (GB/sec/chip)

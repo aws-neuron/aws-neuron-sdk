@@ -18,7 +18,7 @@ Each Inferentia2 chip consists of:
 |                                  | 190 FP16/BF16/cFP8/TF32 TFLOPS,  |
 |                                  | and 47.5 FP32 TFLOPS.            |
 +----------------------------------+----------------------------------+
-| Chip Memory                      | 32GiB of high-bandwidth chip     |                                  
+| Device Memory                    | 32GiB of high-bandwidth device   |                                  
 |                                  | memor (HBM) (for storing model   |                                  
 |                                  | state), with 820 GiB/sec of      |                                  
 |                                  | bandwidth.                       |

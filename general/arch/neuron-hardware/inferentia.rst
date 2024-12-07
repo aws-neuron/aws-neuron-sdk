@@ -19,7 +19,7 @@ Each Inferentia chip consists of:
 |               | cores, delivering 128 INT8 TOPS and 64    |   
 |               | FP16/BF16 TFLOPS                          |  
 +---------------+-------------------------------------------+
-| Chip Memory   | 8GiB of chip DRAM memory (for storing   |  
+| Device Memory | 8GiB of device DRAM memory (for storing   |  
 |               | parameters and intermediate state), with  | 
 |               | 50 GiB/sec of bandwidth                   | 
 +---------------+-------------------------------------------+

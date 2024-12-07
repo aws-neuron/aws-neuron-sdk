@@ -20,7 +20,7 @@ Each Trainium chip consists of:
 |                                  | 190 FP16/BF16/cFP8/TF32 TFLOPS,  |
 |                                  | and 47.5 FP32 TFLOP.             |
 +----------------------------------+----------------------------------+
-| Chip Memory                      | 32 GiB of chip memory (for       |                                  
+| Device Memory                    | 32 GiB of device memory (for     |                                  
 |                                  | storing model state), with 820   |                                  
 |                                  | GiB/sec of bandwidth.            |             
 +----------------------------------+----------------------------------+
