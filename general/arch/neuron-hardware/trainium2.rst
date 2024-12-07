@@ -4,39 +4,39 @@
 Trainium2 Architecture
 ######################
 
-Trainium2 is the third generation, purpose-built Machine Learning chip from AWS. It powers Amazon EC2 trn2-16.48xlarge instances and 
-the u-trn2x64 UltraServer. Every Trainium2 device contains eight NeuronCore-V3. Beginning with Trainium2, AWS Neuron adds support for Logical 
+Trainium2 is the third generation, purpose-built Machine Learning chip from AWS. Every Trainium2 chip contains eight NeuronCore-V3. Beginning with Trainium2, AWS Neuron adds support for Logical 
 NeuronCore Configuration (LNC), which lets you combine the compute and memory resources of multiple physical NeuronCores into a 
-single logical NeuronCore. The following diagram shows the architecture overview of a Trainium2 device.
+single logical NeuronCore. The following diagram shows the architecture overview of a Trainium2 chip.
 
 .. image:: /images/architecture/Trainium2/trainium2.png
     :align: center
     :width: 400
+    
 ===========================
-Trainium2 device components
+Trainium2 chip components
 ===========================
 
-Each Trainium2 device consists of the following components:
+Each Trainium2 chip consists of the following components:
 
 +----------------------------------+-----------------------------------------------------+
 | Compute                          | Eight NeuronCore-v3 that collectively deliver:      |
 |                                  |                                                     |
-|                                  | * 1,287 FP8 TFLOPS                                  | 
-|                                  | * 655 BF16/FP16/TF32 TFLOPS                         |
-|                                  | * 2,551 FP8/FP16/BF16/TF32 sparse TFLOPS            |
+|                                  | * 1,299 FP8 TFLOPS                                  | 
+|                                  | * 667 BF16/FP16/TF32 TFLOPS                         |
+|                                  | * 2,563 FP8/FP16/BF16/TF32 sparse TFLOPS            |
 |                                  | * 181 FP32 TFLOPS                                   |
 |                                  |                                                     |
 +----------------------------------+-----------------------------------------------------+
-| Device Memory                    | 96 GiB of device memory with 2.9 TB/sec of          |
+| Chip Memory                      | 96 GiB of chip memory with 2.9 TB/sec of            |
 |                                  | bandwidth.                                          |             
 +----------------------------------+-----------------------------------------------------+
 | Data Movement                    | 3.5 TB/sec of DMA bandwidth, with inline            |
 |                                  | memory compression and decompression.               |
 +----------------------------------+-----------------------------------------------------+
-| NeuronLink                       | NeuronLink-v3 for device-to-device interconnect     |
-|                                  | provides 1.28 TB/sec bandwidth per device. It allows|
+| NeuronLink                       | NeuronLink-v3 for chip-to-chip interconnect         |
+|                                  | provides 1.28 TB/sec bandwidth per chip. It allows  |
 |                                  | for efficient scale-out training and inference, as  |
-|                                  | well as memory pooling between Trainium2 devices.   |
+|                                  | well as memory pooling between Trainium2 chips.     |
 +----------------------------------+-----------------------------------------------------+
 | Programmability                  | Trainium2 supports dynamic shapes and control flow  |
 |                                  | via NeuronCore-v3 ISA extensions. Trainium2 also    |
@@ -46,14 +46,14 @@ Each Trainium2 device consists of the following components:
 |                                  | custom operators via deeply embedded GPSIMD engines.|
 +----------------------------------+-----------------------------------------------------+
 | Collective communication         | 20 CC-Cores orchestrate collective communication    |
-|                                  | among Trainium2 devices within and across instances.|
+|                                  | among Trainium2 chips within and across instances.  |
 +----------------------------------+-----------------------------------------------------+     
 
 ==================================
 Trainium2 performance improvements
 ==================================
 
-The following set of tables offer a comparison between Trainium and Trainium2 devices. 
+The following set of tables offer a comparison between Trainium and Trainium2 chips. 
  
 Compute
 """""""
@@ -71,11 +71,11 @@ Compute
     
     *   - FP8 (TFLOPS)
         - 191
-        - 1287
+        - 1299
         - 6.7x
     *   - BF16/FP16/TF32 (TFLOPS)
         - 191
-        - 655
+        - 667
         - 3.4x
     *   - FP32 (TFLOPS)
         - 48
@@ -83,7 +83,7 @@ Compute
         - 3.7x
     *   - FP8/FP16/BF16/TF32 Sparse (TFLOPS)
         - Not applicable
-        - 2551 
+        - 2563 
         - Not applicable
 
 Memory
@@ -113,8 +113,8 @@ Memory
         - 224
         - 4.7x
     *   - Memory Pool Size
-        - Up to 16 devices
-        - Up to 64 devices
+        - Up to 16 chips
+        - Up to 64 chips
         - 4x
 
 Interconnect
@@ -131,7 +131,7 @@ Interconnect
         - Trainium2
         - Improvement factor
     
-    *   - Inter-chip Interconnect (GB/sec/device)
+    *   - Inter-chip Interconnect (GB/sec/chip)
         - 384
         - 1280
         - 3.3x

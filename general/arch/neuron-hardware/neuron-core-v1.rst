@@ -5,7 +5,7 @@ NeuronCore-v1 Architecture
 --------------------------
 
 NeuronCore-v1 is the first generation NeuronCore engine, powering
-the Inferentia NeuronDevices. Each NeuronCore-v1 is a fully-independent
+the Inferentia chips. Each NeuronCore-v1 is a fully-independent
 heterogenous compute-unit, with three main engines (Tensor/Vector/Scalar
 Engines), and on-chip software-managed SRAM memory, for
 maximizing data locality (compiler managed, for maximum data locality

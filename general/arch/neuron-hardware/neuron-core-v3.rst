@@ -3,7 +3,7 @@
 NeuronCore-v3 Architecture
 --------------------------
 
-NeuronCore-v3 is the third-generation NeuronCore that powers Trainium2 devices. It is a fully-independent heterogenous compute 
+NeuronCore-v3 is the third-generation NeuronCore that powers Trainium2 chips. It is a fully-independent heterogenous compute 
 unit consisting of 4 main engines: Tensor, Vector, Scalar, and GPSIMD, with on-chip software-managed SRAM memory to maximize data 
 locality and optimize data prefetch. The following diagram shows a high-level overview of the NeuronCore-V3 architecture.
 

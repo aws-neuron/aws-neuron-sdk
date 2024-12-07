@@ -207,7 +207,7 @@ And then we build it using the ``torch_neuronx`` package in ``build.py``:
         build_directory=os.getcwd()
     )
 
-Notice that here we specify both the ``relu.cpp`` and ``shape.cpp`` files separately. This is because the shape functions will be compiled with an x86 compiler and run on the host during the XLA compilation, and the compute functions will be compiled for the NeuronCore device and executed during the training loop. Running ``build.py`` produces the same ``librelu.so`` as in the CPU example, but compiles the source code to execute on the NeuronCore.
+Notice that here we specify both the ``relu.cpp`` and ``shape.cpp`` files separately. This is because the shape functions will be compiled with an x86 compiler and run on the host during the XLA compilation, and the compute functions will be compiled for the NeuronCore accelerator and executed during the training loop. Running ``build.py`` produces the same ``librelu.so`` as in the CPU example, but compiles the source code to execute on the NeuronCore.
 
 In our ``my_ops.py`` file we just use the ``torch_neuronx`` API to load our new library and execute our customOp exactly the same way we did before:
 

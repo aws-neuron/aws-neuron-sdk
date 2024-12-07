@@ -3,7 +3,7 @@
 AWS NeuronCore Architecture
 ===========================
 
-NeuronCores are fully-independent heterogenous compute-units that power Tranium, Tranium2, Inferentia, and Inferentia2 NeuronDevices. 
+NeuronCores are fully-independent heterogenous compute-units that power Tranium, Tranium2, Inferentia, and Inferentia2 chips. 
 For a detailed description of current generation NeuronCore (NeuronCore-v3) hardware engines, see:
 
 * :ref:`neuroncores-v3-arch`

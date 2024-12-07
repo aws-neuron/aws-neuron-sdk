@@ -4,7 +4,7 @@ NeuronCore-v2 Architecture
 --------------------------
 
 NeuronCore-v2 is the second generation of the NeuronCore engine,
-powering the Trainium NeuronDevices. Each NeuronCore-v2 is a
+powering the Trainium chips. Each NeuronCore-v2 is a
 fully-independent heterogenous compute-unit, with 4 main engines
 (Tensor/Vector/Scalar/GPSIMD Engines), and on-chip
 software-managed SRAM memory, for maximizing data locality (compiler

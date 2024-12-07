@@ -1,7 +1,7 @@
 .. _neuroninstances-arch:
 
-Trn and Inf Instances Architecture
-==================================
+Instance and UltraServer Architecture
+=====================================
 
 For a detailed description of Trn Instances:
 

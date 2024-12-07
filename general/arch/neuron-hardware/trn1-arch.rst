@@ -4,8 +4,8 @@ Amazon EC2 Trn1/Trn1n Architecture
 ===================================
 
 On this page, we provide an architectural overview of the AWS Trn1/Trn1n
-instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices that power them
-(Trainium devices from here on).
+instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronChips that power them
+(Trainium chips from here on).
 
 .. contents::  Table of contents
    :local:
@@ -16,7 +16,7 @@ instances, and the corresponding :ref:`Trainium <trainium-arch>` NeuronDevices t
 Trn1/Trn1n Architecture
 -----------------------
 
-An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>` devices.
+An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>` chips.
 
 
 .. list-table::
@@ -27,14 +27,13 @@ An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>
       
 
     *   - Instance size
-        - # of Trainium devices
+        - # of Trainium chips
         - vCPUs
         - Host Memory (GiB)
         - FP8/FP16/BF16/TF32 TFLOPS
         - FP32 TFLOPS
-        - Device Memory (GiB)
-        - Device Memory Bandwidth (GiB/sec)
-        - NeuronLink-v2 device-to-device (GiB/sec/device)
+        - Chip Memory (GiB)
+        - Chip Memory Bandwidth (GiB/sec)
         - EFA bandwidth (Gbps)
 
     *   - Trn1.2xlarge
@@ -72,21 +71,21 @@ An EC2 Trn1/Trn1n instance is powered by up to 16 :ref:`Trainium <trainium-arch>
 
 
 The Trn1.2xlarge instance size allows customers to train their models on
-a single Trainium device, which is useful for small model training, as
+a single Trainium chip, which is useful for small model training, as
 well as for model experimentation. The Trn1.32xlarge and Trn1n.32xlarge instance size come
-with a high-bandwidth and low-latency NeuronLink-v2 device-to-device
-interconnect, which utilizes a 4D-HyperCube topology. This is useful for
-collective communication between the Trainium devices during scale-out
+with a high-bandwidth and low-latency NeuronLink-v2 chip-to-chip
+interconnect, which utilizes a 2D Torus topology. This is useful for
+collective communication between the Trainium chips during scale-out
 training, as well as for pooling the memory capacity of all Trainium
-devices, making it directly addressable from each of the devices.
+chips, making it directly addressable from each of the chips.
 
-In a Trn1/Trn1n server, the Trainium devices are connected in a 2D Torus topology, as depicted below:
+In a Trn1/Trn1n server, the Trainium chips are connected in a 2D Torus topology, as depicted below:
 
 .. image:: /images/trn1-topology.png
 
 The Trn1/Trn1n instances are also available in an EC2 UltraCluster, which
-enables customers to scale Trn1/Trn1n instances to over 30,000 Trainium
-devices, and leverage the AWS-designed non-blocking petabit-scale EFA
+enables customers to scale Trn1/Trn1n instances to over 100,000 Trainium
+chips, and leverage the AWS-designed non-blocking petabit-scale EFA
 networking infrastructure.
 
 .. image:: /images/ultracluster-1.png

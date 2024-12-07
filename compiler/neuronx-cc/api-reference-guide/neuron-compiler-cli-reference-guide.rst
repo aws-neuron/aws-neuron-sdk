@@ -128,7 +128,7 @@ Available Commands:
 
     - ``llm-training``: Enable the compiler to perform optimizations applicable to large language model (LLMS) training runs that  shard parameters, gradients, and optimizer states across data-parallel workers. This is equivalent to the previously documented option argument value of ``NEMO``, which will be deprecated in a future release.
 
-  - :option:`--logical-nc-config <shard_degree>`: Instructs the compiler to shard the input graph across physical NeuronCore devices. Possible numeric values are {1, 2}. (only available on trn2; Default: ``2``)
+  - :option:`--logical-nc-config <shard_degree>`: Instructs the compiler to shard the input graph across physical NeuronCore accelerators. Possible numeric values are {1, 2}. (only available on trn2; Default: ``2``)
 
     Valid values:
 

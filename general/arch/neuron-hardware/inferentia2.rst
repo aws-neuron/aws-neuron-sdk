@@ -3,13 +3,13 @@
 Inferentia2 Architecture
 ------------------------
 
-At the heart of each Inf2 instance are up to twelve Inferentia2 devices (each with two :ref:`NeuronCore-v2 <neuroncores-v2-arch>` cores). Inferentia2 is the second
-generation AWS purpose-built Machine Learning inference accelerator. The Inferentia2 device architecture is depicted below: 
+At the heart of each Inf2 instance are up to twelve Inferentia2 chips (each with two :ref:`NeuronCore-v2 <neuroncores-v2-arch>` cores). Inferentia2 is the second
+generation AWS purpose-built Machine Learning inference accelerator. The Inferentia2 chip architecture is depicted below: 
 
 .. image:: /images/inferentia2.png
 
 
-Each Inferentia2 device consists of:
+Each Inferentia2 chip consists of:
 
 +----------------------------------+----------------------------------+
 | Compute                          | Two :ref:`NeuronCore-v2          |
@@ -18,7 +18,7 @@ Each Inferentia2 device consists of:
 |                                  | 190 FP16/BF16/cFP8/TF32 TFLOPS,  |
 |                                  | and 47.5 FP32 TFLOPS.            |
 +----------------------------------+----------------------------------+
-| Device Memory                    | 32GiB of high-bandwidth device   |                                  
+| Chip Memory                      | 32GiB of high-bandwidth chip     |                                  
 |                                  | memor (HBM) (for storing model   |                                  
 |                                  | state), with 820 GiB/sec of      |                                  
 |                                  | bandwidth.                       |
@@ -28,7 +28,7 @@ Each Inferentia2 device consists of:
 |                                  | compression/decompression.       |
 +----------------------------------+----------------------------------+
 | NeuronLink                       | NeuronLink-v2 for                |                                  
-|                                  | device-to-device interconnect    |                                  
+|                                  | chip-to-chip interconnect        |                                  
 |                                  | enables high-performance         |                                  
 |                                  | collective compute for           |                                  
 |                                  | co-optimization of latency and   |                                  

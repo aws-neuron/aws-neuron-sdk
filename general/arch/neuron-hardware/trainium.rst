@@ -4,14 +4,14 @@
 Trainium Architecture
 ----------------------
 
-At the heart of the Trn1 instance are 16 x Trainium devices (each Trainium include 2 x :ref:`NeuronCore-v2 <neuroncores-v2-arch>`). Trainium is the second
+At the heart of the Trn1 instance are 16 x Trainium chips (each Trainium include 2 x :ref:`NeuronCore-v2 <neuroncores-v2-arch>`). Trainium is the second
 generation purpose-built Machine Learning accelerator from AWS. The
-Trainium device architecture is depicted below:
+Trainium chip architecture is depicted below:
 
 .. image:: /images/trainium-neurondevice.png
 
 
-Each Trainium device consists of:
+Each Trainium chip consists of:
 
 +----------------------------------+----------------------------------+
 | Compute                          | Two :ref:`NeuronCore-v2          |
@@ -20,7 +20,7 @@ Each Trainium device consists of:
 |                                  | 190 FP16/BF16/cFP8/TF32 TFLOPS,  |
 |                                  | and 47.5 FP32 TFLOP.             |
 +----------------------------------+----------------------------------+
-| Device Memory                    | 32 GiB of device memory (for     |                                  
+| Chip Memory                      | 32 GiB of chip memory (for       |                                  
 |                                  | storing model state), with 820   |                                  
 |                                  | GiB/sec of bandwidth.            |             
 +----------------------------------+----------------------------------+
@@ -29,11 +29,11 @@ Each Trainium device consists of:
 |                                  | compression/decompression.       |
 +----------------------------------+----------------------------------+
 | NeuronLink                       | NeuronLink-v2 for                |
-|                                  | device-to-device interconnect    |
+|                                  | chip-to-chip interconnect        |
 |                                  | enables efficient scale-out      |
 |                                  | training, as well as memory      |
 |                                  | pooling between the different    |
-|                                  | Trainium devices.                |
+|                                  | Trainium chips.                  |
 +----------------------------------+----------------------------------+
 | Programmability                  | Trainium supports dynamic shapes |
 |                                  | and control flow, via ISA        |

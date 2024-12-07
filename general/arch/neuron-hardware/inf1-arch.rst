@@ -4,8 +4,8 @@ Amazon EC2 Inf1 Architecture
 ==============================
 
 On this page, we provide an architectural overview of the Amazon EC2 Inf1
-instance and the corresponding :ref:`Inferentia <inferentia-arch>` NeuronDevices that power
-them (:ref:`Inferentia <inferentia-arch>` devices from here on).
+instance and the corresponding :ref:`Inferentia <inferentia-arch>` NeuronChips that power
+them (:ref:`Inferentia <inferentia-arch>` chips from here on).
 
 .. contents:: Table of Contents
    :local:
@@ -16,7 +16,7 @@ them (:ref:`Inferentia <inferentia-arch>` devices from here on).
 Inf1 Architecture
 -----------------
 
-The EC2 Inf1 instance is powered by 16 :ref:`Inferentia <inferentia-arch>` devices, allowing
+The EC2 Inf1 instance is powered by 16 :ref:`Inferentia <inferentia-arch>` chips, allowing
 customers to choose between four instance sizes:
 
 .. list-table::
@@ -27,14 +27,14 @@ customers to choose between four instance sizes:
     
 
     *   - Instance size
-        - # of Inferentia devices
+        - # of Inferentia chips
         - vCPUs
         - Host Memory (GiB)
         - FP16/BF16 TFLOPS
         - INT8 TOPS
-        - Device Memory (GiB)
-        - Device Memory bandwidth (GiB/sec)
-        - NeuronLink-v1 device-to-device bandwidth (GiB/sec/device)
+        - Chip Memory (GiB)
+        - Chip Memory bandwidth (GiB/sec)
+        - NeuronLink-v1 chip-to-chip bandwidth (GiB/sec/chip)
         - EFA bandwidth (Gbps)
 
     *   - Inf1.xlarge
@@ -84,7 +84,7 @@ customers to choose between four instance sizes:
 
 
 
-Inf1 offers a direct device-to-device interconnect called NeuronLink-v1,
+Inf1 offers a direct chip-to-chip interconnect called NeuronLink-v1,
 which enables co-optimizing latency and throughput via the :ref:`Neuron Core Pipeline <neuroncore-pipeline>` technology. 
 
 .. image:: /images/inf1-server-arch.png
