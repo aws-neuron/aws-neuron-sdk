@@ -100,6 +100,10 @@ Decoders
      - Samples and Tutorials
 
    * - gpt-2
+     - nxd-training
+     - * :ref:`megatron_gpt_pretraining`
+   
+   * - gpt-2
      - torch-neuronx
      - * `How to run training jobs for "gpt2" PyTorch model with AWS Trainium <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/hf_language_modeling/gpt2/gpt2.ipynb>`_
        * :ref:`zero1-gpt2-pretraining-tutorial`
@@ -124,6 +128,23 @@ Decoders
      - * :ref:`gpt_neox_tp_zero1_tutorial`
        * `Training GPT-NEOX 6.9B model using neuronx-distributed		 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_6.9b_hf_pretrain>`_
        * `Pre-train GPT Neox 6.9b on Wikicorpus dataset using Neuronx Distributed library <https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow/blob/master/examples/neuronx-distributed/gpt_neox_6.9b/README.md#pre-train-gpt-neox-69b-on-wikicorpus-dataset-using-neuronx-distributed-library>`_
+
+   * - meta-llama/Llama-3.1-70b
+     - neuronx-distributed
+     - * :ref:`llama2_tp_pp_tutorial`
+
+   * - meta-llama/Llama-3.1-8b
+     - neuronx-distributed
+     - * :ref:`llama2_7b_tp_zero1_tutorial`
+
+   * - meta-llama/Llama-3-70b
+     - neuronx-distributed
+     - * :ref:`llama2_tp_pp_tutorial`
+
+   * - meta-llama/Llama-3-8b
+     - nxd-training
+     - * :ref:`hf_llama3_8B_pretraining`
+       * :ref:`hf_llama3_8B_SFT`
 
    * - meta-llama/Llama-3-8b
      - neuronx-distributed
