@@ -37,8 +37,10 @@ see :ref:`model_samples_tutorials`.
       :link-type: ref
 
 
+Overview
+========
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Overview
    
@@ -50,17 +52,22 @@ see :ref:`model_samples_tutorials`.
    What’s New </release-notes/index>
    Announcements </general/announcements/index>
 
+
+ML Frameworks
+=============
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
-   :caption: ML frameworks
+   :caption: ML Frameworks
 
    PyTorch Neuron </frameworks/torch/index>
    JAX Neuron </frameworks/jax/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
 
+NeuronX Distributed (NxD)
+=========================
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: NeuronX Distributed (NxD)
 
@@ -68,8 +75,11 @@ see :ref:`model_samples_tutorials`.
    NxD Inference (Beta) </libraries/nxd-inference/index>
    NxD Core </libraries/neuronx-distributed/index>
    
+
+Additional ML Libraries
+=======================
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Additional ML Libraries
 
@@ -77,10 +87,12 @@ see :ref:`model_samples_tutorials`.
    Transformers Neuron </libraries/transformers-neuronx/index>
    AWS Neuron reference for NeMo Megatron </libraries/nemo-megatron/index>
 
+Developer Flows
+===============
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
-   :caption: Developer flows
+   :caption: Developer Flows
 
    Neuron DLAMI </dlami/index>
    Neuron Containers </containers/index>
@@ -89,8 +101,12 @@ see :ref:`model_samples_tutorials`.
    Third-party Solutions <general/devflows/third-party-solutions>
    Setup Guide </general/setup/index>
 
+
+Runtime & Tools
+===============
+
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Runtime & Tools
 
@@ -100,8 +116,10 @@ see :ref:`model_samples_tutorials`.
    Third-party Solutions <tools/third-party-solutions>
    Other Tools </general/other-tools>
 
+Compiler
+========
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Compiler
 
@@ -109,8 +127,10 @@ see :ref:`model_samples_tutorials`.
    Neuron Kernel Interface (Beta) <general/nki/index>
    Neuron C++ Custom Operators </neuron-customops/index>
 
+Learning Neuron
+===============
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Learning Neuron
 
@@ -121,15 +141,20 @@ see :ref:`model_samples_tutorials`.
    Troubleshooting </general/troubleshooting>
    Neuron Glossary </general/arch/glossary>
 
+
+Legacy Software
+===============
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: Legacy Software
 
    Apache MXNet </frameworks/mxnet-neuron/index>
 
+About Neuron
+============
+
 .. toctree::
-   :hidden:
    :maxdepth: 1
    :caption: About Neuron
 

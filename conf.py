@@ -91,9 +91,44 @@ extensions = [
 ]
 
 
+#html_sidebars = {
+#   'general/announcements/index': ["recentposts.html"],
+#}
+
+#html_sidebars = {
+#    "**": ["google-search.html", "sbt-sidebar-nav.html"],  # Add the search box to all pages
+#    "general/announcements/index": ["recentposts.html"]  # Keep existing config
+#}
+
+
+#html_sidebars = {
+#    "**": [
+#        "google-search.html",  # Your Google Custom Search box
+#        "sbt-sidebar-nav.html",  # For navigation and TOC
+#        "sidebar-logo.html",  # If you have a logo 
+#    ]
+#}
+
+
 html_sidebars = {
-   'general/announcements/index': ["recentposts.html"]
+    "**": [
+        "navbar-logo.html",
+        "search-field.html",
+        "sbt-sidebar-nav.html",
+    ],
+
+    "general/announcements/*": [
+        "navbar-logo.html",
+        "search-field.html",
+        "ablog/postcard.html",
+        "ablog/recentposts.html",
+        "ablog/tagcloud.html",
+        "ablog/categories.html",
+        "ablog/archives.html",
+        "sbt-sidebar-nav.html",
+    ]
 }
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates', 'general/nki/_templates/']
@@ -173,6 +208,13 @@ html_theme_options = {
     "home_page_in_toc": False,
     "repository_branch" : branch_name,
     "announcement": top_banner_message,
+    #"navbar_persistent": [],
+}
+
+html_additional_pages = {
+    "search-results": "search-results.html",
+    "search-field-google":"search-field-google.html",
+    "search-field-rtd":"search-field-rtd.html"
 }
 
 html_context = {
