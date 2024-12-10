@@ -21,26 +21,17 @@ Usage
 
 .. option:: neuronx-cc <command> [parameters]
 
-Common parameters for the Neuron CLI:
-
-- :option:`--verbose <level>`: Specify the level of output produced by the compiler. (Default: ``warning``)
-
-  Valid values:
-
-  - ``info``: Informational messages regarding the progress of model compilation (written to stdout).
-  - ``warning``: Diagnostic messages that report model code that is not inherently erroneous but may be risky or suggest there may have been an error (written to stderr).
-  - ``error``: The compiler detected a condition causing it not complete the compilation successfully (written to stderr).
-  - ``critical``: The compiler encountered an unrecoverable error terminates immediately (written to stderr).
-  - ``debug``: Extensive information regarding the compiler's internal execution phases (written to stdout).
-
-- :option:`--help`: Display a usage message of compiler options.
-    Use :option:`neuronx-cc <command> --help` for information on a specific command.
-
 Available Commands:
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :option:`compile`
 -  :option:`list-operators`
+
+Common parameters for the Neuron CLI:
+
+- :option:`--help`: Display a usage message of compiler options.
+    Use :option:`neuronx-cc <command> --help` for information on a specific command.
+
 
 .. _neuronx-cc-compile:
 
@@ -49,6 +40,7 @@ Available Commands:
   .. _description-1:
 
   Compile a model for use on the AWS Machine Learning Accelerator.
+
 
   .. code-block:: shell
 
@@ -67,6 +59,8 @@ Available Commands:
      [--enable-fast-loading-neuron-binaries]
      [--logfile <filename>]
      [--output <filename>]
+     [--verbose <level>]
+
 
   *Compile Parameters:*
 
@@ -158,6 +152,16 @@ Available Commands:
   - :option:`--logfile <filename>`: Filename where compiler writes log messages. (Default: “log-neuron-cc.txt”).
 
   - :option:`--output <filename>`: Filename where compilation output (NEFF archive) will be recorded. (Default: "file.neff”)
+
+  - :option:`--verbose <level>`: Specify the level of output produced by the compiler. (Default: ``warning``)
+
+    Valid values:
+
+    - ``info``: Informational messages regarding the progress of model compilation (written to stdout).
+    - ``warning``: Diagnostic messages that report model code that is not inherently erroneous but may be risky or suggest there may have been an error (written to stderr).
+    - ``error``: The compiler detected a condition causing it not complete the compilation successfully (written to stderr).
+    - ``critical``: The compiler encountered an unrecoverable error terminates immediately (written to stderr).
+    - ``debug``: Extensive information regarding the compiler's internal execution phases (written to stdout).
 
   *Example*:
     Compiling an XLA HLO:
