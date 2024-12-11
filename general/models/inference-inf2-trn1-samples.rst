@@ -194,7 +194,7 @@ Vision Transformers
 
    * - clip-vit-base-patch32
      - torch-neuronx
-     - * `HuggingFace Pretrained CLIP Base Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples-staging/blob/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_
+     - * `HuggingFace Pretrained CLIP Base Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_
 
 
    * - clip-vit-large-patch14
