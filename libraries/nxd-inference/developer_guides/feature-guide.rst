@@ -163,9 +163,8 @@ Compile-time Configurations
 ---------------------------
 
 NxD Inference models support a variety of compile-time
-configurations that you can use to tune model performance. For more
-information, see `Configuration: [Docs] NxD Inference API
-Reference <https://quip-amazon.com/TDtiAMV2e8XT#temp:C:OAVc06e7670c1434acf86c5700ce>`__.
+configurations you can use to tune model performance. For more
+information, see the :ref:`nxd-inference-api-guide`.
 
 Hugging Face generate() API support
 -----------------------------------
