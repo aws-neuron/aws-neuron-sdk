@@ -20,7 +20,7 @@ For setting up EFA that is needed for multi-node training, please see :ref:`setu
 For XLA-related troubleshooting notes see :ref:`How to debug models in PyTorch
 Neuron <pytorch-neuronx-debug>`
 and `PyTorch-XLA troubleshooting
-guide <https://github.com/pytorch/xla/blob/master/TROUBLESHOOTING.md>`__.
+guide <https://github.com/pytorch/xla/blob/v1.10.0/TROUBLESHOOTING.md>`__.
 
 If your multi-worker training run is interrupted, you may need to kill
 all the python processes (WARNING: this kills all python processes and
