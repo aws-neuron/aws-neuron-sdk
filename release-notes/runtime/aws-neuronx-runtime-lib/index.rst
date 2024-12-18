@@ -39,7 +39,7 @@ New in this release
 ^^^^^^^^^^^^^^^^^^^
 * Added Trainium2 support
 * Added runtime support to detect and fail on out-of-bound memory access in DMA operations
-* Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N/INF2E
+* Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N
 * Added new profiling API for capturing system and device profiles. This feature is currently in beta. See the Neuron Profiler 2.0 (Beta) documentation for usage. (:ref:`reference <neuron-profiler-2-0-guide>`)
 
 Improvements

@@ -76,11 +76,14 @@ Decoders
      - torch-neuronx
      - * `HuggingFace Pretrained GPT2 Feature Extraction on Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_gpt2_feature_extraction_on_trn1.ipynb>`_
   
+   * - meta-llama/Llama-3.3-70B
+     - neuronx-distributed-inference
+     - * :ref:`nxdi-trn2-llama3.3-70b-tutorial`
+
    * - meta-llama/Llama-3.2-90B
      - neuronx-distributed-inference
      - * :ref:`Tutorial for deploying Llama-3.2-90B on Trn1 & Inf2 instances <nxdi-llama3.2-multimodal-tutorial>`
    
-
    * - meta-llama/Llama-3.1-8b
      - transformers-neuronx
      - * `Run Hugging Face Llama 3.1 8B autoregressive sampling on Inf2 & Trn1 with 32k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-32k-sampling.ipynb>`_

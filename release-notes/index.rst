@@ -40,8 +40,8 @@ tasks <nxdi-llama3.2-multimodal-tutorial>`, and Mixture-of-Experts (MoE) model a
 Mixtral and DBRX. The library supports quantization methods, includes
 dynamic sampling, and is compatible with HuggingFace checkpoints and
 generate() API. NxDI also supports distributed strategies including tensor parallelism and incorporates speculative decoding techniques (Draft model and EAGLE). The
-release includes a Llama 3.1 405B model sample on a single trn2.48xlarge
-instance :ref:`Llama 3.1 405B model inference <nxdi-trn2-llama3.1-405b-tutorial>`.
+release includes :ref:`Llama 3.1 405B model sample <nxdi-trn2-llama3.1-405b-tutorial>` and :ref:`Llama 3.3 70B model sample <nxdi-trn2-llama3.3-70b-tutorial>` for inference on a single trn2.48xlarge
+instance.
 
 For more information, see :ref:`NxD Inference documentation <nxdi-overview>` and check the NxD
 Inference Github repository: `aws-neuron/neuronx-distributed-inference <https://github.com/aws-neuron/neuronx-distributed-inference>`_
@@ -212,7 +212,7 @@ More release content can be found in the table below and each component release 
 
    * - Neuron Runtime
      - * Added runtime support to fail in case of out-of-bound memory access when DGE is enabled.
-       * Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N/INF2E
+       * Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N
        * See more at :ref:`neuron-runtime-rn`
      - Inf1,Inf2,Trn1/Trn1n,Trn2
 

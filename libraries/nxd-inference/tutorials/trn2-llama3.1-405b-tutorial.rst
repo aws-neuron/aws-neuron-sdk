@@ -103,6 +103,8 @@ for best performance.
    To use the QKV and MLP kernels, you must set ``torch_dtype`` to ``torch.bfloat16``
    in NeuronConfig.
 
+.. _nxdi-trn2-llama3.1-405b-running:
+
 Tutorial: Run Llama3.1 405B on Trn2
 -----------------------------------
 
@@ -110,7 +112,7 @@ As a prerequisite, this tutorial requires that you have a Trn2 instance
 created from a Deep Learning AMI that has the Neuron SDK pre-installed.
 
 To set up a Trn2 instance using Deep Learning AMI with pre-installed Neuron SDK,
-see :ref:`setup-guide-trn2`.
+see :ref:`nxdi-setup`.
 
 Step 1: Connect to the Trn2 instance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
