@@ -9,7 +9,7 @@ Neuron Custom C++ Operators [Beta]
 
 .. note:: 
 
-        Neuron Custom C++ Operators feature is available only starting from second generation of NeuronCore (NeuronCore-v2)
+        Neuron Custom C++ Operators feature is currently supported on NeuronCore-v2 architecture only, which is found in Trainium (Trn1) and second-generation Inferentia (Inf2) chips.
 
 
 .. toctree::
