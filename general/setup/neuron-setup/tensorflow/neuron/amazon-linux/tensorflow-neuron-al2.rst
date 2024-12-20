@@ -9,7 +9,9 @@
 TensorFlow Neuron ("tensorflow-neuron") Setup on Amazon Linux 2
 ===============================================================
 
-
+.. note::
+   As of 2.20.0, Neuron Runtime no longer supports AL2. Upgrade to AL2023 following the :ref:`AL2 Migration guide <eos-al2>`
+   
 .. contents:: Table of contents
 	:local:
 	:depth: 2

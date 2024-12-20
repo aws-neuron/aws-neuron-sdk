@@ -18,7 +18,7 @@ def allocated_fused_rms_norm_qkv(hidden, weights, norm_dtype=np.float32, eps=1e-
   """
   ...
 
-def allocated_fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False, mixed_percision=True):
+def allocated_fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False, mixed_precision=True):
   r"""
   Allocated fused self attention kernel for small head size Stable Diffusion workload.
   
@@ -43,7 +43,7 @@ def allocated_fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_ca
 
   IO tensor dtypes:
    - This kernel assumes all IO tensors have the same dtype
-   - If mixed_percision is True, then all Tensor Engine operation will be performed in
+   - If mixed_precision is True, then all Tensor Engine operation will be performed in
      bfloat16 and accumulation will be performed in float32. Otherwise the intermediates
      will be in the same type as the inputs.
   """
@@ -103,7 +103,7 @@ def flash_fwd(q, k, v, seed, logit_bias=None, softmax_scale=None, use_causal_mas
 
   IO tensor dtypes:
     - This kernel assumes all IO tensors have the same dtype
-    - If mixed_percision is True, then all Tensor Engine operation will be performed in
+    - If mixed_precision is True, then all Tensor Engine operation will be performed in
       bfloat16 and accumulation will be performed in float32. Otherwise the intermediates
       will be in the same type as the inputs.
 
@@ -130,7 +130,7 @@ def flash_fwd(q, k, v, seed, logit_bias=None, softmax_scale=None, use_causal_mas
   """
   ...
 
-def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False, mixed_percision=True):
+def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False, mixed_precision=True):
   r"""
   Fused self attention kernel for small head size Stable Diffusion workload.
 
@@ -151,7 +151,7 @@ def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=
 
   IO tensor dtypes:
    - This kernel assumes all IO tensors have the same dtype
-   - If mixed_percision is True, then all Tensor Engine operation will be performed in
+   - If mixed_precision is True, then all Tensor Engine operation will be performed in
      bfloat16 and accumulation will be performed in float32. Otherwise the intermediates
      will be in the same type as the inputs.
   """

@@ -62,6 +62,7 @@ and this key allows users to configure the ``trainer``.
     limit_val_batches: 1
     limit_test_batches: 1
     gradient_clip_val: 1.0
+    lnc: 2
 
 .. note::
 
@@ -75,6 +76,20 @@ Number of devices to be used for training. If using torchrun, this is equal to `
 
     * **Type**: integer
     * **Required**: True
+
+**lnc**
+
+Neuron-specific setting that specifies the logical-to-physical Neuron Core mapping ratio.
+This parameter determines the number of physical Neuron cores used for each logical Neuron Core.
+
+Values:
+
+- lnc: 1 - Each node exposes 128 logical devices, with a 1:1 mapping between logical and physical Neuron Cores.
+- lnc: 2 - Implements a 2:1 mapping between logical and physical Neuron Cores.
+
+    * **Type**: integer
+    * **Required**: False
+    * **Default**: None (must be explicitly set)
 
 **num_nodes**
 
@@ -288,7 +303,7 @@ feature provided by NeuronxDistributed's
 
 **resume_from_checkpoint**
 
-Set this as the checkpoint file to load from. Check the SFT example config under ``conf`` on how to use it.
+Set this as the checkpoint file to load from. Check the SFT/DPO example config under ``conf`` on how to use it.
 
     * **Type**: str
     * **Default**: null
@@ -365,9 +380,9 @@ Data
 
 This is where we configure the dataset/dataloader. This config is dependent on the dataloader/dataset been
 used. Users can add custom keys in this config and read inside the ``CustomDataModule`` using ``cfg.data``.
-Currently the library adds support for 3 kinds of data modules: ``MegatronDataModule``, ``SFTDataModule``
+Currently the library adds support for 3 kinds of data modules: ``MegatronDataModule``, ``ModelAlignmentDataModule``
 and ``HFDataModule``. To learn about the config parameters of ``MegatronDataModule`` please check the
-``megatron_llama_7B_config.yaml``, for ``SFTDataModule`` check the ``megatron_llama2_7B_SFT_config.yaml``
+``megatron_llama_7B_config.yaml``, for ``ModelAlignmentDataModule`` check the ``megatron_llama2_7B_SFT_config.yaml``
 and for ``HFDataModule``, refer to ``hf_llama3_8B_config.yaml``.
 
 The parameters that are common across all the configs are documented below.
@@ -421,7 +436,8 @@ Let's start with the config for the HF model:
     use_cpu_initialization: True
 
     ## Activation Checkpointing
-    activations_checkpoint_granularity: selective # 'selective' or 'full'
+    activations_checkpoint_granularity: selective
+    activations_checkpoint_recompute: [CoreAttention]
 
     fusions:
         softmax: True
@@ -482,6 +498,15 @@ This needs to be set if users want to use the
     * **Type**: bool
     * **Required**: True
 
+**fuse_qkv**
+
+This is set if users want to use fused q, k and v tensors in
+`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api-reference-guide-training.html#gqa-qkv-linear-module>`_ Using fuse_qkv can improve throughput. 
+This parameter is True by default.
+
+    * **Type**: bool
+    * **Required**: False
+
 **use_cpu_initialization**
 
 Setting this flag to ``True`` will initialize the weights on ``CPU`` and then move to device. It is recommended to set
@@ -492,16 +517,28 @@ this flag to ``True``. This parameter is common for all models supported in the 
 
 **activations_checkpoint_granularity**
 
-This flags controls which module needs to be recomputed during the backward pass. Setting it to ``selective`` would recompute
-the ``attention block`` (and ``MLP`` block in case of larger ``8K+`` seq-length for ``Llama models``). Setting to
-``full`` will only save activations of every layer and recompute the entire layer during the backward pass. More
-information on activation recompute can be found
+This flag controls which module needs to be recomputed during the backward pass.
+
+Values:
+
+- ``selective`` - Enables selective recomputation of specified modules in `activations_checkpoint_recompute` during the backward pass.
+- ``full`` - Saves activations at layer boundaries and recomputes the entire layer during the backward pass.
+- ``null`` - Disables activation checkpointing.
+
+More information on activation recompute can be found
 `in this link <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/activation_memory_reduction.html#activation-recomputation>`_.
 This parameter is common for all models supported in the library.
 
     * **Type**: str
     * **Possible Values**: ``selective``, ``full``, ``null``
     * **Required**: True
+
+**activations_checkpoint_recompute**
+This config specifies which modules to recompute when using ``selective`` activation checkpointing.
+It accepts a list of module names as strings or `null`.
+
+    * **Type**: list[str] or `null`
+    * **Required**: False
 
 **fusions.softmax**
 
@@ -783,8 +820,126 @@ like - ``master_weights`` , ``fp32_grad_acc``, ``xla_use_bf16``, ``xla_downcast_
 ``neuron_rt_stochastic_rounding_en``.
 
 
-SFT-specific
--------------
+Model Alignment Specific
+------------------------
 
-Follow :ref:`HuggingFace LLama3-8B Supervised Fine-tuning <hf_llama3_8B_SFT>` for SFT-specific
-config to enable finetuning.
+You can configure a finetuning (SFT) or model alignment (DPO) through the YAML file.
+
+.. code-block:: yaml
+
+    data:
+        train_dir: /example_datasets/llama3_8b/training.jsonl
+        val_dir: null
+        dev_choose_samples: 2250
+        seq_length: 4096
+
+        alignment_strategy:
+            # DPO specific config
+            dpo:
+                kl_beta: 0.01
+                loss_type: sigmoid
+                max_dpo_prompt_length: 2048
+                precompute_ref_log_probs: True
+                truncation_mode: keep_start
+
+            # Alternatively, can also use SFT specific config
+            sft:
+                packing: True
+
+    model:
+        weight_init_only: True
+
+**data**
+    **train_dir**
+
+    SFT/DPO training data - jsonl or arrow file
+
+    As for SFT/DPO we use HF style ModelAlignment dataloader, we also use HF style data file paths
+
+        * **Type**: str
+        * **Required**: True
+
+    **val_dir**
+
+    SFT/DPO validation data - jsonl or arrow file
+
+    As for SFT/DPO we use HF style ModelAlignment dataloader, we also use HF style data file paths
+
+        * **Type**: str
+        * **Required**: False
+
+    **dev_choose_samples**
+
+    If set, will use that many number of records from the
+    head of the dataset instead of using all. Set to null to use full dataset
+
+        * **Type**: integer
+        * **Default**: null
+        * **Required**: False
+
+    **seq_length**
+
+    Set sequence length for the training job.
+    For DPO, it is total sequence length of prompt and (chosen/rejected) response concatenated together.
+
+        * **Type**: integer
+        * **Required**: True
+
+    **alignment_strategy**
+
+    Set only when using finetuning specific algorithms (SFT, DPO, etc) and related hyperparameters
+    DPO-specific parameters.
+
+        **dpo**
+            **kl_beta**
+
+            KL-divergence beta to control divergence of policy model from reference model
+
+                * **Type**: float
+                * **Default**: 0.01
+                * **Required**: True
+
+            **loss_type**
+
+            Currently support sigmoid version of optimized DPO loss
+
+                * **Type**: str
+                * **Default**: ``sigmoid``
+                * **Required**: True
+
+            **max_dpo_prompt_length**
+
+            Set maximum length of prompt in the concatenated prompt and (chosen/rejected) response input
+
+                * **Type**: integer
+                * **Required**: True
+
+            **precompute_ref_log_probs**
+
+            To enable precomputation of reference model log probabilities using pre-fit hook,
+            False is not supported currently
+
+                * **Type**: bool
+                * **Required**: True
+
+            **truncation_mode**
+
+            To define how to truncate if size (prompt+response) exceeds seq_length
+            options: ["keep_start", "keep_end"]
+
+                * **Type**: str
+                * **Default**: ``keep_start```
+                * **Required**: True
+
+    SFT-specific parameters.
+
+        **sft**
+            **packing**
+
+            Appends multiple records in a single record until seq length
+            supported by model, if false uses pad tokens to reach seq length.
+            Setting it to True increases throughput but might impact accuracy.
+
+                * **Type**: bool
+                * **Default**: False
+                * **Required**: False

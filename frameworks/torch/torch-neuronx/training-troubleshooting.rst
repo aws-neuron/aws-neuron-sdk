@@ -89,6 +89,37 @@ From inside container where ``sudo`` doesn't work (this change will be reflected
 Possible Error Conditions
 -------------------------
 
+Eager debug mode fails with "urllib3.exceptions.URLSchemeUnknown: Not supported URL scheme http+unix"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running with eager debug mode (NEURON_USE_EAGER_DEBUG_MODE=1) using ``torch-neuronx`` and ``neuronx-cc`` from releases 2.19.1 and 2.20, you may see the following error:
+
+.. code:: bash
+
+   urllib3.exceptions.URLSchemeUnknown: Not supported URL scheme http+unix
+
+This error is due to ``requests`` version >= 2.32. While ``neuronx-cc`` pins ``requests`` package version be less than 2.32, installing other packages like ``transformers`` could bring in a newer version of ``requests``.  To work-around this, you can pin ``requests`` to version 2.31.0 with the following command, which also include ``urllib3`` pinning due to a related issue noted in the next note:
+
+.. code:: bash
+
+   pip install requests==2.31.0 urllib3==1.26.20
+
+Eager debug mode fails with "TypeError: HTTPConnection.request() got an unexpected keyword argument 'chunked'"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running with eager debug mode (NEURON_USE_EAGER_DEBUG_MODE=1) using ``torch-neuronx`` and ``neuronx-cc`` from releases 2.19.1 and 2.20, you may see the following error:
+
+.. code:: bash
+
+   TypeError: HTTPConnection.request() got an unexpected keyword argument 'chunked'
+
+This error is due to ``urllib3`` version >= 2.* and can be a dependency of ``requests`` < 2.32.  To work-around this, you can pin ``urllib3`` to version 1.26.20 with the following command (which also include ``requests`` pinning due a related issue noted the previous note):
+
+.. code:: bash
+
+   pip install requests==2.31.0 urllib3==1.26.20
+
+
 Non-Fatal Error OpKernel ('op: "TPU*" device_type: "CPU"')
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

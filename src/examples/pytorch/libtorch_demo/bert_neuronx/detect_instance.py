@@ -1,3 +1,5 @@
+import torch
+import torch_neuronx
 from typing import Optional
 
 INSTANCETYPE_TO_NEURONCORES = {
@@ -32,6 +34,7 @@ def get_instance_type() -> str:
     except:  # noqa: E722, there are various ways above code can fail and we don't care
         return None
 
+
 def get_num_neuroncores(instance_type: Optional[str] = None) -> int:
     """
     Try to obtain the maximum number of NeuronCores available on this instance.
@@ -49,5 +52,28 @@ def get_num_neuroncores(instance_type: Optional[str] = None) -> int:
             instance_type = get_instance_type()
         return INSTANCETYPE_TO_NEURONCORES[instance_type]
     except KeyError:
-        num_cores = 2
+        num_cores = get_num_neuroncores_v3()
         return num_cores
+
+
+def get_num_neuroncores_v3() -> int:
+    """
+    Retrieve the number of NeuronCores visible to this process.
+
+    Returns:
+        The number of visible neuron cores.
+
+    Raises:
+        RuntimeError: If the Neuron runtime cannot be initialized. This most
+            commonly occurs when executing on an instance with no Neuron
+            devices available or when no Neuron devices are visible to the
+            process.
+    """
+    runtime = torch.classes.neuron.Runtime()
+    try:
+        nc_count = runtime.get_visible_nc_count()
+    except RuntimeError as e:
+        raise RuntimeError(
+            "Neuron runtime cannot be initialized; cannot determine the number of available NeuronCores"  # noqa: E501
+        ) from e
+    return nc_count

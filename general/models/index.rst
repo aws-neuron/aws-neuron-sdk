@@ -19,7 +19,7 @@ and various GitHub repositories.
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
-.. card:: Inference on Inf2 and Trn1
+.. card:: Inference on Inf2, Trn1 and Trn2
     :link: model_samples_inference_inf2_trn1
     :link-type: ref
     :class-body: sphinx-design-class-title-small

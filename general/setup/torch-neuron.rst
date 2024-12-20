@@ -46,20 +46,6 @@ PyTorch Neuron (``torch-neuron``) Setup
         :class-body: sphinx-design-class-title-small
 
 
-``torch-neuron`` setup on Amazon Linux 2 (AL2)
-----------------------------------------------
-
-.. card:: Amazon Linux 2  (DLAMI Base AMI)
-        :link: setup-torch-neuron-al2-base-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Amazon Linux 2 (DLAMI Pytorch AMI)
-        :link: setup-torch-neuron-al2-pytorch-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-
 ``torch-neuron`` setup on Amazon Linux 2023 (AL2023)
 -----------------------------------------------------
 .. card:: Amazon Linux 2023 (Amazon Linux 2023 AMI)

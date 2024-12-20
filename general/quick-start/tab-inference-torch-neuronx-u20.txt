@@ -19,8 +19,8 @@
         .. tab-item:: PyTorch 2.1.2
 
             .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 176
-                :end-line: 177
+                :start-line: 230
+                :end-line: 231
 
         .. tab-item:: PyTorch 1.13.1
 

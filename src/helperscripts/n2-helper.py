@@ -716,9 +716,9 @@ class manifest:
                 if args.framework_version == "1.13.1":   # Work around to pin the version in case of 1.13
                     str += '=='
                     str += "1.13.*"
-                    # str += self.get_package_version(category=args.framework, name=framework_name,
-                    #                         neuron_version=args.neuron_version,
-                    #                         framework_version=args.framework_version)
+                elif args.framework_version == "2.1.2":
+                    str += '=='
+                    str += "2.1.*"
                 str += ' torchvision\n'
             else:
                 str += framework_name
@@ -1086,7 +1086,7 @@ def cli_parse_arguments():
                                      usage='\npython3 %(prog)s --list={packages} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --list={pyversions} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --install-type={install,update}\n'
-                                           + 'python3 %(prog)s --instance={inf1,trn1,inf2}\n'
+                                           + 'python3 %(prog)s --instance={inf1,trn1,inf2,trn2}\n'
                                            + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023,rockylinux9}\n'
                                            + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework,dlami-neuron}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
@@ -1100,7 +1100,7 @@ def cli_parse_arguments():
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
     group.add_argument("--list", choices=['neuron_versions', 'pyversions','packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
-    parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2'])
+    parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2', 'trn2'])
     parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023', 'rockylinux9'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework', 'dlami-neuron'],
                         default='non-dlami', help='default=non-dlami')

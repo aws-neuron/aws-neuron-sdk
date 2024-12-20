@@ -7,6 +7,33 @@ Neuron DLC Release Notes
    :local:
    :depth: 1
 
+
+Known Issues
+------------
+Updated : 12/20/2024
+
+- pytorch-training-neuronx 2.5.1 DLC has a CRITICAL CVE related to `pytorch-lightning` package. However, this issue does not currently affect Neuron DLC consumers, as the vulnerability is specific to the "lightning" package within the Lightning ecosystem.
+ *  `CVE-2024-5452 <https://nvd.nist.gov/vuln/detail/CVE-2024-5452>`_
+- pytorch-training-neuronx 2.5.1 and pytorch-inference-neuronx 2.5.1 DLCs have three HIGH CVEs related to `transformers` package. We are actively monitoring these issues and will publish new DLCs as soon as there is a fix upstream.
+ * `CVE-2024-11392 <https://nvd.nist.gov/vuln/detail/CVE-2024-11392>`_
+ * `CVE-2024-11393 <https://nvd.nist.gov/vuln/detail/CVE-2024-11393>`_
+ * `CVE-2024-11394 <https://nvd.nist.gov/vuln/detail/CVE-2024-11394>`_
+
+Neuron 2.21.0
+-------------
+Date: 12/19/2024
+
+- Added new jax-training-neuronx 0.4 Training DLC that contains all dependencies including drivers, tools and other packages to run :ref:`jax-neuronx-setup` out of the box.
+- Added new pytorch-inference-neuronx 2.5.1 and pytorch-training-neuronx 2.5.1 DLCs
+- PyTorch 1.13.1 and 2.1.2 DLCs reached end of support phase, We now recommend customers to use PyTorch 2.5.1 DLCs by default.
+- All Neuron supported DLCs to use latest Neuron SDK 2.21.0 version.
+- All Neuron supported DLCs are now updated to Ubuntu 22. Here is the list:
+ * pytorch-inference-neuron 2.5.1 with Ubuntu 22
+ * pytorch-training-neuron 2.5.1 with Ubuntu 22
+ * jax-training-neuronx 0.4 with Ubuntu 22
+- pytorch-inference-neuronx now supports both NxD Inference and Transformers NeuronX libraries for inference.
+
+
 Neuron 2.20.2
 -------------
 Date: 11/20/2024

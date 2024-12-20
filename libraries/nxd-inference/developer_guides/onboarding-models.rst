@@ -5,7 +5,7 @@ Onboarding models to run on NxD Inference
 
 This guide covers how to onboard a model to get it to run on NxD Inference
 for the first time. To learn more about how to optimize a model on Neuron,
-see the :ref:`nxdi-developer-guides`.
+see the :ref:`nxdi-feature-guide`.
 
 .. contents:: Table of contents
    :local:
@@ -378,6 +378,8 @@ the following references for more information about these formats:
 - Pickle:
 
   - https://docs.python.org/3/library/pickle.html
+
+.. _nxdi-onboarding-models-vllm:
 
 Integrating Onboarded Model with vLLM
 -------------------------------------

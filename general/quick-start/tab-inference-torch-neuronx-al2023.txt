@@ -1,6 +1,6 @@
 .. _neuronx_installation:
 
-.. dropdown::  Install EFA (Applicable only for ``Trn1\Trn1n``)
+.. dropdown::  Install EFA (Applicable only for ``Trn1\Trn1n\Trn2``)
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
@@ -16,11 +16,17 @@
 
     .. tab-set::
 
-        .. tab-item :: PyTorch 2.1.2
+        .. tab-item :: PyTorch 2.5.1
 
             .. include:: /src/helperscripts/installationScripts/python_instructions.txt
                 :start-line: 179
                 :end-line: 180
+
+        .. tab-item :: PyTorch 2.1.2
+
+            .. include:: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 227
+                :end-line: 228
 
         .. tab-item:: PyTorch 1.13.1
 

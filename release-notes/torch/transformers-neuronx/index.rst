@@ -90,6 +90,42 @@ Model features
      - Yes
      - Yes
 
+Release [0.13.322.0]
+----------------------
+Date: 12/20/2024
+
+Summary
+~~~~~~~
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Flash decoding support for speculative decoding
+- Enabled on-device generation support in speculative decoding flows	
+- Added support for EAGLE speculative decoding support with greedy and lossless sampling
+- Support for CPU compilation and sharded model saving
+
+
+Performance Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~
+- Performance optimized MLP and QKV kernels added for llama models with support for sequence parallel norm
+- Added support to control concurrent compilation workers
+- Added option to skip AllGather using duplicate Q weights during shard over sequence
+
+
+Resolved Issues
+~~~~~~~~~~~~~~~
+
+- Fixed padding issues when requested batch size is smaller than neff compiled size	
+- Fixed sequence parallel norm issue when executor is used with speculative decoding flows
+
+Known Issues and Limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- GPT-NeoX is sensitive to ``fp16`` and customers are advised to use only ``amp="f32"`` for GPT-NeoX.
+- Using ``cache_layout=constants.LAYOUT_BSH`` in NeuronConfig has known limitations with compilation. Customers are advised to use ``constants.LAYOUT_SBH`` instead.
+
+
 Release [0.12.313]
 ----------------------
 Date: 09/16/2024

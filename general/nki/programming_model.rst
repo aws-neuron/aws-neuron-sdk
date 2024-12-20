@@ -15,15 +15,16 @@ NeuronCores, where every kernel consists of three main stages:
 
 :numref:`Fig. %s <nki-fig-pm-nc>` below is a simplified diagram of
 a NeuronCore along with its attached HBM
-device memory. NKI kernels currently target a single NeuronCore-v2.
+device memory. NKI kernels in current release can target a single NeuronCore-v2
+or up to two NeuronCore-v3.
 
 As shown in :numref:`Fig. %s <nki-fig-pm-nc>`, a single NeuronCore consists
 of two on-chip SRAMs (SBUF and PSUM)
 and four heterogenous compute engines: the Tensor
 Engine, Vector Engine, Scalar Engine, and GpSimd Engine.
 For more information about the compute engine capabilities, see
-:doc:`NeuronCore-v2 Architecture <trainium_inferentia2_arch>`.
-Next, let's dive into the memory hierarchy design of NeuronCore-v2,
+:doc:`NeuronDevice Architecture Guide <nki_arch_guides>`.
+Next, let's dive into the memory hierarchy design of NeuronCore,
 which provides the necessary architecture knowledge to
 understand the NKI programming model.
 
@@ -83,7 +84,7 @@ Memory hierarchy
 :numref:`Fig. %s <nki-fig-pm-memory>` below shows the four-level
 memory hierarchy available to a single NeuronCore. The
 ranges provided in the figure are intended to calibrate the programmer's mental
-model. See :doc:`Neuron Architecture <trainium_inferentia2_arch>` for the exact values.
+model. See :doc:`NeuronDevice Architecture Guide <nki_arch_guides>` for the exact values.
 
 Similar to standard memory hierarchy in other devices, memories near the top of the hierarchy
 are the closest to the compute engines; therefore, they are designed to provide the highest

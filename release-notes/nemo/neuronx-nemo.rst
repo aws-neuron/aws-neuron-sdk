@@ -1,7 +1,7 @@
 .. _neuronx-nemo-rn:
 
 
-AWS Neuron Reference for Nemo Megatron(``neuronx-nemo-megatron``) Release Notes 
+AWS Neuron Reference for Nemo Megatron(``neuronx-nemo-megatron``) Release Notes
 ===============================================================================
 
 .. contents:: Table of contents
@@ -9,6 +9,44 @@ AWS Neuron Reference for Nemo Megatron(``neuronx-nemo-megatron``) Release Notes
    :depth: 1
 
 This document lists the release notes for ``neuronx-nemo-megatron`` library.
+
+``neuronx-nemo-megatron`` [0.8.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/20/2024
+
+New in this release
+-------------------
+
+* Added support for HuggingFace to NeMo checkpoint conversion when virtual pipeline parallel is enabled.
+* Added support for Python 3.11
+* Added support for PyTorch 2.5
+* Added collective compute coalescing for ZeRO-1 optimizer
+* Bug fix for flash attention to ensure proper mixed precision data type handling
+
+Known Issues and Limitations
+----------------------------
+
+None at this time.
+
+
+``neuronx-nemo-megatron`` [0.7.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 09/16/2024
+
+New in this release
+-------------------
+
+* Fixed issue with linear warmup with cosine annealing
+* Fixed indexing issues with MPI job checkpoint conversion.
+* Fixed pipeline parallel bug for NeMo to HF checkpoint conversion.
+
+Known Issues and Limitations
+----------------------------
+
+None at this time.
+
 
 ``neuronx-nemo-megatron`` [0.6.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -11,6 +11,7 @@ Tutorials
 
     
     /libraries/nxd-inference/tutorials/trn2-llama3.1-405b-tutorial
+    /libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial
 
     
 

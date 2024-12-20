@@ -9,6 +9,16 @@ model deployment on AWS Inferentia and Trainium instances. Neuronx Distributed
 Inference includes a model hub and modules that users can reference to
 implement their own models on Neuron.
 
+This API guide describes API and configuration functions and parameters that you
+can use when you directly interact with the NxD Inference library.
+
+.. note ::
+
+   NxD Inference also supports integration with vLLM. When you use vLLM, you can
+   use the ``override_neuron_config`` attribute to override defaults using the
+   :ref:`NeuronConfig parameters <nxd-inference-api-guide-neuron-config>` described
+   in this API guide. For more information about vLLM integration, see :ref:`nxdi-vllm-user-guide`.
+
 
 .. contents:: Table of contents
    :local:
@@ -17,10 +27,22 @@ implement their own models on Neuron.
 Configuration
 -------------
 
+NxD Inference defines configuration objects that enable you to control how a model
+is compiled and used for inference. When you compile a model, its configuration is
+serialized to a JSON file in the compiled checkpoint, so you can distribute the
+compiled checkpoint to additional Neuron instances without needing to compile on
+each instance.
+
+NxD Inference supports loading HuggingFace model checkpoints and configurations.
+When you run a model from a HuggingFace checkpoint, NxD Inference loads the model
+configuration from the model's PretrainedConfig.
+
+.. _nxd-inference-api-guide-neuron-config:
+
 NeuronConfig
 ~~~~~~~~~~~~
 
-NeuronConfig contains configuration options for inference on Neuron.
+NeuronConfig contains compile-time configuration options for inference on Neuron. 
 
 Initialization
 ^^^^^^^^^^^^^^
@@ -202,12 +224,14 @@ Attributes
   - ``attn_kernel_enabled`` - Whether to enable the flash attention
     kernel when supported. Defaults to ``false``.
   - ``qkv_kernel_enabled`` - Whether to enable the fused QKV kernel. To
-    use this option, you must set ``fused_qkv`` to ``true``. Defaults to
-    ``false``.
-  - ``mlp_kernel_enabled`` - Whether to enable the MLP kernel. Defaults
+    use this option, you must set ``fused_qkv`` to ``true`` and ``torch_dtype``
+    to ``torch.bfloat16``. Defaults to ``false``.
+  - ``mlp_kernel_enabled`` - Whether to enable the MLP kernel. To use this
+    option, you must set ``torch_dtype`` to ``torch.bfloat16``. Defaults
     to ``false``.
   - ``quantized_mlp_kernel_enabled`` - Whether to enable the quantized
-    MLP kernel. Defaults to ``false``.
+    MLP kernel, which uses FP8 compute to improve performance. To use this
+    option, you must set ``mlp_kernel_enabled`` to ``true``. Defaults to ``false``.
   - ``rmsnorm_quantize_kernel_enabled`` - Whether to enable the
     quantized RMS norm kernel. Defaults to ``false``.
 
@@ -267,8 +291,8 @@ InferenceConfig
 ~~~~~~~~~~~~~~~
 
 InferenceConfig contains a NeuronConfig and model configuration
-attributes. The required model configuration attributes depend on which
-model you configure.
+attributes.
+
 
 .. _initialization-1:
 
@@ -370,7 +394,8 @@ MoENeuronConfig
 ~~~~~~~~~~~~~~~
 
 A NeuronConfig subclass for mixture-of-experts (MoE) models. This config
-includes attributes specific to MoE models.
+includes attributes specific to MoE models. MoE model configurations, such
+as DbrxNeuronConfig, are subclasses of MoENeuronConfig.
 
 .. _initialization-2:
 
@@ -403,8 +428,9 @@ Attributes
 FusedSpecNeuronConfig
 ~~~~~~~~~~~~~~~~~~~~~
 
-A configuration for a model that uses fused speculation, where the
-target and draft models are compiled into a combined model.
+A configuration for a model that uses fused speculation, which is a speculative
+decoding feature where the target and draft models are compiled into a combined model to improve
+performance. For more information, see :ref:`nxd-fused-speculative-decoding`.
 
 .. _attributes-3:
 
@@ -422,7 +448,8 @@ Generation
 HuggingFaceGenerationAdapter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To use HuggingFace-style generation, create a
+NxD Inference supports running inference with the HuggingFace ``generate``
+inference. To use HuggingFace-style generation, create a
 HuggingFaceGenerationAdapter that wraps a Neuron application model.
 Then, you can call ``generate`` on the adapted model.
 
@@ -450,7 +477,9 @@ NeuronApplicationBase
 NeuronApplicationBase is the base class for all application models,
 including NeuronBaseForCausalLM. NeuronApplicationBase provides
 functions to compile and load models. This class extends
-``torch.nn.Module``.
+``torch.nn.Module``. Application models are the entry point to running
+inference with NxD Inference. You can extend this class to define new
+application models that implement use cases in addition to causal LM.
 
 .. _attributes-4:
 
@@ -537,8 +566,9 @@ Functions
 NeuronBaseForCausalLM
 ~~~~~~~~~~~~~~~~~~~~~
 
-NeuronBaseForCausalLM is the base application class for causal language
-models. This class extends NeuronApplicationBase.
+NeuronBaseForCausalLM is the base application class that you use to generate
+text with causal language models. This class extends NeuronApplicationBase.
+You can extend this class to run text generation in custom models.
 
 .. _attributes-5:
 
@@ -570,7 +600,9 @@ NeuronBaseModel
 ~~~~~~~~~~~~~~~
 
 NeuronBaseModel is the base class for all models. This class extends
-``torch.nn.Module``.
+``torch.nn.Module``. In instances of NeuronBaseModel, you define the
+modules, such as attention, MLP, and decoder layers, that make up a model.
+You can extend this class to define custom decoder models.
 
 .. _attributes-6:
 
@@ -622,6 +654,9 @@ as NeuronBaseForCausalLM, use this class to prepare a model for
 compilation. ModelWrapper defines the inputs to use when tracing the
 model during compilation.
 
+To define a custom model with additional model inputs, you can extend ModelWrapper
+and override the ``input_generator`` function, which defines the inputs for tracing.
+
 .. _functions-6:
 
 Functions
@@ -631,3 +666,8 @@ Functions
   a model wrapper from a given config and model class. This model class
   is used to compile the model with the given compiler args. The tag is
   used to identify the compiled model in the application.
+- ``input_generator(self)`` - Returns a list of input tensors to use to trace
+  the model for compilation. When you trace and compile a model, the trace captures
+  only the code paths that are run with these inputs. To support different inputs and
+  code paths based on configuration options, provide configuration-specific inputs
+  in ``input_generator``.

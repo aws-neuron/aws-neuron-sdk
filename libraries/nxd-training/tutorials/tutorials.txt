@@ -2,3 +2,6 @@
 * :ref:`hf_llama3_8B_pretraining`
 * :ref:`hf_llama3_8B_SFT`
 * :ref:`checkpoint_conversion`
+* :ref:`hf_llama3_8B_DPO`
+* :ref:`hf_llama3_70B_pretraining`
+* :ref:`checkpoint_conversion`

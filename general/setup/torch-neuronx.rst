@@ -4,7 +4,7 @@ PyTorch Neuron (``torch-neuronx``) Setup
 ========================================
 
 .. note::
-   This Setup guide is relevant for ``Inf2`` & ``Trn1`` / ``Trn1n`` instances.
+   This Setup guide is relevant for ``Inf2`` & ``Trn1`` / ``Trn1n`` / ``Trn2`` instances.
 
 .. contents:: Table of contents
    :local:
@@ -42,19 +42,6 @@ PyTorch Neuron (``torch-neuronx``) Setup
         :link-type: ref
         :class-body: sphinx-design-class-title-small
 
-
-``torch-neuronx`` setup on Amazon Linux 2 (AL2)
------------------------------------------------
-
-.. card:: Amazon Linux 2  (DLAMI Base AMI)
-        :link: setup-torch-neuronx-al2-base-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Amazon Linux 2 (DLAMI PyTorch Neuron)
-        :link: setup-torch-neuronx-al2-dlami-pytorch
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
 
 ``torch-neuronx`` setup on Amazon Linux 2023 (AL2023)
 -----------------------------------------------------

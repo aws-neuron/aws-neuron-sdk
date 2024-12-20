@@ -26,6 +26,7 @@
         * :ref:`Fresh Install <pytorch-neuronx-install>`
         * :ref:`Update to latest release <pytorch-neuronx-update>`
         * :ref:`Install previous releases <pytorch-neuronx-install-prev>`
+        * :ref:`pytorch-neuronx-install-cxx11`
 
         .. include:: /general/setup/install-templates/trn1-ga-warning.txt
 

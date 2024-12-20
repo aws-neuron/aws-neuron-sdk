@@ -12,8 +12,8 @@ NxD Training
 NxD Training (where NxD stands for NeuronX Distributed) library is a collection of open-source tools and libraries 
 designed to empower customers to train PyTorch models on AWS Trainium instances. It is
 :ref:`introduced with Neuron 2.20 release <introduce-nxd-training>` as a beta software. NxD Training combines both ease-of-use and access to
-features built on top of :ref:`NxD Core<neuronx-distributed-index>` library. It is compatible with
-training platforms like NVIDIA’s NeMo.
+features built on top of :ref:`NxD Core<neuronx-distributed-index>` library. Except for a few Trainium specific features, NxD Training 
+is compatible with training platforms like NVIDIA’s NeMo.
 
 Specifically, :ref:`NxD Training <nxdt_figure>` offers the following features and productivity flows:
 
@@ -42,7 +42,7 @@ Specifically, :ref:`NxD Training <nxdt_figure>` offers the following features an
 *  **Models**: Users can start on NxD Training with ready-to-use samples based on HuggingFace and Megatron-LM model formats. It has support for advanced LLM architecture blocks such as 
    `Grouped Query Attention layer <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`_. 
 
-*  **SW Releases**: NxD code is available on `GitHub <https://github.com/aws-neuron/neuronx-distributed-training/tree/main>`_, both as pip wheel and source code.
+*  **SW Releases**: NxD Training code is available on `GitHub <https://github.com/aws-neuron/neuronx-distributed-training/tree/main>`_, both as pip wheel and source code.
 
 .. _nxdt_figure:
 

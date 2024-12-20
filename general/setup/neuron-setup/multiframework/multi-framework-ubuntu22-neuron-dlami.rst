@@ -10,14 +10,14 @@ Get Started with Neuron on Ubuntu 22 with Neuron Multi-Framework DLAMI
 ======================================================================
 
 You can quickly get started on Ubuntu 22 using the Neuron Deep Learning AMI (DLAMI). Then, start using one of the multiple frameworks or libraries that Neuron SDK supports by
-activating the corresponding virtual environment. Each virtual environment comes pre-installed with Neuron libraries needed for you to get started. The Neuron DLAMI supports all Neuron instances (Inf1/Inf2/Trn1/Trn1n)
+activating the corresponding virtual environment. Each virtual environment comes pre-installed with Neuron libraries needed for you to get started. The Neuron DLAMI supports all Neuron instances (Inf1/Inf2/Trn1/Trn1n/Trn2)
 and is updated with each Neuron SDK release. To start using the latest version of the Neuron DLAMI, use the following steps:
 
 Step 1:  Launch the instance using Neuron DLAMI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once you open the `EC2 Console <https://console.aws.amazon.com/ec2>`_, select your desired AWS region and choose "Launch Instance". Under AMI selection select the "Quick Start"
-and "Ubuntu", choose the "Deep Learning AMI Neuron (Ubuntu 22.04)"(see screenshot below). Once you have selected the AMI, select the desired Neuron Instance(Inf1/Inf2/Trn1/Trn1n) , 
+and "Ubuntu", choose the "Deep Learning AMI Neuron (Ubuntu 22.04)"(see screenshot below). Once you have selected the AMI, select the desired Neuron Instance(Inf1/Inf2/Trn1/Trn1n/Trn2) , 
 configure disk size and other criteria, launch the instance
 
 .. image:: /images/neuron-multi-framework-dlami-quick-start.png

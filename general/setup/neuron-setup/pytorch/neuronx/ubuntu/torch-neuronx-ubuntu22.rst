@@ -42,7 +42,6 @@ This section provide links that will assist you to quickly start with a fresh in
         :start-line: 5
         :end-line: 6
 
-
 .. include:: /general/quick-start/tab-inference-torch-neuronx-u22.txt
 
 .. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-u22.rst

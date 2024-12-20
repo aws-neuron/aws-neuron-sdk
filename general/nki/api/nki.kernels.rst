@@ -20,7 +20,7 @@ Note that these kernels are already being deployed as part of the Neuron stack. 
 will automatically invoke the `flash_fwd` kernel listed here. Therefore, replacing the framework operators with these 
 NKI kernels likely won't result in extra performance benefit.
 
-Please see the `README <https://github.com/aws-neuron/nki-samples>`_ page 
+See the `README <https://github.com/aws-neuron/nki-samples>`_ page 
 of the GitHub Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_ for more details.
 
 .. autosummary::

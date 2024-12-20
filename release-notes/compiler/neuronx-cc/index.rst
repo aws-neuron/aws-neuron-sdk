@@ -7,6 +7,12 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.16.345.0]
+----------------------------
+Date: 12/20/2024
+
+* Minor bug fixes and performance enhancements for the trn2 platform.
+
 Neuron Compiler
 ---------------
 Date: 12/03/2024
@@ -14,8 +20,7 @@ Date: 12/03/2024
 * This release introduces the ``trn2`` option argument to the compiler ``--target`` option to specify that the compiler should
   generate code for a trn2 instance family. Example usage: ``neuronx-cc compile --target=trn2 ...``
   
-* This release introduces the ``--logical-nc-config`` or ``-lnc`` compiler command line option in support of the Logical NeuronCore Configuration feature available in Trainium2 instances. The compiler's default is LNC=2.
-Note: Use of this option is available only for Trainium2 instances. 
+* This release introduces the ``--logical-nc-config`` or ``-lnc`` compiler command line option in support of the Logical NeuronCore Configuration feature available in Trainium2 instances. The compiler's default is LNC=2.  **Note: Use of this option is available only for Trainium2 instances.**
 
 Neuron Compiler [2.15.128.0]
 ----------------------------
@@ -34,7 +39,7 @@ Neuron Compiler [2.13.72.0]
 ----------------------------
 Date: 04/25/2024
 
-* Minor bug fixes and enhancements
+* Minor bug fixes and enhancements.
 
 
 Neuron Compiler [2.13.68.0]

@@ -1,2 +1,6 @@
 * :ref:`nxdi-feature-guide`
+* :ref:`nxdi-model-reference`
 * :ref:`nxdi-onboarding-models`
+* :ref:`nxdi-vllm-user-guide`
+* :ref:`nxd-examples-migration-guide`
+* :ref:`nxdi_migrate_from_tnx`

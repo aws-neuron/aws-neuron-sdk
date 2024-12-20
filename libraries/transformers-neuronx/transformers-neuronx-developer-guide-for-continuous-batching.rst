@@ -1,87 +1,90 @@
 .. _transformers_neuronx_developer_guide_for_cb:
 
-Transformers NeuronX (``transformers-neuronx``) Developer Guide For Continuous Batching
+Transformers NeuronX (``transformers-neuronx``) Developer Guide for Continuous Batching
 =======================================================================================
 
-The continuous batching feature has been enabled with Transformers NeuronX.
+Transformers NeuronX is integrated with vLLM to enable continuous batching for high-throughput 
+LLM serving and inference. This guide aims to help users get started with continuous batching for
+Transformers NeuronX and vLLM by providing:
+
+- :ref:`Transformers NeuronX <cb-tnx-overview>` An overview of Transformers NeuronX.
+- :ref:`cb-overview` The continuous batching procedure implemented by Transformers NeuronX and vLLM.
+- :ref:`cb-install` Installation and usage instructions for Transformers NeuronX and vLLM.
+- :ref:`cb-release-221-features` A showcase of new features in Transformers NeuronX and vLLM.
+- :ref:`cb-faq`
+
+.. _cb-tnx-overview:
+
+Transformers NeuronX (``transformers-neuronx``)
+-----------------------------------------------
+
 Transformers NeuronX for Trn1 and Inf2 is a software package that enables
 PyTorch users to perform large language model (LLM) :ref:`performant inference <neuron_llm_inference>` on
 second-generation Neuron hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 The :ref:`Neuron performance page <inf2-performance>` lists expected inference performance for commonly used Large Language Models.
 
+.. _cb-overview:
 
-Overview of continuous batching API and vLLM support
-----------------------------------------------------
+Continuous Batching with Transformers NeuronX and vLLM
+------------------------------------------------------
 
-Transformers NeuronX supports continuous batching for ``LLaMA`` model class.
+Transformers NeuronX implements the following operational flow with vLLM for continuous batching support:
 
-The basic flow for continuous batching support includes the following operations performed automatically by Transformers NeuronX:
-
-1. Fill multiple prompts with context encoding by using virtual dynamic batching.
-2. Decode each sequence until one of the sequences generates an EOS token.
+1. Context encode multiple prompts using virtual dynamic batching.
+2. Decode all sequences simultaneously until a sequence generates an EOS token.
 3. Evict the finished sequence and insert a new prompt encoding.
-4. Resume the decoding proces, repeating steps 2-3 until all of the sequences are decoded.
+4. Resume the decoding process, repeating steps 2 and 3 until all sequences are decoded.
 
-Overview of models supported
-----------------------------
+.. _cb-supported-model-architectures:
 
-We support continuous batching for models compatible with the the following HuggingFace classes:
+Supported Model Architectures
+-----------------------------
 
-- LlamaForCausalLM
-- MistralForCausalLM
+Transformers NeuronX supports continuous batching for models compatible with the following Hugging Face classes:
 
+- ``LlamaForCausalLM``
+- ``MistralForCausalLM``
 
-New Features in 2.20 Neuron vLLM integration
---------------------------------------------
+.. _cb-install:
 
-Currently Neuron vLLM integration is tested with Transformers NeuronX using v0.5.0 vLLM that is publicly available.
-As part of 2.20 release, there are several enhancements done in Neuron vLLM integration on top of v0.5.0 vLLM. 
-It is our intention that these features will be upstreamed to vLLM repo as soon as possible after the release.
-Until the features are upstreamed, you can access these features from vLLM upstreaming Neuron fork in our AWS Neuron GitHub 
-repository at https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.5.0-neuron.
-
-Features in v0.5.0 vLLM Neuron Fork
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* On-device generation is now enabled by default. Please note that this feature currently does not support producing log probabilities in the vllm integration. Furthermore, we restrict sampling to at most top 256 tokens by default. It can be changed by editing ``global_top_k`` in the ``GenerationConfig``. 
-* Multi-node inference to support larger models. Example scripts are included in the `commit <https://github.com/vllm-project/vllm/commit/e5a3c0904799ec8e04e25ac25e66024004a61533>`_ .
-* Directly load HuggingFace compatible checkpoints without creation of ``-split`` directory.
-* Fix AssertionError when running offline examples i.e. no need to apply the patch mentioned below.
-
-Some features have already been upstreamed to vllm v0.6.0 and are not included in our v0.5.0 vLLM Neuron fork:
-
-* Configure bucketing and NeuronConfig throught vLLM interface instead of requiring code changes
-
-
-Installing vLLM and running a simple offline script
+Install vLLM and Get Started with Offline Inference
 ---------------------------------------------------
 
-Once neuronx-cc and transformers-neuronx packages are installed, we will be able to install vLLM from source.
+Neuron maintains a fork of vLLM (v0.6.2) that contains the necessary changes to support inference with Transformers NeuronX.
+Neuron is working with the vLLM community to upstream these changes to make them available in a future version.
+
+Install vLLM
+^^^^^^^^^^^^
+
+First install ``neuronx-cc`` and the ``transformers-neuronx`` packages. Then install the vLLM fork from source:
 
 .. code-block:: bash
 
-   git clone https://github.com/vllm-project/vllm.git
-   cd vllm
-   git checkout v0.5.0
-   pip install .
-   pip install ray
+    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    cd upstreaming-to-vllm
+    pip install -r requirements-neuron.txt
+    VLLM_TARGET_DEVICE="neuron" && pip install -e .
 
 .. note::
 
-    Please note the vLLM pip package from PyPI is not compatible with Neuron. To work with Neuron, install vLLM using the source as outlined above.
+    Please note the vLLM ``pip`` package from PyPI is not compatible with Neuron. To work with Neuron, install vLLM using the source as outlined above.
 
 .. note::
 
-    There is currently a known issue with offline inference examples that can be solved by applying the `vllm_v0.5.0_neuron.patch`_ patch
-    to vLLM source after checking out v0.5.0 tag by running ``git apply vllm_v0.5.0_neuron.patch``. We are in the process of upstreaming the 
-    fix for a future vLLM release.
+    The current supported version of Pytorch for Neuron installs ``triton`` version ``2.1.0``. This is incompatible with ``vllm >= 0.5.3``. You may see an error ``cannot import name 'default_dump_dir...``. To work around this, run ``pip install --upgrade triton==3.0.0`` after installing the vLLM wheel.
 
+If Neuron packages are detected correctly in the installation process, ``vllm-0.6.dev0+neuron215`` will be installed (The ``neuron`` version depends on the installed
+``neuronx-cc`` version).
 
-If Neuron packages are detected correctly in the installation process, ``vllm-0.5.0+neuron214`` (The neuron version depends on the installed 
-neuronx-cc version) will be installed.
+Run Offline Batched Inference with Transformers NeuronX and vLLM
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+In the following example we demonstrate how to perform continuous batching with a Llama model.
 
-In the following example we demonstrate how to perform continuous batching with a ``LLaMA`` model.
+.. note::
+
+    Since Llama models are gated, please accept the Llama Community License Agreement and request access to the model.
+    Then use a Hugging Face user access token to download the model.
 
 .. code-block:: python
 
@@ -96,10 +99,10 @@ In the following example we demonstrate how to perform continuous batching with 
     ]
     # Create a sampling params object.
     sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
-    
+
     # Create an LLM.
     llm = LLM(
-        model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        model="meta-llama/Meta-Llama-3.1-8B-Instruct",
         max_num_seqs=8,
         # The max_model_len and block_size arguments are required to be same as max sequence length,
         # when targeting neuron device. Currently, this is a known limitation in continuous batching
@@ -110,6 +113,7 @@ In the following example we demonstrate how to perform continuous batching with 
         # The device argument can be either unspecified for automated detection, or explicitly assigned.
         device="neuron",
         tensor_parallel_size=2)
+
     # Generate texts from the prompts. The output is a list of RequestOutput objects
     # that contain the prompt, generated text, and other information.
     outputs = llm.generate(prompts, sampling_params)
@@ -119,39 +123,165 @@ In the following example we demonstrate how to perform continuous batching with 
         generated_text = output.outputs[0].text
         print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
 
+Run the API Server
+^^^^^^^^^^^^^^^^^^
+To run the OpenAI-compatible API server in vLLM, run either command below:
 
-Known issues and FAQs
----------------------
+.. code-block:: bash
 
-**How to fix 'AssertionError: Cache operations are not supported for Neuron backend.' ?**
+    vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
 
-Make sure the following patch is applied to vLLM v0.5.0 before installing. You can do so with
-the following steps: Navigating into the vLLM source directory. Create a ``vllm_v0.5.0_neuron.patch`` file 
-inside the vLLM source directory with the content shown below. Then run ``git apply vllm_v0.5.0_neuron.patch`` 
-to apply the patch and install vllm via `pip install .`
+.. code-block:: bash
 
-.. _vllm_v0.5.0_neuron.patch:
+    python3 -m vllm.entrypoints.openai.api_server meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
 
-.. code-block::
+.. _cb-release-221-features:
 
-    diff --git a/vllm/executor/neuron_executor.py b/vllm/executor/neuron_executor.py
-    index e7f0e887..87564b76 100644
-    --- a/vllm/executor/neuron_executor.py
-    +++ b/vllm/executor/neuron_executor.py
-    @@ -48,9 +48,9 @@ class NeuronExecutor(ExecutorBase):
-        def execute_model(
-                self,
-                execute_model_req: ExecuteModelRequest) -> List[SamplerOutput]:
-    -        assert (execute_model_req.blocks_to_swap_in == {}
-    -                and execute_model_req.blocks_to_swap_out == {}
-    -                and execute_model_req.blocks_to_copy == {}), (
-    +        assert (not execute_model_req.blocks_to_swap_in
-    +                and not execute_model_req.blocks_to_swap_out
-    +                and not execute_model_req.blocks_to_copy), (
-                        "Cache operations are not supported for Neuron backend.")
-            assert execute_model_req.num_lookahead_slots == 0, (
-                "lookahead not supported for Neuron backend.")
+New Features in Neuron Release 2.21
+-----------------------------------
 
-**Is PagedAttention supported with vLLM integration?**
+Neuron's vLLM integration with Transformers NeuronX is tested using a public fork of vLLM v0.6.2.
+New features and enhancements introduced in this fork will be described below.
+Neuron's intent is to upstream these features to vLLM as soon as possible after release.
+Prior to upstreaming, these features can be accessed in the AWS Neuron GitHub
+repository https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron.
+
+**Neuron Release 2.21 Features for the v0.6.2 vLLM Neuron Fork**
+
+- :ref:`Sequence bucketing <cb-sequence-bucketing>` configuration for context encoding and token generation.
+- :ref:`Granular NeuronConfig control <cb-neuron-config-override>` in vLLM entrypoints.
+- Inference support for :ref:`speculative decoding <cb-speculative-decoding>`.
+- Inference support for :ref:`EAGLE speculative decoding <cb-eagle-speculative-decoding>`.
+
+**Neuron Release 2.20 Features**
+
+- Multi-node inference support for larger models. Example scripts are included in `vLLM <https://github.com/vllm-project/vllm/commit/e5a3c0904799ec8e04e25ac25e66024004a61533>`_ .
+- Direct loading of Hugging Face-compatible checkpoints without creation of a ``-split`` directory.
+
+.. _cb-sequence-bucketing:
+
+Sequence Bucketing
+^^^^^^^^^^^^^^^^^^
+To configure buckets, set the following environment variables. Refer to the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#bucketing>`_
+for details on how to configure the values. These environment variables need to be set before starting the vLLM server or instantiating the ``LLM`` object.
+
+- ``NEURON_CONTEXT_LENGTH_BUCKETS``:  Bucket sizes for context encoding.
+- ``NEURON_TOKEN_GEN_BUCKETS``: Bucket sizes for token generation.
+
+For example: ``export NEURON_CONTEXT_LENGTH_BUCKETS="128,512,1024"``
+
+
+.. _cb-neuron-config-override:
+
+NeuronConfig Override
+^^^^^^^^^^^^^^^^^^^^^
+The default ``NeuronConfig`` in vLLM uses the latest optimizations from the Neuron SDK. However, you can override the default values or add a new configuration from the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#>`_ by setting the ``override_neuron_config`` parameter while creating the ``LLM`` object.
+
+.. code-block:: python
+
+    llm = LLM(
+        model="meta-llama/Meta-Llama-3.1-8B-Instruct",
+        max_num_seqs=8,
+        max_model_len=128,
+        block_size=128
+        device="neuron",
+        tensor_parallel_size=32,
+        #Override or update the NeuronConfig
+        override_neuron_config={"shard_over_sequence":True})
+
+While standing up the API server, set the ``override-neuron-config`` argument. For example:
+
+.. code-block:: bash
+
+    vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
+
+
+.. _cb-quantization:
+
+Quantization
+^^^^^^^^^^^^
+To use `int8 weight storage <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#int8-weight-storage-support>`_ ,
+set the environment variable ``NEURON_QUANT_DTYPE`` to ``s8``.
+
+
+.. _cb-speculative-decoding:
+
+Speculative Decoding
+^^^^^^^^^^^^^^^^^^^^
+Speculative decoding is a token generation optimization technique that
+uses a small draft model to generate ``K`` tokens autoregressively and a
+larger target model to determine which draft tokens to accept, all in a combined forward pass.
+For more information on speculative decoding, please see `[Leviathan, 2023] <https://arxiv.org/abs/2211.17192>`_ and `[Chen et al., 2023] <https://arxiv.org/pdf/2302.01318>`_.
+
+Speculative decoding is now available for inference with Transformers NeuronX and vLLM:
+
+.. code-block:: python
+
+    from vllm import LLM, SamplingParams
+
+    # Sample prompts.
+    prompts = [
+        "Hello, my name is",
+        "The president of the United States is",
+        "The capital of France is",
+        "The future of AI is",
+    ]
+    # Create a sampling params object.
+    sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
+
+    # Create an LLM.
+    llm = LLM(
+        model="meta-llama/Meta-Llama-3.1-70B-Instruct",
+        speculative_model="meta-llama/Llama-3.2-1B-Instruct",
+        # The max_model_len, speculative_max_model_len, and block_size arguments are required to be same as max sequence length,
+        # when targeting neuron device. Currently, this is a known limitation in continuous batching
+        # support in transformers-neuronx.
+        max_model_len=128,
+        block_size=128,
+        speculative_max_model_len=128,
+        dtype="bfloat16",
+        max_num_seqs=4,
+        num_speculative_tokens=4,
+        # The device can be automatically detected when AWS Neuron SDK is installed.
+        # The device argument can be either unspecified for automated detection, or explicitly assigned.
+        device="neuron",
+        tensor_parallel_size=32,
+        use_v2_block_manager=True,
+    )
+
+    outputs = llm.generate(prompts, sampling_params)
+    # Print the outputs.
+    for output in outputs:
+        prompt = output.prompt
+        generated_text = output.outputs[0].text
+        print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+
+.. note::
+
+    Please ensure that the selected target and draft model are from the same model family. For example, if the target model is an instruction-tuned Llama model,
+    the draft model must also be a lower-capacity instruction-tuned Llama model.
+
+.. _cb-eagle-speculative-decoding:
+
+EAGLE Speculative Decoding
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Extrapolation Algorithm for Greater Language-model Efficiency (EAGLE) extends the speculative decoding
+technique described above by:
+
+- Utilizing a specially trained EAGLE draft model that predicts feature outputs through an Autoregression Head and next token outputs through an LM Head.
+- Reducing sampling uncertainty by using the next autoregressively sampled token and a current feature map as draft model inputs.
+
+For more information on EAGLE, please see `[Li et al., 2024] <https://arxiv.org/pdf/2401.15077>`_
+
+EAGLE speculative decoding can be applied without changes to the speculative decoding code sample above. Transformers NeuronX and vLLM will recognize
+a draft model as an EAGLE draft when ``is_eagle: True`` is set in the model's Hugging Face ``config.json`` file.
+
+
+.. _cb-faq:
+
+Frequently Asked Questions
+--------------------------
+
+**Is PagedAttention supported in the vLLM integration?**
 
 No, PagedAttention is not currently supported. It will be supported in a future Neuron release.

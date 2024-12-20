@@ -15,13 +15,18 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
-Neuron Driver release [2.19.xx.0]
+Neuron Driver release [2.19.64.0]
 --------------------------------
-Date: 12/03/2024
+Date: 12/20/2024
+
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added Trainium2 support
 
 Improvements
 ^^^^^^^^^^^^
-* Optimized HBM Memory allocation to reduce fragmentation
+* Optimized HBM Memory allocation to reduce fragmentation. See :ref:`here <small_allocations_mempool>` for more details.
 
 Neuron Driver release [2.18.20.0]
 --------------------------------

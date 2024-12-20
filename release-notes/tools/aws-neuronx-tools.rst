@@ -8,9 +8,9 @@ Neuron System Tools
    :depth: 2
 
 
-Neuron Tools  [2.20.0.0]
+Neuron Tools  [2.20.204.0]
 ------------------------
-Date: 12/03/2024
+Date: 12/20/2024
 
 New in the release
 ^^^^^^^^^^^^^^^^^^

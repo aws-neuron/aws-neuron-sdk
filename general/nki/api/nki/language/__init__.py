@@ -56,6 +56,10 @@ def affine_range(*args, **kwargs):
   - Using ``affine_range`` also allows Neuron compiler to perform additional loop-level optimizations, such as
     loop vectorization in current release. The exact type of loop-level optimizations applied is subject
     to changes in future releases.
+  - Since each kernel instance only runs on a single NeuronCore, `affine_range` does **not** parallelize
+    different loop iterations across multiple NeuronCores. However, different iterations could be parallelized/pipelined
+    on different compute engines within a NeuronCore depending on the invoked instructions (engines) and data dependency
+    in the loop body.
 
   .. code-block::
     :linenos:

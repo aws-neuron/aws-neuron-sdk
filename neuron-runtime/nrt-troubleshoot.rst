@@ -152,7 +152,7 @@ message in the console and in syslog:
 Solution
 ''''''''
 
-Terminate any other processes that are using NeuronCore accelerators and then try launching the application again. If you are using Jupyter, ensure that you only have a single Jupyter kernel attempting to access the NeuronCores by restarting or shutting-down any other kernels, which will release any NeuronCores that might be in use.
+Terminate any other processes that are using NeuronCore and then try launching the application again. If you are using Jupyter, ensure that you only have a single Jupyter kernel attempting to access the NeuronCores by restarting or shutting-down any other kernels, which will release any NeuronCores that might be in use.
 
 ------------
 
@@ -317,6 +317,104 @@ Solution
 Use properly sized instance. trn1.32xlarge has 32 Neuron Cores,
 trn1.2xlarge has 2 Neuron Cores.
 
+-----------------------------------------------------
+
+Neuron Runtime execution fails at out-of-bound access
+-----------------------------------------------------
+
+When a Neuron Runtime execution encounters an out-of-bound access error, the runtime logs in the stdout console will display one of the following error messages: 
+
+::
+
+    2024-08-12 18:34:56,116::ERROR: 2024-Aug-12 18:34:56.067150 159612:159612 ERROR  TDRV:generate_custom_notification_msg        nd0:nc0:h_model.id1107: Received notification generated at runtime: failed to run embedding table update, due to out-of-bound access.
+    2024-08-12 18:34:56,116::ERROR: 2024-Aug-12 18:34:56.067151 159602:159602 ERROR  TDRV:generate_custom_notification_msg        nd0:nc1:h_model.id1109: Received notification generated at runtime: failed to run scatter/gather (indirect memory copy), due to out-of-bound access.
+
+**Cause of the Error**
+
+An out-of-bound access error typically indicates that incorrect inputs have been provided to the model. 
+
+**How to Debug**
+
+To troubleshoot this issue, you need to examine both the High-Level Operation (HLO) and all inputs. 
+Neuron Runtime can automatically dump all inputs in binary format, which can be instrumental in debugging. 
+To enable input dumping for each failed execution, set the following environment variable:
+
+::
+    
+    export NEURON_RT_DUMP_INPUTS_ON_ERR=<an NRT_STATUS value>
+
+A complete set of ``NRT_STATUS`` can be found under :ref:`The LIBNRT API Return Codes <nrt_api>`.
+
+Once this variable is set, Neuron Runtime generates a directory in the current working directory for each failed execution at this `NRT_STATUS` value. The directory name follows this pattern:
+
+::
+    
+    input_dump_<runtime_generated_random_number>_h_nn_<runtime_generated_execution_id>
+
+
+Inside each directory, you'll find all the inputs that led to this failure, stored in binary format. 
+Additionally, the model name is saved in a separate file called model_name.txt within the same directory.
+
+To disable input dump, you can set the environment variable back to 0
+
+::
+    
+    export NEURON_RT_DUMP_INPUTS_ON_ERR=0
+
+**Example: Debug an out-of-bound access execution**
+
+To debug an out-of-bound (OOB) execution, which returns an NRT_STATUS code of 1006, both HLO and all inputs are required. 
+By setting the ``NEURON_RT_DUMP_INPUTS_ON_ERR`` environment variable to 1006, you can capture the inputs leading to an OOB execution.
+
+For example, when an OOB error occurs, Neuron Runtime creates a directory named input_dump_424238335_h_nn_10001. 
+Here, 424238335 is a randomly generated number by Neuron Runtime, and 10001 is the Neuron Runtime generated execution ID. 
+All relevant inputs, labeled from input0 to input14, are saved in binary format within this directory.
+
+::
+
+    ubuntu@ip-172-31-53-90:~$ NEURON_RT_DUMP_INPUTS_ON_ERR=1006 torchrun --nproc_per_node=2 train_torchrun.py
+    ......
+    2024-Jun-26 00:32:47.943821 30294:32381 ERROR  TDRV:generate_custom_notification_msg        nd0:nc0:h_model.id1001: Received notification generated at runtime: failed to run scatter/gather (indirect memory copy), due to out-of-bound access. isa instruction line number = 11. model name = /home/ubuntu/token-seqlen1280-batch128-FullyUnrolled.736.2.0.62758.0a0+44863561.93f365ce40ab99133659.pb.neff
+    ......
+    2024-Jun-26 00:32:47.948678 30294:32381 ERROR  NMGR:dlr_infer                               Inference completed with err: 1006. mode->h_nn=1001, start_nc=0, nc_count=1
+    2024-Jun-26 00:32:50.801487 30294:32381 ERROR  TDRV:tensor_dump_inputs                      15 input tensors were dumped successfully to directory /home/ubuntu/input_dump_424238335_h_nn_10001. Model name is /home/ubuntu/token-seqlen1280-batch128-FullyUnrolled.736.2.0.62758.0a0+44863561.93f365ce40ab99133659.pb.neff
+    ......
+
+    ubuntu@ip-172-31-53-90:~$ ls -lt
+    total 3908900
+    drwxrwxr-x 2 ubuntu ubuntu 4096 Jun 26 00:32 input_dump_424238335_h_nn_10001
+    .....
+
+    ubuntu@ip-172-31-53-90:~$ ls -lt input_dump_424238335_h_nn_10001
+    total 1405192
+    -rw-r—r-- 1 ubuntu ubuntu 5242880 Jun 26 00:32 input14.bin
+    -rw-r—r-- 1 ubuntu ubuntu 5242880 Jun 26 00:32 input13.bin
+    -rw-r—r-- 1 ubuntu ubuntu 5242880 Jun 26 00:32 input12.bin
+    -rw-r—r-- 1 ubuntu ubuntu 5242880 Jun 26 00:32 input11.bin
+    -rw-r—r-- 1 ubuntu ubuntu 13967360 Jun 26 00:32 input10.bin
+    -rw-r—r-- 1 ubuntu ubuntu 81920 Jun 26 00:32 input8.bin
+    -rw-r—r-- 1 ubuntu ubuntu 4 Jun 26 00:32 input9.bin
+    -rw-r—r-- 1 ubuntu ubuntu 4 Jun 26 00:32 input6.bin
+    -rw-r—r-- 1 ubuntu ubuntu 81920 Jun 26 00:32 input7.bin
+    -rw-r—r-- 1 ubuntu ubuntu 16777216 Jun 26 00:32 input5.bin
+    -rw-r—r-- 1 ubuntu ubuntu 131072 Jun 26 00:32 input3.bin
+    -rw-r—r-- 1 ubuntu ubuntu 13967360 Jun 26 00:32 input4.bin
+    -rw-r—r-- 1 ubuntu ubuntu 16777216 Jun 26 00:32 input2.bin
+    -rw-r—r-- 1 ubuntu ubuntu 13967360 Jun 26 00:32 input1.bin
+    -rw-r—r-- 1 ubuntu ubuntu 1342177280 Jun 26 00:32 input0.bin
+    -rw-r—r-- 1 ubuntu ubuntu 9 Jun 26 00:32 model_name.txt
+
+    ubuntu@ip-172-31-53-96:~$ cat input_dump_424238335_h_nn_10001/model_name.txt
+    /home/ubuntu/token-seqlen1280-batch128-FullyUnrolled.736.2.0.62758.0a0+44863561.93f365ce40ab99133659.pb.neff
+
+
+**Known Limitations**
+
+* **HLO Access**: Neuron Runtime does not have direct access to the HLO; it must be deduced from the model name.
+
+* **Partial Input Dumps**: If a Neuron Runtime execution fails and an exception is raised to the Neuron Framework, other ongoing Neuron Runtime executions may be terminated by the Neuron Framework. This means only one set of inputs may be fully captured, while others may be incomplete if terminated prematurely.
+
+  * An input dump folder is considered complete when the model_name.txt file is fully written, as Neuron Runtime saves all inputs first and then writes the model_name.txt file. So you might find out the folder with the complete set of inputs by searching for the model_name.txt file.
 
 
 
@@ -340,7 +438,11 @@ For Trn and Inf instances, the following hardware errors are monitored by Neuron
 |                        |                                                           | `EventBridge rules <https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events>`_.                         |                                                                                                                                                                      |
 |                        |                                                           |                                                                                                                               |                                                                                                                                                                      |
 |                        |                                                           | 2. Neuron Runtime Behavior:                                                                                                   |                                                                                                                                                                      |
-|                        |                                                           | Neuron Runtime will exit with ``NRT_EXEC_COMPLETED_WITH_ERR (1004)`` return code.                                             |                                                                                                                                                                      |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_EXEC_COMPLETED_WITH_ERR (1004)``                                              |                                                                                                                                                                      |
+|                        |                                                           | or ``NRT_EXEC_HW_ERR_NC_UE (1202)`` return code.                                                                              |                                                                                                                                                                      |
+|                        |                                                           | You will see the following error message in runtime logs from stdout console: ``(FATAL-RT-UNDEFINED-STATE)                    |                                                                                                                                                                      |
+|                        |                                                           | [ND 0][NC 0] Uncorrectable memory error is detected, metadata: 0x16. Please terminate or stop/start this instance to prevent  |                                                                                                                                                                      |
+|                        |                                                           | future impact from the hardware error.``                                                                                      |                                                                                                                                                                      |
 +------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | HBM Uncorrectable      | An HBM encountered an uncorrectable error and produced    | 1. Instance Retirement Notice:                                                                                                | 1. Replace the EC2 instance by                                                                                                                                       |
 |                        | incorrect results.                                        | You will receive an `EC2 instance retirement notice                                                                           | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
@@ -352,25 +454,28 @@ For Trn and Inf instances, the following hardware errors are monitored by Neuron
 |                        |                                                           | `EventBridge rules <https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events>`_.                         |                                                                                                                                                                      |
 |                        |                                                           |                                                                                                                               |                                                                                                                                                                      |
 |                        |                                                           | 2. Neuron Runtime Behavior:                                                                                                   |                                                                                                                                                                      |
-|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    |                                                                                                                                                                      |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)``                                                                 |                                                                                                                                                                      |
+|                        |                                                           | or ``NRT_EXEC_HW_ERR_HBM_UE (1201)`` return code.                                                                             |                                                                                                                                                                      |
 |                        |                                                           | You will see the following error message in runtime logs from stdout console: ``(FATAL-RT-UNDEFINED-STATE)                    |                                                                                                                                                                      |
-|                        |                                                           | encountered uncorrectable memory error on Neuron Device 0. Execution results may be invalid.                                  |                                                                                                                                                                      |
-|                        |                                                           | Please terminate or start/stop this instance to recover from bad hardware.``                                                  |                                                                                                                                                                      |
+|                        |                                                           | Uncorrectable HBM memory error is detected. Execution results may be invalid.                                                 |                                                                                                                                                                      |
+|                        |                                                           | Please terminate or stop/start this instance to prevent future impact from the hardware error.``                              |                                                                                                                                                                      |
 +------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DMA Aborts             | A DMA engine encountered an unrecoverable error.          | Neuron Runtime Behavior:                                                                                                      | Replace the EC2 instance by                                                                                                                                          |
-|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
-|                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
-|                        |                                                           | ``[MLA 0][NC 0] DMA TX engine 0 is in an abort state`` or                                                                     |                                                                                                                                                                      | 
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)``                                                                 | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | or ``NRT_EXEC_HW_ERR_DMA_ABORT (1203)`` return code.                                                                          | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
+|                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                |                                                                                                                                                                      |
+|                        |                                                           | ``[MLA 0][NC 0] DMA TX engine 0 is in an abort state`` or                                                                     |                                                                                                                                                                      |
 |                        |                                                           | ``[MLA 0][NC 0] DMA RX engine 0 is in an abort state``                                                                        |                                                                                                                                                                      |
 +------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Hang on Collectives    | Possibly caused by a hardware error on another worker.    | Neuron Runtime Behavior:                                                                                                      | Search for SRAM Uncorrectable, HBM Uncorrectable, DMA Aborts, and Hang on Compute errors on the other workers, and implement the recommended actions on the          |
-|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | affected worker. Afterward, restart your workload and attempt again.                                                                                                 |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)``                                                                 | affected worker. Afterward, restart your workload and attempt again.                                                                                                 |
+|                        |                                                           | or ``NRT_EXEC_HW_ERR_COLLECTIVES (1200)`` return code.                                                                        |                                                                                                                                                                      |
 |                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                |                                                                                                                                                                      |
 |                        |                                                           | ``(FATAL-RT-UNDEFINED-STATE) missing collectives status                                                                       |                                                                                                                                                                      |
 |                        |                                                           | on Neuron Device 0 NC 0, model 0 - suspected hang in collectives operation 0 out of 100``                                     |                                                                                                                                                                      |
 +------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Hang on Compute        | Unexpected software or hardware issue.                    | Neuron Runtime Behavior:                                                                                                      | Replace the EC2 instance by                                                                                                                                          |
-|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)`` return code.                                                    | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
+|                        |                                                           | Neuron Runtime will timeout and exit with ``NRT_TIMEOUT (5)``.                                                                | `terminating <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html>`_                                                                      |
 |                        |                                                           | You will see the following error messages in runtime logs from stdout console:                                                | it or `stopping then starting <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html>`_ it.                                                            |
 |                        |                                                           | ``(FATAL-RT-UNDEFINED-STATE) execution timeout (30000 ms)                                                                     |                                                                                                                                                                      |
 |                        |                                                           | on Neuron Device 0 NC 0, model xxx.neff, waiting for execution completion notification``                                      |                                                                                                                                                                      |

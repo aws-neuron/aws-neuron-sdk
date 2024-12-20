@@ -4,7 +4,7 @@ JAX Setup
 =========
 
 .. note::
-   This setup guide is relevant for ``Inf2`` & ``Trn1`` / ``Trn1n`` instances.
+   This setup guide is relevant for ``Inf2`` & ``Trn1`` / ``Trn1n`` / ``Trn2`` instances.
 
 .. contents:: Table of contents
    :local:

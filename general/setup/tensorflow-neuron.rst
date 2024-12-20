@@ -39,14 +39,6 @@ Tensorflow Neuron (``tensorflow-neuron``) Setup
         :class-body: sphinx-design-class-title-small
 
 
-``tensorflow-neuron`` setup on Amazon Linux 2 (AL2)
----------------------------------------------------
-
-.. card:: Amazon Linux 2  (DLAMI Base AMI)
-        :link: setup-tensorflow-neuron-al2-base-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
 ``tensorflow-neuron`` setup on Amazon Linux 2023 (AL2023)
 ---------------------------------------------------------
 

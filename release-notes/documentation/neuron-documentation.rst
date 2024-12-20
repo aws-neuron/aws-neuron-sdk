@@ -7,6 +7,81 @@ Neuron Documentation Release Notes
    :local:
    :depth: 1
 
+Neuron 2.21.0
+---------------
+Date: 12/20/2024
+
+Neuron Architectue and Features
+- Added Trainium2 Architectue guide. See :ref:`trainium2-arch`
+- Added Trn2 Architecture guide. See :ref:`aws-trn2-arch`
+- Added Logical NeuronCore configuration guide. See :ref:`logical-neuroncore-config`
+- Added NeuronCore-v3 Architecture guide. See :ref:`neuroncores-v3-arch`
+
+Neuron Compiler
+- Added NKI tutorial for SPMD usage with multiple Neuron Cores on Trn2. See `tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/tutorials/spmd_multiple_nc_tensor_addition.rst>`_
+- Updated NKI FAQ with Trn2 FAQs. See :ref:`nki_faq` 
+- Added :doc:`Direct Allocation Developer Guide <nki_direct_allocation_guide>`
+- Updated :doc:`nki.isa <api/nki.isa>` API guide with support for new APIs. 
+- Updated :doc:`nki.language <api/nki.language>` API guide with support for new APIs. 
+- Updated :doc:`nki.compiler <api/nki.compiler>` API guide with support for new APIs. 
+- Updated NKI :ref:`datatype <nl_datatypes>` guide with support for ``float8_e5m2``. 
+- Updated :doc:`kernels <api/nki.kernels>` with support for allocated_fused_self_attn_for_SD_small_head_size and allocated_fused_rms_norm_qkv kernels
+
+Neuron Runtime
+- Updated troubleshooting doc with information on device out-of-memory errors after upgrading to Neuron Driver 2.19 or later. See :ref:`small_allocations_mempool`
+
+NeuronX Distributed Inference
+- Added Application Note to introduce NxD Inference. See :ref:`introduce-nxd-inference`
+- Added NxD Inference Supported Features Guide. See :ref:`nxdi-feature-guide`
+- Added NxD Inference Tutorial for Deploying Llama 3.1 405B (Trn2). See :ref:`nxdi-trn2-llama3.1-405b-tutorial`
+- Added NxD Inference API Reference Guide. See :ref:`nxd-inference-api-guides`
+- Added NxD Inference Production Ready Models (Model Hub) Guide. See :ref:`nxdi-model-reference`
+- Added Migration Guide from NxD examples to NxD Inference. See :ref:`nxd-examples-migration-guide`
+- Added Migration Guide from Transformers NeuronX to NeuronX Distributed Inference. See :ref:`nxdi_migrate_from_tnx`
+- Added vLLM User Guide for NxD Inference. See :ref:`nxdi-vllm-user-guide`
+- Added tutorial for deploying Llama3.2 Multimodal Models. See :ref:`nxdi-llama3.2-multimodal-tutorial`
+
+NeuronX Distributed Training
+- Updated :ref:`api_guide_nxd_training`, :ref:`llama2_tp_pp_tutorial`, :ref:`llama3_tp_pp_tutorial`, :ref:`nxdt_config_overview`, and :ref:`checkpoint_conversion` with support for fused Q,K,V
+- Updated :ref:`nxdt_config_overview` with support for Trn2 configuration API
+- UpdatedDirect :ref:`checkpoint_conversion` with support for  HuggingFace Model Conversion
+- Added tutorial for HuggingFace Llama3.1/Llama3-70B Pretraining. See :ref:`hf_llama3_70B_pretraining`
+- Added tutorial for HuggingFace Llama3-8B Direct Preference Optimization (DPO) based Fine-tuning. See :ref:`hf_llama3_8B_DPO`
+
+Transformers NeuronX
+- Updated :ref:`transformers_neuronx_developer_guide` and :ref:`torch_neuronx_trace_api` with support for CPU compilation.
+- Updated :ref:`transformers_neuronx_developer_guide` to enable skipping the first Allgather introduced by flash decoding at the cost of duplicate Q weights.
+- Updated :ref:`transformers_neuronx_developer_guide` with support for EAGLE speculation
+
+Neuron Tools
+- Added Neuron Profiler 2.0 Beta User Guide with support for system profiles, integration with Perfetto, distributed workload support, etc. See :ref:`neuron-profiler-2-0-guide`
+- Updated nccom-test user guide to include support for Trn2. See :ref:`nccom-test`
+- Updated neuron-ls user guide to include support for Trn2. See :ref:`neuron-ls-ug`
+- Updated neuron-monitor user guide to include support for Trn2. See :ref:`neuron-monitor-ug`
+- Updated neuron-top user guide to include support for Trn2. See :ref:`neuron-top-ug`
+- Added Ask Q Developer documentation for general Neuron guidance and jumpstarting NKI kernel developement. See :ref:`amazon-q-dev`
+
+PyTorch NeuronX
+- Added troubleshooting note for eager debug mode errors. See :ref:`pytorch-neuron-traning-troubleshooting`
+- Add torch-neuronx cxx11 ABI documentation. See :ref:`pytorch-neuronx-install-cxx11`
+- Added Migration Guide From ``XLA_USE_BF16``/ ``XLA_DOWNCAST_BF16``. See :ref:`migration_from_xla_downcast_bf16`
+- Updated BERT tutorial to not use ``XLA_DOWNCAST_BF16`` and updated BERT-Large pretraining phase to BFloat16 BERT-Large pretraining with AdamW and stochastic rounding. See :ref:`hf-bert-pretraining-tutorial`
+- Added Appliation Note for PyTorch 2.5 support. See :ref:`introduce-pytorch-2-5`
+- Updated PyTorch NeuronX Environment Variables document with support for PyTorch 2.5. See :ref:`pytorch-neuronx-envvars`
+
+Misc
+- Added a third-party developer flow solutions page. See :ref:`third-party-devflow-solutions`
+- Added a third-party libraries page. See :ref:`third-party-libraries`
+
+End of support announcements
+- :ref:`announce-eos-neuron-det`
+- :ref:`announce-eos-nxd-examples`
+- :ref:`announce-python-eos`
+- :ref:`announce-eos-pytorch-eos-113`
+- :ref:`announce-eos-pytorch-2-1`
+- :ref:`announce-u20-dlami-dlc-eos`
+- :ref:`announce-eos-torch-neuron`
+
 Neuron 2.20.0
 ---------------
 Date: 09/16/2024
@@ -25,7 +100,7 @@ Neuron Compiler
 - Added NKI FAQ. See :ref:`nki_faq`
 - Added NKI Known Issues. See :ref:`nki_known_issues`
 - Updated Neuron Glossary with NKI terms. See :ref:`neuron_hw_glossary`
-- Added new :ref:`NKI samples repository <https://github.com/aws-neuron/nki-samples>`
+- Added new `NKI samples repository <https://github.com/aws-neuron/nki-samples>`_
 - Added average_pool2d, fused_mamba, layernorm, matrix_multiplication, rms_norm, sd_attention, tensor_addition, and transpose_2d kernel tutorials to the NKI samples respository. See :ref:`NKI samples repository <https://github.com/aws-neuron/nki-samples>`
 - Added unit and integration tests for each kernel. See `NKI samples repository <https://github.com/aws-neuron/nki-samples>`_
 - Updated Custom Operators API Reference Guide with updated terminology (HBM). See :ref:`custom-ops-api-ref-guide`

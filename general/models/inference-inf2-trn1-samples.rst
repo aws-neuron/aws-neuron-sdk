@@ -1,7 +1,7 @@
 .. _model_samples_inference_inf2_trn1:
 
-Inference Samples/Tutorials (Inf2/Trn1)
-=======================================
+Inference Samples/Tutorials (Inf2/Trn1/Trn2)
+============================================
 
 .. contents:: Table of contents
    :local:
@@ -76,6 +76,11 @@ Decoders
      - torch-neuronx
      - * `HuggingFace Pretrained GPT2 Feature Extraction on Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_gpt2_feature_extraction_on_trn1.ipynb>`_
   
+   * - meta-llama/Llama-3.2-90B
+     - neuronx-distributed-inference
+     - * :ref:`Tutorial for deploying Llama-3.2-90B on Trn1 & Inf2 instances <nxdi-llama3.2-multimodal-tutorial>`
+   
+
    * - meta-llama/Llama-3.1-8b
      - transformers-neuronx
      - * `Run Hugging Face Llama 3.1 8B autoregressive sampling on Inf2 & Trn1 with 32k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-32k-sampling.ipynb>`_
@@ -87,6 +92,15 @@ Decoders
      - * `Run Hugging Face Llama 3.1 70B autoregressive sampling on Trn1 with 64k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-64k-sampling.ipynb>`_
        * `Run Hugging Face meta-llama/Meta-Llama-3.1-70B autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-3.1-70b-sampling.ipynb>`_
 
+   * - meta-llama/Llama-3.1-70b-Instruct
+     - transformers-neuronx
+     - * `Run Hugging Face Llama-3.1-70B-Instruct + Llama-3.2-1B-Instruct Speculative Decoding on Trn1 with transformers-neuronx and vLLM <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-speculative-decoding.ipynb>`_
+       * `Run Hugging Face Llama-3.1-70B-Instruct EAGLE Speculative Decoding on Trn1 with transformers-neuronx and vLLM <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-eagle-speculative-decoding.ipynb>`_
+
+   * - meta-llama/Llama-3.1-405b
+     - neuronx-distributed-inference
+     - * :ref:`Tutorial for deploying Llama-3.1-405B on Trn2 <nxdi-trn2-llama3.1-405b-tutorial>`
+   
    * - meta-llama/Llama-3.1-405b
      - transformers-neuronx
      - * `Run Hugging Face Llama 3.1 405B autoregressive sampling on Trn1/Trn1n with 16k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_
@@ -191,10 +205,9 @@ Vision Transformers
      - torch-neuronx
      - * `HuggingFace Pretrained ViT Inference on Trn1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_vit_inference_on_inf2.ipynb>`_
 
-
    * - clip-vit-base-patch32
      - torch-neuronx
-     - * `HuggingFace Pretrained CLIP Base Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples-staging/blob/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_
+     - * `HuggingFace Pretrained CLIP Base Inference on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_clip_base_inference_on_inf2.ipynb>`_
 
 
    * - clip-vit-large-patch14

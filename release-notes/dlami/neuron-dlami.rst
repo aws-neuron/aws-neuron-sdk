@@ -7,6 +7,22 @@ Neuron DLAMI Release Notes
    :local:
    :depth: 1
 
+Neuron 2.21.0
+-------------
+
+Date: 12/20/2024
+
+- Added support for Trainium2 chips within the Neuron Multi Framework DLAMI.
+- Added support for JAX 0.4 to Neuron Multi Framework DLAMI.
+- Added NxD Training (NxDT), NxD Inference (NxDI) and NxD Core PyTorch 2.5 support within the Neuron Multi Framework DLAMI.
+- Added Single Framework DLAMI for TensorFlow 2.10 on U22 and corresponding SSM Parameter support.
+- Removing virtual environments for PyTorch 1.13 and 2.1 within Neuron Multi Framework DLAMI.
+- Removing PyTorch 1.13 inf1 virtual environment from Neuron Multi Framework DLAMI.
+- Removing Single Framework DLAMI and corresponding SSM Parameters for PyTorch 1.13 and 2.1.
+- Removing SSM Parameters for AL2 Base DLAMI, PyTorch 1.13 and 2.1 Neuron DLAMI.
+  
+See :ref:`neuron-dlami-overview`
+
 Neuron 2.20.1
 -------------
 

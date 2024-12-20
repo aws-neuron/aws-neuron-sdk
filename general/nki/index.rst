@@ -131,8 +131,8 @@ Writing Performant NKI Kernels
 
       .. grid-item::
 
-            .. card:: Trainium/Inferentia2 Architecture Guide
-                  :link: trainium_inferentia2_arch
+            .. card:: NeuronDevice Architecture Guide
+                  :link: nki_arch_guides
                   :link-type: ref
                   :class-body: sphinx-design-class-title-small
 

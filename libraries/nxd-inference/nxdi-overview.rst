@@ -31,8 +31,6 @@ NxD Inference(NxDI) library offers the following benefits:
 * **Open Source and SW Release**:  NxD Inference library is provided as pip wheel and corresponding source code is made available on `GitHub <https://github.com/aws-neuron/neuronx-distributed-inference>`_ . We encourage developers to contribute new model implementations or feature optimizations to the NxDI library by submitting a pull request.
 
 
-NxD Inference library is a PyTorch library that extends NxD Core library to enable easy deployment of production-ready deep learning models of any size.  Several Inference modules like Key Value(KV) Cache , Multi-Head Attention (MHA), Continuous Batching, Speculative Decoding etc are implemented in NxD Inference .  NxDI model hub which consists of production ready models that developers can easily deploy in production are implemented using inference modules and NxD core primitives.
-
 
 .. _nxdi_figure:
 

@@ -3,7 +3,7 @@
 PyTorch NeuronX Tracing API for Inference
 ===========================================
 
-.. py:function:: torch_neuronx.trace(func, example_inputs, *_, input_output_aliases={}, compiler_workdir=None, compiler_args=None, partitioner_config=None, inline_weights_to_neff=True)
+.. py:function:: torch_neuronx.trace(func, example_inputs, *_, input_output_aliases={}, compiler_workdir=None, compiler_args=None, partitioner_config=None, inline_weights_to_neff=True, cpu_backend=False)
     
     Trace and compile operations in the ``func`` by executing it using
     ``example_inputs``.
@@ -44,6 +44,9 @@ PyTorch NeuronX Tracing API for Inference
     :keyword bool inline_weights_to_neff: A boolean indicating whether the weights should be
         inlined to the NEFF. If set to False, weights will be separated from the NEFF.
         The default is ``True``.
+    :keyword bool cpu_backend: A boolean indicating whether CPU should be used for tracing. 
+        If set to True, tracing can be done completely on CPU. This keyword needs to be used with 
+        the ``compiler_args`` option to set the ``--target`` flag. The default is ``False``.
 
     :returns: The traced :class:`~torch.jit.ScriptModule` with the embedded
        compiled Neuron graph. Operations in this module will execute on Neuron.
@@ -206,6 +209,40 @@ PyTorch NeuronX Tracing API for Inference
         loaded = torch.jit.load('model.pt')
         torch_neuronx.move_trace_to_device(loaded,0) # necessary for performance
         loaded(torch.rand(1, 1, 3, 3))
+    
+    *CPU Compilation*
+
+    On CPU:
+
+    .. code-block:: python
+
+        import torch
+        import torch_neuronx
+        import torch.nn as nn
+        class Model(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.conv = nn.Conv2d(1, 1, 3)
+            def forward(self, x):
+                return self.conv(x) + 1
+        model = Model()
+        model.eval()
+        example_inputs = torch.rand(1, 1, 3, 3)
+        # Traces the forward method on CPU, compiling for Trn1
+        trace = torch_neuronx.trace(model, example_inputs, compiler_args="--target trn1", cpu_backend=True)
+        torch.jit.save(trace, 'model.pt')
+        # Move model.pt to a Neuron instance
+    
+    On Neuron:
+
+    .. code-block:: python
+
+      import torch
+      import torch_neuronx
+      import torch.nn as nn
+      
+      loaded = torch.jit.load('model.pt')
+      loaded(torch.rand(1, 1, 3, 3))
     
     .. note::
 

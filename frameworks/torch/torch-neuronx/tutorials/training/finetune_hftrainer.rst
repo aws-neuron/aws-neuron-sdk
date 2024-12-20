@@ -40,7 +40,7 @@ First we install a recent version of HF transformers, scikit-learn and evaluate 
 
 .. code:: bash
 
-    export HF_VER=4.27.4
+    export HF_VER=4.44.0
     pip install -U transformers==$HF_VER datasets evaluate scikit-learn
     cd ~/
     git clone https://github.com/huggingface/transformers --branch v$HF_VER
@@ -55,7 +55,13 @@ We will run MRPC task fine-tuning following the example in README.md located in 
 
     If you are using older versions of transformers <4.27.0 or PyTorch Neuron <1.13.0, please see section :ref:`workarounds_for_older_versions` for necessary workarounds.
 
-We use full BF16 casting using XLA_USE_BF16=1 and compiler flag ``--model-type=transformer`` to enable best performance.
+We use BF16 mixed-precision casting using trainer API ``--bf16`` option and compiler flag ``--model-type=transformer`` to enable best performance.
+We also launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_node=N`` option to specify the number of workers. Here we start of with 1 worker.
+
+.. note::
+
+    With transformers version 4.44 and up, please use torchrun even for one worker (``--nproc_per_node=1``) to avoid execution hang.
+
 First, paste the following script into your terminal to create a “run.sh” file and change it to executable:
 
 .. code:: bash
@@ -64,11 +70,12 @@ First, paste the following script into your terminal to create a “run.sh” fi
     #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
-    XLA_USE_BF16=1 python3 ./run_glue.py \\
+    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=1 ./run_glue.py \\
     --model_name_or_path bert-large-uncased \\
     --task_name \$TASK_NAME \\
     --do_train \\
     --do_eval \\
+    --bf16 \\
     --max_seq_length 128 \\
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
@@ -108,11 +115,11 @@ If precompilation was not done, the first execution of ./run.sh will be slower d
 
 .. _multi_worker_training:
 
-Multi-worker training
----------------------
+Multi-worker data-parallel training
+-----------------------------------
 
-The above script would run one worker on one NeuronCore. To run on
-multiple cores, launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_node=N`` option to specify the number of workers
+The above script would run one worker on one Logical NeuronCore. To run on
+multiple Logical NeuronCores in data-parallel configuration, launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_node=N`` option to specify the number of workers
 (N=2 for trn1.2xlarge, and N=2, 8, or 32 for trn1.32xlarge).
 
 .. note::
@@ -128,11 +135,12 @@ Paste the following script into your terminal to create a “run_2w.sh” file a
     #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
-    XLA_USE_BF16=1 torchrun --nproc_per_node=2 ./run_glue.py \\
+    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=2 ./run_glue.py \\
     --model_name_or_path bert-large-uncased \\
     --task_name \$TASK_NAME \\
     --do_train \\
     --do_eval \\
+    --bf16 \\
     --max_seq_length 128 \\
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
@@ -210,12 +218,13 @@ Paste the following script into your terminal to create a “run_converted.sh”
     #!/usr/bin/env bash
     export TASK_NAME=mrpc
     export NEURON_CC_FLAGS="--model-type=transformer"
-    XLA_USE_BF16=1 python3 ./run_glue.py \\
+    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=2 ./run_glue.py \\
     --model_name_or_path hf_saved_model \\
     --tokenizer_name bert-large-uncased \\
     --task_name \$TASK_NAME \\
     --do_train \\
     --do_eval \\
+    --bf16 \\
     --max_seq_length 128 \\
     --per_device_train_batch_size 8 \\
     --learning_rate 2e-5 \\
@@ -283,6 +292,7 @@ Known issues and limitations
 
 The following are currently known issues:
 
+-  With transformers==4.44.0, running one worker fine-tuning without torchrun would result in a hang. To workaround and run one worker fine-tuning, use ``torchrun --nproc_per_node=1 <script>``.
 -  With torch-neuronx 2.1, HF Trainer API's use of XLA function ``xm.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. This is an issue with the trial execution of empty NEFFs and should not affect the normal execution of the training script.
 -  Multi-worker training using Trainer API resulted in too many graph compilations for HF transformers>=4.35: This is resolved with HF transformers>=4.37 with the additional workarounds as shown in `the ticket<https://github.com/aws-neuron/aws-neuron-sdk/issues/813>`.
 -  Long compilation times: this can be alleviated with

@@ -31,16 +31,15 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
-Neuron Runtime Library [2.23.xx.0]
+Neuron Runtime Library [2.23.110.0]
 ---------------------------------
-Date: 12/03/2024
+Date: 12/20/2024
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
 * Added Trainium2 support
-* Added runtime support to surface out-of-bound errors from DGE to customers
+* Added runtime support to detect and fail on out-of-bound memory access in DMA operations
 * Added support for 4-rank replica group on adjacent Neuron cores on TRN1/TRN1N/INF2E
-* Added runtime support to fail in case of out-of-bound memory access in certain use-cases. (:ref:`reference <nrt-input-dump>`)
 * Added new profiling API for capturing system and device profiles. This feature is currently in beta. See the Neuron Profiler 2.0 (Beta) documentation for usage. (:ref:`reference <neuron-profiler-2-0-guide>`)
 
 Improvements

@@ -44,8 +44,9 @@ Install the neuron packages using the command:
 Building Apex
 -------------
 
-Since NxD Training is built on top of NeMo, we have to install its dependencies too. One of which is the
-`Apex <https://github.com/NVIDIA/apex/tree/master>`_ library. NeMo uses it for few of the fused module implementations.
+NxD Training uses the NeMo toolkit, which requires you to install additional dependencies. One of these dependencies is 
+the `Apex <https://github.com/NVIDIA/apex/tree/master>`_ library. The NeMo toolkit uses this library for several fused 
+module implementations.
 
 .. note::
     NeMo used to use Apex for all distributed training APIs. Since we are using NxD for the same purpose, the use of

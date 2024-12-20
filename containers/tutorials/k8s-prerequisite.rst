@@ -44,6 +44,23 @@ This template file has a few important config settings -
 * The template installs the EFA driver. Please note that the libfabric version should match between the AMI and the workload containers.
 * It uses the `EKS optimized accelerated AMI <https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html#gpu-ami>`__ which  has the necessary neuron components installed. The template uses AMI for Kubernetes version 1.25. Please update to appropriate version.
 * The template adds trn1.32xlarge nodes to the cluster. Please update to the desired instance type.
+* Trn2 instance types use a default LNC (Logical NeuronCore Configuration) setting of `2`, if you want to change it to `1`, update the UserData section of the launch template to a new LNC setting as shown below, and deploy the new/updated version of launch template.
+
+.. code-block:: bash
+
+    --==BOUNDARY==
+    Content-Type: text/x-shellscript; charset="us-ascii"
+
+    #!/bin/bash
+    set -ex
+    config_dir=/opt/aws/neuron
+    config_file=${config_dir}/logical_nc_config
+    [ -d "$config_dir" ] || mkdir -p "$config_dir"
+    [ -f "$config_file" ] || touch "$config_file"
+    if ! grep -q "^NEURON_LOGICAL_NC_CONFIG=1$" "$config_file" 2>/dev/null; then
+        printf "NEURON_LOGICAL_NC_CONFIG=1" >> "$config_file"
+    fi
+    --==BOUNDARY==--
 
 Finally, run the following command to create cloud formation stack:
 

@@ -14,6 +14,169 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [2.5.1.2.4.0]
+----------------------
+Date: 12/20/2024
+
+Summary
+~~~~~~~
+
+- :ref:`Introducing PyTorch 2.5 Support<introduce-pytorch-2-5>`
+- Added support for Trainium2
+- Added support for C++11 ABI
+- Added support for Neuron Profiler 2.0
+- Added support for libneuronxla 2.1.*
+- Supported Python versions: 3.9, 3.10, 3.11
+
+Known limitations
+~~~~~~~~~~~~~~~~~
+
+* PyTorch NeuronX currently does not support GSPMD
+* PyTorch NeuronX currently does not support torch.compile
+* PyTorch NeuronX currently does not support DDP/FSDP
+
+Known issues
+~~~~~~~~~~~~
+
+Please see the :ref:`Introducing PyTorch 2.5 Support<introduce-pytorch-2-5>` for a full list of known issues.
+
+Certain sequence of operations with ``xm.save()`` could corrupt tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using the ``xm.save`` function to save tensors, please use ``xm.mark_step()`` before ``xm.save`` to avoid the error described in https://github.com/pytorch/xla/issues/8422 where parameter aliasing could corrupt other tensor values. This issue will be fixed in a future release.
+
+(Here ``xm`` is ``torch_xla.core.xla_model`` following PyTorch/XLA convention)
+
+Lower BERT pretraining performance with torch-neuronx 2.5 compared to torch-neuronx 2.1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be deprecation warnings (as noted below).
+
+
+Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used). Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to cast model to BF16. (see :ref:`<migration_from_xla_downcast_bf16>`)
+
+
+WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.world_size instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size`` instead.
+
+
+WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal() `` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
+
+
+AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In Torch-XLA 2.5, ``torch_xla.runtime.using_pjrt`` is removed because PJRT is the sole Torch-XLA runtime.
+See `commit PR <https://github.com/pytorch/xla/commit/d6fb5391d09578c8804b1331a5e7a4f72bf981db>`_.
+
+
+``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With PyTorch 2.5 (torch-neuronx), HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. To work-around this issue, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
+
+.. code:: python
+
+    import copy
+    import torch_xla.core.xla_model as xm
+    def mesh_reduce(tag, data, reduce_fn):
+        xm.rendezvous(tag)
+        xdatain = copy.deepcopy(data)
+        xdatain = xdatain.to("xla")
+        xdata = xm.all_gather(xdatain, pin_layout=False)
+        cpu_xdata = xdata.detach().to("cpu")
+        cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
+        xldata = [x for x in cpu_xdata_split]
+        return reduce_fn(xldata)
+    xm.mesh_reduce = mesh_reduce
+
+
+``Check failed: tensor_data`` error during when using ``torch.utils.data.DataLoader`` with ``shuffle=True``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With PyTorch 2.5 (torch-neuronx), using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
+
+.. code:: bash
+
+    RuntimeError: torch_xla/csrc/xla_graph_executor.cpp:562 : Check failed: tensor_data
+
+This is due to ``synchronize_rng_states`` using ``xm.mesh_reduce`` to synchronize RNG states. ``xm.mesh_reduce`` in turn uses ``xm.rendezvous()`` with payload, which as noted in 2.x migration guide, would result in extra graphs that could lead to lower performance due to change in ``xm.rendezvous()`` in torch-xla 2.x. In the case of :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`, using ``xm.rendezvous()`` with payload also lead to the error above. This limitation will be fixed in an upcoming release. For now, to work around the issue, please disable shuffle in DataLoader when ``NEURON_EXTRACT_GRAPHS_ONLY`` environment is set automatically by Neuron Parallel Compile:
+
+.. code:: python
+
+    train_dataloader = DataLoader(
+        train_dataset, shuffle=(os.environ.get("NEURON_EXTRACT_GRAPHS_ONLY", None) == None), collate_fn=default_data_collator, batch_size=args.per_device_train_batch_size
+    )
+
+Additionally, as in the previous section, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
+
+.. code:: python
+
+    import copy
+    import torch_xla.core.xla_model as xm
+    def mesh_reduce(tag, data, reduce_fn):
+        xm.rendezvous(tag)
+        xdatain = copy.deepcopy(data)
+        xdatain = xdatain.to("xla")
+        xdata = xm.all_gather(xdatain, pin_layout=False)
+        cpu_xdata = xdata.detach().to("cpu")
+        cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
+        xldata = [x for x in cpu_xdata_split]
+        return reduce_fn(xldata)
+    xm.mesh_reduce = mesh_reduce
+
+Compiler assertion error when running Stable Diffusion training
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, with PyTorch 2.5 (torch-neuronx), we are seeing the following compiler assertion error with Stable Diffusion training when gradient accumulation is enabled. This will be fixed in an upcoming release. For now, if you would like to run Stable Diffusion training with Neuron SDK release 2.21, please disable gradient accumulation in torch-neuronx 2.5.
+
+.. code:: bash
+
+    ERROR 222163 [NeuronAssert]: Assertion failure in usr/lib/python3.8/concurrent/futures/process.py at line 239 with exception:
+    too many partition dims! {{0,+,960}[10],+,10560}[10]
+
+
+Release [2.1.2.2.4.0]
+----------------------
+Date: 12/xx/2024
+
+Summary
+~~~~~~~
+
+- Added support for Trainium2
+- Added support for C++11 ABI
+- Added support for Neuron Profiler 2.0
+- Added support for libneuronxla 2.1.*
+
+.. note::
+
+    The CVEs `CVE-2024-31583 <https://github.com/advisories/GHSA-pg7h-5qx3-wjr3>`_ and `CVE-2024-31580 <https://github.com/advisories/GHSA-5pcm-hx3q-hm94>`_ affect PyTorch versions 2.1 and earlier. Based on Amazon's analysis, executing models on Trainium and Inferentia is not exposed to either of these vulnerabilities. We recommend upgrading to the new version of Torch-NeuronX by following the Neuron setup instruction.
+
+Release [1.13.1.1.16.0]
+-----------------------
+Date: 12/xx/2024
+
+Summary
+~~~~~~~
+
+Minor updates
+
+.. note::
+
+    Torch NeuronX 1.13 currently does not support Trainium2.
+
+.. note::
+
+    The CVEs `CVE-2024-31583 <https://github.com/advisories/GHSA-pg7h-5qx3-wjr3>`_ and `CVE-2024-31580 <https://github.com/advisories/GHSA-5pcm-hx3q-hm94>`_ affect PyTorch versions 2.1 and earlier. Based on Amazon's analysis, executing models on Trainium and Inferentia is not exposed to either of these vulnerabilities. We recommend upgrading to the new version of Torch-NeuronX by following the Neuron setup instruction.
+
 Release [2.1.2.2.3.2]
 ----------------------
 Date: 11/20/2024
@@ -44,7 +207,7 @@ This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and pr
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for Neuron Kernel Interface (NKI). Please see [NKI documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html) for more information.
+- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`_ for more information.
 - Added support for Python 3.11.
 - Added support for protobuf versions 3.20+.
 - (Training) Increased performance for BERT-Large pretraining by changing ``NEURON_TRANSFER_WITH_STATIC_RING_OPS`` default.
@@ -187,7 +350,7 @@ Currently, with PyTorch 2.1 (torch-neuronx), we are seeing the following compile
 
 Release [1.13.1.1.16.0]
 -----------------------
-Date: 09/xx/2024
+Date: 09/16/2024
 
 Summary
 ~~~~~~~
@@ -196,7 +359,7 @@ This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and pr
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for Neuron Kernel Interface (NKI). Please see [NKI documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html) for more information.
+- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`_ for more information.
 - Added support for Python 3.11.
 - Added support for protobuf versions 3.20+.
 - (Inference) Added support for weight separated models for DataParallel class.

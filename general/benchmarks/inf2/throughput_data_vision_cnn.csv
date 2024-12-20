@@ -1,9 +1,9 @@
 Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
-resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.1,Inf2.xlarge,Image Classification,6944.75,4.59,4.66,Batch,2.20.0,Data Parallel,8,FP32,Matmult-BF16
-resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.1,Inf2.xlarge,Image Classification,5116.51,6.24,6.31,Batch,2.20.0,Data Parallel,8,FP32,Matmult-BF16
-resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.1,Inf2.xlarge,Image Classification,4420.47,7.23,7.31,Batch,2.20.0,Data Parallel,8,FP32,Matmult-BF16
-resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.1,Inf2.xlarge,Image Classification,3178.53,80.43,80.56,Batch,2.20.0,Data Parallel,64,FP32,Matmult-BF16
-resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.1,Inf2.xlarge,Image Classification,2430.45,105.24,105.36,Batch,2.20.0,Data Parallel,64,FP32,Matmult-BF16
-UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 2.1,Inf2.xlarge,Image Segmentation,999.94,15.99,16.08,Batch,2.20.0,Data Parallel,4,FP32,Matmult-BF16
-vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 2.1,Inf2.xlarge,Image Classification,4687.13,54.55,54.65,Batch,2.20.0,Data Parallel,64,FP32,Matmult-BF16
-vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 2.1,Inf2.xlarge,Image Classification,2095.37,15.25,15.32,Batch,2.20.0,Data Parallel,8,FP32,Matmult-BF16
+resnet18,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.5,Inf2.xlarge,Image Classification,6949.174,4.587,4.659,Batch,2.21.0,Data Parallel,8,FP32,Matmult-BF16
+resnet34,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.5,Inf2.xlarge,Image Classification,5158.607,6.18,6.251,Batch,2.21.0,Data Parallel,8,FP32,Matmult-BF16
+resnet50,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.5,Inf2.xlarge,Image Classification,4393.304,7.283,7.331,Batch,2.21.0,Data Parallel,8,FP32,Matmult-BF16
+resnet101,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.5,Inf2.xlarge,Image Classification,3164.991,80.818,80.938,Batch,2.21.0,Data Parallel,64,FP32,Matmult-BF16
+resnet152,224x224,:benchmark-pt:`Benchmark <resnet>`,PyTorch 2.5,Inf2.xlarge,Image Classification,2449.875,104.406,104.531,Batch,2.21.0,Data Parallel,64,FP32,Matmult-BF16
+UNet,224x224,:benchmark-pt:`Benchmark <unet>`,PyTorch 2.5,Inf2.xlarge,Image Segmentation,1010.803,15.818,15.875,Batch,2.21.0,Data Parallel,4,FP32,Matmult-BF16
+vgg11,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 2.5,Inf2.xlarge,Image Classification,4734.402,54.044,54.09,Batch,2.21.0,Data Parallel,64,FP32,Matmult-BF16
+vgg16,224x224,:benchmark-pt:`Benchmark <vgg>`,PyTorch 2.5,Inf2.xlarge,Image Classification,2161.392,14.77,14.832,Batch,2.21.0,Data Parallel,8,FP32,Matmult-BF16

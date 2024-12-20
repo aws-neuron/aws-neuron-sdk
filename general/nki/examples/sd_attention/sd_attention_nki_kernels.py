@@ -15,7 +15,7 @@ from scipy.special import softmax
 # NKI_EXAMPLE_31_BEGIN
 @nki.jit
 def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=False,
-                                           mixed_percision=True):
+                                           mixed_precision=True):
   """
   Fused self attention kernel for small head dimension Stable Diffusion workload, 
   simplified for this tutorial. 
@@ -38,14 +38,14 @@ def fused_self_attn_for_SD_small_head_size(q_ref, k_ref, v_ref, use_causal_mask=
 
   IO tensor dtypes:
    - This kernel assumes all IO tensors have the same dtype
-   - If mixed_percision is True, then all Tensor Engine operation will be performed in
+   - If mixed_precision is True, then all Tensor Engine operation will be performed in
    bfloat16 and accumulation will be performed in float32. Otherwise the intermediates
    will be in the same type as the inputs.
   """
   # Use q_ref dtype as the intermediate tensor dtype
   # Assume all IO tensors have the same dtype
   kernel_dtype = q_ref.dtype
-  pe_in_dt = nl.bfloat16 if mixed_percision else np.float32
+  pe_in_dt = nl.bfloat16 if mixed_precision else np.float32
   assert q_ref.dtype == k_ref.dtype == v_ref.dtype
 
   # Shape checking

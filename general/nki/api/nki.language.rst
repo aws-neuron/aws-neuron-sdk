@@ -212,6 +212,7 @@ Others
    device_print
    loop_reduce
 
+.. _nl_datatypes:
 
 Data Types
 -----------

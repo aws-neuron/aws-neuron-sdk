@@ -10,7 +10,24 @@ NxD Core Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
-.. _neuronx-distributed-rn-0-9-0:
+.. _neuronx-distributed-rn-0-10-0:
+
+NxD Core [0.10.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 12/20/2024
+
+New in this release
+-------------------
+
+**Training:**
+
+* Added support for HuggingFace Llama3 70B with Trn2 instances
+* Added support for PyTorch 2.5
+* Added DPO support for post-training model alignment
+* Added fused QKV optimization in GQA models
+* Support for Mixture-of-Experts with Tensor, Sequence, and Pipeline parallelism
+
 
 NxD Core [0.9.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

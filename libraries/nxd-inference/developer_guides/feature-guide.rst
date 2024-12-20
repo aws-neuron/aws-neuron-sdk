@@ -18,7 +18,7 @@ Checkpoint compatibility with HuggingFace Transformers
 ------------------------------------------------------
 
 Models included in the NxD Inference model hub are checkpoint-compatible with
-HuggingFace Transformers. Supporting other checkpoint formats in NxD Infernece is possible through converting the
+HuggingFace Transformers. Supporting other checkpoint formats in NxD Inference is possible through converting the
 obtained checkpoint to the standard HuggingFace Transformers checkpoint format.
 
 Checkpoint support
@@ -92,7 +92,7 @@ NeuronConfig.
 Logical NeuronCore support
 --------------------------
 On Trn2 instances, Neuron supports Logical NeuronCore (LNC) configuration,
-which combines multiuple physical NeuronCores into a single logical
+which combines multiple physical NeuronCores into a single logical
 NeuronCore. We recommend using LNC=2 on Trn2 instances.
 
 ::
@@ -234,7 +234,7 @@ sampling, provide an OnDeviceSamplingConfig for the
 
 ::
 
-   on_device_sampling_config = OnDeviceSamplingConfig()
+   on_device_sampling_config = OnDeviceSamplingConfig(global_topk=256)
    neuron_config = NeuronConfig(on_device_sampling_config=on_device_sampling_config)
 
 Dynamic Sampling
@@ -360,6 +360,8 @@ provide a list of bucket sizes in ``context_encoding_buckets`` and/or
        context_encoding_buckets=[1024, 2048, 4096],
        token_generation_buckets=[8192]
    )
+
+.. _nxdi-quantization:
 
 Quantization
 ------------
@@ -609,12 +611,35 @@ Medusa speculative decoding currently supports only batch sizes of 1.
 EAGLE Speculative Decoding
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NxD Inference supports EAGLE v1. NxD Inference supports 
-EAGLE with a flat draft structure. To use EAGLE v1, you must use a draft
-model that is specifically fine-tuned for EAGLE speculation. For more information
-about EAGLE, and for links to pretrained EAGLE draft model checkpoint
-for various popular models, see the official implementation on GitHub:
-https://github.com/SafeAILab/EAGLE.
+NxD Inference supports EAGLE v1 speculative decoding with a flat draft structure.
+
+EAGLE Checkpoint Compatibility
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To use EAGLE speculative decoding, you must use a draft
+model that is specifically fine-tuned for EAGLE speculation. Additionally, to use EAGLE with
+NxD Inference, the draft model must include the LM head weights from the target model.
+These weights are shared between the draft and target model.
+
+Because NxD Inference uses a flat draft structure, it predicts only one token per draft iteration.
+Although NxD Inference doesn't support EAGLE with a tree structure, you can train
+an EAGLE checkpoint in the same way. Note that depending on your use case and dataset, you
+might see lower acceptance rate with the flat draft structure compared with using a tree structure.
+
+You can find links to pretrained EAGLE draft model checkpoints for various
+popular models in the official EAGLE repository on GitHub: https://github.com/SafeAILab/EAGLE.
+However, these pretrained EAGLE model checkpoints don't include the LM head
+weights from the target model. To use these pretrained checkpoints with NxD Inference,
+you must first copy the LM head weights from the target to the draft model.
+
+NxD Inference supports EAGLE models with or without input normalization. By default,
+NxD Inference expects that the EAGLE model doesn't use input normalization. To use
+an EAGLE model with input normalization, set ``enable_eagle_draft_input_norm`` to ``True``
+in NeuronConfig.
+
+.. _nxd-fused-speculative-decoding:
+Fused Speculation
+^^^^^^^^^^^^^^^^^
 
 EAGLE speculation uses a feature called *fused speculation*, where the
 draft model and target model are fused into a single compiled model to

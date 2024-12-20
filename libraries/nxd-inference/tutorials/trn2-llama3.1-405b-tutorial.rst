@@ -99,6 +99,10 @@ for best performance.
   this kernel, set ``quantized_mlp_kernel_enabled=True``. This kernel requires
   ``mlp_kernel_enabled=True``.
 
+.. note::
+   To use the QKV and MLP kernels, you must set ``torch_dtype`` to ``torch.bfloat16``
+   in NeuronConfig.
+
 Tutorial: Run Llama3.1 405B on Trn2
 -----------------------------------
 
@@ -119,7 +123,7 @@ includes the Neuron SDK.
 
 ::
 
-   source ~/aws_neuronx_venv_pytorch_2_1_nxd_inference/bin/activate
+   source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
 
 Run ``pip list`` to verify that the Neuron SDK is installed.
 
@@ -136,28 +140,30 @@ Step 2: Install the vLLM version that supports NxD Inference
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.0-neuron>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron>`__
 
 To run NxD Inference with vLLM, you download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b v0.6.0-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Activate the Neuron virtual environment.
 
 ::
     
-    source ~/aws_neuronx_venv_pytorch_2_1_nxd_inference/bin/activate
+    source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
 
 
 Install the Neuron vLLM fork into the virtual environment.
 
 ::
     
-    cd upstreaming-to-vllm python -m pip install -r requirements-neuron.txt -e ./
+    cd upstreaming-to-vllm
+    pip install -r requirements-neuron.txt
+    VLLM_TARGET_DEVICE="neuron" pip install -e .
 
 
 Step 3: Deploy Llama 3.1 405B sample code
@@ -165,14 +171,14 @@ Step 3: Deploy Llama 3.1 405B sample code
 
 Choose one of the following examples to run on the Trn2 instance:
 
-1. Deploy Llama3.1 405B with vLLM offine inference. This example demonstrates
+1. Deploy Llama3.1 405B with vLLM offline inference. This example demonstrates
    how to deploy on Trn2 with vLLM and topK sampling.
 
 2. Deploy Llama3.1 405B with EAGLE speculative decoding. This example
    demonstrates how to use EAGLE to optimize Llama3.1 405B on Trn2.
 
-Example 1: Deploy Llama3.1 405B on Trn2 with vLLM offine inference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 1: Deploy Llama3.1 405B on Trn2 with vLLM offline inference
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This example demonstrates how to deploy Llama3.1 405B on Trn2 with vLLM
 offline inference and the following configuration options:
@@ -240,10 +246,8 @@ speculative decoding.
 
 .. note::
    To use this example, you must provide an EAGLE-trained Llama3.1 405B
-   checkpoint to use for EAGLE speculative decoding. This EAGLE checkpoint 
-   must not be tree-based. For more information
-   about EAGLE and how to train an EAGLE checkpoint, see the
-   official implementation on GitHub: `SafeAILab/EAGLE <https://github.com/SafeAILab/EAGLE>`__.
+   checkpoint to use for EAGLE speculative decoding. For more information
+   about EAGLE checkpoint compatibility with NxD Inference, see :ref:`nxd-eagle-speculative-decoding`.
 
 This example uses the following configuration options:
 

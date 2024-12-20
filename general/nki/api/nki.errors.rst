@@ -402,11 +402,11 @@ err_shared_hbm_must_in_kernel_level
 shared_hbm tensor can only be created in top level kernel scope
 
 Creating shared_hbm tensors inside a loop, under if condition
- or inside another function called by the top-level nki kernel
- is not supported.
+or inside another function called by the top-level nki kernel
+is not supported.
 
 Consider hoist the creation of shared_hbm tensors to the top
- level kernel scope.
+level kernel scope.
 
 .. code-block:: python
 

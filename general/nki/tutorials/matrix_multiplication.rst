@@ -24,7 +24,10 @@ Basic compute kernel
 
 :numref:`Fig. %s <nki-fig-mm-view>` illustrates how a simple matrix
 multiplication: ``lhs [M, K] * rhs [K, N] = output [M, N]`` would be mapped to the
-Tensor Engine (TensorE) and SRAMs from its original mathematical view.
+Tensor Engine (TensorE) and SRAMs from its original mathematical view. Note, the PSUM
+partition dimension is rotated 90 degrees from SBUF partition dimension solely for layout visualization.
+The copy preserves the ``output`` tile layout from PSUM to SBUF, by copying data from each PSUM partition
+to the corresponding SBUF partition.
 
 The NKI example below implements a compute kernel for a single-tile matrix
 multiplication. It computes a ``64(M) x 128(K) x 512 (N)`` matrix
@@ -119,8 +122,8 @@ compiler, which enables faster compilation.
 
 There is an alternative way to implement this tiled matrix multiplication kernel
 using the SPMD programming model.  We can use the SPMD model to launch ``(M/128)
-x (N/512)`` instances of the kernel to complete the innermost loop.  For more
-details, please refer to the :ref:`SPMD programming model <nki-pm-spmd>`.
+x (N/512)`` instances of the kernel to complete the innermost loop. For more
+details, refer to the :ref:`SPMD programming model <nki-pm-spmd>`.
 
 
 
@@ -358,5 +361,4 @@ implementation:
 
 .. code-block::
 
-   python3 matrix_multiplication_torch.py 
-
+   python3 matrix_multiplication_torch.py

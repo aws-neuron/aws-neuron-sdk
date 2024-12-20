@@ -110,7 +110,15 @@ def affine_select(pred, on_true_tile, on_false_value, *, mask=None, dtype=None, 
   r"""
   Select elements between an input tile ``on_true_tile`` and a scalar value ``on_false_value``
   according to a boolean predicate tile using GpSimd Engine. The predicate tile is
-  calculated on-the-fly in the engine using the input affine expression ``pred``.
+  calculated on-the-fly in the engine by evaluating an affine expression element-by-element as indicated in ``pred``.
+  
+  ``pred`` must meet the following requirements:
+
+    - It must not depend on any runtime variables that can't be resolved at compile-time.
+    - It can't be multiple masks combined using logical operators such as ``&`` and ``|``.
+
+  For a complex predicate that doesn't meet the above requirements, consider using :doc:`nl.where <nki.language.where>`.
+
   The input tile ``on_true_tile``, the calculated boolean predicate tile expressed by ``pred``,
   and the returned output tile of this instruction
   must have the same shape. If the predicate value of a given position is ``True``,
@@ -130,7 +138,8 @@ def affine_select(pred, on_true_tile, on_false_value, *, mask=None, dtype=None, 
 
   **Estimated instruction cost:**
 
-  ``150 + N`` GpSimd Engine cycles, where ``N`` is the number of elements per partition in ``on_true_tile``.
+  ``GPSIMD_START + N`` GpSimd Engine cycles, where ``N`` is the number of elements per partition in ``on_true_tile`` and
+  ``GPSIMD_START`` is the instruction startup overhead on GpSimdE, roughly 150 engine cycles.
 
   :param pred: an affine expression that defines the boolean predicate
   :param on_true_tile: an input tile for selection with a ``True`` predicate value
@@ -772,26 +781,26 @@ def tensor_copy(src, *, mask=None, dtype=None, engine=0, **kwargs):
 
 def tensor_copy_dynamic_src(src, *, mask=None, dtype=None, **kwargs):
   r"""
-  Copy a source tile in SBUF, with a dynamic offset along the free 
-  dimension (except for the partition dimension) using Vector, Scalar or GpSimd
-  Engine.
+  Create a copy of ``src`` tile within NeuronCore on-chip SRAMs using Vector Engine,
+  with ``src`` located at a dynamic offset within each partition.
 
-  Consider combining with ``nl.mgrid`` to specify a static grid and use an
-  index tensor (containing offsets) to specify dynamic offsets. The source tile 
-  ``src`` must be in SBUF / PSUM. Index tensor which specifies the offsets must 
-  be in SBUF memory.
-
-  In addition, since GpSimd Engine cannot access PSUM in NeuronCore, Scalar or 
-  Vector Engine must be chosen when the input or output tile is in PSUM 
-  (see :ref:`arch_sec_neuron_core_engines` for details). By default, this API returns
+  Both source and destination tiles can be in either SBUF or PSUM. By default, this API returns
   a tile in SBUF, unless the returned value is assigned to a pre-declared PSUM tile.
+
+  The source and destination tiles must also have the same number of partitions and the same number of elements
+  per partition.
+
+  The dynamic offset must be a scalar value resided in SBUF. If you have a list of dynamic offsets
+  for gathering tiles in SBUF/PSUM, you may loop over each offset and call ``tensor_copy_dynamic_src``
+  once per offset.
 
   **Estimated instruction cost:**
 
-  Each index element specifying the offset along the free dimension will trigger 
-  a tensor_copy instruction. In addition, since the index is dynamic, an overhead
-  of approximately 140 cycles is incurred to read index elements from SBUF / PSUM 
-  into the engine.
+  ``max(MIN_II_DYNAMIC, N)`` engine cycles, where:
+
+  -  ``N`` is the number of elements per partition in the ``src`` tile,
+  -  ``MIN_II_DYNAMIC`` is the minimum instruction initiation interval for instructions with dynamic source location.
+     ``MIN_II_DYNAMIC`` is roughly 600 engine cycles.
 
   :param src: the source of copy, must be a tile in SBUF or PSUM.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
@@ -1013,7 +1022,7 @@ def tensor_scalar_reduce(*, data, op0, operand0, reduce_op, reduce_res, reverse0
   :param op0: the math operator used with operand0 (any arithmetic operator in :ref:`nki-aluop` is allowed)
   :param operand0: a scalar constant or a tile of shape ``(data.shape[0], 1)``, where data.shape[0]
                   is the partition axis size of the input ``data`` tile
-  :param reverse0: `(coming soon)` reverse ordering of inputs to ``op0``; if false, ``operand0`` is the rhs of ``op0``;
+  :param reverse0: `(not supported yet)` reverse ordering of inputs to ``op0``; if false, ``operand0`` is the rhs of ``op0``;
                    if true, ``operand0`` is the lhs of ``op0``. `<-- currently not supported yet.`
   :param reduce_op: the reduce operation to perform on the free dimension of ``data <op0> operand0``
   :param reduce_res: a tile of shape ``(data.shape[0], 1)``, where data.shape[0]
@@ -1027,33 +1036,38 @@ def tensor_scalar_reduce(*, data, op0, operand0, reduce_op, reduce_res, reverse0
 
 def tensor_tensor(data1, data2, op, *, dtype=None, mask=None, **kwargs):
   r"""
-  Perform an element-wise operation of input two tiles using Vector Engine or GpSimd Engine. 
+  Perform an element-wise operation of input two tiles using Vector Engine or GpSimd Engine.
   The two tiles must have the same partition axis size and the same number of elements per partition.
 
-  The two input tiles, ``data1`` and ``data2`` cannot both reside in PSUM. The three legal cases are:
-
-  1. Both ``data1`` and ``data2`` are in SBUF.
-  2. ``data1`` is in SBUF, while ``data2`` is in PSUM.
-  3. ``data1`` is in PSUM, while ``data2`` is in SBUF.
-
-  The output tile can be in either SBUF or PSUM.
-
   The element-wise operator is specified using the ``op`` field and can be any *binary* operator
-  supported by NKI (see :ref:`nki-aluop` for details) that runs on the Vector Engine, 
-  or can be ``np.power``/``nl.power`` (a special case that runs on the GpSimd Engine).
+  supported by NKI (see :ref:`nki-aluop` for details) that runs on the Vector Engine,
+  or can be ``np.power``/``nl.power``  that runs on the GpSimd Engine.
   For bitvec operators, the input/output data types must be integer types and Vector Engine treats
   all input elements as bit patterns without any data type casting. For arithmetic operators, there is no
   restriction on the input/output data types, but the engine automatically casts input data types to float32
   and performs the element-wise operation in float32 math. The float32 results are cast to the target
   data type specified in the ``dtype`` field before written into the
   output tile. If the ``dtype`` field is not specified, it is default to be the same as the data type of ``data1``
-  or ``data2``, whichever has the highest precision.
+  or ``data2``, whichever has the higher precision.
+
+  Since GpSimd Engine cannot access PSUM, the input or output tiles cannot be in PSUM
+  if ``op`` is ``np.power``/``nl.power``
+  (see :ref:`arch_sec_neuron_core_engines` for details).
+  Otherwise, the output tile can be in either SBUF or PSUM.
+  However, the two input tiles, ``data1`` and ``data2`` cannot both reside in PSUM.
+  The three legal cases are:
+
+  1. Both ``data1`` and ``data2`` are in SBUF.
+  2. ``data1`` is in SBUF, while ``data2`` is in PSUM.
+  3. ``data1`` is in PSUM, while ``data2`` is in SBUF.
 
   Note, if you need broadcasting capability in the free dimension for either input tile, you should consider
   using :doc:`nki.isa.tensor_scalar <nki.isa.tensor_scalar>` API instead,
   which has better performance than ``nki.isa.tensor_tensor`` in general.
 
   **Estimated instruction cost:**
+
+  See below table for tensor_tensor performance when it runs on Vector Engine.
 
   .. list-table::
     :widths: 40 60

@@ -6,7 +6,7 @@ NKI Performance Guide
 In this document, we describe a recipe to find performance bottlenecks of NKI kernels and apply common software optimizations
 to address such bottlenecks. During this process, we will showcase how to leverage :doc:`neuron-profile <neuron_profile_for_nki>`,
 a GUI-based performance profiler designed for NeuronDevices, to guide your performance optimization efforts. Before proceeding
-with this document, please make sure to read through :doc:`Trainium/Inferentia2 Architecture Guide <trainium_inferentia2_arch>`
+with this document, make sure to read through :doc:`NeuronDevice Architecture Guide <nki_arch_guides>`
 to familiarize yourself with Neuron hardware architecture.
 
 Ideally, performance optimization efforts would end with one of two possible outcomes: the execution of a NKI kernel is
@@ -432,13 +432,13 @@ computation cost (one ScalarE cycle throughput-wise).
    Many back-to-back ScalarE instructions with small tensor shapes
 
 **Optimization**: The trick of this optimization is to increase the free dimension size of instruction input tiles. As discussed
-in the :doc:`architecture guide <trainium_inferentia2_arch>`, NeuronCore compute engines
+in the :doc:`architecture guide <nki_arch_guides>`, NeuronCore compute engines
 typically require at least 128 elements/partition in the source tensor to be efficient. However, it is worth mentioning
 that increasing free dimension sizes might not be trivial due to the high-level computation definition. We suggest developers
-walking through the `architecture guide <trainium_inferentia2_arch.html>`_ in detail to better understand capabilities of
+walking through the :doc:`architecture guide <nki_arch_guides>` in detail to better understand capabilities of
 different compute engines, and mapping/reformulating the high-level operators onto the engines using the most suitable instructions.
-Such instructions could be invoked either through the high-level ``[nki.lanaguage](api/nki.language.html)`` or low-level
-``[nki.isa](api/nki.isa.html)`` APIs.
+Such instructions could be invoked either through the high-level ``[nki.lanaguage](api/nki.language)`` or low-level
+``[nki.isa](api/nki.isa)`` APIs.
 
 In addition, keep in mind there is a trade-off in choosing the free dimension size in instruction input tiles: Too small
 of a tile size exposes significant instruction overhead leading to inefficient engine execution, while too large of a tile
@@ -558,7 +558,7 @@ or ScalarE is busy at any moment in time, while TensorE has clear engine idle ga
 **Optimization**: A common optimization to tackle vector/scalar-operation-heavy operators is **combining instructions** using
 low-level ``nki.isa`` APIs. Combining instructions can leverage the deep pipelined stages within VectorE and ScalarE engine
 data path to increase hardware utilization per instruction and reduce the instruction count. Check out the
-:doc:`architecture guide <trainium_inferentia2_arch>` to learn what operations can be done in a pipeline fashion
+:doc:`architecture guide <nki_arch_guides>` to learn what operations can be done in a pipeline fashion
 in a single VectorE/ScalarE instruction.
 
 For example, below pseudo-code showcase combining three instructions into a single one on ScalarE. ``impl 1`` and ``impl
@@ -720,7 +720,7 @@ when such instructions are taking up a large portion of the execution. Before di
 it is important to understand the root cause of these transposes.
 
 At a high level, tensor transposes are needed to adjust the data layout of tensors to match the partition dimension requirements
-of different ISA instructions. Refer to the :doc:`architecture guide <trainium_inferentia2_arch>`
+of different ISA instructions. Refer to the :doc:`architecture guide <nki_arch_guides>`
 for layout requirements of each compute engine. Transposes are inserted explicitly into NKI kernels through
 :doc:`nl.transpose <api/generated/nki.language.transpose>` or :doc:`nisa.sb_transpose <api/generated/nki.isa.nc_transpose>`
 APIs, or calling ``nl.matmul`` with ``transpose_x=False``. These transposes are most commonly lowered down to Tensor Engine.

@@ -392,7 +392,7 @@ GQA-QKV Linear Module:
 
     class neuronx_distributed.modules.qkv_linear.GQAQKVColumnParallelLinear(
         input_size, output_size, bias=True, gather_output=True,
-        sequence_parallel_enabled=False, dtype=torch.float32, device=None, kv_size_multiplier=1)
+        sequence_parallel_enabled=False, dtype=torch.float32, device=None, kv_size_multiplier=1, fuse_qkv=True)
 
 This module parallelizes the Q,K,V linear projections using ColumnParallelLinear layers. Instead of using 
 3 different linear layers, we can replace it with a single QKV module. In case of GQA module, the number of 
@@ -423,6 +423,7 @@ Parameters:
 -  ``device: (torch.device)`` : Device to initialize the weights on. By default, the weights
     would be initialized on CPU
 - ``kv_size_multiplier: (int)``: Factor by which the K and V weights would be replicated along the first dimension
+- ``fuse_qkv: (bool)``: When fuse_qkv is enabled, a single fused tensor is used for QKV. By default, this parameter is True. 
 
 
 Checkpointing:

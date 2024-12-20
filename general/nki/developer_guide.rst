@@ -9,7 +9,7 @@ NKI Developer Guides
       getting_started
       programming_model
       framework_custom_op
-      trainium_inferentia2_arch
+      nki_arch_guides
       neuron_profile_for_nki
       nki_perf_guide
       nki_direct_allocation_guide

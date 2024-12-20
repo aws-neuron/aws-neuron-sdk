@@ -150,9 +150,11 @@ physical tile and must follow these ISA rules:
 - If ``0  < pdim_size <= 32``,  ``start_partition`` must be one of 0/32/64/96
 
 The ``byte_addr`` indicates the byte offset into each partition the physical tile allocation starts from.
-On NeuronCore-v2, a valid ``byte_addr`` can be any integer values from 0 (inclusive) to
+For example, on NeuronCore-v2, a valid ``byte_addr`` can be any integer values from 0 (inclusive) to
 ``192KiB-16KiB=(192-16)*1024`` (exclusive). 192KiB is the physical size of a SBUF partition
-(defined :doc:`architecture guide <trainium_inferentia2_arch>`) and 16KiB is allocated for compiler internal usage.
+and 16KiB is allocated for compiler internal usage.
+Refer to :doc:`NeuronDevice Architecture Guide <nki_arch_guides>` for the physical SBUF partition size
+on each NeuronCore version.
 In addition, ``byte_addr`` must be aligned to ``nki.language.constants.sbuf_min_align``.
 
 At compile time, the compiler will statically evaluate ``func`` over indices of all the
@@ -320,7 +322,8 @@ To improve parallelism, programmers should hoist the tensor declaration and allo
 #2. Avoid PSUM Bank Collisions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Recall from :ref:`trainium_inferentia2_arch`, PSUM in NeuronCore-V2 has eight banks that can accumulate
+As discussed in :doc:`NeuronDevice Architecture Guide <nki_arch_guides>`,
+PSUM in each NeuronCore has eight banks that can accumulate
 TensorE matrix multiplication results independently.
 Especially in complex loops where PSUM tensors have multiple logical block dimensions, programmers should pay close attention
 to PSUM bank allocations so that they do not collide.

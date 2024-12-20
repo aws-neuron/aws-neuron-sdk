@@ -16,77 +16,72 @@ import neuronxcc.nki.language as nl
 
 
 @nki.jit(mode="simulation")
-def example_tensor_copy_dynamic_src_0(in_tensor, idx_tensor):
-  out_tensor = nl.ndarray([128, 64], dtype=in_tensor.dtype,
+def example_tensor_copy_dynamic_src_0(src_tensor, offsets):
+  out_tensor = nl.ndarray([128, 64], dtype=src_tensor.dtype,
                           buffer=nl.shared_hbm)
   # NKI_EXAMPLE_0_BEGIN
-  ##############################################################################################
-  # TensorCopyDynamicSrc example 1:
-  # - ``in_tensor`` on HBM is of shape [128 x 512]
-  # - ``in_tensor_sbuf`` on SBUF is of shape [128 x 512]
-  # - ``idx_tensor`` on HBM is of shape [1 x 64] (with values [4, 5, 6, 7, ...])
-  # - ``idx_tensor`` values are loaded into a SBUF tile, ``idx_tensor_sbuf``, from HBM
-  # - ``in_tensor_sbuf`` is copied to ``out_sbuf``based on indices stored in ``idx_tensor_sbuf``
-  # - ``out_tensor`` of shape [128 x 64] is finally written to HBM
-  ##############################################################################################
-  ix, iy = nl.mgrid[0:128, 0:1]
+  #########################################################################################
+  # TensorCopyDynamicSrc example 0:
+  # - src_tensor in HBM of shape [128, 512]
+  # - offsets in HBM of shape [1, 64] (with values [4, 5, 6, 7, ...])
+  # - Gather tiles of shape [128, 1] from src_tensor into out_tensor using offsets
+  #########################################################################################
 
-  in_tensor_sbuf = nl.load(in_tensor)
+  # Load src_tensor and offsets into SBUF
+  src_tensor_sbuf: nt.tensor[128, 512] = nl.load(src_tensor)
+  offsets_sbuf: nt.tensor[1, 64] = nl.load(offsets)
 
-  # indices must be on SBUF
-  idx_tensor_sbuf: nt.tensor[1, 64] = nl.load(idx_tensor)
-
-  # write temporary output to SBUF
-  out_sbuf: nt.tensor[128, 64] = nl.ndarray([128, 64], dtype=in_tensor.dtype,
+  # Copy into output tensor in SBUF
+  out_sbuf: nt.tensor[128, 64] = nl.ndarray([128, 64], dtype=src_tensor.dtype,
                                             buffer=nl.sbuf)
 
-  # in each iteration a 1 X 1 tensor offset is accessed in ``idx_tile``
-  # in our example, we select the dynamic offset along axis=1.
-  # ``idx_tensor`` is dynamically populated.
-  for b_idx in nl.affine_range(idx_tensor_sbuf.shape[1]):
-    out_sbuf[ix, b_idx] = nisa.tensor_copy_dynamic_src(
-        in_tensor_sbuf[ix, idx_tensor_sbuf[0, b_idx] + iy])
+  # Static indices to access a tile of shape [128, 1];
+  # Add dynamic offsets to iy for tensor_copy_dynamic_src
+  ix, iy = nl.mgrid[0:128, 0:1]
+
+  for idx in nl.affine_range(offsets_sbuf.shape[1]):
+    out_sbuf[ix, idx] = nisa.tensor_copy_dynamic_src(
+        src_tensor_sbuf[ix, offsets_sbuf[0, idx] + iy])
+
+  nl.store(out_tensor, value=out_sbuf)
   ...
   # NKI_EXAMPLE_0_END
   # write final output to HBM as buffered output
-  nl.store(out_tensor, value=out_sbuf)
   return out_tensor
 
 
 @nki.jit(mode="simulation")
-def example_tensor_copy_dynamic_src_1(in_tensor, idx_tensor):
-  out_tensor = nl.ndarray([128, 8, 4], dtype=in_tensor.dtype,
+def example_tensor_copy_dynamic_src_1(src_tensor, offsets):
+  out_tensor = nl.ndarray([128, 8, 4], dtype=src_tensor.dtype,
                           buffer=nl.shared_hbm)
   # NKI_EXAMPLE_1_BEGIN
-  ###############################################################################################
+  #########################################################################################
   # TensorCopyDynamicSrc example 1:
-  # - ``in_tensor`` on HBM is of shape [128 x 512 x 4]
-  # - ``in_tensor_sbuf`` on SBUF has shape [128 x 512 x 4]
-  # - ``idx_tensor`` on HBM is of shape [1 x 8] (with values [4, 5, 6, 7, ...])
-  # - ``idx_tensor`` values are loaded into a SBUF tile, ``idx_tensor_sbuf``, from HBM
-  # - ``in_tensor_sbuf`` is copied to ``out_sbuf``based on indices stored in ``idx_tensor_sbuf``
-  # - ``out_tensor`` of shape [128 x 8 x 4] is finally written to HBM
-  ###############################################################################################
-  ix, iy, iz = nl.mgrid[0:128, 0:1, 0:4]
+  # - src_tensor in HBM of shape [128, 512, 4]
+  # - offsets in HBM of shape [1 x 8] (with values [4, 5, 6, 7, ...]) to index into
+  #   second axis of src_tensor
+  # - Gather tiles of shape [128, 4] from src_tensor into out_tensor using offsets
+  #########################################################################################
 
-  in_tensor_sbuf = nl.load(in_tensor)
+  # Load src_tensor and offsets into SBUF
+  src_tensor_sbuf: nt.tensor[128, 512, 4] = nl.load(src_tensor)
+  offsets_sbuf: nt.tensor[1, 8] = nl.load(offsets)
 
-  # indices must be on SBUF
-  idx_tensor_sbuf: nt.tensor[1, 8] = nl.load(idx_tensor)
-
-  # write temporary output to SBUF
-  out_sbuf: nt.tensor[128, 8, 4] = nl.ndarray([128, 8, 4], dtype=in_tensor.dtype,
+  # Copy into output tensor in SBUF
+  out_sbuf: nt.tensor[128, 8, 4] = nl.ndarray([128, 8, 4], dtype=src_tensor.dtype,
                                               buffer=nl.sbuf)
 
-  # in each iteration a 1 X 1 tensor offset is accessed in ``idx_tile``
-  # in our example, we select the dynamic offset along axis=1.
-  # ``idx_tensor`` is dynamically populated.
-  for b_idx in nl.affine_range(idx_tensor.shape[1]):
-    out_sbuf[ix, b_idx, iz] = nisa.tensor_copy_dynamic_src(
-        in_tensor_sbuf[ix, idx_tensor_sbuf[0, b_idx], iz])
+  # Static indices to access a tile of shape [128, 1, 4];
+  # Use dynamic offsets directly to index the second axis for tensor_copy_dynamic_src
+  ix, _, iz = nl.mgrid[0:128, 0:1, 0:4]
+
+  for idx in nl.affine_range(offsets.shape[1]):
+    out_sbuf[ix, idx, iz] = nisa.tensor_copy_dynamic_src(
+        src_tensor_sbuf[ix, offsets_sbuf[0, idx], iz])
+
+  nl.store(out_tensor, value=out_sbuf)
   ...
   # NKI_EXAMPLE_1_END
-  nl.store(out_tensor, value=out_sbuf)
   return out_tensor
 
 

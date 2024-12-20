@@ -10,6 +10,29 @@ NxD Training Release Notes (``neuronx-distributed-training``)
 
 This document lists the release notes for Neuronx Distributed Training library.
 
+.. _neuronx-distributed-training-rn-1-1-0:
+
+Neuronx Distributed Training [1.1.0]
+
+Date: 12/20/2024
+
+Features in this release
+------------------------
+
+* Added support for HuggingFace Llama3/3.1 70B with trn2 instances
+* Added support for custom pipeline parallel cuts in HuggingFace Llama3
+* Added support for PyTorch 2.5
+* Added support for DPO post-training model alignment
+* Added support for Mixtral 8x7B Megatron and HuggingFace models
+* Added option in checkpoint converter to download and convert checkpoints using HuggingFace model identifier
+* Fix the validation loss to properly compute the average loss across the validation epoch
+* Minor bug fixes for error logging and imports
+
+Known Issues and Limitations
+----------------------------
+
+* Autocast option may not properly cast all inputs to bf16, recommended to use mixed precision option (currently is default) in configs for best results
+
 .. _neuronx-distributed-training-rn-1-0-1:
 
 Neuronx Distributed Training [1.0.1]

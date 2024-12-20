@@ -19,7 +19,7 @@ with the following important characteristics:
 -  Scheduler: Hugging Face's get_linear_schedule_with_warmup
 -  Allreduce occurs before optimizer step, after gradient accumulations
    (following DeepSpeed's Smart Gradient Accumulation)
--  Training data types: Float32, full BFloat16 casting and Stochastic Rounding (SR), PyTorch Autocast (Automatic Mixed Precision or AMP) and SR
+-  Training data types: Float32, full BFloat16 and Stochastic Rounding (SR), full BFloat16 with fp32 copy of weights, PyTorch Autocast (Automatic Mixed Precision or AMP)
 
 As done in the original BERT paper, BERT pretraining happens in two
 phases. In the first phase (phase 1) BERT maximum sequence length is fixed
@@ -37,8 +37,8 @@ documentation <https://pytorch.org/xla/>`__.
 .. include:: ../note-performance.txt
 
 
-Phase 1 BERT-Large pretraining
-------------------------------
+Phase 1 BFloat16 BERT-Large pretraining with AdamW and stochastic rounding
+--------------------------------------------------------------------------
 
 
 Setting up the training environment on trn1.32xlarge
@@ -104,9 +104,7 @@ BFloat16 and stochastic rounding in phase 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Phase 1 pretraining performance can be increased by using BFloat16 casting
-and stochastic rounding. BFloat16 casting and stochastic rounding can be enabled by setting environment
-variable ``XLA_USE_BF16=1`` when
-launching the pretraining job. ``XLA_DOWNCAST_BF16=1`` can also be used instead of ``XLA_USE_BF16=1`` to preserve part of the training loop in FP32. Here we use ``XLA_DOWNCAST_BF16=1`` to ensure smooth loss curve when loss averaging is used. We also preserve the optimizer states in FP32 using a modified HuggingFace AdamW implementation in order to match FP32 loss with BFloat16.
+and stochastic rounding. BFloat16 casting and stochastic rounding can be enabled by moving the model to BFloat16 using ``model.to(torch.bfloat16)`` expression in the training code and setting the environment variable ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1``, both are done in BERT pretraining example ``dp_bert_large_hf_pretrain_hdf5.py`` by default. Also in the BERT pretraining example, the loss is kept in FP32 to ensure smooth loss curve when loss averaging is used. We also preserve the optimizer states in FP32 using a modified HuggingFace AdamW implementation in order to match FP32 loss with BFloat16.
 To achieve maximum performance while maintaining loss
 convergence characteristics, we are using batch size of 16 and
 gradient accumulation microsteps of 32 to maintain global batch size of 16384 for phase 1.
@@ -114,7 +112,11 @@ The batch size and gradient accumulation microstep changes can be set by
 launching the BERT pretraining script ``dp_bert_large_hf_pretrain_hdf5.py`` with
 command-line arguments ``--batch_size=16 --grad_accum_usteps=32``, as seen in the following steps.
 
-Another option with BFloat16 using PyTorch AutoCast (Automatic Mixed Precision or AMP) is covered at :ref:`amp-sr-phase1`.
+Another option with BFloat16 using PyTorch AutoCast (Automatic Mixed Precision or AMP) is covered in :ref:`amp-sr-phase1`.
+
+.. note::
+
+   ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated starting in torch-xla 2.1, and their usage would result in warnings. They will become no-operations in torch-xla 2.6. Please switch to using ``model.to(torch.bfloat16()`` or AMP.
 
 Pre-compilation
 ~~~~~~~~~~~~~~~
@@ -125,7 +127,7 @@ graph in the background and the graph is executed in hardware only when the tens
 .. code:: shell
 
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-   XLA_DOWNCAST_BF16=1 neuron_parallel_compile torchrun --nproc_per_node=32 \
+   neuron_parallel_compile torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --steps_this_run 10 \
    --batch_size 16 \
@@ -180,15 +182,15 @@ set of commands to launch 32 data parallel distributed training workers on trn1.
 .. code:: bash
 
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 \
+   torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
 
 The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training.
 
-As the training script launches, you will initially see several console
-messages indicating that the Neuron Runtime is initializing:
+
+The following messages indicate that the Neuron Runtime is initializing:
 
 .. code:: bash
 
@@ -356,7 +358,7 @@ The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default
 .. code:: bash
 
    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-   XLA_DOWNCAST_BF16=1  torchrun --nproc_per_node=32 \
+   torchrun --nproc_per_node=32 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --max_steps 7032 \
    --batch_size 16 \
@@ -366,23 +368,53 @@ The command-line argument ``--optimizer LAMB`` is needed, otherwise, the default
 
 The script ``run_dp_bert_large_hf_pretrain_bf16_s128_lamb.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training.
 
-.. _amp-sr-phase1:
+.. _fp32paramscopy-sr-phase1:
 
-Phase 1 BERT-Large pretraining with PyTorch Autocast (AMP) and stochastic rounding
-----------------------------------------------------------------------------------
-Besides the :ref:`bf16_sr_phase1` , you can also use AMP with stochastic rounding. The detailed background is at https://pytorch.org/docs/stable/amp.html. It uses both data types BFloat16 and Float32, hence provides better performance over Float32. A detailed comparison is available at :ref:`trn1_training_perf`.
-To launch the AMP, one additional command-line argument is needed ``--enable_pt_autocast``. ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1`` enables the stochastic roundings. 
+Phase 1 BFloat16 BERT-Large pretraining with AdamW and FP32 copy of weights
+---------------------------------------------------------------------------
+BFloat16 training can be achieved without stochastic rounding when a copy of weights is kept in FP32. To train BERT-Large with AdamW and FP32 copy of weights, specify ``--optimizer=AdamW_FP32ParamsCopy`` option when calling the BERT pretraining script (stochastic rounding is off):
 
 .. code:: bash
 
     cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 \
+    torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
+    --batch_size 16 \
+    --optimizer=AdamW_FP32ParamsCopy \
+    --grad_accum_usteps 32 |& tee run_pretrain_log.txt
+
+The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script with ``fp32paramscopy`` option like ``./run_dp_bert_large_hf_pretrain_bf16_s128.sh fp32paramscopy`` to start the training with FP32 copy of weights.
+
+
+.. _amp-sr-phase1:
+
+Phase 1 BERT-Large pretraining with AdamW and PyTorch Autocast (Automatic Mixed Precision or AMP)
+-------------------------------------------------------------------------------------------------
+Besides the :ref:`bf16_sr_phase1` , you can also use [PyTorch Autocast for XLA (Automatic Mixed Precision or AMP)](https://github.com/pytorch/xla/blob/master/docs/source/perf/amp.md), which automatically converts operations to either a lower precision (like Bfloat16) or Float32. This generally provides better performance over full Float32 due to higher compute density and lower memory footprint (:ref:`trn1_training_perf`).
+With the BERT-Large pretraining scripts you can use AMP by specifying the ``--enable_pt_autocast`` option without enabling stochatic rounding (``NEURON_RT_STOCHASTIC_ROUNDING_EN is not set``).
+
+.. code:: bash
+
+    cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
     torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
     --batch_size 16 \
     --enable_pt_autocast \
     --grad_accum_usteps 32 |& tee run_pretrain_log.txt
 
 The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script with ``amp`` option like ``./run_dp_bert_large_hf_pretrain_bf16_s128.sh amp`` to start the training with AMP.
+
+Under the hood, ``--enable_pt_autocast`` would wrap only the forward pass and loss in the PyTorch autocasting context. The backward pass is NOT in the PyTorch autocasting context. This converts compute operations such as matrix multiply, convolution, activation, and pooling to lower precision such as BFloat16 while keeping numerically sensitive operations such as softmax and cross-entropy in Float32. For information about operations that are autocasted, please see [PyTorch Autocast for XLA AMP guide](https://github.com/pytorch/xla/blob/master/docs/source/perf/amp.md#supported-operators).
+
+.. code:: python
+
+             with torch.autocast(enabled=flags.enable_pt_autocast, dtype=torch.bfloat16, device_type='xla'):
+                 outputs = model(input_ids=input_ids,
+                                 attention_mask=input_mask,
+                                 token_type_ids=segment_ids,
+                                 labels=masked_lm_labels,
+                                 next_sentence_label=next_sentence_labels)
+                 loss = outputs.loss / flags.grad_accum_usteps
+             loss.backward()
+             running_loss += loss.detach()
 
 Phase 1 BERT-Large pretraining on two instances
 -----------------------------------------------
@@ -401,7 +433,7 @@ On the rank-0 Trn1 host (root), run with ``--node_rank=0`` using torchrun utilit
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
    export XLA_TRANSFER_SEED_ASYNC=1
-   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 \
+   torchrun --nproc_per_node=32 --nnodes=2 --node_rank=0 --master_addr=<root IP> --master_port=2020 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
@@ -415,7 +447,7 @@ On another Trn1 host, run with ``--node_rank=1``, and ``--master_addr`` also set
    export FI_PROVIDER=efa
    export BUCKET_CAP_MB=512
    export XLA_TRANSFER_SEED_ASYNC=1
-   XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 \
+   torchrun --nproc_per_node=32 --nnodes=2 --node_rank=1 --master_addr=<root IP> --master_port=2020 \
    dp_bert_large_hf_pretrain_hdf5.py \
    --batch_size 16 \
    --grad_accum_usteps 16 |& tee run_pretrain_log.txt
@@ -448,14 +480,14 @@ Initiating a Training Job
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To launch the phase 2 pretraining job with AdamW optimizer, run the same python script ``dp_bert_large_hf_pretrain_hdf5.py``
-as before except with different options for phase 2. Again, we are using BFloat16 casting and stochastic rounding
-by setting environment variable ``XLA_DOWNCAST_BF16=1``. For phase 2, we are using global batch size of 32768, with worker device batch size of 2
+as before except with different options for phase 2. 
+For phase 2, we are using global batch size of 32768, with worker device batch size of 2
 and gradient accumulation microsteps of 512. The pretokenized dataset is expected to be at ``~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/`` following the setup steps above and is set via ``--data_dir`` option.
 
 .. code:: shell
 
     cd ~/aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain
-    XLA_DOWNCAST_BF16=1 torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
+    torchrun --nproc_per_node=32 dp_bert_large_hf_pretrain_hdf5.py \
         --data_dir ~/examples_datasets/bert_pretrain_wikicorpus_tokenized_hdf5_seqlen512/ \
         --lr 2.8e-4 \
         --phase2 \
@@ -469,7 +501,7 @@ and gradient accumulation microsteps of 512. The pretokenized dataset is expecte
         --max_steps 1563 \
         |& tee run_pretrain_log_phase2.txt
 
-The script ``run_dp_bert_large_hf_pretrain_bf16_s128.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training with AdamW optimizer. Similarly, you can use LAMB optimizer using the script ``run_dp_bert_large_hf_pretrain_bf16_s512_lamb_phase2.sh``.
+The script ``run_dp_bert_large_hf_pretrain_bf16_s512_phase2.sh`` is provided in the same BERT tutorial directory for convenience and you can simply run the script to start the training with AdamW optimizer. Similarly, you can use LAMB optimizer using the script ``run_dp_bert_large_hf_pretrain_bf16_s512_lamb_phase2.sh``.
 
 The output below is expected as the job is initiated. Step 28125 is the phase1_end_step in this run, which could be different if phase1 training stops at a different global step.
 
@@ -617,11 +649,6 @@ Copy this entire directory to ``~/examples_datasets/bert_pretrain_wikicorpus_tok
 Known issues and limitations
 ----------------------------
 
-NaNs seen with transformers version >= 4.21.0 when running HF BERT fine-tuning or pretraining with XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When running HuggingFace BERT (any size) fine-tuning tutorial or pretraining tutorial with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you will see NaNs in the loss immediately at the first step. More details on the issue can be found at `pytorch/xla#4152 <https://github.com/pytorch/xla/issues/4152>`_. The workaround is to use 4.20.0 or earlier (the tutorials currently recommend version 4.15.0) or add ``transformers.modeling_utils.get_parameter_dtype = lambda x: torch.bfloat16`` to the Python script.
-
 BERT-large compilation limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -689,11 +716,6 @@ The fix is to add xm.rendezvous at the end of training to ensure all workers syn
         torch.set_default_tensor_type('torch.FloatTensor')
         train_bert_hdf5(flags)
         xm.rendezvous("_mp_fn finished")
-
-Reduced multi-node performance with Neuron PyTorch 1.12 (release 2.6)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Default BERT performance on multiple instances is reduced with Neuron PyTorch 1.12 (release 2.6). The workaround is to set the XLA flag XLA_TRANSFER_SEED_ASYNC=1.
 
 Troubleshooting
 ---------------

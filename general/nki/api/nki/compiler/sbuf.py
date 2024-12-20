@@ -50,7 +50,7 @@ def alloc(func):
     The ``byte_addr`` indicates the byte offset into each partition the physical tile starts from.
     On NeuronCore-v2, a valid ``byte_addr`` can be any integer values from 0 (inclusive) to
     192KiB-16KiB=(192-16)*1024 (exclusive). 192KiB is the physical size of a SBUF partition
-    (defined in :doc:`architecture guide <../../trainium_inferentia2_arch>`) and 16KiB is allocated for compiler internal usage.
+    (defined in :doc:`architecture guide <../../arch/trainium_inferentia2_arch>`) and 16KiB is allocated for compiler internal usage.
     In addition, the ``base_addr`` must be aligned to ``nki.language.constants.sbuf_min_align``.
 
 

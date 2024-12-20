@@ -74,11 +74,11 @@ Install Cargo, the package manager for the Rust programming language.
 
 
  +----------------------------------+----------------------------------+
- | Ubuntu                           | AL2                              |
+ | Ubuntu                           | Amazon Linux                     |
  +----------------------------------+----------------------------------+
  | .. code-block:: bash             | .. code-block:: bash             |
  |                                  |                                  |
- |    sudo apt install -y cargo   |    sudo yum install -y cargo   |
+ |    sudo apt install -y cargo     |    sudo yum install -y cargo     |
  +----------------------------------+----------------------------------+
 
 
@@ -91,6 +91,7 @@ Run the setup script to download additional depdendencies and build the app. (Th
 ::
 
   ...
+  + PATH_NEURON_LIB=/opt/aws/neuron/lib/
   + g++ utils.cpp example_app.cpp -o ../example-app -O2 -D_GLIBCXX_USE_CXX11_ABI=0 -I../libtorch/include -L../tokenizers_binding/lib -L/opt/aws/neuron/lib/ -L../libtorch/lib -Wl,-rpath,libtorch/lib -Wl,-rpath,tokenizers_binding/lib -Wl,-rpath,/opt/aws/neuron/lib/ -ltokenizers -ltorchneuron -ltorch_cpu -lc10 -lpthread -lnrt
   ~/libtorch_demo
   Successfully completed setup

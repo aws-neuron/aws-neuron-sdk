@@ -72,12 +72,12 @@ PyTorch Neuron are (beta ones are noted):
 
 ``NEURON_TRANSFER_WITH_STATIC_RING_OPS``
 
-- The list of torch.nn.Modules that will have all parameter input buffers marked as static to enable runtime optimizations. The default is "Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d" for torch-neuronx 1.13/2.1 and "Embedding" for torch-neuronx 2.1 starting in SDK release 2.20.
+- The list of torch.nn.Modules that will have all parameter input buffers marked as static to enable runtime optimizations. The default is "Embedding,LayerNorm,Linear,Conv2d,BatchNorm2d" for ``torch-neuronx`` 1.13/2.1, and "Embedding" for ``torch-neuronx`` 2.1 in SDK release 2.20, and empty for ``torch-neuronx`` 2.1+ in SDK release 2.21.
 
 ``NEURONCORE_NUM_DEVICES`` **[Use only with xmp.spawn]**
 
 -  Number of NeuronCores for setting up distributed data parallel training
-   when using torch_xla.distributed.xla_multiprocessing.spawn (xmp.spawn) utility only. See `MNIST MLP training with xmp.spawn<https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/mnist_mlp/train_xmp.py>`__ for example.
+   when using torch_xla.distributed.xla_multiprocessing.spawn (xmp.spawn) utility only. See `MNIST MLP training with xmp.spawn <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/mnist_mlp/train_xmp.py>`__ for example.
    NOTE: Do not use this environment variable when using ``torchrun``, which has ``--nproc_per_node`` option instead for this purpose. ``torchrun`` is recommended for consistent experience on one instance as well as across multiple instances.
 
 ``NEURON_DUMP_HLO_SNAPSHOT`` **[Beta]** **[Torch-NeuronX 1.13 only]**
@@ -96,9 +96,14 @@ PyTorch Neuron are (beta ones are noted):
 
 - When set to 1, mark all parameter transfers as static to enable runtime optimizations for torch.nn modules that are wrapped as done in Megatron-LM. This setting is not needed if torch.nn modules are not wrapped.
 
-``BUCKET_CAP_MB`` **[PyTorch XLA]**
+``BUCKET_CAP_MB`` **[PyTorch XLA <=2.1]**
 
-- If there are many parameters, such as in BERT training, small allreduce sizes can limit performance. To improve performance, you can try increasing the bucket size using ``BUCKET_CAP_MB`` environment variable, which is set to 50MB by default. For example, BERT pretraining on multiple instances can see improved performance with ``BUCKET_CAP_MB=512``.
+- If there are many small gradient tensors, such as in BERT training, small allreduce sizes can limit performance. To improve performance, you can try increasing the bucket size using ``BUCKET_CAP_MB`` environment variable, which is set to 50MB by default. For example, BERT pretraining on multiple instances can see improved performance with ``BUCKET_CAP_MB=512``. NOTE: While this is supported in PyTorch Neuron 2.5, it is recommended for users to switch to ``ALLREDUCE_GRADIENTS_BUCKET_SIZE_MB``.
+
+``ALLREDUCE_GRADIENTS_BUCKET_SIZE_MB`` **[PyTorch XLA 2.5+]**
+
+- If there are many small gradient tensors, such as in BERT training, small allreduce sizes can limit performance. To improve performance, you can try increasing the bucket size using ``ALLREDUCE_GRADIENTS_BUCKET_SIZE_MB`` environment variable, which is set to 50MB by default. For example, BERT pretraining on multiple instances can see improved performance with ``ALLREDUCE_GRADIENTS_BUCKET_SIZE_MB=512``.
+
 
 ``XLA_FLAGS`` **[PyTorch XLA]** **[Torch-NeuronX 2.1+]**
 
@@ -108,19 +113,20 @@ PyTorch Neuron are (beta ones are noted):
 
 - When set to 1 along with ``TORCH_DIST_INIT_BARRIER=0``, PJRT process group initialization will use DummyStore instead of TCPStore. This reduces the number of open file descriptors and enables scaling training up to a large number of nodes.
 
-``XLA_USE_BF16`` **[PyTorch XLA]**
+``XLA_USE_BF16`` **[PyTorch XLA <=2.1]**
 
 - When ``XLA_USE_BF16=1``, PyTorch Neuron will automatically map both torch.float and torch.double tensors
   to bfloat16 tensors and turn on Stochastic Rounding mode. This can both reduce memory footprint and improve performance.
   Example: to enable bfloat16 autocasting and stochastic rounding, set XLA_USE_BF16=1 only, as
-  stochastic rounding mode is on by default when XLA_USE_BF16=1. If you would like to preserve some tensors in float32, see ``XLA_DOWNCAST_BF16`` below.
+  stochastic rounding mode is on by default when XLA_USE_BF16=1. If you would like to preserve some tensors in float32, see ``XLA_DOWNCAST_BF16`` below. NOTE: This is deprecated in PyTorch Neuron 2.5. See :ref:`migration_from_xla_downcast_bf16`.
 
-``XLA_DOWNCAST_BF16`` **[PyTorch XLA]**
+
+``XLA_DOWNCAST_BF16`` **[PyTorch XLA <=2.1]**
 
 - When ``XLA_DOWNCAST_BF16=1``, PyTorch Neuron will automatically map torch.float tensors to bfloat16 tensors, torch.double tensors
   to float32 tensors and turn on Stochastic Rounding mode. This can both reduce memory footprint and improve performance, while preserving some tensors in float32.
   Example: to enable float to bfloat16 and double to float autocasting and stochastic rounding, set XLA_DOWNCAST_BF16=1 only, as
-  stochastic rounding mode is on by default when XLA_DOWNCAST_BF16=1. If you want to cast both torch.float and torch.double to bfloat16, please see ``XLA_USE_BF16`` above.
+  stochastic rounding mode is on by default when XLA_DOWNCAST_BF16=1. If you want to cast both torch.float and torch.double to bfloat16, please see ``XLA_USE_BF16`` above. NOTE: This is deprecated in PyTorch Neuron 2.5. See :ref:`migration_from_xla_downcast_bf16`.
 
 ``XLA_DISABLE_FUNCTIONALIZATION`` **[PyTorch XLA 2.1+]**
 

@@ -25,7 +25,7 @@ This section walks you through the various options to install and upgrade Neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-.. card:: PyTorch NeuronX (``torch-neuronx``) Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
+.. card:: PyTorch NeuronX (``torch-neuronx``) Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n``/ ``Trn2`` Instances
             :link: setup-torch-neuronx
             :link-type: ref
             :class-body: sphinx-design-class-title-small

@@ -199,6 +199,13 @@ parallel degree of 4. This can be enabled by passing the argument:
 The above changes are already included in the `run_llama_70b_tp_pp.sh`. For Llama13B model we only do 8-way tensor parallelism so
 we do not need this change.
 
+`Fusing Q,K,V layers:`
+
+In the GQAQKVColumnParallelLinear, the parallel matrix multiply is coalesced to improve throughput. Currently it's enabled by default. To disable it, set ``--fuse_qkv 0``
+
+`Note:` Because the layers above are coalesced, ensure that any pretrained checkpoint loaded for fine-tuning has the q,k,v layers coleasced. Otherwise, preprocessing is required to fuse these layers in the checkpoint. Follow this :ref:`Checkpoint Conversion Guide <checkpoint_conversion>` and set ``--fuse_qkv`` to coalesce the layers in the checkpoint. 
+
+
 
 `Flash Attention:`
 

@@ -73,7 +73,7 @@ accept any valid NKI data types and convert input elements into float32 before p
   |                        +----------------------------+---------------------------------------------+------------------------+
   |                        | Arithmetic Shift Left      | ``nki.language.left_shift``                 | N                      |
   |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Arithmetic Shift Right     |  Support coming soon.                       | N                      |
+  |                        | Arithmetic Shift Right     |  Not supported                              | N                      |
   |                        +----------------------------+---------------------------------------------+------------------------+
   |                        | Logical Shift Left         | ``nki.language.left_shift``                 | N                      |
   |                        +----------------------------+---------------------------------------------+------------------------+
@@ -164,7 +164,7 @@ activation functions are approximated with piece-wise polynomials on Scalar Engi
    * - Sine
      - ``nki.language.sin`` or ``numpy.sin``
    * - Cosine
-     - Support coming soon.
+     - Not supported
    * - Arctan
      - ``nki.language.arctan`` or ``numpy.arctan``
    * - Sign

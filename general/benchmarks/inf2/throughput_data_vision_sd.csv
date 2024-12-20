@@ -1,7 +1,7 @@
 Model,Image Size,Scripts,Framework,Inst. Type,Task,Throughput (inference/sec),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Model Data Type,Compilation Autocast Data Type
-Stable Diffusion 1.5,512x512,:benchmark-pt:`Benchmark <sd_15_512>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.479,2089,2093,Real Time,2.18.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.604,1655,1663,Real Time,2.18.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
-Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.182,5504,5519,Real Time,2.18.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion 2 Inpainting,936x624,:benchmark-pt:`Benchmark <sd2_inpainting>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.165,6045,6063.4,Real Time,2.18.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
-Stable Diffusion XL Base,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_1024>`,PyTorch 2.1,Inf2.xlarge,Image Generation,0.082,12200,12260,Real Time,2.18.0,Data Parallel,1,FP32,Matmult-BF16
-Stable Diffusion XL Base & Refiner,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_and_refiner>`,PyTorch 2.1,Inf2.8xlarge,Image Generation,0.093,10741,11006,Real Time,2.18.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 1.5,512x512,:benchmark-pt:`Benchmark <sd_15_512>`,PyTorch 2.5,Inf2.xlarge,Image Generation,0.494,2023.741,2031.705,Real Time,2.21.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2.1,512x512,:benchmark-pt:`Benchmark <sd2_512>`,PyTorch 2.5,Inf2.xlarge,Image Generation,0.596,1679.805,1685.442,Real Time,2.21.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
+Stable Diffusion 2.1,768x768,:benchmark-pt:`Benchmark <sd2_768>`,PyTorch 2.5,Inf2.xlarge,Image Generation,0.187,5337.509,5357.361,Real Time,2.21.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion 2 Inpainting,936x624,:benchmark-pt:`Benchmark <sd2_inpainting>`,PyTorch 2.5,Inf2.xlarge,Image Generation,0.133,7546.004,7550.984,Real Time,2.21.0,Data Parallel,1,"FP32, BF16",Matmult-BF16
+Stable Diffusion XL Base,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_1024>`,PyTorch 2.5,Inf2.xlarge,Image Generation,0.083,12048.659,12102.431,Real Time,2.21.0,Data Parallel,1,FP32,Matmult-BF16
+Stable Diffusion XL Base & Refiner,1024x1024,:benchmark-pt:`Benchmark <sdxl_base_and_refiner>`,PyTorch 2.5,Inf2.8xlarge,Image Generation,0.095,10546.45,10704.566,Real Time,2.21.0,Data Parallel,1,FP32,Matmult-BF16
