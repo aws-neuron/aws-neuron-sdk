@@ -20,9 +20,9 @@ Neuron 2.21.0 (12/20/2024)
 What's New
 ^^^^^^^^^^
 
-**Overview**: Neuron 2.21.0 introduces support for :ref:`AWS Trainium 2 <trainium2-arch>` and
+**Overview**: Neuron 2.21.0 introduces support for :ref:`AWS Trainium2 <trainium2-arch>` and
 :ref:`Trn2 instances <aws-trn2-arch>`, including the trn2.48xlarge instance type and Trn2
-UltraServer. The release adds new capabilities in both training and
+UltraServer (Preview). The release adds new capabilities in both training and
 inference of large-scale models. It introduces :ref:`NxD Inference (beta) <introduce-nxd-inference>`, a
 PyTorch-based library for deployment, :ref:`Neuron Profiler 2.0 (beta) <neuron-profiler-2-0-guide>`, and
 :ref:`PyTorch 2.5 <introduce-pytorch-2-5>` support across the Neuron SDK, and :ref:`Logical NeuronCore
@@ -55,10 +55,8 @@ post-training model alignment, and adds support for Mixture-of-Experts
 :ref:`checkpoint conversion <checkpoint_conversion>` capabilities and supports MoE with Tensor,
 Sequence, Pipeline, and Expert parallelism.
 
-**ML Frameworks:** Neuron 2.21.0 adds :ref:`PyTorch 2.5 <introduce-pytorch-2-5>` coming with improved
-support for eager mode, FP8, and Automatic Mixed Precision capabilities.
-JAX support extends to version 0.4.35, including support for JAX caching
-APIs.
+**ML Frameworks:** Neuron 2.21.0 adds support for :ref:`PyTorch 2.5 <introduce-pytorch-2-5>` and 
+JAX 0.4.35.
 
 .. note::
   The CVEs
@@ -91,8 +89,7 @@ multi-core operations, and includes new modules and APIs including
 support for float8_e5m2 datatype.
 
 **Deep Learning Containers (DLAMIs)**: This release expands support for
-JAX 0.4 within the :ref:`Multi Framework DLAMI <neuron-dlami-overview>`. It also introduces NeuronX
-Distributed Training (NxDT), Inference (NxDI), and Core (NxD) with
+JAX 0.4 within the :ref:`Multi Framework DLAMI <neuron-dlami-overview>`. It also introduces NxD Training, NxD Inference, and NxD Core with
 :ref:`PyTorch 2.5 <introduce-pytorch-2-5>` support. Additionally, a new Single Framework DLAMI for
 TensorFlow 2.10 on Ubuntu 22 is now available.
 
