@@ -90,6 +90,16 @@ Model features
      - Yes
      - Yes
 
+Release [0.13.380.0]
+----------------------
+Date: 01/14/2025
+
+What's new in this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- The transformers depedency has been pinned to ``transformers<4.48``
+
+
 Release [0.13.322.0]
 ----------------------
 Date: 12/20/2024

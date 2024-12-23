@@ -31,6 +31,14 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.23.112.0]
+---------------------------------
+Date: 01/14/2025
+
+Bug fixes
+^^^^^^^^^
+* Fixed DMA abort errors on TRN2.
+
 Neuron Runtime Library [2.23.110.0]
 ---------------------------------
 Date: 12/20/2024

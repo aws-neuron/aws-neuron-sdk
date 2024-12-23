@@ -9,6 +9,14 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.23.135.0]
+------------------------------
+Date: 01/14/2025
+
+Improvements
+^^^^^^^^^^^^
+* Aws-ofi-nccl: minor performance improvement
+
 Neuron Collectives [2.23.133.0]
 ------------------------------
 Date: 12/20/2024

@@ -7,6 +7,13 @@ Neuron DLAMI Release Notes
    :local:
    :depth: 1
 
+Neuron 2.21.1
+-------------
+
+Date: 01/14/2025
+
+- No changes to DLAMI. Incompatibility issue reported for Tensorflow 2.10 (inf1) on v2.21.1. See :ref:`neuron-dlami-overview`.
+
 Neuron 2.21.0
 -------------
 

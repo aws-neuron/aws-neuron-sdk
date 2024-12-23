@@ -17,9 +17,18 @@ to easily get started on single Neuron instance. Below sections describe the sup
 
 Neuron Multi Framework DLAMI
 ----------------------------
-Neuron Deep Learning AMI (DLAMI) is a multi-framework DLAMI that supports multiple Neuron framework/libraries. Each DLAMI is pre-installed with Neuron drivers and support all Neuron instance types. Each virtual environment that corresponds to a specific Neuron framework/library
-comes pre-installed with all the Neuron libraries including Neuron compiler and Neuron run-time needed for you to easily get started.
+Neuron Deep Learning AMI (DLAMI) is a multi-framework DLAMI that supports multiple Neuron framework/libraries. Each DLAMI is pre-installed with Neuron drivers and support all Neuron instance types. Each virtual environment that corresponds to a specific Neuron framework/library 
+comes pre-installed with all the Neuron libraries including Neuron compiler and Neuron runtime needed for you to easily get started. 
 
+
+.. note::
+
+  Tensorflow-neuron 2.10 (inf1) released in SDK v2.20.2 is not compatible with the latest runtime in v2.21 SDK. 
+  Code that compiles will face runtime errors with the latest SDK 2.21.1 version.
+  
+  Neuron team is aware of this issue and it will be fixed in the next minor release.
+  
+  Please refer to `this page <https://github.com/aws-neuron/aws-neuron-sdk/issues/1071>`_ for more information on the issue and a temporary work-around.
 
 Multi Framework DLAMIs supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

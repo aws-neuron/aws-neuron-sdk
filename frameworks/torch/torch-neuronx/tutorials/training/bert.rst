@@ -1,10 +1,10 @@
 .. _hf-bert-pretraining-tutorial:
 
-Hugging Face BERT Pretraining Tutorial
-======================================
+Hugging Face BERT Pretraining Tutorial (Data-Parallel)
+======================================================
 
 This tutorial explains how to run Hugging Face BERT-Large model
-pretraining on Trainium using PyTorch Neuron.
+pretraining on Trainium using PyTorch Neuron and data-parallel mode.
 
 The Hugging Face BERT pretraining example demonstrates the steps
 required to perform single-node, multi-accelerator PyTorch model
@@ -44,7 +44,7 @@ Phase 1 BFloat16 BERT-Large pretraining with AdamW and stochastic rounding
 Setting up the training environment on trn1.32xlarge
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The BERT training script ``dp_bert_large_hf_pretrain_hdf5.py``
+The BERT training script ``dp_bert_large_hf_pretrain_hdf5.py`` (`source <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/dp_bert_hf_pretrain/dp_bert_large_hf_pretrain_hdf5.py>`_)
 can run on a Trainium instance (trn1.32xlarge) that contains the
 appropriate Neuron runtime and Python dependencies.
 
@@ -60,7 +60,7 @@ For all the commands below, make sure you are in the virtual environment that yo
 
    source ~/aws_neuron_venv_pytorch/bin/activate
 
-Next, clone the AWS Neuron Samples repository and install requirements in the BERT tutorial directory ``aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain``:
+Next, clone the `AWS Neuron Samples repository <https://github.com/aws-neuron/aws-neuron-samples/>`_ and install requirements in the BERT tutorial directory ``aws-neuron-samples/torch-neuronx/training/dp_bert_hf_pretrain`` (`directory link <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/dp_bert_hf_pretrain>`_):
 
 .. code:: shell
 

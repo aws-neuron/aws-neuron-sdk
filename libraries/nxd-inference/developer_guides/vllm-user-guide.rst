@@ -89,14 +89,16 @@ Here is a quick and minimal example to get running.
         max_model_len=128,
         device="neuron",
         tensor_parallel_size=2)
-        
+
     prompts = [
         "Hello, my name is",
         "The president of the United States is",
         "The capital of France is",
         "The future of AI is",
     ]
-    sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
+    # note that top_k must be set to lower than the global_top_k defined in
+    # the neuronx_distributed_inference.models.config.OnDeviceSamplingConfig
+    sampling_params = SamplingParams(top_k=10, temperature=0.8, top_p=0.95)
 
     outputs = llm.generate(prompts, sampling_params)
 
