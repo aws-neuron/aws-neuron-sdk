@@ -218,59 +218,63 @@ compiled and executed if there are extra mark-steps or functions with
 implicit mark-steps. Additionally, more graphs can be generated if there
 are different execution paths taken due to control-flows.
 
-Automatic casting of float tensors to BFloat16
-----------------------------------------------
+Full BF16 with stochastic rounding enabled
+------------------------------------------
 
-With PyTorch Neuron, the default behavior is for torch.float (FP32) and torch.double (FP64) tensors
-to be mapped to torch.float in hardware. To reduce memory footprint and improve performance,
-torch.float and torch.double tensors can automatically be converted to BFloat16 by setting
-the environment variable ``XLA_USE_BF16=1``. Alternatively, torch.float can automatically be converted 
-to BFloat16 and torch.double converted to FP32 by setting the environment variable ``XLA_DOWNCAST_BF16=1``.
+Previously, on torch-neuronx 2.1 and earlier, the environmental variable ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` provide full casting to BF16 with stochastic rounding enabled by default. These environmental variables are deprecated in torch-neuronx 2.5, although still functional with warnings. To replace ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` with stochastic rounding on Neuron, set ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1`` and use the ``torch.nn.Module.to`` method to cast model floating-point parameters and buffers to data-type bfloat16 as follows:
 
-Automatic Mixed-Precision
--------------------------
+.. code:: python
 
-BF16 mixed-precision using PyTorch Autocast
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    os.environ["NEURON_RT_STOCHASTIC_ROUNDING_EN"] = "1"
 
-By default, the compiler automatically cast internal FP32 operations to
-BF16. You can disable this and allow PyTorch's BF16 mixed-precision to
-do the casting. PyTorch's BF16 mixed-precision is achieved by casting
-certain operations to operate BF16. We currently use CUDA's list of
-operations that can operate in BF16:
+    # model is created
+    model.to(torch.bfloat16)
 
-.. code:: bash
+Stochastic rounding is needed to enable faster convergence for full BF16 model.
 
-   _convolution
-   _convolution
-   _convolution_nogroup
-   conv1d
-   conv2d
-   conv3d
-   conv_tbc
-   conv_transpose1d
-   conv_transpose2d
-   conv_transpose3d
-   convolution
-   cudnn_convolution
-   cudnn_convolution_transpose
-   cudnn_convolution
-   cudnn_convolution_transpose
-   cudnn_convolution
-   cudnn_convolution_transpose
-   prelu
-   addmm
-   addmv
-   addr
-   matmul
-   mm
-   mv
-   linear
-   addbmm
-   baddbmm
-   bmm
-   chain_matmul
-   linalg_multi_dot
+If the loss is to be kept in FP32, initialize it with ``dtype=torch.float`` as follows:
+
+.. code:: python
+
+    running_loss = torch.zeros(1, dtype=torch.float).to(device)
+
+Similarly, if the optimizer states are to be kept in FP32, convert the gradients to FP32 before optimizer computations:
+
+.. code:: python
+
+    grad = p.grad.data.float()
+
+For a full example, please see the updated BERT pretraining tutorial.
+
+BF16 in GPU-compatible mode without stochastic rounding enabled
+---------------------------------------------------------------
+
+Full BF16 training in GPU-compatible mode would enable faster convergence without the need for stochastic rounding, but would require a FP32 copy of weights/parameters to be saved and used in the optimizer. To enable BF16 in GPU-compatible mode without stochastic rounding enabled, use the ``torch.nn.Module.to`` method to cast model floating-point parameters and buffers to data-type bfloat16 as follows without setting ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1``:
+
+.. code:: python
+
+    # model is created
+    model.to(torch.bfloat16)
+
+In the initializer of the optimizer, for example AdamW, you can add code like the following code snippet to make a FP32 copy of weights:
+
+.. code:: python
+
+        # keep a copy of weights in highprec
+        self.param_groups_highprec = []
+        for group in self.param_groups:
+            params = group['params']
+            param_groups_highprec = [p.data.float() for p in params]
+            self.param_groups_highprec.append({'params': param_groups_highprec})
+
+.. _automatic_mixed_precision_autocast:
+
+BF16 automatic mixed precision using PyTorch Autocast
+-----------------------------------------------------
+
+By default, the compiler automatically casts internal FP32 operations to
+BF16. You can disable this and allow PyTorch's BF16 automatic mixed precision function (``torch.autocast``) to
+do the casting of certain operations to operate in BF16.
 
 To enable PyTorch's BF16 mixed-precision, first turn off the Neuron
 compiler auto-cast:
@@ -279,22 +283,16 @@ compiler auto-cast:
 
    os.environ["NEURON_CC_FLAGS"] = "--auto-cast=none"
 
-Next, overwrite torch.cuda.is_bf16_supported to return True:
-
-.. code:: python
-
-   torch.cuda.is_bf16_supported = lambda: True
-
 Next, per recommendation from official PyTorch documentation, place only
-the forward-pass of the training step in the torch.autocast scope:
+the forward-pass of the training step in the ``torch.autocast`` scope with ``xla`` device type:
 
 .. code:: python
 
-   with torch.autocast(dtype=torch.bfloat16, device_type='cuda'):
+   with torch.autocast(dtype=torch.bfloat16, device_type='xla'):
        # forward pass
 
-The device type is CUDA because we are using CUDA's list of BF16
-compatible operations as mentioned above.
+The device type is XLA because we are using PyTorch-XLA's autocast backend. The full list of which operations are casted to BF16, which are maintained in FP32, and which are casted to the widest input types are shown in
+`autocast mode source code <https://github.com/pytorch/xla/blob/master/torch_xla/csrc/autocast_mode.cpp>`_.
 
 Example showing the original training code snippet:
 
@@ -319,7 +317,7 @@ The following shows the training loop modified to use BF16 autocast:
    def train_loop_fn(train_loader):
        for i, data in enumerate(train_loader):
            torch.cuda.is_bf16_supported = lambda: True
-           with torch.autocast(dtype=torch.bfloat16, device_type='cuda'):
+           with torch.autocast(dtype=torch.bfloat16, device_type='xla'):
                inputs = data[0]
                labels = data[3]
                outputs = model(inputs, labels=labels)
