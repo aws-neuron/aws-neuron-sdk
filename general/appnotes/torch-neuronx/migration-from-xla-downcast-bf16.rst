@@ -8,7 +8,7 @@ Introduction
 
 The environmental variables ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` were created to provide an easy cast-to-bf16 option before automatic mixed-precision or ``model.to(torch.bfloat16)`` as available in Torch-XLA. Now that both automatic mixed precision and ``model.to(torch.bfloat16)`` are available in Torch-XLA,  ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` are redundant and can be replaced with these options as a more familiar experience as on other platforms such as CPUs and GPUs. (They are deprecated in Torch-XLA 2.5 as warnings, and will be removed in a future release).
 
-This change can best be made to scripts running with Torch-XLA 2.1 and 2.5.
+The changes recommended below can best be made to scripts running with Torch-XLA 2.1 and 2.5. The same recommendations are also available in :ref:`pytorch-neuronx-programming-guide`.
 
 Full BF16 with stochastic rounding enabled
 ------------------------------------------
