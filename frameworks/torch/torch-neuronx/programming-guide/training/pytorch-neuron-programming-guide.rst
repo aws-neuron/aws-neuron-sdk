@@ -401,13 +401,6 @@ be loaded using ``serialization.load`` api. More information on this here: `Savi
 
 FAQ
 ---
-
-What is the difference between Trainium and Inferentia?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Trainium is an accelerator designed to speed up training, whereas
-Inferentia is an accelerator designed to speed up inference.
-
 Debugging and troubleshooting
 -----------------------------
 
