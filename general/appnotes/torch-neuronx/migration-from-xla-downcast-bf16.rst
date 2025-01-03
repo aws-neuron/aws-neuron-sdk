@@ -13,7 +13,7 @@ The changes recommended below can best be made to scripts running with Torch-XLA
 Full BF16 with stochastic rounding enabled
 ------------------------------------------
 
-Previously, on torch-neuronx 2.1 and earlier, the environmental variable ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` provide full casting to BF16 with stochastic rounding enabled by default. These environmental variables are deprecated in torch-neuronx 2.5, although still functional with warnings. To replace ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` with stochastic rounding on Neuron, set ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1`` and use the ``torch.nn.Module.to`` method to cast model floating-point parameters and buffers to data-type bfloat16 as follows:
+Previously, on torch-neuronx 2.1 and earlier, the environmental variables ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` provided full casting to BF16 with stochastic rounding enabled by default. These environmental variables are deprecated in torch-neuronx 2.5, although still functional with warnings. To replace ``XLA_USE_BF16`` or ``XLA_DOWNCAST_BF16`` with stochastic rounding on Neuron, set ``NEURON_RT_STOCHASTIC_ROUNDING_EN=1`` and use the ``torch.nn.Module.to`` method to cast model floating-point parameters and buffers to data-type BF16 as follows:
 
 .. code:: python
 
@@ -36,7 +36,7 @@ Similarly, if the optimizer states are to be kept in FP32, convert the gradients
 
     grad = p.grad.data.float()
 
-For a full example, please see the updated BERT pretraining tutorial.
+For a full example, please see the :ref:`PyTorch Neuron BERT Pretraining Tutorial (Data-Parallel) <hf-bert-pretraining-tutorial>`, which has been updated to use ``torch.nn.Module.to`` instead of ``XLA_DOWNCAST_BF16``.
 
 BF16 in GPU-compatible mode without stochastic rounding enabled
 ---------------------------------------------------------------
@@ -74,6 +74,9 @@ From then, you can use the usual gradients but updating the FP32 copy of weights
                 # Update FP32 copy of weights
                 p_highprec.data.addcdiv_(exponential_avg, denominator, value=-step_size)
 
+
+In the :ref:`PyTorch Neuron BERT Pretraining Tutorial (Data-Parallel) <hf-bert-pretraining-tutorial>`, this mode can be enabled by pasing ``--optimizer=AdamW_FP32ParamsCopy`` option to ``dp_bert_large_hf_pretrain_hdf5.py`` and setting ``NEURON_RT_STOCHASTIC_ROUNDING_EN=0`` (or leave it unset).
+
 BF16 automatic mixed precision using PyTorch Autocast
 -----------------------------------------------------
 
@@ -88,7 +91,7 @@ compiler auto-cast:
 
    os.environ["NEURON_CC_FLAGS"] = "--auto-cast=none"
 
-Next, per recommendation from official PyTorch documentation, place only
+Next, per recommendation from official PyTorch `torch.autocast documentation <https://pytorch.org/docs/stable/amp.html#autocasting>`__, place only
 the forward-pass of the training step in the ``torch.autocast`` scope with ``xla`` device type:
 
 .. code:: python
@@ -96,8 +99,7 @@ the forward-pass of the training step in the ``torch.autocast`` scope with ``xla
    with torch.autocast(dtype=torch.bfloat16, device_type='xla'):
        # forward pass
 
-The device type is XLA because we are using PyTorch-XLA's autocast backend. The full list of which operations are casted to BF16, which are maintained in FP32, and which are casted to the widest input types are shown in
-`autocast mode source code <https://github.com/pytorch/xla/blob/master/torch_xla/csrc/autocast_mode.cpp>`_.
+The device type is XLA because we are using PyTorch-XLA's autocast backend. The PyTorch-XLA `autocast mode source code <https://github.com/pytorch/xla/blob/master/torch_xla/csrc/autocast_mode.cpp>`_ lists which operations are casted to lower precision BF16 ("lower precision fp cast policy" section), which are maintained in FP32 ("fp32 cast policy"), and which are promoted to the widest input types ("promote" section).
 
 Example showing the original training code snippet:
 
@@ -124,3 +126,15 @@ The following shows the training loop modified to use BF16 autocast:
            torch.cuda.is_bf16_supported = lambda: True
            with torch.autocast(dtype=torch.bfloat16, device_type='xla'):
                inputs = data[0]
+               labels = data[3]
+               outputs = model(inputs, labels=labels)
+           loss = outputs.loss/ flags.grad_acc_steps
+           loss.backward()
+           optimizer.step()
+           xm.mark_step()
+
+For a full example of BF16 mixed-precision, see :ref:`PyTorch Neuron BERT Pretraining Tutorial (Data-Parallel) <hf-bert-pretraining-tutorial>`.
+
+See official PyTorch documentation for more details about
+`torch.autocast <https://pytorch.org/docs/stable/amp.html#autocasting>`__
+.
