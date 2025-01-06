@@ -25,7 +25,7 @@ def main():
         if tfn_version < LooseVersion('1.15.0.1.0.1333.0'):
             raise RuntimeError(
                 'tensorflow-neuron version {} is too low for this demo. Please upgrade '
-                'by "pip install -U tensorflow-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(tfn_version))
+                'by "pip install -U tensorflow-neuron --index-url=https://pip.repos.neuron.amazonaws.com"'.format(tfn_version))
 
     with open(args.image, 'rb') as f:
         img_jpg_bytes = f.read()

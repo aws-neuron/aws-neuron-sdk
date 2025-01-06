@@ -296,12 +296,12 @@ def main():
         if neuroncc_version < LooseVersion('1.0.18000'):
             raise RuntimeError(
                 'neuron-cc version {} is too low for this demo. Please upgrade '
-                'by "pip install -U neuron-cc --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(neuroncc_version))
+                'by "pip install -U neuron-cc --index-url=https://pip.repos.neuron.amazonaws.com"'.format(neuroncc_version))
         tfn_version = LooseVersion(pkg_resources.get_distribution('tensorflow-neuron').version)
         if tfn_version < LooseVersion('1.15.3.1.0.1900.0'):
             raise RuntimeError(
                 'tensorflow-neuron version {} is too low for this demo. Please upgrade '
-                'by "pip install -U tensorflow-neuron --extra-index-url=https://pip.repos.neuron.amazonaws.com"'.format(tfn_version))
+                'by "pip install -U tensorflow-neuron --index-url=https://pip.repos.neuron.amazonaws.com"'.format(tfn_version))
 
     sys.path.append(os.getcwd())
     from DeepLearningExamples.PyTorch.Detection.SSD.src import model as torch_ssd300_model
@@ -336,7 +336,7 @@ def main():
             if not op.get_attr('executable'):
                 raise AttributeError(
                     'Neuron executable (neff) is empty. Please check neuron-cc is installed and working properly '
-                    '("pip install neuron-cc --force --extra-index-url=https://pip.repos.neuron.amazonaws.com" '
+                    '("pip install neuron-cc --force --index-url=https://pip.repos.neuron.amazonaws.com" '
                     'to force reinstall neuron-cc).')
             model_config = op.node_def.attr['model_config'].list
             if model_config.i:

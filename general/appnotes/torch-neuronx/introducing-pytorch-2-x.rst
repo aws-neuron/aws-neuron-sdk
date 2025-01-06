@@ -63,7 +63,7 @@ To migrate the training scripts from PyTorch NeuronX 2.1 to PyTorch NeuronX 2.5,
 
     ``xm`` below refers to ``torch_xla.core.xla_model`` and ``xr`` refers to ``torch_xla.runtime``
 
-* The environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used). Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to convert model to BF16 format. (see :ref:`<migration_from_xla_downcast_bf16>`)
+* The environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used). Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to convert model to BF16 format. (see :ref:`migration_from_xla_downcast_bf16`)
 * The ``torch_xla.experimental.pjrt`` module which was replaced by ``torch_xla.runtime`` in Torch-XLA 2.1, has been removed in Torch-XLA 2.5. Users should now utilize the ``torch_xla.runtime`` module as a replacement.
 * ``torch_xla.runtime.using_pjrt`` is removed because PJRT is the sole Torch-XLA runtime.
 * ``xm.all_reduce`` no longer operates in-place for single tensors. To fix this, please convert the single tensor to an array (e.g.. ``[single_tensor]``) or assign the output of ``xm.all_reduce`` to a variable.
@@ -108,7 +108,7 @@ This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be rem
 WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal() `` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
+This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
 
 
 AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'

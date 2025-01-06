@@ -10,7 +10,7 @@ You can install the ``neuronx-distributed`` package using the following command:
 
 .. code:: ipython3
 
-   python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+   python -m pip install neuronx_distributed --index-url https://pip.repos.neuron.amazonaws.com
 
 
 

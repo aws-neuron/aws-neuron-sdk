@@ -33,7 +33,7 @@ If you encounter an error like below, it is because the model size is larger tha
 To compile such large models, use the :ref:`separate_weights=True <torch_neuron_trace_api>` flag. Note,
 ensure that you have the latest version of compiler installed to support this flag.
 You can upgrade neuron-cc using 
-:code:`python3 -m pip install neuron-cc[tensorflow] -U --force --extra-index-url=https://pip.repos.neuron.amazonaws.com`
+:code:`python3 -m pip install neuron-cc[tensorflow] -U --force --index-url=https://pip.repos.neuron.amazonaws.com`
 
 ::
 

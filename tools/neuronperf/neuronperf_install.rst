@@ -7,5 +7,5 @@ Activate your Neuron environment, and execute:
 
 .. code:: bash
 
-  $ pip install neuronperf --extra-index-url=https://pip.repos.neuron.amazonaws.com
+  $ pip install neuronperf --index-url=https://pip.repos.neuron.amazonaws.com
 

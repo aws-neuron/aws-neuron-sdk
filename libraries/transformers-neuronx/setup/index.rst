@@ -8,7 +8,7 @@ the following instruction.
 
 .. code-block::
 
-   pip install transformers-neuronx --extra-index-url=https://pip.repos.neuron.amazonaws.com
+   pip install transformers-neuronx --index-url=https://pip.repos.neuron.amazonaws.com
 
 
 If you are starting from scratch, Neuron Multi Framework DLAMI is recommended as it comes pre-installed with Transformers NeuronX virtual environment.

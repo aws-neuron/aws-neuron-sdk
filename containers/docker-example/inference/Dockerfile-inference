@@ -32,7 +32,7 @@ ENV PATH="/opt/bin/:/opt/aws/neuron/bin:${PATH}"
 # Include framework tensorflow-neuron or torch-neuronx and compiler (compiler not needed for inference)
 RUN pip3 install \
     torch-neuronx \
-    --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    --index-url=https://pip.repos.neuron.amazonaws.com
 
 # Include your APP dependencies here.
 # RUN ...

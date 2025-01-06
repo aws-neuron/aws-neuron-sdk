@@ -26,7 +26,7 @@ RUN wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEU
 # Include framework tensorflow-neuron or torch-neuron and compiler (compiler not needed for inference)
 RUN pip3 install \
     torch-neuron \
-    --extra-index-url=https://pip.repos.neuron.amazonaws.com
+    --index-url=https://pip.repos.neuron.amazonaws.com
 
 # Include your APP dependencies here.
 # RUN/ENTRYPOINT/CMD ...

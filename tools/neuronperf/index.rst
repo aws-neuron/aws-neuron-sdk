@@ -15,7 +15,7 @@ To install NeuronPerf in your Neuron environment, execute:
 
 .. code:: bash
 
-  $ pip install neuronperf --extra-index-url=https://pip.repos.neuron.amazonaws.com
+  $ pip install neuronperf --index-url=https://pip.repos.neuron.amazonaws.com
 
 
 Refer to the :ref:`neuronperf_examples` and :ref:`neuronperf_user_guide` to get started.

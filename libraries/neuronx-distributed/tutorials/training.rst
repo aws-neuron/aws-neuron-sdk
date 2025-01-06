@@ -24,7 +24,7 @@ following command:
 
 .. code:: ipython3
 
-   python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+   python -m pip install neuronx_distributed --index-url https://pip.repos.neuron.amazonaws.com
 
 Make sure the transformers version is set to ``4.26.0`` (Note: If you have transformers-neuronx in your environment, you need to uninstall it to avoid a conflict with the transformers version.)
 
