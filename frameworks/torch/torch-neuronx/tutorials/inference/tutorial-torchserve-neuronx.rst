@@ -24,7 +24,7 @@ You should now have a compiled ``bert_neuron_b6.pt`` file, which is required goi
 
 Open a shell on the instance you prepared earlier, create a new directory named ``torchserve``. Copy your compiled model from the previous tutorial into this new directory.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
    :language: bash
    :lines: 4-6
 
@@ -34,7 +34,7 @@ Open a shell on the instance you prepared earlier, create a new directory named 
 
 Prepare a new Python virtual environment with the necessary Neuron and TorchServe components. Use a virtual environment to keep (most of) the various tutorial components isolated from the rest of the system in a controlled way.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
    :language: bash
    :lines: 8
 
@@ -52,7 +52,7 @@ Install the system requirements for TorchServe.
 
    .. tab-item:: Ubuntu 20 DLAMI Base
 
-      .. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+      .. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
         :language: bash
         :lines: 10
 
@@ -118,7 +118,7 @@ Download the `custom handler script <https://pytorch.org/serve/custom_service.ht
 
 Next, we need to associate the handler script with the compiled model using ``torch-model-archiver``. Run the following commands in your terminal:
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 12-16
 
@@ -128,7 +128,7 @@ Next, we need to associate the handler script with the compiled model using ``to
 
 The result of the above will be a ``mar`` file inside the ``model_store`` directory.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 18
 
@@ -160,13 +160,13 @@ Run TorchServe
 
 It's time to start the server. Typically we'd want to launch this in a separate console, but for this demo we’ll just redirect output to a file.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 20
 
 Verify that the server seems to have started okay.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 22
 
@@ -215,7 +215,7 @@ First, determine the number of NeuronCores available based on your instance size
           - 32
 
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 24-26
 
@@ -249,7 +249,7 @@ This script will send a ``batch_size`` number of requests to our model. In this 
 
 Execute the script in your terminal.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 28
 
@@ -279,7 +279,7 @@ We've seen how to perform a single batched inference, but how many inferences ca
 
 Run the benchmarking script.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 30
 
@@ -302,7 +302,7 @@ Run the benchmarking script.
 
 You can now shutdown torchserve.
 
-.. literalinclude:: tutorial_source_instructions/run_torchserve_u20.sh
+.. literalinclude:: /frameworks/torch/torch-neuron/tutorials/tutorial_source_instructions/run_torchserve_u20.sh
     :language: bash
     :lines: 32
 
