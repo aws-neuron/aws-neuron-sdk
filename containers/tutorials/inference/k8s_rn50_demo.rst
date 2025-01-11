@@ -78,7 +78,7 @@ and the Neuron runtime happens over GRPC, which requires passing the `IPC_LOCK` 
                - --port=8500
                - --rest_api_port=9000
                - --model_name=resnet50_neuron
-               - --model_base_path=s3://your-bucket-of-models/resnet50_neuron/
+               - --model_base_path=s3://${your-bucket-of-models}/resnet50_neuron/
              ports:
                - containerPort: 8500
                - containerPort: 9000
