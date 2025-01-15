@@ -28,10 +28,11 @@ Step 1: Set up Development Environment
    
 ::
 
-    source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
+    source /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
 
 
-3. Install the fork of vLLM (v0.6.x-neuron) that supports NxD Inference following :ref:`nxdi-vllm-user-guide`.
+3. Install the fork of vLLM (v0.6.x-neuron) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
+   in the vLLM User Guide for NxD Inference.
    
 4. You should now have the Neuron SDK and other necessary packages installed,
    including ``neuronx-distributed-inference``, ``neuronx-cc``, ``torch``, ``torchvision``, and ``vllm-neuronx``.
@@ -337,6 +338,11 @@ You should receive outputs shown in the client terminal shortly:
     Rome.","tool_calls":[]},"logprobs":null,"finish_reason":"stop","stop_reason":null}],
     "usage":{"prompt_tokens":42,"total_tokens":50,"completion_tokens":8},"prompt_logprobs":null}
 
+
+
+If the request fails, increase the value of the ``VLLM_RPC_TIMEOUT`` environment variable using  
+``export VLLM_RPC_TIMEOUT=180000``, then restart the server. The timeout value depends on the
+model and deployment configuration used.
 
 To send a request with both text and image prompts:
 

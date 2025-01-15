@@ -12,6 +12,19 @@ This document lists the release notes for Neuronx-Distributed library.
 
 .. _neuronx-distributed-rn-0-10-0:
 
+NxD Core [0.10.1]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 1/14/2025
+
+New in this release
+-------------------
+
+**Inference:**
+
+* Fix an issue with sequence parallel support for quantized models.
+
+
 NxD Core [0.10.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -27,6 +40,13 @@ New in this release
 * Added DPO support for post-training model alignment
 * Added fused QKV optimization in GQA models
 * Support for Mixture-of-Experts with Tensor, Sequence, and Pipeline parallelism
+
+
+Known Issues and Limitations
+----------------------------
+
+* With PT2.5, some of the key workloads like Llama3-8B training may show reduced performance when using `--llm-training` compiler flag as compared to PT2.1.
+In such a case, try removing `--llm-training` flag from `NEURON_CC_FLAGS` in the run.sh
 
 
 NxD Core [0.9.0]

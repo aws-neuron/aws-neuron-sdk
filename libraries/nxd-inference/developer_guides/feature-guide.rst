@@ -626,16 +626,64 @@ Although NxD Inference doesn't support EAGLE with a tree structure, you can trai
 an EAGLE checkpoint in the same way. Note that depending on your use case and dataset, you
 might see lower acceptance rate with the flat draft structure compared with using a tree structure.
 
+NxD Inference supports EAGLE models with or without input normalization. By default,
+NxD Inference expects that the EAGLE model doesn't use input normalization. To use
+an EAGLE model with input normalization, set ``enable_eagle_draft_input_norm`` to ``True``
+in NeuronConfig.
+
 You can find links to pretrained EAGLE draft model checkpoints for various
 popular models in the official EAGLE repository on GitHub: https://github.com/SafeAILab/EAGLE.
 However, these pretrained EAGLE model checkpoints don't include the LM head
 weights from the target model. To use these pretrained checkpoints with NxD Inference,
 you must first copy the LM head weights from the target to the draft model.
 
-NxD Inference supports EAGLE models with or without input normalization. By default,
-NxD Inference expects that the EAGLE model doesn't use input normalization. To use
-an EAGLE model with input normalization, set ``enable_eagle_draft_input_norm`` to ``True``
-in NeuronConfig.
+The following code demonstrates how to perform this operation for a `Llama-3.1-70B-Instruct <https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct>`__
+target model and the corresponding `EAGLE draft <https://huggingface.co/yuhuili/EAGLE-LLaMA3-Instruct-70B>`__:
+
+::
+
+    import json
+    import os
+
+    import torch
+    from safetensors import safe_open
+    from safetensors.torch import save_file
+
+    target_model_path = "Meta-Llama-3.1-70B-Instruct"
+    draft_model_path = "Llama-3.1-70B-Instruct-EAGLE-Draft"
+
+    DRAFT_MODEL_SAFETENSORS_NAME = "model.safetensors"
+    LM_HEAD_WEIGHT_TENSOR_NAME = "lm_head.weight"
+    TARGET_MODEL_SAFETENSORS_INDEX_NAME = "model.safetensors.index.json"
+
+    def find_lm_head_safetensors_location(model_dir):
+        model_index_location_path = os.path.join(model_dir, TARGET_MODEL_SAFETENSORS_INDEX_NAME)
+
+        with open(model_index_location_path, 'r') as f:
+            model_index_locations = json.load(f)
+
+        lm_head_safetensors_name = model_index_locations["weight_map"][LM_HEAD_WEIGHT_TENSOR_NAME]
+
+        return lm_head_safetensors_name
+
+    # Find the target model `lm_head.weight` location in safetensors
+    target_lm_head_safetensors_name = find_lm_head_safetensors_location(target_model_path)
+    target_lm_head_safetensors_path = os.path.join(target_model_path, target_lm_head_safetensors_name)
+
+    # Open the target model.safetensor containing `lm_head.weight`
+    with safe_open(target_lm_head_safetensors_path, framework="pt") as f:
+        target_lm_head = f.get_tensor(LM_HEAD_WEIGHT_TENSOR_NAME)
+
+    # Collect all tensors in the draft model
+    draft_model_safetensors_path = os.path.join(draft_model_path, DRAFT_MODEL_SAFETENSORS_NAME)
+    tensors = {}
+    with safe_open(draft_model_safetensors_path, framework="pt") as f:
+        for key in f.keys():
+            tensors[key] = f.get_tensor(key)
+
+    # Add the LM head weights and save out the new draft model.safetensors file
+    tensors[LM_HEAD_WEIGHT_TENSOR_NAME] = target_lm_head.type(torch.float16)
+    save_file(tensors, draft_model_safetensors_path)
 
 .. _nxd-fused-speculative-decoding:
 Fused Speculation
@@ -654,82 +702,108 @@ Example
 
 ::
 
-   import copy
+    import copy
 
-   from transformers import AutoTokenizer, GenerationConfig
+    from neuronx_distributed_inference.models.config import (
+        FusedSpecNeuronConfig,
+        NeuronConfig,
+        OnDeviceSamplingConfig
+    )
+    from neuronx_distributed_inference.models.llama.modeling_llama import (
+        NeuronLlamaForCausalLM,
+        NeuronLlamaModel
+    )
+    from neuronx_distributed_inference.utils.accuracy import get_generate_outputs
+    from neuronx_distributed_inference.utils.hf_adapter import load_pretrained_config
+    from transformers import AutoTokenizer, GenerationConfig
 
-   from neuronx_distributed_inference.models.config import (
-       NeuronConfig,
-       FusedSpecNeuronConfig
-   )
-   from neuronx_distributed_inference.models.llama.modeling_llama import (
-       LlamaInferenceConfig,
-       NeuronLlamaForCausalLM,
-       NeuronLlamaModel
-   )
-   from neuronx_distributed_inference.utils.accuracy import get_generate_outputs
-   from neuronx_distributed_inference.utils.hf_adapter import load_pretrained_config
+    prompt = "The future of AI is"
 
-   prompts = ["I believe the meaning of life is"]
+    model_path = "/home/ubuntu/models/Llama-3.1-70B-Instruct"
+    draft_model_path = "/home/ubuntu/models/Llama-3.1-70B-Instruct-EAGLE-Draft"
+    compiled_model_path = "/home/ubuntu/neuron_models/Llama-3.1-70B-Instruct-EAGLE"
+    max_sequence_length = 1024
 
-   model_path = "/home/ubuntu/models/Llama-3-8B-Instruct"
-   draft_model_path = "/home/ubuntu/models/EAGLE-LLaMA3-Instruct-8B"
-   compiled_model_path = "/home/ubuntu/neuron_models/Llama-3-8B-Instruct-EAGLE"
+    # Initialize on-device sampling configuration.
+    on_device_sampling_config = OnDeviceSamplingConfig(
+        temperature=0.7,
+        top_k=50,
+        top_p=1.0,
+    )
 
-   # Initialize target model.
-   neuron_config = NeuronConfig(
-       enable_eagle_speculation=True,
-       speculation_length=5,
-       trace_tokengen_model=False
-   )
-   config = LlamaInferenceConfig(
-       neuron_config,
-       load_config=load_pretrained_config(model_path)
-   )
-   model = NeuronLlamaForCausalLM(model_path, config)
+    # Initialize model configuration.
+    neuron_config = NeuronConfig(
+        # Neuron supports EAGLE batch sizes greater than 1.
+        # We set batch size to 1 in this tutorial due to a
+        # limitation in the transformers library for
+        # generation with speculative decoding.
+        # For more information, see: https://github.com/huggingface/transformers/issues/32165
+        batch_size = 1,
+        enable_eagle_speculation=True,
+        enable_fused_speculation=True,
+        max_context_length=max_sequence_length,
+        max_length=max_sequence_length,
+        on_device_sampling_config=on_device_sampling_config,
+        seq_len=max_sequence_length,
+        speculation_length=5,
+        # For best performance, set to the maximum tensor
+        # parallelism of your Neuron instance type.
+        tp_degree=32,
+        trace_tokengen_model=False
+    )
 
-   # Initialize draft model.
-   draft_neuron_config = copy.deepcopy(neuron_config)
-   draft_neuron_config.trace_tokengen_model = True
-   draft_neuron_config.enable_fused_speculation **=** False
-   draft_neuron_config.is_eagle_draft **=** True
-   draft_neuron_config.sequence_parallel_enabled **=** False
-   draft_config = LlamaInferenceConfig(
-       draft_neuron_config,
-       load_config=load_pretrained_config(draft_model_path)
-   )
+    config = NeuronLlamaForCausalLM.get_config_cls()(
+        neuron_config, load_config=load_pretrained_config(model_path)
+    )
 
-   # Initialize fused speculation config.
-   fused_spec_config = FusedSpecNeuronConfig(
-       NeuronLlamaModel,
-       draft_config=draft_config,
-       draft_model_path=draft_model_path,
-   )
-   config.fused_spec_config = fused_spec_config
+    # Initialize draft model configuration and set EAGLE-specific values.
+    draft_neuron_config = copy.deepcopy(neuron_config)
+    draft_neuron_config.trace_tokengen_model = True
+    draft_neuron_config.enable_fused_speculation = False
+    draft_neuron_config.is_eagle_draft = True
+    draft_neuron_config.sequence_parallel_enabled = False
 
-   # Compile and save model.
-   model.compile(compiled_model_path)
+    draft_config = NeuronLlamaForCausalLM.get_config_cls()(
+        draft_neuron_config, load_config=load_pretrained_config(draft_model_path))
 
-   # Load model to the Neuron device.
-   model.load(compiled_model_path)
+    # Initialize fused speculation configuration.
+    fused_spec_config = FusedSpecNeuronConfig(
+        NeuronLlamaForCausalLM._model_cls,
+        draft_config=draft_config,
+        draft_model_path=draft_model_path,
+    )
+    config.fused_spec_config = fused_spec_config
 
-   # Load tokenizer and generation config.
-   tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side=neuron_config.padding_side)
-   generation_config = GenerationConfig.from_pretrained(model_path)
+    # Initialize model from configuration.
+    model = NeuronLlamaForCausalLM(model_path, config)
 
-   # Run generation.
-   _, output_tokens = get_generate_outputs(
-       model,
-       prompts,
-       tokenizer,
-       is_hf=False,
-       draft_model=draft_model,
-       generation_config=generation_config
-   )
+    # Compile and save model.
+    model.compile(compiled_model_path)
 
-   print("Generated outputs:")
-   for i, output_token in enumerate(output_tokens):
-       print(f"Output {i}: {output_token}")
+    # Load model to the Neuron device.
+    model.load(compiled_model_path)
+
+    # Load tokenizer and generation config.
+    tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side=neuron_config.padding_side)
+    generation_config = GenerationConfig.from_pretrained(model_path)
+    generation_config.max_length = 1024
+    # pad_token_id is required for Hugging Face assisted sampling.
+    generation_config.pad_token_id = tokenizer.eos_token_id
+
+    # Run generation and print outputs.
+    _, output_tokens = get_generate_outputs(
+        model,
+        [prompt],
+        tokenizer,
+        is_hf=False,
+        # draft_model is not set here due to fused speculation.
+        draft_model=None,
+        generation_config=generation_config
+    )
+
+    print("Generated output:")
+    for _, output in enumerate(output_tokens):
+        print(output)
 
 MoE model architecture support
 ------------------------------
