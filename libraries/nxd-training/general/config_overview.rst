@@ -782,6 +782,7 @@ This config can help to decide the dtype of the model/optimizer.
         xla_use_bf16: '0'
         xla_downcast_bf16: '0'
         neuron_rt_stochastic_rounding_en: '0'
+        parallel_layers_reduce_dtype: 'bf16'
 
 .. note::
 
@@ -789,35 +790,41 @@ This config can help to decide the dtype of the model/optimizer.
     ``neuron_rt_stochastic_rounding_en`` will be picked up from the config. These parameters are for more finer control of
     precision. It is recommended to use ``mixed_precision`` config for better accuracy.
 
-**mixed_precision**
+**type**
+    **mixed_precision**
 
-This config will use the ``zero1`` optimizer and will keep master weights in ``fp32``. It will also perform grad
-accumulation and ``grad cc`` in ``fp32``. It will also set the ``xla_downcast_bf16``. It will disable stocastic
-rounding.
+    The ``mixed_precision`` config uses the ``zero1`` optimizer. It performs grad accumulation,
+    ``grad cc``, and keeps the master copy of the weights in ``fp32``. It also sets the ``xla_downcast_bf16``
+    environment variable to 1 and disables stochastic rounding.
 
-**mixed_precisionSR**
+    **mixed_precisionSR**
 
-This is a superset config of ``mixed_precision``, only difference been the stochastic rounding. In this case, we set the
-stochastic rounding.
-
-
-**bf16SR**
-
-This config will perform all operations in ``bf16``. It will rely on the stochastic rounding feature to gain accuracy.
+    ``mixed_precisionSR`` is a superset of the ``mixed_precision`` config with stochastic rounding enabled.
 
 
-**autocast**
+    **bf16SR**
 
-This config will follow the exact same precision strategy followed by ``torch.autocast``.
+    ``bf16SR`` config will perform all operations in ``bf16`` and relies on stochastic rounding feature for accuracy gains.
 
-.. note::
-    Autocast is not supported in this release.
 
-**manual**
+    **autocast**
 
-To gain control of the different precision nobs, one can set the precision type to ``manual`` and control parameters
-like - ``master_weights`` , ``fp32_grad_acc``, ``xla_use_bf16``, ``xla_downcast_bf16`` and
-``neuron_rt_stochastic_rounding_en``.
+    ``autocast`` config will follow the exact same precision strategy followed by ``torch.autocast``.
+
+    .. note::
+        Autocast is not supported in this release.
+
+    **manual**
+
+    To gain control of the different precision nobs, one can set the precision type to ``manual`` and control parameters
+    like - ``master_weights`` , ``fp32_grad_acc``, ``xla_use_bf16``, ``xla_downcast_bf16`` and
+    ``neuron_rt_stochastic_rounding_en``.
+
+**parallel_layers_reduce_dtype**
+
+This config will perform reduce collectives (all-reduce and reduce-scatter) within parallel layers in the
+specified precision. If ``fp32`` precision type is used, then we implicitly set reduce dtype to ``fp32``.
+Otherwise it will be defaulted to ``bf16`` in all other cases unless specified.
 
 
 Model Alignment Specific

@@ -11,6 +11,15 @@ NxD Inference Release Notes (``neuronx-distributed-inference``)
 This document lists the release notes for Neuronx Distributed Inference library.
 
 
+Neuronx Distributed Inference [0.1.1] (Beta) (Neuron 2.21.1 Release)
+------------------------------------------------------------------
+Date: 01/14/2025
+
+Bug Fixes
+^^^^^^^^^
+* Fix minor issues with sampling params and add validation for sampling params.
+
+
 Neuronx Distributed Inference [0.1.0] (Beta) (Neuron 2.21 Release)
 ------------------------------------------------------------------
 Date: 12/20/2024

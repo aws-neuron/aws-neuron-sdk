@@ -19,6 +19,13 @@ Updated : 12/20/2024
  * `CVE-2024-11393 <https://nvd.nist.gov/vuln/detail/CVE-2024-11393>`_
  * `CVE-2024-11394 <https://nvd.nist.gov/vuln/detail/CVE-2024-11394>`_
 
+Neuron 2.21.1
+-------------
+Date: 01/14/2025
+
+- Minor improvements and bug fixes.
+
+
 Neuron 2.21.0
 -------------
 Date: 12/19/2024

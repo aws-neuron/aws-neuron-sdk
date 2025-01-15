@@ -12,6 +12,16 @@ This document lists the release notes for Neuronx Distributed Training library.
 
 .. _neuronx-distributed-training-rn-1-1-0:
 
+Neuronx Distributed Training [1.1.1]
+
+Date: 1/14/2025
+
+Features in this release
+------------------------
+
+* Added a flag in Llama3/3.1 70B config to control the dtype of reduce-scatter operations in Column/Row Parallel linear layers.
+
+
 Neuronx Distributed Training [1.1.0]
 
 Date: 12/20/2024
@@ -32,6 +42,8 @@ Known Issues and Limitations
 ----------------------------
 
 * Autocast option may not properly cast all inputs to bf16, recommended to use mixed precision option (currently is default) in configs for best results
+* With PT2.5, some of the key workloads like Llama3-8B training may show a reduced performance when using `--llm-training` compiler flag as compared to PT2.1.
+In such a case, try removing `--llm-training` flag from `compiler_flags` in the config.yaml
 
 .. _neuronx-distributed-training-rn-1-0-1:
 

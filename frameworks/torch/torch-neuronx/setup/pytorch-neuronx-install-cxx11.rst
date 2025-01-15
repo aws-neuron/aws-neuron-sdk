@@ -87,9 +87,9 @@ just like standard versions of ``torch-neuronx``.
 Building ``torch`` and ``torch-xla`` with C++11 ABI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The instructions for building ``torch`` from source is at https://github.com/pytorch/pytorch#from-source
+The instructions for building ``torch`` from source are at https://github.com/pytorch/pytorch#from-source
 
-The instructions for building ``torch-xla`` from source is at https://github.com/pytorch/xla/blob/master/CONTRIBUTING.md
+The instructions for building ``torch-xla`` from source are at https://github.com/pytorch/xla/blob/master/CONTRIBUTING.md
 
 The following are simplified instructions (subject to change):
 
@@ -184,8 +184,8 @@ package file directly and ``unzip`` the wheel:
 
 .. _pytorch-neuronx-cxx11-versioning:
 
-How can I know which ABI torch-neuron is using?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How can I know which ABI torch-neuronx is using?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Packages which use the pre-C++11 ABI have no local identifier and use the
 following version scheme:
