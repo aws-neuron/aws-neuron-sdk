@@ -51,7 +51,7 @@ index.
 
 ::
 
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuron --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuron --no-deps
 
 
 Specific versions of ``torch-neuron`` with cxx11 ABI support can be installed
@@ -59,9 +59,9 @@ just like standard versions of ``torch-neuron``.
 
 ::
 
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron>=1.8" --no-deps
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron==1.9.1" --no-deps
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron<1.10" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron>=1.8" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron==1.9.1" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuron<1.10" --no-deps
 
 .. important::
 
@@ -117,7 +117,7 @@ is to download the wheel and unpack the contents:
 
 .. code:: bash
 
-    pip download --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuron --no-deps
+    pip download --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuron --no-deps
     wheel unpack torch_neuron-*.whl
 
 If the exact version of the ``torch-neuron`` package is known and no

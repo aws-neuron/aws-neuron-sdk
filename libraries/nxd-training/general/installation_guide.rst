@@ -37,7 +37,7 @@ Install the neuron packages using the command:
 .. code-block :: shell
 
     pip install -U pip
-    pip install --upgrade neuronx-cc==2.* torch-neuronx torchvision neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+    pip install --upgrade neuronx-cc==2.* torch-neuronx torchvision neuronx_distributed --index-url https://pip.repos.neuron.amazonaws.com
 
 .. _nxdt_nemo_deps:
 
@@ -132,7 +132,7 @@ To install the library, one can run the following command:
 
 .. code-block :: shell
 
-    pip install neuronx_distributed_training --extra-index-url https://pip.repos.neuron.amazonaws.com
+    pip install neuronx_distributed_training --index-url https://pip.repos.neuron.amazonaws.com
 
 
 .. _nxdt_installation_common_failures:

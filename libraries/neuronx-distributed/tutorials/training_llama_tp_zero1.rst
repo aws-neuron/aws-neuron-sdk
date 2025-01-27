@@ -23,67 +23,52 @@ introduces how to setup and use a ParallelCluster.
 To setup the packages on the headnode of the ParallelCluster, follow the instructions mentioned here:
 :ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`.
 
-We also need to install the ``neuronx-distributed`` package inside the virtual env using the following command:
+We also need to install and clone the ``neuronx-distributed`` package inside the virtual env using the following commands:
 
 .. code:: ipython3
 
-   python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+   python -m pip install neuronx_distributed --index-url https://pip.repos.neuron.amazonaws.com
+   git clone git@github.com:aws-neuron/neuronx-distributed.git
 
 Let’s download the scripts for pretraining:
 
 
-1. Creating a directory to hold our experiments
+1. Navigate to a directory to hold our experiments
 
-.. code:: ipython3
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_tp_zero1_setup.sh
+   :language: shell
+   :lines: 4
 
-   mkdir -p ~/examples/tp_zero1_llama_hf_pretrain
-   cd ~/examples/tp_zero1_llama_hf_pretrain   
+2. Link the training scripts for our experiments
 
-2. Downloading training scripts for our experiments
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_tp_zero1_setup.sh
+   :language: shell
+   :lines: 5-8
 
-.. code:: ipython3
+If you want to pre-train Llama3.1 8B, you would need to run the following steps -
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/logger.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/training_utils.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/requirements.txt
-
-If you want to pre-train Llama3.108B, you would need to run the following steps -
-
-.. code:: ipython3
-
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama3_8B_hf_pretrain.sh
-   mkdir 8B_config_llama3 && cd 8B_config_llama3
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/8B_config_llama3.1/config.json
-   cd ..
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_31_8b.sh
+   :language: shell
+   :lines: 5-7
 
 If you want to pre-train Llama3 8B, you would need to run the following steps -
 
-.. code:: ipython3
-
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama3_8B_hf_pretrain.sh
-   mkdir 8B_config_llama3 && cd 8B_config_llama3
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/8B_config_llama3/config.json
-   cd ..
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
+   :language: shell
+   :lines: 5-6
 
 
 If you want to pre-train Llama2 7B, run the following steps -
 
-.. code:: ipython3
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_2_7b.sh
+   :language: shell
+   :lines: 5-6
 
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/tp_zero1_llama2_7B_hf_pretrain.sh
-   mkdir 7B_config_llama2 && cd 7B_config_llama2
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/7B_config_llama2/config.json
-   cd ..
+3. Installing the additional requirements
 
-3. Installing the additional requirements and giving the right permissions to our shell script
-
-.. code:: ipython3
-
-   python3 -m pip install -r requirements.txt
-   chmod +x tp_zero1_llama2_7B_hf_pretrain.sh
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_tp_zero1_setup.sh
+   :language: shell
+   :lines: 10
 
 
 To tokenize the data, we must request the tokenizer from hugging face and meta by following the instructions at the following link: `HuggingFace Llama 3 8B Model <https://huggingface.co/meta-llama/Meta-Llama-3-8B>`__ . 
@@ -115,17 +100,16 @@ For Llama3.1/Llama3, make sure your ``~/examples/tp_zero1_llama_hf_pretrain`` di
 For Llama2, you just copy the ``tokenizer.model`` to the ``~/examples/tp_zero1_llama_hf_pretrain`` directory.
 Next let’s download and pre-process the dataset:
 
-.. code:: ipython3
-
-   cd ~/examples/tp_zero1_llama_hf_pretrain
-   python3 get_dataset.py --llama-version 3  # change the version number to 2 for Llama-2 models
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
+   :language: shell
+   :lines: 11
 
 `Note:` In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/tp_zero1_llama_hf_pretrain'. Use `repo_type` argument if needed.`` 
 This could be because of a stale cache. Try deleting the cache using: 
 
-.. code:: ipython3
-
-   sudo rm -rf /home/ubuntu/.cache/
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
+   :language: shell
+   :lines: 8
 
 
 At this point, you are all set to start training. The below tutorial uses ``Llama3 8B`` as an example. To run Llama2 7B, simply change the script from ``tp_zero1_llama3_8B_hf_pretrain.sh`` to ``tp_zero1_llama2_7B_hf_pretrain.sh``
@@ -137,12 +121,9 @@ By this step, the ParallelCluster is all setup for running experiments.
 Before we run training, we first pre-compile the graphs using the :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`.
 Let’s run the command below:
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 4 \
-   --cpus-per-task 128 \
-   --wrap="srun neuron_parallel_compile bash $(pwd)/tp_zero1_llama3_8B_hf_pretrain.sh"
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
+   :language: shell
+   :lines: 15-18
 
 This script uses a tensor-parallel size of 8.
 This will automatically set the zero-1 sharding degree to 16 (4 * 32 workers / tensor_parallel_size). 
@@ -156,12 +137,9 @@ created.
 Once the graphs are compiled we can now run training and observe our loss goes down.
 To run the training, we just run the above command but without ``neuron_parallel_compile``.
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 4 \
-   --cpus-per-task 128 \
-   --wrap="srun bash $(pwd)/tp_zero1_llama3_8B_hf_pretrain.sh"
+.. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
+   :language: shell
+   :lines: 20-23
 
 
 Performance:

@@ -55,7 +55,7 @@ index.
 
 ::
 
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuronx --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuronx --no-deps
 
 
 Specific versions of ``torch-neuronx`` with C++11 ABI support can be installed
@@ -63,8 +63,8 @@ just like standard versions of ``torch-neuronx``.
 
 ::
 
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.1.*" --no-deps
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5,*" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.1.*" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5,*" --no-deps
 
 .. important::
 
@@ -169,7 +169,7 @@ is to download the wheel and unpack the contents:
 
 .. code:: bash
 
-    pip download --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuronx --no-deps
+    pip download --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 torch-neuronx --no-deps
     wheel unpack torch_neuronx-*.whl
 
 If the exact version of the ``torch-neuronx`` package is known and no

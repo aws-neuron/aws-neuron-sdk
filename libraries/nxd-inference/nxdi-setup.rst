@@ -67,7 +67,7 @@ Run this command to install NxD Inference.
 
    source aws_neuron_venv_pytorch/bin/activate
    pip install -U pip
-   pip install --upgrade neuronx-cc==2.* neuronx-distributed-inference --extra-index-url https://pip.repos.neuron.amazonaws.com
+   pip install --upgrade neuronx-cc==2.* neuronx-distributed-inference --index-url https://pip.repos.neuron.amazonaws.com
 
 
 Verify NxD Inference Installation

@@ -88,10 +88,10 @@ leads to a RoI Align latency reduction two to three times larger than the defaul
     !sudo apt install python3.7-dev -y
     
     # Install Neuron packages
-    !pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
     !pip uninstall -y torchvision
-    !pip install --force-reinstall torch-neuron==1.11.0.* neuron-cc[tensorflow] "protobuf==3.20.1" ninja opencv-python
-    
+    !pip install --force-reinstall "protobuf==3.20.1" ninja opencv-python
+    !pip install --force-reinstall torch-neuron==1.11.0.* neuron-cc[tensorflow] --index-url https://pip.repos.neuron.amazonaws.com
+
     # Change cuda to 10.2 for Detectron2
     !sudo rm /usr/local/cuda
     !sudo ln -s /usr/local/cuda-10.2 /usr/local/cuda

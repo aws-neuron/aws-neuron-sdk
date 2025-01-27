@@ -437,7 +437,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
 def hlpr_pip_repos_setup():
     str = '\n'
     str += '# Set Pip repository  to point to the Neuron repository' + '\n'
-    str += 'pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com'+ '\n'
+    str += 'pip config set global.index-url https://pip.repos.neuron.amazonaws.com'+ '\n'
     return str
 
 #################################################

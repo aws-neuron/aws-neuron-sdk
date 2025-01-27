@@ -76,16 +76,13 @@
         source aws_neuron_venv_pytorch/bin/activate
         pip install -U pip
 
-        # Install packages from repos
-        python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
-
         # Install wget, awscli
         pip install wget
         pip install awscli
 
         # Install Neuron packages
-        pip install torch-neuronx==1.13.0.1.*
-        pip install neuronx-cc==2.*
+        pip install torch-neuronx==1.13.0.1.* --index-url=https://pip.repos.neuron.amazonaws.com
+        pip install neuronx-cc==2.* --index-url=https://pip.repos.neuron.amazonaws.com
 
 
 .. dropdown::  Run Tutorial
