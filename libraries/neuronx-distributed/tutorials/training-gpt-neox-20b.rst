@@ -17,52 +17,35 @@ Setting up environment is same as the :ref:`GPT-NeoX 6.9B tutorial<gpt_neox_tp_z
 
 **Let’s download the scripts for pretraining:**
 
-.. code:: ipython3
-
-   mkdir -p ~/examples/tp_dp_gpt_neox_hf_pretrain
-   cd ~/examples/tp_dp_gpt_neox_hf_pretrain
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.sh
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/modeling_gpt_neox_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/utils.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/adamw_fp32_optim_params.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/tp_dp_gpt_neox_hf_pretrain/common/requirements.txt
-   python3 -m pip install -r requirements.txt
+.. literalinclude:: nxd-source-code/gpt_neox_tp_zero1/gpt_neox_20b.sh
+   :language: shell
+   :lines: 4-8
 
 Next let’s download and pre-process the dataset:
 
-.. code:: ipython3
-
-   cd ~/examples/tp_dp_gpt_neox_hf_pretrain
-   python3 get_dataset.py
+.. literalinclude:: nxd-source-code/gpt_neox_tp_zero1/gpt_neox_20b.sh
+   :language: shell
+   :lines: 10
 
 At this point, you are all set to start training.
 
 **Running training**
 
 We first pre-compile the graphs using the ``neuron_parallel_compile``.
-Suppose the cluster queue name is ``compute1-dy-training-0`` and we are using node 1-4,
-let’s run the command below:
+Let’s run the command below:
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodelist=compute1-dy-training-0-[1-4] \
-   --cpus-per-task 128 \
-   --wrap="srun neuron_parallel_compile bash $(pwd)/tp_dp_gpt_neox_20b_hf_pretrain.sh"
+.. literalinclude:: nxd-source-code/gpt_neox_tp_zero1/gpt_neox_20b.sh
+   :language: shell
+   :lines: 14-17
 
 This script uses a tensor-parallel size of 32.
 This will automatically set the zero-1 sharding degree to 4 (4 * 32 workers / tensor_parallel_size).
 Once the graphs are compiled we can now run training and observe our loss goes down.
 To run the training, we just the above command but without ``neuron_parallel_compile``.
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodelist=compute1-dy-training-0-[1-4] \
-   --cpus-per-task 128 \
-   --wrap="srun bash $(pwd)/tp_dp_gpt_neox_20b_hf_pretrain.sh"
+.. literalinclude:: nxd-source-code/gpt_neox_tp_zero1/gpt_neox_20b.sh
+   :language: shell
+   :lines: 19-22
 
 
 **Sequence Parallel**

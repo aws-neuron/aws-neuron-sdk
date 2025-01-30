@@ -21,64 +21,46 @@ We also need to install the ``neuronx-distributed`` package inside the virtual e
 .. code:: ipython3
 
    python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+   git clone git@github.com:aws-neuron/neuronx-distributed.git
 
 Let’s download the scripts for pretraining:
 
 
-1. Creating a directory to hold our experiments
+1. Navigate to a directory to hold our experiments
 
-.. code:: ipython3
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_tp_pp_ptl_setup.sh
+   :language: shell
+   :lines: 4
 
-   mkdir -p ~/examples/llama2_lightning
-   cd ~/examples/llama2_lightning
+2. Link the training scripts for our experiments
 
-2. Downloading training scripts for our experiments
-
-.. code:: ipython3
-
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/data_module.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/module_llama.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_nxd_ptl.py
-
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/get_dataset.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lr.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/modeling_llama_nxd.py
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/requirements_ptl.txt
-   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/training_utils.py
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_tp_pp_ptl_setup.sh
+   :language: shell
+   :lines: 5-10
 
 If you want to pre-train Llama 7B, you would need to run the following steps -
 
-.. code:: ipython3
-
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_7b_tp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_zero1_llama_hf_pretrain/7B_config_llama2/config.json
-    chmod +x run_llama_7b_tp_ptl.sh
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
+   :language: shell
+   :lines: 5-8
 
 If you want to pre-train Llama 13B, you would need to run the following steps -
 
-.. code:: ipython3
-
-    mkdir -p ~/examples/llama2_lightning/13B_config
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_13b_tp_pp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_pp_llama_hf_pretrain/13B_config_llama2/config.json -P 13B_config/
-    chmod +x run_llama_13b_tp_pp_ptl.sh
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_13b.sh
+   :language: shell
+   :lines: 5-8
 
 If you want to pre-train Llama 70B, you would need to run the following steps -
 
-.. code:: ipython3
-
-    mkdir -p ~/examples/llama2_lightning/70B_config
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/lightning/run_llama_70b_tp_pp_ptl.sh
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/main/examples/training/llama/tp_pp_llama_hf_pretrain/70B_config_llama2/config.json -P 70B_config/
-    chmod +x run_llama_70b_tp_pp_ptl.sh
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_70b.sh
+   :language: shell
+   :lines: 5-8
 
 3. Installing the additional requirements and giving the right permissions to our shell script
 
-.. code:: ipython3
-
-   python3 -m pip install -r requirements.txt
-   python3 -m pip install -r requirements_ptl.txt  # Currently we're supporting Lightning version 2.1.0
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_tp_pp_ptl_setup.sh
+   :language: shell
+   :lines: 12-13
 
 
 Next, we tokenize our dataset. 
@@ -92,10 +74,9 @@ Once you have downloaded the tokenizer and model weights, you can copy the ``tok
 
 Next let’s download and pre-process the dataset:
 
-.. code:: ipython3
-
-   cd ~/examples/llama2_lightning
-   python3 get_dataset.py --llama-version 2  # currently we only support Llama-2 models
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
+   :language: shell
+   :lines: 13
 
 ``Note``: In case you see an error of the following form when downloading data: ``huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/ubuntu/examples/llama2_lightning'. Use `repo_type` argument if needed.`` 
 This could be because of a stale cache. Try deleting the cache using: 
@@ -114,12 +95,9 @@ By this step, the ParallelCluster is all setup for running experiments.
 Before we run training, we first pre-compile the graphs using the :ref:`neuron_parallel_compile <pytorch-neuronx-parallel-compile-cli>`.
 Let’s run the command below:
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 4 \
-   --cpus-per-task 128 \
-   --wrap="srun neuron_parallel_compile bash $(pwd)/run_llama_7b_tp_ptl.sh"
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
+   :language: shell
+   :lines: 17-20
 
 This script uses a tensor-parallel size of 8.
 This will automatically set the zero-1 sharding degree to 16 (4 * 32 workers / tensor_parallel_size). 
@@ -133,12 +111,9 @@ created.
 Once the graphs are compiled we can now run training and observe our loss goes down.
 To run the training, we just run the above command but without ``neuron_parallel_compile``.
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 4 \
-   --cpus-per-task 128 \
-   --wrap="srun bash $(pwd)/run_llama_7b_tp_ptl.sh"
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
+   :language: shell
+   :lines: 22-25
 
 Training Llama2-13B/70B with Tensor Parallelism and Pipeline Parallelism
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -149,22 +124,16 @@ Let’s run the command below:
 
 Pre-compiling
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 32 \
-   --cpus-per-task 128 \
-   --wrap="srun neuron_parallel_compile bash $(pwd)/run_llama_70b_tp_pp_ptl.sh"
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_70b.sh
+   :language: shell
+   :lines: 17-20
 
 This script uses a tensor-parallel size of 8, pipeline-parallel size of 8
 To run the training, we just use the above command but without ``neuron_parallel_compile``.
 
-.. code:: ipython3
-
-   sbatch --exclusive \
-   --nodes 32 \
-   --cpus-per-task 128 \
-   --wrap="srun bash $(pwd)/run_llama_70b_tp_pp_ptl.sh"
+.. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
+   :language: shell
+   :lines: 22-25
 
 
 Checkpointing:
