@@ -551,7 +551,7 @@ Case #1 - Tensor split to even and odd columns
 Here we split an input tensor into two output tensors, where the first
 output tensor gathers all the even columns from the input tensor,
 and the second output tensor gathers all the odd columns from the
-input tensor. We assume the rows of the input tensors are mapped to SBUF
+input tensor. We assume the rows of the input tensor are mapped to SBUF
 partitions. Therefore, we are effectively gathering elements along
 the free dimension of the input tensor. :numref:`Fig. %s <nki-fig-pm-index-1>`
 below visualizes the input and output tensors.
