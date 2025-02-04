@@ -6,7 +6,7 @@ Tutorial: Using Speculative Decoding to improve Llama-3.3-70B inference performa
 NeuronX Distributed (NxD) Inference allows you to deploy Llama3.3 70B on
 a single Trn2 or Trn1 instance. This tutorial provides a step-by-step
 guide to deploy Llama3.3 70B on a Trn2 instance using two different configurations, one without
-speculative decoding and the other with vanilla speculative decoding enabled
+speculative decoding and the other with draft model based speculative decoding enabled
 (with Llama-3.2 1B as the draft model).
 We will also measure performance by running a load test using LLMPerf
 and compare key metrics between the two configurations.
@@ -90,7 +90,7 @@ Install llmperf into the virtual environment.
     pip install -e . 
 
 
-Download Models
+Download models
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To use this sample, you must first download a 70B model checkpoint from Hugging Face
 to a local path on the Trn2 instance. For more information, see
@@ -123,6 +123,7 @@ the tutorial for running 405B model :ref:`nxdi-trn2-llama3.1-405b-tutorial`
 The script compiles the model and runs generation on the given input prompt.
 Note the path we used to save the compiled model. This path should be used
 when launching vLLM server for inference so that the compiled model can be loaded without recompilation.
+Please refer to :ref:`nxd-inference-api-guide` for more information on these ``inference_demo`` flags.
 
 ::
 
@@ -202,9 +203,11 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
 Step 3: Measure performance using LLMPerf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 After the above steps, the vllm server should be running. 
-You can now measure the performance using LLMPerf. Below is a sample shell script to run LLMPerf.
+You can now measure the performance using LLMPerf. Before we can use the ``llmperf`` package, we need to make a few changes to its code. 
+Follow :ref:`benchmarking with LLMPerf guide <llm_perf_patch_changes>` to apply the code changes.
 
-To provide the model with 10000 tokens as input and generate 1500 tokens as output on average,
+
+Below is a sample shell script to run LLMPerf. To provide the model with 10000 tokens as input and generate 1500 tokens as output on average,
 we use the following parameters from LLMPerf:
 
 ::
@@ -247,49 +250,49 @@ A sample output from the above script is shown below:
     Results for token benchmark for /home/ubuntu/models/Llama-3.3-70B-Instruct/ queried with the openai api.
 
     inter_token_latency_s
-        p25 = 0.019814822451599563
-        p50 = 0.019832020386432607
-        p75 = 0.01984963524178602
-        p90 = 0.01985819646107654
-        p95 = 0.019871625061845408
-        p99 = 0.02061684579865075
-        mean = 0.019860720100291072
-        min = 0.019783137260004878
-        max = 0.02133107245961825
-        stddev = 0.00021329793592557677
+        p25 = 0.01964743386193489
+        p50 = 0.01965969146322459
+        p75 = 0.019672998415771872
+        p90 = 0.01969826815724373
+        p95 = 0.019810569172135244
+        p99 = 0.020350346909947692
+        mean = 0.01969182239660784
+        min = 0.0196275211258056
+        max = 0.020702997242410977
+        stddev = 0.00015700734112322808
     ttft_s
-        p25 = 0.5723962930496782
-        p50 = 0.5756837059743702
-        p75 = 0.5782957510091364
-        p90 = 0.5809791539330036
-        p95 = 0.5902622325113043
-        p99 = 25.081049750000144
-        mean = 1.536737611917779
-        min = 0.5699969907291234
-        max = 48.603518176823854
-        stddev = 6.79209192602991
+        p25 = 0.8109508841298521
+        p50 = 0.8142827898263931
+        p75 = 30.46490489714779
+        p90 = 30.513100237119943
+        p95 = 30.521608413150535
+        p99 = 48.876512633068415
+        mean = 11.503728219866753
+        min = 0.8080519903451204
+        max = 66.4881955627352
+        stddev = 15.692731777293613
     end_to_end_latency_s
-        p25 = 30.299682187382132
-        p50 = 30.3268030770123
-        p75 = 30.348097508074716
-        p90 = 30.367999098449946
-        p95 = 30.383213692484425
-        p99 = 56.00018264657342
-        mean = 31.32914203199558
-        min = 30.249366438016295
-        max = 80.60140019096434
-        stddev = 7.110435685337879
+        p25 = 30.296781020238996
+        p50 = 30.326033774763346
+        p75 = 59.9560666854959
+        p90 = 60.001504834741354
+        p95 = 60.028880204679446
+        p99 = 79.1842334462329
+        mean = 41.04328096391633
+        min = 30.265212223865092
+        max = 97.54387667682022
+        stddev = 15.796048923358924
     request_output_throughput_token_per_s
-        p25 = 49.45944310946372
-        p50 = 49.494171785795885
-        p75 = 49.538473422552784
-        p90 = 49.56724071383475
-        p95 = 49.58726816215459
-        p99 = 49.61382242393379
-        mean = 48.88194397874459
-        min = 18.62250527216358
-        max = 49.62087398014387
-        stddev = 4.367006858791291
+        p25 = 25.044969421803977
+        p50 = 49.49542857484997
+        p75 = 49.543217224244
+        p90 = 49.583184869985566
+        p95 = 49.58588728343319
+        p99 = 49.592597790896676
+        mean = 40.91042833304163
+        min = 15.387946954098137
+        max = 49.59489426003143
+        stddev = 11.825984480587056
     number_input_tokens
         p25 = 10000.0
         p50 = 10000.0
@@ -307,15 +310,15 @@ A sample output from the above script is shown below:
         p75 = 1501.0
         p90 = 1501.0
         p95 = 1501.0
-        p99 = 1501.0
-        mean = 1501.0
+        p99 = 1502.02
+        mean = 1501.04
         min = 1501
-        max = 1501
-        stddev = 0.0
+        max = 1503
+        stddev = 0.282842712474619
     Number Of Errored Requests: 0
-    Overall Output Throughput: 47.479805693322504
+    Overall Output Throughput: 36.55567822866449
     Number Of Completed Requests: 50
-    Completed Requests Per Minute: 1.897926943104164
+    Completed Requests Per Minute: 1.4612140207588533
 
 
 Scenario 2: Run Llama3.3 70B on Trn2 with Speculative Decoding
@@ -324,7 +327,7 @@ In this scenario, you will run Llama3.3 70B on Trn2 with Speculative Decoding.
 Specifically, we will use the below variations from the supported variants as described in
 :ref:`nxd-speculative-decoding`
 
-* Vanilla Speculative Decoding with Llama-3.2-1B as the draft model :ref:`nxd-vanilla-speculative-decoding`
+* Speculative Decoding with Llama-3.2-1B as the draft model :ref:`nxd-vanilla-speculative-decoding`
 * Fused Speculation for improved performance :ref:`nxd-fused-speculative-decoding`
 
 Step 1: Compile the model
@@ -341,6 +344,7 @@ For a quick review, here are the additional arguments provided:
             --speculation-length 7 \
             --no-trace-tokengen-model \
 
+Please refer to :ref:`nxd-inference-api-guide` for more information on these ``inference_demo`` flags.
 The complete script to compile the model for this configuration is shown below:
 
 ::
@@ -439,7 +443,8 @@ Here is the complete script to run the model using vLLM with speculative decodin
 
 Step 3: Measure performance using LLMPerf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The script to measure the performance using LLMPerf is same as the one used in the first scenario.
+The script to measure the performance using LLMPerf is same as the one used in the first scenario. Before we can use the ``llmperf`` package, we need to make a few changes to its code. 
+Follow :ref:`benchmarking with LLMPerf guide <llm_perf_patch_changes>` to apply the code changes.
 
 For convenience, here's the script once again:
 
@@ -474,49 +479,49 @@ A sample output from the above script is shown below:
     Results for token benchmark for /home/ubuntu/models/Llama-3.3-70B-Instruct/ queried with the openai api.
 
     inter_token_latency_s
-        p25 = 0.005602470060500006
-        p50 = 0.005631429936426381
-        p75 = 0.005658711920414741
-        p90 = 0.005684578440866123
-        p95 = 0.005713548544825365
-        p99 = 0.006577651818428922
-        mean = 0.00566579679981318
-        min = 0.005526937821879983
-        max = 0.007301821645038824
-        stddev = 0.00024078117608748752
+        p25 = 0.0053349758717231455
+        p50 = 0.005386366705410183
+        p75 = 0.005441084293027719
+        p90 = 0.005499971026182175
+        p95 = 0.005520176071580499
+        p99 = 0.005911254031351169
+        mean = 0.00540780140378178
+        min = 0.005264532127728065
+        max = 0.006265544256816307
+        stddev = 0.00013951778334019935
     ttft_s
-        p25 = 0.6115399743430316
-        p50 = 0.6124009389895946
-        p75 = 0.6139737505000085
-        p90 = 0.6173051572870463
-        p95 = 0.6198122691828758
-        p99 = 27.979491891143738
-        mean = 1.6862781716044992
-        min = 0.6109044901095331
-        max = 54.25300705060363
-        stddev = 7.585774430901768
+        p25 = 0.8693495176266879
+        p50 = 0.870149074587971
+        p75 = 0.8710820493288338
+        p90 = 0.8725412225350737
+        p95 = 0.8742059985175729
+        p99 = 36.83790613239617
+        mean = 2.280795605443418
+        min = 0.8676468348130584
+        max = 71.38881027325988
+        stddev = 9.97280539681726
     end_to_end_latency_s
-        p25 = 9.01934456313029
-        p50 = 9.060323748504743
-        p75 = 9.101599234272726
-        p90 = 9.139903657091782
-        p95 = 9.185261113895104
-        p99 = 37.84166024243913
-        mean = 10.185618488714098
-        min = 8.901652369182557
-        max = 65.20616552000865
-        stddev = 7.940203139754607
+        p25 = 8.873123338911682
+        p50 = 8.950916013680398
+        p75 = 9.030085149221122
+        p90 = 9.120021602977067
+        p95 = 9.150626054406166
+        p99 = 45.70815015356973
+        mean = 10.393093119114637
+        min = 8.766328778117895
+        max = 80.78758085798472
+        stddev = 10.158917239418473
     request_output_throughput_token_per_s
-        p25 = 164.91607258958172
-        p50 = 165.66736932540198
-        p75 = 166.4200873246242
-        p90 = 167.1482207218583
-        p95 = 167.262433556426
-        p99 = 167.99197421975765
-        mean = 162.7853177282462
-        min = 23.019295614605873
-        max = 168.6203794248862
-        stddev = 20.210056581750347
+        p25 = 166.22213179149702
+        p50 = 167.69243252025473
+        p75 = 169.16253286110174
+        p90 = 169.52692450439133
+        p95 = 169.81518762962915
+        p99 = 170.85438941846397
+        mean = 164.631719334475
+        min = 18.579588397857652
+        max = 171.2233293995004
+        stddev = 21.152953887186314
     number_input_tokens
         p25 = 10000.0
         p50 = 10000.0
@@ -540,16 +545,15 @@ A sample output from the above script is shown below:
         max = 1503
         stddev = 0.282842712474619
     Number Of Errored Requests: 0
-    Overall Output Throughput: 143.3838447738045
+    Overall Output Throughput: 144.17136914316023
     Number Of Completed Requests: 50
-    Completed Requests Per Minute: 5.7313800341285175
+    Completed Requests Per Minute: 5.76285918335928
 
 Conclusion
 -----------
-As seen in the table below, when speculative decoding with
-draft model (combined with fused speculative decoding) is used,
-TPOT improves by about 72% and there is a 3x improvement in output
-token throughput compared to when no speculative decoding is used.
+As seen in the table below, TPOT reduced by 3.6x and output token throughput increased by 4x when using speculative decoding with draft model combined with fused speculative decoding,
+compared to baseline without speculative decoding. Please note that batch size of 1 is used in this tutorial for computing the below metrics.
+
 
 .. csv-table::
    :file: llama70b_perf_comparison.csv

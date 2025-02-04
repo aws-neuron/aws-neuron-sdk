@@ -55,8 +55,8 @@ tasks <nxdi-llama3.2-multimodal-tutorial>`, and Mixture-of-Experts (MoE) model a
 Mixtral and DBRX. The library supports quantization methods, includes
 dynamic sampling, and is compatible with HuggingFace checkpoints and
 generate() API. NxDI also supports distributed strategies including tensor parallelism and incorporates speculative decoding techniques (Draft model and EAGLE). The
-release includes :ref:`Llama 3.1 405B model sample <nxdi-trn2-llama3.1-405b-tutorial>` and :ref:`Llama 3.3 70B model sample <nxdi-trn2-llama3.3-70b-tutorial>` for inference on a single trn2.48xlarge
-instance.
+release includes :ref:`Llama 3.1 405B model sample <nxdi-trn2-llama3.1-405b-tutorial>`, :ref:`Llama 3.3 70B model sample <nxdi-trn2-llama3.3-70b-tutorial>` 
+and :ref:`Llama 3.1 405B model with speculative decoding <nxdi-trn2-llama3.1-405b-speculative-tutorial>` for inference on a single trn2.48xlarge instance.
 
 For more information, see :ref:`NxD Inference documentation <nxdi-overview>` and check the NxD
 Inference Github repository: `aws-neuron/neuronx-distributed-inference <https://github.com/aws-neuron/neuronx-distributed-inference>`_

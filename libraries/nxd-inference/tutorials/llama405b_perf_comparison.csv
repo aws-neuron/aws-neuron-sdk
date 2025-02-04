@@ -1,0 +1,3 @@
+Scenario (all using BF16),TTFT (P50 in ms),TPOT (P50 in ms),Output token Throughput (per second)
+No speculative decoding,2442,37.9,25.46
+Fused speculative decoding + rescaled weights (Llama 3.2 1B Draft),2255,8.27,102.41

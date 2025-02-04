@@ -10,7 +10,7 @@ You can run Llama3.1 405B with default configuration options. NxD
 Inference also provides several features and configuration options that
 you can use to optimize and tune the performance of Llama3.1 405B on
 Trn2. This guide walks through how to run Llama3.1 405B on Trn2 with
-vLLM, and how to enable these optimizations for optimal performance.
+vLLM, and how to enable these optimizations for optimal performance. In addition, we also have a separate tutorial for running Llama3.1 405B with vanilla fused speculative decoding :ref:`nxdi-trn2-llama3.1-405b-speculative-tutorial`. 
 
 .. contents:: Table of contents
    :local:
