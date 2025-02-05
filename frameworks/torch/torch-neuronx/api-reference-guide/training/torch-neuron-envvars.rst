@@ -155,6 +155,11 @@ PyTorch Neuron are (beta ones are noted):
 - Integer range of specific NeuronCores needed by the process (for example, 0-3 specifies NeuronCores 0, 1, 2, and 3).
   You this environment variable when using torchrun to limit the launched processs to specific consecutive NeuronCores. To ensure best performance, the multi-core jobs requiring N NeuronCores for collective communication must be placed at the NeuronCore ID that starts at a multiple of N, where N is the world size limited to 1, 2, 8, 32. For example, a process using 2 NeuronCores can be mapped to 2 free NeuronCores starting at NeuronCore id 0, 2, 4, 6, etc, and a process using 8 NeuronCores can be mapped to 8 free NeuronCores starting at NeuronCore id 0, 8, 16, 24.
 
+``XLA_USE_32BIT_LONG`` **[PyTorch XLA 2.6+]**
+
+- Sets the default type for XLA IRs to 32-bits for signed and unsigned 64-bit integers. This will ensure that PyTorch XLA will generate 32-bit instructions, implicitly downcasting any 64-bit integers. This is particularly helpful to bypass known Neuron compiler limitations with 64-bits.
+  Note that the PyTorch operations with 64-bit integers that can not be safely converted to 32-bits will fail during PyTorch XLA's lowering.
+
 Additional Neuron runtime environment variables are described in `runtime
 configuration
 documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-runtime/nrt-configurable-parameters.html>`__.
