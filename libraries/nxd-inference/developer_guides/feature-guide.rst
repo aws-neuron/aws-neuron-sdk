@@ -466,7 +466,7 @@ smaller *draft* LLM model predicts the next tokens, and the larger *target*
 LLM model verifies those predictions. NxD Inference supports
 the following speculative decoding implementations:
 
-1. :ref:`Vanilla speculative decoding<nxd-vanilla-speculative-decoding>`,
+1. :ref:`Speculative decoding with a draft model <nxd-vanilla-speculative-decoding>`,
    where a separate draft model predicts the next *n* tokens for the target
    model. Each model is compiled independently.
 2. :ref:`Medusa speculative decoding<nxd-medusa-speculative-decoding>`,
@@ -479,17 +479,17 @@ the following speculative decoding implementations:
 
 .. _nxd-vanilla-speculative-decoding:
 
-Vanilla Speculative Decoding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Speculative Decoding with a Draft model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To use vanilla speculative decoding, you configure, compile, and load a
-draft model in addition to the main target model. To enable vanilla
-speculative decoding, set ``speculation_length`` and
+To use speculative decoding with a draft model, you configure, compile, and load a
+draft model in addition to the main target model. To enable 
+speculative decoding with a draft model, set ``speculation_length`` and
 ``trace_tokengen_model=False`` in the target model's NeuronConfig. The
 draft model's NeuronConfig should use the same configuration but with
 these additional attributes reset to their defaults.
 
-Vanilla speculative decoding currently supports only batch sizes of 1.
+ Speculative decoding with a draft model currently supports only batch sizes of 1.
 
 .. _example-2:
 

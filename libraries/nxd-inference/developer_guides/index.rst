@@ -14,6 +14,8 @@ Developer Guides
     /libraries/nxd-inference/developer_guides/vllm-user-guide
     /libraries/nxd-inference/developer_guides/nxd-examples-migration-guide
     /libraries/nxd-inference/developer_guides/migrate-from-tnx-to-nxdi
+    /libraries/nxd-inference/developer_guides/llm-inference-benchmarking-guide
+
 
 
 Use the NxD Inference (``neuronx-distributed-inference``) Developer Guides to learn how to use NxD Inference.

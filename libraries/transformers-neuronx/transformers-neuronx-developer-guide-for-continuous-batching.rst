@@ -73,7 +73,7 @@ First install ``neuronx-cc`` and the ``transformers-neuronx`` packages. Then ins
 
     The current supported version of Pytorch for Neuron installs ``triton`` version ``2.1.0``. This is incompatible with ``vllm >= 0.5.3``. You may see an error ``cannot import name 'default_dump_dir...``. To work around this, run ``pip install --upgrade triton==3.0.0`` after installing the vLLM wheel.
 
-If Neuron packages are detected correctly in the installation process, ``vllm-0.6.dev0+neuron215`` will be installed (The ``neuron`` version depends on the installed
+If Neuron packages are detected correctly in the installation process, ``vllm-0.1.dev2830+g22c56ee.neuron216`` will be installed (The ``neuron`` version depends on the installed
 ``neuronx-cc`` version).
 
 Run Offline Batched Inference with Transformers NeuronX and vLLM
@@ -129,11 +129,11 @@ To run the OpenAI-compatible API server in vLLM, run either command below:
 
 .. code-block:: bash
 
-    vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
+    vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 4 --max-model-len 2048 --block-size 8
 
 .. code-block:: bash
 
-    python3 -m vllm.entrypoints.openai.api_server meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
+    python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 4 --max-model-len 2048 --block-size 8
 
 .. _cb-release-221-features:
 
@@ -193,7 +193,7 @@ While standing up the API server, set the ``override-neuron-config`` argument. F
 
 .. code-block:: bash
 
-    vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 16 --max-model-len 2048 --block-size 8 --override-neuron-config "shard_over_sequence:True"
+    python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct --tensor-parallel-size 32 --max-num-seqs 4 --max-model-len 2048 --block-size 8 --override-neuron-config {\"shard_over_sequence\":\"True\"}
 
 
 .. _cb-quantization:

@@ -261,8 +261,8 @@ class manifest:
             if args.install_type == 'install':
                 if args.os == 'rockylinux9':
                     str += '\n# Install and enable EPEL\n'
-                    str += 'sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm\n'
-                    str += 'sudo yum config-manager --enable epel\n'
+                    str += 'sudo yum config-manager --set-enabled crb\n'
+                    str += 'sudo yum install epel-release -y\n'
         return str
 
     def config_neuron_repository(self, args):

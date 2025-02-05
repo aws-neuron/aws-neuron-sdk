@@ -103,6 +103,7 @@ Decoders
    * - meta-llama/Llama-3.1-405b
      - neuronx-distributed-inference
      - * :ref:`Tutorial for deploying Llama-3.1-405B on Trn2 <nxdi-trn2-llama3.1-405b-tutorial>`
+       * :ref:`nxdi-trn2-llama3.1-405b-speculative-tutorial`
    
    * - meta-llama/Llama-3.1-405b
      - transformers-neuronx
