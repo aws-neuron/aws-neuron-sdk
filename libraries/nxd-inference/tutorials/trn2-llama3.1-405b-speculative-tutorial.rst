@@ -347,6 +347,8 @@ Note that we have added the path for the draft model.
     # This is where the compiled model (.pt file) and sharded checkpoints will be saved. The same path
     # should be used when launching vLLM server for inference.
     COMPILED_MODEL_PATH="/home/ubuntu/traced_model/Llama-3.1-405B-Instruct/"
+    # Add a modules to not convert json file to the model path for quantized modules.
+    MTNC_FILE_PATH="/home/ubuntu/models/Llama-3.1-405B-Instruct-FP8-rescaled/modules_to_not_convert.json"
 
     NUM_CORES=128
     TP_DEGREE=64
@@ -383,7 +385,6 @@ Note that we have added the path for the draft model.
             -—draft-model-path $DRAFT_MODEL_PATH \
             -—enable-fused-speculation \
             -—speculation-length 7 \
-            -—no-trace-tokengen-model \
             -—pad-token-id 2 \
             -—logical-neuron-cores $LNC \
             -—quantized-mlp-kernel-enabled \
@@ -391,6 +392,7 @@ Note that we have added the path for the draft model.
             -—rmsnorm-quantize-kernel-enabled \
             -—enable-bucketing \
             -—prompt "What is annapurna labs?" \
+            --modules-to-not-convert-file $MTNC_FILE_PATH \
             -—context-encoding-buckets 1024 2048 4096 10240 12288 \
             -—token-generation-buckets 12800 2>&1 | tee compile_and_generate_log
 

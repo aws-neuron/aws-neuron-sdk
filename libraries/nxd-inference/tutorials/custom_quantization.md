@@ -205,6 +205,7 @@ inference_demo --model-type llama --task-type causal-lm run \
     --on-device-sampling \
     --mlp-kernel-enabled \
     --quantized-mlp-kernel-enabled \
+    --quantization-dtype <dtype> \
     --quantization-type <type> \
     --prompt "I believe the meaning of life is" \
     --modules-to-not-convert-file /<your_path>/modules_to_not_convert.json
