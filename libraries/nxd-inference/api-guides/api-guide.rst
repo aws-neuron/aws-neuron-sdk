@@ -213,8 +213,8 @@ Attributes
   - ``modules_to_not_convert`` - Specify a list of modules to be not quantized. Also, required when running inference on custom quantized model where ceratin layers are left in full precision. Example: ["lm_head", "layers.0.self_attn", "layers.1.mlp", ...].
       Defaults to None (meaning all modules will be quantized)
 
-  - ``draft_model_modules_to_not_convert`` - Specify a list of modules in full precision when working with fused speculation. If no layers are quantized add all layer in the list.
-      This is only required in the case of fused speculation. Example: ["lm_head", "layers.0.self_attn", "layers.1.mlp", ...].
+  - ``draft_model_modules_to_not_convert`` - Specify a list of modules in full precision when working with fused speculation. If no layers are quantized add all layer in the list. Example: ["lm_head", "layers.0.self_attn", "layers.1.mlp", ...].
+      This is only required in the case of fused speculation.
 
 - KV cache quantization
 

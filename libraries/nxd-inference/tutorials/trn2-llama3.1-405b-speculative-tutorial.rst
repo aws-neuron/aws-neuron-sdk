@@ -347,7 +347,7 @@ Note that we have added the path for the draft model.
     # This is where the compiled model (.pt file) and sharded checkpoints will be saved. The same path
     # should be used when launching vLLM server for inference.
     COMPILED_MODEL_PATH="/home/ubuntu/traced_model/Llama-3.1-405B-Instruct/"
-    # Add a modules to not convert json file to the model path for quantized modules.
+    # Add a modules to not convert json file to the model path to specify non quantized modules.
     MTNC_FILE_PATH="/home/ubuntu/models/Llama-3.1-405B-Instruct-FP8-rescaled/modules_to_not_convert.json"
 
     NUM_CORES=128
