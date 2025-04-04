@@ -136,7 +136,6 @@
         {"name":"torch-neuron","version":"1.12.1.2.11.13.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
         {"name":"torch-neuron","version":"1.13.1.2.11.13.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
         {"name":"torch-neuronx","version":"2.5.1.2.6.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
-        {"name":"torch_xla","version":"1.13.1+torchneurong","supported_instances":["trn1","inf2"],"supported_python_versions":["3.9","3.10","3.11"]},
         {"name":"torch_xla","version":"2.1.6","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
         {"name":"transformers-neuronx","version":"0.13.470","supported_instances":["trn1","inf2"],"supported_python_versions":["3.9","3.10","3.11"]},
         {"name":"efa-installer","version":"na","supported_instances":["trn1"],"supported_python_versions":[]}
