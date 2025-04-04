@@ -229,6 +229,25 @@ def bitwise_xor(x, y, *, dtype=None, mask=None, **kwargs):
 bool_ = np.bool_
 r"""Boolean type (True or False), stored as a byte. Same as `numpy.bool_`."""
 
+def broadcast_to(src, *, shape, **kwargs):
+  r"""
+  Broadcast the ``src`` tile to a new shape based on numpy broadcast rules.
+  The ``src`` may also be a tensor object which may be implicitly converted to a tile.
+  A tensor can be implicitly converted to a tile if the partition dimension
+  is the outermost dimension.
+
+  :param src: the source of broadcast, a tile in SBUF or PSUM. May also be a tensor object.
+  :param shape: the target shape for broadcasting.
+  :return: a new tile broadcast along the partition dimension of ``src``,
+           this new tile will be in SBUF, but can be also assigned to a PSUM tensor.
+
+  .. nki_example:: ../../test/test_nki_nl_broadcast.py
+   :language: python
+   :marker: NKI_EXAMPLE_5
+
+  """
+  ...
+
 def ceil(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Ceiling of the input, element-wise.
@@ -319,6 +338,20 @@ def ds(start, size):
   """
   ...
 
+def empty_like(a, dtype=None, *, buffer=None, name="", **kwargs):
+  r"""
+  Create a new tensor with the same shape and type as a given tensor.
+
+  ((Similar to `numpy.empty_like <https://numpy.org/doc/stable/reference/generated/numpy.empty_like.html>`_))
+
+  :param a: the tensor.
+  :param dtype: the data type of the tensor (see :ref:`nki-dtype` for more information).
+  :param buffer: the specific buffer (ie, :doc:`sbuf<nki.language.sbuf>`, :doc:`psum<nki.language.psum>`, :doc:`hbm<nki.language.hbm>`), defaults to :doc:`sbuf<nki.language.sbuf>`.
+  :param name: the name of the tensor.
+  :return: a tensor with the same shape and type as a given tensor.
+  """
+  ...
+
 def equal(x, y, *, dtype=bool, mask=None, **kwargs):
   r"""
   Element-wise boolean result of x == y.
@@ -397,7 +430,7 @@ r"""Half-precision floating-point number type. Same as `numpy.float16`."""
 float32 = np.float32
 r"""Single-precision floating-point number type, compatible with C ``float``. Same as `numpy.float32`."""
 
-float8_e4m3 = np.dtype('|V1')
+float8_e4m3 = np.dtype('float8_e4m3')
 r"""8-bit floating-point number (1S,4E,3M)"""
 
 float8_e5m2 = np.dtype('float8_e5m2')
@@ -415,6 +448,23 @@ def floor(x, *, dtype=None, mask=None, **kwargs):
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: a tile that has floor values of ``x``.
+  """
+  ...
+
+def fmod(x, y, dtype=None, mask=None, **kwargs):
+  r"""
+  Floor-mod of ``x / y``, element-wise.
+
+  The remainder has the same sign as the dividend x. 
+  It is equivalent to the Matlab(TM) rem function and should not be confused with the Python modulus operator x % y.
+
+  ((Similar to `numpy.fmod <https://numpy.org/doc/stable/reference/generated/numpy.fmod.html>`_))
+
+  :param x: a tile. If x is a scalar value it will be broadcast to the shape of y. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param y: a tile or a scalar value. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has values ``x fmod y``.
   """
   ...
 
@@ -899,6 +949,23 @@ def mish(x, *, dtype=None, mask=None, **kwargs):
   """
   ...
 
+def mod(x, y, dtype=None, mask=None, **kwargs):
+  r"""
+  Integer Mod of ``x / y``, element-wise
+
+  Computes the remainder complementary to the floor_divide function. 
+  It is equivalent to the Python modulus x % y and has the same sign as the divisor y.
+
+  ((Similar to `numpy.mod <https://numpy.org/doc/stable/reference/generated/numpy.mod.html>`_))
+
+  :param x: a tile. If x is a scalar value it will be broadcast to the shape of y. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param y: a tile or a scalar value. ``x.shape`` and ``y.shape`` must be `broadcastable <https://numpy.org/doc/stable/user/basics.broadcasting.html>`__ to a common shape, that will become the shape of the output.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has values ``x mod y``.
+  """
+  ...
+
 def multiply(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Multiply the inputs, element-wise.
@@ -1086,6 +1153,21 @@ def random_seed(seed, *, mask=None, **kwargs):
   :param seed: a scalar value to use as the seed.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: none
+  """
+  ...
+
+def reciprocal(x, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Reciprocal of the the input, element-wise. 
+  
+  ((Similar to `numpy.reciprocal <https://numpy.org/doc/stable/reference/generated/numpy.reciprocal.html>`_))
+
+  ``reciprocal(x) = 1 / x``
+
+  :param x: a tile.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has reciprocal values of ``x``.
   """
   ...
 

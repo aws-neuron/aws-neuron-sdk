@@ -31,6 +31,39 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.24.xx.0]
+---------------------------------
+Date: xx/xx/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Removed support for Neuron Distributed Event Tracing (:ref:`reference <announce-eos-neuron-det>`)
+
+Improvements
+^^^^^^^^^^^^
+* Improved dynamic DMA descriptor generation performance by up to 3% for certain workloads
+* Reduced collectives device memory footprint for large Neffs
+* Improved device latency for memory bound workloads on TRN2
+* Added support for profiling executions when NRT is launched in Async Execution Mode (``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS > 0``)
+* Added check to detect execution completion queue overflows
+
+Bug fixes
+^^^^^^^^^
+* Fixed bug introduced in NRT 2.23 where the runtime was incorrectly reporting executions that hit "Out of Bound" errors as successful executions
+* Fixed segfault when encountering “out of memory” errors when starting profiles
+
+Neuron Profiler 2.0 (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Reduced overhead of Neuron Profiler 2.0 to <1% of overall latency
+* Added new ``nrt_sys_trace_fetch_events`` API to retrieve system trace events
+* Added out of bound error events to system trace
+* Removed the ``NEURON_RT_INSPECT_DURATION_NSEC`` and ``NEURON_RT_INSPECT_START_OFFSET_NSEC`` configuration options
+
+NKI
+^^^
+* Added dynamic DMA support for block scatter ops
+* Added RangeSelect instruction Support for the Vector engine
+
 Neuron Runtime Library [2.23.112.0]
 ---------------------------------
 Date: 01/14/2025

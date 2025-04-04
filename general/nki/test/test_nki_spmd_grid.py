@@ -24,7 +24,8 @@ def nki_spmd_kernel(a):
 # NKI_EXAMPLE_0_END
 
 
-nki_spmd_kernel = nki.jit(nki_spmd_kernel, mode='simulation')
+nki_spmd_kernel = nki.jit(nki_spmd_kernel, mode='simulation',
+                          platform_target='trn2')
 
 
 class TestNkiIsaExamplesTensorCopy(unittest.TestCase):

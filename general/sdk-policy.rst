@@ -431,7 +431,10 @@ Neuron APIs
 |                      | API Contract         | API Backward         |
 |                      |                      | Compatibility        |
 +======================+======================+======================+
-| Developer Preview    | Major changes may    | No                   |
+|       Alpha          |   Unstable and       |    No                |
+|                      |   undocumented       |                      |
++----------------------+----------------------+----------------------+
+| Developer Preview    | Major changes may    |    No                |
 | (Beta)               | happen               |                      |
 +----------------------+----------------------+----------------------+
 | GA (Stable)          | Incremental changes  | Yes \*               |
@@ -447,17 +450,22 @@ Neuron APIs
 Neuron Features
 ~~~~~~~~~~~~~~~
 
-+-----------------+-----------------+-----------------+-------------+
-|                 | Testing         | Functionality   | Performance |
-+=================+=================+=================+=============+
-| Developer       | Basic           | Minimal Viable  |             |
-| Preview (Beta)  |                 | Product (MVP) \*|             |
-+-----------------+-----------------+-----------------+-------------+
-| GA (Stable)     | Standard        | Incremental     | Tested      |
-|                 | Product Testing | additions       |             |
-|                 |                 | or changes      |             |
-|                 |                 | in new releases |             |
-+-----------------+-----------------+-----------------+-------------+
++-----------------+-----------------+------------------------+-------------+
+|                 | Testing         | Functionality          | Performance |
++=================+=================+========================+=============+
+|                 | No formal       | Partial funcitonality  | Not tested  |
+|     Alpha       | testing done    | with limited set of    | or          |
+|                 |                 | core capabilities,     | evaluated   |
+|                 |                 | far from Minium Viable |             |
+|                 |                 | Product (MVP) \*       |             |
++-----------------+-----------------+------------------------+-------------+
+| Developer       | Basic           | Minimum Viable         |             |
+| Preview (Beta)  |                 | Product (MVP) \*       |             |
++-----------------+-----------------+------------------------+-------------+
+| GA (Stable)     | Standard        | Incremental            | Tested      |
+|                 | Product Testing | additions or changes   |             |
+|                 |                 | in new releases        |             |
++-----------------+-----------------+------------------------+-------------+
 
 \* A minimum viable product (MVP) for a Neuron Feature contains just
 enough functionality to be usable by early customers who can then

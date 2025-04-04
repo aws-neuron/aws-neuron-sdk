@@ -51,14 +51,14 @@ Install packages
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2>`__
 
 To run NxD Inference with vLLM, you need to download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Make sure to activate the Neuron virtual environment if using a new terminal instead of the one from connect step above.
@@ -116,7 +116,7 @@ shell script file, for example, ``compile_model.sh`` and then run it.
 Note that we are using the following features as described in
 the tutorial for running 405B model :ref:`nxdi-trn2-llama3.1-405b-tutorial`
 
-* Logical NeuronCores (LNC)
+* Logical NeuronCore Configuration (LNC)
 * Tensor parallelism (TP) on Trn2
 * Optimized Kernels
 
@@ -124,6 +124,16 @@ The script compiles the model and runs generation on the given input prompt.
 Note the path we used to save the compiled model. This path should be used
 when launching vLLM server for inference so that the compiled model can be loaded without recompilation.
 Please refer to :ref:`nxd-inference-api-guide` for more information on these ``inference_demo`` flags.
+
+
+.. note::
+
+    Known issue: Using kernels with bucket length of 1024 or less may lead to ``Numerical Error`` in inference.
+
+    ::
+
+        RuntimeError: Failed to execute the model status=1003 message=Numerical Error
+
 
 ::
 
@@ -166,8 +176,9 @@ Please refer to :ref:`nxd-inference-api-guide` for more information on these ``i
             --mlp-kernel-enabled \
             --cc-pipeline-tiling-factor 1 \
             --pad-token-id 2 \
-            --logical-neuron-cores $LNC \
             --enable-bucketing \
+            --context-encoding-buckets 2048 4096 8192 12288 \
+	        --token-generation-buckets 2048 4096 8192 12800 \
             --prompt "What is annapurna labs?" 2>&1 | tee log
 
 
@@ -342,10 +353,19 @@ For a quick review, here are the additional arguments provided:
             --draft-model-path $DRAFT_MODEL_PATH \
             --enable-fused-speculation \
             --speculation-length 7 \
-            --no-trace-tokengen-model \
 
 Please refer to :ref:`nxd-inference-api-guide` for more information on these ``inference_demo`` flags.
 The complete script to compile the model for this configuration is shown below:
+
+
+.. note::
+
+    Known issue: Using kernels with bucket length of 1024 or less may lead to ``Numerical Error`` in inference.
+
+    ::
+
+        RuntimeError: Failed to execute the model status=1003 message=Numerical Error
+
 
 ::
 
@@ -390,10 +410,10 @@ The complete script to compile the model for this configuration is shown below:
             --draft-model-path $DRAFT_MODEL_PATH \
             --enable-fused-speculation \
             --speculation-length 7 \
-            --no-trace-tokengen-model \
             --pad-token-id 2 \
-            --logical-neuron-cores $LNC \
             --enable-bucketing \
+            --context-encoding-buckets 2048 4096 8192 12288 \
+	        --token-generation-buckets 2048 4096 8192 12800 \
             --prompt "What is annapurna labs?" 2>&1 | tee log
 
 Step 2: Run the model using vLLM

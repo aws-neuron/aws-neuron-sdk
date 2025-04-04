@@ -90,26 +90,23 @@ This will save your NTFF profile to ``profile_exec_2.ntff``.
 In :ref:`View Neuron Profile UI <nki-view-neuron-profile-ui>`, we will view the profile in a user-friendly format using the
 Neuron Profile UI.
 
-Profile using ``nki.benchmark``
+Profile using ``nki.profile``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You may also use the :doc:`nki.benchmark <api/generated/nki.benchmark>` API to generate a NEFF and NTFF programmatically.
-One caveat is :doc:`nki.benchmark <api/generated/nki.benchmark>` runs your NEFF without an ML framework in
-:doc:`nki.baremetal <api/generated/nki.baremetal>` mode, so the input tensors to the kernel must be NumPy arrays
-instead of framework tensors such as torch.Tensor.
+You may also use the :doc:`nki.profile <api/generated/nki.profile>` API to generate a NEFF and NTFF programmatically.
 
-Below is an example NKI kernel decorated by :doc:`nki.benchmark <api/generated/nki.benchmark>`.
-Full code of ``prof-kernel-benchmark.py``:
+Below is an example NKI kernel decorated by :doc:`nki.profile <api/generated/nki.profile>`.
+Full code of ``prof-kernel-profile.py``:
 
-.. literalinclude:: examples/prof-kernel-benchmark.py
+.. literalinclude:: examples/prof-kernel-profile.py
    :language: python
    :linenos:
 
-To use :doc:`nki.benchmark <api/generated/nki.benchmark>` to create a NEFF file and NTFF profile in your current
+To use :doc:`nki.profile <api/generated/nki.profile>` to create a NEFF file, NTFF profile, and dump reports in your specified
 directory, execute the example NKI kernel with:
 ::
 
-   $ python3 prof-kernel-benchmark.py
+   $ python3 prof-kernel-profile.py
 
 In :ref:`View Neuron Profile UI <nki-view-neuron-profile-ui>`, we will view the profile in a user-friendly format using the
 Neuron Profile UI.

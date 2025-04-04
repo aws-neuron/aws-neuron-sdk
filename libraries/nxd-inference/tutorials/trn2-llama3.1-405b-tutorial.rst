@@ -19,17 +19,19 @@ vLLM, and how to enable these optimizations for optimal performance. In addition
 Background, Concepts, and Optimizations
 ---------------------------------------
 
-Logical NeuronCores (LNC)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Logical NeuronCore Configuration (LNC)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Trn2, the Neuron SDK supports a concept called *logical Neuron cores
-(LNC)*, which represents multiple Neuron cores as a single Neuron core.
+On Trn2, the Neuron SDK supports *Logical NeuronCore Configuration
+(LNC)*, which determines the number of NeuronCores visible to the Neuron SDK.
 When running on Trn2, the Neuron SDK is optimized for LNC=2, which means
-each Neuron core visible to the Neuron SDK is two physical Neuron cores.
+each NeuronCore visible to the Neuron SDK is two physical NeuronCores.
 The LNC configuration also affects what TP degree options you can use.
 
-For more information about logical NeuronCore support, see
-:ref:`logical-neuroncore-config`.
+NxD Inference automatically chooses the correct LNC configuration
+based on the target platform.
+
+For more information about LNC, see :ref:`logical-neuroncore-config`.
 
 Tensor parallelism (TP) on Trn2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,10 +87,11 @@ for best performance.
 - Flash attention. This kernel uses a sharded flash attention
   implementation to improve performance during the context encoding
   pass. This kernel is enabled automatically at supported sequence
-  lengths. For LNC2, NxD Inference automatically enables flash attention for sequence lengths greater than
-  512 that are divisible by 1024. For LNC1, NxD Inference automatically enables flash attention
-  for sequence lengths greater than 4096. You can also enable it with ``attn_kernel_enabled=True`` in
-  NeuronConfig.
+  lengths. For LNC2, NxD Inference automatically enables flash attention for sequence lengths of
+  256 and larger that are divisible by 256. For LNC1, NxD Inference automatically enables flash attention
+  for sequence lengths of 4096 and larger. You can also enable it with ``attn_kernel_enabled=True`` in
+  NeuronConfig. NxD Inference automatically enables the flash attention kernel
+  at supported sequence lengths even if ``attn_kernel_enabled`` is ``false``.
 - QKV. This kernel fuses the QKV layers to improve performance during
   the attention forward pass. To enable this kernel, set
   ``qkv_kernel_enabled=True`` in NeuronConfig.
@@ -142,14 +145,14 @@ Step 2: Install the vLLM version that supports NxD Inference
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2>`__
 
 To run NxD Inference with vLLM, you download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Activate the Neuron virtual environment.
@@ -221,7 +224,6 @@ for this tutorial.
            dtype=torch.bfloat16,
            # Configure NeuronConfig.
            override_neuron_config={
-               "logical_neuron_cores": 2,
                "max_context_length": 1024
            },
            device="neuron"
@@ -285,6 +287,7 @@ This example uses the following configuration options:
    
    def run_llama_generate():
        top_k = 1
+       do_sample = False
    
        # Initialize tokenizer.
        tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="right")
@@ -294,13 +297,12 @@ This example uses the following configuration options:
        neuron_config = NeuronConfig(
            torch_dtype=torch.bfloat16,
            tp_degree=64,
-           logical_neuron_cores=2,
            batch_size=1,
            max_context_length=1024,
            seq_len=2048,
            on_device_sampling_config=OnDeviceSamplingConfig(
                dynamic=False,
-               do_sample=False,
+               do_sample=do_sample,
                top_k=top_k
            ),
            enable_eagle_speculation=True,
@@ -354,7 +356,7 @@ This example uses the following configuration options:
        # Initialize generation config.
        generation_config = GenerationConfig.from_pretrained(model_path)
        generation_config_kwargs = {
-           "do_sample": True,
+           "do_sample": do_sample,
            "top_k": top_k,
            "pad_token_id": 0,
            "prompt_lookup_num_tokens": neuron_config.speculation_length,

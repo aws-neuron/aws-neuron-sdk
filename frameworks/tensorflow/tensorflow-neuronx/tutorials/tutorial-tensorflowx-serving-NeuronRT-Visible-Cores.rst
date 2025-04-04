@@ -7,9 +7,8 @@ TensorFlow serving allows customers to scale-up inference workloads
 across a network. TensorFlow Neuron Serving uses the same API as normal
 TensorFlow Serving with two differences: (a) the saved model must be
 compiled for neuron and (b) the entry point is a different binary
-named ``tensorflow_model_server_neuron``. The binary is found at
-``/usr/local/bin/tensorflow_model_server_neuron`` and is pre-installed
-in the DLAMI or installed with APT/YUM tensorflow-model-server-neuronx package.
+named ``tensorflow_model_server_neuronx``. Follow the steps below 
+to install the package using apt-get or yum. This will be pre-installed in a future release.
 
 Install TensorFlow Model Server and Serving API
 -----------------------------------------------

@@ -10,6 +10,21 @@ NxD Training Release Notes (``neuronx-distributed-training``)
 
 This document lists the release notes for Neuronx Distributed Training library.
 
+.. _neuronx-distributed-training-rn-1-2-0:
+
+Neuronx Distributed Training [1.2.0]
+
+Date: 04/03/2025
+
+Features in this release
+------------------------
+
+* Added support for LoRA supervised fine-tuning.
+* Added option to configure collectives data types.
+* Minor fixes to reduce the amount of logs during training.
+* Removes `--llm-training` flag by default in all configs, except llama2. Note: this flag should not be enabled when using the Neuron Kernel Interface.
+
+
 .. _neuronx-distributed-training-rn-1-1-0:
 
 Neuronx Distributed Training [1.1.1]

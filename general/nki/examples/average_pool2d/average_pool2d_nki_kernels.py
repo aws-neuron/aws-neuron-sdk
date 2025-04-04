@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
   print(in_tensor, out_nki, out_np)
 
-  match = (out_nki == out_nki).all()
+  match = (out_nki == out_np).all()
 
   if match:
     print("NKI and NumPy match")

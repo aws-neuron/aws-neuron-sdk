@@ -82,7 +82,10 @@ def mamba_v1(delta, u, A, B, C):
                 # Step 6: Accumulation of scanC along state_size dimension
                 # scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len] = nisa.tensor_tensor(
                 #         scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len], scanC, op=nl.add)
-                scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len] += scanC
+                # Avoid using += for now due to temporary NKI limitation that += is NOT reliable
+                # except a special code pattern to trigger PSUM accumulation (See more in Matrix multiplication tutorial).
+                scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len] = \
+                    scanC_accum[i_channel_tile, 0:channel_psize, 0:seq_len] + scanC
 
         # Store scanC_accum for a single batch to output
         for i_channel_tile in nl.affine_range(n_channel_tile):
@@ -159,7 +162,9 @@ def mamba_v2(delta, u, A, B, C):
                 scanC = nisa.tensor_tensor(scan_res, C_i_bcast, op=nl.multiply)
 
                 # Step 6: Accumulation of scanC along state_size dimension
-                scanC_accum[0:channel_psize, 0:seq_len] += scanC
+                # Avoid using += for now due to temporary NKI limitation that += is NOT reliable
+                # except a special code pattern to trigger PSUM accumulation (See more in Matrix multiplication tutorial).
+                scanC_accum[0:channel_psize, 0:seq_len] = scanC_accum[0:channel_psize, 0:seq_len] + scanC
 
             # Store scanC_accum for a single batch to output
             nl.store(output[i_batch, channel_start:channel_start+channel_psize, 0:seq_len],
@@ -252,7 +257,10 @@ def mamba_v3(delta, u, A, B, C):
                     scanC = nisa.tensor_tensor(scan_res, C_i_bcast, op=nl.multiply)
 
                     # Step 6: Accumulation of scanC along state_size dimension
-                    scanC_accum[0:channel_psize, seq_len_start:seq_len_start+seq_len_fsize] += scanC
+                    # Avoid using += for now due to temporary NKI limitation that += is NOT reliable
+                    # except a special code pattern to trigger PSUM accumulation.
+                    scanC_accum[0:channel_psize, seq_len_start:seq_len_start+seq_len_fsize] = \
+                        scanC_accum[0:channel_psize, seq_len_start:seq_len_start+seq_len_fsize] + scanC
 
             # Store scanC_accum for a single batch to output
             nl.store(output[i_batch, channel_start:channel_start+channel_psize, 0:seq_len],

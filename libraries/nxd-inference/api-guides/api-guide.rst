@@ -94,11 +94,24 @@ Attributes
   - ``save_sharded_checkpoint`` - Whether to save the sharded weights in
     the compiled checkpoint. If this option is disabled, NxD Inference
     shards the weights during model load. Defaults to ``true``.
-  - ``logical_neuron_cores`` - The number of logical Neuron cores per
-    Neuron core. Defaults to ``1``. To run on trn2 instances, set this
-    to ``2``.
+  - ``logical_nc_config`` - The Logical NeuronCore Configuration (LNC).
+    On Trn1 and Inf2, this defaults to ``1``. On Trn2, this defaults to ``2``.
+    You can also configure LNC with the ``NEURON_LOGICAL_NC_CONFIG`` environment
+    variable. For more information about LNC, see :ref:`logical-neuroncore-config`.
+
+    - Note: If you use Trn2 with NxD Inference v0.1 (Neuron 2.21), you must
+      specify LNC=2 by setting ``logical_neuron_cores=2`` in NeuronConfig.
+      The ``logical_neuron_cores`` attribute is deprecated in NxD Inference v0.2
+      and later.
+
+  - ``skip_sharding`` - Whether to skip weight sharding during compilation.
+    You can use this option if the compiled checkpoint path already
+    includes sharded weights for the model. Defaults to ``false``.
   - ``weights_to_skip_layout_optimization`` - The list of weight names
     to skip during weight layout optimization.
+  - ``skip_warmup`` - Whether to skip warmup during model load. To improve
+    the performance of the first request sent to a model, NxD Inference
+    warms up the model during load. Defaults to ``false``.
 
 - Distributed configuration
 
@@ -112,13 +125,13 @@ Attributes
       amount of HBM memory per Neuron core.
 
       - On trn2, each Neuron core has 24GB of memory (with
-        ``logical_neuron_cores`` set to ``2``).
+        ``logical_nc_config`` set to ``2``).
       - On inf2/trn1, each Neuron core has 16GB of memory.
 
     - The Neuron runtime supports the following tensor-parallelism
       degrees:
 
-      - trn2: 1, 2, 4, 8, 16, 32, and 64 (with ``logical_neuron_cores``
+      - trn2: 1, 2, 4, 8, 16, 32, and 64 (with ``logical_nc_config``
         set to ``2``)
       - inf2: 1, 2, 4, 8, and 24
       - trn1: 1, 2, 8, 16, and 32
@@ -144,7 +157,7 @@ Attributes
     attributes:
 
     - ``do_sample`` - Whether to use multinomial sampling (true) or
-      greedy sampling (false). Defaults to ``true``.
+      greedy sampling (false). Defaults to ``false``.
     - ``top_k`` - The top-k value to use for sampling. Defaults to
       ``1``.
     - ``dynamic`` - Whether to enable dynamic sampling. With dynamic
@@ -210,6 +223,12 @@ Attributes
     - ``per_tensor_symmetric``
     - ``per_channel_symmetric``
 
+  - ``modules_to_not_convert`` - Specify a list of modules to be not quantized. Also, required when running inference on custom quantized models(using external libraries) where certain layers are left in full precision. Example: ["lm_head", "layers.0.self_attn", "layers.1.mlp", ...].
+    Defaults to None (meaning all modules will be quantized)
+
+  - ``draft_model_modules_to_not_convert`` - Specify a list of modules in full precision when working with fused speculation. If no layers are required, add all layers in the list. Example: ["lm_head", "layers.0.self_attn", "layers.1.mlp", ...].
+    This is only required in the case of fused speculation.
+
 - KV cache quantization
 
   - ``kv_cache_quant`` - Whether to quantize the KV cache. When enabled,
@@ -248,10 +267,6 @@ Attributes
 
 - Speculative decoding
 
-  - ``trace_tokengen_model`` - Whether to trace the model's token
-    generation model during compilation. When using speculation, set
-    this to false for the primary model, because you use a draft model
-    for token generation. Defaults to ``true``.
   - ``speculation_length`` - The number of tokens to generate with the
     draft model before checking work with the primary model. Set this
     value to a positive integer to enable speculation. Defaults to
@@ -281,6 +296,24 @@ Attributes
     Defaults to ``0``.
   - ``medusa_tree`` - The Medusa tree to use. For an example, see
     ``medusa_mc_sim_7b_63.json`` in the ``examples`` folder.
+
+
+
+- Multi-LoRA serving
+
+  - ``lora_config`` - The multi-lora serving configuration to use. Defaults to ``none``. Specify this config to enable multi-LoRA serving. This
+    config is ``LoraServingConfig``, which has the following
+    attributes:
+
+    - ``max_loras`` - The maximum number of concurrent LoRA adapters 
+      in device memory. Defaults to ``1``.
+    - ``lora_ckpt_paths`` - The checkpoint paths for LoRA adapters with key-value pairs. The key is the adapter ID and the value is the local path of the LoRA adapter checkpoint.
+    - ``lora_memory_transpose`` - Transpose memory layout to optimize 
+      inference performance. Defaults to ``True``.
+    - ``lora_shard_linear_layer`` - Shard the linear layer across TP group to 
+      reduce memory consumption at the cost of communication overehead. 
+      Defaults to ``False``.
+
 
 - Compilation configuration
 
@@ -510,13 +543,15 @@ Functions
   model for Neuron and saves the compiled model to the given path. This
   function compiles all models added to ``self.models``. This function
   also shards the weights for the model. To produce HLO files that have
-  source annotations enabled for debugging, set ``debug`` to ``True``.
+  source annotations enabled for debugging, set ``debug`` to ``True``. When ``debug`` is enabled, HLOs contain following attributes for each computation: ``op_type``, ``op_name``, ``source_file``, and ``source_line``.
 - ``load(self, compiled_model_path)`` - Loads the compiled model from
   the given path to the Neuron device. This function also loads the
   model weights to the Neuron device.
 - ``load_weights(self, compiled_model_path)`` - Loads the model weights
   from the given path to the Neuron device. You can call this function
   to load new weights without reloading the entire model.
+- ``shard_weights(self, compiled_model_path)`` - Shards the model's
+  weights and serializes the sharded weights to the given path.
 - ``forward(self, **kwargs)`` - The forward function for this
   application model. This function must be implemented by subclasses.
 - ``validate_config(cls, config)`` - Checks whether the config is valid
@@ -527,6 +562,9 @@ Functions
   use when compiling this model. By default, this returns no compiler
   arguments. This function can be implemented by subclasses to use
   model-specific compiler args.
+- ``to_cpu(self)`` - Allows inference to be run entirely on CPU. Use this 
+  in place of the ``compile`` and ``load`` functions. Note that CPU inference 
+  doesn't currently work for configurations that use kernels.
 - ``get_state_dict(cls, model_path, config)`` - Gets the state dict for
   this model. By default, this function loads the state dict from the
   given model path. This function calls the class'
@@ -586,10 +624,12 @@ Functions
   NeuronApplicationBase and configures the models used in this LM
   application, including context encoding, token gen, and others, based
   on the given NeuronConfig.
-- ``forward(self, input_ids=None, seq_ids=None, attention_mask=None, position_ids=None, sampling_params=None, prev_hidden=None, past_key_values=None, inputs_embeds=None, labels=None, use_cache=None, output_attentions=None, output_hidden_states=None, medusa_args=None, return_dict=None)``
+- ``forward(self, input_ids=None, seq_ids=None, attention_mask=None, position_ids=None, sampling_params=None, prev_hidden=None, past_key_values=None, inputs_embeds=None, labels=None, use_cache=None, output_attentions=None, output_hidden_states=None, medusa_args=None, return_dict=None, input_capture_hook=None)``
   - The forward function for causal LM. This function routes the forward
   pass to the correct sub-model (such as context encoding or token
-  generation) based on the current model state.
+  generation) based on the current model state. If an ``input_capture_hook``
+  function is provided, the forward function calls the hook with the model
+  inputs as arguments.
 - ``reset(self)`` - Resets the model for a new batch of inference. After
   the model is reset, a subsequent run will invoke the context encoding
   model.

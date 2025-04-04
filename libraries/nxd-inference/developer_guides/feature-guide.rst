@@ -89,15 +89,21 @@ The compile function serializes sharded weights by default, and you can
 disable this functionality with the ``save_sharded_checkpoint`` flag in
 NeuronConfig.
 
-Logical NeuronCore support
---------------------------
+Logical NeuronCore Configuration (LNC) support
+----------------------------------------------
 On Trn2 instances, Neuron supports Logical NeuronCore (LNC) configuration,
 which combines multiple physical NeuronCores into a single logical
-NeuronCore. We recommend using LNC=2 on Trn2 instances.
+NeuronCore. On Trn2 instances, the Neuron SDK is optimized for LNC=2, which means
+each NeuronCore visible to the Neuron SDK is two physical NeuronCores.
+
+NxD Inference automatically chooses the correct LNC configuration
+based on the target platform. To override the default LNC configuration,
+you can set the ``NEURON_LOGICAL_NC_CONFIG`` environment variable, or set the
+``logical_nc_config`` flag in NeuronConfig.
 
 ::
 
-   neuron_config = NeuronConfig(logical_neuron_cores=2)
+   neuron_config = NeuronConfig(logical_nc_config=2)
 
 For more information about logical NeuronCore support, see
 :ref:`logical-neuroncore-config`.
@@ -125,14 +131,12 @@ Neuron-optimized transformer decoder models.
    smaller than the tensor-parallelism degree multiplied by the amount
    of memory per Neuron core.
 
-   1. On Trn2, each Neuron core has 24GB of memory (with
-      ``logical_neuron_cores`` set to ``2``).
+   1. On Trn2, each Neuron core has 24GB of memory (with LNC2).
    2. On Inf2/Trn1, each Neuron core has 16GB of memory.
 
 3. The Neuron runtime supports the following tensor-parallelism degrees:
 
-   1. Trn2: 1, 2, 4, 8, 16, 32, and 64 (with ``logical_neuron_cores``
-      set to ``2``)
+   1. Trn2: 1, 2, 4, 8, 16, 32, and 64 (with LNC2)
    2. Inf2: 1, 2, 4, 8, and 24
    3. Trn1: 1, 2, 8, 16, and 32
 
@@ -849,3 +853,151 @@ The NeuronAttentionBase module uses ``REPLICATE_TO_TP_DEGREE`` by
 default. If the TP degree isn't divisible by the number of KV heads,
 NeuronAttentionBase uses ``CONVERT_TO_MHA``.
 
+.. _nxdi_async_mode_feature_guide:
+
+Asyncronous Runtime Support
+---------------------------
+
+NxD Inference offers certain model configurations to be run with Asyncronous Runtime Mode (Async mode).
+Async mode allows NxD Inference to parallelize CPU logic with Neuron (NEFF) logic. As a result, any CPU overheads
+within NxDI that exist between sequential model executions (ex. autoregressive loop in LLMs) are almost fully
+eliminated. This reduces latency anywhere from 5% to 20% based on the model configuration.
+
+This feature can be enabled with by setting ``async_mode`` to ``True`` in ``NeuronConfig``.
+
+To use Async mode, a model configuration must meet the following prerequisites:
+- On-device sampling is enabled.
+- If speculation is enabled, fused speculation must also be enabled.
+
+It is highly recommended to set ``async_mode`` to ``True`` for every other case, since it offers a latency reduction.
+Furthermore, this feature is a purely runtime feature, so if you have a previously compiled model, and its configuration
+doesn't fall under the unsupported case, ``async_mode`` will likely be able to improve performance.
+
+.. note::
+    If you are using vLLM, this feature works independently of vLLM's Async Engine. As a result, ``async_mode`` can be enabled
+    whether vLLM is used or not.
+
+Multi-LoRA Serving
+------------------
+
+NxD Inference supports serving with multiple LoRA adapters and users can specify different LoRA adapters for their requests at runtime. 
+It also supports multi-LoRA serving with vLLM as the frontend.
+NxD Inference currently supports loading of LoRA adapters at server startup for dense models like Llama-3.3-70B. 
+Dynamic loading of LoRA adapters at runtime is not currently supported and will be supported in a future Neuron release.
+
+Enable multi-LoRA serving
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To enable multi-LoRA serving, provide a LoraServingConfig for ``lora_config`` attribute in NeuronConfig.
+
+::
+
+    lora_config = LoraServingConfig(
+        max_loras=max_loras,
+        lora_ckpt_paths=lora_ckpt_paths,
+    )
+    neuron_config = NeuronConfig(lora_config=lora_config)
+
+Refer to :ref:`nxd-inference-api-guide` for more details of ``LoraServingConfig``.
+
+NxD Inference primarily supports the format of LoRA adapters from `Huggingface PEFT <https://github.com/huggingface/peft>`__.
+Each checkpoint path is a folder that contains a checkpoint file (.safetensors, .bin, or .pt) and a configuration json file (.json).
+In addition, NxD inference also supports LoRA adapters trained from `NxD LoRA finetuning <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/lora_finetune_developer_guide.html>`__.
+Each checkpoint path is a checkpoint file (.pt) that includes both LoRA adapter weights and the configuration. 
+
+NxD Inference assumes all the LoRA adapters for multi-LoRA serving are available locally during compilation and their weights are loaded on neuron devices during serving.
+When uploading a LoRA adapter checkpoint to NxDI for multi-LoRA serving, the user is requried to name the adapter with a unique adapter ID, which will be used by users to specify the LoRA adapter for serving at runtime and by NxDI for model compilation.
+
+The number of the multiple LoRA adapters for serving is specified by ``max_loras``.
+The set of LoRA adapters in NxD Inference are specified by ``lora_ckpt_paths``, which is a dictionary with a key-value pair for each LoRA adapter. 
+The key is the adapter ID named by the user and the value is the local path of the LoRA adapter checkpoint.
+For detailed examples of multi-LoRA serving in NxDI, see :ref:`nxdi-trn2-llama3.1-8b-multi-lora-tutorial`.
+
+
+Maximum number of LoRA adapters supported
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The LoRA adapter size is much smaller than the base model, but its weights still consumes non-negligible on-device memory. 
+The maximum number of LoRA adapters that can be concurrently supported in NxD Inference depends on the base model, the LoRA rank, the reserved memory size for LoRA adapters, and how the LoRA adapters are sharded across TP groups.
+
+Suppose Trn1 instance is used for multi-LoRA serving and the reserved memory size on each neuron core for LoRA adapters is 2GB.
+Each LoRA adapter has two parts, LoRA A and LoRA B, and only one of them can be partitioned with tensor parallelism and the other is just Linear layer.
+We analyze the maximum number of LoRA adapters supported in NxD inference under two cases: the linear layer is duplicated and the linear layer is sharded.
+These two cases can be specified by ``lora_shard_linear_layer`` in ``LoraServingConfig``.
+
+When the linear layer is duplicated
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The weight size of a LoRA adapter on each device is around half of the total LoRA adapter size in this case.
+When the base model is Llama3.1 8B, the LoRA adapter checkpoint size with LoRA rank 16 in BF16 is around 170MB. 
+Because ``2GB / (170MB / 2) = 23``, the maximum number of concurrent LoRA adapters is 23.
+When the base model is Llama3.3 70B, the LoRA adapter checkpoint size with LoRA rank 16 in BF16 is around 830MB and we can set ``max_loras=4``.
+We analyze the maximum number of LoRA adapters supported in NxD inference under two cases: the linear layer is duplicated and the linear layer is sharded.
+These two cases can be specified by ``lora_shard_linear_layer`` in ``LoraServingConfig``.
+
+.. list-table::
+    :widths: auto
+    :header-rows: 1 
+    :stub-columns: 1    
+    :align: left
+      
+    *   - Model
+        - Reserved Memory size
+        - LoRA rank
+        - Maximum LoRAs
+    
+    *   - Llama3.1 8B
+        - 2GB
+        - 16
+        - 23
+    *   - Llama3.1 8B
+        - 2GB
+        - 32
+        - 12
+    *   - Llama3.3 70B
+        - 2GB
+        - 16
+        - 4
+    *   - Llama3.3 70B
+        - 2GB
+        - 32 
+        - 2
+
+When the linear layer is sharded
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The linear layer in a LoRA adapter is sharded across neuron cores in a TP group at the cost of Allgather communication overehead in this case.
+The weight size of a LoRA adapter on each device is ``1/TP_DEGREE`` of the total LoRA adapter size.
+
+.. list-table::
+    :widths: auto
+    :header-rows: 1 
+    :stub-columns: 1    
+    :align: left
+      
+    *   - Model
+        - Reserved Memory size
+        - LoRA rank
+        - TP degree
+        - Maximum LoRAs
+    
+    *   - Llama3.1 8B
+        - 2GB
+        - 16
+        - 32
+        - 376
+    *   - Llama3.1 8B
+        - 2GB
+        - 32
+        - 32
+        - 188
+    *   - Llama3.3 70B
+        - 2GB
+        - 16
+        - 32
+        - 77
+    *   - Llama3.3 70B
+        - 2GB
+        - 32 
+        - 32
+        - 38

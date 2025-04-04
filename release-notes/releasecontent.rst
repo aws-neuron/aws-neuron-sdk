@@ -1,5 +1,6 @@
 .. _neuron-release-content:
 .. _latest-neuron-release-content:
+.. _latest-neuron-release-artifacts:
 
 Release Content
 ===============
@@ -9,35 +10,39 @@ Release Content
    :depth: 2
 
 
-Neuron 2.21.0 (10/25/2024)
+Neuron 2.22.0 (04/03/2025)
 ---------------------------
 
 Trn1 packages
 ^^^^^^^^^^^^^
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Trn2 packages
 ^^^^^^^^^^^^^
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 
 Inf2 packages
 ^^^^^^^^^^^^^
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Inf1 packages
 ^^^^^^^^^^^^^
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Supported Python Versions for Inf1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Supported Numpy Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -86,10 +91,6 @@ Supported Probuf Versions
 +----------------------------------+----------------------------------+
 
 
-Neuron 2.21.1 Beta (03/12/2024)
-------------------------------
-
-For access to Neuron 2.21 Beta release contact your account manager.
 
   
 Previous Neuron Releases Content

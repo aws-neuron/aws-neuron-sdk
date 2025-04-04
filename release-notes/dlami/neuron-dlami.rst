@@ -7,6 +7,22 @@ Neuron DLAMI Release Notes
    :local:
    :depth: 1
 
+
+Neuron 2.22.0
+-------------
+
+Date: 4/3/2025
+
+- Adding PyTorch 2.5 (Amazon Linux 2023, Ubuntu 22.04) and PyTorch 1.13 Inf1 (Ubuntu 22.04) single framework DLAMIs.
+- Adding PyTorch 1.13 Inf1 virtual environments within the Neuron Multi Framework DLAMIs. (Amazon Linux 2023, Ubuntu 22.04)  
+- Adding Tensorflow 2.10 Inf1 virtual environments within Multi Framework DLAMI and Tensorflow singleframework DLAMI.
+- Adding support for Amazon Linux 2023 in the Base Neuron DLAMI.
+- Security improvements: Bump Linux kernel to 5.19.0-1024-aws for Ubuntu 22 DLAMIs.
+- Bug fix: Update venv paths in message of the day (MOTD) launch screens for Neuron DLAMIs.
+- Optimization: Reduce EBS storage size for all DLAMIs such that the virtual environments and dependencies consume 80% of available block storage. This results in reduced cost and time to launch for the DLAMIs. Customers can always request more storage if needed.
+
+See :ref:`neuron-dlami-overview`.
+
 Neuron 2.21.1
 -------------
 

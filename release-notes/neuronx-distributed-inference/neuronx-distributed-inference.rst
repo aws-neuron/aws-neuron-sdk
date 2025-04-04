@@ -11,6 +11,106 @@ NxD Inference Release Notes (``neuronx-distributed-inference``)
 This document lists the release notes for Neuronx Distributed Inference library.
 
 
+Neuronx Distributed Inference [0.2.0] (Beta) (Neuron 2.22.0 Release)
+------------------------------------------------------------------
+Date: 04/03/2025
+
+Models in this Release
+^^^^^^^^^^^^^^^^^^^^^^
+
+* Llama 3.2 11B (Multimodal)
+
+Features in this Release
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Multi-LoRA serving. This release adds support for multi-LoRA serving
+  through vLLM by loading LoRA adapters at server startup. Multi-LoRA
+  serving is currently supported for Llama 3.1 8B, Llama 3.3 70B, and
+  other models that use the Llama architecture.
+* Custom quantization. You can now specify which layers or modules in
+  NxDI to quantize or keep in full precision during inference. To
+  configure which layers or modules to skip during quantization, use
+  the ``modules_to_not_convert`` and
+  ``draft_model_modules_to_not_convert`` attributes in NeuronConfig.
+* Models quantized through external libraries. NxDI now supports
+  inference of models that are quantized externally using quantization
+  libraries such as LLMCompressor.
+* Async mode. This release adds support for async mode, which improves performance
+  by asynchronously preparing the next forward call to a mode. To use async mode,
+  enable the ``async_mode`` flag in NeuronConfig.
+* CPU inference. You can now run models on CPU and compare against output on Neuron
+  to debug accuracy issues. To use this feature, enable the ``on_cpu`` flag in
+  NeuronConfig.
+* Unit/module testing utilities. These common utilities include
+  ``build_module``, ``build_function``, and ``validate_accuracy``,
+  which enable you to build a module or function and validate its
+  accuracy on Neuron. You can use these utilities in unit/integration
+  tests to verify your modeling code works correctly.
+* Add support for models that use a custom ``head_dim`` value from InferenceConfig.
+  This change enables support for models where ``head_dim`` isn't equivalent to
+  ``hidden_size`` divided by ``num_attention_heads``.
+* Input capture hooks. When you call the NeuronBaseForCausalLM forward function, you
+  can provide an ``input_capture_hook`` function that will be called with the model
+  inputs as arguments.
+* Runtime warmup. To improve the performance of the first request sent to a model,
+  NxD Inference now warms up the model during load. You can disable this behavior
+  with the ``skip_warmup`` flag in NeuronConfig.
+
+Backward Incompatible Changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Fix the behavior of the ``do_sample`` sampling flag. Previously,
+  NxDI used greedy sampling when ``do_sample=True``, which was a bug because
+  ``do_sample=True`` should result in multinomial sampling.
+  If you use ``do_sample=True`` in a config where you intend to use
+  greedy sampling, you must change it to ``do_sample=False``. As part
+  of this change, the default value for ``do_sample`` is now
+  ``False``.
+* Enforce that tensors in a model's state_dict don't share memory with
+  other tensors. This change can cause models to fail to load if their
+  tensors share memory, which now results in an error:
+  ``RuntimeError: Error while trying to find names to remove to save state dict``.
+  To fix this issue, apply ``.clone().detach().contiguous()`` to the
+  model's state_dict, and re-shard the weights.
+* Change the quantization state_dict keys from ``weight_scale`` to
+  ``scale`` to match the NxD quantization scale keys and avoid any
+  confusion. If you use quantization and have sharded weights from
+  earlier versions of NxDI, you must re-shard the weights.
+* If you use a model that skips quantization for certain modules (such
+  as in Llama 3.1 405B FP8), you must now specify
+  ``modules_not_to_convert`` to configure the modules that skip
+  quantization.
+* Validate when input size exceeds the model's maximum length (``max_context_length``
+  or ``max_length``). NxD Inference now throws a ValueError if given an input that's
+  too large. To enable the previous behavior, where input is truncated to the maximum
+  length, enable the ``allow_input_truncation`` flag in NeuronConfig.
+
+Other Changes
+^^^^^^^^^^^^^
+
+* Improve model performance by up to 50% (5-20% in most cases) by eliminating overheads in logging.
+* Upgrade ``transformers`` from v4.45 to v4.48.
+* Deprecate NeuronConfig's ``logical_neuron_cores`` attribute and replace it with
+  ``logical_nc_config``. The LNC config is now automatically set from the 
+  ``NEURON_LOGICAL_NC_CONFIG`` environment variable if set.
+* Deprecate NeuronConfig's ``trace_tokengen_model`` attribute. This attribute is now
+  determined dynamically based on other configuration attributes.
+* Improve the performance of on-device sampling.
+* When running Llama models with LNC2, the sharded flash attention kernel is now 
+  automatically enabled when context length is 256 or greater. Previously, this kernel
+  was enabled for context length of 1024 or greater. This change improves performance 
+  at smaller context lengths.
+* NeuronConfig now includes a ``skip_sharding`` flag that you can enable to skip weight 
+  sharding during model compilation. This option is useful in cases where you have 
+  already sharded weights, such as during iterative development, so you can iterate 
+  without re-sharding the weights each time you compile the model.
+* NeuronApplicationBase now includes a ``shard_weights`` function that
+  you can use to shard weights independent of compiling the model.
+* Fix vanilla speculative decoding support for models with multiple
+  EOS tokens.
+* Other minor fixes and improvements.
+
+
 Neuronx Distributed Inference [0.1.1] (Beta) (Neuron 2.21.1 Release)
 ------------------------------------------------------------------
 Date: 01/14/2025

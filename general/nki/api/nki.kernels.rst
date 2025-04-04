@@ -1,9 +1,6 @@
 NKI Kernels
 ==============
 
-.. currentmodule:: nki.kernels
-
-
 .. _nki_kernels:
 
 nki.kernels
@@ -23,14 +20,4 @@ NKI kernels likely won't result in extra performance benefit.
 See the `README <https://github.com/aws-neuron/nki-samples>`_ page 
 of the GitHub Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_ for more details.
 
-.. autosummary::
-   :toctree: generated
-   :nosignatures:
-
-   fused_self_attn_for_SD_small_head_size
-   allocated_fused_self_attn_for_SD_small_head_size
-   allocated_fused_rms_norm_qkv
-   flash_attn_bwd
-   resize_nearest_fixed_dma_kernel
-   flash_fwd
-   select_and_scatter_kernel
+The documentation of the kernels is available at the `nki-samples <https://github.com/aws-neuron/nki-samples>`_ repository.

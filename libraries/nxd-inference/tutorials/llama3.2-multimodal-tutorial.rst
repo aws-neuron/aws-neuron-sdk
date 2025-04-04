@@ -3,14 +3,13 @@
 Tutorial: Deploying Llama3.2 Multimodal Models
 ========================================
 
-NeuronX Distributed Inference (NxDI) enables you to deploy ``Llama-3.2-90B-Vision-Instruct`` models on 
-Neuron Trainium and Inferentia instances.
+NeuronX Distributed Inference (NxDI) enables you to deploy ``Llama-3.2-11B-Vision-Instruct`` and 
+``Llama-3.2-90B-Vision-Instruct`` models on Neuron Trainium and Inferentia instances.
 
 You can run Llama3.2 Multimodal with default configuration options. NxD Inference also provides several 
 features and configuration options that you can use to optimize and tune the performance for inference. 
 This guide walks through how to run Llama3.2 Multimodal with vLLM, and how to enable optimizations for 
-inference performance on Trn1/Inf2 instances. It takes about 20-60 minutes to complete. Please note that
-``Llama-3.2-11B-Vision-Instruct`` is currently not supported on PyTorch 2.5.
+inference performance on Trn1/Inf2 instances. It takes about 20-60 minutes to complete.
 
 .. contents:: Table of contents
    :local:
@@ -23,15 +22,14 @@ Step 1: Set up Development Environment
    if you don’t have one yet. If you are looking to install NxD Inference library without using pre-existing 
    DLAMI, please refer to the :ref:`nxdi-setup`.
 
-2. Use default virtual environment pre-installed with the Neuron SDK. We currently only support Llama3.2
-   Multimodal 90B model with PyTorch 2.5.
+2. Use default virtual environment pre-installed with the Neuron SDK.
    
 ::
 
     source /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
 
 
-3. Install the fork of vLLM (v0.6.x-neuron) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
+3. Install the fork of vLLM (neuron-2.22-vllm-v0.7.2) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
    in the vLLM User Guide for NxD Inference.
    
 4. You should now have the Neuron SDK and other necessary packages installed,
@@ -42,7 +40,8 @@ Step 2: Download and Convert Checkpoints
 ----------------------------------------
 Download Llama3.2 Multimodal models from either 
 `Meta's official website <https://www.llama.com/llama-downloads/>`__ 
-or `HuggingFace(HF) <https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct>`__. 
+or HuggingFace(HF) (`11B <https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct>`__, 
+`90B <https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct>`__). 
 
 NxDI supports HF checkpoint out-of-the-box. To use the Meta checkpoint, 
 you need to run the following script to convert the downloaded Meta checkpoint into NxDI supported format.
@@ -53,7 +52,7 @@ you need to run the following script to convert the downloaded Meta checkpoint i
         --input-dir <path_to_meta_pytorch_checkpoint> \
         --output-dir <path_to_neuron_checkpoint> \
         --instruct \
-        --num-shards 8 #(for 90B)
+        --num-shards 8 #(1 for 11B and 8 for 90B)
 
 After the script is finished running, you should have the following configuration 
 and checkpoint files. Verify by ``ls <path_to_neuron_checkpoint>``:
@@ -67,7 +66,7 @@ and checkpoint files. Verify by ``ls <path_to_neuron_checkpoint>``:
 
 .. note::
 
-    The following code examples use 90B model HF checkpoint, as it is supported by default, 
+    The following code examples use HF checkpoint, as it is supported by default, 
     no script needs to be run.
 
 
@@ -102,7 +101,7 @@ explanation of each configuration.
   sequence, we support batch size 1.
 
 - ``SEQ_LEN`` - The entire sequence length combining input and output sequence. We 
-  support sequence length up to 16k for 90B model.
+  support sequence length up to 128k for 11B model, and 16k for 90B model.
 
 - ``TENSOR_PARALLEL_SIZE`` - For best performance, choose the maximum supported 
   value by your instance, that is divisible by the model’s hidden sizes and number 

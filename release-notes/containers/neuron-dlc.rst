@@ -18,6 +18,18 @@ Updated : 12/20/2024
  * `CVE-2024-11392 <https://nvd.nist.gov/vuln/detail/CVE-2024-11392>`_
  * `CVE-2024-11393 <https://nvd.nist.gov/vuln/detail/CVE-2024-11393>`_
  * `CVE-2024-11394 <https://nvd.nist.gov/vuln/detail/CVE-2024-11394>`_
+- jax-training-neuronx and pytorch-training-neuronx has a CRITICAL CVE related to integer overflow in libaom internal function, that is coming from UBUNTU base image upstream
+ * `CVE-2024-5171 <https://people.canonical.com/~ubuntu-security/cve/2024/CVE-2024-5171.html>`_
+
+
+Neuron 2.22.0
+-------------
+Date: 04/04/2025
+
+- Upgraded jax-training-neuronx DLC to 0.5 version
+- Updated Neuron SDK to latest 2.22.0 release for all Neuron DLCs
+- Restructure all Dockerfiles by combining RUN commands for faster build time
+
 
 Neuron 2.21.1
 -------------

@@ -188,6 +188,33 @@ To workaround this error, you can use the `mask` parameter:
     j = j0 * 512 + i1
     y = nl.add(x[0, j], x[0, j - 2048], mask=j > 2048)
 
+.. _nki-errors-err_copy_dynamic_indirect_indices_not_natively_supported:
+
+err_copy_dynamic_indirect_indices_not_natively_supported
+--------------------------------------------------------
+
+If indices are dynamic (i.e. known only at runtime), copying indirect 
+memory references is not natively supported.
+
+For example, when overloading the `assignment` operator as a copy operation, the following 
+code will throw an error:
+
+.. code-block:: python
+
+  data_tensor: tensor[128, 8, 4] = nl.load(data_tensor)
+  idx_tile: tensor[8, 1] = nl.load(idx_tensor)
+  out_sbuf: tensor[8, 4] = nl.ndarray([8, 4], dtype=data_tensor.dtype,
+                                      buffer=nl.sbuf)
+  iy, iz = nl.mgrid[0:8, 0:4]
+  out_sbuf[iy, iz] = data_tensor[0, idx_tile, iz] # idx_tile only known at runtime
+  
+To fix this error, consider using :doc:`nisa.tensor_copy_dynamic_src<generated/nki.isa.tensor_copy_dynamic_src>`
+as follows.
+
+.. code-block:: python
+
+  out_sbuf[iy, iz] = nisa.tensor_copy_dynamic_src(data_tensor[0, idx_tile, iz])    
+
 .. _nki-errors-err_dynamic_control_flow_not_supported:
 
 err_dynamic_control_flow_not_supported
@@ -247,6 +274,26 @@ To fix the problem you can use index tensor `a` to generate a tile whose first d
     iy = nl.arange(8)[None, :]
     # result of `a[i, ix, iy]` is a tile with shape (8, 8) and the first dimension is the partition dimension
     c[i, ix, iy] = nl.add(a[i, ix, iy], 32) # also works
+
+.. _nki-errors-err_hbm_tensor_with_init_value_not_supported:
+
+err_hbm_tensor_with_init_value_not_supported
+--------------------------------------------
+
+Creating HBM tensor with init value is not supported.
+
+.. code-block:: python
+
+  t = nl.full((3, 128, 512), fill_value=1.0, buffer=nl.shared_hbm) # t on hbm and has an init value
+  # Error: Creating HBM tensor with init value is not supported.
+
+To work around the limitation you need to explicitly initialize the tensor with nl.store:
+
+.. code-block:: python
+
+    t = nl.ndarray((3, 128, 512), buffer=nl.shared_hbm)
+    for i in range(3):
+      nl.store(dst=t[i, :, :], value=1.0)
 
 .. _nki-errors-err_indirect_indices_free_dim:
 
@@ -498,16 +545,16 @@ providing a proper mask:
     nl.store(x[tile.p, i * 512 + tile.x], value=0,
               mask=i * 512 + tile.x < 4000)  # Ok
 
-.. _nki-errors-err_tensor_creation_on_scratchpad_with_init_value_not_allowed:
+.. _nki-errors-err_tensor_creation_on_scratchpad_with_init_value_not_supported:
 
-err_tensor_creation_on_scratchpad_with_init_value_not_allowed
--------------------------------------------------------------
+err_tensor_creation_on_scratchpad_with_init_value_not_supported
+---------------------------------------------------------------
 
 Creating SBUF/PSUM tensor with init value is not supported in allocated NKI kernels.
 
 .. code-block:: python
 
-  t = nl.full((3, par_dim(128), 512), fill_value=1.0, buffer=ncc.sbuf.mod_alloc(base_addr=0)) # t is allocated and has a init value
+  t = nl.full((3, par_dim(128), 512), fill_value=1.0, buffer=ncc.sbuf.mod_alloc(base_addr=0)) # t is allocated and has an init value
   # Error: Creating SBUF/PSUM tensor with init value is not supported in allocated NKI kernels.
 
 .. _nki-errors-err_tensor_output_not_written_to:

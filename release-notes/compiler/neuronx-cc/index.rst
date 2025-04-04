@@ -7,6 +7,12 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.17.194.0]
+----------------------------
+Date: 04/03/2025
+
+* Minor bug fixes and performance enhancements for both the trn1 and trn2 platforms.
+
 Neuron Compiler [2.16.372.0]
 ----------------------------
 Date: 01/14/2025

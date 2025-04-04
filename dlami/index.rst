@@ -26,9 +26,31 @@ comes pre-installed with all the Neuron libraries including Neuron compiler and 
   Tensorflow-neuron 2.10 (inf1) released in SDK v2.20.2 is not compatible with the latest runtime in v2.21 SDK. 
   Code that compiles will face runtime errors with the latest SDK 2.21.1 version.
   
-  Neuron team is aware of this issue and it will be fixed in the next minor release.
+  Neuron team is aware of this issue and we will ship a single-framework AMI for TF 2.10 inf1 in a future release.
+
+  You can use multi-framework DLAMIs from Neuron SDK v2.20.0 for inf1 workloards to avoid this issue. For example:
+
+  Deep Learning AMI Neuron (Ubuntu 22.04/AL2023) 20241027
+
+  | Ubuntu22: ami-017ff4652165fd617
+  | AL2023: ami-06fdb253ce8a32239
+
+  .. code-block:: shell
+    
+     aws ec2 run-instances --image-id <ami-id>
   
-  Please refer to `this page <https://github.com/aws-neuron/aws-neuron-sdk/issues/1071>`_ for more information on the issue and a temporary work-around.
+  
+  Alternatively, you can use the latest Neuron DLAMIs on Ubuntu and run this command as a work-around:
+  
+  .. code-block:: shell
+
+     sudo apt-get remove -y aws-neuronx-dkms aws-neuronx-collectives aws-neuronx-runtime-lib aws-neuronx-tools
+     sudo apt-get install aws-neuronx-dkms=2.18.* -y
+     sudo apt-get install aws-neuronx-collectives=2.22.* -y
+     sudo apt-get install aws-neuronx-runtime-lib=2.22.* -y
+     sudo apt-get install aws-neuronx-tools=2.19.* -y
+  
+  https://github.com/aws-neuron/aws-neuron-sdk/issues/1071 for more information on the issue.
 
 Multi Framework DLAMIs supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,10 +66,11 @@ Multi Framework DLAMIs supported
       - DLAMI Name
 
     * - Ubuntu 22.04
-      - Inf2, Trn1, Trn1n, Trn2
+      - Inf1, Inf2, Trn1, Trn1n, Trn2
       - Deep Learning AMI Neuron (Ubuntu 22.04)
+
     * - Amazon Linux 2023
-      - Inf2, Trn1, Trn1n, Trn2
+      - Inf1, Inf2, Trn1, Trn1n, Trn2
       - Deep Learning AMI Neuron (Amazon Linux 2023)
 
 
@@ -72,6 +95,9 @@ Virtual Environments pre-installed
 
     * - PyTorch 2.5 NxD Inference, Torch NeuronX
       - /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference
+    
+    * - Transformers NeuronX (PyTorch 2.5)
+      - /opt/aws_neuronx_venv_pytorch_2_5_transformers
 
     * - JAX 0.4 NeuronX
       - /opt/aws_neuronx_venv_jax_0_4
@@ -79,11 +105,11 @@ Virtual Environments pre-installed
     * - Tensorflow 2.10 NeuronX
       - /opt/aws_neuronx_venv_tensorflow_2_10
 
-    * - Transformers NeuronX (PyTorch 2.5)
-      - /opt/aws_neuronx_venv_pytorch_2_5_transformers
-
     * - Tensorflow 2.10 Neuron (Inf1)
       - /opt/aws_neuron_venv_tensorflow_2_10_inf1
+    
+    * - PyTorch 1.13 Neuron (Inf1)
+      - /opt/aws_neuron_venv_pytorch_1_13_inf1
 
 You can easily get started with the multi-framework DLAMI through AWS console by following this :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`. If you are looking to
 use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
@@ -109,15 +135,30 @@ Single Framework DLAMIs supported
       - Neuron Instances Supported
       - DLAMI Name
 
-    * - Tensorflow 2.10
+    * - PyTorch 2.5
       - Ubuntu 22.04
-      - Inf1, Inf2, Trn1, Trn1n, Trn2
-      - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04)
+      - Inf2, Trn1, Trn1n, Trn2
+      - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04) 
+
+    * - PyTorch 2.5
+      - Amazon Linux 2023
+      - Inf2, Trn1, Trn1n, Trn2
+      - Deep Learning AMI Neuron PyTorch 2.5 (Amazon Linux 2023)
 
     * - Tensorflow 2.10
-      - Ubuntu 20.04
-      - Inf2, Trn1, Trn1n
-      - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 20.04)
+      - Ubuntu 22.04
+      - Inf2, Trn1, Trn1n, Trn2
+      - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04) 
+    
+    * - Tensorflow 2.10 (Inf1)
+      - Ubuntu 22.04
+      - Inf1
+      - Deep Learning AMI Neuron TensorFlow 2.10 Inf1 (Ubuntu 22.04) 
+    
+    * - PyTorch 1.13 (Inf1)
+      - Ubuntu 22.04
+      - Inf1
+      - Deep Learning AMI Neuron PyTorch 1.13 Inf1 (Ubuntu 22.04)
 
 
 Virtual Environments pre-installed
@@ -133,19 +174,36 @@ Virtual Environments pre-installed
       - Neuron Libraries supported
       - Virtual Environment
 
-    * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04)
-      - tensorflow-neuronx
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.5 Torch NeuronX, NxD Core
+      - /opt/aws_neuronx_venv_pytorch_2_5
+
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.5 NxD Training, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_training
+
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.5 NxD Inference, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference
+
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
+      - Transformers NeuronX PyTorch 2.5
+      - /opt/aws_neuronx_venv_pytorch_2_5_transformers 
+
+    * - Deep Learning AMI Neuron PyTorch 1.13 (Ubuntu 22.04) 
+      - Pytorch Neuron (Inf1)
+      - /opt/aws_neuron_venv_pytorch_1_13_inf1
+  
+    * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04) 
+      - Tensorflow Neuronx
       - /opt/aws_neuronx_venv_tensorflow_2_10
-
-    * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 20.04)
-      - tensorflow-neuronx
-      - /opt/aws_neuron_venv_tensorflow_2_10
-
+    
     * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04)
-      - tensorflow-neuron (Inf1)
+      - Tensorflow Neuron (Inf1)
       - /opt/aws_neuron_venv_tensorflow_2_10_inf1
-
-You can easily get started with the single framework DLAMI through AWS console by following one of the corresponding setup guides . If you are looking to
+    
+    
+You can easily get started with the single framework DLAMI through AWS console by following one of the corresponding setup guides . If you are looking to 
 use the Neuron DLAMI in your cloud automation flows , Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
 
 Neuron Base DLAMI
@@ -166,13 +224,13 @@ Base DLAMIs supported
       - Neuron Instances Supported
       - DLAMI Name
 
-    * - Ubuntu 22.04
-      - Inf1, Inf2, Trn1, Trn1n
-      - Deep Learning Base Neuron AMI (Ubuntu 22.04)
+    * - Amazon Linux 2023
+      - Inf1, Inf2, Trn1n, Trn1, Trn2 
+      - Deep Learning Base Neuron AMI (Amazon Linux 2023)
 
-    * - Ubuntu 20.04
-      - Inf1, Inf2, Trn1, Trn1n
-      - Deep Learning Base Neuron AMI (Ubuntu 20.04)
+    * - Ubuntu 22.04
+      - Inf1, Inf2, Trn1n, Trn1, Trn2 
+      - Deep Learning Base Neuron AMI (Ubuntu 22.04)
 
 
 .. _ssm-parameter-neuron-dlami:
@@ -221,12 +279,24 @@ SSM Parameter Prefix
     * - Deep Learning AMI Neuron (Amazon Linux 2023)
       - /aws/service/neuron/dlami/multi-framework/amazon-linux-2023
 
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04)
+      - /aws/service/neuron/dlami/pytorch-2.5/ubuntu-22.04
+    
+    * - Deep Learning AMI Neuron PyTorch 2.5 (Amazon Linux 2023)
+      - /aws/service/neuron/dlami/pytorch-2.5/amazon-linux-2023
+
+    * - Deep Learning AMI Neuron PyTorch 1.13 Inf1 (Ubuntu 22.04)
+      - /aws/service/neuron/dlami/pytorch-1.13-inf1/ubuntu-22.04
+
     * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 22.04)
       - /aws/service/neuron/dlami/tensorflow-2.10/ubuntu-22.04
 
     * - Deep Learning AMI Neuron TensorFlow 2.10 (Ubuntu 20.04)
       - /aws/service/neuron/dlami/tensorflow-2.10/ubuntu-20.04
 
+    * - Deep Learning Base Neuron AMI (Amazon Linux 2023)
+      - /aws/service/neuron/dlami/base/amazon-linux-2023
+   
     * - Deep Learning Base Neuron AMI (Ubuntu 22.04)
       - /aws/service/neuron/dlami/base/ubuntu-22.04
 

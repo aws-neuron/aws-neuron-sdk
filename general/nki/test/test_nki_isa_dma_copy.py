@@ -29,7 +29,7 @@ def nki_dma_copy(a):
   ############################################################################
   # Example 1: Copy over the tensor to another tensor
   ############################################################################
-  nisa.dma_copy(src=a, dst=b)
+  nisa.dma_copy(dst=b, src=a)
 
   # NKI_EXAMPLE_7_END
 

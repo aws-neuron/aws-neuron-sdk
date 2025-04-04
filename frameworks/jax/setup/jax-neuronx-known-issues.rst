@@ -1,6 +1,6 @@
-.. _jax_neuron-known-issues:
+.. _jax-neuron-known-issues:
 
-JAX Neuron Known issues
+JAX NeuronX Known Issues
 ------------------------
 - ``Threefry`` RNG algorithm is not completely supported. Use ``rbg`` algorithm instead. This can be configured by setting the following config option ``jax.config.update("jax_default_prng_impl", "rbg")``
 - For JAX versions older than ``0.4.34``, caching does not work out of the box. Use the following to enable caching support,
@@ -19,9 +19,15 @@ JAX Neuron Known issues
 - ``jax.lax.cond`` is not supported.
 - Host callbacks are not supported. As a result APIs based on callbacks from ``jax.debug`` and ``jax.experimental.checkify`` are not supported.
 - Mesh configurations which use non-connected Neuron cores might crash during execution. You might observe compilation or Neuron runtime errors for such configurations. Device connectivity can be determined by using ``neuron-ls --topology``.
-- Not all dtypes supported by JAX work on Neuron. Check `data types supported in Neuron <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-features/data-types.html>`_ for supported data types.
+- Not all dtypes supported by JAX work on Neuron. Check :ref:`neuron-data-types` for supported data types.
 - ``jax.dlpack`` is not supported.
 - ``jax.experimental.sparse`` is not supported.
 - ``jax.lax.sort`` only supports comparators with LE, GE, LT and GT operations.
 - ``jax.lax.reduce_precision`` is not supported.
-- Certain operations (for example, rng weight initialization) might result in slow compilations. Try to run such operations on CPU.
+- Certain operations (for example, rng weight initialization) might result in slow compilations. Try to run such operations on the CPU backend or by setting the following environment variable ``NEURON_RUN_TRIVIAL_COMPUTATION_ON_CPU=1``.
+- Neuron only supports ``float8_e4m3`` and ``float8_e5m2`` for FP8 dtypes.
+- Complex dtypes (``jnp.complex64`` and ``jnp.complex128``) are not supported.
+- Variadic reductions are not supported.
+- Out of bound access for scatter/gather operations can result in runtime errors.
+- Dot operations on int dtypes are not supported.
+- ``lax.DotAlgorithmPreset`` is not always respected. Dot operations occur in operand dtypes. This is a configurable parameter for ``jax.lax.dot`` and ``jax.lax.dot_general``.

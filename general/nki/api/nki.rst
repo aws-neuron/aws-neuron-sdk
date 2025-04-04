@@ -15,9 +15,9 @@ Decorators
 
    jit
    benchmark
+   profile
    baremetal
    simulate_kernel
-
 
 Types
 ---------

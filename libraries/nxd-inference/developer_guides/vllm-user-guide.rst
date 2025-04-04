@@ -28,12 +28,7 @@ and Chunked Prefill on Neuron instances through NxD Inference in upcoming releas
 Supported Models
 ----------------
 
-We currently support the following models in vLLM by default through NxD Inference:
-
-* DBRX
-* LLama 2, 3, 3.1, 3.2 (1B and 3B), 3.3
-* Mistral-V2
-* Mixtral
+Refer to :ref:`Supported Model Architectures<nxdi-supported-model-architectures>` for a list of models supported in vLLM through NxD Inference.
 
 If you are adding your own model to NxD Inference, please see :ref:`Integrating Onboarded Model with vLLM<nxdi-onboarding-models-vllm>`
 for instructions on how to setup vLLM integration for it.
@@ -43,7 +38,7 @@ Setup
 
 .. note::
 
-    Currently, we maintain a fork of vLLM (v0.6.2) that contains the necessary changes to support NxD Inference.
+    Currently, we maintain a fork of vLLM (v0.7.2) that contains the necessary changes to support NxD Inference.
     Therefore, it is important to follow the installation instructions below rather than installing vLLM
     from PyPI or the official vLLM repository. We are working with the vLLM community to upstream these
     changes to make them available in a future vLLM version.
@@ -52,7 +47,7 @@ Before installing vLLM with the instructions below, you need to install ``neuron
 
 .. code::
 
-    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
     pip install -r requirements-neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
@@ -65,9 +60,11 @@ Neuron Framework Selection
 
 .. note::
 
-    The Neuron integration for vLLM supports both Transformers NeuronX and NxD Inference libraries. If you have both libraries installed,
-    by default Transformers NeuronX is used. To override this, please select the NxD Inference as desired Neuron framework by setting
-    the ``VLLM_NEURON_FRAMEWORK`` environment variable to ``neuronx-distributed-inference`` before running vLLM.
+    The Neuron integration for vLLM supports both Transformers NeuronX and NxD Inference libraries. Set the ``VLLM_NEURON_FRAMEWORK`` 
+    environment variable to ``neuronx-distributed-inference`` to use the NxD Inference library. Set the  ``VLLM_NEURON_FRAMEWORK`` 
+    environment variable to ``transformers-neuronx`` to use the Transformers NeuronX library. Make sure you have the corresponding library
+    installed before running vLLM. If you have both libraries installed, and the ``VLLM_NEURON_FRAMEWORK`` environment variable is not set,
+    the NxD Inference library will be used by default.
 
 If you are migrating from Transformers NeuronX to NxD Inference, you can refer to this :ref:`Migration Guide<nxdi_migrate_from_tnx>` for
 additional support.
@@ -169,7 +166,7 @@ E2E performance of the Neuron integration.
 Decoding
 ^^^^^^^^
 
-:ref:`On-device sampling<nxdi-on-device-sampling>` performs sampling logic on the Neuron devices 
+:ref:`On-device sampling<nxdi-on-device-sampling>` is enabled by default, which performs sampling logic on the Neuron devices 
 rather than passing the generated logits back to CPU and sample through vLLM. This allows us to
 use Neuron hardware to accelerate sampling and reduce the amount of data transferred between devices 
 leading to improved latency.
@@ -184,7 +181,8 @@ When on-device sampling is enabled, we handle the following special cases:
 * When ``top_k`` is set to -1, we limit ``top_k`` to 256 instead.
 * When ``temperature`` is set to 0, we use greedy decoding to remain compatible with existing conventions. This is the same as setting ``top_k`` to 1.
 
-By default, on-device sampling is disabled. You can enable on-device sampling by passing a ``on_device_sampling_config``
+By default, on-device sampling utilizes a greedy decoding strategy to select tokens with the highest probabilities. 
+You can enable a different on-device sampling strategy by passing a ``on_device_sampling_config``
 using the override neuron config feature (see :ref:`Model Configuration<nxdi-vllm-model-configuration>`). It is strongly recommended to make use
 of the ``global_top_k`` configuration limiting the maximum value of ``top_k`` a user can request for improved performance.
 
@@ -205,12 +203,21 @@ a small-ish model of 15GB might take around 15min to compile. Exact times depend
 Doing this on each server start would lead to unacceptable application startup times. 
 Therefore, we support storing and loading the traced and compiled models.
 
-Both are controlled through the ``NEURON_COMPILED_ARTIFACTS`` variable. When pointed to a path that contains a model,
-we load it directly. If loading fails or if ``NEURON_COMPILED_ARTIFACTS`` is not set, then we recompile and store
-the results in the provided location.
+Both are controlled through the ``NEURON_COMPILED_ARTIFACTS`` variable. When pointed to a path that contains a pre-compiled model,
+we load the pre-compiled model directly, and any differing model configurations passed in to the vllm API will not trigger re-compilation. 
+If loading from the ``NEURON_COMPILED_ARTIFACTS`` path fails, then we will recompile the model with the provided configurations and store 
+the results in the provided location. If ``NEURON_COMPILED_ARTIFACTS`` is not set, we will compile the model and store it under a ``neuron-compiled-artifacts``
+subdirectory in the directory of your model checkpoint.
 
 Examples
 --------
+
+For a list of examples for using vLLM with Neuron, refer to `upstreaming-to-vllm/examples
+/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2/examples/offline_inference>`_ folder. Look for example scripts that are prefixed with ``neuron_``. We provide examples for use cases such as speculative decoding (EAGLE and draft model), multimodal models, 
+quantization, multi-LoRA and more. A separate folder `upstreaming-to-vllm/examples/neuron
+/multi_node/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2/examples/neuron/multi_node>`_ contains examples for enabling multinode inferencing on Neuron.
+
+For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.
 
 The following examples use `meta-llama/Llama-3.1-8B-Instruct <https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct>`_ on a ``Trn1.32xlarge`` instance. 
 

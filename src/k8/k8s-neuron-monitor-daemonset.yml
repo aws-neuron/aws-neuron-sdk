@@ -40,14 +40,16 @@ spec:
                       - inf2.48xlarge
       containers:
         - name: neuron-monitor
-          image: public.ecr.aws/neuron/neuron-monitor:1.1.0
+          image: public.ecr.aws/neuron/neuron-monitor:1.3.0
           ports:
             - containerPort: 8000
           command:
              - "/opt/bin/entrypoint.sh"
           args: 
             - "--port"
-            - "8000"  
+            - "8000"
+            - "--neuron-monitor-config"
+            - "/opt/aws/neuron/bin/neuron-monitor.conf"
           resources:
             limits:
               cpu: 500m

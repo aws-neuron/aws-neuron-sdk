@@ -15,6 +15,18 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.20.xx.0]
+--------------------------------
+Date: xx/xx/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* This driver is required to run with Neuron Runtime 2.24 or later on Trainium2 machines. Included in the release is a bug fix to avoid device memory corruption issues leading to undefined Neuron Device behavior.
+
+Improvements
+^^^^^^^^^^^^
+* Improved interface between ``libnrt`` and the Driver resulting in stability improvements.
+
 Neuron Driver release [2.19.64.0]
 --------------------------------
 Date: 12/20/2024
