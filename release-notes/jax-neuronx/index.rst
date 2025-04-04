@@ -15,6 +15,19 @@ the Neuron NKI JAX interface. It also serves as a meta-package for providing
 a tested combination of the ``jax-neuronx``, ``jax``, ``jaxlib``, ``libneuronxla``
 , and ``neuronx-cc`` packages.
 
+
+Release [0.1.3]
+----------------------
+Date: 03/xx/2025
+
+
+Summary
+~~~~~~~
+
+- This release supports JAX versions up to ``0.5.0``.
+- Known issues are listed within :ref:`jax-neuron-known-issues`.
+
+
 Release [0.1.2]
 ----------------------
 Date: 12/20/2024

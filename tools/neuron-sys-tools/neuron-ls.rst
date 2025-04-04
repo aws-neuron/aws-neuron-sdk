@@ -23,6 +23,8 @@ To use this command, simply type ``neuron-ls`` in your terminal.
 
     - :option:`--topology, -t`: Display topology information about the system's Neuron Devices.
 
+    - :option:`--json-output, -j`: Output in JSON format.
+
 .. note::
 
   ``neuron-ls`` fully supports the newly launched Trn2 instances.
@@ -201,17 +203,63 @@ These are a few examples on running the tool on a trn2n.48xlarge:
   Legend:
 
           *––► = Wrap-around link
+::
+
+  $ neuron-ls -j
+  [
+    {
+        "neuron_device": 0,
+        "bdf": "cc:00.0",
+        "connected_to": [
+            12,
+            3,
+            4,
+            1
+        ],
+        "nc_count": 4,
+        "logical_neuroncore_config": 2,
+        "memory_size": 103079215104,
+        "neuron_processes": [
+            {
+                "pid": 113985,
+                "command": "neuron-bench exec --run-as-cc-neff --...",
+                "neuron_runtime_version": "2.0.0"
+            }
+        ]
+    },
+    ...
+    {
+        "neuron_device": 15,
+        "bdf": "f7:00.0",
+        "connected_to": [
+            11,
+            14,
+            3,
+            12
+        ],
+        "nc_count": 4,
+        "logical_neuroncore_config": 2,
+        "memory_size": 103079215104,
+        "neuron_processes": [
+            {
+                "pid": 113985,
+                "command": "neuron-bench exec --run-as-cc-neff --...",
+                "neuron_runtime_version": "2.0.0"
+            }
+        ]
+    }
+  ]
 -  instance-type: Type of instance on which neuron-ls is running.
 -  instance-id: EC2 ID of the instance on which neuron-ls is running.
--  logical-neuroncore_config: (only available on trn2 instances) the current logical NeuronCore configuration; for more information refer to :ref:`logical-neuroncore-config`
--  NEURON DEVICE: Logical ID assigned to the Neuron Device.
--  NEURON CORES: Number of NeuronCores present in the Neuron Device.
--  NEURON MEMORY: Amount DRAM memory in Neuron Device.
--  CONNECTED DEVICES: Logical ID of Neuron Devices connected to this
+-  logical-neuroncore-config: (only available on trn2 instances) the current logical NeuronCore configuration; for more information refer to :ref:`logical-neuroncore-config`
+-  NEURON DEVICE / neuron_device: Logical ID assigned to the Neuron Device.
+-  NEURON CORES / nc_count: Number of NeuronCores present in the Neuron Device.
+-  NEURON MEMORY / memory_size: Amount DRAM memory in Neuron Device.
+-  CONNECTED DEVICES / connected_to: Logical ID of Neuron Devices connected to this
    Neuron Device.
--  PCI BDF: PCI Bus Device Function (BDF) ID of the device.
--  PID: ID of the process using this NeuronDevice.
--  COMMAND: Command used to launch the process using this
+-  PCI BDF / bdf: PCI Bus Device Function (BDF) ID of the device.
+-  PID / pid: ID of the process using this NeuronDevice.
+-  COMMAND / command: Command used to launch the process using this
    Neuron Device.
--  RUNTIME VERSION: Version of Neuron Runtime (if applicable) for
+-  RUNTIME VERSION / neuron_runtime_version: Version of Neuron Runtime (if applicable) for
    the application using this Neuron Device.

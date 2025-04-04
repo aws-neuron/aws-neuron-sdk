@@ -51,14 +51,14 @@ Install packages
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2>`__
 
 To run NxD Inference with vLLM, you need to download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Make sure to activate the Neuron virtual environment if using a new terminal instead of the one from connect step above.
@@ -113,13 +113,21 @@ shell script file, for example, ``compile_model.sh`` and then run it.
 Note that we are using the following features as described in
 the tutorial for running 405B model :ref:`nxdi-trn2-llama3.1-405b-tutorial`
 
-* Logical NeuronCores (LNC)
+* Logical NeuronCore Configuration (LNC)
 * Tensor parallelism (TP) on Trn2
 * Optimized Kernels
 
 The script compiles the model and runs generation on the given input prompt. Please refer to :ref:`nxd-inference-api-guide` for more information on these ``inference_demo`` flags.
 Note the path we used to save the compiled model. This path should be used
 when launching vLLM server for inference so that the compiled model can be loaded without recompilation.
+
+.. note::
+
+    Known issue: Using kernels with bucket length of 1024 or less may lead to ``Numerical Error`` in inference.
+
+    ::
+
+        RuntimeError: Failed to execute the model status=1003 message=Numerical Error
 
 ::
 
@@ -153,7 +161,6 @@ when launching vLLM server for inference so that the compiled model can be loade
             --seq-len 12800 \
             --on-device-sampling \
             --top-k 1 \
-            --do-sample \
             --fused-qkv \
             --sequence-parallel-enabled \
             --qkv-kernel-enabled \
@@ -161,8 +168,9 @@ when launching vLLM server for inference so that the compiled model can be loade
             --mlp-kernel-enabled \
             --cc-pipeline-tiling-factor 1 \
             --pad-token-id 2 \
-            --logical-neuron-cores $LNC \
             --enable-bucketing \
+            -—context-encoding-buckets 2048 4096 10240 12288 \
+            -—token-generation-buckets 12800 \
             --prompt "What is annapurna labs?" 2>&1 | tee log
 
 
@@ -315,10 +323,14 @@ The output for this llama-3.1-405B model run for the base case is shown below. P
 Scenario 2: Run Llama-3.1-405b inference with fp8 weights and fused speculation (with draft model)
 --------------------------------------------------------------------------------------------------
 
-Step 1: Rescale the model weights to use Neuron FP8 format
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 1: Rescale the model weights to use Neuron FP8 format and save the modules to not convert file in model path
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Since Neuron device only supports the ``FP8_EXP4 (IEEE-754)`` data type, and the HuggingFace FP8 checkpoint for Llamma-405b is in a different FP8 format (``OCP FP8 E4M3/e4m3fn``) which has a different range, we need to rescale the public model weights. 
 Follow this guide to rescale the FP8 model weights from HuggingFace: `link <https://github.com/aws-neuron/neuronx-distributed/blob/main/src/neuronx_distributed/quantization/README_rescaling_fp8_for_neuron.md>`__.
+
+Running a quantized model requires us to create modules to not convert json file to explicitly mention the layers which are not quantized in the model. For this tutorial we can use the following file.
+
+Download: :download:`modules_to_not_convert.json <modules_to_not_convert.json>`
 
 Next we will compile and run the model and record performance metrics.
 
@@ -331,12 +343,22 @@ shell script file, for example, ``compile_model.sh`` and then run it.
 Note that we are using the following features as described in
 the tutorial for running 405B model :ref:`nxdi-trn2-llama3.1-405b-tutorial`
 
-* Logical NeuronCores (LNC)
+* Logical NeuronCore Configuration (LNC)
 * Tensor parallelism (TP) on Trn2
 * Optimized Kernels
 
 The compiling script is similar to the one in part 1. 
 Note that we have added the path for the draft model.
+
+
+.. note::
+
+    Known issue: Using kernels with bucket length of 1024 or less may lead to ``Numerical Error`` in inference.
+
+    ::
+
+        RuntimeError: Failed to execute the model status=1003 message=Numerical Error
+
 
 ::
     
@@ -347,6 +369,8 @@ Note that we have added the path for the draft model.
     # This is where the compiled model (.pt file) and sharded checkpoints will be saved. The same path
     # should be used when launching vLLM server for inference.
     COMPILED_MODEL_PATH="/home/ubuntu/traced_model/Llama-3.1-405B-Instruct/"
+    # Add a modules to not convert json file to the model path to specify non quantized modules.
+    MTNC_FILE_PATH="/home/ubuntu/models/Llama-3.1-405B-Instruct-FP8-rescaled/modules_to_not_convert.json"
 
     NUM_CORES=128
     TP_DEGREE=64
@@ -383,15 +407,14 @@ Note that we have added the path for the draft model.
             -—draft-model-path $DRAFT_MODEL_PATH \
             -—enable-fused-speculation \
             -—speculation-length 7 \
-            -—no-trace-tokengen-model \
             -—pad-token-id 2 \
-            -—logical-neuron-cores $LNC \
             -—quantized-mlp-kernel-enabled \
             -—quantization-type per_channel_symmetric \
             -—rmsnorm-quantize-kernel-enabled \
             -—enable-bucketing \
             -—prompt "What is annapurna labs?" \
-            -—context-encoding-buckets 1024 2048 4096 10240 12288 \
+            --modules-to-not-convert-file $MTNC_FILE_PATH \
+            -—context-encoding-buckets 2048 4096 10240 12288 \
             -—token-generation-buckets 12800 2>&1 | tee compile_and_generate_log
 
 

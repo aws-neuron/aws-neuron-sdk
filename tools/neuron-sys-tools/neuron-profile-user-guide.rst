@@ -298,17 +298,34 @@ The following are some useful features that may help with navigating a profile:
   - All marker information can be found by clicking the ``Annotations`` button.
   - Markers can be saved and loaded by using a provided name for the marker set.
   - Individual markers can be renamed or deleted in this menu as well.
+  - Time span between markers will automatically be shown, and users can change the marker name next to ``diff vs`` to calculate time between other markers.
+
+|neuron-profile-annotation-menu|
 
 - The "Search" tab can be used to find and highlight specific points in the profile related to the queried field(s).
 - Click on the "Box Select" button in the top-right corner of the timeline and then click and drag on any region of the plot to select all events in that region and get summary statistics such as total duration and breakdowns of opcodes, transfer_sizes, and more.
-- The ``Edit view settings`` can be used to further customize the timeline view.  For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
+- The ``Edit view settings`` can be used to further customize the timeline view.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
 
-Additionally, there are various summary buttons that can be clicked to provide more information on the model/NEFF, such as the input and output tensors,
-number of FLOPs, and the start and end of a framework layer.
+  - For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.
+  - To speed up initial load times, the default will be a ``Minimal View`` which only shows the instructions executed and the model FLOPs utilization (MFU) over time.  Changing between the minimal and full views can also be done through the ``Reset to Full View`` or ``Reset to Minimal View`` buttons.
+
+|neuron-profile-view-settings|
+
+Additionally, there are various summary tabs that can be clicked to provide more information on the model/NEFFs.
+
+- ``Layer Summary`` shows timing information, FLOPs and instructions counts per layer.
+- ``Selection Summary`` shows summarized information for all data points in the selected window when using the "Box Select" mode.
+- ``NEFF Header`` shows details on the profiled NEFF, such as the number of NeuronCores required to execute.
+- ``NEFF Nodes`` shows input, output, and weight tensor information, including name, size, and shape.
+- ``Model Info`` shows a summary of the NTFF, such as the NeuronCore the model was executed on, number of notifications, and hardware execution time.
+- ``DMA Queues Info`` shows more information on the queues used for data movement.
+- ``NC Memory Usage Info`` shows a snapshot of the device memory usage breakdown before profiling was started.
+- ``Terminology`` shows a description of metrics provided in the summary table.
 
 |neuron-profile-web-summaries|
 
-Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times. Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
+Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times.
+Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
 
 |neuron-profile-tensor-reload-annotation|
 
@@ -487,7 +504,9 @@ Add the following lines to /etc/sysctl.conf
 Commit changes by running ``sudo sysctl -p``.
 
 .. |neuron-profile-web-timeline| image:: /images/neuron-profile-web-timeline_2-11.png
-.. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-11.png
+.. |neuron-profile-annotation-menu| image:: /images/neuron-profile-annotation-menu_2-21.png
+.. |neuron-profile-view-settings| image:: /images/neuron-profile-view-settings_2-21.png
+.. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-21.png
 .. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
 .. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png

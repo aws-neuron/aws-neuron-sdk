@@ -12,9 +12,12 @@ Developer Guides
     /libraries/nxd-inference/developer_guides/model-reference
     /libraries/nxd-inference/developer_guides/onboarding-models
     /libraries/nxd-inference/developer_guides/vllm-user-guide
+    /libraries/nxd-inference/developer_guides/writing-tests
     /libraries/nxd-inference/developer_guides/nxd-examples-migration-guide
     /libraries/nxd-inference/developer_guides/migrate-from-tnx-to-nxdi
     /libraries/nxd-inference/developer_guides/llm-inference-benchmarking-guide
+    /libraries/nxd-inference/developer_guides/accuracy-eval-with-datasets
+    /libraries/nxd-inference/developer_guides/custom-quantization
 
 
 

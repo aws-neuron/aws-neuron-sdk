@@ -18,6 +18,7 @@ Memory operations
    load_transpose2d
    atomic_rmw
    copy
+   broadcast_to
 
 
 .. _nl_creation:
@@ -30,6 +31,7 @@ Creation operations
    :nosignatures:
 
    ndarray
+   empty_like
    zeros
    zeros_like
    ones
@@ -69,6 +71,8 @@ Math operations
    trunc
    floor
    ceil
+   mod
+   fmod
    exp
    log
    cos
@@ -95,7 +99,7 @@ Math operations
    dropout
    matmul
    transpose
-
+   reciprocal
 
 
 Bitwise operations

@@ -51,64 +51,70 @@ Supported Math Operators for NKI ISA
 ====================================
 
 :ref:`tbl-aluop` below lists all the mathematical operator primitives supported by NKI.
-Many :ref:`nki.isa <nki-isa>` APIs (instructions) supported by Vector Engine
-allow programmable operators through the ``op`` field. The supported operators fall into two categories:
-*bitvec* and *arithmetic*. In general, instructions using *bitvec* operators expect integer data types
-and treat input elements as bit patterns. On the hand, instructions using *arithmetic* operators
-accept any valid NKI data types and convert input elements into float32 before performing the operators.
+Many :ref:`nki.isa <nki-isa>` APIs (instructions) allow programmable operators through the ``op`` field. 
+The supported operators fall into two categories: *bitvec* and *arithmetic*. In general, instructions 
+using *bitvec* operators expect integer data types and treat input elements as bit patterns. On the other 
+hand, instructions using *arithmetic* operators accept any valid NKI data types and convert input elements 
+into float32 before performing the operators.
 
 .. _tbl-aluop:
 .. table:: Supported Math Operators by NKI ISA
 
-  +------------------------+----------------------------+---------------------------------------------+------------------------+
-  |                        | Operator                   | Accepted ``op`` by Vector Engine            | Legal Reduction ``op`` |
-  +========================+============================+=============================================+========================+
-  |                        | Bitwise Not                | ``nki.language.invert``                     | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Bitwise And                | ``nki.language.bitwise_and``                | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Bitwise Or                 | ``nki.language.bitwise_or``                 | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  | Bitvec                 | Bitwise Xor                | ``nki.language.bitwise_xor``                | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Arithmetic Shift Left      | ``nki.language.left_shift``                 | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Arithmetic Shift Right     |  Not supported                              | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical Shift Left         | ``nki.language.left_shift``                 | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical Shift Right        | ``nki.language.right_shift``                | N                      |
-  +------------------------+----------------------------+---------------------------------------------+------------------------+
-  |                        | Add                        | ``nki.language.add``                        | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Subtract                   | ``nki.language.subtract``                   | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Multiply                   | ``nki.language.multiply``                   | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Max                        | ``nki.language.maximum``                    | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Min                        | ``nki.language.minimum``                    | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Is Equal to                | ``nki.language.equal``                      | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Is Not Equal to            | ``nki.language.not_equal``                  | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  | Arithmetic             | Is Greater than or Equal to| ``nki.language.greater_equal``              | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Is Greater than to         | ``nki.language.greater``                    | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Is Less than or Equal to   | ``nki.language.less_equal``                 | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Is Less than               | ``nki.language.less``                       | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical Not                | ``nki.language.logical_not``                | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical And                | ``nki.language.logical_and``                | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical Or                 | ``nki.language.logical_or``                 | Y                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Logical Xor                | ``nki.language.logical_xor``                | Y                      |
-  +------------------------+----------------------------+---------------------------------------------+------------------------+
+  +------------------------+----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Operator                   | ``op``                                      | Legal Reduction ``op`` | Supported Engine     |
+  +========================+============================+=============================================+========================+======================+
+  |                        | Bitwise Not                | ``nki.language.invert``                     | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Bitwise And                | ``nki.language.bitwise_and``                | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Bitwise Or                 | ``nki.language.bitwise_or``                 | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  | Bitvec                 | Bitwise Xor                | ``nki.language.bitwise_xor``                | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Arithmetic Shift Left      | ``nki.language.left_shift``                 | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Arithmetic Shift Right     |  Not supported                              | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical Shift Left         | ``nki.language.left_shift``                 | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical Shift Right        | ``nki.language.right_shift``                | N                      | Vector               |
+  +------------------------+----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Add                        | ``nki.language.add``                        | Y                      | Vector/Scalar        |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Subtract                   | ``nki.language.subtract``                   | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Multiply                   | ``nki.language.multiply``                   | Y                      | Vector/Scalar        |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Max                        | ``nki.language.maximum``                    | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Min                        | ``nki.language.minimum``                    | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Is Equal to                | ``nki.language.equal``                      | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Is Not Equal to            | ``nki.language.not_equal``                  | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  | Arithmetic             | Is Greater than or Equal to| ``nki.language.greater_equal``              | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Is Greater than to         | ``nki.language.greater``                    | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Is Less than or Equal to   | ``nki.language.less_equal``                 | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Is Less than               | ``nki.language.less``                       | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical Not                | ``nki.language.logical_not``                | N                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical And                | ``nki.language.logical_and``                | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical Or                 | ``nki.language.logical_or``                 | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Logical Xor                | ``nki.language.logical_xor``                | Y                      | Vector               |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Reverse Square Root        | ``nki.language.rsqrt``                      | N                      | GpSIMD/Scalar        |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Reciprocal                 | ``nki.language.reciprocal``                 | N                      | Vector/Scalar        |
+  +------------------------+----------------------------+---------------------------------------------+------------------------+----------------------+
+
+**Note** The Scalar Engine only supports Add and Multiply from NeuronCore-v3.
 
 .. _nki-act-func:
 
@@ -116,60 +122,61 @@ Supported Activation Functions for NKI ISA
 ==========================================
 :ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation`` API. These
 activation functions are approximated with piece-wise polynomials on Scalar Engine.
+*NOTE*: if input values fall outside the supported **Valid Input Range** listed below, 
+the Scalar Engine will generate invalid output results.
 
 
 .. _tbl-act-func:
-.. list-table:: Supported Activation Functions by NKI ISA
-   :widths: 25 25
-   :header-rows: 1
+.. table:: Supported Activation Functions by NKI ISA
+   :widths: 25 25 25
 
-   * - Function Name
-     - Accepted ``op`` by Scalar Engine
-   * - Identity
-     - ``nki.language.copy`` or ``numpy.copy``
-   * - Square
-     - ``nki.language.square`` or ``numpy.square``
-   * - Sigmoid
-     - ``nki.language.sigmoid``
-   * - Relu
-     - ``nki.language.relu``
-   * - Gelu
-     - ``nki.language.gelu``
-   * - Gelu Derivative
-     - ``nki.language.gelu_dx``
-   * - Gelu with Tanh Approximation
-     - ``nki.language.gelu_apprx_tanh``
-   * - Silu
-     - ``nki.language.silu``
-   * - Silu Derivative
-     - ``nki.language.silu_dx``
-   * - Tanh
-     - ``nki.language.tanh`` or ``numpy.tanh``
-   * - Square Root
-     - ``nki.language.sqrt`` or ``numpy.sqrt``
-   * - Reverse Square Root
-     - ``nki.language.rsqrt``
-   * - Exponential
-     - ``nki.language.exp`` or ``numpy.exp``
-   * - Softplus
-     - ``nki.language.softplus``
-   * - Mish
-     - ``nki.language.mish``
-   * - Natural Log
-     - ``nki.language.log`` or ``numpy.log``
-   * - Erf
-     - ``nki.language.erf``
-   * - Erf Derivative
-     - ``nki.language.erf_dx``
-   * - Sine
-     - ``nki.language.sin`` or ``numpy.sin``
-   * - Cosine
-     - Not supported
-   * - Arctan
-     - ``nki.language.arctan`` or ``numpy.arctan``
-   * - Sign
-     - ``nki.language.sign`` or ``numpy.sign``
-
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Function Name                  | Accepted ``op`` by Scalar Engine                    | Valid Input Range   |
+   +================================+=====================================================+=====================+
+   | Identity                       | ``nki.language.copy`` or ``numpy.copy``             | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Square                         | ``nki.language.square`` or ``numpy.square``         | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Sigmoid                        | ``nki.language.sigmoid``                            | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Relu                           | ``nki.language.relu``                               | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Gelu                           | ``nki.language.gelu``                               | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Gelu Derivative                | ``nki.language.gelu_dx``                            | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Gelu with Tanh Approximation   | ``nki.language.gelu_apprx_tanh``                    | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Silu                           | ``nki.language.silu``                               | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Silu Derivative                | ``nki.language.silu_dx``                            | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Tanh                           | ``nki.language.tanh`` or ``numpy.tanh``             | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Softplus                       | ``nki.language.softplus``                           | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Mish                           | ``nki.language.mish``                               | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Erf                            | ``nki.language.erf``                                | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Erf Derivative                 | ``nki.language.erf_dx``                             | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Exponential                    | ``nki.language.exp`` or ``numpy.exp``               | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Natural Log                    | ``nki.language.log`` or ``numpy.log``               | ``[2^-64, 2^64]``   |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Sine                           | ``nki.language.sin`` or ``numpy.sin``               | ``[-PI, PI]``       |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Arctan                         | ``nki.language.arctan`` or ``numpy.arctan``         | ``[-PI/2, PI/2]``   |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Square Root                    | ``nki.language.sqrt`` or ``numpy.sqrt``             | ``[2^-100, 2^100]`` |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Reverse Square Root            | ``nki.language.rsqrt``                              | ``[2^-87, 2^97]``   |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Reciprocal                     | ``nki.language.reciprocal`` or ``numpy.reciprocal`` | ``±[2^-42, 2^42]``  |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Sign                           | ``nki.language.sign`` or ``numpy.sign``             | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
 
 .. _nki-mask:
 
@@ -389,6 +396,48 @@ To prevent larger dtypes from being inferred from weak scalar types, do either o
     assert z.dtype == nl.bfloat16
 
 **Note:** The Vector Engine internally performs most of the computation in FP32 (see :ref:`arch_guide_vector_engine`) and casts the output back to the specific type.
+
+
+.. _nki-engine-sel:
+
+NKI Engine Selection for Operators Supported on Multiple Engines
+================================================================
+There is a tradeoff between precision and speed on different engines for operators with multiple engine options. Users can select which engine to map to based on 
+their needs. We take reciprocal and reverse square root as two examples and explain the tradeoff below.
+
+1. Reciprocal can run on Scalar Engine or Vector Engine:
+
+  Reciprocal can run on Vector Engine with ``nki.isa.reciprocal`` or on Scalar Engine with ``nki.isa.activation(nl.reciprocal)``. Vector Engine performs reciprocal 
+  at a higher precision compared to Scalar Engine; however, the computation throughput of reciprocal on Vector Engine is about 8x lower than Scalar Engine for large 
+  input tiles. For input tiles with a small number of elements per partition (less than 64, processed one per cycle), instruction initiation interval (roughly 64 
+  cycles) dominates performance so Scalar Engine and Vector Engine have comparable performance. In this case, we suggest using Vector Engine to achieve better precision.
+
+  **Estimated cycles on different engines:**
+
+  .. list-table::
+    :widths: 40 60
+    :header-rows: 1
+
+    * - Cost `(Engine Cycles)`
+      - Condition
+    * - ``max(MIN_II, N)``
+      - mapped to Scalar Engine ``nki.isa.scalar_engine``
+    * - ``max(MIN_II, 8*N)``
+      - mapped to Vector Engine ``nki.isa.vector_engine``
+
+  where,
+
+  - ``N`` is the number of elements per partition in the input tile.
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
+    ``MIN_II`` is roughly 64 engine cycles.
+
+  **Note** ``nki.isa.activation(op=nl.reciprocal)`` doesn't support setting bias on NeuronCore-v2.
+
+2. Reverse square root can run on GpSIMD Engine or Scalar Engine:
+
+  Reverse square root can run on GpSIMD Engine with ``nki.isa.tensor_scalar(op0=nl.rsqrt, operand0=0.0)`` or on Scalar Engine with ``nki.isa.activation(nl.rsqrt)``. 
+  GpSIMD Engine performs reverse square root at a higher precision compared to Scalar Engine; however, the computation throughput of reverse square root on GpSIMD 
+  Engine is 4x lower than Scalar Engine. 
 
 
 .. rubric:: Footnotes

@@ -10,25 +10,6 @@ PyTorch Neuron (``torch-neuronx``) Setup
    :local:
    :depth: 2
 
-``torch-neuronx`` setup on Ubuntu 20 
-------------------------------------
-
-.. card:: Ubuntu 20 (Ubuntu20 AMI)
-        :link: setup-torch-neuronx-ubuntu20
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Ubuntu 20 (DLAMI Base AMI)
-        :link: setup-torch-neuronx-ubuntu20-base-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Ubuntu 20 (DLAMI PyTorch Neuron)
-        :link: setup-torch-neuronx-ubuntu20-dlami-pytorch
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-
 ``torch-neuronx`` setup on Ubuntu 22
 ------------------------------------
 

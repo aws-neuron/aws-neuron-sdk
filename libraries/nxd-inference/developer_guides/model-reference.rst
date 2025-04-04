@@ -97,6 +97,7 @@ Neuron Classes
 Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct
 - https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct
 
 Mixtral

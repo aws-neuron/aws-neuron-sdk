@@ -834,63 +834,30 @@ You can configure a finetuning (SFT) or model alignment (DPO) through the YAML f
 
 .. code-block:: yaml
 
-    data:
-        train_dir: /example_datasets/llama3_8b/training.jsonl
-        val_dir: null
-        dev_choose_samples: 2250
-        seq_length: 4096
+    model_alignment_strategy:
+        # DPO specific config
+        dpo:
+            kl_beta: 0.01
+            loss_type: sigmoid
+            max_dpo_prompt_length: 2048
+            precompute_ref_log_probs: True
+            truncation_mode: keep_start
 
-        alignment_strategy:
-            # DPO specific config
-            dpo:
-                kl_beta: 0.01
-                loss_type: sigmoid
-                max_dpo_prompt_length: 2048
-                precompute_ref_log_probs: True
-                truncation_mode: keep_start
+        # Alternatively, can also use SFT specific config
+        sft:
+            packing: True
 
-            # Alternatively, can also use SFT specific config
-            sft:
-                packing: True
+        # Parameter-efficient finetuning - LoRA config
+        peft:
+            lora_rank: 16
+            lora_alpha: 32
+            lora_dropout: 0.05
+            lora_bias: "none"
+            lora_verbose: True
+            target_modules: ["qkv_proj"]
 
     model:
         weight_init_only: True
-
-**data**
-    **train_dir**
-
-    SFT/DPO training data - jsonl or arrow file
-
-    As for SFT/DPO we use HF style ModelAlignment dataloader, we also use HF style data file paths
-
-        * **Type**: str
-        * **Required**: True
-
-    **val_dir**
-
-    SFT/DPO validation data - jsonl or arrow file
-
-    As for SFT/DPO we use HF style ModelAlignment dataloader, we also use HF style data file paths
-
-        * **Type**: str
-        * **Required**: False
-
-    **dev_choose_samples**
-
-    If set, will use that many number of records from the
-    head of the dataset instead of using all. Set to null to use full dataset
-
-        * **Type**: integer
-        * **Default**: null
-        * **Required**: False
-
-    **seq_length**
-
-    Set sequence length for the training job.
-    For DPO, it is total sequence length of prompt and (chosen/rejected) response concatenated together.
-
-        * **Type**: integer
-        * **Required**: True
 
     **alignment_strategy**
 

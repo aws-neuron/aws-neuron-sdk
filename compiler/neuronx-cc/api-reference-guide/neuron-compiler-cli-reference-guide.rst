@@ -122,7 +122,7 @@ Common parameters for the Neuron CLI:
 
     - ``llm-training``: Enable the compiler to perform optimizations applicable to large language model (LLMS) training runs that  shard parameters, gradients, and optimizer states across data-parallel workers. This is equivalent to the previously documented option argument value of ``NEMO``, which will be deprecated in a future release.
 
-  - :option:`--logical-nc-config <shard_degree>`: Instructs the compiler to shard the input graph across physical NeuronCore accelerators. Possible numeric values are {1, 2}. (only available on trn2; Default: ``2``)
+  - :option:`--logical-nc-config <shard_degree>`: Instructs the compiler to shard the input graph across physical NeuronCore accelerators. Possible numeric values are {1, 2}. (Only available on trn2; Default: ``2``)
 
     Valid values:
 
@@ -141,7 +141,7 @@ Common parameters for the Neuron CLI:
 
   - :option:`--enable-mixed-precision-accumulation`: Perform intermediate calculations of accumulation operators (such as softmax and layernorm) in FP32 and cast the result to the model-designated datatype. This improves the operator's resulting accuracy.
 
-  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for compiler-introduced matrix-multiply transpose computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled.
+  - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for compiler-introduced matrix-multiply transpose computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled. (Only needed on trn1; while the trn2 compiler will accept this flag for compatibility reasons, it has no effect on the compilation.)
 
   - :option:`--enable-fast-context-switch`: Optimize for faster model switching rather than execution latency.
       This option will defer loading some weight constants until the start of model execution. This results in overall faster system performance when your application switches between models frequently on the same Neuron Core (or set of cores).

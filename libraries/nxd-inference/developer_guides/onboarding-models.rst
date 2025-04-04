@@ -351,6 +351,18 @@ from the NxD Inference model hub.
        def get_config_cls(cls):
            return LlamaInferenceConfig
 
+NxD Inference offers :ref:`nxdi_async_mode_feature_guide` as an alternative method to executing NEFFs in parallel with CPU Logic. To evaluate if your
+task can utilize ``async_mode``, the following questions must be answered:
+
+1. Does your task repeatedly execute a model for a single user request? If not, then ``async_mode`` won't offer any benefits.
+    - Example: The Auto Regressive loops used in LLMs perform repeated execution of models for a given prompt, which can get some benefits from async mode.
+2. Does the output of one execution get passed onto the next execution without manipulation? If not, then ``async_mode`` is incompatible.
+    - NOTE: It might be possible to address this by moving some manipulation logic within the neff.
+    - Example: For LLMs using on-device-sampling, we pass in the token generated as output as input to the next step in the auto regressive loop directly. Without on-device-sampling, the sampling logic will rely on logits as output, which is a data dependent compute pattern that is incompatible with async mode.
+3. Is there sufficient CPU logic that is independent of the previous outputs? If not, then ``async_mode`` likely won't offer major benefits.
+    - Example: In production workloads, these are typically server overheads (scheduling, logging, etc.), but this could also be some pre/post processing steps in the model execution pipeline.
+Based on the answers above, ``async_mode`` will need to be set accordingly, and/or, be configured to work correctly with the application.
+
 5. Convert weights to a supported format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -397,6 +409,8 @@ in this guide, you can follow these steps to run that model through vLLM.
    vLLM engine.
 4. Run offline/online inference to get the model working with vLLM.
 
+.. _nxdi-evaluating-models:
+
 Evaluating Models on Neuron
 ---------------------------
 
@@ -404,37 +418,7 @@ NxD Inference provides tools that you can use to
 evaluate the accuracy and performance of the models that you onboard to
 Neuron.
 
-Token Matching
-~~~~~~~~~~~~~~
-
-The token matching evaluation tool verifies that output tokens match
-expected tokens. With this evaluation tool, Neuronx Distributed
-Inference runs generation on the Neuron device. Then, it compares the
-output against expected tokens, which you can provide or generate with
-the HuggingFace model on CPU. If all tokens match, this accuracy check
-passes.
-
-- Warning: Token mismatches are acceptable in many scenarios, especially
-  with large models or large sequence lengths. This tool should only be
-  used for small models and small sequence lengths.
-- Note: Generating HuggingFace model outputs on CPU can take a
-  significant amount of time for larger models or large sequence
-  lengths.
-
-Example (``check_accuracy`` API)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-   from neuronx_distributed_inference.utils.accuracy import check_accuracy
-
-   # Init Neuron model, HuggingFace tokenizer, and HuggingFace generation config.
-
-   check_accuracy(
-       model,
-       tokenizer,
-       generation_config,
-   )
+.. _nxdi-logit-matching:
 
 Logit Matching
 ~~~~~~~~~~~~~~
@@ -501,6 +485,40 @@ Example (``check_accuracy_logits`` API)
        tokenizer,
        generation_config,
    )
+
+Token Matching
+~~~~~~~~~~~~~~
+
+The token matching evaluation tool verifies that output tokens match
+expected tokens. With this evaluation tool, Neuronx Distributed
+Inference runs generation on the Neuron device. Then, it compares the
+output against expected tokens, which you can provide or generate with
+the HuggingFace model on CPU. If all tokens match, this accuracy check
+passes.
+
+- Warning: Token mismatches are acceptable in many scenarios, especially
+  with large models or large sequence lengths. This tool should only be
+  used for small models and small sequence lengths.
+- Note: Generating HuggingFace model outputs on CPU can take a
+  significant amount of time for larger models or large sequence
+  lengths.
+
+Example (``check_accuracy`` API)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+   from neuronx_distributed_inference.utils.accuracy import check_accuracy
+
+   # Init Neuron model, HuggingFace tokenizer, and HuggingFace generation config.
+
+   check_accuracy(
+       model,
+       tokenizer,
+       generation_config,
+   )
+
+.. _nxdi-benchmark-sampling:
 
 Benchmarking
 ~~~~~~~~~~~~
@@ -587,6 +605,8 @@ tools:
   logits to compare against for the accuracy check. This file must contain
   an object saved with ``torch.save()``.
 - ``--benchmark`` - Run benchmarking.
+- ``--on-cpu`` - Run inference on CPU. To simulate tensor parallelism, 
+  initialize ``inference_demo.py`` with ``torchrun``.
 
 Debugging Models on Neuron
 --------------------------
@@ -606,3 +626,10 @@ use log/print statements to debug code that is called from this forward
 function (or any other compiled code).
 
 Debugging Neuron modeling code on CPU isn't yet supported.
+
+Writing Tests on Neuron
+-----------------------
+
+NxD Inference provides tools to help you write unit and integration tests
+that validate your model works as expected. For more information, see
+:ref:`nxdi-writing-tests`.

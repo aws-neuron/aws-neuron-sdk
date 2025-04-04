@@ -10,7 +10,37 @@ NxD Core Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
-.. _neuronx-distributed-rn-0-10-0:
+.. _neuronx-distributed-rn-0-11-0:
+
+NxD Core [0.11.0]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 4/3/2025
+
+New in this release
+-------------------
+
+**Inference:**
+
+* Improve the performance of weight sharding by up to 60-70%, depending on the model.
+* You can now configure modules to skip during quantization with the
+  ``modules_to_not_convert`` argument.
+* Other minor fixes and improvements.
+
+
+**Training:**
+
+* Fixed issue with wikicorpus dataset download
+* Updated model load for LoRA checkpoints
+
+
+Known Issues and Limitations
+----------------------------
+
+* With PT2.5, some of the key workloads like Llama3-8B training may show reduced performance when using `--llm-training` compiler flag as compared to PT2.1.
+In such a case, try removing `--llm-training` flag from `NEURON_CC_FLAGS` in the run.sh only if using Neuron Kernel Interface.
+
+.. _neuronx-distributed-rn-0-10-1:
 
 NxD Core [0.10.1]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -24,6 +54,8 @@ New in this release
 
 * Fix an issue with sequence parallel support for quantized models.
 
+
+.. _neuronx-distributed-rn-0-10-0:
 
 NxD Core [0.10.0]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,6 +1,7 @@
 * :ref:`megatron_gpt_pretraining`
 * :ref:`hf_llama3_8B_pretraining`
 * :ref:`hf_llama3_8B_SFT`
+* :ref:`hf_llama3_8B_SFT_LORA`
 * :ref:`hf_llama3_8B_DPO`
 * :ref:`hf_llama3_70B_pretraining`
 * :ref:`checkpoint_conversion`

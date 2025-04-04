@@ -22,9 +22,9 @@ add_inf1_tag = ['general/arch',
                 'general/announcements/index',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
-add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx', 'libraries/nemo-megatron/']
-# add_trn2_tag = ['']
-add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','neuronx-distributed/nxd-training', 'general/setup/tensorflow-neuronx']
+add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx', 'libraries/nemo-megatron/', 'libraries/nxd-training/']
+add_trn2_tag = ['libraries/nxd-training/']
+add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','libraries/nxd-training', 'general/setup/tensorflow-neuronx']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',
                 'general/arch/neuron-features/collective-communication-operations',
@@ -82,7 +82,8 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                  'general/arch/neuron-hardware/trn2-arch',
                  'general/arch/neuron-hardware/neuron-core-v3',
                  '/general/announcements/neuron2.x/announce-neuron-trn2',
-                 '/general/arch/neuron-features/logical-neuroncore-config'
+                 '/general/arch/neuron-features/logical-neuroncore-config',
+                 'libraries/nxd-training/'
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
@@ -99,7 +100,8 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'general/arch/neuron-hardware/trn2-arch',
                   'general/arch/neuron-hardware/neuron-core-v3', 
                   '/general/announcements/neuron2.x/announce-neuron-trn2',
-                  '/general/arch/neuron-features/logical-neuroncore-config'
+                  '/general/arch/neuron-features/logical-neuroncore-config',
+                  'libraries/nxd-training/'
                ]
 
 
@@ -265,6 +267,9 @@ class NeuronTag(SphinxDirective):
                 return_instances.append('Inf2')
                 return_instances.append('Trn1')
                 return_instances.append('Trn2')
+
+        if cur_file=='general/appnotes/neuronx-distributed/introducing-nxdt-training':
+            return_instances = ['Trn1','Trn2']
             
         # generate text from instances list if the list is not empty.
         return_instances = sorted(set(return_instances))

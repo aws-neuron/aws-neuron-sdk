@@ -2,7 +2,9 @@
 * :ref:`nxdi-model-reference`
 * :ref:`nxdi-onboarding-models`
 * :ref:`nxdi-vllm-user-guide`
+* :ref:`nxdi-writing-tests`
 * :ref:`nxd-examples-migration-guide`
 * :ref:`nxdi_migrate_from_tnx`
 * :ref:`llm-inference-benchmarking`
-
+* :ref:`accuracy-eval-with-datasets`
+* :ref:`nxdi-custom-quantization`

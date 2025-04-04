@@ -150,7 +150,7 @@ Run PyTorch reference implementation and check correctness:
 
    python3 sd_attention_torch.py
 
-Run barmetal mode and check correctness:
+Run baremetal mode and check correctness:
 
 .. code-block::
 

@@ -22,17 +22,6 @@
                 :start-line: 179
                 :end-line: 180
 
-        .. tab-item :: PyTorch 2.1.2
-
-            .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 227
-                :end-line: 228
-
-        .. tab-item:: PyTorch 1.13.1
-
-            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 164
-                :end-line: 165
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section
     :link: inference-torch-neuronx

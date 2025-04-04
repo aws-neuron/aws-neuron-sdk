@@ -112,15 +112,34 @@ This form of tiling can be achieved in NKI as follows:
    :linenos:
    :marker: NKI_EXAMPLE_18
 
-Note the use of ``nl.mgrid`` to define indices, this is the same as the
+A few notes about the above code example:
+
+First, in current release of NKI, the following NKI code pattern is the only way to trigger PSUM accumulation
+for matmuls on TensorEngine reliably:
+
+.. code-block::
+
+   # condition 1: a psum buffer with zeros
+   psum_buf = nl.zeros(..., buffer=nl.psum)
+
+   # condition 2: an affine range loop
+   for i in nl.affine_range(N):
+      # condition 3: add matmul results from TensorEngine
+      psum_buf += nl.matmul(stationary_tile, moving_tile) # or nisa.nc_matmul
+
+The ``nki_matmul_tiled_`` kernel meets all three conditions above, and so do the kernels in the rest of this tutorial.
+The use of :ref:`PSUM accumulation architecture feature <arch_sec_accumulation_psum>` is critical to
+achieve good performance out of TensorEngine when
+the contraction dimension of the matmul is greater than 128.
+
+Second, note the use of ``nl.mgrid`` to define indices, this is the same as the
 ``mgrid`` in NumPy. It is similar to the other way to define indexes through
 ``nl.arange`` but it enables a more concise way to introduce indexes from
-multiple dimensions.  ``nl.affine_range`` is used to define loop-level
-iterators.  The loops defined with ``affine_range`` are *not* unrolled by the
-compiler, which enables faster compilation.
+multiple dimensions.  :doc:`nl.affine_range <../api/generated/nki.language.affine_range>` is used to define loop-level
+iterators, which is the recommended iterator type when the loop does not have loop-carried dependency
+(Note, associative reductions are not considered loop carried dependencies in this context).
 
-
-There is an alternative way to implement this tiled matrix multiplication kernel
+Finally, there is an alternative way to implement this tiled matrix multiplication kernel
 using the SPMD programming model.  We can use the SPMD model to launch ``(M/128)
 x (N/512)`` instances of the kernel to complete the innermost loop. For more
 details, refer to the :ref:`SPMD programming model <nki-pm-spmd>`.
@@ -232,10 +251,10 @@ the final result of each output block directly, since the input blocks in both
 ``lhs_T`` and ``rhs`` cover the entire contraction dimension.  After contraction
 dimension blocking, the accumulation is separated into different groups.
 We can accumulate the partial sum from each computation block back to an
-SBUF tensor for the final result. 
-A small amount of HBM traffic might also be 
-introduced if the partial sum cannot be kept in SBUF before being consumed. 
-On the bright side, we can increase the block size for the free dimensions, 
+SBUF tensor for the final result.
+A small amount of HBM traffic might also be
+introduced if the partial sum cannot be kept in SBUF before being consumed.
+On the bright side, we can increase the block size for the free dimensions,
 which continues to improve the arithmetic intensity.
 
 .. _nki-fig-mm-after-blocking-all:
@@ -260,7 +279,7 @@ With the blocking configuration in the code (16 tiles or 2048 numbers in the
 ``M`` dimension; 2 tiles or 1024 numbers in the ``N`` dimension; and 8 tiles or
 1024 numbers in the ``K`` dimension), this computation has an arithmetic
 intensity of 683 Flops/Byte (2048*1024*1024/(2048*1024 + 1024*1024)). This is
-certainly above the threshold of 222. 
+certainly above the threshold of 222.
 
 At the same time, this blocking configuration keeps all the tensors within the
 SBUF limit as much as possible.  With all matrices in BF16 data type, the
@@ -273,8 +292,8 @@ When the ``M`` dimension becomes bigger, spilling and reloading of the
 computation can still be sufficient.
 
 Since the K blocking loop is hand optimized for our ideal data locality, we do
-not actually want the compiler to rewrite this loop during its vectorization and 
-other loop-level optimization passes. To communicate this we use 
+not actually want the compiler to rewrite this loop during its vectorization and
+other loop-level optimization passes. To communicate this we use
 ``nl.sequential_range()`` to construct the K blocking loop.
 
 .. nki_example:: ../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
@@ -354,7 +373,7 @@ Run benchmarking of different NKI kernels:
 
 .. code-block::
 
-   python3 matrix_multiplication_nki_kernels.py 
+   python3 matrix_multiplication_nki_kernels.py
 
 Run PyTorch implementation to validate the NKI results against the PyTorch
 implementation:

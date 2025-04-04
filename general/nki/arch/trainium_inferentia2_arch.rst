@@ -336,6 +336,8 @@ However, there are a few notable exceptions, such as :doc:`nki.isa.bn_stats <../
 which further imposes free dimension size of input tile cannot exceed 512. Refer to the `nki.isa API manual <nki.language>`
 for instruction-specific tile size constraints.
 
+.. _arch_guide_cross_partition_data_movement:
+
 Cross-partition Data Movement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -359,9 +361,10 @@ The Reshape Bank supports the following data movement:
 #. *32x32 transpose*\ : Each Reshape Bank can read in 32 elements per SBUF/PSUM partitions and transpose the partition and
    free dimension of the incoming 32x32 matrix. This can be invoked by :doc:`nki.isa.nc_transpose <../api/generated/nki.isa.nc_transpose>`
    API by selecting VectorE as the execution engine.
-#. *32 partition shuffle* [instruction support in NKI not supported yet]: Each Reshape Bank can take an arbitrary *shuffle mask*
+#. *32 partition shuffle*\ : Each Reshape Bank can take an arbitrary *shuffle mask*
    ``SM``\ * of length 32. The integer value of ``SM[i]`` indicates the source partition ID (modulo 32) that the Reshape Bank
    output stream ``i`` will get. For example, we can broadcast partition[0] to partition[0-31] using a SM of 32 zeros.
+   This can be invoked by :doc:`nki.isa.nc_stream_shuffle <../api/generated/nki.isa.nc_stream_shuffle>` API.
 
 Refer :ref:`here <arch_sec_cross_partition_connect>`
 later in this doc for cross-bank data movement.
@@ -829,18 +832,39 @@ instructions on TensorE:
    Matmul tiling (hardware view).
 
 Effectively, the first ``nki.isa.nc_matmul`` instruction overwrites the destination PSUM bank with the instruction output.
-The second instruction accumulates instruction output onto the previous instruction’s result in the same PSUM. The PSUM
+The second instruction accumulates instruction output onto the previous instruction's result in the same PSUM. The PSUM
 accumulation is always done in FP32. A series of TensorE matmul instructions with the first one writing to a PSUM bank and
 more subsequent instructions accumulating into the same PSUM bank data is called a *matmul accumulation group*.
 
-In NKI, the ``nki.isa.nc_matmul`` does not have an explicit control field to indicate ``overwrite`` or ``accumulate`` for
-the PSUM. Instead, NeuronCompiler is able to identify the ``overwrite, accumulate, accumulate, ...`` pattern from an explicit
-empty PSUM bank declaration (e.g., ``res_psum = nl.zeros((128, 512), np.float32, buffer=nl.psum)``\ ) and matmul output
-accumulations in the inner loop (e.g., ``res_psum += nisa.nc_matmul(stationary_tile, moving_tile)``\ ). Refer to the
+In current release of NKI, the ``nki.isa.nc_matmul`` does not have an explicit
+control field to indicate ``overwrite`` or ``accumulate`` for
+the PSUM. Instead, NeuronCompiler relies on the following NKI code pattern to trigger PSUM accumulation:
+
+.. code-block::
+
+   # condition 1: a psum buffer with zeros
+   psum_buf = nl.zeros(..., buffer=nl.psum)
+
+   # condition 2: an affine range loop
+   for i in nl.affine_range(N):
+      # condition 3: add matmul results from TensorEngine
+      psum_buf += nl.matmul(stationary_tile, moving_tile) # or nisa.nc_matmul
+
+
+Refer to the
 :ref:`Tiling Matrix Multiplications <tutorial_matmul_tiling>`
-tutorial for a detailed implementation. Note, since VectorE/ScalarE cannot control the accumulation in PSUM, using the ``res_psum
-+=`` syntax on any instructions other than ``nki.isa.nc_matmul`` or ``nki.language.matmul`` will result in an extra VectorE
-instruction to perform element-wise addition (:doc:`nki.isa.tensor_tensor <../api/generated/nki.isa.tensor_tensor>`).
+tutorial for a detailed implementation.
+
+.. note::
+
+   Due to current limitations in NKI, ``psum_buf[...] = psum_buf + nisa.nc_matmul(stationary_tile, moving_tile)``
+   will not reliably trigger the PSUM accumulation architecture feature. Therefore, even though this alternative
+   syntax is functionally equivalent to the use of ``+=``, it may get lowered to nisa.tensor_tensor on VectorEngine for
+   accumulation instead, leading to much lower performance.
+
+   Side note, due to :ref:`a known limitation <nki_known_issues>`, we also suggest programmers avoid ``+=`` unless the
+   above three conditions to trigegr PSUM accumulation
+   are met exactly in the kernel code. Fall back to ``var[...] = var + new_var`` syntax for more reliable compilation.
 
 Finally, with 8 PSUM banks per partition, TensorE can have up to eight outstanding matmul accumulation groups, which allows
 flexible scheduling of matmul instructions on TensorE. Also, the extra buffering from multiple PSUM banks allows us to pipeline

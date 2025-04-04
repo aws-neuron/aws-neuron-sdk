@@ -19,10 +19,10 @@ import neuronxcc.nki.language as nl
 
 
 @nki.jit(mode="simulation")
-def nki_nc_matmul(a_tensor, b_tensor, d_tensor, e_tensor):
-          # g_tensor, h_tensor, i_tensor):
+def nki_nc_matmul(a_tensor, b_tensor, d_tensor, e_tensor, g_tensor, h_tensor):
   c_tensor = nl.ndarray([128, 512], dtype=nl.float32, buffer=nl.shared_hbm)
   f_tensor = nl.ndarray([128, 512], dtype=nl.float32, buffer=nl.shared_hbm)
+  i_tensor = nl.ndarray([16, 128, 512], dtype=nl.float32, buffer=nl.shared_hbm)
 
   # NKI_EXAMPLE_0_BEGIN
   ##################################################################
@@ -30,56 +30,53 @@ def nki_nc_matmul(a_tensor, b_tensor, d_tensor, e_tensor):
   # multiply matrix a of shape (128, 128) and matrix b of shape (128, 512)
   # to get matrix c in PSUM of shape (128, 512)
   ##################################################################
-  i_p_a = nl.arange(128)[:, None]
-  i_f_a = nl.arange(128)[None, :]
-  i_p_b = nl.arange(128)[:, None]
-  i_f_b = nl.arange(512)[None, :]
-  a = nl.load(a_tensor[i_p_a, i_f_a])
-  b = nl.load(b_tensor[i_p_b, i_f_b])
+  a_mgrid = nl.mgrid[0:128, 0:128]
+  b_mgrid = nl.mgrid[0:128, 0:512]
+  c_mgrid = nl.mgrid[0:128, 0:512]
 
-  c_psum = nisa.nc_matmul(a[i_p_a, i_f_a], b[i_p_b, i_f_b])
+  a = nl.load(a_tensor[a_mgrid.p, a_mgrid.x])
+  b = nl.load(b_tensor[b_mgrid.p, b_mgrid.x])
 
-  nl.store(c_tensor[i_p_a, i_f_b], c_psum)
+  c_psum = nisa.nc_matmul(a[a_mgrid.p, a_mgrid.x], b[b_mgrid.p, b_mgrid.x])
+
+  nl.store(c_tensor[c_mgrid.p, c_mgrid.x], c_psum)
 
   ##################################################################
   # Example 2:
   # multiply matrix d of shape (256, 128) and matrix e of shape (256, 512)
   # to get matrix f in PSUM of shape (128, 512) using psum accumulation
   ##################################################################
+  d_mgrid = nl.mgrid[0:128, 0:128]
+  e_mgrid = nl.mgrid[0:128, 0:512]
+  f_mgrid = nl.mgrid[0:128, 0:512]
+
   f_psum = nl.zeros((128, 512), nl.float32, buffer=nl.psum)
 
-  i_p_d = nl.arange(128)[:, None]
-  i_f_d = nl.arange(128)[None, :]
-  i_p_e = nl.arange(128)[:, None]
-  i_f_e = nl.arange(512)[None, :]
-
   for i_contract in nl.affine_range(2):
-    d = nl.load(d_tensor[i_contract * 128 + i_p_d, i_f_d])
-    e = nl.load(e_tensor[i_contract * 128 + i_p_e, i_f_e])
-    f_psum += nisa.nc_matmul(d[i_p_d, i_f_d],
-                              e[i_p_e, i_f_e])
+    d = nl.load(d_tensor[i_contract * 128 + d_mgrid.p, d_mgrid.x])
+    e = nl.load(e_tensor[i_contract * 128 + e_mgrid.p, e_mgrid.x])
+    f_psum += nisa.nc_matmul(d[d_mgrid.p, d_mgrid.x], e[e_mgrid.p, e_mgrid.x])
     
-  nl.store(f_tensor[i_p_d, i_f_e], f_psum)
-  return c_tensor, f_tensor
+  nl.store(f_tensor[f_mgrid.p, f_mgrid.x], f_psum)
+
+  ##################################################################
+  # Example 3:
+  # perform batched matrix multiplication on matrix g of shape (16, 32, 128) 
+  # and matrix h of shape (16, 32, 512) to get matrix i of (16, 128, 512) 
+  # using Tensor Engine packing mode. 
+  ##################################################################
+  g_mgrid = nl.mgrid[0:32, 0:128]
+  h_mgrid = nl.mgrid[0:32, 0:512]
+  i_mgrid = nl.mgrid[0:128, 0:512]
+
+  for i in nl.affine_range(16):
+    g = nl.load(g_tensor[i, g_mgrid.p, g_mgrid.x])
+    h = nl.load(h_tensor[i, h_mgrid.p, h_mgrid.x])
+    i_psum = nisa.nc_matmul(g, h, tile_position=((i % 4) * 32, 0), tile_size=(32, 128))
+    nl.store(i_tensor[i, i_mgrid.p, i_mgrid.x], i_psum)
+
+  return c_tensor, f_tensor, i_tensor
   # NKI_EXAMPLE_0_END
-  # FIXME: packing example doesn't work yet:
-  # ##################################################################
-  # # Example 3:
-  # # multiply matrix g of shape (64, 256) and matrix h of shape (64, 512)
-  # # to get matrix i of (256, 512) using two independent psum tiles
-  # # and Tensor Engine packing mode
-  # ##################################################################
-  # i_p_g = nl.arange(64)[:, None]
-  # i_f_g = nl.arange(128)[None, :]
-  # i_p_h = nl.arange(64)[:, None]
-  # i_f_h = nl.arange(512)[None, :]
-
-  # # Since the matrix g tile has a (64, 128) padded shape,
-  # # we can enable packing mode in hardware
-  # # to run the two nc_matmul instructions simultaneously by setting the rowgrp appropriately
-  # i_psum_0 = nisa.nc_matmul(g[i_p_g, i_f_g], h[i_p_h, i_f_h], rowgrp=64)
-  # i_psum_1 = nisa.nc_matmul(g[i_p_g, 128 + i_f_g], h[i_p_h, i_f_h], rowgrp=64)
-
 
 @nki.jit(mode="simulation", platform_target='trn2')
 def nki_nc_matmul_double_row_gen3(a_input, b_input):
@@ -112,19 +109,19 @@ class TestNkiIsaExamplesNcMatmul(unittest.TestCase):
     d = np.random.random_sample([256, 128]).astype(np.float32)
     e = np.random.random_sample([256, 512]).astype(np.float32)
 
-    # g = np.random.random_sample([64, 256]).astype(np.float32)
-    # h = np.random.random_sample([64, 512]).astype(np.float32)
-    # i = np.ndarray(shape=[256, 512], dtype=np.float32)
+    g = np.random.random_sample([16, 32, 128]).astype(np.float32)
+    h = np.random.random_sample([16, 32, 512]).astype(np.float32)
+    i = np.ndarray(shape=[16, 128, 512], dtype=np.float32)
 
-    c, f = nki_nc_matmul(a, b, d, e)
+    c, f, i = nki_nc_matmul(a, b, d, e, g, h)
 
     c_golden = np.matmul(np.transpose(a), b)
     f_golden = np.matmul(np.transpose(d), e)
-    # i_golden = np.matmul(np.transpose(g), h)
+    i_golden = np.matmul(g.transpose(0, 2, 1), h)
 
     self.assertTrue(np.allclose(c, c_golden))
     self.assertTrue(np.allclose(f, f_golden))
-    # self.assertTrue(np.allclose(i, i_golden))
+    self.assertTrue(np.allclose(i, i_golden))
 
   def test_double_row_gen3(self):
     np.random.seed(0)

@@ -323,9 +323,7 @@ Profile Capture Environment Variables
 * ``NEURON_RT_INSPECT_ENABLE``: Set to 1 to enable system and device profiles. For control over which profile types are captured use ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` and ``NEURON_RT_INSPECT_DEVICE_PROFILE``.
 * ``NEURON_RT_INSPECT_OUTPUT_DIR``: The directory where captured profile data will be saved to. Defaults to ``./output``.
 * ``NEURON_RT_INSPECT_SYSTEM_PROFILE``: Set to 0 to disable the capture of system profiles. Defaults to 1 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_DEVICE_PROFILE``: Set to 0 to disable the capture of device profiles. Defaults to 1 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_DURATION_NSEC``: Duration in nanoseconds of the profile capture session. After this time, the profiler will detach from the running workload. A value of 0 will run the profiler for the entire duration of the application. Defaults to 0.
-* ``NEURON_RT_INSPECT_START_OFFSET_NSEC``: Time in nanoseconds to wait between launching the workload and starting profile capture. A value of 0 starts profiling immediately.
+* ``NEURON_RT_INSPECT_DEVICE_PROFILE``: Set to 0 to disable the capture of device profiles. Defaults to 0 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
 
 Example Capturing Profile of Application Using Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -337,10 +335,6 @@ Instead of using the PyTorch or JAX profilers you can profile your Python applic
     NEURON_RT_INSPECT_ENABLE=1 NEURON_RT_INSPECT_OUTPUT_DIR=./output python app.py
 
 See :ref:`Profile Capture Environment Variables <neuron-profiler-capture-environment-variables>` for other profiling options that can be set via environment variable.
-
-.. note::
-
-    There is a known issue with PyTorch not dumping trace files to disk when not using the context-managed profiling API and instead using the ``NEURON_RT_INSPECT_ENABLE`` environment variable to enable profiling. This can be mitigated by setting ``export NEURON_RT_INSPECT_DUMP_PERIOD_SEC=30``. This will trigger trace dump files to be written every 30 seconds. If your workload runs for less than 30 seconds, you may still not get trace dump files on disk.
 
 Example Capturing Profile of nccom-test Using Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -378,13 +372,7 @@ and provides a useful ``--help`` command to explain available options.
 
     [inspect command options]
         -o, --output-dir=              Output directory for the captured profile data, including system and device profiles (default: ./output)
-        -s, --start-offset-ns=         Time in nanoseconds to wait between launching the workload and starting profile capture. A value of 0 starts profiling immediately.
-                                        (default: 0)
-        -d, --duration-ns=             Duration in nanoseconds of the profile capture session. After this time, the profiler will detach from the running workload. A
-                                        value of 0 will run the profiler for the entire duration of the application. (default: 0)
         -n, --num-trace-events=        Maximum number of trace events to capture when profiling. Once hitting this limit, no new events are recorded
-        -p, --dump-period-sec=         Period in seconds to dump the trace data to disk. A value of 0 will disable periodic dumping. Useful for seeing partial profiling
-                                        results for long-running workloads. (default: 30)
             --capture-system-profiles  Disable capture of system profile data. Can reduce output size.
             --capture-device-profiles  Disable capture of device profile data. Can reduce output size.
 
@@ -668,6 +656,26 @@ For example:
 .. code-block:: shell
 
     neuron-profile view -d ./output --ignore-device-profile --output-format perfetto
+
+
+Troubleshooting
+---------------
+
+Incomplete JAX Profiles
+~~~~~~~~~~~~~~~~~~~~~~~
+
+If your JAX profile has fewer events than expected or lacks the Runtime API trace, check whether 
+``jax.profiler.stop_trace`` is being called inside a ``with jax.profiler.trace`` context block. 
+This can prematurely stop tracing. Use ``jax.profiler.stop_trace`` only when profiling was started 
+with ``jax.profiler.start_trace``, not when using the context-managed ``with jax.profiler.trace`` API.
+
+Also when using ``jax.profiler`` within your script ensure that the 
+environment variable ``NEURON_RT_INSPECT_ENABLE`` is not set to 1. 
+Additionally, ensure that ``NEURON_RT_INSPECT_OUTPUT_DIR`` is set to 
+the correct output directory and this is the output directory passed to 
+``with jax.profiler.trace``.
+
+
 
 
 .. |neuron-profiler2-annotate-system-ui| image:: /images/neuron-profiler2-annotate-system-ui.png

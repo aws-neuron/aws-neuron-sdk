@@ -8,6 +8,24 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.22.66.0]
+------------------------
+Date: 2/14/2025
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* ``neuron-det`` is no longer supported starting with this release.  We recommend customers transition to Neuron Profiler 2.0 (Beta) for debugging runtime hangs and issues in large-scale settings.
+  This tool offers the same runtime function level traces with improved ease of use and optimized performance. For more information about Neuron Profiler 2.0 (Beta), see :ref:`neuron-profiler-2-0-guide`.
+* Added several enhancements to the Neuron Profiler UI, including NeuronCore barrier annotations, a minimal default view to improve initial load performance, usability of updating markers, and better organization of view settings.
+* Added new event types in the system profile for Neuron Profiler 2.0 (Beta) related to out-of-bounds execution errors, execution request submission, and model switch overhead.
+* Updated system trace output format for Neuron Profiler 2.0 (Beta).  Users will need to upgrade the ``aws-neuronx-runtime-lib`` and ``aws-neuronx-tools`` packages to the same Neuron SDK version to process and view the profiles.
+
+Bug fixes
+^^^^^^^^^
+* Fixed an issue in the Neuron Profiler UI where dependencies were misaligned in the timeline when highlighted.
+* Fixed an issue where instruction dependency IDs were truncated in the Neuron Profiler JSON output.
+
+
 Neuron Tools  [2.20.204.0]
 ------------------------
 Date: 12/20/2024

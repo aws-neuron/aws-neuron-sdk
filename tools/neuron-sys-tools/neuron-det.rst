@@ -7,6 +7,10 @@ Neuron Distributed Event Tracing (NDET) User Guide
     :local:
     :depth: 2
 
+.. note::
+
+    Neuron DET is no longer supported as of Neuron 2.22.0 release. All customers using the NDET tool for debugging runtime hangs/issues in large-scale settings should transition to the Neuron Profiler 2.0. This tool offers the same runtime function level traces with improved ease of use and optimized performance. For more information on Neuron Profiler 2.0, please refer to the :ref:`neuron-profiler-2-0-guide`.
+
 Overview
 --------
 

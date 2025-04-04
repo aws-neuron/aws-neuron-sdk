@@ -26,6 +26,8 @@ NKI ISA
    tensor_scalar_reduce
    tensor_copy
    tensor_copy_dynamic_src
+   tensor_copy_dynamic_dst
+   tensor_copy_predicated
    reciprocal
    iota
    dropout
@@ -35,6 +37,20 @@ NKI ISA
    bn_aggr
    local_gather
    dma_copy
+   max8
+   nc_find_index8
+   nc_match_replace8
+   nc_stream_shuffle
+
+
+Accumulation Command
+--------------------
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-attr-only-template.rst
+   :nosignatures:
+
+   reduce_cmd
 
 
 Engine Types
@@ -54,6 +70,13 @@ Engine Types
 
 Target
 -------------
+
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-attr-only-template.rst
+   :nosignatures:
+
+   engine
 
 .. autosummary::
    :toctree: generated
