@@ -4,7 +4,7 @@
       {"repo_type":"rpm", "repo_url":"https://yum.repos.neuron.amazonaws.com/"},
       {"repo_type":"deb", "repo_url":"https://apt.repos.neuron.amazonaws.com/"}
     ],
-    "manifest_date": "03/28/2025",
+    "manifest_date": "04/03/2025",
     "manifest_version": "2.22.0",
     "latest_release": [
       {"instance":"inf1", "version":"2.22.0"},
