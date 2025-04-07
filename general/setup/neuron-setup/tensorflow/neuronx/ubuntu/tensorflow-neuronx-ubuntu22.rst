@@ -38,8 +38,8 @@ This section provide links that will assist you to quickly start with a fresh in
     :animate: fade-in
 
     .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 5
-        :end-line: 6
+        :start-line: 242
+        :end-line: 243
 
 
 .. include:: /general/quick-start/tab-inference-tensorflow-neuronx-u22.txt

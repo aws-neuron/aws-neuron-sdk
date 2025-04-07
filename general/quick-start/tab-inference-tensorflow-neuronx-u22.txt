@@ -6,8 +6,8 @@
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 47
-        :end-line: 48
+        :start-line: 248
+        :end-line: 249
 
 .. dropdown::  Install TensorFlow Neuron (``tensorflow-neuronx``)
     :class-title: sphinx-design-class-title-small

@@ -6,8 +6,8 @@
     :animate: fade-in
 
     .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 44
-        :end-line: 45
+        :start-line: 245
+        :end-line: 246
 
 .. dropdown::  Install PyTorch Neuron (torch-neuronx) 
     :class-title: sphinx-design-class-title-small
@@ -19,8 +19,8 @@
         .. tab-item :: PyTorch 2.5.1
 
             .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 179
-                :end-line: 180
+                :start-line: 236
+                :end-line: 237
 
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section
