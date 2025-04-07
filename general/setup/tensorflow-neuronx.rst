@@ -11,24 +11,6 @@ Tensorflow Neuron (``tensorflow-neuronx``) Setup
    :depth: 2
 
 
-``tensorflow-neuronx`` setup on Ubuntu 20
-------------------------------------------
-
-.. card:: Ubuntu 20 (Ubuntu20 AMI)
-        :link: setup-tensorflow-neuronx-u20
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Ubuntu 20 (DLAMI Base AMI)
-        :link: setup-tensorflow-neuronx-u20-base-dlami
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
-.. card:: Ubuntu 20 (DLAMI Tensorflow AMI)
-        :link: setup-tensorflow-neuronx-u20-dlami-tensorflow
-        :link-type: ref
-        :class-body: sphinx-design-class-title-small
-
 
 ``tensorflow-neuronx`` setup on Ubuntu 22
 ------------------------------------------

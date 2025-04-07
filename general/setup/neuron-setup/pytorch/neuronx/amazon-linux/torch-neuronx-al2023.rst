@@ -37,8 +37,8 @@ This section provide links that will assist you to quickly start with a fresh in
     :animate: fade-in
 
     .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 2
-        :end-line: 3
+        :start-line: 239
+        :end-line: 240
 
 
 .. include:: /general/quick-start/tab-inference-torch-neuronx-al2023.txt
