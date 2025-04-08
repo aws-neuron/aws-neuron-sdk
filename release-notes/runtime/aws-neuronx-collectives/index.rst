@@ -9,9 +9,9 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
-Neuron Collectives [2.24.xx.0]
+Neuron Collectives [2.24.59.0]
 ------------------------------
-Date: xx/xx/2025
+Date: 04/03/2025
 
 Improvements
 ^^^^^^^^^^^^

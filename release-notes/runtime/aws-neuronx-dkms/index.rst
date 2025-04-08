@@ -15,9 +15,9 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
-Neuron Driver release [2.20.xx.0]
+Neuron Driver release [2.20.28.0]
 --------------------------------
-Date: xx/xx/2025
+Date: 04/03/2025
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
