@@ -7,6 +7,40 @@ Neuron Kernel Interface (NKI) release notes
 
 ..    :depth: 2
 
+Neuron Kernel Interface (NKI) (Beta) [2.22]
+------------------------------------------------
+Date: 04/03/2025
+
+* New modules and APIs:
+
+  * :doc:`nki.profile <api/generated/nki.profile>`
+  * :doc:`nki.isa <api/nki.isa>` new APIs:
+    
+    * ``tensor_copy_dynamic_dst``
+    * ``tensor_copy_predicated``
+    * ``max8``, ``nc_find_index8``, ``nc_match_replace8``
+    * ``nc_stream_shuffle``
+  
+  * :doc:`nki.language <api/nki.language>` new APIs: ``mod``, ``fmod``, ``reciprocal``, ``broadcast_to``, ``empty_like``
+
+* Improvements:
+
+  * :doc:`nki.isa.nc_matmul <api/generated/nki.isa.nc_matmul>` now supports PE tiling feature 
+  * :doc:`nki.isa.activation <api/generated/nki.isa.activation>` updated to support reduce operation and :doc:`reduce commands <api/generated/nki.isa.reduce_cmd>`
+  * :doc:`nki.isa.engine <api/generated/nki.isa.engine>` enum
+  * ``engine`` parameter added to more ``nki.isa`` APIs that support engine selection (ie, ``tensor_scalar``, ``tensor_tensor``, ``memset``)
+  * Documentation for ``nki.kernels`` have been moved to the Github: https://aws-neuron.github.io/nki-samples. 
+    The source code can be viewed at https://github.com/aws-neuron/nki-samples.
+    
+    * These kernels are still shipped as part of Neuron package in ``neuronxcc.nki.kernels`` module
+
+* Documentation updates:
+
+  * Kernels public repository https://aws-neuron.github.io/nki-samples
+  * Updated :ref:`profiling guide <profile-using-nki-profile>` to use ``nki.profile`` instead of ``nki.benchmark``
+  * NKI ISA Activation functions table now have :ref:`valid input data ranges<tbl-act-func>` listed
+  * NKI ISA Supported Math operators now have :ref:`supported engine<tbl-aluop>` listed
+  * Clarify ``+=`` syntax support/limitation
 
 Neuron Kernel Interface (NKI) (Beta) [2.21]
 ------------------------------------------------

@@ -20,4 +20,4 @@ NKI kernels likely won't result in extra performance benefit.
 See the `README <https://github.com/aws-neuron/nki-samples>`_ page 
 of the GitHub Repository `nki-samples <https://github.com/aws-neuron/nki-samples>`_ for more details.
 
-The documentation of the kernels is available at the `nki-samples <https://github.com/aws-neuron/nki-samples>`_ repository.
+The documentation of the kernels is available at https://aws-neuron.github.io/nki-samples.
