@@ -90,6 +90,8 @@ This will save your NTFF profile to ``profile_exec_2.ntff``.
 In :ref:`View Neuron Profile UI <nki-view-neuron-profile-ui>`, we will view the profile in a user-friendly format using the
 Neuron Profile UI.
 
+.. _profile-using-nki-profile:
+
 Profile using ``nki.profile``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
