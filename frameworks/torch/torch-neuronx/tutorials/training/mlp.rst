@@ -130,6 +130,12 @@ Expected CPU output:
     Final loss is 0.1040
     ----------End Training ---------------
 
+Run the command below to execute this script:
+
+.. literalinclude:: tutorial_source_code/multi_layer_perceptron_training/multi_layer_perceptron_training_code.sh
+   :language: bash
+   :lines: 7
+
 For a full tutorial on training in PyTorch, please see
 https://pytorch.org/tutorials/beginner/introyt/trainingyt.html.
 
@@ -172,6 +178,12 @@ The resulting script ``train.py`` can be executed as
 from ``model.py``. When you examine the script, the comments that begin with
 'XLA' indicate the changes required to make the script compatible with
 torch_xla.
+
+Run the command below to execute this script:
+
+.. literalinclude:: tutorial_source_code/multi_layer_perceptron_training/multi_layer_perceptron_training_code.sh
+   :language: bash
+   :lines: 10
 
 Expected output on trn1.32xlarge (start from a fresh compilation cache, located at /var/tmp/neuron-compile-cache by default):
 
@@ -266,9 +278,11 @@ installation to run multiple processes, each using one Logical NeuronCore. Use
 the option ``nproc_per_node`` to indicate the number of processes to launch.
 For example, to run on two Logical NeuronCores on one Trn1/Trn2 instance only, do:
 
-.. code:: bash
+Run the command below to execute this script:
 
-   torchrun --nproc_per_node=2 train_torchrun.py
+.. literalinclude:: tutorial_source_code/multi_layer_perceptron_training/multi_layer_perceptron_training_code.sh
+   :language: bash
+   :lines: 13
 
 .. note::
 
@@ -321,10 +335,11 @@ Single-worker MLP evaluation on Trainium
 
 After training, the final checkpoint is saved in ``checkpoints`` directory. You can run the evaluation step by running the ``eval.py`` script in the same directory as the training script:
 
-.. code:: bash
+Run the command below to execute this script:
 
-   cd ~/aws-neuron-samples/torch-neuronx/training/mnist_mlp
-   python eval.py
+.. literalinclude:: tutorial_source_code/multi_layer_perceptron_training/multi_layer_perceptron_training_code.sh
+   :language: bash
+   :lines: 16-17
 
 This evaluation phase can be merged with the training script to check accuracy, for example at the end of every epoch. It is kept separate for illustration purpose.
 
@@ -367,9 +382,11 @@ However, note that the inference trace API fixed the input tensor shape, so that
 
 The script ``eval_using_trace.py`` can be compared against ``eval.py`` to show the above modifications. It can be executed using:
 
-.. code:: bash
+Run the command below to execute this script:
 
-   python eval_using_trace.py
+.. literalinclude:: tutorial_source_code/multi_layer_perceptron_training/multi_layer_perceptron_training_code.sh
+   :language: bash
+   :lines: 18
 
 Expected results (note the large increase in performance when using trace API for inference):
 

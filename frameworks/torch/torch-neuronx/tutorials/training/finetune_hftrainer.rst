@@ -38,13 +38,9 @@ For all the commands below, make sure you are in the virtual environment that yo
 
 First we install a recent version of HF transformers, scikit-learn and evaluate packages in our environment as well as download the source matching the installed version. In this example, we use the text classification example from HF transformers source:
 
-.. code:: bash
-
-    export HF_VER=4.44.0
-    pip install -U transformers==$HF_VER datasets evaluate scikit-learn
-    cd ~/
-    git clone https://github.com/huggingface/transformers --branch v$HF_VER
-    cd ~/transformers/examples/pytorch/text-classification
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_setup_code.sh
+   :language: shell
+   :lines: 5-9
 
 Single-worker training
 ----------------------
@@ -64,36 +60,17 @@ We also launch the ``run_glue.py`` script with ``torchrun`` using ``--nproc_per_
 
 First, paste the following script into your terminal to create a “run.sh” file and change it to executable:
 
-.. code:: bash
-
-    tee run.sh > /dev/null <<EOF
-    #!/usr/bin/env bash
-    export TASK_NAME=mrpc
-    export NEURON_CC_FLAGS="--model-type=transformer"
-    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=1 ./run_glue.py \\
-    --model_name_or_path bert-large-uncased \\
-    --task_name \$TASK_NAME \\
-    --do_train \\
-    --do_eval \\
-    --bf16 \\
-    --max_seq_length 128 \\
-    --per_device_train_batch_size 8 \\
-    --learning_rate 2e-5 \\
-    --num_train_epochs 5 \\
-    --save_total_limit 1 \\
-    --overwrite_output_dir \\
-    --output_dir /tmp/\$TASK_NAME/ |& tee log_run
-    EOF
-
-    chmod +x run.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
+   :language: shell
+   :lines: 7-27
 
 We optionally precompile the model and training script using neuron_parallel_compile to warm up the persistent
 graph cache (Neuron Cache) such that the actual run has fewer compilations (faster run
 time):
 
-.. code:: bash
-
-    neuron_parallel_compile ./run.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
+   :language: shell
+   :lines: 30
 
 Please ignore the results from this precompile run as it is only for
 extracting and compiling the XLA graphs.
@@ -107,9 +84,9 @@ Precompilation is optional and only needed to be done once unless hyperparameter
 After the optional precompilation, the actual run will be faster with minimal
 additional compilations.
 
-.. code:: bash
-
-    ./run.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
+   :language: shell
+   :lines: 32
 
 If precompilation was not done, the first execution of ./run.sh will be slower due to serial compilations. Rerunning the same script a second time would show quicker execution as the compiled graphs will be already cached in persistent cache.
 
@@ -129,44 +106,25 @@ multiple Logical NeuronCores in data-parallel configuration, launch the ``run_gl
 The following example runs 2 workers.
 Paste the following script into your terminal to create a “run_2w.sh” file and change it to executable:
 
-.. code:: bash
-
-    tee run_2w.sh > /dev/null <<EOF
-    #!/usr/bin/env bash
-    export TASK_NAME=mrpc
-    export NEURON_CC_FLAGS="--model-type=transformer"
-    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=2 ./run_glue.py \\
-    --model_name_or_path bert-large-uncased \\
-    --task_name \$TASK_NAME \\
-    --do_train \\
-    --do_eval \\
-    --bf16 \\
-    --max_seq_length 128 \\
-    --per_device_train_batch_size 8 \\
-    --learning_rate 2e-5 \\
-    --num_train_epochs 5 \\
-    --save_total_limit 1 \\
-    --overwrite_output_dir \\
-    --output_dir /tmp/\$TASK_NAME/ |& tee log_run_2w
-    EOF
-
-    chmod +x run_2w.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
+   :language: shell
+   :lines: 7-27
 
 Again, we optionally precompile the model and training script using neuron_parallel_compile to warm up the persistent
 graph cache (Neuron Cache), ignoring the results from this precompile run as it is only for
 extracting and compiling the XLA graphs:
 
-.. code:: bash
-
-    neuron_parallel_compile ./run_2w.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
+   :language: shell
+   :lines: 30
 
 Precompilation is optional and only needed to be done once unless hyperparameters such as batch size are modified.
 After the optional precompilation, the actual run will be faster with minimal
 additional compilations.
 
-.. code:: bash
-
-    ./run_2w.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
+   :language: shell
+   :lines: 32
 
 During run, you will now notice that the "Total train batch size" is now 16 and the "Total optimization steps" is now half the number for one worker training.
 
@@ -174,79 +132,36 @@ Converting BERT pretrained checkpoint to Hugging Face pretrained model format
 -----------------------------------------------------------------------------
 If you have a pretrained checkpoint (i.e., from the BERT phase 2 pretraining tutorial), you can run the script below (saved as "convert.py") to convert BERT pretrained saved checkpoint to Hugging Face pretrained model format. An example phase 2 pretrained checkpoint can be downloaded from ``s3://neuron-s3/training_checkpoints/pytorch/dp_bert_large_hf_pretrain/ckpt_29688.pt``. Note that here we also use the ``bert-large-uncased`` model configuration to match the BERT-Large model trained following BERT phase 2 pretraining tutorial.
 
-.. code:: python
-
-    import os
-    import sys
-    import argparse
-    import torch
-    import transformers
-    from transformers import (
-        BertForPreTraining,
-    )
-    import torch_xla.core.xla_model as xm
-    from transformers.utils import check_min_version
-    from transformers.utils.versions import require_version
-
-    if __name__ == '__main__':
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--model_name', type=str, default='bert-large-uncased',  help="Path to model identifier from huggingface.co/models")
-        parser.add_argument('--output_saved_model_path', type=str, default='./hf_saved_model', help="Directory to save the HF pretrained model format.")
-        parser.add_argument('--checkpoint_path', type=str, required=True, help="Path to pretrained checkpoint which needs to be converted to a HF pretrained model format")
-        args = parser.parse_args(sys.argv[1:])
-
-        model = BertForPreTraining.from_pretrained(args.model_name)
-        check_point = torch.load(args.checkpoint_path, map_location='cpu')
-        model.load_state_dict(check_point['model'], strict=False)
-        model.save_pretrained(args.output_saved_model_path, save_config=True, save_function=xm.save)
-        print("Done converting checkpoint {} to HuggingFace saved model in directory {}.".format(args.checkpoint_path, args.output_saved_model_path))
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
+   :language: python
+   :lines: 8-33
 
 Run the conversion script as:
 
-.. code:: bash
-
-    python convert.py --checkpoint_path ckpt_29688.pt
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
+   :language: shell
+   :lines: 35
 
 After conversion, the new Hugging Face pretrained model is stored in the output directory specified by the ``--output_saved_model_path`` option which is ``hf_saved_model`` by default. You will use this directory in the next step.
 
 Paste the following script into your terminal to create a “run_converted.sh” file and change it to executable:
 (note that it uses the converted Hugging Face pretrained model in ``hf_saved_model`` directory):
 
-.. code:: bash
-
-    tee run_converted.sh > /dev/null <<EOF
-    #!/usr/bin/env bash
-    export TASK_NAME=mrpc
-    export NEURON_CC_FLAGS="--model-type=transformer"
-    NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=2 ./run_glue.py \\
-    --model_name_or_path hf_saved_model \\
-    --tokenizer_name bert-large-uncased \\
-    --task_name \$TASK_NAME \\
-    --do_train \\
-    --do_eval \\
-    --bf16 \\
-    --max_seq_length 128 \\
-    --per_device_train_batch_size 8 \\
-    --learning_rate 2e-5 \\
-    --num_train_epochs 5 \\
-    --save_total_limit 1 \\
-    --overwrite_output_dir \\
-    --output_dir /tmp/\$TASK_NAME/ |& tee log_run_converted
-    EOF
-
-    chmod +x run_converted.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
+   :language: shell
+   :lines: 38-59
 
 If it is the first time running with ``bert-large-uncased`` model or if hyperparameters have changed, then the optional one-time precompilation step can save compilation time:
 
-.. code:: bash
-
-    neuron_parallel_compile ./run_converted.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
+   :language: shell
+   :lines: 62
 
 If you have run the single worker training in a previous section, then you can skip the precompilation step and just do:
 
-.. code:: bash
-
-    ./run_converted.sh
+.. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
+   :language: shell
+   :lines: 65
 
 .. _workarounds_for_older_versions:
 

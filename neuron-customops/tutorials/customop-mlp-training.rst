@@ -57,10 +57,9 @@ For all the commands below, make sure you are in the virtual environment that yo
 
 Install dependencies for PyTorch Custom Extensions in your environment by running:
 
-.. code:: bash
-
-    pip install regex
-    pip install ninja
+.. literalinclude:: tutorial_source_code/custom_c_mlp_training/custom_c_mlp_training_code.sh
+   :language: bash
+   :lines: 5-6
 
 The ``ninja`` package is only needed for the reference CPU example. It is not needed by Neuron to run on Trainium instances.
     
