@@ -61,10 +61,9 @@ Activate the virtual environment created in :ref:`neuronx-customop-mlp-tutorial`
 
 As a reminder, ``ninja`` should be already installed in the virtual environment. If not, install it for PyTorch Custom Extensions in your environment by running:
 
-.. code:: bash
-
-    pip install regex
-    pip install ninja
+.. literalinclude:: tutorial_source_code/custom_c_perf_optimization/custom_c_perf_optimization_code.sh
+   :language: bash
+   :lines: 5-6
 
 Model Configuration Adjustment
 ------------------------------

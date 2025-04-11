@@ -182,11 +182,9 @@ with mixed precision (bfloat16 and float32)
 
 -  single node training:
 
-::
-
-   # compile graphs
-   neuron_parallel_compile bash run_clm.sh MIXED wikitext-103-raw-v1
-   bash run_clm.sh MIXED wikitext-103-raw-v1
+.. literalinclude:: tutorial_source_code/zero1_training/zero1_single_node_training_code.sh
+   :language: shell
+   :lines: 8-10
 
 -  multi-node training, run:
 
