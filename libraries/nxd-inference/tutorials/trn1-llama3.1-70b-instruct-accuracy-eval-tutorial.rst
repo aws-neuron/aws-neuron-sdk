@@ -80,10 +80,10 @@ Installing dependencies
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Copy the
-`inference-benchmarkin <https://github.com/aws-neuron/aws-neuron-samples-staging/tree/aws-neuron-eval/inference-benchmarking/>`__
+`inference-benchmarking <https://github.com/aws-neuron/aws-neuron-samples/tree/master/inference-benchmarking/>`__
 directory to some location on your instance. Change directory to the
 your copy of
-`inference-benchmarkin <https://github.com/aws-neuron/aws-neuron-samples-staging/tree/aws-neuron-eval/inference/benchmarking/aws-neuron-eval>`__. Install other required dependencies in the same python env (e.g
+`inference-benchmarking <https://github.com/aws-neuron/aws-neuron-samples/tree/master/inference-benchmarking/>`__. Install other required dependencies in the same python env (e.g
 aws_neuron_venv_pytorch if you followed `manual install NxD
 Inference <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/nxdi-setup.html#id3>`__
 ) by:
@@ -105,7 +105,7 @@ Running Evaluations
 -------------------
 
 There are two methods that you can use `the evaluation
-scirpts <https://github.com/aws-neuron/aws-neuron-samples-staging/tree/aws-neuron-eval/inference/benchmarking/aws-neuron-eval>`__
+scirpts <https://github.com/aws-neuron/aws-neuron-samples/tree/master/inference-benchmarking/>`__
 to run your evaluation.
 
 1. Using a yaml configuration file and ``accuracy.py`` script
