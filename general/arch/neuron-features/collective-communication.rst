@@ -29,7 +29,8 @@ Neuron also provides the following peer to peer operators:
 
 Support for additional Collective Communication operators might be added
 in future releases. Neuron devices are connected via NeuronLinks within
-a single instance and EFA links between instances. All NeuronLinks
+a single instance and EFA links between instances (for Trn2, an UltraCluser 
+would be considered a single instance). All NeuronLinks
 transfer the data directly between Neuron device and between Neuron
 devices and EFA devices bypassing the host to achieve high bandwidth and
 low latency.
