@@ -206,7 +206,7 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
         --tensor-parallel-size 64 \
         --device neuron \
         --use-v2-block-manager \
-        --override-neuron-config "{\"on_device_sampling_config\": {\"do_sample\": true}}" \
+        --override-neuron-config "{\"on_device_sampling_config\": {\"do_sample\": true}, \"skip_warmup\": true}" \
         --port 8000 &
     PID=$!
     echo "vLLM server started with PID $PID"
