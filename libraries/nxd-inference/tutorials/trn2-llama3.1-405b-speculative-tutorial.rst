@@ -463,7 +463,7 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
         -—speculative-model $DRAFT_MODEL_PATH \
         -—num-speculative-tokens 7 \
         -—use-v2-block-manager \
-        -—override-neuron-config "{\"enable_fused_speculation\":true, \"quantized-mlp-kernel-enabled\":true, \"quantization-type\":\"per_channel_symmetric\"}" \
+        -—override-neuron-config "{\"enable_fused_speculation\":true, \"quantized-mlp-kernel-enabled\":true, \"quantization-type\":\"per_channel_symmetric\", \"skip_warmup\": true}" \
         -—port 8000 & PID=$!
     echo "vLLM server started with PID $PID"
 

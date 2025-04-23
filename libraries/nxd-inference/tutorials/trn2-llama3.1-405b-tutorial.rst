@@ -224,7 +224,8 @@ for this tutorial.
            dtype=torch.bfloat16,
            # Configure NeuronConfig.
            override_neuron_config={
-               "max_context_length": 1024
+               "max_context_length": 1024,
+               "skip_warmup": True,
            },
            device="neuron"
        )

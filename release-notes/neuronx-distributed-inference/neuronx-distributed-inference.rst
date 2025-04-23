@@ -110,6 +110,17 @@ Other Changes
   EOS tokens.
 * Other minor fixes and improvements.
 
+Known Issues and Limitations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* For some configurations that use continuous batching or vLLM, model warmup can cause ``Numerical Error`` during inference. 
+  If you encounter this error, set ``skip_warmup=True`` in NeuronConfig to disable warmup and avoid this issue. 
+  To disable warmup in vLLM, pass ``"skip_warmup": true`` in ``override_neuron_config``. For more information about how to configure vLLM, see vLLM 
+  `Model Configuration <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/vllm-user-guide.html#model-configuration>`_.
+ 
+  ::
+
+      RuntimeError: Failed to execute the model status=1003 message=Numerical Error
 
 Neuronx Distributed Inference [0.1.1] (Beta) (Neuron 2.21.1 Release)
 ------------------------------------------------------------------
