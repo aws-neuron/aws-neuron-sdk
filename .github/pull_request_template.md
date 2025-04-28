@@ -6,8 +6,9 @@
 Please specify the release version, instance size and type, OS type and test output.
 
 Training tutorial:
-Convergence graph for training tutorials
-Performance metrics average_throughput, latency_p50, latency_p99 and MFU% if available
+Please attach convergence graph for training tutorials.
+
+Please attache performance metrics average_throughput, latency_p50, latency_p99 and MFU% if available
 
 
 Please make sure this PR contains correct classification terms (Alpha, Beta, and Stable).
@@ -19,7 +20,7 @@ If possible, provide your results or a link to them for the reviewer to check yo
 
 
 *Link to RTD for my changes:* 
-https://awsdocs-neuron-staging.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
+https://awsdocs-neuron.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
 
 
 *Additional context:*
@@ -33,7 +34,7 @@ https://awsdocs-neuron-staging.readthedocs-hosted.com/en/YOUR_BRANCH_NAME/
 - [ ] (If applicable) I've automated a test to safegaurd my changes from regression.
 - [ ] (If applicable) I've posted test collateral to prove my change was effective and not harmful.
 - [ ] (If applicable) I've added someone from QA to the list of reviewers.  Do this if you didn't make an automated test or feel it's appropriate for another reason.
-- [ ] (If applicable) I've reviewed the licenses of updated and new binaries and their dependencies to make sure all licenses are on the pre-approved Amazon license list.  See https://inside.amazon.com/en/services/legal/us/OpenSource/Pages/BlessedOpenSourceLicenses.aspx.
+
 
 
 ## Pytest Marker Checklist
