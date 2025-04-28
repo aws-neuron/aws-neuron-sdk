@@ -23,7 +23,7 @@ configure NeuronX Runtime behavior.
      - RT Version
    * - ``NEURON_RT_VISIBLE_CORES``
      - Range of specific NeuronCores needed by the process
-     - Integer range (like 1-3)
+     - Integer range (like 1-3), a comma-separated list (like 3,1,2), or both (like 2-3,1)
      - Any value or range between 0 to Max NeuronCore in the system.
      - None
      - 2.0+
