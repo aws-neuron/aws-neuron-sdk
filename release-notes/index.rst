@@ -106,7 +106,7 @@ More release content can be found in the table below and each component release 
      - Inf1, Inf2, Trn1/Trn1n
 
 
-For detailed release artificats, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
+For detailed release artifacts, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
 
 
 Previous Releases
