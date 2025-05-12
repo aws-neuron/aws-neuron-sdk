@@ -15,6 +15,16 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+
+Neuron Driver release [2.20.74.0]
+--------------------------------
+Date: 05/12/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Fixes DMA abort errors on Trainium2 that could occur in Neuron Runtime during specific workloads.
+
+
 Neuron Driver release [2.20.28.0]
 --------------------------------
 Date: 04/03/2025
