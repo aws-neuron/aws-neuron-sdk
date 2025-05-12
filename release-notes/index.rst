@@ -9,6 +9,20 @@ What's New
 
 .. _latest-neuron-release:
 
+.. _neuron-2.22.1-whatsnew:
+
+Neuron 2.22.1 (05/12/2025)
+---------------------------
+
+.. contents:: Table of contents
+   :local:
+   :depth: 1
+
+What's New
+^^^^^^^^^^
+
+Neuron 2.21.1 release includes a Neuron Driver update that resolves DMA abort errors on Trainium2 devices. These errors were previously occurring in the Neuron Runtime during specific workload executions.
+
 .. _neuron-2.22.0-whatsnew:
 
 Neuron 2.22.0 (04/03/2025)
@@ -69,7 +83,7 @@ More release content can be found in the table below and each component release 
    * - Neuron Compiler (neuronx-cc)
      - * :ref:`neuronx-cc-rn`
      - Trn1/Trn1n,Inf2,Trn2
-  
+
    * - Neuron Kernel Interface (NKI)
      - * :ref:`nki_rn`
      - Trn1/Trn1n,Inf2
@@ -104,7 +118,6 @@ More release content can be found in the table below and each component release 
        * :ref:`announce-no-support-torch-neuron`
        * See more at :ref:`announcements-main`
      - Inf1, Inf2, Trn1/Trn1n
-
 
 For detailed release artificats, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
 
