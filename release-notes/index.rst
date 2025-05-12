@@ -21,7 +21,7 @@ Neuron 2.22.1 (05/12/2025)
 What's New
 ^^^^^^^^^^
 
-Neuron 2.21.1 release includes a Neuron Driver update that resolves DMA abort errors on Trainium2 devices. These errors were previously occurring in the Neuron Runtime during specific workload executions.
+Neuron 2.22.1 release includes a Neuron Driver update that resolves DMA abort errors on Trainium2 devices. These errors were previously occurring in the Neuron Runtime during specific workload executions.
 
 .. _neuron-2.22.0-whatsnew:
 
