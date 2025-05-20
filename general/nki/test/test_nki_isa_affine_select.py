@@ -34,7 +34,7 @@ def nki_affine_select(a_tensor):
 
 class TestNkiIsaExamplesAffineSelect(unittest.TestCase):
   def test_affine_select(self):
-    a = np.random.random_sample([128, 128]).astype(np.float32)
+    a = np.random.random_sample([128, 128]).astype(np.float32) * 100
     b_golden = np.copy(a)
 
     b = nki_affine_select(a)

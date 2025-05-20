@@ -13,3 +13,4 @@ NKI Developer Guides
       neuron_profile_for_nki
       nki_perf_guide
       nki_direct_allocation_guide
+      nki_block_dimension_migration_guide

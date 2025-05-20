@@ -15,6 +15,14 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.21.37.0]
+--------------------------------
+Date: 05/19/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added the ability for users to read power utilization for each neuron device via a sysfs interface. This interface shows the minimum, maximum and average power consumed by the device over the past minute, expressed as a percentage of the device's maximum power. (:ref:`reference <neuron-sysfs-ug>`)
+* Added the ability for users to read the device utilization. This shows up as the microseconds between the start and end of the current execution on hardware. (:ref:`reference <neuron-sysfs-ug>`)
 
 Neuron Driver release [2.20.74.0]
 --------------------------------

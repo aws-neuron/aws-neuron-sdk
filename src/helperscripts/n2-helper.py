@@ -713,12 +713,15 @@ class manifest:
         else:  # fresh install
             if args.framework == 'pytorch':
                 str += framework_name
-                if args.framework_version == "1.13.1":   # Work around to pin the version in case of 1.13
+                if args.framework_version == "1.13.1":   
                     str += '=='
                     str += "1.13.*"
                 elif args.framework_version == "2.1.2":
                     str += '=='
                     str += "2.1.*"
+                elif args.framework_version == "2.5.1":
+                    str += '=='
+                    str += "2.5.*"
                 str += ' torchvision\n'
             else:
                 str += framework_name

@@ -44,9 +44,9 @@ def nki_activation(a_tensor, b_tensor, c_tensor):
 class TestNkiIsaExamplesActivation(unittest.TestCase):
   def test_activation(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 1024]).astype(np.float32)
-    b = np.random.random_sample([128, 512]).astype(np.float32)
-    c = np.random.random_sample([128, 1]).astype(np.float32)
+    a = np.random.random_sample([128, 1024]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    c = np.random.random_sample([128, 1]).astype(np.float32) * 100
 
     a_act, b_act = nki_activation(a, b, c)
 

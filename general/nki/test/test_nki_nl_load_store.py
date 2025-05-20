@@ -62,13 +62,13 @@ def example_load_store_b(in_tensor):
 
 class TestNkiExampleNlLoad(unittest.TestCase):
   def test_nl_load(self):
-    src = np.random.random_sample([128, 512]).astype(np.float32)
+    src = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
     dst = example_kernel(src)
     self.assertTrue(np.allclose(src, dst))
 
   def test_load_store_3d(self):
-    in_tensor = np.random.random_sample([4, 128, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([4, 128, 512]).astype(np.float32) * 100
 
     out_tensor = example_load_store_b(in_tensor)
     self.assertTrue(np.allclose(out_tensor, in_tensor))

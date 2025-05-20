@@ -10,7 +10,7 @@ speculative decoding and the other with draft model based speculative decoding e
 (with Llama-3.2 1B as the draft model).
 We will also measure performance by running a load test using LLMPerf
 and compare key metrics between the two configurations.
-We will use a batch size of 1 throughout the tutorial.
+While this tutorial uses batch size 1 for demonstration purposes, the model configuration provides support for batch sizes up to 4.
 
 .. contents:: Table of contents
    :local:
@@ -101,6 +101,9 @@ for this tutorial.
 Since we will be using Speculative Decoding in the second configuration, 
 you will also need a draft model checkpoint. You can download and use `meta-llama/Llama-3.2-1B-Instruct <https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct>`__.
 
+.. note::
+
+    NxD Inference supports batch sizes up to 4 for this model configuration. To determine the optimal batch size for your specific use case, we recommend incrementally testing batch sizes from 1 to 4 while monitoring your application's performance metrics.
 
 Scenario 1: Run Llama3.3 70B on Trn2
 -------------------------------------
@@ -182,7 +185,7 @@ Please refer to :ref:`nxd-inference-api-guide` for more information on these ``i
             --prompt "What is annapurna labs?" 2>&1 | tee log
 
 
-
+    
 Step 2: Run the model using vLLM 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 After compiling the model, you can run the model using vLLM. Save the contents of the below script to another

@@ -25,7 +25,7 @@ Neuron Quick Links
         .. grid-item-card:: ML libraries
 
                 * :ref:`nxdt`
-                * :ref:`NxD Inference (beta)<nxdi-index>`
+                * :ref:`NxD Inference <nxdi-index>`
                 * :ref:`neuronx-distributed-index`
                 * :ref:`transformers_neuronx_readme`
                 * :ref:`nemo-megatron-index`

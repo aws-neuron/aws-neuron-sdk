@@ -40,7 +40,7 @@ def nki_tensor_copy(in_tensor):
 class TestNkiIsaExamplesTensorCopy(unittest.TestCase):
   def test_tensor_copy(self):
     np.random.seed(0)
-    src = np.random.random_sample([8, 8]).astype(np.float32)
+    src = np.random.random_sample([8, 8]).astype(np.float32) * 100
     dst_golden = np.copy(src)
 
     dst = nki_tensor_copy(src)

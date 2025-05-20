@@ -10,9 +10,26 @@ NxD Training Release Notes (``neuronx-distributed-training``)
 
 This document lists the release notes for Neuronx Distributed Training library.
 
+.. _neuronx-distributed-training-rn-1-3-0:
+
+NeuronX Distributed Training [1.3.0]
+------------------------------------
+
+Date: 05/16/2025
+
+Features in this release
+
+* (Beta release) Added autocast for HF based Llama3 8B and Llama3 70B models
+* (Beta release) Added support for context parallel sequence lengths up to 32k on TRN1
+* Added support for ORPO
+* Added support for nemo-toolkit 2.1
+* Added support for Transformers 4.48.0
+* Added support for PyTorch-Lightning 2.5.0
+* Added support for PyTorch 2.6
+
 .. _neuronx-distributed-training-rn-1-2-0:
 
-Neuronx Distributed Training [1.2.0]
+NeuronX Distributed Training [1.2.0]
 ------------------------------------
 
 Date: 04/03/2025
@@ -27,7 +44,7 @@ Features in this release
 
 .. _neuronx-distributed-training-rn-1-1-0:
 
-Neuronx Distributed Training [1.1.1]
+NeuronX Distributed Training [1.1.1]
 ------------------------------------
 
 Date: 1/14/2025
@@ -37,7 +54,7 @@ Features in this release
 * Added a flag in Llama3/3.1 70B config to control the dtype of reduce-scatter operations in Column/Row Parallel linear layers.
 
 
-Neuronx Distributed Training [1.1.0]
+NeuronX Distributed Training [1.1.0]
 ------------------------------------
 
 Date: 12/20/2024
@@ -62,7 +79,7 @@ In such a case, try removing `--llm-training` flag from `compiler_flags` in the 
 
 .. _neuronx-distributed-training-rn-1-0-1:
 
-Neuronx Distributed Training [1.0.1]
+NeuronX Distributed Training [1.0.1]
 ------------------------------------
 
 Date: 11/20/2024
@@ -73,7 +90,7 @@ Features in this release
 
 .. _neuronx-distributed-training-rn-1-0-0:
 
-Neuronx Distributed Training [1.0.0]
+NeuronX Distributed Training [1.0.0]
 ------------------------------------
 
 Date: 09/16/2024

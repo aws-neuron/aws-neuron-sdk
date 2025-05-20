@@ -1,9 +1,9 @@
 .. _hf_llama3_8B_SFT_LORA:
 
-HuggingFace Llama3-8B Efficient Supervised Fine-tuning with LoRA (Beta)
-=======================================================================
+HuggingFace  Llama3.1/Llama3-8B Efficient Supervised Fine-tuning with LoRA (Beta)
+=================================================================================
 
-In this example, we will compile and finetune pre-trained HF Llama3-8B model
+In this example, we will compile and finetune pre-trained HF  Llama3.1/Llama3-8B model
 with LoRA adaptors on a single instance with the ``NxD Training (NxDT)`` library.
 LoRA or Low Rank Adaptation allows for parameter-efficient fine-tuning (PEFT) by adding small trainable rank
 decomposition matrices to specified layer of the model, significantly

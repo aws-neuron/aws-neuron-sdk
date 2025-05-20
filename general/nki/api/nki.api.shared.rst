@@ -79,11 +79,11 @@ into float32 before performing the operators.
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
   |                        | Logical Shift Right        | ``nki.language.right_shift``                | N                      | Vector               |
   +------------------------+----------------------------+---------------------------------------------+------------------------+----------------------+
-  |                        | Add                        | ``nki.language.add``                        | Y                      | Vector/Scalar        |
+  |                        | Add                        | ``nki.language.add``                        | Y                      | Vector/GpSIMD/Scalar |
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
   |                        | Subtract                   | ``nki.language.subtract``                   | Y                      | Vector               |
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
-  |                        | Multiply                   | ``nki.language.multiply``                   | Y                      | Vector/Scalar        |
+  |                        | Multiply                   | ``nki.language.multiply``                   | Y                      | Vector/GpSIMD/Scalar |
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
   |                        | Max                        | ``nki.language.maximum``                    | Y                      | Vector               |
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
@@ -112,9 +112,13 @@ into float32 before performing the operators.
   |                        | Reverse Square Root        | ``nki.language.rsqrt``                      | N                      | GpSIMD/Scalar        |
   |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
   |                        | Reciprocal                 | ``nki.language.reciprocal``                 | N                      | Vector/Scalar        |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Absolute                   | ``nki.language.abs``                        | N                      | Vector/Scalar        |
+  |                        +----------------------------+---------------------------------------------+------------------------+----------------------+
+  |                        | Power                      | ``nki.language.power``                      | N                      | GpSIMD               |
   +------------------------+----------------------------+---------------------------------------------+------------------------+----------------------+
 
-**Note** The Scalar Engine only supports Add and Multiply from NeuronCore-v3.
+**Note** Add and Multiply are supported on Scalar Engine only from NeuronCore-v3. 32-bit integer Add and Multiply are only supported on GpSIMD Engine.
 
 .. _nki-act-func:
 
@@ -176,6 +180,8 @@ the Scalar Engine will generate invalid output results.
    | Reciprocal                     | ``nki.language.reciprocal`` or ``numpy.reciprocal`` | ``±[2^-42, 2^42]``  |
    +--------------------------------+-----------------------------------------------------+---------------------+
    | Sign                           | ``nki.language.sign`` or ``numpy.sign``             | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Absolute                       | ``nki.language.abs`` or ``numpy.abs``               | ``[-inf, inf]``     |
    +--------------------------------+-----------------------------------------------------+---------------------+
 
 .. _nki-mask:
@@ -298,7 +304,7 @@ the example below:
       in_tile = nl.load(in_tensor[i_p, i_f], mask=(i_p < sz_p))
 
       # perform the computation
-      out_tile = nl.exp(in_tile)
+      out_tile = nl.exp(in_tile, mask=(i_p < sz_p))
 
       # store the results back to external memory
       # only write up to sz_p

@@ -35,7 +35,7 @@ def reciprocal_kernel(in_tensor):
 class TestNkiExampleNisaReciprocal(unittest.TestCase):
   def test_nisa_reciprocal(self):
     np.random.seed(0)
-    src = np.random.random_sample([128, 512]).astype(np.float32)
+    src = np.random.random_sample([128, 512]).astype(np.float32) * 100
     dst_golden = np.reciprocal(src)
 
     dst = reciprocal_kernel(src)

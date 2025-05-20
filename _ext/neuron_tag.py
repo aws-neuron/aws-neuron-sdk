@@ -83,6 +83,7 @@ clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                  'general/arch/neuron-hardware/neuron-core-v3',
                  '/general/announcements/neuron2.x/announce-neuron-trn2',
                  '/general/arch/neuron-features/logical-neuroncore-config',
+                 '/libraries/neuronx-distributed/context_parallelism_overview',
                  'libraries/nxd-training/'
                 ]
 
@@ -126,7 +127,8 @@ clear_trn2_tag = [ 'frameworks/tensorflow/',
                   'general/models/inference-inf2-trn1-samples',
                   'general/models/training-trn1-samples',
                   'general/arch/neuron-hardware/trainium',
-                  'general/arch/neuron-hardware/neuron-core-v2'
+                  'general/arch/neuron-hardware/neuron-core-v2',
+                  '/libraries/neuronx-distributed/context_parallelism_overview',
 
                     ]
 clear_nc_v2_tag = [

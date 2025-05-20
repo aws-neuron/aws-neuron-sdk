@@ -305,7 +305,7 @@ you want to run in parallel. For example, the following loop will be serialized 
 .. code-block:: python
 
   for i in affine_range(8):
-      t = nl.ndaraay((128, 512), dtype=..., buffer=ncc.sbuf.mod_alloc(base_addr=0))
+      t = nl.ndarray((128, 512), dtype=..., buffer=ncc.sbuf.mod_alloc(base_addr=0))
       t[i] = ...
       # do something with t
 
@@ -313,7 +313,7 @@ To improve parallelism, programmers should hoist the tensor declaration and allo
 
 .. code-block:: python
 
-  t = nl.ndaraay((8, 128, 512), dtype=...,
+  t = nl.ndarray((8, 128, 512), dtype=...,
                 buffer=ncc.sbuf.mod_alloc(base_addr=0, num_free_tiles=(8,))
   for i in affine_range(8):
       t[i] = ...

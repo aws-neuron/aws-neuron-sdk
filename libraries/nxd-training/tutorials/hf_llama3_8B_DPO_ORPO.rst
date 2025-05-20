@@ -1,12 +1,13 @@
-.. _hf_llama3_8B_DPO:
+.. _hf_llama3_8B_DPO_ORPO:
 
-HuggingFace Llama3-8B Direct Preference Optimization (DPO) based Fine-tuning
-============================================================================
+HF Llama3.1/Llama3-8B Direct Preference Optimization (DPO) and Odds Ratio Preference Optimization (ORPO) based Fine-tuning (Beta)
+=================================================================================================================================
 
-In this example, we will compile and finetune a pre-trained
-HF Llama3-8B model on a single instance with the ``NxD Training (NxDT)`` library
-using `Direct Preference Optimization (DPO) <https://arxiv.org/pdf/2305.18290>`_.
-The pre-trained Llama3-8B model serves as the foundation, and we will
+In this example, we will show how to compile and finetune a pre-trained
+HF Llama3.1/Llama3-8B model on a single instance with the ``NxD Training (NxDT)`` library
+using `Direct Preference Optimization (DPO) <https://arxiv.org/pdf/2305.18290>`_ and
+`Odds Ratio Preference Optimization (ORPO) <https://arxiv.org/abs/2403.07691>`_
+based fine-tuning. The pre-trained Llama3-8B model serves as the foundation, and we will
 build upon this base by fine-tuning and aligning the model to adapt
 it to a specific task or dataset.
 The example has the following main sections:
@@ -48,24 +49,23 @@ You can configure a variety of DPO-specific and model parameters for finetuning 
         resume_from_checkpoint: /pretrained_ckpt
 
     data:
-        train_dir: /example_datasets/llama3_8b/training.jsonl
+        train_dir: /example_datasets/llama3_8b/data_dpo.jsonl
         val_dir: null
-        dev_choose_samples: 2250
+        dev_choose_samples: null
         seq_length: 4096
-
-        alignment_strategy:
-            dpo:
-                kl_beta: 0.01
-                loss_type: sigmoid
-                max_dpo_prompt_length: 2048
-                precompute_ref_log_probs: True
-                truncation_mode: keep_start
-
         tokenizer:
             type: /llama3_tokenizer
 
     model:
         weight_init_only: True
+
+    model_alignment_strategy:
+        dpo:
+            kl_beta: 0.01
+            loss_type: sigmoid
+            max_prompt_length: 2048
+            precompute_ref_log_probs: True
+            truncation_mode: keep_start
 
 
 **exp_manager**
@@ -113,12 +113,31 @@ You can configure a variety of DPO-specific and model parameters for finetuning 
         * **Type**: integer
         * **Required**: True
 
-    **alignment_strategy**
+    **tokenizer**
+        **type**
 
-    Set only when using finetuning specific algorithms (SFT, DPO, etc) and related hyperparameters
-    DPO-specific parameters.
+        Set tokenizer path/type
+
+            * **Type**: str
+            * **Default**: ``/llama3_tokenizer``
+            * **Required**: True
+
+ **model**
+        **weight_init_only**
+
+        Load only model states and ignore the optim states from ckpt directory
+
+            * **Type**: bool
+            * **Default**: True
+
+ **model_alignment_strategy**
+
+    Set only when using finetuning specific algorithms (SFT, DPO, etc) and and parameter-efficient
+    fine-tuning methods like LoRA (Low-Rank Adaptation).
 
         **dpo**
+            Direct Preference Optimization (DPO) specific parameters.
+
             **kl_beta**
 
             KL-divergence beta to control divergence of policy model from reference model
@@ -135,7 +154,7 @@ You can configure a variety of DPO-specific and model parameters for finetuning 
                 * **Default**: ``sigmoid``
                 * **Required**: True
 
-            **max_dpo_prompt_length**
+            **max_prompt_length**
 
             Set maximum length of prompt in the concatenated prompt and (chosen/rejected) response input
 
@@ -159,36 +178,118 @@ You can configure a variety of DPO-specific and model parameters for finetuning 
                 * **Default**: ``keep_start```
                 * **Required**: True
 
-    **tokenizer**
-        **type**
+ORPO-YAML Configuration Overview
+--------------------------------
 
-        Set tokenizer path/type
+Here we show the ORPO-specific model parameters which can be configured
+for finetuning through the YAML file.
+And below we explain the parameters that are new as compared to DPO-specific
+parameters.
 
-            * **Type**: str
-            * **Default**: ``/llama3_tokenizer``
-            * **Required**: True
+.. code-block:: yaml
 
- **model**
-        **weight_init_only**
+    exp_manager:
+        checkpoint_callback_params:
+            every_n_train_steps: 10
+        resume_from_checkpoint: /pretrained_ckpt
 
-        Load only model states and ignore the optim states from ckpt directory
+    data:
+        train_dir: /example_datasets/llama3_8b/data_orpo.jsonl
+        val_dir: null
+        dev_choose_samples: null
+        seq_length: 4096
+        tokenizer:
+            type: /llama3_tokenizer
 
-            * **Type**: bool
-            * **Default**: True
+    model:
+        encoder_seq_len: 4096
+        weight_init_only: True
+        optim:
+            lr: 1.5e-4
+            sched:
+                name: CosineAnnealing
 
+    model_alignment_strategy:
+        orpo:
+            beta: 0.1
+            max_prompt_length: 2048
+            truncation_mode: keep_start
+
+
+**exp_manager**
+
+    **checkpoint_callback_params.every_n_train_steps**
+
+    How often we want to checkpoint.
+
+        * **Type**: int
+        * **Required**: True
+
+**model**
+    **encoder_seq_length**
+
+    Setting the sequence length for the training job. This parameter is common for all
+    models supported in the library.
+
+        * **Type**: int
+        * **Required**: True
+
+    **optim.sched**
+
+    This is where the LR schedulers can be set. We can configure the schedulers supported by
+    ``NeMo``. All the schedulers can be configured according to the
+    `parameters specified here <https://github.com/NVIDIA/NeMo/blob/v1.14.0/nemo/core/config/schedulers.py>`__.
+
+        * **Type**: config
+        * **Possible Values**: ``LinearAnnealingWithWarmUp``, ``CosineAnnealing``, ``WarmupPolicy``,
+        *  ``WarmupHoldPolicy``, ``SquareAnnealing``, ``NoamAnnealing``, ``WarmupAnnealing``,
+        *   ``StepLR``, ``rprop``, ``ExponentialLR``
+        * **Required**: True
+
+
+ **model_alignment_strategy**
+
+    Set only when using finetuning specific algorithms (SFT, DPO, ORPO, etc) and parameter-efficient
+    fine-tuning methods like LoRA (Low-Rank Adaptation).
+
+        **orpo**
+            Odds Ratio Preference Optimization (ORPO) specific parameters.
+
+            **beta**
+
+            KL-divergence beta to control divergence of policy model from reference model
+
+                * **Type**: float
+                * **Default**: 0.01
+                * **Required**: True
 
 Download the dataset
 --------------------
 
-This tutorial makes use of a preprocessed version of `intel-orca_dpo_pairs` preference
-dataset that is stored in S3. The dataset can be downloaded to your cluster or instance
-by running the following AWS CLI commands on the head node or your Trn1 instance:
+The DPO (& ORPO) tutorial makes use of the same preprocessed version of `intel-orca_dpo_pairs`
+preference dataset that is stored in S3. The dataset can be downloaded to your cluster or
+instance by running the following AWS CLI commands on the head node or your Trn1 instance:
 
 .. code-block:: bash
 
     export DATA_DIR=~/examples_datasets/llama3_8b
     mkdir -p ${DATA_DIR} && cd ${DATA_DIR}
     aws s3 cp s3://neuron-s3/training_datasets/llama/dpo/data_dpo.jsonl .  --no-sign-request
+
+Then, download the ``config.json`` file:
+
+For Llama-3.1-8B:
+
+.. code-block:: bash
+
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/8B_config_llama3.1/config.json ~/
+
+
+For Llama-3-8B:
+
+.. code-block:: bash
+
+   wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed/master/examples/training/llama/tp_zero1_llama_hf_pretrain/8B_config_llama3/config.json ~/
 
 
 Convert data to DPO-specific Preference data format
@@ -264,7 +365,7 @@ Modify the following paths in YAML file based on your specific directory configu
 4. ``train_dir`` and ``val_dir``
 
 You can use your Llama model, pretrained checkpoint and tokenizer by
-modifying the ``hf_llama3_8B_DPO_config.yaml`` file.
+modifying the ``hf_llama3_8B_<DPO/ORPO>_config.yaml`` file.
 
 
 Checkpoint Conversion
@@ -300,7 +401,7 @@ First, clone the open-source ``neuronx-distributed-training`` library
 Now, ensure that you are using the proper config file in the ``conf/`` directory.
 In the ``train.sh`` file, ensure that the ``CONF_FILE`` variable is properly
 set to the config for the model you want to use. In our case,
-it will be ``hf_llama3_8B_DPO_config.yaml``. The default config here is a 8B parameter model,
+it will be ``hf_llama3_8B_<DPO/ORPO>_config.yaml``. The default config here is a 8B parameter model,
 but users can also add their own ``conf/*.yaml`` files and run different configs and
 hyperparameters if desired. Please see :ref:`Config Overview <nxdt_config_overview>`
 for examples and usage for the ``.yaml`` config files.
@@ -310,7 +411,7 @@ Next, run the following commands to launch an AOT pre-compilation job on your in
 .. code-block:: bash
 
     export COMPILE=1
-    export CONF_FILE=hf_llama3_8B_DPO_config
+    export CONF_FILE=hf_llama3_8B_<DPO/ORPO>_config
     ./train.sh
 
 The compile output and logs will be shown directly in the terminal
@@ -340,8 +441,8 @@ On a single instance:
 
 .. code-block:: bash
 
-    export COMPILE=1
-    export CONF_FILE=hf_llama3_8B_DPO_config
+    export COMPILE=0
+    export CONF_FILE=hf_llama3_8B_<DPO/ORPO>_config
     ./train.sh
 
 Once the model is loaded onto the Trainium accelerators and training has commenced,
@@ -351,9 +452,13 @@ Example:
 
 .. code-block:: bash
 
-    Epoch 0:   0%|          | 1/250 [00:20<1:26:16, 20.79s/it, loss=2.24, v_num=9-50, reduced_train_loss=2.240, global_step=0.000, consumed_samples=4.000]
-    Epoch 0:   1%|          | 2/250 [00:38<1:18:33, 19.01s/it, loss=6.45, v_num=9-50, reduced_train_loss=2.240, global_step=1.000, consumed_samples=8.000]
-    Epoch 0:   1%|          | 3/250 [00:45<1:02:29, 15.18s/it, loss=6.45, v_num=9-50, reduced_train_loss=2.240, global_step=1.000, consumed_samples=8.000]
+    Epoch 0:   5%|â–         | 3/62 [02:59<58:44,  0.02it/s, v_num=8-06, reduced_train_loss=6.930, chosen_rewards=-0.81, rejected_rewards=-0.675, lr=2.73e-5, parameter_norm=1.95e+3, global_step=1.000, consumed_samples=32.00, throughput=0.108, throughput_peak=0.0677, gradient_norm=8.600]
+    Epoch 0:   6%|â–‹         | 4/62 [03:24<49:27,  0.02it/s, v_num=8-06, reduced_train_loss=6.790, chosen_rewards=-0.628, rejected_rewards=-0.64, lr=5.45e-5, parameter_norm=1.95e+3, global_step=3.000, consumed_samples=64.00, throughput=0.181, throughput_peak=0.146, gradient_norm=6.590]
+    Epoch 0:   8%|â–Š         | 5/62 [03:50<43:42,  0.02it/s, v_num=8-06, reduced_train_loss=6.790, chosen_rewards=-0.628, rejected_rewards=-0.64, lr=5.45e-5, parameter_norm=1.95e+3, global_step=3.000, consumed_samples=64.00, throughput=0.181, throughput_peak=0.146, gradient_norm=6.590]
+
+.. note::
+    The values in the above logs will differ based on config used, package versions,
+    models, and other factors. This is just an example.
 
 Monitoring Training
 -------------------

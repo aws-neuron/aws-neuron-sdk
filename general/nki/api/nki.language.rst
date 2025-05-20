@@ -249,3 +249,4 @@ Constants
    :nosignatures:
 
    tile_size
+   fp32

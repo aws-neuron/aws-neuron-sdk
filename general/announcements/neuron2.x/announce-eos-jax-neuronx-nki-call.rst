@@ -5,11 +5,10 @@
 .. _announce-eos-jax-neuronx-features:
 
 Announcing end of support for ``jax_neuronx.nki_call`` API in ``jax-neuronx`` from  starting next release
-------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 
 Starting with :ref:`Neuron Release 2.23 <neuron-2.23.0-whatsnew>`, Neuron will end support for ``jax_neuronx.nki_call`` API in ``jax-neuronx`` package.
 
 For a full list of features that require ``jax-neuronx``, please see :ref:`jax_neuron-known-issues`. 
 
-Customers using ``jax_neuronx.nki_call`` API are recommended to switch invocations to directly call functions annotated with :ref:`nki.jit API <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/api/generated/nki.jit.html>_`.
-
+Customers using ``jax_neuronx.nki_call`` API are recommended to switch invocations to directly call functions annotated with :ref:`nki.jit API <nki_decorators>`.

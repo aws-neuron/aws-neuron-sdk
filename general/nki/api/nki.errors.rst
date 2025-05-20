@@ -316,6 +316,16 @@ was on the partition dimension, use ``nl.arange`` instead.
   
   data_tile = nl.load(data_tensor[idx_tile[i_p, 0], i_f]) 
 
+.. _nki-errors-err_leading_dimension_of_tensor_must_be_partition:
+
+err_leading_dimension_of_tensor_must_be_partition
+-------------------------------------------------
+
+The leading dimension of SBUF/PSUM tensors must be the partition dimension.
+
+NKI used to allow block dimensions in front of the partition dimension, but block dimension has been
+deprecated. Please refer to :doc:`Migration Guide for Block Dimension <../nki_block_dimension_migration_guide>`
+
 .. _nki-errors-err_local_variable_used_out_of_scope:
 
 err_local_variable_used_out_of_scope

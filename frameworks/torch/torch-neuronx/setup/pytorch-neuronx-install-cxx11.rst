@@ -63,8 +63,8 @@ just like standard versions of ``torch-neuronx``.
 
 ::
 
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.1.*" --no-deps
-    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5,*" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5.*" --no-deps
+    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.6.*" --no-deps
 
 .. important::
 
@@ -108,27 +108,25 @@ Build ``torch`` (CPU only) and ``torch-xla`` wheels for version 2.5:
 
    git clone --recursive https://github.com/pytorch/pytorch --branch v2.5.1
    cd pytorch/
-   git clone --recursive https://github.com/pytorch/xla.git --branch r2.5.1
+   git clone --recursive https://github.com/pytorch/xla.git --branch v2.5.1
    _GLIBCXX_USE_CXX11_ABI=1 python setup.py bdist_wheel
    # pip wheel will be present in ./dist
    cd xla/
    CXX_ABI=1 python setup.py bdist_wheel
    # pip wheel will be present in ./dist
 
-Build ``torch`` (CPU only) and ``torch-xla`` wheels for version 2.1:
+Build ``torch`` (CPU only) and ``torch-xla`` wheels for version 2.6:
 
 .. code:: bash
 
-   git clone --recursive https://github.com/pytorch/pytorch --branch v2.1.2
+   git clone --recursive https://github.com/pytorch/pytorch --branch v2.6.0
    cd pytorch/
-   git clone --recursive https://github.com/pytorch/xla.git --branch r2.1_aws_neuron
+   git clone --recursive https://github.com/pytorch/xla.git --branch r2.6_aws_neuron
    _GLIBCXX_USE_CXX11_ABI=1 python setup.py bdist_wheel
    # pip wheel will be present in ./dist
    cd xla/
-   # Release 2.21 TORCH_XLA_VERSION=2.1.6
-   TORCH_XLA_VERSION=2.1.6 CXX_ABI=1 python setup.py bdist_wheel
+   CXX_ABI=1 python setup.py bdist_wheel
    # pip wheel will be present in ./dist
-
 
 FAQ
 ^^^
@@ -208,8 +206,8 @@ This allows the ABI to be validated in the by inspecting the local identifier
 Example:
 ::
 
-    2.1.5.2.4.0+cxx11
     2.5.1.2.4.0+cxx11
+    2.6.1.2.4.0+cxx11
 
 
 How can I know which ABI torch is using?

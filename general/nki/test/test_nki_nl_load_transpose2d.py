@@ -57,7 +57,7 @@ def example_kernel_1(in_tensor):
 class TestNkiExampleNlLoadTranspose2d(unittest.TestCase):
   def test_dma_transpose_load_0(self):
     np.random.seed(0)
-    src = np.random.random_sample([2048, 128]).astype(np.float32)
+    src = np.random.random_sample([2048, 128]).astype(np.float32) * 100
 
     dst = example_kernel_0(src)
 
@@ -66,7 +66,7 @@ class TestNkiExampleNlLoadTranspose2d(unittest.TestCase):
 
   def test_dma_transpose_load_1(self):
     np.random.seed(0)
-    src = np.random.random_sample([2048, 128]).astype(np.float32)
+    src = np.random.random_sample([2048, 128]).astype(np.float32) * 100
 
     dst = example_kernel_1(src)
 

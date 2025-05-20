@@ -10,6 +10,83 @@ NxD Inference Release Notes (``neuronx-distributed-inference``)
 
 This document lists the release notes for Neuronx Distributed Inference library.
 
+Neuronx Distributed Inference [0.3.5591] (Neuron 2.23.0 Release)
+-----------------------------------------------------------------------
+
+Date: 05/20/2025
+
+NxD Inference is now GA and out of beta in the Neuron 2.23 release.
+
+Features in this Release
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Features
+
+  * Shard-on-load for weight sharding is now enabled by default. With this change,
+    end-to-end compile and load time is reduced by up to 70% when
+    sharding weights. This change significantly reduces compile time by skipping
+    weight sharding and serialization during compile, but may lead to
+    increased load time. For example, for Llama 3.1 405B,
+    end-to-end compile and load time is reduced from 40 minutes to
+    12 minutes. For best load performance, you can continue to serialize
+    sharded weights by enabling ``save_sharded_checkpoint`` in
+    NeuronConfig. For more information, see :ref:`nxdi-weights-sharding-guide`.
+  * Neuron Persistent Cache. NxD Inference now supports Neuron
+    Persistent Cache, which caches compiled model artifacts to reduce
+    compilation times. For more information, see :ref:`nxdi-neuron-persistent-cache`.
+  * Support for an attention block kernel for token generation. This kernel
+    performs QKV projections, RoPE, attention, and output projections. You can use
+    this kernel with Llama3-like attention on Trn2 to improve token gen performance.
+    To use this kernel, enable ``attn_block_tkg_nki_kernel_enabled`` in NeuronConfig.
+
+    * This kernel can also update the KV cache in parallel with each layer's
+      attention compute to further improve performance. This functionality hides
+      the latency of the KV cache update that is otherwise done for all layers at
+      once at the end of each token generation iteration. To enable in-kernel
+      KV cache updates, enable ``attn_block_tkg_nki_kernel_cache_update`` in NeuronConfig.
+      When in-kernel KV cache updating is enabled, you can also enable ``k_cache_transposed``
+      to further improve the performance.
+
+  * Automatically extract ``target_modules`` and ``max_lora_rank`` from
+    LoRA checkpoints. You no longer need to set these arguments
+    manually.
+  * Support fused residual add in the QKV kernel. This feature improves
+    the performance of context encoding at short sequence lengths. To
+    use this feature, enable the ``qkv_kernel_fuse_residual_add`` flag
+    in NeuronConfig.
+
+* Backward incompatible changes
+
+  * Remove ``set_async_mode(async_mode)`` from NeuronBaseForCausalLM, as
+    this feature didn't work as intended. Async mode cannot be enabled or
+    disabled after the model is loaded. To enable async mode, set ``async_mode=True``
+    in NeuronConfig.
+
+* Other changes
+
+  * Disable warmup for continuous batching. This change avoids an issue
+    that prevents certain model configurations from loading correctly.
+    When warmup is disabled, you will see lower performance on the first
+    few requests to the model. This change also affects initial
+    performance for serving through vLLM. Warmup will work in many cases
+    where it is now disabled, so you can try to reenable warmup by
+    setting ``skip_warmup=False`` in NeuronConfig. Alternatively, you
+    can manually warm up the model by sending a few requests to each
+    bucket after loading the model.
+  * Fix an issue where when continuous batching and bucketing were
+    enabled, NxDI padded each input to the largest sequence in the
+    batch, rather than the next largest bucket for that input. This
+    change improves performance when using continuous batching with
+    bucketing, including through vLLM.
+  * Add a ``num_runs`` parameter to ``benchmark_sampling``, so you can
+    configure the number of runs to perform when benchmarking.
+  * Silence unimportant error messages during warmup.
+  * NeuronConfig now includes a ``disable_kv_cache_tiling`` flag that
+    you can set to disable KV cache tiling in cases where it was
+    previously enabled by default.
+  * Update the package version to include additional information in the
+    version tag.
+  * Other minor fixes and improvements.
 
 Neuronx Distributed Inference [0.2.0] (Beta) (Neuron 2.22.0 Release)
 ------------------------------------------------------------------

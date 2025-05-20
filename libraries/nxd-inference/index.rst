@@ -1,7 +1,7 @@
 .. _nxdi-index:
 
-NxD Inference(Beta) 
-===================
+NxD Inference
+=============
 
 
 .. toctree::

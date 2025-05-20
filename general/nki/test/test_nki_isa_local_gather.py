@@ -54,7 +54,7 @@ class TestNkiIsaExamplesLocalGather(unittest.TestCase):
     # (optional, default=1) gather element count per index: num_elem_per_idx
 
     # NUMPY_SEMANTICS_BEGIN
-    src_buffer = np.random.random_sample([128, 512, 4]).astype(np.float32)
+    src_buffer = np.random.random_sample([128, 512, 4]).astype(np.float32) * 100
     index_per_core = np.random.randint(low=0, high=512, size=(16, 4), dtype=np.uint16)
     # replicate 8 times for 8 GpSimd cores
     index = np.tile(index_per_core, (num_gpsimd_cores, 1))

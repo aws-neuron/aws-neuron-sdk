@@ -45,7 +45,7 @@ def nki_reduce(a_tensor):
       
 class TestNkiIsaExamplesReduce(unittest.TestCase):
   def test_reduce(self):
-    a = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
     b = np.ndarray(shape=(128, 1), dtype=np.float32)
     b = nki_reduce(a)
 

@@ -75,3 +75,16 @@ Following are the instructions to apply the patch to the LLMPerf library.
   Run ``git apply neuron_perf.patch``. Confirm changes with ``git diff``.
 
 
+Benchmarking Data parallel inference with multiple model copies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To measure performance with data parallel inference by using multiple model copies, we need to make additional changes to LLMPerf by applying the following patch:
+
+* Step 1: Get the Neuron git patch file for data parallel inference
+
+  Download the ``llmperf_dp.patch`` :download:`file </src/benchmark/helper_scripts/llmperf_dp.patch>` into the ``llmperf`` directory. 
+
+* Step 2: Apply the git patch
+
+  Run ``git apply llmperf_dp.patch``. Confirm changes with ``git diff``.
+
+This patch enables data parallelism by allowing requests to be distributed across multiple model server endpoints. When multiple addresses are specified in OPENAI_API_BASE (e.g. "http://server1;http://server2;http://server3"), each request will be routed to a different server either randomly or in round-robin fashion, allowing concurrent processing across multiple model servers.

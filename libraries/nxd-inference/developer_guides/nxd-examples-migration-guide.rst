@@ -17,15 +17,17 @@ of how to use it, see :ref:`nxdi-feature-guide`, :ref:`NxD Inference Tutorials <
 and the `generation_demo.py script <https://github.com/aws-neuron/neuronx-distributed-inference/blob/main/examples/generation_demo.py>`__.
 
 .. warning::
-   The inference examples (including Llama 2, Llama 3, Mixtral, and DBRX) in
-   the NxD Core GitHub repository will be removed in
-   a future Neuron release. The models and example code are implemented in the
+   Previous inference examples (including Llama 2, Llama 3, Mixtral, and DBRX) in
+   the NxD Core GitHub repository were removed in Neuron Release 2.23.
+   The models and example code are implemented in the
    NxD Inference library, so you can easily integrate them with your inference
    scripts. If you use these examples in NxD Core, we recommend
    that you update your inference scripts to use the NxD Inference model hub
    instead. If your use case requires you to directly integrate with the NxD
    Core library (and not NxD Inference) then you can continue to use the NxD
-   Core library directly. For more information, see :ref:`announce-eos-nxd-examples`.
+   Core library directly. For an example of how to integrate with NxD Core directly,
+   see the newer `Llama3.2 1B sample <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/llama>`__
+   added in Neuron Release 2.23. For more information, see :ref:`announce-eos-nxd-examples`.
 
 .. contents:: Table of contents
    :local:

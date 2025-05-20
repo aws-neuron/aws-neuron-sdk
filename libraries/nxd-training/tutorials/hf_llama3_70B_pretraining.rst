@@ -387,6 +387,75 @@ Compared to initial pre-training loss value, you should see lower loss value whe
     Epoch 0:   4%|▍         | 4/91 [21:25<7:46:02, 321.41s/it, loss=0.556, v_num=7, reduced_train_loss=1.670, lr=7.5e-9, parameter_norm=4736.0, global_step=2.000, consumed_samples=3072.0]
     Epoch 0:   4%|▍         | 4/91 [21:25<7:46:02, 321.41s/it, loss=0.417, v_num=7, reduced_train_loss=1.670, lr=7.5e-9, parameter_norm=4736.0, global_step=3.000, consumed_samples=4096.0]
 
+
+Pretraining with Context Paralellism
+------------------------------------
+
+To run pretraining with context parallelism, use the following yaml config file: ``hf_llama3_70B_CP_config.yaml``.
+This YAML file has the following changes to enable context parallelism:
+
+
+.. code-block:: yaml
+
+    distributed_strategy:
+        context_parallel_size: 2
+
+    fusions:
+        flash_attention: False
+        ring_attention: True
+
+
+**distributed_strategy**
+    **context_parallel_size**
+
+    Context parallel degree to be used for sharding sequence.
+
+    * **Type**: int
+    * **Required**: False
+    * **Default**: 1
+
+
+**fusions**
+    **ring_attention**
+
+    Setting this flag to ``True`` will use the ring attention module for
+    both forward and backward.
+    This parameter must be true when context parallel is
+    ```context_parallel_size`` is greater than 1.
+
+    * **Type**: bool
+    * **Required**: False
+
+
+In the config file, ``context_parallel_size`` is set to the desired degree, and as
+context parallelism leverages ring attention instead of flash attention, we set ``ring_attention: True``,
+and ``flash_attention: False``.
+
+Context parallelism currently supports sequence lengths up to 32k and is supported on TRN1.
+
+Compile with:
+
+.. code-block:: bash
+
+    export COMPILE=1
+    export CONF_FILE=hf_llama3_70B_CP_config
+    sbatch --exclusive \
+        --nodes 16 \
+        --cpus-per-task 128 \
+        --wrap="srun ./train.sh"
+
+and pre-training with:
+
+.. code-block:: bash
+
+    export COMPILE=0
+    export CONF_FILE=hf_llama3_70B_CP_config
+    sbatch --exclusive \
+        --nodes 16 \
+        --cpus-per-task 128 \
+        --wrap="srun ./train.sh"
+
+
 Troubleshooting Guide
 ---------------------
 

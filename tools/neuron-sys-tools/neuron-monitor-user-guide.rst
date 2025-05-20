@@ -225,6 +225,9 @@ This is its structure:
      },
      "neuron_hardware_info": {
                [...]
+     },
+     "neuron_k8s_info": {
+               [...]
      }
    }
 
@@ -242,11 +245,14 @@ This is its structure:
    ``"report"`` but only contains system-level metric groups (not
    associated to any Neuron application)
 
-
 Regardless of the configuration, the following two JSON objects are always present
 in the output:
 
-**instance_info**
+.. _neuron-monitor-instance-info:
+
+instance_info
+~~~~~~~~~~~~~
+
 Contains information about the instance on which neuron-monitor is running.
 ::
 
@@ -275,7 +281,11 @@ not be available:
 ``error`` will contain an error string if getting one of the fields,
 **except those mentioned above**, resulted in an error.
 
-**neuron_hardware_info**
+.. _neuron-monitor-hardware-info:
+
+neuron_hardware_info
+~~~~~~~~~~~~~~~~~~~~
+
 Contains basic information about the Neuron hardware.
 ::
 
@@ -299,6 +309,65 @@ Contains basic information about the Neuron hardware.
 -  ``error`` : will contain an error string if any occurred when getting this information
    (usually due to the Neuron Driver not being installed or not running).
 
+The following JSON object is disabled by default, but can be made available if "k8s_info" is enabled:
+
+.. _neuron-monitor-k8s-info:
+
+neuron_k8s_info
+~~~~~~~~~~~~~~~
+
+Contains information about what Kubernetes pods/containers are using Neuron resources
+::
+
+           "neuron_k8s_info": {
+             "period": 15.030359284,
+             "neuroncores_k8s_info": {
+               "0": {
+                 "pod_name": "p0",
+                 "namespace": "n0",
+                 "container_name": ["c0"]
+               },
+               "1": {
+                 "pod_name": "p0",
+                 "namespace": "n0",
+                 "container_name": ["c0"]
+               },
+               ...
+             "neurondevices_k8s_info": {
+               "0": {
+                 "pod_name": "p0",
+                 "namespace": "n0",
+                 "container_name": ["c0"]
+               },
+               ...
+             }
+             "error": ""
+           },
+
+- ``"neuroncores_k8s_info"`` - object containing information on which
+  Neuron cores are being used by Kubernetes pod/containers, indexed by
+  Neuron core index: ``"neuroncore_index": { neuroncore_k8s_data }``
+
+  - ``"pod_name"`` - name of pod using Neuron core
+  - ``"namespace"`` - namespace of pod using Neuron core
+  - ``"container_name"`` - names of containers using Neuron core
+
+- ``"neurondevices_k8s_info"`` - object containing information on which
+  Neuron devices are being used by Kubernetes pod/containers, indexed by
+  Neuron device index: ``"neurondevice_index": { neurondevice_k8s_data }``
+
+  - ``"pod_name"`` - name of pod using Neuron device
+  - ``"namespace"`` - namespace of pod using Neuron device
+  - ``"container_name"`` - names of containers using Neuron device
+
+- ``"error"`` - will contain an error string if any occurred when getting this information
+
+For more information on how to enable K8s information, see :ref:`neuron-monitor-k8s-infopy`.
+
+.. _neuron-metric-groups:
+
+Metric Groups
+~~~~~~~~~~~~~
 
 Each **metric group** requested in the settings file will get an entry
 in the resulting output. The general format for such an entry is:
@@ -319,7 +388,7 @@ Neuron application level metric groups
 .. _neuron-monitor-nc-counters:
 
 neuroncore_counters
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -752,9 +821,9 @@ memory_info
 Companion scripts
 -----------------
 
-neuron-monitor is installed with two example Python companion script:
-`neuron-monitor-cloudwatch.py <#neuron-monitor-cloudwatchpy>`__ and
-`neuron-monitor-prometheus.py <#neuron-monitor-prometheuspy>`__.
+neuron-monitor is installed with three Python companion scripts:
+:ref:`neuron-monitor-cloudwatchpy`, :ref:`neuron-monitor-prometheuspy`, and
+:ref:`neuron-monitor-k8s-infopy`
 
 .. _neuron-monitor-cloudwatchpy:
 
@@ -811,6 +880,38 @@ If your data visualization framework is Grafana, we provided a :download:`Grafan
 which integrates with Prometheus and this script.
 
 .. |image| image:: ../../images/nm-img2.png
+
+.. _neuron-monitor-k8s-infopy:
+
+neuron-monitor-k8s-info.py (Beta)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It requires Python3 and the `gRPC Python
+package <https://pypi.org/project/grpcio/>`__. It is installed
+to: ``/opt/aws/neuron/bin/neuron-monitor-k8s-info.py``.
+
+.. important::
+
+   This companion script is in Beta and is disabled by default.
+
+   It only works on EKS, and is currently not supported with EKS auto mode.
+
+.. _using-neuron-monitor-k8s-infopy:
+
+Using neuron-monitor-k8s-info.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+   neuron-monitor | neuron-monitor-prometheus.py --port <port> --enable-k8s-info | neuron-monitor-k8s-info.py --period <seconds>
+
+For example:
+
+::
+
+   neuron-monitor | neuron-monitor-prometheus.py --port 8008 --enable-k8s-info | neuron-monitor-k8s-info.py --period 30
+
+The default value for ``--period`` is ``15``.
 
 Running neuron monitor in Kubernetes environment
 -----------------------------------------

@@ -6,7 +6,7 @@ Define new directives for nki documentation
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Any
+from typing import TYPE_CHECKING, ClassVar, Any, Union
 
 from docutils import nodes
 from docutils.parsers.rst import directives
@@ -38,7 +38,7 @@ class NKIExampleReader(LiteralIncludeReader):
     self.skip_marker = self.options.get('skip_marker', 'NKI_EXAMPLE')
 
   def nki_example_filter(
-      self, lines: list[str], location: tuple[str, int] | None = None,
+      self, lines: list[str], location: Union[tuple[str, int], None] = None,
   ) -> list[str]:
     whole_file = 'whole-file' in self.options
     example_lines = []
@@ -72,7 +72,7 @@ class NKIExampleReader(LiteralIncludeReader):
 
     return example_lines
 
-  def read(self, location: tuple[str, int] | None = None) -> tuple[str, int]:
+  def read(self, location: Union[tuple[str, int], None] = None) -> tuple[str, int]:
     filters = [
       self.nki_example_filter,
       #  self.pyobject_filter,

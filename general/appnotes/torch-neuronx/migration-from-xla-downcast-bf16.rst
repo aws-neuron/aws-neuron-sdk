@@ -6,9 +6,15 @@ Migration From ``XLA_USE_BF16``/``XLA_DOWNCAST_BF16``
 Introduction
 ------------
 
-The environmental variables ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` were created to provide an easy cast-to-bf16 option before automatic mixed-precision or ``model.to(torch.bfloat16)`` as available in Torch-XLA. Now that both automatic mixed precision and ``model.to(torch.bfloat16)`` are available in Torch-XLA,  ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` are redundant and can be replaced with these options as a more familiar experience as on other platforms such as CPUs and GPUs. (They are deprecated in Torch-XLA 2.5 as warnings, and will be removed in a future release).
+The environmental variables ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` were created to provide an easy cast-to-bf16 option before automatic mixed-precision or ``model.to(torch.bfloat16)`` as available in Torch-XLA. Now that both automatic mixed precision and ``model.to(torch.bfloat16)`` are available in Torch-XLA,  ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` are redundant and can be replaced with these options as a more familiar experience as on other platforms such as CPUs and GPUs. Using them in Torch-XLA 2.5+ would cause warnings to be displayed about their deprecation. While they are still functional, their functionality will be removed in a future release (Torch-XLA 2.8) so the recommended changes below are available as replacement.
 
-The changes recommended below can best be made to scripts running with Torch-XLA 2.1 and 2.5. The same recommendations are also available in :ref:`pytorch-neuronx-programming-guide`.
+NeuronX Distributed Training has been updated to use some of the options below. Please see :ref:`standard_mixed_precision` for more information.
+
+The changes recommended below can best be made to scripts running with Torch-XLA 2.5+. The same recommendations are also available in :ref:`pytorch-neuronx-programming-guide`.
+
+.. note::
+
+    This guide recommends the options below as replacement for ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16``. Do not set ``XLA_USE_BF16=1`` or ``XLA_DOWNCAST_BF16=1`` when using the options below on Neuron devices. Using them will override the per-operator precision settings provided by the options and thus cause more operators to execute in bfloat16.
 
 Full BF16 with stochastic rounding enabled
 ------------------------------------------
@@ -100,6 +106,11 @@ the forward-pass of the training step in the ``torch.autocast`` scope with ``xla
        # forward pass
 
 The device type is XLA because we are using PyTorch-XLA's autocast backend. The PyTorch-XLA `autocast mode source code <https://github.com/pytorch/xla/blob/master/torch_xla/csrc/autocast_mode.cpp>`_ lists which operations are casted to lower precision BF16 ("lower precision fp cast policy" section), which are maintained in FP32 ("fp32 cast policy"), and which are promoted to the widest input types ("promote" section).
+
+.. note::
+
+   If an operation is not part of any policy in `autocast mode source code <https://github.com/pytorch/xla/blob/master/torch_xla/csrc/autocast_mode.cpp>`_, the data type of the inputs will be used for the computation of the operation.
+
 
 Example showing the original training code snippet:
 

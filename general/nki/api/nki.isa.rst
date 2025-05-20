@@ -32,6 +32,7 @@ NKI ISA
    iota
    dropout
    affine_select
+   range_select
    memset
    bn_stats
    bn_aggr
@@ -43,29 +44,16 @@ NKI ISA
    nc_stream_shuffle
 
 
-Accumulation Command
+NKI ISA Config Enums
 --------------------
 .. autosummary::
    :toctree: generated
    :template: nki-custom-class-attr-only-template.rst
    :nosignatures:
 
+   engine
    reduce_cmd
-
-
-Engine Types
--------------
-
-.. autosummary::
-   :toctree: generated
-   :nosignatures:
-
-   tensor_engine
-   vector_engine
-   scalar_engine
-   gpsimd_engine
-   dma_engine
-   unknown_engine
+   dge_mode
 
 
 Target
@@ -73,14 +61,8 @@ Target
 
 .. autosummary::
    :toctree: generated
-   :template: nki-custom-class-attr-only-template.rst
-   :nosignatures:
-
-   engine
-
-.. autosummary::
-   :toctree: generated
    :nosignatures:
 
    nc_version
    get_nc_version
+

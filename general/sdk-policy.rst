@@ -254,7 +254,8 @@ updates, and security issues related to any third-party software
 included in the Neuron DLAMI or DLCs by releasing new versions of the
 Neuron DLAMI or DLCs. However, updates won't be applied retroactively to
 older versions of the Neuron DLAMI or DLCs. Instead, users will need to
-use the new versions to get the latest updates.
+use the new versions to get the latest updates. Generally, Neuron DLAMIs and Deep Learning Containers (DLCs) will support one latest LTS Linux Distribution version (Ubuntu, Amazon Linux, and Rocky9), with exceptions. Neuron Base DLAMIs (which come pre-installed with Neuron driver, EFA, and Neuron tools) will support the two latest versions of LTS Linux Distributions.
+
 
 For more information see:
 

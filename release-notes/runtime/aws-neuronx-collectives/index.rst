@@ -9,6 +9,22 @@ Neuron Collectives refers to a set of libraries used to support collective compu
    :local:
    :depth: 1
 
+Neuron Collectives [2.25.65.0]
+------------------------------
+Date: 05/19/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added multinode collectives support for Trainium2 instances without EFA devices
+
+Improvements
+^^^^^^^^^^^^
+* Minor performance improvement to network proxy handshake
+
+Bug fixes
+^^^^^^^^^
+* Fixed memory leak clearning up communication devices during ``nrt_close``
+
 Neuron Collectives [2.24.59.0]
 ------------------------------
 Date: 04/03/2025

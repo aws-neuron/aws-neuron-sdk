@@ -57,4 +57,7 @@ class TestNkiIsaExamplesTensorTensorScan(unittest.TestCase):
     for i in range(1, c.shape[1]):
       golden[:, i] = a[:, i] * golden[:, i - 1] + b[:, i]
 
+    print(c)
+    print(golden)
+    print(c - golden)
     self.assertTrue(np.allclose(c, golden))

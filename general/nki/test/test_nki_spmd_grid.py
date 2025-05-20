@@ -31,7 +31,7 @@ nki_spmd_kernel = nki.jit(nki_spmd_kernel, mode='simulation',
 class TestNkiIsaExamplesTensorCopy(unittest.TestCase):
   def test_spmd_grid(self):
     np.random.seed(0)
-    src = np.random.random_sample([4, 2, 1, 1]).astype(np.float32)
+    src = np.random.random_sample([4, 2, 1, 1]).astype(np.float32) * 100
     dst_golden = np.copy(src)
 
     # NKI_EXAMPLE_0_BEGIN

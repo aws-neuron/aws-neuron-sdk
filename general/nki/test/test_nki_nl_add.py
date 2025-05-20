@@ -103,8 +103,8 @@ def add_broadcast_each_dims(a_tensor, b_tensor):
 class TestNkiNlExampleAdd(unittest.TestCase):
   def test_add(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 512]).astype(np.float32) * 100
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
     
@@ -113,7 +113,7 @@ class TestNkiNlExampleAdd(unittest.TestCase):
 
   def test_add_tensor_scalar(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
     b = 2.2
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
@@ -123,8 +123,8 @@ class TestNkiNlExampleAdd(unittest.TestCase):
 
   def test_add_broadcast_free_dim(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([128, 1]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 1]).astype(np.float32) * 100
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
 
@@ -133,8 +133,8 @@ class TestNkiNlExampleAdd(unittest.TestCase):
 
   def test_add_broadcast_par_dim(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([1, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([1, 512]).astype(np.float32) * 100
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
 
@@ -143,8 +143,8 @@ class TestNkiNlExampleAdd(unittest.TestCase):
 
   def test_add_broadcast_both_dims(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([1, 1]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([1, 1]).astype(np.float32) * 100
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
 
@@ -153,8 +153,8 @@ class TestNkiNlExampleAdd(unittest.TestCase):
 
   def test_add_broadcast_each_dims(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 1]).astype(np.float32)
-    b = np.random.random_sample([1, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 1]).astype(np.float32) * 100
+    b = np.random.random_sample([1, 512]).astype(np.float32) * 100
     c = np.zeros([128, 512]).astype(np.float32)
     c_golden = np.add(a, b)
 

@@ -124,6 +124,95 @@ class FrameworkKernel:
     """
     ...
 
+class tensor: 
+  r"""
+  A tensor object represents a multidimensional, homogeneous array of fixed-size items
+  """
+
+  def assert_shape(self, shape):
+    r"""
+    Assert that the tensor has the given shape.
+
+    :param shape: The expected shape.
+    :return: The tensor.
+    """
+    ...
+
+  def astype(self, dtype):
+    r"""
+    Copy of the tensor, cast to a specified type.
+
+    :param dtype: The target dtype
+    :return: the tensor with new type. Copy ALWAYS occur
+    """
+    ...
+
+  def broadcast_to(self, shape):
+    r"""
+    Broadcast tensor to a new shape based on numpy broadcast rules.
+    The tensor object must be a tile or can be implicitly converted to a tile.
+    A tensor can be implicitly converted to a tile iff the partition dimension
+    is the highest dimension.
+
+    :param shape: The new shape
+    :return:      Return a new view of the tensor, no copy will occur
+    """
+    ...
+
+  @property
+  def dtype(self):
+    r"""
+    Data type of the tensor.
+    """
+    ...
+
+  def expand_dims(self, axis):
+    r"""
+    Gives a new shape to a tensor by adding a dimension of size 1 at the specified position.
+
+    :param axis: the position of the new dimension.
+    :return:      Return a new tensor with expanded shape
+    """
+    ...
+
+  @property
+  def itemsize(self):
+    r"""
+    Length of one tensor element in bytes.
+    """
+    ...
+
+  @property
+  def ndim(self):
+    r"""
+    Number of dimensions of the tensor.
+    """
+    ...
+
+  def reshape(self, shape):
+    r"""
+    Gives a new shape to an array without changing its data.
+
+    :param shape: The new shape
+    :return:      Return a new view of the tensor, no copy will occur
+    """
+    ...
+
+  @property
+  def shape(self):
+    r"""
+    Shape of the tensor.
+    """
+    ...
+
+  def view(self, dtype):
+    r"""
+    Return a new view of the tensor, reinterpret to a specified type.
+
+    :return: A new tensor object refer to the original tensor data, NO copy will occur
+    """
+    ...
+
 def baremetal(kernel=None, **kwargs):
   r"""
   Compile and run a NKI kernel on NeuronDevice without involving ML frameworks such as PyTorch and JAX.
@@ -398,93 +487,4 @@ def simulate_kernel(kernel, *args, **kwargs):
    :language: python
   """
   ...
-
-class tensor: 
-  r"""
-  A tensor object represents a multidimensional, homogeneous array of fixed-size items
-  """
-
-  def assert_shape(self, shape):
-    r"""
-    Assert that the tensor has the given shape.
-
-    :param shape: The expected shape.
-    :return: The tensor.
-    """
-    ...
-
-  def astype(self, dtype):
-    r"""
-    Copy of the tensor, cast to a specified type.
-
-    :param dtype: The target dtype
-    :return: the tensor with new type. Copy ALWAYS occur
-    """
-    ...
-
-  def broadcast_to(self, shape):
-    r"""
-    Broadcast tensor to a new shape based on numpy broadcast rules.
-    The tensor object must be a tile or can be implicitly converted to a tile.
-    A tensor can be implicitly converted to a tile iff the partition dimension
-    is the highest dimension.
-
-    :param shape: The new shape
-    :return:      Return a new view of the tensor, no copy will occur
-    """
-    ...
-
-  @property
-  def dtype(self):
-    r"""
-    Data type of the tensor.
-    """
-    ...
-
-  def expand_dims(self, axis):
-    r"""
-    Gives a new shape to a tensor by adding a dimension of size 1 at the specified position.
-
-    :param axis: the position of the new dimension.
-    :return:      Return a new tensor with expanded shape
-    """
-    ...
-
-  @property
-  def itemsize(self):
-    r"""
-    Length of one tensor element in bytes.
-    """
-    ...
-
-  @property
-  def ndim(self):
-    r"""
-    Number of dimensions of the tensor.
-    """
-    ...
-
-  def reshape(self, shape):
-    r"""
-    Gives a new shape to an array without changing its data.
-
-    :param shape: The new shape
-    :return:      Return a new view of the tensor, no copy will occur
-    """
-    ...
-
-  @property
-  def shape(self):
-    r"""
-    Shape of the tensor.
-    """
-    ...
-
-  def view(self, dtype):
-    r"""
-    Return a new view of the tensor, reinterpret to a specified type.
-
-    :return: A new tensor object refer to the original tensor data, NO copy will occur
-    """
-    ...
 

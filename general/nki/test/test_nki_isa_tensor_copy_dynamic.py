@@ -87,7 +87,7 @@ def example_tensor_copy_dynamic_src_1(src_tensor, offsets):
 
 class TestNkiExampleNisaTensorCopyDynSrc(unittest.TestCase):
   def test_tensor_copy_dyn_src_0(self):
-    in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([128, 512]).astype(np.float32) * 100
     dynamic_offset = np.full([], fill_value=4, dtype=np.int32)
     idx_tensor = np.expand_dims(dynamic_offset + np.arange(64).astype(np.int32),
                                 axis=0)
@@ -97,7 +97,7 @@ class TestNkiExampleNisaTensorCopyDynSrc(unittest.TestCase):
     self.assertTrue(np.allclose(out_tensor, golden))
 
   def test_tensor_copy_dyn_src_1(self):
-    in_tensor = np.random.random_sample([128, 512, 4]).astype(np.float32)
+    in_tensor = np.random.random_sample([128, 512, 4]).astype(np.float32) * 100
     dynamic_offset = np.full([], fill_value=4, dtype=np.int32)
     idx_tensor = np.expand_dims(dynamic_offset + np.arange(8).astype(np.int32),
                                 axis=0)

@@ -63,6 +63,7 @@ and this key allows users to configure the ``trainer``.
     limit_test_batches: 1
     gradient_clip_val: 1.0
     lnc: 2
+    sequential_move_factor: 11
 
 .. note::
 
@@ -154,6 +155,15 @@ Float value to clip gradients at.
     * **Required**: True
 
 
+**sequential_move_factor**
+
+Number of ranks/devices participating in initializing the model weights in parallel. Useful to reduce init time
+when using TP-PP config. The value can be increased upto the number of ``trainer.devices`` being used.
+
+    * **Default value**: 11
+    * **Type**: integer
+    * **Required**: False
+
 .. _nxdt_config_exptm:
 
 Experiment Manager
@@ -180,6 +190,7 @@ experiment logging directory, which parameters to log and how often to log, etc.
         save_last: False
         filename: 'megatron_llama--{step}-{consumed_samples}'
         every_n_train_steps: 200
+        use_master_weights_in_ckpt: False
     log_parameter_norm: True
     log_gradient_norm: True
     enable_recovery_time_instrumentation: False
@@ -247,6 +258,14 @@ How often we want to checkpoint.
     * **Type**: int
     * **Required**: True
 
+**checkpoint_callback_params.use_master_weights_in_ckpt**
+
+Whether or not to save master weights when checkpointing.
+
+    * **Type**: bool
+    * **Default**: False
+    * **Required**: False
+
 **log_parameter_norm**
 
 Set this to log parameter norm across model parallel ranks.
@@ -303,10 +322,19 @@ feature provided by NeuronxDistributed's
 
 **resume_from_checkpoint**
 
-Set this as the checkpoint file to load from. Check the SFT/DPO example config under ``conf`` on how to use it.
+Set this as the checkpoint file to load from. Check the SFT/DPO/ORPO example config under ``conf`` on how to use it.
 
     * **Type**: str
     * **Default**: null
+    * **Required**: False
+
+**ckpt_ptl_version**
+
+Set this only if your checkpoint does not contain the pytorch-lightning version in it.
+This version is the pytorch-lightning version the checkpoint was saved with.
+
+    * **Type**: str
+    * **Default**: "2.5.0"
     * **Required**: False
 
 .. _nxdt_config_distributed_strategy:
@@ -349,6 +377,16 @@ Use a value of 1 if no pipeline parallelism is used.
 
     * **Type**: int
     * **Required**: True
+
+**context_parallel_size**
+
+Context parallel degree to be used for sharding sequence. When
+context_parallel_size is greater than 1,
+``fusions.ring_attention`` must be set to ``True``.
+
+    * **Type**: int
+    * **Required**: False
+    * **Default**: 1
 
 **zero1**
 
@@ -507,6 +545,26 @@ This parameter is True by default.
     * **Type**: bool
     * **Required**: False
 
+**transpose_nki_inputs**
+
+This is set if users want to transpose the inputs to NKI FlashAttention function. To be used only when
+``fusions.flash_attention`` is ``True``. Using ``transpose_nki_inputs`` with ``fusions.flash_attention``
+can improve throughput. This parameter is True by default for all models, unless used otherwise.
+
+    * **Type**: bool
+    * **Required**: False
+
+**pipeline_cuts**
+
+This is set as a list of layer names if users want to specify manual cut points for pipeline parallelism.
+One example is ['model.layers.10', 'model.layers.20'] in the case of PP=3.
+
+    * **Type**: List[str]
+    * **Required**: False
+
+.. note::
+    When using this param, the number of pipeline cuts should always be ``pipeline_model_parallel_size-1``.
+
 **use_cpu_initialization**
 
 Setting this flag to ``True`` will initialize the weights on ``CPU`` and then move to device. It is recommended to set
@@ -521,7 +579,8 @@ This flag controls which module needs to be recomputed during the backward pass.
 
 Values:
 
-- ``selective`` - Enables selective recomputation of specified modules in `activations_checkpoint_recompute` during the backward pass.
+- ``selective`` - Enables selective recomputation of specified
+                modules in `activations_checkpoint_recompute` during the backward pass.
 - ``full`` - Saves activations at layer boundaries and recomputes the entire layer during the backward pass.
 - ``null`` - Disables activation checkpointing.
 
@@ -556,6 +615,16 @@ common for all models supported in the library.
     * **Type**: bool
     * **Required**: True
 
+**fusions.ring_attention**
+
+Setting this flag to ``True`` will use the ring attention module for
+both forward and backward.
+This parameter must be true when ``context_parallel_size``
+is greater than 1.
+
+    * **Type**: bool
+    * **Required**: False
+
 **fusions.do_layer_norm_weight_decay**
 
 Setting this flag to ``True`` will add layer norm weight decay. This parameter is common for all models supported in
@@ -566,7 +635,7 @@ the library.
 
 **optim**
 
-This is where the optimizers can be set. Since the library is built using ``NeMo``, we can configure the optimizers
+This is where the optimizers can be set. We can configure the optimizers
 supported by ``NeMo``. All the optimzers can be configured according to the
 `parameters specified here <https://github.com/NVIDIA/NeMo/blob/v1.14.0/nemo/core/config/optimizers.py>`__.
 
@@ -577,7 +646,7 @@ supported by ``NeMo``. All the optimzers can be configured according to the
 
 **optim.sched**
 
-This is where the LR schedulers can be set. Since the library is built using ``NeMo``, we can configure the schedulers
+This is where the LR schedulers can be set. We can configure the schedulers
 supported by ``NeMo``. All the schedulers can be configured according to the
 `parameters specified here <https://github.com/NVIDIA/NeMo/blob/v1.14.0/nemo/core/config/schedulers.py>`__.
 
@@ -830,7 +899,9 @@ Otherwise it will be defaulted to ``bf16`` in all other cases unless specified.
 Model Alignment Specific
 ------------------------
 
-You can configure a finetuning (SFT) or model alignment (DPO) through the YAML file.
+You can configure fine-tuning (SFT) or model alignment (DPO/ORPO)
+through the YAML file, along with parameter-efficient
+fine-tuning using LoRA.
 
 .. code-block:: yaml
 
@@ -839,13 +910,19 @@ You can configure a finetuning (SFT) or model alignment (DPO) through the YAML f
         dpo:
             kl_beta: 0.01
             loss_type: sigmoid
-            max_dpo_prompt_length: 2048
+            max_prompt_length: 2048
             precompute_ref_log_probs: True
             truncation_mode: keep_start
 
-        # Alternatively, can also use SFT specific config
+        # Alternatively, you can also use SFT specific config
         sft:
             packing: True
+
+        # Alternatively, can also use ORPO specific config
+        orpo:
+            beta: 0.01
+            max_prompt_length: 2048
+            truncation_mode: keep_start
 
         # Parameter-efficient finetuning - LoRA config
         peft:
@@ -856,10 +933,8 @@ You can configure a finetuning (SFT) or model alignment (DPO) through the YAML f
             lora_verbose: True
             target_modules: ["qkv_proj"]
 
-    model:
-        weight_init_only: True
 
-    **alignment_strategy**
+**model_alignment_strategy**
 
     Set only when using finetuning specific algorithms (SFT, DPO, etc) and related hyperparameters
     DPO-specific parameters.
@@ -881,7 +956,7 @@ You can configure a finetuning (SFT) or model alignment (DPO) through the YAML f
                 * **Default**: ``sigmoid``
                 * **Required**: True
 
-            **max_dpo_prompt_length**
+            **max_prompt_length**
 
             Set maximum length of prompt in the concatenated prompt and (chosen/rejected) response input
 
@@ -917,3 +992,84 @@ You can configure a finetuning (SFT) or model alignment (DPO) through the YAML f
                 * **Type**: bool
                 * **Default**: False
                 * **Required**: False
+
+    `Odds Ratio Preference Optimization (ORPO) <https://arxiv.org/abs/2403.07691>`_
+    specific parameters.
+
+        **orpo**
+            **beta**
+
+            KL-divergence beta to control divergence of policy model from reference model
+
+                * **Type**: float
+                * **Default**: 0.01
+                * **Required**: True
+
+            **max_prompt_length**
+
+            Set maximum length of prompt in the concatenated prompt and (chosen/rejected) response input
+
+                * **Type**: integer
+                * **Required**: True
+
+            **truncation_mode**
+
+            To define how to truncate if size (prompt+response) exceeds seq_length
+            options: ["keep_start", "keep_end"]
+
+                * **Type**: str
+                * **Default**: ``keep_start```
+                * **Required**: True
+
+        **peft**
+            Configuration options for Parameter-Efficient Fine-Tuning (PEFT) methods,
+            specifically LoRA settings.
+
+            **lora_rank**
+
+            Rank of LoRA; determines the number of trainable parameters
+            Higher rank allows for more expressive adaptations but increases memory usage
+
+                * **Type**: int
+                * **Default**: 16
+                * **Required**: True
+
+            **lora_alpha**
+
+            Scaling factor for LoRA updates; affects the magnitude of LoRA adaptations.
+
+                * **Type**: int
+                * **Default**: 32
+                * **Required**: True
+
+            **lora_dropout**
+
+            Dropout rate for LoRA layers to prevent overfitting.
+
+                * **Type**: float
+                * **Default**: 0.05
+                * **Required**: False
+
+            **lora_bias**
+
+            Bias type for LoRA. Determines which biases are trainable. Can be 'none', 'all' or 'lora_only'
+
+                * **Type**: str
+                * **Default**: "none"
+                * **Required**: False
+
+            **lora_verbose**
+
+            Enables detailed LoRA-related logging during training.
+
+                * **Type**: bool
+                * **Default**: False
+                * **Required**: False
+
+            **target_modules**
+
+            List of model layers to apply `LoRA <https://arxiv.org/abs/2106.09685>`__.
+
+                * **Type**: list[str]
+                * **Default**: ["qkv_proj"] (for Llama)
+                * **Required**: True

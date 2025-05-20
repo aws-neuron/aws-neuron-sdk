@@ -7,7 +7,7 @@ Trn1/Trn1n Training Performance
    :local:
 
 
-*Last update: April 3rd, 2025*
+*Last update: May 20th, 2025*
 
 
 
@@ -34,6 +34,8 @@ Decoder Models
          TP and PP are specified in the run script and DP is calculated by dividing **world size**(Number of nodes/instances * Number of neuron cores per instance) by TP * PP degrees.
 
          For example : TP = 4, PP = 4 and Number of instances is 32 (trn1.32xlarge). The world size will be : 32 (num instances) * 32(neuron cores per instance) = 1024. Now, DP degree = 1024 (World size)/ 4 (TP) * 4 (PP) = 64
+
+         For more information on batch sizes please refer to :ref:`neuron-batching`
 
 
 Vision Transformer Models

@@ -121,7 +121,7 @@ def example_indirect_save_2(in_tensor):
 
 class TestNkiExampleNlLoadStoreIndirect(unittest.TestCase):
   def test_indirect_load_1(self):
-    in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([128, 512]).astype(np.float32) * 100
     idx_tensor = 2*np.arange(64, dtype=np.int32)
     golden = in_tensor[idx_tensor]
 
@@ -129,7 +129,7 @@ class TestNkiExampleNlLoadStoreIndirect(unittest.TestCase):
     self.assertTrue(np.allclose(out_tensor, golden))
 
   def test_indirect_load_2(self):
-    in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([128, 512]).astype(np.float32) * 100
     idx_tensor = 2*np.arange(64, dtype=np.int32)
     golden = in_tensor[idx_tensor]
 
@@ -137,14 +137,14 @@ class TestNkiExampleNlLoadStoreIndirect(unittest.TestCase):
     self.assertTrue(np.allclose(out_tensor, golden))
 
   def test_indirect_save_1(self):
-    in_tensor = np.random.random_sample([64, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([64, 512]).astype(np.float32) * 100
     idx_tensor = 2*np.arange(64, dtype=np.int32)
 
     out_tensor = example_indirect_save_1(in_tensor, idx_tensor)
     self.assertTrue(np.allclose(out_tensor[idx_tensor], in_tensor))
 
   def test_indirect_save_2(self):
-    in_tensor = np.random.random_sample([64, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([64, 512]).astype(np.float32) * 100
     idx_tensor = 2*np.arange(64, dtype=np.int32)
 
     out_tensor = example_indirect_save_2(in_tensor)

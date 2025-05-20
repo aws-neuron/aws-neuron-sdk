@@ -573,6 +573,27 @@ To view a device profile go to https://ui.perfetto.dev/ and open the  ``device_p
 .. note::
     Your browser may run out of memory when viewing ``*.pftrace`` (Perfetto trace) files that are more than a few hundred MB. See the section :ref:`Viewing Large Profiles in Perfetto <neuron-profile-large-perfetto-profiles>` for directions on how to view large traces using the trace processor.
 
+
+Perfetto Output View Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When outputting to Perfetto it is possible to group your traces by different attributes. This is useful for
+larger profiles involving many NeuronCores and instances. The following options are available:
+
++---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|           CLI option            |                                                                                                                     Description                                                                                                                     |
++=================================+=====================================================================================================================================================================================================================================================+
+| --system-trace-primary-group    | The first order grouping of trace events. In Perfetto this corresponds to a process (group of rows in the UI).  Comma-delimited list of field names (options include instance_id, thread_id, lnc_idx, process_id) (default: instance_id,process_id) |
++---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| --system-trace-secondary-group  | The second order grouping of trace events. In Perfetto this corresponds to a thread (single row in the UI).  Comma-delimited list of field names (options include instance_id, thread_id, lnc_idx, process_id) (default: lnc_idx,thread_id)         |
++---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
+For example, the following profile uses ``neuron-profile view --output-format=perfetto --system-trace-primary-group=instance_id,process_id --system-trace-secondary-group=lnc_idx,thread_id`` to group the system profile first by unique combinations
+of instance_id and process_id, and then in each of those groups there are rows of events with unique combinations of lnc_idx and thread_id.
+
+|neuron-profiler2-perfetto-grouping|
+
 Generating JSON Output From Profiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -684,3 +705,4 @@ the correct output directory and this is the output directory passed to
 .. |neuron-profiler2-drilldown-device| image:: /images/neuron-profiler2-drilldown-device.png
 .. |neuron-profiler2-perfetto-timeline| image:: /images/neuron-profiler2-perfetto-timeline.png
 .. |neuron-profiler2-perfetto-device-timeline| image:: /images/neuron-profiler2-perfetto-device-timeline.png
+.. |neuron-profiler2-perfetto-grouping| image:: /images/neuron-profiler2-perfetto-grouping.png

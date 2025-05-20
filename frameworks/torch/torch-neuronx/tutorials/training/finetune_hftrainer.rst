@@ -207,9 +207,10 @@ Known issues and limitations
 
 The following are currently known issues:
 
+-  During model evaluation, there can be small compilations for every evaluation step due to a `known transformers issue <https://github.com/huggingface/transformers/issues/37593>`_. The work-around is to set training arguments ``eval_do_concat_batches=False`` and apply the changes in `the PR <https://github.com/huggingface/transformers/pull/37621>`_ which will be in a future release of transformers package (version 4.52 or later).
 -  With transformers==4.44.0, running one worker fine-tuning without torchrun would result in a hang. To workaround and run one worker fine-tuning, use ``torchrun --nproc_per_node=1 <script>``.
 -  With torch-neuronx 2.1, HF Trainer API's use of XLA function ``xm.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. This is an issue with the trial execution of empty NEFFs and should not affect the normal execution of the training script.
--  Multi-worker training using Trainer API resulted in too many graph compilations for HF transformers>=4.35: This is resolved with HF transformers>=4.37 with the additional workarounds as shown in `the ticket<https://github.com/aws-neuron/aws-neuron-sdk/issues/813>`.
+-  Multi-worker training using Trainer API resulted in too many graph compilations for HF transformers>=4.35: This is resolved with HF transformers>=4.37 with the additional workarounds as shown in `the ticket<https://github.com/aws-neuron/aws-neuron-sdk/issues/813>`_.
 -  Long compilation times: this can be alleviated with
    ``neuron_parallel_compile`` tool to extract graphs from a short trial run and
    compile them in parallel ahead of the actual run, as shown above.

@@ -49,16 +49,18 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │   ├── hardware
   │   │   ├── mem_ecc_uncorrected
   │   │   └── sram_ecc_uncorrected
-  │   └── memory_usage
-  │       └── host_mem
-  │           ├── application_memory
-  │           ├── constants
-  │           ├── dma_buffers
-  │           ├── dma_rings
-  │           ├── driver_memory
-  │           ├── notifications
-  │           ├── tensors
-  │           └── uncategorized
+  │   ├── memory_usage
+  │   │    └── host_mem
+  │   │       ├── application_memory
+  │   │       ├── constants
+  │   │       ├── dma_buffers
+  │   │       ├── dma_rings
+  │   │       ├── driver_memory
+  │   │       ├── notifications
+  │   │       ├── tensors
+  │   │       └── uncategorized
+  │   └── power
+  │        └── utilization
   ├── neuron_core0/
   │       ├── info/
   │       │   └── architecture/
@@ -98,7 +100,8 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   │       │       ├── inference_count
   │       │       ├── model_load_count
   │       │       ├── reset_fail_count
-  │       │       └── reset_req_count
+  │       │       ├── reset_req_count
+  │       │       └── nc_time_in_use
   │       └── ...
   │── neuron_core1/
   │   │   ├── info/
@@ -183,8 +186,36 @@ Description for Each Field
     * ``mem_ecc_uncorrected``: The number of uncorrected ECC events in the Neuron device's DRAM.
 
     * ``sram_ecc_uncorrected``: The  number of uncorrected ECC events in the Neuron device's SRAM.
+  * ``power/``: Power statistics.
 
+    * ``utilization``: Reports per-minute power usage statistics as a percentage of max power in the following format:
 
+        <status>,<timestamp>,<min_power>,<max_power>,<avg_power>
+
+        **Field descriptions:**
+
+        status
+            Indicates the sampling state in a string.  Valid values are:
+
+              ``POWER_STATUS_VALID`` - Sampling successful
+
+              ``POWER_STATUS_NO_DATA`` - No samples available
+
+              ``POWER_STATUS_INVALID`` - An internal sampling error occurred
+
+        timestamp
+            Time when the sample was collected in Unix epoch seconds (integer)
+
+        min_power
+            Minimum power utilization during the sampling period (0.00-100.00%)
+
+        max_power
+            Maximum power utilization during the sampling period (0.00-100.00%)
+
+        avg_power
+            Average power utilization during the sampling period (0.00-100.00%)
+
+      The interface updates these statistics every minute based on continuous power sampling.
 * ``other_info/``: This directory contains statistics that are not included by ``status/`` and ``memory_usage/``. None of them are counter types.
 
   * ``flop_count``: The number of flops. You can use it to calculate the TFLOP/s by ``flop_count`` / time interval
@@ -197,6 +228,7 @@ Description for Each Field
 
   * ``reset_req_count``:  The number of device resets requests
 
+  * ``nc_time_in_use``:  The time interval in microseconds between the start and the end of the current execution on hardware
 
 Other fields:
 

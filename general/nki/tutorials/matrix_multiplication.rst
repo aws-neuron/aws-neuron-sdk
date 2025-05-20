@@ -364,7 +364,7 @@ discussed in this tutorial.
 * All matrix multiplication NKI kernels: :download:`matrix_multiplication_nki_kernels.py <../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py>`
 * PyTorch implementation: :download:`matrix_multiplication_torch.py <../examples/matrix_multiplication/matrix_multiplication_torch.py>`
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/nki_samples/tutorials/matrix_multiplication/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/matrix_multiplication/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

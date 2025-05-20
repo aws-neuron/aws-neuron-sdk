@@ -8,7 +8,8 @@ Neuronx Distributed Training framework is built on top of
 `NeMo <https://github.com/NVIDIA/NeMo/tree/v1.14.0>`_ libraries and
 `PyTorch-Lightning <https://github.com/Lightning-AI/pytorch-lightning/tree/1.8.6>`_. The guide below will provide
 a step-by-step instructions on how to setup the environment to run training using NeuronX Distributed Training
-framework.
+framework. Alternatively, you can use the Neuronx Distributed Training virtual environment found in the Neuron DLAMI without
+running any of these setup steps. See :ref:`neuron-dlami-overview`.
 
 .. contents:: Table of contents
    :local:
