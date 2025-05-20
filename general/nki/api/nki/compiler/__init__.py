@@ -1,6 +1,12 @@
 import numpy as np
 import ml_dtypes
 
+psum = ...
+r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.psum.auto_alloc()``"""
+
+sbuf = ...
+r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
+
 def enable_stack_allocator(func=None, log_level=50):
   r"""
   Use stack allocator to allocate the psum and sbuf tensors in the kernel.
@@ -27,11 +33,8 @@ def force_auto_alloc(func=None):
   """
   ...
 
-psum = ...
-r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.psum.auto_alloc()``"""
-
-sbuf = ...
-r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
+def no_reorder():
+  ...
 
 def skip_middle_end_transformations(func=None):
   r""" Skip all middle end transformations on the kernel

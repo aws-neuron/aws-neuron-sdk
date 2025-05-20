@@ -45,8 +45,8 @@ def nki_copy_predicated(predicate, on_true_tensor, on_false_tensor):
 class TestNkiIsaExamplescopy_predicated(unittest.TestCase):
   def test_copy_predicated(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
     b = nki_copy_predicated(np.less_equal(a, 0.8), a, b)
     b_golden = np.where(np.less_equal(a, 0.8), a, b)

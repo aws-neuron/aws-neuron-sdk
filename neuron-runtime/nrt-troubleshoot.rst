@@ -341,7 +341,7 @@ To enable input dumping for each failed execution, set the following environment
 
 ::
     
-    export NEURON_RT_DUMP_INPUTS_ON_ERR=<an NRT_STATUS value>
+    export NEURON_RT_DBG_DUMP_INPUTS_ON_ERR=<an NRT_STATUS value>
 
 A complete set of ``NRT_STATUS`` can be found under :ref:`The LIBNRT API Return Codes <nrt_api>`.
 
@@ -359,12 +359,12 @@ To disable input dump, you can set the environment variable back to 0
 
 ::
     
-    export NEURON_RT_DUMP_INPUTS_ON_ERR=0
+    export NEURON_RT_DBG_DUMP_INPUTS_ON_ERR=0
 
 **Example: Debug an out-of-bound access execution**
 
 To debug an out-of-bound (OOB) execution, which returns an NRT_STATUS code of 1006, both HLO and all inputs are required. 
-By setting the ``NEURON_RT_DUMP_INPUTS_ON_ERR`` environment variable to 1006, you can capture the inputs leading to an OOB execution.
+By setting the ``NEURON_RT_DBG_DUMP_INPUTS_ON_ERR`` environment variable to 1006, you can capture the inputs leading to an OOB execution.
 
 For example, when an OOB error occurs, Neuron Runtime creates a directory named input_dump_424238335_h_nn_10001. 
 Here, 424238335 is a randomly generated number by Neuron Runtime, and 10001 is the Neuron Runtime generated execution ID. 
@@ -372,7 +372,7 @@ All relevant inputs, labeled from input0 to input14, are saved in binary format 
 
 ::
 
-    ubuntu@ip-172-31-53-90:~$ NEURON_RT_DUMP_INPUTS_ON_ERR=1006 torchrun --nproc_per_node=2 train_torchrun.py
+    ubuntu@ip-172-31-53-90:~$ NEURON_RT_DBG_DUMP_INPUTS_ON_ERR=1006 torchrun --nproc_per_node=2 train_torchrun.py
     ......
     2024-Jun-26 00:32:47.943821 30294:32381 ERROR  TDRV:generate_custom_notification_msg        nd0:nc0:h_model.id1001: Received notification generated at runtime: failed to run scatter/gather (indirect memory copy), due to out-of-bound access. isa instruction line number = 11. model name = /home/ubuntu/token-seqlen1280-batch128-FullyUnrolled.736.2.0.62758.0a0+44863561.93f365ce40ab99133659.pb.neff
     ......

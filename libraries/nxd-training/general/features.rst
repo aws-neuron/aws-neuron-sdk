@@ -32,6 +32,7 @@ Distributed Techniques
     2. Interleave pipeline schedule (or virtual pipeline parallel)
 5. `Zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2.html#what-is-zero-1>`_
 6. Expert-parallelism
+7. `Context-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/context_parallelism_overview.html>`_
 
 Modules
 --------

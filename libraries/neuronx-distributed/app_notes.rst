@@ -10,6 +10,7 @@ App Notes
     /libraries/neuronx-distributed/tensor_parallelism_overview
     /libraries/neuronx-distributed/pipeline_parallelism_overview
     /libraries/neuronx-distributed/activation_memory_reduction
+    /libraries/neuronx-distributed/context_parallelism_overview
 
 
 

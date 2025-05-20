@@ -77,8 +77,8 @@ def nki_bn_stats_bn_aggr_2(b_tensor):
 
 class TestNkiIsaExamplesBnStatsBnAggr(unittest.TestCase):
   def test_bn_stats_bn_aggr(self):
-    a = np.random.random_sample([128, 128]).astype(np.float32)
-    b = np.random.random_sample([128, 1024]).astype(np.float32)
+    a = np.random.random_sample([128, 128]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 1024]).astype(np.float32) * 100
 
     a_mean, a_var = nki_bn_stats_bn_aggr_1(a)
     b_mean, b_var = nki_bn_stats_bn_aggr_2(b)

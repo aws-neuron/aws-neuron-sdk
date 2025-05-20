@@ -41,7 +41,7 @@ def nki_mask(in_tensor):
 class TestNkiIsaExamplesMask(unittest.TestCase):
   def test_mask(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
     b = nki_mask(a)
 

@@ -54,8 +54,8 @@ def nki_dropout_scalar(in_tensor):
 
 class TestNkiIsaExamplesDropout(unittest.TestCase):
   def test_dropout(self):
-    a = np.random.random_sample([128, 512]).astype(np.float32)
-    b = np.random.random_sample([128, 1]).astype(np.float32) 
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
+    b = np.random.random_sample([128, 1]).astype(np.float32) * 100 
     c = np.zeros([128, 512]).astype(np.float32)
     c_zeros = np.copy(c)
     
@@ -65,7 +65,7 @@ class TestNkiIsaExamplesDropout(unittest.TestCase):
     # self.assertFalse(np.allclose(c, a)) # we don't have dropout simulation implementation
     
   def test_dropout_scalar(self):
-    a = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
     b = np.zeros([128, 512]).astype(np.float32)
     b_zeros = np.copy(b)
     

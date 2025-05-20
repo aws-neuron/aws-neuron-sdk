@@ -145,7 +145,9 @@ Attributes
     performance by using larger matrices. Defaults to ``false``.
   - ``sequence_parallel_enabled`` - Whether to use sequence parallelism,
     which splits tensors along the sequence dimension. Defaults to
-    ``false``.
+    ``false``. Sequence parallel requires context sequence length to
+    be divisible with tensor parallelism degree. Once enabled, sequence parallelism
+    is only applied to context encoding.
   - ``qk_layernorm`` - Whether to enable QK layer normalization.
     Defaults to ``false``.
 
@@ -241,7 +243,11 @@ Attributes
 - Kernels
 
   - ``attn_kernel_enabled`` - Whether to enable the flash attention
-    kernel when supported. Defaults to ``false``.
+    kernel when supported. Defaults to ``false``. Flash attention is automatically enabled by default for certain conditions,
+    see ``NeuronAttentionBase.get_flash_attention_strategy`` in 
+    `neuronx_distributed_inference.modules.attention.attention_base <https://github.com/aws-neuron/neuronx-distributed-inference/blob/main/src/neuronx_distributed_inference/modules/attention/attention_base.py>`_.
+    Even explicitly enabled flash attention with ``NeuronConfig(attn_kernel_enabled=True)`` will be disabled for use cases
+    where enabling it would be less efficient.
   - ``qkv_kernel_enabled`` - Whether to enable the fused QKV kernel. To
     use this option, you must set ``fused_qkv`` to ``true`` and ``torch_dtype``
     to ``torch.bfloat16``. Defaults to ``false``.

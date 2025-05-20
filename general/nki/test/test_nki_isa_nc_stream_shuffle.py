@@ -33,7 +33,7 @@ def nki_stream_shuffle(in_tensor, out_tensor):
       
 class TestNkiIsaExamplesStreamShuffle(unittest.TestCase):
   def test_stream_shuffle(self):
-    in_tensor = np.random.random_sample([32, 128]).astype(np.float32)
+    in_tensor = np.random.random_sample([32, 128]).astype(np.float32) * 100
     out_tensor = np.ndarray([32, 128], dtype=np.float32)
 
     simulate_kernel(nki_stream_shuffle, in_tensor, out_tensor)

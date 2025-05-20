@@ -52,7 +52,6 @@ While NxD Inference supports most features and models available in TNx, there ar
 
 **Features that are not yet supported in NxD Inference**: The following TNx features aren't supported yet in the NxD Inference library.
 
-* Neuron persistent cache
 * Multi-Node Inference support
 
 

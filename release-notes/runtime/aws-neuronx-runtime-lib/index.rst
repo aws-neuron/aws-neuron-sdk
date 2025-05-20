@@ -31,6 +31,33 @@ NEFF Version Runtime Version Range Notes
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
 
+Neuron Runtime Library [2.25.57.0]
+---------------------------------
+Date: 05/19/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added ``NEURON_RT_LOW_LATENCY_TASKS_CPU_AFFINITY`` environment variable to allow users to set the thread affinity of low latency tasks that run on host cpu
+
+Improvements
+^^^^^^^^^^^^
+* Refined software notification queue overflow detection flow and improved error message
+* Reduced latency for All-Reduce intra-chip collective (TP 4) by 50% for medium message sizes
+* Improved error message when an execution request is passed a tensor allocated on an incorrect HBM
+* Improved NEFF switch latency by up to 95% when using async mode
+* Increased the number of different replica groups supported in the same NEFF on TRN2
+* Explicitly limit the max number of in-flight async requests to the hard limit of 63
+
+Bug fixes
+^^^^^^^^^
+* Fixed segfault that can occur when applications attempt to load a NEFF with an unsupported number of FMA source descriptors
+
+Neuron Profiler 2.0 (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Added traces for Host <-> device data transfer events in system profiles
+* Added pre/post execution hooks to system profiles
+* Significant performance improvements in time taken by calls to nrt_sys_trace_fetch_events()
+
 Neuron Runtime Library [2.24.53.0]
 ---------------------------------
 Date: 04/03/2025

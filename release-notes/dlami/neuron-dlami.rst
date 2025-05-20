@@ -8,6 +8,21 @@ Neuron DLAMI Release Notes
    :depth: 1
 
 
+Neuron 2.23.0
+-------------
+
+Date: 05/19/2025
+
+- Adding support for PyTorch 2.6 (Amazon Linux 2023, Ubuntu 22.04) single framework DLAMI.
+- Adding support JAX 0.5 (Amazon Linux 2023, Ubuntu 22.05) single framework DLAMI.
+- Update multi framework DLAMI's virtual environments to use PyTorch 2.6 and JAX 0.5
+- Security improvements: Bump Linux kernel to 6.8.1027 for Ubuntu 22 DLAMIs.
+- Security improvements: Bump Linux kernel to 6.1.134 for Amazon Linux 2023 DLAMIs.
+- Added a setup script within neuronx-distributed-training virtual environment to automate the installation of required dependencies. See :ref: `nxdt_installation_guide`.
+
+See :ref:`neuron-dlami-overview`.
+
+
 Neuron 2.22.0
 -------------
 

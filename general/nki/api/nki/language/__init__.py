@@ -1,6 +1,176 @@
 import numpy as np
 import ml_dtypes
 
+bfloat16 = np.dtype('bfloat16')
+r"""16-bit floating-point number (1S,8E,7M)"""
+
+bool_ = np.bool_
+r"""Boolean type (True or False), stored as a byte. Same as `numpy.bool_`."""
+
+float16 = np.float16
+r"""Half-precision floating-point number type. Same as `numpy.float16`."""
+
+float32 = np.float32
+r"""Single-precision floating-point number type, compatible with C ``float``. Same as `numpy.float32`."""
+
+float8_e4m3 = np.dtype('float8_e4m3')
+r"""8-bit floating-point number (1S,4E,3M)"""
+
+float8_e5m2 = np.dtype('float8_e5m2')
+r"""8-bit floating-point number (1S,5E,2M)"""
+
+class fp32: 
+  r""" FP32 Constants"""
+
+  @property
+  def min(self):
+    r"""FP32 Bit pattern (0xff7fffff) representing the minimum (or maximum negative) FP32 value"""
+    ...
+
+hbm = ...
+r"""HBM - Alias of `private_hbm`"""
+
+int16 = np.int16
+r"""Signed integer type, compatible with C ``short``. Same as `numpy.int16`."""
+
+int32 = np.int32
+r"""Signed integer type, compatible with C ``int``. Same as `numpy.int32`."""
+
+int8 = np.int8
+r"""Signed integer type, compatible with C ``char``. Same as `numpy.int8`."""
+
+mgrid = ...
+r"""
+  Same as NumPy mgrid:
+  "An instance which returns a dense (or fleshed out) mesh-grid when indexed,
+  so that each returned argument has the same shape. The dimensions and number
+  of the output arrays are equal to the number of indexing dimensions."
+
+  Complex numbers are not supported in the step length.
+
+  ((Similar to `numpy.mgrid <https://numpy.org/doc/stable/reference/generated/numpy.mgrid.html>`_))
+
+  .. nki_example:: ../../test/test_nki_nl_mgrid.py
+   :language: python
+   :marker: NKI_EXAMPLE_8
+
+  .. nki_example:: ../../test/test_nki_nl_mgrid.py
+   :language: python
+   :marker: NKI_EXAMPLE_9
+
+  """
+
+nc = ...
+r""" Create a logical neuron core dimension in launch grid.
+
+  The instances of spmd kernel will be distributed to different physical neuron
+  cores on the annotated dimension.
+
+  .. code-block:: python
+
+    # Let compiler decide how to distribute the instances of spmd kernel
+    c = kernel[2, 2](a, b)
+
+    import neuronxcc.nki.language as nl
+
+    # Distribute the kernel to physical neuron cores around the first dimension
+    # of the spmd grid.
+    c = kernel[nl.nc(2), 2](a, b)
+    # This means:
+    # Physical NC [0]: kernel[0, 0], kernel[0, 1]
+    # Physical NC [1]: kernel[1, 0], kernel[1, 1]
+
+  Sometimes the size of a spmd dimension is bigger than the number of available
+  physical neuron cores. We can control the distribution with the following
+  syntax:
+
+  .. nki_example:: ../../test/test_nki_spmd_grid.py
+   :language: python
+   :marker: NKI_EXAMPLE_0
+
+  """
+
+par_dim = ...
+r""" Mark a dimension explicitly as a partition dimension.
+  """
+
+private_hbm = ...
+r"""HBM - Only visible to each individual kernel instance in the SPMD grid"""
+
+psum = ...
+r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.psum.auto_alloc()``"""
+
+sbuf = ...
+r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
+
+shared_hbm = ...
+r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
+
+spmd_dim = ...
+r""" Create a dimension in the SPMD launch grid of a NKI kernel with sub-dimension tiling.
+
+  A key use case for ``spmd_dim`` is to shard an existing NKI kernel over multiple
+  NeuronCores without modifying the internal kernel implementation. Suppose we
+  have a kernel, ``nki_spmd_kernel``, which is launched with a 2D SPMD grid,
+  (4, 2). We can shard the first dimension of the launch grid (size 4) over two
+  physical NeuronCores by directly manipulating the launch grid as follows:
+
+  .. nki_example:: ../../test/test_nki_spmd_grid.py
+   :language: python
+   :marker: NKI_EXAMPLE_0
+
+  """
+
+tfloat32 = np.dtype('|V4')
+r"""32-bit floating-point number (1S,8E,10M)"""
+
+class tile_size: 
+  r""" Tile size constants. """
+
+  @property
+  def bn_stats_fmax(self):
+    r"""Maximum free dimension of BN_STATS"""
+    ...
+
+  @property
+  def gemm_moving_fmax(self):
+    r"""Maximum free dimension of the moving operand of General Matrix Multiplication on Tensor Engine."""
+    ...
+
+  @property
+  def gemm_stationary_fmax(self):
+    r"""Maximum free dimension of the stationary operand of General Matrix Multiplication on Tensor Engine."""
+    ...
+
+  @property
+  def pmax(self):
+    r"""Maximum partition dimension of a tile."""
+    ...
+
+  @property
+  def psum_fmax(self):
+    r"""Maximum free dimension of a tile on PSUM buffer."""
+    ...
+
+  @property
+  def psum_min_align(self):
+    r"""The minimum byte alignment requirement for PSUM free dimension address."""
+    ...
+
+  @property
+  def sbuf_min_align(self):
+    r"""The minimum byte alignment requirement for SBUF free dimension address."""
+    ...
+
+uint16 = np.uint16
+r"""Unsigned integer type, compatible with C ``unsigned short``. Same as `numpy.uint16`."""
+
+uint32 = np.uint32
+r"""Unsigned integer type, compatible with C ``unsigned int``. Same as `numpy.uint32`."""
+
+uint8 = np.uint8
+r"""Unsigned integer type, compatible with C ``unsigned char``. Same as `numpy.uint8`."""
+
 def abs(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Absolute value of the input, element-wise. 
@@ -172,9 +342,6 @@ def atomic_rmw(dst, value, op, *, mask=None, **kwargs):
   """
   ...
 
-bfloat16 = np.dtype('bfloat16')
-r"""16-bit floating-point number (1S,8E,7M)"""
-
 def bitwise_and(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Bitwise AND of the two inputs, element-wise.
@@ -225,9 +392,6 @@ def bitwise_xor(x, y, *, dtype=None, mask=None, **kwargs):
   :return: a tile that has values ``x ^ y``.
   """
   ...
-
-bool_ = np.bool_
-r"""Boolean type (True or False), stored as a byte. Same as `numpy.bool_`."""
 
 def broadcast_to(src, *, shape, **kwargs):
   r"""
@@ -424,18 +588,6 @@ def expand_dims(data, axis):
 def finfo(dtype):
   ...
 
-float16 = np.float16
-r"""Half-precision floating-point number type. Same as `numpy.float16`."""
-
-float32 = np.float32
-r"""Single-precision floating-point number type, compatible with C ``float``. Same as `numpy.float32`."""
-
-float8_e4m3 = np.dtype('float8_e4m3')
-r"""8-bit floating-point number (1S,4E,3M)"""
-
-float8_e5m2 = np.dtype('float8_e5m2')
-r"""8-bit floating-point number (1S,5E,2M)"""
-
 def floor(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Floor of the input, element-wise.
@@ -554,18 +706,6 @@ def greater_equal(x, y, *, dtype=bool, mask=None, **kwargs):
   :return: a tile with boolean result of ``x >= y`` element-wise.
   """
   ...
-
-hbm = ...
-r"""HBM - Alias of `private_hbm`"""
-
-int16 = np.int16
-r"""Signed integer type, compatible with C ``short``. Same as `numpy.int16`."""
-
-int32 = np.int32
-r"""Signed integer type, compatible with C ``int``. Same as `numpy.int32`."""
-
-int8 = np.int8
-r"""Signed integer type, compatible with C ``char``. Same as `numpy.int8`."""
 
 def invert(x, *, dtype=None, mask=None, **kwargs):
   r"""
@@ -879,27 +1019,6 @@ def mean(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   """
   ...
 
-mgrid = ...
-r"""
-  Same as NumPy mgrid:
-  "An instance which returns a dense (or fleshed out) mesh-grid when indexed,
-  so that each returned argument has the same shape. The dimensions and number
-  of the output arrays are equal to the number of indexing dimensions."
-
-  Complex numbers are not supported in the step length.
-
-  ((Similar to `numpy.mgrid <https://numpy.org/doc/stable/reference/generated/numpy.mgrid.html>`_))
-
-  .. nki_example:: ../../test/test_nki_nl_mgrid.py
-   :language: python
-   :marker: NKI_EXAMPLE_8
-
-  .. nki_example:: ../../test/test_nki_nl_mgrid.py
-   :language: python
-   :marker: NKI_EXAMPLE_9
-
-  """
-
 def min(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
   Minimum of elements along the specified axis (or axes) of the input.
@@ -980,36 +1099,6 @@ def multiply(x, y, *, dtype=None, mask=None, **kwargs):
   """
   ...
 
-nc = ...
-r""" Create a logical neuron core dimension in launch grid.
-
-  The instances of spmd kernel will be distributed to different physical neuron
-  cores on the annotated dimension.
-
-  .. code-block:: python
-
-    # Let compiler decide how to distribute the instances of spmd kernel
-    c = kernel[2, 2](a, b)
-
-    import neuronxcc.nki.language as nl
-
-    # Distribute the kernel to physical neuron cores around the first dimension
-    # of the spmd grid.
-    c = kernel[nl.nc(2), 2](a, b)
-    # This means:
-    # Physical NC [0]: kernel[0, 0], kernel[0, 1]
-    # Physical NC [1]: kernel[1, 0], kernel[1, 1]
-
-  Sometimes the size of a spmd dimension is bigger than the number of available
-  physical neuron cores. We can control the distribution with the following
-  syntax:
-
-  .. nki_example:: ../../test/test_nki_spmd_grid.py
-   :language: python
-   :marker: NKI_EXAMPLE_0
-
-  """
-
 def ndarray(shape, dtype, *, buffer=None, name="", **kwargs):
   r"""
   Create a new tensor of given shape and dtype on the specified buffer.
@@ -1075,10 +1164,6 @@ def ones(shape, dtype, *, buffer=None, name="", **kwargs):
   """
   ...
 
-par_dim = ...
-r""" Mark a dimension explicitly as a partition dimension.
-  """
-
 def power(x, y, *, dtype=None, mask=None, **kwargs):
   r"""
   Elements of x raised to powers of y, element-wise.
@@ -1092,9 +1177,6 @@ def power(x, y, *, dtype=None, mask=None, **kwargs):
   :return: a tile that has values ``x`` to the power of ``y``.
   """
   ...
-
-private_hbm = ...
-r"""HBM - Only visible to each individual kernel instance in the SPMD grid"""
 
 def prod(x, axis, *, dtype=None, mask=None, keepdims=False, **kwargs):
   r"""
@@ -1129,9 +1211,6 @@ def program_ndim():
   :return:    The number of dimensions in the launch grid, i.e. the number of axes
   """
   ...
-
-psum = ...
-r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.psum.auto_alloc()``"""
 
 def rand(shape, dtype=np.float32, **kwargs):
   r"""
@@ -1235,9 +1314,6 @@ def rsqrt(x, *, dtype=None, mask=None, **kwargs):
   """
   ...
 
-sbuf = ...
-r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
-
 def sequential_range(*args, **kwargs):
   r"""
   Create a sequence of numbers for use as **sequential** loop iterators in NKI. ``sequential_range``
@@ -1299,9 +1375,6 @@ def shared_constant(constant, dtype=None, **kwargs):
   :return: a tensor which contains the constant data
   """
   ...
-
-shared_hbm = ...
-r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
 
 def shared_identity_matrix(n, dtype=np.uint8, **kwargs):
   r"""
@@ -1415,21 +1488,6 @@ def softplus(x, *, dtype=None, mask=None, **kwargs):
   :return: a tile that has softplus of ``x``.
   """
   ...
-
-spmd_dim = ...
-r""" Create a dimension in the SPMD launch grid of a NKI kernel with sub-dimension tiling.
-
-  A key use case for ``spmd_dim`` is to shard an existing NKI kernel over multiple
-  NeuronCores without modifying the internal kernel implementation. Suppose we
-  have a kernel, ``nki_spmd_kernel``, which is launched with a 2D SPMD grid,
-  (4, 2). We can shard the first dimension of the launch grid (size 4) over two
-  physical NeuronCores by directly manipulating the launch grid as follows:
-
-  .. nki_example:: ../../test/test_nki_spmd_grid.py
-   :language: python
-   :marker: NKI_EXAMPLE_0
-
-  """
 
 def sqrt(x, *, dtype=None, mask=None, **kwargs):
   r"""
@@ -1577,47 +1635,6 @@ def tanh(x, *, dtype=None, mask=None, **kwargs):
   """
   ...
 
-tfloat32 = np.dtype('|V4')
-r"""32-bit floating-point number (1S,8E,10M)"""
-
-class tile_size: 
-  r""" Tile size constants. """
-
-  @property
-  def bn_stats_fmax(self):
-    r"""Maximum free dimension of BN_STATS"""
-    ...
-
-  @property
-  def gemm_moving_fmax(self):
-    r"""Maximum free dimension of the moving operand of General Matrix Multiplication on Tensor Engine."""
-    ...
-
-  @property
-  def gemm_stationary_fmax(self):
-    r"""Maximum free dimension of the stationary operand of General Matrix Multiplication on Tensor Engine."""
-    ...
-
-  @property
-  def pmax(self):
-    r"""Maximum partition dimension of a tile."""
-    ...
-
-  @property
-  def psum_fmax(self):
-    r"""Maximum free dimension of a tile on PSUM buffer."""
-    ...
-
-  @property
-  def psum_min_align(self):
-    r"""The minimum byte alignment requirement for PSUM free dimension address."""
-    ...
-
-  @property
-  def sbuf_min_align(self):
-    r"""The minimum byte alignment requirement for SBUF free dimension address."""
-    ...
-
 def transpose(x, *, dtype=None, mask=None, **kwargs):
   r"""
   Transposes a 2D tile between its partition and free dimension.
@@ -1644,15 +1661,6 @@ def trunc(x, *, dtype=None, mask=None, **kwargs):
   :return: a tile that has truncated values of ``x``.
   """
   ...
-
-uint16 = np.uint16
-r"""Unsigned integer type, compatible with C ``unsigned short``. Same as `numpy.uint16`."""
-
-uint32 = np.uint32
-r"""Unsigned integer type, compatible with C ``unsigned int``. Same as `numpy.uint32`."""
-
-uint8 = np.uint8
-r"""Unsigned integer type, compatible with C ``unsigned char``. Same as `numpy.uint8`."""
 
 def var(x, axis, *, dtype=None, mask=None, **kwargs):
   r"""

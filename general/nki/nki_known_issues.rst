@@ -54,22 +54,6 @@ Unsupported Syntax:
      Internal mapping failed. Only input/output/const DRAM location is supported!``" will be thrown when such
      tensor is encountered.
 
-#. ``+=`` only works reliably in the special context of PSUM accumulation for matmuls within an affine loop:
-
-   .. code-block:: python
-
-      # condition 1: a psum buffer with zeros
-      psum_buf = nl.zeros(..., buffer=nl.psum)
-
-      # condition 2: an affine range loop
-      for i in nl.affine_range(N):
-         # condition 3: add matmul results from TensorEngine
-         psum_buf += nl.matmul(...) # or nisa.nc_matmul
-
-   Avoid using ``+=`` unless all three conditions above are met in your kernel code. Use ``var[...] = var + new_var``
-   explicitly as a workaround.
-
-
 Unexpected Behavior:
 --------------------------
 
@@ -78,15 +62,6 @@ Unexpected Behavior:
    *  Custom data types like ``nl.float32r``, ``nl.bfloat16``, ``nl.float8_e4m3``, and ``nl.float8_e5m2`` simulate
       in ``fp32`` precision. Also, NumPy API calls outside of the NKI kernel, such as ``np.allclose``
       may not work with the above types.
-
-   *  :doc:`nl.rand <api/generated/nki.language.rand>` generates the same values for subsequent calls to ``nl.rand()``.
-
-   *  :doc:`nl.random_seed <api/generated/nki.language.random_seed>` is a no-op in simulation.
-
-   *  :doc:`nisa.dropout <api/generated/nki.isa.dropout>` is a no-op in simulation.
-
-   *  Masks don't work in simulation, and garbage data is generated in tensor elements that are
-      supposed to be untouched based on API masking.
 
 #. Execution:
 

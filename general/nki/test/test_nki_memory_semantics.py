@@ -24,7 +24,7 @@ def simple_demo_kernel(a_ptr):
 class TestNkiMemorySemantics(unittest.TestCase):
   def test_simulate_kernel(self):
     np.random.seed(0)
-    a = np.random.random_sample([4, 128, 512]).astype(np.float32)
+    a = np.random.random_sample([4, 128, 512]).astype(np.float32) * 100
     
     result = simple_demo_kernel(a)
 

@@ -8,10 +8,9 @@ What's New
    :depth: 1
 
 .. _latest-neuron-release:
+.. _neuron-2.23.0-whatsnew:
 
-.. _neuron-2.22.1-whatsnew:
-
-Neuron 2.22.1 (05/12/2025)
+Neuron 2.23.0 (05/20/2025)
 ---------------------------
 
 .. contents:: Table of contents
@@ -21,34 +20,21 @@ Neuron 2.22.1 (05/12/2025)
 What's New
 ^^^^^^^^^^
 
-Neuron 2.22.1 release includes a Neuron Driver update that resolves DMA abort errors on Trainium2 devices. These errors were previously occurring in the Neuron Runtime during specific workload executions.
+With the Neuron 2.23 release, we move NxD Inference (NxDI) library out of beta. It is now recommended for all multi-chip inference use-cases. In addition, Neuron has new training capabilities, including Context Parallelism and ORPO, NKI improvements (new operators and ISA features), and new Neuron Profiler debugging and performance analysis optimizations. Finaly, Neuron now supports :ref:`PyTorch 2.6 <introduce-pytorch-2-6>` and JAX 0.5.3.
 
-.. _neuron-2.22.0-whatsnew:
+Inference: NxD Inference (NxDI) moves from beta to GA. NxDI now supports Persistent Cache to reduce compilation times, and optimizes model loading with improved weight sharding performance.
 
-Neuron 2.22.0 (04/03/2025)
----------------------------
+Training: NxD Training (NxDT) added Context Parallelism support (beta) for Llama models, enabling sequence lengths up to 32K. NxDT now supports model alignment, ORPO, using DPO-style datasets. NxDT has upgraded supports for 3rd party libraries, specifically: PyTorch Lightning 2.5, Transformers 4.48, and NeMo 2.1.
 
-.. contents:: Table of contents
-   :local:
-   :depth: 1
+Neuron Kernel Interface (NKI): New support for 32-bit integer nki.language.add and nki.language.multiply on GPSIMD Engine. NKI.ISA improvements include range_select for Trainium2, fine-grained engine control, and enhanced tensor operations. New performance tuning API `no_reorder` has been added to enable user-scheduling of instructions. When combined with allocation, this enables software pipelining. Language consistency has been improved for arithmetic operators (+=, -=, /=, *=) across loop types, PSUM, and SBUF.
 
-What's New
-^^^^^^^^^^
+Neuron Profiler: Profiling performance has improved, allowing users to view profile results 5x times faster on average. New features include timeline-based error tracking and JSON error event reporting, supporting execution and OOB error detection. Additionally, this release improves multiprocess visualization with Perfetto. 
 
-The Neuron 2.22 release includes performance optimizations, enhancements and new capabilities across the Neuron software stack. 
+Neuron Monitoring: Added Kubernetes context information (pod_name, namespace, and container_name) to neuron monitor prometheus output, enabling resource utilization tracking by pod, namespace, and container.
 
-For inference workloads, the NxD Inference library now supports Llama-3.2-11B model and supports multi-LoRA serving, allowing customers to load and serve multiple LoRA adapters. Flexible quantization features have been added, enabling users to specify which model layers or NxDI modules to quantize. Asynchronous inference mode has also been introduced, improving performance by overlapping Input preparation with model execution.
+Neuron DLCs: This release updates containers with PyTorch 2.6 support for inference and training. For JAX DLC, this release adds JAX 0.5.0 training support.
 
-For training, we added LoRA supervised fine-tuning to NxD Training to enable additional model customization and adaptation.
-
-Neuron Kernel Interface (NKI): This release adds new APIs in nki.isa, nki.language, and nki.profile. These enhancements provide customers with greater flexibility and control.
-
-The updated Neuron Runtime includes optimizations for reduced latency and improved device memory footprint. On the tooling side, the Neuron Profiler 2.0 (beta) has added UI enhancements and new event type support.
-
-Neuron DLCs: this release reduces DLC image size by up to 50% and enables faster build times with updated Dockerfiles structure. On the Neuron DLAMI side, new PyTorch 2.5 single framework DLAMIs have been added for Ubuntu 22.04 and Amazon Linux 2023, along with several new virtual environments within the Neuron Multi Framework DLAMIs.
-
-
-More release content can be found in the table below and each component release notes.
+Neuron DLAMIs: This release updates MultiFramework AMIs to include PyTorch 2.6, JAX 0.5, and TensorFlow 2.10 and Single Framework AMIs for PyTorch 2.6 and JAX 0.5.
 
 .. list-table::
    :widths: auto
@@ -75,10 +61,6 @@ More release content can be found in the table below and each component release 
    * - PyTorch NeuronX (torch-neuronx)
      - * :ref:`torch-neuronx-rn`
      - Trn1/Trn1n,Inf2,Trn2
-
-   * - NeuronX Nemo Megatron for Training
-     - * `neuronx-nemo-megatron github repo <https://github.com/aws-neuron/neuronx-nemo-megatron>`_  and  :ref:`neuronx-nemo-rn`
-     - Trn1/Trn1n,Inf2
 
    * - Neuron Compiler (neuronx-cc)
      - * :ref:`neuronx-cc-rn`
@@ -109,13 +91,17 @@ More release content can be found in the table below and each component release 
      - Inf1,Inf2,Trn1/Trn1n
 
    * - Release Annoucements
-     - * :ref:`announce-eos-neuron-det`
-       * :ref:`announce-eos-nxd-examples`
-       * :ref:`announce-python-eos`
-       * :ref:`announce-eos-pytorch-eos-113`
-       * :ref:`announce-eos-pytorch-2-1`
-       * :ref:`announce-u20-dlami-dlc-eos`
-       * :ref:`announce-no-support-torch-neuron`
+     - * :ref:`announce-eos-block-dimension-nki`
+       * :ref:`announce-eos-mllama-checkpoint`
+       * :ref:`announce-eos-nxdt-megatron-models`
+       * :ref:`announce-eos-torch-neuronx-nki-jit`
+       * :ref:`announce-eos-xla-bf`
+       * :ref:`announce-no-support-jax-neuronx-features`
+       * :ref:`announce-no-support-nemo-megatron`
+       * :ref:`announce-no-support-tensorflow-eos`
+       * :ref:`announce-u20-base-no-support`
+       * :ref:`announce-tnx-maintenance`
+       * :ref:`announce-eol-nxd-examples`
        * See more at :ref:`announcements-main`
      - Inf1, Inf2, Trn1/Trn1n
 

@@ -28,7 +28,7 @@ def tensor_exp_kernel_(in_tensor):
     in_tile = nl.load(in_tensor[i_p, i_f], mask=(i_p<sz_p))
 
     # perform the computation
-    out_tile = nl.exp(in_tile)
+    out_tile = nl.exp(in_tile, mask=(i_p<sz_p))
 
     # store the results back to external memory
     # only write up to sz_p

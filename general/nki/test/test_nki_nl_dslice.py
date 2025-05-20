@@ -31,7 +31,7 @@ def example_kernel(in_tensor):
 
 class TestNkiExampleNlLoad(unittest.TestCase):
   def test_nl_load(self):
-    a = np.random.random_sample([128, 4096]).astype(np.float32)
+    a = np.random.random_sample([128, 4096]).astype(np.float32) * 100
 
     b = example_kernel(a)
     self.assertTrue(np.allclose(a, b))

@@ -82,7 +82,7 @@ def allocated_loop_transpose(a_ptr, tp_ptr):
 class TestNkiSBUFModuloAllocation(unittest.TestCase):
   def test_simulate_kernel(self):
     np.random.seed(0)
-    a = np.random.random_sample([2048, 1024]).astype(np.float32)
+    a = np.random.random_sample([2048, 1024]).astype(np.float32) * 100
     b = np.ndarray(shape=(1024, 2048), dtype=np.float32)
 
     nki.simulate_kernel(allocated_loop_transpose, a, b)

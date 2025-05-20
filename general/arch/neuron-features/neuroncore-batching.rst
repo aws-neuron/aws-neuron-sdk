@@ -211,23 +211,38 @@ a distributed training job, especially global batch size (GBS) and micro-batch.
 Knowing the batch size in advance is crucial for precompiling the computational
 graph and for setting the hyperparameters.
 
-  global batch-size
-    Number of total samples used for an update of the optimizer.
-    This includes all the repsective gradients that get added up from
-    data-parallel processing or gradient accumulation.
-
   micro-batch size
     Smallest unit of the number of samples getting processed in a single step
     in the accelerator. For very large models, it is frequently chosen to be 1.
-    
+
+  gradient accumulation
+    Process of iterating over a micro-batch multiple times and summing up the gradients 
+    before an optimizer update. This can happen in a dedicated loop for gradient 
+    accumulation or as part of multiple iterations of samples in pipeline parallelism.
+    See :ref:`pp_developer_guide` for more details on pipeline parallelism.
+
+  data-parallel size (or DP degree)
+    Number of model replicas that process different portions of data in parallel.
+    Each replica maintains a complete copy of the model while processing unique
+    data chunks, after which their gradients are synchronized for the optimizer update. 
+    See :ref:`neuron_hw_glossary` for more details.
+
+  global batch-size
+    Number of total samples used for an update of the optimizer.
+    This includes all the respective gradients that get added up from
+    data-parallel processing or gradient accumulation.
+    :literal:`global batch size = micro_batch_size * data_parallel_size * gradient_accumulation_steps`
+
   mini-batch or replica-batch size
     Number of samples that contribute to a gradient within one data-parallel rank.
     A mini-batch gradient is obtained by aggregating multiple
     micro-batch gradients within or without a pipeline (aka. gradient accumulation).
+    :literal:`mini_batch_size = micro_batch_size * gradient_accumulation_steps`
 
   worker batch
-     The portion of mini-batch samples processed by a worker.
-    
+    The portion of mini-batch samples processed by a worker.
+    The idea behind a worker batch is that one worker (node) might have a subset of the dp-degrees 
+    and we care about how much data gets tackled by this worker.
 
 How to determine the optimal batch-size for training workloads?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -294,5 +309,3 @@ For example, for BERT-Large Ph1 training, with a model-state of 4B per
 parameter (2B weights, 2B parameters), and TP-rank = PP-rank = 1, the
 approximated optimal per-NeuronCore training batch-size would be:
 :literal:`batch-size(Training/Trainium) = 0.6 x (1 x 1 x 16e+9``) / ``(300e+6 x 4``) = 8`
-
-

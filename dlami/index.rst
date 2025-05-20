@@ -87,20 +87,20 @@ Virtual Environments pre-installed
     * - Neuron Framework/Libraries supported
       - Virtual Environment
 
-    * - PyTorch 2.5 Torch NeuronX, NxD Core
-      - /opt/aws_neuronx_venv_pytorch_2_5
-
-    * - PyTorch 2.5 NxD Training, Torch NeuronX
-      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_training
-
-    * - PyTorch 2.5 NxD Inference, Torch NeuronX
-      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference
+    * - PyTorch 2.6 Torch NeuronX, NxD Core
+      - /opt/aws_neuronx_venv_pytorch_2_6
     
-    * - Transformers NeuronX (PyTorch 2.5)
-      - /opt/aws_neuronx_venv_pytorch_2_5_transformers
+    * - PyTorch 2.6 NxD Training, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_6_nxd_training
+    
+    * - PyTorch 2.6 NxD Inference, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_6_nxd_inference
+    
+    * - Transformers NeuronX (PyTorch 2.6)
+      - /opt/aws_neuronx_venv_pytorch_2_6_transformers
 
-    * - JAX 0.4 NeuronX
-      - /opt/aws_neuronx_venv_jax_0_4
+    * - JAX 0.5 NeuronX
+      - /opt/aws_neuronx_venv_jax_0_5
 
     * - Tensorflow 2.10 NeuronX
       - /opt/aws_neuronx_venv_tensorflow_2_10
@@ -111,9 +111,12 @@ Virtual Environments pre-installed
     * - PyTorch 1.13 Neuron (Inf1)
       - /opt/aws_neuron_venv_pytorch_1_13_inf1
 
-You can easily get started with the multi-framework DLAMI through AWS console by following this :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`. If you are looking to
-use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
 
+Within the PyTorch 2.6 NxD Training virtual environment, we have included a setup script that installs required dependencies for the package. To run this script,
+activate the virtual environment and run ``setup_nxdt.sh`` and this will run :ref:`the setup steps here <nxdt_installation_guide>`.
+
+You can easily get started with the multi-framework DLAMI through AWS console by following this :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`. If you are looking to 
+use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
 
 Neuron Single Framework DLAMI
 -----------------------------
@@ -135,15 +138,25 @@ Single Framework DLAMIs supported
       - Neuron Instances Supported
       - DLAMI Name
 
-    * - PyTorch 2.5
+    * - PyTorch 2.6
       - Ubuntu 22.04
       - Inf2, Trn1, Trn1n, Trn2
-      - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04) 
+      - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04) 
 
-    * - PyTorch 2.5
+    * - PyTorch 2.6
       - Amazon Linux 2023
       - Inf2, Trn1, Trn1n, Trn2
-      - Deep Learning AMI Neuron PyTorch 2.5 (Amazon Linux 2023)
+      - Deep Learning AMI Neuron PyTorch 2.6 (Amazon Linux 2023)
+
+    * - JAX 0.5
+      - Ubuntu 22.04
+      - Inf2, Trn1, Trn1n, Trn2
+      - Deep Learning AMI Neuron JAX 0.5 (Ubuntu 22.04) 
+
+    * - JAX 0.5
+      - Amazon Linux 2023
+      - Inf2, Trn1, Trn1n, Trn2
+      - Deep Learning AMI Neuron JAX 0.5 (Amazon Linux 2023) 
 
     * - Tensorflow 2.10
       - Ubuntu 22.04
@@ -173,22 +186,26 @@ Virtual Environments pre-installed
     * - DLAMI Name
       - Neuron Libraries supported
       - Virtual Environment
+  
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.6 Torch NeuronX, NxD Core
+      - /opt/aws_neuronx_venv_pytorch_2_6
 
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
-      - PyTorch 2.5 Torch NeuronX, NxD Core
-      - /opt/aws_neuronx_venv_pytorch_2_5
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.6 NxD Training, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_6_nxd_training
 
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
-      - PyTorch 2.5 NxD Training, Torch NeuronX
-      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_training
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04, Amazon Linux 2023) 
+      - PyTorch 2.6 NxD Inference, Torch NeuronX
+      - /opt/aws_neuronx_venv_pytorch_2_6_nxd_inference
 
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
-      - PyTorch 2.5 NxD Inference, Torch NeuronX
-      - /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04, Amazon Linux 2023) 
+      - Transformers NeuronX PyTorch 2.6
+      - /opt/aws_neuronx_venv_pytorch_2_6_transformers 
 
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04, Amazon Linux 2023) 
-      - Transformers NeuronX PyTorch 2.5
-      - /opt/aws_neuronx_venv_pytorch_2_5_transformers 
+    * - Deep Learning AMI Neuron JAX 0.5 (Ubuntu 22.04, Amazon Linux 2023) 
+      - JAX NeuronX 0.5
+      - /opt/aws_neuronx_venv_jax_0_5
 
     * - Deep Learning AMI Neuron PyTorch 1.13 (Ubuntu 22.04) 
       - Pytorch Neuron (Inf1)
@@ -279,11 +296,17 @@ SSM Parameter Prefix
     * - Deep Learning AMI Neuron (Amazon Linux 2023)
       - /aws/service/neuron/dlami/multi-framework/amazon-linux-2023
 
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Ubuntu 22.04)
-      - /aws/service/neuron/dlami/pytorch-2.5/ubuntu-22.04
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Ubuntu 22.04)
+      - /aws/service/neuron/dlami/pytorch-2.6/ubuntu-22.04
     
-    * - Deep Learning AMI Neuron PyTorch 2.5 (Amazon Linux 2023)
-      - /aws/service/neuron/dlami/pytorch-2.5/amazon-linux-2023
+    * - Deep Learning AMI Neuron PyTorch 2.6 (Amazon Linux 2023)
+      - /aws/service/neuron/dlami/pytorch-2.6/amazon-linux-2023
+
+    * - Deep Learning AMI Neuron JAX 0.5 (Ubuntu 22.04)
+      - /aws/service/neuron/dlami/jax-0.5/ubuntu-22.04
+  
+    * - Deep Learning AMI Neuron JAX 0.5 (Amazon Linux 2023)
+      - /aws/service/neuron/dlami/jax-0.5/amazon-linux-2023
 
     * - Deep Learning AMI Neuron PyTorch 1.13 Inf1 (Ubuntu 22.04)
       - /aws/service/neuron/dlami/pytorch-1.13-inf1/ubuntu-22.04

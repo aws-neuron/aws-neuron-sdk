@@ -1,9 +1,9 @@
 .. _hf_llama3_8B_pretraining:
 
-HuggingFace Llama3-8B Pretraining
-=================================
+HuggingFace Llama3.1/Llama3-8B Pretraining
+==========================================
 
-In this example, we will compile and train a HF Llama3-8B model on a single instance
+In this example, we will compile and train a HF Llama3.1/Llama3-8B model on a single instance
 with the ``NxD Training (NxDT)`` library.
 The example has the following main sections:
 

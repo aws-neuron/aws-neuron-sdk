@@ -67,7 +67,7 @@ To migrate the training scripts from PyTorch NeuronX 2.1 to PyTorch NeuronX 2.5,
 * The ``torch_xla.experimental.pjrt`` module which was replaced by ``torch_xla.runtime`` in Torch-XLA 2.1, has been removed in Torch-XLA 2.5. Users should now utilize the ``torch_xla.runtime`` module as a replacement.
 * ``torch_xla.runtime.using_pjrt`` is removed because PJRT is the sole Torch-XLA runtime.
 * ``xm.all_reduce`` no longer operates in-place for single tensors. To fix this, please convert the single tensor to an array (e.g.. ``[single_tensor]``) or assign the output of ``xm.all_reduce`` to a variable.
-* The functions ``xm.xrt_world_size()`` and ``xm.xla_model.get_ordinal()`` are deprecated (warning when used). Please switch to ``xr.world_size`` and ``xr.global_ordinal`` respectively as replacements.
+* The functions ``xm.xrt_world_size()``, ``xm.xla_model.get_ordinal()``, and ``xm.xla_model.get_local_ordinal()`` are deprecated (warning when used). Please switch to ``xr.world_size``, ``xr.global_ordinal``, and ``xr.local_ordinal`` respectively as replacements.
 * ``torch_xla.experimental.xla_sharding`` is now replaced by ``torch_xla.distributed.spmd.xla_sharding``.
 * Class ``ZeroRedundancyOptimizer`` now has two new arguments that replaces the optional boolean argument ``coalesce_cc``:
     * ``bucket_cap_mb_all_gather`` (int, Optional): Number of MegaBytes of the tensor bucket to fill before doing all-gather. Default: 0 (disable  all gather coalescing).
@@ -103,7 +103,7 @@ If modifying library code is not possible, disable XLA parameter aliasing by set
 Tensor split on second dimension of 2D array not working
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, when using tensor split operation on a 2D array in the second dimension, the resulting tensors don't have the expected data (https://github.com/pytorch/xla/issues/8640). The work-around is to set ``XLA_DISABLE_FUNCTIONALIZATION=0``.
+Currently, when using tensor split operation on a 2D array in the second dimension, the resulting tensors don't have the expected data (https://github.com/pytorch/xla/issues/8640). The work-around is to set ``XLA_DISABLE_FUNCTIONALIZATION=0``. Another work-around is to use ``torch.tensor_split``.
 
 Import torch_xla crashed with ``TypeError: must be called with a dataclass type or instance`` with torch-xla 2.5 and torch 2.5.1+cpu (CPU flavor)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,10 +117,10 @@ When using the ``xm.save`` function to save tensors, please use ``xm.mark_step()
 
 (Here ``xm`` is ``torch_xla.core.xla_model`` following PyTorch/XLA convention)
 
-Lower BERT pretraining performance with torch-neuronx 2.5 compared to torch-neuronx 2.1
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Lower BERT pretraining performance when switch to using ``model.to(torch.bfloat16)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be deprecation warnings (as noted below).
+Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be deprecation warnings (as noted below).
 
 Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -182,51 +182,6 @@ Also set ``use_reentrant=True`` while calling the torch_xla checkpoint function.
 For more details on checkpointing, refer the `documentation <https://pytorch.org/docs/stable/checkpoint.html>`_.
 
 
-Incorrect device assignment when using ellipsis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Usage of ellipsis (``...``) with PyTorch/XLA 2.5 can lead to incorrect device assignment of the tensors as 'lazy' instead of 'xla'.
-Refer to the example shown
-
-.. code:: python
-
-    import torch
-    import torch_xla.core.xla_model as xm
-    device = xm.xla_device()
-
-    x = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], device=device)
-    print(f"x.device : {x.device}")
-    y = x[:3, ...]
-    print(f"y.device : {y.device}")
-    print(x + y)
-
-
-leads to
-
-.. code::
-
-    x.device : xla:0
-    y.device : lazy:0
-    RuntimeError: torch_xla/csrc/tensor.cpp:57 : Check failed: tensor.device().type() == at::kCPU (lazy vs. cpu)
-
-
-This only happens for scenarios where ellipsis is used to extract a subset of a tensor with the same size as that of the original tensor. An issue is created with pytorch/xla to fix this behavior (`Ref <https://github.com/pytorch/xla/issues/6398>`_).
-Potential workaround is to avoid using ellipsis and instead replace it with ``:`` for each corresponding dimensions in the buffer.
-
-For the faulty code shown above, replace it with
-
-.. code:: python
-
-    import torch
-    import torch_xla.core.xla_model as xm
-    device = xm.xla_device()
-
-    x = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], device=device)
-    print(f"x.device : {x.device}")
-    # Replaced '...' with ':'
-    y = x[:3, :]
-    print(f"y.device : {y.device}")
-    print(x + y)
-
 Error ``Attempted to access the data pointer on an invalid python storage`` when using HF Trainer API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 While using HuggingFace Transformers Trainer API to train (i.e. :ref:`HuggingFace Trainer API fine-tuning tutorial<torch-hf-bert-finetune>`), you may see the error "Attempted to access the data pointer on an invalid python storage". This is a known `issue <https://github.com/huggingface/transformers/issues/27578>`_ and has been fixed in the version ``4.37.3`` of HuggingFace Transformers.
@@ -260,60 +215,14 @@ If using Torch-NeuronX 2.5 on Amazon Linux 2, you will see a GlibC error below. 
 
    ImportError: /lib64/libc.so.6: version `GLIBC_2.27' not found (required by /tmp/debug/_XLAC.cpython-38-x86_64-linux-gnu.so)
 
-``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``Input dimension should be either 1 or equal to the output dimension it is broadcasting into`` or ``IndexError: index out of range`` error during Neuron Parallel Compile
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With PyTorch 2.5 (torch-neuronx), HF Trainer API's use of XLA function ``.mesh_reduce`` causes ``"EOFError: Ran out of input"`` or ``"_pickle.UnpicklingError: invalid load key, '!'"`` errors during Neuron Parallel Compile. To work-around this issue, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
-
-.. code:: python
-
-    import copy
-    import torch_xla.core.xla_model as xm
-    def mesh_reduce(tag, data, reduce_fn):
-        xm.rendezvous(tag)
-        xdatain = copy.deepcopy(data)
-        xdatain = xdatain.to("xla")
-        xdata = xm.all_gather(xdatain, pin_layout=False)
-        cpu_xdata = xdata.detach().to("cpu")
-        cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
-        xldata = [x for x in cpu_xdata_split]
-        return reduce_fn(xldata)
-    xm.mesh_reduce = mesh_reduce
-
-
-``Check failed: tensor_data`` error during when using ``torch.utils.data.DataLoader`` with ``shuffle=True``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-With PyTorch 2.5 (torch-neuronx), using ``torch.utils.data.DataLoader`` with ``shuffle=True`` would cause the following error in ``synchronize_rng_states`` (i.e. :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`):
-
-.. code:: bash
-
-    RuntimeError: torch_xla/csrc/xla_graph_executor.cpp:562 : Check failed: tensor_data 
-
-This is due to ``synchronize_rng_states`` using ``xm.mesh_reduce`` to synchronize RNG states. ``xm.mesh_reduce`` in turn uses  ``xm.rendezvous()`` with payload which results in extra graphs that could lead to lower performance due to change in ``xm.rendezvous()`` in torch-xla 2.x. In the case of :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`, using ``xm.rendezvous()`` with payload also lead to the error above. This limitation will be fixed in an upcoming release. For now, to work around the issue, please disable shuffle in DataLoader when ``NEURON_EXTRACT_GRAPHS_ONLY`` environment is set automatically by Neuron Parallel Compile:
+When running Neuron Parallel Compile with HF Trainer API, you may see the error ``Status: INVALID_ARGUMENT: Input dimension should be either 1 or equal to the output dimension it is broadcasting into`` or ``IndexError: index out of range`` in Accelerator's ``pad_across_processes`` function. This is due to data-dependent operation in evaluation metrics computation. Data-dependent operations would result in undefined behavior with Neuron Parallel Compile trial execution (execute empty graphs with zero outputs). To work-around this error, please disable compute_metrics when NEURON_EXTRACT_GRAPHS_ONLY is set to 1:
 
 .. code:: python
 
-    train_dataloader = DataLoader(
-        train_dataset, shuffle=(os.environ.get("NEURON_EXTRACT_GRAPHS_ONLY", None) == None), collate_fn=default_data_collator, batch_size=args.per_device_train_batch_size
-    )
-
-Additionally, as in the previous section, you can add the following code snippet (after python imports) to replace ``xm.mesh_reduce`` with a form that uses ``xm.all_gather`` instead of ``xm.rendezvous()`` with payload. This will add additional small on-device graphs (as opposed to the original ``xm.mesh_reduce`` which runs on CPU).
-
-.. code:: python
-
-    import copy
-    import torch_xla.core.xla_model as xm
-    def mesh_reduce(tag, data, reduce_fn):
-	xm.rendezvous(tag)
-	xdatain = copy.deepcopy(data)
-	xdatain = xdatain.to("xla")
-	xdata = xm.all_gather(xdatain, pin_layout=False)
-	cpu_xdata = xdata.detach().to("cpu")
-	cpu_xdata_split = torch.split(cpu_xdata, xdatain.shape[0])
-	xldata = [x for x in cpu_xdata_split]
-	return reduce_fn(xldata)
-    xm.mesh_reduce = mesh_reduce
+   compute_metrics=None if os.environ.get("NEURON_EXTRACT_GRAPHS_ONLY") else compute_metrics
 
 Compiler assertion error when running Stable Diffusion training
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

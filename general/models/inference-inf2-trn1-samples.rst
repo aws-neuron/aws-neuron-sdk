@@ -130,9 +130,9 @@ Decoders
      - * `Run Hugging Face meta-llama/Llama-2-70b autoregressive sampling on Inf2 & Trn1 <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_
        *  `Run speculative sampling on Meta Llama models [Beta] <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/speculative_sampling.ipynb>`_
 
-   * - meta-llama/Llama-2-7b
+   * - meta-llama/Llama-3.2-1B-Instruct
      - neuronx-distributed
-     - * Run Hugging Face meta-llama/Llama-2-7b autoregressive sampling on Inf2 & Trn1 (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
+     - * `Run meta-llama/Llama-3.2-1B-Instruct on Inf2 and Trn1 <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/llama>`_
 
    * - meta-llama/codellama-13b
      - neuronx-distributed

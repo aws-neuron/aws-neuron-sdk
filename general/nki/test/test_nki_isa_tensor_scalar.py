@@ -78,12 +78,12 @@ def nki_tensor_scalar(a_tensor, c_tensor, e_tensor, f_tensor):
       
 class TestNkiIsaExamplesTensorScalar(unittest.TestCase):
   def test_tensor_scalar(self):
-    a = np.random.random_sample([128, 512]).astype(np.float32)
+    a = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
-    c = np.random.random_sample([128, 512]).astype(np.float32)
+    c = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
-    e = np.random.random_sample([64, 1024]).astype(np.float32)
-    f = np.random.random_sample([64, 1]).astype(np.float32)
+    e = np.random.random_sample([64, 1024]).astype(np.float32) * 100
+    f = np.random.random_sample([64, 1]).astype(np.float32) * 100
     
     b, d, g = nki_tensor_scalar(a, c, e, f)
     

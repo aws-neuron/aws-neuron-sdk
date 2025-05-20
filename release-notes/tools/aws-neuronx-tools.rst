@@ -8,6 +8,23 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.23.16.0]
+------------------------
+Date: 5/XX/2025
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Improved Neuron Profiler performance, allowing users to view profile results 5x times faster on average.
+* Improved error reporting with timeline support for error signatures via custom notifications in the Neuron Profiler UI. Added execution and out-of-bounds (OOB) error tracking in Neuron Profiler JSON outputs.
+* Updated the default grouping for system profiles to include process ID.
+* Added ``neuron-monitor`` companion script for collecting Kubernetes info in EKS.  See :ref:`neuron-monitor-k8s-infopy` for details.
+
+Bug fixes
+^^^^^^^^^
+* Fixed hang during data collection when running ``nccom-test`` across multiple instances.
+* Fixed certain cases in Neuron Profiler where DMA sizes were always reported as 0 bytes.
+
+
 Neuron Tools  [2.22.66.0]
 ------------------------
 Date: 2/14/2025

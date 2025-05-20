@@ -10,6 +10,40 @@ NxD Core Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+.. _neuronx-distributed-rn-0-12-0:
+
+NxD Core [0.12.12111]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 5/20/2025
+
+New in this release
+-------------------
+
+**Inference:**
+
+* Improve the Model Builder API. Note: The Model Builder API is in beta.
+  
+  * Add Neuron Persistent Cache support to Model Builder. Now, Model Builder caches
+    compiled model artifacts to reduce compilation time.
+  * Improve the performance of weight sharding in Model Builder to support shard-on-load
+    in NxD Inference.
+  * Improve the performance of Model Builder trace when HLO ``debug`` mode is enabled.
+
+* Add a Llama-3.2-1B reference inference sample using NxD Core.
+* Remove the deprecated NxD inference examples. You can use the NxD Inference
+  library to run inference with on Neuron using NxD.
+* Other minor fixes and improvements.
+
+
+**Training:**
+
+* Context parallel support for sequence lengths up to 32k on TRN1 (beta feature)
+
+**General:**
+
+* Update the package version to include additional information.
+
 .. _neuronx-distributed-rn-0-11-0:
 
 NxD Core [0.11.0]

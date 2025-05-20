@@ -49,14 +49,14 @@ def nki_par_reduce_nd_b(a_tensor, b_tensor):
 
 class TestNkiIsaExamplesPartitionReduce(unittest.TestCase):
   def test_par_reduce_nd(self):
-    a = np.random.random_sample([128, 32, 4]).astype(np.float32)
+    a = np.random.random_sample([128, 32, 4]).astype(np.float32) * 100
     b = np.ndarray(shape=(1, 32, 4), dtype=np.float32)
     simulate_kernel(nki_par_reduce, a, b)
 
     self.assertTrue(np.allclose(b, np.sum(a, axis=0, keepdims=True)))
 
   def test_par_reduce_nd_b(self):
-    a = np.random.random_sample([4, 128, 32, 8]).astype(np.float32)
+    a = np.random.random_sample([4, 128, 32, 8]).astype(np.float32) * 100
     b = np.ndarray(shape=(4, 1, 32, 8), dtype=np.float32)
     simulate_kernel(nki_par_reduce_nd_b, a, b)
 

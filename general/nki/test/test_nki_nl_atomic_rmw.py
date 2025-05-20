@@ -53,10 +53,10 @@ def atomic_rmw_indirect_indices(in_tensor, indices_tensor, value_tensor):
 
 class TestNkiExampleNlLoad(unittest.TestCase):
   def test_atomic_rmw_indirect_indices(self):
-    in_tensor = np.random.random_sample([128, 512]).astype(np.float32)
+    in_tensor = np.random.random_sample([128, 512]).astype(np.float32) * 100
     indices_tensor = np.arange(128, dtype=np.int32)
     indices_tensor = np.expand_dims(indices_tensor, axis=1)
-    value_tensor = np.random.random_sample([128, 512]).astype(np.float32)
+    value_tensor = np.random.random_sample([128, 512]).astype(np.float32) * 100
     golden = in_tensor + value_tensor
 
     rmw_tensor = atomic_rmw_indirect_indices(in_tensor, indices_tensor,

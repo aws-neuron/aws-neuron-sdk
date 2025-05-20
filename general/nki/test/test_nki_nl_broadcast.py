@@ -42,7 +42,7 @@ def test_nl_broadcast(in_tensor):
 
 class TestNkiExampleNlBroadcast(unittest.TestCase):
   def test_nl_broadcast_to(self):
-    src = np.random.random_sample([1, 64]).astype(np.int32)
+    src = np.random.random_sample([1, 64]).astype(np.int32) * 100
 
     dst = test_nl_broadcast(src)
     self.assertTrue(np.allclose(np.repeat(src, 128, axis=0), dst))

@@ -128,6 +128,12 @@ Processing and viewing the profile results
 
 To analyze and view the collected profiling data, use the ``view`` subcommand of ``neuron-profile``. This command performs two main functions: it post-processes the profiling data and starts up an HTTP server. Once the server is running, you can access the profiling results through your web browser. Please note: Chrome is the officially supported browser for viewing profiling results
 
+
+.. note::
+    Profiles can be processed and viewed on another machine without Neuron devices. The ``aws-neuronx-tools`` package
+    needs to be installed so that you can run ``neuron-profile view``. To process the profile on another
+    instance, you need to copy the NEFF and NTFF files from your Inf or Trn instance to that instance.
+
 Viewing a single profile
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -324,15 +330,26 @@ Additionally, there are various summary tabs that can be clicked to provide more
 
 |neuron-profile-web-summaries|
 
-Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn on encircling the dma instructions where the tensor was loaded many times.
-Hover on annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection) and specific throttling details are shown when hovering the annotation.
+Performance Warnings
+~~~~~~~~~~~~~~~~~~~~
+
+Furthermore, ``neuron-profile`` will automatically highlight some potential performance issues with warning annotations. For example if a tensor has been loaded more than 2 times a warning annotation (seen below as an orange box) will be drawn, encircling the dma instructions where the tensor was loaded many times.
+Hover on the annotation to see more details about loading the tensor. Another kind of warning annotation will highlight areas of high throttling. This provides the user a potential reason for slow down (thermal protection). Specific throttling details are shown when hovering the annotation.
 
 |neuron-profile-tensor-reload-annotation|
 
+Collectives
+~~~~~~~~~~~
+
 For models involving collective operations, the timeline will show a box around all data points related to each operation.  Hovering the top left of the box will reveal more information associated with the operation.
-Note: this feature requires profiles to be captured with Neuron Runtime 2.20 or higher.
+
+.. note::
+    this feature requires profiles to be captured with Neuron Runtime 2.20 or higher.
 
 |neuron-profile-cc-op-annotation|
+
+Event Details
+~~~~~~~~~~~~~
 
 The information when a point is clicked is grouped by categories such as `Timing` or `IDs` for convenience.
 Each row will also include a tool tip on the right side, which can be hovered for an explanation on what the field represents.
@@ -340,12 +357,24 @@ For instruction `Operands` specifically, clicking on the tooltip will reveal a b
 
 |neuron-profile-click-tooltip|
 
+Searching Profiles
+~~~~~~~~~~~~~~~~~~
+
 Searching helps identify specific data points that may be worth investigating, such as all instructions related to a specific layer or operation.
 In the "Search" tab, select the corresponding field of interest and enter the value to search for.  Multiple fields can be searched together.  Please refer to the tooltip within the tab for more help on the query syntax.
 The search results will also include a summary of all data points found within the current time range.
 
 |neuron-profile-search-summary|
 
+
+Hardware Errors
+~~~~~~~~~~~~~~~
+
+Invalid code can lead to errors on Neuron hardware. These errors will be displayed in Neuron Profile's Custom Notification timeline, as shown below. For example an Out of Bounds (OOB) error is displayed as:
+
+|neuron-profile-oob-error|
+
+Users can correlate the error to the time it occurred and view nearby events to help debug.
 
 Viewing Profiles with Perfetto
 ------------------------------
@@ -511,6 +540,7 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
 .. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png
 .. |neuron-profile-click-tooltip| image:: /images/neuron-profile-click-tooltip.png
+.. |neuron-profile-oob-error| image:: /images/neuron-profile-oob-error.png
 .. |neuron-profile-search-summary| image:: /images/neuron-profile-search-summary.png
 .. |neuron-profile-perfetto-device| image:: /images/neuron-profiler2-perfetto-device.png
 

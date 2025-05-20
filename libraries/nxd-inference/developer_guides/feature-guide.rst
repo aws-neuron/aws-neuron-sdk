@@ -77,6 +77,21 @@ only the code path that is traced for the sample input tensor.
     model = NeuronLlamaForCausalLM(model_path, config)
     model.compile(compiled_model_path)
 
+
+.. _nxdi-neuron-persistent-cache:
+
+Neuron Persistent Cache
+------------------------
+
+The Neuron Persistent Cache is enabled by default for NxD Inference library.
+Model artifacts which have been compiled once will be cached and reused on
+successive runs when possible. Model artifacts will only be reused when
+compiling with the same compiler version (neuronx-cc), model configurations,
+and compiler flags. Neuron Persistent Cache also includes other features, such as using an S3 bucket as
+the cache backend. For more detailed information, see the
+:ref:`Persistent cache documentation <neuron-caching>`
+
+
 Serialization support
 ---------------------
 
@@ -108,7 +123,7 @@ you can set the ``NEURON_LOGICAL_NC_CONFIG`` environment variable, or set the
 For more information about logical NeuronCore support, see
 :ref:`logical-neuroncore-config`.
 
-.. _nxdi-tensor-parallelism:
+.. _nxdi-feature-guide-tensor-parallelism:
 
 Tensor-parallelism support
 --------------------------
@@ -152,9 +167,10 @@ Examples
    about 148GB memory. Therefore, it can run on 16 NeuronCores on one
    ``trn1.32xlarge`` using 256GB device memory.
 
+.. _nxdi-feature-guide-sequence-parallelism:
+
 Sequence Parallelism
 --------------------
-
 Sequence parallelism splits tensors across the sequence dimension to
 improve performance. You can enable sequence parallelism by setting
 ``sequence_parallel_enabled=True`` in NeuronConfig.

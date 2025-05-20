@@ -1,0 +1,35 @@
+diff --git a/src/llmperf/ray_clients/openai_chat_completions_client.py b/src/llmperf/ray_clients/openai_chat_completions_client.py
+index f2e0a91..74c4027 100644
+--- a/src/llmperf/ray_clients/openai_chat_completions_client.py
++++ b/src/llmperf/ray_clients/openai_chat_completions_client.py
+@@ -1,5 +1,6 @@
+ import json
+ import os
++import random
+ import time
+ from typing import Any, Dict
+ 
+@@ -14,6 +15,9 @@ from llmperf import common_metrics
+ @ray.remote
+ class OpenAIChatCompletionsClient(LLMClient):
+     """Client for OpenAI Chat Completions API."""
++    def __init__(self):
++        self.addr_id = 0
++        self.addr_select_strategy = 'round-robin'
+ 
+     def llm_request(self, request_config: RequestConfig) -> Dict[str, Any]:
+         prompt = request_config.prompt
+@@ -50,6 +54,13 @@ class OpenAIChatCompletionsClient(LLMClient):
+         address = os.environ.get("OPENAI_API_BASE")
+         if not address:
+             raise ValueError("the environment variable OPENAI_API_BASE must be set.")
++        # if several addresses of model server exist, select one for each request (1) randomly or (2) round-robin
++        address_list = address.split(";")
++        if self.addr_select_strategy == 'round-robin':
++            address = address_list[self.addr_id]
++            self.addr_id = (self.addr_id + 1) % len(address_list)
++        else:
++            address = random.choice(address_list)
+         key = os.environ.get("OPENAI_API_KEY")
+         if not key:
+             raise ValueError("the environment variable OPENAI_API_KEY must be set.")

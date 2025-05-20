@@ -1,6 +1,7 @@
 * :ref:`nxdi-trn2-llama3.1-405b-tutorial`
 * :ref:`nxdi-llama3.2-multimodal-tutorial`
 * :ref:`nxdi-trn2-llama3.3-70b-tutorial`
+* :ref:`nxdi-trn2-llama3.3-70b-dp-tutorial`
 * :ref:`nxdi-trn2-llama3.1-8b-multi-lora-tutorial`
 * :ref:`nxdi-trn2-llama3.1-405b-speculative-tutorial`
 * :ref:`nxdi-trn1-llama3.1-70b-instruct-accuracy-eval-tutorial`

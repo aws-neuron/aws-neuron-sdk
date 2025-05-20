@@ -1,10 +1,10 @@
 .. _hf_llama3_8B_SFT:
 
-HuggingFace Llama3-8B Supervised Fine-tuning
-============================================
+HuggingFace  Llama3.1/Llama3-8B Supervised Fine-tuning
+======================================================
 
-In this example, we will compile and finetune pre-trained HF Llama3-8B model
-on a single instance with the NxD Training library.
+In this example, we will compile and finetune pre-trained HF  Llama3.1/Llama3-8B
+model on a single instance with the NxD Training library.
 The pre-trained Llama3-8B model serves as the foundation, and we will
 build upon this solid base by fine-tuning the model to adapt
 it to a specific task or dataset.

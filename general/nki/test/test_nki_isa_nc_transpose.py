@@ -63,8 +63,8 @@ def nki_nc_transpose(a_tensor, b_tensor):
 class TestNkiIsaExamplesSbTranspose(unittest.TestCase):
   def test_nc_transpose(self):
     np.random.seed(0)
-    a = np.random.random_sample([128, 64]).astype(np.float32)
-    b = np.random.random_sample([32, 2]).astype(np.float32)
+    a = np.random.random_sample([128, 64]).astype(np.float32) * 100
+    b = np.random.random_sample([32, 2]).astype(np.float32) * 100
 
     aT, bT = nki_nc_transpose(a, b)
 

@@ -567,15 +567,18 @@ and running all three operations (multiply, add, exp) in a pipeline.
 
 .. code-block::
 
+   import neuronxcc.nki.isa as nisa
+   import neuronxcc.nki.language as nl
+
    # input: data (tile[128, 512]), scale (tile[128, 1]) , bias (tile[128, 1])
 
    # impl 1:
-   scaled = nki.language.multiply(data, scale)
-   shifted = nki.language.add(scaled, bias)
-   exp = nki.language.exp(shifted)
+   scaled = nl.multiply(data, scale)
+   shifted = nl.add(scaled, bias)
+   exp = nl.exp(shifted)
 
    # impl 2:
-   exp = nki.isa.activation(nki.language.exp, data,
+   exp = nisa.activation(nl.exp, data,
                             bias, scale)
 
 Check out :doc:`nki.isa APIs <api/nki.isa>`

@@ -72,7 +72,7 @@ NeuronX Distributed (NxD)
    :caption: NeuronX Distributed (NxD)
 
    NxD Training </libraries/nxd-training/index>
-   NxD Inference (Beta) </libraries/nxd-inference/index>
+   NxD Inference </libraries/nxd-inference/index>
    NxD Core </libraries/neuronx-distributed/index>
    
 

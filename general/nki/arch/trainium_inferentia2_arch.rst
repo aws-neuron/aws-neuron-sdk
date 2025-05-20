@@ -862,10 +862,6 @@ tutorial for a detailed implementation.
    syntax is functionally equivalent to the use of ``+=``, it may get lowered to nisa.tensor_tensor on VectorEngine for
    accumulation instead, leading to much lower performance.
 
-   Side note, due to :ref:`a known limitation <nki_known_issues>`, we also suggest programmers avoid ``+=`` unless the
-   above three conditions to trigegr PSUM accumulation
-   are met exactly in the kernel code. Fall back to ``var[...] = var + new_var`` syntax for more reliable compilation.
-
 Finally, with 8 PSUM banks per partition, TensorE can have up to eight outstanding matmul accumulation groups, which allows
 flexible scheduling of matmul instructions on TensorE. Also, the extra buffering from multiple PSUM banks allows us to pipeline
 TensorE computation with other compute engines: TensorE can move onto the next accumulation group without waiting for VectorE/ScalarE

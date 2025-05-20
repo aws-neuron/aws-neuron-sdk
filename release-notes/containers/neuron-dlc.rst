@@ -10,16 +10,22 @@ Neuron DLC Release Notes
 
 Known Issues
 ------------
-Updated : 12/20/2024
+Updated : 5/19/2025
 
-- pytorch-training-neuronx 2.5.1 DLC has a CRITICAL CVE related to `pytorch-lightning` package. However, this issue does not currently affect Neuron DLC consumers, as the vulnerability is specific to the "lightning" package within the Lightning ecosystem.
- *  `CVE-2024-5452 <https://nvd.nist.gov/vuln/detail/CVE-2024-5452>`_
-- pytorch-training-neuronx 2.5.1 and pytorch-inference-neuronx 2.5.1 DLCs have three HIGH CVEs related to `transformers` package. We are actively monitoring these issues and will publish new DLCs as soon as there is a fix upstream.
- * `CVE-2024-11392 <https://nvd.nist.gov/vuln/detail/CVE-2024-11392>`_
- * `CVE-2024-11393 <https://nvd.nist.gov/vuln/detail/CVE-2024-11393>`_
- * `CVE-2024-11394 <https://nvd.nist.gov/vuln/detail/CVE-2024-11394>`_
-- jax-training-neuronx and pytorch-training-neuronx has a CRITICAL CVE related to integer overflow in libaom internal function, that is coming from UBUNTU base image upstream
- * `CVE-2024-5171 <https://people.canonical.com/~ubuntu-security/cve/2024/CVE-2024-5171.html>`_
+- pytorch-training-neuronx 2.6.0 DLC has two HIGH CVEs related to `sagemaker-python-sdk` package. We are actively working to resolve these high CVEs:
+- * `CVE-2024-34072 <https://nvd.nist.gov/vuln/detail/CVE-2024-34072>`_
+- * `CVE-2024-34073 <https://nvd.nist.gov/vuln/detail/CVE-2024-34073>`_
+
+- pytorch-training-neuronx 2.6.0 DLC has one HIGH CVEs related to `tornado` package. We are actively monitoring this issue and will publish new DLCs as soon as there is a fix upstream.
+- * `CVE-2025-47287 <https://nvd.nist.gov/vuln/detail/CVE-2025-47287>`_
+
+Neuron 2.23.0
+-------------
+Date: 05/19/2025
+
+- Upgraded pytorch-training-neuronx DLC to 2.6 version along with its related dependencies
+- Upgraded pytorch-inference-neuronx DLC to 2.6 version along with its related dependencies
+- Updated Neuron SDK to latest 2.23.0 release for all Neuron DLCs
 
 
 Neuron 2.22.0
