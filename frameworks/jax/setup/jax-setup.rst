@@ -32,14 +32,14 @@ pip repository.
     Ubuntu
 
     .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 5
-        :end-line: 6
+        :start-line: 242
+        :end-line: 243
 
     Amazon Linux 2023
 
     .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-        :start-line: 221
-        :end-line: 222
+        :start-line: 239
+        :end-line: 240
 
 .. dropdown::  Install the JAX Neuron Plugin
     :class-title: sphinx-design-class-title-small
