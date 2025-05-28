@@ -74,6 +74,8 @@ Multi Framework DLAMIs supported
       - Deep Learning AMI Neuron (Amazon Linux 2023)
 
 
+.. _neuron-dlami-multifw-venvs:
+
 
 Virtual Environments pre-installed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

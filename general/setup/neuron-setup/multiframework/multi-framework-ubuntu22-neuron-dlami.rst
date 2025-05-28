@@ -33,47 +33,14 @@ configure disk size and other criteria, launch the instance
 Step 2: Activate the desired virtual environment 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 
-You can activate one of the virtual environments below depending on the library or framework you are interested in.
+You can activate one of the virtual environments depending on the library or framework you are interested in:
 
-.. list-table::
-    :widths: 20 39 
-    :header-rows: 1
-    :align: left
-    :class: table-smaller-font-size
+1. Get the desired virtual environment name for the framework/library by referring to :ref:`the Neuron DLAMI overview <neuron-dlami-multifw-venvs>`.
+2. Activate the virtual environment by using:
 
-    * - Neuron Framework/Library
-      - Activate Virtual Environment Instruction
+  ::
 
-    * - PyTorch Neuron 2.1 (Torch NeuronX , NeuronX Distributed)
-      - .. code-block::
-           
-           source /opt/aws_neuronx_venv_pytorch_2_1/bin/activate
-
-    * - PyTorch Neuron 1.13.1 (Torch NeuronX , NeuronX Distributed)
-      - .. code-block::
-       
-           source /opt/aws_neuronx_venv_pytorch_1_13/bin/activate
-
-    * - Transformers NeuronX (PyTorch 2.1)
-      - .. code-block::
-  
-           source /opt/aws_neuronx_venv_transformers_neuronx/bin/activate
-
-    * - Tensorflow Neuron 2.10 (Tensorflow NeuronX)
-      - .. code-block::
-  
-           source /opt/aws_neuronx_venv_tensorflow_2_10/bin/activate
-
-    * - PyTorch Neuron 1.13.1 (Inf1) (Torch Neuron) 
-      - .. code-block::
-  
-           source /opt/aws_neuron_venv_pytorch_1_13_inf1/bin/activate
-
-    * - Tensorflow 2.10 (Inf1) (Tensorflow Neuron) 
-      - .. code-block::
-  
-           source /opt/aws_neuron_venv_tensorflow_2_10_inf1/bin/activate
-
+    source /opt/<name_of_virtual_environment>/bin/activate
 
 
 After you have activated the desired virtual environment , you can try out one of the tutorials listed in the corresponding framework or library training and inference section.

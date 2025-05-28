@@ -94,7 +94,6 @@
     "neuron_releases": [
       {"neuron_version":"2.23.0", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.25.65.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":[]},
-        {"name":"aws-neuronx-collectives","version":"2.25.65.0","supported_instances":["inf1"],"supported_python_versions":[]},
         {"name":"aws-neuronx-dkms","version":"2.21.37.0","supported_instances":["inf1","trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-gpsimd-customop-lib","version":"0.15.12.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-gpsimd-tools","version":"0.15.1.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":[]},
@@ -102,7 +101,6 @@
         {"name":"aws-neuronx-k8-scheduler","version":"2.25.24.0","supported_instances":["inf1","trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-oci-hook","version":"2.9.88.0","supported_instances":["inf1","trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-runtime-discovery","version":"2.9","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
-        {"name":"aws-neuronx-runtime-lib","version":"2.25.57.0","supported_instances":["inf1"],"supported_python_versions":[]},
         {"name":"aws-neuronx-runtime-lib","version":"2.25.57.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-tools","version":"2.23.9.0","supported_instances":["inf1","trn1","inf2","trn2"],"supported_python_versions":[]},
         {"name":"dmlc_nnvm","version":"1.19.6.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
@@ -119,7 +117,7 @@
         {"name":"neuronx-cc-stubs","version":"2.18.121.0","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10"]},
         {"name":"neuronx_distributed","version":"0.12.12111","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
         {"name":"neuronx_distributed_training","version":"1.3.0","supported_instances":["trn1"],"supported_python_versions":["3.9","3.10","3.11"]},
-        {"name":"neuronx_distributed_inference","version":"0.3.5591","supported_instances":["inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
+        {"name":"neuronx_distributed_inference","version":"0.3.5591","supported_instances":["trn1","inf2","trn2"],"supported_python_versions":["3.9","3.10","3.11"]},
         {"name":"tensorboard-plugin-neuronx","version":"2.0.670.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"tensorflow-model-server-neuronx","version":"2.10.1.2.12.2.0","supported_instances":["inf1","trn1","inf2"],"supported_python_versions":[]},
         {"name":"tensorflow-model-server-neuronx","version":"2.9.3.2.12.2.0","supported_instances":["inf1","trn1","inf2"],"supported_python_versions":[]},

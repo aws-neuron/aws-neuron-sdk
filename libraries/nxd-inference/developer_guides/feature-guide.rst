@@ -21,6 +21,8 @@ Models included in the NxD Inference model hub are checkpoint-compatible with
 HuggingFace Transformers. Supporting other checkpoint formats in NxD Inference is possible through converting the
 obtained checkpoint to the standard HuggingFace Transformers checkpoint format.
 
+.. _nxdi-checkpoint-support:
+
 Checkpoint support
 ------------------
 
@@ -100,9 +102,9 @@ serializes the model to a given folder. After you have a serialized
 model, you can load it directly to a Neuron device without needing to
 compile again.
 
-The compile function serializes sharded weights by default, and you can
-disable this functionality with the ``save_sharded_checkpoint`` flag in
-NeuronConfig.
+The compile function does not serialize sharded weights by default, and you can
+enable this functionality with the ``save_sharded_checkpoint`` flag in
+NeuronConfig. For more information on weights sharding, see :ref:`nxdi-weights-sharding-guide`.
 
 Logical NeuronCore Configuration (LNC) support
 ----------------------------------------------

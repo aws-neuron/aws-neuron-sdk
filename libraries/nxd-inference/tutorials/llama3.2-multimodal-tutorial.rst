@@ -26,7 +26,7 @@ Step 1: Set up Development Environment
    
 ::
 
-    source /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
+    source /opt/aws_neuronx_venv_pytorch_2_6_nxd_inference/bin/activate
 
 
 3. Install the fork of vLLM (neuron-2.22-vllm-v0.7.2) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
