@@ -25,7 +25,7 @@ NxD Inference virtual environment.
 
 ::
 
-   source /opt/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
+   source /opt/aws_neuronx_venv_pytorch_2_6_nxd_inference/bin/activate
 
 
 

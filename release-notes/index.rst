@@ -20,7 +20,7 @@ Neuron 2.23.0 (05/20/2025)
 What's New
 ^^^^^^^^^^
 
-With the Neuron 2.23 release, we move NxD Inference (NxDI) library out of beta. It is now recommended for all multi-chip inference use-cases. In addition, Neuron has new training capabilities, including Context Parallelism and ORPO, NKI improvements (new operators and ISA features), and new Neuron Profiler debugging and performance analysis optimizations. Finaly, Neuron now supports :ref:`PyTorch 2.6 <introduce-pytorch-2-6>` and JAX 0.5.3.
+With the Neuron 2.23 release, we move NxD Inference (NxDI) library out of beta. It is now recommended for all multi-chip inference use-cases. In addition, Neuron has new training capabilities, including Context Parallelism and ORPO, NKI improvements (new operators and ISA features), and new Neuron Profiler debugging and performance analysis optimizations. Finally, Neuron now supports :ref:`PyTorch 2.6 <introduce-pytorch-2-6>` and JAX 0.5.3.
 
 Inference: NxD Inference (NxDI) moves from beta to GA. NxDI now supports Persistent Cache to reduce compilation times, and optimizes model loading with improved weight sharding performance.
 

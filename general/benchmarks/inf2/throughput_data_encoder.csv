@@ -1,22 +1,9 @@
 Model,Scripts,Framework,Inst. Type,Task,Throughput (inference/second),Latency P50 (ms),Latency P99 (ms),Application Type,Neuron Version,Run Mode,Batch Size,Sequence Length,Model Data Type,Compilation Autocast Data Type,OS Type
-albert-base-v2,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),3195.02373414,4.997015,5.1281476,Batch,2.22.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
-bert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),2768.43683133,2.87389755,3.07679415,Batch,2.22.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
-bert-base-cased-finetuned-mrpc,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Sequence Classification,3200.04474702,9.90641117,10.40602207,Batch,2.21.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
-bert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),2919.75168551,5.443573,5.78499317,Batch,2.22.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
-bert-large-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),960.91765682,16.62409306,17.39720106,Batch,2.21.0,Data Parallel,8,128,FP32,Matmult-BF16,U2
+albert-base-v2,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),3040.88352688,5.23519516,5.49864769,Batch,2.23.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
+bert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),2915.56907112,5.46264648,5.82314491,Batch,2.23.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
 bert-large-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),950.0496231,8.41140747,8.84652853,Batch,2.21.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
-camembert-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),3179.48670935,10.04099846,10.2627635,Batch,2.22.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
-distilbert-base-cased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),5045.33379825,1.57833099,1.6892004,Batch,2.22.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
-distilbert-base-cased-distilled-squad,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),5047.23905766,1.57856941,1.69039249,Batch,2.22.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
-distilbert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),5319.17072558,5.99443913,6.24612093,Batch,2.22.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
-google/electra-base-discriminator,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),2905.1433954,10.97726822,11.50465012,Batch,2.22.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
-roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),3035.39876055,5.26380539,5.50436974,Batch,2.22.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
-roberta-large,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.xlarge,Raw Output (AutoModel),921.30295269,8.58855247,9.26065683,Batch,2.22.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
+distilbert-base-uncased,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),5366.69896923,5.94496727,6.30118132,Batch,2.23.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
+google/electra-base-discriminator,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),2976.53673379,10.73884964,11.15537882,Batch,2.23.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
+roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),2943.63247545,5.39398193,5.80955267,Batch,2.23.0,Data Parallel,8,128,FP32,Matmult-BF16,U22
+roberta-large,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.6,Inf2.xlarge,Raw Output (AutoModel),985.94429679,8.09645653,8.26883316,Batch,2.23.0,Data Parallel,4,128,FP32,Matmult-BF16,U22
 xlm-roberta-base,:benchmark-pt:`Benchmark <inf2>`,PyTorch 2.5,Inf2.48xlarge,Raw Output (AutoModel),51.13695938,625.66077709,694.93403673,Batch,2.22.0,Data Parallel,16,128,FP32,Matmult-BF16,U22
-
-
-
-
-
-
-

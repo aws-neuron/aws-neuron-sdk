@@ -47,7 +47,7 @@ Before installing vLLM with the instructions below, you need to install ``neuron
 
 .. code::
 
-    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.23-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
     pip install -r requirements-neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
@@ -213,9 +213,9 @@ Examples
 --------
 
 For a list of examples for using vLLM with Neuron, refer to `upstreaming-to-vllm/examples
-/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2/examples/offline_inference>`_ folder. Look for example scripts that are prefixed with ``neuron_``. We provide examples for use cases such as speculative decoding (EAGLE and draft model), multimodal models, 
+/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.23-vllm-v0.7.2/examples/offline_inference>`_ folder. Look for example scripts that are prefixed with ``neuron_``. We provide examples for use cases such as speculative decoding (EAGLE and draft model), multimodal models, 
 quantization, multi-LoRA and more. A separate folder `upstreaming-to-vllm/examples/neuron
-/multi_node/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2/examples/neuron/multi_node>`_ contains examples for enabling multinode inferencing on Neuron.
+/multi_node/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.23-vllm-v0.7.2/examples/neuron/multi_node>`_ contains examples for enabling multinode inferencing on Neuron.
 
 For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.
 
