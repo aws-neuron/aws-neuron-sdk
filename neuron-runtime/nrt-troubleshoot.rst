@@ -28,13 +28,13 @@ $$$$$$$$$$$$$$
 Neuron Driver installation fails
 --------------------------------
 
-aws-neuron-dkms is a driver package which needs to be compiled during
+aws-neuronx-dkms (or aws-neuron-dkms if you're on inf1) is a driver package which needs to be compiled during
 installation. The compilation requires kernel headers for the instance's
 kernel. ``uname -r`` can be used to find kernel version in the instance.
 In some cases, the installed kernel headers might be newer than the
 instance's kernel itself.
 
-Please look at the aws-neuron-dkms installation log for message like the
+Please look at the aws-neuronx-dkms installation log for message like the
 following:
 
 ::
@@ -50,7 +50,7 @@ loaded.
 
    $ lsmod | grep neuron
 
-If the above has no output then that means ``aws-neuron-dkms``
+If the above has no output then that means ``aws-neuronx-dkms``
 installation is failed.
 
 Solution
@@ -58,34 +58,34 @@ Solution
 
 1. Stop all applications using the NeuronCores.
 
-2. Uninstall aws-neuron-dkms ``sudo apt remove aws-neuron-dkms`` or
-   ``sudo yum remove aws-neuron-dkms``
+2. Uninstall aws-neuronx-dkms ``sudo apt remove aws-neuronx-dkms`` or
+   ``sudo yum remove aws-neuronx-dkms``
 
 3. Install kernel headers for the current kernel
    ``sudo apt install -y linux-headers-$(uname -r)`` or
    ``sudo yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)``
 
-4. Install aws-neuron-dkms ``sudo apt install aws-neuron-dkms`` or
-   ``sudo yum install aws-neuron-dkms``
+4. Install aws-neuronx-dkms ``sudo apt install aws-neuronx-dkms`` or
+   ``sudo yum install aws-neuronx-dkms``
 
 ------------
 
 Application fails to start
 --------------------------
 
-Neuron Runtime requires Neuron Driver(aws-neuron-dkms package) to access Neuron
+Neuron Runtime requires Neuron Driver(aws-neuronx-dkms package) to access Neuron
 devices. If the driver is not installed then Neuron Runtime wont able to access the
 Neuron devices and will fail with an error message in console and syslog.
 
-If ``aws-neuron-dkms`` is not installed then the error message will be like the following::
+If ``aws-neuronx-dkms`` is not installed then the error message will be like the following::
 
- 2021-Aug-11 18:38:27.0917 13713:13713 ERROR   NRT:nrt_init      Unable to determine Neuron Driver version. Please check aws-neuron-dkms package is installed.
+ 2021-Aug-11 18:38:27.0917 13713:13713 ERROR   NRT:nrt_init      Unable to determine Neuron Driver version. Please check aws-neuronx-dkms package is installed.
 
-If ``aws-neuron-dkms`` is installed but does not support the latest runtime then the error message will be like the following::
+If ``aws-neuronx-dkms`` is installed but does not support the latest runtime then the error message will be like the following::
 
- 2021-Aug-11 19:18:21.0661 24616:24616 ERROR   NRT:nrt_init      This runtime requires Neuron Driver version 2.0 or greater. Please upgrade aws-neuron-dkms package.
+ 2021-Aug-11 19:18:21.0661 24616:24616 ERROR   NRT:nrt_init      This runtime requires Neuron Driver version 2.0 or greater. Please upgrade aws-neuronx-dkms package.
 
-When using any supported framework from Neuron SDK version 2.5.0 and Neuron Driver (aws-neuron-dkms) versions 2.4 or older, Neuron Runtime will return the following error message::
+When using any supported framework from Neuron SDK version 2.5.0 and Neuron Driver (aws-neuronx-dkms) versions 2.4 or older, Neuron Runtime will return the following error message::
 
   2022-Dec-01 09:34:12.0559   138:138   ERROR   HAL:aws_hal_tpb_pooling_write_profile       failed programming the engine
 
@@ -97,7 +97,7 @@ Please follow the installation steps in :ref:`setup-guide-index` to install ``aw
 ------------
 
 
-This Neuron Runtime (compatibility id: X) is not compatible with the installed aws-neuron-dkms package
+This Neuron Runtime (compatibility id: X) is not compatible with the installed aws-neuronx-dkms package
 ------------------------------------------------------------------------------------------------------
 
 This error is caused by incompatibility between the Neuron Driver (dkms package) and the Runtime Library (runtime-lib package).  The driver remains backwards compatible with older versions of Neuron Runtime, but newer versions of the Runtime might rely on the functionality that is only provided by a newer driver.  In that case, an update to the newer driver is required.
