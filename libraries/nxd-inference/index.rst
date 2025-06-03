@@ -14,7 +14,7 @@ NxD Inference
     Developer Guides  </libraries/nxd-inference/developer_guides/index>
     Tutorials  </libraries/nxd-inference/tutorials/index>
     App Notes  </libraries/nxd-inference/app-notes/index>
-    Misc  </libraries/nxd-inference/misc>
+    Misc  </libraries/nxd-inference/misc/index>
 
 
 NxD Inference  (where NxD stands for NeuronX Distributed) is an open-source PyTorch-based inference library that simplifies deep learning model deployment on AWS Inferentia and Trainium instances. 
@@ -66,5 +66,5 @@ NxD Inference  (where NxD stands for NeuronX Distributed) is an open-source PyTo
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    * :ref:`neuronx-distributed-inference-rn`
+    .. include:: /libraries/nxd-inference/misc/misc.txt
 
