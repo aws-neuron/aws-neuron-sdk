@@ -35,22 +35,38 @@ for instructions on how to setup vLLM integration for it.
 
 Setup
 -----
+Before installing vLLM with the instructions below, you need to install the Neuron SDK.
 
-.. note::
+Installing vLLM from vllm-project repository
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Currently, we maintain a fork of vLLM (v0.7.2) that contains the necessary changes to support NxD Inference.
-    Therefore, it is important to follow the installation instructions below rather than installing vLLM
-    from PyPI or the official vLLM repository. We are working with the vLLM community to upstream these
-    changes to make them available in a future vLLM version.
+Starting with vLLM v0.9.0, vLLM supports Neuron integration with NxD Inference library out of the box. 
+Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/latest/getting_started/installation/ai_accelerator.html#aws-neuron>`_.
 
-Before installing vLLM with the instructions below, you need to install ``neuronx-distributed-inference``.
+To install the official vLLM repository with Neuron support, use the following commands:
+
+.. code::
+    git clone https://github.com/vllm-project/vllm.git
+    cd vllm
+    pip install -U -r requirements/neuron.txt
+    VLLM_TARGET_DEVICE="neuron" pip install -e .
+
+Installing the AWS Neuron fork of vLLM 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We also maintain a fork of vLLM that contains additional features such as Llama-3.2 multi-modal support and multi-node 
+distributed inference. Install the AWS fork using the following commands:
 
 .. code::
 
     git clone -b neuron-2.23-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
-    pip install -r requirements-neuron.txt
+    pip install -r requirements/neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
+
+.. note::
+
+    The current AWS Neuron fork of vLLM is based on vLLM v0.7.2.
 
 Usage
 -----
