@@ -123,6 +123,12 @@ We can now install the dependencies of the library using the following command:
 
     pip install -r requirements.txt ~/apex/dist/apex-0.1-py3-none-any.whl
 
+After installing the requirements, we need to patch some of the installations so run
+
+.. code-block :: shell
+    
+    wget https://github.com/aws-neuron/neuronx-distributed-training/blob/main/install_setup.sh
+    ./install_setup.sh
 
 .. _nxdt_nxdt_nxdt_install:
 
