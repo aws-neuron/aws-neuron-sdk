@@ -45,12 +45,12 @@ To use this tutorial, you must first download a Llama 3.3 70B Instruct model che
 Install Neuron vLLM Fork
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NxD Inference supports running models with vLLM. This functionality is available in a fork of the vLLM GitHub repository: `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.23-vllm-v0.7.2.>`_
+NxD Inference supports running models with vLLM. This functionality is available in a fork of the vLLM GitHub repository: `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0.>`_
 To run NxD Inference with vLLM, you need to download and install vLLM from this fork. Clone the Neuron vLLM fork.
 
 ::
 
-    git clone -b neuron-2.23-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Activate the Neuron virtual environment if using a new terminal instead of the one from connect step above.

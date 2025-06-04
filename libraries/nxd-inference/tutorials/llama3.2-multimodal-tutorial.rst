@@ -29,7 +29,7 @@ Step 1: Set up Development Environment
     source /opt/aws_neuronx_venv_pytorch_2_6_nxd_inference/bin/activate
 
 
-3. Install the fork of vLLM (neuron-2.22-vllm-v0.7.2) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
+3. Install the fork of vLLM (releases/v2.23.0-v0) that supports NxD Inference following :ref:`Setup<nxdi-vllm-user-guide>` 
    in the vLLM User Guide for NxD Inference.
    
 4. You should now have the Neuron SDK and other necessary packages installed,

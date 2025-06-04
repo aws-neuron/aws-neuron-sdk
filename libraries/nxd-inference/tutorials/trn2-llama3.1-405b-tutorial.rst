@@ -145,14 +145,14 @@ Step 2: Install the vLLM version that supports NxD Inference
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0>`__
 
 To run NxD Inference with vLLM, you download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
 
 
 Activate the Neuron virtual environment.

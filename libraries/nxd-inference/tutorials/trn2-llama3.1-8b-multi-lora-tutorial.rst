@@ -46,14 +46,14 @@ Install packages
 NxD Inference supports running models with vLLM. This functionality is
 available in a fork of the vLLM GitHub repository:
 
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.22-vllm-v0.7.2>`__
+- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0>`__
 
 To run NxD Inference with vLLM, you need to download and install vLLM from this
 fork. Clone the Neuron vLLM fork.
 
 ::
    
-    git clone -b neuron-2.22-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
     source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
 
 
@@ -221,7 +221,7 @@ You can also run multi-LoRA serving offline on TRN2 with vLLM.
         max_loras=2,
     )
     """ 
-    The format of multi-lora requests using NxDI as the backend is different from the default format in vLLM: https://docs.vllm.ai/en/v0.7.2/features/lora.html because NxDI currently doesn't support dynamic loading of LoRA adapters.
+    The format of multi-lora requests using NxDI as the backend is different from the default format in vLLM: https://docs.vllm.ai/en/v0.9.0/features/lora.html because NxDI currently doesn't support dynamic loading of LoRA adapters.
     Only the lora_name needs to be specified.  
     The lora_id and lora_path are supplied at the LLM class/server initialization, after which the paths are
     handled by NxDI.
