@@ -46,6 +46,7 @@ Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/late
 To install the official vLLM repository with Neuron support, use the following commands:
 
 .. code::
+    
     git clone https://github.com/vllm-project/vllm.git
     cd vllm
     pip install -U -r requirements/neuron.txt
