@@ -218,7 +218,7 @@ discussed in this tutorial.
       :download:`spmd_tensor_addition_nki_kernels.py <../examples/tensor_addition/spmd_tensor_addition_nki_kernels.py>`
       into the same folder to run this PyTorch script.
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/tensor_addition/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/tensor_addition/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

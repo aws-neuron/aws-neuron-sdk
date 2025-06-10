@@ -4,7 +4,7 @@ NKI Tutorials
 ================================
 
 The full source code of the following tutorials can be also viewed on the 
-`nki-samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/>`_ repository on GitHub.
+`nki-samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/>`_ repository on GitHub.
 
 .. toctree::
       :maxdepth: 1

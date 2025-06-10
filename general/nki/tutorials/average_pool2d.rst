@@ -103,7 +103,7 @@ discussed in this tutorial.
     * You must also download :download:`average_pool2d_nki_kernels.py <../examples/average_pool2d/average_pool2d_nki_kernels.py>`
       into the same folder to run this JAX script.
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/average_pool2d/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/average_pool2d/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
