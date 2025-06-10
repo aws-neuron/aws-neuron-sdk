@@ -101,8 +101,8 @@ Date: 09/16/2024
 
 * In addition to documentation, we've included many of the innovative kernels
   used with-in the neuron-compiler such as
-  `mamba <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/fused_mamba/mamba_torch.py>`_
-  and `flash attention <https://github.com/aws-neuron/nki-samples/blob/main/src/reference/attention.py>`_
+  `mamba <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/fused_mamba/mamba_torch.py>`_
+  and `flash attention <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/reference/attention.py>`_
   as open-source samples in a new `nki-samples <https://github.com/aws-neuron/nki-samples/>`_
   GitHub repository. New kernel contributions are welcome via GitHub Pull-Requests as well as
   feature requests and bug reports as GitHub Issues. For more information see the

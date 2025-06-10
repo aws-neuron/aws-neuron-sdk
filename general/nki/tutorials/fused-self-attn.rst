@@ -129,7 +129,7 @@ discussed in this tutorial.
 * Kernel Definition, accuracy testing and performance benchmark using baremetal mode: :download:`sd_attention_nki_kernels.py <../examples/sd_attention/sd_attention_nki_kernels.py>` 
 * Use the kernel in PyTorch: :download:`sd_attention_torch.py <../examples/sd_attention/sd_attention_torch.py>`
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/sd_attention/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/sd_attention/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

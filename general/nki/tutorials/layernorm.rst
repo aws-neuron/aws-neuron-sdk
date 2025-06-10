@@ -155,7 +155,7 @@ discussed in this tutorial.
 * PyTorch reference implementation: :download:`layernorm_torch.py <../examples/layernorm/layernorm_torch.py>`
 * Two versions of NKI kernels: :download:`layernorm_nki_kernel.py <../examples/layernorm/layernorm_nki_kernel.py>`
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/layernorm/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/layernorm/>`_
 
 Example usage of the scripts
 -----------------------------

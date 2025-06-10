@@ -936,7 +936,7 @@ discussed in this tutorial.
 * PyTorch reference implementation: :download:`mamba_torch.py <../examples/fused_mamba/mamba_torch.py>`
 * Three versions of NKI kernels: :download:`mamba_nki_kernels.py <../examples/fused_mamba/mamba_nki_kernels.py>`
 
-You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/blob/main/src/tutorials/fused_mamba/>`_
+You can also view the source code in the GitHub repository `nki_samples <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/fused_mamba/>`_
 
 Example usage of the scripts:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
