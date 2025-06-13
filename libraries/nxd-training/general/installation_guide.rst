@@ -127,7 +127,7 @@ After installing the requirements, we need to patch some of the installations so
 
 .. code-block :: shell
     
-    wget https://github.com/aws-neuron/neuronx-distributed-training/blob/main/install_setup.sh
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed-training/master/install_setup.sh
     chmod +x install_setup.sh
     ./install_setup.sh
 
