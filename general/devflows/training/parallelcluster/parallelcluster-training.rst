@@ -36,8 +36,11 @@ Setup environment
 
 Follow `these setup <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/general/network/vpc-subnet-setup.md>`_ instructions to install VPC and all the necessary components for ParallelCluster. 
 
+2. Install AWS ParallelCluster in a virtual environment (recommended)
 
-2. Create and launch ParallelCluster 
+Follow `https://docs.aws.amazon.com/parallelcluster/latest/ug/install-v3-virtual-environment.html`
+
+3. Create and launch ParallelCluster 
 
 Follow `these creating cluster <https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/cluster-configs/trn1-16-nodes-pcluster.md>`_ instructions to launch ParallelCluster in the VPC.
 
