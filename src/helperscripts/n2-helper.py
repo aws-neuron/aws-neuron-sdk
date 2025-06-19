@@ -1066,6 +1066,68 @@ class manifest:
         
         return str
 
+    def search_package_version(self, args):
+        """Search for SDK version containing specific package version"""
+        
+        str = ''
+        
+        # Search for the package version across all releases
+        df_search = self.df_release_packages[
+            (self.df_release_packages['name'] == args.search_package) & 
+            (self.df_release_packages['version'] == args.search_version)
+        ]
+        
+        if df_search.empty:
+            str += f'\nPackage {args.search_package}-{args.search_version} not found in any SDK version.\n'
+        else:
+            result = df_search.iloc[0]  # Get first match
+            str += f'\nSearch Results for {args.search_package}-{args.search_version}:\n\n'
+            str += f"{'SDK Version:':<20} {result['neuron_version']}\n"
+            str += f"{'Component:':<20} {result['component']}\n"
+            str += f"{'Category:':<20} {result['category']}\n"
+            
+            if result['supported_instances']:
+                instances = ', '.join(result['supported_instances'])
+                str += f"{'Instances:':<20} {instances}\n"
+            
+            if result['supported_python_versions']:
+                python_versions = ', '.join(result['supported_python_versions'])
+                str += f"{'Python Versions:':<20} {python_versions}\n"
+            
+            if result['use_cases']:
+                use_cases = ', '.join(result['use_cases'])
+                str += f"{'Use Cases:':<20} {use_cases}\n"
+        
+        return str
+
+    def search_package_history(self, args):
+        """Search for all versions of a package across SDK versions"""
+        
+        str = ''
+        
+        # Search for all versions of the package
+        df_search = self.df_release_packages[
+            self.df_release_packages['name'] == args.search_package
+        ].copy()
+        
+        if df_search.empty:
+            str += f'\nPackage {args.search_package} not found in any SDK version.\n'
+        else:
+            # Sort by neuron version (descending)
+            df_search = df_search.sort_values('neuron_version', ascending=False)
+            
+            str += f'\nAll versions of {args.search_package}:\n\n'
+            str += f"{'SDK Version':<12} {'Package Version':<25} {'Instances':<25} {'Python Versions'}\n"
+            str += '-' * 80 + '\n'
+            
+            for index, row in df_search.iterrows():
+                instances = ', '.join(row['supported_instances']) if row['supported_instances'] else 'N/A'
+                python_versions = ', '.join(row['supported_python_versions']) if row['supported_python_versions'] else 'N/A'
+                
+                str += f"{row['neuron_version']:<12} {row['version']:<25} {instances:<25} {python_versions}\n"
+        
+        return str
+
 
 
 ################
@@ -1102,7 +1164,10 @@ def cli_parse_arguments():
     group = parser.add_mutually_exclusive_group(required=True)
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
     group.add_argument("--list", choices=['neuron_versions', 'pyversions','packages', 'components', 'frameworks'])
+    group.add_argument("--search", choices=['package-version', 'package-history'])
     group.add_argument("--install-type", choices=['install', 'update'])
+    parser.add_argument("--search-package", metavar='PACKAGE_NAME', help='Package name for search operations')
+    parser.add_argument("--search-version", metavar='PACKAGE_VERSION', help='Package version for search operations')
     parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2', 'trn2'])
     parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023', 'rockylinux9'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework', 'dlami-neuron'],
@@ -1136,5 +1201,15 @@ if __name__ == '__main__':
         print(n2_manifest.list_packages(args))
     elif (args.list == 'pyversions'):
         print(n2_manifest.list_pyversions(args))
+    elif (args.search == 'package-version'):
+        if not args.search_package or not args.search_version:
+            print("Error: --search-package and --search-version are required for package-version search")
+            exit(1)
+        print(n2_manifest.search_package_version(args))
+    elif (args.search == 'package-history'):
+        if not args.search_package:
+            print("Error: --search-package is required for package-history search")
+            exit(1)
+        print(n2_manifest.search_package_history(args))
     else:
         print(n2_manifest.generate_script(args))
