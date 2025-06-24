@@ -1,4 +1,4 @@
-.. post:: May 15, 2024
+.. post:: May 15, 2025
     :language: en
     :tags: announce-transformers-neuronx-maintenance, tnx
 

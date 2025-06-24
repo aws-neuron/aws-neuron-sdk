@@ -1,5 +1,7 @@
 User-agent: *
 
+Disallow: /en/v2.24.0/
+
 Disallow: /en/v2.23.0/
 
 Disallow: /en/v2.22.1/

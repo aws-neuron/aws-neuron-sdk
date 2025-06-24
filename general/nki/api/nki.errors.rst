@@ -74,6 +74,55 @@ Scale parameter of activation must be either a scalar value or a 1D vector spann
   nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((1, 128), 1.2, dtype=np.float32)) # not supported
   nisa.activation(op=nl.exp, data=data[...], scale=nisa.memset((128, 128), 1.2, dtype=np.float32)) # not supported
 
+.. _nki-errors-err_ambiguous_tensor_truth_value:
+
+err_ambiguous_tensor_truth_value
+--------------------------------
+
+ValueError: Cannot evaluate truth value of a multi-element tensor/array.
+
+This error occurs in two common scenarios:
+1. Using logical operators (and, or, not) on multi-element tensors
+2. Using tensor objects in conditional statements without explicit None checks
+
+Example of problematic code:
+
+.. code-block:: python
+
+  def func(a, b: Optional[tensor]):
+    ix, iy = nl.mgrid[0:128, 0:128]
+    a_tile: tensor[128, 128] = nl.load(a[ix, iy])
+
+    not_a_tile = not (a_tile > 0)  # The truth value of an array with more than one element is ambiguous
+
+    if b:  # The truth value of an array with more than one element is ambiguous
+      pass
+
+Correct usage:
+
+For tensor operations, use appropriate element-wise operators:
+- Use ~ instead of not for boolean negation
+- Use & instead of and for logical AND
+- Use | instead of or for logical OR
+
+For None checks, use explicit 'is' comparisons:
+
+.. code-block:: python
+
+  def func(a, b: Optional[tensor]):
+    ix, iy = nl.mgrid[0:128, 0:128]
+    a_tile: tensor[128, 128] = nl.load(a[ix, iy])
+
+    not_a_tile = ~(a_tile > 0)  # Element-wise negation
+
+    if b is not None:  # Explicit None check
+      pass
+
+Note:
+  This error is similar to NumPy's ValueError for ambiguous truth value
+  of arrays, as tensors/arrays can contain multiple boolean values and
+  cannot be automatically reduced to a single boolean.
+
 .. _nki-errors-err_annotation_shape_mismatch:
 
 err_annotation_shape_mismatch
@@ -113,12 +162,14 @@ Bias tensor of an activation op must be specified in allocated NKI kernels.
 err_cannot_assign_to_index
 --------------------------
 
-An `index` tensor does not support item assignment. You may explicitly call
-`iota` to convert an `index` tensor to a normal `tile` before any assignments.
+An `index` or `mask` tensor does not support item assignment.
+
+You may explicitly call `iota` to convert an `index` tensor to a normal `tile`
+ before any assignments.
 
 .. code-block:: python
 
-    x = nl.arange(8)[None, :]
+    _, x = nl.mgrid[0:1, 0:8]
     x[0, 5] = 1024   # Error: 'index' tensor does not support item assignment
     y = nisa.iota(x, dtype=nl.uint32)
     y[0, 5] = 1024   # works
@@ -130,7 +181,7 @@ err_cannot_update_immutable_parameter
 
 Cannot update immutable parameter
 
-By default all parameters to the top level nki kernels are immutable, updating
+By default, all parameters to the top level nki kernels are immutable, updating
 immutable parameters in the kernel is not allowed.
 
 .. code-block:: python
@@ -143,9 +194,23 @@ immutable parameters in the kernel is not allowed.
 
     return in_tensor
 
-To fix this error, you could copy the parameter to a temp buffer and modify the buffer instead:
+You could explicitly annotate the parameter as mutable:
 
 .. code-block:: python
+
+  import neuronxcc.nki.typing as nt
+
+  def kernel(in_tensor: nt.mutable_tensor):
+    x = nl.load(in_tensor)
+    y = x + 1
+    nl.store(in_tensor, value=y) # ok, in_tensor is mutable based on the annotation
+
+    return in_tensor
+
+Alternatively, you could return a copy of the input parameter if you don't intend
+to modify the input parameter:
+
+  .. code-block:: python
 
   import neuronxcc.nki.isa as nisa
   import neuronxcc.nki.language as nl
@@ -384,6 +449,45 @@ To fix the problem you can follow the suggestion from the warning
     data[...] = data + i_tile
   
   nl.store(ptr, value=data)
+
+.. _nki-errors-err_mutable_parameter_not_returned:
+
+err_mutable_parameter_not_returned
+----------------------------------
+
+A mutable kernel parameter must be returned by `return`
+
+.. code-block:: python
+
+  import neuronxcc.nki.typing as nt
+
+  def kernel(in_tensor: nt.mutable_tensor):
+    out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
+                            buffer=nl.shared_hbm)
+    x = nl.load(in_tensor)
+    y = x + 1
+    nl.store(out_tensor, value=y)
+    # Also update mutable parameter `in_tensor`
+    nl.store(in_tensor, value=y)
+
+    # But didnt return the mutable parameter `in_tensor`
+    return out_tensor # Error: Mutable kernel parameter not returned by `return` statement
+
+To fix this error, you need to return the mutable parameter to the returned list:
+
+.. code-block:: python
+
+  import neuronxcc.nki.typing as nt
+
+  def kernel(in_tensor: nt.mutable_tensor):
+    out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
+                            buffer=nl.shared_hbm)
+    x = nl.load(in_tensor)
+    y = x + 1
+    nl.store(out_tensor, value=y)
+    nl.store(in_tensor, value=y)
+
+    return out_tensor, in_tensor # ok
 
 .. _nki-errors-err_nested_kernel_with_spmd_grid:
 
@@ -723,4 +827,51 @@ You could avoid the error by either use basic indexing or advanced indexing but 
   i = nl.arange(4)[:, None]
   j = nl.arange(4)[None. :]
   c = nl.exp(a[i, j]) # also ok
+
+.. _nki-errors-err_while_loop_requires_unconditional_entry:
+
+err_while_loop_requires_unconditional_entry
+-------------------------------------------
+
+ValueError: Traditional while loops are not supported - use do-while pattern instead.
+
+This error occurs because NKI does not support traditional while loops where the condition is
+evaluated before the first iteration. Only the do-while pattern (with unconditional first entry)
+is supported by the compiler.
+
+Example of unsupported code (traditional while loop):
+
+.. code-block:: python
+
+  def func(a):
+    a_tile: tensor[1, 1] = nl.load(a[0, 0])
+    a_scalar = scalar(a_tile)  # type cast a tensor to scalar
+
+    # NOT SUPPORTED: Condition checked before first iteration
+    while a_scalar < 10:  # Error: NKI does not support traditional while loops
+      a_tile = a_tile + 1
+      a_scalar = scalar(a_tile)
+
+    # ...
+
+Required pattern (do-while implementation):
+
+.. code-block:: python
+
+  def func(a):
+    a_tile: tensor[1, 1] = nl.load(a[0, 0])
+    a_scalar = scalar(a_tile)  # type cast a tensor to scalar
+
+    # SUPPORTED: First iteration is always executed
+    cond = scalar(True)  # Ensure unconditional entry
+    while cond:
+      a_tile = a_tile + 1
+      a_scalar = scalar(a_tile)
+      cond = a_scalar < 10  # Condition evaluated at end of iteration
+
+    # ...
+
+Note: Due to compiler limitations, NKI only supports loops that follow the do-while pattern,
+where the first iteration is always executed and the continuation condition is checked
+at the end of each iteration.
 
