@@ -15,6 +15,15 @@ Updated : 04/29/2022
 
 - In rare cases of multi-process applications running under heavy stress a model load failure my occur. This may require reloading of the Neuron Driver as a workaround.
 
+Neuron Driver release [2.22.2.0]
+--------------------------------
+Date: 06/23/2025
+
+Bug Fixes
+^^^^^^^^^
+* Added workaround for HW DGE descriptor fetching bug
+* Fixed typos in certain error log messages
+
 Neuron Driver release [2.21.37.0]
 --------------------------------
 Date: 05/19/2025

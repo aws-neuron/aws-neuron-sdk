@@ -36,7 +36,7 @@ See :ref:`migrate_to_pytorch_2_5` for changes needed to use PyTorch NeuronX 2.5.
 How can I install PyTorch NeuronX 2.5?
 --------------------------------------------
 
-To install PyTorch NeuronX 2.5 please follow the :ref:`setup-torch-neuronx` guides for Amazon Linux 2023 and Ubuntu 22 AMI. Please also refer to the Neuron multi-framework DLAMI :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.5 that you can use to easily get started. PyTorch NeuronX 2.5 can be installed using the following:
+To install PyTorch NeuronX 2.5 please follow the :ref:`setup-torch-neuronx` guides for Amazon Linux 2023 and Ubuntu 22 AMI. Please also refer to the Neuron multi-framework DLAMI :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.5 that you can use to get started. PyTorch NeuronX 2.5 can be installed using the following:
 
 .. code::
 

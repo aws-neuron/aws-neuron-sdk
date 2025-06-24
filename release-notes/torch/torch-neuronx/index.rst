@@ -14,6 +14,124 @@ PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
+Release [2.7.0.2.8.*, 2.6.0.2.8.*, 2.5.1.2.8.*]
+-----------------------------------------------
+Date: 6/23/2025
+
+Summary
+~~~~~~~
+
+- :ref:`Introducing PyTorch 2.7 Support<introduce-pytorch-2-7>`
+
+Known limitations
+~~~~~~~~~~~~~~~~~
+
+* PyTorch NeuronX currently does not support GSPMD
+* PyTorch NeuronX currently does not support torch.compile
+* PyTorch NeuronX currently does not support DDP/FSDP
+
+Resolved issues
+~~~~~~~~~~~~~~~
+
+[v2.7] Resolved the lower BERT pretraining performance with torch-neuronx 2.6 compared to torch-neuronx 2.5
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With torch-neuronx v2.6, BERT pretraining performance is ~10% lower compared to torch-neuronx 2.5. This issue is fixed with torch-neuronx v2.7. See  https://github.com/pytorch/xla/issues/9037 for more details.
+
+
+Known issues
+~~~~~~~~~~~~
+
+Please see the :ref:`Introducing PyTorch 2.6 Support<introduce-pytorch-2-6>` for a full list of known issues with v2.6.
+Please see the :ref:`Introducing PyTorch 2.5 Support<introduce-pytorch-2-5>` for a full list of known issues with v2.5.
+
+Updating Ubuntu OS kernel version from 5.15 to 6.8 may result in lower performance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when switching Ubuntu OS kernel version from 5.15 to 6.8, you may see performance differences due to the new kernel scheduler (CFS vs EEVDF). For example, BERT pretraining performance could be lower by up to 10%. You may try using an older OS kernel (i.e. Amazon Linux 2023) or experiment with the kernel real-time scheduler by running ``sudo chrt --fifo 99`` before your command (i.e. ``sudo chrt --fifo 99 <script>``) to improve the performance. Note that adjusting the real-time scheduler can also result in lower performance. See https://www.kernel.org/doc/html/latest/scheduler/sched-eevdf.html for more information.
+
+Tensor split on second dimension of 2D array not working
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when using tensor split operation on a 2D array in the second dimension, the resulting tensors don't have the expected data (https://github.com/pytorch/xla/issues/8640). The work-around is to set ``XLA_DISABLE_FUNCTIONALIZATION=0``. Another work-around is to use ``torch.tensor_split``.
+
+[v2.5] Import torch_xla crashed with ``TypeError: must be called with a dataclass type or instance`` with torch-xla 2.5 and torch 2.5.1+cpu (CPU flavor)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using torch 2.5.1+cpu (CPU flavor) on python 3.10, importing torch_xla crashed with ``TypeError: must be called with a dataclass type or instance`` due to installed triton version 3.2.0 (https://github.com/pytorch/xla/issues/8560). To work-around, please remove the installed triton package or downgrade to triton==3.1.0 or use the regular torch 2.5.1 (GPU flavor).
+
+
+[v2.5] Certain sequence of operations with ``xm.save()`` could corrupt tensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using the ``xm.save`` function to save tensors, please use ``xm.mark_step()`` before ``xm.save`` to avoid the error described in https://github.com/pytorch/xla/issues/8422 where parameter aliasing could corrupt other tensor values. This issue will be fixed in a future release.
+
+(Here ``xm`` is ``torch_xla.core.xla_model`` following PyTorch/XLA convention)
+
+
+[v2.6] Lower BERT pretraining performance with torch-neuronx 2.6 compared to torch-neuronx 2.5
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, BERT pretraining performance is ~10% lower with torch-neuronx 2.6 compared to torch-neuronx 2.5. This is due to a known regression in torch-xla https://github.com/pytorch/xla/issues/9037 and can affect other models with high graph tracing overhead. To work-around this issue, please build the ``r2.6_aws_neuron`` branch of torch-xla as follows (see:ref:`pytorch-neuronx-install-cxx11` for C++11 ABI version):
+
+.. code:: bash
+
+   # Setup build env (make sure you are in a python virtual env). Replace "apt" with "yum" on AL2023.
+   sudo apt install cmake
+   pip install yapf==0.30.0
+   wget https://github.com/bazelbuild/bazelisk/releases/download/v1.20.0/bazelisk-linux-amd64
+   sudo cp bazelisk-linux-amd64 /usr/local/bin/bazel
+   # Clone repos
+   git clone --recursive https://github.com/pytorch/pytorch --branch v2.6.0
+   cd pytorch/
+   git clone --recursive https://github.com/pytorch/xla.git --branch r2.6_aws_neuron
+   _GLIBCXX_USE_CXX11_ABI=0 python setup.py bdist_wheel
+   # pip wheel will be present in ./dist
+   cd xla/
+   CXX_ABI=0 python setup.py bdist_wheel
+   # pip wheel will be present in ./dist and can be installed instead of the torch-xla released in pypi.org
+
+
+Lower BERT pretraining performance when switch to using ``model.to(torch.bfloat16)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be deprecation warnings (as noted below).
+
+Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used). Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to cast model to BF16. (see :ref:`migration_from_xla_downcast_bf16`)
+
+
+[v2.6] AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'xrt_world_size'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is an error that ``torch_xla.core.xla_model.xrt_world_size()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.world_size()`` instead.
+
+[v2.6] AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'get_ordinal'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+
+[v2.5] WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.world_size instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size()`` instead.
+
+
+[v2.5] WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+
+
+AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In Torch-XLA 2.5, ``torch_xla.runtime.using_pjrt`` is removed because PJRT is the sole Torch-XLA runtime.
+See `commit PR <https://github.com/pytorch/xla/commit/d6fb5391d09578c8804b1331a5e7a4f72bf981db>`_.
+
+
 Release [2.6.0.2.7.*, 2.5.1.2.7.*]
 ----------------------------------
 Date: 5/15/2025
@@ -1025,9 +1143,9 @@ This release of 2.1 includes support for Neuron Profiler, multi-instance distrib
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to previously supported features (Transformers-NeuronX, Torch-NeuronX Trace API, Torch-NeuronX training, NeuronX-Distributed training), PyTorch 2.1 (torch-neuronx) now includes support for:
+In addition to previously supported features (Transformers-NeuronX, Torch-NeuronX Trace API, Torch-NeuronX training, NeuronX Distributed training), PyTorch 2.1 (torch-neuronx) now includes support for:
 
-* (Inference) NeuronX-Distributed inference
+* (Inference) NeuronX Distributed inference
 * (Training/Inference) Neuron Profiler
 * (Training) Multi-instance distributed training
 * (Training) Nemo Megatron
@@ -1264,7 +1382,7 @@ This version of PyTorch 2.1 (torch-neuronx) supports:
 
 * (Inference) Transformers-NeuronX
 * (Inference) Torch-NeuronX Trace API
-* (Training) NeuronX-Distributed training
+* (Training) NeuronX Distributed training
 * (Training) Torch-NeuronX training
 * (Training) New snapshotting capability enabled via the XLA_FLAGS environment variable (see :ref:`debug guide <pytorch-neuronx-debug>`)
 
@@ -1274,7 +1392,7 @@ Known limitations
 The following features are not yet supported in this version of PyTorch 2.1 (torch-neuronx):
 
 * (Training/Inference) Neuron Profiler
-* (Inference) NeuronX-Distributed inference
+* (Inference) NeuronX Distributed inference
 * (Training) Nemo Megatron
 * (Training) GSPMD
 * (Training) TorchDynamo (torch.compile)

@@ -60,9 +60,19 @@ cp -f tokenizers_binding/tokenizer.json .
 
 # setup torch
 if [ ! -e "libtorch" ]; then
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
-    unzip libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
-    rm -f libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
+    # Use different download paths based on PyTorch version
+    MAJOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f1)
+    MINOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f2)
+    
+if [ "$MAJOR_VERSION" -gt 2 ] || ([ "$MAJOR_VERSION" -eq 2 ] && [ "$MINOR_VERSION" -ge 7 ]); then
+        wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
+        unzip libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
+        rm -f libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
+    else
+        wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
+        unzip libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
+        rm -f libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
+    fi
 fi
 
 # get libneuron_op.so and install into libtorch

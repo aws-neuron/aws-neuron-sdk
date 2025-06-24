@@ -8,9 +8,35 @@ Neuron System Tools
    :depth: 2
 
 
+Neuron Tools  [2.24.54.0]
+-------------------------
+Date: 6/23/2025
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Scratchpad memory usage visualization is now available in the Neuron Profiler UI.  This feature shows scratchpad memory usage
+  over time with tensor level visibility at each time slice.  This view also provides the HLO name associate with the first use 
+  of each tensor.  See :ref:`neuron-profile-scratchpad-mem-usage` for more details.
+* Framework stack traces are now available in the Neuron Profiler UI.  Users will now be able to see how instructions executed
+  on device map to their source code.  See :ref:`neuron-profile-framework-stack-trace` for more details.
+* On-device collectives barriers are now shown in the Neuron Profiler UI.  This annotation will make it more clear when there is
+  overhead for collectives synchronization.  See :ref:`neuron-profile-collectives-barrier` for an example.
+* HBM throughput visualization over time is now shown in the Neuron Profiler UI, which reflects data movement where either the source
+  or destination are HBM.
+* Added option to filter the Neuron Cores to capture trace events on (:ref:`reference <neuron-profiler-2-0-guide>`)
+* Added option to filter the event types recorded when capturing system traces (:ref:`reference <neuron-profiler-2-0-guide>`)
+* Added a flag to ``nccom-test`` to get results in JSON (``--report-to-json-file <filename>``).
+* Added a flag to ``nccom-test`` to explicitly show input and output sizes based on the operation (``--show-input-output-size``).
+
+Bug fixes
+^^^^^^^^^
+* Fixed instance id labeling in system profile view for framework events.
+* Fixed issue in Neuron Profiler UI where the full data was not shown in the NEFF Nodes tab.
+
+
 Neuron Tools  [2.23.16.0]
 ------------------------
-Date: 5/XX/2025
+Date: 5/19/2025
 
 New in the release
 ^^^^^^^^^^^^^^^^^^

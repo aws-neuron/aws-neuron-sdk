@@ -338,6 +338,8 @@ Hover on the annotation to see more details about loading the tensor. Another ki
 
 |neuron-profile-tensor-reload-annotation|
 
+.. _neuron-profile-collectives-barrier:
+
 Collectives
 ~~~~~~~~~~~
 
@@ -348,6 +350,10 @@ For models involving collective operations, the timeline will show a box around 
 
 |neuron-profile-cc-op-annotation|
 
+Additionally, for any on-device collectives synchronization barrier, a similar box will be display indicating a barrier instead of an actual collectives operation.
+
+|neuron-profile-cc-op-barrier|
+
 Event Details
 ~~~~~~~~~~~~~
 
@@ -356,6 +362,31 @@ Each row will also include a tool tip on the right side, which can be hovered fo
 For instruction `Operands` specifically, clicking on the tooltip will reveal a breakdown of fields that compose an operand, as well as a generic example for reference.  The examples may not apply directly to the currently viewed profile.
 
 |neuron-profile-click-tooltip|
+
+
+.. _neuron-profile-framework-stack-trace:
+
+Framework Stack Trace
+----------------------------
+
+The Framework Stack Trace feature shows up in the Event Details when an instruction on the device profile is clicked. This can we used to map the device instructions back to framework level code in JAX or PyTorch to better understand what part of the application code resulted in a particular device instruction.
+
+|neuron-profile-stack-trace-event-details|
+
+To enable tracking of the stack trace information, you need to set environment variables before compiling your NEFF:
+
+::
+
+    export XLA_IR_DEBUG=1
+    export XLA_HLO_DEBUG=1
+
+Once you have the NEFF, you can simply capture the profile as usual. While viewing the profile use the ``--framework-source-root`` to pass the path to framework source files. This is optional and is only needed if you want to view your code along side the profile.
+
+::
+
+    $ neuron-profile view -n file.neff -s profile.ntff --framework-source-root /path/to/framework/source/files
+
+|neuron-profile-stack-trace-viewer|
 
 Searching Profiles
 ~~~~~~~~~~~~~~~~~~
@@ -375,6 +406,45 @@ Invalid code can lead to errors on Neuron hardware. These errors will be display
 |neuron-profile-oob-error|
 
 Users can correlate the error to the time it occurred and view nearby events to help debug.
+
+
+.. _neuron-profile-scratchpad-mem-usage:
+
+View Scratchpad Usage With Memory Tracker
+------------------------------------------
+
+The Memory Tracker feature in Neuron Profiler provides detailed insights into scratchpad memory usage over time, showing how memory is allocated and utilized by different tensors during model execution. This is particularly useful for understanding memory bottlenecks and optimizing memory usage patterns.
+
+To enable Memory Tracker, you need to set environment variables before compiling your NEFF:
+
+::
+
+    export XLA_IR_DEBUG=1
+    export XLA_HLO_DEBUG=1
+
+Then compile your model with these debug flags enabled. After compilation, capture the profile with the ``--enable-dge-notifs`` flag or set ``NEURON_RT_ENABLE_DGE_NOTIFICATIONS=1``:
+
+::
+
+    $ neuron-profile capture -n file.neff --enable-dge-notifs
+
+Finally, view the profile with Memory Tracker enabled:
+
+::
+
+    $ neuron-profile view -n file.neff -s profile.ntff --enable-memory-tracker
+
+The Memory Tracker displays a timeline showing scratchpad memory usage over time, with a detailed breakdown of which tensors are consuming memory at any given point. This visualization helps identify:
+
+- Peak scratchpad memory usage
+- Memory allocation patterns
+- Tensor-specific memory consumption
+- Potential memory optimization opportunities
+
+|neuron-profiler-memory-tracker|
+
+You can interact with the Memory Tracker timeline similar to other profile views - clicking on memory usage bars will show detailed information about the tensors using memory at that time, and you can zoom in to specific time ranges to get a more detailed view of memory allocation patterns.
+
 
 Viewing Profiles with Perfetto
 ------------------------------
@@ -483,6 +553,8 @@ CLI reference
 
     - :option:`--terminology`: print a helpful table of terminology used by the profiler
 
+    - :option:`--enable-memory-tracker`: Enable Memory Tracker to view scratchpad usage over time with a breakdown of usage per tensor. This requires having set ``XLA_IR_DEBUG=1`` and ``XLA_HLO_DEBUG=1`` before NEFF compilation and passing ``--enable-dge-notifs`` when capturing the profile.
+
 
 Troubleshooting
 ---------------
@@ -539,9 +611,13 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png
 .. |neuron-profile-cc-op-annotation| image:: /images/neuron-profile-cc-op-annotation.png
+.. |neuron-profile-cc-op-barrier| image:: /images/neuron-profile-cc-op-barrier.png
 .. |neuron-profile-click-tooltip| image:: /images/neuron-profile-click-tooltip.png
 .. |neuron-profile-oob-error| image:: /images/neuron-profile-oob-error.png
 .. |neuron-profile-search-summary| image:: /images/neuron-profile-search-summary.png
+.. |neuron-profiler-memory-tracker| image:: /images/neuron-profiler-memory-tracker.png
+.. |neuron-profile-stack-trace-event-details| image:: /images/neuron-profile-stack-trace-event-details.png
+.. |neuron-profile-stack-trace-viewer| image:: /images/neuron-profile-stack-trace-viewer.png
 .. |neuron-profile-perfetto-device| image:: /images/neuron-profiler2-perfetto-device.png
 
 When viewing UI "FATAL - Failed metadata query"
