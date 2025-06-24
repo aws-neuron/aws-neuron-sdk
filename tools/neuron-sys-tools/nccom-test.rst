@@ -132,6 +132,12 @@ CLI arguments
     * - ``--non-interactive``
       - false
       - Do not display any animation or progress indicator.
+    * - ``--report-to-json-file``
+      - N/A
+      - Persist config and results to JSON file if a filepath is provided.
+    * - ``--show-input-output-size``
+      - false
+      - Print or save to JSON per rank input and output sizes in B.
 
 .. note::
 
@@ -215,6 +221,69 @@ Single Instance Examples
        65536           16384    fp32         150           0.41           0.39
       524288          131072    fp32         179           2.73           2.64
     Avg bus bandwidth:      0.7731GB/s
+
+- Reporting input and output size explicitly with ``--show-input-output-size``
+
+.. code-block::
+
+    nccom-test -r 32 --minbytes 1kb --maxbytes 1mb --stepfactor 8 --datatype fp32 --check allg --show-input-output-size
+    size(B)    count(elems)    total_input_size(B)    total_output_size(B)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       1024             256                     32                    1024    fp32            6.16           0.17           0.16
+       8192            2048                    256                    8192    fp32            6.48           1.26           1.23
+      65536           16384                   2048                   65536    fp32            8.17           8.02           7.77
+     524288          131072                  16384                  524288    fp32           23.16          22.64          21.93
+    Avg bus bandwidth:      7.7715GB/s
+
+
+- Example results as JSON with ``--report-to-json-file``
+
+.. code-block::
+
+    nccom-test -r 32 --minbytes 1kb --maxbytes 1mb --stepfactor 8 --datatype fp32 --check allg --report-to-json-file nccom-results.json
+    size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       1024             256    fp32            6.19           0.17           0.16
+       8192            2048    fp32            6.55           1.25           1.21
+      65536           16384    fp32            8.18           8.01           7.76
+     524288          131072    fp32           23.11          22.69          21.98
+    Avg bus bandwidth:      7.7775GB/s
+
+    python3 -m json.tool nccom-results.json
+    {
+        "results": [
+            {
+                "size(B)": 1024,
+                "count(elems)": 256,
+                "type": "fp32",
+                "algbw(GB/s)": 0.16553675170497603,
+                "busbw(GB/s)": 0.16036372821419553,
+                "time:avg(us)": 6.19
+            },
+            {
+                "size(B)": 8192,
+                "count(elems)": 2048,
+                "type": "fp32",
+                "algbw(GB/s)": 1.2500906056270864,
+                "busbw(GB/s)": 1.21102527420124,
+                "time:avg(us)": 6.55
+            },
+            {
+                "size(B)": 65536,
+                "count(elems)": 16384,
+                "type": "fp32",
+                "algbw(GB/s)": 8.008982241741455,
+                "busbw(GB/s)": 7.758701546687035,
+                "time:avg(us)": 8.18
+            },
+            {
+                "size(B)": 524288,
+                "count(elems)": 131072,
+                "type": "fp32",
+                "algbw(GB/s)": 22.688776793562784,
+                "busbw(GB/s)": 21.97975251876395,
+                "time:avg(us)": 23.11
+            }
+        ]
+    }
 
 Multiple Instances Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

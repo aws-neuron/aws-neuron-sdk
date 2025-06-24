@@ -41,7 +41,7 @@ See :ref:`migrate_to_pytorch_2.6` for changes needed to use PyTorch NeuronX 2.6.
 How can I install PyTorch NeuronX 2.6?
 --------------------------------------------
 
-To install PyTorch NeuronX 2.6 please follow the :ref:`setup-torch-neuronx` guides for Amazon Linux 2023 and Ubuntu 22 AMI. Please also refer to the Neuron multi-framework DLAMI :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.6 that you can use to easily get started. PyTorch NeuronX 2.6 can be installed using the following:
+To install PyTorch NeuronX 2.6 please follow the :ref:`setup-torch-neuronx` guides for Amazon Linux 2023 and Ubuntu 22 AMI. Please also refer to the Neuron multi-framework DLAMI :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>` for Ubuntu 22 with a pre-installed virtual environment for PyTorch NeuronX 2.6 that you can use to get started. PyTorch NeuronX 2.6 can be installed using the following:
 
 .. code::
 
@@ -66,7 +66,7 @@ To migrate the training scripts from PyTorch NeuronX 2.5 to PyTorch NeuronX 2.6,
 
 .. note::
 
-    ``xm`` below refers to ``torch_xla.core.xla_model`` and ``xr`` refers to ``torch_xla.runtime``
+    ``xm`` below refers to ``torch_xla.core.xla_model``, ``xr`` refers to ``torch_xla.runtime``, and ``xmp`` refers to ``torch_xla.distributed.xla_multiprocessing``
 
 * The environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used) and will be removed in an upcoming release. Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to convert model to BF16 format. (see :ref:`migration_from_xla_downcast_bf16`)
 * The functions ``xm.xrt_world_size()``, ``xm.xla_model.get_ordinal()``, and ``xm.xla_model.get_local_ordinal()`` are deprecated (warning when used). Please switch to ``xr.world_size()``, ``xr.global_ordinal()``, and ``xr.local_ordinal()`` respectively as replacements.
@@ -123,20 +123,21 @@ Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.6 release, please down
 Environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are deprecated (warning when used). Please switch to automatic mixed-precision or use ``model.to(torch.bfloat16)`` command to cast model to BF16. (see :ref:`migration_from_xla_downcast_bf16`)
 
 
-AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'xrt_world_size'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.world_size instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is an error that ``torch_xla.core.xla_model.xrt_world_size()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.world_size()`` instead.
+This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size`` instead.
 
-AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'get_ordinal'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'get_local_ordinal'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
 
-This is an error that ``torch_xla.core.xla_model.xla_model.get_local_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.local_ordinal()`` instead.
+WARNING:torch_xla.core.xla_model.xla_model.get_local_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.local_ordinal instead.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a warning that ``torch_xla.core.xla_model.xla_model.get_local_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.local_ordinal`` instead.
 
 
 Socket Error: Socket failed to bind

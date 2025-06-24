@@ -15,6 +15,7 @@ NEURON_RT_STOCHASTIC_ROUNDING_EN=1 torchrun --nproc_per_node=2 ./run_glue.py \\
 --do_train \\
 --do_eval \\
 --bf16 \\
+--use_cpu True \\
 --max_seq_length 128 \\
 --per_device_train_batch_size 8 \\
 --learning_rate 2e-5 \\

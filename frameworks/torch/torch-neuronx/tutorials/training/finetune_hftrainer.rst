@@ -62,7 +62,7 @@ First, paste the following script into your terminal to create a “run.sh” fi
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
    :language: shell
-   :lines: 7-27
+   :lines: 7-28
 
 We optionally precompile the model and training script using neuron_parallel_compile to warm up the persistent
 graph cache (Neuron Cache) such that the actual run has fewer compilations (faster run
@@ -70,7 +70,7 @@ time):
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
    :language: shell
-   :lines: 30
+   :lines: 31
 
 Please ignore the results from this precompile run as it is only for
 extracting and compiling the XLA graphs.
@@ -86,7 +86,7 @@ additional compilations.
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_single_worker_training.sh
    :language: shell
-   :lines: 32
+   :lines: 33
 
 If precompilation was not done, the first execution of ./run.sh will be slower due to serial compilations. Rerunning the same script a second time would show quicker execution as the compiled graphs will be already cached in persistent cache.
 
@@ -108,7 +108,7 @@ Paste the following script into your terminal to create a “run_2w.sh” file a
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
    :language: shell
-   :lines: 7-27
+   :lines: 7-28
 
 Again, we optionally precompile the model and training script using neuron_parallel_compile to warm up the persistent
 graph cache (Neuron Cache), ignoring the results from this precompile run as it is only for
@@ -116,7 +116,7 @@ extracting and compiling the XLA graphs:
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
    :language: shell
-   :lines: 30
+   :lines: 31
 
 Precompilation is optional and only needed to be done once unless hyperparameters such as batch size are modified.
 After the optional precompilation, the actual run will be faster with minimal
@@ -124,7 +124,7 @@ additional compilations.
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_multi_worker_training_code.sh
    :language: shell
-   :lines: 32
+   :lines: 33
 
 During run, you will now notice that the "Total train batch size" is now 16 and the "Total optimization steps" is now half the number for one worker training.
 
@@ -149,19 +149,19 @@ Paste the following script into your terminal to create a “run_converted.sh”
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
    :language: shell
-   :lines: 38-59
+   :lines: 38-60
 
 If it is the first time running with ``bert-large-uncased`` model or if hyperparameters have changed, then the optional one-time precompilation step can save compilation time:
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
    :language: shell
-   :lines: 62
+   :lines: 63
 
 If you have run the single worker training in a previous section, then you can skip the precompilation step and just do:
 
 .. literalinclude:: tutorial_source_code/bert_mrpc_finetuning/bert_mrpc_finetuning_converted_checkpoint_training.sh
    :language: shell
-   :lines: 65
+   :lines: 66
 
 .. _workarounds_for_older_versions:
 
@@ -234,6 +234,7 @@ The following are currently known issues:
 - Variable input sizes: When fine-tune models such as dslim/bert-base-NER using the `token-classification example <https://github.com/huggingface/transformers/tree/main/examples/pytorch/token-classification>`__, you may encounter timeouts (lots of "socket.h:524 CCOM WARN Timeout waiting for RX" messages) and execution hang. This occurs because NER dataset has different sample sizes, which causes many recompilations and compiled graph (NEFF) reloads. Furthermore, different data parallel workers can execute different compiled graph. This multiple-program multiple-data behavior is currently unsupported. To workaround this issue, please pad to maximum length using the Trainer API option ``--pad_to_max_length``.
 - When running HuggingFace GPT fine-tuning with transformers version >= 4.21.0 and using XLA_USE_BF16=1 or XLA_DOWNCAST_BF16=1, you might see NaNs in the loss immediately at the first step. This issue occurs due to large negative constants used to implement attention masking (https://github.com/huggingface/transformers/pull/17306). To workaround this issue, please use transformers version <= 4.20.0.
 - When using Trainer API option --bf16, you will see "RuntimeError: No CUDA GPUs are available". To workaround this error, please add "import torch; torch.cuda.is_bf16_supported = lambda: True" to the Python script (i.e. run_glue.py). (Trainer API option --fp16 is not yet supported).
+- When using latest HuggingFace transformers version, you may see "ValueError: Your setup doesn't support bf16/gpu." To fix this, please use ``--use_cpu True`` in your scripts.
 
 The following are resolved issues:
 

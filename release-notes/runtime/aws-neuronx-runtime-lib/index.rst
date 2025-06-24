@@ -12,9 +12,10 @@ Neuron Runtime consists of a kernel mode driver and C/C++ libraries which provid
 Known issues
 ------------
 
-Updated : 07/03/2024
+Updated : 06/19/2025
 
 - The ``nrt_tensor_allocate`` APIs do not support more then 4 GB (>= 4GB) sizes. Passing in a size larger than or equal to 4GB will result in datatype overflow leading to undefined behavior.
+- A hardware bug affecting **Trainium** and **Inferentia2** devices causes numerical errors to become "sticky" within the Neuron Core hardware. When a legitimate numerical error occurs during execution, the error state persists in the hardware, causing all subsequent executions to incorrectly report numerical errors even when the computations are valid. This sticky error state can only be resolved by restarting the application to clear the hardware.
 
 NEFF Support Table:
 -------------------
@@ -30,6 +31,41 @@ NEFF Version Runtime Version Range Notes
 1.0          >= 1.0.6905.0         Starting support for 1.0 NEFFs 
 2.0          >= 1.6.5.0            Starting support for 2.0 NEFFs 
 ============ ===================== ===================================
+
+Neuron Runtime Library [2.26.42.0]
+---------------------------------
+Date: 06/23/2025
+
+New in this release
+^^^^^^^^^^^^^^^^^^^
+* Added support for 8x8 collective groups (TP8 + CP8) on **TRN2** for **LNC=2**
+* Added support for direct `State-Buffer` to `State-Buffer` collective ops for **LNC=1**
+* Introduce RDH algorithm for inter-node collective communication
+* Added support for loading NEFF with different world sizes in the same NRT process
+
+Improvements
+^^^^^^^^^^^^
+* Reduced the average latency of 32x2 collective groups by 65%
+* Reduced latency for intra-chip reduce scatter operations on **TRN2** instances by up to 20% for small transfers and 60% for medium to large transfers
+* Improved latency for medium message sizes for intra-chip All Gather operations on **TRN2** by up to 60%
+* Improved the debugging experience by adding logs which print out the value of timed-out, non-zero semaphores on **Trainium2** platforms
+* Improved timeout error messages by displaying the NEFF program counters for the stuck Neuron Core
+* Refined out-of-memory error messages to report a NEFF level memory breakdown table
+
+Bug fixes
+^^^^^^^^^
+* Fixed crash caused by race condition during the capture of system profiles
+* Fixed various memory leaks that occur during `nrt_close`
+
+Neuron Profiler 2.0 (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Added option to filter the Neuron Cores to capture trace events on (:ref:`reference <neuron-profiler-2-0-guide>`)
+* Added option to filter the event types recorded when capturing system traces (:ref:`reference <neuron-profiler-2-0-guide>`)
+* Added new trace events to capture the latency of the collectives execution barrier
+
+Compatibility Changes
+^^^^^^^^^^^^^^^^^^^^^
+* This version of the Neuron runtime requires `aws-neuron-dkms` version `2.22` or later on **Trainium2** instances
 
 Neuron Runtime Library [2.25.57.0]
 ---------------------------------

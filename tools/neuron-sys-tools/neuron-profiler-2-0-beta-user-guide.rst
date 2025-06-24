@@ -678,6 +678,271 @@ For example:
 
     neuron-profile view -d ./output --ignore-device-profile --output-format perfetto
 
+Filtering System Profiles
+--------------------------
+
+This guide explains how to filter system trace events to optimize memory usage, reduce output size, and speed up trace processing. **Capture-time filtering** reduces memory usage and trace file size by only collecting specific events, but filtered data cannot be recovered later. **Processing-time filtering** preserves the complete trace and allows flexible analysis with different filters, but requires more memory and storage during capture.
+
+Capture-Time Filtering
+~~~~~~~~~~~~~~~~~~~~~~
+
+Configure filters before trace capture using environment variables or API functions. 
+You can use NeuronCore filters to only capture events for specific NeuronCores (for example only events associated with NeuronCore 0 or all the NeuronCores on a specific NeuronDevice). 
+You can use event type filters to only capture specific events (for example model execute or collectives events). 
+It is possible to combine both NeuronCore and event type filters.
+
+Filtering by NeuronCore
+^^^^^^^^^^^^^^^^^^^^^^^
+
+If capture is enabled for a NeuronCore then a ring buffer will be allocated in host memory for storing those core's events. Thus filtering by NeuronCore decreases host memory usage during capture.
+
+Default Behavior
+"""""""""""""""""
+
+By default, all visible NeuronCores are enabled for capture. 
+
+Using Environment Variables
+"""""""""""""""""""""""""""
+
+.. code-block:: shell
+
+    # Filter to capture events only from NeuronCore 0
+    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0
+
+    # Filter to capture events from NeuronCores 0, 2, and 4
+    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0,2,4
+
+    # Filter to capture events from a range of NeuronCores (0 through 3)
+    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0-3
+
+    # Reset to default behavior
+    unset NEURON_RT_INSPECT_EVENT_FILTER_NC # Back to capturing all visible cores
+
+Using API Functions
+"""""""""""""""""""
+
+.. code-block:: c
+
+    #include <nrt/nrt_sys_trace.h>
+
+    // Allocate and configure trace options
+    nrt_sys_trace_config_t *config;
+    nrt_sys_trace_config_allocate(&config);
+    nrt_sys_trace_config_set_defaults(config);
+
+    // Enable capture only for specific NeuronCores
+
+    // Disable all cores since by default they are all enabled
+    int num_cores = 128;
+    for (int i=0; i<num_cores; i++) {
+      nrt_sys_trace_config_set_capture_enabled_for_nc(config, i, false); // disable NC i
+    }
+
+    // Then enable specific cores
+    nrt_sys_trace_config_set_capture_enabled_for_nc(config, 0, true);  // Enable NC 0
+    nrt_sys_trace_config_set_capture_enabled_for_nc(config, 2, true);  // Enable NC 2
+
+    // Start tracing with the configuration
+    nrt_sys_trace_start(config);
+
+    // Your application code here...
+
+    // Stop tracing and cleanup
+    nrt_sys_trace_stop();
+    nrt_sys_trace_config_free(config);
+
+Filtering by Event Type
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Default Behavior
+"""""""""""""""""
+
+By default, all event types are enabled for capture.
+
+Getting Available Event Types
+""""""""""""""""""""""""""""""
+
+You can discover all available event types using the ``nrt_sys_trace_get_event_types`` API.
+
+.. code-block:: c
+
+    #include <nrt/nrt_sys_trace.h>
+
+    // Get all available event types
+    const char **event_types = nullptr;
+    size_t count = 0;
+    NRT_STATUS status = nrt_sys_trace_get_event_types(&event_types, &count);
+
+    if (status == NRT_SUCCESS) {
+        printf("Available event types:\n");
+        for (size_t i = 0; i < count; ++i) {
+            printf("  %s\n", event_types[i]);
+        }
+        
+        // Free the event types array
+        for (size_t i = 0; i < count; ++i) {
+            free((void*)event_types[i]);
+        }
+        free((void*)event_types);
+    }
+
+Using Environment Variables
+"""""""""""""""""""""""""""
+
+The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
+
+* **Default**: If not set, all event types are captured
+* **Specific event types**: Use exact event names from ``nrt_sys_trace_get_event_types()``
+* **Event categories**: Use ``hardware`` or ``software`` to filter by category
+* **Exclusion**: Use ``^`` prefix to exclude specific events from a category
+
+.. code-block:: shell
+
+    # Filter to capture only specific event types
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
+
+    # Filter to capture all hardware events
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
+
+    # Filter to capture all software events
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
+
+    # Filter to capture all hardware events EXCEPT cc_exec
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
+
+    # Filter to capture all software events EXCEPT model_load
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^model_load
+
+    # Mix categories and specific events
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,tensor_read,tensor_write
+
+    # Reset to default behavior
+    unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE  # Back to capturing all event types
+
+The ``hardware`` group contains events that are executed on the ML accelerator. 
+These are ``nc_exec_running``, ``cc_running``, ``cc_exec_barrier``, ``numerical_err``, ``nrt_model_switch``, ``timestamp_sync_point``, ``hw_notify``.
+The ``software`` group contains all other events.
+
+Using API Functions
+"""""""""""""""""""
+
+Use the ``nrt_sys_trace_config_set_capture_enabled_for_event_type`` API to filter by event type.
+
+.. code-block:: c
+
+    #include <nrt/nrt_sys_trace.h>
+
+    // Configure trace options
+    nrt_sys_trace_config_t *config;
+    nrt_sys_trace_config_allocate(&config);
+    nrt_sys_trace_config_set_defaults(config); // By default, all event types are enabled
+
+    // Disable specific event types (others remain enabled)
+    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "device_exec", false);
+
+    // Or disable all first, then enable only specific ones
+    const char **all_event_types = nullptr;
+    size_t all_count = 0;
+    nrt_sys_trace_get_event_types(&all_event_types, &all_count);
+
+    // Disable all event types first
+    for (size_t i = 0; i < all_count; ++i) {
+        nrt_sys_trace_config_set_capture_enabled_for_event_type(config, all_event_types[i], false);
+    }
+
+    // Enable only specific event types
+    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "model_load", true);
+    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "nrt_execute", true);
+
+    // Verify which event types are enabled
+    const char **enabled_types = nullptr;
+    size_t enabled_count = 0;
+    nrt_sys_trace_config_get_enabled_event_types(config, &enabled_types, &enabled_count);
+    printf("Enabled event types: %zu\n", enabled_count);
+    for (size_t i = 0; i < enabled_count; ++i) {
+        printf("  %s\n", enabled_types[i]);
+    }
+
+    // Clean up memory (caller is responsible)
+    for (size_t i = 0; i < enabled_count; ++i) {
+        free((void*)enabled_types[i]);
+    }
+    free((void*)enabled_types);
+
+    for (size_t i = 0; i < all_count; ++i) {
+        free((void*)all_event_types[i]);
+    }
+    free((void*)all_event_types);
+
+    // Start tracing
+    nrt_sys_trace_start(config);
+
+    // Your application code here...
+
+    // Cleanup
+    nrt_sys_trace_stop();
+    nrt_sys_trace_config_free(config);
+
+Tips
+^^^^
+
+1. **Memory Optimization**: Use NeuronCore filtering to avoid allocating ring buffers for unused cores and decrease host memory usage. Use both event type or NeuronCore to decrease output trace sizes.
+2. **Event Type Discovery**: Use ``nrt_sys_trace_get_event_types()`` to discover available event types
+3. **Category Filtering**: Use ``hardware``/``software`` categories for broad filtering
+4. **Exclusion Filtering**: Use ``^`` prefix to exclude specific events from categories
+5. **Combine Filters**: Use both NeuronCore and event type filters together for maximum optimization
+
+Processing-Time Filtering
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apply filters when viewing or processing already captured profiles. This approach allows you to 
+analyze the same trace data in different ways without recapturing. The filters can be used for any 
+``neuron-profile`` output format including ``--output-format json`` and ``--output-format perfetto``.
+
+Filtering by NeuronCore
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``--system-trace-filter-neuron-core`` to only process events for specific NeuronCores. The IDs are local to the instance and not global IDs. 
+
+If the ``--system-trace-filter-neuron-core`` argument is not set then events from all NeuronCores will be included in the processed trace.
+
+.. code-block:: shell
+
+    # Filter by single neuron core
+    neuron-profile view -d ./output --system-trace-filter-neuron-core "0" --output-format perfetto
+
+    # Filter by multiple neuron cores
+    neuron-profile view -d ./output --system-trace-filter-neuron-core "0,1,2,3" --output-format perfetto
+
+Filtering by Event Type
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``--system-trace-filter-event-type`` to only process specific trace events types.
+
+If the ``--system-trace-filter-event-type`` argument is not set then all event types will be included in the processed trace.
+
+.. code-block:: shell
+
+    # Filter by single event type
+    neuron-profile view -d ./output --system-trace-filter-event-type "nrt_execute" --output-format perfetto
+
+    # Filter by multiple event types
+    neuron-profile view -d ./output --system-trace-filter-event-type "nrt_execute,nrt_load" --output-format perfetto
+
+Filtering by Instance ID
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``--system-trace-filter-instance-id`` to only process events for specific ec2 instances.
+
+If the ``--system-trace-filter-instance-id`` argument is not set then events from all instances will be included in the processed trace.
+
+.. code-block:: shell
+
+    # Filter by single instance
+    neuron-profile view -d ./output --system-trace-filter-instance-id "i-abc123" --output-format perfetto
+
+    # Filter by multiple instances (comma-separated)
+    neuron-profile view -d ./output --system-trace-filter-instance-id "i-abc123,i-def456,i-ghi789" --output-format perfetto
 
 Troubleshooting
 ---------------

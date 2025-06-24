@@ -81,5 +81,6 @@ Neuron Application Notes
          .. toctree::
             :maxdepth: 1
 
+            /general/appnotes/torch-neuronx/introducing-pytorch-2-7
             /general/appnotes/torch-neuronx/introducing-pytorch-2-6
             /general/appnotes/torch-neuronx/introducing-pytorch-2-x

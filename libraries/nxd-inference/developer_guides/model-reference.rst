@@ -143,3 +143,27 @@ Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - https://huggingface.co/databricks/dbrx-instruct
+
+Qwen2.5
+~~~~
+
+NxD Inference supports models based on the Qwen2.5 model architecture.
+
+.. _neuron-classes-4:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: Qwen2NeuronConfig
+- Inference config class: Qwen2InferenceConfig
+- Causal LM model class: NeuronQwen2ForCausalLM
+
+.. _compatible-checkpoint-examples-4:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/Qwen/Qwen2.5-72B-Instruct
+- https://huggingface.co/Qwen/Qwen2.5-32B-Instruct
+- https://huggingface.co/Qwen/Qwen2.5-7B-Instruct
+- https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct
