@@ -398,7 +398,8 @@ def broadcast_to(src, *, shape, **kwargs):
   Broadcast the ``src`` tile to a new shape based on numpy broadcast rules.
   The ``src`` may also be a tensor object which may be implicitly converted to a tile.
   A tensor can be implicitly converted to a tile if the partition dimension
-  is the outermost dimension.
+  is the outermost dimension. If ``src.shape`` is already the same as ``shape``, this operation
+  will simply return ``src``.
 
   :param src: the source of broadcast, a tile in SBUF or PSUM. May also be a tensor object.
   :param shape: the target shape for broadcasting.
@@ -633,6 +634,71 @@ def full(shape, fill_value, dtype, *, buffer=None, name="", **kwargs):
   :param name: the name of the tensor.
   :return: a new tensor allocated on the buffer.
   """
+  ...
+
+def gather_flattened(data, indices, *, mask=None, dtype=None, **kwargs):
+  r"""
+    Gather elements from ``data`` according to the ``indices``.
+
+    This instruction gathers elements from the ``data`` tensor using integer indices
+    provided in the ``indices`` tensor. For each element in the ``indices`` tensor, it retrieves
+    the corresponding value from the ``data`` tensor using the index value to select
+    from the free dimension of ``data``. The gather instruction effectively performs up to
+    128 parallel gather operations, with each operation using the corresponding partition
+    of ``data`` and ``indices``.
+
+    The output tensor has the same shape as the ``indices`` tensor, with each output element
+    containing the value from ``data`` at the position specified by the corresponding index.
+    Out of bounds indices will return garbage values.
+
+    Both ``data`` and ``indices`` must be 2-, 3-, or 4-dimensional.
+    The ``indices`` tensor must contain uint32 values.
+
+    For indexing purposes, all free dimensions are flattened and indexed as the same "row".
+    Consider this example:
+
+    .. code-block:: text
+
+        data =
+        [[[1., 2.],
+         [3., 4.]],
+        [[5., 6.],
+         [7., 8.]]]
+        indices =
+        [[[0, 1],
+          [1, 3]],
+         [[3, 3],
+          [1, 0]]]
+        nl.gather_flattened(data, indices) produces this result:
+        [[[1., 2.],
+          [2., 4.]],
+         [[8., 8.],
+          [6., 5.]]]
+
+    With the exception of handling out-of-bounds indices, this behavior is equivalent to:
+
+    .. code-block:: python
+
+        indices_flattened = indices.reshape(indices.shape[0], -1)
+        data_flattened = data.reshape(data.shape[0], -1)
+        result = np.take_along_axis(data_flattened, indices_flattened, axis=-1)
+        result.reshape(indices.shape)
+
+    ((Similar to `torch.gather_flattened <https://pytorch.org/docs/master/generated/torch.gather_flattened.html>`_))
+
+    :param data: the source tensor to gather values from
+    :param indices: tensor containing uint32 indices to gather across the flattened free dimension.
+    :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+    :return: a tensor with the same shape as indices containing gathered values from data
+
+    Example:
+
+    .. nki_example:: ../../test/test_nki_nl_gather_flattened.py
+       :language: python
+       :marker: NKI_EXAMPLE_0
+
+    """
   ...
 
 def gelu(x, *, dtype=None, mask=None, **kwargs):
@@ -1229,7 +1295,7 @@ def random_seed(seed, *, mask=None, **kwargs):
   Using the same seed will generate the same sequence of random numbers when using
   together with the random() API
 
-  :param seed: a scalar value to use as the seed.
+  :param seed: a 32-bit scalar value to use as the seed.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: none
   """

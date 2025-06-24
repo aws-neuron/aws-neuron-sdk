@@ -13,7 +13,7 @@ from neuronxcc.nki.typing import tensor
 import numpy as np
 
 
-@nki.jit(mode="simulation", kernel_return=True)
+@nki.jit(mode="simulation")
 def nki_max_index8():
   # NKI_EXAMPLE_0_BEGIN
   ##################################################################

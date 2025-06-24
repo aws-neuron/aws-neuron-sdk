@@ -33,7 +33,16 @@ def force_auto_alloc(func=None):
   """
   ...
 
+def multi_buffer(factor=2):
+  r"""Create a MultiBufferDirective to enable multi-buffered allocation.
+
+  Args:
+      factor: The multi-buffer factor determining how many buffers to use.
+  """
+  ...
+
 def no_reorder():
+  r"""Create an OperationOrderGuard to prevent operation reordering."""
   ...
 
 def skip_middle_end_transformations(func=None):
