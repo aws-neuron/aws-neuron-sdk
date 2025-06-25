@@ -87,8 +87,11 @@ Attributes
     - ``torch.float32``
 
   - ``rpl_reduce_dtype`` - The torch data type to use for ``all_reduce``
-    operations in RowParallelLinear layers. Defaults to the
-    ``torch_dtype``.
+    operations in RowParallelLinear layers. Defaults to ``None`` and does the 
+    reduction in the input tensors dtype.
+  - ``cast_type`` - The type of casting strategy to use when loading model parameters. 
+    Can be set to ``config`` (default) which casts all parameters to ``torch_dtype``, 
+    or ``as-declared`` which casts all parameters to the dtype they were defined with.
   - ``async_mode`` - Whether to use asynchronous mode for inference.
     Defaults to ``false``.
   - ``save_sharded_checkpoint`` - Whether to save the sharded weights in
@@ -150,6 +153,8 @@ Attributes
     is only applied to context encoding.
   - ``qk_layernorm`` - Whether to enable QK layer normalization.
     Defaults to ``false``.
+  - ``attention_dtype`` - The torch data type to use for all operations in attention. 
+    Defaults to ``None`` and infers the dtype based on the dtype of the hidden_states passed to attention.
 
 - On-device sampling
 
@@ -325,6 +330,17 @@ Attributes
 
   - ``cc_pipeline_tiling_factor`` - The pipeline tiling factor to use
     for collectives. Defaults to ``2``.
+
+- Debugging
+
+  - ``output_logits`` - Whether to return model logits from the Neuron device
+    when using on-device sampling. With on-device sampling, the model samples
+    the logits on-device to return a singular token, and the model output includes only
+    the tokens (without the logits) to improve performance. The ``output_logits`` feature enables
+    you to output the logits alongside the token, which enables you to run logit
+    validation and investigate the model output. Note: This feature
+    impacts performance and shouldn't be used in production; this should 
+    only be used for testing and debugging model logits.
 
 InferenceConfig
 ~~~~~~~~~~~~~~~

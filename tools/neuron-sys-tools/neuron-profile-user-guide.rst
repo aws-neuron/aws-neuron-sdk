@@ -508,7 +508,7 @@ CLI reference
 
     Takes a given compiled NEFF, executes it, and collects the profile results.
     When no inputs are provided, all-zero inputs are used, which may result in inf or NaNs.
-    It is recommended to use ``--ignore-inference``
+    It is recommended to use ``--ignore-exec-errors``
 
     - :option:`-n,--neff` (string): the compiled NEFF to profile
 
@@ -555,6 +555,16 @@ CLI reference
 
     - :option:`--enable-memory-tracker`: Enable Memory Tracker to view scratchpad usage over time with a breakdown of usage per tensor. This requires having set ``XLA_IR_DEBUG=1`` and ``XLA_HLO_DEBUG=1`` before NEFF compilation and passing ``--enable-dge-notifs`` when capturing the profile.
 
+
+FAQ
+---
+
+Difference between TensorE and TensorMatrixE Rows in Timeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- TensorE includes instruction trace for LoadStationary (LoadWeight)
+- TensorMatrixE includes instruction trace for MultiplyMoving (Matmul)
+- Both instruction traces happen on the same TensorE engine, but we separate them into two rows to de-clutter the timeline due to the background load stationary feature (loading stationary matrix for the next matmul in parallel to current matmul). See more info in :ref:`NKI architecture guide <arch_guide_tensor_engine_perf>`. 
 
 Troubleshooting
 ---------------

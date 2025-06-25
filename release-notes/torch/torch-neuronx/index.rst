@@ -16,7 +16,7 @@ hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
 
 Release [2.7.0.2.8.*, 2.6.0.2.8.*, 2.5.1.2.8.*]
 -----------------------------------------------
-Date: 6/23/2025
+Date: 6/24/2025
 
 Summary
 ~~~~~~~

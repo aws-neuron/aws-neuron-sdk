@@ -10,7 +10,7 @@ Neuron DLC Release Notes
 
 Known Issues
 ------------
-Updated : 6/23/2025
+Updated : 6/24/2025
 
 - pytorch-training-neuronx 2.7.0 DLC has two HIGH CVEs related to `sagemaker-python-sdk` package. We are actively working to resolve these high CVEs:
 - * `CVE-2024-34072 <https://nvd.nist.gov/vuln/detail/CVE-2024-34072>`_
@@ -19,7 +19,7 @@ Updated : 6/23/2025
 
 Neuron 2.24.0
 -------------
-Date: 06/23/2025
+Date: 06/24/2025
 
 - Added new pytorch-inference-vllm-neuronx 0.7.2 DLC that contains all dependencies including drivers, tools, NxDI and other packages to run :ref:`nxdi-vllm-user-guide` out of the box
 - Upgraded pytorch-training-neuronx DLC to 2.7 version along with its related dependencies

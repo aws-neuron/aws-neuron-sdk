@@ -34,7 +34,7 @@ NEFF Version Runtime Version Range Notes
 
 Neuron Runtime Library [2.26.42.0]
 ---------------------------------
-Date: 06/23/2025
+Date: 06/24/2025
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^

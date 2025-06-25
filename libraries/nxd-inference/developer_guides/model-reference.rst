@@ -165,5 +165,8 @@ Compatible Checkpoint Examples
 
 - https://huggingface.co/Qwen/Qwen2.5-72B-Instruct
 - https://huggingface.co/Qwen/Qwen2.5-32B-Instruct
+- https://huggingface.co/Qwen/Qwen2.5-14B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-7B-Instruct
+- https://huggingface.co/Qwen/Qwen2.5-3B-Instruct (Not tested, but expected to work out of the box)
+- https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct
