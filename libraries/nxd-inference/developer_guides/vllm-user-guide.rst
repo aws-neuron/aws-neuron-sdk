@@ -18,8 +18,6 @@ for loading and invoking models used in vLLM’s LLMEngine (see https://docs.vll
 for more details on vLLM architecture). This means input processing, scheduling and output 
 processing follow the default vLLM behavior. 
 
-You enable the Neuron integration in vLLM by setting the device type used by vLLM to ``neuron``.
-
 Currently, we support continuous batching and streaming generation in the NxD Inference vLLM integration.
 We are working with the vLLM community to enable support for other vLLM features like PagedAttention
 and Chunked Prefill on Neuron instances through NxD Inference in upcoming releases.
@@ -37,36 +35,69 @@ Setup
 -----
 Before installing vLLM with the instructions below, you need to install the Neuron SDK.
 
-Installing vLLM from vllm-project repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prerequisite: Launch an instance and install drivers and tools
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Starting with vLLM v0.9.0, vLLM supports Neuron integration with NxD Inference library out of the box. 
-Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/latest/getting_started/installation/ai_accelerator.html#aws-neuron>`_.
-
-To install the official vLLM repository with Neuron support, use the following commands:
-
-.. code::
-    
-    git clone https://github.com/vllm-project/vllm.git
-    cd vllm
-    pip install -U -r requirements/neuron.txt
-    VLLM_TARGET_DEVICE="neuron" pip install -e .
+Before installing vLLM with the instructions below, you will first need to launch an Inferentia or Trainium instance and install the necessary
+Neuron drivers and tools. Refer to :ref:`these setup instructions<nxdi-setup>` for different ways to prepare your environment, including using
+Neuron DLAMIs and Neuron DLCs for quick setups.
 
 Installing the AWS Neuron fork of vLLM 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We also maintain a fork of vLLM that contains additional features such as multi-node distributed inference. Install the AWS fork using the following commands:
+We maintain a fork of vLLM that supports the latest features for NxD Inference. 
+
+Quickstart using Docker
+"""""""""""""""""""""""
+
+Users can now use a preconfigured Deep Learning Container (DLC) with the AWS Neuron fork of vLLM pre-installed.
+Refer to the `vllm-inference-neuronx container <https://github.com/aws-neuron/deep-learning-containers?tab=readme-ov-file#vllm-inference-neuronx>`_
+on `https://github.com/aws-neuron/deep-learning-containers <https://github.com/aws-neuron/deep-learning-containers>`_ to get started.
+
+Manually install from source
+"""""""""""""""""""""""""""""""
+
+To manually install the AWS fork from source, use the following commands:
 
 .. code::
 
-    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b neuron-2.24-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
-    pip install -r requirements/neuron.txt
+    pip install -r requirements-neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
 
 .. note::
 
-    The current AWS Neuron fork of vLLM is based on vLLM v0.9.0.
+    The current AWS Neuron fork of vLLM (``neuron-2.24-vllm-v0.7.2``) is based on vLLM 0.7.2 as some of the new features in 2.24 release 
+    like prefix caching are only tested with vLLM 0.7.2. We intend to upgrade and support the latest vLLM version in future Neuron releases.
+
+.. note::
+
+    Starting in release 2.24, the Neuron initialization in vLLM code no longer enables sequence parallel by default. This is to ensure
+    better compatibility with models and configurations where sequence parallelism is not well supported. If you previously relied on the 
+    Neuron vLLM code to specify sequence parallel, you may now see increased TTFT times. To re-enable sequence parallelism, you can pass 
+    ``--override-neuron-config "{\"sequence_parallel_enabled\":true}"``.
+
+Installing vLLM from vLLM main repository
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A prior version of Neuron SDK 2.23 NxD Inference support was upstreamed onto vLLM v0.9.0. 
+Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/stable/getting_started/installation/ai_accelerator.html#aws-neuron>`_.
+
+To install the official vLLM repository with Neuron support, use the following commands. Only Neuron SDK 2.23 and prior features are 
+currently available in the official vLLM repository. See Neuron SDK 2.23 artifacts :ref:`here<pre-release-content>`. It is recommended 
+to re-install neuronx-distributed and neuronx-distributed-inference libraries after installing vLLM to avoid dependency version incompatibilities.
+
+.. code::
+
+    git clone -b releases/v0.9.0 https://github.com/vllm-project/vllm.git
+    cd vllm
+    pip install -U -r requirements/neuron.txt
+    VLLM_TARGET_DEVICE="neuron" pip install -e .
+
+    pip install neuronx-distributed==0.12.12111
+    pip install neuronx-distributed-inference==0.3.5591
+
 
 Usage
 -----
@@ -225,13 +256,34 @@ If loading from the ``NEURON_COMPILED_ARTIFACTS`` path fails, then we will recom
 the results in the provided location. If ``NEURON_COMPILED_ARTIFACTS`` is not set, we will compile the model and store it under a ``neuron-compiled-artifacts``
 subdirectory in the directory of your model checkpoint.
 
+Prefix Caching
+^^^^^^^^^^^^^^
+Starting in Neuron SDK 2.24, prefix caching is supported on the AWS Neuron fork of vLLM. Prefix caching allows developers to improve TTFT by 
+re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching<nxdi-prefix-caching>` for more information on how to 
+enable prefix caching with vLLM. 
+
+
+Disaggregated Inference
+^^^^^^^^^^^^^^^^^^^^^^^
+Starting in Neuron SDK 2.24, disaggregated inference is supported on the AWS Neuron fork of vLLM. This feature allows different hardware
+resources to separately perform the compute intensive prefill phase and the memory bandwidth intensive decode phase of inference, thereby 
+removing the prefill-decode interference and improving Goodput. See :ref:`Disaggregated Inference<nxdi-disaggregated-inference>` for more information on 
+how to use disaggregated inference with vLLM. 
+
+
 Examples
 --------
 
 For a list of examples for using vLLM with Neuron, refer to `upstreaming-to-vllm/examples
-/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0/examples/offline_inference>`_ folder. Look for example scripts that are prefixed with ``neuron_``. We provide examples for use cases such as speculative decoding (EAGLE and draft model), multimodal models, 
-quantization, multi-LoRA and more. A separate folder `upstreaming-to-vllm/examples/neuron
-/multi_node/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0/examples/neuron/multi_node>`_ contains examples for enabling multinode inferencing on Neuron.
+/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.24-vllm-v0.7.2/examples/offline_inference>`_ folder. Look for example scripts with the ``neuron_`` prefix. 
+We provide examples for use cases such as `automatic prefix caching <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_prefix_inference.py>`_,
+`disaggregated inference <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_di.py>`_, 
+`speculative decoding with a draft model <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_speculation.py>`_,
+`speculative decoding using EAGLE <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_eagle.py>`_,
+`multimodal models <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_multimodal.py>`_, 
+`multi-LoRA <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_multi_lora.py>`_, 
+`quantization <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_int8_quantization.py>`_, and more.
+
 
 For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.
 

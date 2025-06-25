@@ -722,6 +722,9 @@ class manifest:
                 elif args.framework_version == "2.5.1":
                     str += '=='
                     str += "2.5.*"
+                elif args.framework_version == "2.6.0":
+                    str += '=='
+                    str += "2.6.*"
                 str += ' torchvision\n'
             else:
                 str += framework_name

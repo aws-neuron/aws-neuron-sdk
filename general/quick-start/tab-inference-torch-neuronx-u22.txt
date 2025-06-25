@@ -16,6 +16,12 @@
 
     .. tab-set::
 
+        .. tab-item:: PyTorch 2.7.0
+
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 269
+                :end-line: 270
+        
         .. tab-item:: PyTorch 2.6.0
 
             .. include :: /src/helperscripts/installationScripts/python_instructions.txt

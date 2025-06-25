@@ -1,0 +1,5 @@
+Dataset,TTFT (P50 in ms) without prefix caching ,TTFT (P50 in ms) with prefix caching,Improvement
+math.math (>90% cache hit),342.81,107.8,3.18x
+dynamic sonnet 1k (~25% cache hit),123.08,102.15,1.2x
+dynamic sonnet 2k (~25% cache hit),592.8,377.2,1.57x
+HumanEval (No cache hit),89.7,91.8,0.98x

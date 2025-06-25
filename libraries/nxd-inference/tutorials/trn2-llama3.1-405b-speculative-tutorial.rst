@@ -49,34 +49,8 @@ Install packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 NxD Inference supports running models with vLLM. This functionality is
-available in a fork of the vLLM GitHub repository:
-
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0>`__
-
-To run NxD Inference with vLLM, you need to download and install vLLM from this
-fork. Clone the Neuron vLLM fork.
-
-::
-   
-    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
-
-
-Make sure to activate the Neuron virtual environment if using a new terminal instead of the one from connect step above.
-
-::
-    
-    source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
-
-
-Install the Neuron vLLM fork into the virtual environment.
-
-::
-    
-    cd upstreaming-to-vllm
-    pip install -r requirements-neuron.txt
-    VLLM_TARGET_DEVICE="neuron" pip install -e .
-    cd ..
-
+available in the AWS Neuron fork of the vLLM GitHub repository. Install the latest release branch of vLLM from the AWS Neuron fork 
+following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
 
 In this tutorial, you will use `llmperf <https://github.com/ray-project/llmperf>`_ to measure the inference performance of the base Llama-3.1-405b-Instruct configuration and the more
 optimized configuration. 

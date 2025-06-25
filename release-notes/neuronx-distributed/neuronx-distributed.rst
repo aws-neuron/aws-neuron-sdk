@@ -10,6 +10,29 @@ NxD Core Release Notes (``neuronx-distributed``)
 
 This document lists the release notes for Neuronx-Distributed library.
 
+.. _neuronx-distributed-rn-0-13-0:
+
+NxD Core [0.13.14393]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date: 6/24/2025
+
+New in this release
+-------------------
+
+**Inference:**
+
+* Add ``--auto-cast=none`` compiler arg by default in ModelBuilder to
+  ensure model dtypes are preserved during compilation.
+* Update ModelBuilder to cast model weights based on dtypes defined in
+  module parameters.
+* Add support for PyTorch 2.7. This release includes support for PyTorch 2.5, 2.6, and 2.7.
+* Other minor fixes and improvements.
+
+**Training:**
+
+* Added support for transformers 4.48.0
+
 .. _neuronx-distributed-rn-0-12-0:
 
 NxD Core [0.12.12111]
