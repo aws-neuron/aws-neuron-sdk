@@ -39,13 +39,9 @@ Training
 
 Neuron Kernel Interface (NKI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-**Language Enhancements**
 
 - **New nki.language.gather_flattened**: Provides efficient parallel tensor element gathering.
 - **Enhanced accuracy**: Improved valid range of ``nki.language.sqrt`` and ``nki.isa.activation(nl.sqrt)`` 
-
-**Instruction Set Architecture (ISA) Improvements**
-
 - **Advanced indexing**: Improved performance for ``nki.isa.nc_match_replace8``.
 
 Neuron Tools
