@@ -5,7 +5,7 @@ Tutorial: Multi-LoRA serving for Llama-3.1-8B on Trn2 instances
 
 NeuronX Distributed (NxD) Inference supports multi-LoRA serving. This tutorial provides a step-by-step
 guide for multi-LoRA serving with Llama-3.1-8B as the base model on a Trn2 instance.
-It describes two different ways of running multi-LoRA serving with NxDI directly and through vLLM (with NxDI)
+It describes two different ways of running multi-LoRA serving with NxD Inference directly and through vLLM (with NxD Inference)
 We will use LoRA adapters downloaded from HuggingFace as examples for serving.
 
 .. contents:: Table of contents
@@ -44,27 +44,8 @@ You should see Neuron packages including
 Install packages
 ~~~~~~~~~~~~~~~~
 NxD Inference supports running models with vLLM. This functionality is
-available in a fork of the vLLM GitHub repository:
-
-- `aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/releases/v2.23.0-v0>`__
-
-To run NxD Inference with vLLM, you need to download and install vLLM from this
-fork. Clone the Neuron vLLM fork.
-
-::
-   
-    git clone -b releases/v2.23.0-v0 https://github.com/aws-neuron/upstreaming-to-vllm.git
-    source ~/aws_neuronx_venv_pytorch_2_5_nxd_inference/bin/activate
-
-
-Install the Neuron vLLM fork into the virtual environment.
-
-::
-    
-    cd upstreaming-to-vllm
-    pip install -r requirements-neuron.txt
-    VLLM_TARGET_DEVICE="neuron" pip install -e .
-    cd ..
+available in the AWS Neuron fork of the vLLM GitHub repository. Install the latest release branch of vLLM from the AWS Neuron fork 
+following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
 
 
 Download base model and LoRA adapters
@@ -150,7 +131,7 @@ The script compiles the model and runs generation on the given input prompt.
             --adapter-id lora_id_2 \
             | tee log
 
-NxDI expects the same number of prompts and adapter IDs in the script.
+NxD Inference expects the same number of prompts and adapter IDs in the script.
 A prompt is mapped to the adapter ID with the same order.
 For example, the first prompt in the script assoicates with ``lora_id_1`` and the second one assoicates with ``lora_id_2``.
 Although the two prompts are the same, NxD Inference will generate different outputs due to different adapter IDs.
@@ -221,10 +202,11 @@ You can also run multi-LoRA serving offline on TRN2 with vLLM.
         max_loras=2,
     )
     """ 
-    The format of multi-lora requests using NxDI as the backend is different from the default format in vLLM: https://docs.vllm.ai/en/v0.9.0/features/lora.html because NxDI currently doesn't support dynamic loading of LoRA adapters.
+    NxD Inference enables static loading of LoRA adapters: https://docs.vllm.ai/en/v0.9.0/features/lora.html on vLLM server start and does 
+    not optionally support dynamic serving of LoRA adapters: https://docs.vllm.ai/en/v0.9.0/features/lora.html#dynamically-serving-lora-adapters
     Only the lora_name needs to be specified.  
     The lora_id and lora_path are supplied at the LLM class/server initialization, after which the paths are
-    handled by NxDI.
+    handled by NxD Inference.
     """
     lora_req_1 = LoRARequest("lora_id_1", 0, " ")
 	lora_req_2 = LoRARequest("lora_id_2", 1, " ")

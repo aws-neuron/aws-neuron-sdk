@@ -58,8 +58,7 @@ Prerequisites
 
 This tutorial requires that you have a Trn1 instance created from a Deep
 Learning AMI that has the Neuron SDK pre-installed. Also we depend on
-our fork of vLLM
-`aws-neuron/upstreaming-to-vllm <https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron>`__.
+our fork of vLLM as described in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
 
 Before running evaluations, ensure your environment is properly
 configured by following these essential setup guides:
