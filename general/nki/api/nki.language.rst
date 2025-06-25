@@ -149,7 +149,7 @@ Tensor manipulation operations
    expand_dims
 
 
-Sorting/Searching operations
+Indexing/Searching operations
 -----------------------------
 
 .. autosummary::
@@ -157,6 +157,7 @@ Sorting/Searching operations
    :nosignatures:
 
    where
+   gather_flattened
 
 
 Collective communication operations

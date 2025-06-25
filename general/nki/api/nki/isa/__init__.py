@@ -764,20 +764,24 @@ def nc_find_index8(*, data, vals, mask=None, dtype=None, **kwargs):
   """
   ...
 
-def nc_match_replace8(*, data, vals, imm, mask=None, dtype=None, **kwargs):
+def nc_match_replace8(*, data, vals, imm, dst_idx=None, mask=None, dtype=None, **kwargs):
   r"""
   Replace first occurrence of each value in ``vals`` with ``imm`` in ``data``
-  using the Vector engine. This is an in-place modification of the ``data``
-  tensor.
+  using the Vector engine and return the replaced tensor. If ``dst_idx``
+  tile is provided, the indices of the matched values are written to ``dst_idx``.
 
-  This instruction reads the input ``data`` and replaces the first occurrence of each
-  of the given values (from ``vals`` tensor) with the specified immediate constant.
-  Other values are written out unchanged.
+  This instruction reads the input ``data``, replaces the first occurrence of each
+  of the given values (from ``vals`` tensor) with the specified immediate constant and,
+  optionally, output indices of matched values to ``dst_idx``. When performing the operation,
+  the free dimensions of both ``data`` and ``vals`` are flattened. However, these dimensions
+  are preserved in the replaced output tensor and in ``dst_idx`` respectively. The partition
+  dimension defines the parallelization boundary. Match, replace, and index
+  generation operations execute independently within each partition.
 
   The ``data`` tensor can be up to 5-dimensional, while the ``vals`` tensor can be up
   to 3-dimensional. The ``vals`` tensor must have exactly 8 elements per partition.
   The data tensor must have no more than 16,384 elements per partition.
-  The output will have the same shape as the input data tensor. ``data`` and ``vals``
+  The replaced output will have the same shape as the input data tensor. ``data`` and ``vals``
   must have the same number of partitions. Both input tensors can come from SBUF
   or PSUM.
 
@@ -788,11 +792,46 @@ def nc_match_replace8(*, data, vals, imm, mask=None, dtype=None, **kwargs):
 
   **Estimated instruction cost:**
 
-  ``N`` engine cycles, where:
+  ``min(MIN_II, N)`` engine cycles, where:
 
   - ``N`` is the number of elements per partition in the data tensor
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
+    ``MIN_II`` is roughly 64 engine cycles.
+
+  **NumPy equivalent:**
+
+  .. code-block:: python
+
+      # Let's assume we work with NumPy, and ``data``, ``vals`` are 2-dimensional arrays
+      # (with shape[0] being the partition axis) and imm is a constant float32 value.
+
+      import numpy as np
+
+      # Get original shapes
+      data_shape = data.shape
+      vals_shape = vals.shape
+
+      # Reshape to 2D while preserving first dimension
+      data_2d = data.reshape(data_shape[0], -1)
+      vals_2d = vals.reshape(vals_shape[0], -1)
+
+      # Initialize output array for indices
+      indices = np.zeros(vals_2d.shape, dtype=np.uint32)
+
+      for i in range(data_2d.shape[0]):
+        for j in range(vals_2d.shape[1]):
+          val = vals_2d[i, j]
+          # Find first occurrence of val in data_2d[i, :]
+          matches = np.where(data_2d[i, :] == val)[0]
+          if matches.size > 0:
+            indices[i, j] = matches[0]  # Take first match
+            data_2d[i, matches[0]] = imm
+
+      output = data_2d.reshape(data.shape)
+      indices = indices.reshape(vals.shape) # Computed only if ``dst_idx`` is specified
 
   :param data: the data tensor to modify
+  :param dst_idx: (optional) the destination tile to write flattened indices of matched values
   :param vals: tensor containing the 8 values per partition to replace
   :param imm: float32 constant to replace matched values with
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
@@ -804,6 +843,22 @@ def nc_match_replace8(*, data, vals, imm, mask=None, dtype=None, **kwargs):
   .. nki_example:: ../../test/test_nki_isa_nc_match_replace8.py
      :language: python
      :marker: NKI_EXAMPLE_0
+
+  .. nki_example:: ../../test/test_nki_isa_nc_match_replace8.py
+     :language: python
+     :marker: NKI_EXAMPLE_1
+
+  .. nki_example:: ../../test/test_nki_isa_nc_match_replace8.py
+     :language: python
+     :marker: NKI_EXAMPLE_2
+
+  .. nki_example:: ../../test/test_nki_isa_nc_match_replace8.py
+     :language: python
+     :marker: NKI_EXAMPLE_3
+
+  .. nki_example:: ../../test/test_nki_isa_nc_match_replace8.py
+     :language: python
+     :marker: NKI_EXAMPLE_4
 
   """
   ...
@@ -911,23 +966,27 @@ def nc_stream_shuffle(src, dst, shuffle_mask, *, dtype=None, mask=None, **kwargs
   element must be in data type int or affine expression. ``shuffle_mask[i]`` indicates which input partition the 
   output partition [i] copies from within each 32-partition quadrant. The special value ``shuffle_mask[i]=255`` 
   means the output tensor in partition [i] will be unmodified. ``nc_stream_shuffle`` can be applied to multiple 
-  of quadrants. In the case with more than one quadrant, same ``shuffle_mask`` is applied to each quadrant. 
-  ``mask`` applies to ``dst``, meaning that locations masked out by ``mask`` will be unmodified. For more 
-  information about the cross-partition data movement, see :ref:`arch_guide_cross_partition_data_movement`.
+  of quadrants. In the case with more than one quadrant, the shuffle is applied to each quadrant independently, 
+  and the same ``shuffle_mask`` is used for each quadrant. ``mask`` applies to ``dst``, meaning that locations 
+  masked out by ``mask`` will be unmodified. For more information about the cross-partition data movement, 
+  see :ref:`arch_guide_cross_partition_data_movement`.
 
-  This API has 4 constraints on ``src`` and ``dst``:
+  This API has 3 constraints on ``src`` and ``dst``:
 
   #. ``dst`` must have same data type as ``src``.
-  #. ``dst`` must occupy the same number of partitions ``num_partitions`` and have the same number of elements per partition as ``src``.
-  #. The number of partitions ``num_partition`` accessed by ``src`` and ``dst`` must be 32 or 64 or 96 or 128 partitions. 
-     The start partition ``start_partition`` of src does not have to match ``start_partition`` of dst
-  #. ``num_partition`` and ``start_partition`` accessed by ``src`` and ``dst`` must follow rules below.
+  #. ``dst`` must have the same number of elements per partition as ``src``.
+  #. The access start partition of ``src`` (``src_start_partition``), does not have to match or be in the same quadrant 
+     as that of ``dst`` (``dst_start_partition``). However, ``src_start_partition``/``dst_start_partition`` needs to follow 
+     some special hardware rules with the number of active partitions ``num_active_partitions``. 
+     ``num_active_partitions = ceil(max(src_num_partitions, dst_num_partitions)/32) * 32``, where ``src_num_partitions`` and 
+     ``dst_num_partitions`` refer to the number of partitions the ``src`` and ``dst`` tensors access respectively. 
+     ``src_start_partition``/``dst_start_partition`` is constrained based on the value of ``num_active_partitions``:
+
+    * If ``num_active_partitions`` is 96/128, ``src_start_partition``/``dst_start_partition`` must be 0.
    
-    * If ``num_partition`` is 96 or 128, ``start_partition`` must be 0.
+    * If ``num_active_partitions`` is 64, ``src_start_partition``/``dst_start_partition`` must be 0/64.
    
-    * If ``num_partition`` is 64, ``start_partition`` must be 0 or 64.
-   
-    * If ``num_partition`` is 32, ``start_partition`` must be 0 or 32 or 64 or 96.
+    * If ``num_active_partitions`` is 32, ``src_start_partition``/``dst_start_partition`` must be 0/32/64/96.
 
   **Estimated instruction cost:**
 
@@ -946,6 +1005,14 @@ def nc_stream_shuffle(src, dst, shuffle_mask, *, dtype=None, mask=None, **kwargs
   .. nki_example:: ../../test/test_nki_isa_nc_stream_shuffle.py
    :language: python
    :marker: NKI_EXAMPLE_0
+
+  .. nki_example:: ../../test/test_nki_isa_nc_stream_shuffle.py
+   :language: python
+   :marker: NKI_EXAMPLE_1
+
+  .. nki_example:: ../../test/test_nki_isa_nc_stream_shuffle.py
+   :language: python
+   :marker: NKI_EXAMPLE_2
   
   """
   ...

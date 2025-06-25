@@ -10,7 +10,7 @@ Neuron System Tools
 
 Neuron Tools  [2.24.54.0]
 -------------------------
-Date: 6/23/2025
+Date: 6/24/2025
 
 New in the release
 ^^^^^^^^^^^^^^^^^^
