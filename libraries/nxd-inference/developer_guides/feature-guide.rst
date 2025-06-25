@@ -895,6 +895,107 @@ doesn't fall under the unsupported case, ``async_mode`` will likely be able to i
     If you are using vLLM, this feature works independently of vLLM's Async Engine. As a result, ``async_mode`` can be enabled
     whether vLLM is used or not.
 
+.. _nxdi_prefix_caching:
+
+Prefix Caching Support
+----------------------
+
+Prefix caching is a performance optimization technique where prompts in multiple requests sharing the same prefix can reuse the
+previously computed KV cache. When context encoding a prompt that starts with a previously computed prefix, the encoding of the
+prefix tokens will be skipped and the corresponding KV Cache will be fetched and used for encoding the rest of the tokens (suffix).
+The performance benefit comes from the time saved by re-using the KV Cache instead of re-encoding the prefix tokens. NxD Inference
+supports prefix caching during context encoding. To store KV cache and match to prefix efficiently, NxD Inference uses block KV Cache
+layout for prefix caching. NxD Inference does not implement its own cache eviction, memory management, or prefix hashing for matches.
+Instead, it requires external management of the block KV cache and expects active block tables and slot mappings to be provided with
+each generation request. This feature integrates with vLLM by enabling automatic prefix caching, which manages the block tables,
+handles automatic prefix matching across prompts, and performs cache evictions. More on automatic prefix caching support on vLLM
+can be found `here <https://docs.vllm.ai/en/latest/design/v1/prefix_caching.html>`__.
+
+To enable prefix caching with NxD Inference, set ``is_prefix_caching=True`` in NeuronConfig along with configurations for
+block KV cache layout.
+
+::
+
+    neuron_config = NeuronConfig(
+        is_prefix_caching=True,
+        is_block_kv_layout=True,
+        pa_num_blocks=1024,
+        pa_block_size=32,
+    )
+
+``is_block_kv_layout=True`` and ``is_prefix_caching=True`` are set in NeuronConfig to enable block KV Cache layout and enable
+prefix caching. The first two dimensions of the KV cache are set to the number of blocks and block size, respectively. These
+configurations are specified using ``pa_num_blocks`` and ``pa_block_size`` in NeuronConfig. For optimal performance with Neuron,
+it's recommended to set ``pa_block_size=32``. The minimum required ``pa_num_blocks`` to be initialized is
+``(batch_size * max_model_len) / pa_block_size`` However, it is recommended to initialize more blocks than the required minimum
+to accommodate caching of common prefixes. The higher the number of blocks, the greater the likelihood of cache hits, as fewer
+cache evictions will occur. NxD Inference does not currently provide an automated solution to determine the maximum number of
+KV Cache blocks that can be initialized in HBM without exceeding available memory space. Customers are advised to experiment with
+increasing the number of blocks that balances the cache hit rate and memory taken. Any memory taken by increasing the cache will
+impact the batch sizes and sequence lengths that can be supported, so customers are sugggested to pick the correct number of blocks
+considering these trade offs and the specific inference workload they plan to run in production.
+
+NxD Inference does not use paged attention for prefix caching. Instead, it follows a different process:
+first gathering the block KV cache using the block table, then converting it to a flat KV cache layout, computing attention, and 
+finally scattering the computed cache back to the block KV cache layout. This approach introduces overhead during
+token generation requests due to layout conversions, which can negatively impact performance as the ``max_model_len`` increases.
+
+Bucketing with Prefix Caching
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Prefix caching handles both the prefix (cache hit) and suffix (no cache hit) portions of input prompts during context encoding.
+A two-dimensional bucketing system has been introduced to support context encoding when prefix caching is enabled. This system
+uses separate dimensions corresponding to the prefix and suffix (non cache-hit portion) of the input prompts. In contrast,
+token generation still uses one-dimensional bucketing based on the maximum sequence length.
+
+When bucketing is enabled, NxD Inference creates prefill (suffix) buckets (covering suffix portion) starting with powers of 2,
+ranging from 512 up to the maximum context length. The prefix buckets mirror the prefill buckets, with one key difference: a special
+prefix bucket of size 0 is added to handle requests with no cache hits. NxD Inference then creates a two-dimensional grid of all prefill
+and prefix bucket combinations, which represents the effective set of buckets during context encoding. During request processing,
+NxD Inference first identifies the smallest prefill bucket that can accommodate the largest suffix portion of the input prompts.
+If prefill padding is needed, NxD Inference prioritizes moving tokens from the prefix's end to the prefill bucket before adding padding.
+It then determines the smallest prefix bucket that can fit the largest prefix across prompts. These two dimensions together determine
+the final (prefill, prefix) bucket combination used to serve the context encoding request.
+
+You can configure specific buckets to optimize inference based on the expected distribution of prefix lengths, input lengths, and
+output lengths for your model. In NeuronConfig, set ``enable_bucketing=True``, and provide a list of bucket sizes in
+``context_encoding_buckets``, ``prefix_buckets`` and/or ``token_generation_buckets``. ``context_encoding_buckets`` corresponds to prefill
+buckets when prefix caching is enabled.
+
+::
+
+    neuron_config = NeuronConfig(
+        enable_bucketing=True,
+        context_encoding_buckets=[512, 1024, 2048],
+        prefix_buckets=[512, 1024]
+        token_generation_buckets=[2048]
+    )
+
+Examples
+^^^^^^^^
+
+For ``context_encoding_buckets=[512, 1024, 2048]`` and ``prefix_buckets=[512, 1024]``
+
+For requests with:
+
+- Input prompt of size 1000 with no prefix, NxDI uses prefill bucket as 1024 and prefix bucket as 0.
+- Input prompt of size 800 with 128 as the prefix size, and remaining 672 as the suffix size, NxDI first selects 1024
+  as the prefill bucket. Remaining 352 prefill slots are filled up by moving entire prefix to the suffix part.
+  So prefill bucket of 1024 and prefix bucket as 0 is used here.
+- Input prompt of size 900 with 640 as the prefix size, and remaining 260 as the suffix size, NxDI first selects 512
+  as the prefill bucket. Remaining 252 prefill slots are filled up by moving 252 tokens from the end of prefix to the suffix part.
+  Effective prefix length now becomes 388, so prefill bucket of 512 and prefix bucket as 512 is used.
+- Input prompt of size 1600 with 1280 as the prefix size and remaining 320 as the suffix size, NxDI selects 512 as the
+  prefill bucket. Remaining 192 prefill slots are filled up by moving 192 tokens from the end of prefix to the suffix part.
+  Effective prefix length now becomes 1088 which is larger than the largest prefix bucket of 1024. This leads to exception
+  during the request processing.
+
+The two-dimensional bucketing system exponentially increases the number of context encoding buckets. Therefore, users should exercise caution
+when using auto-bucketing with large context lengths. It is recommended to limit the granularity of prefix buckets based on your
+specific workload requirements.
+
+For detailed examples of prefix caching with NxD Inference and vLLM, see :ref:`nxdi-trn2-llama3.3-70b-apc-tutorial`.
+
 Multi-LoRA Serving
 ------------------
 

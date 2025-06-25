@@ -10,6 +10,103 @@ NxD Inference Release Notes (``neuronx-distributed-inference``)
 
 This document lists the release notes for Neuronx Distributed Inference library.
 
+Neuronx Distributed Inference [0.4.7422] (Neuron 2.24.0 Release)
+-----------------------------------------------------------------------
+
+Date: 06/24/2025
+
+* Models
+
+  * Qwen2.5 text models, which are tested on Trn1. Compatible models include:
+
+    * `Qwen2.5-0.5B-Instruct <https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct>`__
+    * `Qwen2.5-7B-Instruct <https://huggingface.co/Qwen/Qwen2.5-7B-Instruct>`__
+    * `Qwen2.5-32B-Instruct <https://huggingface.co/Qwen/Qwen2.5-32B-Instruct>`__
+    * `Qwen2.5-72B-Instruct <https://huggingface.co/Qwen/Qwen2.5-72B-Instruct>`__
+
+* Features
+
+  * Automatic Prefix Caching support (APC) through vLLM. APC
+    improves efficiency by reusing KV cache from previous queries if the
+    new query shares a prefix. APC can significantly improve TTFT based on how often
+    different queries share the same prefixes. Performance gains are greater
+    when requests have longer shared prefixes and when there is a higher
+    frequency of prefix sharing across requests. For example, with Llama3.3 70B on Trn2,
+    you can observe a 3.2x TTFT improvement with the math.math dataset (90% cache hit),
+    a 1.6x TTFT improvement with a Sonnet dataset with 2K prompt length (25% cache hit),
+    or no TTFT improvement with the HumanEval dataset (0% cache hit). For more information,
+    see :ref:`nxdi-prefix-caching` and :ref:`nxdi-trn2-llama3.3-70b-apc-tutorial`.
+  * Disaggregated Inference (DI) support through vLLM (Beta). Disaggregated Inference is 
+    also known as disaggregated serving, disaggregated prefill, or p/d disaggregation.
+    DI separates the prefill and decode phase of inference onto different hardware resources.
+    DI can improve inter token latency (ITL) by by eliminating prefill stall in
+    continuous batching, where decode is paused to perform prefill for a new incoming request.
+    With DI, you can also scale prefill and decode resources independently to further improve
+    performance. For more information, see :ref:`nxdi-disaggregated-inference`.
+  * Context parallelism in NeuronAttentionBase (Beta). Context parallelism
+    distributes context processing across multiple NeuronCores. Context
+    parallelism improves TTFT, particularly at higher sequence lengths where
+    the number of KV heads is low. To use context parallelism, set ``cp_degree``
+    in NeuronConfig.
+  * Mixed-precision parameters in modeling code. This feature enables
+    you to configure each module's dtype independently. To use
+    mixed-precision parameters, set ``cast_type="as-declared"`` in
+    NeuronConfig. Note: The default behavior (``cast_type="config"``) is
+    to cast all parameters to the ``torch_dtype`` in NeuronConfig.
+  * Output logits when using on-device sampling. To output logits,
+    enable ``output_logits`` in NeuronConfig. Note that this flag
+    impacts performance and should only be used for debugging model
+    logits.
+
+* Other changes
+
+  * Add support for PyTorch 2.7. This release includes support for PyTorch 2.5, 2.6, and 2.7.
+  * Upgrade ``transformers`` requirement from v4.48 to v4.51.
+  * Re-enable warmup on Trn2. NxD Inference disabled warmup on Trn2 in the
+    previous release due to an issue that prevented certain model
+    configurations from loading correctly. That issue is now fixed.
+  * Update the behavior of the ``attn_kernel_enabled`` attribute in
+    NeuronConfig, which configures whether to use the flash attention
+    kernel. Previously, ``True`` meant to enable in all cases where
+    supported, and ``False`` meant to auto-enable where beneficial
+    (defaults to ``False``). Now, ``attn_kernel_enabled=False`` disables
+    the flash attention kernel in all cases. To use the previous
+    auto-enable behavior, set ``attn_kernel_enabled=None``. The default
+    value for ``attn_kernel_enabled`` is now ``None`` to retain the same
+    default behavior as before.
+  * Enable ``--verify-hlo`` flag during compilation. Now, if an HLO is
+    invalid, compilation will fail. Previously, in certain scenarios,
+    the compiler would successfully compile invalid HLOs.
+  * Update the flash attention kernel strategy to use the attention
+    kernel on Trn2 in all cases where it's supported. This change fixes
+    an issue where certain context lengths failed to trace.
+  * Add ``logical_nc_config`` as an argument to the ``build_module`` and
+    ``build_function`` test utilities, so you can use these utilities to
+    test modules/functions for Trn2 using LNC2.
+  * Other minor fixes and improvements.
+
+
+Known Issues and Limitations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Increased Device Memory Usage for Certain Configurations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Certain model configurations require slightly more device memory than in
+previous releases. If your model used close to the maximum amount of device
+memory in previous releases, this increase could cause it to fail to load after
+you compile it with this release. This issue is most likely to affect
+Llama3.1-405B configurations that use a large number of buckets.
+
+If this issue occurs, you will see the following error during model load.
+
+::
+
+   ERROR  TDRV:log_dev_mem                             Failed to allocate 512.000MB (alignment: 4.000MB, usage: shared scratchpad) on ND14:NC 6
+
+To avoid this error, reduce the number of buckets you use, or reduce the 
+sequence lengths that you use in each bucket.
+
 Neuronx Distributed Inference [0.3.5591] (Neuron 2.23.0 Release)
 -----------------------------------------------------------------------
 
@@ -64,7 +161,7 @@ Features in this Release
 
 * Other changes
 
-  * Disable warmup for continuous batching. This change avoids an issue
+  * Disable warmup for Trn2. This change avoids an issue
     that prevents certain model configurations from loading correctly.
     When warmup is disabled, you will see lower performance on the first
     few requests to the model. This change also affects initial

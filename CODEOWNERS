@@ -1,14 +1,14 @@
 # This file creates codeowners for the documentation. It will allow setting code reviewers for all Pull requests to merge to the master branch 
 # Each line is a file pattern followed by one or more owners.
 
-# Refernce guide - https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#example-[…]ners-file
+# Reference guide - https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#example-[…]ners-file
 # Example - These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence,
 # @global-owner1 and @global-owner2 will be requested for
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @micwade-aws @musunita @aws-sadaf @natemail-aws @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @shadis @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks
+*       @aws-maens @micwade-aws @musunita @aws-sadaf @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @shadis @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks @erickson-doug
 
 src/examples/mxnet/ @aws-rhsoln  @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
