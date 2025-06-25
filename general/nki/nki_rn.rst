@@ -7,6 +7,32 @@ Neuron Kernel Interface (NKI) release notes
 
 ..    :depth: 2
 
+Neuron Kernel Interface (NKI) (Beta) [2.24]
+------------------------------------------------
+Date: 06/24/2025
+
+* ``sqrt`` valid data range extended for accuracy improvement with wider numerical values support.
+* :doc:`nki.language.gather_flattened <api/generated/nki.language.gather_flattened>` new API
+* :doc:`nki.isa.nc_match_replace8 <api/generated/nki.isa.nc_match_replace8>` additional param ``dst_idx`` 
+* improved docs/examples on :doc:`nki.isa.nc_match_replace8 <api/generated/nki.isa.nc_match_replace8>`, :doc:`nki.isa.nc_stream_shuffle <api/generated/nki.isa.nc_stream_shuffle>` 
+* improved error messages
+
+Neuron Kernel Interface (NKI) (Beta) [2.23]
+------------------------------------------------
+Date: 05/20/2025
+
+* :doc:`nki.isa.range_select <api/generated/nki.isa.range_select>` (for trn2) new instruction
+* ``abs``, ``power`` ops supported on to nki.isa tensor instruction
+* ``abs`` op supported on :doc:`nki.isa.activation <api/generated/nki.isa.activation>` instruction
+* :doc:`GpSIMD engine <api/generated/nki.isa.engine>` support added to ``add``, ``multiply`` in 32bit integer to nki.isa tensor operations
+* :doc:`nki.isa.tensor_copy_predicated <api/generated/nki.isa.tensor_copy_predicated>` support for reversing predicate. 
+* :doc:`nki.isa.tensor_copy_dynamic_src <api/generated/nki.isa.tensor_copy_dynamic_src>`, :doc:`tensor_copy_dynamic_dst <api/generated/nki.isa.tensor_copy_dynamic_dst>` engine selection.
+* :doc:`nki.isa.dma_copy <api/generated/nki.isa.dma_copy>` additional support with ``dge_mode``, ``oob_mode``, and in-place add ``rmw_op``.
+* ``+=, -=, /=, *=`` operators now work consistently across loop types, PSUM, and SBUF,  
+* fixed simulation for instructions: :doc:`nki.language.rand <api/generated/nki.language.rand>`, :doc:`random_seed <api/generated/nki.language.random_seed>`, :doc:`nki.isa.dropout <api/generated/nki.isa.dropout>`
+* fixed simulation masking behavior
+* Added warning when the block dimension is used for SBUF and PSUM tensors, see: :ref:`NKI Block Dimension Migration Guide <nki_block_dimension_migration_guide>` 
+
 Neuron Kernel Interface (NKI) (Beta) [2.22]
 ------------------------------------------------
 Date: 04/03/2025
