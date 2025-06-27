@@ -38,7 +38,6 @@ The following dtypes are supported:
 * torch::kHalf
 * torch::kInt
 * torch::kChar
-* torch::kLong
 * torch::kShort
 * torch::kByte
 
