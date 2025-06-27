@@ -6,3 +6,4 @@
 * :ref:`nxdi-trn2-llama3.1-405b-speculative-tutorial`
 * :ref:`nxdi-trn1-llama3.1-70b-instruct-accuracy-eval-tutorial`
 * :ref:`nxdi-trn2-llama3.3-70b-apc-tutorial`
+* :ref:`nxdi-disaggregated-inference-tutorial`

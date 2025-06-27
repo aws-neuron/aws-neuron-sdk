@@ -19,6 +19,7 @@ Developer Guides
     /libraries/nxd-inference/developer_guides/accuracy-eval-with-datasets
     /libraries/nxd-inference/developer_guides/custom-quantization
     /libraries/nxd-inference/developer_guides/weights-sharding-guide
+    /libraries/nxd-inference/developer_guides/disaggregated-inference
 
 
 
