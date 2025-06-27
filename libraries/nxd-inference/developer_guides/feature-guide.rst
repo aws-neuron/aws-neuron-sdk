@@ -1120,3 +1120,20 @@ The weight size of a LoRA adapter on each device is ``1/TP_DEGREE`` of the total
         - 32 
         - 32
         - 38
+
+.. _nxdi_di_feature_guide:
+
+Disaggregated Inference [BETA]
+------------------------------
+
+Disaggregated Inference is an LLM serving architecture separates the prefill and decode phases of inference onto different hardware resources.
+Separating the compute intensive prefill phase from the memory bandwidth intensive decode phase can improve the LLM serving experience by
+
+1. Removing prefill interruptions to decode from continuous batching to reduce inter token latency (ITL). These gains can be used to
+achieve higher throughput by running with a higher decode batch size while staying under Service Level Objectives (SLO).
+
+2. Adapt to changing traffic patterns while still remaining under application SLOs.
+
+3. Enable independent scaling of resources and parallelism strategies for prefill (compute bound) and decode (memory bound).
+
+See the :ref:`Disaggregated Inference Developer Guide<nxdi-disaggregated-inference>` and the :ref:`Disaggregated Inference Tutorial<nxdi-disaggregated-inference-tutorial>`
