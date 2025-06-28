@@ -24,6 +24,16 @@ Bug Fixes
 * Added workaround for HW DGE descriptor fetching bug
 * Fixed typos in certain error log messages
 
+Upcoming Neuron driver 2.21 support changes for Inf1 instance users
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types). 
+* ``Inf1`` instance users, Neuron driver 2.21 and below will remain supported with regular security patches. 
+* ``Inf1`` instance users are advised to pin the Neuron driver version to ``2.21.*`` in their installation script using following command:
+
+.. code-block:: bash
+
+    sudo apt-get install aws-neuronx-dkms=2.21.* -y
+
 Neuron Driver release [2.21.37.0]
 --------------------------------
 Date: 05/19/2025
