@@ -27,16 +27,20 @@ branch_name = ""
 
 
 if os.environ.get('READTHEDOCS') == "True":
-    env_branch_name = os.environ.get('READTHEDOCS_VERSION_NAME')
-    branch_name = env_branch_name
-    if branch_name == "latest":
-        branch_name = "master"       
-    if os.environ.get('READTHEDOCS_PROJECT') == "awsdocs-neuron":
-        env_project_name = "aws-neuron-sdk"
-        project_name = env_project_name
-    elif os.environ.get('READTHEDOCS_PROJECT') == "awsdocs-neuron-staging":
-        env_project_name = "private-aws-neuron-sdk-staging"
-        project_name = env_project_name
+    # branch
+    branch_name = os.environ.get('READTHEDOCS_VERSION_NAME') \
+              or os.environ.get('GIT_BRANCH_NAME') \
+              or "master" 
+
+    # project (with fallback!)
+    rtd_proj = os.environ.get('READTHEDOCS_PROJECT', "")
+    if rtd_proj == "awsdocs-neuron":
+        project_name = "aws-neuron-sdk"
+    elif rtd_proj == "awsdocs-neuron-staging":
+        project_name = "private-aws-neuron-sdk-staging"
+    else:
+        project_name = "aws-neuron-sdk"
+
 else:
     env_project_name = os.environ.get('GIT_PROJECT_NAME')
     env_branch_name = os.environ.get('GIT_BRANCH_NAME')
@@ -178,7 +182,7 @@ extlinks = {
             ,'compile-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_compile.py', '')
             ,'benchmark-pt': ('https://github.com/aws-neuron/'+projectblob+'/src/benchmark/pytorch/%s_benchmark.py', '')
             ,'llama-sample': ('https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/%s.ipynb', '')
-            ,'github':(f'https://github.com/aws-neuron/{projectblob}', '')
+            ,'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', '')
             }
 
 
