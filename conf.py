@@ -28,9 +28,13 @@ branch_name = ""
 
 if os.environ.get('READTHEDOCS') == "True":
     # branch
-    branch_name = os.environ.get('READTHEDOCS_VERSION_NAME') \
-              or os.environ.get('GIT_BRANCH_NAME') \
-              or "master" 
+    branch_name = (
+        os.environ.get('READTHEDOCS_VERSION_NAME')
+        or os.environ.get('GIT_BRANCH_NAME')
+        or "master" # local default
+    )
+    if branch_name == "latest":
+        branch_name = "master"
 
     # project (with fallback!)
     rtd_proj = os.environ.get('READTHEDOCS_PROJECT', "")
@@ -43,20 +47,12 @@ if os.environ.get('READTHEDOCS') == "True":
 
 else:
     env_project_name = os.environ.get('GIT_PROJECT_NAME')
-    env_branch_name = os.environ.get('GIT_BRANCH_NAME')
-    
-    # set project name
-    if env_project_name != None:
-        project_name = env_project_name
-    else:
-        project_name = "aws-neuron-sdk"
+    env_branch_name  = os.environ.get('GIT_BRANCH_NAME')
 
-    # set branch name
-    if env_branch_name != None:
-        branch_name = env_branch_name
-        if branch_name == "latest":
-            branch_name = "master"
-    else:
+    project_name = env_project_name or "aws-neuron-sdk"
+
+    branch_name  = env_branch_name or "master"
+    if branch_name == "latest": # local builds that pass “latest”
         branch_name = "master"
 
 # -- Project information -----------------------------------------------------
