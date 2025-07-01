@@ -26,7 +26,7 @@ Features in this release
 NeuronX Distributed Training [1.4.0]
 ------------------------------------
 
-Date: 06/26/2025
+Date: 06/24/2025
 
 Features in this release
 
