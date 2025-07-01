@@ -30,7 +30,7 @@ Date: 06/24/2025
 
 Features in this release
 
-* Added support for PyTorch 2.7
+* Added support for PyTorch 2.7.
 
 .. _neuronx-distributed-training-rn-1-3-0:
 
