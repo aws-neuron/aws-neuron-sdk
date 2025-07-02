@@ -4,6 +4,12 @@ What's New
 ==========
 
 .. _latest-neuron-release:
+.. _neuron-2.24.1-whatsnew:
+Neuron 2.24.1 (06/30/2025)
+---------------------------
+
+Neuron version 2.24.1 resolves an installation issue that could prevent NeuronX Distributed Training from being installed successfully.
+
 .. _neuron-2.24.0-whatsnew:
 
 Neuron 2.24.0 (06/24/2025)
