@@ -14,4 +14,4 @@ the Neuronx Distributed Training library.
     Registering an optimizer and LR scheduler <optimizer_lr_scheduler_flow>
     Migrating from Neuron-NeMo-Megatron to Neuronx Distributed Training <migration_nnm_nxdt>
     NxD Training Compatibility with NeMo <migration_nemo_nxdt>
-
+    CPU Mode Developer Guide <cpu_mode_developer_guide>
