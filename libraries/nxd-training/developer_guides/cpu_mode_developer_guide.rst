@@ -1,21 +1,17 @@
 .. _cpu_mode_overview:
 
+This topic discusses the use of CPU mode for processing and debugging parallel primitives using PyTorch without compilation steps. 
+
 CPU Mode Overview
 =================
 
-CPU mode allows users to run parallel primitives
-like `RowParallelLinear` and `ColumnParallelLinear` on CPU. This is useful
-when debugging or developing model sharding and want to check the intermediate results 
-of sharded layers. The CPU mode runs in PyTorch's eager mode and does not require
-the compilation steps of torch-xla and Neuron compiler. The collective communications
-like all-reduce use the PyTorch's 
-`gloo backend <https://pytorch.org/docs/stable/distributed.html#backends-that-come-with-pytorch>`_
-for communications.
+Use CPU mode to run parallel primitives like `RowParallelLinear` and `ColumnParallelLinear` on a compute instance's CPU when
+debugging or developing model sharding and check the intermediate results  of sharded layers. CPU mode runs in PyTorch's "eager" mode and does not require the compilation steps of torch-xla and the Neuron compiler. 
 
-To enable the CPU mode, we need to set the environment variable `NXD_CPU_MODE=1` to 
-enable the CPU mode. As the CPU mode leverages Gloo backend for communication, users 
-need to initialize the distributed environment with "gloo" backend instead of "xla" backend.
-In the following, we given an example of a MLP with Tensor Parallel linear layers. 
+Collective communications like all-reduce use PyTorch's  `Gloo backend <https://pytorch.org/docs/stable/distributed.html#backends-that-come-with-pytorch>`_
+for communication. Since CPU mode leverages the Gloo backend for communication, you must initialize the distributed environment with the "gloo" backend instead of the "xla" backend. To enable CPU mode, set the environment variable `NXD_CPU_MODE=1`.
+
+Here is an example of a multi-layer perceptron (MLP) built with Tensor Parallel linear layers, configured to use CPU mode to process them without prior compilation: 
 
 .. code-block:: python
 
@@ -74,12 +70,12 @@ In the following, we given an example of a MLP with Tensor Parallel linear layer
 How to use CPU mode in existing scripts
 ---------------------------------------
 
-If the scripts previously used the `xla_device` explicitly, 
-users need to replace the corresponding use of `xla_device` with 
-`get_device()` function call from `neuronx_distributed.utils` to get the suitable device. 
-Similarly, you need to replace explicit calling of `xm.master_print` with wrapped `master_print`
-from `neuronx_distributed.utils`. In principle, to make the 
-scripts general to both CPU mode and XLA mode with Trainium as the backend, you 
-need to replace functions from torch-xla package with a thin wrapper that can 
-dispatch the function calls to the native PyTorch counterparts, when CPU mode 
-is in-use.
+If your scripts previously used the `xla_device` explicitly, 
+you must replace the corresponding use of `xla_device` with the 
+`get_device()` function call from `neuronx_distributed.utils` to get the suitable device.
+
+To make the scripts general to both CPU mode and XLA mode, and with Trainium as the backend, you 
+must replace functions from the `torch-xla` package with a thin wrapper that can 
+dispatch the function calls to the native PyTorch counterparts when CPU mode 
+is in use. For example, you must replace explicit calls to `xm.master_print` with calls to a wrapped version of `master_print` 
+from `neuronx_distributed.utils`. 
