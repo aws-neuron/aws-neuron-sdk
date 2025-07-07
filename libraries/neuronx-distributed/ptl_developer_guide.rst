@@ -127,7 +127,7 @@ Here's a minimal example that trains a simple linear model using Neuron-PT-Light
         # Start training
         trainer.fit(model=model, train_dataloaders=dataloader)
 
-Key Components Breakdown
+How this example works
 ''''''''''''''''''''''''
 
 **1. NeuronLTModule**: The core component that extends PyTorch Lightning's LightningModule with Neuron-specific functionality.
