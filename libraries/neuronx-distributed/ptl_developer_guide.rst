@@ -3,6 +3,17 @@
 Developer guide for Neuron-PT-Lightning (PyTorch Lightning)
 =================================================================
 
+Prerequisites
+^^^^^^^^^^^^^
+
+**Recommended Setup: AWS Deep Learning AMI**
+
+The easiest way to get started is by using the AWS Deep Learning AMI (DLAMI), which comes pre-configured with all the required dependencies for Neuron-PT-Lightning development.
+
+**Alternative Setup**
+
+If you're not using the DLAMI, you can install the Neuron SDK by following the `Neuron SDK installation guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/index.html>`_. The DLAMI is recommended as it includes all necessary dependencies and is pre-configured for optimal performance on Neuron instances.
+
 Quickstart Guide
 ^^^^^^^^^^^^^^^^
 
