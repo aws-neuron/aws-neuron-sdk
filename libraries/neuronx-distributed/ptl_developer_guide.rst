@@ -18,7 +18,14 @@ Quickstart Guide
 ^^^^^^^^^^^^^^^^
 
 This quickstart guide provides a simple working example to get you started with Neuron-PT-Lightning (PyTorch Lightning with Neuron). 
-The example demonstrates the basic components needed to train a model on Neuron devices using PTL.
+The example demonstrates a basic linear regression model that trains on synthetic data using Neuron devices. It shows the essential components needed to:
+
+- Set up a Neuron-compatible Lightning module with manual optimization
+- Configure neuronx-distributed settings for device management
+- Use XLA mark steps for optimal performance on Neuron hardware
+- Train a model with proper gradient accumulation and logging
+
+The complete example trains a simple 2-layer linear model (32 input features → 2 outputs) on randomly generated data for 20 training steps, demonstrating the core patterns you'll use in more complex Neuron-PT-Lightning applications.
 
 Complete Working Example
 ''''''''''''''''''''''''
@@ -170,6 +177,52 @@ How this example works
 - ``xm.mark_step()`` after optimization isolates the optimization step
 
 This example provides a foundation that you can extend with more complex models, data loading, and training configurations as shown in the detailed sections below.
+
+Troubleshooting
+'''''''''''''''
+
+**ModuleNotFoundError: No module named '_lzma'**
+
+This error can occur in DLAMI environments due to the custom Python build. To resolve this:
+
+1. Install a new Python version using your system package manager:
+
+   .. code:: bash
+
+       # For Ubuntu/Debian
+       sudo apt update && sudo apt install python3.9 python3.9-pip
+       
+       # For Amazon Linux
+       sudo yum install python39 python39-pip
+
+2. Install the required dependencies in the new Python environment following the setup instructions in the Prerequisites section.
+
+**ImportError: Cannot import Lightning modules**
+
+If you encounter import errors with standard PyTorch Lightning modules, make sure you're importing from ``neuronx_distributed.lightning`` instead of ``pytorch_lightning``:
+
+.. code:: python
+
+    # ❌ Don't use standard Lightning imports
+    from pytorch_lightning import LightningModule, Trainer
+    
+    # ✅ Use Neuron-specific imports
+    from neuronx_distributed.lightning import NeuronLTModule, NeuronXLAStrategy
+    from pytorch_lightning import Trainer  # Trainer can still be imported from pytorch_lightning
+
+**Validating Training on Neuron Hardware**
+
+To verify your training is actually running on Neuron devices, use ``neuron-top`` in a separate terminal:
+
+.. code:: bash
+
+    neuron-top
+
+This will show real-time utilization of your Neuron cores. You should see activity on the NeuronCores when your training script is running. If you don't see any activity, check that:
+
+- You're running on a Neuron-enabled instance (inf1, inf2, trn1, etc.)
+- Your model is properly configured with the NeuronXLAStrategy
+- The XLA compilation completed successfully (check for any compilation errors in your logs)
 
 Training
 ^^^^^^^^
