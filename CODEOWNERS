@@ -8,7 +8,7 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @micwade-aws @musunita @aws-sadaf @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @shadis @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks @erickson-doug
+*       @aws-maens @micwade-aws @musunita @aws-sadaf @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks @erickson-doug
 
 src/examples/mxnet/ @aws-rhsoln  @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
@@ -23,3 +23,4 @@ src/examples/pytorch/ @jluntamazon @aws-sadaf @aws-maens @vikas-paliwal-aws @rgr
 neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @musunita @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 
+libraries/nxd-inference/ @huntingcarlisle @lccasagrande @lipovsek-aws @erickson-doug @eshalakhotia @pinak-p @hannanjgaws @akhil-aws @ahimsh-aws @rgrandhiamzn @yahavb @FThompsonAWS @gsnaws @sidjoshiaws @jluntamazon @musunita
