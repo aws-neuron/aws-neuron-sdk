@@ -65,34 +65,7 @@ Neuron Profiler 2.0 (Beta)
 
 Compatibility Changes
 ^^^^^^^^^^^^^^^^^^^^^
-* This version of the Neuron runtime requires `aws-neuron-dkms` version `2.22` or later on **Trainium2** instances.
-
-Compatibility Support Table
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Runtime Version: 2.26.42.0
-
-The Neuron runtime was tested and confirmed passing for the following EC2 instances and configurations:
-
-=========================== ============= ============== ================= ===============
-Instance Type               OS Type       OS Version     Kernel Version    GLIBC Version
-=========================== ============= ============== ================= ===============
-inf2.48xlarge               Ubuntu        U24            6.8               2.39
-inf2.48xlarge               Ubuntu        U22            6.8               2.35
-inf2.48xlarge               Ubuntu        U20            5.15              2.31
-inf2.48xlarge               Rocky Linux   RL9            5.14              2.34
-inf2.48xlarge               Amazon Linux  AL2023         6.1               2.34
-trn1.32xlarge               Ubuntu        U24            6.8               2.39
-trn1.32xlarge               Ubuntu        U22            6.8               2.35
-trn1.32xlarge               Ubuntu        U20            5.15              2.31
-trn1.32xlarge               Rocky Linux   RL9            5.14              2.34
-trn1.32xlarge               Amazon Linux  AL2023         6.1               2.34
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U24            6.8               2.39
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U22            6.8               2.35
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U20            5.15              2.31
-trn2.3xlarge/trn2.48xlarge  Amazon Linux  AL2023         6.1               2.34
-=========================== ============= ============== ================= ===============
-
-
+* This version of the Neuron runtime requires `aws-neuron-dkms` version `2.22` or later on **Trainium2** instances
 
 Neuron Runtime Library [2.25.57.0]
 ---------------------------------
