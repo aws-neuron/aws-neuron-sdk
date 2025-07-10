@@ -1,4 +1,4 @@
-# This file creates codeowners for the documentation. It will allow setting code reviewers for all Pull requests to merge to the master branch 
+ This file creates codeowners for the documentation. It will allow setting code reviewers for all Pull requests to merge to the master branch 
 # Each line is a file pattern followed by one or more owners.
 
 # Reference guide - https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#example-[…]ners-file
@@ -22,4 +22,3 @@ neuron-guide/neuron-frameworks/tensorflow-neuron/tutorials/ @musunita @awshaiche
 src/examples/pytorch/ @jluntamazon @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/pytorch-neuron/  @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/ @musunita @jluntamazon @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
-
