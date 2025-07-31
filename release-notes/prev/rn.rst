@@ -1,12 +1,155 @@
 .. _prev-rn:
 
-Previous Releases Notes (Neuron 2.x)
+Previous release notes (Neuron 2.x)
 ====================================
 
 .. contents:: Table of contents
    :local:
    :depth: 1
 
+.. _neuron-2.24.1-whatsnew:
+
+Neuron 2.24.1 (06/30/2025)
+---------------------------
+
+Neuron version 2.24.1 resolves an installation issue that could prevent NeuronX Distributed Training from being installed successfully.
+
+.. _neuron-2.24.0-whatsnew:
+
+Neuron 2.24.0 (06/24/2025)
+---------------------------
+
+Neuron version 2.24 introduces new inference capabilities including prefix caching, disaggregated inference (Beta), and context parallelization support (Beta). This release also includes NKI language enhancements and enhanced profiling visualizations for improved debugging and performance analysis. Neuron 2.24 adds support for PyTorch 2.7 and JAX 0.6, updates existing DLAMIs and DLCs, and introduces a new vLLM inference container.
+
+.. contents:: Table of contents
+   :local:
+   :depth: 1
+
+What's New
+^^^^^^^^^^
+
+NxD Inference (NxDI) includes the following enhancements:
+
+- **Prefix caching**: Improves Time To First Token (TTFT) by up to 3x when processing common shared prompts across requests.
+- **Disaggregated inference (Beta)**: Uses 1P1D (1 Prefill, 1 Decode) architecture to reduce prefill-decode interference and improve goodput.
+- **Context parallelism (Beta)**: Improves TTFT for longer sequence lengths by processing context encoding in parallel across multiple NeuronCores.
+- **Model support**: Added beta support for Qwen 2.5 text models.
+- **NxD Inference Library**: Upgraded to support PyTorch 2.7 and Transformers 4.48.
+
+Hugging Face Optimum Neuron 0.2.0 now supports PyTorch-based NxD Core backend for LLM inference, simplifying the implementation of new PyTorch model architectures. Models including Llama 3.1-8B and Llama-3.3-70B have migrated from Transformers NeuronX to the NxD backend.
+
+Training
+^^^^^^^^
+
+**Library Upgrades**
+
+- **NxD Training  (NxDT) Library**: Upgraded to support PyTorch 2.7 and Transformers 4.48.
+- **JAX Training Support**: Upgraded to JAX 0.6.0.
+
+Neuron Kernel Interface (NKI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **New nki.language.gather_flattened**: Provides efficient parallel tensor element gathering.
+- **Enhanced accuracy**: Improved valid range of ``nki.language.sqrt`` and ``nki.isa.activation(nl.sqrt)`` 
+- **Advanced indexing**: Improved performance for ``nki.isa.nc_match_replace8``.
+
+Neuron Tools
+^^^^^^^^^^^^
+
+**Neuron Profiler Enhancements**
+
+- **Framework stack traces**: Maps device instructions to model source code.
+- **Scratchpad memory usage visualization**: Shows tensor-level memory usage over time with HLO name association.
+- **On-device collectives barriers**: Identifies synchronization overhead.
+- **HBM throughput visualization**: Tracks data movement involving High Bandwidth Memory (HBM) over time.
+
+**NCCOM-TEST Improvements**
+
+- Added ``--report-to-json-file`` flag: Outputs results in JSON format.
+- Added ``--show-input-output-size`` flag: Explicitly displays input and output sizes based on operations.
+
+Neuron Deep Learning Containers (DLCs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Updated containers with PyTorch 2.7 support for inference and training.
+- Added new inference container with NxD Inference and vLLM with FastAPI.
+- JAX DLCs now support JAX 0.6.0 training.
+
+Neuron Deep Learning AMIs (DLAMIs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Updated MultiFramework DLAMIs to include PyTorch 2.7 and JAX 0.6.0.
+- Added new Single Framework DLAMIs for PyTorch 2.7 and JAX 0.6.0.
+
+Neuron 2.24 Feature Release Notes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+   :class: table-smaller-font-size
+
+   * - What's New
+     - Details
+     - Instances
+
+   * - NxD Core (neuronx-distributed) 
+     - * :ref:`neuronx-distributed-rn`   
+     - ``Trn1`` / ``Trn1n``, ``Trn2``
+
+   * - NxD Inference (neuronx-distributed-inference)
+     - * :ref:`neuronx-distributed-inference-rn` 
+     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
+
+   * - NxD Training (neuronx-distributed-training)
+     - * :ref:`neuronx-distributed-training-rn` 
+     - ``Trn1`` / ``Trn1n``, ``Trn2``
+
+   * - PyTorch NeuronX (torch-neuronx)
+     - * :ref:`torch-neuronx-rn`
+     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
+
+   * - Neuron Compiler (neuronx-cc)
+     - * :ref:`neuronx-cc-rn`
+     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
+
+   * - Neuron Kernel Interface (NKI)
+     - * :ref:`nki_rn`
+     - ``Inf2``, ``Trn1``/ ``Trn1n``
+
+   * - Neuron Tools
+     - * :ref:`neuron-tools-rn`
+     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
+
+   * - Neuron Runtime
+     - * :ref:`neuron-runtime-rn`
+     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
+
+   * - Transformers NeuronX (transformers-neuronx) for Inference
+     - * :ref:`transformers-neuronx-rn` 
+     - ``Inf2``, ``Trn1`` / ``Trn1n``
+
+   * - Neuron Deep Learning AMIs (DLAMIs)
+     - * :ref:`neuron-dlami-overview`
+     - ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
+
+   * - Neuron Deep Learning Containers (DLCs)
+     - * :ref:`neuron-dlc-release-notes`
+     - ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
+
+   * - Release Announcements
+     - * :ref:`announce-no-longer-support-beta-pytorch-neuroncore-placement-apis`
+       * :ref:`announce-eos-block-dimension-nki`
+       * :ref:`announce-eos-pt-two-five`
+       * :ref:`announce-eos-tensorflow-tutorial`
+       * :ref:`announce-eos-tnx`
+       * :ref:`announce-eos-longer-support-xla-bf16-vars`
+       * :ref:`announce-eos-block-dimension-nki`
+       * :ref:`announce-no-longer-support-llama-32-meta-checkpoint`
+       * :ref:`announce-no-longer-support-nki-jit`
+       * See more at :ref:`announcements-main`.
+     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
 
 .. _neuron-2.23.0-whatsnew:
 
@@ -202,7 +345,7 @@ More release content can be found in the table below and each component release 
      - * :ref:`neuron-dlc-release-notes`
      - Inf1,Inf2,Trn1/Trn1n
 
-   * - Release Annoucements
+   * - Release Announcements
      - * :ref:`announce-eos-neuron-det`
        * :ref:`announce-eos-nxd-examples`
        * :ref:`announce-python-eos`
@@ -258,7 +401,7 @@ It enables PyTorch model onboarding with minimal code changes and
 integrates with :ref:`vLLM <nxdi-vllm-user-guide>`. NxDI supports various model architectures,
 including Llama versions for text processing (Llama 2, Llama 3, Llama
 3.1, Llama 3.2, and Llama 3.3), :ref:`Llama 3.2 multimodal for multimodal
-tasks <nxdi-llama3.2-multimodal-tutorial>`, and Mixture-of-Experts (MoE) model architectures including
+tasks </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb>`, and Mixture-of-Experts (MoE) model architectures including
 Mixtral and DBRX. The library supports quantization methods, includes
 dynamic sampling, and is compatible with HuggingFace checkpoints and
 generate() API. NxDI also supports distributed strategies including tensor parallelism and incorporates speculative decoding techniques (Draft model and EAGLE). The
@@ -374,7 +517,7 @@ More release content can be found in the table below and each component release 
    * - NxD Inference (neuronx-distributed-inference)
      - * Introduced new NxD Inference Library. See :ref:`introduce-nxd-inference`
        * Added Llama3.1 405B Inference Example on Trn2. See :ref:`nxdi-trn2-llama3.1-405b-tutorial`
-       * Added Llama 3.2 Multimodal inference sample. See :ref:`nxdi-llama3.2-multimodal-tutorial`
+       * Added Llama 3.2 Multimodal inference sample. See :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`
        * Added support for vLLM integration for NxD Inference. See :ref:`nxdi-vllm-user-guide`
        * Introduced Open Source Github repository for NxD Inference. See `aws-neuron/neuronx-distributed-inference <https://github.com/aws-neuron/neuronx-distributed-inference>`_
        * See more at :ref:`neuronx-distributed-inference-rn` 
@@ -491,7 +634,7 @@ The documentation has been updated to include architectural details about :ref:`
 
 
 
-.. _neuron-2.20.0-whatsnew:
+.. _neuron-2.20.2-whatsnew:
 
 Neuron 2.20.2 (11/20/2024)
 ---------------------------

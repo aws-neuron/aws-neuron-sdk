@@ -74,11 +74,11 @@ Install Cargo, the package manager for the Rust programming language.
 
 
  +----------------------------------+----------------------------------+
- | Ubuntu                           | Amazon Linux                     |
+ | Ubuntu                           | Amazon Linux 2023                |
  +----------------------------------+----------------------------------+
  | .. code-block:: bash             | .. code-block:: bash             |
  |                                  |                                  |
- |    sudo apt install -y cargo     |    sudo yum install -y cargo     |
+ |    sudo apt install -y cargo     |    sudo dnf install -y cargo     |
  +----------------------------------+----------------------------------+
 
 

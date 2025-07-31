@@ -139,5 +139,5 @@ Data parallelism doesn't introduce any additional collective operations during i
 How to Use Data Parallelism with NxD Inference
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-See :ref:`nxdi-trn2-llama3.3-70b-dp-tutorial` for detailed guidance on how to use vLLM to apply data parallelism along with tensor
+See :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial.ipynb` for detailed guidance on how to use vLLM to apply data parallelism along with tensor
 parallelism to increase model inference throughput in NxDI. 

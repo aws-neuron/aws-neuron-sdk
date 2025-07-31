@@ -914,7 +914,7 @@ Please install g++ on AMIs without g++ pre-installed (i.e. server AMIs):
 .. code:: bash
 
    # Amazon Linux
-   sudo yum nstall -y gcc-c++
+   sudo dnf install -y gcc-c++
 
 Supported Python versions:
 

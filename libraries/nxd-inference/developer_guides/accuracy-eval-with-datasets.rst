@@ -14,7 +14,7 @@ In future we will add support for other benchmarking clients.
 
 The code used in this guide is located at https://github.com/aws-neuron/aws-neuron-samples/tree/master/inference-benchmarking/
 
-For a tutorial that you can follow and run on a trainium or inferentia instance please look at :ref:`Evaluating Accuracy of Llama-3.1-70B on Neuron using open source datasets <nxdi-trn1-llama3.1-70b-instruct-accuracy-eval-tutorial>`.
+For a tutorial that you can follow and run on a trainium or inferentia instance please look at :ref:`Evaluating Accuracy of Llama-3.1-70B on Neuron using open source datasets </libraries/nxd-inference/tutorials/trn1-llama3.1-70b-instruct-accuracy-eval-tutorial.ipynb>`.
 
 Configuration Setup
 -------------------

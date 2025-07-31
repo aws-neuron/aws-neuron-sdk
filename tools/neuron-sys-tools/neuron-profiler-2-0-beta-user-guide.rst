@@ -819,7 +819,7 @@ The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
     # Reset to default behavior
     unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE  # Back to capturing all event types
 
-The ``hardware`` group contains events that are executed on the ML accelerator. 
+The ``hardware`` group contains events that are executed on the NeuronCore. 
 These are ``nc_exec_running``, ``cc_running``, ``cc_exec_barrier``, ``numerical_err``, ``nrt_model_switch``, ``timestamp_sync_point``, ``hw_notify``.
 The ``software`` group contains all other events.
 
@@ -882,6 +882,49 @@ Use the ``nrt_sys_trace_config_set_capture_enabled_for_event_type`` API to filte
     // Cleanup
     nrt_sys_trace_stop();
     nrt_sys_trace_config_free(config);
+
+
+.. _neuron-profile-system-timestamp-adjustment
+
+Adjusting Hardware Timestamps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Hardware events executed on the NeuronCore use device-specific timestamps that are in a different time domain than CPU timestamps. To enable accurate correlation between hardware and software events in the JSON system trace output, the runtime automatically adjusts hardware event timestamps to the CPU time domain using synchronization point events.
+
+How Timestamp Adjustment Works
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+System trace events are generated from multiple independent time domains: the CPU host and each ML accelerator devices operating with their own clocks. To align events from different domains, the runtime performs software-based time synchronization after event collection.
+
+**Sync Point Events**: After each execution, a special ``timestamp_sync_point`` event captures nearly simultaneous timestamps from both the host CPU (``cpu_timestamp_ns``) and the device (``nc_timestamp_ns``). These sync events are used to adjust the timestamps of hardware events to the CPU domain. 
+These synchronization events are included in the returned event trace and serve as reference points for timestamp adjustment. Users can see the sync point used for aligning hardware events in the timeline.
+
+**Adjustment Algorithm**: For each hardware event, the runtime:
+
+- Uses the sync point with matching exec_id for that NeuronCore
+- Calculates the time difference between the hardware event and the sync point (in device time)
+- Applies that same time difference to the sync point's CPU timestamp
+- Formula: ``adjusted_timestamp = sync_cpu_timestamp + (event_device_timestamp - sync_device_timestamp)``
+
+Illustration::
+
+         Sync_Point           HW_Event
+                 │                │
+                 ▼                ▼
+    Device Time ─●────────────────●───>
+                 |-------Δt------>|     - sync_device_timestamp and sync_cpu_timestamp occur ~simultaneously, though their clocks differ
+    CPU Time ────●────────────────●───> - Calc Δt = event_device_timestamp - sync_device_timestamp (elapsed time since sync point on device)
+                 |-------Δt------>|     - Add Δt to sync_cpu_timestamp to get adjusted_timestamp
+
+|neuron-profiler2-syncpoint-timeline|
+
+**Hardware Events**: Hardware events that require timestamp adjustment include:
+
+- ``nc_exec_running`` (NeuronCore execution start/stop)
+- ``cc_running`` (collective communication execution)
+- ``cc_exec_barrier`` (collective communication barriers)
+- ``numerical_err`` (numerical errors)
+- ``nc_model_switch`` (NeuronCore model switching)
 
 Tips
 ^^^^
@@ -971,3 +1014,4 @@ the correct output directory and this is the output directory passed to
 .. |neuron-profiler2-perfetto-timeline| image:: /images/neuron-profiler2-perfetto-timeline.png
 .. |neuron-profiler2-perfetto-device-timeline| image:: /images/neuron-profiler2-perfetto-device-timeline.png
 .. |neuron-profiler2-perfetto-grouping| image:: /images/neuron-profiler2-perfetto-grouping.png
+.. |neuron-profiler2-syncpoint-timeline| image:: /images/neuron-profiler2-syncpoint-timeline.png

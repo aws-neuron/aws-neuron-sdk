@@ -994,7 +994,7 @@ The two-dimensional bucketing system exponentially increases the number of conte
 when using auto-bucketing with large context lengths. It is recommended to limit the granularity of prefix buckets based on your
 specific workload requirements.
 
-For detailed examples of prefix caching with NxD Inference and vLLM, see :ref:`nxdi-trn2-llama3.3-70b-apc-tutorial`.
+For detailed examples of prefix caching with NxD Inference and vLLM, see :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial.ipynb`.
 
 Multi-LoRA Serving
 ------------------
@@ -1030,7 +1030,7 @@ When uploading a LoRA adapter checkpoint to NxDI for multi-LoRA serving, the use
 The number of the multiple LoRA adapters for serving is specified by ``max_loras``.
 The set of LoRA adapters in NxD Inference are specified by ``lora_ckpt_paths``, which is a dictionary with a key-value pair for each LoRA adapter. 
 The key is the adapter ID named by the user and the value is the local path of the LoRA adapter checkpoint.
-For detailed examples of multi-LoRA serving in NxDI, see :ref:`nxdi-trn2-llama3.1-8b-multi-lora-tutorial`.
+For detailed examples of multi-LoRA serving in NxDI, see :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial.ipynb`.
 
 
 Maximum number of LoRA adapters supported

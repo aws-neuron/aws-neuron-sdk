@@ -64,7 +64,7 @@ To see details of Neuron component versions please see :ref:`neuron-release-cont
 
    For successful installation or update to Neuron 1.16.0 and newer from previous releases:
       * Stop Neuron Runtime 1.x daemon (``neuron-rtd``) by running: ``sudo systemctl stop neuron-rtd``
-      * Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or ``sudo yum remove aws-neuron-runtime``
+      * Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or ``sudo dnf remove aws-neuron-runtime``
       * Install or upgrade to the latest Neuron Driver (``aws-neuron-dkms``) by following the :ref:`install-guide-index` instructions.
       * Starting with Neuron version 2.3, ``aws-neuron-dkms`` the package name has been changed to ``aws-neuronx-dkms``, see :ref:`neuron2-intro`
 
@@ -224,7 +224,7 @@ For a successful migration from previous releases of your application to *Neuron
 #. Make sure you are not using *Neuron Runtime 1.x* (``aws-neuron-runtime``)   
     * Remove any code that installs ``aws-neuron-runtime`` from any CI/CD scripts.
     * Stop ``neuron-rtd`` by running ``sudo systemctl stop neuron-rtd``
-    * Uninstall ``neuron-rtd`` by running ``sudo apt remove aws-neuron-runtime`` or ``sudo yum remove aws-neuron-runtime``
+    * Uninstall ``neuron-rtd`` by running ``sudo apt remove aws-neuron-runtime`` or ``sudo dnf remove aws-neuron-runtime``
 
 
 #. Upgrade to your Neuron Framework of choice:
@@ -345,7 +345,7 @@ Solution
 ~~~~~~~~
 
 * Stop ``neuron-rtd`` by running: ``sudo systemctl stop neuron-rtd``
-* Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or sudo ``yum remove aws-neuron-runtime``
+* Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or sudo ``dnf remove aws-neuron-runtime``
 * Install ``aws-neuron-dkms`` by following steps in :ref:`install-guide-index`
 
 .. include:: ./important-neuronx-dkms.txt

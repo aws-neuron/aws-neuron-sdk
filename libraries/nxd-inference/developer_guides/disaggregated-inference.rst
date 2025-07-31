@@ -31,7 +31,7 @@ Neuron Implementation Details
 -----------------------------
 
 Disaggregated Inference is mainly implemented through Neuron's vLLM fork 
-https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.24-vllm-v0.7.2 
+https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25 
 and the Neuron Runtime.
 
 There are three main components to a DI workflow.
@@ -123,7 +123,7 @@ of one prefill to one decode (1P1D) are supported.
 Example Usage
 -------------
 
-Refer to the `offline inference DI example <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_di.py>`_
+Refer to the `offline inference DI example <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25/examples/offline_inference/neuron_di.py>`_
 for a quick example to get started.
 
 Refer to the :ref:`Disaggregated Inference Tutorial<nxdi-disaggregated-inference-tutorial>` for a detailed usage guide.

@@ -1,7 +1,15 @@
 .. _tensorflow-ssd300:
 
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: The tutorial for the AWS Neuron SDK is currently deprecated and not maintained. It is provided for reference only.
+
 Running SSD300 with AWS Neuron
 ==============================
+
+.. note:: 
+   This page was archived on 7/31/2025.
 
 *Update 11/16: The model checkpoint
 link*\ https://api.ngc.nvidia.com/v2/models/nvidia/ssdpyt_fp32/versions/1/files/nvidia_ssdpyt_fp32_20190225.pt\ *is

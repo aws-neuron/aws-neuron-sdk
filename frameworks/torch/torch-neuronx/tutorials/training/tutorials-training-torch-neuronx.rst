@@ -8,7 +8,7 @@ Tutorials for Training(torch-neuronx)
     /frameworks/torch/torch-neuronx/tutorials/training/bert
     /frameworks/torch/torch-neuronx/tutorials/training/mlp
     /frameworks/torch/torch-neuronx/tutorials/training/finetune_hftrainer
-    /frameworks/torch/torch-neuronx/tutorials/training/finetune_t5
+   
     /frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2
     /frameworks/torch/torch-neuronx/tutorials/training/analyze_for_training
     /neuron-customops/tutorials/customop-mlp-training

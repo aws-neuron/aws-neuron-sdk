@@ -193,7 +193,7 @@ torch-xla version 2.5+ now requires ``libcrypt.so.1`` shared library. Currently,
 
 .. code::
 
-   sudo yum install libxcrypt-compat
+   sudo dnf install libxcrypt-compat
 
 
 ``FileNotFoundError: [Errno 2] No such file or directory: 'libneuronpjrt-path'`` Failure

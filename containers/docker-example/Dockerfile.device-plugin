@@ -7,8 +7,8 @@ enabled=1' > /etc/yum.repos.d/neuron.repo
 
 RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
-RUN yum install -y aws-neuron-k8-plugin
-RUN yum install -y tar gzip
+RUN dnf install -y aws-neuron-k8-plugin
+RUN dnf install -y tar gzip
 
 ENV PATH="/opt/aws/neuron/bin/k8s-neuron-device-plugin:${PATH}"
 

@@ -261,8 +261,8 @@ class manifest:
             if args.install_type == 'install':
                 if args.os == 'rockylinux9':
                     str += '\n# Install and enable EPEL\n'
-                    str += 'sudo yum config-manager --set-enabled crb\n'
-                    str += 'sudo yum install epel-release -y\n'
+                    str += 'sudo dnf config-manager --set-enabled crb\n'
+                    str += 'sudo dnf install epel-release -y\n'
         return str
 
     def config_neuron_repository(self, args):
@@ -322,7 +322,7 @@ class manifest:
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get update -y' + '\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-                str += 'sudo yum update -y' + '\n'
+                str += 'sudo dnf update -y' + '\n'
             if args.os == 'rockylinux9':
                 str += '# Reboot instance to ensure kernel is updated\n'
                 str += 'sudo reboot\n'
@@ -342,7 +342,7 @@ class manifest:
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-                str += 'sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
+                str += 'sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
 
         return str
 
@@ -352,7 +352,7 @@ class manifest:
         if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
             str += 'sudo apt-get install git -y\n'
         elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-            str += 'sudo yum install git -y\n'
+            str += 'sudo dnf install git -y\n'
 
         return str
 
@@ -412,7 +412,7 @@ class manifest:
                         'pin_major'].values[0] == 'true':
                         version = '-' + self.get_major_version(driver_package, args.instance)
 
-                str += f'sudo yum {yum_install} {driver_package}{version}* -y\n'
+                str += f'sudo dnf {yum_install} {driver_package}{version}* -y\n'
         '''
         if args.ami == 'dlami-base':
             str += '--allow-change-held-packages'
@@ -461,7 +461,7 @@ class manifest:
                             str += '\n'
 
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-                        str += 'sudo yum '
+                        str += 'sudo dnf '
                         if args.install_type == 'install':
                             str += 'install '
                             str += runtime_package
@@ -528,7 +528,7 @@ class manifest:
                                                                   neuron_version=args.neuron_version) + '* -y\n'
 
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-                        str += 'sudo yum '
+                        str += 'sudo dnf '
                         if args.install_type == 'install':
                             str += 'install '
                             str += system_tool
@@ -554,7 +554,7 @@ class manifest:
         str = ''
         if args.os == 'amazonlinux2023':
             str += '# Install External Dependency\n'
-            str += 'sudo yum '
+            str += 'sudo dnf '
             if args.mode == 'develop':
                 str += 'install -y '
             elif args.install_type == 'update':
@@ -587,10 +587,10 @@ class manifest:
                     str += 'sudo add-apt-repository ppa:deadsnakes/ppa\n'
                     str += 'sudo apt-get install python' + target_python_version + '\n'
                 elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
-                    str += 'sudo yum install -y amazon-linux-extras\n'
-                    str += 'sudo yum install python' + target_python_version + '\n'
+                    str += 'sudo dnf install -y amazon-linux-extras\n'
+                    str += 'sudo dnf install python' + target_python_version + '\n'
                 elif args.os == 'rockylinux9':
-                    str += 'sudo yum install python' + target_python_version + '\n'
+                    str += 'sudo dnf install python' + target_python_version + '\n'
 
             # Install Python venv
             """
@@ -605,9 +605,9 @@ class manifest:
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += '\n# Install Python venv \n'
                 if args.os == 'amazonlinux2' or args.os == 'rockylinux9':
-                    str += 'sudo yum install -y python' + target_python_version + '-venv gcc-c++ \n'
+                    str += 'sudo dnf install -y python' + target_python_version + '-venv gcc-c++ \n'
                 else:
-                    str += 'sudo yum install -y gcc-c++ \n'
+                    str += 'sudo dnf install -y gcc-c++ \n'
 
             # when venv_install_type is parellel cluster, we need to change the directory
             if args.venv_install_type == 'parallel-cluster':
@@ -659,7 +659,7 @@ class manifest:
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
         str += f'\n{indentation}# Set pip repository pointing to the Neuron repository \n'
-        str += f'{indentation}python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com\n'
+        str += f'{indentation}python -m pip config set global.index-url https://pip.repos.neuron.amazonaws.com\n'
 
         return str
 
@@ -780,7 +780,7 @@ class manifest:
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
-                        str += f'sudo yum install tensorflow-model-server-neuronx{ms_version} -y\n'
+                        str += f'sudo dnf install tensorflow-model-server-neuronx{ms_version} -y\n'
 
             elif args.framework == 'mxnet':
 
@@ -927,7 +927,7 @@ class manifest:
                     if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
-                        str += f'sudo yum install tensorflow-model-server-neuronx{ms_version} -y\n'
+                        str += f'sudo dnf install tensorflow-model-server-neuronx{ms_version} -y\n'
 
             elif args.framework == 'mxnet':
 

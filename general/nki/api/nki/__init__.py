@@ -291,7 +291,7 @@ def benchmark(kernel=None, **kwargs):
     sudo apt-get install aws-neuronx-tools=2.* -y
 
     # on Amazon Linux
-    sudo yum install aws-neuronx-tools-2.* -y
+    sudo dnf install aws-neuronx-tools-2.* -y
 
   You may specify a path to save your NEFF file through input
   parameter ``save_neff_name`` and a path to save your NTFF file through ``save_trace_name``.

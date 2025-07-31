@@ -98,10 +98,6 @@ Decoders
    * - Model
      - Frameworks/Libraries
      - Samples and Tutorials
-
-   * - gpt-2
-     - nxd-training
-     - * :ref:`megatron_gpt_pretraining`
    
    * - gpt-2
      - torch-neuronx

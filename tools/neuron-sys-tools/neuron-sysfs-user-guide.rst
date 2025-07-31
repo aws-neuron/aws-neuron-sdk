@@ -48,6 +48,7 @@ Here is the high level structure of the Neuron sysfs filesystem, where the total
   ├── stats
   │   ├── hardware
   │   │   ├── mem_ecc_uncorrected
+  │   │   ├── mem_ecc_repairable_uncorrected
   │   │   └── sram_ecc_uncorrected
   │   ├── memory_usage
   │   │    └── host_mem
@@ -183,7 +184,9 @@ Description for Each Field
 
   * ``hardware/``: Hardware statistics.
 
-    * ``mem_ecc_uncorrected``: The number of uncorrected ECC events in the Neuron device's DRAM.
+    * ``mem_ecc_uncorrected``: The number of unrepairable uncorrected ECC events in the Neuron device's DRAM.
+
+    * ``mem_ecc_repairable_uncorrected``: The number of repairable uncorrected ECC events in the Neuron device's DRAM.
 
     * ``sram_ecc_uncorrected``: The  number of uncorrected ECC events in the Neuron device's SRAM.
   * ``power/``: Power statistics.

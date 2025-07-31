@@ -828,3 +828,50 @@ You could avoid the error by either use basic indexing or advanced indexing but 
   j = nl.arange(4)[None. :]
   c = nl.exp(a[i, j]) # also ok
 
+.. _nki-errors-err_while_loop_requires_unconditional_entry:
+
+err_while_loop_requires_unconditional_entry
+-------------------------------------------
+
+ValueError: Traditional while loops are not supported - use do-while pattern instead.
+
+This error occurs because NKI does not support traditional while loops where the condition is
+evaluated before the first iteration. Only the do-while pattern (with unconditional first entry)
+is supported by the compiler.
+
+Example of unsupported code (traditional while loop):
+
+.. code-block:: python
+
+  def func(a):
+    a_tile: tensor[1, 1] = nl.load(a[0, 0])
+    a_scalar = scalar(a_tile)  # type cast a tensor to scalar
+
+    # NOT SUPPORTED: Condition checked before first iteration
+    while a_scalar < 10:  # Error: NKI does not support traditional while loops
+      a_tile = a_tile + 1
+      a_scalar = scalar(a_tile)
+
+    # ...
+
+Required pattern (do-while implementation):
+
+.. code-block:: python
+
+  def func(a):
+    a_tile: tensor[1, 1] = nl.load(a[0, 0])
+    a_scalar = scalar(a_tile)  # type cast a tensor to scalar
+
+    # SUPPORTED: First iteration is always executed
+    cond = scalar(True)  # Ensure unconditional entry
+    while cond:
+      a_tile = a_tile + 1
+      a_scalar = scalar(a_tile)
+      cond = a_scalar < 10  # Condition evaluated at end of iteration
+
+    # ...
+
+Note: Due to compiler limitations, NKI only supports loops that follow the do-while pattern,
+where the first iteration is always executed and the continuation condition is checked
+at the end of each iteration.
+

@@ -1,9 +1,9 @@
 .. _jax-neuron-setup:
 
-JAX Neuron plugin Setup
+JAX NeuronX plugin Setup
 ------------------------------
 
-The JAX Neuron plugin is a set of modularized JAX plugin packages integrating
+The JAX NeuronX plugin is a set of modularized JAX plugin packages integrating
 AWS Trainium and Inferentia machine learning accelerators into JAX as pluggable
 devices. It includes the following Python packages, all hosted on the AWS Neuron
 pip repository.
@@ -12,6 +12,9 @@ pip repository.
 * ``jax-neuronx``: A package containing Neuron-specific JAX features, such as the `Neuron NKI <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`__ JAX interface. It also serves as a meta-package for providing a tested combination of the ``jax-neuronx``, ``jax``, ``jaxlib``, ``libneuronxla``, and ``neuronx-cc`` packages. Making proper use of the features provided in ``jax-neuronx`` will unleash the full potential of Trainium and Inferentia.
 
 .. include:: /general/setup/install-templates/trn1-ga-warning.txt
+
+.. note:: 
+    JAX requires ``Python 3.10`` or newer. Ensure a supported python version is installed on your system prior to installing JAX.
 
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
@@ -41,12 +44,12 @@ pip repository.
         :start-line: 239
         :end-line: 240
 
-.. dropdown::  Install the JAX Neuron Plugin
+.. dropdown::  Install the JAX NeuronX Plugin
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    We provide two methods for installing the JAX Neuron plugin. The first is to install
+    We provide two methods for installing the JAX NeuronX plugin. The first is to install
     the ``jax-neuronx`` meta-package from the AWS Neuron pip repository. This method provides
     a production-ready JAX environment where ``jax-neuronx``'s major dependencies, namely
     ``jax``, ``jaxlib``, ``libneuronxla``, and ``neuronx-cc``, have undergone thorough testing
@@ -54,18 +57,19 @@ pip repository.
 
     .. code:: bash
 
-        python3 -m pip install jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
+        python3 -m pip install jax-neuronx[stable] --index-url=https://pip.repos.neuron.amazonaws.com
 
     The second is to install packages ``jax``, ``jaxlib``, ``libneuronxla``,
     and ``neuronx-cc`` separately, with ``jax-neuronx`` being an optional addition.
     Because ``libneuronxla`` supports a broad range of ``jaxlib`` versions through
     the PJRT C-API mechanism, this method provides flexibility when choosing
-    ``jax`` and ``jaxlib`` versions, enabling JAX users to bring the JAX Neuron plugin
+    ``jax`` and ``jaxlib`` versions, enabling JAX users to bring the JAX NeuronX plugin
     into their own JAX environments.
 
     .. code:: bash
 
-        python3 -m pip install jax==0.4.31 jaxlib==0.4.31 jax-neuronx libneuronxla neuronx-cc==2.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
+        python3 -m pip install jax==0.4.38 jaxlib==0.4.38
+        python3 -m pip install jax-neuronx libneuronxla neuronx-cc==2.* --index-url=https://pip.repos.neuron.amazonaws.com
 
 We can now run some simple JAX programs on the Trainium or Inferentia
 accelerators.
@@ -80,9 +84,9 @@ accelerators.
 
 Compatibility between packages ``jaxlib`` and ``libneuronxla`` can be
 determined from `PJRT C-API
-version <https://github.com/openxla/xla/blob/5564a9220af230c6c194e37b37938fb40692cfc7/xla/pjrt/c/pjrt_c_api.h>`__.
+version <https://github.com/openxla/xla/blob/0d1b60216ea13b0d261d59552a0f7ef20c4f76c5/xla/pjrt/c/pjrt_c_api.h>`__.
 For more information, see `PJRT integration
-guide <https://github.com/openxla/xla/blob/5564a9220af230c6c194e37b37938fb40692cfc7/xla/pjrt/c/docs/pjrt_integration_guide.md>`__.
+guide <https://github.com/openxla/xla/blob/0d1b60216ea13b0d261d59552a0f7ef20c4f76c5/docs/pjrt/pjrt_integration.md>`__.
 
 To determine compatible JAX versions, you can use the
 ``libneuronxla.supported_clients`` API for querying known supported
@@ -98,7 +102,7 @@ client packages and their versions.
        For example,
        >>> import libneuronxla
        >>> libneuronxla.supported_clients()
-       ['jaxlib 0.4.31 (PJRT C-API 0.54)', 'torch_xla 2.2.0 (PJRT C-API 0.35)', 'torch_xla 2.3.0 (PJRT C-API 0.46)']
+       ['jaxlib 0.4.38 (PJRT C-API 0.58)', torch_xla 2.6.0 (PJRT C-API 0.55)', 'torch_xla 2.6.1 (PJRT C-API 0.55)', 'torch_xla 2.7.0 (PJRT C-API 0.61)']
 
 Note that the list of supported client packages and versions covers
 known versions only and may be incomplete. More versions could be

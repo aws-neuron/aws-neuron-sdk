@@ -38,30 +38,26 @@ Compatibility Support Table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Driver Version: 2.22.2.0
 
-The Neuron driver was tested and confirmed passing for the following EC2 instances and configurations:
+The Neuron driver was tested for the following EC2 instances and configurations:
 
 =========================== ============= ============== ================= ===============
-Instance Type               OS Type       OS Version     Kernel Version    GLIBC Version
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
 =========================== ============= ============== ================= ===============
-inf1.6xlarge                Ubuntu        U20            5.15              2.31
-inf1.6xlarge                Rocky Linux   RL9            5.14              2.34
-inf2.48xlarge               Ubuntu        U24            6.8               2.39
-inf2.48xlarge               Ubuntu        U22            6.8               2.35
-inf2.48xlarge               Ubuntu        U20            5.15              2.31
-inf2.48xlarge               Rocky Linux   RL9            5.14              2.34
-inf2.48xlarge               Amazon Linux  AL2023         6.1               2.34
-inf2.48xlarge               Amazon Linux  AL2            5.10              2.26
-trn1.32xlarge               Ubuntu        U24            6.8               2.39
-trn1.32xlarge               Ubuntu        U22            6.8               2.35
-trn1.32xlarge               Ubuntu        U20            5.15              2.31
-trn1.32xlarge               Rocky Linux   RL9            5.14              2.34
-trn1.32xlarge               Amazon Linux  AL2023         6.1               2.34
-trn1.32xlarge               Amazon Linux  AL2            5.10              2.26
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U24            6.8               2.39
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U22            6.8               2.35
-trn2.3xlarge/trn2.48xlarge  Ubuntu        U20            5.15              2.31
-trn2.3xlarge/trn2.48xlarge  Amazon Linux  AL2023         6.1               2.34
-trn2.3xlarge/trn2.48xlarge  Amazon Linux  AL2            5.10              2.26
+``Inf1``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Ubuntu        U24            6.8               2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Inf2``                    Amazon Linux  AL2            5.10              2.26
+``Trn1``                    Ubuntu        U24            6.8               2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Amazon Linux  AL2            5.10              2.26
+``Trn2``                    Ubuntu        U24            6.8               2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Amazon Linux  AL2            5.10              2.26
 =========================== ============= ============== ================= ===============
 
 
@@ -118,7 +114,6 @@ Bug Fixes
 
 Neuron Driver release [2.18.12.0]
 --------------------------------
-
 Date: 09/16/2024
 
 New in this release

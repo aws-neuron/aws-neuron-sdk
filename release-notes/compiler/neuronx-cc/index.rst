@@ -7,6 +7,27 @@ Neuron Compiler (``neuronx-cc``) release notes
 
    :depth: 2
 
+Neuron Compiler [2.20.2831.0]
+----------------------------
+Date: 07/31/2025
+
+* Announcement: The Neuron Compiler default for the ``--auto-cast`` option will change from ``--auto-cast=matmult`` to ``--auto-cast=none`` in a future release. See Neuron SDK General Announcememnts page for a detailed description of this change.
+
+* Minor bug fixes and performance enhancements for both the trn1 and trn2 platforms.
+
+
+Neuron Compiler [2.19.8089.0]
+----------------------------
+Date: 06/24/2025
+
+* This update enables the Hardware DMA Generation Engine (Hardware DGE) by default on Trainium2 instances. Hardware DGE is a memory optimization that will reduce the generated compiler artifacts size (i.e., NEFFs) and the models’ memory footprint.  Data movement (DMA) descriptors will be generated in the hardware, as needed, during model execution. This reduces (HBM) memory usage within the NEFF and allows the use of more DMA queues.
+
+Neuron Compiler [2.18.121.0]
+----------------------------
+Date: 05/19/2025
+
+* Minor bug fixes and performance enhancements for both the trn1 and trn2 platforms.
+
 Neuron Compiler [2.17.194.0]
 ----------------------------
 Date: 04/03/2025

@@ -17,7 +17,7 @@ Please update the Neuron Driver to the latest (version 2.3.26 or newer) so that 
 .. important ::
 
    You must update to the latest Neuron Driver (aws-neuron-dkms version 2.3.26 or newer) before installing or upgrading to latest Neuron release.
-      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
+      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo dnf remove aws-neuron-dkms``
       * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 Neuron 1.19.1 (05/27/2022)
@@ -30,7 +30,7 @@ In addition, this release updates ``tensorflow-neuron`` installation instruction
 .. important ::
 
    For successful installation or update to next releases (Neuron 1.20.0 and newer):
-      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
+      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo dnf remove aws-neuron-dkms``
       * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 
@@ -43,7 +43,7 @@ In addition, this release updates ``tensorflow-neuron`` installation instruction
 .. important ::
 
    For successful installation or update to next releases (Neuron 1.20.0 and newer):
-      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo yum remove aws-neuron-dkms``
+      * Uninstall ``aws-neuron-dkms`` by running: ``sudo apt remove aws-neuron-dkms`` or ``sudo dnf remove aws-neuron-dkms``
       * Install or upgrade to latest Neuron driver (``aws-neuron-dkms``) by following the ":ref:`install-guide-index`" instructions.
 
 Neuron 1.19.0 (04/29/2022)
@@ -582,10 +582,10 @@ commands:
 ::
 
    # Amazon Linux 2
-   sudo yum remove aws-neuron-runtime-base
-   sudo yum remove aws-neuron-runtime
-   sudo yum install aws-neuron-runtime-base
-   sudo yum install aws-neuron-runtime
+   sudo dnf remove aws-neuron-runtime-base
+   sudo dnf remove aws-neuron-runtime
+   sudo dnf install aws-neuron-runtime-base
+   sudo dnf install aws-neuron-runtime
 
 Jun 11, 2020 Release
 --------------------------
@@ -651,8 +651,8 @@ Please update the aws-neuron-runtime-base package:
    sudo apt-get install aws-neuron-runtime-base
 
    # Amazon Linux, Centos, RHEL
-   sudo yum update
-   sudo yum install aws-neuron-runtime-base
+   sudo dnf update
+   sudo dnf install aws-neuron-runtime-base
 
 May 11, 2020 Release
 --------------------------

@@ -8,5 +8,5 @@
 * :ref:`llm-inference-benchmarking`
 * :ref:`accuracy-eval-with-datasets`
 * :ref:`nxdi-custom-quantization`
-* :ref:`nxdi-weights-sharding-guide`
 * :ref:`nxdi-disaggregated-inference`
+* :ref:`nxdi-weights-sharding-guide`

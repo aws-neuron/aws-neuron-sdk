@@ -35,7 +35,7 @@ Date: 06/24/2025
     you can observe a 3.2x TTFT improvement with the math.math dataset (90% cache hit),
     a 1.6x TTFT improvement with a Sonnet dataset with 2K prompt length (25% cache hit),
     or no TTFT improvement with the HumanEval dataset (0% cache hit). For more information,
-    see :ref:`nxdi-prefix-caching` and :ref:`nxdi-trn2-llama3.3-70b-apc-tutorial`.
+    see :ref:`nxdi-prefix-caching` and :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial.ipynb`.
   * Disaggregated Inference (DI) support through vLLM (Beta). Disaggregated Inference is 
     also known as disaggregated serving, disaggregated prefill, or p/d disaggregation.
     DI separates the prefill and decode phase of inference onto different hardware resources.

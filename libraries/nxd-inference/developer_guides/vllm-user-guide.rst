@@ -61,22 +61,11 @@ To manually install the AWS fork from source, use the following commands:
 
 .. code::
 
-    git clone -b neuron-2.24-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b 2.25.0 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
-    pip install -r requirements-neuron.txt
+    pip install -r requirements/neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
 
-.. note::
-
-    The current AWS Neuron fork of vLLM (``neuron-2.24-vllm-v0.7.2``) is based on vLLM 0.7.2 as some of the new features in 2.24 release 
-    like prefix caching are only tested with vLLM 0.7.2. We intend to upgrade and support the latest vLLM version in future Neuron releases.
-
-.. note::
-
-    Starting in release 2.24, the Neuron initialization in vLLM code no longer enables sequence parallel by default. This is to ensure
-    better compatibility with models and configurations where sequence parallelism is not well supported. If you previously relied on the 
-    Neuron vLLM code to specify sequence parallel, you may now see increased TTFT times. To re-enable sequence parallelism, you can pass 
-    ``--override-neuron-config "{\"sequence_parallel_enabled\":true}"``.
 
 Installing vLLM from vLLM main repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -85,7 +74,7 @@ A prior version of Neuron SDK 2.23 NxD Inference support was upstreamed onto vLL
 Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/stable/getting_started/installation/ai_accelerator.html#aws-neuron>`_.
 
 To install the official vLLM repository with Neuron support, use the following commands. Only Neuron SDK 2.23 and prior features are 
-currently available in the official vLLM repository. See Neuron SDK 2.23 artifacts :ref:`here<pre-release-content>`. It is recommended 
+currently available in the official vLLM repository. See Neuron SDK 2.23 artifacts :ref:`here<neuron-2.23.0-artifacts>`. It is recommended 
 to re-install neuronx-distributed and neuronx-distributed-inference libraries after installing vLLM to avoid dependency version incompatibilities.
 
 .. code::
@@ -259,7 +248,7 @@ subdirectory in the directory of your model checkpoint.
 Prefix Caching
 ^^^^^^^^^^^^^^
 Starting in Neuron SDK 2.24, prefix caching is supported on the AWS Neuron fork of vLLM. Prefix caching allows developers to improve TTFT by 
-re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching<nxdi-prefix-caching>` for more information on how to 
+re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching<nxdi_prefix_caching>` for more information on how to 
 enable prefix caching with vLLM. 
 
 
@@ -275,14 +264,14 @@ Examples
 --------
 
 For a list of examples for using vLLM with Neuron, refer to `upstreaming-to-vllm/examples
-/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.24-vllm-v0.7.2/examples/offline_inference>`_ folder. Look for example scripts with the ``neuron_`` prefix. 
-We provide examples for use cases such as `automatic prefix caching <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_prefix_inference.py>`_,
-`disaggregated inference <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_di.py>`_, 
-`speculative decoding with a draft model <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_speculation.py>`_,
-`speculative decoding using EAGLE <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_eagle.py>`_,
-`multimodal models <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_multimodal.py>`_, 
-`multi-LoRA <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_multi_lora.py>`_, 
-`quantization <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.24-vllm-v0.7.2/examples/offline_inference/neuron_int8_quantization.py>`_, and more.
+/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25/examples/offline_inference>`_ folder. Look for example scripts with the ``neuron_`` prefix. 
+We provide examples for use cases such as `automatic prefix caching <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_prefix_caching.py>`_,
+`disaggregated inference <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_di.py>`_, 
+`speculative decoding with a draft model <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_speculation.py>`_,
+`speculative decoding using EAGLE <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_eagle.py>`_,
+`multimodal models <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_multimodal.py>`_, 
+`multi-LoRA <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_multi_lora.py>`_, 
+`quantization <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_int8_quantization.py>`_, and more.
 
 
 For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.

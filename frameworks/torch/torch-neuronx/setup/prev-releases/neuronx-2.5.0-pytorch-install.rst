@@ -66,13 +66,13 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		pip install -U pip
 
 		# Install packages from beta repos
-		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
         
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"
 
 
-         .. tab-item:: Amazon Linux 2 AMI
+         .. tab-item:: Amazon Linux 2023 AMI
 
             .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
@@ -91,22 +91,22 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB 
 
 		# Install OS headers
-		sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+		sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 		
 		# Update OS packages
-		sudo yum update -y
+		sudo dnf update -y
 
 
 		# Remove preinstalled packages and Install Neuron Driver and Runtime
-		sudo yum remove aws-neuron-dkms -y
-		sudo yum remove aws-neuronx-dkms -y
-		sudo yum remove aws-neuronx-oci-hook -y
-		sudo yum remove aws-neuronx-runtime-lib -y
-		sudo yum remove aws-neuronx-collectives -y
-		sudo yum install aws-neuronx-dkms-2.6.5.0  -y
-		sudo yum install aws-neuronx-oci-hook-2.1.2.0  -y
-		sudo yum install aws-neuronx-runtime-lib-2.10.15.0  -y
-		sudo yum install aws-neuronx-collectives-2.10.17.0  -y
+		sudo dnf remove aws-neuron-dkms -y
+		sudo dnf remove aws-neuronx-dkms -y
+		sudo dnf remove aws-neuronx-oci-hook -y
+		sudo dnf remove aws-neuronx-runtime-lib -y
+		sudo dnf remove aws-neuronx-collectives -y
+		sudo dnf install aws-neuronx-dkms-2.6.5.0  -y
+		sudo dnf install aws-neuronx-oci-hook-2.1.2.0  -y
+		sudo dnf install aws-neuronx-runtime-lib-2.10.15.0  -y
+		sudo dnf install aws-neuronx-collectives-2.10.17.0  -y
 
 		# Install EFA Driver(only required for multi-instance training)
 		curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
@@ -119,9 +119,9 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
              	# Remove pre-installed package and Install Neuron Tools
-		sudo yum remove aws-neuron-tools  -y
-		sudo yum remove aws-neuronx-tools  -y
-		sudo yum install aws-neuronx-tools-2.5.16.0  -y
+		sudo dnf remove aws-neuron-tools  -y
+		sudo dnf remove aws-neuronx-tools  -y
+		sudo dnf install aws-neuronx-tools-2.5.16.0  -y
 
 		# Install Python venv and activate Python virtual environment to install
 		# Neuron pip packages.
@@ -130,7 +130,7 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		python -m pip install -U pip
 
 		# Install packages from beta repos
-		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
 		
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"

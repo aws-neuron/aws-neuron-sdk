@@ -8,14 +8,14 @@ across a network. TensorFlow Neuron Serving uses the same API as normal
 TensorFlow Serving with two differences: (a) the saved model must be
 compiled for neuron and (b) the entry point is a different binary
 named ``tensorflow_model_server_neuronx``.  Follow the steps below 
-to install the package using apt-get or yum. This will be pre-installed in a future release.
+to install the package using apt-get or dnf. This will be pre-installed in a future release.
 
 Install TensorFlow Model Server and Serving API
 -----------------------------------------------
 
 Follow the steps in the :ref:`install-neuronx-tensorflow`.
 
-Then ensure you install using either apt-get or yum.
+Then ensure you install using either apt-get or dnf.
 
 .. code:: bash
 
@@ -25,7 +25,7 @@ or
 
 .. code:: bash
 
-  sudo yum install tensorflow-model-server-neuronx
+  sudo dnf install tensorflow-model-server-neuronx
 
 Also, you would need TensorFlow Serving API (use --no-deps to prevent
 installation of regular tensorflow).
