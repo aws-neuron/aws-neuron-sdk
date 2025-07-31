@@ -30,7 +30,7 @@ if os.environ.get('READTHEDOCS') == "True":
     env_branch_name = os.environ.get('READTHEDOCS_VERSION_NAME')
     branch_name = env_branch_name
     if branch_name == "latest":
-        branch_name = "master"       
+        branch_name = "master"
     if os.environ.get('READTHEDOCS_PROJECT') == "awsdocs-neuron":
         env_project_name = "aws-neuron-sdk"
         project_name = env_project_name
@@ -40,7 +40,7 @@ if os.environ.get('READTHEDOCS') == "True":
 else:
     env_project_name = os.environ.get('GIT_PROJECT_NAME')
     env_branch_name = os.environ.get('GIT_BRANCH_NAME')
-    
+
     # set project name
     if env_project_name != None:
         project_name = env_project_name
@@ -105,7 +105,7 @@ extensions = [
 #    "**": [
 #        "google-search.html",  # Your Google Custom Search box
 #        "sbt-sidebar-nav.html",  # For navigation and TOC
-#        "sidebar-logo.html",  # If you have a logo 
+#        "sidebar-logo.html",  # If you have a logo
 #    ]
 #}
 
@@ -228,7 +228,7 @@ html_context = {
 #html_theme = 'sphinx_rtd_theme'
 
 #html_theme_options = {
-#       
+#
 #    'navigation_depth': 3
 #}
 
@@ -240,7 +240,7 @@ html_context = {
 #}
 
 #html_context = {
-#    "github_url": "https://github.com", 
+#    "github_url": "https://github.com",
 #    "github_user": "aws-neuron",
 #    "github_repo": "private-aws-neuron-sdk-staging",
 #    "github_version": "master",
@@ -302,4 +302,6 @@ linkcheck_ignore = [r'http://localhost:\d+/',r'https://awsdocs-neuron.readthedoc
 ,r'https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/examples/pytorch/torch-neuronx/t5-inference-tutorial.ipynb',r'https://github.com/aws-neuron/aws-neuron-parallelcluster-samples/blob/master/examples/jobs/neuronx-nemo-megatron-llamav2-job.md',r'https://github.com/pytorch/PiPPy/blob/main/pippy/IR.py#L697', r'https://github.com/pytorch/pytorch/blob/main/torch/fx/_symbolic_trace.py#L241', r'https://github.com/pytorch/xla/blob/master/torch_xla/utils/checkpoint.py#L129', r'https://github.com/aws-neuron/neuronx-distributed/blob/main/src/neuronx_distributed/parallel_layers/layer_norm.py#L32', r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.py#L273C1-L289C55'
 ,r'https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install',r'https://github.com/google-research/bert#user-content-pre-trained-models',r'https://github.com/google-research/bert#user-content-sentence-and-sentence-pair-classification-tasks', r'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-retirement.html', r'https://repost.aws/knowledge-center/eventbridge-notification-scheduled-events', r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/modeling_gpt_neox_nxd.py',r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain.py',r'https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb']
 linkcheck_exclude_documents = [r'src/examples/.*', 'general/announcements/neuron1.x/announcements', r'release-notes/.*',r'containers/.*']
+
 nitpicky = False
+
