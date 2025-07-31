@@ -21,7 +21,6 @@ sphinxcontrib-htmlhelp
 sphinxcontrib-jsmath
 sphinxcontrib-qthelp
 sphinxcontrib-serializinghtml
-sphinxcontrib-contentui
 traitlets
 nbformat
 numpy==1.21.2
