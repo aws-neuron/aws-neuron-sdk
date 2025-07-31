@@ -471,6 +471,33 @@ passes.
   significant amount of time for larger models or large sequence
   lengths.
 
+Example (``check_accuracy_logits_v2`` API)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+   from neuronx_distributed_inference.utils.accuracy import generate_expected_logits, check_accuracy_logits_v2
+
+   # Init Neuron model, test inputs and HuggingFace generation config.
+
+   # Generating HuggingFace model outputs on CPU.
+   expected_logits = generate_expected_logits(
+        neuron_model,
+        inputs.input_ids,
+        inputs.attention_mask,
+        generation_config
+    )
+    # Alternatively, you can load the expected_logits from disk to save time.
+    # expected_logits = ...
+
+    check_accuracy_logits_v2(
+        neuron_model,
+        expected_logits,
+        inputs.input_ids,
+        inputs.attention_mask,
+        generation_config=generation_config
+    )
+
 Example (``check_accuracy_logits`` API)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

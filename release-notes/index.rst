@@ -1,160 +1,73 @@
-.. _neuron-whatsnew:
+.. _neuron_release_notes:
 
-What's New
-==========
-
-.. _latest-neuron-release:
-.. _neuron-2.24.1-whatsnew:
-Neuron 2.24.1 (06/30/2025)
----------------------------
-
-Neuron version 2.24.1 resolves an installation issue that could prevent NeuronX Distributed Training from being installed successfully.
-
-.. _neuron-2.24.0-whatsnew:
-
-Neuron 2.24.0 (06/24/2025)
----------------------------
-
-Neuron version 2.24 introduces new inference capabilities including prefix caching, disaggregated inference (Beta), and context parallelization support (Beta). This release also includes NKI language enhancements and enhanced profiling visualizations for improved debugging and performance analysis. Neuron 2.24 adds support for PyTorch 2.7 and JAX 0.6, updates existing DLAMIs and DLCs, and introduces a new vLLM inference container.
-
-.. contents:: Table of contents
-   :local:
-   :depth: 1
-
-Inference
-^^^^^^^^^
-
-NxD Inference (NxDI) includes the following enhancements:
-
-- **Prefix caching**: Improves Time To First Token (TTFT) by up to 3x when processing common shared prompts across requests.
-- **Disaggregated inference (Beta)**: Uses 1P1D (1 Prefill, 1 Decode) architecture to reduce prefill-decode interference and improve goodput.
-- **Context parallelism (Beta)**: Improves TTFT for longer sequence lengths by processing context encoding in parallel across multiple NeuronCores.
-- **Model support**: Added beta support for Qwen 2.5 text models.
-- **NxD Inference Library**: Upgraded to support PyTorch 2.7 and Transformers 4.48.
-
-Hugging Face Optimum Neuron 0.2.0 now supports PyTorch-based NxD Core backend for LLM inference, simplifying the implementation of new PyTorch model architectures. Models including Llama 3.1-8B and Llama-3.3-70B have migrated from Transformers NeuronX to the NxD backend.
-
-Training
-^^^^^^^^
-
-**Library Upgrades**
+.. meta::
+   :description: The AWS Neuron SDK release notes home page. Current release version: 2.25.0.
 
 
-- **NxD Training  (NxDT) Library**: Upgraded to support PyTorch 2.7 and Transformers 4.48.
-- **JAX Training Support**: Upgraded to JAX 0.6.0.
+AWS Neuron SDK Release Notes
+============================
 
-Neuron Kernel Interface (NKI)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Last updated**: July 31, 2025
 
-- **New nki.language.gather_flattened**: Provides efficient parallel tensor element gathering.
-- **Enhanced accuracy**: Improved valid range of ``nki.language.sqrt`` and ``nki.isa.activation(nl.sqrt)`` 
-- **Advanced indexing**: Improved performance for ``nki.isa.nc_match_replace8``.
+.. toctree::
+    :maxdepth: 2
+    :hidden:
 
-Neuron Tools
-^^^^^^^^^^^^
-
-**Neuron Profiler Enhancements**
-
-- **Framework stack traces**: Maps device instructions to model source code.
-- **Scratchpad memory usage visualization**: Shows tensor-level memory usage over time with HLO name association.
-- **On-device collectives barriers**: Identifies synchronization overhead.
-- **HBM throughput visualization**: Tracks data movement involving High Bandwidth Memory (HBM) over time.
-
-**NCCOM-TEST Improvements**
-
-- Added ``--report-to-json-file`` flag: Outputs results in JSON format.
-- Added ``--show-input-output-size`` flag: Explicitly displays input and output sizes based on operations.
-
-Neuron Deep Learning Containers (DLCs)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Updated containers with PyTorch 2.7 support for inference and training.
-- Added new inference container with NxD Inference and vLLM with FastAPI.
-- JAX DLCs now support JAX 0.6.0 training.
-
-Neuron Deep Learning AMIs (DLAMIs)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Updated MultiFramework DLAMIs to include PyTorch 2.7 and JAX 0.6.0.
-- Added new Single Framework DLAMIs for PyTorch 2.7 and JAX 0.6.0.
+    Neuron 2.25.0 </release-notes/2.25.0/index>
+    Previous versions </release-notes/prev/rn>
 
 
-Neuron 2.24 Feature Release Notes
----------------------------------
+This is the official home page for the AWS Neuron SDK release notes. Release notes are provided whenever AWS and Annapurna labs releases a new version of the Neuron SDK. Select a release version and review what it brings to you!
+
+.. note::
+    The AWS Neuron SDK is updated regularly with new versions. These releases follow a semantic versioning model of ``(major).(minor).(patch)``. ``major`` versions are more likely to introduce new features and breaking changes over a prior major version. ``minor`` versions add feature and API improvements and may introduce smaller breaking changes. ``patch`` versions typically provide bug fixes and will not have breaking changes.
+
+.. raw:: html
+
+   <table style="margin-left: 5px; width: 100%; border: 2px solid #444444">
+     <tr>
+       <td style="background-color:rgb(167, 219, 248); color: black; padding: 10px">
+         <h2> Latest AWS Neuron SDK release: 2.25.0 </h2>
+         <p>
+         On <b>7/31/2025</b>, AWS and Annapurna Labs released version <b>2.25.0</b> of the Neuron SDK. Neuron 2.25.0 delivers updates across several key areas: inference performance optimizations, expanded model support, enhanced profiling capabilities, improved monitoring and observability tools, framework updates, and refreshed development environments and container offerings. The release includes bug fixes across the SDK components, along with updated tutorials and documentation for new features and model deployments.
+         </p>
+         For more details, see the full <b><a href="2.25.0/index.html">AWS Neuron SDK 2.25.0 release notes</a></b>.
+       </td>
+     </tr>
+   </table>
+
+Previous AWS Neuron SDK releases
+--------------------------------
 
 .. list-table::
    :widths: auto
    :header-rows: 1
    :align: left
-   :class: table-smaller-font-size
 
-   * - What's New
-     - Details
-     - Instances
+   * - SDK version
+     - Date released
+   * - :ref:`2.24.1 <neuron-2.24.1-whatsnew>`
+     - 06/30/25
+   * - :ref:`2.24.0 <neuron-2.24.0-whatsnew>`
+     - 06/24/25
+   * - :ref:`2.23.0 <neuron-2.23.0-whatsnew>`
+     - 06/10/25
+   * - :ref:`2.22.1 <neuron-2.22.1-whatsnew>`
+     - 05/12/25
+   * - :ref:`2.22.0 <neuron-2.22.0-whatsnew>`
+     - 04/03/25
+   * - :ref:`2.21.1 <neuron-2.21.1-whatsnew>`
+     - 01/14/25
+   * - :ref:`2.21.0 Beta <neuron-2.21.0.beta-whatsnew>`
+     - 12/03/24
+   * - :ref:`2.20.2 <neuron-2.20.2-whatsnew>`
+     - 11/20/24
 
-   * - NxD Core (neuronx-distributed) 
-     - * :ref:`neuronx-distributed-rn`   
-     - ``Trn1`` / ``Trn1n``, ``Trn2``
-
-   * - NxD Inference (neuronx-distributed-inference)
-     - * :ref:`neuronx-distributed-inference-rn` 
-     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
-
-   * - NxD Training (neuronx-distributed-training)
-     - * :ref:`neuronx-distributed-training-rn` 
-     - ``Trn1`` / ``Trn1n``, ``Trn2``
-
-   * - PyTorch NeuronX (torch-neuronx)
-     - * :ref:`torch-neuronx-rn`
-     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
-
-   * - Neuron Compiler (neuronx-cc)
-     - * :ref:`neuronx-cc-rn`
-     - ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
-
-   * - Neuron Kernel Interface (NKI)
-     - * :ref:`nki_rn`
-     - ``Inf2``, ``Trn1``/ ``Trn1n``
-
-   * - Neuron Tools
-     - * :ref:`neuron-tools-rn`
-     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
-
-   * - Neuron Runtime
-     - * :ref:`neuron-runtime-rn`
-     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
-
-   * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * :ref:`transformers-neuronx-rn` 
-     - ``Inf2``, ``Trn1`` / ``Trn1n``
-
-   * - Neuron Deep Learning AMIs (DLAMIs)
-     - * :ref:`neuron-dlami-overview`
-     - ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
-
-   * - Neuron Deep Learning Containers (DLCs)
-     - * :ref:`neuron-dlc-release-notes`
-     - ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
-
-   * - Release Announcements
-     - * :ref:`announce-no-longer-support-beta-pytorch-neuroncore-placement-apis`
-       * :ref:`announce-eos-block-dimension-nki`
-       * :ref:`announce-eos-pytorch25`
-       * :ref:`announce-eos-tensorflow-tutorial`
-       * :ref:`announce-eos-tnx`
-       * :ref:`announce-eos-longer-support-xla-bf16-vars`
-       * :ref:`announce-eos-block-dimension-nki`
-       * :ref:`announce-no-longer-support-llama-32-meta-checkpoint`
-       * :ref:`announce-no-longer-support-nki-jit`
-       * See more at :ref:`announcements-main`.
-     - ``Inf1``, ``Inf2``, ``Trn1``/ ``Trn1n``
-
-For detailed release artifacts, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
-
-
-Previous Releases
+Older releases
 -----------------
 
-* :ref:`prev-rn`
-* :ref:`pre-release-content`
-* :ref:`prev-n1-rn`
+Release notes are archived when the major version of a release is incremented.
+
+* :doc:`Previous Neuron SDK 2.X release notes <prev/rn>`
+* :doc:`Archived Neuron SDK 1.X release notes <neuron1/prev/rn>`
+

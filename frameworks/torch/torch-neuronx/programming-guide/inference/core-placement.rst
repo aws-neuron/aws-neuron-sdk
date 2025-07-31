@@ -182,7 +182,7 @@ specified by the ``NEURON_RT_NUM_CORES`` configuration.
 
 .. _torch_neuronx_placement_explicit:
 
-Explicit Core Placement [Beta]
+Explicit Core Placement
 -------------------------------------
 
 The ``torch_neuronx`` framework allows can be found in the

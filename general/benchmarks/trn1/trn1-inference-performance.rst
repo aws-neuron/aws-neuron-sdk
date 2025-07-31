@@ -7,7 +7,7 @@ Trn1/Trn1n Inference Performance
    :local:
 
 
-*Last update:  May 20th, 2025*
+*Last update:  July 31st, 2025*
 
 
 .. _NLP:

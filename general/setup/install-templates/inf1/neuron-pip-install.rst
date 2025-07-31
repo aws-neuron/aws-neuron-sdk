@@ -12,8 +12,8 @@ environment on Ubuntu or Amazon Linux:
 .. code:: bash
 
    # Amazon Linux
-   sudo yum update
-   sudo yum install -y python3 gcc-c++
+   sudo dnf update
+   sudo dnf install -y python3 gcc-c++
 
 Setup a new Python virtual environment:
 

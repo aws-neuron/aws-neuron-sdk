@@ -1,6 +1,6 @@
 .. _pre-release-content:
 
-Previous Releases Artifacts (Neuron 2.x)
+Previous release artifacts (Neuron 2.x)
 =======================================
 
 .. contents:: Table of contents

@@ -42,11 +42,11 @@ Install the system requirements for TorchServe.
 
 .. tab-set::
 
-   .. tab-item:: Amazon Linux 2 DLAMI Base
+   .. tab-item:: Amazon Linux 2023 DLAMI Base
 
       .. code-block:: bash
 
-        sudo yum -y install jq java-11-amazon-corretto-headless
+        sudo dnf -y install jq java-11-amazon-corretto-headless
         sudo alternatives --config java
         sudo alternatives --config javac
 

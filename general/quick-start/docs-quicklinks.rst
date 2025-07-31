@@ -12,7 +12,7 @@ Neuron Quick Links
                 * :ref:`amazon-q-dev`
                 * :ref:`model_samples_tutorials`
                 * :ref:`benchmark`
-                * :ref:`neuron-whatsnew`
+                * :ref:`neuron_release_notes`
                 * :ref:`announcements-main`
 
         .. grid-item-card:: ML frameworks
@@ -34,8 +34,8 @@ Neuron Quick Links
                 
                 * :ref:`neuron_runtime`
                 * :ref:`neuron_cc`
-                * :ref:`Neuron Kernel Interface (NKI) (beta)<neuron-nki>`
-                * :ref:`Neuron Custom C++ Operators (beta)<neuron_c++customops>`
+                * :ref:`Neuron Kernel Interface (NKI) (beta) <neuron-nki>`
+                * :ref:`Neuron Custom C++ Operators (beta) <neuron_c++customops>`
                 * :ref:`monitoring_tools`
                 * :ref:`profiling-tools`
                 * :ref:`other-tools`
@@ -48,6 +48,7 @@ Neuron Quick Links
 
                 * :ref:`neuron-architecture-index`
                 * :ref:`neuron-features-index`
+                * :ref:`neuron-deep-dives-home`
                 * :ref:`neuron-appnotes-index`
                 * :ref:`neuron_faq`
                 * :ref:`general-troubleshooting`

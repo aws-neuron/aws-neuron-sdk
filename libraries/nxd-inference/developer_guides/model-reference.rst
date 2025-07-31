@@ -81,7 +81,7 @@ NxD Inference supports Llama 3.2 multimodal models. You can use HuggingFace
 checkpoints or the original Meta checkpoints. To use the Meta checkpoint,
 you must first convert the checkpoint to Neuron format. For more information
 about how to run Llama3.2 multimodal inference, and for details about 
-how to convert the original Meta checkpoints to run on NxD Inference, see :ref:`nxdi-llama3.2-multimodal-tutorial`.
+how to convert the original Meta checkpoints to run on NxD Inference, see :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`.
 
 .. _neuron-classes-1:
 
@@ -170,3 +170,29 @@ Compatible Checkpoint Examples
 - https://huggingface.co/Qwen/Qwen2.5-3B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct
+
+Qwen3
+~~~~
+
+NxD Inference supports models based on the Qwen3 model architecture.
+
+.. _neuron-classes-5:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: Qwen3NeuronConfig
+- Inference config class: Qwen3InferenceConfig
+- Causal LM model class: NeuronQwen3ForCausalLM
+
+.. _compatible-checkpoint-examples-5:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/Qwen/Qwen3-0.6B
+- https://huggingface.co/Qwen/Qwen3-1.7B
+- https://huggingface.co/Qwen/Qwen3-4B
+- https://huggingface.co/Qwen/Qwen3-8B
+- https://huggingface.co/Qwen/Qwen3-14B
+- https://huggingface.co/Qwen/Qwen3-32B

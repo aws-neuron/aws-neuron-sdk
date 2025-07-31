@@ -52,17 +52,8 @@ After you are connected, activate the Python virtual environment that includes t
 
    source ~/aws_neuronx_venv_pytorch_2_7_nxd_inference/bin/activate
 
-Install the Neuron vLLM fork into the virtual environment(s).
 
-::
-
-   git clone -b neuron-2.24-vllm-v0.7.2 https://github.com/aws-neuron/upstreaming-to-vllm.git
-   cd upstreaming-to-vllm
-   pip install -r requirements-neuron.txt
-   VLLM_TARGET_DEVICE="neuron" pip install -e .
-   cd ..
-
-For more information see :ref:`nxdi-vllm-user-guide`.
+Install the latest release branch of vLLM from the AWS Neuron fork following the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`. 
 
 
 Run ``pip list`` to verify that the Neuron SDK is installed.

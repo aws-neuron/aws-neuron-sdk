@@ -10,25 +10,29 @@
           functionality.{% endtrans %}</p>
       </div>
     </noscript>
-    {% block search_form %}
-        {% include "search-field-google.html" %}
-    {% endblock %}
 
     <h2>{{ _('Search Results') }}</h2> 
+
     <script async src="https://cse.google.com/cse.js?cx=657ffaecc36684ee1">
     </script>
     <div class="gcse-searchresults-only"></div> 
-
+    <div id="search-results"></div>
   </div>
-  <script>
-    // Activate the search field on page load
-    let searchInput = document.querySelector("form.bd-search input");
-    if (searchInput) {
-      searchInput.focus();
-      searchInput.select();
-      console.log("[PST]: Set focus on search field.");
-    }
-  </script>
+<script>
+
+// Activate the search field on page load
+let searchForm2 = document.getElementById('search-form');
+let searchFormInput2 = searchForm2.querySelector('input[type="search"]');
+
+if (searchFormInput2) {
+  searchFormInput2.focus();
+  searchFormInput2.select();
+  console.log("[PST]: Set focus on search field.");
+  searchFormInput2.value = localStorage.getItem('lastSearchQuery');
+} 
+
+</script>
+
 {% endblock docs_body %}
 {# Below sections just re-create the behavior of Sphinx default search #}
 {# Page metadata #}
@@ -38,7 +42,4 @@
 {# Manually include the search JS that Sphinx includes #}
 {% block scripts -%}
   {{ super() }}
-  <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
-  <script src="{{ pathto('_static/language_data.js', 1) }}"></script>
-  <script src="{{ pathto('searchindex.js', 1) }}"></script>
 {%- endblock scripts %}

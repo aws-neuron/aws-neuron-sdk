@@ -1,30 +1,21 @@
 .. _torch_neuronx_core_placement_api:
 
-PyTorch NeuronX NeuronCore Placement APIs **[Beta]**
-============================================================================
-
-.. warning::
-
-    The following functionality is beta and **will not be supported** in
-    future releases of the NeuronSDK. This module serves only as a preview for
-    future functionality. In future releases, equivalent functionality may
-    be moved directly to the :code:`torch_neuronx` module and will no longer be
-    available in the :code:`torch_neuronx.experimental` module.
-
+PyTorch NeuronX NeuronCore Placement APIs
+=========================================
 
 Functions which enable placement of :class:`torch.jit.ScriptModule` to specific
 NeuronCores. Two sets of functions are provided which can be used
 interchangeably but have different performance characteristics and advantages:
 
-- The :func:`~torch_neuronx.experimental.multicore_context` &
-  :func:`~torch_neuronx.experimental.neuron_cores_context` functions are context
+- The :func:`~torch_neuronx.multicore_context` &
+  :func:`~torch_neuronx.neuron_cores_context` functions are context
   managers that allow a model to be placed on a given NeuronCore *only* at
   :func:`torch.jit.load` time. These functions are the most efficient way of
   loading a model since the model is loaded directly to a NeuronCore. The
   alternative functions described below require that a model is unloaded from
   one core and then reloaded to another.
-- The :func:`~torch_neuronx.experimental.set_multicore` &
-  :func:`~torch_neuronx.experimental.set_neuron_cores` functions allow a model
+- The :func:`~torch_neuronx.set_multicore` &
+  :func:`~torch_neuronx.set_neuron_cores` functions allow a model
   that has already been loaded to a NeuronCore to be moved to a different
   NeuronCore. This functionality is less efficient than directly loading a model
   to a NeuronCore within a context manager but allows device placement to be
@@ -39,7 +30,7 @@ interchangeably but have different performance characteristics and advantages:
     :class:`torch.nn.Module` onto a NeuronCore prior to compilation will do
     nothing.
 
-.. py:function:: torch_neuronx.experimental.set_neuron_cores(trace: torch.jit.ScriptModule, start_nc: int=-1, nc_count: int=-1)
+.. py:function:: torch_neuronx.set_neuron_cores(trace: torch.jit.ScriptModule, start_nc: int=-1, nc_count: int=-1)
 
     Set the NeuronCore start/count for all Neuron subgraphs in a torch Module.
 
@@ -69,7 +60,7 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         model = torch.jit.load('example_neuron_model.pt')
-        torch_neuronx.experimental.set_neuron_cores(model, start_nc=0, nc_count=1)
+        torch_neuronx.set_neuron_cores(model, start_nc=0, nc_count=1)
 
         model(example) # Executes on NeuronCore 0
         model(example) # Executes on NeuronCore 0
@@ -82,7 +73,7 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         model = torch.jit.load('example_neuron_model.pt')
-        torch_neuronx.experimental.set_neuron_cores(model, start_nc=2, nc_count=2)
+        torch_neuronx.set_neuron_cores(model, start_nc=2, nc_count=2)
 
         model(example) # Executes on NeuronCore 2
         model(example) # Executes on NeuronCore 3
@@ -95,10 +86,10 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         model1 = torch.jit.load('example_neuron_model.pt')
-        torch_neuronx.experimental.set_neuron_cores(model1, start_nc=2)
+        torch_neuronx.set_neuron_cores(model1, start_nc=2)
 
         model2 = torch.jit.load('example_neuron_model.pt')
-        torch_neuronx.experimental.set_neuron_cores(model2, start_nc=0)
+        torch_neuronx.set_neuron_cores(model2, start_nc=0)
 
         model1(example) # Executes on NeuronCore 2
         model1(example) # Executes on NeuronCore 2
@@ -106,7 +97,7 @@ interchangeably but have different performance characteristics and advantages:
         model2(example) # Executes on NeuronCore 0
 
 
-.. py:function:: torch_neuronx.experimental.set_multicore(trace: torch.jit.ScriptModule)
+.. py:function:: torch_neuronx.set_multicore(trace: torch.jit.ScriptModule)
 
     Loads all Neuron subgraphs in a torch Module to all visible NeuronCores.
 
@@ -136,14 +127,14 @@ interchangeably but have different performance characteristics and advantages:
     .. code-block:: python
 
         model = torch.jit.load('example_neuron_model.pt')
-        torch_neuronx.experimental.set_multicore(model)
+        torch_neuronx.set_multicore(model)
 
         model(example) # Executes on NeuronCore 0
         model(example) # Executes on NeuronCore 1
         model(example) # Executes on NeuronCore 2
 
 
-.. py:function:: torch_neuronx.experimental.neuron_cores_context(start_nc: int=-1, nc_count: int=-1)
+.. py:function:: torch_neuronx.neuron_cores_context(start_nc: int=-1, nc_count: int=-1)
 
     A context which sets the NeuronCore start/count for Neuron models loaded
     with :func:`torch.jit.load`.
@@ -177,7 +168,7 @@ interchangeably but have different performance characteristics and advantages:
 
     .. code-block:: python
 
-        with torch_neuronx.experimental.neuron_cores_context(start_nc=0, nc_count=1):
+        with torch_neuronx.neuron_cores_context(start_nc=0, nc_count=1):
             model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 0
@@ -190,7 +181,7 @@ interchangeably but have different performance characteristics and advantages:
 
     .. code-block:: python
 
-        with torch_neuronx.experimental.neuron_cores_context(start_nc=2, nc_count=2):
+        with torch_neuronx.neuron_cores_context(start_nc=2, nc_count=2):
             model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 2
@@ -203,10 +194,10 @@ interchangeably but have different performance characteristics and advantages:
 
     .. code-block:: python
 
-        with torch_neuronx.experimental.neuron_cores_context(start_nc=2):
+        with torch_neuronx.neuron_cores_context(start_nc=2):
             model1 = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
-        with torch_neuronx.experimental.neuron_cores_context(start_nc=0):
+        with torch_neuronx.neuron_cores_context(start_nc=0):
             model2 = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model1(example) # Executes on NeuronCore 2
@@ -215,7 +206,7 @@ interchangeably but have different performance characteristics and advantages:
         model2(example) # Executes on NeuronCore 0
 
 
-.. py:function:: torch_neuronx.experimental.multicore_context()
+.. py:function:: torch_neuronx.multicore_context()
 
     A context manager which loads models to all visible NeuronCores for Neuron
     models loaded with :func:`torch.jit.load`.
@@ -246,7 +237,7 @@ interchangeably but have different performance characteristics and advantages:
 
     .. code-block:: python
 
-        with torch_neuronx.experimental.multicore_context():
+        with torch_neuronx.multicore_context():
             model = torch.jit.load('example_neuron_model.pt')  # Load must occur within the context
 
         model(example) # Executes on NeuronCore 0

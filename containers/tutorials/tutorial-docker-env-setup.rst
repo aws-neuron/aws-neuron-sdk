@@ -7,7 +7,7 @@ Introduction
 ------------
 
 A Neuron application can be deployed using docker containers. This
-tutorial describes how to configure docker to expose Inferentia/Trainium devices
+tutorial describes how to configure docker on Amazon Linux 2023 to expose Inferentia/Trainium devices
 to containers.
 
 
@@ -34,16 +34,16 @@ to containers.
                sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
                # Update OS packages
-               sudo yum update -y
+               sudo dnf update -y
 
 
                # Install OS headers
-               sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+               sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 
                # Remove preinstalled packages and Install Neuron Driver and Runtime
-               sudo yum remove aws-neuron-dkms -y
-               sudo yum remove aws-neuronx-dkms -y
-               sudo yum install aws-neuronx-dkms-2.*  -y
+               sudo dnf remove aws-neuron-dkms -y
+               sudo dnf remove aws-neuronx-dkms -y
+               sudo dnf install aws-neuronx-dkms-2.*  -y
 
                # Install EFA Driver(only required for multi-instance training)
                curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
@@ -62,7 +62,7 @@ to containers.
 
             .. code:: bash
 
-               sudo yum install -y docker.io
+               sudo dnf install -y docker.io
                sudo usermod -aG docker $USER
 
             Logout and log back in to refresh membership.
@@ -149,7 +149,7 @@ to containers.
 			sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
 			# Update OS packages
-			sudo yum update -y
+			sudo dnf update -y
 
 			################################################################################################################
 			# To install or update to Neuron versions 1.19.1 and newer from previous releases:
@@ -157,10 +157,10 @@ to containers.
 			################################################################################################################
 
 			# Install OS headers
-			sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+			sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 
 			# Install Neuron Driver
-			sudo yum install aws-neuron-dkms -y
+			sudo dnf install aws-neuron-dkms -y
 
 			####################################################################################
 			# Warning: If Linux kernel is updated as a result of OS package update
@@ -174,7 +174,7 @@ to containers.
 
          .. code:: bash
 
-            sudo yum install -y docker.io
+            sudo dnf install -y docker.io
             sudo usermod -aG docker $USER
 
          Logout and log back in to refresh membership.

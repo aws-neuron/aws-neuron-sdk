@@ -9,7 +9,6 @@ This section will go over tutorials to help users get started with NxD Training 
     :maxdepth: 1
     :hidden:
 
-    Megatron GPT Pretraining <megatron_gpt_pretraining>
     HuggingFace Llama3.1/Llama3-8B Pretraining <hf_llama3_8B_pretraining>
     HuggingFace Llama3.1/LLama3-8B Supervised Fine-tuning <hf_llama3_8B_SFT>
     HuggingFace Llama3.1/Llama3-8B Efficient Supervised Fine-tuning with LoRA (Beta) <hf_llama3_8B_SFT_LORA>

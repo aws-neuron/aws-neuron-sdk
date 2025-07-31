@@ -23,7 +23,7 @@ enabled=1' > /etc/yum.repos.d/neuron.repo
 
 RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
-RUN yum install -y tensorflow-model-server-neuron
+RUN dnf install -y tensorflow-model-server-neuron
 RUN mkdir -p /root/models/
 #copy your model
 COPY tf_model/  /root/models/

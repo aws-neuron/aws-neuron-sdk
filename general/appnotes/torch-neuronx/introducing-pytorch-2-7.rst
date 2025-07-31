@@ -83,6 +83,11 @@ There are no code changes required in the inference scripts.
 Troubleshooting and Known Issues
 --------------------------------
 
+Using the latest torch-xla v2.7 may result in increase in host memory usage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using the latest torch-xla v2.7 may result in increase in host memory usage compared torch-xla v2.6. In one example, LLama2 pretraining with ZeRO1 and sequence length 16k could see an increase of 1.6% in host memory usage.
+
 TypeError: AdamW.__init__() got an unexpected keyword argument 'decoupled_weight_decay'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -169,7 +174,7 @@ torch-xla version 2.5+ now requires ``libcrypt.so.1`` shared library. Currently,
 
 .. code::
 
-   sudo yum install libxcrypt-compat
+   sudo dnf install libxcrypt-compat
 
 
 ``FileNotFoundError: [Errno 2] No such file or directory: 'libneuronpjrt-path'`` Failure

@@ -7,6 +7,23 @@ Neuron System Tools
    :local:
    :depth: 2
 
+Neuron Tools  [2.25.100.0]
+-------------------------
+Date: 7/31/2025
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+* Add NeuronCore IDs associated with each Neuron device as well as CPU and NUMA node affinity in both the text and JSON outputs.
+  See :ref:`neuron-ls-ug` for an example.
+* Added a summary metric to device profiles for ``total_active_time`` (the amount of time the device was not idle during execution).
+* System profiles now show the sync point events that are used to approximate CPU and Neuron device timestamp alignment.
+
+Bug fixes
+^^^^^^^^^
+* Fixed issue in Neuron Profiler summary metrics where ``dma_active_time`` was larger than expected.
+* Fixed type inconsistency for certain event types and attributes in the system profile data that could result in a crash.
+* Removed metrics for defunct processes from Neuron Monitor's Prometheus output to more accurately reflect the current utilization of NeuronCores.
+
 
 Neuron Tools  [2.24.54.0]
 -------------------------

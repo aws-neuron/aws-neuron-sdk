@@ -83,7 +83,7 @@ Setting up **Grafana**
 
 For a more detailed guide on how to install **Grafana** visit their official guide at https://grafana.com/grafana/download.
 
-Add the Grafana repo to yum:
+Add the Grafana repo to dnf:
 
 .. code:: bash
 
@@ -103,7 +103,7 @@ Install and start **Grafana**:
 
 .. code:: bash
 
-    sudo yum install -y grafana
+    sudo dnf install -y grafana
     sudo /bin/systemctl start grafana-server.service
 
 By default, **Grafana** will run a HTTP server on port 3000. If you need to change that, update its config and restart the service:

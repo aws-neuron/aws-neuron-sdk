@@ -39,7 +39,7 @@ NeuronX Distributed Inference
 - Added Migration Guide from NxD examples to NxD Inference. See :ref:`nxd-examples-migration-guide`
 - Added Migration Guide from Transformers NeuronX to NeuronX Distributed Inference. See :ref:`nxdi_migrate_from_tnx`
 - Added vLLM User Guide for NxD Inference. See :ref:`nxdi-vllm-user-guide`
-- Added tutorial for deploying Llama3.2 Multimodal Models. See :ref:`nxdi-llama3.2-multimodal-tutorial`
+- Added tutorial for deploying Llama3.2 Multimodal Models. See :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`
 
 NeuronX Distributed Training
 - Updated :ref:`api_guide_nxd_training`, :ref:`llama2_tp_pp_tutorial`, :ref:`llama3_tp_pp_tutorial`, :ref:`nxdt_config_overview`, and :ref:`checkpoint_conversion` with support for fused Q,K,V
@@ -314,7 +314,6 @@ Known Issues and Limitations
 Following tutorials are currently not working. These tutorials will be updated once there is a fix.
 
 - `Zero1-gpt2-pretraining-tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2.html#zero1-gpt2-pretraining-tutorial>`_
-- `Finetune t5 tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/finetune_t5.html#torch-hf-t5-finetune>`_
 
 Neuron 2.14.0
 -------------

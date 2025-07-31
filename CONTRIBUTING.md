@@ -19,7 +19,6 @@ reported the issue. Please try to include as much information as you can. Detail
 * Any modifications you've made relevant to the bug
 * Anything unusual about your environment or deployment
 
-
 ## Contributing Workflow (via Pull Requests)
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
 
@@ -29,28 +28,44 @@ Contributions via pull requests are much appreciated. Before sending us a pull r
 
 To send us a pull request, please:
 
-1. Fork the repository (See: [fork guide](https://help.github.com/articles/fork-a-repo/))
 2. Clone the repository locally:
+
     ```bash
-    git clone git@github.com:YOUR-USERNAME/aws-neuron-sdk.git
+    git clone git@github.com:YOUR-USERNAME/private-aws-neuron-sdk-staging.git
     ```
+
 3. Install the build dependencies. This requires a Python 3 installation:
+
     ```bash
-    cd aws-neuron-sdk/
+    cd .. # The root folder where you have your cloned Git repos
+    python3 -m venv venv && . venv/bin/activate
+    pip install -U pip
+    cd private-aws-neuron-sdk-staging
     pip install -r requirements.txt
     ```
+
 4. Build the documentation into HTML. This command will allow you to view the
    rendered documentation by opening the generated `_build/html/index.html`.
+
+   Run:
+
    ```bash
-   make html
+   sphinx-build -b html . _build/html
    ```
+
+   If this doesn't work, try this command:
+
+   ```bash
+   sphinx-build -C -b html . _build/html
+   ```
+
 2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
-3. Rebuild the documentation (`make html`). Always ensure that this builds 
-   correctly and that your contribution is rendered as expected.
-4. Commit to your fork using clear commit messages.
-5. Send us a pull request (See: [pull request guide](https://help.github.com/articles/creating-a-pull-request/)), answering any default questions in the pull request interface.
+3. Rebuild the documentation (`sphinx-build -b html . _build/html`). Always ensure that the docs build without errors and that your changes look correct before pushing your changes to remote.
+4. Commit your changes to your branch with a clear commit messages. 
+5. Push your changes to remote (`git push origin`) and create a PR from your branch into `master`. (See: [pull request guide](https://help.github.com/articles/creating-a-pull-request/)). Answer any default questions in the pull request interface.
 6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
+Updated process documentation can be found here: [Neuron Sphinx/Readthedocs FAQ](https://quip-amazon.com/ebN0AYH7lAKW/Neuron-SphinxReadthedocs-FAQ).
 
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any 'help wanted' issues is a great place to start.

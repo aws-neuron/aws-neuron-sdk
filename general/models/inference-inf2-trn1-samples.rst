@@ -79,15 +79,15 @@ Decoders
    * - meta-llama/Llama-3.3-70B
      - neuronx-distributed-inference
      - * :ref:`nxdi-trn2-llama3.3-70b-tutorial`
-       * :ref:`nxdi-trn2-llama3.3-70b-dp-tutorial`
+       * :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial.ipynb`
 
    * - meta-llama/Llama-3.2-11B-Vision-Instruct
      - neuronx-distributed-inference
-     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances <nxdi-llama3.2-multimodal-tutorial>`
+     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb>`
    
    * - meta-llama/Llama-3.2-90B-Vision-Instruct
      - neuronx-distributed-inference
-     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances <nxdi-llama3.2-multimodal-tutorial>`
+     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb>`
    
    * - meta-llama/Llama-3.1-8b
      - transformers-neuronx

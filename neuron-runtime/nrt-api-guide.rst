@@ -1,25 +1,22 @@
 .. _nrt-api-guide:
 
-Developer's Guide - NeuronX Runtime
-==================================
+Developer Guide - NeuronX Runtime
+=================================
 
-.. contents:: Table of contents
-    :local:
-    :depth: 3
+This guide is intended to support a deeper understanding of the Neuron Runtime and how ML applications are built using the Runtime APIs directly, and focuses on the information you need to know when building custom frameworks that call ``libnrt`` APIs directly from C/C++ apps. It is applicable to developers building their own ML frameworks; if you are using a popular existing framework such as PyTorch, JAX, or TensorFlow, the concepts and techniques discussed in this guide do not apply to your work.
 
-Introduction
-------------
-This guide is intended to support a deeper understanding of the Neuron Runtime and how ML applications are built using the Runtime APIs directly.
-Most customers will not need this level of detail as the interactions with the Neuron Runtime are already taken care by popular ML Frameworks with built-in Neuron support
-such as torch-neuron and tensorflow-neuron.
-This guide is focused on the information you need to know when building custom frameworks that will call libnrt APIs directly from C/C++ apps.
+.. toctree:: In this topic
+   :local:
+   :maxdepth: 1
 
 .. note::
     The next few paragraphs provide a brief introduction to the Neuron hardware and the Neuron Runtime architecture. Customers who'd rather skip this and jump straight to building their first ML
     application which runs without the aid of an ML framework, should go to :ref:`first_app`.
 
-The Neuron Runtime Library (libnrt) is the intermediate layer between Application + Framework and Neuron Driver + Neuron Device.
-It provides a C API for initializing the Neuron hardware, staging models and input data, executing inferences and training iterations on the staged models, and retrieving output data. The vast majority of ML applications running on Neuron will follow one of the following 3 architectural templates:
+About the Neuron Runtime Library
+--------------------------------
+
+The Neuron Runtime Library (``libnrt``) is the intermediate layer between Application + Framework and Neuron Driver + Neuron Device. It provides a C API for initializing the Neuron hardware, staging models and input data, executing inferences and training iterations on the staged models, and retrieving output data. The vast majority of ML applications running on Neuron will follow one of the following 3 architectural templates:
 
 
 .. figure:: ../images/neuron-rt-diagram.png
@@ -38,18 +35,18 @@ It provides a C API for initializing the Neuron hardware, staging models and inp
 
 .. _reqs:
 
-Required Software
------------------
+Requirements
+------------
 
 A more comprehensive guide to installing Neuron software can be found in the :ref:`torch_quick_start` guide.
 
-The Neuron Runtime requires the Neuron Driver, which is provided by the ``aws-neuron-dkms`` package:
+The Neuron Runtime requires the Neuron Driver, which is provided by the ``aws-neuron-dkms`` package. Run the commands below to install the driver for the indicated operating system:
 
-AL2:
+AL2023:
 
 .. code-block:: bash
 
-    sudo yum install aws-neuronx-dkms
+    sudo dnf install aws-neuronx-dkms
 
 Ubuntu:
 
@@ -59,14 +56,14 @@ Ubuntu:
 
 
 
-The Runtime Library consists of the libnrt.so and header files.  These artifacts are version controlled and installed via the ``aws-neuronx-runtime-lib`` package. After installing the package, the binary (``libnrt.so``) is found in
-``/opt/aws/neuron/lib`` and the needed header files are found in ``/opt/aws/neuron/include``:
+The Runtime Library consists of the ``libnrt.so`` and header files.  These artifacts are version-controlled and installed via the ``aws-neuronx-runtime-lib`` package. After installing the package, you will find the compied library file (``libnrt.so``) in
+``/opt/aws/neuron/lib`` and the necessary header files to use the APIs it provides in ``/opt/aws/neuron/include``. Run the commands below to install the runtime library and headers for the indicated operating system:
 
-AL2:
+AL2023:
 
 .. code-block:: bash
 
-    sudo yum install aws-neuronx-runtime-lib
+    sudo dnf install aws-neuronx-runtime-lib
 
 Ubuntu:
 
@@ -74,13 +71,13 @@ Ubuntu:
 
     sudo apt-get install aws-neuronx-runtime-lib
 
-For applications that use distributed training or distributed inferences, the Neuron Collective Communication Library is required:
+For applications that use distributed training or distributed inferences, the Neuron Collective Communication Library is required. Run the commands below to the library for the indicated operating system:
 
-AL2:
+AL2023:
 
 .. code-block:: bash
 
-    sudo yum install aws-neuronx-collectives
+    sudo dnf install aws-neuronx-collectives
 
 Ubuntu:
 
@@ -89,9 +86,9 @@ Ubuntu:
     sudo apt-get install aws-neuronx-collectives
 
 
-In case of multi-instance training, the EFA driver and the Libfabric library - provided by the EFA installer - need to be installed as well:
+In case of multi-instance training, you must also install the EFA driver and the Libfabric library (provided by the EFA installer). Run the command below to install it:
 
-AL2 & Ubuntu:
+AL2023 & Ubuntu:
 
 .. code-block:: bash
 
@@ -108,10 +105,10 @@ AL2 & Ubuntu:
 
 .. _insttypes:
 
-Brief Introduction to Neuron Hardware
--------------------------------------
+Introduction to Neuron Hardware
+-------------------------------
 
-Neuron Machine Learning Accelerators (or Neuron Devices) are custom accelerators designed to efficiently execute Machine Learning workloads such as executing inference on a given model or running a distributed training job. Depending on the type of workload and its size, customers can opt for the following Neuron-equipped EC2 instances:
+Neuron Machine Learning Accelerators (or Neuron Devices) are custom accelerators designed to efficiently run  Machine Learning workloads such as inference using a given model or a distributed training job. Depending on the type of workload and its size, customers can opt for the following Neuron-equipped EC2 instances:
 
 .. list-table::
     :widths: 40 40 40 40 40
@@ -168,13 +165,16 @@ Neuron Machine Learning Accelerators (or Neuron Devices) are custom accelerators
 Neuron Device
 ^^^^^^^^^^^^^
 
-Each Neuron Device consists of multiple execution units - called NeuronCores, a high throughput device memory, PCIe interfaces to the host CPU and to the other Neuron Devices and other components, depending on the Neuron Device version.
+Each Neuron Device consists of multiple execution units called "NeuronCores". They use high-bandwidth device memory and PCIe interfaces to coordinate with the host CPU and other Neuron Devices and components (depending on the Neuron Device version).
 
-To get the number of NeuronCores per Neuron Device, the amount of Neuron Device memory and the way devices are directly connected, use the ``neuron-ls`` tool:
+To get the number of NeuronCores per Neuron Device, the amount of Neuron Device memory, and the way devices are directly connected, use the ``neuron-ls`` tool by running the following command:
+
+``neuron-ls --topology``
+
+If successful, it will return output like this:
 
 .. code-block:: bash
 
-    neuron-ls --topology
     instance-type: trn1.32xlarge
     instance-id: i-0633517e496256bf8
     +--------+--------+--------+---------------+---------+
@@ -227,11 +227,11 @@ NeuronCore
 ^^^^^^^^^^
 
 The NeuronCore is the primary execution unit within the accelerator. Each NeuronCore contains several execution engines
-(for different types of compute operations such as tensor-based, vector and scalar), DMA engines, and a local cache.
+(for different types of compute operations such as tensor-based, vector, and scalar), Direct Memory Access (DMA) engines, and a local cache.
+
 A NeuronCore can operate independently or together with other NeuronCores, depending on the nature of the workload and the way
 a model is compiled and loaded to the NeuronCores in the accelerator. Each execution engine can access the cache and DRAM attached to the accelerator device.
-The primary form of data movement between the host CPU and the accelerator device, as well as between the device DRAM and NeuronCores, is Direct Memory Access (DMA).
-The use of DMA enables more efficient data movement.
+Data is transferred between the host CPU and the accelerator device (as well as between the device DRAM and NeuronCores) using DMA, which enables more efficient data movement.
 
 The Neuron Runtime Architecture
 -------------------------------
@@ -263,9 +263,8 @@ A NEFF (*N*euron *E*xecutable *F*ile *F*ormat) is a single file container for al
 A NEFF is the output of the Neuron Compiler (neuron-cc). It contains Neuron machine instructions, pseudo instructions (compiler-generated instructions
 which are parsed and replaced with Neuron instructions by the Neuron Runtime when the model loads), tensor information, model parameters and other components
 that support the model's execution on one or more NeuronCores.
-Operators that are not supported by Neuron can be compiled into CPU-executable binary and included into the NEFF as well.
 
-The contents of a NEFF can be shown by using ``neuron-packager`` tool (which will be released soon).
+Operators that are not supported by Neuron can be compiled into CPU-executable binary and included into the NEFF as well.
 
 Usually there is only one subgraph (which is executed on a single NeuronCore) in a NEFF:
 
@@ -277,12 +276,11 @@ Usually there is only one subgraph (which is executed on a single NeuronCore) in
                                             image:0    3259008      IN      NHWC    [1 3 552 984]
                                        net_output:0    1323972     OUT      NHWC    [1 78 69 123]                false
 
-In this example, there is a single subgraph, one input and one output:
+In this example, there is a single subgraph, one input, and one output:
 
 |nrt_neff_single|
 
-Some NEFFs can have multiple subgraphs (which will be deployed by the runtime on separate NeuronCores) and multiple CPU operators, as exemplified below:
-
+Some NEFFs can have multiple subgraphs (which are deployed by the runtime on separate NeuronCores) and multiple CPU operators, as demonstrated below:
 
 .. code-block:: bash
 
@@ -308,7 +306,7 @@ Some NEFFs can have multiple subgraphs (which will be deployed by the runtime on
                                                                          nn/relu4:0       2      IN      NHWC    [1 1 1 1]
                                                                         nn/output:0       2     OUT      NHWC    [1 1 1 1]                false
 
-The output above can be summarized by the graph below:
+The output above is summarized by the graph below:
 
 |nrt_neff|
 
@@ -354,38 +352,39 @@ Tools such as ``neuron-top`` and ``neuron-monitor`` can be used to determine the
 
 .. _first_app:
 
-Building the first Neuron application
+
+Building your first Neuron application
 -------------------------------------
 
-The simple application presented here will load a NEFF file, use the provided binary files' contents as input tensors
-(if a file wasn't provided for an input tensor, that input tensor will be zero-filled), and save the output tensors as
-binary files.
-
+The simple application presented here loads a NEFF file using the provided binary files' contents as input tensors and saving the output tensors as
+binary files. If a file isn't provided for an input tensor, that input tensor will be zero-filled.
 
 Prerequisites
 ^^^^^^^^^^^^^
 
-Building the application requires:
+Before you start, you must have the following available in your local environment:
 
-* a recent version of GCC
-* installing the ``aws-neuronx-runtime-lib`` package as described in :ref:`reqs`
+* A recent version of GCC C++ compiler
+* An installation of the ``aws-neuronx-runtime-lib`` package as described in :ref:`reqs`
 
 Running the built application requires:
 
-* a Neuron-equipped instance as shown in :ref:`insttypes`
-* installing the ``aws-neuronx-runtime-lib`` and the ``aws-neuronx-dkms`` package as described in :ref:`reqs`
-* a NEFF file
+* A Neuron-equipped EC2 compute instance as shown in :ref:`insttypes`
+* Installing the ``aws-neuronx-runtime-lib`` and the ``aws-neuronx-dkms`` package on the instance as described in :ref:`reqs`
+* A NEFF file
 
 
-Getting a NEFF file
-^^^^^^^^^^^^^^^^^^^
+Obtain a NEFF file
+^^^^^^^^^^^^^^^^^^
 
-When running any workload through a Neuron framework, the compiled NEFFs will be placed in ``/var/tmp/neuron-compile-cache``.
-Additionally, setting the ``NEURON_FRAMEWORK_DEBUG`` environment variable to ``1`` before running the workload will enable
+When you run a workload through a Neuron framework, the compiled NEFFs are placed in ``/var/tmp/neuron-compile-cache``.
+Additionally, setting the ``NEURON_FRAMEWORK_DEBUG`` environment variable to ``1`` before running the workload enables
 the compiled NEFFs to be written to the current directory.
 
-The Code
-^^^^^^^^
+Author your code
+^^^^^^^^^^^^^^^^
+
+For the purposes of this guide, use the code provided below. If you are developing your own application, review this code to understand how to use the Neuron Runtime in it.
 
 .. code-block:: c
 
@@ -729,9 +728,10 @@ Running the example:
     ./run_neff my.neff [input_1] [input_1.bin] [input_2] [input_2.bin] ...
 
 
-Code Breakdown
-^^^^^^^^^^^^^^
+Review of the example code
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+This section breaks down the code example above to better illustrate the structure, flow, and calls in it.
 
 Initialization and cleanup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -747,11 +747,10 @@ Initialization and cleanup
 The Neuron Runtime is initialized by calling ``nrt_init`` and all applications should call ``nrt_close`` once they're done
 using it. For more details on these functions, go to the :ref:`api_init` section.
 
-
 Loading the NEFF
 ~~~~~~~~~~~~~~~~
 
-Once the contents of a NEFF file have been mapped to virtual memory using mmap ...
+Once the contents of a NEFF file have been mapped to virtual memory using ``mmap``,  load the NEFF with ``nrt_load``.
 
 .. code-block:: c
 
@@ -770,8 +769,7 @@ Once the contents of a NEFF file have been mapped to virtual memory using mmap .
     neff_data = mmap_file(argv[1], &neff_size);
 
 
-... the NEFF is loaded using ``nrt_load``. The runtime will decide the optimal placement for the model - it will
-choose the best NeuronCore on which to deploy the model:
+The runtime will decide the optimal placement for the model. Specifically, it chooses the optimal NeuronCore on which to deploy the model.
 
 .. code-block:: c
 
@@ -780,18 +778,17 @@ choose the best NeuronCore on which to deploy the model:
     // ...
 
 
-The call will return a valid model handle in ``nrt_model_t*`` which will subsequently be
-used for other calls to the Runtime API (such as ``nrt_execute``).
+The call to ``nrt_load`` returns a valid model handle of type ``nrt_model_t*``, which you can use for other calls to the Runtime API (such as ``nrt_execute``).
 
-For more details on the model API (including ``nrt_load``), go to the :ref:`api_model` section. 
+For more details on the model API (including ``nrt_load``), see :ref:`api_model`.
 
 
 Creating input/output tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The main container for tensors is the ``nrt_tensor_set_t*``. Tensors (``nrt_tensor_t*``) are not passed directly to the NEFF execution function, ``nrt_execute``,
-they have to be wrapped in a ``nrt_tensor_set_t*``. The ``allocate_tensors`` function will allocate the tensorset and the tensors for the requested usage type
-(``NRT_TENSOR_USAGE_INPUT`` or ``NRT_TENSOR_USAGE_OUTPUT``) and return the tensorset containing the allocated tensors in ``out_tset``.
+The main container for tensors is the ``nrt_tensor_set_t*``. Tensors (``nrt_tensor_t*``) are not passed directly to the NEFF execution function (``nrt_execute``); rather,
+they have to be wrapped as ``nrt_tensor_set_t*``. The ``allocate_tensors`` function allocates the tensorset and the tensors for the requested usage type
+(``NRT_TENSOR_USAGE_INPUT`` or ``NRT_TENSOR_USAGE_OUTPUT``) and returns the tensorset containing the allocated tensors in ``out_tset``.
 
 .. code-block:: c
 
@@ -822,8 +819,8 @@ they have to be wrapped in a ``nrt_tensor_set_t*``. The ``allocate_tensors`` fun
 Iterating through tensors in an nrt_tensor_set_t
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A helper function, ``iterate_tensors`` is used to iterate through the ``nrt_tensor_t`` in a tensorset and call the function
-``handler`` for each of them. If the handler function returns ``false`` iteration ends. ``iterate_tensors`` returns the first error
+A helper function, ``iterate_tensors``, is defined and implemented to iterate through the ``nrt_tensor_t`` values in a tensorset and call the function
+``handler`` for each of them. If the handler function returns ``false``, iteration ends. ``iterate_tensors`` returns the first error
 reported by the handler function.
 
 .. code-block:: c
@@ -877,7 +874,7 @@ For more details on the tensor API, check out the :ref:`api_tensor` and the :ref
 Executing the NEFF
 ~~~~~~~~~~~~~~~~~~
 
-The NEFF is executed using a call to ``nrt_execute``. If ``nrt_execute`` completes successfully, the output tensors are
+Execute the NEFF by calling ``nrt_execute``. If ``nrt_execute`` completes successfully, the output tensors are
 read and saved to files (one binary file per output tensor) using ``iterate_tensors``:
 
 .. code-block:: c
@@ -923,9 +920,8 @@ The LIBNRT API
 API Return Codes
 ^^^^^^^^^^^^^^^^
 
-All API calls will return an NRT_STATUS value representing the return status of the call. In case of an error, an error message
-will also be logged (based on the logging settings, more on that in the next section). The table below contains all the possible error codes.
-Please note that some error codes only apply to certain API calls.
+All API calls return an ``NRT_STATUS`` value representing the return status of the call. In case of an error, an error message
+is logged (based on the logging settings). The table below contains all the possible error codes. Note that some error codes only apply to certain API calls.
 
 .. list-table::
     :widths: 40 20 260
@@ -981,7 +977,7 @@ Please note that some error codes only apply to certain API calls.
       - Execution was completed with other errors, either logical (event double clear), or hardware (parity error)
     * - ``NRT_EXEC_NC_BUSY``
       - 1005
-      - The neuron core is locked (in use) by another model/thread
+      - The NeuronCore is locked (in use) by another model/thread
     * - ``NRT_OOB``
       - 1006
       - One or more indirect memcopies and/or embedding updates are out of bound due to input corruptions
@@ -1001,11 +997,11 @@ Initialization, configuration and teardown
 .. c:function:: NRT_STATUS nrt_init(nrt_framework_type_t framework, const char *fw_version, const char *fal_version)
 
     Initializes the Neuron Runtime’s internal state and the Neuron hardware’s state.
-    This should be called before any other nrt_* call is attempted - although a small set of functions
-    are exempt from this rule (for example ``nrt_get_total_nc_count`` and ``get_nrt_version``). Any call to the NRT
-    library API will return NRT_FAILURE if ``nrt_init`` has not been called beforehand and that API call requires it.
+    This should be called before any other nrt_* call is attempted, although a small set of functions
+    are exempt from this rule (such as ``nrt_get_total_nc_count`` and ``get_nrt_version``). Any call to the NRT
+    library API will return ``NRT_FAILURE`` if ``nrt_init`` has not been called beforehand for any API call requires it.
 
-    The runtime can be configured by setting the appropriate environment variable before this API call.
+    The runtime is configured by setting the appropriate environment variable before this API call.
     The list of available environment variables is found in the :ref:`api_config` section.
 
     :param framework: Can be one of:
@@ -1208,7 +1204,7 @@ The Tensor API
 
     Allocates a new tensor, placing it in either host virtual memory or device memory (based on the ``tensor_placement`` argument), on the specified NeuronCore index, of a given size, and attaches the given name to it - the name is only used for log messages.
     For applications running on Inferentia, ``tensor_placement`` should always be ``NRT_TENSOR_PLACEMENT_VIRTUAL``. For all other cases, ``NRT_TENSOR_PLACEMENT_DEVICE`` should be used. If successful, the ``tensor`` address will contain a valid pointer to the newly allocated ``nrt_tensor_t``.
-    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.  
+    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.
 
     :param tensor_placement: Controls where the tensor will be placed, the definition of the ``nrt_tensor_placement_t`` enum is as follows:
 
@@ -1216,7 +1212,7 @@ The Tensor API
 
             typedef enum {
                 NRT_TENSOR_PLACEMENT_DEVICE,    // the tensor is allocated directly in device memory
-                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
+                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB)
                 NRT_TENSOR_PLACEMENT_VIRTUAL    // the tensor is allocated in host memory
             } nrt_tensor_placement_t;
 
@@ -1302,8 +1298,22 @@ The Tensor API
     :param tensor: Valid pointer to an ``nrt_tensor_t``.
     :returns: Pointer to host memory used by the tensor.
 
+.. c:function:: NRT_STATUS nrt_tensor_check_output_completion(const nrt_tensor_t *output_tensor, int64_t timeout, uint64_t expected_completion_count)
 
-.. _api_tensorset:
+    Checks if the output tensor has been completely written to by the Neuron Runtime.
+    It waits for up to ``timeout`` microseconds, or unlimited if ``timeout`` is negative, until the tensor reaches the expected completion count.
+    If the ``timeout`` is given as unbounded, it emits a warning at the first 30 seconds.
+    The caller is in charge of handling the timeout behavior.
+    If the tensor is complete, it returns ``NRT_SUCCESS``;
+    if the output tensor is given as NULL, it returns ``NRT_INVALID``;
+    if the tensor does not reach the ``expected_completion_count`` within the timeout, it returns ``NRT_TIMEOUT``.
+
+    :param output_tensor: Valid pointer to an ``nrt_tensor_t``, which is expected to be an output tensor.
+    :param timeout: Maximum time to wait for the output tensor to be written to, in microseconds. If negative, it waits indefinitely until the tensor is complete.
+    :param expected_completion_count: The number of completions expected by the caller.
+
+
+_api_tensorset:
 
 The Tensorset API
 ~~~~~~~~~~~~~~~~~
@@ -1354,8 +1364,8 @@ The Execution API
     Runs one execution of the given ``nrt_model_t`` using the provided input tensor set and writing the results to the provided output tensor set.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensor set containing input data.
-    :param output_set: Tensor set where the output data will be written to.
+    :param input_set: Tensorset containing input data.
+    :param input_set: Tensor set where the output data will be written to.
 
 
 .. c:function:: NRT_STATUS nrt_execute_repeat(nrt_model_t *model, const nrt_tensor_set_t *input_set, nrt_tensor_set_t *output_set, int repeat_count)
@@ -1364,8 +1374,8 @@ The Execution API
     This requires a specially compiled NEFF and it's not a commonly used call.
 
     :param model: Valid pointer to a `nrt_model_t` on which to run the execution.
-    :param input_set: Tensor set containing input data.
-    :param output_set: Tensor set where the output data will be written to.
+    :param input_set: Tensorset containing input data.
+    :param input_set: Tensor set where the output data will be written to.
     :param repeat_count:  Number of times to repeat this execution.
 
 

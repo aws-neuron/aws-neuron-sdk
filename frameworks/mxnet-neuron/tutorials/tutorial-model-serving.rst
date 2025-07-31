@@ -24,7 +24,7 @@ and skip the installation part in the first step below.
 .. code:: bash
 
    cd ~/
-   # sudo yum -y install -q jre # for AML2
+   # sudo dnf -y install -q jre # for AL2023
    sudo apt-get install -y -q default-jre  # for Ubuntu
    pip install multi-model-server
 

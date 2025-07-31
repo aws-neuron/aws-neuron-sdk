@@ -115,6 +115,11 @@ Attributes
   - ``skip_warmup`` - Whether to skip warmup during model load. To improve
     the performance of the first request sent to a model, NxD Inference
     warms up the model during load. Defaults to ``false``.
+  - ``scratchpad_page_size`` - The scratchpad page size to use during compilation
+    and at runtime. The scratchpad is a shared memory buffer used for internal
+    model variables and other data. You can adjust this attribute in scenarios
+    where you need to adjust memory usage to support larger models or larger
+    sequence lengths.
 
 - Distributed configuration
 

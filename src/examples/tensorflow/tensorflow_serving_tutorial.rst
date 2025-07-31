@@ -26,7 +26,7 @@ or
 
 .. code:: bash
 
-   sudo yum install tensorflow-model-server-neuron
+   sudo dnf install tensorflow-model-server-neuron
 
 Also, you would need TensorFlow Serving API (use --no-deps to prevent
 installation of regular tensorflow). Depending on the version of Tensorflow

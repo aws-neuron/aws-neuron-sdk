@@ -1,0 +1,141 @@
+# Optional Metadata
+metadata:
+
+# Model Information
+model:
+  family: "Llama 3"
+  name: "Llama-3.3-70B-Instruct"
+  display_name: "Llama 3.3 70B"
+  checkpoint: "meta-llama/Llama-3.3-70B-Instruct"
+
+  description: |
+    Llama 3.3 70B is Meta's multilingual large language model with 70B parameters 
+    and a transformer architecture featuring Grouped Query Attention (GQA).
+
+# Hardware Requirements
+hardware:
+
+# Configurations
+configurations:
+  config1:
+    instance_type: "trn2.48xlarge"
+    sdk_version: "2.25"
+    dp_degree: 1
+    neuron:
+      async_mode: true
+      batch_size: 1
+      tp_degree: 64
+      attn_block_tkg_nki_kernel_cache_update: true
+      attn_block_tkg_nki_kernel_enabled: true
+      attn_kernel_enabled: true
+      cc_pipeline_tiling_factor: 1
+      enable_bucketing: true
+      fused_qkv: true
+      is_continuous_batching: true
+      k_cache_transposed: true
+      kv_cache_tiling: false
+      logical_nc_config: 2
+      mlp_kernel_enabled: true
+      qkv_kernel_enabled: true
+      seq_len: 16384
+      sequence_parallel_enabled: true
+      token_generation_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+      context_encoding_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+      on_device_sampling_config: 
+        do_sample: true
+        dynamic: true
+    vllm:
+      tensor_parallel_size: 64
+      max_num_seqs: 1
+      max_model_len: 16384
+      device: "neuron"
+      use_v2_block_manager: true
+      override_neuron_config: {}
+
+  config2:
+    instance_type: "trn2.48xlarge"
+    sdk_version: "2.25"
+    dp_degree: 2
+    neuron:
+      async_mode: true
+      batch_size: 8
+      ctx_batch_size: 1
+      tp_degree: 32
+      attn_block_tkg_nki_kernel_cache_update: true
+      attn_block_tkg_nki_kernel_enabled: true
+      attn_kernel_enabled: true
+      cc_pipeline_tiling_factor: 1
+      enable_bucketing: true
+      fused_qkv: true
+      is_continuous_batching: true
+      k_cache_transposed: true
+      kv_cache_tiling: false
+      logical_nc_config: 2
+      mlp_kernel_enabled: true
+      qkv_kernel_enabled: true
+      seq_len: 16384
+      sequence_parallel_enabled: true
+      token_generation_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+      context_encoding_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+      on_device_sampling_config: 
+        do_sample: true
+        dynamic: true
+    vllm:
+      tensor_parallel_size: 32
+      max_num_seqs: 8
+      max_model_len: 16384
+      device: "neuron"
+      use_v2_block_manager: true
+      override_neuron_config: {}
+  
+  config3:
+    instance_type: "trn2.48xlarge"
+    sdk_version: "2.25"
+    dp_degree: 2
+    neuron:
+      batch_size: 1
+      tp_degree: 64
+      enable_bucketing: true
+      is_continuous_batching: true
+      logical_nc_config: 2
+      seq_len: 16384
+    vllm:
+      tensor_parallel_size: 64
+      max_num_seqs: 1
+      max_model_len: 16384
+      device: "neuron"
+      use_v2_block_manager: true
+      override_neuron_config: {}
+
+  config4:
+    instance_type: "trn1.32xlarge"
+    sdk_version: "2.25"
+    dp_degree: 1
+    neuron:
+      batch_size: 1
+      tp_degree: 32
+      enable_bucketing: true
+      is_continuous_batching: true
+      logical_nc_config: 1
+      seq_len: 16384
+    vllm:
+      tensor_parallel_size: 32
+      max_num_seqs: 1
+      max_model_len: 16384
+      device: "neuron"
+      use_v2_block_manager: true
+      override_neuron_config: {}
+
+defaults:
+  "trn2.48xlarge": 
+    config: "config3"
+  "trn1.32xlarge": 
+    config: "config4"
+
+# Recommendations
+recommendations:
+  Latency:
+    config: "config1"
+
+  Throughput:
+    config: "config2"

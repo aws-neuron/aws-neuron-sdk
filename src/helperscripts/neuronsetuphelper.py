@@ -437,7 +437,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
 def hlpr_pip_repos_setup():
     str = '\n'
     str += '# Set Pip repository  to point to the Neuron repository' + '\n'
-    str += 'pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com'+ '\n'
+    str += 'pip config set global.index-url https://pip.repos.neuron.amazonaws.com'+ '\n'
     return str
 
 #################################################
@@ -465,7 +465,7 @@ def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
     if nr_setup.os == 'ubuntu':        
         str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'        
     elif nr_setup.os == 'amazonlinux':
-        str += 'sudo yum install -y python'+ py_ver + '-venv gcc-c++' + '\n'
+        str += 'sudo dnf install -y python'+ py_ver + '-venv gcc-c++' + '\n'
     str += 'python'+ py_ver + ' -m venv ' + nr_setup.framework +'_venv' + '\n'
     str += 'source '+ nr_setup.framework  + '_venv/bin/activate' + '\n'
     str += 'pip install -U pip' + '\n'
@@ -560,7 +560,7 @@ def hlpr_os_packages_update(nr_setup):
     if nr_setup.os == 'ubuntu':
         str += 'sudo apt-get update -y' + '\n'
     elif nr_setup.os == 'amazonlinux':
-        str += 'sudo yum update -y' + '\n'
+        str += 'sudo dnf update -y' + '\n'
 
     return str
 
@@ -576,7 +576,7 @@ def hlpr_os_headers_update(nr_setup):
     if nr_setup.os == 'ubuntu':
         str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n' 
     elif nr_setup.os == 'amazonlinux':
-        str += 'sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
+        str += 'sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
     return str 
 
 #################################################
@@ -653,7 +653,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
             os_cmd += '################################################################################################################\n'
             os_cmd += '# To install or update to Neuron versions 2.99.99 and newer from previous releases:'+ '\n'
             if (nr_setup.os=='ubuntu'):
-                os_cmd += '# - Unstall aws-neuron-dkms by calling \`sudo yum remove aws-neuron-dkms -y\`  -y'+ '\n'
+                os_cmd += '# - Unstall aws-neuron-dkms by calling \`sudo dnf remove aws-neuron-dkms -y\`  -y'+ '\n'
             elif (nr_setup.os=='amazonlinux'):
                 os_cmd += '# - Unstall aws-neuron-dkms by calling \`sudo apt-get remove aws-neuron-dkms\`  -y'+ '\n'
             os_cmd += '# - DO NOT skip \'aws-neuronx-dkms\' install or upgrade step, you MUST install or upgrade to latest Neuron driver'+ '\n'
@@ -676,9 +676,9 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
     if nr_setup.os=='ubuntu':
         os_cmd_prefix = 'sudo apt-get install '
     elif (nr_setup.action=='Install')&(nr_setup.os=='amazonlinux'):
-        os_cmd_prefix = 'sudo yum install '
+        os_cmd_prefix = 'sudo dnf install '
     elif (nr_setup.action=='Update')&(nr_setup.os=='amazonlinux'):
-        os_cmd_prefix = 'sudo yum update '
+        os_cmd_prefix = 'sudo dnf update '
 
     if comp in nr_setup.releases_info[neuron_version].release_os_install_list:
         # install only if there is a package associated with the component
@@ -695,11 +695,11 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
                 os_cmd += '# If you are downgrading from newer version, please add \'--allow-downgrades\' option to \'sudo apt-get install\' '
             if (nr_setup.is_latest_neuron==False)&(nr_setup.os=='amazonlinux'):
                 os_cmd += '\n'
-                os_cmd += '# If you are downgrading from newer version , please remove existing package using \'sudo yum remove\' before installing the older package'
+                os_cmd += '# If you are downgrading from newer version , please remove existing package using \'sudo dnf remove\' before installing the older package'
             os_cmd += '\n'
-            # Amazon Linux DLAMI will not allow updating tensorflow-model-server and aws-neuron-dkms without adding sudo yum versionlock delete
+            # Amazon Linux DLAMI will not allow updating tensorflow-model-server and aws-neuron-dkms without adding sudo dnf versionlock delete
             if ((comp=='tensorflow-model-server') | (comp=='driver'))  & (nr_setup.ami == 'dlami') & (nr_setup.os == 'amazonlinux'):
-                os_cmd += 'sudo yum versionlock delete '
+                os_cmd += 'sudo dnf versionlock delete '
                 os_cmd += pkg_dict[key]['package']
                 os_cmd += '\n'
 
@@ -740,7 +740,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
             os_cmd += '################################################################################################################\n'
             os_cmd += '# To install or update to Neuron versions 2.99.99 and newer from previous releases:'+ '\n'
             if (nr_setup.os=='ubuntu'):
-                os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo yum remove aws-neuron-tools -y\`  -y'+ '\n'
+                os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo dnf remove aws-neuron-tools -y\`  -y'+ '\n'
             elif (nr_setup.os=='amazonlinux'):
                 os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo apt-get remove aws-neuron-tools\`  -y'+ '\n'
             os_cmd += '################################################################################################################\n'            
@@ -829,7 +829,7 @@ def hlpr_instructions(nr_setup, neuron_version):
 
             if (setup_mode == 'develop') | (setup_mode == 'deploy'):
                 if (nr_setup.action =='Install')&(nr_setup.ami!='dlami'):
-                    # For First install, setup Neuron OS packagaes repo (yum or apt)
+                    # For First install, setup Neuron OS packagaes repo (dnf or apt)
                     cmd_string += hlpr_os_packages_first_setup(nr_setup)
 
                 # Always update to latest OS packages

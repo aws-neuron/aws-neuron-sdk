@@ -19,9 +19,9 @@ enabled=1' > /etc/yum.repos.d/neuron.repo
 
 RUN rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
-RUN yum install -y aws-neuron-tools
-RUN yum install -y aws-neuron-runtime
-RUN yum install -y tar gzip
+RUN dnf install -y aws-neuron-tools
+RUN dnf install -y aws-neuron-runtime
+RUN dnf install -y tar gzip
 
 ENV PATH="/opt/aws/neuron/bin:${PATH}"
 

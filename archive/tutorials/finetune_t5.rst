@@ -1,10 +1,15 @@
 .. _torch-hf-t5-finetune:
 
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: The tutorial for the AWS Neuron SDK is currently deprecated and not maintained. It is provided for reference only.
+
 Fine-tune T5 model on Trn1
 ================================
 
 .. note:: 
-   Update 01/03/24: This tutorial is currently broken and the AWS Neuron team is working on the fix.
+   This page was archived on 7/31/2025.
 
 
 In this tutorial, we show how to fine-tune a Hugging Face (HF) T5 model 
