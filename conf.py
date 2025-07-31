@@ -18,7 +18,7 @@ sys.path.append(os.path.abspath("./_ext"))
 sys.path.append(os.path.abspath("./general/nki/api"))
 sys.path.append(os.path.abspath("./general/nki/_ext"))
 sys.path.append(os.path.abspath("./frameworks/torch/torch-neuron/"))
-# sys.path.append(os.path.abspath("./_static"))
+sys.path.append(os.path.abspath("./_static"))
 
 
 # get environment variables
