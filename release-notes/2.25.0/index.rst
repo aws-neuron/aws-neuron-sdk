@@ -43,7 +43,6 @@ Inference Optimizations (NxD Core and NxDI)
 
 Neuron 2.25.0 introduces performance optimizations and new capabilities including:
 
-* On-device Forward Pipeline, reducing latency by up to 43% in models like Pixtral
 * Context and Data Parallel support for improved batch scaling
 * Chunked Attention for efficient long sequence processing
 * 128k context length support for Llama 70B models
@@ -57,8 +56,6 @@ Model Support (NxDI)
 Neuron 2.25.0 expands model support to include:
 
 * Qwen3 dense models (0.6B to 32B parameters)
-* Flux.1-dev model for text-to-image generation (Beta)
-* Pixtral-Large-Instruct-2411 for image-to-text generation (Beta)
 
 Profiling Updates
 ^^^^^^^^^^^^^^^^^
