@@ -1,3 +1,4 @@
 * :ref:`api_guide`
 * :ref:`api_guide_nxd_training`
 * :ref:`api_guide_nxd_inference`
+* :ref:`nxd-core-model-builder-v2`

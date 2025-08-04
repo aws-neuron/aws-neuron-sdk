@@ -10,5 +10,6 @@ API Reference Guide
     /libraries/neuronx-distributed/api_guide
     /libraries/neuronx-distributed/api-reference-guide-training
     /libraries/neuronx-distributed/api-reference-guide-inference
+    /libraries/neuronx-distributed/model_builder_v2_api_reference
 
 .. include:: /libraries/neuronx-distributed/api-reference-guide.txt

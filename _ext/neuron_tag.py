@@ -23,7 +23,7 @@ add_inf1_tag = ['general/arch',
                 'frameworks/tensorflow/tensorflow-neuron/'
                 ]
 add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx', 'libraries/nemo-megatron/', 'libraries/nxd-training/']
-add_trn2_tag = ['libraries/nxd-training/']
+add_trn2_tag = ['libraries/nxd-training/', 'general/models/']
 add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','libraries/nxd-training', 'general/setup/tensorflow-neuronx']
 clear_inf1_tag = ['general/arch/neuron-features/neuron-caching',
                 'general/arch/neuron-features/eager-debug-mode',

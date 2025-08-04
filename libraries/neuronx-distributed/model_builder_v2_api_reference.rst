@@ -27,6 +27,8 @@ APIs
 - `neuronx_distributed.NxDModel.save`_
 - `neuronx_distributed.NxDModel.load`_
 
+`Usage Notes`_
+
 **Examples**
 
 `Usage Examples`_
@@ -459,10 +461,6 @@ Retrieves the NEFF (Neuron Executable File Format) from the specified
 model. Requires the associated model to already be added using the
 ``add()`` method.
 
-**Raises:** ``KeyError``: If the specified key is not found in the
-available keys. ``RuntimeError``: If there is an error retrieving the
-NEFF.
-
 .. _parameters-6:
 
 Parameters
@@ -478,6 +476,14 @@ Returns
 
 ``bytes`` — The NEFF for the specified model
 
+.. _raises-6:
+
+Raises
+~~~~~~
+
+- ``KeyError``: If the specified key is not found in the available keys.
+- ``RuntimeError``: If there is an error retrieving the NEFF.
+
 neuronx_distributed.NxDModel.get_metaneff
 =========================================
 
@@ -488,10 +494,6 @@ neuronx_distributed.NxDModel.get_metaneff
 
 Retrieves the metaneff from the specified model. Requires the associated
 model to already be added using the ``add()`` method.
-
-**Raises:** ``KeyError``: If the specified key is not found in the
-available keys. ``RuntimeError``: If there is an error retrieving the
-metaneff.
 
 .. _parameters-7:
 
@@ -509,6 +511,14 @@ Returns
 ``metaneff_pb2.MetaNeff`` — The metaneff proto object for the specified
 model.
 
+.. _raises-7:
+
+Raises
+~~~~~~~
+
+- ``KeyError``: If the specified key is not found in the available keys. 
+- ``RuntimeError``: If there is an error retrieving the metaneff.
+
 neuronx_distributed.NxDModel.get_hlo
 ====================================
 
@@ -520,16 +530,12 @@ neuronx_distributed.NxDModel.get_hlo
 Retrieves the HLO from the specified model. Requires the associated
 model to already be added using the ``add()`` method.
 
-**Raises:** ``KeyError``: If the specified key is not found in the
-available keys. ``RuntimeError``: If there is an error retrieving the
-metaneff.
-
 .. _parameters-8:
 
 Parameters
 ~~~~~~~~~~
 
-- **key: str** — \***\* The identifier for the model whose HLO should be
+- **key: str** — The identifier for the model whose HLO should be
   retrieved.
 
 .. _returns-8:
@@ -539,6 +545,15 @@ Returns
 
 ``hlo_pb2.HloModuleProto`` — The HLO module proto object for the
 specified model.
+
+.. _raises-8:
+
+Raises
+~~~~~~
+
+- ``KeyError``: If the specified key is not found in the available keys.
+- ``RuntimeError``: If there is an error retrieving the metaneff. 
+
 
 neuronx_distributed.NxDModel.set_weights
 ========================================
@@ -559,11 +574,7 @@ transformer (if provided) or a direct parallel loading mechanism.
 
 This function should only be called before the model is loaded onto a
 Neuron device. Once the model is loaded, use the
-``replace_weights()``\ method to update the weights.
-
-**Raises:**
-
-``ValueError``: If the model is already loaded on a Neuron device.
+``replace_weights()`` method to update the weights.
 
 .. _parameters-9:
 
@@ -580,6 +591,13 @@ Returns
 ~~~~~~~
 
 ``None``
+
+.. _raises-9:
+
+Raises
+~~~~~~
+
+``ValueError``: If the model is already loaded on a Neuron device.
 
 neuronx_distributed.NxDModel.to_neuron
 ======================================
@@ -649,18 +667,14 @@ neuronx_distributed.NxDModel.read_from_neuron_buffer
 Reads a tensor value from a Neuron device buffer to CPU, based on given
 key and rank.
 
-**Raises:** ``AssertionError``: If this method is called before
-to_neuron() ``KeyError``: If the specified state_buffer_key does not
-exist in the states for the given rank.
-
 .. _parameters-11:
 
 Parameters
 ~~~~~~~~~~
 
-- **buffer_key: str** — \***\* The key identifying the specific buffer
+- **buffer_key: str** — The key identifying the specific buffer
   to retrieve.
-- **rank: int** — \***\* The rank from which to retrieve the buffer.
+- **rank: int** — The rank from which to retrieve the buffer.
 
 .. _returns-12:
 
@@ -668,6 +682,14 @@ Returns
 ~~~~~~~
 
 ``torch.Tensor``: The requested tensor buffer copied to Host memory.
+
+.. _raises-12:
+
+Raises
+~~~~~~
+
+- ``AssertionError``: If this method is called before to_neuron()
+- ``KeyError``: If the specified state_buffer_key does not exist in the states for the given rank.
 
 neuronx_distributed.NxDModel.write_to_neuron_buffer
 ===================================================
@@ -687,19 +709,14 @@ This function updates a state buffer on a Neuron device by copying
 values from the provided tensor. The destination buffer must already
 exist and have the same shape as the input tensor.
 
-**Raises:** ``AssertionError``: If this method is called before
-``to_neuron()`` ``KeyError``: If the specified ``state_buffer_key`` does
-not exist in the states for the given rank, or if the shapes of the
-input tensor and target buffer do not match.
-
 .. _parameters-12:
 
 Parameters
 ~~~~~~~~~~
 
-- **tensor: torch.Tensor** — \***\* The tensor containing the data to be
+- **tensor: torch.Tensor** — The tensor containing the data to be
   written to the buffer.
-- **buffer_key: str** — \***\* The key identifying the specific buffer
+- **buffer_key: str** — The key identifying the specific buffer
   to update.
 - **rank: int** — The rank where the buffer is located.
 
@@ -709,6 +726,14 @@ Returns
 ~~~~~~~
 
 ``None``
+
+.. _raises-13:
+
+Raises
+~~~~~~~
+
+- ``AssertionError``: If this method is called before ``to_neuron()``.
+- ``KeyError``: If the specified ``state_buffer_key`` does not exist in the states for the given rank, or if the shapes of the input tensor and target buffer do not match.
 
 neuronx_distributed.NxDModel.forward
 ====================================
@@ -720,31 +745,29 @@ neuronx_distributed.NxDModel.forward
        *args,
        model_name: Optional[str] = None,
        forward_mode='default',
-      **kwargs
+       **kwargs
    ):
 
 The forward method of the NxDModel class, which will take in inputs and
-run the respective neff.
-
-**Raises:** ``AssertionError`` ``RuntimeError`` ``KeyError``
+run the respective NEFF.
 
 .. _parameters-13:
 
 Parameters
 ~~~~~~~~~~
 
-- **args: Union[torch.Tensor, List[torch.Tensor]]** *—* \**\* Positional
+- **args: Union[torch.Tensor, List[torch.Tensor]]** — Positional
   tensor inputs to model. List form must be used if
   ``forward_mode != 'default'``.
-- **model_name: Optional[str]** — \***\* Parameter to pass in a specific
+- **model_name: Optional[str]** — Parameter to pass in a specific
   key to execute. This must be used in cases of ambiguous routing.
-- **forward_mode: str, default=‘default’** — \***\* There are 3
+- **forward_mode: str, default=‘default’** — There are 3
   supported modes: default, ranked, async.
 
   - **default**: This takes in inputs, replicates them across ranks,
     executes the model, and only returns the outputs from rank 0
   - **ranked:** This takes in inputs in ranked form, meaning each
-    individual tensor input (ie each ``arg`` in ``*args``)must be a list
+    individual tensor input (ie each ``arg`` in ``*args``) must be a list
     of tensors whose length is equal to the world size of the compiled
     model. The model will execute, and return a ranked output, which is
     a ``List`` of all outputs by rank (ie a
@@ -752,11 +775,11 @@ Parameters
   - **async:** Like ranked, this takes in inputs and returns outputs in
     ranked form, except the major difference is that the outputs will be
     returned instantly, and will be references to buffers where the
-    model will write the output once the neff is done executing. To
-    block on the neff call, you must call ``.cpu()`` for each tensor in
+    model will write the output once the NEFF is done executing. To
+    block on the NEFF call, you must call ``.cpu()`` for each tensor in
     the output.
 
-- \****kwargs (torch.Tensor, List[torch.Tensor]):\*\* Keyword arguments
+- ****kwargs (torch.Tensor, List[torch.Tensor])** — Keyword arguments
   corresponding to specific input tensors to the model. List form must
   be used if ``forward_mode != 'default'``.
 
@@ -765,10 +788,10 @@ Parameters
 Returns
 ~~~~~~~
 
-It depends on the ``forward_mode`` setting: **default:** Expected format
-of tensor outputs based on what was originally traced. **ranked or
-async:** ``List[List[torch.Tensor]]`` \***\* of shape (num_out_tensors,
-world_size)
+It depends on the ``forward_mode`` setting: 
+
+- **default:** Expected format of tensor outputs based on what was originally traced.
+- **ranked or async:** ``List[List[torch.Tensor]]`` of shape (num_out_tensors, world_size).
 
 neuronx_distributed.NxDModel.save
 =================================
@@ -786,9 +809,9 @@ artifact can be loaded with ``NxDModel.load`` or ``torch.jit.load``
 Parameters
 ~~~~~~~~~~
 
-- **path_to_save: str** — \***\* The file path where the TorchScript
+- **path_to_save: str** — The file path where the TorchScript
   model should be saved.
-- **save_weights: Optional[bool], default=False** — \***\* If ``True``,
+- **save_weights: Optional[bool], default=False** — If ``True``,
   preserves the weights within the TorchScript model. It is ``False`` by
   default.
 
@@ -820,21 +843,17 @@ previously saved TorchScript model. If the restoration process fails, it
 returns the loaded TorchScript model instead, as backwards compatibility
 is not guaranteed across different versions of NxD.
 
-**Raises:** ``ValueError``: If the provided model was not originally
-saived using ``NxDModel.save()`` ``AssertionError``: If
-``start_rank``/``local_ranks_size`` parameters are inconsistently set.
-
 .. _parameters-15:
 
 Parameters
 ~~~~~~~~~~
 
-- **path_to_model: str** — \***\* Path to the saved TorchScript model
+- **path_to_model: str** — Path to the saved TorchScript model
   file.
-- **start_rank: Optional[int], default=None** — \***\* Starting rank for
+- **start_rank: Optional[int], default=None** — Starting rank for
   distributed processing. If ``None``, and ``local_ranks_size`` is set,
   an ``AssertionError`` will be raised. Defaults to ``None``
-- **local_ranks_size: Optional[int], default=None** — \***\* Size of
+- **local_ranks_size: Optional[int], default=None** — Size of
   local_ranks for distribtued processing. Must be set if ``start_rank``
   is provided. Defaults to ``None``
 
@@ -846,6 +865,14 @@ Returns
 ``Union[NxDModel, torch.jit.ScriptModule]``: Either the restored
 ``NxdModel`` instance, or the loaded TorchScript model if restoration
 fails.
+
+.. _raises-16:
+
+Raises
+~~~~~~~
+
+- ``ValueError``: If the provided model was not originally saved using ``NxDModel.save()``.
+- ``AssertionError``: If ``start_rank``/``local_ranks_size`` parameters are inconsistently set.
 
 Usage Notes
 ===========
@@ -936,7 +963,8 @@ Usage Examples
 E2E with ModelBuilder APIs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**With Callable**
+Example: Build and run callable with ModelBuilder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -960,7 +988,8 @@ E2E with ModelBuilder APIs
 
    torch.testing.assert_close(cpu_out, neuron_out)
 
-**With ``torch`` module**
+Example: Build and run torch module with ModelBuilder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1010,7 +1039,8 @@ E2E with ModelBuilder APIs
    cpu_out = cpu_model(input)
    neuron_out = nxd_model(x=input)
 
-**Multi-bucket trace**
+Example: Multi-bucket trace with ModelBuilder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1067,7 +1097,8 @@ E2E with ModelBuilder APIs
        neuron_out = nxd_model(input)
        torch.testing.assert_close(cpu_out, neuron_out)
 
-**Example inputs supplied as kwargs**
+Example: Build and run torch module with ModelBuilder where example inputs are supplied as kwargs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1124,7 +1155,8 @@ E2E with ModelBuilder APIs
        neuron_out = nxd_model(x=input[0], y=input[1])
        torch.testing.assert_close(cpu_out, neuron_out)
 
-**With in-place buffer updates**
+Example: Build and run torch module with in-place buffer updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1175,7 +1207,8 @@ E2E with ModelBuilder APIs
 E2E with Fundamental Units
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**With Callable**
+Example: Build and run Callable with Fundamental Units
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1199,7 +1232,8 @@ E2E with Fundamental Units
    neuron_out = nxd_model(torch.ones(2,2), torch.ones(2,2))
    torch.testing.assert_close(cpu_out, neuron_out)
 
-**With ``torch`` module**
+Example: Build and run torch module with Fundamental Units
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1268,7 +1302,8 @@ E2E with Fundamental Units
    neuron_out = nxd_model(input)
    torch.testing.assert_close(cpu_out, neuron_out)
 
-**Multi-bucket trace**
+Example: Multi-bucket trace with Fundamental Units
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1347,7 +1382,8 @@ E2E with Fundamental Units
        neuron_out = nxd_model(input)
        torch.testing.assert_close(cpu_out, neuron_out)
 
-**Example inputs supplied as kwargs**
+Example: Build and run torch module with Fundamental Units where example inputs are supplied as kwargs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -1426,8 +1462,8 @@ E2E with Fundamental Units
        neuron_out = nxd_model(x=input[0], y=input[1])
        torch.testing.assert_close(cpu_out, neuron_out)
 
-With in-place buffer updates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example: Build and run torch module with in-place buffer updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 

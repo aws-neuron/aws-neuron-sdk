@@ -1,5 +1,6 @@
 .. _nxdi-disaggregated-inference:
 
+==============================
 Disaggregated Inference [BETA]
 ==============================
 
@@ -9,12 +10,11 @@ Overview
 
 Disaggregated Inference (DI), also known as disaggregated serving, disaggregated prefill, P/D disaggregation,
 is an LLM serving architecture that separates the prefill and decode phases of inference onto different hardware resources. 
-To achieve this, prefill worker needs to transfer the computed KV cache to the decode worker to resume decoding.
+To achieve this, the prefill worker needs to transfer the computed KV cache to the decode worker to resume decoding.
 Separating the compute intensive prefill phase from the memory bandwidth intensive 
 decode phase can improve the LLM serving experience by
 
-1. Removing prefill interruptions to decode from continuous batching to reduce inter token latency (ITL). These gains can be used to
-achieve higher throughput by running with a higher decode batch size while staying under Service Level Objectives (SLO).
+1. Removing prefill interruptions to decode from continuous batching to reduce inter token latency (ITL). These gains can be used to achieve higher throughput by running with a higher decode batch size while staying under Service Level Objectives (SLO).
 
 2. Adapt to changing traffic patterns while still remaining under application SLOs.
 
@@ -23,12 +23,11 @@ achieve higher throughput by running with a higher decode batch size while stayi
 
 .. note::
 
-    This feature is still in beta. Currently only a single decode server and a single prefill server is 
-    supported (1P1D). Automatic Prefix Caching is not supported with DI.
+    Automatic Prefix Caching is not supported with DI.
 
 
-Neuron Implementation Details
------------------------------
+High-Level Flow on Neuron
+-------------------------
 
 Disaggregated Inference is mainly implemented through Neuron's vLLM fork 
 https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25 
@@ -93,7 +92,7 @@ servers in the prefill cluster to match the new traffic pattern. Continuous batc
 longer prefill requests increase tail ITL whereas DI workloads continue to deliver a low variance and a predictable customer experience.
 
 Additionally, DI also allows users to tailor their parallelism strategies differently for prefill and decode. 
-For example, a model with 32 attention heads may prefer to run two decode servers Data Parallel=2 (DP). 
+For example, a model with 32 attention heads may prefer to run two decode servers Data Parallel=2 (DP) 
 each with Tensor Parallel=32 (TP) in order to reduce KV replication instead of TP=64. Such replication will get worse if using Group Query Attention (GQA).
 
 DI does not necessarily improve throughput directly but it can help depending on the workload. Continuous
@@ -116,8 +115,369 @@ do not have this issue as these techniques run prefill and decode on the same ha
 
 One technique to remediate this is to run with a dynamic amount of prefill and decode servers. We call this
 dynamic xPyD. In the above example, we could run with 1 prefill and 2 decode servers so that our prefill and 
-decode efficiency will be balanced. This is being actively worked on and currently only static configurations
-of one prefill to one decode (1P1D) are supported.
+decode efficiency will be balanced.
+
+========================
+Detailed System Overview
+========================
+
+
+Proxy Server Architecture
+-------------------------
+
+The proxy server routes messages between clients and workers in our disaggregated inference system. 
+It uses the Quart framework, Python's asyncio libraries, and etcd to manage this communication.
+
+Main Components
+===============
+
+* **Framework**: Quart (for handling web requests)
+* **Task Management**: Python asyncio
+* **Request Forwarding**: Uses etcd to detect new prefill and decode workers (xPyD only)
+
+How Requests Flow
+=================
+
+When a client sends a request, the proxy server starts two tasks at the same time:
+
+.. code:: python
+
+    prefill_task = asyncio.create_task(anext(prefill_response))
+    decode_task = asyncio.create_task(anext(decode_response))
+
+    await prefill_task
+    async for chunk in handle_prefill_response(prefill_response,
+                                             streaming, endpoint,
+                                             uid, request_time):
+        yield chunk
+
+    await decode_task
+    async for chunk in handle_decode_response(decode_response,
+                                            streaming, endpoint, uid,
+                                            request_time):
+        yield chunk
+
+If running in static 1P1D mode, the workers are pre-chosen. If running in dynamic 
+xPyD mode, the workers are chosen by round-robin and discovered through etcd.
+
+This approach offers two benefits:
+
+1. Faster responses because network delays don't stack up
+2. The decode server can get ready while prefill is working
+
+How Tokens Work
+===============
+
+The proxy server handles tokens in specific ways to ensure accurate responses:
+
+Prefill Settings
+^^^^^^^^^^^^^^^^
+* Sets ``max_tokens=1`` for prefill requests
+* Returns the first output token
+
+Decode settings
+^^^^^^^^^^^^^^^
+* Runs as normal except it skips the first token from decode
+
+Output Types
+============
+
+The system can work in two ways decided by the client if streaming is enabled:
+
+1. **Streaming Mode**
+   
+   * Sends tokens to the client one at a time
+   * Uses both prefill and decode servers
+   * Shows results as they're created
+
+2. **Batch Mode (stream=false)**
+   
+   * Sends all tokens at once when finished
+
+Response Handling
+=================
+
+The proxy server:
+
+* Combines responses from both servers
+* Keeps tokens in the right order
+* Makes sure outputs match what clients expect from a regular system
+
+Dynamic xPyD (Multiple Prefill, Multiple Decode)
+===============================================
+
+Dynamic xPyD lets you use multiple prefill and decode workers and dynamically add new workers to the cluster.
+
+.. note::
+   The system can't yet remove or handle unresponsive nodes automatically.
+
+
+Worker Discovery and Connection Manager (neuron_connector.py)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The system keeps track of workers using an etcd server. Here's how it works:
+
+.. code:: python
+
+    class NeuronConnector:
+        def _keep_alive_ectd(self):
+            # Add worker to etcd
+            etcd_client.put(
+                f"/workers/{self.role}/{self.local_ip}/{self.api_server_port}",
+                json.dumps({"connections": []}),
+                lease
+            )
+
+This manager:
+
+* Signs up workers with etcd 
+* Keeps a list of active connections
+* Creates new buffers when needed (dynamic xPyD)
+* Or statically creates buffers (static 1P1D)
+
+Signal Plane (ZMQ Communication)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* **Router** (Prefill): Works with many decode connections
+* **Dealer** (Decode): Connects to prefill
+* **Message Types**:
+  
+  * Welcome message when connecting
+  * Setting up key-value maps
+  * Managing transfers
+
+Buffer Connection Management Details
+------------------------------------
+
+Buffer connection management is a critical component of the DI system that controls how servers communicate.
+The system supports two modes of operation: static 1P1D and dynamic xPyD.
+The connection management is done by ``neuron_connector.py`` and the actual buffer class is in ``neuron_buffer.py``.
+
+We use two types of buffers:
+
+* ``SendBuffer``: For prefill workers
+* ``RecvBuffer``: For decode workers
+
+Static 1P1D Mode
+================
+In static mode, the system creates a single buffer for each worker during initialization:
+
+.. code-block:: python
+
+    def initialize_buffer(self):
+        if self.config.is_kv_producer:
+            self.static_buffer = SendBuffer(
+                self.kv_caches,
+                self.zmq_context,
+                self.neuron_recv_ip,
+                self.config.kv_ip,
+                self.config.kv_port
+            )
+
+This approach means:
+
+* All connection components are predefined
+* Communication paths are fixed
+* Buffers have predetermined communication partners
+
+Dynamic xPyD Mode
+=================
+In dynamic mode, the system creates buffers on demand. Both SendBuffers and RecvBuffers can be created dynamically:
+
+.. code-block:: python
+
+    def maybe_setup_buffer(self, remote_ip, remote_port):
+        if self.static_buffer:
+            return self.static_buffer
+
+        key = "" if self.config.is_kv_producer else (remote_ip, remote_port)
+        
+        if key in self.connection_dict:
+            return self.connection_dict[key]
+
+Key differences in dynamic mode:
+
+1. One to many relationship between SendBuffers and RecvBuffers
+2. Workers register themselves in etcd for service discovery
+3. New connection determined by proxy server, the info is encoded in the request_id
+4. Workers check their connection dictionary for existing buffers encoded in the request_id
+5. If no buffer exists, they create a new one using the proxy server's information
+6. The new buffer establishes ZMQ communication with its partner
+
+This dynamic approach allows the system to:
+
+* Add new connections as needed
+* Scale with changing workloads
+* Maintain efficient communication paths
+* Adapt to cluster changes
+
+
+Transfer Engine and Communication
+---------------------------------
+
+Below is an image showing the KV cache transfer process on neuron:
+
+.. image:: /libraries/nxd-inference/developer_guides/images/di_transfer_architecture.png
+    :alt: High Level Transfer Architecture
+
+Transfer Engine (neuron_transfer_engine.py)
+===========================================
+
+The transfer engine moves KV cache efficiently between workers:
+
+.. code:: python
+
+    class NeuronTransferEngine:
+        def transfer_neuron_tensors(self, tensors, offsets, lengths, peer_devices, ...):
+            self.engine.queue_transfer_with_token(
+                tensors, offsets, lengths, peer_devices, self.local_devices,
+                self.comm_ids, completion_count, completion_token, use_queue,
+                completion_time_out)
+
+The engine:
+
+* Sets up KV communication between devices
+* Calls Neuron Runtime APIs to move KV caches
+* Tracks when transfers finish
+
+Zero-Copy Transfer System
+=========================
+
+Send Handler (Prefill Side)
+"""""""""""""""""""""""""""
+
+* Runs in its own thread
+* Listens for requests from decode servers
+* Handles three types of requests:
+  
+  * Handshakes to confirm connection establishment
+  * Setting up KV cache maps
+  * Decode server requests for KV cache transfer (lookup_all)
+
+Here's how it works:
+
+.. code:: python
+
+    def send_handler(self):
+        while True:
+            identity, request = self.router.recv_json()
+        
+            if request["type"] == "handshake":
+                self.router.send_json(identity, {
+                    "status": "ok",
+                    "timestamp": time.time()
+                })
+                continue
+        
+            if request["type"] == "kv_map_init":
+                # Set up transfer details
+                continue
+                
+            if request["type"] == "lookup_all":
+                self._process_lookup_all(identity, request)
+                continue
+
+Receive Handler (Decode Side)
+"""""""""""""""""""""""""""""
+
+* Keeps a list of waiting transfers
+* For each task:
+  
+  * Sends request to prefill server
+  * Waits for answer
+  * If successful:
+    
+    * Saves the output token from signal plane
+    * Starts moving the KV cache through Transfer Engine
+  
+  * If it fails:
+    
+    * Tries again later
+
+Starting Transfers
+""""""""""""""""""
+
+On the Prefill Side:
+
+.. code:: python
+
+    # ensure that the request is finished prefill
+    if request_id not in self.lookup_dict:
+        self.router.send_json(identity, {"success": False})
+        return
+
+    # After getting decode server request and prefill is finished
+    kv_caches, offsets, lengths, peer_devices = \
+        self.generate_transfer_sequences(entry, remote_id=identity_str)
+
+    # Start transfer
+    self.get_transfer_engine(remote_id=identity_str).transfer_neuron_tensors(
+        kv_caches, offsets, lengths, peer_devices,
+        completion_token=entry.completion_token)
+
+On the Decode Side:
+
+.. code:: python
+
+    # receive prefill worker's output token
+    entry.output_token = torch.tensor(
+        response["output_token"]).unsqueeze(0)
+
+    kv_caches, offsets, lengths, peer_devices = \
+         self.generate_transfer_sequences(entry)
+
+    # do not wait for request completion for recv buffer
+    self.get_transfer_engine().transfer_neuron_tensors(
+        kv_caches, offsets,lengths, peer_devices,
+        completion_token=entry.completion_token)
+
+The ``completion_token`` provides the status of the transfer.
+
+.. note::
+
+    These are separate threads from the main inference process and do not block ongoing inference.
+
+
+Request Scheduling Rules
+------------------------
+
+Here are new scheduling rules for Disaggregated Inference:
+
+Prefill Worker Rules
+====================
+
+* Requests can be: Waiting, Transferring, or Running
+* Only one request can run at a time
+* Total of transferring + running must not exceed batch size
+* Can start new requests when:
+  
+  * Nothing is running
+  * Number of transfers is less than batch size
+
+Decode Worker Rules
+===================
+
+* Uses same request states as prefill
+* Running + transferring must not exceed batch size
+* Running must not exceed batch size
+* Must finish key-value cache transfer before running
+* Can start new transfers when there's space
+
+Scheduler Jobs
+==============
+
+* Adds transfer requests to a list
+* Checks status without blocking
+* Uses status to make decisions
+* Doesn't handle transfers directly
+
+These rules help:
+
+* Keep key-value caches safe
+* Use resources well
+* Process batches efficiently
+* Keep scheduling separate from transfers
+
 
 
 Example Usage

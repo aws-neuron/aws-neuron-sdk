@@ -10,3 +10,4 @@
 * :ref:`nxdi-custom-quantization`
 * :ref:`nxdi-disaggregated-inference`
 * :ref:`nxdi-weights-sharding-guide`
+* :ref:`performance-cli-params`

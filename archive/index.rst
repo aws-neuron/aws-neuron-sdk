@@ -25,13 +25,13 @@ Archived Content
    * - Tutorial
      - Last release supported
      - Date archived
-   * - `Fine-tune T5 model on Trn1 <tutorials/finetune_t5>`_
+   * - :doc:`tutorials/finetune_t5`
      - Neuron 2.24.0
      - Archived on: 7/31/2025
-   * - `Running SSD300 with AWS Neuron <tutorials/ssd300_demo/ssd300_demo>`_
+   * - :doc:`tutorials/ssd300_demo/ssd300_demo`
      - Neuron 2.24.0
      - Archived on: 7/31/2025
-   * - `Megatron GPT Pretraining <tutorials/megatron_gpt_pretraining>`_
+   * - :doc:`tutorials/megatron_gpt_pretraining`
      - Neuron 2.25.0
      - Archived on: 7/31/2025
 

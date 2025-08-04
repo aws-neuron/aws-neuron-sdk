@@ -46,7 +46,13 @@ Other improvements
   specify this attribute to configure the scratchpad page size used
   during compilation and at runtime. The scratchpad is a shared memory buffer
   used for internal model variables and other data. For more information, see :ref:`nxd-inference-api-guide-neuron-config`.
-
+- Enabled `Chunked Attention <https://huggingface.co/blog/llama4-release#:~:text=Chunked%20attention%20(in%20RoPE%20layers)>`__ as a generic building block for
+  any attention-based model. Chunked attention limits the KV cache size to chunk size and can be used to enable long-context inference where memory constraint is an issue. 
+  NxDI now supports chunked attention for any model that defines ``attention_chunk_size`` in the model's HuggingFace ``config.json``,  such as `Llama 4 Scout <https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E/blob/main/config.json#L11>`__,
+  or in the model's InferenceConfig.
+  Developers using NxDI can then pass ``attention_chunk_size`` to the attention module to enable chunked attention. See `modeling_llama.py <https://github.com/aws-neuron/neuronx-distributed-inference/blob/main/src/neuronx_distributed_inference/models/llama/modeling_llama.py>`__ for example.
+- Published scripts to evaluate model accuracy and benchmark performance against Neuron. For more details, see :ref:`the corresponding documentation <libraries/nxd-inference/tutorials/generating-results-with-performance-cli>` or `go to the Neuron samples GitHub repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/inference-benchmarking>`_.
+  
 Breaking changes
 ----------------
 

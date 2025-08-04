@@ -20,7 +20,6 @@ AWS Neuron SDK 2.25.0 release notes
    NxD Training <nxd-training>
    NxD Core <nxd-core>
    Neuron Compiler <compiler>
-   NKI <nki>
    Neuron Runtime <runtime>
    Developer tools <tools>
    Deep Learning AMIs <dlami>
@@ -43,13 +42,11 @@ Inference Optimizations (NxD Core and NxDI)
 
 Neuron 2.25.0 introduces performance optimizations and new capabilities including:
 
-* On-device Forward Pipeline, reducing latency by up to 43% in models like Pixtral
 * Context and Data Parallel support for improved batch scaling
-* Chunked Attention for efficient long sequence processing
+* Chunked Attention for improved long sequence processing
 * 128k context length support for Llama 70B models
-* Automatic Aliasing (Beta) for faster tensor operations
-* Disaggregated Serving (Beta) showing 20% improvement in ITL/TTST
-
+* Automatic Aliasing (Beta) for fast tensor operations
+* Disaggregated Serving (Beta) improvements
 
 Model Support (NxDI)
 ^^^^^^^^^^^^^^^^^^^^
@@ -58,7 +55,6 @@ Neuron 2.25.0 expands model support to include:
 
 * Qwen3 dense models (0.6B to 32B parameters)
 * Flux.1-dev model for text-to-image generation (Beta)
-* Pixtral-Large-Instruct-2411 for image-to-text generation (Beta)
 
 Profiling Updates
 ^^^^^^^^^^^^^^^^^
@@ -172,16 +168,6 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
 
         .. grid-item-card:: 
-                :link: neuron-2-25-0-nki
-                :link-type: ref
-
-                **Neuron Kernel Interface (NKI)** 2.25.0 release notes
-                ^^^
-                Neuron's Python-based programming interface for developing and optimizing Neuron kernels.
-                +++
-                Supports: ``Inf2``, ``Trn1``, ``Trn1n``
-
-        .. grid-item-card:: 
                 :link: neuron-2-25-0-runtime
                 :link-type: ref
 
@@ -269,8 +255,9 @@ Ending support in 2.25.0
 
 * The following tutorials are no longer supported and have been moved the to :doc:`AWS Neuron SDK doc archive </archive/index>`:
   
-  * :doc:`Fine-tuning Hugging Face T5 for text summarization </tutorials/finetune_t5>`
-  * :doc:`Running SSD300 with AWS Neuron </tutorials/ssd300_demo/ssd300_demo>`
+  * :doc:`/archive/tutorials/finetune_t5`
+  * :doc:`/archive/tutorials/ssd300_demo/ssd300_demo`
+  * :doc:`/archive/tutorials/megatron_gpt_pretraining`
 
 * Neuron 2.25 is the last release supporting NxDT Megatron Models. Future Neuron releases will not include support for NxDT Megatron Models. Current users of the NxDT Megatron Models are advised to use the Hugging Face model instead by setting the ``CONF_FILE`` variable in the ``train.sh`` file to the config model you want to use.
 

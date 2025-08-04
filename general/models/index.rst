@@ -8,7 +8,7 @@ Model samples and tutorials
     :hidden:
 
     Training on Trn1 </general/models/training-trn1-samples>
-    Inference on Inf2 and Trn1 </general/models/inference-inf2-trn1-samples>    
+    Inference on Inf2/Trn1/Trn2 </general/models/inference-inf2-trn1-samples>    
     Inference on Inf1 </general/models/inference-inf1-samples>
     
 This section gives you the consolidated list of code samples and tutorials published by AWS Neuron across documentation 

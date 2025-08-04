@@ -10,7 +10,7 @@ This page contains the packages, libraries, and other artifacts (and the version
    :local:
    :depth: 2
 
-<< `Back to the release notes <latest-neuron-release>`
+<< :ref:`Back to the release notes <latest-neuron-release>`
 
 Neuron 2.25.0 (07/31/2025)
 ---------------------------
