@@ -45,9 +45,8 @@ In this step, we will process the Neuron profile data and launch TensorBoard.
 
 .. code:: bash
 
-    python3 -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
 
-    pip install tensorboard-plugin-neuronx
+    pip install tensorboard-plugin-neuronx --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 .. note::
 
