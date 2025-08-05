@@ -198,7 +198,7 @@ extlinks = {
         "https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/%s.ipynb",
         "",
     ),
-    ,'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', '')
+    'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', '')
 }
 
 
