@@ -66,7 +66,7 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		pip install -U pip
 
 		# Install packages from beta repos
-		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
         
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"
@@ -130,7 +130,7 @@ Install PyTorch NeuronX (Neuron 2.5.0)
 		python -m pip install -U pip
 
 		# Install packages from beta repos
-		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 		
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.2.0" "neuronx-cc==2.2.0.73"

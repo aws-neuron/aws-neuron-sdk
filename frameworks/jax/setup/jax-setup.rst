@@ -57,7 +57,7 @@ pip repository.
 
     .. code:: bash
 
-        python3 -m pip install jax-neuronx[stable] --index-url=https://pip.repos.neuron.amazonaws.com
+        python3 -m pip install jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
     The second is to install packages ``jax``, ``jaxlib``, ``libneuronxla``,
     and ``neuronx-cc`` separately, with ``jax-neuronx`` being an optional addition.
@@ -69,7 +69,7 @@ pip repository.
     .. code:: bash
 
         python3 -m pip install jax==0.4.38 jaxlib==0.4.38
-        python3 -m pip install jax-neuronx libneuronxla neuronx-cc==2.* --index-url=https://pip.repos.neuron.amazonaws.com
+        python3 -m pip install jax-neuronx libneuronxla neuronx-cc==2.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
 We can now run some simple JAX programs on the Trainium or Inferentia
 accelerators.

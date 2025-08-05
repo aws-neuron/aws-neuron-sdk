@@ -63,8 +63,8 @@ just like standard versions of ``torch-neuronx``.
 
 ::
 
-    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5.*" --no-deps
-    pip install --index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.6.*" --no-deps
+    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.5.*" --no-deps
+    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com/cxx11 "torch-neuronx==2.6.*" --no-deps
 
 .. important::
 
