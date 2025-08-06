@@ -44,7 +44,6 @@ Neuron 2.25.0 introduces performance optimizations and new capabilities includin
 
 * Context and Data Parallel support for improved batch scaling
 * Chunked Attention for improved long sequence processing
-* 128k context length support for Llama 70B models
 * Automatic Aliasing (Beta) for fast tensor operations
 * Disaggregated Serving (Beta) improvements
 
@@ -55,16 +54,6 @@ Neuron 2.25.0 expands model support to include:
 
 * Qwen3 dense models (0.6B to 32B parameters)
 * Flux.1-dev model for text-to-image generation (Beta)
-
-Profiling Updates
-^^^^^^^^^^^^^^^^^
-
-Enhancements to profiling capabilities include:
-
-* Addition of timestamp sync points to align device execution with CPU events
-* Expanded JSON output providing the same detailed data set used by the Neuron Profiler UI
-* New total active time metric showing accelerator utilization as percentage of total runtime
-* Fixed DMA active time calculation for more accurate measurements
 
 Monitoring and Observability
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
