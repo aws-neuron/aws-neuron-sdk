@@ -53,7 +53,6 @@ Model Support (NxDI)
 Neuron 2.25.0 expands model support to include:
 
 * Qwen3 dense models (0.6B to 32B parameters)
-* Flux.1-dev model for text-to-image generation (Beta)
 
 Monitoring and Observability
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
