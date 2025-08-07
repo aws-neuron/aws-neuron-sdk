@@ -34,9 +34,9 @@ def get_env_vars_from_rtd():
     branch_name = os.environ.get("READTHEDOCS_VERSION_NAME", "master")
     branch_name = "master" if branch_name == "latest" else branch_name
 
-    project_name = "private-aws-neuron-sdk-staging"
-    if os.environ.get("READTHEDOCS_PROJECT") == "awsdocs-neuron":
-        project_name = "aws-neuron-sdk"
+    project_name = "aws-neuron-sdk"
+    if os.environ.get("READTHEDOCS_PROJECT") == "awsdocs-neuron-staging":
+        project_name = "private-aws-neuron-sdk-staging"
 
     return project_name, branch_name
 
@@ -198,7 +198,7 @@ extlinks = {
         "https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/%s.ipynb",
         "",
     ),
-    "github": (f"https://github.com/aws-neuron/{projectblob}", ""),
+    'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', '')
 }
 
 

@@ -81,8 +81,8 @@
         pip install awscli
 
         # Install Neuron packages
-        pip install torch-neuronx==1.13.0.1.* --index-url=https://pip.repos.neuron.amazonaws.com
-        pip install neuronx-cc==2.* --index-url=https://pip.repos.neuron.amazonaws.com
+        pip install torch-neuronx==1.13.0.1.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
+        pip install neuronx-cc==2.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
 
 .. dropdown::  Run Tutorial

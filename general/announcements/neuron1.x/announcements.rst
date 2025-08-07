@@ -157,24 +157,21 @@ Starting with Neuron SDK 1.14.0, run one of the following commands to upgrade to
 .. code-block::
 
     source activate aws_neuron_pytorch_p36
-    pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-    pip install --upgrade torch-neuron neuron-cc[tensorflow] torchvision
+    pip install --upgrade torch-neuron neuron-cc[tensorflow] torchvision --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 * To upgrade TensorFlow Neuron:
 
 .. code-block::
 
    source activate aws_neuron_tensorflow_p36
-   pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-   pip install --upgrade tensorflow-neuron tensorboard-neuron neuron-cc
+   pip install --upgrade torch-neuron neuron-cc[tensorflow] torchvision --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 * To upgrade MXNet Neuron:
 
 .. code-block::
 
    source activate aws_neuron_mxnet_p36
-   pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-   pip install --upgrade mxnet-neuron neuron-cc
+   pip install --upgrade torch-neuron neuron-cc[tensorflow] torchvision --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 For more information please check the `blog <https://aws.amazon.com/blogs/developer/neuron-conda-packages-eol/>`__.
 
