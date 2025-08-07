@@ -5,6 +5,21 @@ title: '[DOCS ISSUE] '
 labels: bug
 assignees: ''
 ---
+## Hardware Used
+
+[Trainium/Inferentia, along with the specific instance used]
+
+## Training/Inference
+
+[Training/Inference]
+
+## Release Artifacts
+
+[Which release was used e.g. 2.23,2.24 etc.]
+
+## Model Type
+
+[Tutorial, custom model etc.]
 
 ## Description
 
@@ -15,3 +30,5 @@ assignees: ''
 1. ...
 2. ...
 3. ...
+
+
