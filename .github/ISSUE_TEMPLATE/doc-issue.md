@@ -13,6 +13,10 @@ assignees: ''
 
 [Training/Inference]
 
+## Instance type
+
+[Inf2.xlarge/trn1.32xlarge/trn2.48xlarge etc]
+
 ## Release Artifacts
 
 [Which release was used e.g. 2.23,2.24 etc.]
