@@ -72,7 +72,7 @@
 		pip install awscli
 
 		# Install packages from  repos
-		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
@@ -144,7 +144,7 @@
 		pip install awscli	
 
 		# Install packages from repos
-		python -m pip config set global.index-url "https://pip.repos.neuron.amazonaws.com"
+		python -m pip config set global.extra-index-url "https://pip.repos.neuron.amazonaws.com"
 
 		# Install Python packages - Transformers package is needed for BERT
 		python -m pip install torch-neuronx=="1.11.0.1.*" "neuronx-cc==2.*"
