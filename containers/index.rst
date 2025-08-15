@@ -6,7 +6,7 @@ Neuron Containers
 .. toctree::
     :maxdepth: 1
 
-    Configure a Neuron DLC <get-started/quickstart-configure-deploy-dlc>
+    Quickstart: Deploy a DLC <get-started/quickstart-configure-deploy-dlc>
     /containers/getting-started
     /containers/locate-neuron-dlc-image
     /containers/dlc-then-customize-devflow
