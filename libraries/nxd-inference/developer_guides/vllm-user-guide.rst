@@ -31,6 +31,15 @@ Refer to :ref:`Supported Model Architectures<nxdi-supported-model-architectures>
 If you are adding your own model to NxD Inference, please see :ref:`Integrating Onboarded Model with vLLM<nxdi-onboarding-models-vllm>`
 for instructions on how to setup vLLM integration for it.
 
+.. warning::
+  NeuronX distributed inference does not support the following combination of features in vLLM:
+
+  - vLLM with model ID
+  - Shard on load
+  - Tied weight embeddings
+  - 
+  To workaround this limitation, download a model checkpoint from Huggingface (such as `Qwen3-8B<https://huggingface.co/Qwen/Qwen3-8B>`_) and serve it.
+  
 Setup
 -----
 Before installing vLLM with the instructions below, you need to install the Neuron SDK.
