@@ -265,3 +265,5 @@
             :animate: fade-in
 
             :ref:`tutorial-infer`
+            :ref:`quickstart_vllm_dlc_deploy`
+            

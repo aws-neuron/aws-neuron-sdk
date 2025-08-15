@@ -1,13 +1,13 @@
 .. meta::
-   :description: Learn how to configure and deploy a vLLM Deep Learning Container with AWS Neuron SDK on Trainium and Inferentia instances.
+   :description: Learn how to deploy a vLLM server using preconfigured Neuron Deep Learning Container with on Trainium and Inferentia instances.
    :date_updated: 08/18/2025
 
-.. _dlc_quickstart_configure_deploy:
+.. _quickstart_vllm_dlc_deploy:
 
-Quickstart: Configure and deploy a Deep Learning Container (DLC) with AWS Neuron SDK
+Quickstart: Configure and deploy a vLLM server using Neuron Deep Learning Container (DLC)
 ====================================================================================
 
-This topic guides you through configuring and deploying a vLLM Deep Learning Container using the AWS Neuron SDK. When you complete this tutorial, you will run a vLLM inference server on AWS Trainium and Inferentia instances.
+This topic guides you through deploying a vLLM server on Trainium and Inferentia instances using Deep Learning Container preconfigured with AWS Neuron SDK artifacts. When you complete this tutorial, you will be able run a vLLM inference server on AWS Trainium and Inferentia instances.
 
 Overview
 --------
@@ -29,31 +29,31 @@ Prerequisites
 Before you begin, ensure you have:
 
 * AWS Trainium or Inferentia instance access
-* Docker installed on your instance
+* Docker installed on your instance. You can set up docker environment according to :ref:`tutorial-docker-env-setup`
 * SSH access to your instance
 
 Prepare your environment
 ------------------------
 
-Launch an AWS Trainium or Inferentia instance with sufficient resources for your model requirements.
+Launch an AWS Trainium or Inferentia instance with sufficient resources for your model requirements. We recommend using one of the base DLAMIs to launch your instance - `Neuron Base DLAMI <#>`.
 
 Step 1: Pull the vLLM Docker image
 -----------------------------------
 
 In this step, you will download the vLLM Docker image from AWS ECR.
 
-Pull the vLLM Docker image from AWS ECR:
+Pull the latest vLLM Docker image from Neuron repo in AWS ECR public gallery here `pytorch-inference-vllm-neuronx <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`. We 
 
 .. code-block:: bash
 
    docker pull <image_uri>
 
-Replace ``<image_uri>`` with the specific vLLM image URI from AWS ECR.
+Replace ``<image_uri>`` with the specific vLLM image URI for example - `public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.9.1-neuronx-py310-sdk2.25.0-ubuntu22.04`
 
 Step 2: Start the Docker container
 -----------------------------------
 
-In this step, you will run the container with access to Neuron devices.
+In this step, you will run the container with access to Neuron devices. For this tutorial, we are using an inf2.48xlarge instance.
 
 Run the container interactively with access to Neuron devices:
 
@@ -84,7 +84,7 @@ Run the container interactively with access to Neuron devices:
    bash
 
 .. note::
-   Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
+   The inf2.48xlarge instance provides 16 Neuron devices. Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
 
 Step 3: Start the vLLM server
 ------------------------------
@@ -125,7 +125,7 @@ Wait for the server to fully initialize. You will see output showing available A
 
 All complete! Now, let's confirm everything works.
 
-Confirmation
+Step 5: Inference Confirmation
 ------------
 
 Test the API to confirm your setup works correctly.
@@ -172,7 +172,7 @@ You should receive a response similar to:
      }
    }
 
-Congratulations! You have successfully deployed a vLLM inference server using AWS Neuron SDK. If you encountered any issues, see the **Common issues** section below.
+Congratulations! You have successfully deployed a vLLM inference server using a preconfigured Neuron DLC. If you encountered any issues, see the **Common issues** section below.
 
 Available API endpoints
 -----------------------

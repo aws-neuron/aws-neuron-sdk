@@ -54,6 +54,8 @@ Users can now use a preconfigured Deep Learning Container (DLC) with the AWS Neu
 Refer to the `vllm-inference-neuronx container <https://github.com/aws-neuron/deep-learning-containers?tab=readme-ov-file#vllm-inference-neuronx>`_
 on `https://github.com/aws-neuron/deep-learning-containers <https://github.com/aws-neuron/deep-learning-containers>`_ to get started.
 
+For a complete step-by-step tutorial on deploying the vLLM Neuron DLC, see :ref:`quickstart_vllm_dlc_deploy`.
+
 Manually install from source
 """""""""""""""""""""""""""""""
 
