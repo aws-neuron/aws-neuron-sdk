@@ -1,5 +1,5 @@
 .. meta::
-   :description: Learn how to configure and deploy a Deep Learning Container (DLC) with the AWS Neuron SDK.
+   :description: Learn how to configure and deploy a vLLM Deep Learning Container with AWS Neuron SDK on Trainium and Inferentia instances.
    :date_updated: 08/18/2025
 
 .. _dlc_quickstart_configure_deploy:
@@ -7,96 +7,227 @@
 Quickstart: Configure and deploy a Deep Learning Container (DLC) with AWS Neuron SDK
 ====================================================================================
 
-This topic guides you through configuring and deploying a Deep Learning Container (DLC) using the AWS Neuron SDK. When you have completed it, you will understand the basic process to prepare and deploy a DLC that runs on AWS Trainium and Inferentia ML chipsets.
+This topic guides you through configuring and deploying a vLLM Deep Learning Container using the AWS Neuron SDK. When you complete this tutorial, you will run a vLLM inference server on AWS Trainium and Inferentia instances.
 
 Overview
 --------
 
-.. {Describe exactly what the customer will achieve by following the tutorial, including information on when they will use the process in this doc and a high-level review of the steps in it. This helps them quickly assess the relevance of the tutorial to their own use case.}
+You will pull a vLLM Docker image, configure it for Neuron devices, and start an inference server. This process lets you deploy large language models on AWS ML accelerators for high-performance inference workloads.
 
-{optional}Before you start
+Before you start
 ----------------
 
 This tutorial assumes that you have experience in the following areas:
 
-* {list required knowledge or experience, provide links to supporting topics/info if appropriate}
-* ...
+* Docker container management
+* AWS EC2 instance administration
+* Command-line interface operations
 
 Prerequisites
 -------------
 
-.. {What the customer must have available in terms of hardware, software, accounts/permissions, and knowledge/skills. Provide links where appropriate.}
-* {Required packages/services/tools/hardware with the supported versions, if any}
-* {Account and auth requirements, if any}
-* {System requirements, if any}
-* {Required knowledge/skills, if appropriate}
-* {Any other prerequisites that the customer must have in place before starting the tutorial}
+Before you begin, ensure you have:
+
+* AWS Trainium or Inferentia instance access
+* Docker installed on your instance
+* SSH access to your instance
 
 Prepare your environment
-----------------------
+------------------------
 
-.. {Optional section, where you provide any initial preparation or configuration the customer must perform, such as setting up a virtual environment, configuring environment variables, downloading a dockerfile template, etc. Basically, anything the customer must have in place and configured before starting into the steps below. Link to supporting guidance if signficant work is needed.} 
+Launch an AWS Trainium or Inferentia instance with sufficient resources for your model requirements.
+
+Step 1: Pull the vLLM Docker image
+-----------------------------------
+
+In this step, you will download the vLLM Docker image from AWS ECR.
+
+Pull the vLLM Docker image from AWS ECR:
+
 .. code-block:: bash
-   # Example setup command
-   pip install package_name
-Step 1: {scoped task starting with a verb}
------------------------------
 
-In this step, you will {describe the outcome of the task described in this step}.
+   docker pull <image_uri>
 
-.. {The first discrete task in the end-to-end process covered by the tutorial. Use active voice (“You do X”, not “X is done by you”) as best you can. Provide code, shell commands, or screenshots, that will make the subtask clear or easy whenever possible — never make the customer guess as to the specifics of the action you’re asking them to take.}
-First, you ...
+Replace ``<image_uri>`` with the specific vLLM image URI from AWS ECR.
 
-.. {Optionally, provide some way for the user to confirm they were successful in performing the task, such as code or shell output, or running some command that let’s them confirm they did everything correctly as instructed.}
-Step 2: {scoped task starting with a verb}
+Step 2: Start the Docker container
+-----------------------------------
+
+In this step, you will run the container with access to Neuron devices.
+
+Run the container interactively with access to Neuron devices:
+
+.. code-block:: bash
+
+   docker run -it \
+   --device=/dev/neuron0 \
+   --device=/dev/neuron1 \
+   --device=/dev/neuron2 \
+   --device=/dev/neuron3 \
+   --device=/dev/neuron4 \
+   --device=/dev/neuron5 \
+   --device=/dev/neuron6 \
+   --device=/dev/neuron7 \
+   --device=/dev/neuron8 \
+   --device=/dev/neuron9 \
+   --device=/dev/neuron10 \
+   --device=/dev/neuron11 \
+   --device=/dev/neuron12 \
+   --device=/dev/neuron13 \
+   --device=/dev/neuron14 \
+   --device=/dev/neuron15 \
+   --cap-add SYS_ADMIN \
+   --cap-add IPC_LOCK \
+   -p 8080:8080 \
+   --name <server_name> \
+   <image_uri> \
+   bash
+
+.. note::
+   Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
+
+Step 3: Start the vLLM server
 ------------------------------
 
-In this step, you will {describe the outcome of the task described in this step based on the work they did in the prior step}.
+In this step, you will launch the vLLM inference server inside the container.
 
-.. {The next discrete task in the process covered by the tutorial. Use active voice (“You do X”, not “X is done by you”) as best you can. Provide code, shell commands, or screenshots, that will make the subtask clear or easy whenever possible — never make the customer guess as to the specifics of the action you’re asking them to take.}
-You ...
+Inside the container, start the vLLM inference server:
 
-.. {Optionally, provide some way for the user to confirm they were successful in performing the task, such as code or shell output, or running some command that let’s them confirm they did everything correctly as instructed.}
-.. **{More steps as needed, following the same pattern as above. Each step should be a discrete task that builds on the previous steps, leading to the final outcome of the tutorial.}**
-Step N: {scoped task starting with a verb}
+.. code-block:: bash
+
+   VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python vllm.entrypoints.openai.api_server \
+   --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
+   --max-num-seqs=4 \
+   --max-model-len=128 \
+   --tensor-parallel-size=8 \
+   --port=8080 \
+   --device 'neuron' \
+   --override-neuron-config '{"enable_bucketing":false}'
+
+.. important::
+   * Choose the appropriate model for your use case
+   * Set ``--tensor-parallel-size`` to be less than or equal to the number of Neuron devices you specified in Step 2
+   * Server startup typically takes 5-10 minutes
+
+Step 4: Verify server status
 -----------------------------
 
-In the final step, you will {describe the outcome of the task described in this step based on the work they did in the prior step}.
+In this step, you will confirm the server starts successfully.
 
-.. {The last discrete task in the process covered by the tutorial. Use active voice (“You do X”, not “X is done by you”) as best you can. Provide code, shell commands, or screenshots, that will make the subtask clear or easy whenever possible — never make the customer guess as to the specifics of the action you’re asking them to take.}
-You ...
+Wait for the server to fully initialize. You will see output showing available API routes:
 
-All complete! Now, let’s confirm everything works.
+.. code-block:: text
+
+   INFO 08-12 00:04:47 [launcher.py:28] Available routes are:
+   INFO 08-12 00:04:47 [launcher.py:36] Route: /health, Methods: GET
+   INFO 08-12 00:04:47 [launcher.py:36] Route: /v1/chat/completions, Methods: POST
+   INFO 08-12 00:04:47 [launcher.py:36] Route: /v1/completions, Methods: POST
+
+All complete! Now, let's confirm everything works.
 
 Confirmation
 ------------
 
-.. {Provide them with a way to know they’ve done everything correctly. This could be a screenshot, command-line output, a tool to launch, or specific settings to check.}
-Congratulations! You have now {what the user has accomplished}. If you encountered any issues, see the **Common issues** section below.
+Test the API to confirm your setup works correctly.
+
+Open a separate terminal and make an API call:
+
+.. code-block:: bash
+
+   curl http://localhost:8080/v1/chat/completions \
+   -H "Content-Type: application/json" \
+   -d '{
+     "messages": [
+       {
+         "role": "user",
+         "content": "What is the capital of Italy?"
+       }
+     ]
+   }'
+
+You should receive a response similar to:
+
+.. code-block:: json
+
+   {
+     "id": "chatcmpl-ac7551dd2f2a4be3bd2c1aabffa79b4c",
+     "object": "chat.completion",
+     "created": 1754958455,
+     "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+     "choices": [
+       {
+         "index": 0,
+         "message": {
+           "role": "assistant",
+           "content": "The capital of Italy is Rome...",
+           "tool_calls": []
+         },
+         "finish_reason": "stop"
+       }
+     ],
+     "usage": {
+       "prompt_tokens": 23,
+       "total_tokens": 106,
+       "completion_tokens": 83
+     }
+   }
+
+Congratulations! You have successfully deployed a vLLM inference server using AWS Neuron SDK. If you encountered any issues, see the **Common issues** section below.
+
+Available API endpoints
+-----------------------
+
+The server provides various endpoints for different use cases:
+
+* **Health Check**: ``GET /health``
+* **Chat Completions**: ``POST /v1/chat/completions``
+* **Text Completions**: ``POST /v1/completions``
+* **Embeddings**: ``POST /v1/embeddings``
+* **Models Info**: ``GET /v1/models``
+* **API Documentation**: ``GET /docs``
 
 Common issues
 -------------
 
-Uh oh! Did you encounter an error or other issue while working through this tutorial? Here are some commonly encountered issues and how to address them.
+Did you encounter an error while working through this tutorial? Here are common issues and solutions:
 
-- {Problem 1}: [Solution]
-- {Problem 2}: [Solution]
-- {Problem 3}: [Solution]
+- **Server won't start**: Check that you have sufficient Neuron devices allocated
+- **Connection refused**: Verify the container is running and port 8080 is properly mapped
+- **Slow performance**: Ensure your ``tensor-parallel-size`` matches your available Neuron devices
+- **Memory issues**: Consider using a larger instance type or reducing model size
 
-{Optional}Clean up
------------------
+For additional help, refer to the complete vLLM User Guide for NxD Inference documentation.
 
-.. {Explain how to clean up any resources or environment changes used in this tutorial, if needed.}
+Clean up
+--------
+
+To clean up resources after completing this tutorial:
+
+1. Stop the Docker container:
+
+   .. code-block:: bash
+
+      docker stop <server_name>
+
+2. Remove the container:
+
+   .. code-block:: bash
+
+      docker rm <server_name>
+
+3. Terminate your EC2 instance if no longer needed.
+
 Next steps
 ----------
 
-Now that you've completed this tutorial, take your work and dive into other topics that build off of it.
+Now that you've completed this tutorial, explore these related topics:
 
-* {link to topic that builds off this quickstart}
-* {link to topic that builds off this quickstart}
+* Learn more about vLLM configuration options in the vLLM User Guide for NxD Inference
+* Explore model optimization techniques for better performance
+* Set up production deployment with load balancing and monitoring
 
-{Optional}Further reading
-----------------
+Further reading
+---------------
 
-- {link with description here}
-- {link with description here}
+- `vLLM User Guide for NxD Inference <#>`_ - Complete documentation for vLLM on Neuron
+- `AWS Neuron SDK Documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_ - Full Neuron SDK reference
