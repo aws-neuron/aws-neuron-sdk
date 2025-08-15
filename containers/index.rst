@@ -22,10 +22,10 @@ In this section, you'll find resources to help you use containers for accelerati
       .. grid-item::
 
             .. card::
-                :title: Quickstart: Configure and deploy a Deep Learning Container (DLC) with AWS Neuron
-                :ref: dlc_quickstart_configure_deploy   
-                :description: Learn how to configure and deploy a Deep Learning Container (DLC) with the AWS Neuron SDK.
-                :icon: fa-rocket 
+                  :title: Quickstart: Configure and deploy a Deep Learning Container (DLC) with AWS Neuron
+                  :ref: dlc_quickstart_configure_deploy   
+                  :description: Learn how to configure and deploy a Deep Learning Container (DLC) with the AWS Neuron SDK.
+                  :icon: fa-rocket 
 
 
 Getting started with Neuron DLC using Docker
