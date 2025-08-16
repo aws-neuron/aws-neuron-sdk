@@ -6,7 +6,7 @@ Neuron Containers
 .. toctree::
     :maxdepth: 1
 
-    Quickstart: Deploy a DLC <get-started/quickstart-configure-deploy-dlc>
+    Quickstart: Deploy a DLC with vLLM </containers/get-started/quickstart-configure-deploy-dlc>
     /containers/getting-started
     /containers/locate-neuron-dlc-image
     /containers/dlc-then-customize-devflow
@@ -16,15 +16,17 @@ Neuron Containers
 
 In this section, you'll find resources to help you use containers for accelerating your deep learning models on Inferentia and Trainium instances.
 
+----
 .. grid:: 1
   :gutter: 1
 
-  .. grid-item-card:: Quickstart: Configure and deploy a Deep Learning Container (DLC) with AWS Neuron
-    :ref: dlc_quickstart_configure_deploy
+  .. grid-item-card:: Quickstart: Configure and deploy a Deep Learning Container (DLC) with vLLM
+    :ref: quickstart_vllm_dlc_deploy
     :class-card: sd-border-1  
       
     Learn how to configure and deploy a Deep Learning Container (DLC) with the AWS Neuron SDK.
       
+----
 
 Getting started with Neuron DLC using Docker
 --------------------------------------------
