@@ -53,7 +53,7 @@ Replace ``<image_uri>`` with the specific vLLM image URI for example - `public.e
 Step 2: Start the Docker container
 -----------------------------------
 
-In this step, you will run the container with access to Neuron devices. For this tutorial, we are using an trn1.32xlarge instance.
+In this step, you will run the container with access to Neuron devices. For this tutorial, we are using an inf2.48xlarge instance.
 
 Run the container interactively with access to Neuron devices:
 
@@ -72,10 +72,6 @@ Run the container interactively with access to Neuron devices:
    --device=/dev/neuron9 \
    --device=/dev/neuron10 \
    --device=/dev/neuron11 \
-   --device=/dev/neuron12 \
-   --device=/dev/neuron13 \
-   --device=/dev/neuron14 \
-   --device=/dev/neuron15 \
    --cap-add SYS_ADMIN \
    --cap-add IPC_LOCK \
    -p 8080:8080 \
@@ -84,7 +80,7 @@ Run the container interactively with access to Neuron devices:
    bash
 
 .. note::
-   The trn1.32xlarge instance provides 16 Neuron devices. Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
+   The inf2.48xlarge instance provides 16 Neuron devices. Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
 
 Step 3: Start the vLLM server
 ------------------------------
