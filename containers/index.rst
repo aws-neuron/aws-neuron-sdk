@@ -6,6 +6,7 @@ Neuron Containers
 .. toctree::
     :maxdepth: 1
 
+    Quickstart: Deploy a DLC with vLLM </containers/get-started/quickstart-configure-deploy-dlc>
     /containers/getting-started
     /containers/locate-neuron-dlc-image
     /containers/dlc-then-customize-devflow
@@ -15,8 +16,25 @@ Neuron Containers
 
 In this section, you'll find resources to help you use containers for accelerating your deep learning models on Inferentia and Trainium instances.
 
-Getting started with Neuron DLC using Docker
---------------------------------------------
+----
+
+.. grid:: 1
+  :gutter: 1
+
+  .. grid-item-card:: Quickstart: Configure and deploy a Deep Learning Container (DLC) with vLLM
+    :link: quickstart_vllm_dlc_deploy
+    :link-type: ref
+
+    **Quickstart: Configure and deploy a DLC with vLLM** 
+    ^^^
+    Get started by configuring and deploying a Deep Learning Container (DLC) with the AWS Neuron SDK and vLLM.
+    +++
+    Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
+      
+----
+
+Getting started with Neuron DLCs using Docker
+---------------------------------------------
 AWS Neuron Deep Learning Containers (DLCs) are a set of Docker images for training and serving models on AWS Trainium and Inferentia instances using AWS Neuron SDK. To build a Neuron container using Docker, please refer to :ref:`containers-getting-started`.
 
 Neuron Deep Learning Containers
