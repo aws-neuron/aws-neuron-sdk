@@ -29,7 +29,7 @@ In this section, you'll find resources to help you use containers for accelerati
     ^^^
     Get started by configuring and deploying a Deep Learning Container (DLC) with the AWS Neuron SDK and vLLM.
     +++
-    Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
+    Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
       
 ----
 
