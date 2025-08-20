@@ -404,3 +404,32 @@ You can change the sampling parameters and enable or disable streaming.
         generated_text = response.choices[0].message.content
         
     print(generated_text)
+
+
+Specifying context and token buckets (online inference)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can tune bucketing for **prefill** (context encoding) and **decode** (token generation) by
+passing ``override_neuron_config`` to the OpenAI-compatible server.  
+The example below targets a 1K-token workload on ``meta-llama/Llama-3.1-8B-Instruct`` with **single sequence** (BS=1) execution.
+
+.. code:: bash
+
+    export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
+
+    python -m vllm.entrypoints.openai.api_server \
+      --model "meta-llama/Llama-3.1-8B-Instruct" \
+      --device "neuron" \
+      --tensor-parallel-size 16 \
+      --max-num-seqs 1 \
+      --max-model-len 1024 \
+      --port 8080 \
+      --override-neuron-config "{\"enable_bucketing\": true, \
+        \"context_encoding_buckets\": [256, 512, 1024], \
+        \"token_generation_buckets\": [32, 64, 128, 256, 512, 768], \
+        \"max_context_length\": 1024, \
+        \"seq_len\": 1024, \
+        \"batch_size\": 1, \
+        \"ctx_batch_size\": 1, \
+        \"tkg_batch_size\": 1, \
+        \"is_continuous_batching\": true}"
