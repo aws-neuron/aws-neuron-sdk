@@ -60,9 +60,9 @@ to run any model based on Llama, such as Mistral.
 Neuron Classes
 ^^^^^^^^^^^^^^
 
-- Neuron config class: MoENeuronConfig
-- Inference config class: MixtralInferenceConfig
-- Causal LM model class: NeuronMixtralForCausalLM
+- Neuron config class: NeuronConfig
+- Inference config class: LlamaInferenceConfig
+- Causal LM model class: NeuronLlamaForCausalLM
 
 Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
