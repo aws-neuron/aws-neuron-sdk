@@ -13,6 +13,13 @@ body:
     validations:
       required: true
   - type: textarea
+    id: modelname
+    attributes:
+      label: Model Type
+      description: Provide Model Name
+    validations:
+      required: true
+  - type: textarea
     id: workloadtype
     attributes:
       label: Describe the workload type 
