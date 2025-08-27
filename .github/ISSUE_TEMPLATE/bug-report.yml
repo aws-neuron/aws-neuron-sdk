@@ -16,7 +16,7 @@ body:
     id: workloadtype
     attributes:
       label: Describe the workload type 
-      description: Tell me is it a Inference/Training workload or anything else.
+      description: Please mention workload type (e.g.Inference/Training workload or anything else.)
     validations:
       required: true
   - type: textarea
