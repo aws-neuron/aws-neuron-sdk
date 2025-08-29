@@ -40,6 +40,10 @@ body:
       label: Release version 
       description: |
         Provide Neuron SDK release version - ( e.g. 2.25.0) and all relevant component versions. 
+        ```
+        apt list --installed | grep -i -e neuron
+        pip list | grep -i -e neuron -e torch -e transformers -e jax
+        ```
         apt list --installed | grep -i -e neuron,   pip list | grep -i -e neuron -e torch -e transformers -e jax      
   - type: textarea
     id: reproduction
