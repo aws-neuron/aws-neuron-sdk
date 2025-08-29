@@ -83,17 +83,4 @@ body:
         Anything else that might be relevant for troubleshooting this bug. Providing context helps us come up with a solution that is most useful in the real world. When applicable, please provide HLOs and compiler commands.
     validations:
       required: false
-  - type: input
-    id: neuronx-cc-version
-    attributes:
-      label: neuronx-cc version used
-      description: |
-        Please provide output of neuronx-cc --version 
-    validations:
-      required: false
-  - type: input
-    id: frameworks-used
-    attributes:
-      label: Framework(s) and their versions used ( PyTorch, etc..) 
-    validations:
-      required: false
+
