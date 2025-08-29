@@ -12,7 +12,7 @@ The NeuronX Runtime consists of a kernel driver and C/C++ libraries which provid
     /neuron-runtime/api-reference-guide
     /neuron-runtime/configuration-guide
     Explore the Neuron Runtime </neuron-runtime/explore/index>
-    Misc </neuron-runtime/misc-runtime>
+    Resources </neuron-runtime/misc-runtime>
 
 .. dropdown::  API Reference Guide
       :class-title: sphinx-design-class-title-med
