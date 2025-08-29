@@ -21,8 +21,6 @@ This asynchronous execution paradigm enables intrinsic overlapping of computatio
 
 Despite these performance benefits, resource contention is a significant consideration. DMA engines are shared resources between computation and communication subsystems. This contention can cause throughput degradation for compute operations due to delayed DMA transactions between High Bandwidth Memory (HBM) and Scratchpad Buffer (SBUF), affecting both input tensor loading and output tensor spill-out for computation engines. Communication operations may also experience performance degradation due to time-sharing of DMA engine resources. Implementing optimal DMA prioritization strategies is critical for maximizing system performance in real-world conditions.
 
-For more details, see the `Neuron Runtime documentation <https://awsdocs.com/neuron-sdk/neuron-runtime/>`_ and the `Neuron Compiler Guide <https://awsdocs.com/neuron-sdk/compiler-guide/>`_.
-
 Overlap Between Compute and Communication
 -----------------------------------------
 
@@ -39,8 +37,6 @@ Current compiler heuristics schedule FSDP AllGather operations collectively at t
 
 Similarly, FSDP ReduceScatter operations are typically scheduled at the end of the backward pass, just before optimizer execution, due to compiler memory optimization strategies. An alternative scheduling approach—placing each FSDP ReduceScatter operation within the subsequent backward layer—would enable better computational overlap and eliminate idle periods at the end of the backward pass.
 
-For a deeper look at distributed training strategies, see the `Neuron Distributed Training Guide <https://awsdocs.com/neuron-sdk/distributed-training/>`_.
-
 Token Threading for FSDP
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -54,6 +50,7 @@ This mechanism uses a specialized Neuron PJRT compiler pass to identify operatio
 The resulting High Level Optimizer (HLO) instruction sequence demonstrates the dependency chain:
 
 .. code-block:: none
+
    constant.45 = bf16[] constant(0)
    all-gather.26 = (bf16[4096,8192]{2,1,0}, bf16[]) all-gather(param, constant.45), ...
    ...
@@ -65,6 +62,7 @@ The resulting High Level Optimizer (HLO) instruction sequence demonstrates the d
    ...
    get-tuple-element.7 = bf16[] get-tuple-element(all-gather.25), index=1, ...
    reduce-scatter.8 = (bf16[128,8192]{1,0}, bf16[]) reduce-scatter(dot.9, get-tuple-element.7), ...
+
 A token is extracted from the preceding CC operation and incorporated into the input tuple of the next CC operation, creating an explicit data dependency that enforces deterministic ordering. The Neuron compiler preserves this ordering during instruction scheduling but eliminates the token tensors from the final execution plan.
 
 This implementation enables effective overlapping of FSDP CC operations with computational operations in adjacent network layers. Performance analysis confirms that FSDP AllGather operations for Attention layers successfully overlap with computation in preceding Multi-Layer Perceptron (MLP) layers, specifically in the execution window between TP AllGather and ReduceScatter operations.
@@ -74,8 +72,6 @@ This implementation enables effective overlapping of FSDP CC operations with com
    :width: 80%
 
    Image that shows how FSDP-AG operations for Attention layers successfully overlap with computation in preceding MLP layers.
-
-For more information on FSDP CC operations, see the `Neuron Compiler Advanced Features <https://awsdocs.com/neuron-sdk/compiler-advanced/>`_.
 
 Adjusting Static DMA Priority
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,13 +86,13 @@ To address performance degradation caused by overlapping FSDP AllGather operatio
 For systems with both TP and FSDP, optimal performance is achieved by prioritizing PDMAT for computational operations over FSDP CC operations:
 
 .. code-block:: shell
+
    NEURON_RT_DBG_DMA_PACKETIZATION_SIZE=65536
    NEURON_RT_DBG_CC_DMA_PACKET_SIZE=4096
+
 Although ``NEURON_RT_DBG_CC_DMA_PACKET_SIZE`` also affects critical TP collective communication operations, empirical analysis shows operational efficiency remains unimpaired.
 
 The architecture supports additional DMA instruction types for dynamic transaction handling (DmaMemcpy, DmaIndirect, DmaTranspose), using the Descriptor Generation Engine (DGE) to generate DMA descriptors dynamically. The ``NEURON_RT_DBG_DMA_PACKETIZATION_SIZE`` parameter does not affect these DGE-based instructions. Enhanced dynamic DMA prioritization is under development.
-
-See the `Neuron Runtime Tuning Guide <https://awsdocs.com/neuron-sdk/runtime-tuning/>`_ for more information.
 
 Overlap Between Communications – Multi-stream CC
 ------------------------------------------------
@@ -126,24 +122,25 @@ Multi-stream CC enables concurrent execution of communication operations using p
 To enable multi-stream CC in JAX, set these environment variables:
 
 .. code-block:: shell
+
    NEURON_FSDP=1
    NEURON_FSDP_CC_MULTISTREAM=1
 
 For NxD implementations, also set this environment variable:
 
 .. code-block:: shell
+
    NEURON_NXD_FSDP_CC_MULTISTREAM=1
 
 The stream allocation mechanism is implemented in Neuron PJRT compilation passes, where CC stream identifiers (stream_id) are assigned to the ``frontend_attributes`` field of HLO instructions, using metadata tags from Token Threading for FSDP.
 
 .. code-block:: none
+
    reduce-scatter.8 =
      (bf16[128,8192]{1,0}, bf16[]) reduce-scatter(dot.9, get-tuple-element.7), ...
      frontend_attributes={collective_type="tp_reduce_scatter",has_token="1",stream_id="0"}, ...
 
 These configuration parameters are being incorporated into default settings in future releases, enabling automatic activation. More granular user-configurable options for stream allocation are also under development.
-
-For more details, refer to the `Neuron Distributed Inference Guide <https://awsdocs.com/neuron-sdk/distributed-inference/>`_.
 
 Adjusting Static DMA Priority (per Stream)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -153,10 +150,10 @@ DMA prioritization for TP CC operations is critical, as these operations directl
 The ``NEURON_RT_DBG_CC_DMA_PACKET_SIZE`` variable accepts comma-delimited values for individual adjustment of DMA packet sizes per communication stream:
 
 .. code-block:: shell
+
    NEURON_RT_DBG_DMA_PACKETIZATION_SIZE=65536
    NEURON_RT_DBG_CC_DMA_PACKET_SIZE=65536,4096 # 65536 for stream 0, 4096 for stream 1
 
-For more on DMA configuration, see the `Neuron Runtime Advanced Configuration <https://awsdocs.com/neuron-sdk/runtime-advanced/>`_.
 
 Weight Prefetch
 ^^^^^^^^^^^^^^^
@@ -168,12 +165,11 @@ If all FSDP CC operations are shifted by one layer, Attention layers in the back
 To balance communication and computation, additional configuration parameters enable precise control over the shifting distance for FSDP CC operations:
 
 .. code-block:: shell
+
    NEURON_FSDP_NUM_LAYER_EARLY_AG_SHIFT=1
    NEURON_FSDP_NUM_LAYER_LATE_RS_SHIFT=2
 
 These parameters enable differential shifting strategies for AllGather and ReduceScatter operations, optimizing the overlap pattern for each model architecture.
-
-See the `Neuron FSDP Optimization Guide <https://awsdocs.com/neuron-sdk/fsdp-optimization/>`_ for further details.
 
 What’s Next?
 ------------
@@ -187,8 +183,6 @@ For critical CC operations, the DGE will implement dynamic resource reallocation
 
 TRN3 and later generations will include DMA engines with strict priority-based arbitration, processing descriptors from the highest-priority ring to completion before lower-priority transactions. This hardware advancement will expand the flexibility and effectiveness of DMA prioritization strategies.
 
-For updates on upcoming features, see the `Neuron SDK Release Notes <https://awsdocs.com/neuron-sdk/release-notes/>`_.
-
 Fine-grained CC
 ^^^^^^^^^^^^^^^
 
@@ -201,11 +195,9 @@ These CC operations can be decomposed into more granular communication primitive
 
 This fine-grained CC approach is based on research from Google and is under development for future versions of the Neuron SDK.
 
-For ongoing research and future directions, see the `Neuron SDK Research Blog <https://awsdocs.com/neuron-sdk/blog/>`_.
-
 Read More
 ---------
 
-- `AWS Neuron SDK Documentation Home <https://awsdocs.com/neuron-sdk/>`_
-- `Neuron Distributed Training Guide <https://awsdocs.com/neuron-sdk/distributed-training/>`_
-- `Neuron Runtime Documentation <https://awsdocs.com/neuron-sdk/neuron-runtime/>`_
+- `AWS Neuron SDK Documentation Home <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/>`_
+- `Neuron Distributed Training Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-training/index.html>`_
+- `Neuron Runtime Documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/index.html>`_
