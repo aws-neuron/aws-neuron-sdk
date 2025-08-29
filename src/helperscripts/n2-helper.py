@@ -659,7 +659,7 @@ class manifest:
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
         str += f'\n{indentation}# Set pip repository pointing to the Neuron repository \n'
-        str += f'{indentation}python -m pip config set global.index-url https://pip.repos.neuron.amazonaws.com\n'
+        str += f'{indentation}python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com\n'
 
         return str
 
