@@ -23,7 +23,7 @@ body:
     id: workloadtype
     attributes:
       label: Describe the workload type 
-      description: Please mention workload type (e.g.Inference/Training workload or anything else.)
+      description: Note the type of workload (such as Inference or Training) and any specific details about the workload configuration.
     validations:
       required: true
   - type: textarea
