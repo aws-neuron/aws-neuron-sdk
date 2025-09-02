@@ -91,7 +91,7 @@ Inside the container, start the vLLM inference server:
 
 .. code-block:: bash
 
-   VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python vllm.entrypoints.openai.api_server \
+   VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python -m vllm.entrypoints.openai.api_server \
    --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
    --max-num-seqs=4 \
    --max-model-len=128 \
