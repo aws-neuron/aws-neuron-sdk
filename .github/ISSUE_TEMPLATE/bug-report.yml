@@ -9,7 +9,7 @@ body:
     id: description
     attributes:
       label: Describe the bug
-      description: What is the problem? A clear and concise description of the bug.
+      description: What is the problem? Provide a clear description of your issue and the steps you took that produced it.
     validations:
       required: true
   - type: textarea
