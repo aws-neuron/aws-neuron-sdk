@@ -44,7 +44,6 @@ body:
         apt list --installed | grep -i -e neuron
         pip list | grep -i -e neuron -e torch -e transformers -e jax
         ```
-        apt list --installed | grep -i -e neuron,   pip list | grep -i -e neuron -e torch -e transformers -e jax      
   - type: textarea
     id: reproduction
     attributes:
