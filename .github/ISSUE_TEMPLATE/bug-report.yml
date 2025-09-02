@@ -49,7 +49,7 @@ body:
     attributes:
       label: Reproduction Steps
       description: |
-        Provide model type, Tutorial links for more context.
+        Provide the type of the model and links to any tutorials you may have used, as additional context.
         Provide a self-contained, concise snippet of code that can be used to reproduce the issue.
         For more complex issues provide a repo with the smallest sample that reproduces the bug.
         
