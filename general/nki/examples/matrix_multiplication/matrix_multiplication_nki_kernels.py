@@ -376,9 +376,9 @@ def nki_matmul_fully_optimized_(
     # Copying the result from SBUF to HBM
     for m in nl.affine_range(NUM_BLOCK_M):
       for bm in nl.affine_range(TILES_IN_BLOCK_M):
-        i_res = nl.mgrid[0:TILE_K, 0:TILE_N]
-        i_res_packed = nl.mgrid[0:TILE_K, 0:BLOCK_N]
-        result_packed = nl.ndarray((TILE_K, BLOCK_N),
+        i_res = nl.mgrid[0:TILE_M, 0:TILE_N]
+        i_res_packed = nl.mgrid[0:TILE_M, 0:BLOCK_N]
+        result_packed = nl.ndarray((TILE_M, BLOCK_N),
                                    dtype=result_tiles.dtype,
                                    buffer=nl.sbuf)
 
@@ -388,7 +388,7 @@ def nki_matmul_fully_optimized_(
                         bn * TILE_N + i_res.x] = nl.copy(result_tiles[m, bm, bn,
                                                                       i_res.p,
                                                                       i_res.x])
-        nl.store(result[(TILES_IN_BLOCK_M * m + bm) * TILE_K + i_res_packed.p,
+        nl.store(result[(TILES_IN_BLOCK_M * m + bm) * TILE_M + i_res_packed.p,
                         BLOCK_N * n + i_res_packed.x],
                  value=result_packed[i_res_packed.p, i_res_packed.x])
 
