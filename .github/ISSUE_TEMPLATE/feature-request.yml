@@ -25,7 +25,7 @@ body:
     attributes:
       label: Proposed Solution
       description: |
-        Suggest how to implement the addition or change. Please include prototype/workaround/sketch/reference implementation.
+        Provide detailed suggestions or requirements for this proposed feature. If you have them, include any reference implementation details (or even links to prototypes).
     validations:
       required: false
   - type: textarea
