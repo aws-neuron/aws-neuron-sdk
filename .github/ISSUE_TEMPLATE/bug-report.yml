@@ -61,7 +61,7 @@ body:
     id: regression
     attributes:
       label: Regression Issue
-      description: What is a regression? If it worked in a previous version but doesn't in the latest version, it's considered a
+      description: Is this as regression (did it work in a previous version and not now)?
         If this is a regression, provide the Neuron SDK release version where this configuration worked for you.
       options:
         - label: Select this option if this issue appears to be a regression.
