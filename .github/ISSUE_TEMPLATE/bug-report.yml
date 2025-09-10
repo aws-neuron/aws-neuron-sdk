@@ -71,7 +71,7 @@ body:
     attributes:
       label: Possible Solution
       description: |
-        Suggest a fix/reason for the bug
+        Suggest a fix or reason for the bug, if you know:
     validations:
       required: false
   - type: textarea
