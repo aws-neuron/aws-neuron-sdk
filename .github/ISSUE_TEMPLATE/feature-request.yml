@@ -33,7 +33,7 @@ body:
     attributes:
       label: Other Information
       description: |
-        Any alternative solutions or features you considered, a more detailed explanation, stack traces, related issues, links for context, etc.
+        Any additional details or information you can provide, including links to related content or similar issues.
     validations:
       required: false
   - type: checkboxes
