@@ -40,7 +40,7 @@ for instructions on how to setup vLLM integration for it.
  
   If this combination is configured, you will likely see this error: ``NotImplementedError: Cannot copy out of meta tensor; no data!``
  
-  To workaround this limitation, download a model checkpoint from Huggingface (such as `Qwen3-8B<https://huggingface.co/Qwen/Qwen3-8B>`_) and serve it.
+  To workaround this limitation, download a model checkpoint from Hugging Face (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B>`_) and serve it.
   
 Setup
 -----

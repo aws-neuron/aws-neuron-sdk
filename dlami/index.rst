@@ -52,6 +52,36 @@ comes pre-installed with all the Neuron libraries including Neuron compiler and 
   
   https://github.com/aws-neuron/aws-neuron-sdk/issues/1071 for more information on the issue.
 
+
+.. note::
+
+  The AL2023 DLAMI shipped in SDK v2.25 has an issue with the symbolic linking of Python3.10 shared object files which affects PyTorch virtual environments.
+  This is because AL2023 operating system comes with Python3.9 by default and torch_neuronx requires Python3.10. We have fixed the issue in the upcoming release.
+  
+  Current workaround:
+
+  .. code-block:: shell
+
+     sudo ln -sf /usr/lib64/libpython3.9.so.1.0 /usr/lib64/libpython3.10.so.1.0
+
+
+.. note::
+
+  The DLAMIs shipped in SDK v2.25 had an issue with the dependencies within Neuronx Distributed Training.
+  Specifically, ``setuptools`` had 'xw' extra characters which caused ``setup_nxdt.sh`` script to fail. 
+  This has been removed in the upcoming release.
+  
+  For a workaround, update the requirements file to remove these extra characters.
+
+  .. code-block:: shell
+    
+     vi /opt/aws_neuronx_venv_pytorch_2_7_nxd_training/bin/requirements.txt
+
+     ...
+     setuptools>=70.0xw -> setuptools>=70.0
+     ...
+
+
 Multi Framework DLAMIs supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
