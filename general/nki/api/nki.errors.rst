@@ -210,7 +210,7 @@ You could explicitly annotate the parameter as mutable:
 Alternatively, you could return a copy of the input parameter if you don't intend
 to modify the input parameter:
 
-  .. code-block:: python
+.. code-block:: python
 
   import neuronxcc.nki.isa as nisa
   import neuronxcc.nki.language as nl
