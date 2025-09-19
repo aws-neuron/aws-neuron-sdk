@@ -95,7 +95,7 @@ Currently, BERT pretraining performance is ~10% lower with torch-neuronx 2.6 com
 Lower BERT pretraining performance when switch to using ``model.to(torch.bfloat16)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be deprecation warnings (as noted below).
+Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be end-of-support warnings (as noted below).
 
 Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,7 +111,7 @@ This is an error that ``torch_xla.core.xla_model.xrt_world_size()`` is removed i
 [v2.6] AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'get_ordinal'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+This is an error that ``torch_xla.core.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
 
 [v2.5] WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.world_size instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -119,10 +119,10 @@ This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is re
 This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size()`` instead.
 
 
-[v2.5] WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+[v2.5] WARNING:torch_xla.core.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+This is a warning that ``torch_xla.core.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
 
 
 AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
@@ -237,7 +237,7 @@ Currently, BERT pretraining performance is ~10% lower with torch-neuronx 2.6 com
 Lower BERT pretraining performance when switch to using ``model.to(torch.bfloat16)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be deprecation warnings (as noted below).
+Currently, BERT pretraining performance is ~11% lower when switching to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16`` due to https://github.com/pytorch/xla/issues/8545. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 and 2.6 although there will be end-of-support warnings (as noted below).
 
 Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -253,7 +253,7 @@ This is an error that ``torch_xla.core.xla_model.xrt_world_size()`` is removed i
 [v2.6] AttributeError: <module 'torch_xla.core.xla_model' ... does not have the attribute 'get_ordinal'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+This is an error that ``torch_xla.core.xla_model.get_ordinal()`` is removed in torch-xla version 2.7. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
 
 [v2.5] WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.world_size instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -261,10 +261,10 @@ This is an error that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` is re
 This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size()`` instead.
 
 
-[v2.5] WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+[v2.5] WARNING:torch_xla.core.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+This is a warning that ``torch_xla.core.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
 
 
 AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
@@ -335,7 +335,7 @@ When using the ``xm.save`` function to save tensors, please use ``xm.mark_step()
 Lower BERT pretraining performance with torch-neuronx 2.5 compared to torch-neuronx 2.1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be deprecation warnings (as noted below).
+Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be end-of-support warnings (as noted below).
 
 
 Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
@@ -350,10 +350,10 @@ WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in releas
 This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size()`` instead.
 
 
-WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+WARNING:torch_xla.core.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
+This is a warning that ``torch_xla.core.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal`` instead.
 
 
 AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
@@ -476,7 +476,7 @@ When using the ``xm.save`` function to save tensors, please use ``xm.mark_step()
 Lower BERT pretraining performance with torch-neuronx 2.5 compared to torch-neuronx 2.1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be deprecation warnings (as noted below).
+Currently, BERT pretraining performance is ~11% lower with torch-neuronx 2.5 compared to torch-neuronx 2.1. This is due to the switch to using ``model.to(torch.bfloat16)`` as part of migration away from the deprecated environment variable ``XLA_DOWNCAST_BF16``. As a work-around to recover the performance, you can set ``XLA_DOWNCAST_BF16=1`` which would still work in torch-neuronx 2.5 although there will be end-of-support warnings (as noted below).
 
 
 Warning "XLA_DOWNCAST_BF16 will be deprecated after the 2.5 release, please downcast your model directly"
@@ -491,10 +491,10 @@ WARNING:root:torch_xla.core.xla_model.xrt_world_size() will be removed in releas
 This is a warning that ``torch_xla.core.xla_model.xrt_world_size()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.world_size`` instead.
 
 
-WARNING:torch_xla.core.xla_model.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
+WARNING:torch_xla.core.xla_model.get_ordinal() will be removed in release 2.7. is deprecated. Use torch_xla.runtime.global_ordinal instead.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a warning that ``torch_xla.core.xla_model.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
+This is a warning that ``torch_xla.core.xla_model.get_ordinal()`` will be removed in a future release. Please switch to using ``torch_xla.runtime.global_ordinal()`` instead.
 
 
 AttributeError: module 'torch_xla.runtime' has no attribute 'using_pjrt'
@@ -1528,7 +1528,7 @@ What's new in this release
 
 - (Training) Added coalescing of all-gather and reduce-scatter inside ZeRO1, which should help in improving performance at high cluster sizes.
 - (Inference) Added the ability to partition unsupported ops to CPU during traced inference. (See ``torch_neuronx.trace`` API guide)
-- (Inference) Previously undocumented arguments trace API args ``state`` and ``options`` are now unsupported (have no effect) and will result in a deprecation warning if used.
+- (Inference) Previously undocumented arguments trace API args ``state`` and ``options`` are now unsupported (have no effect) and will result in a end-of-support warning if used.
 
 Resolved issues
 ~~~~~~~~~~~~~~~

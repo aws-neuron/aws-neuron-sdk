@@ -92,6 +92,10 @@ The total model loading time in each subsequent run is expected to be comparable
 Shard on load
 ------------------
 
+.. warning::
+    At high batch size (>=32), we have observed performance degradation with ``shard-on-load`` for some models such as Llama3.1-8B. If you observe worse inference performance with ``shard-on-load``, please disable this feature (by enabling the ``--save-sharded-checkpoint`` flag during compilation with ``inference_demo`` as above).
+    Alternatively, if you are not using ``inference_demo``, you can also enable ``save_sharded_checkpoint`` directly in ``NeuronConfig`` which will be passed to model init when the model is traced and compiled.
+
 The shard on load approach significantly reduces sharding overheads by parallelizing tensor movement in sharding/loading and skipping sharded checkpoints serialization. 
 This approach is preferred when you are working with weights that are frequently retrained/fine-tuned so re-sharding becomes a bottleneck when serving with new weights.
 Since Neuron 2.23 release, Shard on load is enabled by default in NxD Inference.

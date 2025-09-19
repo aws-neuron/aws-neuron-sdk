@@ -450,6 +450,170 @@ Functions
   ``NeuronConfig`` by default; subclasses can override this function to
   configure a specific NeuronConfig subclass to use.
 
+RouterConfig
+~~~~~~~~~~~
+
+Configuration class for expert router in mixture-of-experts models. This config specifies the activation function and data type used in the router component.
+
+.. _initialization-4:
+
+Initialization
+^^^^^^^^^^^^^
+
+Initialize directly with parameters or use the from_kwargs class method.
+
+.. _functions-4:
+
+Functions
+^^^^^^^^
+
+- ``RouterConfig(**kwargs)`` - Initializes router configuration with specified activation function and data type.
+
+.. _attributes-4:
+
+Attributes
+^^^^^^^^^
+
+- ``act_fn`` - Activation function to use in the router. Defaults to ``"softmax"``. See ACT2FN for supported activations.
+- ``dtype`` - Data type for router computations. Defaults to ``torch.float32``.
+
+RoutedExpertsMLPOpsConfig
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Configuration class for routed experts in mixture-of-experts models. This class shares several configuration flags with MoENeuronConfig and provides additional settings specific to expert MLPs.
+
+.. _initialization-6:
+
+Initialization
+^^^^^^^^^^^^^
+
+Initialize with specific parameters for expert MLP operations.
+
+.. _attributes-6:
+
+Attributes
+^^^^^^^^^
+
+- ``num_experts`` - Total number of experts in the model.
+- ``hidden_size`` - Hidden dimension of the layers.
+- ``intermediate_size`` - Intermediate dimension of the layers.
+- ``top_k`` - Number of experts activated per token. Must be less than or equal to num_experts.
+- ``hidden_act`` - Activation function for hidden layers. See ACT2FN for supported activations.
+- ``glu_mlp`` -  When True, combines gate and up projection; otherwise, uses simple up projection.
+- ``bias`` - Whether to include bias terms in linear layers. Defaults to ``False``.
+- ``glu_type`` - Type of GLU activation to use. Defaults to ``GLUType.GLU``.
+- ``hidden_act_scaling_factor`` - Scaling factor applied to gate projections before activation. Defaults to ``1.0``
+- ``hidden_act_bias`` - Bias term added to the up projection values. Defaults to ``0.0``.
+- ``capacity_factor`` - Controls expert capacity and token dropping rate. None indicates full capacity with no token dropping.
+- ``use_index_calc_kernel`` - Whether to use specialized kernel for index calculations. Defaults to ``False``.
+- ``gate_clamp_upper_limit`` - Upper bound for clamping expert MLP gate projection results. No clamping if ``None``.
+- ``gate_clamp_lower_limit`` - Lower bound for clamping expert MLP gate projection results. No clamping if ``None``.
+- ``up_clamp_upper_limit`` - Upper bound for clamping expert MLP up projection results. No clamping if ``None``.
+- ``up_clamp_lower_limit`` - Lower bound for clamping expert MLP up projection results. No clamping if ``None``.
+- ``normalize_top_k_affinities`` - Whether to normalize chosen experts' affinities before combining with MLP outputs. Defaults to ``False``.
+- ``early_expert_affinity_modulation`` - Whether to enable early modulation of expert affinities. Defaults to ``False``.
+- ``input_layer_init_method`` - Initialization function for input linear layer weights. Defaults to ``None``.
+- ``output_layer_init_method`` - Initialization function for output linear layer weights. Defaults to ``None``.
+- ``enable_spmd_rank`` - Whether to use runtime rank information in inference. Defaults to ``False``.
+- ``is_prefill`` - Whether the configuration is for prefill computation. Defaults to ``None``.
+
+BlockwiseMatmulConfig
+~~~~~~~~~~~~~~~~~~~~
+
+Configuration class for blockwise matrix multiplication operations. This config contains settings that control how blockwise matrix multiplication is performed, particularly in the context of expert MLPs.
+
+.. _initialization-3:
+
+Initialization
+^^^^^^^^^^^^^
+
+Initialize with specific parameters or use the from_kwargs class method.
+
+.. _functions-3:
+
+Functions
+^^^^^^^^
+
+- ``BlockwiseMatmulConfig(**kwargs)`` - Initializes configuration with the specified attributes.
+
+.. _attributes-3:
+
+Attributes
+^^^^^^^^^
+
+- ``block_size`` - Size of blocks used in blockwise matrix multiplication.
+- ``use_block_parallel`` - Whether to enable block parallel blockwise matmul NKI kernel.
+- ``block_sharding_strategy`` - Strategy for block parallel blockwise matmul kernel implementation.
+
+  - ``BlockShardStrategy.HI_LO`` - distribute upper half and lower half blocks across LNCs.
+  - ``BlockShardStrategy.PING_PONG`` - distribute odd blocks on NC0 and even blocks on NC1.
+  
+- ``skip_dma_token`` - Kernel optimization flag for skipping token DMA operations for padding. When true, inputs to blockwise kernel don't require padding.
+- ``skip_dma_weight`` - Kernel optimization flag for skipping weight DMA operations for padding.
+- ``logical_nc_config`` - LNC size configuration. Defaults to 1 on trn1 and 2 on trn2.
+- ``blockwise_nki_autograd_cls`` - NKI function implementing blockwise matmul for expert MLPs. Defaults to ``BlockwiseMatmulNKIFunc`` when None.
+- ``use_torch_block_wise`` - Forces using PyTorch implementation of blockwise matmul for expert MLPs instead of NKI kernel.
+- ``parallelize_token_to_block_mapping`` - Enables parallel computation of block position to token indices mapping. Enabled by default.
+- ``optimized_block_to_token_mapping`` - When enabled, token position in blocks will only include top k experts.
+- ``always_augment_inputs_for_blockwise_matmul`` - Forces padding of inputs to blockwise kernel regardless of skip_dma value.
+- ``use_shard_on_intermediate_dynamic_while`` - Enables shard-on-intermediate dynamic while kernel.
+- ``use_shard_on_block_dynamic_while`` - Enables shard-on-block dynamic while kernel.
+- ``num_static_blocks`` - Number of static blocks to compute in dynamic kernel. Static blocks have fixed computation, while dynamic blocks can be skipped.
+
+MoEFusedTKGConfig
+~~~~~~~~~~~~~~~~
+
+Configuration class for fused Token Generation operations in mixture-of-experts models. This config controls various kernel optimizations and fusion options.
+
+.. _initialization-7:
+
+Initialization
+^^^^^^^^^^^^^
+
+Initialize with settings for quantization and kernel enablement options.
+
+.. _attributes-7:
+
+Attributes
+^^^^^^^^^
+
+- ``quantized`` - Whether weights are quantized or not.
+- ``moe_fused_kernel_enabled`` - Whether to enable the fused MoE kernel. Defaults to ``None``.
+- ``router_topk_kernel_enabled`` - Whether to enable the router top-k kernel optimization. Defaults to ``None``.
+- ``expert_mlp_kernel_enabled`` - Whether to enable the expert MLP kernel optimization. Defaults to ``None``.
+- ``shared_mlp_kernel_enabled`` - Whether to enable the shared MLP kernel optimization. Defaults to ``None``.
+
+HybridShardingConfig
+~~~~~~~~~~~~~~~~~~~
+
+Configuration class for hybrid sharding in mixture-of-experts models. This config specifies different parallelism degrees for CTE (Context Encoding) and TKG (Token Generation) components.
+
+.. _initialization-5:
+
+Initialization
+^^^^^^^^^^^^^
+
+Initialize with keyword arguments specifying parallelism degrees.
+
+.. _functions-5:
+
+Functions
+^^^^^^^^
+
+- ``HybridShardingConfig(**kwargs)`` - Initializes configuration with specified parallelism degrees.
+
+.. _attributes-5:
+
+Attributes
+^^^^^^^^^
+
+- ``moe_cte_tp_degree`` - Tensor parallelism degree for Context Encoding. Defaults to ``1``.
+- ``moe_cte_ep_degree`` - Expert parallelism degree for Context Encoding. Defaults to ``1``.
+- ``moe_tkg_tp_degree`` - Tensor parallelism degree for Token Generation. Defaults to ``1``.
+- ``moe_tkg_ep_degree`` - Expert parallelism degree for Token Generation. Defaults to ``1``.
+
+.. _nxd-inference-api-guide-moe-neuron-config:
+
 MoENeuronConfig
 ~~~~~~~~~~~~~~~
 
@@ -476,14 +640,44 @@ Functions
 
 Attributes
 ^^^^^^^^^^
+- General
 
-- ``capacity_factor`` - The capacity factor to use when allocating
-  tokens across experts. When an expert is at capacity, tokens allocated
-  to that expert are dropped until that expert has capacity again.
-  Defaults to ``None``, which means that NxDI waits until an expert has
-  capacity, and no tokens are dropped.
-- ``glu_mlp`` - Whether to use a Gated Linear Unit in the MLP. Defaults
-  to ``false``.
+  - ``moe_tp_degree`` - Tensor parallelism degree for MoE. Defaults to ``1``.
+  - ``moe_ep_degree`` - Expert parallelism degree. Defaults to ``1``.
+  - ``hybrid_sharding_config(**kwargs)`` - Configuration for hybrid model sharding. Defaults to ``None``.
+
+- Router
+
+  - ``router_config(**kwargs)`` - Configuration for the expert router. Can be initialized from a dictionary or kwargs.
+  - ``return_expert_index`` - Whether to return expert indices in output. Defaults to ``False``.
+  - ``return_router_logits`` - Whether to return router logits in output. Defaults to ``False``.
+
+- Expert MLPs
+
+  - ``blockwise_matmul_config(**kwargs)`` - Configuration for blockwise matrix multiplication. Defaults to empty config.
+  - ``capacity_factor`` - The capacity factor to use when allocating
+    tokens across experts. When an expert is at capacity, tokens allocated
+    to that expert are dropped until that expert has capacity again.
+    Defaults to ``None``, which means that NxDI waits until an expert has
+    capacity, and no tokens are dropped.
+  - ``glu_mlp`` - Whether to use a Gated Linear Unit in the MLP. Defaults
+    to ``false``
+  - ``glu_type`` - Type of GLU activation to use. Defaults to ``"glu"``.
+  - ``hidden_act_scaling_factor`` - Scaling factor applied to gate projections before activation. Defaults to ``1.0``.
+  - ``hidden_act_bias`` - Bias term added to the up projection values. Defaults to ``0.0``.
+  - ``gate_clamp_upper_limit`` - Upper limit for clamping experts gate values. Defaults to ``None``.
+  - ``gate_clamp_lower_limit`` - Lower limit for clamping experts gate values. Defaults to ``None``.
+  - ``up_clamp_upper_limit`` - Upper limit for clamping experts up values. Defaults to ``None``.
+  - ``up_clamp_lower_limit`` - Lower limit for clamping experts up values. Defaults to ``None``.
+  - ``use_index_calc_kernel`` - Whether to use specialized kernel for index calculations. Defaults to ``False``.
+  - ``early_expert_affinity_modulation`` - Enable early modulation of expert affinities. Defaults to ``False``.
+  - ``normalize_top_k_affinities`` - Whether to normalize the top-k expert affinities. Defaults to ``True``.
+
+- Shared Experts 
+
+  - ``fused_shared_experts`` - Whether to use fused gate/up computation for shared experts. Defaults to ``False``.
+  - ``shared_experts_sequence_parallel_enabled`` - Enable sequence parallelism for shared experts. Defaults to ``False``.
+  - ``transpose_shared_experts_weights`` - Whether to transpose weights for shared experts. Defaults to ``False``.
 
 FusedSpecNeuronConfig
 ~~~~~~~~~~~~~~~~~~~~~

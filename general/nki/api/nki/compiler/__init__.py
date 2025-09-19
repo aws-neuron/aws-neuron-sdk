@@ -7,6 +7,10 @@ r"""PSUM - Only visible to each individual kernel instance in the SPMD grid, ali
 sbuf = ...
 r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid, alias of ``nki.compiler.sbuf.auto_alloc()``"""
 
+def allocation_scope():
+  r"""AllocationScope class for managing tensor allocation scopes."""
+  ...
+
 def enable_stack_allocator(func=None, log_level=50):
   r"""
   Use stack allocator to allocate the psum and sbuf tensors in the kernel.

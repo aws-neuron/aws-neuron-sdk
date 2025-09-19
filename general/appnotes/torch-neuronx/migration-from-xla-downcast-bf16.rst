@@ -6,7 +6,7 @@ Migration From ``XLA_USE_BF16``/``XLA_DOWNCAST_BF16``
 Introduction
 ------------
 
-The environmental variables ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` were created to provide an easy cast-to-bf16 option before automatic mixed-precision or ``model.to(torch.bfloat16)`` as available in Torch-XLA. Now that both automatic mixed precision and ``model.to(torch.bfloat16)`` are available in Torch-XLA,  ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` are redundant and can be replaced with these options as a more familiar experience as on other platforms such as CPUs and GPUs. Using them in Torch-XLA 2.5+ would cause warnings to be displayed about their deprecation. While they are still functional, their functionality will be removed in a future release (Torch-XLA 2.8) so the recommended changes below are available as replacement.
+The environmental variables ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` were created to provide an easy cast-to-bf16 option before automatic mixed-precision or ``model.to(torch.bfloat16)`` as available in Torch-XLA. Now that both automatic mixed precision and ``model.to(torch.bfloat16)`` are available in Torch-XLA,  ``XLA_USE_BF16`` and ``XLA_DOWNCAST_BF16`` are redundant and can be replaced with these options as a more familiar experience as on other platforms such as CPUs and GPUs. Using them in Torch-XLA 2.5+ would cause warnings to be displayed about their end-of-support. While they are still functional, their functionality will be removed in a future release (Torch-XLA 2.8) so the recommended changes below are available as replacement.
 
 NeuronX Distributed Training has been updated to use some of the options below. Please see :ref:`standard_mixed_precision` for more information.
 

@@ -307,8 +307,4 @@ Convolutional Neural Networks(CNN)
    * - resnet50
      - torch-neuronx
      - * `How to fine-tune a pretrained ResNet50 Pytorch model with AWS Trainium (trn1 instances) using NeuronSDK <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/resnet50>`_
-
-   * - milesial/Pytorch-UNet
-     - torch-neuronx
-     - * `This notebook shows how to fine-tune a pretrained UNET PyTorch model with AWS Trainium (trn1 instances) using NeuronSDK. <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training/unet_image_segmentation>`_
-
+ - 

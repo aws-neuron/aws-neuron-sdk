@@ -180,7 +180,7 @@ What's new in this release
 - Streamer support enabled for BLOOM, GPTJ, GPT2, GPT-NeoX and LLAMA models
 - Support for on device generation for TopK in Mixtral models
 - Continuous batching support for Mistral v0.2
-- Minor API improvements with type annotations for NeuronConfig, deprecation warnings for old arguments, and exposing top-level configurations
+- Minor API improvements with type annotations for NeuronConfig, end-of-support warnings for old arguments, and exposing top-level configurations
 
 - Performance improvements such as an optimized logit ordering for continuous batching in Llama models, optimized QKV padding for certain GQA models, faster implementation of cumsum operation to improve TopP performance
   

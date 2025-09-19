@@ -31,7 +31,10 @@ Models that are trained using FP32 data types can be deployed on Neuron
 through ahead of time compilation using the :ref:`Neuron Compiler <neuron_cli>`.
 
 
-**By default**, the Neuron Compiler will **cast all FP32 tensors, 
+.. important::
+    **By default**, the Neuron Compiler disables auto-casting and uses the data types defined within the model.
+    This provides the best accuracy for FP32 trained models, but does not provide the best performance.
+
 weights and operations to BF16**. Only partial sums are left in FP32. The default, casting will generate the highest
 performance for a FP32 trained model.
 

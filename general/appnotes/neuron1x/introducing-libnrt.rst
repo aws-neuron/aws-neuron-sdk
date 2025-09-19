@@ -88,7 +88,7 @@ Neuron Runtime
    it continued owning that device until it was stopped. This created the need to stop ``neuron-rtd`` in certain cases. With the introduction of ``libnrt.so``, *Neuron Runtime* as it runs inside the context of the application. With *Neuron Runtime 2.x*, the act of starting and stopping a Neuron application causes ``libnrt.so`` to automatically claim or release ownership of the required Neuron devices.
    
 
-* NeuronCore Groups (NCG) deprecation
+* NeuronCore Groups (NCG) end-of-support
    Before the introduction of *Neuron Runtime 2.x*, NeuronCore Group (NCG) was used to define an execution group of one or more NeuronCores 
    where models could be loaded and executed. It also provided separation between processes.
    

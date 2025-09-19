@@ -360,6 +360,29 @@ To work around the limitation you need to explicitly initialize the tensor with 
     for i in range(3):
       nl.store(dst=t[i, :, :], value=1.0)
 
+.. _nki-errors-err_indirect_indices_are_not_supported_with_nki_api:
+
+err_indirect_indices_are_not_supported_with_nki_api
+---------------------------------------------------
+
+The API does not allow using tiles / tensors with indirect indices.
+
+Indirect indexing refers to using one tensor to index into another tensor, which is not
+supported by the current NKI API. For example, ``nl.load_transpose2d``, and ``nisa.dma_transpose`` APIs
+do not support indirect indices.
+
+For example:
+
+.. code-block:: python
+
+    idx_tile = nl.load(idx_tensor)
+    # This will cause an error
+    # Using idx_tile as an index for indirect access is not allowed
+    result = nl.load_transpose2d(data_tensor[idx_tile])
+
+Instead, consider using APIs that support indirect indexing operations
+such as ``nl.load``, and ``nisa.dma_copy``.
+
 .. _nki-errors-err_indirect_indices_free_dim:
 
 err_indirect_indices_free_dim
@@ -785,6 +808,54 @@ which allows writing to the same memory location:
 
   for i in nl.sequential_range(4):
     a[0] = 0 # Also ok, we dont expect the sequential_range to execute in parallel
+
+.. _nki-errors-err_unsupported_expression_in_mask:
+
+err_unsupported_expression_in_mask
+----------------------------------
+
+NKI mask expressions must be affine expressions of static loop indices.
+
+In NKI, mask expressions used with operations like store, load, and compute functions
+must be composed of affine expressions of static loop indices. An affine expression is a
+linear combination of variables plus a constant (ax + by + ... + c). Runtime values,
+such as tensor elements or dynamic values, are not supported in mask expressions.
+
+Examples of unsupported mask expressions:
+
+.. code-block:: python
+
+  # Using a tensor element in a mask expression
+  def test(n):
+    out = nl.ndarray([8], dtype=n.dtype, buffer=nl.shared_hbm)
+    nl.store(out, 0, mask=scalar(n) > 2)  # Error: n is a runtime value
+    return out
+
+  # Using a non-affine operation in a mask expression
+  def test():
+    out = nl.ndarray([8], dtype=nl.int32, buffer=nl.shared_hbm)
+    for i in range(8):
+      nl.store(out, i, mask=(i % 4) < 2)  # Error: i % 2 is not an affine expression
+    return out
+
+Examples of supported mask expressions:
+
+.. code-block:: python
+
+  # Using affine expressions of loop indices
+  def test():
+    out = nl.ndarray([8], dtype=nl.int32, buffer=nl.shared_hbm)
+
+    # Simple comparison with loop index
+    for i in range(8):
+      nl.store(out, i, mask=i < 4)  # Ok: i < 4 is an affine expression
+
+    # Linear combination of loop indices
+    for i in range(8):
+      for j in range(8):
+        nl.store(out, i, mask=(2*i + 3*j + 1) < 20)  # Ok: this is affine
+
+    return out
 
 .. _nki-errors-err_unsupported_memory:
 

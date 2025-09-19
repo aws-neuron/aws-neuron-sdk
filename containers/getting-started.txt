@@ -124,13 +124,6 @@
              | 0      | 2      | 32 GB  | 10:1c.0 |
              +--------+--------+--------+---------+
 
-      .. dropdown:: Build and Run Docker Image
-            :class-title: sphinx-design-class-title-small
-            :class-body: sphinx-design-class-body-small
-            :animate: fade-in
-
-            * :ref:`how-to-build-neuron-container`
-
       .. dropdown::  Run Tutorial
             :class-title: sphinx-design-class-title-small
             :class-body: sphinx-design-class-body-small

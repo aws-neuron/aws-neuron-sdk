@@ -4,6 +4,14 @@ import ml_dtypes
 bfloat16 = np.dtype('bfloat16')
 r"""16-bit floating-point number (1S,8E,7M)"""
 
+class bfp16: 
+  r"""BFLOAT16 Constants"""
+
+  @property
+  def min(self):
+    r"""BFLOAT16 Bit pattern (0xff80) representing the minimum (or maximum negative) BFLOAT16 value"""
+    ...
+
 bool_ = np.bool_
 r"""Boolean type (True or False), stored as a byte. Same as `numpy.bool_`."""
 
@@ -162,6 +170,11 @@ class tile_size:
     r"""The minimum byte alignment requirement for SBUF free dimension address."""
     ...
 
+  @property
+  def total_available_sbuf_size(self):
+    r"""The total SBUF available size"""
+    ...
+
 uint16 = np.uint16
 r"""Unsigned integer type, compatible with C ``unsigned short``. Same as `numpy.uint16`."""
 
@@ -173,7 +186,7 @@ r"""Unsigned integer type, compatible with C ``unsigned char``. Same as `numpy.u
 
 def abs(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Absolute value of the input, element-wise. 
+  Absolute value of the input, element-wise.
 
   :param x: a tile.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
@@ -285,14 +298,14 @@ def all(x, axis, *, dtype=bool, mask=None, **kwargs):
 
 def all_reduce(x, op, program_axes, *, dtype=None, mask=None, parallel_reduce=True, asynchronous=False, **kwargs):
   r"""
-  Apply reduce operation over multiple SPMD programs. 
+  Apply reduce operation over multiple SPMD programs.
 
   :param x: a tile.
   :param op: numpy ALU operator to use to reduce over the input tile.
-  :param program_axes: a single axis or a tuple of axes along which the reduction operation is performed. 
+  :param program_axes: a single axis or a tuple of axes along which the reduction operation is performed.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
-  :param parallel_reduce: optional boolean parameter whether to turn on parallel reduction. Enable parallel 
+  :param parallel_reduce: optional boolean parameter whether to turn on parallel reduction. Enable parallel
                reduction consumes additional memory.
   :param asynchronous: Defaults to False. If `True`, caller should synchronize before
                        reading final result, e.g. using `nki.sync_thread`.
@@ -533,8 +546,8 @@ def equal(x, y, *, dtype=bool, mask=None, **kwargs):
 
 def erf(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Error function of the input, element-wise. 
-  
+  Error function of the input, element-wise.
+
   ((Similar to `torch.erf <https://pytorch.org/docs/master/generated/torch.erf.html>`_))
 
   ``erf(x) = 2/sqrt(pi)*integral(exp(-t**2), t=0..x)`` .
@@ -608,7 +621,7 @@ def fmod(x, y, dtype=None, mask=None, **kwargs):
   r"""
   Floor-mod of ``x / y``, element-wise.
 
-  The remainder has the same sign as the dividend x. 
+  The remainder has the same sign as the dividend x.
   It is equivalent to the Matlab(TM) rem function and should not be confused with the Python modulus operator x % y.
 
   ((Similar to `numpy.fmod <https://numpy.org/doc/stable/reference/generated/numpy.fmod.html>`_))
@@ -684,7 +697,7 @@ def gather_flattened(data, indices, *, mask=None, dtype=None, **kwargs):
         result = np.take_along_axis(data_flattened, indices_flattened, axis=-1)
         result.reshape(indices.shape)
 
-    ((Similar to `torch.gather_flattened <https://pytorch.org/docs/master/generated/torch.gather_flattened.html>`_))
+    ((Similar to `torch.gather <https://pytorch.org/docs/master/generated/torch.gather.html>`_))
 
     :param data: the source tensor to gather values from
     :param indices: tensor containing uint32 indices to gather across the flattened free dimension.
@@ -706,6 +719,17 @@ def gelu(x, *, dtype=None, mask=None, **kwargs):
   Gaussian Error Linear Unit activation function on the input, element-wise.
 
   ((Similar to `torch.nn.functional.gelu <https://pytorch.org/docs/stable/generated/torch.nn.functional.gelu.html>`_))
+
+  :param x: a tile.
+  :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+  :return: a tile that has gelu of ``x``.
+  """
+  ...
+
+def gelu_apprx_sigmoid(x, *, dtype=None, mask=None, **kwargs):
+  r"""
+  Gaussian Error Linear Unit activation function on the input, element-wise, with sigmoid approximation.
 
   :param x: a tile.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
@@ -794,7 +818,7 @@ def left_shift(x, y, *, dtype=None, mask=None, **kwargs):
   Bitwise left-shift x by y, element-wise.
 
   ((Similar to `numpy.left_shift <https://numpy.org/doc/stable/reference/generated/numpy.left_shift.html>`_))
-  
+
   Computes the bit-wise left shift of the underlying binary representation of the integers
   in the input tiles. This function implements the C/Python operator ``<<``
 
@@ -966,39 +990,39 @@ def logical_xor(x, y, *, dtype=bool, mask=None, **kwargs):
 def loop_reduce(x, op, loop_indices, *, dtype=None, mask=None, **kwargs):
   r"""
   Apply reduce operation over a loop. This is an ideal instruction to compute a
-  high performance reduce_max or reduce_min. 
-  
-  Note: The destination tile is also the rhs input to ``op``. For example, 
-  
+  high performance reduce_max or reduce_min.
+
+  Note: The destination tile is also the rhs input to ``op``. For example,
+
   .. code-block:: python
-    
+
     b = nl.zeros((N_TILE_SIZE, M_TILE_SIZE), dtype=float32, buffer=nl.sbuf)
     for k_i in affine_range(NUM_K_BLOCKS):
-      
-      # Skipping over multiple nested loops here. 
+
+      # Skipping over multiple nested loops here.
       # a, is a psum tile from a matmul accumulation group.
       b = nl.loop_reduce(a, op=np.add, loop_indices=[k_i], dtype=nl.float32)
-     
+
   is the same as:
-  
+
   .. code-block:: python
-    
+
     b = nl.zeros((N_TILE_SIZE, M_TILE_SIZE), dtype=nl.float32, buffer=nl.sbuf)
     for k_i in affine_range(NUM_K_BLOCKS):
 
-      # Skipping over multiple nested loops here. 
+      # Skipping over multiple nested loops here.
       # a, is a psum tile from a matmul accumulation group.
       b = nisa.tensor_tensor(data1=b, data2=a, op=np.add, dtype=nl.float32)
 
   If you are trying to use this instruction only for accumulating results on SBUF, consider
-  simply using the ``+=`` operator instead. 
-    
-  The ``loop_indices`` list enables the compiler to recognize which loops this reduction can be 
+  simply using the ``+=`` operator instead.
+
+  The ``loop_indices`` list enables the compiler to recognize which loops this reduction can be
   optimized across as part of any aggressive loop-level optimizations it may perform.
 
   :param x: a tile.
   :param op: numpy ALU operator to use to reduce over the input tile.
-  :param loop_indices: a single loop index or a tuple of loop indices along which the reduction operation is performed. 
+  :param loop_indices: a single loop index or a tuple of loop indices along which the reduction operation is performed.
                       Can be numbers or loop_index objects coming from ``nl.affine_range``.
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
@@ -1014,23 +1038,23 @@ def matmul(x, y, *, transpose_x=False, mask=None, **kwargs):
 
   .. note::
       For optimal performance on hardware, use :func:`nki.isa.nc_matmul` or call ``nki.language.matmul``
-      with ``transpose_x=True``. Use ``nki.isa.nc_matmul`` also to access low-level features 
+      with ``transpose_x=True``. Use ``nki.isa.nc_matmul`` also to access low-level features
       of the Tensor Engine.
 
   .. note::
       Implementation details:
-      ``nki.language.matmul`` calls ``nki.isa.nc_matmul`` under the hood. 
+      ``nki.language.matmul`` calls ``nki.isa.nc_matmul`` under the hood.
       ``nc_matmul`` is neuron specific customized implementation of matmul that computes ``x.T @ y``,
       as a result, ``matmul(x, y)`` lowers to ``nc_matmul(transpose(x), y)``.
-      To avoid this extra transpose instruction being inserted, 
+      To avoid this extra transpose instruction being inserted,
       use ``x.T`` and ``transpose_x=True`` inputs to this ``matmul``.
 
   :param x: a tile on SBUF (partition dimension ``<= 128``, free dimension ``<= 128``),
             ``x``'s free dimension must match ``y``'s partition dimension.
   :param y: a tile on SBUF (partition dimension ``<= 128``, free dimension ``<= 512``)
   :param transpose_x: Defaults to False. If ``True``, ``x`` is treated as already transposed.
-                      If ``False``, an additional transpose will be inserted 
-                      to make ``x``'s partition dimension the contract dimension of the matmul 
+                      If ``False``, an additional transpose will be inserted
+                      to make ``x``'s partition dimension the contract dimension of the matmul
                       to align with the Tensor Engine.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
 
@@ -1138,7 +1162,7 @@ def mod(x, y, dtype=None, mask=None, **kwargs):
   r"""
   Integer Mod of ``x / y``, element-wise
 
-  Computes the remainder complementary to the floor_divide function. 
+  Computes the remainder complementary to the floor_divide function.
   It is equivalent to the Python modulus x % y and has the same sign as the divisor y.
 
   ((Similar to `numpy.mod <https://numpy.org/doc/stable/reference/generated/numpy.mod.html>`_))
@@ -1303,8 +1327,8 @@ def random_seed(seed, *, mask=None, **kwargs):
 
 def reciprocal(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Reciprocal of the the input, element-wise. 
-  
+  Reciprocal of the the input, element-wise.
+
   ((Similar to `numpy.reciprocal <https://numpy.org/doc/stable/reference/generated/numpy.reciprocal.html>`_))
 
   ``reciprocal(x) = 1 / x``
@@ -1358,7 +1382,7 @@ def rms_norm(x, w, axis, n, epsilon=1e-06, *, dtype=None, compute_dtype=None, ma
   :param n: total number of values to calculate rms
   :param epsilon: epsilon value used by rms calculation to avoid divide-by-zero
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
-  :param compute_dtype: (optional) dtype for the internal computation - 
+  :param compute_dtype: (optional) dtype for the internal computation -
                         *currently `dtype` and `compute_dtype` behave the same, both sets internal compute and return dtype.*
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: `` x / RMS(x) * w ``
@@ -1367,8 +1391,8 @@ def rms_norm(x, w, axis, n, epsilon=1e-06, *, dtype=None, compute_dtype=None, ma
 
 def rsqrt(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Reciprocal of the square-root of the input, element-wise. 
-  
+  Reciprocal of the square-root of the input, element-wise.
+
   ((Similar to `torch.rsqrt <https://pytorch.org/docs/master/generated/torch.rsqrt.html>`_))
 
   ``rsqrt(x) = 1 / sqrt(x)``
@@ -1459,8 +1483,8 @@ def shared_identity_matrix(n, dtype=np.uint8, **kwargs):
 
 def sigmoid(x, *, dtype=None, mask=None, **kwargs):
   r"""
-  Logistic sigmoid activation function on the input, element-wise. 
-  
+  Logistic sigmoid activation function on the input, element-wise.
+
   ((Similar to `torch.nn.functional.sigmoid <https://pytorch.org/docs/stable/generated/torch.nn.functional.sigmoid.html>`_))
 
   ``sigmoid(x) = 1/(1+exp(-x))``
@@ -1526,14 +1550,14 @@ def sin(x, *, dtype=None, mask=None, **kwargs):
 
 def softmax(x, axis, *, dtype=None, compute_dtype=None, mask=None, **kwargs):
   r"""
-  Softmax activation function on the input, element-wise. 
-  
+  Softmax activation function on the input, element-wise.
+
   ((Similar to `torch.nn.functional.softmax <https://pytorch.org/docs/stable/generated/torch.nn.functional.softmax.html>`_))
 
   :param x: a tile.
   :param axis: int or tuple/list of ints. The axis (or axes) along which to operate; must be free dimensions, not partition dimension (0); can only be the last contiguous dim(s) of the tile: ``[1], [1,2], [1,2,3], [1,2,3,4]``
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
-  :param compute_dtype: (optional) dtype for the internal computation - 
+  :param compute_dtype: (optional) dtype for the internal computation -
                         *currently `dtype` and `compute_dtype` behave the same, both sets internal compute and return dtype.*
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: a tile that has softmax of ``x``.
@@ -1581,7 +1605,12 @@ def square(x, *, dtype=None, mask=None, **kwargs):
   """
   ...
 
-def static_cast(arr, dtype):
+def static_cast(input_data, dtype):
+  r"""cast a scalar or array to a new dtype.
+
+  - input_data: scalar or array
+  - dtype: string type or numpy dtype
+  """
   ...
 
 def static_range(*args):
@@ -1612,7 +1641,7 @@ def store(dst, value, *, mask=None, **kwargs):
   See :ref:`nki-pm-memory` for detailed information.
 
   :param dst: HBM tensor to store the data into.
-  :param value: An SBUF tile that contains the values to store.
+  :param value: An SBUF tile that contains the values to store. If the tile is in PSUM, an extra copy will be performed to move the tile to SBUF first.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return:
 

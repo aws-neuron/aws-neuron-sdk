@@ -237,16 +237,16 @@
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=2.5.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
 
 # AL2023 Driver and Tools
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami --category=driver_runtime_tools
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami --category=driver_runtime_tools
 
 # U22 Driver and Tools
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami --category=driver_runtime_tools
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami --category=driver_runtime_tools
 
 # AL2 EFA Installation
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=efa --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=efa --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
 
 # U22 EFA Installation
-.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=efa --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=efa --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
 
 # U22 2.6.0 Pytorch Neuronx Upgrade
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=2.6.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
@@ -263,8 +263,20 @@
 # U22 2.7.0 Pytorch Neuronx Upgrade
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
 
-# AL2023 Latest Pytorch Neuronx Install
+# AL2023 2.7.0 Pytorch Neuronx Install
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
 
-# U22 Latest Pytorch Neuronx Install
+# U22 2.7.0 Pytorch Neuronx Install
 .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=2.7.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
+
+# AL2023 2.8.0 Pytorch Neuronx Upgrade
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
+
+# U22 2.8.0 Pytorch Neuronx Upgrade
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami
+
+# AL2023 Latest Pytorch Neuronx Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=trn1 --ami=non-dlami
+
+# U22 Latest Pytorch Neuronx Install
+.. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu22 --instance=trn1 --ami=non-dlami

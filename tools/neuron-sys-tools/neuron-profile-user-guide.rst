@@ -310,10 +310,21 @@ The following are some useful features that may help with navigating a profile:
 
 - The "Search" tab can be used to find and highlight specific points in the profile related to the queried field(s).
 - Click on the "Box Select" button in the top-right corner of the timeline and then click and drag on any region of the plot to select all events in that region and get summary statistics such as total duration and breakdowns of opcodes, transfer_sizes, and more.
-- The ``Edit view settings`` can be used to further customize the timeline view.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
 
-  - For example, changing the ``Instruction Grouping`` dropdown option to "Layer" will re-color the timeline based on the associated framework layer name.
-  - To speed up initial load times, the default will be a ``Minimal View`` which only shows the instructions executed and the model FLOPs utilization (MFU) over time.  Changing between the minimal and full views can also be done through the ``Reset to Full View`` or ``Reset to Minimal View`` buttons.
+View Settings
+^^^^^^^^^^^^^
+
+Options within the ``View Settings`` tab can be used to further customize the timeline view.  Editing any settings will update the URL accordingly, which can be used to re-visit the current view at a later time.
+To speed up initial load times, the default will be a ``Minimal View`` which only shows the instructions executed and the model FLOPs utilization (MFU) over time.  Changing between the minimal and full views can also be done through the ``Reset to Full View`` or ``Reset to Minimal View`` buttons.
+
+- ``DMA color group`` will recolor DMAs based on the selected grouping. For example, "Engine" will re-color the DMAs based on the associated engine.
+- ``Instruction color group`` will recolor instructions based on the selected grouping. For example, "Layer" will re-color the timeline based on the associated framework layer name.
+- ``Layer group depth`` will group and color instructions at the selected layer depth. It will apply when ``Instruction color group`` is set to "Layer".
+
+  **Example:**
+    When ``Layer group depth`` is 2, instructions with layers `model/layer1/op1` and `model/layer1/op2` will be set to the same color.
+- ``Semaphore IDs`` allows for the selection of multiple semaphore values to show at once within the timeline
+  
 
 |neuron-profile-view-settings|
 
@@ -566,6 +577,28 @@ Difference between TensorE and TensorMatrixE Rows in Timeline
 - TensorMatrixE includes instruction trace for MultiplyMoving (Matmul)
 - Both instruction traces happen on the same TensorE engine, but we separate them into two rows to de-clutter the timeline due to the background load stationary feature (loading stationary matrix for the next matmul in parallel to current matmul). See more info in :ref:`NKI architecture guide <arch_guide_tensor_engine_perf>`. 
 
+Out of memory (OOM) when capturing a profile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If ``neuron-profile capture`` fails due to device out-of-memory (OOM), you can increase available memory using using the single-IO mode:
+
+Single-IO creates one shared I/O buffer on the device equal to the size of the largest I/O tensor. All inputs and outputs then point to slices of this shared buffer instead of allocating separate tensors. This significantly lowers the device memory needed during capture at the cost of producing incorrect outputs.
+
+Example usage:
+
+::
+
+    neuron-profile capture --single-io -n file.neff -s profile.ntff
+
+Important: with ``--single-io``, the profiled performance characteristics (e.g., timing, utilization, bandwidth) are representative, but the model outputs are intentionally not correct. Use this option only to get accurate performance measurements when device memory is tight; do not use it for correctness/accuracy validation.
+
+If you are able to make changes to your model itself to reduce memory usage, consider the following:
+- Reduce batch size
+- Lower numerical precision
+- Reduce number of layers
+
+In some cases, a full device profile isn’t necessary to understand performance at a high level. You can instead capture a system profile, which shows overall model execution time and a runtime API trace across all workers and does not require extra device memory. See :ref:`System Profiles overview <system-profiles-overview>`.
+
 Troubleshooting
 ---------------
 
@@ -616,7 +649,7 @@ Commit changes by running ``sudo sysctl -p``.
 
 .. |neuron-profile-web-timeline| image:: /images/neuron-profile-web-timeline_2-11.png
 .. |neuron-profile-annotation-menu| image:: /images/neuron-profile-annotation-menu_2-21.png
-.. |neuron-profile-view-settings| image:: /images/neuron-profile-view-settings_2-21.png
+.. |neuron-profile-view-settings| image:: /images/neuron-profile-view-settings_2-26.png
 .. |neuron-profile-web-summaries| image:: /images/neuron-profile-web-summaries_2-21.png
 .. |neuron-profile-tensor-reload-annotation| image:: /images/neuron-profile-tensor-reload-annotation.png
 .. |neuron-profile-multiworker-timeline| image:: /images/neuron-profile-multiworker-timelime_2-16.png

@@ -7,6 +7,43 @@ Neuron Kernel Interface (NKI) release notes
 
 ..    :depth: 2
 
+
+Neuron Kernel Interface (NKI) (Beta) [2.26]
+------------------------------------------------
+Date: 09/18/2025
+
+* new :doc:`nki.language <api/nki.language>` APIs:
+
+  * :doc:`nki.language.gelu_apprx_sigmoid <api/generated/nki.language.gelu_apprx_sigmoid>` - Gaussian Error Linear Unit activation function with sigmoid approximation.
+  * :doc:`nki.language.tile_size.total_available_sbuf_size <api/generated/nki.language.tile_size>` to get total available SBUF size
+
+* new :doc:`nki.isa <api/nki.isa>` APIs:
+
+  * :doc:`nki.isa.select_reduce <api/generated/nki.isa.select_reduce>` - selectively copy elements with max reduction 
+  * :doc:`nki.isa.sequence_bounds <api/generated/nki.isa.sequence_bounds>` - compute sequence bounds of segment IDs
+  * :doc:`nki.isa.dma_transpose <api/generated/nki.isa.dma_transpose>` 
+
+    * ``axes`` param to define 4D transpose for some supported cases
+    * ``dge_mode`` to specify Descriptor Generation Engine (DGE).
+
+  * ``nl.gelu_apprx_sigmoid`` op support on :doc:`nki.isa.activation <api/generated/nki.isa.activation>`
+
+* fixes / improvements:
+
+  * :doc:`nki.language.store <api/generated/nki.language.store>` supports PSUM buffer with extra additional copy inserted.
+
+* docs/tutorial improvements:
+
+  * :doc:`nki.isa.dma_transpose <api/generated/nki.isa.dma_transpose>` API doc and example
+  * :doc:`nki.simulate_kernel <api/generated/nki.simulate_kernel>` example improvement
+  * use ``nl.fp32.min`` in tutorial code instead of a magic number
+
+* better error reporting:
+
+  * indirect indexing on transpose
+  * mask expressions
+
+
 Neuron Kernel Interface (NKI) (Beta) [2.24]
 ------------------------------------------------
 Date: 06/24/2025
@@ -55,7 +92,7 @@ Date: 04/03/2025
   * :doc:`nki.isa.activation <api/generated/nki.isa.activation>` updated to support reduce operation and :doc:`reduce commands <api/generated/nki.isa.reduce_cmd>`
   * :doc:`nki.isa.engine <api/generated/nki.isa.engine>` enum
   * ``engine`` parameter added to more ``nki.isa`` APIs that support engine selection (ie, ``tensor_scalar``, ``tensor_tensor``, ``memset``)
-  * Documentation for ``nki.kernels`` have been moved to the Github: https://aws-neuron.github.io/nki-samples. 
+  * Documentation for ``nki.kernels`` have been moved to the GitHub: https://aws-neuron.github.io/nki-samples. 
     The source code can be viewed at https://github.com/aws-neuron/nki-samples.
     
     * These kernels are still shipped as part of Neuron package in ``neuronxcc.nki.kernels`` module

@@ -54,7 +54,7 @@ PyTorch NeuronX Tracing API for Inference
 
     .. warning::
 
-      Behavior Change! The use of using args for kwargs is deprecated starting from release 2.15.0 (``torch-neuronx==1.13.1.1.12.0``).
+      Behavior Change! Using ``args`` for ``kwargs`` is no longer supported starting from release 2.15.0 (``torch-neuronx==1.13.1.1.12.0``).
       The current behavior is that a warning will be raised, but ``torch_neuronx.trace()`` will attempt to infer the keyword
       arguments. This is likely to become an error in future releases, so to avoid the warning/error, assign kwargs as kwargs and
       not args.
