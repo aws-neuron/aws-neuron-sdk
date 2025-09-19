@@ -4,7 +4,7 @@
 
 .. _announce-moving-samples:
 
-Announcing deprecation for NeuronX Distributed Training Samples in Neuron Samples Repository 
+Announcing end-of-support for NeuronX Distributed Training Samples in Neuron Samples Repository 
 ----------------------------------------------------------------------------------------------
 
 :ref:`Neuron release 2.16 <neuron-2.16.0-whatsnew>` will be the last release to include support for NeuronX Distributed Training Samples (Llama-2, GPT-NeoX 20B, and GPT-NeoX 6.9B) under the `AWS Neuron Samples Github repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/training>`_.

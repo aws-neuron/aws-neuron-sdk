@@ -4,7 +4,7 @@
 
 .. _announce-update-containers:
 
-Announcing deprecation for Neuron Containers with Runtime 1.x
+Announcing end-of-support for Neuron Containers with Runtime 1.x
 --------------------------------------------------------------
 
 :ref:`Neuron release 2.3 <announce-neuron-rtd-eol>` was the last release to support Neuron Runtime 1.x (neuron-rtd).

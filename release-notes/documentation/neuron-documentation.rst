@@ -189,9 +189,9 @@ Neuron 2.19.0
 Date: 07/03/2024
 
 
-- Updated Transformers NeuronX Developer guide with support for inference for longer sequence lengths with Flash Attention kernel. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX developer guide with QKV Weight Fusion support. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX continuous batching developer guide with updated vLLM instructions and models supported. See :ref:`Developer Guide <transformers_neuronx_developer_guide_for_cb>`.
+- Updated Transformers NeuronX Developer guide with support for inference for longer sequence lengths with Flash Attention kernel. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX developer guide with QKV Weight Fusion support. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX continuous batching developer guide with updated vLLM instructions and models supported. See :ref:`Developer Guide <transformers_neuronx_readme>`.
 - Updated Neuronx Distributed User guide with interleaved pipeline support. See :ref:`api_guide`
 - Added Codellama 13b 16k tutorial with NeuronX Distributed Inference library. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_ 
 - Updated PyTorch NeuronX Environment variables with custom SILU enabled via NEURON_CUSTOM_SILU. See :ref:`pytorch-neuronx-envvars`
@@ -227,11 +227,11 @@ Date: 04/01/2024
 - Updated NeuronX Distributed developer guide with support for :ref:`Autobucketing <nxd-inference-devguide-autobucketing>`
 - Added PyTorch NeuronX developer guide for :ref:`Autobucketing <torch-neuronx-autobucketing-devguide>`.
 - Updated :ref:`api_guide` and :ref:`llama2_tp_pp_tutorial` with support for asynchronous checkpointing.
-- Updated Transformers NeuronX Developer guide with support for streamer and stopping criteria APIs. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX Developer guide with instructions for ``Repeating N-Gram Filtering``. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX developer guide with Top-K on-device sampling support [Beta]. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX developer guide with Checkpointing support and automatic model selection. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
-- Updated Transformers NeuronX Developer guide with support for speculative sampling [Beta]. See :ref:`Developer Guide <transformers_neuronx_developer_guide>`.
+- Updated Transformers NeuronX Developer guide with support for streamer and stopping criteria APIs. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX Developer guide with instructions for ``Repeating N-Gram Filtering``. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX developer guide with Top-K on-device sampling support [Beta]. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX developer guide with Checkpointing support and automatic model selection. See :ref:`Developer Guide <transformers_neuronx_readme>`.
+- Updated Transformers NeuronX Developer guide with support for speculative sampling [Beta]. See :ref:`Developer Guide <transformers_neuronx_readme>`.
 - Added sample for training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer with ``neuronx-distributed``. See :ref:`codegen25_7b_tp_zero1_tutorial`.
 - Added Tutorial for codellama/CodeLlama-13b-hf model inference with 16K seq length using Transformers Neuronx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_.
 - Added Mixtral-8x7B Inference Sample/Notebook using TNx. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_.
@@ -260,7 +260,7 @@ Date: 12/21/2023
 - Added announcement for End of Support for ``PyTorch 1.10`` . See :ref:`announce-eos_pytorch110`
 - Added announcement for End of Support for ``PyTorch 2.0`` Beta. See :ref:`announce-eos_pytorch2`
 - Added announcement for moving NeuronX Distributed sample model implementations. See :ref:`announce-moving-samples`
-- Updated Transformers NeuronX developer guide with support for Grouped Query Attention(GQA). See :ref:`developer guide <transformers_neuronx_developer_guide>` 
+- Updated Transformers NeuronX developer guide with support for Grouped Query Attention(GQA). See :ref:`developer guide <transformers_neuronx_readme>` 
 - Added sample for ``Llama-2-70b`` model inference. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_ 
 - Added documentation for ``PyTorch Lightning``  to train models using ``tensor parallelism`` and ``data parallelism`` . See :ref:`api guide <api_guide>` , :ref:`developer guide <ptl_developer_guide>` and :ref:`tutorial <llama2_7b_tp_zero1_ptl_tutorial>`
 - Added documentation for Model and Optimizer Wrapper training API that handles the parallelization. See :ref:`api guide <api_guide>` and :ref:`model_optimizer_wrapper_developer_guide`
@@ -320,7 +320,7 @@ Neuron 2.14.0
 Date: 09/15/2023
 
 - Neuron Calculator now supports multiple model configurations for Tensor Parallel Degree computation. See :ref:`neuron_calculator`
-- Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-deprecation-transformer-flag`
+- Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-end-of-support-transformer-flag`
 - Updated HF ViT benchmarking script to use ``--model-type=transformer`` flag. See :ref:`[script] <src/benchmark/pytorch/hf-google-vit_benchmark.py>`
 - Updated ``torch_neuronx.analyze`` API documentation. See :ref:`torch_neuronx_analyze_api`
 - Updated Performance benchmarking numbers for models on Inf1,Inf2 and Trn1 instances with 2.14 release bits. See :ref:`_benchmark`

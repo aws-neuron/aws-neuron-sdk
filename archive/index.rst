@@ -9,15 +9,28 @@ Archived AWS Neuron SDK documentation
 .. note::
 
     This page contains archived tutorials and other documentation for older versions of the AWS Neuron SDK.
-    These pages are no longer actively maintained and may reference deprecated features or APIs. They are provided as-is and may not reflect the current state of the AWS Neuron SDK.
+    These pages are no longer actively maintained and may reference unsupported features or deprecated APIs. They are provided as-is and may not reflect the current state of the AWS Neuron SDK.
 
 Overview
 --------
 
 The following content has been archived for reference purposes. For the latest documentation and guides, visit the `AWS Neuron SDK documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/>`_.
 
-Archived Content
-----------------
+Archived feature docs
+---------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Feature
+     - Last release supported
+     - Date archived
+   * - :doc:`transformers-neuronx/index`
+     - Neuron 2.25.0
+     - Archived on: 9/15/2025
+
+Archived tutorials
+------------------
 
 .. list-table::
    :header-rows: 1
@@ -34,6 +47,18 @@ Archived Content
    * - :doc:`tutorials/megatron_gpt_pretraining`
      - Neuron 2.25.0
      - Archived on: 7/31/2025
+   * - :doc:`tutorials/finetuning_llama2_7b_ptl`
+     - Neuron 2.26.0
+     - Archived on: 8/25/2025
+   * - :doc:`tutorials/training_llama2_tp_pp_ptl`
+     - Neuron 2.26.0
+     - Archived on: 8/25/2025
+   * - :doc:`tutorials/training_codegen25_7b`
+     - Neuron 2.26.0
+     - Archived on: 8/25/2025
+   * - :doc:`tutorials/gpt3_neuronx_nemo_megatron_pretraining`
+     - Neuron 2.26.0
+     - Archived on: 8/25/2025
 
 .. toctree::
     :maxdepth: 1

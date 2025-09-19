@@ -157,7 +157,7 @@ improves :ref:`performance <appnote-performance-benchmark>`
 and reduces model loading times. It also simplifies :ref:`Neuron installation steps <install-guide-index>`,
 and improves the user experience of :ref:`container creation and deployment <neuron-containers>`.
 In addition it includes bug fixes, new :ref:`application notes <neuron-appnotes>`, updated :ref:`tutorials <neuron-tutorials>`,
-and announcements of software :ref:`deprecation <software-deprecation>` and :ref:`maintenance <software-maintenance>`.
+and announcements of software :ref:`end-of-support <software-end-of-support>` and :ref:`maintenance <software-maintenance>`.
 
 
 -  **Neuron Runtime 2.x**

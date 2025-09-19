@@ -24,6 +24,16 @@ users to gain comprehensive insights into their application's performance across
     capturing and viewing profiles. It is not a replacement of :ref:`Neuron Profiler <neuron-profile-ug>`, 
     which is the existing feature set specifically for capturing and viewing device profiles.
 
+
+.. _system-profiles-overview:
+Key benefits
+~~~~~~~~~~~~
+
+- End-to-end timing of model execution and a Neuron Runtime API trace across all workers, helping identify scheduling gaps, synchronization, and host/runtime overheads.
+- No extra device memory usage by default, making system profiles ideal when device memory is limited or when only high-level insights are needed.
+- Option to capture device profiles for individual models during your workload. 
+- Flexible capture and viewing: enable via environment variables or framework APIs; view in the Neuron Profiler UI, in Perfetto, or export as JSON.
+
 Capturing profiles
 ------------------
 
@@ -324,6 +334,7 @@ Profile Capture Environment Variables
 * ``NEURON_RT_INSPECT_OUTPUT_DIR``: The directory where captured profile data will be saved to. Defaults to ``./output``.
 * ``NEURON_RT_INSPECT_SYSTEM_PROFILE``: Set to 0 to disable the capture of system profiles. Defaults to 1 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
 * ``NEURON_RT_INSPECT_DEVICE_PROFILE``: Set to 0 to disable the capture of device profiles. Defaults to 0 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
+* ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``: Maximum number of trace events for each NeuronCore to capture when profiling. Once hitting this limit, oldest events are overwritten. Defaults to 1,000,000. Increasing will use more host memory.
 
 Example Capturing Profile of Application Using Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -580,19 +591,38 @@ Perfetto Output View Options
 When outputting to Perfetto it is possible to group your traces by different attributes. This is useful for
 larger profiles involving many NeuronCores and instances. The following options are available:
 
-+---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|           CLI option            |                                                                                                                     Description                                                                                                                     |
-+=================================+=====================================================================================================================================================================================================================================================+
-| --system-trace-primary-group    | The first order grouping of trace events. In Perfetto this corresponds to a process (group of rows in the UI).  Comma-delimited list of field names (options include instance_id, thread_id, lnc_idx, process_id) (default: instance_id,process_id) |
-+---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| --system-trace-secondary-group  | The second order grouping of trace events. In Perfetto this corresponds to a thread (single row in the UI).  Comma-delimited list of field names (options include instance_id, thread_id, lnc_idx, process_id) (default: lnc_idx,thread_id)         |
-+---------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table:: Perfetto output view options
+     :header-rows: 1
+     :widths: 30 70
+
+     * - CLI option
+         - Description
+     * - ``--system-trace-primary-group``
+         - First-order grouping of trace events (maps to a Perfetto process / process group of rows). Provide a comma-delimited
+             list of field names. Allowed fields: ``instance_id``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
+             ``instance_id,process_id``.
+     * - ``--system-trace-secondary-group``
+         - Second-order grouping of trace events (maps to a Perfetto thread / single row). Provide a comma-delimited list of
+             field names. Allowed fields: ``instance_id``, ``worker_gid``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
+             ``worker_gid,lnc_idx,thread_id``.
 
 
 For example, the following profile uses ``neuron-profile view --output-format=perfetto --system-trace-primary-group=instance_id,process_id --system-trace-secondary-group=lnc_idx,thread_id`` to group the system profile first by unique combinations
 of instance_id and process_id, and then in each of those groups there are rows of events with unique combinations of lnc_idx and thread_id.
 
 |neuron-profiler2-perfetto-grouping|
+
+Grouping By Global Worker ID
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, Perfetto traces are grouped by ``worker_gid`` which is a unique global identifier for each NeuronCore across all instances in a distributed workload.
+When clicking on an event in the trace you will see fields for both ``lnc_idx`` (local NeuronCore index on that process) and ``worker_gid`` (global NeuronCore index across all instances).
+It is possible for ``lnc_idx`` to be the same for different processes on the same instance or across different instances in a distributed workload. However, ``worker_gid`` is unique for each NeuronCore across all instances.
+The image below shows how to correlate the naming of tracks (rows) in the Perfetto UI to both ``lnc_idx`` and ``worker_gid``.
+
+|neuron-profiler2-perfetto-gid|
+
+
 
 Generating JSON Output From Profiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -677,6 +707,8 @@ For example:
 .. code-block:: shell
 
     neuron-profile view -d ./output --ignore-device-profile --output-format perfetto
+
+.. _neuron-profiler-filtering-system-profiles:
 
 Filtering System Profiles
 --------------------------
@@ -1004,7 +1036,20 @@ Additionally, ensure that ``NEURON_RT_INSPECT_OUTPUT_DIR`` is set to
 the correct output directory and this is the output directory passed to 
 ``with jax.profiler.trace``.
 
+Dropped Events in System Profile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+When processing a system profile, you may see a warning indicating that some trace events were dropped during capture.
+
+.. code-block:: shell
+
+    WARN[0000] Warning: 1001 trace events were dropped during capture (stored 530560 out of 531561 total events). Consider increasing buffer size, reducing trace duration, or filtering events.
+
+This means during capture the trace event buffers filled and oldest events were overwritten. If you need to avoid dropping events for the full duration of your workload consider the following adjustments:
+
+* Increase buffer size by setting ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC`` (see :ref:`Profile Capture Environment Variables <neuron-profiler-capture-environment-variables>`). This will increase host memory usage.
+* Apply capture-time filters (NeuronCores / event types) (see :ref:`Filtering System Profiles <neuron-profiler-filtering-system-profiles>`.)
+* Shorten profiled region: limit the code span under the profiling context / runtime.
 
 
 .. |neuron-profiler2-annotate-system-ui| image:: /images/neuron-profiler2-annotate-system-ui.png
@@ -1015,3 +1060,4 @@ the correct output directory and this is the output directory passed to
 .. |neuron-profiler2-perfetto-device-timeline| image:: /images/neuron-profiler2-perfetto-device-timeline.png
 .. |neuron-profiler2-perfetto-grouping| image:: /images/neuron-profiler2-perfetto-grouping.png
 .. |neuron-profiler2-syncpoint-timeline| image:: /images/neuron-profiler2-syncpoint-timeline.png
+.. |neuron-profiler2-perfetto-gid| image:: /images/neuron-profiler2-perfetto-gid.png

@@ -483,7 +483,7 @@ These rules help:
 Example Usage
 -------------
 
-Refer to the `offline inference DI example <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25/examples/offline_inference/neuron_di.py>`_
+Refer to the `offline inference DI example <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.26/examples/offline_inference/neuron_di.py>`_
 for a quick example to get started.
 
 Refer to the :ref:`Disaggregated Inference Tutorial<nxdi-disaggregated-inference-tutorial>` for a detailed usage guide.

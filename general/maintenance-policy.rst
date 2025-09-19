@@ -93,10 +93,6 @@ A Neuron feature refers to any functionality or attribute that is part
 of the Neuron SDK, whether it belongs to the entire Neuron SDK or to one
 of its specific components.
 
-For example, a Neuron feature is `Neuron Persistent
-Cache <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#neuron-persistent-cache>`__
-in the :ref:`Transformers Neuronx library <transformers_neuronx_developer_guide>`
-
 Neuron APIs
 ~~~~~~~~~~~
 

@@ -87,6 +87,7 @@ Math operations
    gelu
    gelu_dx
    gelu_apprx_tanh
+   gelu_apprx_sigmoid
    silu
    silu_dx
    erf

@@ -31,12 +31,14 @@ Next, we will need to install ``NxDT`` and its dependencies.
 Please see the following installation guide for installing ``NxDT``:
 :ref:`NxDT Installation Guide <nxdt_installation_guide>`.
 
-We can download the ``requirements_dpo.txt`` and install using the command:
+For DPO and ORPO tests, We have to first install ``requirements.txt`` and then install ``alignment_requirements.txt``. We can use the following commands for the same:
 
 .. code-block:: shell
 
-    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed-training/master/requirements_dpo.txt
-    pip install -r requirements_dpo.txt
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed-training/master/requirements.txt
+    pip install -r requirements.txt
+    wget https://raw.githubusercontent.com/aws-neuron/neuronx-distributed-training/master/alignment_requirements.txt
+    pip install -r alignment_requirements.txt
 
 DPO-YAML Configuration Overview
 -------------------------------

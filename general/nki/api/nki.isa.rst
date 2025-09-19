@@ -33,11 +33,14 @@ NKI ISA
    dropout
    affine_select
    range_select
+   select_reduce
+   sequence_bounds
    memset
    bn_stats
    bn_aggr
    local_gather
    dma_copy
+   dma_transpose
    max8
    nc_find_index8
    nc_match_replace8

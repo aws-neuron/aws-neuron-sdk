@@ -3,7 +3,7 @@
 .. meta::
    :noindex:
    :nofollow:
-   :description: The tutorial for the AWS Neuron SDK is currently deprecated and not maintained. It is provided for reference only.
+   :description: This tutorial for the AWS Neuron SDK is currently archived and not maintained. It is provided for reference only.
 
 Fine-tune T5 model on Trn1
 ================================

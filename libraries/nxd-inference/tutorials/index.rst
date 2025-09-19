@@ -21,6 +21,7 @@ Tutorials
     /libraries/nxd-inference/tutorials/disaggregated-inference-1p1d-tutorial
     /libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial 
     /libraries/nxd-inference/tutorials/generating-results-with-performance-cli
+    /libraries/nxd-inference/tutorials/flux-inference-tutorial
 
 This section includes tutorials that you can follow to get started with the NeuronX Distributed (NxD) Inference library.
 

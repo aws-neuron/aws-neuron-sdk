@@ -147,7 +147,7 @@ def nki_range_select_chaining(on_true, bound0, bound1, compare_op0, compare_op1,
     return select_res, reduce_result
 
 class TestNkiIsaExamplesRangeSelect(unittest.TestCase):
-    def test_range_select(self):
+    def test_range_select_example(self):
         on_true_data = np.random.random_sample((128, 512)).astype(np.float32)
         bound0 = np.zeros([128, 1], dtype=np.float32)
         bound1 = np.full([128, 1], 64, dtype=np.float32)

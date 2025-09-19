@@ -13,13 +13,13 @@ JAX NeuronX Known Issues
 
     compilation_cache.set_cache_dir('./cache_directory')
 
-- For JAX versions older than ``0.4.34``, Buffer donation does not work out of the box. Add the following snippet to your script to enable it - ``jax._src.interpreters.mlir._platforms_with_donation.append('neuron')``
+- For JAX versions older than ``0.4.34``, buffer donation does not work out of the box. Add the following snippet to your script to enable it - ``jax._src.interpreters.mlir._platforms_with_donation.append('neuron')``
+- Mesh configurations which use non-connected Neuron cores might crash during execution. You might observe compilation or Neuron runtime errors for such configurations. Device connectivity can be determined by using ``neuron-ls --topology``.
+- Not all dtypes supported by JAX work on Neuron. Check :ref:`neuron-data-types` for supported data types.
 - ``jax.random.randint`` does not produce expected distribution of randint values. Run it on CPU instead.
 - Dynamic loops are not supported for ``jax.lax.while_loop``. Only static while loops are supported.
 - ``jax.lax.cond`` is not supported.
 - Host callbacks are not supported. As a result APIs based on callbacks from ``jax.debug`` and ``jax.experimental.checkify`` are not supported.
-- Mesh configurations which use non-connected Neuron cores might crash during execution. You might observe compilation or Neuron runtime errors for such configurations. Device connectivity can be determined by using ``neuron-ls --topology``.
-- Not all dtypes supported by JAX work on Neuron. Check :ref:`neuron-data-types` for supported data types.
 - ``jax.dlpack`` is not supported.
 - ``jax.experimental.sparse`` is not supported.
 - ``jax.lax.sort`` only supports comparators with LE, GE, LT and GT operations.
