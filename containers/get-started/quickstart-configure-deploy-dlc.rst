@@ -119,6 +119,17 @@ Wait for the server to fully initialize. You will see output showing available A
    INFO 08-12 00:04:47 [launcher.py:36] Route: /v1/chat/completions, Methods: POST
    INFO 08-12 00:04:47 [launcher.py:36] Route: /v1/completions, Methods: POST
 
+.. note::
+   During startup, you may see warning logs similar to the following, which can be safely ignored:
+
+   .. code-block:: text
+
+      No module named 'vllm._version'
+        from .version import __version__, __version_tuple__  # isort:skip
+      WARNING [__init__.py:25] The vLLM package was not found, so its version could not be inspected. This may cause platform detection to fail.
+      INFO [__init__.py:243] Automatically detected platform neuron.
+      WARNING [_custom_ops.py:21] Failed to import from vllm._C with ModuleNotFoundError("No module named 'vllm._C'")
+
 All complete! Now, let's confirm everything works.
 
 Step 5: Inference Confirmation

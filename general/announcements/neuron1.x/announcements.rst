@@ -85,7 +85,7 @@ With the introduction of *Neuron Runtime 2.x*, the strict separation of NeuronCo
 deprecated.  *Neuron Runtime 2.x* enables each process to own a set of NeuronCores, and within each process, Neuron Runtime 2.x supports loading and 
 executing multiple models on separate , different or overlapping sets of NeuronCores.
 
-Please note that ``NEURONCORE_GROUP_SIZES`` environment variable is in the process of being :ref:`deprecated <eol-ncgs-env>`, and for a transition period 
+Please note that ``NEURONCORE_GROUP_SIZES`` environment variable is in the process of being :ref:`unsupported <eol-ncgs-env>`, and for a transition period 
 ``NEURONCORE_GROUP_SIZES`` can be used to preserve the old NeuronCore Group behavior. The frameworks internally would convert ``NEURONCORE_GROUP_SIZES`` to 
 use runtime's new mode of mapping models to NeuronCores.
 

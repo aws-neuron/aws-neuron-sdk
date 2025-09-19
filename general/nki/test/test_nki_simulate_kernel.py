@@ -11,19 +11,19 @@ import numpy as np
 
 
 @nki.jit
-def print_kernel():
-  a = nl.ndarray([4, 4], dtype=nl.float32, buffer=nl.shared_hbm)
+def print_kernel(a_tensor):
+  b = nl.empty_like(a_tensor, buffer=nl.hbm)
 
-  # Create (4, 4) tensor in sbuf
-  y = nl.zeros([4, 4], dtype=np.float32)
+  # Load tensor into sbuf
+  a = nl.load(a_tensor)
 
   # Print tensor y
-  nl.device_print("value of y:", y)
+  nl.device_print("value of a:", a)
 
-  # Directly store tensor y as a single tile
-  nl.store(a, value=y)
+  # Directly store a into hbm
+  nl.store(b, value=a)
 
-  return a
+  return b
 # NKI_EXAMPLE_END
 
 
@@ -31,8 +31,9 @@ class TestNkiIsaExamplesSimulateKernel(unittest.TestCase):
   def test_simulate_kernel(self):
     # NKI_EXAMPLE_BEGIN
     np.random.seed(0)
+    a = np.random.random_sample([3, 4]).astype(np.float32) * 10
 
-    a = nki.simulate_kernel(print_kernel)
+    b = nki.simulate_kernel(print_kernel, a)
 
-    assert np.allclose(a, np.zeros([4, 4]))
+    assert np.allclose(a, b)
     # NKI_EXAMPLE_END

@@ -100,6 +100,31 @@ Compatible Checkpoint Examples
 - https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct
 - https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct
 
+Llama4
+~~~~~~~~~~~~~~~~~~
+
+NxD Inference supports Llama 4 models, including both Scout and Maverick checkpoints.
+You can use Hugging Face checkpoints. Both checkpoints leverage early fusion for native multimodality,
+enabling them to process text and image inputs. For more information
+about how to run Llama 4 inference, see :ref:`/libraries/nxd-inference/tutorials/llama4-tutorial.ipynb`.
+
+.. _neuron-classes-1:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: Llama4NeuronConfig
+- Inference config class: Llama4InferenceConfig
+- Causal LM model class: NeuronLlama4ForCausalLM
+
+.. _compatible-checkpoint-examples-1:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct
+- https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct
+
 Mixtral
 ~~~~~~~
 
@@ -196,3 +221,27 @@ Compatible Checkpoint Examples
 - https://huggingface.co/Qwen/Qwen3-8B
 - https://huggingface.co/Qwen/Qwen3-14B
 - https://huggingface.co/Qwen/Qwen3-32B
+
+
+FLUX.1 [BETA]
+~~~~~~~~~~~~~~~~~~
+
+NxD Inference supports FLUX.1-dev model checkpoint for text to image generation.
+You can use Hugging Face checkpoints. For more information
+about how to run FLUX.1-dev inference, see :ref:`/libraries/nxd-inference/tutorials/flux-inference-tutorial.ipynb`.
+
+.. _neuron-classes-3:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Flux Application class: NeuronFluxApplication
+- Flux Pipeline class: NeuronFluxPipeline
+- Flux Backbone Neuron config class: FluxBackboneInferenceConfig
+
+.. _compatible-checkpoint-examples-1:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/black-forest-labs/FLUX.1-dev

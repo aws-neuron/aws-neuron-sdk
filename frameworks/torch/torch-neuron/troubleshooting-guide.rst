@@ -3,6 +3,44 @@
 Troubleshooting Guide for PyTorch Neuron (``torch-neuron``)
 ===========================================================
 
+Patching PyTorch version 1.13 for CVEs
+--------------------------------------
+
+PyTorch version 1.13 has the following CVEs:
+- CVE-2025-32434
+- CVE-2024-31580
+- CVE-2024-31583
+
+To patch PyTorch version 1.13, run the following on a CPU instance with Ubuntu 22 AMI (it takes 30 minutes on a c5.4xlarge):
+
+::
+
+    git clone --recursive https://github.com/pytorch/pytorch -b v1.13.1
+    cd pytorch
+    git cherry-pick b5c3a17c2c207ebefcb85043f0cf94be9b2fef81
+    git cherry-pick 9c7071b0e324f9fb68ab881283d6b8d388a4bcd2
+    wget https://github.com/user-attachments/files/22013116/patch_v113.txt
+    git apply patch_v113.txt
+
+To build the pip wheel, see `build steps <https://github.com/pytorch/pytorch/tree/v1.13.1?tab=readme-ov-file#from-source>`_. A condensed version is provided below.
+
+Install Miniconda by following `installation steps <https://www.anaconda.com/docs/getting-started/miniconda/install#linux-2>`_ and run the following commands:
+
+::
+
+    source ~/miniconda3/bin/activate
+    conda create --name conda_py39 python=3.9
+    conda activate conda_py39
+    conda install astunparse numpy==1.19.5 ninja pyyaml setuptools cmake cffi typing_extensions future six requests dataclasses
+    conda install mkl mkl-include# CUDA only: Add LAPACK support for the GPU if needed
+    conda install -c pytorch magma-cuda110  # or the magma-cuda* that matches your CUDA version from https://anaconda.org/pytorch/repo
+    sudo apt install cmake g++
+
+    export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+    PYTORCH_BUILD_VERSION=1.13.2 PYTORCH_BUILD_NUMBER=1 python setup.py bdist_wheel
+    # the PyTorch pip wheel will be in dist directory
+
+
 General Torch-Neuron issues
 ---------------------------
 

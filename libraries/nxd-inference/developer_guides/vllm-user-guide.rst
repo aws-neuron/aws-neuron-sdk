@@ -74,7 +74,7 @@ To manually install the AWS fork from source, use the following commands:
 
 .. code::
 
-    git clone -b 2.25.0 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b 2.26.0 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
     pip install -r requirements/neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
@@ -277,14 +277,14 @@ Examples
 --------
 
 For a list of examples for using vLLM with Neuron, refer to `upstreaming-to-vllm/examples
-/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.25/examples/offline_inference>`_ folder. Look for example scripts with the ``neuron_`` prefix. 
-We provide examples for use cases such as `automatic prefix caching <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_prefix_caching.py>`_,
-`disaggregated inference <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_di.py>`_, 
-`speculative decoding with a draft model <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_speculation.py>`_,
-`speculative decoding using EAGLE <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_eagle.py>`_,
-`multimodal models <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_multimodal.py>`_, 
-`multi-LoRA <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_multi_lora.py>`_, 
-`quantization <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.25/examples/offline_inference/neuron_int8_quantization.py>`_, and more.
+/offline_inference/ <https://github.com/aws-neuron/upstreaming-to-vllm/tree/neuron-2.26/examples/offline_inference>`_ folder. Look for example scripts with the ``neuron_`` prefix. 
+We provide examples for use cases such as `automatic prefix caching <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_prefix_caching.py>`_,
+`disaggregated inference <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_di.py>`_, 
+`speculative decoding with a draft model <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_speculation.py>`_,
+`speculative decoding using EAGLE <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_eagle.py>`_,
+`multimodal models <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_multimodal.py>`_, 
+`multi-LoRA <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_multi_lora.py>`_, 
+`quantization <https://github.com/aws-neuron/upstreaming-to-vllm/blob/neuron-2.26/examples/offline_inference/neuron_int8_quantization.py>`_, and more.
 
 
 For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.

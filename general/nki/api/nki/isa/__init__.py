@@ -124,9 +124,9 @@ def activation(op, data, *, bias=None, scale=1.0, reduce_op=None, reduce_res=Non
   In this case, the element of scale/bias within each partition is broadcasted to
   elements of the input ``data`` tile in the same partition.
 
-  There are 128 registers on the scalar engine for storing reduction results, corresponding 
+  There are 128 registers on the scalar engine for storing reduction results, corresponding
   to the 128 partitions of the input.
-  The scalar engine can reduce along free dimensions without extra performance penalty, 
+  The scalar engine can reduce along free dimensions without extra performance penalty,
   and store the result of reduction into these registers. The reduction is done after the activation function
   is applied.
 
@@ -134,8 +134,8 @@ def activation(op, data, *, bias=None, scale=1.0, reduce_op=None, reduce_res=Non
         output = f_{act}(data * scale + bias)
         accu\_registers = reduce\_op(accu\_registers, reduce\_op(output, axis=<FreeAxis>))
 
-  These registers are shared between ``activation`` and ``activation_accu`` calls, and the state of them can be 
-  controlled via the ``reduce_cmd`` parameter. 
+  These registers are shared between ``activation`` and ``activation_accu`` calls, and the state of them can be
+  controlled via the ``reduce_cmd`` parameter.
 
   - ``nisa.reduce_cmd.reset``: Reset the accumulators to zero
   - ``nisa.reduce_cmd.idle``: Do not use the accumulators
@@ -143,7 +143,7 @@ def activation(op, data, *, bias=None, scale=1.0, reduce_op=None, reduce_res=Non
   - ``nisa.reduce_cmd.reset_reduce``: Resets the accumulators then immediately accumulate the results of the current instruction into the accumulators
 
   We can choose to read out the current values stored in the
-  register by passing in a tensor in the ``reduce_res`` arguments. Reading out the accumulator will 
+  register by passing in a tensor in the ``reduce_res`` arguments. Reading out the accumulator will
   incur a small overhead.
 
   Note that ``activation_accu`` can also change the state of the registers. It's user's responsibility
@@ -168,8 +168,8 @@ def activation(op, data, *, bias=None, scale=1.0, reduce_op=None, reduce_res=Non
   ``max(MIN_II, N)`` Scalar Engine cycles, where
 
   - ``N`` is the number of elements per partition in ``data``.
-  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles. 
-    ``MIN_II`` is roughly 64 engine cycles. 
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
+    ``MIN_II`` is roughly 64 engine cycles.
 
   :param op: an activation function (see :ref:`nki-act-func` for supported functions)
   :param data: the input tile; layout: (partition axis <= 128, free axis)
@@ -200,8 +200,8 @@ def activation_reduce(op, data, *, reduce_op, reduce_res, bias=None, scale=1.0, 
   ``nisa.activation`` result using Scalar Engine. The results for the reduction is stored
   in the reduce_res.
 
-  This API is equivalent to calling ``nisa.activation`` with 
-  ``reduce_cmd=nisa.reduce_cmd.reset_reduce`` and passing in reduce_res. This API is kept for 
+  This API is equivalent to calling ``nisa.activation`` with
+  ``reduce_cmd=nisa.reduce_cmd.reset_reduce`` and passing in reduce_res. This API is kept for
   backward compatibility, we recommend using ``nisa.activation`` moving forward.
 
   Refer to :doc:`nisa.activation <nki.isa.activation>` for semantics of ``op/data/bias/scale``.
@@ -212,13 +212,13 @@ def activation_reduce(op, data, *, reduce_op, reduce_res, bias=None, scale=1.0, 
   SBUF/PSUM tile with the same partition axis size as the input tile ``data`` and one element per partition.
   On NeuronCore-v2, the ``reduce_op`` can only be an addition, ``np.add`` or ``nl.add``.
 
-  There are 128 registers on the scalar engine for storing reduction results, corresponding 
-  to the 128 partitions of the input. These registers are shared between ``activation`` and ``activation_accu`` calls. 
-  This instruction first resets those 
+  There are 128 registers on the scalar engine for storing reduction results, corresponding
+  to the 128 partitions of the input. These registers are shared between ``activation`` and ``activation_accu`` calls.
+  This instruction first resets those
   registers to zero, performs the reduction on the value after activation function is applied,
   stores the results into the registers,
-  then reads out the reduction results from the register, eventually store them into ``reduce_res``. 
-  
+  then reads out the reduction results from the register, eventually store them into ``reduce_res``.
+
   Note that ``nisa.activation`` can also change the state of the register. It's user's
   responsibility to ensure correct ordering. It's the best practice to not mixing
   the use of ``activation_reduce`` and ``activation``.
@@ -261,7 +261,7 @@ def affine_select(pred, on_true_tile, on_false_value, *, mask=None, dtype=None, 
   Select elements between an input tile ``on_true_tile`` and a scalar value ``on_false_value``
   according to a boolean predicate tile using GpSimd Engine. The predicate tile is
   calculated on-the-fly in the engine by evaluating an affine expression element-by-element as indicated in ``pred``.
-  
+
   ``pred`` must meet the following requirements:
 
     - It must not depend on any runtime variables that can't be resolved at compile-time.
@@ -410,13 +410,13 @@ def dma_copy(*, dst, src, mask=None, dst_rmw_op=None, oob_mode=oob_mode.error, d
 
   :param src: the source of copy.
   :param dst: the dst of copy.
-  :param dst_rmw_op: the read-modify-write operation to be performed at the destination. 
-                     Currently only ``np.add`` is supported, which adds the source data to the existing destination data. 
+  :param dst_rmw_op: the read-modify-write operation to be performed at the destination.
+                     Currently only ``np.add`` is supported, which adds the source data to the existing destination data.
                      If ``None``, the source data directly overwrites the destination.
                      If ``dst_rmw_op`` is specified, only ``oob_mode=oob_mode.error`` is allowed.
-                     For best performance with Descriptor Generation Engine (DGE), unique dynamic offsets 
-                     must be used to access ``dst``. Multiple accesses to the same offset will cause a data hazard. 
-                     If duplicated offsets are present, the compiler automatically adds synchronization to avoid 
+                     For best performance with Descriptor Generation Engine (DGE), unique dynamic offsets
+                     must be used to access ``dst``. Multiple accesses to the same offset will cause a data hazard.
+                     If duplicated offsets are present, the compiler automatically adds synchronization to avoid
                      hazards, which slows down computation.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :param mode: (optional) Specifies how to handle out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
@@ -425,11 +425,7 @@ def dma_copy(*, dst, src, mask=None, dst_rmw_op=None, oob_mode=oob_mode.error, d
         - ``oob_mode.skip``: Silently skips any operations involving out-of-bounds indices.
 
         For example, when using indirect gather/scatter operations, out-of-bounds indices can occur if the index array contains values that exceed the dimensions of the target array.
-  :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for copy: 
-                   ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software 
-                   DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE) or ``nki.isa.dge_mode.unknown``
-                   (by default, let compiler select the best DGE mode). HWDGE is only supported 
-                   for NeuronCore-v3+.
+  :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for copy: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). HWDGE is only supported for NeuronCore-v3+.
 
   A cast will happen if the ``src`` and ``dst`` have different dtype.
 
@@ -450,7 +446,7 @@ def dma_copy(*, dst, src, mask=None, dst_rmw_op=None, oob_mode=oob_mode.error, d
   .. nki_example:: ../../test/test_nki_isa_dma_copy.py
    :language: python
    :marker: NKI_EXAMPLE_3
-   
+
   .. nki_example:: ../../test/test_nki_isa_dma_copy.py
    :language: python
    :marker: NKI_EXAMPLE_4
@@ -469,29 +465,33 @@ def dma_copy(*, dst, src, mask=None, dst_rmw_op=None, oob_mode=oob_mode.error, d
   """
   ...
 
-def dma_transpose(src, *, mask=None, dtype=None, **kwargs):
+def dma_transpose(src, *, axes=None, mask=None, dtype=None, **kwargs):
   r"""
   Perform a transpose on input ``src`` using DMA Engine.
 
   The permutation of transpose follow the rules described below:
-  For 2-d input tile, the permutation will be [1, 0]
-  For 3-d input tile, the permutation will be [2, 1, 0]
-  For 4-d input tile, the permutation will be [3, 1, 2, 0]
 
-  **Estimated instruction cost:**
-
-  TBD
+  1. For 2-d input tile, the permutation will be [1, 0]
+  2. For 3-d input tile, the permutation will be [2, 1, 0]
+  3. For 4-d input tile, the permutation will be [3, 1, 2, 0]
 
   :param src: the source of transpose, must be a tile in HBM or SBUF.
+  :param axes: transpose axes where the i-th axis of the transposed tile will correspond to the axes[i] of the source.
+               Supported axes are ``(1, 0)``, ``(2, 1, 0)``, and ``(3, 1, 2, 0)``.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+  :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for copy: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). HWDGE is only supported for NeuronCore-v3+.
   :return: a tile with transposed content
 
   Example:
 
-  .. nki_example:: ../../test/test_nki_nl_load_transpose2d.py
+  .. nki_example:: ../../test/test_nki_isa_dma_transpose.py
    :language: python
-   :marker: NKI_EXAMPLE_20
+   :marker: NKI_EXAMPLE_0
+
+  .. nki_example:: ../../test/test_nki_isa_dma_transpose.py
+   :language: python
+   :marker: NKI_EXAMPLE_1
 
   """
   ...
@@ -907,7 +907,7 @@ def nc_matmul(stationary, moving, *, is_stationary_onezero=False, is_moving_onez
       - Condition
     * - ``max(min(64, N_stationary), N_moving)``
       - input data type is one of ``float8_e4m3/float8_e5m2/bfloat16/float16/tfloat32``
-    * - ``4 * max(min(64, N_stationary), N_moving)`` 
+    * - ``4 * max(min(64, N_stationary), N_moving)``
       - input data type is ``float32``
 
   where,
@@ -915,15 +915,15 @@ def nc_matmul(stationary, moving, *, is_stationary_onezero=False, is_moving_onez
   - ``N_stationary`` is the number of elements per partition in ``stationary`` tile.
   - ``N_moving`` is the number of elements per partition in ``moving`` tile.
 
-  The Tensor Engine, as a systolic array with 128 rows and 128 columns of processing elements (PEs), could be underutilized 
-  for small ``nc_matmul`` instructions, i.e., the ``stationary`` tile has small free axis size or small partition axis size 
-  (e.g. 32, 64). In such a case, the Tensor Engine allows PE tiling, i.e., multiple small ``nc_matmul`` instructions to execute 
+  The Tensor Engine, as a systolic array with 128 rows and 128 columns of processing elements (PEs), could be underutilized
+  for small ``nc_matmul`` instructions, i.e., the ``stationary`` tile has small free axis size or small partition axis size
+  (e.g. 32, 64). In such a case, the Tensor Engine allows PE tiling, i.e., multiple small ``nc_matmul`` instructions to execute
   in parallel on the PE array, to improve compute throughput. PE tiling is enabled by setting ``tile_position`` and ``tile_size``.
   ``tile_position`` indicates the PE tile starting position (row position, column position) for a ``nc_matmul`` instruction in
-  the PE array. ``tile_size`` indicates the PE tile size (row size, column size) to hold by a ``nc_matmul`` instruction starting 
+  the PE array. ``tile_size`` indicates the PE tile size (row size, column size) to hold by a ``nc_matmul`` instruction starting
   from the ``tile_position``. For example, setting ``tile_position`` to (0, 0) and ``tile_size`` to (128, 128) means using full
   PE array.
-  
+
   Requirements on ``tile_position`` and ``tile_size`` are:
 
   #. ``tile_position`` and ``tile_size`` must be both set to enable PE tiling.
@@ -958,42 +958,42 @@ def nc_matmul(stationary, moving, *, is_stationary_onezero=False, is_moving_onez
 
 def nc_stream_shuffle(src, dst, shuffle_mask, *, dtype=None, mask=None, **kwargs):
   r"""
-  Apply cross-partition data movement within a quadrant of 32 partitions from source tile 
+  Apply cross-partition data movement within a quadrant of 32 partitions from source tile
   ``src`` to destination tile ``dst`` using Vector Engine.
-      
-  Both source and destination tiles can be in either SBUF or PSUM, and passed in by reference as arguments. 
-  In-place shuffle is allowed, i.e., ``dst`` same as ``src``. ``shuffle_mask`` is a 32-element list. Each mask 
-  element must be in data type int or affine expression. ``shuffle_mask[i]`` indicates which input partition the 
-  output partition [i] copies from within each 32-partition quadrant. The special value ``shuffle_mask[i]=255`` 
-  means the output tensor in partition [i] will be unmodified. ``nc_stream_shuffle`` can be applied to multiple 
-  of quadrants. In the case with more than one quadrant, the shuffle is applied to each quadrant independently, 
-  and the same ``shuffle_mask`` is used for each quadrant. ``mask`` applies to ``dst``, meaning that locations 
-  masked out by ``mask`` will be unmodified. For more information about the cross-partition data movement, 
+
+  Both source and destination tiles can be in either SBUF or PSUM, and passed in by reference as arguments.
+  In-place shuffle is allowed, i.e., ``dst`` same as ``src``. ``shuffle_mask`` is a 32-element list. Each mask
+  element must be in data type int or affine expression. ``shuffle_mask[i]`` indicates which input partition the
+  output partition [i] copies from within each 32-partition quadrant. The special value ``shuffle_mask[i]=255``
+  means the output tensor in partition [i] will be unmodified. ``nc_stream_shuffle`` can be applied to multiple
+  of quadrants. In the case with more than one quadrant, the shuffle is applied to each quadrant independently,
+  and the same ``shuffle_mask`` is used for each quadrant. ``mask`` applies to ``dst``, meaning that locations
+  masked out by ``mask`` will be unmodified. For more information about the cross-partition data movement,
   see :ref:`arch_guide_cross_partition_data_movement`.
 
   This API has 3 constraints on ``src`` and ``dst``:
 
   #. ``dst`` must have same data type as ``src``.
   #. ``dst`` must have the same number of elements per partition as ``src``.
-  #. The access start partition of ``src`` (``src_start_partition``), does not have to match or be in the same quadrant 
-     as that of ``dst`` (``dst_start_partition``). However, ``src_start_partition``/``dst_start_partition`` needs to follow 
-     some special hardware rules with the number of active partitions ``num_active_partitions``. 
-     ``num_active_partitions = ceil(max(src_num_partitions, dst_num_partitions)/32) * 32``, where ``src_num_partitions`` and 
-     ``dst_num_partitions`` refer to the number of partitions the ``src`` and ``dst`` tensors access respectively. 
+  #. The access start partition of ``src`` (``src_start_partition``), does not have to match or be in the same quadrant
+     as that of ``dst`` (``dst_start_partition``). However, ``src_start_partition``/``dst_start_partition`` needs to follow
+     some special hardware rules with the number of active partitions ``num_active_partitions``.
+     ``num_active_partitions = ceil(max(src_num_partitions, dst_num_partitions)/32) * 32``, where ``src_num_partitions`` and
+     ``dst_num_partitions`` refer to the number of partitions the ``src`` and ``dst`` tensors access respectively.
      ``src_start_partition``/``dst_start_partition`` is constrained based on the value of ``num_active_partitions``:
 
     * If ``num_active_partitions`` is 96/128, ``src_start_partition``/``dst_start_partition`` must be 0.
-   
+
     * If ``num_active_partitions`` is 64, ``src_start_partition``/``dst_start_partition`` must be 0/64.
-   
+
     * If ``num_active_partitions`` is 32, ``src_start_partition``/``dst_start_partition`` must be 0/32/64/96.
 
   **Estimated instruction cost:**
 
-  ``max(MIN_II, N)`` Vector Engine cycles, where ``N`` is the number of elements per 
-  partition in ``src``, and ``MIN_II`` is the minimum instruction initiation interval 
+  ``max(MIN_II, N)`` Vector Engine cycles, where ``N`` is the number of elements per
+  partition in ``src``, and ``MIN_II`` is the minimum instruction initiation interval
   for small input tiles. ``MIN_II`` is roughly 64 engine cycles.
-  
+
   :param src: the source tile
   :param dst: the destination tile
   :param shuffle_mask: a 32-element list that specifies the shuffle source and destination partition
@@ -1013,7 +1013,7 @@ def nc_stream_shuffle(src, dst, shuffle_mask, *, dtype=None, mask=None, **kwargs
   .. nki_example:: ../../test/test_nki_isa_nc_stream_shuffle.py
    :language: python
    :marker: NKI_EXAMPLE_2
-  
+
   """
   ...
 
@@ -1083,37 +1083,42 @@ def nc_transpose(data, *, mask=None, dtype=None, engine=engine.unknown, **kwargs
 
 def range_select(*, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.idle, reduce_res=None, reduce_op=np.amax, range_start=0, on_false_value=fp32.min, mask=None, dtype=None, **kwargs):
   r"""
+
     Select elements from ``on_true_tile`` based on comparison with bounds using Vector Engine.
-    
+
+    .. note::
+
+      Available only on NeuronCore-v3 and beyond.
+
     For each element in ``on_true_tile``, compares its free dimension index + ``range_start`` against ``bound0`` and ``bound1``
     using the specified comparison operators (``comp_op0`` and ``comp_op1``). If both comparisons
     evaluate to True, copies the element to the output; otherwise uses  ``on_false_value``.
-    
+
     Additionally performs a reduction operation specified by ``reduce_op`` on the results,
     storing the reduction result in ``reduce_res``.
 
-    **Note on numerical stability:** 
-    
-    In self-attention, we often have this instruction sequence: ``range_select`` (VectorE) -> ``reduce_res`` -> ``activation`` (ScalarE). 
-    When ``range_select`` outputs a full row of ``fill_value``, caution is needed to avoid NaN in the 
+    **Note on numerical stability:**
+
+    In self-attention, we often have this instruction sequence: ``range_select`` (VectorE) -> ``reduce_res`` -> ``activation`` (ScalarE).
+    When ``range_select`` outputs a full row of ``fill_value``, caution is needed to avoid NaN in the
     activation instruction that subtracts the output of ``range_select`` by ``reduce_res`` (max value):
 
     - If ``dtype`` and ``reduce_res`` are both FP32, we should not hit any NaN issue
       since ``FP32_MIN - FP32_MIN = 0``. Exponentiation on 0 is stable (1.0 exactly).
 
     - If ``dtype`` is FP16/BF16/FP8, the fill_value in the output tile will become ``-INF``
-      since HW performs a downcast from FP32_MIN to a smaller dtype. 
+      since HW performs a downcast from FP32_MIN to a smaller dtype.
       In this case, you must make sure reduce_res uses FP32 ``dtype`` to avoid NaN in ``activation``.
       NaN can be avoided because ``activation`` always upcasts input tiles to FP32 to perform math operations: ``-INF - FP32_MIN = -INF``.
       Exponentiation on ``-INF`` is stable (0.0 exactly).
 
-    **Constraints:**    
+    **Constraints:**
 
     The comparison operators must be one of:
 
     - np.equal
     - np.less
-    - np.less_equal 
+    - np.less_equal
     - np.greater
     - np.greater_equal
 
@@ -1122,7 +1127,7 @@ def range_select(*, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd
     - ``bound0`` and ``bound1`` must have one element per partition
     - ``on_true_tile`` must be one of the FP dtypes, and ``bound0/bound1`` must be FP32 types.
 
-    The comparison with ``bound0``, ``bound1``, and free dimension index is done in FP32. 
+    The comparison with ``bound0``, ``bound1``, and free dimension index is done in FP32.
     Make sure ``range_start`` + free dimension index is within 2^24 range.
 
     **Estimated instruction cost:**
@@ -1134,25 +1139,25 @@ def range_select(*, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd
     - ``MIN_II`` is roughly 64 engine cycles.
 
     **Numpy equivalent:**
-    
+
     .. code-block:: python
 
         indices = np.zeros(on_true_tile.shape)
         indices[:] = range_start + np.arange(on_true_tile[0].size)
-        
+
         mask = comp_op0(indices, bound0) & comp_op1(indices, bound1)
         select_out_tile = np.where(mask, on_true_tile, on_false_value)
         reduce_tile = reduce_op(select_out_tile, axis=1, keepdims=True)
 
     :param on_true_tile: input tile containing elements to select from
-    :param on_false_value: constant value to use when selection condition is False. 
+    :param on_false_value: constant value to use when selection condition is False.
       Due to HW constraints, this must be FP32_MIN FP32 bit pattern
     :param comp_op0: first comparison operator
-    :param comp_op1: second comparison operator  
+    :param comp_op1: second comparison operator
     :param bound0: tile with one element per partition for first comparison
     :param bound1: tile with one element per partition for second comparison
     :param reduce_op: reduction operator to apply on across the selected output. Currently only ``np.max`` is supported.
-    :param reduce_res: optional tile to store reduction results. 
+    :param reduce_res: optional tile to store reduction results.
     :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``
       Defaults to 0, and must be a compiler time integer.
     :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
@@ -1171,7 +1176,7 @@ def range_select(*, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd
     .. nki_example:: ../../test/test_nki_isa_range_select.py
        :language: python
        :marker: NKI_EXAMPLE_1
-   
+
     """
   ...
 
@@ -1181,7 +1186,7 @@ def reciprocal(data, *, dtype=None, mask=None, **kwargs):
 
   **Estimated instruction cost:**
 
-  ``max(MIN_II, 8*N)`` Vector Engine cycles, where ``N`` is the number of elements per partition in ``data``, and 
+  ``max(MIN_II, 8*N)`` Vector Engine cycles, where ``N`` is the number of elements per partition in ``data``, and
   ``MIN_II`` is the minimum instruction initiation interval for small input tiles. ``MIN_II`` is roughly 64 engine cycles.
 
   :param data: the input tile
@@ -1204,8 +1209,8 @@ def scalar_tensor_tensor(*, data, op0, operand0, op1, operand1, reverse0=False, 
 
   ``data`` input can be an SBUF or PSUM tile of 2D shape.
   ``operand0`` can be SBUF or PSUM tile of shape ``(data.shape[0], 1)``, i.e., vector, or a compile-time constant scalar.
-  ``operand1`` can be SBUF or PSUM tile of shape ``(data.shape[0], data.shape[1])`` (i.e., has to match ``data`` shape), 
-  note that ``operand1`` and ``data`` can't both be on PSUM. 
+  ``operand1`` can be SBUF or PSUM tile of shape ``(data.shape[0], data.shape[1])`` (i.e., has to match ``data`` shape),
+  note that ``operand1`` and ``data`` can't both be on PSUM.
 
   **Estimated instruction cost:**
 
@@ -1217,7 +1222,7 @@ def scalar_tensor_tensor(*, data, op0, operand0, op1, operand1, reverse0=False, 
       - Condition
     * - ``N``
       - ``data`` and ``operand1`` are both ``bfloat16``, ``op0=nl.subtract`` and ``op1=nl.multiply``, and ``N`` is even
-    * - ``2*N`` 
+    * - ``2*N``
       - otherwise
 
   where,
@@ -1237,6 +1242,132 @@ def scalar_tensor_tensor(*, data, op0, operand0, op1, operand1, reverse0=False, 
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :return: an output tile of ``(data <op0> operand0) <op1> operand1`` computation
+
+  """
+  ...
+
+def select_reduce(*, dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd=reduce_cmd.idle, reduce_op=np.amax, reverse_pred=False, mask=None, dtype=None, **kwargs):
+  r"""
+    Selectively copy elements from either ``on_true`` or ``on_false`` to the destination tile
+    based on a ``predicate`` using Vector Engine, with optional reduction (max).
+
+    The operation can be expressed in NumPy as:
+
+    .. code-block:: python
+
+        # Select:
+        predicate = ~predicate if reverse_pred else predicate
+        result = np.where(predicate, on_true, on_false)
+
+        # With Reduce:
+        reduction_result = np.max(result, axis=1, keepdims=True)
+
+    **Memory constraints:**
+
+    - Both ``on_true`` and ``predicate`` are permitted to be in SBUF
+    - Either ``on_true`` or ``predicate`` may be in PSUM, but not both simultaneously
+    - The destination ``dst`` can be in either SBUF or PSUM
+
+    **Shape and data type constraints:**
+
+    - ``on_true``, ``dst``, and ``predicate`` must have identical shapes (same number of partitions and elements per partition)
+    - ``on_true`` can be any supported dtype except ``tfloat32``, ``int32``, ``uint32``
+    - ``on_false`` dtype must be ``float32`` if ``on_false`` is a scalar.
+    - ``on_false`` has to be either scalar or vector of shape ``(on_true.shape[0], 1)``
+    - ``predicate`` dtype can be any supported integer type ``int8``, ``uint8``, ``int16``, ``uint16``
+    - ``reduce_res`` must be a vector of shape ``(on_true.shape[0], 1)``
+    - ``reduce_res`` dtype must of float type
+    - ``reduce_op`` only supports ``max``
+
+    **Behavior:**
+
+    - Where predicate is True: The corresponding elements from ``on_true`` are copied to ``dst``
+    - Where predicate is False: The corresponding elements from ``on_false`` are copied to ``dst``
+    - When reduction is enabled, the max value from each partition of the ``result`` is computed and stored in ``reduce_res``
+
+    **Accumulator behavior:**
+
+    The Vector Engine maintains internal accumulator registers that can be controlled via the ``reduce_cmd`` parameter:
+
+    - ``nisa.reduce_cmd.reset_reduce``: Reset accumulators to -inf, then accumulate the current results
+    - ``nisa.reduce_cmd.reduce``: Continue accumulating without resetting (useful for multi-step reductions)
+    - ``nisa.reduce_cmd.idle``: No accumulation performed (default)
+
+    .. note::
+      Even when ``reduce_cmd`` is set to ``idle``, the accumulator state may still be modified.
+      Always use ``reset_reduce`` after any operations that ran with ``idle`` mode to ensure
+      consistent behavior.
+
+    .. note::
+      The accumulator registers are shared for other Vector Engine accumulation instructions such :doc:`nki.isa.range_select <nki.isa.range_select>`
+
+    :param dst: The destination tile to write the selected values to
+    :param predicate: Tile that determines which value to select (on_true or on_false)
+    :param on_true: Tile to select from when predicate is True
+    :param on_false: Value to use when predicate is False, can be a scalar value or a vector tile of ``(on_true.shape[0], 1)``
+    :param reduce_res: (optional) Tile to store reduction results, must have shape ``(on_true.shape[0], 1)``
+    :param reduce_cmd: (optional) Control accumulator behavior using ``nisa.reduce_cmd`` values, defaults to idle
+    :param reduce_op: (optional) Reduction operator to apply (only ``np.max`` is supported)
+    :param reverse_pred: (optional) Reverse the meaning of the predicate condition, defaults to False
+    :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+
+    **Example 1: Basic selection**
+
+    .. nki_example:: ../../test/test_nki_isa_select_reduce.py
+       :language: python
+       :marker: NKI_EXAMPLE_1
+
+    **Example 2: Selection with reduction**
+
+    .. nki_example:: ../../test/test_nki_isa_select_reduce.py
+       :language: python
+       :marker: NKI_EXAMPLE_2
+
+    **Example 3: Selection with reversed predicate**
+
+    .. nki_example:: ../../test/test_nki_isa_select_reduce.py
+       :language: python
+       :marker: NKI_EXAMPLE_3
+    """
+  ...
+
+def sequence_bounds(*, segment_ids, dtype=None):
+  r"""
+  Compute the sequence bounds for a given set of segment IDs using GpSIMD Engine.
+
+  Given a tile of segment IDs, this function identifies where each segment begins and ends.
+  For each element, it returns a pair of values: [start_index, end_index] indicating
+  the boundaries of the segment that element belongs to. All segment IDs must be non-negative
+  integers. Padding elements (with segment ID of zero) receive special boundary
+  values: a start index of n and an end index of (-1), where n is the length
+  of ``segment_ids``.
+
+  The output tile contains two values per input element: the start index (first column)
+  and end index (second column) of each segment. The partition dimension must always be 1.
+  For example, with input shape (1, 512), the output shape becomes (1, 2, 512), where
+  the additional dimension holds the start and end indices for each element.
+
+  The input tile (``segment_ids``) must have data type np.float32 or np.int32.
+  The output tile data type is specified using the ``dtype`` field (must be np.float32 or np.int32).
+  If ``dtype`` is not specified, the output data type will be the same as the input
+  data type of ``segment_ids``.
+
+  **NumPy equivalent:**
+
+  .. nki_example:: ../../test/test_nki_isa_sequence_bounds.py
+   :language: python
+   :marker: NKI_EXAMPLE_1
+
+  :param segment_ids: tile containing the segment IDs. Elements with ID=0 are treated as padding.
+  :param dtype: data type of the output (must be np.float32 or np.int32)
+  :return: tile containing the sequence bounds.
+
+  Example:
+
+  .. nki_example:: ../../test/test_nki_isa_sequence_bounds.py
+   :language: python
+   :marker: NKI_EXAMPLE_0
 
   """
   ...
@@ -1289,7 +1420,7 @@ def tensor_copy_dynamic_dst(*, dst, src, mask=None, dtype=None, engine=engine.un
   Create a copy of ``src`` tile within NeuronCore on-chip SRAMs using Vector or Scalar or GpSimd Engine,
   with ``dst`` located at a dynamic offset within each partition.
 
-  Both source and destination tiles can be in either SBUF or PSUM. 
+  Both source and destination tiles can be in either SBUF or PSUM.
 
   The source and destination tiles must also have the same number of partitions and the same number of elements
   per partition.
@@ -1359,13 +1490,13 @@ def tensor_copy_dynamic_src(src, *, mask=None, dtype=None, engine=engine.unknown
   """
   ...
 
-def tensor_copy_predicated(*, src, dst, predicate, mask=None, dtype=None, reverse_pred=False, **kwargs):
+def tensor_copy_predicated(*, src, dst, predicate, reverse_pred=False, mask=None, dtype=None, **kwargs):
   r"""
   Conditionally copy elements from the ``src`` tile to the destination tile on SBUF / PSUM
   based on a ``predicate`` using Vector Engine.
 
-  This instruction provides low-level control over conditional data movement on NeuronCores, 
-  optimized for scenarios where only selective copying of elements is needed. Either ``src`` or 
+  This instruction provides low-level control over conditional data movement on NeuronCores,
+  optimized for scenarios where only selective copying of elements is needed. Either ``src`` or
   ``predicate`` may be in PSUM, but not both simultaneously. Both ``src`` and ``predicate`` are permitted to be in SBUF.
 
   Shape and data type constraints:
@@ -1374,10 +1505,10 @@ def tensor_copy_predicated(*, src, dst, predicate, mask=None, dtype=None, revers
   2. ``predicate`` must be of type ``uint8``, ``uint16``, or ``uint32``.
   3. ``src`` and ``dst`` must share the same data type.
 
-  **Behavior:**  
+  **Behavior:**
 
   - Where predicate is True: The corresponding elements from `src` are copied to `dst` tile. If `src` is a scalar, the scalar is copied to the `dst` tile.
-  - Where predicate is False: The corresponding values in `dst` tile are unmodified 
+  - Where predicate is False: The corresponding values in `dst` tile are unmodified
 
   **Estimated instruction cost:**
 
@@ -1385,13 +1516,13 @@ def tensor_copy_predicated(*, src, dst, predicate, mask=None, dtype=None, revers
     :widths: 40 60
     :header-rows: 1
 
-    * - Cost ``(Vector Engine Cycles)`` 
+    * - Cost ``(Vector Engine Cycles)``
       - Condition
-    * - ``max(MIN_II, N)`` 
-      - If ``src`` is from SBUF and ``predicate`` is from PSUM or the other way around 
-    * - ``max(MIN_II, 2N)`` 
-      - If both ``src`` and ``dst`` are in SBUF 
-    
+    * - ``max(MIN_II, N)``
+      - If ``src`` is from SBUF and ``predicate`` is from PSUM or the other way around
+    * - ``max(MIN_II, 2N)``
+      - If both ``src`` and ``dst`` are in SBUF
+
   - ``N`` is the number of elements per partition in ``src`` tile
   - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
     ``MIN_II`` is roughly 64 engine cycles.
@@ -1399,9 +1530,9 @@ def tensor_copy_predicated(*, src, dst, predicate, mask=None, dtype=None, revers
   :param ``src``: The source tile or number to copy elements from when ``predicate`` is True
   :param ``dst``: The destination tile to copy elements to
   :param ``predicate``: A tile that determines which elements to copy
+  :param reverse_pred: A boolean that reverses the effect of ``predicate``.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
-  :param reverse_pred: A boolean that reverses the effect of ``predicate``.
 
   Example:
 
@@ -1471,7 +1602,7 @@ def tensor_reduce(op, data, axis, *, mask=None, dtype=None, negate=False, keepdi
 
     * - Cost `(Vector Engine Cycles)`
       - Condition
-    * - ``N/2`` 
+    * - ``N/2``
       - both input and output data types are ``bfloat16`` *and* the reduction operator is add or maximum
     * - ``N``
       - otherwise
@@ -1529,7 +1660,7 @@ def tensor_scalar(data, op0, operand0, reverse0=False, op1=None, operand1=None, 
   data types must be integer types, and input elements are treated as bit patterns without any data type casting.
 
   If arithmetic operators are used, the ``tensor_scalar`` instruction can run on Vector or Scalar or GpSimd Engine.
-  However, each engine supports limited arithmetic operators (see :ref:``tbl-aluop``). The Scalar Engine on trn2 only 
+  However, each engine supports limited arithmetic operators (see :ref:``tbl-aluop``). The Scalar Engine on trn2 only
   supports a subset of the operator combination:
 
     - ``op0=np.multiply`` and ``op1=np.add``
@@ -1547,7 +1678,7 @@ def tensor_scalar(data, op0, operand0, reverse0=False, op1=None, operand1=None, 
   ``max(MIN_II, N)`` Vector or Scalar Engine cycles, where
 
   - ``N`` is the number of elements per partition in ``data``.
-  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles. 
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
     ``MIN_II`` is roughly 64 engine cycles.
 
   :param data: the input tile
@@ -1565,7 +1696,7 @@ def tensor_scalar(data, op0, operand0, reverse0=False, op1=None, operand1=None, 
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.scalar_engine`,
-                 `nki.isa.gpsimd_engine` (only allowed for rsqrt) or `nki.isa.unknown_engine` (default, let 
+                 `nki.isa.gpsimd_engine` (only allowed for rsqrt) or `nki.isa.unknown_engine` (default, let
                  compiler select best engine based on the input tile shape).
   :return: an output tile of ``(data <op0> operand0) <op1> operand1`` computation
 
@@ -1633,17 +1764,19 @@ def tensor_tensor(data1, data2, op, *, dtype=None, mask=None, engine=engine.unkn
 
   The element-wise operator is specified using the ``op`` field and can be any *binary* operator
   supported by NKI (see :ref:`nki-aluop` for details) that runs on the Vector Engine,
-  or can be ``np.power``/``nl.power``  that runs on the GpSimd Engine.
+  or it can be ``power`` or integer ``add``, ``multiply```, or ``subtract`` which run on the GpSimd Engine.
   For bitvec operators, the input/output data types must be integer types and Vector Engine treats
-  all input elements as bit patterns without any data type casting. For arithmetic operators, there is no
+  all input elements as bit patterns without any data type casting. 
+  For arithmetic operators, there is no
   restriction on the input/output data types, but the engine automatically casts input data types to float32
-  and performs the element-wise operation in float32 math. The float32 results are cast to the target
+  and performs the element-wise operation in float32 math (unless it is one of the supported integer ops mentioned above). 
+  The float32 results are cast to the target
   data type specified in the ``dtype`` field before written into the
   output tile. If the ``dtype`` field is not specified, it is default to be the same as the data type of ``data1``
   or ``data2``, whichever has the higher precision.
 
   Since GpSimd Engine cannot access PSUM, the input or output tiles cannot be in PSUM
-  if ``op`` is ``np.power``/``nl.power``
+  if ``op`` is one of the GpSimd operations mentioned above.
   (see :ref:`arch_sec_neuron_core_engines` for details).
   Otherwise, the output tile can be in either SBUF or PSUM.
   However, the two input tiles, ``data1`` and ``data2`` cannot both reside in PSUM.
@@ -1667,22 +1800,22 @@ def tensor_tensor(data1, data2, op, *, dtype=None, mask=None, engine=engine.unkn
 
     * - Cost `(Vector Engine Cycles)`
       - Condition
-    * - ``max(MIN_II, N)`` 
+    * - ``max(MIN_II, N)``
       - one input tile is in PSUM and the other is in SBUF
-    * - ``max(MIN_II, N)`` 
+    * - ``max(MIN_II, N)``
       - all of the below:
 
         * both input tiles are in SBUF,
         * input/output data types are all ``bfloat16``,
         * the operator is add, multiply or subtract,
         * Input tensor data is contiguous along the free dimension (that is, stride in each partition is 1 element)
-    * - ``max(MIN_II, 2N)`` 
+    * - ``max(MIN_II, 2N)``
       - otherwise
 
   where,
 
   - ``N`` is the number of elements per partition in ``data1``/``data2``.
-  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles. 
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
     ``MIN_II`` is roughly 64 engine cycles.
 
 
@@ -1691,7 +1824,7 @@ def tensor_tensor(data1, data2, op, *, dtype=None, mask=None, engine=engine.unkn
   :param op: a binary math operator (see :ref:`nki-aluop` for supported operators)
   :param mask: (optional) a compile-time constant predicate that controls whether/how this instruction is executed (see :ref:`nki-mask` for details)
   :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tiles, or whichever input type has the highest precision (see :ref:`nki-type-promotion` for more information);
-  :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.gpsimd_engine` 
+  :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.gpsimd_engine`
                  or `nki.isa.unknown_engine` (default, let compiler select best engine based on the input tile shape).
   :return: an output tile of the element-wise operation
 
@@ -1751,13 +1884,13 @@ def tensor_tensor_scan(data0, data1, initial, op0, op1, reverse0=False, reverse1
   or ``data1``, whichever has the highest precision.
 
   **Estimated instruction cost:**
-  
+
   ``max(MIN_II, 2N)`` Vector Engine cycles, where
 
   - ``N`` is the number of elements per partition in ``data0``/``data1``.
-  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles. 
+  - ``MIN_II`` is the minimum instruction initiation interval for small input tiles.
     ``MIN_II`` is roughly 64 engine cycles.
-  
+
   :param data0: lhs input operand of the scan operation
   :param data1: rhs input operand of the scan operation
   :param initial: starting state of the scan; can be a SBUF/PSUM tile with 1 element/partition or a scalar

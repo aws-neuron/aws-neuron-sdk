@@ -1,5 +1,10 @@
 .. _codegen25_7b_tp_zero1_tutorial:
 
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: This tutorial for the AWS Neuron SDK is currently archived and not maintained. It is provided for reference only.
+
 Training CodeGen2.5 7B with Tensor Parallelism and ZeRO-1 Optimizer 
 ==============================================================================================
 

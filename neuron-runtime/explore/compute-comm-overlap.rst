@@ -50,7 +50,7 @@ This mechanism uses a specialized Neuron PJRT compiler pass to identify operatio
 The resulting High Level Optimizer (HLO) instruction sequence demonstrates the dependency chain:
 
 .. code-block:: none
-
+   
    constant.45 = bf16[] constant(0)
    all-gather.26 = (bf16[4096,8192]{2,1,0}, bf16[]) all-gather(param, constant.45), ...
    ...
@@ -122,20 +122,20 @@ Multi-stream CC enables concurrent execution of communication operations using p
 To enable multi-stream CC in JAX, set these environment variables:
 
 .. code-block:: shell
-
+   
    NEURON_FSDP=1
    NEURON_FSDP_CC_MULTISTREAM=1
 
 For NxD implementations, also set this environment variable:
 
 .. code-block:: shell
-
+   
    NEURON_NXD_FSDP_CC_MULTISTREAM=1
 
 The stream allocation mechanism is implemented in Neuron PJRT compilation passes, where CC stream identifiers (stream_id) are assigned to the ``frontend_attributes`` field of HLO instructions, using metadata tags from Token Threading for FSDP.
 
 .. code-block:: none
-
+   
    reduce-scatter.8 =
      (bf16[128,8192]{1,0}, bf16[]) reduce-scatter(dot.9, get-tuple-element.7), ...
      frontend_attributes={collective_type="tp_reduce_scatter",has_token="1",stream_id="0"}, ...
@@ -154,7 +154,6 @@ The ``NEURON_RT_DBG_CC_DMA_PACKET_SIZE`` variable accepts comma-delimited values
    NEURON_RT_DBG_DMA_PACKETIZATION_SIZE=65536
    NEURON_RT_DBG_CC_DMA_PACKET_SIZE=65536,4096 # 65536 for stream 0, 4096 for stream 1
 
-
 Weight Prefetch
 ^^^^^^^^^^^^^^^
 
@@ -165,7 +164,7 @@ If all FSDP CC operations are shifted by one layer, Attention layers in the back
 To balance communication and computation, additional configuration parameters enable precise control over the shifting distance for FSDP CC operations:
 
 .. code-block:: shell
-
+   
    NEURON_FSDP_NUM_LAYER_EARLY_AG_SHIFT=1
    NEURON_FSDP_NUM_LAYER_LATE_RS_SHIFT=2
 

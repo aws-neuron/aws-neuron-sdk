@@ -19,12 +19,12 @@ def nki_affine_select(a_tensor):
   # NKI_EXAMPLE_BEGIN
   ##################################################################
   # Example 1: Take tile a of shape [128, 128] and replace its
-  # upper triangle with -9984.0;
+  # upper triangle with nl.fp32.min;
   ##################################################################
   ix, iy = nl.mgrid[0:128, 0:128]
   a = nl.load(a_tensor[ix, iy])
 
-  b = nisa.affine_select(pred=(iy <ix), on_true_tile=a[ix, iy], on_false_value=-9984.0)
+  b = nisa.affine_select(pred=(iy <ix), on_true_tile=a[ix, iy], on_false_value=nl.fp32.min)
 
   nl.store(b_tensor[ix, iy], b)
   # NKI_EXAMPLE_END
@@ -40,7 +40,7 @@ class TestNkiIsaExamplesAffineSelect(unittest.TestCase):
     b = nki_affine_select(a)
 
     triui = np.triu_indices_from(b_golden) # upper triangle indicies
-    b_golden[triui] = -9984.0
+    b_golden[triui] = nl.fp32.min
 
     self.assertTrue(np.allclose(b, b_golden))
 

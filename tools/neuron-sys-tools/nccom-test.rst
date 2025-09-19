@@ -138,6 +138,9 @@ CLI arguments
     * - ``--show-input-output-size``
       - false
       - Print or save to JSON per rank input and output sizes in B.
+    * - ``--sb2sb``
+      - false
+      - Indicates whether or not to allocate input, output, and ``scratch-buffer`` on SBUF (rather than HBM).  This may result in improved performance.
 
 .. note::
 

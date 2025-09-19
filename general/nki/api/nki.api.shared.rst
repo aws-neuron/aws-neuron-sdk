@@ -51,10 +51,10 @@ Supported Math Operators for NKI ISA
 ====================================
 
 :ref:`tbl-aluop` below lists all the mathematical operator primitives supported by NKI.
-Many :ref:`nki.isa <nki-isa>` APIs (instructions) allow programmable operators through the ``op`` field. 
-The supported operators fall into two categories: *bitvec* and *arithmetic*. In general, instructions 
-using *bitvec* operators expect integer data types and treat input elements as bit patterns. On the other 
-hand, instructions using *arithmetic* operators accept any valid NKI data types and convert input elements 
+Many :ref:`nki.isa <nki-isa>` APIs (instructions) allow programmable operators through the ``op`` field.
+The supported operators fall into two categories: *bitvec* and *arithmetic*. In general, instructions
+using *bitvec* operators expect integer data types and treat input elements as bit patterns. On the other
+hand, instructions using *arithmetic* operators accept any valid NKI data types and convert input elements
 into float32 before performing the operators.
 
 .. _tbl-aluop:
@@ -126,7 +126,7 @@ Supported Activation Functions for NKI ISA
 ==========================================
 :ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation`` API. These
 activation functions are approximated with piece-wise polynomials on Scalar Engine.
-*NOTE*: if input values fall outside the supported **Valid Input Range** listed below, 
+*NOTE*: if input values fall outside the supported **Valid Input Range** listed below,
 the Scalar Engine will generate invalid output results.
 
 
@@ -150,6 +150,8 @@ the Scalar Engine will generate invalid output results.
    | Gelu Derivative                | ``nki.language.gelu_dx``                            | ``[-inf, inf]``     |
    +--------------------------------+-----------------------------------------------------+---------------------+
    | Gelu with Tanh Approximation   | ``nki.language.gelu_apprx_tanh``                    | ``[-inf, inf]``     |
+   +--------------------------------+-----------------------------------------------------+---------------------+
+   | Gelu with Sigmoid Approximation| ``nki.language.gelu_apprx_sigmoid``                 | ``[-inf, inf]``     |
    +--------------------------------+-----------------------------------------------------+---------------------+
    | Silu                           | ``nki.language.silu``                               | ``[-inf, inf]``     |
    +--------------------------------+-----------------------------------------------------+---------------------+
@@ -318,7 +320,7 @@ the example below:
 NKI Type Promotion
 ==================
 
-When the data types (dtypes) of inputs to an arithmetic operation (i.e., add, multiply, tensor_tensor, etc.) differ, we promote the dtypes 
+When the data types (dtypes) of inputs to an arithmetic operation (i.e., add, multiply, tensor_tensor, etc.) differ, we promote the dtypes
 following the rules below:
 
 **(float, integer)**: Pick the float type. Example:
@@ -351,10 +353,10 @@ The output of the arithmetic operation will get the promoted type by default.
 
 .. code-block:: python
 
-  x = np.ndarray((N, M), dtype=nl.float8_e4m3) 
+  x = np.ndarray((N, M), dtype=nl.float8_e4m3)
   y = np.ndarray((N, M), dtype=np.float16)
   z = nl.add(x, y) # calculation done in FP32, output cast to np.float16
-  assert z.dtype == np.float16 
+  assert z.dtype == np.float16
 
 To prevent the compiler from automatically widening output dtype based on mismatching input dtypes, you may explicitly set the output dtype in the arithmetic operation API.
 This would be useful if the output is passed into another operation that benefits from a smaller dtype.
@@ -386,11 +388,11 @@ To prevent larger dtypes from being inferred from weak scalar types, do either o
 1. Explicitly set the datatype of the scalar, like ``np.int8(2)``, so that the output type is what you desire:
 
   .. code-block:: python
-    
-    x = np.ndarray((N, M), dtype=np.float16) 
-    y = np.float16(2) 
-    z = nl.add(x, y) 
-    assert z.dtype == np.float16 
+
+    x = np.ndarray((N, M), dtype=np.float16)
+    y = np.float16(2)
+    z = nl.add(x, y)
+    assert z.dtype == np.float16
 
 2. Explicitly set the output dtype of the arithmetic operation:
 
@@ -408,14 +410,14 @@ To prevent larger dtypes from being inferred from weak scalar types, do either o
 
 NKI Engine Selection for Operators Supported on Multiple Engines
 ================================================================
-There is a tradeoff between precision and speed on different engines for operators with multiple engine options. Users can select which engine to map to based on 
+There is a tradeoff between precision and speed on different engines for operators with multiple engine options. Users can select which engine to map to based on
 their needs. We take reciprocal and reverse square root as two examples and explain the tradeoff below.
 
 1. Reciprocal can run on Scalar Engine or Vector Engine:
 
-  Reciprocal can run on Vector Engine with ``nki.isa.reciprocal`` or on Scalar Engine with ``nki.isa.activation(nl.reciprocal)``. Vector Engine performs reciprocal 
-  at a higher precision compared to Scalar Engine; however, the computation throughput of reciprocal on Vector Engine is about 8x lower than Scalar Engine for large 
-  input tiles. For input tiles with a small number of elements per partition (less than 64, processed one per cycle), instruction initiation interval (roughly 64 
+  Reciprocal can run on Vector Engine with ``nki.isa.reciprocal`` or on Scalar Engine with ``nki.isa.activation(nl.reciprocal)``. Vector Engine performs reciprocal
+  at a higher precision compared to Scalar Engine; however, the computation throughput of reciprocal on Vector Engine is about 8x lower than Scalar Engine for large
+  input tiles. For input tiles with a small number of elements per partition (less than 64, processed one per cycle), instruction initiation interval (roughly 64
   cycles) dominates performance so Scalar Engine and Vector Engine have comparable performance. In this case, we suggest using Vector Engine to achieve better precision.
 
   **Estimated cycles on different engines:**
@@ -441,9 +443,9 @@ their needs. We take reciprocal and reverse square root as two examples and expl
 
 2. Reverse square root can run on GpSIMD Engine or Scalar Engine:
 
-  Reverse square root can run on GpSIMD Engine with ``nki.isa.tensor_scalar(op0=nl.rsqrt, operand0=0.0)`` or on Scalar Engine with ``nki.isa.activation(nl.rsqrt)``. 
-  GpSIMD Engine performs reverse square root at a higher precision compared to Scalar Engine; however, the computation throughput of reverse square root on GpSIMD 
-  Engine is 4x lower than Scalar Engine. 
+  Reverse square root can run on GpSIMD Engine with ``nki.isa.tensor_scalar(op0=nl.rsqrt, operand0=0.0)`` or on Scalar Engine with ``nki.isa.activation(nl.rsqrt)``.
+  GpSIMD Engine performs reverse square root at a higher precision compared to Scalar Engine; however, the computation throughput of reverse square root on GpSIMD
+  Engine is 4x lower than Scalar Engine.
 
 
 .. rubric:: Footnotes

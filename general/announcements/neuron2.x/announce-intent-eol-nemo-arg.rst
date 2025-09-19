@@ -1,6 +1,6 @@
 .. post:: Oct 26, 2023
     :language: en
-    :tags: announce-intent-deprecation-nemo-arg, nemo-arg
+    :tags: announce-intent-end-of-support-nemo-arg, nemo-arg
 
 .. _announce-intent-deprecate-nemo-arg:
 

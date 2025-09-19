@@ -7,6 +7,26 @@ Neuron System Tools
    :local:
    :depth: 2
 
+Neuron Tools  [2.26.7.0]
+------------------------
+Date: 9/18/2025
+
+New in the release
+^^^^^^^^^^^^^^^^^^
+
+* Profiler UI now allows selecting multiple semaphore values to display simultaneously for a more comprehensive view of activity.
+* System profile grouping default in Perfetto now uses global NeuronCore ID instead of process local NeuronCore ID for better display of multi-process workloads.
+* Added warning when system profile events are dropped due to limited buffer space, and added suggestion of how configure more buffer space if desired.
+* ``nccom-test`` support on Trn2 for State Buffer to State Buffer collectives benchmarking for all-reduce, all-gather, and reduce-scatter operations.
+* ``nccom-test`` will show helpful error message when invalid sizes are used with all-to-all collectives.
+
+Bug fixes
+^^^^^^^^^
+
+* Fixed device memory usage type table and improvement made to stay in sync between runtime and tools versions.
+* Fixed system profile crash when processing long-running workloads.
+* Fixed display of system profiles in Perfetto to correctly separate rows within the same Logical NeuronCore when using ``NEURON_LOGICAL_NC_CONFIG=2`` on Trn2.
+
 Neuron Tools  [2.25.100.0]
 -------------------------
 Date: 7/31/2025

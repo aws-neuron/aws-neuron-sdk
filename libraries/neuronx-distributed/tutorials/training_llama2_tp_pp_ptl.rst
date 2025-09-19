@@ -1,5 +1,10 @@
 .. _llama2_tp_pp_ptl_tutorial:
 
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: This tutorial for the AWS Neuron SDK is currently archived and not maintained. It is provided for reference only.
+
 Training Llama-2-7B/13B/70B using Tensor Parallelism and Pipeline Parallelism with Neuron PyTorch-Lightning 
 =========================================================================================
 

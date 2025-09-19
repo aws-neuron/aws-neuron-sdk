@@ -7,17 +7,22 @@ Previous release notes (Neuron 2.x)
    :local:
    :depth: 1
 
-.. _neuron-2.24.1-whatsnew:
+Neuron 2.25.0 (07/31/2025)
+--------------------------
+
+See :ref:`neuron-2-25-0-whatsnew` for the full Neuron 2.25 release notes.
+
+.. _neuron-2-24-1-whatsnew:
 
 Neuron 2.24.1 (06/30/2025)
----------------------------
+--------------------------
 
 Neuron version 2.24.1 resolves an installation issue that could prevent NeuronX Distributed Training from being installed successfully.
 
-.. _neuron-2.24.0-whatsnew:
+.. _neuron-2-24-0-whatsnew:
 
 Neuron 2.24.0 (06/24/2025)
----------------------------
+--------------------------
 
 Neuron version 2.24 introduces new inference capabilities including prefix caching, disaggregated inference (Beta), and context parallelization support (Beta). This release also includes NKI language enhancements and enhanced profiling visualizations for improved debugging and performance analysis. Neuron 2.24 adds support for PyTorch 2.7 and JAX 0.6, updates existing DLAMIs and DLCs, and introduces a new vLLM inference container.
 
@@ -411,7 +416,7 @@ and :ref:`Llama 3.1 405B model with speculative decoding <nxdi-trn2-llama3.1-405
 For more information, see :ref:`NxD Inference documentation <nxdi-overview>` and check the NxD
 Inference Github repository: `aws-neuron/neuronx-distributed-inference <https://github.com/aws-neuron/neuronx-distributed-inference>`_
 
-**Transformers NeuronX (TNx)**: This release introduces several new features, including flash decoding support for speculative decoding, and on-device generation in speculative decoding flows. It adds :ref:`Eagle speculative decoding <cb-eagle-speculative-decoding>` with greedy and lossless sampling, as well as support for :ref:`CPU compilation <transformers_neuronx_developer_guide>` and sharded model saving. Performance improvements include optimized MLP and QKV for Llama models with sequence parallel norm and control over concurrent compilation workers.
+**Transformers NeuronX (TNx)**: This release introduces several new features, including flash decoding support for speculative decoding, and on-device generation in speculative decoding flows. It adds :ref:`Eagle speculative decoding <cb-eagle-speculative-decoding>` with greedy and lossless sampling, as well as support for :ref:`CPU compilation <transformers_neuronx_readme>` and sharded model saving. Performance improvements include optimized MLP and QKV for Llama models with sequence parallel norm and control over concurrent compilation workers.
 
 **Training Highlights:** NxD Training in this release adds support for
 HuggingFace :ref:`Llama3/3.1 70B <hf_llama3_70B_pretraining>` on trn2 instances, introduces :ref:`DPO support <hf_llama3_8B_DPO>` for
@@ -724,12 +729,12 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n , Inf2, Inf1
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * Support for on-device sampling (Top P) and dynamic sampling (per request parameters) with Continuous batching. See :ref:`developer guide <transformers_neuronx_developer_guide>`
-       * Support for Flash Decoding to enable inference for higher sequence lengths of upto 128K. See :ref:`developer guide <transformers_neuronx_developer_guide>` and `Llama-3.1-8B model sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`_.
-       * Support for multi-node inference for large models like ``Llama-3.1-405B``. See :ref:`developer guide <transformers_neuronx_developer_guide>` and `Llama-3.1-405B model sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_.
-       * Support for bucketing, multi-node inference , on-device sampling and other improvements in Neuron vLLM integration. See :ref:`developer guide <transformers_neuronx_developer_guide_for_cb>` 
+     - * Support for on-device sampling (Top P) and dynamic sampling (per request parameters) with Continuous batching. See :ref:`developer guide <transformers_neuronx_readme>`
+       * Support for Flash Decoding to enable inference for higher sequence lengths of upto 128K. See :ref:`developer guide <transformers_neuronx_readme>`_.
+       * Support for multi-node inference for large models like ``Llama-3.1-405B``. See :ref:`developer guide <transformers_neuronx_readme>`_.
+       * Support for bucketing, multi-node inference , on-device sampling and other improvements in Neuron vLLM integration. See :ref:`developer guide <transformers_neuronx_readme>` 
        * Support for Llama 3.1 models (405B, 70B, and 8B variants). See samples for `Llama-3.1-405B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_ , `Llama-3.1-70B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-64k-sampling.ipynb>`_  and  `Llama-3.1-8B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`_
-       * Support for improved model loading for models like Llama-3 by loading the pre-sharded or pre-transformed weights. See :ref:`serialization support in developer guide <transformers_neuronx_developer_guide>`. 
+       * Support for improved model loading for models like Llama-3 by loading the pre-sharded or pre-transformed weights. See :ref:`serialization support in developer guide <transformers_neuronx_readme>`. 
        * Support for ROPE scaling for Llama 3 and Llama 3.1 models. 
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
@@ -1083,9 +1088,9 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n , Inf2, Inf1
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * Support for Flash Attention kernel in Llama models to enable inference for higher sequence lengths. See :ref:`developer guide <transformers_neuronx_developer_guide>` and `Llama-3-8B model sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3-8b-32k-sampling.ipynb>`_.
+     - * Support for Flash Attention kernel in Llama models to enable inference for higher sequence lengths. See :ref:`developer guide <transformers_neuronx_readme>`_.
        * Support for running Top-K sampling on Neuron device for generation in Mixtral models. See ``Mixtral-8x7b`` `sample <https://github.com/aws-neuron/transformers-neuronx/blob/main/src/transformers_neuronx/mixtral/model.py>`_.
-       * [Beta] Support for Continuous batching with ``mistralai/Mistral-7B-Instruct-v0.2`` model inference. See :ref:`developer guide <transformers_neuronx_developer_guide_for_cb>`.
+       * [Beta] Support for Continuous batching with ``mistralai/Mistral-7B-Instruct-v0.2`` model inference. See :ref:`developer guide <transformers_neuronx_readme>`.
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
@@ -1380,7 +1385,7 @@ Patch release with minor Neuron Compiler bug fixes and enhancements. See more in
 Neuron 2.18.1 (04/10/2024)
 --------------------------
 
-Neuron 2.18.1 release introduces :ref:`Continuous batching(beta) <transformers_neuronx_developer_guide_for_cb>` and Neuron vLLM integration(beta) support in Transformers NeuronX library that improves LLM inference throughput. This release also fixes hang issues related to Triton Inference Server as well as updating Neuron DLAMIs and DLCs with this release(2.18.1). 
+Neuron 2.18.1 release introduces :ref:`Continuous batching(beta) <transformers_neuronx_readme>` and Neuron vLLM integration(beta) support in Transformers NeuronX library that improves LLM inference throughput. This release also fixes hang issues related to Triton Inference Server as well as updating Neuron DLAMIs and DLCs with this release(2.18.1). 
 See more in  :ref:`transformers-neuronx-rn` and :ref:`neuronx-cc-rn` 
 
 
@@ -1419,11 +1424,11 @@ More release content can be found in the table below and each component release 
 
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * [Beta] Support for Speculative Decoding API. See :ref:`developer guide <transformers_neuronx_developer_guide>` and  `Llama-2-70B sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/speculative_sampling.ipynb>`_ 
-       * Support for SafeTensors checkpoint format with improved weight loading performance.  See :ref:`developer guide <transformers_neuronx_developer_guide>` 
-       * Support for running  Top-K sampling on Neuron Device for improved performance.  See :ref:`developer guide <transformers_neuronx_developer_guide>` 
+     - * [Beta] Support for Speculative Decoding API. See :ref:`developer guide <transformers_neuronx_readme>`_ 
+       * Support for SafeTensors checkpoint format with improved weight loading performance.  See :ref:`developer guide <transformers_neuronx_readme>` 
+       * Support for running  Top-K sampling on Neuron Device for improved performance.  See :ref:`developer guide <transformers_neuronx_readme>` 
        * Code Llama model inference sample with 16K input seq length. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/codellama-13b-16k-sampling.ipynb>`_
-       * [Beta] Support for streaming API and stopping criteria API. See :ref:`developer guide <transformers_neuronx_developer_guide>`
+       * [Beta] Support for streaming API and stopping criteria API. See :ref:`developer guide <transformers_neuronx_readme>`
        * Support for ``Mixtral-8x7B-v0.1`` model inference. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mixtral-8x7b-sampling.ipynb>`_
        * [Beta] Support for ``mistralai/Mistral-7B-Instruct-v0.2`` model inference. See `sample <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/mistralai-Mistral-7b-Instruct-v0.2.ipynb>`_
        * See more at :ref:`transformers-neuronx-rn` 
@@ -1565,7 +1570,7 @@ More release content can be found in the table below and each component release 
 
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
-     - * [Beta] Support for Grouped Query Attention(GQA). See :ref:`developer guide <transformers_neuronx_developer_guide>` 
+     - * [Beta] Support for Grouped Query Attention(GQA). See :ref:`developer guide <transformers_neuronx_readme>` 
        * [Beta] Support for ``Llama-2-70b`` model inference using ``Grouped Query Attention``. See `tutorial <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-70b-sampling.ipynb>`_ 
        * [Beta] Support for ``Mistral-7B-Instruct-v0.1`` model inference. See :ref:`sample code <mistral_gqa_code_sample>`
        * See more at :ref:`transformers-neuronx-rn` 
@@ -1683,7 +1688,7 @@ Neuron 2.15 also introduces support for training ``resnet50``, ``milesial/Pytorc
      - Inf2,Trn1/Trn1n
 
    * - Transformers Neuron (transformers-neuronx) for Inference
-     - * Serialization support for ``Llama``, ``Llama-2``, ``GPT2`` and ``BLOOM`` models . See :ref:`developer guide <transformers_neuronx_developer_guide>` and `tutorial <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/meta-llama-2-13b-sampling.ipynb>`_
+     - * Serialization support for ``Llama``, ``Llama-2``, ``GPT2`` and ``BLOOM`` models . See :ref:`developer guide <transformers_neuronx_readme>`_
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
 
@@ -1818,7 +1823,7 @@ This release introduces the following:
   
    * - Documentation Updates
      - * Neuron Calculator now supports multiple model configurations for Tensor Parallel Degree computation. See :ref:`neuron_calculator`
-       * Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-deprecation-transformer-flag`
+       * Announcement to deprecate ``--model-type=transformer-inference`` flag. See :ref:`announce-end-of-support-transformer-flag`
        * See more at :ref:`neuron-documentation-rn`
      - Inf1, Inf2, Trn1/Trn1n
   
@@ -1893,7 +1898,7 @@ This release introduces the following:
 
    * - Transformers Neuron (transformers-neuronx) for Inference
      - * Latency optimizations for  ``Llama`` and ``GPT-2`` models inference.
-       * Neuron Persistent Cache support (:ref:`developer guide <transformers_neuronx_developer_guide>`)
+       * Neuron Persistent Cache support (:ref:`developer guide <transformers_neuronx_readme>`)
        * See more at :ref:`transformers-neuronx-rn` 
      - Inf2, Trn1/Trn1n
    

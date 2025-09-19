@@ -1,5 +1,10 @@
 .. _llama2_7b_tp_zero1_ptl_finetune_tutorial:
 
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: This tutorial for the AWS Neuron SDK is currently archived and not maintained. It is provided for reference only.
+
 Fine-tuning Llama2 7B with tensor parallelism and ZeRO-1 optimizer using Neuron PyTorch-Lightning 
 =========================================================================================
 

@@ -1,5 +1,13 @@
 .. _gpt_neox_20b_tp_zero1_tutorial:
 
+
+
+.. meta::
+   :noindex:
+   :nofollow:
+   :description: This tutorial for the AWS Neuron SDK is currently unsupported and not maintained. It is provided for reference only.
+
+
 Training GPT-NeoX 20B with Tensor Parallelism and ZeRO-1 Optimizer 
 =========================================================================================
 

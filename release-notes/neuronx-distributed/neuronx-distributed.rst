@@ -54,7 +54,7 @@ New in this release
   * Improve the performance of Model Builder trace when HLO ``debug`` mode is enabled.
 
 * Add a Llama-3.2-1B reference inference sample using NxD Core.
-* Remove the deprecated NxD inference examples. You can use the NxD Inference
+* Remove the unsupported NxD inference examples. You can use the NxD Inference
   library to run inference with on Neuron using NxD.
 * Other minor fixes and improvements.
 
