@@ -7,4 +7,5 @@
 * :ref:`/libraries/nxd-inference/tutorials/trn1-llama3.1-70b-instruct-accuracy-eval-tutorial.ipynb`
 * :ref:`nxdi-disaggregated-inference-tutorial`
 * :ref:`nxdi-disaggregated-inference-1p1d-tutorial`
+* :ref:`/libraries/nxd-inference/tutorials/llama4-tutorial.ipynb`
 * :ref:`/libraries/nxd-inference/tutorials/generating-results-with-performance-cli.ipynb`

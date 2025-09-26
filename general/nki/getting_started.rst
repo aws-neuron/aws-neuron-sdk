@@ -38,30 +38,28 @@ compiler is not installed. The import might take about a minute the first
 time you run it. Whenever possible, we recommend using local instance NVMe volumes instead of EBS for
 executable code.
 
-If you intend to run NKI kernels without any ML framework for quick prototyping, you will also need
+If you intend to run NKI kernels without any ML framework for quick prototyping, you must have 
 `NumPy <https://numpy.org/install/>`__ installed.
 
-To call NKI kernels from PyTorch, you also need to have ``torch_neuronx``
-installed. For an installation guide, see
+To call NKI kernels from PyTorch, you must have ``torch_neuronx``
+installed. For details on installation, see
 `PyTorch Neuron Setup <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>`__.
-You can verify that you have ``torch_neuronx`` installed by
+
+Verify that you have ``torch_neuronx`` installed by
 running the following command:
 
 ::
 
    python -c 'import torch_neuronx'
 
-To call NKI kernels from JAX, you need to have ``jax_neuronx`` installed.
-For an installation guide, see
-`JAX Neuron Setup <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/setup/jax-setup.html>`__.
-You can verify that you have ``jax_neuronx`` installed by
-running the following command:
+To call NKI kernels from JAX, you must have both ``libneuronxla`` and ``jax`` installed.  For details on installing JAX, see
+`JAX Neuron Setup <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/setup/jax-setup.html>`_.
+
+Verify that you have ``libneuronxla`` installed by running the following command:
 
 ::
-
-   python -c 'import jax_neuronx'
-
-
+	  		  
+	python -c 'import libneuronxla'
 
 Implementing your first NKI kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

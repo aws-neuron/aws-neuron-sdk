@@ -42,13 +42,13 @@ Step 1: Pull the vLLM Docker image
 
 In this step, you will download the vLLM Docker image from AWS ECR.
 
-Pull the latest vLLM Docker image from Neuron repo in AWS ECR public gallery here `pytorch-inference-vllm-neuronx <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`. We 
+Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-inference-vllm-neuronx <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`_ repository, and then get the latest published image tag and use it in the command below:
 
 .. code-block:: bash
 
-   docker pull <image_uri>
+   docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-Replace ``<image_uri>`` with the specific vLLM image URI for example - `public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.9.1-neuronx-py310-sdk2.25.0-ubuntu22.04`
+For example, replace ``<image_tag>`` with an SDK 2.26.0 released DLC image tag such as ``0.9.1-neuronx-py311-sdk2.26.0-ubuntu22.04``
 
 Step 2: Start the Docker container
 -----------------------------------

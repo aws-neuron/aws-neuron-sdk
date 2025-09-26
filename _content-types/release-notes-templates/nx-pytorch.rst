@@ -1,9 +1,9 @@
-.. _neuron-2-XX-X-pytorch:
+.. _neuron-2-XX-0-pytorch:
 
 .. meta::
-   :description: The official release notes for the AWS Neuron SDK PyTorch support component, version X.XX.0. Release date: XX/XX/2025.
+   :description: The official release notes for AWS Neuron SDK PyTorch support, version X.XX.0. Release date: XX/XX/XXXX.
 
-AWS Neuron SDK 2.25.0: PyTorch support release notes
+AWS Neuron SDK X.XX.0: PyTorch support release notes
 ====================================================
 
 **Date of release**: Month Day, 2025
@@ -12,13 +12,13 @@ AWS Neuron SDK 2.25.0: PyTorch support release notes
    :local:
    :depth: 2
 
-* Go back to the :ref:`AWS Neuron 2.XX.0 release notes home <neuron-2-XX-X-whatsnew>`
+
+* Go back to the :ref:`AWS Neuron 2.XX.0 release notes home <neuron-2-XX-0-whatsnew>`
 
 Released versions
 -----------------
 
-- ``2.7.0.2.9.*``
-- ``2.6.0.2.9.*``
+* ... 
 
 Improvements
 ------------
@@ -43,8 +43,6 @@ USER-FACING DESCRIPTION OF IMPROVEMENT (WHAT WILL IT DO FOR DEV CUSTOMERS), WHY 
 Behavioral changes
 ------------------
 
-*Behavioral changes are small, user-facing changes that you may notice after upgrading to this version.*
-
 * CHANGE DESCRIPTION SENTENCE. NOTE HOW THE USER MAY EXPERIENCE IT, IF APPLICABLE.
 * CHANGE DESCRIPTION SENTENCE. NOTE HOW THE USER MAY EXPERIENCE IT, IF APPLICABLE.
 * CHANGE DESCRIPTION SENTENCE. NOTE HOW THE USER MAY EXPERIENCE IT, IF APPLICABLE.
@@ -53,17 +51,15 @@ Behavioral changes
 Breaking changes
 ----------------
 
-*Sometimes we have to break something now to make the experience better in the longer term. Breaking changes are changes that may require you to update your own code, tools, and configurations.*
-
 * CHANGE DESCRIPTION SENTENCE. NOTE HWHEN THE USER MAY ENCOUNTER IT. PROVIDE A WORKAROUND, IF POSSIBLE.
 * CHANGE DESCRIPTION SENTENCE. NOTE HWHEN THE USER MAY ENCOUNTER IT. PROVIDE A WORKAROUND, IF POSSIBLE.
-* CHANGE DESCRIPTION SENTENCE. NOTE HWHEN THE USER MAY ENCOUNTER IT. PROVIDE A WORKAROUND, IF POSSIBLE.
+* CHANGE DESCRIPTION SENTENCE. NOTE WHEN THE USER MAY ENCOUNTER IT. PROVIDE A WORKAROUND, IF POSSIBLE.
 * . . .
 
 Bug fixes
 ---------
 
- Here's what we fixed in 2.25.0:
+Here's what we fixed in 2.XX.X:
 
 * SHORT SENTENCE DESCRIBING BUG FIX.
 * SHORT SENTENCE DESCRIBING BUG FIX.

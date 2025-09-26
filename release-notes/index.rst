@@ -3,7 +3,6 @@
 .. meta::
    :description: The AWS Neuron SDK release notes home page. Current release version: 2.26.0.
 
-
 AWS Neuron SDK Release Notes
 ============================
 

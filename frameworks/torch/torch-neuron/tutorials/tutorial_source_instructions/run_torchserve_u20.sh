@@ -5,7 +5,7 @@ cd torchserve
 python trace_bert_neuronx.py
 ls
 
-pip install transformers==4.20.1 torchserve==0.7.0 torch-model-archiver==0.7.0 captum==0.6.0
+pip install transformers==4.52.* torchserve==0.7.0 torch-model-archiver==0.7.0 captum==0.6.0
 
 sudo apt install openjdk-11-jdk -y
 

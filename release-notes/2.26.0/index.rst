@@ -72,7 +72,6 @@ The Deep Learning AMI now supports PyTorch 2.8 on Amazon Linux 2023 and Ubuntu 2
    :local:
    :depth: 2
 
-
 Component release notes
 -----------------------
 
