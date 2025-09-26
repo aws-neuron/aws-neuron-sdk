@@ -187,6 +187,67 @@ See the :ref:`Multi-worker data-parallel MLP training using torchrun
 tutorial <neuronx-mlp-training-tutorial:multi-worker-data-parallel-mlp-training-using-torchrun>`
 for a full example.
 
+
+Checking the device kind
+------------------------
+
+To find out the device kind that the application is running on, use ``torch_xla.core.xla_model.xla_device_kind()``. The returned string can be ``NC_v2`` for Trainium1, ``NC_v3`` for Trainium2 LNC=1 configuration, or ``NC_v3d`` for Trainium2 LNC=2 configuration. See :ref:`Logical NeuronCore<logical-neuroncore-config>` for more information about LNC configuration.
+
+Example:
+
+.. code:: python
+
+   import torch_xla.core.xla_model as xm
+
+   devkind = xm.xla_device_kind()
+   print(devkind)
+
+Output on trn1.32xlarge:
+
+.. code:: bash
+
+   NC_v2
+
+Checking the number of devices
+------------------------------
+
+To find out the number of devices are available on the EC2 instance, use ``torch_xla.core.xla_model.get_xla_supported_devices()``, which returns a list of devices:
+
+.. code:: python
+
+   import torch_xla.core.xla_model as xm
+
+   devices = xm.get_xla_supported_devices()
+   print(len(devices))
+   print(devices)
+
+Output on trn1.32xlarge:
+ 
+.. code:: bash
+
+    32
+    ['xla:0', 'xla:1', 'xla:2', 'xla:3', 'xla:4', 'xla:5', 'xla:6', 'xla:7', 'xla:8', 'xla:9', 'xla:10', 'xla:11', 'xla:12', 'xla:13', 'xla:14', 'xla:15', 'xla:16', 'xla:17', 'xla:18', 'xla:19', 'xla:20', 'xla:21', 'xla:22', 'xla:23', 'xla:24', 'xla:25', 'xla:26', 'xla:27', 'xla:28', 'xla:29', 'xla:30', 'xla:31']
+
+
+Checking the platform type
+--------------------------
+
+To get the EC2 instance's platform type string, i.e. ``trn1``, ``inf2``, ``trn2``, use ``torch_neuronx.utils.get_platform_target()``:
+
+.. code:: python
+
+   from torch_neuronx.utils import get_platform_target
+
+   platform = get_platform_target()
+   print(platform)
+
+Output on trn1.32xlarge:
+ 
+.. code:: bash
+
+   trn1
+
+
 Conversion from Distributed Data Parallel (DDP) application
 -----------------------------------------------------------
 
