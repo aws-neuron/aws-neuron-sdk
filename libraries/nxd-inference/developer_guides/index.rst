@@ -20,6 +20,7 @@ Developer Guides
     /libraries/nxd-inference/developer_guides/custom-quantization
     /libraries/nxd-inference/developer_guides/disaggregated-inference
     /libraries/nxd-inference/developer_guides/weights-sharding-guide
+    /libraries/nxd-inference/developer_guides/how-to-use-fpem
 
 
 Use the NxD Inference (``neuronx-distributed-inference``) Developer Guides to learn how to use NxD Inference.
