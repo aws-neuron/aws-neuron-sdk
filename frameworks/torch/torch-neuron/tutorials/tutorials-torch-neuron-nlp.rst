@@ -10,11 +10,12 @@ Natural Language Processing (NLP) Tutorials (``torch-neuron``)
 
 
 .. toctree::
-	:hidden:
+   :hidden:
+   :maxdepth: 1
 
-	/src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
-        /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb
-	/src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb
-	/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-libtorch
-	/frameworks/torch/torch-neuron/tutorials/tutorial-torchserve
-	/src/examples/pytorch/transformers-marianmt.ipynb
+   /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
+   /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb
+   /src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb
+   tutorial-libtorch
+   tutorial-torchserve
+   transformers-marianmt

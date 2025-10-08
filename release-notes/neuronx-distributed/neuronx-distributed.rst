@@ -169,7 +169,7 @@ New in this release
 -------------------
 
 * Added support for Interleave pipeline parallel. At large cluster sizes, interleave pipeline schedule should help to reduce the pipeline bubble, thereyby increasing training throughput.
-* Added integration with flash attention kernel for longer sequence length training. See :ref:`Llama3 8K sequence-length training sample<llama2_7b_tp_zero1_tutorial>`.
+* Added integration with flash attention kernel for longer sequence length training. See :ref:`Llama3 8K sequence-length training sample <llama3_tp_zero1_tutorial>`.
 * Added support for naive speculative decoding, enabling assistance during the token generation process by predicting tokens with a draft model and verifying the predicted tokens with the original target model. Refer to the Neuronx Distributed inference developer guide for an example. 
 * Added integration with flash attention kernel for longer sequence length inference. See an end to end example of CodeLlama-13b model with 16K sequence length.
 * Added support for scaled inference to run for Llama-2 70b or similar sized models

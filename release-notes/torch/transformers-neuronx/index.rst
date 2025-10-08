@@ -379,7 +379,7 @@ What's new in this release
 - Added support for GPT-NeoX models [Beta].
 - Added support for BLOOM models [Beta].
 - Added support for Llama models [Alpha].
-- Added support for more flexible tensor-parallel configurations to GPT2, OPT, and BLOOM. The attention heads doesn't need to be evenly divisible by `tp_degree` anymore. (Note: The `tp_degree` still needs to satisfy the runtime topologies constraint for collective communication (i.e Allreduce). For more details on supported topologies, see: `Tensor-parallelism-support`_ and https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-features/collective-communication.html.)
+- Added support for more flexible tensor-parallel configurations to GPT2, OPT, and BLOOM. The attention heads doesn't need to be evenly divisible by `tp_degree` anymore. (Note: The `tp_degree` still needs to satisfy the runtime topologies constraint for collective communication (i.e Allreduce). For more details on supported topologies, see: `Tensor-parallelism-support`_ and https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-features/collective-communication.html.)
 - Added multi-query / multi-group attention support for GPT2.
 
 Resolved Issues

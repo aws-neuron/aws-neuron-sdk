@@ -1,7 +1,7 @@
 .. _tensorflow-neuron-install-prev-al2023:
 
 Install Previous Tensorflow Neuron Releases for Ubuntu (``tensorflow-neuron``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1

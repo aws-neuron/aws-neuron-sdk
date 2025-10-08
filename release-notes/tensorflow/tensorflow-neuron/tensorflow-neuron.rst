@@ -338,7 +338,7 @@ New in this release
 
 Date: 08/08/2020
 
-.. _summary-1:
+.. _ts-summary-1:
 
 New in this release
 -------------------
@@ -352,7 +352,7 @@ Various minor improvements.
 
 Date: 08/05/2020
 
-.. _summary-2:
+.. _ts-summary-2:
 
 New in this release
 -------------------
@@ -366,7 +366,7 @@ Various minor improvements.
 
 Date: 07/16/2020
 
-.. _summary-3:
+.. _ts-summary-3:
 
 New in this release
 -------------------
@@ -404,7 +404,7 @@ Resolved Issues
 
 Date 6/11/2020
 
-.. _summary-4:
+.. _ts-summary-4:
 
 New in this release
 -------------------
@@ -414,7 +414,7 @@ This version contains a few bug fixes.
 Major New Features
 ------------------
 
-.. _resolved-issues-1:
+.. _tf-resolved-issues-1:
 
 Resolved Issues
 ---------------
@@ -439,14 +439,14 @@ Known Issues and limitations
 
 Date: 5/11/2020
 
-.. _summary-5:
+.. _ts-summary-5:
 
 New in this release
 -------------------
 
 This version contains some bug fixes and new features.
 
-.. _major-new-features-1:
+.. _tf-major-new-features-1:
 
 Major New Features
 ------------------
@@ -454,7 +454,7 @@ Major New Features
 -  tensorflow-neuron is now built on TensorFlow 1.15.2 instead of
    TensorFlow 1.15.0
 
-.. _resolved-issues-2:
+.. _tf-resolved-issues-2:
 
 Resolved Issues
 ---------------
@@ -469,26 +469,26 @@ Resolved Issues
 Known Issues and limitations
 ----------------------------
 
-.. _11501013330:
+.. _tf-11501013330:
 
 [1.15.0.1.0.1333.0]
 ^^^^^^^^^^^^^^^^^^^
 
 Date: 3/26/2020
 
-.. _summary-6:
+.. _ts-summary-6:
 
 New in this release
 -------------------
 
-.. _major-new-features-2:
+.. _tf-major-new-features-2:
 
 Major New Features
 ------------------
 
 -  Improved performance between TensorFlow to Neuron runtime.
 
-.. _resolved-issues-3:
+.. _tf-resolved-issues-3:
 
 Resolved Issues
 ---------------
@@ -499,7 +499,7 @@ Resolved Issues
    handling of compiler timeout termination by letting it clean up
    before exiting.
 
-.. _known-issues-and-limitations-2:
+.. _tf-known-issues-and-limitations-2:
 
 Known Issues and limitations
 ----------------------------
@@ -511,12 +511,12 @@ Known Issues and limitations
 
 Date: 2/27/2020
 
-.. _summary-7:
+.. _ts-summary-7:
 
 New in this release
 -------------------
 
-.. _major-new-features-3:
+.. _tf-major-new-features-3:
 
 Major New Features
 ------------------
@@ -530,12 +530,12 @@ Major New Features
    descriptive and also provide instructions to restart neuron-rtd when
    necessary.
 
-.. _resolved-issues-4:
+.. _tf-resolved-issues-4:
 
 Resolved Issues
 ---------------
 
-.. _known-issues-and-limitations-3:
+.. _tf-known-issues-and-limitations-3:
 
 Known Issues and Limitations
 ----------------------------
@@ -551,26 +551,26 @@ Solution: run compilation on c5.4xlarge instance type or larger.
 Other Notes
 -----------
 
-.. _1150109970:
+.. _tf-1150109970:
 
 [1.15.0.1.0.997.0]
 ^^^^^^^^^^^^^^^^^^
 
 Date: 1/27/2020
 
-.. _summary-8:
+.. _ts-summary-8:
 
 New in this release
 -------------------
 
-.. _major-new-features-4:
+.. _tf-major-new-features-4:
 
 Major New Features
 ------------------
 
 -  Added support for NCHW pooling operators in tfn.saved_model.compile.
 
-.. _resolved-issues-5:
+.. _tf-resolved-issues-5:
 
 Resolved Issues
 ---------------
@@ -578,7 +578,7 @@ Resolved Issues
 -  Fixed GRPC transient status error issue.
 -  Fixed a graph partitioner issue with control inputs.
 
-.. _known-issues-and-limitations-4:
+.. _tf-known-issues-and-limitations-4:
 
 Known Issues and Limitations
 ----------------------------
@@ -591,7 +591,7 @@ Known Issues and Limitations
 
 Solution: run compilation on c5.4xlarge instance type or larger.
 
-.. _other-notes-1:
+.. _tf-other-notes-1:
 
 Other Notes
 -----------
@@ -603,51 +603,51 @@ Other Notes
 
 Date: 12/20/2019
 
-.. _summary-9:
+.. _ts-summary-9:
 
 New in this release
 -------------------
 
-.. _major-new-features-5:
+.. _tf-major-new-features-5:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-6:
+.. _tf-resolved-issues-6:
 
 Resolved Issues
 ---------------
 
 -  Improved handling of ``tf.neuron.saved_model.compile`` arguments
 
-.. _known-issues-and-limitations-5:
+.. _tf-known-issues-and-limitations-5:
 
 Known Issues and Limitations
 ----------------------------
 
-.. _other-notes-2:
+.. _tf-other-notes-2:
 
 Other Notes
 -----------
 
-.. _1150107490:
+.. _tf-1150107490:
 
 [1.15.0.1.0.749.0]
 ^^^^^^^^^^^^^^^^^^
 
 Date: 12/1/2019
 
-.. _summary-10:
+.. _tf-summary-10:
 
 New in this release
 -------------------
 
-.. _major-new-features-6:
+.. _tf-major-new-features-6:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-7:
+.. _tf-resolved-issues-7:
 
 Resolved Issues
 ---------------
@@ -656,7 +656,7 @@ Resolved Issues
    process is killed
 -  Remove unnecessary GRPC calls when the process is killed
 
-.. _known-issues-and-limitations-6:
+.. _tf-known-issues-and-limitations-6:
 
 Known Issues and Limitations
 ----------------------------
@@ -686,7 +686,7 @@ Within a Conda environment:
    conda update wrapt
    conda update tensorflow-neuron
 
-.. _other-notes-3:
+.. _tf-other-notes-3:
 
 Other Notes
 -----------
@@ -698,7 +698,7 @@ Other Notes
 
 Date: 11/25/2019
 
-.. _summary-11:
+.. _ts-summary-11:
 
 New in this release
 -------------------
@@ -707,12 +707,12 @@ This version is available only in released DLAMI v26.0 and is based on
 TensorFlow version 1.15.0. Please
 :ref:`update <dlami-rn-known-issues>` to latest version.
 
-.. _major-new-features-7:
+.. _tf-major-new-features-7:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-8:
+.. _tf-resolved-issues-8:
 
 Resolved Issues
 ---------------
@@ -730,7 +730,7 @@ The following models have successfully run on neuron-inferentia systems
 3. Resnet50 V1/V2
 4. Inception-V2/V3/V4
 
-.. _other-notes-4:
+.. _tf-other-notes-4:
 
 Other Notes
 -----------

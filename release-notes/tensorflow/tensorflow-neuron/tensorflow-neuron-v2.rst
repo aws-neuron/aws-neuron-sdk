@@ -9,7 +9,7 @@ TensorFlow 2.x (``tensorflow-neuron``) Release Notes
 
 This document lists the release notes for the tensorflow-neuron 2.x packages.
 
-.. _tf-known-issues-and-limitations:
+.. _tf-known-issues-and-limitations-v2:
 
 Known Issues and Limitations - updated 08/12/2021
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

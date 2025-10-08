@@ -82,7 +82,7 @@ You can upgrade neuron-cc using
 
 torch.jit.trace issues
 ----------------------
-The :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`
+The :ref:`/frameworks/torch-neuron/api-compilation-python-api.rst`
 uses the PyTorch :func:`torch.jit.trace` function to generate
 :class:`~torch.jit.ScriptModule` models for execution on Inferentia. Due to that,
 to execute your PyTorch model on Inferentia it must be torch-jit-traceable,

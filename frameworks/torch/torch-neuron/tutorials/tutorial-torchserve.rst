@@ -13,7 +13,7 @@ Overview
 
 This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ with Neuron, the SDK for Amazon Inf1 instances. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
-Verify that this tutorial is running in a virtual environement that was set up according to the `Torch-Neuronx Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>` or `Torch-Neuron Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuron.html#setup-torch-neuron>`
+Verify that this tutorial is running in a virtual environement that was set up according to the `Torch-Neuronx Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuronx.html#setup-torch-neuronx>` or `Torch-Neuron Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuron.html#setup-torch-neuron>`
 
 .. _torchserve-compile:
 

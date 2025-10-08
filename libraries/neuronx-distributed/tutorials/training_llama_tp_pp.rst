@@ -10,7 +10,7 @@ checkpoint as well as constant mask optimization in the ``neuronx-distributed`` 
 Setting up environment:
                        
 For this experiment, we will use a ParallelCluster with at least 32 trn1-32xl compute nodes.
-`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`__
+`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`__
 introduces how to setup and use a ParallelCluster.
 
 We also need to install the ``neuronx-distributed`` package using the following command:

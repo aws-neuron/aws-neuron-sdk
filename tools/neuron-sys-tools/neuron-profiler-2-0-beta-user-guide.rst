@@ -26,6 +26,7 @@ users to gain comprehensive insights into their application's performance across
 
 
 .. _system-profiles-overview:
+
 Key benefits
 ~~~~~~~~~~~~
 
@@ -366,6 +367,7 @@ To understand the profiling output see this section: :ref:`Inspect Output <neuro
 
 CLI reference for System Profiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 In addition to controlling profiling with environment variables, you can use the ``neuron-profile inspect`` command line interface 
 for profiling applications. This provides the same functionality as environment variables but helps you avoid typos, invalid arguments, 
 and provides a useful ``--help`` command to explain available options.
@@ -596,15 +598,11 @@ larger profiles involving many NeuronCores and instances. The following options 
      :widths: 30 70
 
      * - CLI option
-         - Description
+       - Description
      * - ``--system-trace-primary-group``
-         - First-order grouping of trace events (maps to a Perfetto process / process group of rows). Provide a comma-delimited
-             list of field names. Allowed fields: ``instance_id``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
-             ``instance_id,process_id``.
+       - First-order grouping of trace events (maps to a Perfetto process / process group of rows). Provide a comma-delimited list of field names. Allowed fields: ``instance_id``, ``thread_id``, ``lnc_idx``, ``process_id``. Default: ``instance_id,process_id``.
      * - ``--system-trace-secondary-group``
-         - Second-order grouping of trace events (maps to a Perfetto thread / single row). Provide a comma-delimited list of
-             field names. Allowed fields: ``instance_id``, ``worker_gid``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
-             ``worker_gid,lnc_idx,thread_id``.
+       - Second-order grouping of trace events (maps to a Perfetto thread / single row). Provide a comma-delimited list of field names. Allowed fields: ``instance_id``, ``worker_gid``, ``thread_id``, ``lnc_idx``, ``process_id``. Default: ``worker_gid,lnc_idx, thread_id``.
 
 
 For example, the following profile uses ``neuron-profile view --output-format=perfetto --system-trace-primary-group=instance_id,process_id --system-trace-secondary-group=lnc_idx,thread_id`` to group the system profile first by unique combinations
@@ -915,8 +913,7 @@ Use the ``nrt_sys_trace_config_set_capture_enabled_for_event_type`` API to filte
     nrt_sys_trace_stop();
     nrt_sys_trace_config_free(config);
 
-
-.. _neuron-profile-system-timestamp-adjustment
+.. _neuron-profile-system-timestamp-adjustment:
 
 Adjusting Hardware Timestamps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -29,7 +29,7 @@ loop is simply repeated 1000 times:
         model.train()
         ...
 
-Save the following code as :download:`train_monitor.py <examples/pytorch/mnist_mlp/train_monitor.py>` and you can run it as
+Save the following code as :download:`train_monitor.py </src/examples/pytorch/mnist_mlp/train_monitor.py>` and you can run it as
 ``python3 train_monitor.py`` on a Trn1 instance.
 
 .. literalinclude:: /src/examples/pytorch/mnist_mlp/train_monitor.py
@@ -131,7 +131,7 @@ Next, you'll add a Prometheus data source by going to ``Configuration`` -> ``Dat
 .. image:: tutorial_grafana_add_prometheus.png
    :alt: Image: image.png
 
-Finally, upload the sample dashboard :download:`neuron-monitor-grafana.json <src/examples/neuron-monitor/neuron-monitor-grafana.json>`
+Finally, upload the sample dashboard :download:`neuron-monitor-grafana.json </src/examples/neuron-monitor/neuron-monitor-grafana.json>`
 to **Grafana**:
 
 .. image:: tutorial_grafana_upload_dash.png

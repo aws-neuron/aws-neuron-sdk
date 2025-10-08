@@ -1,8 +1,8 @@
 
 .. tensorflow-neuronx-u20-update:
 
-Update to latest TensorFlow Neuron  (``tensorflow-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Update to latest TensorFlow NeuronX  (``tensorflow-neuronx``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.
 

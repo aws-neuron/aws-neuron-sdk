@@ -12,7 +12,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -22,7 +22,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 19
                     :end-line: 22
 
@@ -36,7 +36,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -46,7 +46,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 19
                     :end-line: 22
 
@@ -60,7 +60,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -70,7 +70,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 19
                     :end-line: 22
 
@@ -84,7 +84,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -94,7 +94,7 @@ Install TensorFlow 2.x (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 19
                     :end-line: 22
 

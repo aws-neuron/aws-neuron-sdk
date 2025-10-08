@@ -370,7 +370,7 @@ speed of object recognition models.
 
 -  Compiler optimization '-O2' option is now enabled by default.
 
-.. _major-new-features-1:
+.. _cc-major-new-features-0:
 
 New in this release
 -------------------
@@ -382,7 +382,7 @@ New in this release
    to be specified. Note: some tutorials still explicitly specify "-O2".
    These will be modified in forthcoming updates.
 
-.. _resolved-issues-1:
+.. _cc-resolved-issues-0:
 
 Resolved Issues
 ---------------
@@ -398,21 +398,21 @@ Resolved Issues
 
 Date 8/08/2020
 
-.. _summary-1:
+.. _cc-summary-1:
 
 Summary
 -------
 
 Various performance improvements.
 
-.. _major-new-features-1:
+.. _cc-major-new-features-1:
 
 New in this release
 -------------------
 
 Improved performance of BERT base with -O2
 
-.. _resolved-issues-1:
+.. _cc-resolved-issues-1:
 
 Resolved Issues
 ---------------
@@ -426,7 +426,7 @@ Resolved Issues
 
 Date 8/05/2020
 
-.. _summary-2:
+.. _cc-summary-2:
 
 Summary
 -------
@@ -440,7 +440,7 @@ Various improvements.
 
 Date 7/16/2020
 
-.. _summary-3:
+.. _cc-summary-3:
 
 Summary
 -------
@@ -448,7 +448,7 @@ Summary
 This release has some bug fixes and some functional and performance
 improvements to support compilation of several neural networks.
 
-.. _major-new-features-2:
+.. _cc-major-new-features-2:
 
 New in this release
 -------------------
@@ -461,7 +461,7 @@ This release
 -  Improved performance of the '-O2' on BERT base, and openpose pose
    network.
 
-.. _resolved-issues-2:
+.. _cc-resolved-issues-2:
 
 Resolved Issues
 ---------------
@@ -487,7 +487,7 @@ Other Notes
 
 Date 6/11/2020
 
-.. _summary-4:
+.. _cc-summary-4:
 
 Summary
 -------
@@ -495,7 +495,7 @@ Summary
 This release has some bug fixes and some functional and performance
 improvements to support compilation of several neural networks.
 
-.. _major-new-features-3:
+.. _cc-major-new-features-3:
 
 New in this release
 -------------------
@@ -512,14 +512,14 @@ This release
    Runtime prior to May, 2020 (1.0.6905.0) release. Please update the
    Neuron Runtime when using NEFF version 1.0.
 
-.. _resolved-issues-3:
+.. _cc-resolved-issues-3:
 
 Resolved Issues
 ---------------
 
 -  Compilation issues on prosotron encoder, decoder neural networks.
 
-.. _other-notes-1:
+.. _cc-other-notes-1:
 
 Other Notes
 -----------
@@ -540,7 +540,7 @@ inferentia_hwm==1.0.1362.0 islpy==2018.2
 
 Date 5/11/2020
 
-.. _summary-5:
+.. _cc-summary-5:
 
 Summary
 -------
@@ -548,7 +548,7 @@ Summary
 Bug fixes and some functional and performance improvements to several
 neural networks.
 
-.. _major-new-features-4:
+.. _cc-major-new-features-4:
 
 New in this release
 -------------------
@@ -562,7 +562,7 @@ New in this release
 -  Most compiler messages are migrated from cout to logging mechanisms
    with verbosity control
 
-.. _resolved-issues-4:
+.. _cc-resolved-issues-4:
 
 Resolved Issues
 ---------------
@@ -575,7 +575,7 @@ Resolved Issues
 -  Robustness improvements for ParallelWavenet and transformer decoder
    networks
 
-.. _other-notes-2:
+.. _cc-other-notes-2:
 
 Other Notes
 -----------
@@ -600,7 +600,7 @@ Dependencies
 
 Date 3/26/2020
 
-.. _summary-6:
+.. _cc-summary-6:
 
 Summary
 -------
@@ -608,7 +608,7 @@ Summary
 Bug fixes and some functional and performance improvements to several
 neural networks.
 
-.. _major-new-features-5:
+.. _cc-major-new-features-5:
 
 New in this release
 -------------------
@@ -618,7 +618,7 @@ New in this release
 -  Improved inference performance in natural language processing
    networks (such as prosotron encoder) by 45%
 
-.. _resolved-issues-5:
+.. _cc-resolved-issues-5:
 
 Resolved Issues
 ---------------
@@ -631,7 +631,7 @@ Known issues and limitations
 
 -  See previous releases.
 
-.. _other-notes-3:
+.. _cc-other-notes-3:
 
 Other Notes
 -----------
@@ -659,21 +659,21 @@ Dependencies
 
 Date 2/27/2020
 
-.. _summary-7:
+.. _cc-summary-7:
 
 Summary
 -------
 
 Bug fixes and minor performance improvements.
 
-.. _major-new-features-6:
+.. _cc-major-new-features-6:
 
 New in this release
 -------------------
 
 None
 
-.. _resolved-issues-6:
+.. _cc-resolved-issues-6:
 
 Resolved Issues
 ---------------
@@ -682,14 +682,14 @@ Resolved Issues
 -  Compiler internal enhancements made that will benefit models such as
    BERT
 
-.. _known-issues-and-limitations-1:
+.. _cc-known-issues-and-limitations-1:
 
 Known issues and limitations
 ----------------------------
 
 -  See previous releases.
 
-.. _other-notes-4:
+.. _cc-other-notes-4:
 
 Other Notes
 -----------
@@ -714,7 +714,7 @@ Dependencies
 
 Date 1/27/2020
 
-.. _summary-8:
+.. _cc-summary-8:
 
 Summary
 -------
@@ -722,14 +722,14 @@ Summary
 Bug fixes and some performance enhancement related to data movement for
 BERT-type neural networks.
 
-.. _major-new-features-7:
+.. _cc-major-new-features-7:
 
 New in this release
 -------------------
 
 None
 
-.. _resolved-issues-7:
+.. _cc-resolved-issues-7:
 
 Resolved Issues
 ---------------
@@ -764,7 +764,7 @@ Resolved Issues
    2020-01-09 13:40:26.002637: E tensorflow/core/common_runtime/executor.cc:642] Executor failed to create kernel. Invalid argument: neff is invalid
    [[{{node bert/NeuronOp}}]]
 
-.. _known-issues-and-limitations-2:
+.. _cc-known-issues-and-limitations-2:
 
 Known issues and limitations
 ----------------------------
@@ -776,7 +776,7 @@ use in cases other than as shown in the specific tutorial as results may
 not be defined. These options should be considered beta and will
 be removed over time.
 
-.. _other-notes-5:
+.. _cc-other-notes-5:
 
 Other Notes
 -----------
@@ -801,19 +801,19 @@ Dependencies
 
 Date 12/20/2019
 
-.. _summary-9:
+.. _cc-summary-9:
 
 Summary
 -------
 
 Bug fixes and some performance enhancement for NeuronCore Pipeline.
 
-.. _major-new-features-8:
+.. _cc-major-new-features-8:
 
 New in this release
 -------------------
 
-.. _resolved-issues-8:
+.. _cc-resolved-issues-8:
 
 Resolved Issues
 ---------------
@@ -828,7 +828,7 @@ Resolved Issues
 -  Improved efficiency of compute engine synchronization
 -  Improved efficiency of data transfers within the Neuron code
 
-.. _known-issues-and-limitations-3:
+.. _cc-known-issues-and-limitations-3:
 
 Known issues and limitations
 ----------------------------
@@ -840,7 +840,7 @@ use in cases other than as shown in the specific tutorial as results may
 not be defined. These options should be considered beta and will
 be removed over time.
 
-.. _other-notes-6:
+.. _cc-other-notes-6:
 
 Other Notes
 -----------
@@ -867,17 +867,17 @@ Dependencies
 
 Date 12/1/2019
 
-.. _summary-10:
+.. _cc-summary-10:
 
 Summary
 -------
 
-.. _major-new-features-9:
+.. _cc-major-new-features-9:
 
 New in this release
 -------------------
 
-.. _resolved-issues-9:
+.. _cc-resolved-issues-9:
 
 Resolved Issues
 ---------------
@@ -891,7 +891,7 @@ Resolved Issues
 -  Fixed bf16 constant loading
 -  Fixed Conv2D tile accumulation
 
-.. _known-issues-and-limitations-4:
+.. _cc-known-issues-and-limitations-4:
 
 Known Issues and Limitations
 ----------------------------
@@ -899,7 +899,7 @@ Known Issues and Limitations
 See previous release notes. Resolved issues are shown in Resolved
 Issues.
 
-.. _other-notes-7:
+.. _cc-other-notes-7:
 
 Other Notes
 -----------
@@ -942,21 +942,21 @@ Dependencies
 
 Date: 11/25/2019
 
-.. _major-new-features-10:
+.. _cc-major-new-features-10:
 
 New in this release
 -------------------
 
 N/A, this is the first release.
 
-.. _resolved-issues-10:
+.. _cc-resolved-issues-10:
 
 Resolved issues
 ---------------
 
 N/A, this is the first release.
 
-.. _known-issues-and-limitations-5:
+.. _cc-known-issues-and-limitations-5:
 
 Known issues and limitations
 ----------------------------
@@ -990,7 +990,7 @@ Known issues and limitations
    is executed in NeuronCore Pipeline mode, only the first operator in a
    neural network can receive primary inputs from the host.
 
-.. _other-notes-8:
+.. _cc-other-notes-8:
 
 Other Notes
 -----------

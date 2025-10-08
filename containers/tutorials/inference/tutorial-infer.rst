@@ -26,7 +26,7 @@ Setup Environment
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 
-3. Clone the `aws-neuron/deep-learning-containers<https://github.com/aws-neuron/deep-learning-containers>`_ GitHub repository and use one of the PyTorch inference Dockerfiles found in the folders of the repo:
+3. Clone the `aws-neuron/deep-learning-containers <https://github.com/aws-neuron/deep-learning-containers>`_ GitHub repository and use one of the PyTorch inference Dockerfiles found in the folders of the repo:
 
 .. code:: bash
 

@@ -15,8 +15,8 @@ import os
 import sys
 
 sys.path.append(os.path.abspath("./_ext"))
-sys.path.append(os.path.abspath("./general/nki/api"))
-sys.path.append(os.path.abspath("./general/nki/_ext"))
+sys.path.append(os.path.abspath("./nki/api"))
+sys.path.append(os.path.abspath("./nki/_ext"))
 sys.path.append(os.path.abspath("./frameworks/torch/torch-neuron/"))
 sys.path.append(os.path.abspath("./_static"))
 
@@ -83,6 +83,7 @@ extensions = [
     "nki_directives",
     "sphinxcontrib.googleanalytics",
     "sphinxcontrib.datatemplates",
+    "sphinxcontrib.spelling",
 ]
 
 
@@ -92,7 +93,7 @@ html_sidebars = {
         "search-field.html",
         "sbt-sidebar-nav.html",
     ],
-    "general/announcements/*": [
+    "about-neuron/announcements/*": [
         "navbar-logo.html",
         "search-field.html",
         "ablog/postcard.html",
@@ -108,17 +109,16 @@ html_sidebars = {
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [
     "_templates",
-    "general/nki/_templates/",
-    "content-templates",
+    "nki/_templates/",
+    "_content-templates/",
     "libraries/nxd-inference/_templates",
 ]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "**.ipynb_checkpoints", ".venv", "content-templates/"]
-html_extra_path = ["static"]
-
+exclude_patterns = ['_build','_content-types','**.ipynb_checkpoints','.venv','_utilities']
+html_extra_path = ['static']
 
 # remove bash/python/ipython/jupyter prompts and continuations
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
@@ -211,11 +211,11 @@ intersphinx_mapping = {
 
 # -- Options for Theme  -------------------------------------------------
 
-# top_banner_message="<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>"
+# top_banner_message="<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>"
 
-# top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
+# top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
 
-top_banner_message = "Neuron 2.26.0 is released! Check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>What's New </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/index.html'>Announcements</a> for more details."
+top_banner_message = "Neuron 2.26.0 is released! Check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>What's New </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/index.html'>Announcements</a> for more details."
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
@@ -283,8 +283,8 @@ plotly_include_directive_source = False
 
 
 # -- ABlog config -------------------------------------------------
-blog_path = "general/announcements/index"
-blog_post_pattern = "general/appnotes/*.rst"
+blog_path = "about-neuron/announcements/index"
+blog_post_pattern = "about-neuron/appnotes/*.rst"
 blog_feed_length = 5
 fontawesome_included = True
 post_show_prev_next = False
@@ -314,9 +314,9 @@ rst_epilog = """
 # Exclude private github from linkcheck. Readthedocs only exposes the ssh-agent to the 'checkout' build step, which is too early for the linkchecker to run.
 linkcheck_ignore = [
     r"http://localhost:\d+/",
-    r"https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html",
+    r"https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/dlami-pytorch-introduce.html",
     r"https://github\.com/aws-neuron/private-aws-neuron-sdk-staging/",
-    r"https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/dlami-pytorch-introduce.html",
+    r"https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/dlami-pytorch-introduce.html",
     r"https://awsdocs-neuron-staging.readthedocs-hosted.com/en/latest/frameworks/tensorflow/tensorflow-neuronx/setup/tensorflow-neuronx-install.html#install-tensorflow-neuronx",
     r"https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx#inference",
     r"https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx#training",
@@ -348,7 +348,7 @@ linkcheck_ignore = [
 ]
 linkcheck_exclude_documents = [
     r"src/examples/.*",
-    "general/announcements/neuron1.x/announcements",
+    "about-neuron/announcements/neuron1.x/announcements",
     r"release-notes/.*",
     r"containers/.*",
 ]

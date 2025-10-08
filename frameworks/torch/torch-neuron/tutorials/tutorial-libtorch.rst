@@ -13,7 +13,7 @@ Overview
 
 This tutorial demonstrates the use of `LibTorch <https://pytorch.org/cppdocs/installing.html>`_ with Neuron, the SDK for Amazon Inf1, Inf2 and Trn1 instances. By the end of this tutorial, you will understand how to write a native C++ application that performs inference on EC2 Inf1, Inf2 and Trn1 instances. We will use an inf1.6xlarge and a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
-Verify that this tutorial is running in a virtual environement that was set up according to the `Torch-Neuronx Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>` or `Torch-Neuron Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuron.html#setup-torch-neuron>`
+Verify that this tutorial is running in a virtual environement that was set up according to the `Torch-Neuronx Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuronx.html#setup-torch-neuronx>` or `Torch-Neuron Installation Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuron.html#setup-torch-neuron>`
 
 Notes
 -----

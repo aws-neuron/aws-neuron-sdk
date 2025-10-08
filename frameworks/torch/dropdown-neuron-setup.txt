@@ -28,7 +28,7 @@
         * :ref:`Install previous releases <pytorch-neuronx-install-prev>`
         * :ref:`pytorch-neuronx-install-cxx11`
 
-        .. include:: /general/setup/install-templates/trn1-ga-warning.txt
+        .. include:: /setup/install-templates/trn1-ga-warning.txt
 
     .. tab-item:: torch-neuron (``Inf1``)
         :name: torch-neuron-install-main

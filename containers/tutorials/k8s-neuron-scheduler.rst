@@ -3,13 +3,14 @@
 The Neuron scheduler extension is required for scheduling pods that require more than one Neuron core or device resource.
 For a graphical depiction of how the Neuron scheduler extension works, see :ref:`k8s-neuron-scheduler-flow`.
 The Neuron scheduler extension finds sets of directly connected devices with minimal communication latency when scheduling containers.
+
 On Inf1 and Inf2 instance types where Neuron devices are connected through a ring topology, the scheduler finds sets of contiguous devices. For example, for a container requesting 3 Neuron devices
 the scheduler might assign Neuron devices 0,1,2 to the container if they are available but never devices 0,2,4 because those devices are not directly connected.
+
 On Trn1.32xlarge and Trn1n.32xlarge instance types where devices are connected through a 2D torus topology, the Neuron scheduler enforces additional constraints that containers request 1, 4, 8, or all 16 devices.
 If your container requires a different number of devices, such as 2 or 5, we recommend that you use an Inf2 instance instead of Trn1 to benefit from more advanced topology.
 
-Container Device Allocation On Different Instance Types
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Container Device Allocation On Different Instance Types**
 
 The Neuron scheduler extension applies different rules when finding devices to allocate to a container on Inf1 and Inf2 instances than on Trn1.
 These rules ensure that when users request a specific number of resources, Neuron delivers *consistent* and *high* performance regardless of which
@@ -39,9 +40,7 @@ When requesting 8 devices, your container will be allocated one of the following
 
 For all instance types, requesting one or all Neuron cores or devices is valid.
 
-
-Deploy Neuron Scheduler Extension
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Deploy the Neuron Scheduler Extension**
 
 .. tab-set::
 

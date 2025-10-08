@@ -169,6 +169,7 @@ The example shows kubernetes version 1.25. Please update the version as needed. 
 This will add the nodes to the cluster. Please wait for the nodes to be 'Ready'. This can be verified using the get node command.
 
 .. code-block:: bash
+  
     kubectl get node
 
 If you are running a distributed training or inference job, you will need EFA resources. Please install the EFA device plugin using instructions at `EFA device plugin repository <https://github.com/aws-samples/aws-efa-eks>`_.

@@ -1,0 +1,12 @@
+.. tab-set:: 
+
+    .. tab-item:: Inference
+
+        .. include:: /devflows/inference/aws-batch-flows.txt
+
+
+.. tab-set:: 
+
+    .. tab-item:: Training
+
+        .. include:: /devflows/training/aws-batch-flows.txt

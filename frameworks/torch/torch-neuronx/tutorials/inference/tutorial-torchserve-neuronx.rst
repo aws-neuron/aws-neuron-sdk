@@ -12,7 +12,7 @@ Overview
 --------
 This tutorial demonstrates the use of `TorchServe <https://pytorch.org/serve>`_ with Neuron, the SDK for EC2 Inf2 and Trn1 instances. By the end of this tutorial, you will understand how TorchServe can be used to serve a model backed by EC2 Inf2/Trn1 instances. We will use a pretrained BERT-Base model to determine if one sentence is a paraphrase of another.
 
-.. _torchserve-compile:
+.. _torchserve-compile-nx:
 
 
 Run the tutorial
@@ -86,7 +86,7 @@ Verify that TorchServe is now available.
   TorchServe Version is 0.7.0
 
 
-.. _torchserve-setup:
+.. _torchserve-setup-nx:
 
 Setup TorchServe
 ----------------
@@ -153,7 +153,7 @@ Create a `custom config <https://pytorch.org/serve/configuration.html>`_ file to
   This will cause TorchServe to bind on all interfaces. For security in real-world applications, you’ll probably want to use port 8443 and `enable SSL <https://pytorch.org/serve/configuration.html#enable-ssl>`_.
 
 
-.. _torchserve-run:
+.. _torchserve-run-nx:
 
 Run TorchServe
 --------------
@@ -265,7 +265,7 @@ Execute the script in your terminal.
 We can see that the first three threads (0, 1, 2) all report ``paraphrase``, as expected. If we instead modify the script to send an incomplete batch and then wait for the timeout to expire, the excess padding results will be discarded.
 
 
-.. _torchserve-benchmark:
+.. _torchserve-benchmark-nx:
 
 Benchmark TorchServe
 --------------------

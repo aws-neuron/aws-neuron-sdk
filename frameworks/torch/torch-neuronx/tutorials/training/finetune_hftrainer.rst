@@ -90,7 +90,7 @@ additional compilations.
 
 If precompilation was not done, the first execution of ./run.sh will be slower due to serial compilations. Rerunning the same script a second time would show quicker execution as the compiled graphs will be already cached in persistent cache.
 
-.. _multi_worker_training:
+.. _multi_worker_training_parallel:
 
 Multi-worker data-parallel training
 -----------------------------------
@@ -211,7 +211,7 @@ Long compilation times
 Long compilation times can be alleviated by using the ``neuron_parallel_compile`` tool to extract graphs from a short trial run and compile them in parallel ahead of the actual run, as shown above. Subsequent runs would load compiled graphs from the Neuron Cache and thus avoid long compilation times.
 
 Compilation errors during precompilation using ``neuron_parallel_compile`` on small EC2 instances
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When precompiling using batch size of 16 on trn1.2xlarge, you will see ``ERROR ||PARALLEL_COMPILE||: parallel compilation with neuronx-cc exited with error.Received error code: -9``. To workaround this error, please set ``NEURON_PARALLEL_COMPILE_MAX_RETRIES=1`` in the environment.
 

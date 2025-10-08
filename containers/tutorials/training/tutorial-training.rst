@@ -23,7 +23,7 @@ Setup Environment
 -----------------
 
 1. Launch an Trn1 Instance
-         .. include:: /general/setup/install-templates/launch-instance.txt
+         .. include:: /setup/install-templates/launch-instance.txt
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 

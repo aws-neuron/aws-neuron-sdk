@@ -8,5 +8,5 @@ Utilizing Neuron Capabilities Tutorials
 .. toctree::
 	:hidden:
 
-	/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-torchserve
+	tutorial-torchserve
 	/src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb

@@ -3,7 +3,7 @@
 Install previous MXNet Neuron releases
 ========================================
 
-.. include:: /general/setup/install-templates/inf1/note-setup-cntr.rst
+.. include:: /setup/install-templates/inf1/note-setup-cntr.rst
 
 
 .. toctree::

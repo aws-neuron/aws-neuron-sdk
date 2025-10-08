@@ -8,7 +8,7 @@
 Training Llama-2-7B/13B/70B using Tensor Parallelism and Pipeline Parallelism with Neuron PyTorch-Lightning 
 =========================================================================================
 
-In this section, we showcase to pretrain a Llama2 7B/13B/70B with Tensor Parallelism and Pipeline Parallel using Neuron PyTorch-Lightning APIs, please refer to :ref:`Llama2 7B Tutorial <llama2_7b_tp_zero1_tutorial>`, :ref:`Llama2 13B/70B Tutorial <llama2_tp_pp_tutorial>`
+In this section, we showcase to pretrain a Llama2 7B/13B/70B with Tensor Parallelism and Pipeline Parallel using Neuron PyTorch-Lightning APIs, please refer to  :ref:`Llama2 13B/70B Tutorial <llama2_tp_pp_tutorial>`
 and :ref:`Neuron PT-Lightning Developer Guide <_ptl_developer_guide>` for more context.
 
 
@@ -16,7 +16,7 @@ Setting up environment:
 ^^^^^^^^^^^^^^^^^^^^^^^
                        
 For this experiment, we will use AWS ParallelCluster with at least four trn1.32xlarge compute nodes(at least 32 nodes are needed for 13B/70B model size).
-`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`__
+`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`__
 introduces how to setup and use a ParallelCluster.
 To setup the packages on the headnode of the ParallelCluster, follow the instructions mentioned here:
 :ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`.

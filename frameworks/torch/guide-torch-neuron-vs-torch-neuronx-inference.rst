@@ -192,10 +192,6 @@ model:
    models. Compared to the benchmarks, this reference is only
    intended to show *how* to run a particular model on Neuron. This only
    validates if a framework supports a given model.
-3. :ref:`model_architecture_fit`: If the a model is not listed on the prior
-   pages, it may be that the model has not been tested or may not be
-   well-supported. The architecture fit page provides high-level guidelines for
-   which kinds of models will work well based on the hardware capabilities.
 
 If a model does not appear in any of these references, the last option is
 to attempt to compile the model to see how it performs. In the case that an

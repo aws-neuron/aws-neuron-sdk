@@ -4,7 +4,7 @@ TensorFlow Tutorial Setup
 =========================
 
 #. Launch an Inf1.6xlarge Instance:
-    .. include:: /general/setup/install-templates/inf1/launch-inf1-dlami.rst
+    .. include:: /setup/install-templates/inf1/launch-inf1-dlami.rst
 
 #. Set up a development environment:
     * Enable or install TensorFlow-Neuron: :ref:`install-neuron-tensorflow`.

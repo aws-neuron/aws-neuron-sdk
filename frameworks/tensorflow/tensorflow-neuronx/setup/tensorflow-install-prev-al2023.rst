@@ -1,7 +1,7 @@
 .. _tensorflow-neuronx-install-prev-al2023:
 
-Install Previous TensorFlow Neuron Releases for Amazon Linux 2023 (``tensorflow-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install Previous TensorFlow NeuronX Releases for Amazon Linux 2023 (``tensorflow-neuronx``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1

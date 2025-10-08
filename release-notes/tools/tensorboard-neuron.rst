@@ -2,7 +2,7 @@
 
 
 Neuron Plugin for TensorBoard Release Notes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+============================================
 
 
 .. contents:: Table of Contents
@@ -11,7 +11,7 @@ Neuron Plugin for TensorBoard Release Notes
 
 
 Known Issues and Limitations - Updated 11/29/2022
-================================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following are not limitations in the Neuron plugin, but may affect your ability to
 use TensorBoard.
@@ -20,7 +20,7 @@ use TensorBoard.
   for Inf1 (``tensorboard-plugin-neuron``).  Please ensure you only have only the correct package installed.
 
 Neuron Plugin for TensorBoard release [2.6.7.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 04/01/2024
 
@@ -30,7 +30,7 @@ Summary
 - Minor updates.
 
 Neuron Plugin for TensorBoard release [2.6.1.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 12/21/2023
 
@@ -41,7 +41,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.5.39.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 7/19/2023
 
@@ -53,7 +53,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.5.37.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 6/14/2023
 
@@ -65,7 +65,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.5.26.0]
-================================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 05/01/2023
 
@@ -79,7 +79,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.5.25.0]
-================================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 03/28/2023
 
@@ -90,7 +90,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.5.0.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 12/09/2022
 
@@ -110,7 +110,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.4.0.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 04/29/2022
 
@@ -121,7 +121,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.3.0.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 03/25/2022
 
@@ -132,7 +132,7 @@ Summary
 
 
 Neuron Plugin for TensorBoard release [2.2.0.0]
-===============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 10/27/2021
 
@@ -155,7 +155,7 @@ New in this release
 
 
 [2.1.2.0]
-=========
+^^^^^^^^^^
 
 Date: 8/12/2021
 
@@ -168,7 +168,7 @@ Summary
 .. _2.1.0.0:
 
 [2.1.0.0]
-=========
+^^^^^^^^^^
 
 Date: 5/28/2021
 
@@ -180,7 +180,7 @@ Summary
 .. _2.0.29.0:
 
 [2.0.29.0]
-=========
+^^^^^^^^^^^
 
 Date: 4/30/2021
 
@@ -208,7 +208,7 @@ Summary
 .. _11501260:
 
 [1.15.0.1.2.6.0]
-================
+^^^^^^^^^^^^^^^^^^
 
 Date: 2/24/2021
 
@@ -220,7 +220,7 @@ Summary
 .. _11501110:
 
 [1.15.0.1.1.1.0]
-================
+^^^^^^^^^^^^^^^^^
 
 Date: 12/23/2020
 
@@ -233,7 +233,7 @@ Summary
 .. _1150106150:
 
 [1.15.0.1.0.615.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date: 11/17/2020
 
@@ -253,7 +253,7 @@ Resolved Issues
 .. _1150106000:
 
 [1.15.0.1.0.600.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date: 09/22/2020
 
@@ -265,11 +265,11 @@ Summary
 .. _1150105700:
 
 [1.15.0.1.0.570.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date: 08/08/2020
 
-.. _summary-1:
+.. _tb-summary-1:
 
 Summary
 -------
@@ -279,11 +279,11 @@ Summary
 .. _1150105130:
 
 [1.15.0.1.0.513.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date: 07/16/2020
 
-.. _summary-2:
+.. _tb-summary-2:
 
 Summary
 -------
@@ -293,11 +293,11 @@ Summary
 .. _1150104910:
 
 [1.15.0.1.0.491.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 6/11/2020
 
-.. _summary-3:
+.. _tb-summary-3:
 
 Summary
 -------
@@ -313,11 +313,11 @@ Resolved Issues
 .. _1150104660:
 
 [1.15.0.1.0.466.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 5/11/2020
 
-.. _summary-4:
+.. _tb-summary-4:
 
 Summary
 -------
@@ -325,7 +325,7 @@ Summary
 Fix potential installation issue when installing both tensorboard and
 tensorboard-neuron.
 
-.. _resolved-issues-1:
+.. _tb-resolved-issues-1:
 
 Resolved Issues
 ---------------
@@ -340,11 +340,11 @@ Other Notes
 .. _1150103920:
 
 [1.15.0.1.0.392.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 3/26/2020
 
-.. _summary-5:
+.. _tb-summary-5:
 
 Summary
 -------
@@ -363,7 +363,7 @@ Major New Features
 -  The Neuron Profile plugin now has an overview page to compare time
    spent on Neuron device versus on CPU.
 
-.. _other-notes-1:
+.. _tb-other-notes-1:
 
 Other Notes
 -----------
@@ -374,11 +374,11 @@ Other Notes
 .. _1150103660:
 
 [1.15.0.1.0.366.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 02/27/2020
 
-.. _summary-6:
+.. _tb-summary-6:
 
 Summary
 -------
@@ -386,7 +386,7 @@ Summary
 Reduced load times and fixed crashes when loading large models for
 visualization.
 
-.. _resolved-issues-2:
+.. _tb-resolved-issues-2:
 
 Resolved Issues
 ---------------
@@ -399,11 +399,11 @@ Resolved Issues
 .. _1150103150:
 
 [1.15.0.1.0.315.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 12/20/2019
 
-.. _summary-7:
+.. _tb-summary-7:
 
 Summary
 -------
@@ -413,21 +413,21 @@ No major chages or fixes. Released with other Neuron packages.
 .. _1150103060:
 
 [1.15.0.1.0.306.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 12/1/2019
 
-.. _summary-8:
+.. _tb-summary-8:
 
 Summary
 -------
 
-.. _major-new-features-1:
+.. _tb-major-new-features-1:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-3:
+.. _tb-resolved-issues-3:
 
 Resolved Issues
 ---------------
@@ -439,7 +439,7 @@ Known Issues & Limits
 
 Same as prior release
 
-.. _other-notes-2:
+.. _tb-other-notes-2:
 
 Other Notes
 -----------
@@ -447,18 +447,18 @@ Other Notes
 .. _1150102800:
 
 [1.15.0.1.0.280.0]
-==================
+^^^^^^^^^^^^^^^^^^
 
 Date 11/29/2019
 
-.. _summary-9:
+.. _tb-summary-9:
 
 Summary
 -------
 
 Initial release packaged with DLAMI.
 
-.. _major-new-features-2:
+.. _tb-major-new-features-2:
 
 Major New Features
 ------------------
@@ -468,7 +468,7 @@ N/A, initial release.
 See user guide here:
 https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-tools/getting-started-tensorboard-neuron.md
 
-.. _resolved-issues-4:
+.. _tb-resolved-issues-4:
 
 Resolved Issues
 ---------------
@@ -495,7 +495,7 @@ Known Issues & Limits
 -  Debugger currently supports TensorFlow only
 -  Visualization requires a TensorFlow-compatible graph
 
-.. _other-notes-3:
+.. _tb-other-notes-3:
 
 Other Notes
 -----------

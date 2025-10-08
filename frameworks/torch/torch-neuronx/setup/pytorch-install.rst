@@ -19,7 +19,7 @@ Develop on AWS ML accelerator instance
 
             .. tab-item:: Amazon Linux 2 DLAMI Base
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 18
 
@@ -29,7 +29,7 @@ Develop on AWS ML accelerator instance
 
             .. tab-item:: Ubuntu 20 DLAMI Base
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 19
                     :end-line: 24
 
@@ -39,7 +39,7 @@ Develop on AWS ML accelerator instance
 
             .. tab-item:: Amazon Linux 2 DLAMI Pytorch
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 25
                     :end-line: 29
 
@@ -51,7 +51,7 @@ Develop on AWS ML accelerator instance
 
             .. tab-item:: Ubuntu 20 DLAMI Pytorch
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 30
                     :end-line: 35
 
@@ -61,12 +61,12 @@ Develop on AWS ML accelerator instance
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 1
                     :end-line: 3
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 4
                     :end-line: 6

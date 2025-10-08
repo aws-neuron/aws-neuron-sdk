@@ -43,7 +43,7 @@ Environment
 
 
 Part 1: Operator Level Trace for ``xm.markstep()`` workflow
---------------------------------------
+-------------------------------------------------------------
 
 Goal
 ~~~~
@@ -169,7 +169,7 @@ Initial Output & Compilation Success
    |----|----|----|----|----|----|----|----|----|----|
    ***************************************************
    Dependency reduction of sg0000
-   0%   10   20   30   40   50   60   70   80   90   100%``
+   0%   10   20   30   40   50   60   70   80   90   100%
    |----|----|----|----|----|----|----|----|----|----|
    ***************************************************
 
@@ -342,7 +342,7 @@ Eventually the input gets fully allocated, and other allocations occur for dot p
 ``Linear[layer1]`` and ``Linear[layer2]``.
 
 Conclusion
-^^^^^^^^
+^^^^^^^^^^^
 
 There are a few conclusions that can be determined from analyzing the timeline. We can see that we’ve been able to save a bit of time due to 
 parallelism with fusion operations, and saving some compute time with preloading operations (ex. ``ReLU``). A clear trend is that a majority of the time is spent on data transfer operations.
@@ -367,7 +367,7 @@ able to improve performance by revealing the bottlenecks of the model.
    user that this is *indeed* what happens in the hardware when executing a simple FFNN.
 
 Part 2: Operator Level Trace with ``torch_neuronx.trace()`` workflow
---------------------------------------
+----------------------------------------------------------------------
 
 Set Up
 ~~~~~~
@@ -428,7 +428,7 @@ Here is the code for ``run.py``:
    print(output_neuron)
 
 Important code differences from Part 1
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. ``import torch_xla.core.xla_model as xm`` is no longer necessary
 2. Set ``traced_only=True`` in ``torch_neuronx.experimental.profiler.profile()``. This option is necessary for traced models, otherwise the generated profile will not be accurate or not work.
@@ -437,8 +437,9 @@ Important code differences from Part 1
 Otherwise, the code is the same as Part 1.
 
 Running Part 2
-~~~~~~~
+~~~~~~~~~~~~~~~~~
 To Run:
+
 ::
 
    python run.py
@@ -446,7 +447,7 @@ To Run:
 The output will look almost identical as Part 1
 
 Loading the Operators Level Trace in TensorBoard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Run ``tensorboard --load_fast=false --logdir logs/``, just like Part 1.
 
@@ -458,8 +459,8 @@ Timeline View:
 
 |tensorboard-operator-trace-view-traced|
 
-Notable Differences in Timeline View from Part 1:
-~~~~~~
+Notable Differences in Timeline View from Part 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **No Input Operators:** For a traced model, we do not transfer the input to an xla device, so these operations are not seen on the timeline. This also affects scheduling, which is why the time taken in
 the profiling is less than the markstep one.

@@ -28,7 +28,7 @@ ParallelCluster Setup
 In this example, we will use 8 instances with ParallelCluster,
 please follow the instructions here to create a cluster:
 `Train your model on ParallelCluster
-<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`_
+<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`_
 
 ParallelCluster automates the creation of trn1 clusters,
 and provides the SLURM job management system for scheduling and managing distributed training jobs.
@@ -41,7 +41,7 @@ Install Dependencies
 Once you have launched a trn1 instance or ParallelCluster,
 please follow this guide on how to install the latest Neuron packages:
 `PyTorch Neuron Setup Guide
-<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>`_.
+<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuronx.html#setup-torch-neuronx>`_.
 
 Next, we will need to install NxD Training and its dependencies.
 Please see the following installation guide for installing NxD Training:

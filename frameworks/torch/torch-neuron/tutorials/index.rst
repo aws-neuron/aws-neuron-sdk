@@ -1,7 +1,7 @@
 .. _pytorch-tutorials:
 
 PyTorch Neuron Tutorials
-====================
+=========================
 
 Before running a tutorial
 -------------------------
@@ -14,7 +14,7 @@ Follow instructions at :ref:`pytorch-tutorial-setup` before running a PyTorch tu
 .. toctree::
    :hidden:
 
-   /neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/pytorch-tutorial-setup
+   pytorch-tutorial-setup
 
 .. _pytorch-computervision:
 
@@ -42,18 +42,16 @@ Natural Language Processing
 * TorchServe tutorial :ref:`[html] <pytorch-tutorials-torchserve>`
 * HuggingFace MarianMT tutorial :ref:`[html] </src/examples/pytorch/transformers-marianmt.ipynb>` :pytorch-neuron-src:`[notebook] <transformers-marianmt.ipynb>`
 
-
 .. toctree::
    :hidden:
+   :maxdepth: 1
    
    /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb
    /src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb
    /src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb
-   /neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-libtorch
-   /frameworks/torch/torch-neuron/tutorials/tutorial-torchserve
-   /src/examples/pytorch/transformers-marianmt.ipynb
-
-
+   tutorial-libtorch
+   tutorial-torchserve
+   transformers-marianmt
 
 .. _pytorch-utilize-neuron:
 
@@ -68,6 +66,5 @@ Utilizing Neuron Capabilities
 .. toctree::
    :hidden:
    
-   /neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/tutorial-torchserve
    /src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb
 

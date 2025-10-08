@@ -56,7 +56,7 @@ New Features
 - This release introduces the Neuron Helm Chart, which helps streamline the deployment of AWS Neuron components on Amazon EKS.
   More information can be found in the GitHub repo: https://github.com/aws-neuron/neuron-helm-charts.
 - Adds ECS support for the "Neuron Node Problem Detector and Recovery" artifact.
-  More information can be found in the Neuron docs: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/plugins/npd-ecs-flows.html#ecs-neuron-problem-detector-and-recovery.
+  More information can be found in the Neuron docs: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/plugins/npd-ecs-flows.html#ecs-neuron-problem-detector-and-recovery.
 
 Improvements
 ------------
@@ -67,7 +67,7 @@ End of Support
 --------------
 
 - Ends support for resource name ‘neurondevice’ with the Neuron Device Plugin.
-  More information can be found in the announcement: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/announcements/neuron2.x/announce-eos-neurondevice.html
+  More information can be found in the announcement: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/announce-eos-neurondevice.html
 
 Neuron K8 release [2.21.14.0]
 =============================
@@ -332,7 +332,7 @@ Minor internal enhancements.
 
 Date: 10/22/2020
 
-.. _summary-1:
+.. _k8-summary-1:
 
 Summary
 -------
@@ -360,7 +360,7 @@ Minor internal enhancements.
 
 Date: 08/08/2020
 
-.. _summary-1:
+.. _k8-summary-1:
 
 Summary
 -------

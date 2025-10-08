@@ -32,7 +32,7 @@ First, you can launch a Trn1 instance by following the Neuron DLAMI guide:
 Once you have launched a Trn1 instance,
 follow this guide on how to install the latest Neuron packages:
 `PyTorch Neuron Setup Guide
-<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html#setup-torch-neuronx>`_.
+<https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/torch-neuronx.html#setup-torch-neuronx>`_.
 
 Next, we will need to install ``NxDT`` and its dependencies.
 Please see the following installation guide for installing ``NxDT``:

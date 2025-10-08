@@ -16,7 +16,7 @@ Setting up the environment
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 For this experiment, we will use AWS ParallelCluster with at least four trn1.32xlarge compute nodes.
-To set up a cluster and prepare it for use, see `Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`__.
+To set up a cluster and prepare it for use, see `Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`__.
 To set up the packages on the head node of the cluster, see
 :ref:`Install PyTorch Neuron on Trn1 <setup-torch-neuronx>`.
 

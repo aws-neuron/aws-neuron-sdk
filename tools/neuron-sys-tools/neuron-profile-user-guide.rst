@@ -30,6 +30,7 @@ Additionally, ``neuron-profile`` supports Neuron Kernel Interface (NKI) develope
     more about Neuron Profiler 2.0, please refer to the :ref:`Neuron Profiler 2.0 (Beta) User Guide <neuron-profiler-2-0-guide>`.
 
 .. _neuron-profiler-installation:
+
 Installation
 ------------
 
@@ -571,7 +572,7 @@ FAQ
 ---
 
 Difference between TensorE and TensorMatrixE Rows in Timeline
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - TensorE includes instruction trace for LoadStationary (LoadWeight)
 - TensorMatrixE includes instruction trace for MultiplyMoving (Matmul)
@@ -664,7 +665,7 @@ Commit changes by running ``sudo sysctl -p``.
 .. |neuron-profile-perfetto-device| image:: /images/neuron-profiler2-perfetto-device.png
 
 When viewing UI "FATAL - Failed metadata query"
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are SSH port forwarding the web UI from a remote machine to your local desktop you will need to port forward both the web UI (3001) and the database (8086) like so:
 
