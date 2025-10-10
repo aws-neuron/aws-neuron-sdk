@@ -329,13 +329,86 @@ environment where the application code is built into the container image.
 .. _neuron-profiler-capture-environment-variables:
 
 Profile Capture Environment Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
-* ``NEURON_RT_INSPECT_ENABLE``: Set to 1 to enable system and device profiles. For control over which profile types are captured use ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` and ``NEURON_RT_INSPECT_DEVICE_PROFILE``.
-* ``NEURON_RT_INSPECT_OUTPUT_DIR``: The directory where captured profile data will be saved to. Defaults to ``./output``.
-* ``NEURON_RT_INSPECT_SYSTEM_PROFILE``: Set to 0 to disable the capture of system profiles. Defaults to 1 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_DEVICE_PROFILE``: Set to 0 to disable the capture of device profiles. Defaults to 0 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``: Maximum number of trace events for each NeuronCore to capture when profiling. Once hitting this limit, oldest events are overwritten. Defaults to 1,000,000. Increasing will use more host memory.
+.. _core-control-variables::
+
+Core control variables
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Description
+     - Default behavior
+   * - ``NEURON_RT_INSPECT_ENABLE``
+     - Set to ``1`` to enable profiling
+     - Enables system profiling and disables device profiling. To control which profile types are captured, see :ref:`Profile stype selection <profile-type-selection>`
+   * - ``NEURON_RT_INSPECT_OUTPUT_DIR``
+     - Directory for profile data output
+     - Default directory for captured profile data is ``./output``
+
+.. _profile-type-selection::
+
+Profile type selection
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note:: 
+    
+    When ``NEURON_RT_INSPECT_ENABLE`` set to ``1``, ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` is enabled by default (set to 1) and ``NEURON_RT_INSPECT_DEVICE_PROFILE`` is disabled by default (set to ``0``).
+
+When ``NEURON_RT_INSPECT_ENABLE` = 1, two different profile types are available:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Profile type
+     - Description
+     - Enable capture
+     - Disable capture
+   * - ``NEURON_RT_INSPECT_SYSTEM_PROFILE``
+     - System-level
+     - Captures runtime system events and operations
+     - Set to ``1``
+     - Set to ``0``
+   * - ``NEURON_RT_INSPECT_DEVICE_PROFILE``
+     - Device-level
+     - Captures detailed NeuronCore hardware metrics
+     - Set to ``1``
+     - Set to ``0``
+
+.. note::
+
+    These variables have no effect if ``NEURON_RT_INSPECT_ENABLE`` is not set to ``1``.
+
+.. _advanced-config-vars::
+  
+Advanced configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Profile type
+     - Description
+     - Default behavior
+   * - ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``
+     - System-level
+     - Maximum trace events per NeuronCore before oldest events are overwritten
+     - 1,000,000
+
+.. note:: 
+    
+    Increasing the event limit will consume more host memory.
 
 Example Capturing Profile of Application Using Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
