@@ -902,7 +902,7 @@ The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
 .. code-block:: shell
 
     # Filter to capture only specific event types
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=nrt_load,nrt_execute,nc_exec_running
 
     # Filter to capture all hardware events
     export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
@@ -911,13 +911,13 @@ The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
     export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
 
     # Filter to capture all hardware events EXCEPT cc_exec
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_running
 
-    # Filter to capture all software events EXCEPT model_load
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^model_load
+    # Filter to capture all software events EXCEPT nrt_load
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^nrt_load
 
     # Mix categories and specific events
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,tensor_read,tensor_write
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,nrt_tensor_write,nrt_tensor_read
 
     # Reset to default behavior
     unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE  # Back to capturing all event types
