@@ -129,7 +129,7 @@ clear_trn2_tag = [ 'frameworks/tensorflow/',
                   'about-neuron/arch/neuron-hardware/trainium',
                   'about-neuron/arch/neuron-hardware/neuron-core-v2',
                   '/libraries/neuronx-distributed/context_parallelism_overview',
-
+                  'neuron-customops/'
                     ]
 clear_nc_v2_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
