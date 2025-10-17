@@ -11,7 +11,8 @@ Explore the Neuron Runtime
    :hidden:
    :maxdepth: 1
 
-   Deep Dive: Compute-Communication Overlap <compute-comm-overlap>
+   Compute-Communication Overlap <compute-comm-overlap>
+   Neuron Device Memory <device-memory>
 
 Curious about how the Neuron Runtime works? Looking for deeper explorations of the computer science, techniques, and algorithms used to develop it? This section provides topics that dive into the learnings and engineering behind the Neuron Runtime, written by the AWS engineers who developed it.
 
@@ -21,4 +22,8 @@ Curious about how the Neuron Runtime works? Looking for deeper explorations of t
         .. grid-item-card:: Neuron Runtime
 
                 * :ref:`neuron-runtime-explore-compute-comm`
+  
+        .. grid-item-card:: Neuron Device Memory
+
+                * :ref:`neuron-device-memory-deep-dive`
 
