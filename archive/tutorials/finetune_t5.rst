@@ -20,7 +20,7 @@ a text-summarization <https://github.com/huggingface/transformers/tree/master/ex
    :local:
    :depth: 2
 
-.. include:: ../note-performance.txt
+.. include:: /frameworks/torch/torch-neuronx/tutorials/note-performance.txt
 
 Setup and compilation
 ---------------------
@@ -187,7 +187,7 @@ You can now follow the same steps as listed above. This script would run a t5-la
 using 32 data-parallel workers.
 
 
-.. _known_issues:
+.. _t5_known_issues:
 
 Known issues and limitations
 ----------------------------

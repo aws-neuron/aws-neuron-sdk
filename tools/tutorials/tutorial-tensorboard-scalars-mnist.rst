@@ -33,7 +33,7 @@ In the training loop, we can then use the ``add_scalar`` API to log the loss per
 
 At the end of the script, add ``writer.flush()`` to ensure all logs are written.
 
-Save the following code as :download:`train_tb.py <examples/pytorch/mnist_mlp/train_tb.py>` and run it as ``python3 train_tb.py`` on a Trn1 instance.
+Save the following code as :download:`train_tb.py </src/examples/pytorch/mnist_mlp/train_tb.py>` and run it as ``python3 train_tb.py`` on a Trn1 instance.
 The generated logs can be found in the ``./output`` directory that was passed to ``SummaryWriter``.
 
 .. literalinclude:: /src/examples/pytorch/mnist_mlp/train_tb.py

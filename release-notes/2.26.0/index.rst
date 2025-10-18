@@ -15,10 +15,8 @@ AWS Neuron SDK 2.26.0 release notes
 
    PyTorch support <nx-pytorch>
    JAX support <nx-jax>
-   Transformers support <nx-transformers>
    NxD Inference <nxd-inference>
    NxD Core <nxd-core>
-   Neuron Compiler <compiler>
    NKI <nki>
    Neuron Runtime <runtime>
    Developer tools <tools>

@@ -32,4 +32,4 @@
 
 
    * - Neuron Components release notes
-     - * :ref:`components-rn`
+     - * :ref:`prev-rn`

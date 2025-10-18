@@ -61,7 +61,7 @@ we would have to split the activations along the sequence dimension and distribu
 block in the transformer module already uses an all-reduce (Row-parallel linear layer used for MLP), we can replace the 
 all-reduce operation with a `reduce-scatter <https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html#reducescatter>`__ operation.
 
-.. image:: images/sequence_parallel.png
+.. image:: /libraries/neuronx-distributed/images/sequence_parallel.png
    :alt: Image: image.png
 
 Ref: `Reducing Activation Recomputation in Large Transformer Models <https://browse.arxiv.org/pdf/2205.05198.pdf>`__

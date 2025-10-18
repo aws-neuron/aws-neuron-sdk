@@ -20,11 +20,6 @@ through AWS support.
    :local:
    :depth: 2
 
-
-Generic Errors
-$$$$$$$$$$$$$$
-
-
 Neuron Driver installation fails
 --------------------------------
 
@@ -54,7 +49,7 @@ If the above has no output then that means ``aws-neuron-dkms``
 installation is failed.
 
 Solution
-''''''''
+^^^^^^^^
 
 1. Stop all applications using the NeuronCores.
 
@@ -67,8 +62,6 @@ Solution
 
 4. Install aws-neuron-dkms ``sudo apt install aws-neuron-dkms`` or
    ``sudo dnf install aws-neuron-dkms``
-
-------------
 
 Application fails to start
 --------------------------
@@ -90,24 +83,21 @@ When using any supported framework from Neuron SDK version 2.5.0 and Neuron Driv
   2022-Dec-01 09:34:12.0559   138:138   ERROR   HAL:aws_hal_tpb_pooling_write_profile       failed programming the engine
 
 Solution
-''''''''
+^^^^^^^^
 
 Please follow the installation steps in :ref:`setup-guide-index` to install ``aws-neuronx-dkms``.
-
-------------
-
 
 This Neuron Runtime (compatibility id: X) is not compatible with the installed aws-neuron-dkms package
 ------------------------------------------------------------------------------------------------------
 
 This error is caused by incompatibility between the Neuron Driver (dkms package) and the Runtime Library (runtime-lib package).  The driver remains backwards compatible with older versions of Neuron Runtime, but newer versions of the Runtime might rely on the functionality that is only provided by a newer driver.  In that case, an update to the newer driver is required.
 
-In some cases the compatibility error persists even after the driver has been updated.  That happens when the update process fails to reload the driver at the end of the update.  Note that ``$ modinfo neuron``  will misleadingly show the new version because modinfo reads the version information for neuron.ko file that’s been successfully replaced.
+In some cases the compatibility error persists even after the driver has been updated.  That happens when the update process fails to reload the driver at the end of the update.  Note that ``$ modinfo neuron``  will misleadingly show the new version because modinfo reads the version information for neuron.ko file that's been successfully replaced.
 
 Reload failure happens because one of the processes is still using Neuron Devices and thus the driver cannot be reloaded.  
 
 Solution
-''''''''
+^^^^^^^^
 
 Check for any process that is still using the Neuron driver by running lsmod:
 
@@ -134,9 +124,6 @@ Or simply rerun the installation one more time.  The driver logs its version in 
 
 A common culprit is a Jupyter process.  If you are using Jupyter on the instance, make sure to terminate Jupyter process before updating the driver.
 
-------------
-
-
 Neuron Core is in use
 ---------------------
 
@@ -150,11 +137,9 @@ message in the console and in syslog:
    2021-Aug-27 23:22:12.0323 28078:28078 ERROR   NRT:nrt_allocate_neuron_cores               NeuronCore(s) not available - Requested:nc1-nc1 Available:0
 
 Solution
-''''''''
+^^^^^^^^
 
 Terminate any other processes that are using NeuronCore and then try launching the application again. If you are using Jupyter, ensure that you only have a single Jupyter kernel attempting to access the NeuronCores by restarting or shutting-down any other kernels, which will release any NeuronCores that might be in use.
-
-------------
 
 Unsupported NEFF Version
 ------------------------
@@ -168,15 +153,13 @@ model load with following error message:
    NEFF version mismatch supported: 1.1 received: 2.0
 
 Solution
-''''''''
+^^^^^^^^
 
 Use compatible versions of Neuron Compiler and Runtime. Updating to the
 latest version of both Neuron Compiler and Neuron Runtime is the
 simplest solution. If updating one of the two is not an option, please
 refer to the :ref:`neuron-runtime-release-notes`
 of the Neuron Runtime to determine NEFF version support.
-
-------------
 
 Unsupported Hardware Operator Code
 ----------------------------------
@@ -190,11 +173,10 @@ Neuron Runtime will display the following error messages:
     2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.    
 
 Solution
-''''''''
+^^^^^^^^
 
 Upgrade to latest Neuron Runtime and Neuron Collectives.
 
-------------
 
 Insufficient Memory
 -------------------
@@ -210,14 +192,12 @@ the model load would fail with the following message in syslog
 
 
 Solution
-''''''''
+^^^^^^^^
 
 As the error is contextual to what's going on with your instance, the
 exact next step is unclear. Try unloading some of the loaded models
 which will free up device DRAM space. If this is still a problem, moving
 to a larger Inf1 instance size with additional NeuronCores may help.
-
-------------
 
 Insufficient number of NeuronCores
 ----------------------------------
@@ -234,14 +214,12 @@ Check for error messages in syslog similar to:
   NRT:  26638:26638 ERROR  NMGR:kmgr_load_nn_post_metrics               Failed to load NN: xxxxxxx, err: 2
 
 Solution
-''''''''
+^^^^^^^^
 
 The NeuronCores may be in use by models you are not actively using.
 Ensure you've unloaded models you're not using and terminated unused applications.
 If this is still a problem, moving to a larger Inf1 instance
 size with additional NeuronCores may help.
-
---------------
 
 Numerical Error
 ---------------
@@ -256,7 +234,7 @@ message:
    nrtd[nnnnn]: ....  Error notifications found on NC .... INFER_ERROR_SUBTYPE_NUMERICAL
 
 Solution
-''''''''
+^^^^^^^^
 
 This usually an indication of either error in the model or error in the
 input.
@@ -264,15 +242,12 @@ input.
 Report issue to Neuron by posting the relevant details on GitHub
 `issues <https://github.com/aws/aws-neuron-sdk/issues>`__.
 
---------------------------------------------------------------------------------------
-
 RuntimeError: module compiled against API version 0xf but this version of numpy is 0xe
 --------------------------------------------------------------------------------------
 This usually means that the numpy version used during compilation is different than the one used when executing the model.
 As of Neuron SDK release 2.15, numpy versions supported in Neuron SDK are following:  numpy<=1.25.2, >=1.22.2.  Check and confirm the right
 numpy version is installed and re-compile/execute the model.
 
-----------------------------
 
 Failure to initialize Neuron
 ----------------------------
@@ -300,8 +275,6 @@ devices automatically.
 
    sudo rmmod neuron; sudo modprobe neuron
 
------------------------------------------------------------------------------
-
 An application is trying to use more cores that are available on the instance
 -----------------------------------------------------------------------------
 
@@ -316,8 +289,6 @@ Solution
 
 Use properly sized instance. trn1.32xlarge has 32 Neuron Cores,
 trn1.2xlarge has 2 Neuron Cores.
-
------------------------------------------------------
 
 Neuron Runtime execution fails at out-of-bound access
 -----------------------------------------------------
@@ -419,7 +390,7 @@ All relevant inputs, labeled from input0 to input14, are saved in binary format 
 
 
 Hardware Errors
-$$$$$$$$$$$$$$$
+~~~~~~~~~~~~~~~
 
 
 For Trn and Inf instances, the following hardware errors are monitored by Neuron Runtime:
@@ -493,7 +464,7 @@ Upon any hardware errors, you should also expect to see the error message like t
 
 
 EFA and Collective Communication Errors
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Missing aws-neuronx-collectives package
 ---------------------------------------
@@ -720,7 +691,7 @@ Verify that the name can be resolved by DNS by using nslookup or dig.  Currently
 
 
 Usage of Neuron Custom C++ Operators
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Neuron Runtime timeout or GPSIMD exception
 ------------------------------------------
@@ -751,7 +722,7 @@ Example GPSIMD exception:
    Exception PC: 0x840001E8
 
 Solution
-''''''''
+^^^^^^^^
 
 If either of the above errors are seen, and ``NEURON_RT_RESET_CORES`` is set to
 0, either unset it or set it to 1. This will enable the default runtime

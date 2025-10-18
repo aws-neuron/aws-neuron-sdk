@@ -633,7 +633,7 @@ This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and pr
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`_ for more information.
+- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/nki_rn.html>`_ for more information.
 - Added support for Python 3.11.
 - Added support for protobuf versions 3.20+.
 - (Training) Increased performance for BERT-Large pretraining by changing ``NEURON_TRANSFER_WITH_STATIC_RING_OPS`` default.
@@ -785,7 +785,7 @@ This release adds support for Neuron Kernel Interface (NKI), Python 3.11, and pr
 What's new in this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`_ for more information.
+- Added support for Neuron Kernel Interface (NKI). Please see `NKI documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/nki_rn.html>`_ for more information.
 - Added support for Python 3.11.
 - Added support for protobuf versions 3.20+.
 - (Inference) Added support for weight separated models for DataParallel class.
@@ -2091,7 +2091,7 @@ Using Hugging Face transformers version >= 4.21.0 can produce NaN outputs for GP
 
 
 Resolved issues (Inference)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :func:`torch.argmax` now supports single argument call variant
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -33,7 +33,7 @@ NEFF Version Runtime Version Range Notes
 ============ ===================== ===================================
 
 Neuron Runtime Library [2.26.42.0]
----------------------------------
+-----------------------------------
 Date: 06/24/2025
 
 New in this release
@@ -92,7 +92,7 @@ Instance Family               OS Type       OS Version     Kernel Version    GLI
 
 
 Neuron Runtime Library [2.25.57.0]
----------------------------------
+-----------------------------------
 Date: 05/19/2025
 
 New in this release
@@ -119,7 +119,7 @@ Neuron Profiler 2.0 (Beta)
 * Significant performance improvements in time taken by calls to nrt_sys_trace_fetch_events()
 
 Neuron Runtime Library [2.24.53.0]
----------------------------------
+-----------------------------------
 Date: 04/03/2025
 
 New in this release
@@ -152,7 +152,7 @@ NKI
 * Added RangeSelect instruction Support for the Vector engine
 
 Neuron Runtime Library [2.23.112.0]
----------------------------------
+------------------------------------
 Date: 01/14/2025
 
 Bug fixes
@@ -160,7 +160,7 @@ Bug fixes
 * Fixed DMA abort errors on TRN2.
 
 Neuron Runtime Library [2.23.110.0]
----------------------------------
+------------------------------------
 Date: 12/20/2024
 
 New in this release
@@ -195,7 +195,7 @@ End of Support
 * Removed INF1 Support from Runtime library
 
 Neuron Runtime Library [2.22.19.0]
----------------------------------
+-----------------------------------
 Date: 11/20/2024
 
 New in this release
@@ -203,7 +203,7 @@ New in this release
 * Minor improvements and bug fixes
 
 Neuron Runtime Library [2.22.14.0]
----------------------------------
+-----------------------------------
 Date: 09/16/2024
 
 New in this release
@@ -216,7 +216,7 @@ Bug fixes
 * Resolved a performance issue with transpose operations, which was caused by an uneven distribution of work across DMA engines
 
 Neuron Runtime Library [2.21.41.0]
----------------------------------
+-----------------------------------
 Date: 07/03/2024
 
 New in this release
@@ -231,7 +231,7 @@ Bug fixes
 * Fixed bug where runtime was incorrectly reporting instruction offsets to the profiler
 
 Neuron Runtime Library [PATCH 2.20.22.0]
-----------------------------------------
+-----------------------------------------
 Date: 04/01/2024
 
 Bug fixes
@@ -244,7 +244,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.20.11.0]
----------------------------------
+-----------------------------------
 Date: 02/13/2024
 
 New in this release
@@ -265,7 +265,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.19.5.0]
----------------------------------
+----------------------------------
 Date: 12/21/2023
 
 New in this release
@@ -282,7 +282,7 @@ New in this release
 
 
 Neuron Runtime Library [2.18.15.0]
----------------------------------
+-----------------------------------
 Date: 11/09/2023
 
 Bug fixes
@@ -291,7 +291,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.18.14.0]
----------------------------------
+-----------------------------------
 Date: 10/26/2023
 
 New in this release
@@ -308,7 +308,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.17.7.0]
----------------------------------
+----------------------------------
 Date: 9/14/2023
 
 New in this release
@@ -325,7 +325,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.16.14.0]
----------------------------------
+-----------------------------------
 Date: 9/01/2023
 
 Bug fixes
@@ -336,7 +336,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.16.8.0]
----------------------------------
+----------------------------------
 Date: 8/09/2023
 
 New in this release
@@ -370,7 +370,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.15.14.0]
----------------------------------
+-----------------------------------
 Date: 8/09/2023
 
 New in this release
@@ -381,7 +381,7 @@ New in this release
 
 
 Neuron Runtime Library [2.15.11.0]
----------------------------------
+-----------------------------------
 Date: 7/19/2023
 
 New in this release
@@ -399,7 +399,7 @@ New in this release
 
 
 Neuron Runtime Library [2.14.8.0]
----------------------------------
+----------------------------------
 Date: 6/14/2023
 
 New in this release
@@ -419,7 +419,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.13.6.0]
----------------------------------
+----------------------------------
 Date: 05/01/2023
 
 New in this release
@@ -435,7 +435,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.12.23.0]
----------------------------------
+-----------------------------------
 Date: 04/19/2023
 
 Bug fixes
@@ -445,7 +445,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.12.14.0]
----------------------------------
+-----------------------------------
 Date: 03/28/2023
 
 New in this release
@@ -461,7 +461,7 @@ New in this release
 
 
 Neuron Runtime Library [2.11.43.0]
----------------------------------
+-----------------------------------
 Date: 02/08/2023
 
 New in this release
@@ -482,7 +482,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.10.18.0]
----------------------------------
+-----------------------------------
 Date: 11/07/2022
 
 New in this release
@@ -493,7 +493,7 @@ New in this release
 
 
 Neuron Runtime Library [2.10.15.0]
----------------------------------
+-----------------------------------
 Date: 10/26/2022
 
 .. _note::
@@ -521,7 +521,7 @@ Bug fixes
 
 
 Neuron Runtime Library [2.9.64.0]
----------------------------------
+----------------------------------
 Date: 10/10/2022
 
 

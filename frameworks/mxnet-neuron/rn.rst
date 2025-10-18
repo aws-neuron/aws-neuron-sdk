@@ -5,6 +5,5 @@ What's New
    :maxdepth: 1
 
    /release-notes/mxnet-neuron/mxnet-neuron
-   /release-notes/neuron-cc-ops/neuron-cc-ops-mxnet
-   /release-notes/conda/mxnet/conda-mxnet-neuron
+   /release-notes/compiler/neuron-cc/neuron-cc-ops/neuron-cc-ops-mxnet
 

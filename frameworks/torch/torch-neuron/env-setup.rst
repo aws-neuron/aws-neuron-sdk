@@ -10,9 +10,8 @@ You can also choose one of the following combinations for compilation and deploy
 .. toctree::
    :maxdepth: 1
    
-   ec2-then-ec2-devflow
-   ec2-then-ec2-devflow-inf2
-   neo-then-hosting-devflow
-   dlc-then-ec2-devflow
-   dlc-then-ecs-devflow
-   dlc-then-eks-devflow
+   /containers/ec2-then-ec2-devflow
+   /containers/neo-then-hosting-devflow
+   /containers/dlc-then-ec2-devflow
+   /containers/dlc-then-ecs-devflow
+   /containers/dlc-then-eks-devflow

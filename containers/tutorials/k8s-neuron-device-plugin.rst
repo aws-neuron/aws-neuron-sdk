@@ -2,8 +2,7 @@
 
 Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource. aws.amazon.com/neuroncore and aws.amazon.com/neuron are the resources that the neuron device plugin registers with the kubernetes. aws.amazon.com/neuroncore is used for allocating neuron cores to the container. aws.amazon.com/neuron is used for allocating neuron devices to the container. When resource name 'neuron' is used, all the cores belonging to the device will be allocated to container.
 
-Deploy Neuron Device Plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Deploy the NeuronDevice Plugin for Kubernetes**
 
 * Make sure :ref:`prequisite<k8s-prerequisite>` are satisified
 * Apply the Neuron device plugin as a daemonset on the cluster with the following command

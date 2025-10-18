@@ -1,4 +1,4 @@
-.. _tensorflow-serving-neuronrt-visible-cores:
+.. _tensorflow-nx-serving-neuronrt-visible-cores:
 
 Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving
 =====================================================

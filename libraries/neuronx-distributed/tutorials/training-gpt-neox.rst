@@ -15,7 +15,7 @@ and zero-1 optimizer in the ``neuronx-distributed`` package. Please refer to the
                        
 
 For this experiment, we will use a ParallelCluster with at least four trn1-32xl compute nodes.
-`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/devflows/training/parallelcluster/parallelcluster-training.html>`__
+`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`__
 introduces how to setup and use a ParallelCluster.
 We need first to create and activate a python virtual env on the head node of the ParallelCluster.
 Next follow the instructions mentioned here:

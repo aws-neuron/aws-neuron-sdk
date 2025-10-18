@@ -175,7 +175,7 @@ tutorial. Please stay in the Python environment that you setup during the tutori
 
 
 MXNet-Neuron Check Model
-=======================
+=========================
 
 The following example shows how to run MXNet-Neuron Check Model tool with MXNet ResNet50 tutorial.
 

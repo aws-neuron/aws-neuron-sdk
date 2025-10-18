@@ -1,8 +1,8 @@
 .. _nccom-test:
 
-=================
+======================
 NCCOM-TEST User Guide
-=================
+======================
 
 .. contents:: Table of contents
     :local:

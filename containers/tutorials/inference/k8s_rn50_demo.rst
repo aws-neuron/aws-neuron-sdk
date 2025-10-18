@@ -21,7 +21,7 @@ Deploy a TensorFlow Serving application image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A trained model must be compiled to an Inferentia target before it can be deployed on Inferentia instances\.
-To continue, you will need a :ref:`Neuron optimized TensorFlow <tensorflow-neuron>` model saved in Amazon S3\.
+To continue, you will need a Neuron-optimized TensorFlow model saved in Amazon S3\.
 If you don’t already have a SavedModel, please follow the tutorial for `creating a Neuron compatible ResNet50 model <https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-inferentia-tf-neuron.html>`_
 and upload the resulting SavedModel to S3\.
 

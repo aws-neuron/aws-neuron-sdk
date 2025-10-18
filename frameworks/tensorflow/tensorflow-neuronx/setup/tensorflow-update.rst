@@ -11,7 +11,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -21,7 +21,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -35,7 +35,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -45,7 +45,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -59,7 +59,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -69,7 +69,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -83,7 +83,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Amazon Linux 2
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 
@@ -93,7 +93,7 @@ Update to Latest TensorFlow (``tensorflow-neuronx``)
 
             .. tab-item:: Ubuntu 20
 
-                .. include :: /general/setup/install-templates/trn1/dlami-notes.rst
+                .. include :: /setup/install-templates/trn1/dlami-notes.rst
                     :start-line: 13
                     :end-line: 16
 

@@ -1,7 +1,7 @@
 .. _mxnet-neuron-install-prev-al2023:
 
 Install Previous MXNet Neuron Releases for Amazon Linux 2023 (``mxnet-neuron``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1

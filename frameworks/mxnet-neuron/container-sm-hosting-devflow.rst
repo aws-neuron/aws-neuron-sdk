@@ -1,1 +1,1 @@
-.. include:: /general/devflows/inference/container-sm-hosting-devflow.rst
+.. include:: /devflows/inference/container-sm-hosting-devflow.rst

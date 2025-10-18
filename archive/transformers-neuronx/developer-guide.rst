@@ -13,8 +13,8 @@ Transformers Neuron Developer Guide (``transformers-neuronx``)
     :maxdepth: 1
     :hidden:
 
-    /libraries/transformers-neuronx/transformers-neuronx-developer-guide
-    /libraries/transformers-neuronx/transformers-neuronx-developer-guide-for-continuous-batching
+    /archive/transformers-neuronx/transformers-neuronx-developer-guide
+    /archive/transformers-neuronx/transformers-neuronx-developer-guide-for-continuous-batching
 
 
 .. include:: /libraries/transformers-neuronx/developer-guide.txt

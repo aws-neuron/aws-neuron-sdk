@@ -12,8 +12,8 @@ AWS Neuron SDK Release Notes
     :maxdepth: 2
     :hidden:
 
-    Neuron 2.26.0 </release-notes/2.26.0/index>
-    Previous versions </release-notes/prev/rn>
+    Neuron 2.26.0 <2.26.0/index>
+    Previous versions <prev/rn>
 
 
 This is the official home page for the AWS Neuron SDK release notes. Release notes are provided whenever AWS and Annapurna labs releases a new version of the Neuron SDK. Select a release version and review what it brings to you!
@@ -63,6 +63,47 @@ Previous AWS Neuron SDK releases
 
 .. note::
     The AWS Neuron SDK is updated regularly with new versions. These releases follow a semantic versioning model of ``(major).(minor).(patch)``. ``major`` versions are more likely to introduce new features and breaking changes over a prior major version. ``minor`` versions add feature and API improvements and may introduce smaller breaking changes. ``patch`` versions typically provide bug fixes and will not have breaking changes.
+
+Neuron component release notes
+------------------------------
+
+Each component of the Neuron SDK has its own release notes. See the table below for links to each component's release notes.
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Component
+     - Release Notes
+   * - Neuron Compiler (neuronx-cc)
+     - :doc:`compiler/neuronx-cc/index`
+   * - Neuron Compiler Ops
+     - :doc:`compiler/neuron-cc/neuron-cc-ops/index`
+   * - JAX NeuronX
+     - :doc:`jax-neuronx/index`
+   * - LibNeuronXLA
+     - :doc:`libneuronxla/index`
+   * - MXNet Neuron
+     - :doc:`mxnet-neuron/index`
+   * - NeMo
+     - :doc:`nemo/index`
+   * - NeuronX Distributed
+     - :doc:`neuronx-distributed/index`
+   * - NeuronX Distributed Inference
+     - :doc:`neuronx-distributed-inference/index`
+   * - NeuronX Distributed Training
+     - :doc:`neuronx-distributed-training/index`
+   * - PyTorch Neuron (torch-neuronx)
+     - :doc:`torch/torch-neuronx/index`
+   * - Transformers NeuronX
+     - :doc:`torch/transformers-neuronx/index`
+   * - AWS NeuronX Collectives
+     - :doc:`runtime/aws-neuronx-collectives/index`
+   * - AWS NeuronX DKMS
+     - :doc:`runtime/aws-neuronx-dkms/index`
+   * - AWS NeuronX Runtime Library
+     - :doc:`runtime/aws-neuronx-runtime-lib/index`
 
 Older releases
 -----------------

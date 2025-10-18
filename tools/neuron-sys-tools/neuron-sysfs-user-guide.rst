@@ -273,6 +273,7 @@ Note
 All files under ``/sys/devices/virtual/neuron_device/neuron0/power`` such as ``runtime_active_kids`` or ``runtime_status`` are related to generic device power management. They are not created or controlled by our sysfs metrics. The word ``runtime`` in these files does not refer to Neuron Runtime.
 
 .. _troubleshoot_via_sysfs:
+
 How to Troubleshoot via Sysfs
 -----------------------------
 You can perform simple and easy tasks to troubleshoot your ML jobs with one or a few CLIs to read or write the sysfs filesystem.

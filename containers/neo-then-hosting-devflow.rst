@@ -1,1 +1,1 @@
-.. include:: /general/devflows/inference/neo-then-hosting-devflow.rst
+.. include:: /devflows/inference/neo-then-hosting-devflow.rst

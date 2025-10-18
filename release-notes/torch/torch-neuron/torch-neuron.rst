@@ -428,12 +428,12 @@ Summary
 ~~~~~~~
 
 - Added support for dictionary outputs using ``strict=False`` flag. See
-  :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/troubleshooting-guide.rst`.
+  :ref:`/frameworks/torch/torch-neuron/troubleshooting-guide.rst`.
 - Updated ``aten::batch_norm`` to correctly implement the ``affine`` flag.
 - Added support for ``aten::erf`` and ``prim::DictConstruct``. See
   :ref:`neuron-cc-ops-pytorch`.
 - Added dynamic batch support. See
-  :ref:`/neuron-guide/neuron-frameworks/pytorch-neuron/api-compilation-python-api.rst`.
+  :ref:`/frameworks/torch/torch-neuron/api-compilation-python-api.rst`.
 
 
 .. _neuron-torch-1410:
@@ -581,7 +581,7 @@ Summary
 
 Date: 08/08/2020
 
-.. _summary-1:
+.. _torch-summary-1:
 
 Summary
 ~~~~~~~
@@ -596,7 +596,7 @@ Summary
 
 Date: 08/05/2020
 
-.. _summary-2:
+.. _torch-summary-2:
 
 Summary
 ~~~~~~~~
@@ -610,7 +610,7 @@ Various minor improvements.
 
 Date: 07/16/2020
 
-.. _summary-3:
+.. _torch-summary-3:
 
 Summary
 ~~~~~~~
@@ -639,7 +639,7 @@ Resolved Issues
 
 Date 6/11/2020
 
-.. _summary-4:
+.. _torch-summary-4:
 
 Summary
 ~~~~~~~
@@ -649,7 +649,7 @@ Summary
 Major New Features
 ~~~~~~~~~~~~~~~~~~
 
-.. _resolved-issues-1:
+.. _torch-resolved-issues-1:
 
 Resolved Issues
 ~~~~~~~~~~~~~~~
@@ -664,7 +664,7 @@ Known Issues and Limitations
 
 Date: 5/11/2020
 
-.. _summary-5:
+.. _torch-summary-5:
 
 Summary
 ~~~~~~~~
@@ -678,17 +678,17 @@ Major New Features
 ~~~~~~~~~~~~~~~~~~
 
 -  Added Neuron Compiler support for a number of previously unsupported
-   PyTorch operators. Please see :ref:`neuron-cc-ops-pytorch`for the
+   PyTorch operators. Please see :ref:`neuron-cc-ops-pytorch` for the
    complete list of operators.
 -  Add support for torch.neuron.trace on models which have previously
    been saved using torch.jit.save and then reloaded.
 
-.. _resolved-issues-2:
+.. _torch-resolved-issues-2:
 
 Resolved Issues
 ~~~~~~~~~~~~~~~~
 
-.. _known-issues-and-limitations-1:
+.. _torch-known-issues-and-limitations-1:
 
 Known Issues and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -700,7 +700,7 @@ Known Issues and Limitations
 
 Date: 3/26/2020
 
-.. _summary-6:
+.. _torch-summary-6:
 
 Summary
 ~~~~~~~
@@ -710,12 +710,12 @@ Summary
 Major New Features
 ~~~~~~~~~~~~~~~~~
 
-.. _resolved-issues-3:
+.. _torch-resolved-issues-3:
 
 Resolved Issues
 ~~~~~~~~~~~~~~~
 
-.. _known-issues-and-limitations-2:
+.. _torch-known-issues-and-limitations-2:
 
 Known Issues and limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -727,7 +727,7 @@ Known Issues and limitations
 
 Date: 2/27/2020
 
-.. _summary-7:
+.. _torch-summary-7:
 
 Summary
 ~~~~~~~
@@ -743,7 +743,7 @@ Major new features
 
 -  None
 
-.. _resolved-issues-4:
+.. _torch-resolved-issues-4:
 
 Resolved issues
 ~~~~~~~~~~~~~~~~~
@@ -757,7 +757,7 @@ Resolved issues
 
 Date: 1/27/2020
 
-.. _summary-8:
+.. _torch-summary-8:
 
 Summary
 ~~~~~~~~
@@ -767,14 +767,14 @@ Summary
 Major new features
 ~~~~~~~~~~~~~~~~~~
 
-.. _resolved-issues-5:
+.. _torch-resolved-issues-5:
 
 Resolved issues
 ~~~~~~~~~~~~~~~~
 
 -  Python 3.5 and Python 3.7 are now supported.
 
-.. _known-issues-and-limitations-3:
+.. _torch-known-issues-and-limitations-3:
 
 Known issues and limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -789,7 +789,7 @@ Other Notes
 
 Date: 12/20/2019
 
-.. _summary-9:
+.. _torch-summary-9:
 
 Summary
 ~~~~~~~~
@@ -807,12 +807,12 @@ installation must include [tensorflow] for PyTorch.
 Major new features
 ~~~~~~~~~~~~~~~~~~
 
-.. _resolved-issues-6:
+.. _torch-resolved-issues-6:
 
 Resolved issues
 ~~~~~~~~~~~~~~~
 
-.. _known-issues-and-limitations-4:
+.. _torch-known-issues-and-limitations-4:
 
 Known issues and limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

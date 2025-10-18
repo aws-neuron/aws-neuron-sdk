@@ -440,19 +440,19 @@ Resolved Issues
 
 Date 08/08/2020
 
-.. _summary-1:
+.. _mxnet-summary-1:
 
 Summary
 -------
 
 Various minor improvements.
 
-.. _major-new-features-1:
+.. _mx-major-new-features-1:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-1:
+.. _mx-resolved-issues-1:
 
 Resolved Issues
 ---------------
@@ -464,19 +464,19 @@ Resolved Issues
 
 Date 08/05/2020
 
-.. _summary-2:
+.. _mxnet-summary-2:
 
 Summary
 -------
 
 Various minor improvements.
 
-.. _major-new-features-2:
+.. _mx-major-new-features-2:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-2:
+.. _mx-resolved-issues-2:
 
 Resolved Issues
 ---------------
@@ -488,19 +488,19 @@ Resolved Issues
 
 Date 07/16/2020
 
-.. _summary-3:
+.. _mxnet-summary-3:
 
 Summary
 -------
 
 This release contains a few bug fixes and user experience improvements.
 
-.. _major-new-features-3:
+.. _mx-major-new-features-3:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-3:
+.. _mx-resolved-issues-3:
 
 Resolved Issues
 ---------------
@@ -518,14 +518,14 @@ Resolved Issues
 
 Date 6/11/2020
 
-.. _summary-4:
+.. _mxnet-summary-4:
 
 Summary
 -------
 
 -  Added support for profiling during inference
 
-.. _major-new-features-4:
+.. _mx-major-new-features-4:
 
 Major New Features
 ------------------
@@ -536,7 +536,7 @@ Major New Features
    (Note that graph view of MXNet graph is not available via
    TensorBoard).
 
-.. _resolved-issues-4:
+.. _mx-resolved-issues-4:
 
 Resolved Issues
 ---------------
@@ -554,14 +554,14 @@ Other Notes
 
 Date 5/11/2020
 
-.. _summary-5:
+.. _mxnet-summary-5:
 
 Summary
 -------
 
 Improved support for shared-memory communication with Neuron-Runtime.
 
-.. _major-new-features-5:
+.. _mx-major-new-features-5:
 
 Major New Features
 ------------------
@@ -574,7 +574,7 @@ Major New Features
 -  Improved container support by automatic falling back to GRPC data
    transfer if shared-memory cannot be allocated by Neuron-Runtime
 
-.. _resolved-issues-5:
+.. _mx-resolved-issues-5:
 
 Resolved Issues
 ---------------
@@ -587,12 +587,12 @@ Resolved Issues
 -  Fixed issue where some large models could not be loaded on
    inferentia.
 
-.. _known-issues-and-limitations-1:
+.. _mx-known-issues-and-limitations-1:
 
 Known Issues and Limitations
 ----------------------------
 
-.. _other-notes-1:
+.. _mx-other-notes-1:
 
 Other Notes
 -----------
@@ -604,29 +604,29 @@ Other Notes
 
 Date 3/26/2020
 
-.. _summary-6:
+.. _mxnet-summary-6:
 
 Summary
 -------
 
 No major changes or fixes
 
-.. _major-new-features-6:
+.. _mx-major-new-features-6:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-6:
+.. _mx-resolved-issues-6:
 
 Resolved Issues
 ---------------
 
-.. _known-issues-and-limitations-2:
+.. _mx-known-issues-and-limitations-2:
 
 Known Issues and Limitations
 ----------------------------
 
-.. _other-notes-2:
+.. _mx-other-notes-2:
 
 Other Notes
 -----------
@@ -638,19 +638,19 @@ Other Notes
 
 Date 2/27/2020
 
-.. _summary-7:
+.. _mxnet-summary-7:
 
 Summary
 -------
 
 No major changes or fixes.
 
-.. _major-new-features-7:
+.. _mx-major-new-features-7:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-7:
+.. _mx-resolved-issues-7:
 
 Resolved Issues
 ---------------
@@ -660,7 +660,7 @@ The issue(s) below are resolved:
 -  Latest pip version 20.0.1 breaks installation of MXNet-Neuron pip
    wheel which has py2.py3 in the wheel name.
 
-.. _known-issues-and-limitations-3:
+.. _mx-known-issues-and-limitations-3:
 
 Known Issues and Limitations
 ----------------------------
@@ -670,7 +670,7 @@ Known Issues and Limitations
    in another container. To work-around, please set environment variable
    NEURON_RTD_USE_SHM to 0.
 
-.. _other-notes-3:
+.. _mx-other-notes-3:
 
 Other Notes
 -----------
@@ -682,19 +682,19 @@ Other Notes
 
 Date 1/27/2020
 
-.. _summary-8:
+.. _mxnet-summary-8:
 
 Summary
 -------
 
 No major changes or fixes.
 
-.. _major-new-features-8:
+.. _mx-major-new-features-8:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-8:
+.. _mx-resolved-issues-8:
 
 Resolved Issues
 ---------------
@@ -709,7 +709,7 @@ Resolved Issues
       previous workaround "``/opt/aws/neuron/bin/neuron-cli reset``" is
       unable to clear all Neuron RTD states.
 
-.. _known-issues-and-limitations-4:
+.. _mx-known-issues-and-limitations-4:
 
 Known Issues and Limitations
 ----------------------------
@@ -727,7 +727,7 @@ Known Issues and Limitations
 -  Work around: install the older version of pip using "pip install
    pip==19.3.1".
 
-.. _other-notes-4:
+.. _mx-other-notes-4:
 
 Other Notes
 -----------
@@ -739,17 +739,17 @@ Other Notes
 
 Date 12/1/2019
 
-.. _summary-9:
+.. _mxnet-summary-9:
 
 Summary
 -------
 
-.. _major-new-features-9:
+.. _mx-major-new-features-9:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-9:
+.. _mx-resolved-issues-9:
 
 Resolved Issues
 ---------------
@@ -763,7 +763,7 @@ Resolved Issues
    to on, which may cause failures. The fix: This option is now off by
    default.
 
-.. _known-issues-and-limitations-5:
+.. _mx-known-issues-and-limitations-5:
 
 Known Issues and Limitations
 ----------------------------
@@ -777,7 +777,7 @@ Known Issues and Limitations
       clear Neuron RTD states after all models are unloaded and server
       is shut down.
 
-.. _other-notes-5:
+.. _mx-other-notes-5:
 
 Other Notes
 -----------
@@ -789,7 +789,7 @@ Other Notes
 
 Date 12/20/2019
 
-.. _summary-10:
+.. _mxnet-summary-10:
 
 Summary
 -------
@@ -803,17 +803,17 @@ No major changes or fixes. Released with other Neuron packages.
 
 Date 12/1/2019
 
-.. _summary-11:
+.. _mxnet-summary-11:
 
 Summary
 -------
 
-.. _major-new-features-10:
+.. _mx-major-new-features-10:
 
 Major New Features
 ------------------
 
-.. _resolved-issues-10:
+.. _mx-resolved-issues-10:
 
 Resolved Issues
 ---------------
@@ -827,7 +827,7 @@ Resolved Issues
    to on, which may cause failures. The fix: This option is now off by
    default.
 
-.. _known-issues-and-limitations-6:
+.. _mx-known-issues-and-limitations-6:
 
 Known Issues and Limitations
 ----------------------------
@@ -841,7 +841,7 @@ Known Issues and Limitations
       clear Neuron RTD states after all models are unloaded and server
       is shut down.
 
-.. _other-notes-6:
+.. _mx-other-notes-6:
 
 Other Notes
 -----------
@@ -853,7 +853,7 @@ Other Notes
 
 Date: 11/25/2019
 
-.. _summary-12:
+.. _mxnet-summary-12:
 
 Summary
 -------
@@ -861,17 +861,17 @@ Summary
 This version is available only in released DLAMI v26.0 and is based on
 MXNet version 1.5.1. Please :ref:`dlami-rn-known-issues` to latest version.
 
-.. _major-new-features-11:
+.. _mx-major-new-features-11:
 
 Major new features
 ------------------
 
-.. _resolved-issues-11:
+.. _mx-resolved-issues-11:
 
 Resolved issues
 ---------------
 
-.. _known-issues-and-limitations-7:
+.. _mx-known-issues-and-limitations-7:
 
 Known issues and limitations
 ----------------------------
@@ -923,7 +923,7 @@ The following models have successfully run on neuron-inferentia systems
 4. Tacotron 2
 5. WaveRNN
 
-.. _other-notes-7:
+.. _mx-other-notes-7:
 
 Other Notes
 -----------

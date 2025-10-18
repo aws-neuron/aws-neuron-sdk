@@ -14,7 +14,6 @@ AWS Neuron SDK 2.25.0 release notes
 
    PyTorch support <nx-pytorch>
    JAX support <nx-jax>
-   Transformers support <nx-transformers>
    NxD Inference <nxd-inference>
    NxD Training <nxd-training>
    NxD Core <nxd-core>
@@ -24,7 +23,7 @@ AWS Neuron SDK 2.25.0 release notes
    Deep Learning AMIs <dlami>
    Deep Learning Containers <containers>
    Docs and samples <docs-and-samples>
-   Release artifacts <../releasecontent>
+   Release artifacts </release-notes/releasecontent>
 
 .. contents:: In this release
    :local:
@@ -251,7 +250,7 @@ Ending support in 2.25.0
 
 * With version 2.25.0, Neuron no longer supports vLLM version 0.7.2. Current users of vLLM 0.7.2 are advised to upgrade to vLLM 0.9.1, which is supported in this release.
 
-* Transformers for NeuronX is no longer supported. For more details, see :doc:`the prior announcement </general/announcements/neuron2.x/announce-intent-maintenance-tnx>`.
+* Transformers for NeuronX is no longer supported. For more details, see :doc:`the prior announcement </about-neuron/announcements/neuron2.x/announce-intent-maintenance-tnx>`.
 
 Previous releases
 -----------------

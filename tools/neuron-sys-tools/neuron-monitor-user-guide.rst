@@ -517,10 +517,8 @@ execution_stats
    executed during this time, the two objects will be ``null`` (i.e.
    ``"total_latency": null``)
 
-   -  ``"total_latency"`` - percentiles, in seconds, representing
-   latency for an execution as measured by the Neuron Runtime
-   -  ``"device_latency"`` - percentiles, in seconds, representing execution time
-   exclusively on the Neuron Device
+   -  ``"total_latency"`` - percentiles, in seconds, representing latency for an execution as measured by the Neuron Runtime
+   -  ``"device_latency"`` - percentiles, in seconds, representing execution time exclusively on the Neuron Device
 
 -  ``"error"`` - string containing any error that occurred when
    collecting the data
@@ -914,6 +912,6 @@ For example:
 The default value for ``--period`` is ``15``.
 
 Running neuron monitor in Kubernetes environment
------------------------------------------
+-------------------------------------------------
 
 For running neuron monitor in Kubernetes environment, please refer to instructions `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/kubernetes-getting-started.html>`_.

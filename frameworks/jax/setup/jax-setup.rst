@@ -9,9 +9,9 @@ devices. It includes the following Python packages, all hosted on the AWS Neuron
 pip repository.
 
 * ``libneuronxla``: A package containing Neuron's integration into JAX's runtime `PJRT <https://openxla.org/xla/pjrt_integration>`__, built using the `PJRT C-API plugin <https://github.com/openxla/xla/blob/5564a9220af230c6c194e37b37938fb40692cfc7/xla/pjrt/c/docs/pjrt_integration_guide.md>`__ mechanism. Installing this package enables using Trainium and Inferentia natively as JAX devices.
-* ``jax-neuronx``: A package containing Neuron-specific JAX features, such as the `Neuron NKI <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/nki/nki_rn.html>`__ JAX interface. It also serves as a meta-package for providing a tested combination of the ``jax-neuronx``, ``jax``, ``jaxlib``, ``libneuronxla``, and ``neuronx-cc`` packages. Making proper use of the features provided in ``jax-neuronx`` will unleash the full potential of Trainium and Inferentia.
+* ``jax-neuronx``: A package containing Neuron-specific JAX features, such as the `Neuron NKI <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/nki_rn.html>`__ JAX interface. It also serves as a meta-package for providing a tested combination of the ``jax-neuronx``, ``jax``, ``jaxlib``, ``libneuronxla``, and ``neuronx-cc`` packages. Making proper use of the features provided in ``jax-neuronx`` will unleash the full potential of Trainium and Inferentia.
 
-.. include:: /general/setup/install-templates/trn1-ga-warning.txt
+.. include:: /setup/install-templates/trn1-ga-warning.txt
 
 .. note:: 
     JAX requires ``Python 3.10`` or newer. Ensure a supported python version is installed on your system prior to installing JAX.

@@ -32,7 +32,7 @@ Setup The Environment
 
 Launch an Inf1 instance by following the below steps, please make sure to choose an inf1.6xlarge instance.
 
-.. include:: /general/setup/install-templates/inf1/launch-inf1-dlami.rst
+.. include:: /setup/install-templates/inf1/launch-inf1-dlami.rst
 
 
 .. _pytorch-neuroncore-pipeline-pytorch-run-tutorial:

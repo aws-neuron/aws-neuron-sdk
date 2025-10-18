@@ -248,13 +248,13 @@ neuronx_distributed.ModelBuilder
 
 ::
 
-   class ModelBuilderV2:
+   class ModelBuilder:
        def __init__(
            self,
            model: Union[Callable, torch.nn.Module],
        )
 
-ModelBuilderV2 is a high-level class that provides a fluent interface
+``ModelBuilder`` is a high-level class that provides a fluent interface
 for tracing and compiling PyTorch models for Neuron devices. It supports
 SPMD (Single Program Multiple Data) execution, and distributed model
 execution.

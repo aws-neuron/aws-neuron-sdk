@@ -26,6 +26,7 @@ users to gain comprehensive insights into their application's performance across
 
 
 .. _system-profiles-overview:
+
 Key benefits
 ~~~~~~~~~~~~
 
@@ -328,13 +329,86 @@ environment where the application code is built into the container image.
 .. _neuron-profiler-capture-environment-variables:
 
 Profile Capture Environment Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
-* ``NEURON_RT_INSPECT_ENABLE``: Set to 1 to enable system and device profiles. For control over which profile types are captured use ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` and ``NEURON_RT_INSPECT_DEVICE_PROFILE``.
-* ``NEURON_RT_INSPECT_OUTPUT_DIR``: The directory where captured profile data will be saved to. Defaults to ``./output``.
-* ``NEURON_RT_INSPECT_SYSTEM_PROFILE``: Set to 0 to disable the capture of system profiles. Defaults to 1 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_DEVICE_PROFILE``: Set to 0 to disable the capture of device profiles. Defaults to 0 when ``NEURON_RT_INSPECT_ENABLE`` is set to 1.
-* ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``: Maximum number of trace events for each NeuronCore to capture when profiling. Once hitting this limit, oldest events are overwritten. Defaults to 1,000,000. Increasing will use more host memory.
+.. _core-control-variables::
+
+Core control variables
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Description
+     - Default behavior
+   * - ``NEURON_RT_INSPECT_ENABLE``
+     - Set to ``1`` to enable profiling
+     - Enables system profiling and disables device profiling. To control which profile types are captured, see :ref:`Profile stype selection <profile-type-selection>`
+   * - ``NEURON_RT_INSPECT_OUTPUT_DIR``
+     - Directory for profile data output
+     - Default directory for captured profile data is ``./output``
+
+.. _profile-type-selection::
+
+Profile type selection
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note:: 
+    
+    When ``NEURON_RT_INSPECT_ENABLE`` set to ``1``, ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` is enabled by default (set to 1) and ``NEURON_RT_INSPECT_DEVICE_PROFILE`` is disabled by default (set to ``0``).
+
+When ``NEURON_RT_INSPECT_ENABLE` = 1, two different profile types are available:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Profile type
+     - Description
+     - Enable capture
+     - Disable capture
+   * - ``NEURON_RT_INSPECT_SYSTEM_PROFILE``
+     - System-level
+     - Captures runtime system events and operations
+     - Set to ``1``
+     - Set to ``0``
+   * - ``NEURON_RT_INSPECT_DEVICE_PROFILE``
+     - Device-level
+     - Captures detailed NeuronCore hardware metrics
+     - Set to ``1``
+     - Set to ``0``
+
+.. note::
+
+    These variables have no effect if ``NEURON_RT_INSPECT_ENABLE`` is not set to ``1``.
+
+.. _advanced-config-vars::
+  
+Advanced configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Variable
+     - Profile type
+     - Description
+     - Default behavior
+   * - ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``
+     - System-level
+     - Maximum trace events per NeuronCore before oldest events are overwritten
+     - 1,000,000
+
+.. note:: 
+    
+    Increasing the event limit will consume more host memory.
 
 Example Capturing Profile of Application Using Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -366,6 +440,7 @@ To understand the profiling output see this section: :ref:`Inspect Output <neuro
 
 CLI reference for System Profiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 In addition to controlling profiling with environment variables, you can use the ``neuron-profile inspect`` command line interface 
 for profiling applications. This provides the same functionality as environment variables but helps you avoid typos, invalid arguments, 
 and provides a useful ``--help`` command to explain available options.
@@ -596,15 +671,11 @@ larger profiles involving many NeuronCores and instances. The following options 
      :widths: 30 70
 
      * - CLI option
-         - Description
+       - Description
      * - ``--system-trace-primary-group``
-         - First-order grouping of trace events (maps to a Perfetto process / process group of rows). Provide a comma-delimited
-             list of field names. Allowed fields: ``instance_id``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
-             ``instance_id,process_id``.
+       - First-order grouping of trace events (maps to a Perfetto process / process group of rows). Provide a comma-delimited list of field names. Allowed fields: ``instance_id``, ``thread_id``, ``lnc_idx``, ``process_id``. Default: ``instance_id,process_id``.
      * - ``--system-trace-secondary-group``
-         - Second-order grouping of trace events (maps to a Perfetto thread / single row). Provide a comma-delimited list of
-             field names. Allowed fields: ``instance_id``, ``worker_gid``, ``thread_id``, ``lnc_idx``, ``process_id``. Default:
-             ``worker_gid,lnc_idx,thread_id``.
+       - Second-order grouping of trace events (maps to a Perfetto thread / single row). Provide a comma-delimited list of field names. Allowed fields: ``instance_id``, ``worker_gid``, ``thread_id``, ``lnc_idx``, ``process_id``. Default: ``worker_gid,lnc_idx, thread_id``.
 
 
 For example, the following profile uses ``neuron-profile view --output-format=perfetto --system-trace-primary-group=instance_id,process_id --system-trace-secondary-group=lnc_idx,thread_id`` to group the system profile first by unique combinations
@@ -831,7 +902,7 @@ The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
 .. code-block:: shell
 
     # Filter to capture only specific event types
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=nrt_load,nrt_execute,nc_exec_running
 
     # Filter to capture all hardware events
     export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
@@ -840,13 +911,13 @@ The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
     export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
 
     # Filter to capture all hardware events EXCEPT cc_exec
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_running
 
-    # Filter to capture all software events EXCEPT model_load
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^model_load
+    # Filter to capture all software events EXCEPT nrt_load
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^nrt_load
 
     # Mix categories and specific events
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,tensor_read,tensor_write
+    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,nrt_tensor_write,nrt_tensor_read
 
     # Reset to default behavior
     unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE  # Back to capturing all event types
@@ -915,8 +986,7 @@ Use the ``nrt_sys_trace_config_set_capture_enabled_for_event_type`` API to filte
     nrt_sys_trace_stop();
     nrt_sys_trace_config_free(config);
 
-
-.. _neuron-profile-system-timestamp-adjustment
+.. _neuron-profile-system-timestamp-adjustment:
 
 Adjusting Hardware Timestamps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
