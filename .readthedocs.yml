@@ -34,3 +34,15 @@ formats:
 python:
   install:
     - requirements: requirements.txt
+
+# Redirects
+redirects:
+  - from: /general/nki/(.*)
+    to: /nki/$1
+    type: 301
+  - from: /general/devflows/(.*)
+    to: /devflows/$1
+    type: 301
+  - from: /general/(.*)
+    to: /about-neuron/$1
+    type: 301
