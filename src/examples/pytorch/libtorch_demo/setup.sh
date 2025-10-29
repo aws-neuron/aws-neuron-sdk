@@ -20,15 +20,7 @@ echo "Using PyTorch version ${TORCH_VERSION}"
 # Python setup
 PYTHON=python3
 PYTHON_VERSION=$($PYTHON --version | cut -f2 -d' ' | cut -f1,2 -d'.')
-
-if [ "$PYTHON_VERSION" == "3.8" ] || [ "$PYTHON_VERSION" == "3.9" ] || [ "$PYTHON_VERSION" == "3.10" ]
-then
-    echo "Python version is '$PYTHON_VERSION'"
-else
-    echo "ERROR: No suitable version of Python found for libtorch demo. Current Python version is '$PYTHON_VERSION'."
-    echo "Install Python 3.8, 3.9, or 3.10 and set the PYTHON environment variable as needed."
-    exit 1
-fi
+echo "Python version is '$PYTHON_VERSION'"
 
 OLD_TOOL_CHAIN=$($PYTHON -c \
     "from bert_neuronx.detect_instance import get_instance_type; print('inf1' in get_instance_type())")
