@@ -3,8 +3,8 @@
 
 .. _libraries-neuron-sdk:
 
-AWS NxD libraries
-==================
+Work with training and inference libraries
+===========================================
 
 Accelerate your machine learning workloads with Neuron's distributed libraries. Our libraries provide high-level abstractions and optimized implementations for distributed training and inference on AWS Trainium and Inferentia.
 
@@ -98,25 +98,25 @@ Hardware compatibility
      - Inference
      - Training
    * - **NxD Core**
-     - ❌
+     - N/A
      - ✅
      - ✅
      - ✅
      - ✅
      - ✅
    * - **NxD Inference**
-     - ❌
+     - N/A
      - ✅
      - ✅
      - ✅
      - ✅
-     - ❌
+     - N/A
    * - **NxD Training**
-     - ❌
-     - ❌
+     - N/A
+     - N/A
      - ✅
      - ✅
-     - ❌
+     - N/A
      - ✅
 
 Third-Party partner libraries

@@ -18,12 +18,6 @@ Neuron tools are essential utilities that provide deep insights into model perfo
 
 **Helper Tools**: Utility functions for model validation, system information gathering, and troubleshooting common deployment issues.
 
-.. toctree:: 
-    :maxdepth: 1
-    :hidden:
-
-    /tools/neuron-sys-tools/index
-
 .. dropdown::  System Tools 
         :class-title: sphinx-design-class-title-med
         :class-body: sphinx-design-class-body-small
@@ -35,12 +29,6 @@ Neuron tools are essential utilities that provide deep insights into model perfo
         * :ref:`neuron-sysfs-ug`
         * :ref:`nccom-test`
         * :ref:`What's New <neuron-tools-rn>`
-
-.. toctree:: 
-    :maxdepth: 1
-    :hidden:
-
-    /tools/tensorboard/index
 
 .. dropdown::  TensorBoard Plugin for Neuron
         :class-title: sphinx-design-class-title-med

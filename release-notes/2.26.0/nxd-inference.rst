@@ -20,7 +20,7 @@ Improvements
 ------------
 
 Llama 4 model support (beta)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Added beta support for Llama 4, which is a family of multi-modal MoE ope- weight LLMs by Meta that support text
 and image inputs. Llama 4 is tested on ``Trn2``. Compatible models include:

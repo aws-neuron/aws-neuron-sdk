@@ -33,7 +33,7 @@
                sudo dnf update -y
 
                # Install OS headers
-               sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+               sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"
 
                # Remove preinstalled packages and Install Neuron Driver and Runtime
                sudo dnf remove aws-neuron-dkms -y
@@ -139,7 +139,7 @@
             :class-title: sphinx-design-class-title-small
             :class-body: sphinx-design-class-body-small
             :animate: fade-in
-                  
+
             .. include:: /setup/install-templates/launch-inf1.txt
 
       .. dropdown:: Install Drivers
@@ -168,7 +168,7 @@
                ################################################################################################################
 
                # Install OS headers
-               sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+               sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"
 
                # Install Neuron Driver
                sudo dnf install aws-neuron-dkms -y
@@ -246,12 +246,12 @@
 
            ::
 
-		     +--------------+---------+--------+-----------+-----------+------+------+
-		     |   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
-		     |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
-		     +--------------+---------+--------+-----------+-----------+------+------+
-		     | 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
-		     +--------------+---------+--------+-----------+-----------+------+------+
+           +--------------+---------+--------+-----------+-----------+------+------+
+           |   PCI BDF    | LOGICAL | NEURON |  MEMORY   |  MEMORY   | EAST | WEST |
+           |              |   ID    | CORES  | CHANNEL 0 | CHANNEL 1 |      |      |
+           +--------------+---------+--------+-----------+-----------+------+------+
+           | 0000:00:1f.0 |       0 |      4 | 4096 MB   | 4096 MB   |    0 |    0 |
+           +--------------+---------+--------+-----------+-----------+------+------+
 
       .. dropdown::  Run Tutorial
             :class-title: sphinx-design-class-title-small
@@ -260,4 +260,4 @@
 
             :ref:`tutorial-infer`
             :ref:`quickstart_vllm_dlc_deploy`
-            
+

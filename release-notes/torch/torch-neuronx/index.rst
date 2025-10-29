@@ -759,7 +759,7 @@ Additionally, as in the previous section, you can add the following code snippet
     xm.mesh_reduce = mesh_reduce
 
 Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
 
@@ -807,7 +807,7 @@ To work-around this issue, please install protobuf 3.20.3:
 Ignore the pip dependency check error that may occur due to the earlier compiler's dependency on protobuf version 3.19.
 
 Hang while training Stable Diffusion v1.5 with PyTorch 1.13 (torch-neuronx)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this release, training Stable Diffusion v1.5 at 512x512 resolution using PyTorch 1.13 (torch-neuronx) currently results in a hang. The fix will be available in an upcoming release. To work-around, you can install compiler from release 2.19 (noting the ``protobuf`` issue mentioned above).
 
@@ -939,7 +939,7 @@ As reported in https://github.com/aws-neuron/aws-neuron-sdk/issues/893, When run
 In release 2.19 torch-neuronx now depends on setuptools version <= 69.5.1.
 
 Resolved compiler assertion error when training using Hugging Face ``deepmind/language-perceiver`` model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The follow assertion error when training with Hugging Face ``deepmind/language-perceiver`` model is now resolved in release 2.19 compiler:
 
@@ -1050,7 +1050,7 @@ Additionally, as in the previous section, you can add the following code snippet
     xm.mesh_reduce = mesh_reduce
 
 Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
 
@@ -1244,7 +1244,7 @@ Additionally, you can add the following code snippet (after python imports) to r
     xm.mesh_reduce = mesh_reduce
 
 Compiler error when ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Currently with PyTorch 2.1 (torch-neuronx), using the ``torch_neuronx.xla_impl.ops.set_unload_prior_neuron_models_mode(True)`` (as previously done in the :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>`) to unload graphs during execution would cause a compilation error ``Expecting value: line 1 column 1 (char 0)``. You can remove this line as it is not recommended for use. Please see the updated :ref:`ZeRO1 tutorial<zero1-gpt2-pretraining-tutorial>` in release 2.18.
 
@@ -1586,7 +1586,7 @@ released: https://github.com/pytorch/pytorch/pull/99104
 
 
 Release [1.13.1.1.11.0]
-----------------------
+------------------------
 Date: 9/15/2023
 
 Summary
@@ -1600,7 +1600,7 @@ Resolved issues
 
 
 Release [1.13.1.1.10.1]
-----------------------
+------------------------
 Date: 9/01/2023
 
 Summary
@@ -1610,7 +1610,7 @@ Minor bug fixes and enhancements.
 
 
 Release [1.13.1.1.10.0]
-----------------------
+------------------------
 Date: 8/28/2023
 
 Summary
@@ -1629,6 +1629,7 @@ Resolved issues
 - (Training) Convolution is now supported
 - Fixed segmentation fault when using torch-neuronx to compile models on U22
 - Fixed XLA tensor stride information in torch-xla package, which blocked lowering of log_softmax and similar functions and showed errors like:
+
 ::
 
       File "/home/ubuntu/waldronn/asr/test_env/lib/python3.7/site-packages/torch/nn/functional.py", line 1930, in log_softmax

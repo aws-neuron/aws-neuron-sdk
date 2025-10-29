@@ -18,16 +18,12 @@ AWS Neuron provides integration with popular machine learning frameworks, enabli
         :link-type: doc
         :class-header: bg-primary text-white
         :class-body: framework-card-body
-
-        **Supports PyTorch 2.8**
         
         Complete PyTorch integration for both inference and training on all Neuron hardware.
         
         * **PyTorch NeuronX** - ``Inf2``, ``Trn1``, ``Trn2`` (inference & training)
         * **PyTorch Neuron** - ``Inf1`` (inference only)
         * Native PyTorch API compatibility
-        * Distributed training support
-        * Advanced profiling and debugging tools
   
     .. grid-item-card:: JAX on AWS Neuron
         :link: jax/index
@@ -40,10 +36,8 @@ AWS Neuron provides integration with popular machine learning frameworks, enabli
         Experimental JAX support with Neuron Kernel Interface (NKI) integration.
         
         * **JAX NeuronX** - Neuron hardware support
-        * NKI JAX interface
         * Research and development focus
-        * Custom kernel development
-        * **Status**: Beta - active development
+        * **Status**: Beta - active 
 
 Hardware compatibility matrix
 -----------------------------
@@ -59,45 +53,32 @@ Hardware compatibility matrix
      - Trn2
      - Inference
      - Training
-   * - **PyTorch NeuronX**
-     - ❌
+   * - **torch-neuronx**
+     - N/A
      - ✅
      - ✅
      - ✅
      - ✅
      - ✅
-   * - **PyTorch Neuron**
+   * - **torch-neuron**
      - ✅
-     - ❌
-     - ❌
-     - ❌
+     - N/A
+     - N/A
+     - N/A
      - ✅
-     - ❌
-   * - **TensorFlow NeuronX**
-     - ❌
+     - N/A
+   * - **JAX NeuronX**
+     - N/A
      - ✅
      - ✅
-     - ❌
+     - N/A
      - ✅
-     - ❌
+     - N/A
    * - **TensorFlow Neuron**
      - ✅
-     - ❌
-     - ❌
-     - ❌
+     - N/A
+     - N/A
+     - N/A
      - ✅
-     - ❌
-   * - **MXNet Neuron**
-     - ✅
-     - ❌
-     - ❌
-     - ❌
-     - ✅
-     - ❌
-   * - **JAX NeuronX**
-     - ❌
-     - ✅
-     - ✅
-     - ✅
-     - ✅
-     - 🚧
+     - N/A
+

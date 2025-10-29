@@ -188,17 +188,6 @@ General Resources
                   :link-type: ref
                   :class-body: sphinx-design-class-title-small
 
-
-.. toctree::
-      :maxdepth: 1
-      :hidden:
-
-      API Reference Manual <api/index>
-      Developer Guide <developer_guide>
-      Tutorials <tutorials>
-      Kernels <api/nki.kernels>
-      Misc <misc>
-
 ..
       migration_guide
 

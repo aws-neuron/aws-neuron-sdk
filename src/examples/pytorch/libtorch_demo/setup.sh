@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# fail on error
+# Fail on error
 set -e
 
 TORCH_VERSION=$(python -c "import torch; v=torch.__version__.split('+')[0]; print(f'{v}')")
@@ -64,14 +64,14 @@ if [ ! -e "libtorch" ]; then
     MAJOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f1)
     MINOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f2)
     
-if [ "$MAJOR_VERSION" -gt 2 ] || ([ "$MAJOR_VERSION" -eq 2 ] && [ "$MINOR_VERSION" -ge 7 ]); then
-        wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
-        unzip libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
-        rm -f libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
-    else
+if [ "$MAJOR_VERSION" -gt 2 ] || ([ "$MAJOR_VERSION" -eq 2 ] && [ "$MINOR_VERSION" -ge 8 ]); then
         wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
         unzip libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
         rm -f libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
+    else
+        wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
+        unzip libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
+        rm -f libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
     fi
 fi
 

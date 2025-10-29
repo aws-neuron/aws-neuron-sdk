@@ -141,9 +141,9 @@ If you want to request a feature or report a critical issue, you can contact us 
    :hidden:
 
    What is AWS Neuron? <what-is-neuron>
-   Architecture <arch/index>
    Benchmarks </about-neuron/benchmarks/index>
    App notes <appnotes/index>
    Troubleshooting <troubleshooting>
+   SDK Maintenance Policy <sdk-policy>
    Security <security>
    Neuron FAQ <faq>
