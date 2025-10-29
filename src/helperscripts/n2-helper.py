@@ -104,7 +104,7 @@ class manifest:
 
         # Install and enable EPEL (required only for rocky linux 9 currently)
         str_preamble += self.install_and_enable_epel(args)
-        
+
         # Configure Neuron repository
         str_preamble += self.config_neuron_repository(args)
 
@@ -254,7 +254,7 @@ class manifest:
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
         return str_jupiter
-    
+
     def install_and_enable_epel(self, args):
         str = ''
         if args.mode != 'compile':
@@ -342,7 +342,7 @@ class manifest:
             if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22':
                 str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
-                str += 'sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
+                str += 'sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"' + '\n'
 
         return str
 
@@ -713,7 +713,7 @@ class manifest:
         else:  # fresh install
             if args.framework == 'pytorch':
                 str += framework_name
-                if args.framework_version == "1.13.1":   
+                if args.framework_version == "1.13.1":
                     str += '=='
                     str += "1.13.*"
                 elif args.framework_version == "2.1.2":
@@ -730,7 +730,7 @@ class manifest:
                     str += "2.7.*"
                 elif args.framework_version == "2.8.0":
                     str += '=='
-                    str += "2.8.*"  
+                    str += "2.8.*"
                 str += ' torchvision\n'
             else:
                 str += framework_name
@@ -1067,12 +1067,12 @@ class manifest:
                         python_version_str += pversion
                 if len(row['supported_python_versions']) != 0:
                     if row['category'] == 'libnrt':
-                        str += f"{row['name'] + ' Version ' + row['version']:<50}{python_version_str} \n" 
+                        str += f"{row['name'] + ' Version ' + row['version']:<50}{python_version_str} \n"
                     else:
                         str += f"{row['name'] + '-' + row['version']:<50}{python_version_str} \n"
 
                 df_version['package'] = (df_version['name'] + '-' + df_version['version'])
-        
+
         return str
 
 

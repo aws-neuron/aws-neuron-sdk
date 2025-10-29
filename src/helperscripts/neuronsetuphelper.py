@@ -55,7 +55,7 @@ class neuron_release_info:
 
 
 # list of all Neuron versions included in the manifest
-neuron_ver_list = []      
+neuron_ver_list = []
 
 
 # release_os_install_list =[]
@@ -123,7 +123,7 @@ def enumerate_release_manifest(nr_setup, in_neuron_version):
         nr_setup.file='neuron-releases-manifest.json'
 
     try:
-        read_file = open(nr_setup.file, "r") 
+        read_file = open(nr_setup.file, "r")
     except:
         print(__name__,": error:","Can't open " + nr_setup.file + " ")
         exit(-1)
@@ -155,7 +155,7 @@ def enumerate_release_manifest(nr_setup, in_neuron_version):
 
         for component_name in m_release:
             if m_release[component_name]["framework"]==False:
-                n_info.release_components_list.append(component_name)    
+                n_info.release_components_list.append(component_name)
             m_packages=m_release[component_name]["packages"]
             for package_name in m_packages:
                 for package_ver in m_packages[package_name]["versions"]:
@@ -206,7 +206,7 @@ def enumerate_release_manifest(nr_setup, in_neuron_version):
                         if tf_model_server_small_ver==tf_small_ver:
                             n_info.release_tf_package_to_model_server_package[pkg]=pkg2
                             break
-        
+
         nr_setup.releases_info[neuron_release_ver]=n_info
 
 
@@ -218,7 +218,7 @@ def enumerate_release_manifest(nr_setup, in_neuron_version):
 
 
 
-    
+
     return (neuron_version,latest_neuron_version)
 
 
@@ -309,9 +309,9 @@ def hlpr_print_config(nr_setup, neuron_version):
         str += '(' + nr_setup.framework_version + ')' + ' '
     if nr_setup.action == 'Update':
         str += 'from latest Neuron version ' + neuron_version
-    else: 
+    else:
         str += 'from Neuron version ' + neuron_version
-    
+
     str += '\n# '
 
     str += 'On '
@@ -352,7 +352,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
     else:
         fw_package_dict= nr_setup.releases_info[neuron_version].release_frameworks_all
         fw_comp=nr_setup.framework_version
-   
+
     pip_cmd_prefix=''
     pip_cmd =''
 
@@ -381,7 +381,7 @@ def hlpr_build_pip_command(nr_setup, neuron_version, component,include_compiler,
                 pip_cmd = cmd + fw_package_dict[fw_comp]['package']
                 if (include_compiler == True):
                     pip_cmd +=  '[cc]'
-                    
+
             if (nr_setup.is_latest_neuron==False) | (nr_setup.force_versions == True):
                 pip_cmd += '=='+fw_package_dict[fw_comp]['version']
             elif (nr_setup.is_latest_neuron==True)&(nr_setup.framework_version!=None):
@@ -450,7 +450,7 @@ def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
     str = ''
     str += '\n'
 
-    if nr_setup.os == 'ubuntu':        
+    if nr_setup.os == 'ubuntu':
         str += '######################################################' + '\n'
         str += '#   Only for Ubuntu 20 - Install Python' + py_ver + '\n'
         str += '#' + '\n'
@@ -462,8 +462,8 @@ def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
     str += '# Install Python venv and activate Python virtual environment to install    ' + '\n'
     str += '# Neuron pip packages.' + '\n'
 
-    if nr_setup.os == 'ubuntu':        
-        str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'        
+    if nr_setup.os == 'ubuntu':
+        str += 'sudo apt-get install -y python'+ py_ver + '-venv g++' + '\n'
     elif nr_setup.os == 'amazonlinux':
         str += 'sudo dnf install -y python'+ py_ver + '-venv gcc-c++' + '\n'
     str += 'python'+ py_ver + ' -m venv ' + nr_setup.framework +'_venv' + '\n'
@@ -475,15 +475,15 @@ def hlpr_pip_install_create_python_venv(nr_setup, neuron_version):
     if (nr_setup.mode == 'develop') & (nr_setup.action =='Install'):
         if ((nr_setup.ami=='dlami') & (nr_setup.conda_env == 'None')) | \
             (nr_setup.ami !='dlami'):
-        
+
             str += '\n'
             str += '# Instal Jupyter notebook kernel '+ '\n'
             str += 'pip install ipykernel ' + '\n'
             str += 'python'+ py_ver + ' -m ipykernel install --user --name '
             str += nr_setup.framework  + '_venv '
-            str += '--display-name "Python (' + package_formal_name[nr_setup.framework] + ')"' + '\n' 
+            str += '--display-name "Python (' + package_formal_name[nr_setup.framework] + ')"' + '\n'
             str += 'pip install jupyter notebook' + '\n'
-            str += 'pip install environment_kernels' + '\n'  
+            str += 'pip install environment_kernels' + '\n'
             str += '\n'
 
     return str
@@ -501,7 +501,7 @@ def hlpr_pip_activate_python_venv(nr_setup, neuron_version):
     str += '# Activate a Python ' + py_ver + ' virtual environment where Neuron pip packages were installed ' + '\n'
     str += 'source '+ nr_setup.framework  + '_venv/bin/activate' + '\n'
     str += '\n'
- 
+
     return str
 
 ######################################################################
@@ -519,8 +519,8 @@ def hlpr_framework_compiler_setup(nr_setup, neuron_version, include_compiler):
             for cmd_pre in nr_setup.releases_info[neuron_version].release_package_main[nr_setup.framework]['pre_install_cmds']:
                 cmd_inst += cmd_pre  + '\n'
 
-   
-    cmd_inst += hlpr_build_pip_command(nr_setup=nr_setup,neuron_version=neuron_version, component=nr_setup.framework,include_compiler=include_compiler,optional=False) 
+
+    cmd_inst += hlpr_build_pip_command(nr_setup=nr_setup,neuron_version=neuron_version, component=nr_setup.framework,include_compiler=include_compiler,optional=False)
 
     return cmd_inst
 
@@ -539,7 +539,7 @@ def hlpr_framework_dlami_activate(nr_setup):
     elif (nr_setup.framework == 'tensorflow'):
         str += '# Activate TensorFlow' + '\n'
 
-    elif (nr_setup.framework == 'mxnet'): 
+    elif (nr_setup.framework == 'mxnet'):
         str += '# Activate MXNet' + '\n'
 
     str += 'source activate '
@@ -574,10 +574,10 @@ def hlpr_os_headers_update(nr_setup):
     str += '# ' + nr_setup.action + ' OS headers'
     str += '\n'
     if nr_setup.os == 'ubuntu':
-        str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n' 
+        str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
     elif nr_setup.os == 'amazonlinux':
-        str += 'sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y' + '\n'
-    return str 
+        str += 'sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"' + '\n'
+    return str
 
 #################################################
 ##  hlpr_os_export_path
@@ -589,7 +589,7 @@ def hlpr_os_export_path(nr_setup):
     if nr_setup.os == 'ubuntu':
         str += 'export PATH=/opt/aws/neuron/bin:$PATH' + '\n'
     elif nr_setup.os == 'amazonlinux':
-        str += 'export PATH=/opt/aws/neuron/bin:$PATH' + '\n'  
+        str += 'export PATH=/opt/aws/neuron/bin:$PATH' + '\n'
     return str
 
 
@@ -638,7 +638,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
 
 
 
-    if (comp=='driver'):    
+    if (comp=='driver'):
         #os_cmd += '\n'
         #os_cmd += '###############################################################################################################\n'
         #os_cmd += '# Before installing or updating aws-neuron-dkms:'+ '\n'
@@ -684,7 +684,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
         # install only if there is a package associated with the component
         if (len(pkg_dict[key]['package_type']) != 0):
             #os_cmd = build_os_command(cmd=os_cmd_prefix,component=comp,is_latest_release=is_latest_neuron)
-            os_cmd += '\n' 
+            os_cmd += '\n'
             if (optional==False):
                 os_cmd += '# ' + nr_setup.action + ' ' + package_formal_name[comp]
             else:
@@ -732,7 +732,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
             os_cmd += '#          Neuron driver (aws-neuronx-dkms) should be re-installed after reboot'+ '\n'
         else:
             os_cmd += '#          Neuron driver (aws-neuron-dkms) should be re-installed after reboot'+ '\n'
-        os_cmd += '####################################################################################\n'            
+        os_cmd += '####################################################################################\n'
 
     if (comp=='tools'):
         if (parse(neuron_version)>=parse('2.99.99')):
@@ -743,7 +743,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
                 os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo dnf remove aws-neuron-tools -y\`  -y'+ '\n'
             elif (nr_setup.os=='amazonlinux'):
                 os_cmd += '# - Unstall aws-neuron-tools by calling \`sudo apt-get remove aws-neuron-tools\`  -y'+ '\n'
-            os_cmd += '################################################################################################################\n'            
+            os_cmd += '################################################################################################################\n'
 
     return os_cmd
 
@@ -752,7 +752,7 @@ def hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp,optional,pkg):
 ##  installation / Update  instructions
 ########################################
 def hlpr_instructions(nr_setup, neuron_version):
-    
+
     cmd_string = ''
 
     setup_mode=nr_setup.mode
@@ -771,7 +771,7 @@ def hlpr_instructions(nr_setup, neuron_version):
                 break
 
 
-    # look what runtime works with this framework version     
+    # look what runtime works with this framework version
     fal_rtd=False
     fal_libnrt=False
     for fw in nr_setup.fal_supported_runtime:
@@ -785,7 +785,7 @@ def hlpr_instructions(nr_setup, neuron_version):
                 fw_ver= nr_setup.releases_info[neuron_version].release_frameworks_all[nr_setup.framework_version]['framework_version']
                 fal_version= nr_setup.releases_info[neuron_version].release_frameworks_all[nr_setup.framework_version]['version']
             fal_supported_rtd=nr_setup.fal_supported_runtime[fw][fw_ver]['neuron-rtd']
-            fal_supported_libnrt=nr_setup.fal_supported_runtime[fw][fw_ver]['libnrt']            
+            fal_supported_libnrt=nr_setup.fal_supported_runtime[fw][fw_ver]['libnrt']
             if (parse(fal_version) >= parse(fal_supported_rtd[0])) &  \
                 (parse(fal_version) <= parse(fal_supported_rtd[1])):
                 fal_rtd=True
@@ -818,8 +818,8 @@ def hlpr_instructions(nr_setup, neuron_version):
                 (dlami_ev_exists==False) | \
                 (nr_setup.is_latest_neuron==False)) \
                 ):
-         
-           
+
+
 
             if (nr_setup.ami=='dlami') & (dlami_ev_exists==False):
                 cmd_string += '\n'
@@ -850,7 +850,7 @@ def hlpr_instructions(nr_setup, neuron_version):
                     cmd_string += hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp='tools',optional=False,pkg=None)
                     if (nr_setup.framework == 'tensorflow'):
                         cmd_string +=  hlpr_build_pip_command(nr_setup, neuron_version, component='tensorboard',include_compiler=False,optional=False)
-            
+
                 if (nr_setup.action =='Install'):
                     cmd_string += hlpr_os_export_path(nr_setup)
 
@@ -865,10 +865,10 @@ def hlpr_instructions(nr_setup, neuron_version):
                     cmd_string += hlpr_pip_activate_python_venv(nr_setup, neuron_version)
             elif (nr_setup.ami=='dlami'):
                 cmd_string += hlpr_framework_dlami_activate(nr_setup)
-                
+
             # Setup Neuron pip packages
             cmd_string += hlpr_pip_repos_setup()
-            
+
             # Now install framework
             if (setup_mode == 'deploy'):
                 # do not install compiler when deploying
@@ -876,7 +876,7 @@ def hlpr_instructions(nr_setup, neuron_version):
             else:
                 # install compiler when mode = developer or mode = compile
                 cmd_string += hlpr_framework_compiler_setup(nr_setup, neuron_version,  include_compiler=True)
-        
+
 
             #if mode = deploy, install model server
             if (setup_mode != 'compile'):
@@ -884,7 +884,7 @@ def hlpr_instructions(nr_setup, neuron_version):
                         if (nr_setup.framework_version==None):
                             tf_package= nr_setup.releases_info[neuron_version].release_frameworks_main[nr_setup.framework]['package_name']
                         else:
-                            tf_package= nr_setup.releases_info[neuron_version].release_frameworks_all[nr_setup.framework_version]['package_name']                         
+                            tf_package= nr_setup.releases_info[neuron_version].release_frameworks_all[nr_setup.framework_version]['package_name']
                         cmd_string += hlpr_os_comp_setup_cmd(nr_setup, neuron_version, comp='tensorflow-model-server',optional=True,pkg= nr_setup.releases_info[neuron_version].release_tf_package_to_model_server_package[tf_package])
 
 
@@ -911,7 +911,7 @@ def hlpr_instructions(nr_setup, neuron_version):
                 cmd_string += hlpr_framework_dlami_activate(nr_setup)
 
 
- 
+
     return cmd_string
 
 
@@ -931,7 +931,7 @@ class neuron_setup_helper:
         if (manifest_file== None) | (manifest_file== 'default')  :
             self.file = 'neuron-releases-manifest.json'
         else:
-            self.file = manifest_file 
+            self.file = manifest_file
 
         ver_tuple = enumerate_release_manifest(nr_setup=self,in_neuron_version=neuron_version)
         self.neuron_version = ver_tuple[0]
@@ -940,7 +940,7 @@ class neuron_setup_helper:
         self.conda_env=""
         self.python_ver=""
         self.generic_conda_env=""
-        
+
         if self.neuron_version == self.latest_neuron_version:
             self.is_latest_neuron=True
         else:
@@ -972,10 +972,10 @@ class neuron_setup_helper:
             self.fw_comp=self.framework
         else:
             self.fw_package_dict= self.releases_info[self.neuron_version].release_frameworks_all
-            self.fw_comp=self.framework_version            
+            self.fw_comp=self.framework_version
 
         setup_cmd=hlpr_instructions(self,self.neuron_version)
-        
+
         return setup_cmd
 
 if __name__ == '__main__':
@@ -987,7 +987,7 @@ if __name__ == '__main__':
     if (args.list):
         setup_cmd += cli_list_cmd(nr_setup=nr_setup,neuron_version=nr_setup.neuron_version, list=args.list)
     else:
-        if (args.install != None)|(args.update !=None):    
+        if (args.install != None)|(args.update !=None):
             if args.install:
                 framework=args.install
                 action = 'Install'
@@ -1000,9 +1000,9 @@ if __name__ == '__main__':
 
         setup_cmd += nr_setup.instructions(framework=framework,action=action,framework_version=args.framework_version,os=args.os,ami=args.ami,mode=args.mode)
     print (setup_cmd)
-    
 
 
-    
+
+
 
 

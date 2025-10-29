@@ -38,7 +38,7 @@ to containers.
 
 
                # Install OS headers
-               sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+               sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"
 
                # Remove preinstalled packages and Install Neuron Driver and Runtime
                sudo dnf remove aws-neuron-dkms -y
@@ -138,34 +138,34 @@ to containers.
 
          .. code:: bash
 
-			# Configure Linux for Neuron repository updates
-			sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
-			[neuron]
-			name=Neuron YUM Repository
-			baseurl=https://yum.repos.neuron.amazonaws.com
-			enabled=1
-			metadata_expire=0
-			EOF
-			sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+            # Configure Linux for Neuron repository updates
+            sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
+            [neuron]
+            name=Neuron YUM Repository
+            baseurl=https://yum.repos.neuron.amazonaws.com
+            enabled=1
+            metadata_expire=0
+            EOF
+            sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
-			# Update OS packages
-			sudo dnf update -y
+            # Update OS packages
+            sudo dnf update -y
 
-			################################################################################################################
-			# To install or update to Neuron versions 1.19.1 and newer from previous releases:
-			# - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
-			################################################################################################################
+            ################################################################################################################
+            # To install or update to Neuron versions 1.19.1 and newer from previous releases:
+            # - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
+            ################################################################################################################
 
-			# Install OS headers
-			sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+            # Install OS headers
+            sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"
 
-			# Install Neuron Driver
-			sudo dnf install aws-neuron-dkms -y
+            # Install Neuron Driver
+            sudo dnf install aws-neuron-dkms -y
 
-			####################################################################################
-			# Warning: If Linux kernel is updated as a result of OS package update
-			#          Neuron driver (aws-neuron-dkms) should be re-installed after reboot
-			####################################################################################
+            ####################################################################################
+            # Warning: If Linux kernel is updated as a result of OS package update
+            #          Neuron driver (aws-neuron-dkms) should be re-installed after reboot
+            ####################################################################################
 
       .. dropdown:: Install Docker
          :class-title: sphinx-design-class-title-small

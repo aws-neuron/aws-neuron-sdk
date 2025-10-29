@@ -33,6 +33,9 @@ For help selecting a framework type for inference, see :ref:`torch-neuron_vs_tor
     
     Training </frameworks/torch/training-torch-neuronx>
 
+
+.. _pytorch-neuronx-main:
+
 """""""""""""""
 PyTorch NeuronX
 """""""""""""""
@@ -46,6 +49,8 @@ PyTorch NeuronX
     :link: inference-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small
+
+.. _pytorch-neuron-main:
 
 """"""""""""""
 PyTorch Neuron

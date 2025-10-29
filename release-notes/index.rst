@@ -23,11 +23,11 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
    <table style="margin-left: 5px; width: 100%; border: 2px solid #444444">
      <tr>
        <td style="background-color:rgba(3, 31, 47, 1); color: white; padding: 10px">
-         <h2 style="color: white">Latest AWS Neuron SDK release: 2.26.0 </h2>
+         <h2 style="color: white">Latest AWS Neuron SDK release: 2.26.1 </h2>
          <p style="color: white">
-         On <b>9/18/2025</b>, AWS released version <b>2.26.0</b> of the Neuron SDK.
+         On <b>9/18/2025</b>, AWS released version <b>2.26.1</b> of the Neuron SDK.
          </p>
-         For more details, see the full <b><a href="2.26.0/index.html" style="color: #AAAAFF; text-decoration: underline">AWS Neuron SDK 2.26.0 release notes</a></b>.
+         For more details, see the full <b><a href="2.26.1.html" style="color: #AAAAFF; text-decoration: underline">AWS Neuron SDK 2.26.1 release notes</a></b>.
        </td>
      </tr>
    </table>
@@ -42,6 +42,8 @@ Previous AWS Neuron SDK releases
 
    * - SDK version
      - Date released
+   * - :ref:`2.26.0 <neuron-2-26-0-whatsnew>`
+     - 09/18/25  
    * - :ref:`2.25.0 <neuron-2-25-0-whatsnew>`
      - 07/31/25
    * - :ref:`2.24.1 <neuron-2-24-1-whatsnew>`

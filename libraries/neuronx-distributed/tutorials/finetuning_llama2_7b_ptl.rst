@@ -57,7 +57,7 @@ Next, download the scripts for fine-tuning.
 .. code:: ipython3
 
    python3 -m pip install -r requirements.txt
-   python3 -m pip install -r requirements_ptl.txt  # Currently we're supporting Lightning version 2.1.0
+   python3 -m pip install -r requirements_ptl.txt  # Currently we're supporting Lightning version 2.4.0
    python3 -m pip install optimum-neuron==0.0.18 nltk  # Additional dependencies for evaluation
    python3 -m pip install --no-warn-conflicts transformers==4.32.1   # Ping transformers version 4.32.1
    chmod +x tp_zero1_llama2_7b_hf_finetune_ptl.sh

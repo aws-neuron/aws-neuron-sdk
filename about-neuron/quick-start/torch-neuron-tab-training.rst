@@ -33,7 +33,7 @@
 
 
         # Install OS headers
-        sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
+        sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"
 
         # Remove preinstalled packages and Install Neuron Driver and Runtime
         sudo dnf remove aws-neuron-dkms -y

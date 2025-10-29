@@ -36,6 +36,12 @@ Installation
 
 ``neuron-profile`` comes as part of the ``aws-neuronx-tools`` package, and will be installed to ``/opt/aws/neuron/bin``.
 
+.. note::
+
+    ``neuron-profile`` requires Ubuntu 22.04 or newer, or Amazon Linux 2023 or newer.
+    Capturing profiles requires an Inferentia or Trainium instance, but processing profiles 
+    can be done on any instance type.
+
 The Neuron web profile viewer utilizes InfluxDB OSS 2.x to store time series data for the profiled workloads after post processing.
 Please follow the instructions provided at https://portal.influxdata.com/downloads/ for the correct OS.  A sample installation
 of Neuron Profile and InfluxDB is provided below.

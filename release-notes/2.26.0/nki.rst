@@ -4,7 +4,7 @@
    :description: The official release notes for the AWS Neuron Kernel Interface (NKI) component, version 2.26.0. Release date: 9/18/2025.
 
 AWS Neuron SDK 2.26.0: Neuron Kernel Interface (NKI) release notes
-=================================================================
+===================================================================
 
 **Date of release**:  September 18, 2025
 

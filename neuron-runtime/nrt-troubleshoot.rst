@@ -58,7 +58,7 @@ Solution
 
 3. Install kernel headers for the current kernel
    ``sudo apt install -y linux-headers-$(uname -r)`` or
-   ``sudo dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)``
+   ``sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"``
 
 4. Install aws-neuron-dkms ``sudo apt install aws-neuron-dkms`` or
    ``sudo dnf install aws-neuron-dkms``
@@ -94,7 +94,7 @@ This error is caused by incompatibility between the Neuron Driver (dkms package)
 
 In some cases the compatibility error persists even after the driver has been updated.  That happens when the update process fails to reload the driver at the end of the update.  Note that ``$ modinfo neuron``  will misleadingly show the new version because modinfo reads the version information for neuron.ko file that's been successfully replaced.
 
-Reload failure happens because one of the processes is still using Neuron Devices and thus the driver cannot be reloaded.  
+Reload failure happens because one of the processes is still using Neuron Devices and thus the driver cannot be reloaded.
 
 Solution
 ^^^^^^^^
@@ -105,8 +105,8 @@ Check for any process that is still using the Neuron driver by running lsmod:
 
    ubuntu@ip-10-1-200-50:~$ lsmod | grep neuron
    neuron                237568  0
-   ubuntu@ip-10-1-200-50:~$ 
-   
+   ubuntu@ip-10-1-200-50:~$
+
 “Used by” counter, the second number, should be 0.  If it is not, there is still a running process that is using Neuron.  Terminate that process and either:
 
 .. code:: bash
@@ -170,7 +170,7 @@ Neuron Runtime will display the following error messages:
 ::
 
     2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Unsupported hardware operator code 214 found in neff.
-    2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.    
+    2023-Jul-28 22:23:13.0357 101413:101422 ERROR  TDRV:translate_one_pseudo_instr_v2           Please make sure to upgrade to latest aws-neuronx-runtime-lib and aws-neuronx-collective; for detailed installation instructions visit Neuron documentation.
 
 Solution
 ^^^^^^^^
@@ -293,7 +293,7 @@ trn1.2xlarge has 2 Neuron Cores.
 Neuron Runtime execution fails at out-of-bound access
 -----------------------------------------------------
 
-When a Neuron Runtime execution encounters an out-of-bound access error, the runtime logs in the stdout console will display one of the following error messages: 
+When a Neuron Runtime execution encounters an out-of-bound access error, the runtime logs in the stdout console will display one of the following error messages:
 
 ::
 
@@ -302,16 +302,16 @@ When a Neuron Runtime execution encounters an out-of-bound access error, the run
 
 **Cause of the Error**
 
-An out-of-bound access error typically indicates that incorrect inputs have been provided to the model. 
+An out-of-bound access error typically indicates that incorrect inputs have been provided to the model.
 
 **How to Debug**
 
-To troubleshoot this issue, you need to examine both the High-Level Operation (HLO) and all inputs. 
-Neuron Runtime can automatically dump all inputs in binary format, which can be instrumental in debugging. 
+To troubleshoot this issue, you need to examine both the High-Level Operation (HLO) and all inputs.
+Neuron Runtime can automatically dump all inputs in binary format, which can be instrumental in debugging.
 To enable input dumping for each failed execution, set the following environment variable:
 
 ::
-    
+
     export NEURON_RT_DBG_DUMP_INPUTS_ON_ERR=<an NRT_STATUS value>
 
 A complete set of ``NRT_STATUS`` can be found under :ref:`The LIBNRT API Return Codes <nrt_api>`.
@@ -319,26 +319,26 @@ A complete set of ``NRT_STATUS`` can be found under :ref:`The LIBNRT API Return 
 Once this variable is set, Neuron Runtime generates a directory in the current working directory for each failed execution at this `NRT_STATUS` value. The directory name follows this pattern:
 
 ::
-    
+
     input_dump_<runtime_generated_random_number>_h_nn_<runtime_generated_execution_id>
 
 
-Inside each directory, you'll find all the inputs that led to this failure, stored in binary format. 
+Inside each directory, you'll find all the inputs that led to this failure, stored in binary format.
 Additionally, the model name is saved in a separate file called model_name.txt within the same directory.
 
 To disable input dump, you can set the environment variable back to 0
 
 ::
-    
+
     export NEURON_RT_DBG_DUMP_INPUTS_ON_ERR=0
 
 **Example: Debug an out-of-bound access execution**
 
-To debug an out-of-bound (OOB) execution, which returns an NRT_STATUS code of 1006, both HLO and all inputs are required. 
+To debug an out-of-bound (OOB) execution, which returns an NRT_STATUS code of 1006, both HLO and all inputs are required.
 By setting the ``NEURON_RT_DBG_DUMP_INPUTS_ON_ERR`` environment variable to 1006, you can capture the inputs leading to an OOB execution.
 
-For example, when an OOB error occurs, Neuron Runtime creates a directory named input_dump_424238335_h_nn_10001. 
-Here, 424238335 is a randomly generated number by Neuron Runtime, and 10001 is the Neuron Runtime generated execution ID. 
+For example, when an OOB error occurs, Neuron Runtime creates a directory named input_dump_424238335_h_nn_10001.
+Here, 424238335 is a randomly generated number by Neuron Runtime, and 10001 is the Neuron Runtime generated execution ID.
 All relevant inputs, labeled from input0 to input14, are saved in binary format within this directory.
 
 ::
@@ -459,7 +459,7 @@ For Trn and Inf instances, the following hardware errors are monitored by Neuron
 |                                     |                                                           | on Neuron Device 0 NC 0, model xxx.neff, waiting for execution completion notification``                                      |                                                                                                                                                                      |
 +-------------------------------------+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-Upon any hardware errors, you should also expect to see the error message like the following in ``dmesg``: 
+Upon any hardware errors, you should also expect to see the error message like the following in ``dmesg``:
 ``NEURON_HW_ERR=SRAM_UNCORRECTABLE_ERROR instance-id=i-0592464924bd45322 hostname=ip-172-31-61-252 nd-id=0 nc-id=0 serial-num=19fcda00f5ff6eb9 action=TERMINATE_INSTANCE``
 
 
@@ -474,7 +474,7 @@ Communication on a single instance and across multiple instances.
 
 ::
 
-   NCCL init error: Error opening libnccom.so, cannot use collective operations! Please set LD_LIBRARY_PATH to library location. Error: libnccom.so: cannot open shared object 
+   NCCL init error: Error opening libnccom.so, cannot use collective operations! Please set LD_LIBRARY_PATH to library location. Error: libnccom.so: cannot open shared object
    file: No such file or directory
    Please make sure to install correct version of aws-neuronx-collectives; for detailed installation instructions visit Neuron documentation
 
@@ -679,7 +679,7 @@ Name resolution failure
 -----------------------
 
 .. code:: bash
-   
+
      WARN Invalid NCCL_COMM_ID [compute1-dy-training-0-1.pcluster-trn1-24-pdx80-2n.pcluster:41211], please use format: <ipv4>:<port> or [<ipv6>]:<port>
 
 .. _solution-11:
@@ -742,5 +742,5 @@ When the variable is not set multi-node collective communication will be disable
 
 ::
 
-   Linux kernel 5.10 requires setting FI_EFA_FORK_SAFE=1 environment variable.  Multi-node support will be disabled.  
+   Linux kernel 5.10 requires setting FI_EFA_FORK_SAFE=1 environment variable.  Multi-node support will be disabled.
    Please restart with FI_EFA_FORK_SAFE=1 set."

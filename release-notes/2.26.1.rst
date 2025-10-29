@@ -1,0 +1,27 @@
+.. meta::
+    :description: Release notes for AWS Neuron SDK release v2.6.1
+    :date-modified: 10/29/2025
+
+
+AWS Neuron SDK Release Notes - v2.26.1
+=======================================
+
+**Release Date**: October 29, 2025
+
+Overview
+---------    
+
+Release *2.26.1* of the AWS Neuron SDK includes bug fixes applied to the AWS Neuron SDK v2.26.0. See :ref:`the Neuron SDK v2.26.0 release notes <neuron-2-26-0-whatsnew>` for the full set of changes that shipped with the 2.26.0 release.
+
+Bug fixes in this release
+--------------------------
+
+* Fix: To address an issue with out-of-memory errors in **torch-neuronx**, this release enables you to use the :doc:`Neuron Runtime API </neuron-runtime/nrt-api-guide>` to apply direct memory allocation.
+
+
+Resources
+----------
+
+* For the set of SDK package version changes in 2.26.1, see :ref:`Release Content <latest-neuron-release-artifacts>`.
+
+

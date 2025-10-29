@@ -607,7 +607,7 @@ Parameters:
 
 Neuron PyTorch-Lightning
 ^^^^^^^^^^^^^^^^^^^^^^^^
-Neuron PyTorch-Lightning is currently based on Lightning version 2.1.0, and will eventually be upstreamed Lightning-AI code base
+Neuron PyTorch-Lightning is currently based on Lightning version 2.4.0, and will eventually be upstreamed Lightning-AI code base
 
 Neuron Lightning Module
 '''''''''''''''''''''''

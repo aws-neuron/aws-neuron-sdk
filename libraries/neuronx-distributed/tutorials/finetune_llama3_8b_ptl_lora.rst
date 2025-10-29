@@ -15,6 +15,7 @@ To set up the packages in the compute instance, see
 Install the ``neuronx-distributed`` package inside the virtual environment using the following command:
 
 .. code-block:: ipython3
+
    python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
 
 Next, download the scripts for fine-tuning with LoRA
@@ -54,7 +55,7 @@ We also download the requirements files for package dependencies and scripts to 
 .. code-block:: ipython3
 
    python3 -m pip install -r requirements.txt
-   python3 -m pip install -r requirements_ptl.txt  # Currently we're supporting Lightning version 2.1.0
+   python3 -m pip install -r requirements_ptl.txt  # Currently we're supporting Lightning version 2.4.0
    chmod +x test_llama_lora_finetune.sh
    # prepare the dataset
    python3 -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab');" 
@@ -104,16 +105,17 @@ Refer to `Huggingface Access Tokens <https://huggingface.co/docs/hub/en/security
 1. Set the dataset for the fine-tuning job. 
 
 In this example, we will use `Dolly <https://huggingface.co/datasets/databricks/databricks-dolly-15k>`_, which is an open source dataset
-of instruction-following records on categories outlined in the `InstructGPT paper <https://arxiv.org/pdf/2203.02155>`_, including brainstorming, classification,
-closed QA, generation, information extraction, open QA, and summarization.
+of instruction-following records on categories outlined in the `InstructGPT paper <https://arxiv.org/pdf/2203.02155>`_, including brainstorming, classification, closed QA, generation, information extraction, open QA, and summarization.
 
-{
-  "instruction": "Alice's parents have three daughters: Amy, Jessy, and what's the name of the third daughter?",
+.. code-block::
 
-  "context": "",
+   {
+   "instruction": "Alice's parents have three daughters: Amy, Jessy, and what's the name of the third daughter?",
 
-  "response": "The name of the third daughter is Alice"
-}
+   "context": "",
+
+   "response": "The name of the third daughter is Alice"
+   }
 
 Configure the following flags in ``test_llama_lora_finetune.sh`` to set up the dataset:
 

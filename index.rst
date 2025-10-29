@@ -140,7 +140,7 @@ Contents
    :hidden:
    
    About Neuron </about-neuron/index>
-   Neuron architecture </about-neuron/arch/index>
+   Neuron Architecture </about-neuron/arch/index>
    What's New </release-notes/index>
    Announcements </about-neuron/announcements/index>
 
@@ -151,41 +151,53 @@ Contents
 
     Quickstarts </about-neuron/quick-start/index>
     Setup Guides </setup/index>
-    Developer tools </tools/index>
     Models and Tutorials </about-neuron/models/index>
     Ask Amazon Q </about-neuron/amazonq-getstarted>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Orchestrate and Deploy
-   :hidden:
-
-   Developer workloads </devflows/index>
-   Neuron DLAMI </dlami/index>
-   Neuron Containers </containers/index>
-   Amazon SageMaker </devflows/sagemaker-flows>
-   Third-party Solutions </devflows/third-party-solutions>
 
 .. toctree::
    :maxdepth: 2
    :caption: Use ML Frameworks
    :hidden:
 
-   About Neuron frameworks </frameworks/index>
-   PyTorch Neuron </frameworks/torch/index>
+   About Neuron Frameworks </frameworks/index>
+   PyTorch NeuronX </frameworks/torch/index>
    JAX NeuronX </frameworks/jax/index>
+   PyTorch Neuron </frameworks/torch/index>
    TensorFlow Neuron </frameworks/tensorflow/index>
 
 .. toctree::
    :maxdepth: 2
-   :caption: Work with Neuron Libraries
+   :caption: Training & Inference Libraries
    :hidden:
 
-   About NxD </libraries/index>
-   Training </libraries/nxd-training/index>
-   Inference </libraries/nxd-inference/index>
-   Core libraries </libraries/neuronx-distributed/index>
+   Overview </libraries/index>
+   NxD Training </libraries/nxd-training/index>
+   NxD Inference </libraries/nxd-inference/index>
+   NxD Core </libraries/neuronx-distributed/index>
    Third-party </libraries/third-party-libraries/third-party-libraries>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Developer Tools
+   :hidden:
+
+   Overview </tools/index>
+   Neuron Profiler </tools/neuron-sys-tools/neuron-profile-user-guide>
+   Neuron Profiler 2.0 (Beta) </tools/neuron-sys-tools/neuron-profiler-2-0-beta-user-guide>
+   System Tools </tools/neuron-sys-tools/index>
+   TensorBoard </tools/tensorboard/index>
+   Third-party tools </tools/third-party-solutions>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Orchestrate and Deploy
+   :hidden:
+
+   AWS Workload Orchestration </devflows/index>
+   Neuron DLAMI </dlami/index>
+   Neuron Containers </containers/index>
+   Amazon SageMaker </devflows/sagemaker-flows>
+   Third-party Solutions </devflows/third-party-solutions>
 
 .. toctree::
    :maxdepth: 1
@@ -193,14 +205,6 @@ Contents
    :hidden:
 
    Neuron Runtime </neuron-runtime/index>
-   
-.. toctree::
-   :maxdepth: 1
-   :caption: Neuron Kernel Interface (NKI)
-   :hidden:
-
-   Neuron Kernel Interface (NKI) </nki/index>
-   NKI Samples and Tutorials </nki/tutorials/index>
 
 .. toctree::
    :maxdepth: 1
@@ -209,6 +213,18 @@ Contents
 
    Neuron Compiler </compiler/index>
    Neuron C++ Custom Operators </neuron-customops/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Neuron Kernel Interface (NKI)
+   :hidden:
+
+   Overview </nki/index>
+   API Reference Manual </nki/api/index>
+   Developer Guide </nki/developer_guide>
+   Tutorials </nki/tutorials>
+   Kernels </nki/api/nki.kernels>
+   Misc </nki/misc>
 
 .. toctree::
    :maxdepth: 1
