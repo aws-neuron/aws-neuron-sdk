@@ -13,8 +13,7 @@ This guide describes how to utilize AWS Inferentia and AWS Trainium AI accelerat
 Overview
 --------
 
-NxD Inference integrates into vLLM by extending the model execution components responsible
-for loading and invoking models used in vLLM’s LLMEngine (see https://docs.vllm.ai/en/latest/design/arch_overview.html#llm-engine 
+NxD Inference integrates with vLLM by leveraging vLLM's Plugin System <https://docs.vllm.ai/en/latest/design/plugin_system.html> to extend the model execution components responsible for loading and invoking models within vLLM's LLMEngine (see https://docs.vllm.ai/en/latest/design/arch_overview.html#llm-engine 
 for more details on vLLM architecture). This means input processing, scheduling and output 
 processing follow the default vLLM behavior. 
 
@@ -26,7 +25,14 @@ and Chunked Prefill on Neuron instances through NxD Inference in upcoming releas
 Supported Models
 ----------------
 
-Refer to :ref:`Supported Model Architectures<nxdi-supported-model-architectures>` for a list of models supported in vLLM through NxD Inference.
+We support a subset of `models supported on NxDI <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/model-reference.html#supported-model-architectures>`_, including:
+
+- Llama 2/3.1/3.3
+- Llama 4 Scout, Maverick
+- Qwen 2.5
+- Qwen 3
+
+Refer to `Supported Model Architectures <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/model-reference.html#supported-model-architectures>`_ for a complete list of models supported in vLLM through NxD Inference.
 
 If you are adding your own model to NxD Inference, please see :ref:`Integrating Onboarded Model with vLLM<nxdi-onboarding-models-vllm>`
 for instructions on how to setup vLLM integration for it.
@@ -53,6 +59,13 @@ Before installing vLLM with the instructions below, you will first need to launc
 Neuron drivers and tools. Refer to :ref:`these setup instructions<nxdi-setup>` for different ways to prepare your environment, including using
 Neuron DLAMIs and Neuron DLCs for quick setups.
 
+
+**Prerequisites:**
+
+- AWS Neuron SDK 2.26 (`Release Notes <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.26.0/>`_)
+- Python 3.8+ (compatible with vLLM requirements)
+- Supported AWS instances: Inf2, Trn1/Trn1n, Trn2
+
 Installing the AWS Neuron fork of vLLM 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -71,97 +84,98 @@ Manually install from source
 """""""""""""""""""""""""""""""
 
 To manually install the AWS fork from source, use the following commands:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code::
+.. important::
+   This is beta preview of the vLLM Neuron plugin. For a more stable experience, consider using the AWS Neuron vllm fork described above.
 
-    git clone -b 2.26.0 https://github.com/aws-neuron/upstreaming-to-vllm.git
-    cd upstreaming-to-vllm
-    pip install -r requirements/neuron.txt
-    VLLM_TARGET_DEVICE="neuron" pip install -e .
+Install the plugin from GitHub sources using the following commands. The plugin will automatically install the correct version of vLLM along with other required dependencies.
 
+.. code-block:: bash
 
-Installing vLLM from vLLM main repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-A prior version of Neuron SDK 2.23 NxD Inference support was upstreamed onto vLLM v0.9.0. 
-Additional details can be found in vLLM docs `here <https://docs.vllm.ai/en/stable/getting_started/installation/ai_accelerator.html#aws-neuron>`_.
-
-To install the official vLLM repository with Neuron support, use the following commands. Only Neuron SDK 2.23 and prior features are 
-currently available in the official vLLM repository. See Neuron SDK 2.23 artifacts :ref:`here<neuron-2.23.0-artifacts>`. It is recommended 
-to re-install neuronx-distributed and neuronx-distributed-inference libraries after installing vLLM to avoid dependency version incompatibilities.
-
-.. code::
-
-    git clone -b releases/v0.9.0 https://github.com/vllm-project/vllm.git
-    cd vllm
-    pip install -U -r requirements/neuron.txt
-    VLLM_TARGET_DEVICE="neuron" pip install -e .
-
-    pip install neuronx-distributed==0.12.12111
-    pip install neuronx-distributed-inference==0.3.5591
+    git clone https://github.com/vllm-project/vllm-neuron.git
+    cd vllm-neuron
+    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 
 
 Usage
 -----
 
-Neuron Framework Selection
+Neuron Environment Setup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
 
-    The Neuron integration for vLLM supports both Transformers NeuronX and NxD Inference libraries. Set the ``VLLM_NEURON_FRAMEWORK`` 
-    environment variable to ``neuronx-distributed-inference`` to use the NxD Inference library. Set the  ``VLLM_NEURON_FRAMEWORK`` 
-    environment variable to ``transformers-neuronx`` to use the Transformers NeuronX library. Make sure you have the corresponding library
-    installed before running vLLM. If you have both libraries installed, and the ``VLLM_NEURON_FRAMEWORK`` environment variable is not set,
-    the NxD Inference library will be used by default.
+    The Neuron plugin for vLLM exclusively supports NxD Inference libraries. The ``VLLM_NEURON_FRAMEWORK`` environment variable defaults to ``neuronx-distributed-inference`` for NxD Inference library usage. Transformers NeuronX is deprecated.
 
-If you are migrating from Transformers NeuronX to NxD Inference, you can refer to this :ref:`Migration Guide<nxdi_migrate_from_tnx>` for
-additional support.
+    If you are migrating from Transformers NeuronX to NxD Inference, you can refer to this :ref:`Migration Guide<nxdi_migrate_from_tnx>` for
+    additional support.
 
 Quickstart
 ^^^^^^^^^^
 
 Here is a quick and minimal example to get running.
 
-.. code::
+.. code-block:: python
 
-    import os
-    os.environ['VLLM_NEURON_FRAMEWORK'] = "neuronx-distributed-inference"
+   import os
+   from vllm import LLM, SamplingParams
 
-    from vllm import LLM, SamplingParams
-    llm = LLM(
-        model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-        max_num_seqs=8,
-        max_model_len=128,
-        device="neuron",
-        tensor_parallel_size=2)
+   # Initialize the model
+   llm = LLM(
+       model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+       max_num_seqs=4,
+       max_model_len=128,
+       tensor_parallel_size=32
+   )
 
-    prompts = [
-        "Hello, my name is",
-        "The president of the United States is",
-        "The capital of France is",
-        "The future of AI is",
-    ]
-    # note that top_k must be set to lower than the global_top_k defined in
-    # the neuronx_distributed_inference.models.config.OnDeviceSamplingConfig
-    sampling_params = SamplingParams(top_k=10, temperature=0.8, top_p=0.95)
+   # Generate text
+   prompts = [
+       "Hello, my name is",
+       "The president of the United States is",
+       "The capital of France is",
+   ]
+   sampling_params = SamplingParams(temperature=0.0)
+   outputs = llm.generate(prompts, sampling_params)
 
-    outputs = llm.generate(prompts, sampling_params)
+   for output in outputs:
+       print(f"Prompt: {output.prompt}")
+       print(f"Generated: {output.outputs[0].text}")
 
-    for output in outputs:
-        prompt = output.prompt
-        generated_text = output.outputs[0].text
-        print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+Feature Support
+---------------
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 10 60
 
-.. nxdi-vllm-model-configuration::
+   * - Feature
+     - Status
+     - Notes
+   * - Prefix Caching
+     - 🟢
+     - 
+   * - Speculative Decoding
+     - 🟢
+     - Only Eagle V1 is supported
+   * - Quantization
+     - 🟢
+     - INT8/FP8 quantization support
+   * - Chunked Prefill
+     - 🚧
+     - 
+   * - Multimodal
+     - 🚧
+     - Only Llama 4 is supported
 
-Model Configuration
+- 🟢 Functional: Fully operational, with ongoing optimizations.
+- 🚧 WIP: Under active development.
+
+Feature Configuration
 ^^^^^^^^^^^^^^^^^^^
 
 NxD Inference models provide many configuration options. When using NxD Inference through vLLM,
 we configure the model with a default configuration that sets the required fields from vLLM settings.
-It is recommended that you do not override these configuration settings unless you need it.
 
 .. code:: ipython3
 
@@ -179,21 +193,25 @@ It is recommended that you do not override these configuration settings unless y
     )
 
 
-If you want to add or change any settings, you can use vLLM's ``override_neuron_config`` setting. 
+Use the ``additional_config`` field to provide an ``override_neuron_config`` dict that specifies your desired NxD Inference configurations.
 You provide the settings you want to override as dictionary (or JSON object when starting vLLM from the CLI)
 containing basic types e.g. to disable auto bucketing (for illustration), use 
 
 .. code:: ipython3
     
-    override_neuron_config={
-        "enable_bucketing":False,
-    }
+    additional_config=dict(
+        override_neuron_config=dict(
+            "enable_bucketing":False,
+        )
+    )
 
 or when launching vLLM from the CLI
 
 .. code::
 
-    --override-neuron-config "{\"enable_bucketing\":false}"
+    --additional-config '{
+        \"override-neuron-config\": {\"enable_bucketing\":false}
+    }'
 
 
 For more information on NxD Inference features, see :ref:`NxD Inference Features Configuration Guide<nxdi-feature-guide>`
@@ -307,37 +325,34 @@ performance.
 
 .. code:: ipython3
 
-    import os
-    os.environ['VLLM_NEURON_FRAMEWORK'] = "neuronx-distributed-inference"
+   import os
+   from vllm import LLM, SamplingParams
 
-    from vllm import LLM, SamplingParams
+   # Initialize the model
+   llm = LLM(
+       model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+       max_num_seqs=4,
+       max_model_len=128,
+       tensor_parallel_size=32,
+       additional_config=dict(
+           override_neuron_config=dict(
+               enable_bucketing=False,
+           )
+       ),
+   )
 
-    # Sample prompts.
-    prompts = [
-        "The president of the United States is",
-        "The capital of France is",
-        "The future of AI is",
-    ]
-    # Create a sampling params object.
-    sampling_params = SamplingParams(top_k=1)
+   # Generate text
+   prompts = [
+       "Hello, my name is",
+       "The president of the United States is",
+       "The capital of France is",
+   ]
+   sampling_params = SamplingParams(temperature=0.0)
+   outputs = llm.generate(prompts, sampling_params)
 
-    # Create an LLM.
-    llm = LLM(
-        model="meta-llama/Llama-3.1-8B-Instruct",
-        max_num_seqs=4,
-        max_model_len=128,
-        override_neuron_config={
-            "enable_bucketing":False,
-        },
-        device="neuron",
-        tensor_parallel_size=32)
-
-    outputs = llm.generate(prompts, sampling_params)
-
-    for output in outputs:
-        prompt = output.prompt
-        generated_text = output.outputs[0].text
-        print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+   for output in outputs:
+       print(f"Prompt: {output.prompt}")
+       print(f"Generated: {output.outputs[0].text}")
 
 Online Inference Example
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -347,14 +362,18 @@ the following command:
 
 .. code::
 
-    VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python -m vllm.entrypoints.openai.api_server \
-        --model="meta-llama/Llama-3.1-8B-Instruct" \
-        --max-num-seqs=4 \
-        --max-model-len=128 \
-        --tensor-parallel-size=8 \
-        --port=8080 \
-        --device "neuron" \
-        --override-neuron-config "{\"enable_bucketing\":false}"
+    python3 -m vllm.entrypoints.openai.api_server \
+    --model "TinyLlama/TinyLlama-1.1B-Chat-v1.0" \
+    --tensor-parallel-size 32 \
+    --max-model-len 128 \
+    --max-num-seqs 4 \
+    --no-enable-prefix-caching \
+    --additional-config '{
+        "override_neuron_config": {
+            "enable_bucketing": False,
+        }
+    }' \
+    --port 8000
 
 In addition to the sampling parameters supported by OpenAI, we also support ``top_k``.
 You can change the sampling parameters and enable or disable streaming.
@@ -415,21 +434,32 @@ The example below targets a 1K-token workload on ``meta-llama/Llama-3.1-8B-Instr
 
 .. code:: bash
 
-    export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
-
     python -m vllm.entrypoints.openai.api_server \
       --model "meta-llama/Llama-3.1-8B-Instruct" \
-      --device "neuron" \
       --tensor-parallel-size 16 \
       --max-num-seqs 1 \
       --max-model-len 1024 \
       --port 8080 \
-      --override-neuron-config "{\"enable_bucketing\": true, \
-        \"context_encoding_buckets\": [256, 512, 1024], \
-        \"token_generation_buckets\": [32, 64, 128, 256, 512, 768], \
-        \"max_context_length\": 1024, \
-        \"seq_len\": 1024, \
-        \"batch_size\": 1, \
-        \"ctx_batch_size\": 1, \
-        \"tkg_batch_size\": 1, \
-        \"is_continuous_batching\": true}"
+      --additional-config '{
+            --\"override-neuron-config\" {\"enable_bucketing\": true, \
+            \"context_encoding_buckets\": [256, 512, 1024], \
+            \"token_generation_buckets\": [32, 64, 128, 256, 512, 768], \
+            \"max_context_length\": 1024, \
+            \"seq_len\": 1024, \
+            \"batch_size\": 1, \
+            \"ctx_batch_size\": 1, \
+            \"tkg_batch_size\": 1, \
+            \"is_continuous_batching\": true}
+        }'
+
+Known Issues
+------------
+
+1. Chunked prefill is disabled by default on Neuron for optimal performance. To enable chunked prefill, set the environment variable ``DISABLE_NEURON_CUSTOM_SCHEDULER="1"``. Users are required to provide a ``num_gpu_blocks_override`` arg calculated as ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vllm to avoid a potential OOB error.
+
+Support
+-------
+
+- **Documentation**: `AWS Neuron Documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_
+- **Issues**: `GitHub Issues <https://github.com/vllm-project/vllm-neuron/issues>`_
+- **Community**: `AWS Neuron Forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`_
