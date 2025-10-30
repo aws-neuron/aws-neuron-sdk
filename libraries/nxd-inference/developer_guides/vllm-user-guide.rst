@@ -74,7 +74,7 @@ To manually install the AWS fork from source, use the following commands:
 
 .. code::
 
-    git clone -b 2.26.0 https://github.com/aws-neuron/upstreaming-to-vllm.git
+    git clone -b 2.26.1 https://github.com/aws-neuron/upstreaming-to-vllm.git
     cd upstreaming-to-vllm
     pip install -r requirements/neuron.txt
     VLLM_TARGET_DEVICE="neuron" pip install -e .
