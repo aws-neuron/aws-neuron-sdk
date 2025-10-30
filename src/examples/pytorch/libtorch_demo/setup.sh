@@ -38,7 +38,7 @@ if [ ! -e "tokenizers" ]; then
     cp neuron.patch tokenizers/neuron.patch
     pushd tokenizers
     git checkout d8c4388166cad8f0216dfc485efd6207a3275af2
-    git am neuron.patch
+    git apply neuron.patch
     rm neuron.patch
     popd
 fi
