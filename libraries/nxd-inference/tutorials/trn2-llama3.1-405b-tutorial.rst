@@ -303,7 +303,6 @@ This example uses the following configuration options:
        draft_neuron_config.trace_tokengen_model = True
        draft_neuron_config.enable_fused_speculation = False
        draft_neuron_config.is_eagle_draft = True
-       draft_neuron_config.sequence_parallel_enabled = False
        draft_config = LlamaInferenceConfig(
            draft_neuron_config,
            load_config=load_pretrained_config(draft_model_path)
