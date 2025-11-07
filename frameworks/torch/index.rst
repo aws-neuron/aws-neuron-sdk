@@ -1,4 +1,3 @@
-.. _pytorch-neuronx-main:
 .. _neuron-pytorch:
 
 PyTorch Neuron
