@@ -6,13 +6,13 @@
 AWS Neuron SDK Release Notes
 ============================
 
-**Last updated**:  September 18, 2025
+**Last updated**:  October 29, 2025
 
 .. toctree::
     :maxdepth: 2
     :hidden:
 
-    Neuron 2.26.0 <2.26.0/index>
+    Neuron 2.26.1 <2.26.1/index>
     Previous versions <prev/rn>
 
 
@@ -25,7 +25,7 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
        <td style="background-color:rgba(3, 31, 47, 1); color: white; padding: 10px">
          <h2 style="color: white">Latest AWS Neuron SDK release: 2.26.1 </h2>
          <p style="color: white">
-         On <b>9/18/2025</b>, AWS released version <b>2.26.1</b> of the Neuron SDK.
+         On <b>10/29/2025</b>, AWS released version <b>2.26.1</b> of the Neuron SDK.
          </p>
          For more details, see the full <b><a href="2.26.1.html" style="color: #AAAAFF; text-decoration: underline">AWS Neuron SDK 2.26.1 release notes</a></b>.
        </td>
