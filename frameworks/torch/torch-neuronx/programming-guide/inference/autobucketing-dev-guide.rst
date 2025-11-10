@@ -251,4 +251,4 @@ Here is a simple example using the BERT model:
 Autobucketing for Neuronx-Distributed
 -------------------------------------
 
-To see this same example applied on Neuronx-Distributed, go to this section on the :ref:`Neuronx-Distributed Inference Developer Guide <nxd-inference-devguide-autobucketing>`
+To see this same example applied on Neuronx-Distributed, go to this section on the :ref:`Neuronx-Distributed Inference Developer Guide <neuronx_distributed_inference_developer_guide>`
