@@ -6,7 +6,7 @@ This section walks you through the various options to get started with Neuron. Y
 
 
 .. card:: Get started with PyTorch
-    :link: pytorch-neuronx-main
+    :link: setup-torch-neuronx
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
