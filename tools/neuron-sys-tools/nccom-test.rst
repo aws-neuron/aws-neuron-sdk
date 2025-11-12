@@ -82,6 +82,7 @@ CLI arguments
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
             - ``sendrecv``: Send-Receive
             - ``alltoall``: All-to-All
+            - ``permute``: Permute
     * - ``-r, --nworkers``
       - N/A, required argument
       - Total number of workers (ranks) to use
@@ -112,6 +113,12 @@ CLI arguments
     * - ``-n, --iters``
       - 20
       - Number of Collective Communication operations to execute during the benchmark.
+    * - ``--custom-replica-group``
+      - N/A
+      - Provide the JSON file for custom-defined replica groups.
+    * - ``--custom-src-target-pairs``
+      - N/A
+      - Provide the JSON file for custom-defined source_target_pairs for the collective permute operation.
     * - ``-w, --warmup_iters``
       - 5
       - Number of Collective Communication operations to execute as warmup during the benchmark
@@ -225,7 +232,33 @@ Single Instance Examples
       524288          131072    fp32         179           2.73           2.64
     Avg bus bandwidth:      0.7731GB/s
 
-- Reporting input and output size explicitly with ``--show-input-output-size``
+- Specify the custom source target pairs as a JSON file for the collective permute operator ``--custom-src-target-pairs``.
+
+.. code-block::
+
+    nccom-test -r 8 --custom-src-target-pairs pairs.json permute
+    size(B)    count(elems)     type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+    33554432        33554432    uint8          894.24          37.52          37.52
+    Avg bus bandwidth:	37.5230GB/s
+
+    cat pairs.json
+    {
+        "src_target_pairs": [
+            [
+                [0, 1],
+                [1, 0],
+                [2, 3],
+                [3, 2],
+                [4, 4],
+                [5, 5],
+                [6, 6],
+                [7, 7]
+            ]
+        ]
+    }
+
+
+- Reporting the input and output size explicitly with ``--show-input-output-size``.
 
 .. code-block::
 

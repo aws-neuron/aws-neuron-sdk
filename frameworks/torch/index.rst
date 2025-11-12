@@ -1,4 +1,3 @@
-.. _pytorch-neuronx-main:
 .. _neuron-pytorch:
 
 PyTorch Neuron
@@ -42,12 +41,12 @@ PyTorch NeuronX
  
 .. card:: PyTorch NeuronX for training on Trn1 and Trn2
     :link: training-torch-neuronx
-    :link-type: ref
+    :link-type: doc
     :class-body: sphinx-design-class-title-small
 
-.. card:: Pytorch NeuronX for inference on Inf2, Trn1, and Trn2 
+.. card:: PyTorch NeuronX for inference on Inf2, Trn1, and Trn2 
     :link: inference-torch-neuronx
-    :link-type: ref
+    :link-type: doc
     :class-body: sphinx-design-class-title-small
 
 .. _pytorch-neuron-main:
@@ -58,5 +57,5 @@ PyTorch Neuron
 
 .. card:: PyTorch Neuron for inference on Inf1
     :link: inference-torch-neuron
-    :link-type: ref
+    :link-type: doc
     :class-body: sphinx-design-class-title-small
