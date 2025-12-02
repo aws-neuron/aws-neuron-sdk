@@ -340,6 +340,8 @@ The same ``nisa.dma_transpose`` API can be used to perform an SBUF2SBUF DMA tran
 
 Performance Consideration. SBUF2SBUF transpose can achieve up to 50% of DMA throughput on Trainium2. Compared to TensorE transpose that is more performant but requires ScalarE/VectorE to evict the transposed output from PSUM back to SBUF, DMA transpose can read from and write to SBUF directly. Therefore, DMA transpose is particularly useful in operators that are ScalarE/VectorE bound, such as self attention.
 
+.. _dge_arch:
+
 Descriptor Generation Engine (DGE)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
