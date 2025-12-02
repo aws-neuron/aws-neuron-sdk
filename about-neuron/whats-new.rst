@@ -42,7 +42,7 @@ TorchNeuron provides eager mode execution for interactive development and debugg
 
 Use TorchNeuron to run your PyTorch research and training workloads on Trainium without platform-specific code changes.
 
-**Learn more**: `Native PyTorch blog post <https://pytorch.org/blog/torchneuron-native-pytorch-backend/>`__, :doc:`documentation </frameworks/torch/pytorch-native-overview>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`__.
+**Learn more**: :doc:`documentation </frameworks/torch/pytorch-native-overview>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`__.
 
 **Access**: Contact your AWS account team for access.
 
@@ -61,7 +61,7 @@ Use Enhanced NKI to innovate and build optimized kernels on Trainium. Explore th
 .. note::
   The NKI Compiler source code is currently in **Private Preview**, while the NKI programming interface is in **Public Preview**.
 
-**Learn more**: :doc:`NKI home page </nki/index>`, :doc:`NKI Language Guide </nki/deep-dives/nki-language-guide>`, and `NKI Compiler GitHub repository <https://github.com/aws-neuron/nki-compiler>`__.
+**Learn more**: :doc:`NKI home page </nki/index>` and :doc:`NKI Language Guide </nki/deep-dives/nki-language-guide>`.
 
 
 NKI Library

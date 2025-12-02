@@ -12,8 +12,6 @@ Overview
 
 .. image:: /images/torchneuron/pytorch-native-neuron-stack.png
 
-For more details on TorchNeuron and Neuron's integration with PyTorch, see `our blog post on pytorch.org <https://pytorch.org/blog/torchneuron-native-pytorch-backend/>`__.
-
 TorchNeuron
 ------------------
 

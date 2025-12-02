@@ -159,3 +159,4 @@ Overviews of the AWS Inf and Trn instance and UltraServer architectures.
    Inf2 Architecture <neuron-hardware/inf2-arch>
    Trn1 Architecture <neuron-hardware/trn1-arch>
    Trn2 Architecture <neuron-hardware/trn2-arch>
+   Trn3 Architecture <neuron-hardware/trn3-arch>
