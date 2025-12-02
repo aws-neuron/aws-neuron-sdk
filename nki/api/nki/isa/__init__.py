@@ -399,7 +399,7 @@ def core_barrier(data, cores, engine=engine.unknown, name=None):
     Synchronize execution across multiple NeuronCores by implementing a barrier mechanism.
 
     .. note::
-      Available only on NeuronCore-v2 or newer.
+      Available only on NeuronCore-v3 or newer.
 
     This instruction creates a synchronization point where all specified NeuronCores must
     reach before any can proceed. The barrier is implemented using a semaphore-based protocol
@@ -909,7 +909,7 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     Compute ``dst = stationary.T @ moving`` matrix multiplication using Tensor Engine.
 
     The figure below illustrates how to map a matrix multiplication from a mathematical definition
-    to nisa.nc_matmul on Tensor Engine. For more detailed discussion of Tensor Engine capabilities, see
+    to ``nisa.nc_matmul`` on Tensor Engine. For more detailed discussion of Tensor Engine capabilities, see
     `Trainium arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium_inferentia2_arch.html>`_.
 
 
@@ -970,18 +970,18 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     must be a PSUM tile.
 
     The ``psum_accumulate_flag`` controls whether the matmul result data should overwrite or accumulate on top of
-    the ``dst`` PSUM tile. Multiple nisa.nc_matmul instructions accumulating into the same PSUM tile
+    the ``dst`` PSUM tile. Multiple ``nisa.nc_matmul`` instructions accumulating into the same PSUM tile
     can form an accumulation group before the PSUM tile content is evicted back to SBUF. The encoding of
     ``psum_accumulate_flag`` is as follows:
 
-    - bit[0] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the first instruction
+    - bit[0] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the first instruction
       in the accumulation group. The matmul result should overwrite the existing content in the ``dst`` PSUM tile.
-    - bit[1] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the last instruction
+    - bit[1] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the last instruction
       in the accumulation group. The matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-    - bit[2] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the first instruction
+    - bit[2] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the first instruction
       in the accumulation group. However, the matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
 
-    nisa.nc_matmul calls that are not the first or last instruction of an accumulation group should not set any bit:
+    ``nisa.nc_matmul`` calls that are not the first or last instruction of an accumulation group should not set any bit:
     ``psum_accumulate_flag=0``.
 
     **Data types.**
@@ -1046,18 +1046,19 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
 
 def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_position=None, tile_size=None, psum_accumulate_flag=3, name=None):
     r"""
-    Compute matrix multiplication of MXFP8 quantized matrices with integrated dequantization using Tensor Engine.
+    Compute matrix multiplication of MXFP8/MXFP4 quantized matrices with integrated dequantization using Tensor Engine.
 
     .. note::
 
-      Available only on NeuronCore-v4 and beyond.
+      Available only on NeuronCore-v4 and newer.
 
-    The NeuronCore-v4 Tensor Engine supports matrix multiplication of MXFP8 quantized matrices as defined in the
+    The NeuronCore-v4 Tensor Engine supports matrix multiplication of MXFP8/MXFP4 quantized matrices as defined in the
     `OCP Microscaling standard <https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf>`__.
     This instruction performs matrix multiplication between quantized ``stationary`` and ``moving`` matrices while
-    applying dequantization scales during computation. The micro-scaling group size is 32 elements along the contraction
-    dimension of both ``stationary`` and ``moving`` tensors.
-    See Trainium3 arch guide for more detailed discussion.
+    applying dequantization scales during computation. The micro-scaling group size is 32 elements in groupss of
+    8 partitions × 4 elements per partition of both ``stationary`` and ``moving`` tensors.
+    See `Trainium3 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/about/trainium3_arch.html>`_
+    for more detailed discussion.
 
     **Tiling Mode.**
 
@@ -1089,17 +1090,17 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     tile must be a PSUM tile.
 
     The ``psum_accumulate_flag`` controls whether the matmul result data should overwrite or accumulate on top of
-    the ``dst`` PSUM tile. Multiple nisa.nc_matmul instructions accumulating into the same PSUM tile
+    the ``dst`` PSUM tile. Multiple ``nisa.nc_matmul_mx`` instructions accumulating into the same PSUM tile
     can form an accumulation group before the PSUM tile content is evicted back to SBUF. The
 
-    - bit[0] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the first instruction
+    - bit[0] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the first instruction
       in the accumulation group. The matmul result should overwrite the existing content in the ``dst`` PSUM tile.
-    - bit[1] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the last instruction
+    - bit[1] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the last instruction
       in the accumulation group. The matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-    - bit[2] of ``psum_accumulate_flag``: if set, indicates this nisa.nc_matmul call is the first instruction
+    - bit[2] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the first instruction
       in the accumulation group. However, the matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
 
-    nisa.nc_matmul calls that are not the first or last instruction of an accumulation group should not set any bit:
+    ``nisa.nc_matmul_mx`` calls that are not the first or last instruction of an accumulation group should not set any bit:
     ``psum_accumulate_flag=0``.
 
     **Data types.**
@@ -1195,7 +1196,7 @@ def nc_transpose(dst, data, engine=engine.unknown, name=None):
     and then performs a 2D transpose.
 
     2D transpose on Tensor Engine is implemented by performing a matrix multiplication between ``data`` as the
-    stationary tensor and an identity matrix as the moving tensor. This is equivalent to calling nisa.nc_matmul
+    stationary tensor and an identity matrix as the moving tensor. This is equivalent to calling ``nisa.nc_matmul``
     directly with ``is_transpose=True``. See :ref:`architecture guide <arch_sec_tensor_engine_alternative_use>`
     for more information. On NeuronCore-v2, Tensor Engine transpose is not bit-accurate if the input ``data``
     contains NaN/Inf.
@@ -1237,7 +1238,7 @@ def quantize_mx(dst, src, dst_scale, name=None):
 
     .. note::
 
-      Available only on NeuronCore-v4 and beyond.
+      Available only on NeuronCore-v4 and newer.
 
     The resulting MXFP8 tensors, ``dst`` and ``dst_scale`` are as defined in the
     `OCP Microscaling standard <https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf>`__.
@@ -1309,7 +1310,7 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
 
     .. note::
 
-      Available only on NeuronCore-v3 and beyond.
+      Available only on NeuronCore-v3 and newer.
 
     For each element in ``on_true_tile``, compares its free dimension index + ``range_start`` against ``bound0`` and ``bound1``
     using the specified comparison operators (``comp_op0`` and ``comp_op1``). If both comparisons
@@ -1665,7 +1666,7 @@ def sendrecv(src, dst, send_to_rank, recv_from_rank, pipe_id, name=None):
     simultaneously using DMA engines.
 
     .. note::
-      Available only on NeuronCore-v2 or newer.
+      Available only on NeuronCore-v3 or newer.
 
     This instruction enables bidirectional data exchange between two NeuronCores within a
     Logical NeuronCore (LNC) configuration.
