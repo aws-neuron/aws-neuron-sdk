@@ -77,7 +77,7 @@ NeuronCores are fully-independent heterogenous compute-units that power Tranium,
       Processing unit architecture for Trainium3
 
    .. grid-item-card:: NeuronCore v3
-      :link: neuron-core-v3
+      :link: neuron-hardware/neuron-core-v3
       :link-type: doc
       :class-body: sphinx-design-class-title-small
 
