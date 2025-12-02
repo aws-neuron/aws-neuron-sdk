@@ -1,5 +1,5 @@
 .. meta::
-    :description: Home page for the NxD Core for Training (NxDT)library included with the Neuron SDK.
+    :description: Home page for the NxD Core for Training (NxDT) library included with the Neuron SDK.
     :date-modified: 12/02/2025
 
 .. _neuronx-distributed-training-index:
