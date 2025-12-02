@@ -226,29 +226,6 @@ Learn more about AWS Neuron
 
 .. toctree::
    :maxdepth: 1
-   :caption: Developer Tools
-   :hidden:
-
-   Overview </tools/index>
-   Neuron Profiler </tools/neuron-sys-tools/neuron-profile-user-guide>
-   Neuron Profiler 2.0 (Beta) </tools/neuron-sys-tools/neuron-profiler-2-0-beta-user-guide>
-   System Tools </tools/neuron-sys-tools/index>
-   TensorBoard </tools/tensorboard/index>
-   Third-party tools </tools/third-party-solutions>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Orchestrate and Deploy
-   :hidden:
-
-   AWS Workload Orchestration </devflows/index>
-   Neuron DLAMI </dlami/index>
-   Neuron Containers </containers/index>
-   Amazon SageMaker </devflows/sagemaker-flows>
-   Third-party Solutions </devflows/third-party-solutions>
-
-.. toctree::
-   :maxdepth: 1
    :caption: Runtime & Collectives
    :hidden:
 

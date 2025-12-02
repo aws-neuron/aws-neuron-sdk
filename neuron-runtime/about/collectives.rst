@@ -82,7 +82,7 @@ Intra-node Collectives
 
 **Intra-node collectives** operate within a single node or a group of nodes where all corresponding Neuron Chips are physically interconnected using NeuronLinks. These operations typically leverage high-bandwidth, low-latency chip-to-chip connections, high-speed PCIe links and NeuronLink interconnections. Since data remains within the local memory (in one or more interconnected nodes) hierarchy, intra-node collectives generally offer superior bandwidth and lower latency compared to inter-node communication. However, depending on the size of the model, multiple nodes are required for the job.
 
-  For more details, see :doc:`Intra-node Collective Communications with AWS Neuron </neuron-runtime/explore/intranode-collective-comms>`.
+  For more details, see :doc:`Intra-node Collective Communications with AWS Neuron </neuron-runtime/explore/intranode-collective-comm>`.
 
 Inter-node Collectives
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -91,7 +91,7 @@ Inter-node Collectives
 
 Modern distributed training frameworks automatically optimize collective operations by combining intra-node and inter-node communication strategies. For example, in a Trn2 cluster, an all-reduce operation across 256 accelerators distributed across 4 nodes might first perform local reductions within each 64-accelerator node, then execute inter-node communication between the 4 nodes, and finally broadcast results back within each node.
 
-For more details, see :doc:`Inter-node Collective Communications with AWS Neuron </neuron-runtime/explore/internode-collective-comms>`.
+For more details, see :doc:`Inter-node Collective Communications with AWS Neuron </neuron-runtime/explore/internode-collective-comm>`.
 
 System Connectivity
 -------------------

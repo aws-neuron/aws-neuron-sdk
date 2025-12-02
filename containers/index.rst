@@ -13,6 +13,7 @@ Neuron Containers
     /containers/neuron-plugins
     /containers/how-to/how-to-ultraserver
     /containers/faq
+    /containers/tutorials
     DRA Beta </containers/neuron-dra>
 
 

@@ -21,6 +21,7 @@ This section contains the technical documentation specific to the NxD Inference 
     Developer Guides  </libraries/nxd-inference/developer_guides/index>
     API Reference Guide </libraries/nxd-inference/api-guides/index>
     App Notes  </libraries/nxd-inference/app-notes/index>
+    Models </about-neuron/models/index>
     Misc  </libraries/nxd-inference/misc/index>
 
 What is NxD Inference?

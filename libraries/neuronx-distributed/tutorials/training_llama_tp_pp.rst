@@ -1,10 +1,9 @@
-.. _llama2_tp_pp_tutorial:
 .. _llama3_tp_pp_tutorial:
 
-Training Llama-3.1-70B, Llama-3-70B or Llama-2-13B/70B with Tensor Parallelism and Pipeline Parallelism 
-================================================================================================================
+Training Llama-3.1-70B and Llama-3-70B with Tensor Parallelism and Pipeline Parallelism 
+========================================================================================
 
-In this section, we showcase to pretrain Llama 3.1, Llama3 70B and Llama2 13B/70B model by using the tensor parallel, pipeline parallel, sequence parallel, activation
+In this section, we showcase to pretrain Llama 3.1 and Llama3 70B models by using the tensor parallel, pipeline parallel, sequence parallel, activation
 checkpoint as well as constant mask optimization in the ``neuronx-distributed`` package.
 
 Setting up environment:
@@ -41,23 +40,7 @@ If you want to pre-train Llama3 70B, you would need to run the following steps -
    :lines: 6-7
 
 
-For llama2 13B, you would need to run the following steps -
-
-.. literalinclude:: nxd-source-code/llama_tp_pp/llama_2_13b.sh
-   :language: shell
-   :lines: 6-7
-
-
-If you want to pre-train Llama2 70B, you would need to run the following steps -
-
-
-.. literalinclude:: nxd-source-code/llama_tp_pp/llama_2_70b.sh
-   :language: shell
-   :lines: 6-7
-
-
-
-The below tutorial uses ``Llama3.1 70B`` as an example. To run Llama2 70B or 13B, simply change the script from ``run_llama3_70B_tp_pp.sh`` to ``run_llama2_70B_tp_pp.sh`` or ``run_llama2_13B_tp_pp.sh``.
+The below tutorial uses ``Llama3.1 70B`` as an example.
 
 First, let's get all the needed dependencies
 
@@ -79,9 +62,7 @@ Run the following from ``~/examples/tp_pp_llama_hf_pretrain`` directory:
 
    login(token='your_own_hugging_face_token')
 
-   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B')  
-   # For llama2 uncomment line below
-   # tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf')
+   tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B')
 
    tokenizer.save_pretrained(".")
 
@@ -90,9 +71,6 @@ For Llama3.1/Llama3, make sure your ``~/examples/tp_pp_llama2_hf_pretrain`` dire
 .. code:: ipython3
 
    './tokenizer_config.json', './special_tokens_map.json', './tokenizer.json'
-
-
-For Llama2, you can just copy the ``tokenizer.model`` to the ``~/examples/tp_pp_llama2_hf_pretrain`` directory.
 
 
 Next let’s download and pre-process the dataset:
@@ -156,7 +134,7 @@ thereby reducing performance. To mitigate this issue, one can use the :ref:`GQAQ
 using tp_degree of 32. This reduces the activation memory per device and thereby eventually allows using a pipeline 
 parallel degree of 4. This can be enabled by passing the argument:
 
-.. code:: ipython3
+.. code-block:: python
 
    torchrun $DISTRIBUTED_ARGS run_llama_nxd.py \
    ... \

@@ -277,5 +277,5 @@ The step latency is O(X * Y) - X is the number of nodes and Y intra-node ranks -
 More information
 -----------------
 
-* :doc:`Intra-node Collective Communications </neuron-runtime/explore/intranode-collective-comms>`
+* :doc:`Intra-node Collective Communications </neuron-runtime/explore/intranode-collective-comm>`
 * :doc:`About Neuron Runtime Collectives </neuron-runtime/about/collectives>`

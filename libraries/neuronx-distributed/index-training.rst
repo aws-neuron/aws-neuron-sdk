@@ -1,5 +1,5 @@
 .. meta::
-    :description: {SEO-ready description less than 200 characters here}
+    :description: Home page for the NxD Core for Training (NewxDT)library included with the Neuron SDK.
     :date-modified: 12/02/2025
 
 .. _neuronx-distributed-training-index:
