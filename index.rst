@@ -192,6 +192,7 @@ Learn more about AWS Neuron
    :caption: Inference Libraries
    :hidden:
 
+   Overview </libraries/nxd-inference/neuron-inference-overview>
    vLLM </libraries/nxd-inference/vllm/index>
    NxD Inference </libraries/nxd-inference/index>
    NxD Core (Inference) </libraries/neuronx-distributed/index-inference>

@@ -79,8 +79,14 @@ Archived tutorials
     tutorials/ssd300_demo/ssd300_demo
     tutorials/megatron_gpt_pretraining
     tutorials/training-gpt-neox-20b
+    tutorials/finetuning_llama2_7b_ptl
+    tutorials/training_llama2_tp_pp_ptl
+    tutorials/training_codegen25_7b
     tutorials/training-gpt-neox
     tensorboard/getting-started-tensorboard-neuron-plugin
+    neuronperf/index
+    helper-tools/index
+    transformers-neuronx/index
 
 Accessing Archived Content
 --------------------------
