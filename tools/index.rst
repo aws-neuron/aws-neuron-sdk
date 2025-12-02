@@ -1,93 +1,74 @@
 .. _neuron-tools:
 
-Neuron Tools
-============
+.. meta::
+   :description: Developer tools for profiling, monitoring, and analyzing machine learning workloads on AWS Neuron devices.
+   :keywords: AWS Neuron, developer tools, profiler, monitoring, analysis, TensorBoard, visualization, debugging, optimization
+   :date-modified: 12/02/2025
 
-Neuron provides debugging and profiling tools with the visualization support of the TensorBoard plugin. The Neuron helper tools assist in best practices for model onboarding and performance optimizations. The debugging and profiling tools provide monitoring of runtime and performance metrics insights.
+Developer Tools
+================
 
-About Neuron tools
-------------------
-
-Neuron tools are essential utilities that provide deep insights into model performance, system utilization, and hardware behavior on AWS Neuron devices. The toolset spans multiple categories to support the complete ML development lifecycle:
-
-**Profiling Tools**: Advanced performance analysis capabilities including detailed execution traces, memory usage patterns, and optimization recommendations through Neuron Profiler and TensorBoard integration.
-
-**System Tools**: Real-time monitoring and diagnostic utilities for tracking device utilization, process management, and hardware health across Neuron instances.
-
-**Performance Tools**: Benchmarking and evaluation frameworks like NeuronPerf for measuring model performance, comparing configurations, and validating optimization strategies.
-
-**Helper Tools**: Utility functions for model validation, system information gathering, and troubleshooting common deployment issues.
-
-.. dropdown::  System Tools 
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        * :ref:`neuron-monitor-ug`
-        * :ref:`neuron-top-ug`
-        * :ref:`neuron-ls-ug`
-        * :ref:`neuron-sysfs-ug`
-        * :ref:`nccom-test`
-        * :ref:`What's New <neuron-tools-rn>`
-
-.. dropdown::  TensorBoard Plugin for Neuron
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        * :ref:`neuronx-plugin-tensorboard`
-        * :ref:`neuron-plugin-tensorboard`
-        * :ref:`What's New <neuron-tensorboard-rn>`
-
-.. toctree:: 
-    :maxdepth: 1
-    :hidden:
-       
-    /tools/helper-tools/index
-
-.. dropdown::  Helper Tools 
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        * :ref:`neuron_check_model`
-        * :ref:`neuron_gatherinfo`
-
-.. toctree:: 
-    :maxdepth: 1
-    :hidden:
-
-    /tools/neuronperf/index
-
-.. dropdown::  Performance and Benchmarks Tools 
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in
-
-        * :ref:`neuronperf`
-        * :ref:`nccom-test`
-        * :ref:`neuron-profile-ug`
-        * :ref:`neuron-profiler-2-0-guide`
-
-                    
-.. dropdown::  Tutorials 
-        :class-title: sphinx-design-class-title-med
-        :class-body: sphinx-design-class-body-small
-        :animate: fade-in  
-
-        .. tab-set:: 
-
-            .. tab-item:: TensorBoard
-
-                * :ref:`neuronx-plugin-tensorboard`
-                * :ref:`tb_track_training_minst`
-                * :ref:`torch-neuronx-profiling-with-tb`
-
-            .. tab-item:: System Tools
-
-                * :ref:`track-system-monitor`
+AWS Neuron provides a comprehensive suite of developer tools for optimizing, monitoring, and debugging machine learning workloads on AWS Inferentia and Trainium accelerators. These tools enable developers to gain deep insights into model performance, system utilization, and hardware behavior to maximize the efficiency of ML applications running on Neuron-enabled instances.
 
 
+.. grid:: 1
+   :gutter: 3
 
+   .. grid-item-card:: Neuron Explorer
+      :link: /tools/neuron-explorer/index
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+        
+      Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium, from model development through debugging, profiling, analysis, and optimization.
 
+   .. grid-item-card:: Neuron Profiler 2.0
+      :link: /tools/profiler/neuron-profiler-2-0-beta-user-guide
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+        
+      Neuron Profiler 2.0 offers a user-friendly experience for capturing and analyzing application performance through both high-level system profiles and detailed device-level profiles.
 
+   .. grid-item-card:: Neuron Profiler
+      :link: /tools/profiler/neuron-profile-user-guide
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+        
+      The Neuron Profiler is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler and run on NeuronDevices.
+
+   .. grid-item-card:: System Tools
+      :link: /tools/neuron-sys-tools/index
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+        
+      Command-line utilities for monitoring, debugging, and managing AWS Neuron devices, including neuron-monitor, neuron-top, neuron-ls, and more.
+
+   .. grid-item-card:: Third Party Tools
+      :link: /tools/third-party-solutions
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+        
+      Third-party tools and integrations that support the AWS Neuron development experience, including monitoring, visualization, and optimization solutions.
+
+.. grid:: 1 1 2 2
+   :gutter: 3
+
+   .. grid-item-card:: Tutorials
+      :link: /tools/tutorials/index
+      :link-type: doc
+      :class-header: sd-bg-secondary sd-text-white
+
+      Tutorials for how to utilize all Neuron Tools.
+
+   .. grid-item-card:: What's New
+      :link: /release-notes/tools/aws-neuronx-tools
+      :link-type: doc
+      :class-header: sd-bg-secondary sd-text-white
+
+      Latest updates, new features, and improvements to Neuron Tools.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   Third-party Tools </tools/third-party-solutions>
+   Tutorials </tools/tutorials/index>

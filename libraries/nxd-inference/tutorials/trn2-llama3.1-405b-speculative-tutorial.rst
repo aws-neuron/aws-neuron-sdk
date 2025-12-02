@@ -48,9 +48,9 @@ You should see Neuron packages including
 Install packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-NxD Inference supports running models with vLLM. This functionality is
-available in the AWS Neuron fork of the vLLM GitHub repository. Install the latest release branch of vLLM from the AWS Neuron fork 
-following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
+NxD Inference supports running models with vLLM via the upstream ``vllm-neuron``
+plugin. Install the latest release branch by following the steps in the
+:ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
 
 In this tutorial, you will use `llmperf <https://github.com/ray-project/llmperf>`_ to measure the inference performance of the base Llama-3.1-405b-Instruct configuration and the more
 optimized configuration. 
@@ -156,7 +156,7 @@ In addition, in the subsequent runs of this script, you can add a ``--skip-compi
 the compiling step since the model is already compiled in the first run of the script. 
 This will allow you to test the model with different prompts. 
 
-Step 2: Start the Vllm server with the compiled Neuron model
+Step 2: Start the vLLM server with the compiled Neuron model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After compiling the model, you can run the model using vLLM. Save the contents of the below script to another
@@ -166,22 +166,18 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
 
     export NEURON_RT_VIRTUAL_CORE_SIZE=2
 
-
-    MODEL_PATH="/home/ubuntu/models/Llama-3.1-405B-Instruct"
-    COMPILED_MODEL_PATH="/home/ubuntu/traced_models/Llama-3.1-405B-Instruct"
-
+    MODEL_PATH="/home/ubuntu/models/Llama-3.1-405B-Instruct/"
+    COMPILED_MODEL_PATH="/home/ubuntu/traced_model/Llama-3.1-405B-Instruct/"
 
     export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
-    export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH
+    export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH  # Re-use the compiled artifacts
     VLLM_RPC_TIMEOUT=100000 python -m vllm.entrypoints.openai.api_server \
-        -—model $MODEL_PATH \
-        -—max-num-seqs 1 \
-        -—max-model-len 12800 \
-        -—tensor-parallel-size 64 \
-        -—device neuron \
-        -—use-v2-block-manager \
-        -—override-neuron-config "{}" \
-        -—port 8000 & PID=$!
+        --model "$MODEL_PATH" \
+        --max-num-seqs 1 \
+        --max-model-len 12800 \
+        --tensor-parallel-size 64 \
+        --no-enable-prefix-caching \
+        --port 8000 & PID=$! 2>&1 | tee llama405b_bf16.log
     echo "vLLM server started with PID $PID"
 
 Step 3: Measure performance using LLMPerf

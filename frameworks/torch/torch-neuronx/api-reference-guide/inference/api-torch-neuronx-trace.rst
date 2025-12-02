@@ -29,7 +29,6 @@ PyTorch NeuronX Tracing API for Inference
        computation graph.
     :arg ~torch.Tensor,tuple[~torch.Tensor] example_inputs: A tuple of example
        inputs that will be passed to the ``func`` while tracing.
-
     :keyword dict input_output_aliases: Marks input tensors as state tensors
        which are device tensors. 
     :keyword str compiler_workdir: Work directory used by
@@ -439,10 +438,12 @@ Graph Partitioner
     :arg Dict analyze_parameters: This is a dictionary of kwargs used in ``torch_neuronx.analyze()``.
       NOTE: Not all kwargs in ``torch_neuronx.analyze()`` are supported
       in the graph partitioner.
-      The following kwargs in analyze are supported for use in the graph partitioenr.
-          a) compiler_workdir
-          b) additional_ignored_ops
-          c) max_workers
+      The following ``kwargs`` in analyze are supported for use in the graph partitioner.
+
+      * ``compiler_workdir``
+      * ``additional_ignored_ops``
+      * ``max_workers``
+
       The default is ``None``, corresponding to the default analyze arguments.
 
     :returns: The  :class:`~torch_neuronx.PartitionerConfig` with the configuration for the graph partitioner.

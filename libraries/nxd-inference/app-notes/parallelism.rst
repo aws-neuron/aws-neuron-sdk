@@ -11,8 +11,6 @@ Parallelism Techniques for LLM Inference
 Overview
 --------
 
-
-
 Large language models (LLMs) have grown exponentially in size in the past few years, requiring
 increasing accelerator memory to run the model. In order to effectively generate predictions from an LLM, it
 is often necessary to use one or more **parallelism techniques** to shard operations across multiple available accelerators.
@@ -21,7 +19,7 @@ by sharding the model across multiple cores. **Data parallelism**, on the other 
 higher throughput by sharding input data.
 
 Tensor Parallelism
----------------
+--------------------
 
 Tensor parallelism is a technique in which a tensor is split into a number of chunks along the intermediate
 dimension, resulting in sharding not only model parameters but also intermediate activations.
@@ -63,13 +61,15 @@ Tensor parallelism can be enabled by setting the ``tp_degree`` parameter in Neur
 :ref:`nxdi-feature-guide-tensor-parallelism` for more detail.
 
 Code example, defining NeuronConfig:
-::
+
+ .. code-block:: python
+
     neuron_config = NeuronConfig(tp_degree=32)
 
 See :ref:`tensor_parallelism_overview` for a detailed reference of the concepts underlying tensor parallelism.
 
 Sequence Parallelism
----------------
+---------------------
 
 One drawback of tensor parallelism is that it replicates attention/MLP layer norm and dropout operations across all NeuronCores.
 These operations are less compute intensive compared to linear layers, but still requires
@@ -91,7 +91,9 @@ Sequence parallelism can be enabled by setting the ``sequence_parallel_enabled``
 :ref:`nxdi-feature-guide-sequence-parallelism` for more detail.
 
 Code example, defining NeuronConfig:
-::
+
+.. code-block:: python
+
     neuron_config = NeuronConfig(sequence_parallel_enabled=True)
 
 Flash Decoding
@@ -112,12 +114,15 @@ Flash decoding can be enabled by setting the ``flash_decoding_enabled`` paramete
 The technique is only supported with GQA (grouped query attention).
 
 Code example, defining NeuronConfig:
-::
+
+
+.. code-block:: python
+
     neuron_config = NeuronConfig(flash_decoding_enabled=True)
 
 
 Data Parallelism
---------------
+------------------
 
 Data parallelism will replicate the model (same architecture, weights and hyperparameters) but will shard input data.
 By distributing the data across NeuronCores or even different instances, data parallelism reduces

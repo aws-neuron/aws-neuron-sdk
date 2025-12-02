@@ -96,8 +96,6 @@ For Llama3.1/Llama3, make sure your ``~/examples/tp_zero1_llama_hf_pretrain`` di
 
    './tokenizer_config.json', './special_tokens_map.json', './tokenizer.json'
 
-
-For Llama2, you just copy the ``tokenizer.model`` to the ``~/examples/tp_zero1_llama_hf_pretrain`` directory.
 Next let’s download and pre-process the dataset:
 
 .. literalinclude:: nxd-source-code/llama_tp_zero1/llama_3_8b.sh
@@ -142,12 +140,12 @@ To run the training, we just run the above command but without ``neuron_parallel
    :lines: 20-23
 
 
-Performance:
+Performance
 ^^^^^^^^^^^^
 
 To achieve better performance, the script applies few techniques:
 
-`Sequence Parallelism and Selective Activation Checkpointing`
+**Sequence Parallelism and Selective Activation Checkpointing**
 
 As explained in the :ref:`Activation Memory Recomputation Doc <activation_memory_reduction>`, both `Sequence Parallelism` 
 and `Selective activation checkpointing` can help with activation memory reduction thereby allowing us to fit bigger 
@@ -155,7 +153,7 @@ models with less number of devices.
 Please refer to :ref:`Activation Memory Reduction Developer Guide <activation_memory_reduction_developer_guide>` on how to 
 enable sequence parallel and selective activation checkpointing.
 
-`Coalescing Q, K, V layers:`
+**Coalescing Q, K, V layers**
 
 We coalesced parallel matrix multiply to improve throughput:
 
@@ -167,18 +165,17 @@ Please check ``modeling_llama_nxd.py`` and ``tp_dp_gpt_neox_20b_hf_pretrain.py``
 cannot be loaded out of the box for fine-tuning, and would require preprocessing. The Q,K,V layers 
 and the gate_proj and up_proj layers need to be coalesced in the checkpoint before loading.
 
-`Logging:`
+**Logging**
 
 Currently for better performance we log loss values every 10 steps. Logging frequently will result in frequent 
 syncs between device and CPU which are expensive. Hence, it is recommended to do less frequent logging if possible.
 
 
-`Flash Attention:`
+**Flash Attention**
 
-We're introducing flash attention function for better performance/memory efficiency. Currently it's enabled by default, to disable it
-set ``--use_flash_attention 0`
+We're introducing flash attention function for better performance/memory efficiency. Currently it's enabled by default, to disable it set ``--use_flash_attention 0``
 
-Checkpointing:
+Checkpointing
 ^^^^^^^^^^^^^^
 
 Currently by default, the checkpoint is saved at the end of training. You can modify that behaviour by saving 

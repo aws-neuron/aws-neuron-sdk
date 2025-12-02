@@ -1,7 +1,7 @@
 .. _torch_neuronx_replace_weights_api:
 
 PyTorch Neuron (``torch-neuronx``) Weight Replacement API for Inference
-============================================================
+========================================================================
 
 .. py:function:: torch_neuronx.replace_weights(neuron_model, weights)
 
@@ -121,10 +121,9 @@ PyTorch Neuron (``torch-neuronx``) Weight Replacement API for Inference
         print(out_network2,out_neuron)
 
 
-    .. note::
+.. note::
 
-        For non-safetensors models, use ``torch.load`` to load the model, and pass the model's ``state_dict``
-        inside like the first example.
+    For non-safetensors models, use ``torch.load`` to load the model, and pass the model's ``state_dict`` inside like the first example.
 
 .. _safetensors: https://huggingface.co/docs/safetensors/index
 .. _torch-xla: https://github.com/pytorch/xla

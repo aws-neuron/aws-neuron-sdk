@@ -5,14 +5,13 @@
 .. _quickstart_vllm_dlc_deploy:
 
 Quickstart: Configure and deploy a vLLM server using Neuron Deep Learning Container (DLC)
-====================================================================================
+==========================================================================================
 
-This topic guides you through deploying a vLLM server on Trainium and Inferentia instances using Deep Learning Container preconfigured with AWS Neuron SDK artifacts. When you complete this tutorial, you will be able run a vLLM inference server on AWS Trainium and Inferentia instances.
+This topic guides you through deploying a vLLM server on Trainium and Inferentia instances using a Deep Learning Container preconfigured with AWS Neuron SDK artifacts. When you complete this tutorial, you will be able run a vLLM inference server on AWS Trainium and Inferentia instances.
 
 Overview
 --------
-
-You will pull a vLLM Docker image, configure it for Neuron devices, and start an inference server. This process lets you deploy large language models on AWS ML accelerators for high-performance inference workloads.
+In this quickstart, you will pull a vLLM Docker image, configure it for Neuron devices, and start an inference server running vLLM. This process lets you deploy large language models on AWS ML accelerators for high-performance inference workloads.
 
 Before you start
 ----------------
@@ -48,12 +47,12 @@ Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-infer
 
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.26.0 released DLC image tag such as ``0.9.1-neuronx-py311-sdk2.26.0-ubuntu22.04``
+For example, replace ``<image_tag>`` with an SDK 2.27.0 released DLC image tag such as ``0.11.0-neuronx-py312-sdk2.27.0-ubuntu24.04``
 
 Step 2: Start the Docker container
 -----------------------------------
 
-In this step, you will run the container with access to Neuron devices. For this tutorial, we are using an inf2.48xlarge instance.
+In this step, you will run the container with access to Neuron devices. For this tutorial, we are using an trn1.32xlarge instance.
 
 Run the container interactively with access to Neuron devices:
 
@@ -72,6 +71,10 @@ Run the container interactively with access to Neuron devices:
    --device=/dev/neuron9 \
    --device=/dev/neuron10 \
    --device=/dev/neuron11 \
+   --device=/dev/neuron12 \
+   --device=/dev/neuron13 \
+   --device=/dev/neuron14 \
+   --device=/dev/neuron15 \
    --cap-add SYS_ADMIN \
    --cap-add IPC_LOCK \
    -p 8080:8080 \
@@ -80,7 +83,7 @@ Run the container interactively with access to Neuron devices:
    bash
 
 .. note::
-   The inf2.48xlarge instance provides 16 Neuron devices. Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
+   The trn1.32xlarge instance provides 16 Neuron devices. Adjust the number of Neuron devices (``--device=/dev/neuronX``) based on your instance type and requirements.
 
 Step 3: Start the vLLM server
 ------------------------------
@@ -91,18 +94,23 @@ Inside the container, start the vLLM inference server:
 
 .. code-block:: bash
 
-   VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python -m vllm.entrypoints.openai.api_server \
+   python -m vllm.entrypoints.openai.api_server \
    --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
    --max-num-seqs=4 \
-   --max-model-len=128 \
+   --max-model-len=1024 \
    --tensor-parallel-size=8 \
    --port=8080 \
-   --device 'neuron' \
-   --override-neuron-config '{"enable_bucketing":false}'
+   --no-enable-prefix-caching \
+   --additional-config='{"override_neuron_config":{"enable_bucketing":false}}'
 
+.. note::
+   **Version compatibility**: The command above is compatible with vLLM version 0.11.0 and later. If you are using an older version (such as 0.9.1), you must:
+   
+   * Replace ``--additional-config='{"override_neuron_config":{"enable_bucketing":false}}'`` with ``--override-neuron-config '{"enable_bucketing":false}'``
+   
 .. important::
    * Choose the appropriate model for your use case
-   * Set ``--tensor-parallel-size`` to be less than or equal to the number of Neuron devices you specified in Step 2
+   * Set ``--tensor-parallel-size`` to be less than or equal to total number of NeuronCores (or TP ranks) available from your devices, accounting for cores per device and logical core configuration
    * Server startup typically takes 5-10 minutes
 
 Step 4: Verify server status
@@ -132,8 +140,8 @@ Wait for the server to fully initialize. You will see output showing available A
 
 All complete! Now, let's confirm everything works.
 
-Step 5: Inference Confirmation
-------------
+Step 5: Inference service confirmation
+---------------------------------------
 
 Test the API to confirm your setup works correctly.
 
@@ -189,7 +197,6 @@ The server provides various endpoints for different use cases:
 * **Health Check**: ``GET /health``
 * **Chat Completions**: ``POST /v1/chat/completions``
 * **Text Completions**: ``POST /v1/completions``
-* **Embeddings**: ``POST /v1/embeddings``
 * **Models Info**: ``GET /v1/models``
 * **API Documentation**: ``GET /docs``
 

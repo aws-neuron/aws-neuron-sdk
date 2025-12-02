@@ -10,14 +10,14 @@ This guide provides solutions for common issues encountered when using NxD Infer
    :depth: 2
 
 Accuracy Issues
---------------
+----------------
 
 The primary methods for validating model accuracy on Neuron involve both token-by-token output matching and logit-level error analysis (relative or max absolute error) against a pre-calibrated GPU FP32 or CPU FP32 reference. When output deviations are observed, these can be systematically attributed to factors such as tokenizer/input discrepancies, amplification from large weight norms (high Lipschitz constants), quantization or precision loss, differences in operator implementation or kernel fusion, compiler optimization, or unintended hardware-level datatype casts.
 
 When validating model accuracy on Neuron, it is important to recognize that predicting the exact output deviations from a high-precision reference (like CPU or GPU FP32) is theoretically NP-hard, due to the complex and nonlinear nature of large neural networks. Rather than attempting to anticipate every possible numerical difference, the recommended strategy is to systematically identify, localize, and diagnose deviations as they occur.
 
 Accuracy Degradation with Auto-Cast
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Issue**: You may observe accuracy degradation in model outputs when using the default auto-cast behavior of the Neuron compiler.
 
@@ -84,7 +84,7 @@ Performance Impact
 
 
 Array indexing and in-place operations in Neuron
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Issue**: When building attention masks, operations that combine array slicing with in-place modifications (e.g., ``mask_i[: arx[0] * arx[1], :ntok] = 0``) can cause accuracy issues in Neuron. This is particularly problematic when the array indices are dynamically computed.
 
@@ -148,11 +148,11 @@ Consider using element-wise operations and avoiding in-place modifications for b
 
 
 Performance Issues
---------------
+--------------------
 
 
 Skip model warmup during inference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Issue**: You may observe slower performance for the first few inference requests, particularly on Trn2.
 
@@ -197,10 +197,10 @@ Skip model warmup during inference
 - For development or non-latency-critical scenarios, the default configuration (warmup disabled) is sufficient.
 
 Other Common Issues
---------------
+--------------------
 
 Tensor Materialization During Tracing caused unexpected model behavior
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Issue**: Developers may inadvertently write code that forces tensor materialization during model tracing, leading to fixed computation paths and unexpected behaviors.
 
@@ -259,7 +259,7 @@ Example of problematic code:
 
 
 Input Data Type Handling for int64/fp64 due to compiler dtype compatibility
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 **Issue**: While you may be using 64-bit data types (int64/fp64) from tokenizers or other input sources, be aware that these are automatically converted to 32-bit types inside `ModelWrapper <https://github.com/aws-neuron/neuronx-distributed-inference/blob/main/src/neuronx_distributed_inference/models/model_wrapper.py>`__.

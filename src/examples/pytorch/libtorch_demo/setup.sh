@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eEx
+
 # Fail on error
 set -e
 
@@ -56,28 +58,29 @@ if [ ! -e "libtorch" ]; then
     MAJOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f1)
     MINOR_VERSION=$(echo "${TORCH_VERSION}" | cut -d. -f2)
     
-if [ "$MAJOR_VERSION" -gt 2 ] || ([ "$MAJOR_VERSION" -eq 2 ] && [ "$MINOR_VERSION" -ge 8 ]); then
-        wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
-        unzip libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
+    if [ "$MAJOR_VERSION" -gt 2 ] || ([ "$MAJOR_VERSION" -eq 2 ] && [ "$MINOR_VERSION" -ge 8 ]); then
+        wget -q https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
+        unzip -q libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
         rm -f libtorch-shared-with-deps-${TORCH_VERSION}+cpu.zip
     else
-        wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
-        unzip libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
+        wget -q https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}%2Bcpu.zip
+        unzip -q libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
         rm -f libtorch-cxx11-abi-shared-with-deps-${TORCH_VERSION}+cpu.zip
     fi
 fi
 
 # get libneuron_op.so and install into libtorch
-pip install --upgrade "transformers==4.40.0
-python bert_neuronx/compile.py
+$PYTHON -m pip install --upgrade "transformers==4.40.0"
+$PYTHON bert_neuronx/compile.py
 
+site_pkgs_dir=$($PYTHON -c "import site; print(site.getsitepackages()[0])")
 if [ "$OLD_TOOL_CHAIN" == "True" ]
   then
-    cp -f $(find ~/ -type d -name '*venv*' -exec find {} -type f -name 'libtorchneuron.so' \; | grep torch_neuron) libtorch/lib/
-    cp -f $(find ~/ -type d -name '*venv*' -exec find {} -type f -name 'libnrt.so' \;) libtorch/lib/
-    cp -f $(find ~/ -type d -name '*venv*' -exec find {} -type f -name 'libnrt.so.1' \;) libtorch/lib/
+    cp -f $(find $site_pkgs_dir -exec find {} -type f -name 'libtorchneuron.so' \; -quit | grep torch_neuron) libtorch/lib/
+    cp -f $(find $site_pkgs_dir -exec find {} -type f -name 'libnrt.so' \; -quit ) libtorch/lib/
+    cp -f $(find $site_pkgs_dir -exec find {} -type f -name 'libnrt.so.1' \; -quit ) libtorch/lib/
   else
-    cp -f $(find ~/ -type d -name '*venv*' -exec find {} -type f -name 'libtorchneuron.so' \; | grep torch_neuronx) libtorch/lib/
+    cp -f $(find $site_pkgs_dir -exec find {} -type f -name 'libtorchneuron.so' \; -quit | grep torch_neuronx) libtorch/lib/
 fi
 
 # compile example app

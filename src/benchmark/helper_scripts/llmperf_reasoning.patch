@@ -1,0 +1,26 @@
+diff --git a/src/llmperf/ray_clients/openai_chat_completions_client.py b/src/llmperf/ray_clients/openai_chat_completions_client.py
+index aeb5fbf..f1b4473 100644
+--- a/src/llmperf/ray_clients/openai_chat_completions_client.py
++++ b/src/llmperf/ray_clients/openai_chat_completions_client.py
+@@ -100,7 +100,7 @@ class OpenAIChatCompletionsClient(LLMClient):
+                         raise RuntimeError(data["error"]["message"])
+
+                     delta = data["choices"][0]["delta"]
+-                    if delta.get("content", None):
++                    if delta.get("content", None) or delta.get("reasoning_content", None):
+                         if not ttft:
+                             ttft = time.monotonic() - start_time
+                             # time_to_next_token.append(ttft)
+@@ -109,7 +109,11 @@ class OpenAIChatCompletionsClient(LLMClient):
+                                 time.monotonic() - most_recent_received_token_time
+                             )
+                         most_recent_received_token_time = time.monotonic()
+-                        generated_text += delta["content"]
++                        if "reasoning_content" in delta and delta["reasoning_content"]:
++                            chunk_content = delta["reasoning_content"]
++                        else:
++                            chunk_content = delta["content"]
++                        generated_text += chunk_content
+
+             total_request_time = time.monotonic() - start_time
+             output_throughput = tokens_received / total_request_time

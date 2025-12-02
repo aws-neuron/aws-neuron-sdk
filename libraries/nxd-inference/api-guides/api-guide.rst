@@ -323,12 +323,19 @@ Attributes
 
     - ``max_loras`` - The maximum number of concurrent LoRA adapters 
       in device memory. Defaults to ``1``.
-    - ``lora_ckpt_paths`` - The checkpoint paths for LoRA adapters with key-value pairs. The key is the adapter ID and the value is the local path of the LoRA adapter checkpoint.
+    - ``max_cpu_loras`` - The maximum number of concurrent LoRA adapters in host memory.
+    - ``enable-dynamic-multi-lora`` - The flag to enable dynamic multi-LoRA serving in NxD inference. Defaults to False.
+    - ``lora_ckpt_paths`` - The checkpoint paths for LoRA adapters that need to be loaded to HBM during initialization with key-value pairs. The key is the adapter ID and the value is the local path of the LoRA adapter checkpoint.
+    - ``lora_ckpt_paths_cpu`` - The checkpoint paths for LoRA adapters in host memory during initialization with key-value pairs. The key is the adapter ID and the value is the local path of the LoRA adapter checkpoint.
     - ``lora_memory_transpose`` - Transpose memory layout to optimize 
       inference performance. Defaults to ``True``.
-    - ``lora_shard_linear_layer`` - Shard the linear layer across TP group to 
-      reduce memory consumption at the cost of communication overehead. 
-      Defaults to ``False``.
+    - ``lora_shard_linear_layer`` - Shard the linear layer across TP group.
+      Defaults to ``True``.
+    - ``base_model_quantized`` - Whether the base model is quantized. Defaults to False.
+    - ``lora_ckpt_json`` - The JSON file that specifies the checkpoint paths for LoRA adapters in both HBM and host memory. Users can set either ``lora_ckpt_json`` or ``lora_ckpt_paths``/``lora_ckpt_paths_cpu`` to specify LoRA adapters, but ``lora_ckpt_json`` is recommended. The JSON file includes three fields:
+      - ``lora-ckpt-dir`` - The directory of the LoRA adapters.
+      - ``lora-ckpt-paths`` - The mapping between LoRA adapter IDs on HBM and their checkpoint paths at initialization.
+      - ``lora-ckpt-paths-cpu`` - The mapping between LoRA adapter IDs and their checkpoints on CPU.
 
 
 - Compilation configuration
@@ -451,48 +458,48 @@ Functions
   configure a specific NeuronConfig subclass to use.
 
 RouterConfig
-~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 Configuration class for expert router in mixture-of-experts models. This config specifies the activation function and data type used in the router component.
 
 .. _initialization-4:
 
 Initialization
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Initialize directly with parameters or use the from_kwargs class method.
 
 .. _functions-4:
 
 Functions
-^^^^^^^^
+^^^^^^^^^^
 
 - ``RouterConfig(**kwargs)`` - Initializes router configuration with specified activation function and data type.
 
 .. _attributes-4:
 
 Attributes
-^^^^^^^^^
+^^^^^^^^^^^
 
 - ``act_fn`` - Activation function to use in the router. Defaults to ``"softmax"``. See ACT2FN for supported activations.
 - ``dtype`` - Data type for router computations. Defaults to ``torch.float32``.
 
 RoutedExpertsMLPOpsConfig
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Configuration class for routed experts in mixture-of-experts models. This class shares several configuration flags with MoENeuronConfig and provides additional settings specific to expert MLPs.
 
 .. _initialization-6:
 
 Initialization
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Initialize with specific parameters for expert MLP operations.
 
 .. _attributes-6:
 
 Attributes
-^^^^^^^^^
+^^^^^^^^^^^
 
 - ``num_experts`` - Total number of experts in the model.
 - ``hidden_size`` - Hidden dimension of the layers.
@@ -518,28 +525,28 @@ Attributes
 - ``is_prefill`` - Whether the configuration is for prefill computation. Defaults to ``None``.
 
 BlockwiseMatmulConfig
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 Configuration class for blockwise matrix multiplication operations. This config contains settings that control how blockwise matrix multiplication is performed, particularly in the context of expert MLPs.
 
 .. _initialization-3:
 
 Initialization
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Initialize with specific parameters or use the from_kwargs class method.
 
 .. _functions-3:
 
 Functions
-^^^^^^^^
+^^^^^^^^^^
 
 - ``BlockwiseMatmulConfig(**kwargs)`` - Initializes configuration with the specified attributes.
 
 .. _attributes-3:
 
 Attributes
-^^^^^^^^^
+^^^^^^^^^^^
 
 - ``block_size`` - Size of blocks used in blockwise matrix multiplication.
 - ``use_block_parallel`` - Whether to enable block parallel blockwise matmul NKI kernel.
@@ -561,21 +568,21 @@ Attributes
 - ``num_static_blocks`` - Number of static blocks to compute in dynamic kernel. Static blocks have fixed computation, while dynamic blocks can be skipped.
 
 MoEFusedTKGConfig
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 Configuration class for fused Token Generation operations in mixture-of-experts models. This config controls various kernel optimizations and fusion options.
 
 .. _initialization-7:
 
 Initialization
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Initialize with settings for quantization and kernel enablement options.
 
 .. _attributes-7:
 
 Attributes
-^^^^^^^^^
+^^^^^^^^^^^
 
 - ``quantized`` - Whether weights are quantized or not.
 - ``moe_fused_kernel_enabled`` - Whether to enable the fused MoE kernel. Defaults to ``None``.
@@ -584,28 +591,28 @@ Attributes
 - ``shared_mlp_kernel_enabled`` - Whether to enable the shared MLP kernel optimization. Defaults to ``None``.
 
 HybridShardingConfig
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Configuration class for hybrid sharding in mixture-of-experts models. This config specifies different parallelism degrees for CTE (Context Encoding) and TKG (Token Generation) components.
 
 .. _initialization-5:
 
 Initialization
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Initialize with keyword arguments specifying parallelism degrees.
 
 .. _functions-5:
 
 Functions
-^^^^^^^^
+^^^^^^^^^^
 
 - ``HybridShardingConfig(**kwargs)`` - Initializes configuration with specified parallelism degrees.
 
 .. _attributes-5:
 
 Attributes
-^^^^^^^^^
+^^^^^^^^^^^
 
 - ``moe_cte_tp_degree`` - Tensor parallelism degree for Context Encoding. Defaults to ``1``.
 - ``moe_cte_ep_degree`` - Expert parallelism degree for Context Encoding. Defaults to ``1``.
@@ -686,7 +693,7 @@ A configuration for a model that uses fused speculation, which is a speculative
 decoding feature where the target and draft models are compiled into a combined model to improve
 performance. For more information, see :ref:`nxd-fused-speculative-decoding`.
 
-.. _attributes-3:
+.. _attributes-17:
 
 Attributes
 ^^^^^^^^^^
@@ -735,7 +742,7 @@ functions to compile and load models. This class extends
 inference with NxD Inference. You can extend this class to define new
 application models that implement use cases in addition to causal LM.
 
-.. _attributes-4:
+.. _attributes-18:
 
 Attributes
 ^^^^^^^^^^
@@ -750,7 +757,7 @@ Attributes
 - ``is_loaded_to_neuron`` - Whether this model is loaded to the Neuron
   device.
 
-.. _functions-3:
+.. _functions-8:
 
 Functions
 ^^^^^^^^^
@@ -829,14 +836,14 @@ NeuronBaseForCausalLM is the base application class that you use to generate
 text with causal language models. This class extends NeuronApplicationBase.
 You can extend this class to run text generation in custom models.
 
-.. _attributes-5:
+.. _attributes-9:
 
 Attributes
 ^^^^^^^^^^
 
 - ``kv_cache_populated`` - Whether the KV cache is populated.
 
-.. _functions-4:
+.. _functions-9:
 
 Functions
 ^^^^^^^^^
@@ -865,7 +872,7 @@ NeuronBaseModel is the base class for all models. This class extends
 modules, such as attention, MLP, and decoder layers, that make up a model.
 You can extend this class to define custom decoder models.
 
-.. _attributes-6:
+.. _attributes-16:
 
 Attributes
 ^^^^^^^^^^
@@ -874,7 +881,7 @@ Attributes
 - ``kv_mgr`` - The KV cache manager to use to manage the KV cache.
 - ``sequence_dimension`` - The dimension for sequence parallelism.
 
-.. _functions-5:
+.. _functions-15:
 
 Functions
 ^^^^^^^^^

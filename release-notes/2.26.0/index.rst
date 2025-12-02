@@ -1,5 +1,4 @@
 .. _neuron-2-26-0-whatsnew:
-.. _latest-neuron-release:
 
 .. meta::
    :description: The official release notes for the AWS Neuron SDK, version 2.26.0. Release date: 9/18/2025.
@@ -22,7 +21,6 @@ AWS Neuron SDK 2.26.0 release notes
    Developer tools <tools>
    Deep Learning AMIs <dlami>
    Deep Learning Containers <containers>
-   Release artifacts <../releasecontent>
 
 What's new?
 -----------

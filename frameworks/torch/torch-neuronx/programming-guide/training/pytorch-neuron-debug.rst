@@ -553,7 +553,7 @@ set to ``os.environ["NEURON_DUMP_HLO_SNAPSHOT"] = "ON_NRT_ERROR_CPU"`` to
 avoid allocating any memory on the device at all for automatic snapshotting.
 
 **Snapshot FAQs:**
----------
+--------------------
 
 **When should I use this features?**
 

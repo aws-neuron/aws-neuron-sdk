@@ -1,117 +1,127 @@
 .. meta::
    :description: AWS Neuron SDK enables high-performance deep learning and generative AI on AWS Inferentia and Trainium instances. Get started with PyTorch, JAX, and distributed training.
-   :date-modified: 2025-10-03
+   :date-modified: 2025-12-02
 
 .. _neuron_home:
 
-AWS Neuron SDK Documentation
-============================
+AWS Neuron Documentation
+=========================
 
-:ref:`AWS Neuron <what-is-neuron>` is a software development kit (SDK) that enables high-performance deep learning and generative AI workloads on `AWS Inferentia <https://aws.amazon.com/ai/machine-learning/inferentia/>`_ and `AWS Trainium <https://aws.amazon.com/ai/machine-learning/trainium/>`_ instances. Neuron provides a complete machine learning development experience with compiler optimization, runtime efficiency, and comprehensive tooling.
+:ref:`AWS Neuron <what-is-neuron>` is a software stack that enables high-performance deep learning and generative AI workloads on `AWS Inferentia <https://aws.amazon.com/ai/machine-learning/inferentia/>`_ and `AWS Trainium <https://aws.amazon.com/ai/machine-learning/trainium/>`_ instances. Neuron provides a complete machine learning development experience with compiler optimization, runtime efficiency, and comprehensive tooling.
 
-**Key Features:**
+**For more details, see** :doc:`What is AWS Neuron? </about-neuron/what-is-neuron>` and :doc:`What's New in AWS Neuron? </about-neuron/whats-new>`
 
-* **Native Framework Integration** - Seamlessly integrated with PyTorch and JAX, with distributed training libraries for large-scale workloads
-* **Frontier Model Support** - Optimized for large language models including Llama 3.3-70B and Llama 3.1-405B
-* **Performance Optimization** - Advanced compiler, profiling tools, and custom kernel support for maximum efficiency
-* **Enterprise Ready** - Full integration with AWS services including SageMaker, EKS, ECS, and third-party platforms
+.. admonition:: Neuron and Open Source
 
-**Supported Instance Types:** ``Inf1``, ``Inf2``, ``Trn1``, ``Trn2``, and ``Trn2`` UltraServer
+   Neuron includes open-source components across the software stack. The NKI Compiler, Neuron Kernel Driver, NKI Library, NxD Inference, and Neuron Explorer are available under open-source licenses. Framework integrations for PyTorch, JAX, and vLLM provide transparent implementations with public repositories for community contributions and modifications. See the :doc:`list of Neuron open-source GitHub repos </about-neuron/oss/index>` for more details.
 
-.. grid:: 1 1 2 2
+.. grid:: 1
    :gutter: 3
 
    .. grid-item-card:: 
-      :link: about-neuron/index
+      :class-card: sd-border-2
+
+      **Looking to dive into Neuron development? Follow these links:**
+      ^^^
+      * :doc:`Learn about Neuron's support for native PyTorch </frameworks/torch/pytorch-native-overview>`
+      * :doc:`Get started with vLLM </libraries/nxd-inference/vllm/index>` for :doc:`Offline </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>` or :doc:`Online </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>` inference model serving
+      * :doc:`Implement and run your first NKI kernel </nki/get-started/quickstart-implement-run-kernel>`
+      * :doc:`Profile with Neuron Explorer </tools/neuron-explorer/index>`
+      * :doc:`Launch a Inf/Trn instance on Amazon EC2 </devflows/ec2-flows>`
+      * :doc:`Deploy a DLC </containers/get-started/quickstart-configure-deploy-dlc>`
+
+Learn more about AWS Neuron
+----------------------------
+
+**Select a card below to read more about these features**:
+
+.. grid:: 1 2 2 2
+   :gutter: 3
+
+   .. grid-item-card:: 
+      :link: /frameworks/torch/pytorch-native-overview
       :link-type: doc
-      :class-card: sd-text-center
+      :class-card: sd-border-2
  
-      **About the AWS Neuron SDK**
+      **Native PyTorch**
       ^^^
-      Learn about the AWS Neuron SDK, its components, and supported hardware
+      Learn about native PyTorch support in AWS Neuron.
 
    .. grid-item-card:: 
-      :link: setup/index
+      :link: /libraries/nxd-inference/vllm/index
       :link-type: doc
-      :class-card: sd-text-center
+      :class-card: sd-border-2
 
-      **Install the AWS Neuron SDK**
+      **vLLM on Neuron**
       ^^^
-      Step-by-step guides for installing the AWS Neuron SDK
+      High-performance inference serving for large language models with OpenAI-compatible APIs on Trainium and Inferentia.
+
+.. grid:: 1
+   :gutter: 3
 
    .. grid-item-card:: 
-      :link: about-neuron/quick-start/index
-      :link-type: doc
-      :class-card: sd-text-center
+      :class-card: sd-border-2
 
-      **Get started with the Neuron SDK**
+      **Developer Tools**
       ^^^
-      Start building with step-by-step tutorials
+      Profile and monitor your models as you develop, build, test, and deploy them with Neuron's developer tools.
+
+      * :doc:`Neuron Explorer </tools/neuron-explorer/index>`
+      * :doc:`Neuron Profiler </tools/profiler/neuron-profile-user-guide>`
+      * :doc:`Neuron Profiler 2.0 </tools/profiler/neuron-profiler-2-0-beta-user-guide>`
+      * :doc:`Neuron System tools </tools/neuron-sys-tools/index>`
+
+.. grid:: 1
+   :gutter: 3
 
    .. grid-item-card:: 
-      :link: release-notes/index
-      :link-type: doc
-      :class-card: sd-text-center
+      :class-card: sd-border-2
 
-      **Release notes**
+      **Neuron Kernel Interface**
       ^^^
-      Latest updates and changes to the AWS Neuron SDK
-   
+      Low-level programming interface for custom kernel development on Trainium and Inferentia with direct hardware access.
 
-Contents
-========
+      * :doc:`Set up your developer environment </nki/get-started/setup-env>`
+      * :doc:`NKI Compiler </nki/compiler/index>`
+      * :doc:`NKI Library  </nki/library/index>`
+      * :doc:`NKI Language Guide (Beta) </nki/deep-dives/nki-language-guide>`
+      * :doc:`NKI Developer "How-to" Guides </nki/how-to-guides/index>`
+      * :doc:`NKI API Reference </nki/api/index>`
+
+**Other Neuron features:**
 
 .. grid:: 1 1 2 2
    :gutter: 3
 
-   .. grid-item-card:: **Learn about AWS Neuron**
+   .. grid-item-card:: **Orchestration and Deployment on AWS EC2 and EKS**
+      :link: /devflows/index
+      :link-type: doc
       :class-card: sd-border-1
 
-      * :doc:`About AWS Neuron <about-neuron/index>`
-      * :doc:`What's New <release-notes/index>`
-      * :doc:`Announcements <about-neuron/announcements/index>`
-      * :doc:`AWS Neuron features <about-neuron/arch/neuron-features/index>`
-      * :doc:`AWS Neuron architecture <about-neuron/arch/index>`
-      * :doc:`Ask Q Developer <about-neuron/amazonq-getstarted>`
-      * :doc:`Performance <about-neuron/benchmarks/index>`
-      * :doc:`Troubleshooting <about-neuron/troubleshooting>`
-      * :doc:`Application Notes <about-neuron/appnotes/index>`
-      * :doc:`FAQ <about-neuron/faq>`
-      * :doc:`AWS Neuron term glossary <about-neuron/arch/glossary>`
+      Configure and run AWS Deep Learning Images (DLAMIs) and Containers (DLCs) to test and deploy your models with AWS EC2 and EKS.
 
-   .. grid-item-card:: **Get started with AWS Neuron**
+   .. grid-item-card::  **AWS Neuron Open Source**
+      :link: /about-neuron/oss/index
+      :link-type: doc
       :class-card: sd-border-1
 
-      * :ref:`Neuron quickstarts <neuron-quickstart>`
-      * :doc:`Samples and tutorials <about-neuron/models/index>`
-  
-   .. grid-item-card:: **Develop with AWS Neuron**
-      :class-card: sd-border-1
-
-      * :doc:`Setup guides <setup/index>`
-
-      * :doc:`Developer tools </tools/index>`
+      Interested in contributing to Neuron source code and samples? Review this documentation and learn about our public GitHub repos and how to contribute to the code and samples in them.  
 
    .. grid-item-card:: **AWS Neuron-supported ML frameworks**
       :class-card: sd-border-1
 
-      * :doc:`PyTorch Neuron <frameworks/torch/index>`
+      * :doc:`PyTorch NeuronX (torch-neuronx) <frameworks/torch/index>`
       * :doc:`JAX NeuronX <frameworks/jax/index>`
 
    .. grid-item-card:: **NeuronX Distributed (NxD) libraries**
       :class-card: sd-border-1
 
-      * :doc:`NxD libraries overview <libraries/index>`
+      * :doc:`NxD Libraries Overview <libraries/index>`
       * :doc:`NxD Training <libraries/nxd-training/index>`
       * :doc:`NxD Inference <libraries/nxd-inference/index>`
-      * :doc:`NxD Core <libraries/neuronx-distributed/index>`
+      * :doc:`NxD Core <libraries/index>`
 
-   .. grid-item-card:: **Additional ML libraries**
-      :class-card: sd-border-1
-
-      * :doc:`Third-party libraries <libraries/third-party-libraries//third-party-libraries>`
-
-   .. grid-item-card:: **Developer workloads**
+   .. grid-item-card:: **Workloads**
       :class-card: sd-border-1
 
       * :doc:`Workload orchestration </devflows/index>`
@@ -122,18 +132,21 @@ Contents
       :class-card: sd-border-1
 
       * :doc:`Neuron Runtime <neuron-runtime/index>`
-  
-   .. grid-item-card:: **Neuron Kernel Interface (NKI)**
+      * :doc:`Neuron Collectives <neuron-runtime/about/collectives>`
+
+   .. grid-item-card:: **Compilers**
       :class-card: sd-border-1
 
-      * :doc:`Neuron Kernel Interface (NKI) <nki/index>`
-      * :doc:`NKI developer guide <nki/developer_guide>`
-
-   .. grid-item-card:: **Neuron Compiler**
-      :class-card: sd-border-1
-
-      * :doc:`Neuron Compiler <compiler/index>`
+      * :doc:`Neuron Graph Compiler <compiler/index>`
+      * :doc:`NKI Compiler </nki/compiler/index>`
       * :doc:`Neuron C++ Custom Operators <neuron-customops/index>`
+      * :doc:`Neuron Compiler Error Codes <compiler/error-codes/index>`
+
+   .. grid-item-card:: **Legacy Documentation and Samples**
+      :class-card: sd-border-1
+
+      * :doc:`Apache MXNet </frameworks/mxnet-neuron/index>`
+      * :doc:`Archived content </archive/index>`
 
 .. toctree::
    :maxdepth: 1
@@ -141,8 +154,9 @@ Contents
    
    About Neuron </about-neuron/index>
    Neuron Architecture </about-neuron/arch/index>
-   What's New </release-notes/index>
+   What's New </about-neuron/whats-new>
    Announcements </about-neuron/announcements/index>
+   Contribute </about-neuron/oss/index>
 
 .. toctree::
     :maxdepth: 1
@@ -151,30 +165,63 @@ Contents
 
     Quickstarts </about-neuron/quick-start/index>
     Setup Guides </setup/index>
-    Models and Tutorials </about-neuron/models/index>
-    Ask Amazon Q </about-neuron/amazonq-getstarted>
+    Models </about-neuron/models/index>
+    Developer Flows </devflows/index>
 
 .. toctree::
    :maxdepth: 2
    :caption: Use ML Frameworks
    :hidden:
 
-   About Neuron Frameworks </frameworks/index>
+   Home </frameworks/index>
+   Native PyTorch </frameworks/torch/pytorch-native-overview>
    PyTorch NeuronX </frameworks/torch/index>
-   JAX NeuronX </frameworks/jax/index>
-   PyTorch Neuron </frameworks/torch/index>
-   TensorFlow Neuron </frameworks/tensorflow/index>
+   JAX NeuronX</frameworks/jax/index>
+   TensorFlow NeuronX</frameworks/tensorflow/index>
 
 .. toctree::
    :maxdepth: 2
-   :caption: Training & Inference Libraries
+   :caption: Training Libraries
+   :hidden:
+
+   NxD Training </libraries/nxd-training/index>
+   NxD Core (Training) </libraries/neuronx-distributed/index-training>
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Inference Libraries
+   :hidden:
+
+   vLLM </libraries/nxd-inference/vllm/index>
+   NxD Inference </libraries/nxd-inference/index>
+   NxD Core (Inference) </libraries/neuronx-distributed/index-inference>
+
+.. toctree::
+   :maxdepth: 2
+   :caption: NxD Core Libraries
    :hidden:
 
    Overview </libraries/index>
-   NxD Training </libraries/nxd-training/index>
-   NxD Inference </libraries/nxd-inference/index>
-   NxD Core </libraries/neuronx-distributed/index>
-   Third-party </libraries/third-party-libraries/third-party-libraries>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Developer Tools
+   :hidden:
+
+   Home </tools/index>
+   Neuron Explorer </tools/neuron-explorer/index>
+   Neuron Profiler 2.0 </tools/profiler/neuron-profiler-2-0-beta-user-guide>
+   Neuron Profiler </tools/profiler/neuron-profile-user-guide>
+   System Tools </tools/neuron-sys-tools/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Orchestrate and Deploy
+   :hidden:
+
+   AWS Workload Orchestration </devflows/index>
+   Neuron DLAMI </dlami/index>
+   Neuron Containers </containers/index>
 
 .. toctree::
    :maxdepth: 1
@@ -205,13 +252,15 @@ Contents
    :hidden:
 
    Neuron Runtime </neuron-runtime/index>
+   Collectives </neuron-runtime/about/collectives>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Compiler
+   :caption: Compilers
    :hidden:
 
-   Neuron Compiler </compiler/index>
+   Graph Compiler </compiler/index>
+   NKI Compiler </nki/compiler/index>
    Neuron C++ Custom Operators </neuron-customops/index>
 
 .. toctree::
@@ -219,20 +268,22 @@ Contents
    :caption: Neuron Kernel Interface (NKI)
    :hidden:
 
-   Overview </nki/index>
-   API Reference Manual </nki/api/index>
-   Developer Guide </nki/developer_guide>
-   Tutorials </nki/tutorials>
-   Kernels </nki/api/nki.kernels>
-   Misc </nki/misc>
+   Home </nki/index>
+   Concepts </nki/about/index>
+   NKI Setup </nki/get-started/setup-env>
+   Quickstart: Build and Run a Kernel </nki/get-started/quickstart-implement-run-kernel>
+   How-To Guides </nki/how-to-guides/index>
+   Tutorials </nki/tutorials/index>
+   Deep Dives </nki/deep-dives/index>
+   API Reference </nki/api/index>
+   NKI Library </nki/library/index>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Legacy software and docs
+   :caption: Other Content
    :hidden:
 
-   Apache MXNet </frameworks/mxnet-neuron/index>
+   Release Notes </release-notes/index>
    Archived content </archive/index>
-
-
+   
 *AWS and the AWS logo are trademarks of Amazon Web Services, Inc. or its affiliates. All rights reserved.*

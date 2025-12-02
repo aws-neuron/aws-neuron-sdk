@@ -13,9 +13,15 @@ Neuron Containers
     /containers/neuron-plugins
     /containers/how-to/how-to-ultraserver
     /containers/faq
+    DRA Beta </containers/neuron-dra>
 
 
 In this section, you'll find resources to help you use containers for accelerating your deep learning models on Inferentia and Trainium instances.
+
+
+.. admonition:: Neuron DRA for Kubernetes Beta
+
+   Neuron is currently testing beta support for Dynamic Resource Allocation (DRA) with Kubernetes. :doc:`Read more about it here </containers/neuron-dra>`.
 
 ----
 

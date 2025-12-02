@@ -102,8 +102,6 @@ The NeuronCore v2 supports the following data types:
 * 8-bit Floating point with configurable range and precision (cFP8)
 * Unsigned 8-bit integer (UINT8)
 
-.. note:: Neuron Compiler support for cFP8 and UINT8 is planned for a future Neuron SDK release. For INT8, see `Neuron Compiler: Enable Neuron INT8 support <https://github.com/aws/aws-neuron-sdk/issues/36>`_ for details.
-
 The layout for these is as follows:
 
 .. raw:: html

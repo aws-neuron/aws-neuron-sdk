@@ -14,6 +14,7 @@ NKI ISA
    :nosignatures:
 
    nc_matmul
+   nc_matmul_mx
    nc_transpose
    activation
    activation_reduce
@@ -29,6 +30,7 @@ NKI ISA
    tensor_copy_dynamic_dst
    tensor_copy_predicated
    reciprocal
+   quantize_mx
    iota
    dropout
    affine_select
@@ -41,10 +43,18 @@ NKI ISA
    local_gather
    dma_copy
    dma_transpose
+   dma_compute
    max8
    nc_find_index8
    nc_match_replace8
    nc_stream_shuffle
+   register_alloc
+   register_load
+   register_move
+   register_store
+   core_barrier
+   sendrecv
+
 
 
 NKI ISA Config Enums

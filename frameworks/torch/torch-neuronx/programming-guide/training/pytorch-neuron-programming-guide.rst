@@ -113,7 +113,7 @@ on Trainium tutorial
 <neuronx-mlp-training-tutorial:single-worker-mlp-training-on-trainium>`.
 
 PyTorch NeuronX multi-worker data parallel training using torchrun
------------------------------------------------------------------
+--------------------------------------------------------------------
 
 Data parallel training allows you to replicate your script across
 multiple workers, each worker processing a proportional portion of the
@@ -398,7 +398,7 @@ Tips and Best Practices
 -----------------------
 
 Understand the lazy mode in PyTorch NeuronX
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One significant difference between PyTorch NeuronX and native PyTorch is
 that the PyTorch NeuronX system runs in lazy mode while the native
@@ -460,10 +460,7 @@ This would save the model in a serialized manner. When saved using the ``seriali
 be loaded using ``serialization.load`` api. More information on this here: `Saving and Loading Tensors <https://pytorch.org/xla/release/1.9/index.html#saving-and-loading-xla-tensors>`__
 
 
-FAQ
----
 Debugging and troubleshooting
 -----------------------------
 
-To debug on PyTorch Neuron, please follow the :ref:`debug
-guide <./pytorch-neuron-debug.html>`.
+To debug on PyTorch Neuron, follow the :doc:`debug guide <pytorch-neuron-debug>`.

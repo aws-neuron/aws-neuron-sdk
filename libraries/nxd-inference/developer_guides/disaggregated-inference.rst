@@ -70,7 +70,7 @@ finished the scheduler will add the request to the next decode batch (5).
 
 
 Prefill Decode Interference When Colocating Prefill and Decode
---------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In traditional continuous batching, prefill requests are prioritized over decode requests. Prefills
 are run as batch size 1 because they are compute intensive whereas decodes can be run at a higher 
@@ -104,7 +104,7 @@ under the application defined SLO.
 
 
 Trade-Offs
-----------
+^^^^^^^^^^^^
 
 Because DI runs prefill and decode separately, each part of the inference process needs to operate at an
 equal level of efficiency to maximize throughput and hardware resources. For example, if you can process 4 prefill
@@ -117,26 +117,22 @@ One technique to remediate this is to run with a dynamic amount of prefill and d
 dynamic xPyD. In the above example, we could run with 1 prefill and 2 decode servers so that our prefill and 
 decode efficiency will be balanced.
 
-========================
-Detailed System Overview
-========================
-
 
 Proxy Server Architecture
--------------------------
+----------------------------
 
 The proxy server routes messages between clients and workers in our disaggregated inference system. 
 It uses the Quart framework, Python's asyncio libraries, and etcd to manage this communication.
 
 Main Components
-===============
+^^^^^^^^^^^^^^^^^
 
 * **Framework**: Quart (for handling web requests)
 * **Task Management**: Python asyncio
 * **Request Forwarding**: Uses etcd to detect new prefill and decode workers (xPyD only)
 
 How Requests Flow
-=================
+^^^^^^^^^^^^^^^^^
 
 When a client sends a request, the proxy server starts two tasks at the same time:
 
@@ -166,21 +162,21 @@ This approach offers two benefits:
 2. The decode server can get ready while prefill is working
 
 How Tokens Work
-===============
+^^^^^^^^^^^^^^^^^
 
 The proxy server handles tokens in specific ways to ensure accurate responses:
 
-Prefill Settings
-^^^^^^^^^^^^^^^^
+**Prefill Settings**
+
 * Sets ``max_tokens=1`` for prefill requests
 * Returns the first output token
 
-Decode settings
-^^^^^^^^^^^^^^^
+**Decode settings**
+
 * Runs as normal except it skips the first token from decode
 
 Output Types
-============
+^^^^^^^^^^^^^^^
 
 The system can work in two ways decided by the client if streaming is enabled:
 
@@ -195,7 +191,7 @@ The system can work in two ways decided by the client if streaming is enabled:
    * Sends all tokens at once when finished
 
 Response Handling
-=================
+^^^^^^^^^^^^^^^^^^
 
 The proxy server:
 
@@ -204,7 +200,7 @@ The proxy server:
 * Makes sure outputs match what clients expect from a regular system
 
 Dynamic xPyD (Multiple Prefill, Multiple Decode)
-===============================================
+--------------------------------------------------
 
 Dynamic xPyD lets you use multiple prefill and decode workers and dynamically add new workers to the cluster.
 
@@ -259,7 +255,8 @@ We use two types of buffers:
 * ``RecvBuffer``: For decode workers
 
 Static 1P1D Mode
-================
+-----------------
+
 In static mode, the system creates a single buffer for each worker during initialization:
 
 .. code-block:: python
@@ -281,7 +278,8 @@ This approach means:
 * Buffers have predetermined communication partners
 
 Dynamic xPyD Mode
-=================
+------------------
+
 In dynamic mode, the system creates buffers on demand. Both SendBuffers and RecvBuffers can be created dynamically:
 
 .. code-block:: python
@@ -321,7 +319,7 @@ Below is an image showing the KV cache transfer process on neuron:
     :alt: High Level Transfer Architecture
 
 Transfer Engine (neuron_transfer_engine.py)
-===========================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The transfer engine moves KV cache efficiently between workers:
 
@@ -341,10 +339,9 @@ The engine:
 * Tracks when transfers finish
 
 Zero-Copy Transfer System
-=========================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Send Handler (Prefill Side)
-"""""""""""""""""""""""""""
+**Send Handler (Prefill Side)**
 
 * Runs in its own thread
 * Listens for requests from decode servers
@@ -377,8 +374,7 @@ Here's how it works:
                 self._process_lookup_all(identity, request)
                 continue
 
-Receive Handler (Decode Side)
-"""""""""""""""""""""""""""""
+**Receive Handler (Decode Side)**
 
 * Keeps a list of waiting transfers
 * For each task:
@@ -395,7 +391,7 @@ Receive Handler (Decode Side)
     * Tries again later
 
 Starting Transfers
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 On the Prefill Side:
 
@@ -444,7 +440,7 @@ Request Scheduling Rules
 Here are new scheduling rules for Disaggregated Inference:
 
 Prefill Worker Rules
-====================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Requests can be: Waiting, Transferring, or Running
 * Only one request can run at a time
@@ -455,7 +451,7 @@ Prefill Worker Rules
   * Number of transfers is less than batch size
 
 Decode Worker Rules
-===================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Uses same request states as prefill
 * Running + transferring must not exceed batch size
@@ -464,7 +460,7 @@ Decode Worker Rules
 * Can start new transfers when there's space
 
 Scheduler Jobs
-==============
+^^^^^^^^^^^^^^^
 
 * Adds transfer requests to a list
 * Checks status without blocking
@@ -477,8 +473,6 @@ These rules help:
 * Use resources well
 * Process batches efficiently
 * Keep scheduling separate from transfers
-
-
 
 Example Usage
 -------------

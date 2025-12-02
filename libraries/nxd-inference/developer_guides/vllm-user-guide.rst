@@ -1,10 +1,13 @@
-.. _nxdi-vllm-user-guide:
+.. _nxdi-vllm-user-guide-v0:
 
-vLLM User Guide for NxD Inference
-=================================
+vLLM V0 User Guide for NxD Inference (Legacy)
+==============================================
 
 `vLLM <https://docs.vllm.ai/en/latest/>`_ is a popular library for LLM inference and serving utilizing advanced inference features such as continuous batching.
 This guide describes how to utilize AWS Inferentia and AWS Trainium AI accelerators in vLLM by using NxD Inference (``neuronx-distributed-inference``).
+
+.. important::
+   This guide is compatible with vLLM v0.x versions. Since vLLM has deprecated v0.x versions (see `vLLM issue #18571 <https://github.com/vllm-project/vllm/issues/18571>`_), Neuron recommends using vLLM v1.x with the vLLM-Neuron Plugin for new deployments. See :ref:`vLLM User Guide  V1 <nxdi-vllm-user-guide>` for the updated guide.
 
 .. contents:: Table of contents
    :local:
@@ -154,7 +157,7 @@ Here is a quick and minimal example to get running.
         print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
 
 
-.. nxdi-vllm-model-configuration::
+.. _nxdi-vllm-model-configuration:
 
 Model Configuration
 ^^^^^^^^^^^^^^^^^^^

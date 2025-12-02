@@ -222,7 +222,7 @@ provides some key advantages over XLA |LazyTensor| execution:
   torch in C++ in conjunction with Neuron XLA |LazyTensor| execution.
 
 Tensor Materialization During Tracing
---------------------------
+---------------------------------------
 
 While tensor materialization is normal for JIT workflow, it is not expected during traced inference.
 When working with traced inference, developers may encounter tensor materialization, which leads to graphs being compiled based on example input tensor value and unexpected program behavior.
@@ -264,7 +264,7 @@ See the updated code without tensor materialization:
               return tensor * 2
 
 Debugging Flags
-~~~~~~~
+~~~~~~~~~~~~~~~~
 
 To help catch tensor materialization issues, PyTorch/XLA provides two useful approaches:
 
@@ -283,7 +283,7 @@ To help catch tensor materialization issues, PyTorch/XLA provides two useful app
    torch_xla._XLAC._set_allow_execution(False)
 
 Recommendations
-~~~~~~~
+~~~~~~~~~~~~~~~~
 
 Using these flags during development can help identify potential issues early in the development cycle. The recommended approach is to:
 

@@ -1,9 +1,9 @@
 .. _neuronx_distributed_inference_developer_guide:
 
-Developer guide for Neuronx-Distributed Inference
+About NeuronX-Distributed (NxD) Inference
 =================================================
 
-Neuronx-Distributed (NxD Core) provides fundamental building blocks that enable you to run
+NeuronX Distributed (NxD Core) provides fundamental building blocks that enable you to run
 advanced inference workloads on AWS Inferentia and Trainium instances. These building
 blocks include parallel linear layers that enable distributed inference, a model builder
 that compiles PyTorch modules into Neuron models, and more.

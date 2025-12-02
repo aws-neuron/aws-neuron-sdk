@@ -27,3 +27,7 @@ nbformat
 numpy==1.21.2
 ml_dtypes~=0.2.0
 sphinxcontrib-googleanalytics
+ipython
+sphinxcontrib.datatemplates
+sphinxcontrib.spelling
+sphinx-tabs

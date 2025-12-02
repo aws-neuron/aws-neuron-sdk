@@ -44,11 +44,11 @@ Parameters:
    each bucket model. This configuration is similar to :func:`torch_neuronx.bucket_model_trace`
 
 -  ``compiler_workdir: Optional[str,pathlib.Path]`` : Work directory used by
-   |neuronx-cc|. This can be useful for debugging and inspecting
-   intermediary |neuronx-cc| outputs.
+   Neuron Graph Compiler. This can be useful for debugging and inspecting
+   intermediary Neuron Graph Compiler outputs.
 
 -  ``compiler_args: Optional[Union[List[str],str]]`` : List of strings representing
-   |neuronx-cc| compiler arguments. See :ref:`neuron-compiler-cli-reference-guide`
+   Neuron Graph Compiler compiler arguments. See :ref:`neuron-compiler-cli-reference-guide`
    for more information about compiler options.
 
 -  ``inline_weights_to_neff: bool`` : A boolean indicating whether the weights should be
@@ -78,11 +78,12 @@ Save:
 
    def neuronx_distributed.trace.parallel_model_save(model, save_dir)
 
-This API should save the traced model in save_dir . Each shard would be
-saved in its respective directory inside the save_dir. Parameters:
+This API should save the traced model in ``save_dir``. Each shard would be
+saved in its respective directory inside the ``save_dir``. 
 
--  ``model: (TensorParallelModel)`` : Traced model produced using the
-parallel_model_trace api.
+Parameters:
+
+-  ``model: (TensorParallelModel)`` : Traced model produced using the ``parallel_model_trace`` API
 -  ``save_dir: (str)`` : The directory where the model would be saved
 
 Load:
@@ -92,8 +93,7 @@ Load:
 
    def neuronx_distributed.trace.parallel_model_load(load_dir)
 
-This API will load the sharded traced model into ``TensorParallelModel``
-for inference.
+This API will load the sharded traced model into ``TensorParallelModel`` for inference.
 
 .. _parameters-10:
 

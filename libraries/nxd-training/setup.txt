@@ -1,8 +1,1 @@
 * :ref:`nxdt_installation_guide`
-..
-   * :ref:`nxdt_python_venv`
-   * :ref:`nxdt_neuron_deps`
-   * :ref:`nxdt_nemo_deps`
-   * :ref:`nxdt_nxdt_reqs`
-   * :ref:`nxdt_nxdt_nxdt_install`
-   * :ref:`nxdt_installation_common_failures`

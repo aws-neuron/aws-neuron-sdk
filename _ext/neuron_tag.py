@@ -13,7 +13,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 neuron1_dir = ['n1']
 neuronx_dir = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','neuron-customops']
 common_dir = ['tools','neuron-runtime','release-notes','containers','general','compiler','frameworks','src']
-text_template = '*This document is relevant for*: '
+text_template = '**This document is relevant for**: '
 add_inf1_tag = ['about-neuron/arch',
                 'about-neuron/arch/index',
                 'about-neuron/arch/neuron-hardware/neuron-hw-arch',
@@ -63,7 +63,6 @@ clear_inf1_tag = ['about-neuron/arch/neuron-features/neuron-caching',
                 'about-neuron/arch/neuron-hardware/neuron-core-v2',
                 'frameworks/torch/torch-neuronx/transformers-neuronx/readme',
                 'release-notes/torch/transformers-neuronx/index',
-                'tools/neuron-sys-tools/neuron-det',
                 'tools/neuron-sys-tools/nccom-test',
                 'about-neuron/benchmarks/inf2/inf2-performance',
                 'about-neuron/announcements/neuron2.x/sm-training-dlc-2.9.1',
@@ -102,7 +101,9 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'about-neuron/arch/neuron-hardware/neuron-core-v3', 
                   '/about-neuron/announcements/neuron2.x/announce-neuron-trn2',
                   '/about-neuron/arch/neuron-features/logical-neuroncore-config',
-                  'libraries/nxd-training/'
+                  'libraries/nxd-training/',
+                  '/about-neuron/arch/neuron-hardware/trn3-arch',
+                  '/about-neuron/arch/neuron-hardware/neuron-core-v4'
                ]
 
 
@@ -129,8 +130,21 @@ clear_trn2_tag = [ 'frameworks/tensorflow/',
                   'about-neuron/arch/neuron-hardware/trainium',
                   'about-neuron/arch/neuron-hardware/neuron-core-v2',
                   '/libraries/neuronx-distributed/context_parallelism_overview',
-                  'neuron-customops/'
-                    ]
+                ]
+clear_trn3_tag = [ 'frameworks/tensorflow/',
+                  'libraries/transformers-neuronx/',
+                  'arch/neuron-hardware/trn1-arch',
+                  'arch/neuron-hardware/inf1/',
+                  'about-neuron/benchmarks/',
+                  'about-neuron/benchmarks/trn1/',
+                  'about-neuron/benchmarks/inf2/inf2-performance',
+                  'about-neuron/models/inference-inf2-trn1-samples',
+                  'about-neuron/models/training-trn1-samples',
+                  'about-neuron/arch/neuron-hardware/trainium',
+                  'about-neuron/arch/neuron-hardware/neuron-core-v2',
+                  '/libraries/neuronx-distributed/context_parallelism_overview',
+                 ]
+
 clear_nc_v2_tag = [
                 'tools/tutorials/tutorial-neuron-check-model',
                 'tools/tutorials/tutorial-neuron-gatherinfo',
@@ -190,9 +204,6 @@ class NeuronTag(SphinxDirective):
 
         cur_file = self.env.docname # current file path
 
-        
-
-
         path_split, path_len = splitall(cur_file)
 
         # see if it is a landing page or an index file.
@@ -205,27 +216,29 @@ class NeuronTag(SphinxDirective):
         if path_split[0] in neuron1_dir: 
             return_instances = ['Inf1']
         elif path_split[0] in neuronx_dir:
-            return_instances = ['Trn1','Trn2','Inf2']
+            return_instances = ['Trn1','Trn2','Trn3','Inf2']
         elif path_split[0] in common_dir:
-            return_instances = ['Trn1','Trn2','Inf1','Inf2']
+            return_instances = ['Trn1','Trn2','Inf1','Inf2','Trn3']
 
         # parse based on the directory where the file is.
         if path_split[path_len-2] == 'inference':
             return_instances = ['Inf1']
         elif path_split[path_len-2] == 'training':
-            return_instances = ['Trn1','Trn2']
+            return_instances = ['Trn1','Trn2','Trn3']
 
         # add or clear tags based on file name and/or folder
         if in_list(cur_file, add_trn1_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
                 return_instances.append('Trn2')
+                return_instances.append('Trn3')
                 return_instances.append('Inf2')
 
         if in_list(cur_file, add_neuronx_tag):
             if 'Trn1' not in return_instances:
                 return_instances.append('Trn1')
                 return_instances.append('Trn2')
+                return_instances.append('Trn3')
                 return_instances.append('Inf2')
 
         if in_list(cur_file, add_inf1_tag):
@@ -247,6 +260,10 @@ class NeuronTag(SphinxDirective):
         if in_list(cur_file, clear_trn2_tag):
             if 'Trn2' in return_instances:
                 return_instances.remove('Trn2')
+        
+        if in_list(cur_file, clear_trn3_tag):
+            if 'Trn3' in return_instances:
+                return_instances.remove('Trn3')
 
         if in_list(cur_file, clear_inf1_tag):
             if 'Inf1' in return_instances:
@@ -263,15 +280,20 @@ class NeuronTag(SphinxDirective):
         if cur_file=='about-neuron/arch/neuron-hardware/trainium2':
             if 'Trn2' not in return_instances:
                 return_instances.append('Trn2')
+
+        if cur_file=='about-neuron/arch/neuron-hardware/trainium3':
+            if 'Trn2' not in return_instances:
+                return_instances.append('Trn3')
        
         if cur_file=='frameworks/torch/inference-torch-neuronx' or cur_file=='setup/torch-neuronx' or cur_file=='setup/tensorflow-neuronx':
             if 'Inf2' not in return_instances:
                 return_instances.append('Inf2')
                 return_instances.append('Trn1')
                 return_instances.append('Trn2')
+                return_instances.append('Trn2')
 
         if cur_file=='about-neuron/appnotes/neuronx-distributed/introducing-nxdt-training':
-            return_instances = ['Trn1','Trn2']
+            return_instances = ['Trn1','Trn2','Trn3']
             
         # generate text from instances list if the list is not empty.
         return_instances = sorted(set(return_instances))

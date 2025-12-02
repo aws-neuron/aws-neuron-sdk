@@ -200,29 +200,36 @@ Parameters:
    of the class to pad and the tgt_src_ratio (num_heads_padded / num_heads)as its argument
 
 Usage:
+
    When modifying the Attention layer, typically you must divide by TP degree like so:
-   ::
-      self.num_heads = neuronx_dist_utils.divide(self.num_heads, get_tensor_model_parallel_size())
+
+   ``self.num_heads = neuronx_dist_utils.divide(self.num_heads, get_tensor_model_parallel_size())``
 
    This line must be modified like so:
-   ::
+  
+   .. code-block:: python
+
       self.num_heads = neuronx_dist_utils.divide(
          self.num_heads + get_number_of_extra_heads(self.num_heads, get_tensor_model_parallel_size()),
          get_tensor_model_parallel_size())
 
    Then, after initializing the model, you must call this wrapper:
-   ::
+   
+   .. code-block:: python
+
       model = get_model(config=desired_config)
       model = pad_model(model, tp_degree=32, desired_config.num_heads)  # Use the model as desired after this point
 
    You can specify a specific layer or class for your model to pad, so you aren't unnecessarily padding.
    Typically, this layer will be your Attention layer
-   ::
-      model = pad_model(model, tp_degree=32, desired_config.num_heads, wrapped_classes=[MyAttention])
+   
+   ``model = pad_model(model, tp_degree=32, desired_config.num_heads, wrapped_classes=[MyAttention])``
 
    You can also specify a pad_hook_fn, to be called whenever encountering an instance of wrapped_class,
    passing in said instance as a parameter, along with the tgt_src_ratio (num_heads_padded / num_heads).
-   ::
+   
+   .. code-block:: python
+
       def my_hook(attention_to_pad, tgt_src_ratio):
          attention_to_pad.split_size = int(model.split_size * tgt_src_ratio)
          model = pad_model(
@@ -255,16 +262,11 @@ Parameters:
 
 
 -  ``parallel_logits (Tensor)`` : Sharded logits from the previous MLP
--  ``labels (Tensor)`` : Label for each token. Labels should not be sharded,
-   and the parallel_cross_entropy would take care of sharding the labels internally
--  ``label_smoothing (float)`` : A float in [0.0, 1.0]. Specifies the amount of
-   smoothing when computing the loss, where 0.0 means no smoothing
-
-
-
+-  ``labels (Tensor)`` : Label for each token. Labels should not be sharded, and the parallel_cross_entropy would take care of sharding the labels internally
+-  ``label_smoothing (float)`` : A float in [0.0, 1.0]. Specifies the amount of smoothing when computing the loss, where 0.0 means no smoothing
 
 Pipeline parallelism:
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 Neuron Distributed Pipeline Model
 '''''''''''''''''''''''''''''''''

@@ -16,45 +16,24 @@ def tensor_split_kernel_(in_tensor):
       out_tensor_odd: a second output tensor (will hold the odd columns of the input tensor)
   """
 
+  # This example only works for tensors with a partition dimension that fits in the SBUF
+  assert in_tensor.shape[0] <= nl.tile_size.pmax
+
   # Extract tile sizes.
   sz_p, sz_f = in_tensor.shape
   sz_fout_even = sz_f - sz_f // 2
   sz_fout_odd = sz_f // 2
+
+  # create output tensors
   out_tensor_even = nl.ndarray((sz_p, sz_fout_even), dtype=in_tensor.dtype, buffer=nl.shared_hbm)
   out_tensor_odd = nl.ndarray((sz_p, sz_fout_odd), dtype=in_tensor.dtype, buffer=nl.shared_hbm)
 
-  # We assume that all three tensors have the same partition dimension size
-  # and it does not exceed pmax
-  assert in_tensor.shape[0] == out_tensor_even.shape[0] == out_tensor_odd.shape[0]
-  assert in_tensor.shape[0] <= nl.tile_size.pmax
-
-  # Make sure even/odd output tensors have correct free dimension size
-  assert sz_fout_even == math.ceil(sz_f / 2)
-  assert sz_fout_odd == math.floor(sz_f / 2)
-
-  # Generate tensor indices for the input/output tensors
-  i_p = nl.arange(sz_p)[:, None]
-  i_f = nl.arange(sz_f)[None, :]
-  i_fout_even = nl.arange(sz_fout_even)[None, :]
-  i_fout_odd = nl.arange(sz_fout_odd)[None, :]
-
-  # Split pattern:
-  i_f_even = (2 * i_fout_even)
-  i_f_odd = (2 * i_fout_odd + 1)
-
   # Load input data from external memory to on-chip memory
-  in_tile = nl.load(in_tensor[i_p, i_f])
-
-  # Perform the split
-  # these assignments invoke copy instructions under the hood
-  # which can execute on either Scalar or Vector Engine
-  # (decided by compiler instruction scheduler)
-  out_tile_even = in_tile[i_p, i_f_even]
-  out_tile_odd = in_tile[i_p, i_f_odd]
+  in_tile = nl.load(in_tensor)
 
   # Store the results back to external memory
-  nl.store(out_tensor_even[i_p, i_fout_even], value=out_tile_even)
-  nl.store(out_tensor_odd[i_p, i_fout_odd], value=out_tile_odd)
+  nl.store(out_tensor_even, value=in_tile[:, 0:sz_f:2])
+  nl.store(out_tensor_odd,  value=in_tile[:, 1:sz_f:2])
 
   return out_tensor_even, out_tensor_odd
 

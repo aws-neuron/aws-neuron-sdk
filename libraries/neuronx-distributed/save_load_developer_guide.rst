@@ -82,6 +82,7 @@ they can run the offline ZeRO-1 optimizer checkpoint conversion tool. This tool 
 conversion from sharded states to full states, from full to sharded, and from sharded to sharded.
 
 .. code:: ipython3
+   
    # sharded to sharded or full to sharded
    nxd_convert_zero_checkpoints --input_dir <input path> --output_dir <output path> --convert_to_sharded --dp_size <new dp degree>
    # sharded to full

@@ -1,13 +1,19 @@
 .. _neuron-pytorch:
 
-PyTorch Neuron
-==============
+PyTorch Support on Neuron
+==========================
 
-PyTorch Neuron unlocks high-performance and cost-effective deep learning acceleration on AWS Trainium-based and AWS Inferentia-based Amazon EC2 instances.
+PyTorch running on Neuron unlocks high-performance and cost-effective deep learning acceleration on AWS Trainium-based and AWS Inferentia-based Amazon EC2 instances.
 
-The PyTorch Neuron plugin architecture enables native PyTorch models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes. 
+The PyTorch plugin for Neuron architecture enables native PyTorch models to be accelerated on Neuron devices, so you can use your existing framework application and get started easily with minimal code changes. 
  
-For help selecting a framework type for inference, see :ref:`torch-neuron_vs_torch-neuronx`
+For help selecting a framework type for inference, see :ref:`torch-neuron_vs_torch-neuronx`. 
+
+.. admonition:: Introducing TorchNeuron, a native backend for AWS Trainium
+
+    At re:Invent '25, AWS Neuron announced their new PyTorch package, "TorchNeuron", which includes the ``torch-neuronx`` library and initial support for a native PyTorch backend (TorchDynamo) with eager execution, ``torch.compile``, and standard distributed APIs. 
+
+    For more details on what is coming with TorchNeuron and PyTorch eager mode support, see :doc:`pytorch-native-overview`.
 
 .. _pytorch-neuronx-training:
 
@@ -16,6 +22,7 @@ For help selecting a framework type for inference, see :ref:`torch-neuron_vs_tor
     :hidden:
     
     /frameworks/torch/torch-setup
+    /frameworks/torch/pytorch-native-overview
 
 
 .. toctree::

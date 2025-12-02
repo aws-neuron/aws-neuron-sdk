@@ -1,7 +1,7 @@
 .. _install-prev-neuron-pytorch:
 
 Install previous PyTorch Neuron releases (``torch-neuron``)
-==========================================================
+============================================================
 
 .. include:: /setup/install-templates/inf1/note-setup-cntr.rst
 

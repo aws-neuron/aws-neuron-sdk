@@ -5,18 +5,15 @@ Developer Guide - NeuronX Runtime
 
 This guide is intended to support a deeper understanding of the Neuron Runtime and how ML applications are built using the Runtime APIs directly, and focuses on the information you need to know when building custom frameworks that call ``libnrt`` APIs directly from C/C++ apps. It is applicable to developers building their own ML frameworks; if you are using a popular existing framework such as PyTorch, JAX, or TensorFlow, the concepts and techniques discussed in this guide do not apply to your work.
 
-.. toctree:: In this topic
-   :local:
-   :maxdepth: 1
-
 .. note::
-    The next few paragraphs provide a brief introduction to the Neuron hardware and the Neuron Runtime architecture. Customers who'd rather skip this and jump straight to building their first ML
+    The next few paragraphs provide a brief introduction to the Neuron hardware and the Neuron Runtime architecture. Customers who would rather skip this and jump straight to building their first ML
     application which runs without the aid of an ML framework, should go to :ref:`first_app`.
+
 
 About the Neuron Runtime Library
 --------------------------------
 
-The Neuron Runtime Library (``libnrt``) is the intermediate layer between Application + Framework and Neuron Driver + Neuron Device. It provides a C API for initializing the Neuron hardware, staging models and input data, executing inferences and training iterations on the staged models, and retrieving output data. The vast majority of ML applications running on Neuron will follow one of the following 3 architectural templates:
+The Neuron Runtime Library (``libnrt``) is the intermediate layer between an application and a framework, and the Neuron driver and Neuron Devices. It provides a C API for initializing the Neuron hardware, staging models and input data, executing inferences and training iterations on the staged models, and retrieving output data. The vast majority of ML applications running on Neuron will follow one of the following 3 architectural templates:
 
 
 .. figure:: ../images/neuron-rt-diagram.png
@@ -239,7 +236,7 @@ The Neuron Runtime Architecture
 |nrt_arch|
 
 Application Interface Layer (The ``libnrt`` API)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Application Interface Layer allows applications and frameworks to use the available Neuron Devices to run
 inference or training workloads. A complete reference of the C interface can be found in :ref:`nrt_api`.
@@ -259,7 +256,7 @@ documented in :ref:`api_profile` section.
 The NEFF format and NEFF Parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A NEFF (*N*euron *E*xecutable *F*ile *F*ormat) is a single file container for all the artifacts needed to execute a model on one or more NeuronCores.
+A NEFF (Neuron Executable File Format) is a single file container for all the artifacts needed to execute a model on one or more NeuronCores.
 A NEFF is the output of the Neuron Compiler (neuron-cc). It contains Neuron machine instructions, pseudo instructions (compiler-generated instructions
 which are parsed and replaced with Neuron instructions by the Neuron Runtime when the model loads), tensor information, model parameters and other components
 that support the model's execution on one or more NeuronCores.
@@ -354,7 +351,7 @@ Tools such as ``neuron-top`` and ``neuron-monitor`` can be used to determine the
 
 
 Building your first Neuron application
--------------------------------------
+----------------------------------------
 
 The simple application presented here loads a NEFF file using the provided binary files' contents as input tensors and saving the output tensors as
 binary files. If a file isn't provided for an input tensor, that input tensor will be zero-filled.
@@ -867,10 +864,6 @@ The ``handler_free_tensor`` function simply deallocates the given tensor:
         // ...
     }
 
-
-For more details on the tensor API, check out the :ref:`api_tensor` and the :ref:`api_tensorset` sections.
-
-
 Executing the NEFF
 ~~~~~~~~~~~~~~~~~~
 
@@ -921,7 +914,8 @@ API Return Codes
 ^^^^^^^^^^^^^^^^
 
 All API calls return an ``NRT_STATUS`` value representing the return status of the call. In case of an error, an error message
-is logged (based on the logging settings). The table below contains all the possible error codes. Note that some error codes only apply to certain API calls.
+is logged (based on the logging settings). The table below contains all the possible error codes. Note that some error codes only apply to certain API calls. 
+For more details on these errors, refer the :ref:`nrt-troubleshooting` docs.
 
 .. list-table::
     :widths: 40 20 260
@@ -986,7 +980,22 @@ is logged (based on the logging settings). The table below contains all the poss
       - Suspected hang in collectives operation due to hardware errors on this or other workers.
     * - ``NRT_EXEC_HW_ERR_HBM_UE``
       - 1201
-      - An HBM suffered from an uncorrectable error and produced incorrect results
+      - HBM Unrepairable Uncorrectable hardware error caused incorrect results 
+    * - ``NRT_EXEC_HW_ERR_NC_UE``
+      - 1202
+      - NeuronCore parity errors caused incorrect results
+    * - ``NRT_EXEC_HW_ERR_DMA_ABORT``
+      - 1203
+      - The DMA engine encountered an error and halted execution
+    * - ``NRT_EXEC_SW_NQ_OVERFLOW``
+      - 1204
+      - Execution timed out due to dropped notifications. Likely caused by Hardware DMA Generation Engine (DGE) notifications
+    * - ``NRT_EXEC_HW_ERR_REPAIRABLE_HBM_UE``
+      - 1205
+      - HBM Repairable Uncorrectable hardware error caused incorrect results
+    * - ``NRT_NETWORK_PROXY_FAILURE``
+      - 1206
+      - Network communication failed between Neuron hardware and Collectives
 
 
 .. _api_init:
@@ -1400,6 +1409,40 @@ The Profiling API
 
     :param filename: Path to a file where the profile will be written. If the file already exists, it will be truncated.
 
+
+.. _api_debug_stream:
+
+The Debug Stream API
+^^^^^^^^^^^^^^^^^^^^
+
+See :ref:`Neuron Debug Stream API Documentation <nrt-debug-stream-api>` for more details.
+
+.. c:function:: NRT_STATUS nrt_debug_client_connect(int logical_nc_idx, int *stream_fd)
+
+    Establishes a connection to a specified Logical Neuron Core's debug stream and returns a handle to the stream in the ``stream_fd`` parameter. Note that only one client
+    can connect to a Logical Neuron Core's stream at any given time. Attempts to connect to a stream with multiple clients will result in a ``NRT_INVALID`` return status.
+
+    :param logical_nc_idx: Core's debug stream to connect to
+    :param stream_fd: Connection handle to reference and interact with the stream
+
+    :returns: ``NRT_SUCCESS`` on success
+
+.. c:function:: void nrt_debug_client_connect_close(int stream_fd)
+
+    Closes a connection created by ``nrt_debug_client_connect``.
+
+    :param stream_fd: Connection handle to close
+
+.. c:function:: NRT_STATUS nrt_debug_client_read_one_event(int stream_fd, ndebug_stream_event_header_t *header, void **payload)
+
+    Consumes a single event from the stream and return it in ``header`` and ``payload``. Note that it is the user's responsibility to free the payload pointer. Also keep
+    in mind that this function must be called from the same process that owns the Logical Neuron Core. Calling this function from any other process results in undefined behavior.
+
+    :param stream_fd: Stream to consume an event from
+    :param header: Consumed event's header
+    :param payload: Consumed event's payload (caller's responsibility to free this pointer)
+
+    :returns: ``NRT_SUCCESS`` on success or ``NRT_QUEUE_EMPTY`` if no events are available
 
 Other APIs
 ^^^^^^^^^^

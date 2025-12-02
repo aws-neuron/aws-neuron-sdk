@@ -15,6 +15,7 @@
       ~engine.vector
       ~engine.scalar
       ~engine.gpsimd
+      ~engine.dma
       ~engine.sync
       ~engine.unknown
    

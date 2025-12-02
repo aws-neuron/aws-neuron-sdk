@@ -361,9 +361,10 @@ task can utilize ``async_mode``, the following questions must be answered:
     - Example: For LLMs using on-device-sampling, we pass in the token generated as output as input to the next step in the auto regressive loop directly. Without on-device-sampling, the sampling logic will rely on logits as output, which is a data dependent compute pattern that is incompatible with async mode.
 3. Is there sufficient CPU logic that is independent of the previous outputs? If not, then ``async_mode`` likely won't offer major benefits.
     - Example: In production workloads, these are typically server overheads (scheduling, logging, etc.), but this could also be some pre/post processing steps in the model execution pipeline.
+  
 Based on the answers above, ``async_mode`` will need to be set accordingly, and/or, be configured to work correctly with the application.
 
-5. Convert weights to a supported format
+1. Convert weights to a supported format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 NxD Inference supports weights stored in the model path in the following
@@ -399,15 +400,22 @@ Integrating Onboarded Model with vLLM
 After completing the model onboarding in NxDI using the steps outlined 
 in this guide, you can follow these steps to run that model through vLLM.
 
-1. Register your application/task head class in vLLM within ``_NEURON_SUPPORTED_MODELS``
-   (see ``vllm/model_executor/model_loader/neuronx_distributed.py``).
-2. Use the local directory as ``model_name_or_path`` within vLLM which
-   contains the model weights and the config.json file that works with
-   your model's InferenceConfig class.
-3. Pass in any custom NeuronConfig attributes by using the
-   ``override_neuron_config`` attribute while initializing the
-   vLLM engine.
-4. Run offline/online inference to get the model working with vLLM.
+1. **Model Architecture**: Ensure your model follows standard NxDI naming 
+   conventions (e.g., ``ModelNameForCausalLM``). The model is automatically 
+   recognized through NxDI's ``MODEL_TYPES`` registry.
+
+2. **Model Directory**: Use the local directory as ``model_name_or_path`` 
+   when initializing vLLM. This directory should contain:
+   
+   - Model weights (safetensors or pickle format)
+   - ``config.json`` file compatible with your InferenceConfig class
+
+3. **Custom Configuration**: Pass any custom NeuronConfig attributes using 
+   the ``override_neuron_config`` parameter when initializing the vLLM engine.
+
+4. **Run Inference**: Execute offline or online inference using vLLM's 
+   standard APIs to get your model working with vLLM.
+
 
 .. _nxdi-evaluating-models:
 
@@ -472,7 +480,7 @@ passes.
   lengths.
 
 Example (``check_accuracy_logits_v2`` API)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 

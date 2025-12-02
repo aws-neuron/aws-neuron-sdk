@@ -44,7 +44,7 @@ They are great! please refer to the :ref:`benchmark` page for open-source model 
 Can I use CUDA libraries with AWS Trainium?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-AWS Trainium and Neuron are plugged into popular frameworks, and is automatically optimizing model deployment on Neuron devices like Inferentia and Trainium. The Neuron SDK automatically optimizes for Trainium without using closed source dependencies like Nvidia CUDA, not requiring any application level code changes to accelerate models. We believe this intentional approach allows developers freedom of choice with their code and models. If you have applications dependencieson CUDA (or other 3rd party closed source artifacts) you will need to strip them out, and from that point the Neuron compiler will take the model as is and optimize it at the hardware level. 
+AWS Trainium and Neuron are plugged into popular frameworks, and is automatically optimizing model deployment on Neuron devices like Inferentia and Trainium. The Neuron SDK automatically optimizes for Trainium without using closed source dependencies like Nvidia CUDA, not requiring any application level code changes to accelerate models. We believe this intentional approach allows developers freedom of choice with their code and models. If you have applications dependencies on CUDA (or other 3rd party closed source artifacts) you will need to strip them out, and from that point the Neuron compiler will take the model as is and optimize it at the hardware level. 
 
 
 Networking

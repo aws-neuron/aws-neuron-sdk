@@ -16,7 +16,7 @@ user to apply optimizations in NxD Core easily. These APIs cover configuration, 
 and saving/loading checkpoint.
 
 Initialize NxD Core config:
-''''''''''''''''''''''''''
+''''''''''''''''''''''''''''
 
 ::
 
@@ -135,7 +135,7 @@ Parameters:
 
 
 Enable LoRA fine-tuning:
-''''''''''''''''''''''
+''''''''''''''''''''''''''
 
 LoRA model wrapper
 ::
@@ -307,9 +307,8 @@ Parameters:
 - ``model (torch.nn.Module)``: model to load, optional.
 - ``optimizer (torch.optim.Optimizer)``: optimizer to load, optional.
 - ``scheduler``: scheduler to load, optional.
-- ``num_workers (int)``: num of processes loading data on host at the same time.
-This is done to avoid the host OOM, range: 1-32.
-- ``strict (bool)``: whether to use strict mode when loading model checkpoint. Default: :code:`True`.
+- ``num_workers (int)``: num of processes loading data on host at the same time. This is done to avoid the host OOM, range: ``[1-32]``.
+- ``strict (bool)``: whether to use strict mode when loading model checkpoint. Default: ``True``.
 
 
 **Load LoRA Checkpoint:**

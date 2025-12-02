@@ -1,4 +1,4 @@
-Tutorials for Inference with ``torch-neuron`` (Inf1)
+Tutorials for Inference with torch-neuron (Inf1)
 ====================================================
 
 .. toctree::

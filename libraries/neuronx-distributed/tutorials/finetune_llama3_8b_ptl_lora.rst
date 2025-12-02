@@ -15,6 +15,7 @@ To set up the packages in the compute instance, see
 Install the ``neuronx-distributed`` package inside the virtual environment using the following command:
 
 .. code-block:: ipython3
+   
 
    python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
 

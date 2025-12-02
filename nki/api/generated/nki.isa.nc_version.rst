@@ -19,5 +19,6 @@
    
       ~nc_version.gen2
       ~nc_version.gen3
+      ~nc_version.gen4
    
    

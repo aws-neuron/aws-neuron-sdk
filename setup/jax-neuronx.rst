@@ -21,6 +21,12 @@ For more installation and deployment options, see :ref:`jax-neuron-setup`.
 ``JAX`` setup on Ubuntu 22
 ---------------------------
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   JAX NeuronX on Ubuntu 22 </frameworks/jax/setup/jax-setup>
+
 .. card:: Ubuntu 22 (Ubuntu22 AMI)
         :link: /frameworks/jax/setup/jax-setup
         :link-type: doc

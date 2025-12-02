@@ -48,4 +48,6 @@ AWS Neuron integrates seamlessly with various AWS compute and orchestration serv
     /devflows/ecs-flows
     /devflows/parallelcluster-flows
     /devflows/aws-batch-flows
+    Amazon SageMaker </devflows/sagemaker-flows>
+    Third-party Solutions </devflows/third-party-solutions>
 

@@ -7,6 +7,12 @@ Previous release notes (Neuron 2.x)
    :local:
    :depth: 1
 
+Neuron 2.26.0 (09/18/2025)
+--------------------------
+
+See :ref:`neuron-2-26-0-whatsnew` for the full Neuron 2.26 release notes.
+
+
 Neuron 2.25.0 (07/31/2025)
 --------------------------
 
@@ -174,7 +180,7 @@ Inference: NxD Inference (NxDI) moves from beta to GA. NxDI now supports Persist
 
 Training: NxD Training (NxDT) added Context Parallelism support (beta) for Llama models, enabling sequence lengths up to 32K. NxDT now supports model alignment, ORPO, using DPO-style datasets. NxDT has upgraded supports for 3rd party libraries, specifically: PyTorch Lightning 2.5, Transformers 4.48, and NeMo 2.1.
 
-Neuron Kernel Interface (NKI): New support for 32-bit integer nki.language.add and nki.language.multiply on GPSIMD Engine. NKI.ISA improvements include range_select for Trainium2, fine-grained engine control, and enhanced tensor operations. New performance tuning API ``no_reorder`` has been added to enable user-scheduling of instructions. When combined with allocation, this enables software pipelining. Language consistency has been improved for arithmetic operators (+=, -=, /=, *=) across loop types, PSUM, and SBUF.
+Neuron Kernel Interface (NKI): New support for 32-bit integer nki.language.add and nki.language.multiply on GPSIMD Engine. NKI.ISA improvements include range_select for Trainium2, fine-grained engine control, and enhanced tensor operations. New performance tuning API ``no_reorder`` has been added to enable user-scheduling of instructions. When combined with allocation, this enables software pipelining. Language consistency has been improved for arithmetic operators (``+=``, ``-=``, ``/=``, ``*=``) across loop types, PSUM, and SBUF.
 
 Neuron Profiler: Profiling performance has improved, allowing users to view profile results 5x times faster on average. New features include timeline-based error tracking and JSON error event reporting, supporting execution and OOB error detection. Additionally, this release improves multiprocess visualization with Perfetto. 
 
@@ -1556,7 +1562,7 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n,Inf2
 
    * - Neuron Tools
-     - * New ``Neuron Distributed Event Tracing (NDET) tool`` to help visualize execution trace logs and diagnose errors in multi-node workloads. See :ref:`neuron-det-ug` 
+     - * New ``Neuron Distributed Event Tracing (NDET) tool`` to help visualize execution trace logs and diagnose errors in multi-node workloads.
        * Support for multi-worker jobs in ``neuron-profile`` . See :ref:`neuron-profile-ug`
        * See more at :ref:`neuron-tools-rn`
      - Inf1/Inf2/Trn1/Trn1n

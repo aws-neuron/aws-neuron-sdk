@@ -708,6 +708,7 @@ target model and the corresponding `EAGLE draft <https://huggingface.co/yuhuili/
     save_file(tensors, draft_model_safetensors_path)
 
 .. _nxd-fused-speculative-decoding:
+
 Fused Speculation
 ^^^^^^^^^^^^^^^^^
 
@@ -1001,8 +1002,9 @@ Multi-LoRA Serving
 
 NxD Inference supports serving with multiple LoRA adapters and users can specify different LoRA adapters for their requests at runtime. 
 It also supports multi-LoRA serving with vLLM as the frontend.
-NxD Inference currently supports loading of LoRA adapters at server startup for dense models like Llama-3.3-70B. 
-Dynamic loading of LoRA adapters at runtime is not currently supported and will be supported in a future Neuron release.
+NxD Inference currently supports loading of LoRA adapters for dense model families, including Llama-2, Llama-3.1, Llama-3.2, Llama-3.3, TinyLlama, and OpenLLaMA.
+A current prerequisite is that the LoRA adapter checkpoints must be stored locally before the server is initialized and started.
+The feature of streaming and dynamically adding new LoRA adapters at runtime from sources like HuggingFace or remote storage will be supported in future releases.
 
 Enable multi-LoRA serving
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1013,7 +1015,11 @@ To enable multi-LoRA serving, provide a LoraServingConfig for ``lora_config`` at
 
     lora_config = LoraServingConfig(
         max_loras=max_loras,
-        lora_ckpt_paths=lora_ckpt_paths,
+        max_cpu_loras=max_cpu_loras,
+        batch_size=batch_size,
+        dynamic_multi_lora=dynamic_multi_lora,
+        base_model_quantized=quantized,
+        lora_ckpt_json=lora_ckpt_json,
     )
     neuron_config = NeuronConfig(lora_config=lora_config)
 
@@ -1025,23 +1031,27 @@ In addition, NxD inference also supports LoRA adapters trained from `NxD LoRA fi
 Each checkpoint path is a checkpoint file (.pt) that includes both LoRA adapter weights and the configuration. 
 
 NxD Inference assumes all the LoRA adapters for multi-LoRA serving are available locally during compilation and their weights are loaded on neuron devices during serving.
-When uploading a LoRA adapter checkpoint to NxDI for multi-LoRA serving, the user is requried to name the adapter with a unique adapter ID, which will be used by users to specify the LoRA adapter for serving at runtime and by NxDI for model compilation.
+When uploading a LoRA adapter checkpoint to NxDI for multi-LoRA serving, the user is required to name the adapter with a unique adapter ID, such as ``adapter_id_1``, which will be used by users to specify the LoRA adapter for serving at runtime and by NxDI for model compilation.
 
-The number of the multiple LoRA adapters for serving is specified by ``max_loras``.
-The set of LoRA adapters in NxD Inference are specified by ``lora_ckpt_paths``, which is a dictionary with a key-value pair for each LoRA adapter. 
-The key is the adapter ID named by the user and the value is the local path of the LoRA adapter checkpoint.
+The maximum number of concurrent LoRA adapters in device memory and host memory for serving are specified by ``max_loras`` and ``max_cpu_loras``, respectively.
+When ``dynamic_multi_lora=False``, all the LoRA adapters must be fully pre-loaded into device memory before the serving process begins.
+Dynamic multi-LoRA serving is enabled by ``dynamic_multi_lora=True``, which loads more LoRA adapters to host memory and dynamically swaps them from CPU to HBM at runtime according to user requests.
+NxD Inference can quantize the base model for multi-LoRA serving with ``base_model_quantized=True``. 
+Refer to :ref:`nxd-inference-api-guide-neuron-config` for setting the quantization configurations.
+The set of LoRA adapters are specified by ``lora_ckpt_json``, which is a JSON file describing the mapping between the adapters IDs and their local paths of the LoRA adapter checkpoint.
+Refer to :ref:`nxd-inference-api-guide-neuron-config` for the JSON format.
 For detailed examples of multi-LoRA serving in NxDI, see :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial.ipynb`.
 
 
-Maximum number of LoRA adapters supported
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Maximum number of LoRA adapters supported in device memory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The LoRA adapter size is much smaller than the base model, but its weights still consumes non-negligible on-device memory. 
-The maximum number of LoRA adapters that can be concurrently supported in NxD Inference depends on the base model, the LoRA rank, the reserved memory size for LoRA adapters, and how the LoRA adapters are sharded across TP groups.
+The maximum number of LoRA adapters that can be concurrently supported in the device memory depends on the base model, the LoRA rank, the reserved HBM size for LoRA adapters, and how the LoRA adapters are sharded across TP groups.
 
-Suppose Trn1 instance is used for multi-LoRA serving and the reserved memory size on each neuron core for LoRA adapters is 2GB.
+Suppose a Trainium instance is used for multi-LoRA serving and the reserved HBM size on each neuron core for LoRA adapters is 2GB.
 Each LoRA adapter has two parts, LoRA A and LoRA B, and only one of them can be partitioned with tensor parallelism and the other is just Linear layer.
-We analyze the maximum number of LoRA adapters supported in NxD inference under two cases: the linear layer is duplicated and the linear layer is sharded.
+We analyze the maximum number of LoRA adapters supported in the device memory under two cases: 1/ the linear layer is duplicated, and 2/ the linear layer is sharded.
 These two cases can be specified by ``lora_shard_linear_layer`` in ``LoraServingConfig``.
 
 When the linear layer is duplicated

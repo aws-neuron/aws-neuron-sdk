@@ -3,8 +3,6 @@
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
-    .. include:: static/neuron-setup-form.txt
      
 
 .. raw:: html

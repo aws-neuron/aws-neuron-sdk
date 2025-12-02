@@ -1,7 +1,7 @@
 .. _neuronx-plugin-tensorboard:
 
-Neuron Plugin for TensorBoard (Trn1)
-====================================
+NeuronX Plugin for TensorBoard (Trn1)
+======================================
 
 .. contents:: Table of Contents
   :local:

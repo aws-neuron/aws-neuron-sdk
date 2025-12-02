@@ -2,49 +2,32 @@ from neuronxcc import nki
 import neuronxcc.nki.language as nl
 
 @nki.jit
-def tensor_maxpool_kernel_(in_tensor, pool_size):
+def tensor_maxpool_kernel_(in_tensor, sz_pool):
   """NKI kernel to compute a 2D max-pool operation
 
   Args:
       in_tensor: an input tensor, of dimensions C x H x W
-      pool_size: integer P representing a (square) pool-window size
+      sz_pool: integer P representing a (square) pool-window size
   Returns:
       out_tensor: the resulting output tensor, of dimensions C x (H/P) x (W/P)
   """
 
   # Get input/output dimensions
-  sz_cin, sz_hin, sz_win = in_tensor.shape
-  sz_hout, sz_wout = sz_hin // pool_size, sz_win // pool_size
-  out_tensor = nl.ndarray((sz_cin, sz_hout, sz_wout), dtype=in_tensor.dtype,
+  sz_p, sz_hin, sz_win = in_tensor.shape
+  sz_hout, sz_wout = sz_hin // sz_pool, sz_win // sz_pool
+  out_tensor = nl.ndarray((sz_p, sz_hout, sz_wout), dtype=in_tensor.dtype,
                           buffer=nl.shared_hbm)
 
-  # Set relevant sizes
-  sz_p = sz_cin
-  sz_pool = pool_size
-
-  # Generate tensor h/w index patterns
-  # 3D indexing according to [C, H, W]
-  i_p = nl.arange(sz_p)[:, None, None] # 3D for
-  i_win = nl.arange(sz_win)[None, None, :]
-  i_hin = nl.arange(sz_hin)[None, :, None]
-
-  i_wout = nl.arange(sz_wout)[None, None, :]
-  i_hout = nl.arange(sz_hout)[None, :, None]
-
   # Generate pool index patterns (requires two extra dimensions, for the pool window)
-  i_0 = nl.arange(sz_p)[:, None, None, None, None] #
-  i_1 = nl.arange(sz_hin//sz_pool)[None, :, None, None, None] # y_outer
-  i_2 = nl.arange(sz_pool)[None, None, :, None, None] # y_inner
-  i_3 = nl.arange(sz_win//sz_pool)[None, None, None, :, None] # x_outer
-  i_4 = nl.arange(sz_pool)[None, None, None, None, :] # x_inner
+  i_0, i_1, i_2, i_3, i_4 = nl.mgrid[:sz_p, :sz_hout, :sz_pool, :sz_wout, :sz_pool]
 
   # Load input data from external memory to on-chip memory
   # Declare ndarray to force a 3D tensor (temporary requirement)
-  in_tile = nl.ndarray([sz_p, sz_hin, sz_win], dtype=in_tensor.dtype)
-  in_tile[:,:,:] = nl.load(in_tensor[i_p, i_hin, i_win])
+  in_tile = nl.ndarray((sz_p, sz_hin, sz_win), dtype=in_tensor.dtype)
+  in_tile[...] = nl.load(in_tensor)
 
   # Perform the pooling operation:
-  # We use numpy's advanced indexing, in order to extend in_tile to 5D, and then reduce-max two dimension.
+  # We use advanced indexing, in order to extend in_tile to 5D, and then reduce-max two dimension.
   # axis[0] is the index for p_dim, and thus doesn't participate in the reduction operation.
   # axis[1] and axis[2] together index the rows, with axis[2] responsible for inner strides
   # (i.e. inside a pooling window), and axis[1] responsible for the outer strides. As such, we reduce over axis[2].
@@ -52,7 +35,7 @@ def tensor_maxpool_kernel_(in_tensor, pool_size):
   out_tile = nl.max(in_tile[i_0, sz_pool*i_1+i_2, sz_pool*i_3+i_4], axis=[2,4])
 
   # Store the results back to external memory
-  nl.store(out_tensor[i_p, i_hout, i_wout], value=out_tile)
+  nl.store(out_tensor, value=out_tile)
 
   return out_tensor
 

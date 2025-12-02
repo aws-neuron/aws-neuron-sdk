@@ -1,0 +1,183 @@
+name: Internal Security Check
+
+# Trigger on PR open, update, or reopen
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Prevent concurrent scans for the same PR
+concurrency:
+  group: security-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+# Required permissions for OIDC and PR comments
+permissions:
+  id-token: write       # Required for OIDC authentication
+  contents: read        # Required for repository checkout
+  pull-requests: write  # Required for posting PR comments
+
+jobs:
+  security-scan:
+    name: Run Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    # SECURITY FIX: Only run if PR is from the same repository (not a fork)
+    # This prevents malicious contributors from exfiltrating AWS credentials
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    
+    steps:
+      # ================================================================
+      # STEP 1: CONFIGURE AWS CREDENTIALS (OIDC)
+      # ================================================================
+      - name: Configure AWS Credentials
+        id: configure-aws
+        continue-on-error: true  # Don't fail workflow on AWS errors
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.INTERNAL_SCANNER_ROLE_ARN }}
+          aws-region: ${{ secrets.INTERNAL_SCANNER_AWS_REGION }}
+          role-session-name: GitHubActions-SecurityCheck-PR-${{ github.event.pull_request.number }}
+      
+      # ================================================================
+      # STEP 2: VERIFY AWS CREDENTIALS
+      # ================================================================
+      - name: Verify AWS Credentials
+        if: steps.configure-aws.outcome == 'success'
+        continue-on-error: true
+        run: |
+          echo "Verifying credentials..."
+          aws sts get-caller-identity > /dev/null 2>&1 || echo "⚠️  Credential verification failed"
+          echo "✅ Credentials check completed"
+      
+      # ================================================================
+      # STEP 3: SUBMIT SCAN REQUEST
+      # ================================================================
+      - name: Submit Security Scan
+        id: submit-scan
+        if: steps.configure-aws.outcome == 'success'
+        continue-on-error: true  # Don't fail workflow on submission errors
+        run: |
+          API_URL="${{ secrets.INTERNAL_SCANNER_API_URL }}"
+          API_PATH="/scan/submit"
+          
+          # Construct request payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "sourceType": "github-pr",
+            "repository": "${{ github.repository }}",
+            "prNumber": ${{ github.event.pull_request.number }},
+            "commitHash": "${{ github.event.pull_request.head.sha }}",
+            "enableRegex": true,
+            "enableLLM": true,
+            "executionMode": "parallel"
+          }
+          EOF
+          )
+          
+          echo "Submitting security scan for PR #${{ github.event.pull_request.number }}"
+          
+          # Submit scan request with SigV4 signing
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            --request POST \
+            --aws-sigv4 "aws:amz:${{ secrets.INTERNAL_SCANNER_AWS_REGION }}:execute-api" \
+            --user "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" \
+            --header "x-amz-security-token: $AWS_SESSION_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data "$PAYLOAD" \
+            "${API_URL}${API_PATH}")
+          
+          # Extract HTTP status code and response body
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          # Check for successful submission
+          if [ "$HTTP_STATUS" != "202" ]; then
+            echo "⚠️  Scan submission failed (HTTP $HTTP_STATUS) - Shadow mode: continuing anyway"
+            echo "scan_submitted=false" >> $GITHUB_OUTPUT
+            exit 0  # Don't fail in shadow mode
+          fi
+          
+          # Extract scan ID from response
+          SCAN_ID=$(echo "$BODY" | jq -r '.scanId')
+          
+          if [ -z "$SCAN_ID" ] || [ "$SCAN_ID" = "null" ]; then
+            echo "⚠️  Failed to extract scan ID - continuing anyway"
+            echo "scan_submitted=false" >> $GITHUB_OUTPUT
+            exit 0  # Don't fail in shadow mode
+          fi
+          
+          echo "✅ Scan submitted successfully"
+          echo "Scan ID: $SCAN_ID"
+          echo "scan_submitted=true" >> $GITHUB_OUTPUT
+          echo "scan_id=$SCAN_ID" >> $GITHUB_OUTPUT
+      
+      # ================================================================
+      # STEP 4: POLL SCAN RESULTS (Shadow Mode - Non-Blocking)
+      # ================================================================
+      - name: Poll Scan Results 
+        id: poll-results
+        if: steps.submit-scan.outputs.scan_submitted == 'true'
+        continue-on-error: true  # Don't fail workflow on scan violations
+        run: |
+          API_URL="${{ secrets.INTERNAL_SCANNER_API_URL }}"
+          SCAN_ID="${{ steps.submit-scan.outputs.scan_id }}"
+          API_PATH="/scan/status/${SCAN_ID}"
+          
+          echo "Polling scan results for scan ID: $SCAN_ID"
+          
+          MAX_ATTEMPTS=60  # 30 minutes with 30 second intervals
+          ATTEMPT=0
+          
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            echo "Polling attempt $ATTEMPT of $MAX_ATTEMPTS..."
+            
+            # Query scan status with SigV4 signing
+            RESPONSE=$(curl -s -w "\n%{http_code}" \
+              --request GET \
+              --aws-sigv4 "aws:amz:${{ secrets.INTERNAL_SCANNER_AWS_REGION }}:execute-api" \
+              --user "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" \
+              --header "x-amz-security-token: $AWS_SESSION_TOKEN" \
+              "${API_URL}${API_PATH}")
+            
+            # Extract HTTP status code and response body
+            HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+            BODY=$(echo "$RESPONSE" | sed '$d')
+            
+            if [ "$HTTP_STATUS" != "200" ]; then
+              echo "⚠️  Failed to query scan status (HTTP $HTTP_STATUS)"
+              sleep 30
+              continue
+            fi
+            
+            # Check scan status
+            STATUS=$(echo "$BODY" | jq -r '.status')
+            
+            if [ "$STATUS" = "COMPLETED" ]; then
+              echo "✅ Scan completed - No security violations detected"
+              echo "scan_passed=true" >> $GITHUB_OUTPUT
+              break
+            elif [ "$STATUS" = "FAILED" ]; then
+              echo "⚠️  Security violations detected - continuing anyway"
+              echo "scan_passed=false" >> $GITHUB_OUTPUT
+              break
+            else
+              echo "Scan status: $STATUS"
+              sleep 30
+            fi
+          done
+          
+          if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+            echo "⚠️  Scan did not complete within timeout - continuing anyway"
+            echo "scan_passed=timeout" >> $GITHUB_OUTPUT
+          fi
+          
+          exit 0  # Always succeed in shadow mode
+
+      - name: Success
+        if: always()
+        run: |
+          echo "This workflow ran in shadow mode and will not block PR merging"
+          echo "Check PR comments and workflow logs for scan results"
+          exit 0

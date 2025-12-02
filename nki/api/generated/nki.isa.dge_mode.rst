@@ -11,9 +11,9 @@
 
    .. autosummary::
    
-      ~dge_mode.none
+      ~dge_mode.unknown
       ~dge_mode.swdge
       ~dge_mode.hwdge
-      ~dge_mode.unknown
+      ~dge_mode.none
    
    

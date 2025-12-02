@@ -36,7 +36,7 @@ PyTorch NeuronX Analyze API for Inference
    :rtype: :class:`~Dict`
 
 
-   .. rubric:: Notes
+   .. note::
 
       This function is meant to be used as a way to evaluate operator support for the model that is intended to be traced.
       The information can be used to modify operators that are unsupported to ones that are supported, or custom partitioning
@@ -47,7 +47,8 @@ PyTorch NeuronX Analyze API for Inference
       Just like torch_neuronx.trace, this API can be used on any EC2 machine with sufficient memory and compute resources.
 
 
-   .. rubric:: Examples
+   Examples
+   ----------
 
    *Fully supported model*
 

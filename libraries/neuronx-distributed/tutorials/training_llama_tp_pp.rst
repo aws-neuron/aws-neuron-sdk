@@ -135,7 +135,7 @@ To run the training, we just use the above command but without ``neuron_parallel
 
 To achieve better performance, the script applies few techniques:
 
-`Sequence Parallelism and Selective Activation Checkpointing`
+**Sequence Parallelism and Selective Activation Checkpointing**:
 
 As explained in the :ref:`Activation Memory Recomputation Doc <activation_memory_reduction>`, both `Sequence Parallelism` 
 and `Selective activation checkpointing` can help with activation memory reduction thereby allowing us to fit bigger 
@@ -144,7 +144,7 @@ Please refer to :ref:`Activation Memory Reduction Developer Guide <activation_me
 enable sequence parallel and selective activation checkpointing. 
 
 
-`GQAQKVColumnParallelLinear Layer`:
+**GQAQKVColumnParallelLinear Layer**:
 
 In LLama 70B GQA module, the K and V attention heads are `8` whereas Q has `64` attentions heads. Since the number of 
 attention heads should be divisible by tensor_parallel_degree, we would end up using a tp_degree of 8. Hence to fit 
@@ -167,21 +167,20 @@ parallel degree of 4. This can be enabled by passing the argument:
 The above changes are already included in the `run_llama_70b_tp_pp.sh`. For Llama13B model we only do 8-way tensor parallelism so
 we do not need this change.
 
-`Fusing Q,K,V layers:`
+**Fusing Q,K,V layers**:
 
 In the GQAQKVColumnParallelLinear, the parallel matrix multiply is coalesced to improve throughput. Currently it's enabled by default. To disable it, set ``--fuse_qkv 0``
 
-`Note:` Because the layers above are coalesced, ensure that any pretrained checkpoint loaded for fine-tuning has the q,k,v layers coleasced. Otherwise, preprocessing is required to fuse these layers in the checkpoint. Follow this :ref:`Checkpoint Conversion Guide <checkpoint_conversion>` and set ``--fuse_qkv`` to coalesce the layers in the checkpoint. 
+.. note::
+    Because the layers above are coalesced, ensure that any pretrained checkpoint loaded for fine-tuning has the q,k,v layers coleasced. Otherwise, preprocessing is required to fuse these layers in the checkpoint. Follow this :ref:`Checkpoint Conversion Guide <checkpoint_conversion>` and set ``--fuse_qkv`` to coalesce the layers in the checkpoint. 
 
 
+**Flash Attention**:
 
-`Flash Attention:`
-
-We're introducing flash attention function for better performance/memory efficiency. Currently it's enabled by default, to disable it
-set ``--use_flash_attention 0`
+We're introducing flash attention function for better performance/memory efficiency. Currently it's enabled by default, to disable it set ``--use_flash_attention 0``
 
 
-`Save/Load Checkpoint` (refer to :ref:`API GUIDE<api_guide>` for more context about checkpoint APIs):
+`Save/Load Checkpoint` (refer to :ref:`API Guide <api_guide>` for more context about checkpoint APIs).
 
 To enable checkpoint saving, add the following flags to ``run_llama_70b_tp_pp.sh``:
 

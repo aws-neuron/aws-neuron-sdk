@@ -1,7 +1,7 @@
 .. _performance-cli-params:
 
 Evaluating Performance of Models on Neuron Using LLMPerf
-============================================
+==========================================================
 
 This topic guides you through determining the performance of your models on Trainium and Inferentia instances using  open-source clients.
 It expands on the basic performance analysis tools provided with Neuron by incorporating the `LLMperf <https://github.com/ray-project/llmperf>`_ client to collect additional information about performance for models such as llama-3.3-70B-instruct and llama-3.1-8b.
@@ -79,7 +79,7 @@ if ``model_s3_path`` is specified, the model is downloaded to ``model_path``;
 otherwise, the model should already be available at ``model_path``.
 
 Performance Test Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------------------------+---------------------------------------+
 | Parameter                   | Description                           |

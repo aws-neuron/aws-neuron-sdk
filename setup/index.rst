@@ -14,6 +14,7 @@ Setup Guide
     Tensorflow NeuronX (tensorflow-neuronx) </setup/tensorflow-neuronx>
     Tensorflow Neuron (tensorflow-neuron) </setup/tensorflow-neuron>
     MxNet Neuron (mxnet-neuron) </setup/mxnet-neuron>
+    Troubleshooting </setup/setup-troubleshooting>
 
 
 
@@ -30,22 +31,20 @@ This section walks you through the various options to install and upgrade Neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-
 .. card:: PyTorch Neuron (``torch-neuron``) Setup for  ``Inf1`` Instances
             :link: setup-torch-neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-.. card:: JAX Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
+.. card:: JAX NeuronX Setup for  ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
             :link: setup-jax-neuronx
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-.. card:: Tensorflow Neuron (``tensorflow-neuronx``) Setup for ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
+.. card:: Tensorflow NeuronX (``tensorflow-neuronx``) Setup for ``Inf2`` & ``Trn1`` / ``Trn1n`` Instances
             :link: setup-tensorflow-neuronx
             :link-type: ref
             :class-body: sphinx-design-class-title-small
-
 
 .. card:: Tensorflow Neuron (``tensorflow-neuron``) Setup for ``Inf1`` Instances
             :link: setup-tensorflow-neuron
@@ -58,8 +57,3 @@ This section walks you through the various options to install and upgrade Neuron
             :link-type: ref
             :class-body: sphinx-design-class-title-small
 
-
-.. card:: PyTorch Neuron Setup Guides for Rocky Linux 9 (``Inf2`` & ``Trn1`` / ``Trn1n``) Instances
-            :link: setup-rocky-linux-9
-            :link-type: ref
-            :class-body: sphinx-design-class-title-small

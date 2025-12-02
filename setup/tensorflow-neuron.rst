@@ -15,6 +15,13 @@ Tensorflow Neuron (``tensorflow-neuron``) Setup
 ``tensorflow-neuron`` setup on Ubuntu 20 
 -----------------------------------------
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   TensorFlow Neuron on Ubuntu 20 </setup/neuron-setup/tensorflow/neuron/ubuntu/tensorflow-neuron-ubuntu20>
+   TensorFlow Neuron on DLAMI Base (Ubuntu 20) </setup/neuron-setup/tensorflow/neuron/ubuntu/tensorflow-neuron-ubuntu20-base-dlami>
+
 .. card:: Ubuntu 20 (Ubuntu20 AMI)
         :link: setup-tensorflow-neuron-u20
         :link-type: ref
@@ -28,6 +35,14 @@ Tensorflow Neuron (``tensorflow-neuron``) Setup
 
 ``tensorflow-neuron`` setup on Ubuntu 22
 -----------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   TensorFlow Neuron on Multi-Framework DLAMI (Ubuntu 22) </setup/neuron-setup/multiframework/multi-framework-ubuntu22-neuron-dlami>
+   TensorFlow Neuron on Ubuntu 22 </setup/neuron-setup/tensorflow/neuron/ubuntu/tensorflow-neuron-ubuntu22>
+
 .. card:: Ubuntu 22 (Neuron Multi-Framework DLAMI)
         :link: setup-ubuntu22-multi-framework-dlami
         :link-type: ref
@@ -41,6 +56,12 @@ Tensorflow Neuron (``tensorflow-neuron``) Setup
 
 ``tensorflow-neuron`` setup on Amazon Linux 2023 (AL2023)
 ---------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   TensorFlow Neuron on Amazon Linux 2023 </setup/neuron-setup/tensorflow/neuron/amazon-linux/tensorflow-neuron-al2023>
 
 .. card:: Amazon Linux 2023 (Amazon Linux 2023 AMI)
         :link: setup-tensorflow-neuron-al2023

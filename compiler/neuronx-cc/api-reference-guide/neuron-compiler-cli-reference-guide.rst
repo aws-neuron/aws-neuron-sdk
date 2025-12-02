@@ -92,13 +92,13 @@ Common parameters for the Neuron CLI:
     - ``transformer``: Perform optimizations specific to `Transformer <https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)>`_ models. 
     - ``unet-inference``: Perform optimizations specific to certain `U-Net <https://en.wikipedia.org/wiki/U-Net>`_ model architectures when performing inference. U-Net models often have certain structures that result in excessive performance-impacting data transfers; this option allows the compiler to apply additional memory optimizations to prevent these data transfers and also allows the compiler to map larger normalization operators which would otherwise not successfully execute.
 
-  - :option:`--auto-cast <cast_mode>`: Controls how the compiler makes tradeoffs between performance and accuracy for FP32 operations. (Default: ``matmult``)
+  - :option:`--auto-cast <cast_mode>`: Controls how the compiler makes tradeoffs between performance and accuracy for FP32 operations. (Default: ``none``)
 
     Valid values:
 
+    - ``none``: (default) Leave all data types as defined in the model. Do not apply auto-casting data type optimizations.
     - ``matmult``: Only cast FP32 operations that use the Neuron matrix-multiplication engine.
     - ``all``: Cast all FP32 operations to achieve highest performance. This option can potentially lower precision/accuracy.
-    - ``none``: Leave all data types as defined in the model. Do not apply auto-casting data type optimizations.
 
     A more complete discussion on how to use this option and its arguments is in :ref:`Mixed Precision and Performance-accuracy Tuning for Training <neuronx-cc-training-mixed-precision>`.
 
@@ -139,7 +139,9 @@ Common parameters for the Neuron CLI:
 
     .. note:: This option supercedes, and deprecates, the ``—enable-experimental-O1`` option introduced in an earlier release.
 
-  - :option:`--enable-mixed-precision-accumulation`: Perform intermediate calculations of accumulation operators (such as softmax and layernorm) in FP32 and cast the result to the model-designated datatype. This improves the operator's resulting accuracy.
+  - :option:`--enable-mixed-precision-accumulation`: **Enabled by default**. Set to ``true`` by default. Perform intermediate calculations of accumulation operators (such as softmax and layernorm) in FP32 and cast the result to the model-designated datatype. This improves the operator's resulting accuracy.
+
+  - :option:`--disable-mixed-precision-accumulation`: Disables mixed precision accumulation. Mixed precision accumulation is enabled by default; use this flag to disable it. Disabling mixed precision accumulation may improve performance at the cost of reduced accuracy for certain operators.
 
   - :option:`--enable-saturate-infinity`: Convert +/- infinity values to MAX/MIN_FLOAT for compiler-introduced matrix-multiply transpose computations that have a high risk of generating Not-a-Number (NaN) values. There is a potential performance impact during model execution when this conversion is enabled. (Only needed on trn1; while the trn2 compiler will accept this flag for compatibility reasons, it has no effect on the compilation.)
 

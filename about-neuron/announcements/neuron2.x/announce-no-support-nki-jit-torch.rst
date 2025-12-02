@@ -11,4 +11,4 @@ Starting with :ref:`Neuron Release 2.24 <neuron-2-24-0-whatsnew>`, ``torch_neuro
 
 **I currently use nki_jit in my PyTorch models. What do I do?**
 
-Customers using ``torch_neuronx.nki_jit`` API are recommended to switch invocations to directly call functions annotated with :ref:`nki.jit API <nki_decorators>`.
+Customers using ``torch_neuronx.nki_jit`` API are recommended to switch invocations to directly call functions annotated with ``@nki.jit``.

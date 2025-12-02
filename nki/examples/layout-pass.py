@@ -14,18 +14,14 @@ def tensor_exp_kernel_(in_tensor):
   out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
                           buffer=nl.shared_hbm)
 
-  # Generate indices for the input/output tensors
-  i_p = nl.arange(128)[:, None]
-  i_f = nl.arange(512)[None, :]
-
   # Load input data from HBM to on-chip memory
-  in_tile = nl.load(in_tensor[i_p, i_f])
+  in_tile = nl.load(in_tensor[0:128, 0:512)
 
   # perform the computation:
   out_tile = nl.exp(in_tile)
 
   # store the results back to HBM
-  nl.store(out_tensor[i_p, i_f], value=out_tile)
+  nl.store(out_tensor[0:128, 0:512], value=out_tile)
 
   return out_tensor
 

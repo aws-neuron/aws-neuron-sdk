@@ -290,6 +290,23 @@ Solution
 Use properly sized instance. trn1.32xlarge has 32 Neuron Cores,
 trn1.2xlarge has 2 Neuron Cores.
 
+
+Neuron DGE notification queue overflow
+----------------------------------------
+
+.. code:: bash
+
+   2025-Oct-01 23:48:34.002205 516278:516289 ERROR  TDRV:exec_consume_topsp_cc_notifications     [ND 1][NC 4] execution on model /home/ubuntu/compiled-models/model.MODULE_7c055c4ac6e2851a63bb+7d89256e.neff, is stuck after all collectives operation have completed
+   2025-Oct-01 23:48:34.002207 516278:516288 ERROR   NRT:nrt_infodump                            Failure: NRT_EXEC_SW_NQ_OVERFLOW in nrt_execute()
+   2025-Oct-01 23:48:34.002234 516278:516288 ERROR   NRT:nrt_infodump                            LNC: 0
+   2025-Oct-01 23:48:34.002260 516278:516285 ERROR  TDRV:exec_request_process_errors             [ND 1][NC 0] execution timeout (30000 ms) on model /home/ubuntu/compiled-models/model.MODULE_7c055c4ac6e2851a63bb+7d89256e.neff, potentially caused by DGE notifications enabled. Please disable it (set NEURON_RT_ENABLE_DGE_NOTIFICATIONS to 0) and try again.
+
+Solution
+^^^^^^^^
+
+Set the environment variable ``NEURON_RT_ENABLE_DGE_NOTIFICATIONS`` to ``0`` to disable DMA Generation Engine notifications.
+
+
 Neuron Runtime execution fails at out-of-bound access
 -----------------------------------------------------
 
@@ -388,9 +405,8 @@ All relevant inputs, labeled from input0 to input14, are saved in binary format 
   * An input dump folder is considered complete when the model_name.txt file is fully written, as Neuron Runtime saves all inputs first and then writes the model_name.txt file. So you might find out the folder with the complete set of inputs by searching for the model_name.txt file.
 
 
-
 Hardware Errors
-~~~~~~~~~~~~~~~
+----------------
 
 
 For Trn and Inf instances, the following hardware errors are monitored by Neuron Runtime:
@@ -464,10 +480,10 @@ Upon any hardware errors, you should also expect to see the error message like t
 
 
 EFA and Collective Communication Errors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 Missing aws-neuronx-collectives package
----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **aws-neuronx-collectives** package is required to execute Collective
 Communication on a single instance and across multiple instances.
@@ -481,7 +497,7 @@ Communication on a single instance and across multiple instances.
 .. _solution-4:
 
 Solution
-^^^^^^^^
+~~~~~~~~~
 
 Install aws-neuornx-collectives package. If the installation used
 non-default destination set LD_LIBRARY_PATH.
@@ -489,7 +505,7 @@ non-default destination set LD_LIBRARY_PATH.
 .. _missing-efa-installer-package:
 
 Missing efa installer package.
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **efa-installer** package is required to execute Collective
 Communication across multiple instances.
@@ -501,7 +517,7 @@ Communication across multiple instances.
 .. _solution-5:
 
 Solution
-^^^^^^^^
+~~~~~~~~~
 
 Follow the directions to install efa-installer package. Make sure to add
 the path to to libfabric library to LD_LIBRARY_PATH
@@ -509,7 +525,7 @@ the path to to libfabric library to LD_LIBRARY_PATH
 .. _efa-is-not-enabled-in-trn132xlarage:
 
 EFA is not enabled in trn1.32xlarge
-------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 EFA is used as a transport for Collective Communication among multiple
 instances. EFA must be enabled on the instances used for multi-node
@@ -522,7 +538,7 @@ training.
 .. _solution-6:
 
 Solution
-^^^^^^^^
+~~~~~~~~~
 
 Confirm that EFA is enabled by running lspci command and making sure
 there are eight EFA devices. For example:
@@ -578,7 +594,7 @@ the instances for multi-node training or running on trn1.2xlarge, this
 error message can be ignored.
 
 Communication timeout
----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Ranks exchange information during NEFF loading and before the start of
 the execution. The loading/execution cannot move forward until all ranks
@@ -599,7 +615,7 @@ are ready.
 .. _solution-7:
 
 Solution
-^^^^^^^^
+~~~~~~~~~
 
 The communication timeouts are not fatal. The ranks will continue
 waiting forever. In most case the timeouts are caused by one of the
@@ -614,7 +630,7 @@ the last known good check point.
 
 .. _communication-errors:
 
-Communication errors.
+Communication errors
 ---------------------
 
 ::
@@ -689,10 +705,6 @@ Solution
 
 Verify that the name can be resolved by DNS by using nslookup or dig.  Currently released version fails to resolve FQDN longer than 63 characters.  This error will be fixed in the upcoming Neuron release.  In the mean time use shorter names to ensure that FQDN length does not exceed the maximum of 63 characters.
 
-
-Usage of Neuron Custom C++ Operators
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Neuron Runtime timeout or GPSIMD exception
 ------------------------------------------
 
@@ -740,7 +752,58 @@ Older Linux (<5.15) kernels require environment variable FI_EFA_FORK_SAFE to be 
 
 When the variable is not set multi-node collective communication will be disabled.  Intra-node collective communication is still possible.  The following error message will be logged the first time a model containing collective communication is loaded:
 
-::
+.. code-block::
 
    Linux kernel 5.10 requires setting FI_EFA_FORK_SAFE=1 environment variable.  Multi-node support will be disabled.
    Please restart with FI_EFA_FORK_SAFE=1 set."
+
+
+Neuron driver cannot be uninstalled
+------------------------------------
+
+If you attempt to uninstall the Neuron driver on Ubuntu with ``sudo dpkg -r aws-neuronx-dkms``, you may get an error like this:
+
+.. code-block::
+
+   Removing aws-neuronx-dkms (2.x) ...
+   Neuron module is currently loaded. Attempting to unload...
+   ERROR: Cannot unload neuron module - it is currently in use.
+   Please stop all processes using the neuron module before uninstalling.
+   dpkg: error processing package aws-neuronx-dkms (--remove):
+   installed aws-neuronx-dkms package pre-removal script subprocess returned error exit status 1
+   Errors were encountered while processing:
+   aws-neuronx-dkms
+
+On Amazon Linux, you get a similar error if you run ``sudo rpm -e aws-neuronx-dkms`` to uninstall the driver:
+
+.. code-block::
+   
+   Uninstall of aws-neuronx module (version 2.x) beginning:
+   Neuron module is currently loaded. Attempting to unload...
+   ERROR: Cannot unload neuron module - it is currently in use.
+   Please stop all processes using the neuron module before uninstalling.
+   error: %preun(aws-neuronx-dkms-2.x-dkms.noarch) scriptlet failed, exit status 1
+   error: aws-neuronx-dkms-2.x-dkms.noarch: erase failed
+
+Usually, this just means you still have an active process using the driver. Killing that process will allow the driver to be unloaded/uninstalled. But if for some rare reason the driver is stuck, one remediation is to first force uninstall the driver, and then reboot. 
+
+Solution
+^^^^^^^^
+
+Force-uninstall the Neuron driver.
+
+.. warning:: Force-uninstalling the driver runs the risk of causing system instability or causing a kernel panic. Reboot your instance immediately after uninstalling it.
+
+To force-uninstall the driver on Ubuntu instances:
+
+.. code-block::
+
+   sudo dkms remove aws-neuronx/<version> --all
+   sudo dpkg -r --force-all aws-neuronx-dkms
+
+To force-uninstall the driver on Amazon Linux instances:
+
+.. code-block::
+
+   sudo dkms remove aws-neuronx/<version> --all
+   sudo rpm -e --noscript aws-neuronx-dkms

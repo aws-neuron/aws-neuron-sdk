@@ -1,6 +1,6 @@
 .. _llm-inference-benchmarking:
 
-LLM Inference Benchmarking guide
+LLM Inference benchmarking guide
 ================================
 
 This guide gives an overview of the metrics that are tracked for LLM Inference and guidelines in using LLMPerf library
@@ -15,7 +15,7 @@ to benchmark for LLM Inference.
 
 LLM Inference metrics
 ---------------------
-Following are the essential metrics for monitoring LLM inference server performance.
+Following are the essential metrics for monitoring LLM Inference server performance.
 
 .. list-table::
    :widths: 20 70 
@@ -49,42 +49,58 @@ Using LLMPerf to benchmark LLM Inference performance
 to accurately benchmark and reproduce the metrics that are published by Neuron.
 
 
-All the changes outlined below are provided as a patch file that you can easily download and apply.
-We will work in upstreaming these changes to public LLMPerf in the future. 
+All the changes outlined below are provided as a patch file. 
 
-Using the relevant HF tokenizer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In public LLMPerf, ``hf-internal-testing`` tokenizer is used by default for all the models that can impact accuracy of performance.
-Instead, there is a change to pass the tokenizer config of the model from Hugging Face which is being benchmarked for Neuron.
+.. note::
 
-Excluding TTFT in TPOT calculation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Patches need to be applied in order because they might modify the same files.
+
+Step 1: Install LLMPerf from source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    python3 -m venv llmperf-env
+    source llmperf-env/bin/activate
+
+    git clone https://github.com/ray-project/llmperf.git ~/llmperf
+    cd ~/llmperf
+    pip install -e .
+
+
+Step 2: Patch custom Tokenizer and updated TPOT metric
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In public LLMPerf, ``hf-internal-testing`` tokenizer is used for all models which leads to incorrect
+performance metrics due to counting more or less tokens than were actually processed by the model
+on the server. Instead, we use the tokenizer of the model that is being benchmarked. 
+
 LLMPerf includes TTFT in Time per Output Token(or Inter Token Latency) calculation. As TPOT and TTFT are two different metrics, a change is done to LLMPerf
 to exclude TTFT from TPOT calculation to keep it consistent with how other industry standard performance benchmarks are done.
 
+Follow these instructions to apply the patch to the LLMPerf library.
 
-Following are the instructions to apply the patch to the LLMPerf library.
-
-
-* Step 1: Get the Neuron git patch file
-
-  Download the ``neuron_perf.patch`` :download:`file </src/benchmark/helper_scripts/neuron_perf.patch>` into the ``llmperf`` directory. 
-
-* Step 2: Apply the git patch
-
-  Run ``git apply neuron_perf.patch``. Confirm changes with ``git diff``.
+* Download the ``neuron_perf.patch`` :download:`file </src/benchmark/helper_scripts/neuron_perf.patch>` into the ``llmperf`` directory. 
+* Run ``git apply neuron_perf.patch``. Confirm changes with ``git diff``.
 
 
-Benchmarking Data parallel inference with multiple model copies
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-To measure performance with data parallel inference by using multiple model copies, we need to make additional changes to LLMPerf by applying the following patch:
+Step 3: Patch data parallel benchmarking with multiple model endpoints
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Step 1: Get the Neuron git patch file for data parallel inference
+To measure performance with data parallel inference using multiple model copies, 
+we allow users to provide multiple semicolon separated endpoints via `OPENAI_API_BASE` 
+(e.g. "export OPENAI_API_BASE=http://server1;http://server2;http://server3") for
+the OpenAI chat completion client. By default, the patch uses round-robin to route
+requests.
 
-  Download the ``llmperf_dp.patch`` :download:`file </src/benchmark/helper_scripts/llmperf_dp.patch>` into the ``llmperf`` directory. 
+* Download the ``llmperf_dp.patch`` :download:`file </src/benchmark/helper_scripts/llmperf_dp.patch>` into the ``llmperf`` directory. 
+* Run ``git apply llmperf_dp.patch``. Confirm changes with ``git diff``.
 
-* Step 2: Apply the git patch
 
-  Run ``git apply llmperf_dp.patch``. Confirm changes with ``git diff``.
+Step 4: Patch reasoning model support
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To measure LLM Inference performance of reasoning models, we need to patch LLMPerf to measure TTFT up to the 
+first reasoning token instead of the first answer token.
 
-This patch enables data parallelism by allowing requests to be distributed across multiple model server endpoints. When multiple addresses are specified in OPENAI_API_BASE (e.g. "http://server1;http://server2;http://server3"), each request will be routed to a different server either randomly or in round-robin fashion, allowing concurrent processing across multiple model servers.
+* Download the ``llmperf_reasoning.patch`` :download:`file </src/benchmark/helper_scripts/llmperf_reasoning.patch>` into the ``llmperf`` directory. 
+* Run ``git apply llmperf_reasoning.patch``. Confirm changes with ``git diff``.

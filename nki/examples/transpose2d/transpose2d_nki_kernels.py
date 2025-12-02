@@ -54,9 +54,7 @@ def tensor_transpose2D_kernel_(in_tensor, shape2D):
   # We're going to need 3 indices to perform f1:f2 transpose.
   # - i_p0 is the parallel index
   # - i_f1 and i_f2 are both free-dim indices, and will be used to transpose between the f1/f2 axes
-  i_p0 = nl.arange(sz_p)[:, None, None]
-  i_f1 = nl.arange(sz_f1)[None, :, None]
-  i_f2 = nl.arange(sz_f2)[None, None, :]
+  i_p0, i_f1, i_f2 = nl.mgrid[:sz_p, :sz_f1, :sz_f2]
 
   # Perform the transposition via a SBUF-to-SBUF copy, with access-pattern manipulation
   # Note that we have 2D tensors and 3 indices, since we need to represent a 2D access pattern *per partition*

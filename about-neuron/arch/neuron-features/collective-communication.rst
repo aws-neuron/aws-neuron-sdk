@@ -65,7 +65,7 @@ of one layer while the gradients for another layer are computed.
 Overlapping compute and communication can result is lower latency and
 higher performance.
 
-
+For more details, see :doc:`Compute-Communications Overlap </neuron-runtime/explore/compute-comm-overlap>`.
 
 .. _trn132xlarge-topology:
 

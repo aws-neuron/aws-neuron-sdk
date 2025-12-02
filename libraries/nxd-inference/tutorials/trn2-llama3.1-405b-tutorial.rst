@@ -142,9 +142,10 @@ You should see Neuron packages including
 Step 2: Install the vLLM version that supports NxD Inference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NxD Inference supports running models with vLLM. This functionality is
-available in the AWS Neuron fork of the vLLM GitHub repository. Install the latest release branch of vLLM from the AWS Neuron fork 
-following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
+NxD Inference supports running models with vLLM through the upstream
+``vllm-neuron`` plugin that ships in the vLLM project. Install the
+latest release branch of the plugin following the detailed
+steps in the vLLM user guide for NxD Inference.
 
 Step 3: Deploy Llama 3.1 405B sample code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,9 +166,6 @@ offline inference and the following configuration options:
 
 - Sequence length: 2048 tokens
 - Max context length: 1024 tokens
-- Speculation length: 6 tokens
-- Flash attention, QKV, and MLP kernels
-- On-device sampling with topK sampling
 
 To use this sample, you must first download a 405B model checkpoint from Hugging Face
 to a local path on the Trn2 instance. For more information, see
@@ -197,12 +195,13 @@ for this tutorial.
            max_model_len=2048,
            block_size=2048,
            dtype=torch.bfloat16,
-           # Configure NeuronConfig.
-           override_neuron_config={
-               "max_context_length": 1024,
-               "skip_warmup": True,
+           enable_prefix_caching=False,
+           additional_config={
+               "override_neuron_config": {
+                   "skip_warmup": True,
+                   "max_context_length": 1024,
+               },
            },
-           device="neuron"
        )
    
        # Run vLLM to generate outputs.

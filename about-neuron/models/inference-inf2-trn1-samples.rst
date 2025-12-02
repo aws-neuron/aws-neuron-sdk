@@ -80,6 +80,7 @@ Decoders
      - neuronx-distributed-inference
      - * :ref:`nxdi-trn2-llama3.3-70b-tutorial`
        * :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial.ipynb`
+       * :ref:`nxdi-sd-inference-tutorial`
 
    * - meta-llama/Llama-3.2-11B-Vision-Instruct
      - neuronx-distributed-inference

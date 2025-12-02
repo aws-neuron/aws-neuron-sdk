@@ -35,80 +35,102 @@ Learn about AWS Neuron
    :gutter: 2
 
    .. grid-item-card::
-      :link: what-is-neuron
-      :link-type: ref
+      :link: /about-neuron/what-is-neuron
+      :link-type: doc
+      :class-card: sd-border-1
 
       **What is AWS Neuron?**
       ^^^
       Short overview of the AWS Neuron SDK and its components
+
+.. grid:: 1 1 2 2
+   :gutter: 2
    
    .. grid-item-card::
-      :link: neuron-architecture-index
-      :link-type: ref
+      :link: /about-neuron/arch/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron architecture**
       ^^^
       Understand the Neuron hardware and software architecture
 
    .. grid-item-card::
-      :link: frameworks-neuron-sdk
-      :link-type: ref
+      :link: /about-neuron/arch/neuron-features/index
+      :link-type: doc
+      :class-card: sd-border-1
+
+      **Neuron features**
+      ^^^
+      Overviews of model development features provided by Neuron
+
+   .. grid-item-card::
+      :link: /frameworks/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Supported ML frameworks**
       ^^^
       Neuron support for popular ML frameworks including PyTorch and JAX
 
    .. grid-item-card::
-      :link: libraries-neuron-sdk
-      :link-type: ref
+      :link: /libraries/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **NeuronX distributed (NxD) libraries**
       ^^^
       NeuronX distributed libraries for training and inference
 
    .. grid-item-card::
-      :link: neuron-nki
-      :link-type: ref
+      :link: /nki/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron Kernel Interface (NKI)**
       ^^^
       NKI is a low-level interface for custom, bare-metal kernel development
 
    .. grid-item-card::
-      :link: neuron_cc
-      :link-type: ref
+      :link: /compiler/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron Compiler**
       ^^^
       The Neuron compiler optimizes models for Neuron hardware
 
    .. grid-item-card::
-      :link: neuron_runtime
-      :link-type: ref
+      :link: /neuron-runtime/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron Runtime**
       ^^^
       Runtime for executing compiled models on Neuron devices
 
    .. grid-item-card::
-      :link: neuron-tools
-      :link-type: ref
+      :link: /tools/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron developer tools**
       ^^^
       Tools for profiling, debugging, and monitoring Neuron applications
 
    .. grid-item-card::
-      :link: neuron-dlami-overview
-      :link-type: ref
+      :link: /dlami/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron AWS Neuron Deep Learning AMIs**
       ^^^
       Deploy the Neuron SDK on EC2 instances with pre-installed Amazon Machine Images (AMIs)
 
    .. grid-item-card::
-      :link: neuron-containers
-      :link-type: ref
+      :link: /containers/index
+      :link-type: doc
+      :class-card: sd-border-1
 
       **Neuron AWS Neuron Deep Learning Containers**
       ^^^
@@ -124,8 +146,8 @@ Resources
 Support
 -------
 
+* :doc:`Neuron Open Source GitHub Repos </about-neuron/oss/index>`
 * :ref:`AWS Neuron SDK maintenance policy <sdk-maintenance-policy>`
-* :ref:`AWS Neuron Support <neuron_support>`
 
 .. _contact-us:
 
@@ -140,10 +162,14 @@ If you want to request a feature or report a critical issue, you can contact us 
    :maxdepth: 1
    :hidden:
 
-   What is AWS Neuron? <what-is-neuron>
+   App Notes <appnotes/index>
+   Ask Amazon Q </about-neuron/amazonq-getstarted>
    Benchmarks </about-neuron/benchmarks/index>
-   App notes <appnotes/index>
-   Troubleshooting <troubleshooting>
+   Neuron FAQ <faq>
+   Neuron Features </about-neuron/arch/neuron-features/index>
+   Open Source </about-neuron/oss/index>
    SDK Maintenance Policy <sdk-policy>
    Security <security>
-   Neuron FAQ <faq>
+   Term Glossary <arch/glossary>
+   Troubleshooting <troubleshooting>
+   What is AWS Neuron? <what-is-neuron>

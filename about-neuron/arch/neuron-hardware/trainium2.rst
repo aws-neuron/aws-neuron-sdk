@@ -4,7 +4,7 @@
 Trainium2 Architecture
 ######################
 
-Trainium2 is the third generation, purpose-built Machine Learning chip from AWS. Every Trainium2 chip contains eight NeuronCore-V3. Beginning with Trainium2, AWS Neuron adds support for Logical 
+Trainium2 is the third generation, purpose-built Machine Learning chip from AWS. Every Trainium2 chip contains eight NeuronCore-V3 cores. Beginning with Trainium2, AWS Neuron adds support for Logical 
 NeuronCore Configuration (LNC), which lets you combine the compute and memory resources of multiple physical NeuronCores into a 
 single logical NeuronCore. The following diagram shows the architecture overview of a Trainium2 chip.
 
@@ -45,7 +45,7 @@ Each Trainium2 chip consists of the following components:
 |                                  | (Round Nearest Even or Stochastic Rounding), and    |
 |                                  | custom operators via deeply embedded GPSIMD engines.|
 +----------------------------------+-----------------------------------------------------+
-| Collective communication         | 20 CC-Cores orchestrate collective communication    |
+| Collective communication         | 16 CC-Cores orchestrate collective communication    |
 |                                  | among Trainium2 chips within and across instances.  |
 +----------------------------------+-----------------------------------------------------+     
 
@@ -151,7 +151,7 @@ Data movement
     
     *   - CC Cores
         - 6
-        - 20
+        - 16
         - 3.3x
     *   - DMA barriers
         - Write-after-write

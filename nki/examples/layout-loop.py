@@ -13,14 +13,14 @@ def tensor_exp_kernel_(in_tensor):
   out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype,
                           buffer=nl.shared_hbm)
 
-  i_f = nl.arange(512)[None, :]
-
   for k in nl.affine_range(2):
     # Generate tensor indices for the input/output tensors
-    i_p = k * nl.tile_size.pmax + nl.arange(nl.tile_size.pmax)[:, None]
+    p_start = k * nl.tile_size.pmax
+    p_end = p_start + nl.tile_size.pmax
+    i_p = slice(p_start, p_end)
 
     # Load input data from HBM to on-chip memory
-    in_tile = nl.load(in_tensor[i_p, i_f])
+    in_tile = nl.load(in_tensor[i_p, 0:512])
 
     # perform the computation
     out_tile = nl.exp(in_tile)

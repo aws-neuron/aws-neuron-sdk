@@ -15,6 +15,13 @@ Tensorflow Neuron (``tensorflow-neuronx``) Setup
 ``tensorflow-neuronx`` setup on Ubuntu 22
 ------------------------------------------
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   TensorFlow NeuronX on Multi-Framework DLAMI (Ubuntu 22) </setup/neuron-setup/multiframework/multi-framework-ubuntu22-neuron-dlami>
+   TensorFlow NeuronX on Ubuntu 22 </setup/neuron-setup/tensorflow/neuronx/ubuntu/tensorflow-neuronx-ubuntu22>
+
 .. card:: Ubuntu 22 (Neuron Multi-Framework DLAMI)
         :link: setup-ubuntu22-multi-framework-dlami
         :link-type: ref
@@ -28,6 +35,12 @@ Tensorflow Neuron (``tensorflow-neuronx``) Setup
 
 ``tensorflow-neuronx`` setup on Amazon Linux 2023 (AL2023)
 ----------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   TensorFlow NeuronX on Amazon Linux 2023 </setup/neuron-setup/tensorflow/neuronx/amazon-linux/tensorflow-neuronx-al2023>
 
 .. card:: Amazon Linux 2023 (Amazon Linux 2023 AMI)
         :link: setup-tensorflow-neuronx-al2023

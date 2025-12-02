@@ -1,6 +1,7 @@
 .. meta::
    :description: Archived AWS Neuron SDK documentation
    :keywords: AWS Neuron SDK, archived tutorials, legacy documentation
+   :date-modified: 12-02-2025
 
 =====================================
 Archived AWS Neuron SDK documentation
@@ -25,9 +26,19 @@ Archived feature docs
    * - Feature
      - Last release supported
      - Date archived
+   * - :doc:`tensorboard/getting-started-tensorboard-neuron-plugin`
+     - Neuron 2.27.0
+     - Archived on: 12/2/2025
+   * - :doc:`neuronperf/index`
+     - Neuron 2.27.0
+     - Archived on: 12/2/2025
+   * - :doc:`helper-tools/index`
+     - Neuron 2.27.0
+     - Archived on: 12/2/2025
    * - :doc:`transformers-neuronx/index`
      - Neuron 2.25.0
      - Archived on: 9/15/2025
+
 
 Archived tutorials
 ------------------
@@ -67,6 +78,9 @@ Archived tutorials
     tutorials/finetune_t5
     tutorials/ssd300_demo/ssd300_demo
     tutorials/megatron_gpt_pretraining
+    tutorials/training-gpt-neox-20b
+    tutorials/training-gpt-neox
+    tensorboard/getting-started-tensorboard-neuron-plugin
 
 Accessing Archived Content
 --------------------------

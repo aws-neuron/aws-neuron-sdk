@@ -17,4 +17,45 @@ NxD Training
 
 NxD Training is a PyTorch library for end-to-end distributed training.
 
-.. include:: /libraries/nxd-training/nxd-training.txt
+.. dropdown::  NxD Training Overview & Setup
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/nxd-training/overview.txt
+    .. include:: /libraries/nxd-training/setup.txt
+
+.. dropdown::  API Reference Guide
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/nxd-training/api-guide.txt
+
+.. dropdown::  Developer Guide
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/nxd-training/developer_guides/dev-guide.txt
+
+.. dropdown::  Tutorials
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/nxd-training/tutorials/tutorials.txt
+
+.. dropdown::  App Notes
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+   
+    .. include:: /libraries/nxd-training/app_notes.txt
+
+.. dropdown::  Misc
+    :class-title: sphinx-design-class-title-small
+    :class-body: sphinx-design-class-body-small
+    :animate: fade-in
+    
+    .. include:: /libraries/nxd-training/general/known-issues.txt

@@ -1,6 +1,6 @@
 .. _torch-neuronx-profiling-with-tb:
 
-Profiling PyTorch Neuron (``torch-neuronx``) with TensorBoard
+Profiling PyTorch NeuronX with TensorBoard
 ==============================================================
 
 .. contents:: Table of Contents
@@ -208,7 +208,7 @@ Printing output from CPU model and Trn1 Model:
            [-0.1684, -0.3229]], device='xla:1')
 
 Loading the Operators Level Trace in TensorBoard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Run ``tensorboard --load_fast=false --logdir logs/``
 

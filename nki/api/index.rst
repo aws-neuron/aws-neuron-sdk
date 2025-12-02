@@ -15,22 +15,10 @@ Summary of different NKI API sets:
   (instruction set architecture) designed to provide fine
   control over the hardware. These APIs expose all the programmable input parameters of the corresponding
   hardware instructions and also enforce the same tile-size and layout requirements as specified in NeuronDevice ISA.
-* **nki.compiler** consists of features that control the compilation process of a NKI kernel.
-
-* Other documents:
-
-  * **NKI API Common Fields** documents common NKI API input parameters such as data types and masks,
-    as well as common API behavior such as type promotion.
-  * **NKI API Errors** captures common error types that are thrown by the NKI kernel compilation *frontend*,
-    including syntax, tile-size and layout violation errors.
-
 
 .. toctree::
     :maxdepth: 2
 
-    nki
-    nki.language
     nki.isa
-    nki.compiler
+    nki.language
     nki.api.shared
-    nki.errors

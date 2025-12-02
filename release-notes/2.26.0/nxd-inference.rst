@@ -75,6 +75,7 @@ With this release, context parallelism is out of beta and includes several impro
   and attention bias. Hybrid sharding refers to models with different sharding strategies
   for context encoding and token generation submodels, such as a configuration that uses
   context parallelism for context encoding and data parallelism for token generation.
+  
 ..
   Sliding window attention (SWA)
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

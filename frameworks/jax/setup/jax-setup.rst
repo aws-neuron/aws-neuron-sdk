@@ -14,7 +14,7 @@ pip repository.
 .. include:: /setup/install-templates/trn1-ga-warning.txt
 
 .. note:: 
-    JAX requires ``Python 3.10`` or newer. Ensure a supported python version is installed on your system prior to installing JAX.
+    JAX requires ``Python 3.10`` or newer. Ensure a supported python version is installed on your system prior to installing JAX. See https://docs.aws.amazon.com/linux/al2023/ug/python.html to install newer python versions on Amazon Linux 2023.
 
 .. dropdown::  Launch the Instance
     :class-title: sphinx-design-class-title-small
@@ -53,7 +53,8 @@ pip repository.
     the ``jax-neuronx`` meta-package from the AWS Neuron pip repository. This method provides
     a production-ready JAX environment where ``jax-neuronx``'s major dependencies, namely
     ``jax``, ``jaxlib``, ``libneuronxla``, and ``neuronx-cc``, have undergone thorough testing
-    by the AWS Neuron team and will have their versions pinned during installation.
+    by the AWS Neuron team and will have their versions pinned during installation. 
+    **Note:** AL2023 requires setting the correct Python binary (Python 3.10 or newer).
 
     .. code:: bash
 
@@ -68,7 +69,7 @@ pip repository.
 
     .. code:: bash
 
-        python3 -m pip install jax==0.4.38 jaxlib==0.4.38
+        python3 -m pip install jax==0.6.2 jaxlib==0.6.2
         python3 -m pip install jax-neuronx libneuronxla neuronx-cc==2.* --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
 We can now run some simple JAX programs on the Trainium or Inferentia

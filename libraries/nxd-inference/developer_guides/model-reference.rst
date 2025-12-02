@@ -83,7 +83,7 @@ you must first convert the checkpoint to Neuron format. For more information
 about how to run Llama3.2 multimodal inference, and for details about 
 how to convert the original Meta checkpoints to run on NxD Inference, see :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`.
 
-.. _neuron-classes-1:
+.. _neuron-classes-0:
 
 Neuron Classes
 ^^^^^^^^^^^^^^
@@ -92,7 +92,7 @@ Neuron Classes
 - Inference config class: MllamaInferenceConfig
 - Causal LM model class: NeuronMllamaForCausalLM
 
-.. _compatible-checkpoint-examples-1:
+.. _compatible-checkpoint-examples-0:
 
 Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -170,7 +170,7 @@ Compatible Checkpoint Examples
 - https://huggingface.co/databricks/dbrx-instruct
 
 Qwen2.5
-~~~~
+~~~~~~~~
 
 NxD Inference supports models based on the Qwen2.5 model architecture.
 
@@ -197,7 +197,7 @@ Compatible Checkpoint Examples
 - https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct
 
 Qwen3
-~~~~
+~~~~~~
 
 NxD Inference supports models based on the Qwen3 model architecture.
 
@@ -230,7 +230,7 @@ NxD Inference supports FLUX.1-dev model checkpoint for text to image generation.
 You can use Hugging Face checkpoints. For more information
 about how to run FLUX.1-dev inference, see :ref:`/libraries/nxd-inference/tutorials/flux-inference-tutorial.ipynb`.
 
-.. _neuron-classes-3:
+.. _neuron-classes-6:
 
 Neuron Classes
 ^^^^^^^^^^^^^^
@@ -239,7 +239,7 @@ Neuron Classes
 - Flux Pipeline class: NeuronFluxPipeline
 - Flux Backbone Neuron config class: FluxBackboneInferenceConfig
 
-.. _compatible-checkpoint-examples-1:
+.. _compatible-checkpoint-examples-6:
 
 Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

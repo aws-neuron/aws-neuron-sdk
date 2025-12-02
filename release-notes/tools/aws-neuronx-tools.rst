@@ -28,7 +28,7 @@ Bug fixes
 * Fixed display of system profiles in Perfetto to correctly separate rows within the same Logical NeuronCore when using ``NEURON_LOGICAL_NC_CONFIG=2`` on Trn2.
 
 Neuron Tools  [2.25.100.0]
--------------------------
+---------------------------
 Date: 7/31/2025
 
 New in the release
@@ -72,7 +72,7 @@ Bug fixes
 
 
 Neuron Tools  [2.23.16.0]
-------------------------
+--------------------------
 Date: 5/19/2025
 
 New in the release
@@ -89,7 +89,7 @@ Bug fixes
 
 
 Neuron Tools  [2.22.66.0]
-------------------------
+--------------------------
 Date: 2/14/2025
 
 New in the release
@@ -107,7 +107,7 @@ Bug fixes
 
 
 Neuron Tools  [2.20.204.0]
-------------------------
+---------------------------
 Date: 12/20/2024
 
 New in the release
@@ -197,7 +197,6 @@ New in the release
 ^^^^^^^^^^^^^^^^^^
 * First release of the Neuron Distributed Event Tracing tool ``neuron-det`` to visualize execution for
   multi-node workloads.
-  Get started with the :ref:`neuron-det-ug`.
 * ``neuron-profile`` now has the ability to capture multi-worker jobs.
   See the :ref:`neuron-profile-ug` for more info.
 * Added terminology descriptions to ``neuron-profile`` summary statistics.

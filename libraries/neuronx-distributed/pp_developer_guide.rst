@@ -84,7 +84,7 @@ After applying model wrapper, ``NxDPPModel`` will partition the model based on t
 ``model.move_model_to_device()`` so that ``NxDPPModel`` will only move the local module to device.
 
 Runtime execution:
-'''''''''''''''''
+'''''''''''''''''''
 
 To use pipeline runtime, user simply needs to replace their original model call with ``NxDPPModel.run_train``, rest will remain unchanged. 
 Please note that the pipeline runtime will take care of both forward and backward call, so user will not need to explicitly make backward calls. 
@@ -125,7 +125,7 @@ Model initialization
 When the model is large, it is easy to cause host OOM when full model is created on every Neuron core. We recommend 2 ways to deal with this situation:
 
 Using torchdistx's deferred initialization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pytorch's torchdistx package (https://github.com/pytorch/torchdistx/tree/main) provides easy way to do deferred initialization. If you have torchdistx installed,
 using deferred initialization is simple as below
@@ -328,6 +328,7 @@ after partition.
 
 Model tracing
 -------------
+
 It is important to understand that the model cannot be partitioned without tracing.
 The model tracing is currently done with FX's symbolic trace. There are `certain limitations for FX's symbolic trace <https://pytorch.org/docs/stable/fx.html#limitations-of-symbolic-tracing>`__. So in order to avoid any tracing issue, 
 we would like to trace as less operations as possible, which means that we only want to trace the structure of the model, and cut the pipeline stages on the transformer layers, we do not care how exactly the computations are in the model.
@@ -335,7 +336,8 @@ By default, we will mark all transformer layers as leaf nodes, so that the trace
 also marks the `LlamaRMSNorm` as leaf module for Llama model.
 
 Special treatment for Hugging Face models
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Hugging Face offers FX support for many of its models. We will detect if user is using a Hugging Face model (by checking if the model class is ``transformers.PreTrainedModel``), and if so we will use the Huggingface's FX tracer to do the symbolic trace.
 The Hugging Face's tracer has implementation of many functionalities to help tracing, for details please refer to `here <https://github.com/huggingface/transformers/blob/main/src/transformers/utils/fx.py>`__.
 However, please be aware that Hugging Face's tracer will check if the model class name belongs to one of the Hugging Face models. So if you create your model class based on some Huggingface model class, it is important to maintain the same class name. Below is an example:
@@ -350,7 +352,7 @@ However, please be aware that Hugging Face's tracer will check if the model clas
 
 
 Auto partition
--------------
+---------------
 Setting the ``auto_partition`` parameter to ``True`` means that the transformer layers are automatically partitioned by evenly splitting the transformer layers between the PP ranks. If the transformer layers are not evenly divisible by the PP ranks, the remaining layers are distributed to the latter pipeline ranks.
 The partitions are created on the basis of the transformer layer names. The transformer layer names are determined by recursively traversing the original torch module to find the layer names of modules that are of the ``transformer_layer_cls`` type in the model.
 If the user does not want to partition the model in this way, they can set the partitions to use by specifying the ``pipeline_cuts``. Note that the pipeline cuts should be at the transformer layer module name, which in the Llama model is given by ``model.layers.i`` where ``i`` is the layer index.

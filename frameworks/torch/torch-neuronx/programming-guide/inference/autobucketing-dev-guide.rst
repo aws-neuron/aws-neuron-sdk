@@ -1,6 +1,6 @@
 .. _torch-neuronx-autobucketing-devguide:
 
-Autobucketing for Inference (|torch-neuronx|)
+Autobucketing for Inference (torch-neuronx)
 =============================================
 
 .. contents:: Table of Contents

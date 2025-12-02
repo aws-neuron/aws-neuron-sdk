@@ -83,6 +83,8 @@ extensions = [
     "nki_directives",
     "sphinxcontrib.googleanalytics",
     "sphinxcontrib.datatemplates",
+    "sphinxcontrib.spelling",
+    "sphinx_tabs.tabs",
 ]
 
 

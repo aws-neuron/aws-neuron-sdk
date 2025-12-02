@@ -15,17 +15,20 @@ This section walks you through the various options to get started with Neuron. Y
     :link-type: ref
     :class-body: sphinx-design-class-title-small
 
-.. card:: Get Started with TensorFlow
-    :link: tensorflow-neuron-main
-    :link-type: ref
+.. card:: Quickstart: Online Model Serving with vLLM
+    :link: /libraries/nxd-inference/vllm/quickstart-vllm-online-serving
+    :link-type: doc
+    :class-body: sphinx-design-class-title-small
+
+.. card:: Quickstart: Offline Model Serving with vLLM
+    :link: /libraries/nxd-inference/vllm/quickstart-vllm-offline-serving
+    :link-type: doc
     :class-body: sphinx-design-class-title-small
 
 .. card:: Get Started with Q Developer
     :link: amazon-q-dev
     :link-type: ref
     :class-body: sphinx-design-class-title-small
-
-
 
 
 

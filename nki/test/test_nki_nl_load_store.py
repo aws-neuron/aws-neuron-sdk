@@ -6,9 +6,9 @@ import unittest
 
 import numpy as np
 import neuronxcc.nki as nki
-# NKI_EXAMPLE_15_BEGIN NKI_EXAMPLE_14_BEGIN NKI_EXAMPLE_11_BEGIN NKI_EXAMPLE_10_BEGIN
+# NKI_EXAMPLE_16_BEGIN NKI_EXAMPLE_15_BEGIN NKI_EXAMPLE_14_BEGIN NKI_EXAMPLE_11_BEGIN NKI_EXAMPLE_10_BEGIN
 import neuronxcc.nki.language as nl
-# NKI_EXAMPLE_10_END NKI_EXAMPLE_11_END NKI_EXAMPLE_14_END NKI_EXAMPLE_15_END
+# NKI_EXAMPLE_16_END NKI_EXAMPLE_10_END NKI_EXAMPLE_11_END NKI_EXAMPLE_14_END NKI_EXAMPLE_15_END
 ...
 
 
@@ -19,7 +19,7 @@ import neuronxcc.nki.language as nl
 
 
 @nki.jit(mode="simulation")
-def example_kernel(in_tensor):
+def example_kernel(in_tensor, use_scalar=False):
   out_tensor = nl.ndarray(in_tensor.shape, in_tensor.dtype,
                           buffer=nl.shared_hbm)
   # NKI_EXAMPLE_10_BEGIN
@@ -28,12 +28,20 @@ def example_kernel(in_tensor):
   data_tile = nl.load(in_tensor)
   ...
   # NKI_EXAMPLE_10_END
-  # NKI_EXAMPLE_14_BEGIN
-  ...
-  # store into out_tensor[P, F] that is on HBM
-  # from data_tile[P, F] that is on SBUF
-  nl.store(out_tensor, data_tile)
-  # NKI_EXAMPLE_14_END
+  if use_scalar:
+    # NKI_EXAMPLE_16_BEGIN
+    ...
+    scalar = 100
+    # store scalar into out_tensor on HBM (effectively a memset)
+    nl.store(out_tensor, scalar)
+    # NKI_EXAMPLE_16_END
+  else:
+    # NKI_EXAMPLE_14_BEGIN
+    ...
+    # store into out_tensor[P, F] that is on HBM
+    # from data_tile[P, F] that is on SBUF
+    nl.store(out_tensor, data_tile)
+    # NKI_EXAMPLE_14_END
   return out_tensor
 
 
@@ -65,6 +73,12 @@ class TestNkiExampleNlLoad(unittest.TestCase):
     src = np.random.random_sample([128, 512]).astype(np.float32) * 100
 
     dst = example_kernel(src)
+    self.assertTrue(np.allclose(src, dst))
+
+  def test_nl_load_scalar(self):
+    src = np.ones([128, 512]).astype(np.int32) * 100
+
+    dst = example_kernel(src, use_scalar=True)
     self.assertTrue(np.allclose(src, dst))
 
   def test_load_store_3d(self):

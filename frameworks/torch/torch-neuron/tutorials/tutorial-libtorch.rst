@@ -26,7 +26,7 @@ Run the tutorial
 
 This tutorial is self contained.  It produces similar output to :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`.
 
-Note:  The tutorial will use about 8.5 GB of disk space.  Please ensure you have sufficient space before beginning.
+Note:  The tutorial will use about 8.5 GB of disk space. Ensure you have sufficient space before beginning.
 
 Right-click and copy :download:`this link address to the tutorial archive</src/examples/pytorch/libtorch_demo.tar.gz>`.
 

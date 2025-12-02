@@ -4,11 +4,11 @@
 
 .. _how-to-use-fpem:
 
-================================================
-How to use on-device Forward Pipeline Execution Mode for optimization
-================================================
+=======================================================================
+How to Use On-device Forward Pipeline Execution Mode for Optimization
+=======================================================================
 
-Task overview
+Task Overview
 -------------
 
 This topic shows you how to use Pipeline Execution Mode to optimize performance for large models with multiple submodels using the NxD Inference. This technique keeps intermediate tensors from sub models on the device to reduce data transfer overhead and minimize model latency.

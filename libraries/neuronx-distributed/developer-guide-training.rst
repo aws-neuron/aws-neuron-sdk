@@ -16,5 +16,4 @@ Training Developer Guides
     /libraries/neuronx-distributed/model_optimizer_wrapper_developer_guide
     /libraries/neuronx-distributed/lora_finetune_developer_guide
 
-.. include:: /libraries/neuronx-distributed/developer-guide-core.txt
 .. include:: /libraries/neuronx-distributed/developer-guide-training.txt

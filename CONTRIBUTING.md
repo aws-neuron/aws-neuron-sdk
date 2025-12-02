@@ -36,7 +36,7 @@ To send us a pull request, please:
     git clone git@github.com:YOUR-USERNAME/private-aws-neuron-sdk-staging.git
     ```
 
-2. Install the build dependencies. This requires a Python 3.9 installation:
+2. Install the build dependencies. This requires a Python 3.9 installation and venv:
 
     ```bash
     cd .. # The root folder where you have your cloned Git repos; don't run this in the repo folder but one level up or you'll have venv files in your repo folder
@@ -80,6 +80,17 @@ To send us a pull request, please:
 8. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
 Updated process documentation can be found here: [Runbook: Authoring a topic for the Neuron documentation](https://quip-amazon.com/e9B9AM7Npb17/Runbook-Authoring-a-topic-for-the-Neuron-documentation).
+
+## Updating the sitemap
+
+If you add or remove a topic, you must recreate the sitemap. To do so:
+
+1. From a shell, `cd` to the root of this repo (`private-aws-neuron-sdk-staging`) on your local machine.
+2. Run the following command: `python3 ./_utilities/create_sitemap.py`. This will generate the sitemap as `sitemap.xml` in the root folder of the repo.
+3. Rename the `sitemap.xml` file to `sitemap1.xml`.
+4. Move the `sitemap1.xml` file to the `/static` folder, copying over the previous version.
+5. Delete the generated `sitemap.xml` file from the root (**not** from `/static`) if you did a copy instead of a move.
+6. Push a PR with the updated sitemap to remote and request DougEric review/approve it.
 
 ## Finding contributions to work on
 

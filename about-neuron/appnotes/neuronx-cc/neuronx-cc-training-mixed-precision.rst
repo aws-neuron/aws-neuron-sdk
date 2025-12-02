@@ -60,9 +60,8 @@ This choice here is driven entirely by accuracy vs performance tradeoff. Casting
 
 The compiler uses BF16 casting **by default** for matrix multiplication operations. The speedup from casting operations gives a significant performance boost and the range of representable values in BF16 allows for more safety compared to FP16 when the possible numeric range of input values is unknown.
 
-The Neuron Compiler's  :option:`--auto-cast` and :option:`--auto-cast-type` CLI options are used to direct the compiler to perform alternate casting operations. See the detailed list of the options in :ref:`Neuron v2 Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>`.
+The Neuron Compiler's  :option:`--auto-cast` and :option:`--auto-cast-type` CLI options are used to direct the compiler to perform alternate casting operations. See the detailed list of the options in :ref:`Neuron v2 Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>`. The default setting is ``--auto-cast=none``, which is applied if the ``--auto-cast`` flag is not provided.
 
-It is recommended that you start with compiling the model to achieve high performance (default), you can then test the accuracy of the application and, if needed, try the next higher precision casting option until the desired accuracy and performance are achieved.
 
 The option combinations to consider in a typical flow are:
 
@@ -70,19 +69,19 @@ The option combinations to consider in a typical flow are:
 +---------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------+-------------------------------------------------+
 | Compiler autocast                                       | Options    Effect                                                        | Performance                                         | Accuracy                                        |
 +=========================================================+==========================================================================+=====================================================+=================================================+
-| ``--auto-cast all --auto-cast-type bf16``               | Best performance at the expense of precision                             | Performance *decreases* as you move down the table  | Accuracy *increases* as you move down the table |
-+---------------------------------------------------------+                                                                          +                                                     |                                                 |
-| ``--auto-cast matmult --auto-cast-type bf16`` (default) |                                                                          |                                                     |                                                 |
-+---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
-| ``--auto-cast all —-auto-cast-type fp16``               | Best performance at the expense of dynamic range                         |                                                     |                                                 |
-+---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
-| ``--auto-cast matmult --auto-cast-type fp16``           |                                                                          |                                                     |                                                 |
+| ``--auto-cast none`` (default)                          | Disables all auto-casting, using the data types defined within the model | Lowest performance                                  | Highest accuracy                                |
++---------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------+-------------------------------------------------+
+| ``--auto-cast matmult --auto-cast-type tf32``           |                                                                          | Performance *increases* as you move down the table  | Accuracy *decreases* as you move down the table |
 +---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
 | ``--auto-cast all —-auto-cast-type tf32``               | Balance of performance, dynamic range, and precision                     |                                                     |                                                 |
 +---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
-| ``--auto-cast matmult --auto-cast-type tf32``           |                                                                          |                                                     |                                                 |
+| ``--auto-cast matmult --auto-cast-type fp16``           |                                                                          |                                                     |                                                 |
 +---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
-| ``--auto-cast none``                                    | Disables all auto-casting, using the data types defined within the model |                                                     |                                                 |
+| ``--auto-cast all —-auto-cast-type fp16``               | Best performance at the expense of dynamic range                         |                                                     |                                                 |
++---------------------------------------------------------+--------------------------------------------------------------------------+                                                     |                                                 |
+| ``--auto-cast matmult --auto-cast-type bf16``           | Best performance at the expense of precision                             |                                                     |                                                 |
++---------------------------------------------------------+                                                                          + ----------------------------------------------------+-------------------------------------------------+
+| ``--auto-cast all --auto-cast-type bf16``               |                                                                          |  Highest performance                                | Lowest accuracy                                 |
 +---------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------+-------------------------------------------------+
 
 Note that compiler has to preserve the input/output (i/o) tensor types requested by Framework, therefore no casting is done on the i/o tensors. Additional speedup can be obtained by casting them in the Framework prior to compilation.

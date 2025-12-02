@@ -108,7 +108,7 @@ created by :ref:`torch_neuronx_trace_api`. **They should be called immediately a
 
 
 Using :func:`torch_neuronx.lazy_load` and :func:`torch_neuronx.async_load` Together
---------
+-------------------------------------------------------------------------------------
 
 You can also enable lazy load and asynchronous load together for the same model.
 To do so, simply call each API independently before saving the model with ``torch.jit.save``:

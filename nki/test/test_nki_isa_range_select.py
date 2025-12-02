@@ -16,10 +16,10 @@ import numpy as np
 ########################################################################
 
 @nki.jit(mode="simulation", platform_target="trn2")
-def nki_range_select_example(on_true, bound0, bound1, compare_op0, compare_op1, range_start):
+def nki_range_select_example(on_true, bound0, bound1, compare_op0, compare_op1, range_start, dtype):
     # Create output tensors
-    select_res = nl.ndarray(on_true.shape, dtype=nl.float32, buffer=nl.hbm)
-    reduce_result = nl.ndarray((on_true.shape[0], 1), dtype=nl.float32, buffer=nl.hbm)
+    select_res = nl.ndarray(on_true.shape, dtype=dtype, buffer=nl.hbm)
+    reduce_result = nl.ndarray((on_true.shape[0], 1), dtype=dtype, buffer=nl.hbm)
     
     # NKI_EXAMPLE_0_BEGIN
     ##################################################################
@@ -32,8 +32,8 @@ def nki_range_select_example(on_true, bound0, bound1, compare_op0, compare_op1, 
     bound0_tile = nl.load(bound0[...])
     bound1_tile = nl.load(bound1[...])
 
-    reduce_res_tile = nl.ndarray((on_true.shape[0], 1), dtype=nl.float32, buffer=nl.sbuf)
-    result = nl.ndarray(on_true.shape, dtype=nl.float32, buffer=nl.sbuf)
+    reduce_res_tile = nl.ndarray((on_true.shape[0], 1), dtype=dtype, buffer=nl.sbuf)
+    result = nl.ndarray(on_true.shape, dtype=dtype, buffer=nl.sbuf)
     
     result[...] = nisa.range_select(
         on_true_tile=on_true_tile,
@@ -45,7 +45,8 @@ def nki_range_select_example(on_true, bound0, bound1, compare_op0, compare_op1, 
         reduce_res=reduce_res_tile,
         reduce_op=np.max,
         range_start=range_start,
-        on_false_value=nl.fp32.min
+        on_false_value=nl.fp32.min,
+        dtype=dtype
     )
 
     nl.store(select_res[...], value=result[...])
@@ -148,29 +149,30 @@ def nki_range_select_chaining(on_true, bound0, bound1, compare_op0, compare_op1,
 
 class TestNkiIsaExamplesRangeSelect(unittest.TestCase):
     def test_range_select_example(self):
-        on_true_data = np.random.random_sample((128, 512)).astype(np.float32)
         bound0 = np.zeros([128, 1], dtype=np.float32)
         bound1 = np.full([128, 1], 64, dtype=np.float32)
         range_start = 32
-        result, reduction = nki_range_select_example(on_true_data, bound0, bound1, 
-                                                     np.greater_equal, np.less, range_start)
+        for dtype in (nl.float8_e4m3, nl.float8_e5m2, nl.bfloat16, np.float16, np.float32):
+            on_true_data = np.random.random_sample((128, 512)).astype(dtype)
+            result, reduction = nki_range_select_example(on_true_data, bound0, bound1,
+                                                     np.greater_equal, np.less, range_start, dtype)
 
-        # The results should match the numpy equivalent from the docstring:
-        # indices = np.zeros(on_true_data.shape)
-        # indices[:] = range_start + np.arange(on_true_data[0].size)
-        # mask = comp_op0(indices, bound0) & comp_op1(indices, bound1)
-        # result = np.where(mask, on_true_data, on_false_value)
-        # reduction = reduce_op(result, axis=1, keepdims=True)
-        indices = np.zeros_like(on_true_data)
-        indices[:] = range_start + np.arange(on_true_data.shape[1])
-      
-        mask = np.greater_equal(indices, bound0) & np.less(indices, bound1)
-        golden = np.where(mask, on_true_data, nl.fp32.min)
+            # The results should match the numpy equivalent from the docstring:
+            # indices = np.zeros_like(on_true_data, dtype=np.float32)
+            # indices[:] = range_start + np.arange(on_true_data[0].size)
+            # mask = comp_op0(indices, bound0) & comp_op1(indices, bound1)
+            # result = np.where(mask, on_true_data, on_false_value)
+            # reduction = reduce_op(result, axis=1, keepdims=True)
+            indices = np.zeros_like(on_true_data, dtype=np.float32)
+            indices[:] = range_start + np.arange(on_true_data.shape[1])
 
-        golden_reduce = np.max(golden, axis=1, keepdims=True)
-  
-        self.assertTrue(np.allclose(result, golden))
-        self.assertTrue(np.allclose(reduction, golden_reduce))
+            mask = np.greater_equal(indices, bound0) & np.less(indices, bound1)
+            golden = np.where(mask, on_true_data, nl.fp32.min)
+            
+            golden_reduce = np.max(golden, axis=1, keepdims=True)
+
+            self.assertTrue(np.allclose(result, golden.astype(dtype).astype(np.float32)))
+            self.assertTrue(np.allclose(reduction, golden_reduce.astype(dtype).astype(np.float32)))
 
     def test_range_select_chaining(self):
         on_true_data = np.random.random_sample((128, 512)).astype(np.float32)

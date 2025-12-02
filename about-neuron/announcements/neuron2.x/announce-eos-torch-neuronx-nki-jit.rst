@@ -9,4 +9,4 @@ Announcing end of support for ``torch_neuronx.nki_jit`` API in ``torch-neuronx``
 
 :ref:`Neuron Release 2.23 <neuron-2.23.0-whatsnew>` will be the last release to include support for ``torch_neuronx.nki_jit`` API in ``torch-neuronx`` package.
 
-Customers using ``torch_neuronx.nki_jit`` API are recommended to switch invocations to directly call functions annotated with :ref:`nki.jit API <nki_decorators>`.
+Customers using ``torch_neuronx.nki_jit`` API are recommended to switch invocations to directly call functions annotated with ``@nki.jit``.

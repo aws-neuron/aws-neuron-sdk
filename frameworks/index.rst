@@ -23,7 +23,7 @@ AWS Neuron provides integration with popular machine learning frameworks, enabli
         
         * **PyTorch NeuronX** - ``Inf2``, ``Trn1``, ``Trn2`` (inference & training)
         * **PyTorch Neuron** - ``Inf1`` (inference only)
-        * Native PyTorch API compatibility
+        * **Native PyTorch API compatibility** -  see: :doc:`/frameworks/torch/pytorch-native-overview`
   
     .. grid-item-card:: JAX on AWS Neuron
         :link: jax/index
