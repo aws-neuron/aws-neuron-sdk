@@ -102,7 +102,6 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   '/about-neuron/announcements/neuron2.x/announce-neuron-trn2',
                   '/about-neuron/arch/neuron-features/logical-neuroncore-config',
                   'libraries/nxd-training/',
-                  '/about-neuron/arch/neuron-hardware/trn3-arch',
                   '/about-neuron/arch/neuron-hardware/neuron-core-v4'
                ]
 

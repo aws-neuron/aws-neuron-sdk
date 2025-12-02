@@ -134,13 +134,6 @@ Overviews of the AWS Inf and Trn instance and UltraServer architectures.
 
       Trn2 instance architecture and specifications
 
-   .. grid-item-card:: Trn3 Architecture
-      :link: neuron-hardware/trn3-arch
-      :link-type: doc
-      :class-body: sphinx-design-class-title-small
-
-      Third-generation training accelerator chip
-
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -158,4 +151,3 @@ Overviews of the AWS Inf and Trn instance and UltraServer architectures.
    Inf2 Architecture <neuron-hardware/inf2-arch>
    Trn1 Architecture <neuron-hardware/trn1-arch>
    Trn2 Architecture <neuron-hardware/trn2-arch>
-   Trn3 Architecture <neuron-hardware/trn3-arch>
