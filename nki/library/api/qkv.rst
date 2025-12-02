@@ -98,7 +98,7 @@ Implementation Details
 
 The kernel implementation includes several key optimizations:
 
-1. **Automatic Implementation Selection**: The kernel automatically selects between TKG (Token Generation) and CTE (Compute Tensor Engine) implementations based on sequence length threshold (currently 96). Some features like RoPE fusion and loading input with DMA transpose are only available in CTE mode. QKV mode only supports automatic allocation at the moment.
+1. **Automatic Implementation Selection**: The kernel automatically selects between TKG (Token Generation) and CTE (Compute Tensor Engine) implementations based on sequence length threshold (currently 96). Some features like RoPE fusion and loading input with DMA transpose are only available in CTE mode. TKG mode only supports automatic allocation at the moment.
 
 2. **Fused Operations Support**: 
    
