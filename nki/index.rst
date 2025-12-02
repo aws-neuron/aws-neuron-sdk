@@ -5,7 +5,7 @@
 
 .. _neuron-nki:
 
-About the Neuron Kernel Interface (NKI) - Beta 2
+Neuron Kernel Interface (NKI) Documentation
 ================================================
 
 The Neuron Kernel Interface (NKI) is a bare-metal programming interface that enables direct access to AWS NeuronDevices available on Inf2, Trn1, Trn2, and Trn3 instances. NKI empowers ML developers to write high-performance kernel functions that can be integrated into PyTorch and JAX models, allowing fine-grained control over hardware resources while maintaining a familiar programming model.

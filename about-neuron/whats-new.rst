@@ -19,8 +19,7 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 
 **Expanded capabilities and enhancements include**:
 
-
-* **Trainium3 UltraServer support**: Enabling customers to scale AI workloads with improved performance
+* :doc:`Trainium3 UltraServer support </about-neuron/arch/neuron-hardware/trn3-arch>`: Enabling customers to scale AI workloads with improved performance
 * :doc:`Native PyTorch support </frameworks/torch/pytorch-native-overview>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
 * :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/about/index>` with open source :doc:`NKI Compiler </nki/compiler/about/index>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
@@ -43,7 +42,7 @@ TorchNeuron provides eager mode execution for interactive development and debugg
 
 Use TorchNeuron to run your PyTorch research and training workloads on Trainium without platform-specific code changes.
 
-**Learn more**: `Native PyTorch blog post <https://pytorch.org/blog/torchneuron-native-pytorch-backend/>`__, :doc:`documentation </frameworks/torch/pytorch-native-overview>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`.
+**Learn more**: `Native PyTorch blog post <https://pytorch.org/blog/torchneuron-native-pytorch-backend/>`__, :doc:`documentation </frameworks/torch/pytorch-native-overview>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`__.
 
 **Access**: Contact your AWS account team for access.
 

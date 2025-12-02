@@ -22,27 +22,27 @@ Each Trainium3 chip consists of the following components:
     :header-rows: 0
     :stub-columns: 1
     :align: left
-    
+
     *   - Compute
         - Eight NeuronCore-v4 cores that collectively deliver:
-          
+
           * 2,517 MXFP8/MXFP4 TFLOPS
           * 671 BF16/FP16/TF32 TFLOPS
           * 2,517 FP16/BF16/TF32 sparse TFLOPS
           * 183 FP32 TFLOPS
-    
+
     *   - Device memory
         - 144 GiB of device memory, with 4.9 TB/sec of bandwidth.
-    
+
     *   - Data movement
         - 4.9 TB/sec of DMA bandwidth, with inline computation.
-    
+
     *   - NeuronLink
         - NeuronLink-v4 for device-to-device interconnect provides 2.56 TB/sec bandwidth per device. It enables efficient scale-out training, as well as memory pooling between the different Trainium3 devices.
-    
+
     *   - Programmability
         - Trainium3 supports dynamic shapes and control flow, via ISA extensions of NeuronCore-v4. Trainium3 also allows for user-programmable rounding mode (Round Nearest Even or Stochastic Rounding), and custom operators via the deeply embedded GPSIMD engines.
-    
+
     *   - Collective communication
         - 16 CC-Cores orchestrate collective communication among Trainium3 devices, both within a server and across servers.
 
@@ -56,15 +56,15 @@ Compute
 
 .. list-table::
     :widths: auto
-    :header-rows: 1 
-    :stub-columns: 1    
+    :header-rows: 1
+    :stub-columns: 1
     :align: left
-      
-    *   - 
+
+    *   -
         - Trainium2
         - Trainium3
         - Improvement factor
-    
+
     *   - MXFP4 (TFLOPS)
         - Not applicable
         - 2517
@@ -87,15 +87,15 @@ Memory
 
 .. list-table::
     :widths: auto
-    :header-rows: 1 
-    :stub-columns: 1    
+    :header-rows: 1
+    :stub-columns: 1
     :align: left
-      
-    *   - 
+
+    *   -
         - Trainium2
         - Trainium3
         - Improvement factor
-    
+
     *   - HBM Capacity (GiB)
         - 96
         - 144
@@ -114,15 +114,15 @@ Interconnect
 
 .. list-table::
     :widths: auto
-    :header-rows: 1 
-    :stub-columns: 1    
+    :header-rows: 1
+    :stub-columns: 1
     :align: left
-      
-    *   - 
+
+    *   -
         - Trainium2
         - Trainium3
         - Improvement factor
-    
+
     *   - Inter-chip Interconnect (GB/sec/chip)
         - 1280
         - 2560
@@ -133,15 +133,15 @@ Data movement
 
 .. list-table::
     :widths: auto
-    :header-rows: 1 
-    :stub-columns: 1    
+    :header-rows: 1
+    :stub-columns: 1
     :align: left
-      
-    *   - 
+
+    *   -
         - Trainium2
         - Trainium3
         - Improvement factor
-    
+
     *   - DMA Bandwidth (TB/sec)
         - 3.5
         - 4.9
@@ -153,3 +153,4 @@ Additional resources
 For a detailed description of NeuronCore-v4 hardware engines, instances powered by AWS Trainium3, and Logical NeuronCore configuration, see the following resources:
 
 * :ref:`NeuronCore-v4 architecture <neuroncores-v4-arch>`
+

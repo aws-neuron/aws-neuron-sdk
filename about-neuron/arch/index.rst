@@ -53,7 +53,7 @@ Inferentia Architecture
       :class-body: sphinx-design-class-title-small
 
       Second-generation inference accelerator chip
-   
+
    .. grid-item-card:: AWS Inferentia
       :link: neuron-hardware/inferentia
       :link-type: doc
@@ -64,7 +64,7 @@ Inferentia Architecture
 NeuronCore Architecture
 ------------------------
 
-NeuronCores are fully-independent heterogenous compute-units that power Tranium, Tranium2, Inferentia, and Inferentia2 chips. 
+NeuronCores are fully-independent heterogenous compute-units that power Tranium, Tranium2, Inferentia, and Inferentia2 chips.
 
 .. grid:: 2
    :gutter: 2
@@ -133,6 +133,14 @@ Overviews of the AWS Inf and Trn instance and UltraServer architectures.
       :class-body: sphinx-design-class-title-small
 
       Trn2 instance architecture and specifications
+
+   .. grid-item-card:: Trn3 Architecture
+      :link: neuron-hardware/trn3-arch
+      :link-type: doc
+      :class-body: sphinx-design-class-title-small
+
+      Trn3 instance architecture and specifications
+
 
 .. toctree::
    :maxdepth: 1

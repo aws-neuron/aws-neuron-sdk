@@ -1,5 +1,5 @@
 .. meta::
-    :description: Home page for the NxD Core for Inference (NeuronX Distributed Inference) library included with the Neuron SDK.
+    :description: Home page for the NxD Inference for Training (NxDI) library included with the Neuron SDK.
     :date-modified: 12/02/2025
 
 .. _neuronx-distributed-inference-index:
@@ -14,10 +14,10 @@ implementations of some of the more popular distributed
 inference techniques. As the size of the model scales, fitting
 these models on a single device becomes impossible and hence we have to
 make use of model sharding techniques to partition the model across
-multiple devices. 
+multiple devices.
 
 As part of this library, we enable support for Tensor
-Parallelism sharding technique with other distributed library supported to be 
+Parallelism sharding technique with other distributed library supported to be
 added in future.
 
 .. _neuronx_distributed_inference_developer_guide:
@@ -50,45 +50,45 @@ For examples of how to build directly on NxD Core, see the following:
 NxD Core for Inference Documentation
 -------------------------------------
 
-.. dropdown::  Setup  
+.. dropdown::  Setup
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
+
     .. include:: /libraries/neuronx-distributed/setup/index.txt
 
-.. dropdown::  App Notes  
+.. dropdown::  App Notes
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-   
+
     .. include:: /libraries/neuronx-distributed/app_notes.txt
 
-.. dropdown::  API Reference Guide  
+.. dropdown::  API Reference Guide
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
+
     .. include:: /libraries/neuronx-distributed/api-reference-guide.txt
 
-.. dropdown::  Developer Guide  
+.. dropdown::  Developer Guide
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
+
     .. include:: /libraries/neuronx-distributed/developer-guide-inference.txt
 
-.. dropdown::  Tutorials  
+.. dropdown::  Tutorials
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
+
     .. include:: /libraries/neuronx-distributed/tutorials/neuronx_distributed_tutorials.txt
 
 
-.. dropdown::  Misc  
+.. dropdown::  Misc
     :class-title: sphinx-design-class-title-small
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
-    
+
     .. include:: /libraries/neuronx-distributed/neuronx-distributed-misc.txt
