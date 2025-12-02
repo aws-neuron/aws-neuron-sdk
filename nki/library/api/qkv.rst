@@ -23,7 +23,7 @@ Background
 The ``QKV`` kernel is a critical component in transformer architectures, responsible for projecting the input hidden states into query, key, and value representations. This kernel optimizes the projection operation by fusing it with optional normalization and supporting various output layouts to accommodate different transformer implementations.
 
 .. note::
-    This kernel automatically selects between TKG (Token Generation) and CTE (Compute Tensor Engine) implementations based on sequence length threshold (currently 96), ensuring optimal performance across different use cases. CTE is used for longer sequences, while TKG is optimized for shorter sequences.
+    This kernel automatically selects between TKG (Token Generation) and CTE (Context Encoding) implementations based on sequence length threshold (currently 96), ensuring optimal performance across different use cases. CTE is used for longer sequences, while TKG is optimized for shorter sequences.
 
 API Reference
 --------------
@@ -98,7 +98,7 @@ Implementation Details
 
 The kernel implementation includes several key optimizations:
 
-1. **Automatic Implementation Selection**: The kernel automatically selects between TKG (Token Generation) and CTE (Compute Tensor Engine) implementations based on sequence length threshold (currently 96). Some features like RoPE fusion and loading input with DMA transpose are only available in CTE mode. TKG mode only supports automatic allocation at the moment.
+1. **Automatic Implementation Selection**: The kernel automatically selects between TKG (Token Generation) and CTE (Context Encoding) implementations based on sequence length threshold (currently 96). Some features like RoPE fusion and loading input with DMA transpose are only available in CTE mode. TKG mode only supports automatic allocation at the moment.
 
 2. **Fused Operations Support**: 
    

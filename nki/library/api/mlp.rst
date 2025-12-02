@@ -25,7 +25,7 @@ Background
 The ``MLP`` kernel is a critical component in transformer architectures, responsible for processing token representations after the attention mechanism. This kernel optimizes the MLP computation by fusing it with optional normalization and supporting various optimizations for both context encoding and token generation scenarios.
 
 .. note::
-    This kernel automatically selects between TKG (Token Generation) and CTE (Compute Tensor Engine) implementations based on the batch size × sequence length threshold (currently 96), ensuring optimal performance across different use cases.
+    This kernel automatically selects between TKG (Token Generation) and CTE (Context Encoding) implementations based on the batch size × sequence length threshold (currently 96), ensuring optimal performance across different use cases.
 
 API Reference
 --------------
