@@ -153,4 +153,3 @@ Additional resources
 For a detailed description of NeuronCore-v4 hardware engines, instances powered by AWS Trainium3, and Logical NeuronCore configuration, see the following resources:
 
 * :ref:`NeuronCore-v4 architecture <neuroncores-v4-arch>`
-* :ref:`AWS EC2 Trn3 Architecture <trn3-arch>`

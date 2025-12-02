@@ -20,13 +20,13 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 **Expanded capabilities and enhancements include**:
 
 
-* :doc:`Trainium3 UltraServer support </about-neuron/arch/neuron-hardware/trn3-arch>`: Enabling customers to scale AI workloads with improved performance
+* **Trainium3 UltraServer support**: Enabling customers to scale AI workloads with improved performance
 * :doc:`Native PyTorch support </frameworks/torch/pytorch-native-overview>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
 * :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/about/index>` with open source :doc:`NKI Compiler </nki/compiler/about/index>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
 * :doc:`Neuron Explorer </tools/neuron-explorer/index>`: Tools suite to support developers and performance engineers in their performance optimization journey from framework operations to hardware instructions
 * :doc:`Neuron DRA for Kubernetes </containers/neuron-dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
-* :doc:`Expanded open source components </about-neuron/oss/index>``: Open sourcing more components including NKI Compiler, Native PyTorch, NKI Library, and more released under Apache 2.0
+* :doc:`Expanded open source components </about-neuron/oss/index>`: Open sourcing more components including NKI Compiler, Native PyTorch, NKI Library, and more released under Apache 2.0
 
 
 AI development requires rapid experimentation, hardware optimization, and production scale workloads. These updates enable researchers to experiment with novel architectures using familiar workflows, ML developers to build AI applications using standard frameworks, and performance engineers to optimize workloads using low-level hardware optimization.

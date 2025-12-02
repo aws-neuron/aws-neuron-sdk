@@ -196,5 +196,5 @@ Algorithm Summary
 More information
 -----------------
 
-* :doc:`Inter-node Collective Communications </neuron-runtime/explore/internode-collective-comms>`
+* :doc:`Inter-node Collective Communications </neuron-runtime/explore/internode-collective-comm>`
 * :doc:`About Neuron Runtime Collectives </neuron-runtime/about/collectives>`

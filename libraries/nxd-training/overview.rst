@@ -12,7 +12,7 @@ NxD Training
 The NeuronX Distributed Training (NxD Training) library is a collection of open-source tools and
 libraries designed to empower customers to train PyTorch models on AWS Trainium instances.
 It combines both ease-of-use and access to features built on top of
-:ref:`NxD Core<neuronx-distributed-index>` library. Except for a few Trainium specific features, NxD Training
+:ref:`NxD Core <neuronx-distributed-training-index>` library. Except for a few Trainium specific features, NxD Training
 is compatible with training platforms like NVIDIA’s NeMo.
 
 Specifically, :ref:`NxD Training <nxdt_figure>` offers the following features and productivity flows:
@@ -24,7 +24,7 @@ Specifically, :ref:`NxD Training <nxdt_figure>` offers the following features an
 
 *  **Distributed Strategies**: Splitting training workload over multiple nodes shortens the job duration. This is made possible through distributed strategies 
    that are the techniques used to shard large scale models across multiple Neuron Cores. NxD Training Distributed Strategies are implemented in the 
-   :ref:`NxD Core <neuronx-distributed-index>` library and include:
+   :ref:`NxD Core <neuronx-distributed-training-index>` library and include:
    Data Parallelism, 
    `Tensor-parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tensor_parallelism_overview.html#tensor-parallelism-overview>`_, 
    `Sequence-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/activation_memory_reduction.html#sequence-parallelism>`_,  
@@ -58,7 +58,7 @@ using three interfaces:
 
 *   High-level `YAML <https://yaml.org/>`_  configuration file used in conjunction with models in NxD Training's model hub
 *   `PyTorch Lightning (PTL) <https://github.com/Lightning-AI/pytorch-lightning>`_ APIs and Trainer in conjunction with NxD Core primitives
-*   :ref:`NxD Core <neuronx-distributed-index>` foundational API, also refered to as NxD Core primitives
+*   :ref:`NxD Core <neuronx-distributed-training-index>` foundational API, also refered to as NxD Core primitives
 
 All three usage mechanisms employ the underlying NxD Core library either directly through programming interfaces or 
 configuration files and developers can choose the method that meets 
