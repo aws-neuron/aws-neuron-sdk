@@ -165,3 +165,7 @@ To stop the vLLM server and free up resources:
 ::
 
     ps aux | grep vllm
+
+3. If any vLLM processes are still running, terminate them using their process IDs (PIDs): ``kill -9 <PID>``.
+   
+You have now successfully deployed GPT-OSS 120B on a Trn3 instance using NxD Inference with vLLM!

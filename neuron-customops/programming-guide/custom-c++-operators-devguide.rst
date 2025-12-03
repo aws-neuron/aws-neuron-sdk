@@ -28,11 +28,13 @@ We provide tooling and library packages (RPM and DEB) that can be installed on T
    aws-neuronx-gpsimd-customop-lib-0.3
 
 For AL2023 only, the following packages need be installed as dependencies:
+
 ::
    sudo dnf install libnsl
    sudo dnf install libxcrypt-compat
 
 On AL2023, they can be installed with the following commands:
+
 ::
    sudo dnf remove python3-devel -y
    sudo dnf remove aws-neuronx-gpsimd-tools-0.* -y
@@ -43,6 +45,7 @@ On AL2023, they can be installed with the following commands:
    sudo dnf install aws-neuronx-gpsimd-customop-lib-0.* -y
 
 On Ubuntu, they can be installed with the following commands:
+
 ::
    sudo apt-get remove python3-dev -y
    sudo apt-get remove aws-neuronx-gpsimd-tools=0.* -y

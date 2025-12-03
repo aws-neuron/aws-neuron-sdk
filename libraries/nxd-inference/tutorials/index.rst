@@ -99,7 +99,7 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
         Learn about the 1P1D (1 Prefill, 1 Decode) pattern for disaggregated inference to optimize latency and throughput.
 
     .. grid-item-card:: GPT-OSS on Trainium3
-        :link: libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial
+        :link: /libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial
         :link-type: doc
         :class-card: sd-rounded-3
 
