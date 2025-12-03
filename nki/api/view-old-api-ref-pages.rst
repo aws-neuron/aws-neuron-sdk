@@ -11,8 +11,8 @@ If you landed on this page, you probably followed a link to an older NKI API ref
 
 To view older versions of the NKI API docs, follow these steps:
 
-1. Go to the AWS Neuron docs home page: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/
-2. Click on the version selector dropdown at the top left of the page (it will say `latest` by default).
+1. Go to the AWS Neuron NKI API docs landing page: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/index.html
+2. Click on the version selector dropdown at the bottom-left of the page (it will say `latest` by default).
 
    .. image:: /nki/img/how-to/api-doc-version-selector.jpg
 
