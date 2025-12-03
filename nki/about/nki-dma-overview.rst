@@ -21,7 +21,7 @@ You can also perform casting as part of DMA when the transfer has a different so
 DMA Triggers
 -------------
 
-DMA transfers can be triggered by any engine sequencer in the NeuronCore. (For details, refer to :doc:`/nki/about/trainium2_arch`.) The sequencer instruction to trigger the transfer may wait on any semaphore condition which is signaled by other compute engines to respect data dependencies. The Trigger Engine for a given transfer can be specified by setting the ``engine`` parameter when calling :doc:`nisa.dma_copy </nki/api/generated/nki.isa.dma_copy>`. This behavior is only allowed when using a hardware DGE in the current NKI Beta 2 release.
+DMA transfers can be triggered by any engine sequencer in the NeuronCore. (For details, refer to :doc:`/nki/about/trainium2_arch`.) The sequencer instruction to trigger the transfer may wait on any semaphore condition which is signaled by other compute engines to respect data dependencies. The Trigger Engine for a given transfer can be specified by setting the ``engine`` parameter when calling :doc:`nisa.dma_copy </nki/api/generated/nki.isa.dma_copy>`. This behavior is only allowed when using hardware DGE in the current NKI Beta 2 release.
 
 DMA Queues
 -----------
