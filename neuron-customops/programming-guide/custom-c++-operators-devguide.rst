@@ -83,7 +83,7 @@ The kernel function contains the C++ implementation of the CustomOp, as shown in
       return t_out;
    }
 
-The kernel function is the main computational code for the operator. We support a subset of the input types usable by regular PyTorch Custom Operators: ``torch::Tensor``, ``torch::Scalar``, ``double``, and ``int64_t``. However we do not support ``std::vector`` or ``std::tuple`` of these types at this time. Note that similar to regular PyTorch Custom Operators, only ``double`` and not ``float``, and only ``int64_t`` and not other integral types such as ``int``, ``short`` or ``long`` are supported. The return value must be a ``torch::Tensor``.
+The kernel function is the main computational code for the operator. We support a subset of the input types usable by regular PyTorch Custom Operators: ``torch::Tensor``, ``torch::Scalar``, ``double``, and ``int64_t``. However we do not support ``std::vector`` or ``std::tuple`` of these types at this time. When passing in scalars, ``double`` is the only supported dtype, no other integral types such as ``int``, ``short``, ``int64_t`` or ``long`` are supported. The return value must be a ``torch::Tensor``.
 
 .. warning::
    Tensors passed into and returned from CustomOp functions can either have up to 8 dimensions where the maximum size of each dimension is 65535, or up to 4 dimensions where the maximum size of each dimension is 4294967295.
