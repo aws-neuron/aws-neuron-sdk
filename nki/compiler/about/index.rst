@@ -63,8 +63,3 @@ The following topics provide more details on the NKI Compiler and working with i
         
         Learn how the NKI compiler integrates with the Neuron SDK graph compiler to optimize and execute kernel functions on NeuronDevices.
 
-    .. grid-item-card:: Migrate NKI Beta 1 Kernels to the New NKI Compiler
-        :link: migrate-nki-kernels-beta2
-        :link-type: ref
-        
-        Learn how to migrate AWS Neuron NKI Beta 1 kernels to the new NKI compiler in Beta 2.

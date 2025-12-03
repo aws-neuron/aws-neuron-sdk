@@ -26,12 +26,6 @@ The NKI (Neuron Kernel Interface) Compiler is a key component of the AWS Neuron 
         
         Learn how the NKI compiler integrates with the :doc:`Neuron SDK graph compiler </compiler/index>` to optimize and execute kernel functions on NeuronDevices.
 
-    .. grid-item-card:: Migrate NKI Beta 1 Kernels to the New NKI Compiler
-        :link: migrate-nki-kernels-beta2
-        :link-type: ref
-        
-        Learn how to migrate AWS Neuron NKI Beta 1 kernels to the new NKI compiler in Beta 2.
-
 .. toctree::
    :maxdepth: 1
    :hidden:
