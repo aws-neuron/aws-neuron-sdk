@@ -1,3 +1,8 @@
+.. meta::
+    :description: Tutorial for deploying GPT-OSS 120B on Trainium3 instances using NeuronX Distributed (NxD) Inference with vLLM.
+    :keywords: GPT-OSS 120B, Trainium3, NeuronX Distributed Inference, NxD Inference, vLLM, Large Language Models, LLM Deployment, Tensor Parallelism, Data Parallelism, Speculative Decoding, Neuron SDK
+    :date-modified: 12/02/2025
+
 .. _nxdi-trn3-gpt-oss-120b-tutorial:
 
 Tutorial: GPT-OSS 120B on Trn3 instances [BETA]
@@ -119,7 +124,7 @@ You should receive a JSON response with the generated text.
 
 
 Step 3: Run performance benchmarks
----------------------------
+-----------------------------------
 
 We are going to use LLMPerf for benchmarking. Install LLMPerf from source and 
 patch it to support data parallelism and reasoning models following :ref:`llm-inference-benchmarking`.

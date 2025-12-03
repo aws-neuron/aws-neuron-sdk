@@ -72,48 +72,56 @@ NxD Inference documentation
     
     .. grid-item-card:: Overview
         :link: /libraries/nxd-inference/overview-index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Learn about NxD Inference architecture, key features, and how it can help you deploy models efficiently on AWS Neuron hardware.
 
     .. grid-item-card:: Setup
         :link: /libraries/nxd-inference/nxdi-setup
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Step-by-step instructions for setting up NxD Inference using DLAMI, Docker containers, or manual installation.
 
     .. grid-item-card:: Get Started with Models
         :link: /libraries/nxd-inference/models/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Deploy production-ready models like Llama 3, DBRX, and Mixtral with optimized configurations for AWS Neuron hardware.
 
     .. grid-item-card:: Tutorials
         :link: /libraries/nxd-inference/tutorials/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Hands-on tutorials for deploying various models, including Llama 3 variants, multimodal models, and using advanced features like speculative decoding.
 
     .. grid-item-card:: Developer Guides
         :link: /libraries/nxd-inference/developer_guides/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         In-depth guides for model onboarding, feature integration, vLLM usage, benchmarking, and customizing inference workflows.
 
     .. grid-item-card:: API Reference
         :link: /libraries/nxd-inference/api-guides/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Comprehensive API documentation for integrating NxD Inference into your applications and customizing inference behavior.
 
     .. grid-item-card:: Application Notes
         :link: /libraries/nxd-inference/app-notes/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Detailed application notes on parallelism strategies and other advanced topics for optimizing inference performance.
 
     .. grid-item-card:: Misc Resources
         :link: /libraries/nxd-inference/misc/index
+        :link-type: doc
         :class-card: sd-rounded-3
         
         Release notes, troubleshooting guides, and other helpful resources for working with NxD Inference.
