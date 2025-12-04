@@ -343,5 +343,4 @@ Resources and More Information
 --------------------------------
 
 * `TorchNeuron GitHub Repository <https://github.com/aws-neuron/torch-neuronx>`__
-* `Blog post on pytorch.org <https://pytorch.org>`__
 * `AWS Trainium Overview <https://aws.amazon.com/machine-learning/trainium/>`__
