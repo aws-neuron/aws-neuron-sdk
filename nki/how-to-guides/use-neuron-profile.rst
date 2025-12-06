@@ -240,31 +240,33 @@ Compile your NKI kernel to create a NEFF in your current directory::
 
     $ python3 mlp_with_mm_kernel.py
 
-.. note:: Find your NEFF named similarly to ``MODULE_SyncTensorsGraph.81_690876920003119736.neff``.
+.. note:: Find your NEFF file, which will be named something like ``MODULE_SyncTensorsGraph.81_690876920003119736.neff``.
 
 Step 3: Profile the Generated NEFF
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The last step would be profiling the generated NEFF. This step executes the NEFF on the NeuronDevice and records a raw execution trace into a NTFF artifact::
+The last step is profiling the generated NEFF. This step executes the NEFF on the NeuronDevice and records a raw execution trace into a NTFF artifact::
 
-    $ neuron-profile capture -n <path_to_neff> -s profile.ntff --profile-nth-exec=2 --enable-dge-notifs
+    $ neuron-explorer capture -n <path_to_neff> -s profile.ntff --profile-nth-exec=2 --enable-dge-notifs
 
 This will save your NTFF profile to ``profile_exec_2.ntff``.
 
-.. note:: The ``--profile-nth-exec=2`` option will profile your NEFF twice on the NeuronDevice and output a NTFF profile for the second iteration. This is recommended to avoid one-time warmup delays which can be seen in the first iteration of execution.
+important:: 
+    
+    The ``--profile-nth-exec=2`` option will profile your NEFF twice on the NeuronDevice and output a NTFF profile for the second iteration. This is recommended to avoid one-time warmup delays which can be seen in the first iteration of execution.
 
-.. note:: The ``--enable-dge-notifs`` option enables the capture of DGE DMA events but has known issues where it may overflow the status notification queue and cause execution timeouts when there are many DGE instructions.
-
-View the Neuron Profile UI
----------------------------
+    The ``--enable-dge-notifs`` option enables the capture of DGE DMA events but has known issues where it may overflow the status notification queue and cause execution timeouts when there are many DGE instructions.
+ 
+View the Neuron Explorer UI
+----------------------------
 
 This section assumes you've completed the previous step and have already generated both the NEFF and NTFF files, and downloaded them on your local machine.
 
 Neuron Explorer includes an interactive, web-based UI for exploring execution traces in detail. In this section, we'll open the Neuron Explorer UI to examine NKI-specific profiling information. These details can be found in multiple areas of the interface — including instruction hover tooltips, instruction click panels, search results, and box select results.
 
-To view the Neuron Profile Web UI, execute the view command to start Web UI::
+To view the Neuron Profile Web UI, execute the view command to start Web UI, replacing ``<workspace>`` with a path to a folder to store your profiling artifacts::
 
-    $ neuron-profile view --data-path ./<workspace> --output-format parquet --ui-mode latest
+    $ neuron-explorer view --data-path ./<workspace>
 
 ``<workspace>`` is a path that neuron profile will use for storing and managing profiles.
 
@@ -281,9 +283,12 @@ For example::
 
     ssh -L 3001:localhost:3001 -L 3002:localhost:3002 <user>@<ip> -fN
 
-If you created an EC2 instance with pem credentials please include it in the ssh tunnel below::
+If you created an EC2 instance with ``pem`` credentials, include it in the ``ssh`` tunnel below::
 
     ssh -i ~/my-ec2.pem -L 3001:localhost:3001 -L 3002:localhost:3002 ubuntu@[PUBLIC_IP_ADDRESS] -fN
+
+
+.. 
 
 Using the Profile UI
 ~~~~~~~~~~~~~~~~~~~~~
@@ -294,7 +299,7 @@ Using the Profile UI
       :align: center
       :width: 750
 
-* Click on the button "Upload Profile" to upload NEFF and NTFF files, and give a meaningful name to your profile. It is optional to select source code folder for code linking.
+* Click on the button "Upload Profile" to upload NEFF and NTFF files, and give a meaningful name to your profile. Selecting a source code folder for code linking is optional.
 
    .. image:: /nki/img/how-to/nki-profiler-2.png
       :align: center
@@ -349,19 +354,19 @@ You can optionally include your NKI source code files for display in Neuron Prof
 
 .. note:: Even if you don't upload the source code, the NKI source filename and line number remain available in the instruction detail view as noted in View Neuron Profile UI.
 
-* If source code is uploaded with NEFF and NTFF file, you will be able to see the source code in the code editor. To open the code editor, click on Add Widget and select Code Editor.
+* If source code is uploaded with NEFF and NTFF file, you will be able to see the source code in the code editor. To open the code editor, click on **Add Widget** and select **Code Editor**.
   
    .. image:: /nki/img/how-to/nki-profiler-10.png
       :align: center
       :width: 750
     
-* The code editor will be open on the right hand side.
+* The code editor will be open on the right-hand side.
   
    .. image:: /nki/img/how-to/nki-profiler-11.png
       :align: center
       :width: 750
 
-* Hover on an instruction that has NKI source location and Command + left click on Mac (Control + right click on Windows), it will pop-up a window for showing file selection for stack trace.
+* Hover on an instruction that has NKI source location and **Command + left click** on Mac (**Ctrl + right click** on Windows), and it will pop-up a window for showing file selection for stack trace.
 
    .. image:: /nki/img/how-to/nki-profiler-12.png
       :align: center
@@ -373,7 +378,7 @@ You can optionally include your NKI source code files for display in Neuron Prof
       :align: center
       :width: 750
 
-* You can also enable different source code decorations in Source Code Settings.
+* You can also enable different source code decorations in **Source Code Settings**.
 
    .. image:: /nki/img/how-to/nki-profiler-14.png
       :align: center
