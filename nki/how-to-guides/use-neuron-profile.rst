@@ -10,7 +10,7 @@ Learn how to profile Neuron Kernel Interface (NKI) kernels using Neuron Explorer
 Install Neuron Explorer
 ------------------------
 
-Ensure that you have the latest version of the ``aws-neuronx-tools`` package installed asNeuron Explorer comes with this package. The ``aws-neuronx-tools`` package is pre-installed on Neuron DLAMIs. 
+Ensure that you have the latest version of the ``aws-neuronx-tools`` package installed asNeuron Explorer comes with this package. The ``aws-neuronx-tools`` package is pre-installed on Neuron DLAMIs.
 
 * For detailed installation instructions, see: :ref:`How to Get Started with Neuron Explorer <new-neuron-profiler-setup>`.
 
@@ -184,7 +184,7 @@ We will profile a 3-layer MLP model that fuses matrix multiplications with ReLU 
             super(NKILinear, self).__init__()
             self.weight = nn.Parameter(torch.randn(out_features, in_features))
             self.bias = nn.Parameter(torch.randn(out_features))
-        
+
         def forward(self, x):
             weight_T = self.weight.t()
             x_T = x.t()
@@ -208,17 +208,17 @@ We will profile a 3-layer MLP model that fuses matrix multiplications with ReLU 
 
     def main():
         from torch_xla.core import xla_model as xm
-        
+
         torch.manual_seed(0)
         device = xm.xla_device()
-        
+
         model = MLP().to(device)
         train_x = torch.randn(2048, 2048).to(device)
-        
+
         output = model(train_x)
-        
+
         print(f"Output tensor: {output}")
-        
+
         xm.mark_step()
 
 
@@ -251,12 +251,17 @@ The last step is profiling the generated NEFF. This step executes the NEFF on th
 
 This will save your NTFF profile to ``profile_exec_2.ntff``.
 
-important:: 
-    
+<<<<<<< HEAD
+important::
+
+=======
+important::
+
+>>>>>>> 1a96dff1 (Updated NKI kernel profiling topic)
     The ``--profile-nth-exec=2`` option will profile your NEFF twice on the NeuronDevice and output a NTFF profile for the second iteration. This is recommended to avoid one-time warmup delays which can be seen in the first iteration of execution.
 
     The ``--enable-dge-notifs`` option enables the capture of DGE DMA events but has known issues where it may overflow the status notification queue and cause execution timeouts when there are many DGE instructions.
- 
+
 View the Neuron Explorer UI
 ----------------------------
 
@@ -288,8 +293,11 @@ If you created an EC2 instance with ``pem`` credentials, include it in the ``ssh
     ssh -i ~/my-ec2.pem -L 3001:localhost:3001 -L 3002:localhost:3002 ubuntu@[PUBLIC_IP_ADDRESS] -fN
 
 
-.. 
+<<<<<<< HEAD
+=======
+..
 
+>>>>>>> 1a96dff1 (Updated NKI kernel profiling topic)
 Using the Profile UI
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -318,35 +326,35 @@ Using the Profile UI
       :width: 750
 
 * If you hover over any engine instruction in the timeline with your mouse, you will see instruction details in a pop-up box.
-   
+
    .. image:: /nki/img/how-to/nki-profiler-5.png
       :align: center
       :width: 750
-      
+
 * If you click on any engine instruction in the timeline with your mouse, you will see event details in a panel below the timeline.
-   
+
    .. image:: /nki/img/how-to/nki-profiler-6.png
       :align: center
       :width: 750
-      
+
 * To view hierarchy of this profile, click on Add Widget and select Hierarchy.
 
    .. image:: /nki/img/how-to/nki-profiler-7.png
       :align: center
       :width: 750
-      
+
 * Using the Profiler's flexible layout support, you can drag and group every widget into any panel of your choice to customize the layout for your workflow.
-   
+
    .. image:: /nki/img/how-to/nki-profiler-8.png
       :align: center
       :width: 750
-      
+
 1. If you right-click on an operator in the hierarchy timeline, it will highlight all related instructions in the instruction timeline.
 
    .. image:: /nki/img/how-to/nki-profiler-9.png
       :align: center
       :width: 750
-      
+
 View NKI Source Code in Neuron Profile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -355,13 +363,13 @@ You can optionally include your NKI source code files for display in Neuron Prof
 .. note:: Even if you don't upload the source code, the NKI source filename and line number remain available in the instruction detail view as noted in View Neuron Profile UI.
 
 * If source code is uploaded with NEFF and NTFF file, you will be able to see the source code in the code editor. To open the code editor, click on **Add Widget** and select **Code Editor**.
-  
+
    .. image:: /nki/img/how-to/nki-profiler-10.png
       :align: center
       :width: 750
-    
+
 * The code editor will be open on the right-hand side.
-  
+
    .. image:: /nki/img/how-to/nki-profiler-11.png
       :align: center
       :width: 750

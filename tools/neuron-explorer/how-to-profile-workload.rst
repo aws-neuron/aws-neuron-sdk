@@ -295,4 +295,4 @@ All uploaded profiles are provided in the Profile Manager page with details such
 * **Star button**: Mark this profile as favorite profile. This profile will be shown in the User's favorites list.
 * **Bulb button**: Navigate to the summary page of this profile. For more details on the summary page, see :doc:`this overview of the Neuron Explorer Summary Page </tools/neuron-explorer/overview-summary-page>`.
 
-Clicking on the name of profile takes you to the profile page of this profile. 
+Clicking on the name of profile takes you to its corresponding profile page. 

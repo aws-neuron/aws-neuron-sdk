@@ -12,8 +12,6 @@ AWS Neuron Expands with Trainium3, Native PyTorch, Faster NKI, and Open Source a
    :align: right
    :width: 120px
 
-
-
 At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <https://aws.amazon.com/ai/machine-learning/trainium/>`__ with expanded open source components and enhanced developer experience. These updates enable standard frameworks to run unchanged on Trainium, removing barriers for researchers to experiment and innovate. For developers requiring deeper control, the enhanced Neuron Kernel Interface (NKI) provides direct access to hardware-level optimizations, enabling customers to scale AI workloads with improved performance.
 
 
@@ -29,6 +27,10 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 
 
 AI development requires rapid experimentation, hardware optimization, and production scale workloads. These updates enable researchers to experiment with novel architectures using familiar workflows, ML developers to build AI applications using standard frameworks, and performance engineers to optimize workloads using low-level hardware optimization.
+
+.. admonition:: Looking to try out our Beta features?
+
+   Just take `the survey here <https://pulse.aws/survey/NZU6MQGW?p=0>`__` and we'll get back to you!
 
 
 Native PyTorch Support

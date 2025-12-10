@@ -364,4 +364,3 @@ NKI programmers can invoke hardware-based DGE on NeuronCore-v3 using ``nisa.dma_
 
    When triggered from ScalarE, execution of the DGE-based DMA instruction could be hidden behind earlier compute instructions (such as ``nisa.activate()``) in program order, since DGE and the compute pipeline of ScalarE are independent hardware resources. Each DGE-based DMA instruction takes about 600 ns to execute on NeuronCore-v3.
 
-See (TODO: link) DMA Deep Dive for more discussion on DGE performance.

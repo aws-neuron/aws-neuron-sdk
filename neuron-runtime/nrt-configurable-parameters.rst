@@ -69,7 +69,16 @@ configure NeuronX Runtime behavior.
      - 0 to INT_MAX; 0 is disabled.
      - 0
      - 2.15+
+   * - ``NEURON_RT_ALLOW_LEGACY_NEFF``
+     - Allow a NEFF compiled for an older arch to execute on a newer one. For example, executing a NEFF originally compiled for Trn1 architecture on Trn2.
+     - Boolean
+     - TRUE or FALSE
+     - FALSE
+     - 2.25+
 
+.. warning::
+  When applying ``NEURON_RT_ALLOW_LEGACY_NEFF``, note that not all NEFF files, especially those from older architectures, may be compatible.
+  In the case of an incompatibility, the operation will fail with a data mismatch error or stall out.
 
 NeuronCore Allocation
 ---------------------

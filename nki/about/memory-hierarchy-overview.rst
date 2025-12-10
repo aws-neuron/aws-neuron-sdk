@@ -82,12 +82,6 @@ the limited capacity of PSUM, we recommend that you reserve PSUM space for the
 tensor engine to write MatMult outputs and to use the vector and scalar engines
 to evict MatMult results back to SBUF as soon as possible.
 
-.. TODO: link to tutorials that showcase tiling/fusion
-
-Note, to optimize kernel performance, it is good practice for NKI programmers
-to be mindful of SBUF and PSUM usage through careful :ref:`tiling <nki-pm-tile>`
-and loop fusion. If the total size of the live data being used by a NKI kernel
-overflows the capacity of any on-chip memory, the Neuron compiler will insert
-the necessary spills or refills between that memory and the next-tier memory in
-the hierarchy.
+.. note:: 
+   To optimize kernel performance, it is good practice for NKI programmers to be mindful of SBUF and PSUM usage through careful :ref:`tiling <nki-pm-tile>` and loop fusion. If the total size of the live data being used by a NKI kernel overflows the capacity of any on-chip memory, the Neuron compiler will insert the necessary spills or refills between that memory and the next-tier memory in the hierarchy.
 
