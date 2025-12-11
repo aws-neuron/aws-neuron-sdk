@@ -251,13 +251,8 @@ The last step is profiling the generated NEFF. This step executes the NEFF on th
 
 This will save your NTFF profile to ``profile_exec_2.ntff``.
 
-<<<<<<< HEAD
 important::
 
-=======
-important::
-
->>>>>>> 1a96dff1 (Updated NKI kernel profiling topic)
     The ``--profile-nth-exec=2`` option will profile your NEFF twice on the NeuronDevice and output a NTFF profile for the second iteration. This is recommended to avoid one-time warmup delays which can be seen in the first iteration of execution.
 
     The ``--enable-dge-notifs`` option enables the capture of DGE DMA events but has known issues where it may overflow the status notification queue and cause execution timeouts when there are many DGE instructions.
@@ -293,11 +288,6 @@ If you created an EC2 instance with ``pem`` credentials, include it in the ``ssh
     ssh -i ~/my-ec2.pem -L 3001:localhost:3001 -L 3002:localhost:3002 ubuntu@[PUBLIC_IP_ADDRESS] -fN
 
 
-<<<<<<< HEAD
-=======
-..
-
->>>>>>> 1a96dff1 (Updated NKI kernel profiling topic)
 Using the Profile UI
 ~~~~~~~~~~~~~~~~~~~~~
 
