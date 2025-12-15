@@ -18,7 +18,7 @@ The NKI Library provides pre-built kernels you can review and modify in your own
      - Source Code
    * - :doc:`RMSNorm-Quant kernel specification </nki/library/specs/design-rmsnorm-quant>`
      - Performs optional RMS normalization followed by quantization to ``fp8``.
-     - `Source code <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/reference/rmsnorm_quant>`_
+     - `Source code <https://github.com/aws-neuron/nki-library/tree/main/src/nkilib_standalone/nkilib/core/rmsnorm>`_
 
 .. toctree::
     :maxdepth: 1
