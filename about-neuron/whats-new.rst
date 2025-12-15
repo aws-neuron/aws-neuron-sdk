@@ -30,8 +30,7 @@ AI development requires rapid experimentation, hardware optimization, and produc
 
 .. admonition:: Looking to try out our Beta features?
 
-   Just take `the survey here <https://pulse.aws/survey/NZU6MQGW?p=0>`__` and we'll get back to you!
-
+   Submit your beta access request through `this form <https://pulse.aws/survey/NZU6MQGW?p=0>`__ and the Neuron Product team will get back to you.
 
 Native PyTorch Support
 -----------------------
