@@ -10,7 +10,6 @@ Developer Tools
 
 AWS Neuron provides a comprehensive suite of developer tools for optimizing, monitoring, and debugging machine learning workloads on AWS Inferentia and Trainium accelerators. These tools enable developers to gain deep insights into model performance, system utilization, and hardware behavior to maximize the efficiency of ML applications running on Neuron-enabled instances.
 
-
 .. grid:: 1
    :gutter: 3
 
@@ -49,6 +48,14 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
         
       Third-party tools and integrations that support the AWS Neuron development experience, including monitoring, visualization, and optimization solutions.
 
+..
+   .. grid-item-card:: AP Visualizer
+      :link: ap-visualizer/ap-visualizer.html
+      :link-type: url
+      :class-header: sd-bg-primary sd-text-white
+        
+      Visualize access patterns of tensors on Neuron devices.
+
 .. grid:: 1 1 2 2
    :gutter: 3
 
@@ -60,7 +67,7 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
       Tutorials for how to utilize all Neuron Tools.
 
    .. grid-item-card:: What's New
-      :link: /release-notes/tools/aws-neuronx-tools
+      :link: /release-notes/2.27.0/tools
       :link-type: doc
       :class-header: sd-bg-secondary sd-text-white
 

@@ -35,7 +35,7 @@
 
 .. warning::
    * Please note the this DLALMI might not have latest PyTorch version. After activating the python venv, please check your current version using : ``pip list installed | grep torch-neuronx``
-   * To see the latest PyTorch version :ref:`check here, <latest-neuron-release-content>` and to update to latest release you can :ref:`check here <pytorch-neuronx-update>`
+   * To see the latest PyTorch version :ref:`check here, <latest-latest-neuron-release-artifacts>` and to update to latest release you can :ref:`check here <pytorch-neuronx-update>`
 
 .. note::
   * When launching a Trn1, please adjust your primary EBS volume size to a minimum of 512GB.

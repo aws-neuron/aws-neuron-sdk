@@ -17,15 +17,18 @@ Updated : 04/29/2022
 
 Neuron Driver release [2.22.2.0]
 --------------------------------
+
 Date: 06/24/2025
 
 Bug Fixes
 ^^^^^^^^^
+
 * Added workaround for HW DGE descriptor fetching bug
 * Fixed typos in certain error log messages
 
 Upcoming Neuron driver 2.21 support changes for Inf1 instance users
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 * Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types). 
 * ``Inf1`` instance users, Neuron driver 2.21 and below will remain supported with regular security patches. 
 * ``Inf1`` instance users are advised to pin the Neuron driver version to ``2.21.*`` in their installation script using following command:
@@ -36,6 +39,7 @@ Upcoming Neuron driver 2.21 support changes for Inf1 instance users
 
 Compatibility Support Table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Driver Version: 2.22.2.0
 
 The Neuron driver was tested for the following EC2 instances and configurations:
@@ -63,65 +67,80 @@ Instance Family               OS Type       OS Version     Kernel Version    GLI
 
 Neuron Driver release [2.21.37.0]
 --------------------------------
+
 Date: 05/19/2025
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * Added the ability for users to read power utilization for each neuron device via a sysfs interface. This interface shows the minimum, maximum and average power consumed by the device over the past minute, expressed as a percentage of the device's maximum power. (:ref:`reference <neuron-sysfs-ug>`)
 * Added the ability for users to read the device utilization. This shows up as the microseconds between the start and end of the current execution on hardware. (:ref:`reference <neuron-sysfs-ug>`)
 
 Neuron Driver release [2.20.74.0]
 --------------------------------
+
 Date: 05/12/2025
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * Fixes DMA abort errors on Trainium2 that could occur in Neuron Runtime during specific workloads.
 
 
 Neuron Driver release [2.20.28.0]
 --------------------------------
+
 Date: 04/03/2025
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * This driver is required to run with Neuron Runtime 2.24 or later on Trainium2 machines. Included in the release is a bug fix to avoid device memory corruption issues leading to undefined Neuron Device behavior.
 
 Improvements
 ^^^^^^^^^^^^
+
 * Improved interface between ``libnrt`` and the Driver resulting in stability improvements.
 
 Neuron Driver release [2.19.64.0]
 --------------------------------
+
 Date: 12/20/2024
 
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * Added Trainium2 support
 
 Improvements
 ^^^^^^^^^^^^
+
 * Optimized HBM Memory allocation to reduce fragmentation. See :ref:`here <small_allocations_mempool>` for more details.
 
 Neuron Driver release [2.18.20.0]
 --------------------------------
+
 Date: 11/20/2024
 
 Bug Fixes
 ^^^^^^^^^
+
 * This release addresses an issue with Neuron Driver that can lead to a user-space application either gaining access to kernel addresses or providing the driver with spoofed memory handles (kernel addresses) that can be potentially used to gain elevated privileges. We would like to thank `Cossack9989 <https://github.com/Cossack9989>`_ for reporting and collaborating on this issue.
 
 Neuron Driver release [2.18.12.0]
 --------------------------------
+
 Date: 09/16/2024
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * Introduced a sysfs memory usage counter for DMA rings (:ref:`reference <neuron-sysfs-ug>`)
 
 Bug Fixes
 ^^^^^^^^^
+
 * Resolved an issue where a memory allocation failure caused a hang due to the memory allocation lock not being released
 * Resolved an issue where the driver was allocating more memory than needed for aligned device allocations
 
@@ -132,12 +151,14 @@ Date: 07/03/2024
 
 New in this release
 ^^^^^^^^^^^^^^^^^^^
+
 * Improved detection and reporting of DMA errors
 * Added more fine grained sysfs metrics to track memory allocation types
 * Logging improvements
 
 Bug Fixes
 ^^^^^^^^^
+
 * Fixed compatibility issues for the Linux 6.3 kernel
 * Resolved issue where device reset handling code was not properly checking the failure metric
 

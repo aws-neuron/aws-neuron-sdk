@@ -236,6 +236,6 @@ Next steps
 Further reading
 ---------------
 
-- :ref:`nxdi-vllm-user-guide`: Complete integration reference.
+- :ref:`nxdi-vllm-user-guide-v1`: Complete integration reference.
 - :ref:`nxdi-tutorials-index`: In-depth tutorials and workflow guides.
 - `Downloading models from Hugging Face <https://huggingface.co/docs/hub/en/models-downloading>`_: Instructions for obtaining model checkpoints.

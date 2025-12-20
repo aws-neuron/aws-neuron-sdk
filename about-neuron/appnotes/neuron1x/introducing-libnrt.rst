@@ -58,7 +58,7 @@ they do not detect *Neuron Driver version 2.1.5.0* or newer. For installation an
 
 .. include:: ./important-neuronx-dkms.txt
 
-To see details of Neuron component versions please see :ref:`neuron-release-content`.
+To see details of Neuron component versions please see :ref:`latest-neuron-release-artifacts`.
 
 .. important ::
 
@@ -148,7 +148,7 @@ Starting from *Neuron 1.16.0*, Neuron framework extensions (TensorFlow Neuron, P
 ``libnrt.so``. It is required to install the ``aws-neuron-dkms`` Driver version 2.1.5.0 or newer for proper operation. The ``neuron-rtd`` daemon 
 that was installed in previous releases no longer works starting with Neuron 1.16.0.
 
-To see details of Neuron component versions see :ref:`neuron-release-content`.
+To see details of Neuron component versions see :ref:`latest-neuron-release-artifacts`.
 
 .. :important:
 

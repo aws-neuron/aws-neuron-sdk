@@ -30,7 +30,7 @@ Using vLLM
 If you are using vLLM for production deployment, we recommend that you
 use the vLLM API to integrate with NxD Inference. The vLLM API automatically
 chooses the correct model and config classes based on the model's config file.
-For more information, refer to the :ref:`nxdi-vllm-user-guide`.
+For more information, refer to the :ref:`nxdi-vllm-user-guide-v1`.
 
 Integrating Directly with NxD Inference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

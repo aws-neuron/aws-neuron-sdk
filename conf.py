@@ -119,7 +119,7 @@ templates_path = [
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build','_content-types','**.ipynb_checkpoints','.venv','_utilities']
-html_extra_path = ['static']
+html_extra_path = ['static', 'tools/ap-visualizer']
 
 # remove bash/python/ipython/jupyter prompts and continuations
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
@@ -212,11 +212,7 @@ intersphinx_mapping = {
 
 # -- Options for Theme  -------------------------------------------------
 
-# top_banner_message="<a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/dlami-pytorch-introduce.html'>  Deep Learning AMI Neuron PyTorch is now available! </a> <br>  <a class='reference internal' style='color:white;'  href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/neuron2.x/sm-training-trn1-introduce.html'> Amazon Sagemaker now supports training jobs on Trn1! </a>"
-
-# top_banner_message="<span>&#9888;</span><a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/setup-troubleshooting.html#gpg-key-update'>  Neuron repository GPG key for Ubuntu installation has expired, see instructions how to update! </a>"
-
-top_banner_message = "Neuron 2.26.1 is released! Check <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>What's New </a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/index.html'>Announcements</a> for more details."
+top_banner_message = "Neuron 2.27.0 is released! Check the <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html'>What's New</a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>Release Notes</a> for more details."
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
@@ -354,3 +350,24 @@ linkcheck_exclude_documents = [
     r"containers/.*",
 ]
 nitpicky = False
+
+import shutil
+
+def setup(app):
+    def move_ap_visualizer(app, exception):
+        if exception is None:
+            root = app.outdir
+            files = ['ap-visualizer.html', 'script.js', 'webgl-grid.js']
+            for f in files:
+                src = os.path.join(root, f)
+                if os.path.exists(src):
+                    dst_dir = os.path.join(root, 'tools', 'ap-visualizer')
+                    os.makedirs(dst_dir, exist_ok=True)
+                    shutil.move(src, os.path.join(dst_dir, f))
+            src_dir = os.path.join(root, 'src')
+            if os.path.exists(src_dir):
+                dst_dir = os.path.join(root, 'tools', 'ap-visualizer', 'src')
+                if os.path.exists(dst_dir):
+                    shutil.rmtree(dst_dir)
+                shutil.move(src_dir, dst_dir)
+    app.connect('build-finished', move_ap_visualizer)

@@ -15,7 +15,11 @@ The AWS Neuron SDK includes:
 * **Deployment support** - Integration with AWS services like SageMaker, EC2, EKS, and ECS
 * **Developer tools** - Profiling, monitoring, and debugging utilities
 
-For a full list of AWS Neuron features, see :ref:`what-is-neuron`
+For a full list of AWS Neuron features, see :ref:`what-is-neuron`.
+
+.. admonition:: Join our Beta program
+
+   Get early access to new Neuron features and tools! `Fill out this form and apply to join our Beta program <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
 
 What is "NeuronX"?
 ------------------
@@ -165,6 +169,8 @@ If you want to request a feature or report a critical issue, you can contact us 
    App Notes <appnotes/index>
    Ask Amazon Q </about-neuron/amazonq-getstarted>
    Benchmarks </about-neuron/benchmarks/index>
+   Beta Participation </about-neuron/beta-participation>
+   Model Samples </about-neuron/models/index>
    Neuron FAQ <faq>
    Neuron Features </about-neuron/arch/neuron-features/index>
    Open Source </about-neuron/oss/index>

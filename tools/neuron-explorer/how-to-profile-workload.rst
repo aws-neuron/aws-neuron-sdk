@@ -243,11 +243,19 @@ VSCode Extension
 
 The UI is also available as a VSCode extension, enabling better native integration for features such as code linking.
 
-First, download the Visual Studio Code Extension (``.vsix``) file from https://github.com/aws-neuron/aws-neuron-sdk/releases/tag/v2.27.0.beta.
+First, download the Visual Studio Code Extension (``.vsix``) file from https://github.com/aws-neuron/aws-neuron-sdk/releases/tag/v2.27.0.
 
-..    TODO: Upload location may change
+.. grid:: 1
+   :gutter: 3
 
-Open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type "> Extensions: Install from VSIX..." and press Enter. When you are prompted to select a file, select **neuronXray-external-v1.1.0.vsix** and then the "Install" button (or press Enter) to install the extension.
+   .. grid-item-card:: 
+      :class-card: sd-border-2
+
+      **Get the Neuron Explorer VSCode Extension**
+      ^^^
+      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron.explorer-2.27.0.vsix>`
+
+Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuronXray-external-v1.1.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
 
 .. image:: /tools/profiler/images/profile-workload-1.png
 

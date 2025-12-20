@@ -7,6 +7,12 @@ Neuron DLC Release Notes
    :local:
    :depth: 1
 
+.. note:: 
+  For Neuron DLC release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/containers`.
+
+
+----
+
 
 Known Issues
 ------------
@@ -21,7 +27,7 @@ Neuron 2.24.0
 -------------
 Date: 06/24/2025
 
-- Added new pytorch-inference-vllm-neuronx 0.7.2 DLC that contains all dependencies including drivers, tools, NxDI and other packages to run :ref:`nxdi-vllm-user-guide` out of the box
+- Added new pytorch-inference-vllm-neuronx 0.7.2 DLC that contains all dependencies including drivers, tools, NxDI and other packages to run vLLM out of the box
 - Upgraded pytorch-training-neuronx DLC to 2.7 version along with its related dependencies
 - Upgraded pytorch-inference-neuronx DLC to 2.7 version along with its related dependencies
 - Upgraded jax-training-neuronx DLC to 0.6 version along with its related dependencies
@@ -57,14 +63,16 @@ Neuron 2.21.0
 -------------
 Date: 12/19/2024
 
-- Added new jax-training-neuronx 0.4 Training DLC that contains all dependencies including drivers, tools and other packages to run :ref:`jax-neuronx-setup` out of the box.
+- Added new jax-training-neuronx 0.4 Training DLC that contains all dependencies including drivers, tools and other packages to run JAX out of the box.
 - Added new pytorch-inference-neuronx 2.5.1 and pytorch-training-neuronx 2.5.1 DLCs
 - PyTorch 1.13.1 and 2.1.2 DLCs reached end of support phase, We now recommend customers to use PyTorch 2.5.1 DLCs by default.
 - All Neuron supported DLCs to use latest Neuron SDK 2.21.0 version.
 - All Neuron supported DLCs are now updated to Ubuntu 22. Here is the list:
- * pytorch-inference-neuron 2.5.1 with Ubuntu 22
- * pytorch-training-neuron 2.5.1 with Ubuntu 22
- * jax-training-neuronx 0.4 with Ubuntu 22
+  
+   * pytorch-inference-neuron 2.5.1 with Ubuntu 22
+   * pytorch-training-neuron 2.5.1 with Ubuntu 22
+   * jax-training-neuronx 0.4 with Ubuntu 22
+  
 - pytorch-inference-neuronx now supports both NxD Inference and Transformers NeuronX libraries for inference.
 
 
@@ -90,7 +98,7 @@ Date: 09/16/2024
 
 - Updated Neuron SDK to latest 2.20.0 release for PyTorch Neuron DLCs.
 - Added new NxD Training package to `pytorch-training-neuronx DLCs <https://github.com/aws-neuron/deep-learning-containers/tree/main?tab=readme-ov-file#pytorch-training-neuronx>`_.
-- See `here <https://github.com/aws-neuron/deep-learning-containers/tree/2.20.0>`_ for the new DLC details.
+- See `here <https://github.com/aws-neuron/deep-learning-containers/tree/2.20.0>`__ for the new DLC details.
 
 
 Neuron 2.19.0
@@ -100,4 +108,4 @@ Date: 07/03/2024
 
 - Updated Neuron SDK to latest 2.19.0 release for PyTorch Neuron DLCs.
 - Updated TorchServe to 0.11.0 for PyTorch Neuron DLCs.
-- See `here <https://github.com/aws-neuron/deep-learning-containers/tree/2.19.0>`_ for the new DLC details.
+- See `here <https://github.com/aws-neuron/deep-learning-containers/tree/2.19.0>`__ for the new DLC details.

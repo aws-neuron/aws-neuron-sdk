@@ -9,11 +9,13 @@ AWS Neuron Documentation
 
 :ref:`AWS Neuron <what-is-neuron>` is a software stack that enables high-performance deep learning and generative AI workloads on `AWS Inferentia <https://aws.amazon.com/ai/machine-learning/inferentia/>`_ and `AWS Trainium <https://aws.amazon.com/ai/machine-learning/trainium/>`_ instances. Neuron provides a complete machine learning development experience with compiler optimization, runtime efficiency, and comprehensive tooling.
 
-**For more details, see** :doc:`What is AWS Neuron? </about-neuron/what-is-neuron>` and :doc:`What's New in AWS Neuron? </about-neuron/whats-new>`
+* **For more details, see** :doc:`What is AWS Neuron? </about-neuron/what-is-neuron>` and :doc:`What's New in AWS Neuron? </about-neuron/whats-new>`
 
-.. admonition:: Neuron and Open Source
+* **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`
 
-   Neuron includes open-source components across the software stack. The NKI Compiler, Neuron Kernel Driver, NKI Library, NxD Inference, and Neuron Explorer are available under open-source licenses. Framework integrations for PyTorch, JAX, and vLLM provide transparent implementations with public repositories for community contributions and modifications. See the :doc:`list of Neuron open-source GitHub repos </about-neuron/oss/index>` for more details.
+.. admonition:: Join our Beta program
+
+   Get early access to new Neuron features and tools! `Fill out this form and apply to join our Beta program <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
 
 .. grid:: 1
    :gutter: 3
@@ -26,7 +28,7 @@ AWS Neuron Documentation
       * :doc:`Learn about Neuron's support for native PyTorch </frameworks/torch/pytorch-native-overview>`
       * :doc:`Get started with vLLM </libraries/nxd-inference/vllm/index>` for :doc:`Offline </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>` or :doc:`Online </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>` inference model serving
       * :doc:`Implement and run your first NKI kernel </nki/get-started/quickstart-implement-run-kernel>`
-      * :doc:`Profile with Neuron Explorer </tools/neuron-explorer/index>`
+      * :doc:`Optimize model performance with Neuron Explorer </tools/neuron-explorer/index>`
       * :doc:`Launch a Inf/Trn instance on Amazon EC2 </devflows/ec2-flows>`
       * :doc:`Deploy a DLC </containers/get-started/quickstart-configure-deploy-dlc>`
 
@@ -82,11 +84,11 @@ Learn more about AWS Neuron
       Low-level programming interface for custom kernel development on Trainium and Inferentia with direct hardware access.
 
       * :doc:`Set up your developer environment </nki/get-started/setup-env>`
-      * :doc:`NKI Compiler </nki/compiler/index>`
       * :doc:`NKI Library  </nki/library/index>`
-      * :doc:`NKI Language Guide (Beta) </nki/deep-dives/nki-language-guide>`
-      * :doc:`NKI Developer "How-to" Guides </nki/how-to-guides/index>`
+      * :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`
+      * :doc:`NKI Tutorials </nki/guides/tutorials/index>`
       * :doc:`NKI API Reference </nki/api/index>`
+      * :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`
 
 **Other Neuron features:**
 
@@ -133,13 +135,12 @@ Learn more about AWS Neuron
 
       * :doc:`Neuron Runtime <neuron-runtime/index>`
       * :doc:`Neuron Collectives <neuron-runtime/about/collectives>`
+      * :doc:`Neuron C++ Custom Operators <neuron-customops/index>`
 
    .. grid-item-card:: **Compilers**
       :class-card: sd-border-1
 
       * :doc:`Neuron Graph Compiler <compiler/index>`
-      * :doc:`NKI Compiler </nki/compiler/index>`
-      * :doc:`Neuron C++ Custom Operators <neuron-customops/index>`
       * :doc:`Neuron Compiler Error Codes <compiler/error-codes/index>`
 
    .. grid-item-card:: **Legacy Documentation and Samples**
@@ -156,6 +157,7 @@ Learn more about AWS Neuron
    Neuron Architecture </about-neuron/arch/index>
    What's New </about-neuron/whats-new>
    Announcements </about-neuron/announcements/index>
+   Release Notes </release-notes/index>
    Contribute </about-neuron/oss/index>
 
 .. toctree::
@@ -165,11 +167,10 @@ Learn more about AWS Neuron
 
     Quickstarts </about-neuron/quick-start/index>
     Setup Guides </setup/index>
-    Models </about-neuron/models/index>
     Developer Flows </devflows/index>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Use ML Frameworks
    :hidden:
 
@@ -180,7 +181,7 @@ Learn more about AWS Neuron
    TensorFlow NeuronX</frameworks/tensorflow/index>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Training Libraries
    :hidden:
 
@@ -188,7 +189,7 @@ Learn more about AWS Neuron
    NxD Core (Training) </libraries/neuronx-distributed/index-training>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Inference Libraries
    :hidden:
 
@@ -198,7 +199,7 @@ Learn more about AWS Neuron
    NxD Core (Inference) </libraries/neuronx-distributed/index-inference>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: NxD Core Libraries
    :hidden:
 
@@ -231,6 +232,7 @@ Learn more about AWS Neuron
 
    Neuron Runtime </neuron-runtime/index>
    Collectives </neuron-runtime/about/collectives>
+   Neuron C++ Custom Operators </neuron-customops/index>
 
 .. toctree::
    :maxdepth: 1
@@ -238,8 +240,7 @@ Learn more about AWS Neuron
    :hidden:
 
    Graph Compiler </compiler/index>
-   NKI Compiler </nki/compiler/index>
-   Neuron C++ Custom Operators </neuron-customops/index>
+   Compiler Error Codes </compiler/error-codes/index>
 
 .. toctree::
    :maxdepth: 1
@@ -247,21 +248,17 @@ Learn more about AWS Neuron
    :hidden:
 
    Home </nki/index>
-   Concepts </nki/about/index>
-   NKI Setup </nki/get-started/setup-env>
-   Quickstart: Build and Run a Kernel </nki/get-started/quickstart-implement-run-kernel>
-   How-To Guides </nki/how-to-guides/index>
-   Tutorials </nki/tutorials/index>
+   Get Started </nki/get-started/index>
+   Guides </nki/guides/index>
    Deep Dives </nki/deep-dives/index>
-   API Reference </nki/api/index>
+   NKI API Reference </nki/api/index>
    NKI Library </nki/library/index>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Other Content
+   :caption: Archive
    :hidden:
 
-   Release Notes </release-notes/index>
    Archived content </archive/index>
    
 *AWS and the AWS logo are trademarks of Amazon Web Services, Inc. or its affiliates. All rights reserved.*

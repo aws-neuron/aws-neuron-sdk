@@ -129,7 +129,7 @@ Tiling
 
 The overall kernel (both RMSNorm and Quantization steps) is tiled on the major dimension of the 2D input tensor by a size equal to the hardware's maximum partition dimension of a tile. This ensures full utilization of the various hardware engines' input width.
 
-Within the RMSNorm operation, the RMS-scale and gamma steps are further tiled on the minor dimension by a size equal to the hardware's maximum free dimension of the stationary operand of General Matrix Multiplication on TensorEngine. This is because the gamma-broadcast operation is ultimately performed via TensorEngine matrix multiplication so we maximize our use of the engine with maximally sized tiles. See `NKI Programming Model </nki/programming_model>` for more details on tile size constraints.
+Within the RMSNorm operation, the RMS-scale and gamma steps are further tiled on the minor dimension by a size equal to the hardware's maximum free dimension of the stationary operand of General Matrix Multiplication on TensorEngine. This is because the gamma-broadcast operation is ultimately performed via TensorEngine matrix multiplication so we maximize our use of the engine with maximally sized tiles. See `What is Tiling? <nki/get-started/about/tiling-overview>` for more details on tile size constraints.
 
 Example:
 
@@ -146,8 +146,6 @@ SPMD Sharding
 ^^^^^^^^^^^^^
 
 This kernel supports SPMD sharding as a way to split the computation across the constituent cores of a `Logical Neuron Core </about-neuron/arch/neuron-features/logical-neuroncore-config>`. It shards on the outer-most dimension.
-
-See the `NKI Programming Guide </nki/programming_model>` for details on SPMD and how to enable it through your kernel invocation.
 
 
 Gamma Broadcast

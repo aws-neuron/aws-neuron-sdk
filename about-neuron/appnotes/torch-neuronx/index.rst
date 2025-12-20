@@ -10,6 +10,7 @@ PyTorch NeuronX Application Notes
    introducing-pytorch-2-6
    introducing-pytorch-2-7
    introducing-pytorch-2-8
+   introducing-pytorch-2-9
    introducing-pytorch-2-x
    migration-from-xla-downcast-bf16
    torch-neuronx-dataparallel-app-note
@@ -22,6 +23,14 @@ PyTorch Version Support
 
 .. grid:: 1 1 2 2
    :gutter: 2
+
+   .. grid-item-card::
+      :link: introducing-pytorch-2-9
+      :link-type: doc
+
+      **PyTorch 2.9 Support**
+      ^^^
+      New features and migration guide for PyTorch 2.9 on Neuron
 
    .. grid-item-card::
       :link: introducing-pytorch-2-8
@@ -38,14 +47,6 @@ PyTorch Version Support
       **PyTorch 2.7 Support**
       ^^^
       Features and improvements introduced with PyTorch 2.7 support
-
-   .. grid-item-card::
-      :link: introducing-pytorch-2-6
-      :link-type: doc
-
-      **PyTorch 2.6 Support**
-      ^^^
-      Migration guide and new capabilities for PyTorch 2.6
 
    .. grid-item-card::
       :link: introducing-pytorch-2-x

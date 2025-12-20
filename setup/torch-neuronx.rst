@@ -10,6 +10,26 @@ PyTorch Neuron (``torch-neuronx``) Setup
    :local:
    :depth: 2
 
+``torch-neuronx`` setup on Ubuntu 24
+------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   PyTorch NeuronX on Multi-Framework DLAMI (Ubuntu 24) </setup/neuron-setup/multiframework/multi-framework-ubuntu24-neuron-dlami>
+   PyTorch NeuronX on Ubuntu 24 </setup/neuron-setup/pytorch/neuronx/ubuntu/torch-neuronx-ubuntu24>
+
+.. card:: Ubuntu 24 (Neuron Multi-Framework DLAMI)
+        :link: setup-ubuntu24-multi-framework-dlami
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
+.. card:: Ubuntu 24 (Ubuntu24 AMI)
+        :link: setup-torch-neuronx-ubuntu24
+        :link-type: ref
+        :class-body: sphinx-design-class-title-small
+
 ``torch-neuronx`` setup on Ubuntu 22
 ------------------------------------
 
@@ -58,3 +78,5 @@ PyTorch Neuron (``torch-neuronx``) Setup
         :link: setup-rocky-linux-9
         :link-type: ref
         :class-body: sphinx-design-class-title-small
+
+      

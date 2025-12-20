@@ -24,5 +24,29 @@ Meta's Llama 3 family includes large language models available in multiple sizes
 
     :bdg-ref-primary:`Quickstart <nxdi-models-llama-3-3-70b-instruct-quickstart>`
 
+.. _nxdi-models-qwen3-index:
+
+Qwen 3
+---------------------------
+
+Qwen 3 family includes large language models available in multiple sizes and versions. Select the model variant that matches your application requirements:
+
+.. grid:: 1
+  :gutter: 1
+
+  .. grid-item-card:: Qwen3 MoE 235B
+
+    Qwen family multilingual LLM, featuring sparse Mixture-of-Experts and Grouped Query Attention
+
+    :bdg-ref-primary:`Quickstart <nxdi-models-qwen3-235b-a22b-quickstart>`
+
 .. note::
    Instructions for additional models will be available soon. For a complete list of supported model architectures, refer to this :ref:`developer guide <nxdi-model-reference>`.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   llama3/llama_33_70b
+   qwen3/qwen3_moe_235b
+

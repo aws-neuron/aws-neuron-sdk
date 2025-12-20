@@ -7,6 +7,12 @@ Neuron DLAMI Release Notes
    :local:
    :depth: 1
 
+.. note:: 
+  For Neuron DLAMI release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/dlami`.
+
+
+----
+
 Neuron 2.24.0
 -------------
 

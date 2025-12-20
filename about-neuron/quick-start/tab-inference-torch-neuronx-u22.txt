@@ -16,6 +16,12 @@
 
     .. tab-set::
 
+        .. tab-item:: PyTorch 2.9.0
+
+            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
+                :start-line: 287
+                :end-line: 288
+
         .. tab-item:: PyTorch 2.8.0
 
             .. include :: /src/helperscripts/installationScripts/python_instructions.txt
@@ -27,12 +33,7 @@
             .. include :: /src/helperscripts/installationScripts/python_instructions.txt
                 :start-line: 269
                 :end-line: 270
-        
-        .. tab-item:: PyTorch 2.6.0
 
-            .. include :: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 257
-                :end-line: 258
 
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section

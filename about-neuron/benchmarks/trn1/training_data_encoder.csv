@@ -1,4 +1,4 @@
 Model,Instance-Type,Training Data-Type,Nodes,Topology,Microbatch,Globalbatch, Optimizer, Sequence Length, Performance [seq/sec],Strong/Weak Scaling,Neuron Version,Neuron Tutorial/Example,Pytorch Neuron(torch-neuronx) Version, OS Type.
-HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),16,1048576,Lamb,128,55617.28,weak scaling,2.26.0,:ref:`hf-bert-pretraining-tutorial`,2.7.0.2.10.13553, U22
-HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,FP32,16,[32xNC(DP)] x 16Nodes(DP),8,1048576,Lamb,128,32482.34,weak scaling,2.26.0,:ref:`hf-bert-pretraining-tutorial`,2.7.0.2.10.13553, U22
-HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,Autocast:BF16+SR,1,[32xNC(DP)],16,16384,AdamW,128,3697.71,strong scaling,2.26.0,:ref:`hf-bert-pretraining-tutorial`,2.7.0.2.10.13553, U22
+HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,Autocast:BF16+SR,16,[32xNC(DP)] x 16Nodes(DP),16,1048576,Lamb,128,56923.6521,weak scaling,2.27.0,:ref:`hf-bert-pretraining-tutorial`,2.9.0.2.11.19321, U22
+HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,FP32,16,[32xNC(DP)] x 16Nodes(DP),8,1048576,Lamb,128,32752.7891,weak scaling,2.27.0,:ref:`hf-bert-pretraining-tutorial`,2.9.0.2.11.19321, U22
+HuggingFace BERT-Large Ph1 pre-training,trn1.32xlarge/trn1n.32xlarge,Autocast:BF16+SR,1,[32xNC(DP)],16,16384,AdamW,128,3836.4653,strong scaling,2.27.0,:ref:`hf-bert-pretraining-tutorial`,2.9.0.2.11.19321, U22

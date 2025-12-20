@@ -2,11 +2,17 @@
 
 
 NxD Inference Release Notes (``neuronx-distributed-inference``)
-=============================================================
+================================================================
 
 .. contents:: Table of contents
    :local:
    :depth: 1
+
+.. note:: 
+  For NxDI release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/nxd-inference`.
+
+
+----
 
 This document lists the release notes for Neuronx Distributed Inference library.
 
@@ -107,6 +113,8 @@ If this issue occurs, you will see the following error during model load.
 To avoid this error, reduce the number of buckets you use, or reduce the 
 sequence lengths that you use in each bucket.
 
+----
+
 Neuronx Distributed Inference [0.3.5591] (Neuron 2.23.0 Release)
 -----------------------------------------------------------------------
 
@@ -186,7 +194,7 @@ Features in this Release
   * Other minor fixes and improvements.
 
 Neuronx Distributed Inference [0.2.0] (Beta) (Neuron 2.22.0 Release)
-------------------------------------------------------------------
+---------------------------------------------------------------------
 Date: 04/03/2025
 
 Models in this Release
@@ -297,7 +305,7 @@ Known Issues and Limitations
       RuntimeError: Failed to execute the model status=1003 message=Numerical Error
 
 Neuronx Distributed Inference [0.1.1] (Beta) (Neuron 2.21.1 Release)
-------------------------------------------------------------------
+---------------------------------------------------------------------
 Date: 01/14/2025
 
 Bug Fixes

@@ -7,6 +7,65 @@ Neuron Kernel Interface (NKI) release notes
 
 ..    :depth: 2
 
+Neuron Kernel Interface (NKI) (Beta) [2.27]
+-------------------------------------------
+Date: 12/25/2025
+
+* new ``nki.language`` APIs:
+
+  * ``nki.language.device_print``
+
+* new ``nki.isa`` APIs:
+
+  * ``nki.isa.dma_compute``
+  * ``nki.isa.nki.isa.quantize_mx``
+  * ``nki.isa.nki.isa.nc_matmul``
+  * ``nki.isa.nki.isa.nc_n_gather`` [used to be ``nl.gather_flattened`` with free partition limited to 512]
+  * ``nki.isa.rand2``
+  * ``nki.isa.rand_set_state``
+  * ``nki.isa.rand_get_state``
+  * ``nki.isa.set_rng_seed``
+  * ``nki.isa.rng``
+
+* new ``dtypes``:
+
+  * ``nki.language.float8_e5m2_x4``
+  * ``nki.language.float4_e2m1fn_x4``
+  * ``nki.language.float8_e4m3fn_x4``
+
+* changes to existing APIs:
+
+  * several ``nki.language`` APIs have been removed in NKI Beta 2
+  * all nki.isa APIs have ``dst`` as an input param
+  * all nki.isa APIs removed ``dtype`` and ``mask`` support
+  * ``nki.isa.memset`` — removed ``shape`` positional arg , since we have ``dst``
+  * ``nki.isa.affine_select`` — instead of ``pred``, we now take ``pattern`` and ``cmp_op`` params
+  * ``nki.isa.iota`` — ``expr`` replaced with ``pattern`` and ``offset``
+  * ``nki.isa.nc_stream_shuffle`` - ``src`` and ``dst`` order changed
+
+* docs improvements:
+
+  * restructured NKI Documentation to align with workflows
+  * added :doc:`Trainium3 Architecture Guide for NKI </nki/guides/architecture/trainium3_arch>`
+  * added :doc:`About Neuron Kernel Interface (NKI) </nki/get-started/about/index>`
+  * added :doc:`NKI Environment Setup Guide </nki/get-started/setup-env>`
+  * added :doc:`Get Started with NKI </nki/get-started/quickstart-implement-run-kernel>`
+  * added :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`
+  * added :doc:`About the NKI Compiler </nki/deep-dives/nki-compiler>`
+  * added :doc:`About NKI Beta Versions </nki/deep-dives/nki-beta-versions>`
+  * added :doc:`MXFP Matrix Multiplication with NKI </nki/deep-dives/mxfp-matmul>`
+  * updated :doc:`Matrix Multiplication Tutorial </nki/guides/tutorials/matrix_multiplication>`
+  * updated :doc:`Profile a NKI Kernel </nki/deep-dives/use-neuron-profile>`
+  * updated :doc:`NKI APIs </nki/api/index>`
+  * updated :doc:`NKI Library docs </nki/library/index>`
+  * removed NKI Error Guide
+
+* known issues:
+
+  * ``nki.isa.nki.isa.nc_matmul`` - ``is_moving_onezero`` was incorrectly named ``is_moving_zero`` in this release
+  * NKI ISA semantic checks are not available with Beta 2, workaround is to reference the API docs
+  * NKI Collectives are not available with Beta 2
+  * ``nki.benchmark`` and ``nki.profile`` are not available with Beta 2
 
 Neuron Kernel Interface (NKI) (Beta) [2.26]
 ------------------------------------------------
@@ -100,7 +159,7 @@ Date: 04/03/2025
 * Documentation updates:
 
   * Kernels public repository https://aws-neuron.github.io/nki-samples
-  * Updated :ref:`profiling guide <profile-using-nki-profile>` to use ``nki.profile`` instead of ``nki.benchmark``
+  * Updated :doc:`profiling guide </nki/deep-dives/use-neuron-profile>` to use ``nki.profile`` instead of ``nki.benchmark``
   * NKI ISA Activation functions table now have :ref:`valid input data ranges<tbl-act-func>` listed
   * NKI ISA Supported Math operators now have :ref:`supported engine<tbl-aluop>` listed
   * Clarify ``+=`` syntax support/limitation
@@ -133,8 +192,7 @@ Date: 12/16/2024
 
 * Documentation updates:
 
-  * New :doc:`Direct Allocation Developer Guide </nki/how-to-guides/nki_direct_allocation_guide>`
-  * Tutorial for :doc:`SPMD usage with multiple Neuron Cores on Trn2 </nki/tutorials/spmd_multiple_nc_tensor_addition>`
+  * Tutorial for :doc:`SPMD usage with multiple Neuron Cores on Trn2 </nki/guides/tutorials/spmd_multiple_nc_tensor_addition>`
 
 Neuron Kernel Interface (NKI) (Beta)
 ------------------------------------------------
@@ -142,11 +200,11 @@ Date: 12/03/2024
 
 * NKI support for Trainium2, including full integration with Neuron Compiler.
   Users can directly shard NKI kernels across multiple Neuron Cores from an SPMD launch grid.
-  See :doc:`tutorial </nki/tutorials/spmd_multiple_nc_tensor_addition>` for more info.
-  See :doc:`Trainium2 Architecture Guide </nki/about/trainium2_arch>` for an initial version of the architecture specification
+  See :doc:`tutorial </nki/guides/tutorials/spmd_multiple_nc_tensor_addition>` for more info.
+  See :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>` for an initial version of the architecture specification
   (more details to come in future releases).
 * New calling convention in NKI kernels, where kernel output tensors are explicitly returned from the kernel instead
-  of pass-by-reference. See any :doc:`NKI tutorial </nki/tutorials/index>` for code examples.
+  of pass-by-reference. See any :doc:`NKI tutorial </nki/guides/tutorials/index>` for code examples.
 
 Neuron Kernel Interface (NKI) (Beta) [2.20]
 -------------------------------------------
