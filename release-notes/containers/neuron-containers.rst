@@ -7,6 +7,10 @@ Neuron Containers Release Notes
    :local:
    :depth: 1
 
+.. note:: 
+  For Neuron Containers release notes on Neuron 2.26.0 up to the current release, see :doc:`/release-notes/prev/by-component/containers`.
+
+----
 
 Neuron 2.5.0
 -------------
@@ -47,8 +51,7 @@ New in this release
 
 -  Starting with Neuron 1.16.0, use of Neuron ML Frameworks now comes
    with an integrated Neuron Runtime as a library, as a result it is
-   no longer needed to deploy ``neuron-rtd``. Please visit :ref:`neuron-containers` for more
-   information.
+   no longer needed to deploy ``neuron-rtd``. 
 -  When using containers built with components from Neuron 1.16.0, or
    newer, please use ``aws-neuron-dkms`` version 2.1 or newer and the
    latest version of ``aws-neuron-runtime-base``. Passing additional

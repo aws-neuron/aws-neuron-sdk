@@ -99,4 +99,5 @@ vLLM on Neuron Tutorials
     Quickstart: Offline Model Serving </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>
     Quickstart: Online Model Serving </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>
     vLLM on Neuron User Guide </libraries/nxd-inference/developer_guides/vllm-user-guide-v1>
+    Model Recipes </libraries/nxd-inference/models/index>
     Deploy Llama4 with vLLM </libraries/nxd-inference/tutorials/llama4-tutorial>

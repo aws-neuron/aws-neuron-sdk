@@ -99,7 +99,6 @@ Instructions
                         sudo dnf install -y libxcrypt-compat
 
                         # Install Python 
-                        sudo dnf install -y amazon-linux-extras
                         sudo dnf install -y python3.11
 
                         # Install GCC
@@ -136,7 +135,6 @@ Instructions
                         sudo dnf install -y libxcrypt-compat
 
                         # Install Python 
-                        sudo dnf install -y amazon-linux-extras
                         sudo dnf install -y python3.11
 
                         # Install GCC 
@@ -467,9 +465,3 @@ Related information
 
 * :doc:`Neuron DLAMI User Guide </dlami/index>`
 * :doc:`Neuron Setup Guide </setup/index>`
-
-.. toctree::
-    :hidden:
-    :maxdepth: 1
-
-    /nki/get-started/onboarding-nki-legacy

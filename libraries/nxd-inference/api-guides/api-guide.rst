@@ -17,7 +17,7 @@ can use when you directly interact with the NxD Inference library.
    NxD Inference also supports integration with vLLM. When you use vLLM, you can
    use the ``override_neuron_config`` attribute to override defaults using the
    :ref:`NeuronConfig parameters <nxd-inference-api-guide-neuron-config>` described
-   in this API guide. For more information about vLLM integration, see :ref:`nxdi-vllm-user-guide`.
+   in this API guide. For more information about vLLM integration, see :ref:`nxdi-vllm-user-guide-v1`.
 
 
 .. contents:: Table of contents

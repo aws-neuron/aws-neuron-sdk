@@ -41,7 +41,7 @@ NxD Inference is designed to enable easy on-boarding of PyTorch models and comes
 I am currently using vLLM with Transformers NeuronX library for inference. Does NxD Inference library support vLLM ?
 ---------------------------------------------------------------------------------------------------------------------
 
-Yes, NxD Inference library supports vLLM inference engine.  Neuron vLLM integration in 2.21 release will start supporting both NxD Inference and Transformers NeuronX libraries.  To use vLLM with NxD Inference library, you can refer to the :ref:`nxdi-vllm-user-guide`.
+Yes, NxD Inference library supports vLLM inference engine.  Neuron vLLM integration in 2.21 release will start supporting both NxD Inference and Transformers NeuronX libraries.  To use vLLM with NxD Inference library, you can refer to the :ref:`nxdi-vllm-user-guide-v1`.
 
 
 

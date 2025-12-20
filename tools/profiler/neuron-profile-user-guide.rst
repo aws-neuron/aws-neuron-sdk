@@ -11,7 +11,7 @@ The Neuron Profiler ,``neuron-profile``, is a tool to profile and analyze perfor
 
 ``neuron-profile`` helps developers identify performance bottlenecks and optimize their workloads for NeuronDevices. neuron-profile provides insights into NeuronDevice activity including the instructions executed on each compute engine (ex. Tensor engine, Vector engine, etc.), DMA data movement activity, and performance metrics such as engine utilization, DMA throughput, memory usage, and more. NeuronDevice activity is collected by the ``neuron-profile capture`` command which runs the model with tracing enabled. Profiling typically has near zero overhead because NeuronDevices have dedicated on-chip hardware profiling.
 
-Additionally, ``neuron-profile`` supports Neuron Kernel Interface (NKI) developers in profiling their kernels. For more information, please refer to :ref:`neuron_profile_for_nki`
+Additionally, ``neuron-profile`` supports Neuron Kernel Interface (NKI) developers in profiling their kernels. For more information, please refer to :ref:`use-neuron-profile`
 
 .. _neuron-profiler-installation:
 

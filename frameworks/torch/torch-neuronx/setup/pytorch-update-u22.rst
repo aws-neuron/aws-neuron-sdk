@@ -9,6 +9,14 @@ If you already have a previous Neuron release installed, this section provide li
 
 .. tab-set::
 
+    .. tab-item:: PyTorch 2.9.0
+
+        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+
+        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
+            :start-line: 284
+            :end-line: 285
+
     .. tab-item:: PyTorch 2.8.0
 
         .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
@@ -24,14 +32,4 @@ If you already have a previous Neuron release installed, this section provide li
         .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 263
             :end-line: 264
-
-    .. tab-item:: PyTorch 2.6.0
-
-        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
-
-        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 251
-            :end-line: 252
-
-
-    
+            

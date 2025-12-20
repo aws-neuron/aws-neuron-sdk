@@ -24,7 +24,7 @@ Release notes have changed!
 
 We've heard your feedback on the Neuron documentation, and we're starting on a journey to improve them. Once early change is a richer structure for the release notes with a clearer presentation of the details you're looking for. It's a small thing, but we hope it helps you!
 
-With that in mind, we'd love to get your feedback on this new format and on our documentation all-up. If you have 5 minutes and want to help us build and deliver better developer docs for you, `Take this survey <>`_.
+
 
 Item 2
 ^^^^^^

@@ -9,6 +9,11 @@ The AI Recommendation Viewer helps users identify and understand bottlenecks and
 
 The feature is entirely opt-in and only enabled for profiles that the user explicitly requests a recommendation for.
 
+.. warning:: 
+    * Responses in this AWS Bedrock-powered feature are AI-generated. Verify accuracy and appropriateness before use. 
+    * This feature is available in US Regions only. Neuron may securely transmit data across Regions within your geography for processing. 
+    * Your AWS account will be billed for Bedrock usage. Each time you generate an AI Recommendation for a profile, a single Bedrock request is made with up to 30,000 input tokens and 10,000 output tokens. 
+    * At the moment, this feature may only be used with Claude Sonnet 4.5.
 
 .. _local_setup_directions:
 
@@ -16,9 +21,6 @@ Local setup directions
 ----------------------------------------------------
 
 AI Recommendations use Amazon Bedrock. To enable this feature, you must configure AWS credentials on the system you are running neuron-explorer on. The AWS credentials should have bedrock:InvokeModel permissions and access to Claude Sonnet 4.5. For information on configuring Bedrock access, refer to the `AWS Bedrock model access documentation <https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html>`_.
-
-.. warning:: 
-    Your AWS account will be billed for Bedrock usage. Each time you generate an AI Recommendation for a profile, a single Bedrock request is made with up to 30,000 input tokens and 10,000 output tokens. At the moment, the feature may only be used with Claude Sonnet 4.5.
 
 Getting an AI Recommendation From the UI
 ----------------------------------------------------

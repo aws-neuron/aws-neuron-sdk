@@ -125,4 +125,3 @@ See Also
 -----------
 
 * :doc:`RMSNorm-Quant Kernel Design Specification </nki/library/specs/design-rmsnorm-quant>`
-* :doc:`RMSNorm Tutorial </nki/tutorials/rmsnorm>`

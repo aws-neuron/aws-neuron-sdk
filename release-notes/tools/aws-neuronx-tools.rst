@@ -7,6 +7,12 @@ Neuron System Tools
    :local:
    :depth: 2
 
+.. note:: 
+  For Neuron Developer Tools release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/tools`.
+
+
+----
+
 Neuron Tools  [2.26.7.0]
 ------------------------
 Date: 9/18/2025

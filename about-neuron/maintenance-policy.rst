@@ -293,7 +293,7 @@ To see the list of available Neuron SDK versions and supported
 dependency software components versions:
 
 -  Neuron SDK documentation under `Release
-   Content <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html#neuron-release-content>`__
+   Content <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html#latest-neuron-release-artifacts>`__
 -  Neuron SDK documentation under `What’s
    New <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#neuron-whatsnew>`__
 

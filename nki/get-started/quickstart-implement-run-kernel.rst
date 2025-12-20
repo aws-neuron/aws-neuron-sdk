@@ -80,7 +80,7 @@ Step 4: Read input into the on-chip memory
 
 In this step, you will add code to read the inputs from HBM into on-chip memory.
 
-The ``nki_tensor_add_kernel`` function will receive inputs from the HBM memory and must move them into on-chip memory to operate over their values. You first create space in the on-chip memory and then copy the value into on-chip memory for each input. See :doc:`NKI Programming Model </nki/deep-dives/programming_model>` for more details on the memory hierarchy.
+The ``nki_tensor_add_kernel`` function will receive inputs from the HBM memory and must move them into on-chip memory to operate over their values. You first create space in the on-chip memory and then copy the value into on-chip memory for each input. See :doc:`Memory Hierarchy </nki/get-started/about/memory-hierarchy-overview>` for more details on the memory hierarchy.
 
 .. code-block:: python
 
@@ -324,11 +324,11 @@ Next steps
 
 Now that you've completed this quickstart, take your work and dive into other topics that build off of it.
 
-* :doc:`NKI Programming Model </nki/deep-dives/programming_model>`
-* :doc:`NKI Tutorials </nki/tutorials/index>`
+* :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`
+* :doc:`NKI Tutorials </nki/guides/tutorials/index>`
 
 Further reading
 ----------------
 
 * :doc:`NKI API Reference Manual </nki/api/index>`
-* :doc:`NKI Developer Guides </nki/how-to-guides/index>`
+* :doc:`NKI Developer Guides </nki/guides/how-to-guides/index>`

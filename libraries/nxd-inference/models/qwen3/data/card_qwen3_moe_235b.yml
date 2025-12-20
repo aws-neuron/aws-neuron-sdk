@@ -1,0 +1,157 @@
+# Optional Metadata
+metadata:
+
+# Model Information
+model:
+  family: "Qwen3"
+  name: "Qwen3-235B-A22B"
+  display_name: "Qwen3 235B A22B"
+  checkpoint: "Qwen/Qwen3-235B-A22B"
+
+  description: |
+    Qwen3 235B A22B is a mixture-of-experts (MoE) model with 235B parameters developed by the Qwen Team,
+    activating 22B parameters per forward pass.
+
+# Hardware Requirements
+hardware:
+
+# Configurations
+configurations:
+  config1:
+    instance_type: "trn2.48xlarge"
+    sdk_version: "2.27"
+    dp_degree: 8
+    neuron:
+      tp_degree: 64
+      attention_dp_degree: 8
+      cp_degree: 16
+      moe_tp_degree: 2
+      moe_ep_degree: 32
+      use_index_calc_kernel: true
+      mode_mask_padded_tokens: true
+      batch_size: 16
+      ctx_batch_size: 1
+      max_context_length: 16384
+      seq_len: 16384
+      scratch_pad_size: 1024
+      torch_dtype: "float16"
+      is_continuous_batching: true
+      fused_qkv: true
+      blockwise_matmul_config:
+        use_shard_on_intermediate_dynamic_while: true
+        skip_dma_token: true
+      on_device_sampling_config:
+        do_sample: true
+        temperature: 0.6
+        top_k: 20
+        top_p: 0.95
+      enable_bucketing: true
+      token_generation_buckets: [10240, 16384]
+      context_encoding_buckets: [10240, 16384]
+      flash_decoding_enabled: false
+      logical_nc_config: 2
+      cc_pipeline_tiling_factor: 2
+      sequence_parallel_enabled: true
+      qkv_kernel_enabled: true
+      qkv_nki_kernel_enabled: true
+      qkv_cte_nki_kernel_fuse_rope: true
+      attn_kernel_enabled: true
+      strided_context_parallel_kernel_enabled: true
+      async_mode: true
+    # vllm v1 config
+    vllm:
+      tensor_parallel_size: 64
+      max_num_seqs: 16
+      max_model_len: 16384
+      additional_config:
+        override_neuron_config:
+          tp_degree: 64
+          attention_dp_degree: 8
+          cp_degree: 16
+          moe_tp_degree: 2
+          moe_ep_degree: 32
+          use_index_calc_kernel: true
+          mode_mask_padded_tokens: true
+          batch_size: 16
+          ctx_batch_size: 1
+          max_context_length: 16384
+          seq_len: 16384
+          scratch_pad_size: 1024
+          torch_dtype: "float16"
+          is_continuous_batching: true
+          fused_qkv: true
+          blockwise_matmul_config:
+            use_shard_on_intermediate_dynamic_while: true
+            skip_dma_token: true
+          on_device_sampling_config:
+            do_sample: true
+            temperature: 0.6
+            top_k: 20
+            top_p: 0.95
+          enable_bucketing: true
+          token_generation_buckets: [10240, 16384]
+          context_encoding_buckets: [10240, 16384]
+          flash_decoding_enabled: false
+          logical_nc_config: 2
+          cc_pipeline_tiling_factor: 2
+          sequence_parallel_enabled: true
+          qkv_kernel_enabled: true
+          qkv_nki_kernel_enabled: true
+          qkv_cte_nki_kernel_fuse_rope: true
+          attn_kernel_enabled: true
+          strided_context_parallel_kernel_enabled: true
+          async_mode: true
+
+  config2:
+    instance_type: "trn2.48xlarge"
+    sdk_version: "2.27"
+    dp_degree: 8
+    neuron:
+      tp_degree: 64
+      attention_dp_degree: 8
+      cp_degree: 16
+      moe_tp_degree: 2
+      moe_ep_degree: 32
+      use_index_calc_kernel: true
+      mode_mask_padded_tokens: true
+      batch_size: 64
+      ctx_batch_size: 1
+      max_context_length: 16384
+      seq_len: 16384
+      scratch_pad_size: 1024
+      torch_dtype: "float16"
+      is_continuous_batching: true
+      fused_qkv: true
+      blockwise_matmul_config:
+        use_shard_on_intermediate_dynamic_while: true
+        skip_dma_token: true
+      on_device_sampling_config:
+        do_sample: true
+        temperature: 0.6
+        top_k: 20
+        top_p: 0.95
+      enable_bucketing: true
+      token_generation_buckets: [10240, 16384]
+      context_encoding_buckets: [10240, 16384]
+      flash_decoding_enabled: false
+      logical_nc_config: 2
+      cc_pipeline_tiling_factor: 2
+      sequence_parallel_enabled: true
+      qkv_kernel_enabled: true
+      qkv_nki_kernel_enabled: true
+      qkv_cte_nki_kernel_fuse_rope: true
+      attn_kernel_enabled: true
+      strided_context_parallel_kernel_enabled: true
+      async_mode: true
+
+defaults:
+  "trn2.48xlarge": 
+    config: "config1"
+
+# Recommendations
+recommendations:
+  Latency:
+    config: "config1"
+
+  Throughput:
+    config: "config2"

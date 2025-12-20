@@ -62,6 +62,7 @@ Others
    program_id
    num_programs
    program_ndim
+   device_print
 
 .. _nl_datatypes:
 
@@ -73,21 +74,22 @@ Data Types
    :nosignatures:
   
    bool_
-   uint8
-   uint16
-   uint32
    int8
    int16
    int32
-   float4_e2m1fn_x4
+   uint8
+   uint16
+   uint32
+   float16
+   float32
+   bfloat16
+   tfloat32
    float8_e4m3
-   float8_e4m3fn_x4
    float8_e5m2
    float8_e5m2_x4
-   float16
-   bfloat16
-   float32
-   tfloat32
+   float8_e4m3fn_x4
+   float4_e2m1fn_x4
+
 
 Constants
 -----------

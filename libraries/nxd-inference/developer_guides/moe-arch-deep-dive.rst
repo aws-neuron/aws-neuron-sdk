@@ -723,7 +723,7 @@ executing while loops on chip with dynamic number of iterations in the Neuron SD
 **LNC2 sharding strategies**
 
 TRN2 and TRN3 provide two physical cores per logical NeuronCore.
-NxD inference via the Neuron Kernel Library (NKL) supports three distinct sharding strategies,
+NxD inference via the Neuron Kernel Library (NKI-Lib) supports three distinct sharding strategies,
 each optimized for different scenarios. The choice of LNC sharding algorithm can be configured
 through `BlockwiseMatmulConfig` parameters:
 

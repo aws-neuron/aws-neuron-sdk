@@ -28,11 +28,6 @@
                 :start-line: 266
                 :end-line: 267
         
-        .. tab-item :: PyTorch 2.6.0
-
-            .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                :start-line: 254
-                :end-line: 255
 
 
 .. card:: Visit PyTorch Neuron(``torch-neuronx``) for Inference section

@@ -1,3 +1,5 @@
+.. _native-pytorch-trainium:
+
 .. meta::
     :description: Documentation Landing Page for TorchNeuron, the native PyTorch backend for AWS Trainium
     :date-modified: 12/02/2025

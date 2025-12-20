@@ -10,6 +10,12 @@ NxD Training Release Notes (``neuronx-distributed-training``)
 
 This document lists the release notes for Neuronx Distributed Training library.
 
+.. note:: 
+  For NxDT release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/nxd-training`.
+
+
+----
+
 .. _neuronx-distributed-training-rn-1-4-0:
 
 NeuronX Distributed Training [1.4.0]
@@ -82,11 +88,10 @@ Features in this release
 * Minor bug fixes for error logging and imports
 
 Known Issues and Limitations
-++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++
 
 * Autocast option may not properly cast all inputs to bf16, recommended to use mixed precision option (currently is default) in configs for best results
-* With PT2.5, some of the key workloads like Llama3-8B training may show a reduced performance when using `--llm-training` compiler flag as compared to PT2.1.
-In such a case, try removing `--llm-training` flag from `compiler_flags` in the config.yaml
+* With PT2.5, some of the key workloads like Llama3-8B training may show a reduced performance when using `--llm-training` compiler flag as compared to PT2.1. In such a case, try removing `--llm-training` flag from `compiler_flags` in the config.yaml
 
 .. _neuronx-distributed-training-rn-1-0-1:
 

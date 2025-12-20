@@ -7,6 +7,11 @@ Neuron K8 Release Notes
    :local:
    :depth: 1
 
+.. note:: 
+  For Neuron DLC release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/containers`.
+
+
+----
 
 Introduction
 ============
@@ -111,7 +116,7 @@ Neuron K8 release [2.19.16.0]
 Date: 01/18/2024
 
 Critical Security Patch
----------
+-------------------------
 
 We updated the dependencies used by the Neuron Device Plugin and the Neuron Kubernetes Scheduler to fix several important
 security vulnerabilities.
@@ -332,13 +337,12 @@ Minor internal enhancements.
 
 Date: 10/22/2020
 
-.. _k8-summary-1:
+.. _k8-summary-2:
 
 Summary
 -------
 
-Support added for use with Neuron Runtime 1.1. More details in the
-Neuron Runtime release notes at :ref:`neuron-runtime-release-notes`.
+Support added for use with Neuron Runtime 1.1. 
 
 
 .. _11170:
@@ -371,9 +375,7 @@ Major New Features
 ------------------
 
 -  New scheduler extension is provided to ensure that kubelet is
-   scheduling pods on inf1 with contiguous device ids. Additional
-   details about the new scheduler are provided :ref:`neuron-k8-scheduler-ext`.
-   including instructions on how to apply it.
+   scheduling pods on inf1 with contiguous device ids.
 
    -  NOTE: The scheduler is only required when using inf1.6xlarge
       and/or inf1.24xlarge
