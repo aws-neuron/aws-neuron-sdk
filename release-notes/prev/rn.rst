@@ -3,20 +3,35 @@
 Previous release notes (Neuron 2.x)
 ====================================
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   Neuron 2.26.1 </release-notes/prev/2.26.1>
+   Neuron 2.26.0 </release-notes/prev/2.26.0/index>
+   Neuron 2.25.0 </release-notes/prev/2.25.0/index>
+
+* **The latest Neuron release is 2.27.0, released on 12/19/2025.** Read the :doc:`2.27.0 release notes </release-notes/2.27.0/index>` for more details.
+  
 .. contents:: Table of contents
    :local:
    :depth: 1
 
+Neuron 2.26.1 (10/29/2025)
+--------------------------
+
+See :doc:`2.26.1` for the updated Neuron 2.26.1 release notes.
+
 Neuron 2.26.0 (09/18/2025)
 --------------------------
 
-See :ref:`neuron-2-26-0-whatsnew` for the full Neuron 2.26 release notes.
+See :ref:`neuron-2-26-0-whatsnew` for the full Neuron 2.26.0 release notes.
 
 
 Neuron 2.25.0 (07/31/2025)
 --------------------------
 
-See :ref:`neuron-2-25-0-whatsnew` for the full Neuron 2.25 release notes.
+See :ref:`neuron-2-25-0-whatsnew` for the full Neuron 2.25.0 release notes.
 
 .. _neuron-2-24-1-whatsnew:
 
@@ -529,7 +544,7 @@ More release content can be found in the table below and each component release 
      - * Introduced new NxD Inference Library. See :ref:`introduce-nxd-inference`
        * Added Llama3.1 405B Inference Example on Trn2. See :ref:`nxdi-trn2-llama3.1-405b-tutorial`
        * Added Llama 3.2 Multimodal inference sample. See :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`
-       * Added support for vLLM integration for NxD Inference. See :ref:`nxdi-vllm-user-guide`
+       * Added support for vLLM integration for NxD Inference. See :ref:`nxdi-vllm-user-guide-v1`
        * Introduced Open Source Github repository for NxD Inference. See `aws-neuron/neuronx-distributed-inference <https://github.com/aws-neuron/neuronx-distributed-inference>`_
        * See more at :ref:`neuronx-distributed-inference-rn` 
      - Inf2, Trn1/Trn1n,Trn2
@@ -559,10 +574,10 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n,Inf2,Trn2
   
    * - Neuron Kernel Interface (NKI)
-     - * Added :doc:`api/nki.compiler` module with Allocation Control and Kernel decorators
-       * Added new nki.isa APIs. See :doc:`api/nki.isa`
-       * Added new nki.language APIs. See :doc:`api/nki.language`
-       * Added new kernels (``allocated_fused_self_attn_for_SD_small_head_size``, ``allocated_fused_rms_norm_qkv``). See :doc:`api/nki.kernels` 
+     - * Added ``nki.compiler`` module with Allocation Control and Kernel decorators
+       * Added new nki.isa APIs. 
+       * Added new nki.language APIs. 
+       * Added new kernels (``allocated_fused_self_attn_for_SD_small_head_size``, ``allocated_fused_rms_norm_qkv``).
        * See more at :ref:`nki_rn`
      - Trn1/Trn1n,Inf2
 
@@ -1419,12 +1434,12 @@ More release content can be found in the table below and each component release 
 
    * - NeuronX Distributed (neuronx-distributed) for Inference
      - * Support for auto bucketing in inference using a custom bucket kernel that can be passed as a bucket configuration to Tracing API. See :ref:`api guide <api_guide>` and :ref:`neuronx_distributed_inference_developer_guide`
-       * Support for inference with bf16 data type using XLA_USE_BF16=1 flag. See sample (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
+       * Support for inference with bf16 data type using XLA_USE_BF16=1 flag.
        * See more at :ref:`neuronx-distributed-rn` 
      - Inf2,Trn1/Trn1n
 
    * - PyTorch NeuronX (torch-neuronx)
-     - * PyTorch 2.1 support is now stable (out of beta).  See updated :ref:`App Note <introduce-pytorch-2-1>` and :ref:`release notes <torch-neuronx-rn>` for known issues.
+     - * PyTorch 2.1 support is now stable (out of beta). 
        * Support for auto bucketing in inference using a custom bucket kernel that can be passed as a bucket configuration to Tracing API. See :ref:`torch-neuronx-autobucketing-devguide`
        * See more at :ref:`torch-neuronx-rn`
      - Trn1/Trn1n,Inf2
@@ -1549,7 +1564,6 @@ More release content can be found in the table below and each component release 
 
    * - NeuronX Distributed (neuronx-distributed) for Inference
      - * Support weight-deduplication amongst TP shards by giving ability to save weights separately than in NEFF files.  See :ref:`developer guide<nxd_inference_developer_guide>`
-       * ``Llama-2-7B`` model inference script (:ref:`[html] </src/examples/pytorch/neuronx_distributed/llama/llama2_inference.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/llama/llama2_inference.ipynb>`)
        * See more at :ref:`neuronx-distributed-rn` and  :ref:`api_guide`
      - Inf2,Trn1/Trn1n
 
@@ -2249,7 +2263,7 @@ This release adds support for EC2 Trn1n instances, introduces new features, perf
      - Trn1, Inf2
 
    * - Release included packages
-     - * see :ref:`neuron-release-content`
+     - * see :ref:`latest-neuron-release-artifacts`
      - Trn1, Inf2, Inf1
 .. _neuron-2.8.0-whatsnew:
 
@@ -2294,7 +2308,7 @@ This release introduces the following:
        * New sample scripts for deploying models with ``torch-neuronx`` under `aws-neuron-samples repository <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_  GitHub repository.
 
    * - Release included packages
-     - * see :ref:`neuron-release-content`
+     - * see :ref:`latest-neuron-release-artifacts`
 
 .. _neuron-2.7.0-whatsnew:
 
@@ -2326,7 +2340,7 @@ This release introduces new capabilities and libraries, as well as features and 
      - Support of PyTorch DistributedDataParallel (DDP) API in PyTorch Neuron (``torch-neuronx``). For resources how to use PyTorch DDP API with Neuron, please check :ref:`neuronx-ddp-tutorial`.
 
    * - Inference support in ``torch-neuronx``
-     - For more details please visit :ref:`pytorch-neuronx-main`` page. You can also try Neuron Inference samples `<https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ in the ``aws-neuron-samples`` GitHub repo.     
+     - For more details, see Neuron Inference samples `<https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ in the ``aws-neuron-samples`` GitHub repo.     
 
    * - Neuron Custom C++ Operators[Beta]
      - Initial support for Neuron Custom C++ Operators [Beta] , with Neuron Custom C++ Operators (“CustomOps”) you can now write CustomOps that run on NeuronCore-v2 chips. For more resources please check :ref:`neuron_c++customops` section.

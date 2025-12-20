@@ -68,12 +68,12 @@ Framework integration
       Guide to migrating from deprecated XLA environment variables to recommended PyTorch mixed-precision options on NeuronX
 
    .. grid-item-card::
-      :link: introduce-pytorch-2-8
+      :link: introduce-pytorch-2-9
       :link-type: ref
 
-      **PyTorch 2.8 Support**
+      **PyTorch 2.9 Support**
       ^^^
-      New features and migration guide for PyTorch 2.8 on Neuron
+      New features and migration guide for PyTorch 2.9 on Neuron
 
 
 

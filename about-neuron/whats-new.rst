@@ -1,11 +1,157 @@
+.. _main_whats-new:
+
 .. meta::
-    :description: Latest features and updates for AWS Neuron SDK including Trainium3 UltraServer support, native PyTorch integration, and enhanced NKI capabilities
-    :date-modified: 12/02/2025
+    :description: Blog posts for the latest features and updates for the AWS Neuron SDK
+    :date-modified: 12/19/2025
+
+What's New in the AWS Neuron SDK
+================================
+
+*Explore detailed posts about the latest features, updates, and upcoming changes to the AWS Neuron SDK.*
+
+.. _whats-new-2025-12-19-v2_27:
+
+AWS Neuron SDK 2.27.0: Trainium3 Support, Enhanced NKI, and Unified Profiling with Neuron Explorer
+---------------------------------------------------------------------------------------------------
+
+**Posted on**: December 19, 2025
+
+Today we are releasing AWS Neuron SDK 2.27.0. This release adds support for Trainium3 (``Trn3``) instances. Enhanced NKI with new NKI Compiler introduces the ``nki.*`` namespace with updated APIs and language constructs. The NKI Library provides pre-optimized kernels for common model operations including attention, MLP, and normalization. Neuron Explorer delivers a unified profiling suite with AI-driven optimization recommendations. vLLM V1 integration is now available through the vLLM-Neuron Plugin. Deep Learning Containers and AMIs are updated with vLLM V1, PyTorch 2.9, JAX 0.7, Ubuntu 24.04, and Python 3.12.
+
+In addition to this release, we are introducing new capabilities and features in private beta access (see Private Beta Access section). We are also announcing our transition to PyTorch native support starting with PyTorch 2.10 in Neuron 2.28, plans to simplify NxDI in upcoming releases, and other important updates. See the End of Support and Migration Notices section for more details.
+
+.. contents:: Explore what's new in Neuron
+   :local:
+   :depth: 1
+
+Private Beta Access
+^^^^^^^^^^^^^^^^^^^
+
+We are also opening access to the following private betas:
+
+* **Native PyTorch (TorchNeuron)** - :doc:`Native PyTorch (TorchNeuron) </frameworks/torch/pytorch-native-overview>`
+* **Enhanced Neuron Kernel Interface (NKI)** - :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`
+* **vLLM support for Trn3** - :doc:`vLLM support for Trn3 </libraries/nxd-inference/vllm/index>`
+* **Neuron DRA for Kubernetes** - :doc:`Neuron DRA for Kubernetes </containers/neuron-dra>`
+
+To request access, visit the `Neuron Private Beta signup form <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
+
+Neuron Kernel Interface (NKI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**NKI Compiler** - The new ``nki.*`` namespace replaces the legacy ``neuronxcc.nki.*`` namespace. Top-level kernel functions now require the ``@nki.jit`` annotation. Neuron 2.27 supports both namespaces side by side; the legacy namespace will be removed in Neuron 2.28. A kernel migration guide is available in the documentation.
+
+For more details, see :ref:`neuron-2-27-0-nki`.
+
+NKI Library
+^^^^^^^^^^^
+
+The NKI Library provides pre-optimized kernels: Attention CTE, Attention TKG, MLP, Output Projection CTE, Output Projection TKG, QKV, and RMSNorm-Quant. Kernels are accessible via the ``nkilib.*`` namespace in neuronx-cc or from the GitHub repository.
+
+For more details, see :ref:`neuron-2-27-0-nkilib`.
+
+Developer Tools
+^^^^^^^^^^^^^^^
+
+**Neuron Explorer** - A a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. This release features improved performance and user expereince for device profiling, with four core viewers to provide insights into model performance:
+
+* **Hierarchy Viewer**: Visualizes model structure and component interactions
+* **AI Recommendation Viewer**: Delivers AI-driven optimization recommendations
+* **Source Code Viewer**: Links profiling data directly to source code
+* **Summary Viewer**: Displays high-level performance metrics
+
+Neuron Explorer is available through UI, CLI, and VSCode IDE integration. Existing NTFF files are compatible but require reprocessing for new features.
+
+New tutorials cover profiling NKI kernels, multi-node training jobs, and vLLM inference workloads. The ``nccom-test`` tool now includes fine-grained collective communication support.
+
+For more details, see :ref:`neuron-2-27-0-tools`.
+
+Inference Updates
+^^^^^^^^^^^^^^^^^
+
+**vLLM V1** - The vLLM-Neuron Plugin enables vLLM V1 integration for inference workloads. vLLM V0 support ends in Neuron 2.28.
+
+**NxD Inference** - Model support expands with beta releases of Qwen3 MoE (Qwen3-235B-A22B) for multilingual text and Pixtral (Pixtral-Large-Instruct-2411) for image understanding. Both models use HuggingFace checkpoints and are supported on ``Trn2`` and ``Trn3`` instances.
+
+For more details, see :ref:`neuron-2-27-0-nxd-inference`.
+
+Neuron Graph Compiler
+^^^^^^^^^^^^^^^^^^^^^
+
+Default accuracy settings are now optimized for precision. The ``--auto-cast`` flag defaults to ``none`` (previously ``matmul``), and ``--enable-mixed-precision-accumulation`` is enabled by default. FP32 models may see performance impacts; restore previous behavior with ``--auto-cast=matmul`` and ``--disable-mixed-precision-accumulation``. Python 3.10 or higher is now required.
+
+For more details, see :ref:`neuron-2-27-0-compiler`.
+
+Runtime Improvements
+^^^^^^^^^^^^^^^^^^^^
+
+**Neuron Runtime Library 2.29** adds support for Trainium3 (``Trn3``) instances and delivers performance improvements for Collectives Engine overhead, NeuronCore branch overhead, NEFF program startup, and all-gather latency.
+
+For more details, see :ref:`neuron-2-27-0-runtime`.
+
+Deep Learning AMIs and Containers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Platform Updates** - All DLCs are updated to Ubuntu 24.04 and Python 3.12. DLAMIs add Ubuntu 24.04 support for base, single framework, and multi-framework configurations.
+
+**Framework Updates**:
+
+* vLLM V1 single framework DLAMI and multi-framework virtual environments
+* PyTorch 2.9 single framework DLAMIs and multi-framework virtual environments (Amazon Linux 2023, Ubuntu 22.04, Ubuntu 24.04)
+* JAX 0.7 single framework DLAMI and multi-framework virtual environments
+
+**New Container** - The ``pytorch-inference-vllm-neuronx`` 0.11.0 DLC provides a complete vLLM inference environment with PyTorch 2.8 and all dependencies.
+
+For more details, see :ref:`neuron-2-27-0-dlami` and :ref:`neuron-2-27-0-dlc`.
+
+
+End of Support and Migration Notices
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Effective this release:**
+
+* :ref:`announcement-python-3-9-eol`
+* :ref:`announcement-end-of-support-pytorch-2-6`
+* :ref:`announce-no-support-tensorflow2-10`
+* :ref:`announce-eos-inf1-virtual-environments`
+* :ref:`announcement-end-of-support-parallel-model-trace`
+* :ref:`announce-eos-tensorboard-tools`
+
+**Effective Neuron 2.28:**
+
+* :ref:`announcement-end-of-support-neuronxcc-nki`
+* :ref:`announcement-nki-library-namespace-changes`
+* :ref:`announcement-nki-library-kernel-migration`
+* :ref:`announcement-end-of-support-vllm-v0`
+
+**Effective with PyTorch 2.10 support:**
+
+* :ref:`announce-transition-pytorch-trainium`
+* :ref:`announcement-end-of-support-nxdt-nxd-core`
+
+**Future Releases:**
+
+* :ref:`announce-nxdi-changes`
+* :ref:`announce-eos-dlami-ubuntu-22-04`
+* :ref:`announce-eos-pytorch-profling-api`
+* :ref:`announce-eos-neuron-profiler`
+
+Detailed Release Notes
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Read the :doc:`Neuron 2.27.0 component release notes </release-notes/2.27.0/index>` for specific Neuron component improvements and details.
+
+
+
+
+----
+
+.. _whats-new-2025-12-02-riv:
 
 AWS Neuron Expands with Trainium3, Native PyTorch, Faster NKI, and Open Source at re:Invent 2025
-=================================================================================================
+------------------------------------------------------------------------------------------------
 
-**Last updated**: 12/02/2025
+**Posted on**: 12/02/2025
 
 .. image:: /images/NeuronStandalone_white_small.png
    :alt: AWS Neuron Logo
@@ -14,12 +160,11 @@ AWS Neuron Expands with Trainium3, Native PyTorch, Faster NKI, and Open Source a
 
 At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <https://aws.amazon.com/ai/machine-learning/trainium/>`__ with expanded open source components and enhanced developer experience. These updates enable standard frameworks to run unchanged on Trainium, removing barriers for researchers to experiment and innovate. For developers requiring deeper control, the enhanced Neuron Kernel Interface (NKI) provides direct access to hardware-level optimizations, enabling customers to scale AI workloads with improved performance.
 
-
 **Expanded capabilities and enhancements include**:
 
 * :doc:`Trainium3 UltraServer support </about-neuron/arch/neuron-hardware/trn3-arch>`: Enabling customers to scale AI workloads with improved performance
 * :doc:`Native PyTorch support </frameworks/torch/pytorch-native-overview>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
-* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/about/index>` with open source :doc:`NKI Compiler </nki/compiler/about/index>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
+* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
 * :doc:`Neuron Explorer </tools/neuron-explorer/index>`: Tools suite to support developers and performance engineers in their performance optimization journey from framework operations to hardware instructions
 * :doc:`Neuron DRA for Kubernetes </containers/neuron-dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
@@ -33,7 +178,7 @@ AI development requires rapid experimentation, hardware optimization, and produc
    Submit your beta access request through `this form <https://pulse.aws/survey/NZU6MQGW?p=0>`__ and the Neuron Product team will get back to you.
 
 Native PyTorch Support
------------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 **Private Preview**
 
@@ -49,7 +194,7 @@ Use TorchNeuron to run your PyTorch research and training workloads on Trainium 
 
 
 Enhanced NKI
--------------
+^^^^^^^^^^^^
 
 **Public Preview**
 
@@ -62,11 +207,10 @@ Use Enhanced NKI to innovate and build optimized kernels on Trainium. Explore th
 .. note::
   The NKI Compiler source code is currently in **Private Preview**, while the NKI programming interface is in **Public Preview**.
 
-**Learn more**: :doc:`NKI home page </nki/index>` and :doc:`NKI Language Guide </nki/deep-dives/nki-language-guide>`.
-
+**Learn more**: :doc:`NKI home page </nki/index>` and :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`.
 
 NKI Library
-------------
+^^^^^^^^^^^
 
 **Public Preview**
 
@@ -78,7 +222,7 @@ Use NKI Library kernels directly in your models to improve performance, or explo
 
 
 Neuron Explorer
-----------------
+^^^^^^^^^^^^^^^
 
 **Public Preview**
 
@@ -90,7 +234,7 @@ Use Neuron Explorer to understand and optimize your model performance on Trainiu
 
 
 Kubernetes-Native Resource Management with Neuron DRA
-------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Private Preview**
 
@@ -106,7 +250,7 @@ Use Neuron DRA to simplify Kubernetes resource management for your Trainium work
 
 
 Resources and Additional Information
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For more information visit the `AWS Trainium official page <https://aws.amazon.com/ai/machine-learning/trainium/>`__, the :doc:`AWS Neuron Documentation </index>`, and :doc:`the AWS Neuron GitHub repositories </about-neuron/oss/index>`.
 

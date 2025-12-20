@@ -74,7 +74,7 @@ The compilation process is typically transparent to users, as the compiler is in
    .. tab-item:: Neuron Graph Compiler for Inf1
 
 
-         .. dropdown:: Craph Compiler API Reference Guide
+         .. dropdown:: Graph Compiler API Reference Guide
                :class-title: sphinx-design-class-title-med
                :class-body: sphinx-design-class-body-small
                :animate: fade-in

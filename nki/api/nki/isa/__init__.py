@@ -1,6 +1,6 @@
 """Auto-generated stub file"""
 from enum import Enum
-import numpy as np
+import nki.language as nl
 import ml_dtypes
 
 class dge_mode(Enum):
@@ -86,6 +86,16 @@ class reduce_cmd(Enum):
 
     load_reduce = 4
     r"""Loads a value into the accumulator registers, then accumulate the results of the current instruction into the accumulators"""
+
+
+class matmul_perf_mode(Enum):
+    r""" perf_mode setting for the matmul """
+
+    none = 'none'
+    r"""Default mode, no performance optimization"""
+
+    double_row = 'double_row'
+    r"""Double FP8 mode, 2x matmul throughput by packing two FP8 weight/ifmap element pairs"""
 
 
 def activation(dst, op, data, bias=None, scale=1.0, reduce_op=None, reduce_res=None, reduce_cmd=reduce_cmd.idle, name=None):
@@ -203,7 +213,7 @@ def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0
     along the free dimension(s) of the :doc:`nisa.activation <nki.isa.activation>` result, at a small additional
     performance cost. The reduction result is returned in ``reduce_res`` in-place, which must be a
     SBUF/PSUM tile with the same partition axis size as the input tile ``data`` and one element per partition.
-    On NeuronCore-v2, the ``reduce_op`` can only be an addition, ``np.add`` or ``nl.add``.
+    On NeuronCore-v2, the ``reduce_op`` must be ``nl.add``.
 
     There are 128 registers on the scalar engine for storing reduction results, corresponding
     to the 128 partitions of the input. These registers are shared between ``activation`` and ``activation_accu`` calls.
@@ -240,7 +250,7 @@ def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0
     """
     ...
 
-def affine_select(dst, pattern, offset, channel_multiplier, on_true_tile, on_false_value, cmp_op=np.equal, name=None):
+def affine_select(dst, pattern, offset, channel_multiplier, on_true_tile, on_false_value, cmp_op=nl.equal, name=None):
     r"""
     Select elements between an input tile ``on_true_tile`` and a scalar value ``on_false_value``
     according to a boolean predicate tile using GpSimd Engine.
@@ -315,7 +325,7 @@ def affine_select(dst, pattern, offset, channel_multiplier, on_true_tile, on_fal
     :param channel_multiplier: an int32 multiplier to be applied to the channel (partition) ID
     :param on_true_tile: an input tile for selection with a ``True`` predicate value
     :param on_false_value: a scalar value for selection with a ``False`` predicate value
-    :param cmp_op: comparison operator to use for predicate evaluation (default: np.equal)
+    :param cmp_op: comparison operator to use for predicate evaluation (default: nl.equal)
 
     """
     ...
@@ -336,13 +346,8 @@ def bn_aggr(dst, data, name=None):
     SBUF tensor at different offsets.
 
     Vector Engine performs the statistics aggregation in float32 precision.
-    Therefore, the engine automatically casts the input ``data`` tile to float32 before
-    performing float32 computation and is capable of casting
-    the float32 computation results into another data type specified by the ``dtype`` field,
-    at no additional performance cost. If ``dtype`` field is not specified, the instruction
-    will cast the float32 results back to the same data type as the input ``data`` tile.
-
-
+    The engine automatically casts the input ``data`` to float32 before performing computation.
+    The float32 computation results are cast to ``dst.dtype`` at no additional performance cost.
 
     :param dst: an output tile with two elements per partition: a mean followed by a variance
     :param data: an input tile with results of one or more :doc:`bn_stats <nki.isa.bn_stats>`
@@ -379,18 +384,11 @@ def bn_stats(dst, data, name=None):
     aggregate ``bn_stats`` outputs from all the tiles.
 
     Vector Engine performs the above statistics calculation in float32 precision.
-    Therefore, the engine automatically casts the input ``data`` tile to float32 before
-    performing float32 computation and is capable of casting
-    the float32 computation results into another data type specified by the ``dtype`` field,
-    at no additional performance cost. If ``dtype`` field is not specified, the instruction
-    will cast the float32 results back to the same data type as the input ``data`` tile.
-
+    The engine automatically casts the input ``data`` to float32 before performing computation.
+    The float32 computation results are cast to ``dst.dtype`` at no additional performance cost.
 
     :param dst: an output tile with 6-element statistics per partition
     :param data: the input tile (up to 512 elements per partition)
-
-
-
     """
     ...
 
@@ -506,7 +504,7 @@ def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mo
     operation can be performed where the source data is combined with existing destination data using a specified
     operation: ``dst = dst_rmw_op(dst, src)``.
 
-    Currently, only ``np.add`` is supported for ``dst_rmw_op`` when performing read-modify-write operations.
+    Currently, only ``nl.add`` is supported for ``dst_rmw_op`` when performing read-modify-write operations.
     When ``dst_rmw_op=None``, the source data directly overwrites the destination data.
 
     ``nisa.dma_copy`` supports different modes of DMA descritpor generation (DGE):
@@ -563,7 +561,7 @@ def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mo
 
     :param dst: the destination tensor to copy data into
     :param src: the source tensor to copy data from
-    :param dst_rmw_op: optional read-modify-write operation (currently only ``np.add`` is supported)
+    :param dst_rmw_op: optional read-modify-write operation (currently only ``nl.add`` is supported)
     :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for DMA descriptor generation: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). Hardware based DGE is only supported for NeuronCore-v3 or newer. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
     :param oob_mode: (optional) Specifies how to handle out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
 
@@ -624,11 +622,7 @@ def dropout(dst, data, prob, name=None):
     - If data type of data is any of the float types (e.g., float32, bfloat16),
       ``prob`` data can be any valid float type
 
-    The output data type of this instruction is specified by the ``dtype`` field. The output data type
-    must match the input data type of ``data`` if input data type is any of the integer types.
-    Otherwise, output data type can be any valid NKI data types. If output data type is not specified,
-    it is default to be the same as input data type.
-
+    The output data type ``dst.dtype`` must match the input data type ``data.dtype``.
 
     :param dst: an output tile of the dropout result
     :param data: the input tile
@@ -766,8 +760,8 @@ def max8(dst, src, name=None):
     Find the 8 largest values in each partition of the source tile.
 
     This instruction reads the input elements, converts them to fp32 internally, and outputs
-    the 8 largest values in descending order for each partition. By default, returns the
-    same dtype as the input tensor.
+    the 8 largest values in descending order for each partition. Outputs are converted to
+    ``dst.dtype`` automatically.
 
     The source tile can be up to 5-dimensional, while the output tile is always 2-dimensional.
     The number of elements read per partition must be between 8 and 16,384 inclusive.
@@ -788,20 +782,14 @@ def max8(dst, src, name=None):
 
 def memset(dst, value, engine=engine.unknown, name=None):
     r"""
-    Initialize a tile filled with a compile-time constant value using Vector or GpSimd Engine.
-    The shape of the tile is specified in the ``shape`` field and the
-    initialized value in the ``value`` field.
-    The memset instruction supports all valid NKI dtypes
-    (see :ref:`nki-dtype`).
+    Initialize ``dst`` by filling it with a compile-time constant ``value``, using Vector or GpSimd Engine.
+    The memset instruction supports all valid NKI dtypes (see :ref:`nki-dtype`).
 
-    :param dst: a tile with shape `shape` whose elements are initialized to `value`.
+    :param dst: destination tile to initialize.
     :param value: the constant value to initialize with
     :param engine: specify which engine to use for memset: ``nki.isa.vector_engine`` or ``nki.isa.gpsimd_engine`` ;
                    ``nki.isa.unknown_engine`` by default, lets compiler select the best engine for the given
                    input tile shape
-
-
-
     """
     ...
 
@@ -904,7 +892,7 @@ def nc_match_replace8(dst, data, vals, imm, dst_idx=None, name=None):
     """
     ...
 
-def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_onezero=False, is_transpose=False, tile_position=(), tile_size=(), psum_accumulate_flag=3, name=None):
+def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_onezero=False, is_transpose=False, tile_position=(), tile_size=(), perf_mode=matmul_perf_mode.none, name=None):
     r"""
     Compute ``dst = stationary.T @ moving`` matrix multiplication using Tensor Engine.
 
@@ -1038,13 +1026,13 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     :param is_transpose: controls Tensor Engine transpose mode on/off starting NeuronCore-v3
     :param tile_position: a 2D tuple (start_row, start_column) to control starting row in Tensor Engine tiling mode; start_column must be 0
     :param tile_size: a 2D tuple (row_size, column_size) to control row tile size in Tensor Engine tiling mode; column_size must be 128
-    :param psum_accumulate_flag: controls PSUM near-memory accumulation in the ``dst`` tile
+    :param perf_mode: controls Tensor Engine FP8 double performance mode on/off starting NeuronCore-v3: ``matmul_perf_mode.none`` (default) disables double FP8 mode; ``matmul_perf_mode.double_row`` enables double FP8 mode which achieves 2x matmul throughput by packing two FP8 weight/ifmap element pairs and computing two multiplications in parallel per cycle; cannot be combined with column tiling mode. See the `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
 
 
     """
     ...
 
-def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_position=None, tile_size=None, psum_accumulate_flag=3, name=None):
+def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_position=None, tile_size=None, name=None):
     r"""
     Compute matrix multiplication of MXFP8/MXFP4 quantized matrices with integrated dequantization using Tensor Engine.
 
@@ -1055,10 +1043,9 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     The NeuronCore-v4 Tensor Engine supports matrix multiplication of MXFP8/MXFP4 quantized matrices as defined in the
     `OCP Microscaling standard <https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf>`__.
     This instruction performs matrix multiplication between quantized ``stationary`` and ``moving`` matrices while
-    applying dequantization scales during computation. The micro-scaling group size is 32 elements in groupss of
-    8 partitions × 4 elements per partition of both ``stationary`` and ``moving`` tensors.
-    See `Trainium3 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/about/trainium3_arch.html>`_
-    for more detailed discussion.
+    applying dequantization scales during computation. The micro-scaling group size is 32 elements in groups of 8 partitions x 4 elements per partition of both ``stationary`` and ``moving`` tensors.
+
+    See the NKI-specific `Trainium3 architecture guide </nki/guides/architecture/trainium3_arch.html>`__ for more details.
 
     **Tiling Mode.**
 
@@ -1143,6 +1130,49 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     :param tile_position: a 2D tuple (start_row, start_column) to control starting row and column in Tensor Engine tiling mode
     :param tile_size: a 2D tuple (row_size, column_size) to control row and column tile sizes in Tensor Engine tiling mode
     :param psum_accumulate_flag: controls PSUM near-memory accumulation in the ``dst`` tile
+
+    """
+    ...
+
+def nc_n_gather(dst, data, indices, name=None):
+    r"""
+    Gather elements from ``data`` according to ``indices`` using GpSimd Engine.
+
+    This instruction performs a gather operation where elements are selected from the input ``data`` tile
+    based on flattened indices specified in the ``indices`` tile. The free dimensions of ``data`` are
+    treated as if they were flattened into a single dimension for indexing purposes, while the partition
+    dimension defines the parallel compute boundary.
+
+    The gather operation works independently within each partition. For each partition, the free dimensions
+    of ``data`` are conceptually flattened, and elements are gathered according to the corresponding
+    flattened indices from the same partition in ``indices``.
+
+    **Memory types.**
+
+    All input and output tiles (``data``, ``indices``, and ``dst``) must be in SBUF.
+    GpSimd Engine cannot access PSUM (see :ref:`arch_sec_neuron_core_engines` for details).
+
+    **Data types.**
+
+    The input ``data`` tile can be any valid NKI data type (see :ref:`nki-dtype` for more information).
+    The output ``dst`` tile must have the same data type as ``data``.
+    The ``indices`` tile must be uint32.
+
+    **Layout.**
+
+    The partition dimension of ``data``, ``indices``, and ``dst`` must be the same.
+    Within each partition, the free dimensions of ``data`` are flattened for indexing.
+    The free dimensions of ``indices`` determine the shape of the output ``dst``.
+
+    **Tile size.**
+
+    The partition dimension size of ``data``, ``indices``, and ``dst`` must be the same and must not exceed 128.
+    The number of elements per partition in ``dst`` must match the number of elements per partition in ``indices``.
+    The indices values must be within the valid range [0, data.size / data.shape[0]).
+
+    :param dst: output tile containing the gathered elements
+    :param data: the input tile to gather elements from
+    :param indices: the indices tile (uint32) specifying which elements to gather
 
     """
     ...
@@ -1303,7 +1333,124 @@ def quantize_mx(dst, src, dst_scale, name=None):
     """
     ...
 
-def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.idle, reduce_res=None, reduce_op=np.amax, range_start=0.0, on_false_value=0.0, name=None):
+def rand2(dst, min, max, name=None):
+    r"""
+    Generate pseudo random numbers with uniform distribution using Vector Engine.
+
+    .. note::
+
+      Available only on NeuronCore-v4 and newer.
+
+    This instruction generates pseudo random numbers and stores them into SBUF/PSUM.
+    The generated values follow a uniform distribution within the specified [min, max] range.
+
+    Key features:
+
+    - Uses XORWOW PRNG algorithm for high-quality random number generation
+    - Generates FP32 random values with uniform distribution
+    - Supports output conversion to various data types
+
+    **Memory types.**
+
+    The output ``dst`` tile can be in SBUF or PSUM.
+
+    **Data types.**
+
+    The output ``dst`` tile can be any of: float8_e4m3, float8_e5m2, float16, bfloat16, float32,
+    tfloat32, int8, int16, int32, uint8, uint16, or uint32.
+
+    **Tile size.**
+
+    The partition dimension size of ``dst`` must not exceed 128. The number of
+    elements per partition of ``dst`` must not exceed the physical size of each SBUF/PSUM partition.
+
+    **Constraints.**
+
+    - Supported arch versions: NeuronCore-v4+.
+    - Supported engines: Vector.
+    - min < max for valid range.
+
+    :param dst: the destination tensor to write random values to
+    :param min: minimum value for uniform distribution range (FP32), can be a scalar or vector value
+    :param max: maximum value for uniform distribution range (FP32), can be a scalar or vector value
+
+    """
+    ...
+
+def rand_get_state(dst, engine=engine.unknown, name=None):
+    r"""
+    Store the current pseudo random number generator (PRNG) states from the engine to SBUF.
+
+    This instruction stores the current PRNG states cached inside the engine to SBUF.
+    Each partition in the output tensor holds the PRNG states for the corresponding compute lane
+    inside the engine.
+
+    **Memory types.**
+
+    The output ``dst`` tile must be in SBUF (NeuronCore-v3) or SBUF/PSUM (NeuronCore-v4+).
+
+    **Data types.**
+
+    The output ``dst`` tile must be uint32.
+
+    **Tile size.**
+
+    - dst element count for XORWOW must be 6 elements (GpSimd) or 24 elements (Vector).
+
+    **Constraints.**
+
+    - Supported arch versions: NeuronCore-v3+.
+    - Supported engines: NeuronCore-v3: GpSimd. NeuronCore-v4+: GpSimd, Vector.
+    - Since GpSimd Engine cannot access PSUM, ``dst`` must be in SBUF when using GpSimd Engine.
+
+    :param dst: the destination tensor to store PRNG state values; must be a 2D uint32 tensor
+                with the partition dimension representing the compute lanes and the free dimension
+                containing the state values
+    :param engine: specify which engine to use: ``nki.isa.vector_engine``, ``nki.isa.gpsimd_engine``,
+                   or ``nki.isa.unknown_engine`` (default, the best engine will be selected)
+
+    """
+    ...
+
+def rand_set_state(src_seeds, engine=engine.unknown, name=None):
+    r"""
+    Seed the pseudo random number generator (PRNG) inside the engine.
+
+    This instruction initializes the PRNG state for future random number generation operations.
+    Each partition in the source tensor seeds the PRNG states for the corresponding compute lane
+    inside the engine.
+
+    The PRNG state is cached inside the engine as a persistent state during the rest of NEFF
+    execution. However, the state cannot survive TPB resets or Runtime reload.
+
+    **Memory types.**
+
+    The input ``src_seeds`` tile must be in SBUF or PSUM.
+
+    **Data types.**
+
+    The input ``src_seeds`` tile must be uint32.
+
+    **Tile size.**
+
+    - src_seeds element count for XORWOW must be 6 elements (GpSimd) or 24 elements (Vector).
+
+    **Constraints.**
+
+    - Supported arch versions: NeuronCore-v3+.
+    - Supported engines: NeuronCore-v3: GpSimd. NeuronCore-v4+: GpSimd, Vector.
+    - Since GpSimd Engine cannot access PSUM, ``src_seeds`` must be in SBUF when using GpSimd Engine.
+
+    :param src_seeds: the source tensor containing seed values for the PRNG; must be a 2D uint32 tensor
+                      with the partition dimension representing the compute lanes and the free dimension
+                      containing the seed values
+    :param engine: specify which engine to use: ``nki.isa.vector_engine``, ``nki.isa.gpsimd_engine``,
+                   or ``nki.isa.unknown_engine`` (default, the best engine will be selected)
+
+    """
+    ...
+
+def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.idle, reduce_res=None, reduce_op=nl.maximum, range_start=0.0, on_false_value=0.0, name=None):
     r"""
 
     Select elements from ``on_true_tile`` based on comparison with bounds using Vector Engine.
@@ -1325,12 +1472,12 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
     When ``range_select`` outputs a full row of ``fill_value``, caution is needed to avoid NaN in the
     activation instruction that subtracts the output of ``range_select`` by ``reduce_res`` (max value):
 
-    - If ``dtype`` and ``reduce_res`` are both FP32, we should not hit any NaN issue
+    - If ``dst.dtype`` and ``reduce_res.dtype`` are both FP32, we should not hit any NaN issue
       since ``FP32_MIN - FP32_MIN = 0``. Exponentiation on 0 is stable (1.0 exactly).
 
-    - If ``dtype`` is FP16/BF16/FP8, the fill_value in the output tile will become ``-INF``
+    - If ``dst.dtype`` is FP16/BF16/FP8, the fill_value in the output tile will become ``-INF``
       since HW performs a downcast from FP32_MIN to a smaller dtype.
-      In this case, you must make sure reduce_res uses FP32 ``dtype`` to avoid NaN in ``activation``.
+      In this case, you must make sure ``reduce_res.dtype`` is FP32 to avoid NaN in ``activation``.
       NaN can be avoided because ``activation`` always upcasts input tiles to FP32 to perform math operations: ``-INF - FP32_MIN = -INF``.
       Exponentiation on ``-INF`` is stable (0.0 exactly).
 
@@ -1338,11 +1485,11 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
 
     The comparison operators must be one of:
 
-    - np.equal
-    - np.less
-    - np.less_equal
-    - np.greater
-    - np.greater_equal
+    - nl.equal
+    - nl.less
+    - nl.less_equal
+    - nl.greater
+    - nl.greater_equal
 
     Partition dim sizes must match across ``on_true_tile``, ``bound0``, and ``bound1``:
 
@@ -1372,13 +1519,10 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
     :param comp_op1: second comparison operator
     :param bound0: tile with one element per partition for first comparison
     :param bound1: tile with one element per partition for second comparison
-    :param reduce_op: reduction operator to apply on across the selected output. Currently only ``np.max`` is supported.
+    :param reduce_op: reduction operator to apply on across the selected output. Currently only ``nl.maximum`` is supported.
     :param reduce_res: optional tile to store reduction results.
-    :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``
-        Defaults to 0, and must be a compiler time integer.
-
-
-
+    :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``.
+        Defaults to 0, and must be a compile-time integer.
 
     """
     ...
@@ -1530,6 +1674,45 @@ def register_store(dst, src):
     """
     ...
 
+def rng(dst, engine=engine.unknown, name=None):
+    r"""
+    Generate pseudo random numbers using the Vector or GpSimd Engine.
+
+    This instruction generates 32 random bits per element and writes them to the
+    destination tensor. Depending on the size of the dtype, the instruction truncates
+    each 32-bit random value to the specified data type, taking the least significant bits.
+
+    Example use case:
+    To generate random FP32 numbers between 0.0 and 1.0, follow the Rng instruction
+    with a normalization instruction (e.g., write 16 random bits as UINT16, then
+    divide by (2^16-1) to get a random FP32 number between 0.0 and 1.0).
+
+    **Memory types.**
+
+    The output ``dst`` tile can be in SBUF or PSUM.
+
+    **Data types.**
+
+    The output ``dst`` tile must be an integer type: int8, int16, int32, uint8, uint16, or uint32.
+
+    **Tile size.**
+
+    The partition dimension size of ``dst`` must not exceed 128. The number of
+    elements per partition of ``dst`` must not exceed the physical size of each SBUF/PSUM partition.
+
+    **Constraints.**
+
+    - Supported arch versions: NeuronCore-v2+.
+    - Supported engines: NeuronCore-v2: Vector. NeuronCore-v3+: GpSimd, Vector.
+    - Since GpSimd Engine cannot access PSUM, ``dst`` must be in SBUF when using GpSimd Engine.
+
+    :param dst: the destination tensor to write random values to
+    :param engine: specify which engine to use: ``nki.isa.vector_engine``, ``nki.isa.gpsimd_engine``,
+                   or ``nki.isa.unknown_engine`` (default, the best engine will be selected)
+
+    """
+    ...
+
 def scalar_tensor_tensor(dst, data, op0, operand0, op1, operand1, reverse0=False, reverse1=False, name=None):
     r"""
     Apply two math operators in sequence using Vector Engine: ``(data <op0> operand0) <op1> operand1``.
@@ -1593,7 +1776,7 @@ def scalar_tensor_tensor(dst, data, op0, operand0, op1, operand1, reverse0=False
     """
     ...
 
-def select_reduce(dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd=reduce_cmd.idle, reduce_op=np.amax, reverse_pred=False, name=None):
+def select_reduce(dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd=reduce_cmd.idle, reduce_op=nl.maximum, reverse_pred=False, name=None):
     r"""
     Selectively copy elements from either ``on_true`` or ``on_false`` to the destination tile
     based on a ``predicate`` using Vector Engine, with optional reduction (max).
@@ -1654,7 +1837,7 @@ def select_reduce(dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd
     :param on_false: Value to use when predicate is False, can be a scalar value or a vector tile of ``(on_true.shape[0], 1)``
     :param reduce_res: (optional) Tile to store reduction results, must have shape ``(on_true.shape[0], 1)``
     :param reduce_cmd: (optional) Control accumulator behavior using ``nisa.reduce_cmd`` values, defaults to idle
-    :param reduce_op: (optional) Reduction operator to apply (only ``np.max`` is supported)
+    :param reduce_op: (optional) Reduction operator to apply (only ``nl.maximum`` is supported)
     :param reverse_pred: (optional) Reverse the meaning of the predicate condition, defaults to False
 
     """
@@ -1754,10 +1937,7 @@ def sequence_bounds(dst, segment_ids, name=None):
     For example, with input shape (1, 512), the output shape becomes (1, 2, 512), where
     the additional dimension holds the start and end indices for each element.
 
-    The input tile (``segment_ids``) must have data type np.float32 or np.int32.
-    The output tile data type is specified using the ``dtype`` field (must be np.float32 or np.int32).
-    If ``dtype`` is not specified, the output data type will be the same as the input
-    data type of ``segment_ids``.
+    Both the input tile (``segment_ids``) and output tile (``dst``) must have data type ``nl.float32`` or ``nl.int32``.
 
     **NumPy equivalent:**
 
@@ -1768,6 +1948,33 @@ def sequence_bounds(dst, segment_ids, name=None):
     :param dst: tile containing the sequence bounds.
     :param segment_ids: tile containing the segment IDs. Elements with ID=0 are treated as padding.
 
+
+    """
+    ...
+
+def set_rng_seed(src_seeds, name=None):
+    r"""
+    Seed the pseudo random number generator (PRNG) inside the Vector Engine.
+
+    The PRNG state is cached inside the engine as a persistent state during the rest of NEFF
+    execution. However, the state cannot survive TPB resets or Runtime reload.
+
+    Using the same seed will generate the same sequence of random numbers when used
+    together with the ``nisa.rng()`` on the Vector Engine.
+
+    **Memory types.**
+
+    The input ``src_seeds`` must be in SBUF or PSUM.
+
+    **Data types.**
+
+    The input ``src_seeds`` must be a 32-bit value.
+
+    **Tile size.**
+
+    The input ``src_seeds`` must be a [1,1] tensor.
+
+    :param src_seeds: a [1,1] tensor on SBUF or PSUM with a 32-bit value to be used as the seed
 
     """
     ...
@@ -1783,9 +1990,8 @@ def tensor_copy(dst, src, engine=engine.unknown, name=None):
     is slightly different across engines:
 
     - Scalar Engine on NeuronCore-v2 performs copy by first casting the input tile to FP32 internally and then casting from
-      FP32 to the output dtype (``dtype``, or src.dtype if ``dtype`` is not specified). Therefore, users should be
-      cautious with assigning this instruction to Scalar Engine when the input data type cannot be precisely cast to FP32
-      (e.g., INT32).
+      FP32 to ``dst.dtype``. Users should be cautious with assigning this instruction to Scalar Engine when the input data 
+      type cannot be precisely cast to FP32 (e.g., INT32).
     - Both GpSimd and Vector Engine can operate in two modes: (1) bit-accurate copy when input and output data types are
       the same or (2) intermediate FP32 cast when input and output data types differ, similar to Scalar Engine.
 
@@ -1798,9 +2004,6 @@ def tensor_copy(dst, src, engine=engine.unknown, name=None):
     :param src: the source of copy, must be a tile in SBUF or PSUM.
     :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.scalar_engine`,
                   `nki.isa.gpsimd_engine` or `nki.isa.unknown_engine` (default, compiler selects best engine based on engine workload).
-
-
-
     """
     ...
 
@@ -1985,19 +2188,17 @@ def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=N
 
     If arithmetic operators are used, the ``tensor_scalar`` instruction can run on Vector or Scalar or GpSimd Engine.
     However, each engine supports limited arithmetic operators (see :ref:``tbl-aluop``). The Scalar Engine on trn2 only
-    supports a subset of the operator combination:
+    supports some operator combinations:
 
-      - ``op0=np.multiply`` and ``op1=np.add``
-      - ``op0=np.multiply`` and ``op1=None``
-      - ``op0=add`` and ``op1=None``
+      - ``op0=nl.multiply`` and ``op1=nl.add``
+      - ``op0=nl.multiply`` and ``op1=None``
+      - ``op0=nl.add`` and ``op1=None``
 
     Also, arithmetic operators impose no restriction on the input/output data types,
     but the engine automatically casts input data types to float32
-    and performs the operators in float32 math. The float32 computation results are cast to the target
-    data type specified in the ``dtype`` field before written into the output tile, at no additional performance cost.
-    If the ``dtype`` field is not specified, it is default to be the same as input tile data type.
-
-
+    and performs the operators in float32 math. The float32 computation results are 
+    cast to ``dst.dtype`` at no additional performance cost.
+    
     :param dst: an output tile of ``(data <op0> operand0) <op1> operand1`` computation
     :param data: the input tile
     :param op0: the first math operator used with operand0 (see :ref:`nki-aluop` for supported operators)
@@ -2015,6 +2216,66 @@ def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=N
                    `nki.isa.gpsimd_engine` (only allowed for rsqrt) or `nki.isa.unknown_engine` (default, let
                    compiler select best engine based on the input tile shape).
 
+    """
+    ...
+
+def tensor_scalar_cumulative(dst, src, op0, op1, imm0, imm1=None, reduce_cmd=reduce_cmd.reset_reduce):
+    r"""
+    Perform tensor-scalar arithmetic operation with cumulative reduction using Vector Engine.
+
+    The operation applies a scalar operation to each tensor element, then performs a cumulative
+    reduction, storing the cumulative results in the destination tensor.
+
+    The operation can be expressed in pseudocode as:
+
+    .. code-block:: python
+
+    if reduce_cmd == reset_reduce:
+        if op1 == add or op1 == subtract:
+            reg = 0
+        elif op1 == mult:
+            reg = 1
+        elif op1 == max:
+            reg = -inf
+        elif op1 == min:
+            reg = +inf
+    elif reduce_cmd == reduce:
+        reg = reg
+    elif reduce_cmd == load_reduce:
+        reg = imm1
+
+    for i in len(in_tensor):
+        if not reverse0:
+            reg = op1(op0(in_tensor[i], imm0), reg)
+            out_tensor[i] = reg
+        else:
+            reg = op1(op0(imm0, in_tensor[i]), reg)
+            out_tensor[i] = reg
+
+    **Operation constraints:**
+
+    - Scalar operation (``op0``) must be an arithmetic op (e.g., add, mult, max)
+    - Reduction operation (``op1``) is limited to add, subtract, mult, max, min
+    - Input / output dtypes are restricted to BF16, FP16, FP32, FP8, UINT8, UINT16, INT8, INT16
+        - INT32/UINT32 are not supported as input/output dtypes (ISA limitation)
+
+    **Accumulator behavior:**
+
+    The Vector Engine maintains internal accumulator registers controlled via ``reduce_cmd``:
+
+    - ``reset_reduce``: Reset accumulator based on reduction operation type
+    - ``load_reduce``: Initialize accumulator with ``imm1`` value
+    - ``reduce``: Continue with existing accumulator value
+
+    :param dst: The destination tensor to write cumulative results to
+    :param src: The source tensor to process
+    :param op0: Scalar arithmetic operation to apply to each element
+    :param op1: Cumulative arithmetic operation for cumulative computation
+    :param imm0: Scalar or vector value for tensor-scalar operation. Must be FP32 datatype
+    :param imm1: (optional) Initial scalar or vector value for the accumulator when ``load_reduce``
+                            is specified as the ``reduce_cmd``. Must be FP32 datatype
+    :param reduce_cmd: (optional) Control accumulator behavior using ``nisa.reduce_cmd`` values,
+                                defaults to ``reset_reduce``
     """
     ...
 
@@ -2061,20 +2322,20 @@ def tensor_tensor(dst, data1, data2, op, engine=engine.unknown, name=None):
     Perform an element-wise operation of input two tiles using Vector Engine or GpSimd Engine.
     The two tiles must have the same partition axis size and the same number of elements per partition.
 
-    The element-wise operator is specified using the ``op`` field and can be any *binary* operator
-    supported by NKI (see :ref:`nki-aluop` for details) that runs on the Vector Engine,
-    or can be ``np.power``/``nl.power``  that runs on the GpSimd Engine.
+    The element-wise operator is specified using the ``op`` field. Valid choices for ``op``:
+
+    1. Any supported *binary* operator that runs on the Vector Engine. (See :ref:`nki-aluop` for details.) 
+    2. ``nl.power``. (Which runs on the GpSimd engine.)
+
     For bitvec operators, the input/output data types must be integer types and Vector Engine treats
     all input elements as bit patterns without any data type casting. For arithmetic operators, there is no
     restriction on the input/output data types, but the engine automatically casts input data types to float32
-    and performs the element-wise operation in float32 math. The float32 results are cast to the target
-    data type specified in the ``dtype`` field before written into the
-    output tile. If the ``dtype`` field is not specified, it is default to be the same as the data type of ``data1``
-    or ``data2``, whichever has the higher precision.
+    and performs the element-wise operation in float32 math. The float32 computation results are cast to
+    ``dst.dtype`` at no additional performance cost.
 
-    Since GpSimd Engine cannot access PSUM, the input or output tiles cannot be in PSUM
-    if ``op`` is ``np.power``/``nl.power``
-    (see :ref:`arch_sec_neuron_core_engines` for details).
+    Since GpSimd Engine cannot access PSUM, the input/output tiles cannot be in PSUM if ``op`` is ``nl.power``.
+    (See :ref:`arch_sec_neuron_core_engines` for details.)
+
     Otherwise, the output tile can be in either SBUF or PSUM.
     However, the two input tiles, ``data1`` and ``data2`` cannot both reside in PSUM.
     The three legal cases are:
@@ -2139,12 +2400,8 @@ def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, rev
 
     Input/output data types can be any supported NKI data type (see :ref:`nki-dtype`),
     but the engine automatically casts input data types to float32
-    and performs the computation in float32 math. The float32 results are cast to the target
-    data type specified in the ``dtype`` field before written into the
-    output tile. If the ``dtype`` field is not specified, it is default to be the
-    same as the data type of ``data0``
-    or ``data1``, whichever has the highest precision.
-
+    and performs the computation in float32 math. The float32 computation results are 
+    cast to ``dst.dtype`` at no additional performance cost.
 
     :param dst: an output tile of the scan operation
     :param data0: lhs input operand of the scan operation

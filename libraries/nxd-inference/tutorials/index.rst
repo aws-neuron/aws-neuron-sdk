@@ -30,6 +30,7 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
     Llama4 </libraries/nxd-inference/tutorials/llama4-tutorial>
     Llama4 Legacy </libraries/nxd-inference/tutorials/llama4-tutorial-v0>
     Pixtral </libraries/nxd-inference/tutorials/pixtral-tutorial>
+    Qwen3 MoE 235B </libraries/nxd-inference/tutorials/qwen3-moe-tutorial>
     Speculative Decoding </libraries/nxd-inference/tutorials/sd-inference-tutorial>
 
     
@@ -139,6 +140,13 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
         :class-card: sd-rounded-3
 
         Learn how to deploy `mistralai/Pixtral-Large-Instruct-2411 <https://huggingface.co/mistralai/Pixtral-Large-Instruct-2411>`__ on a single `trn2.48xlarge` instance.
+
+    .. grid-item-card:: Qwen3 MoE Inference
+        :link: /libraries/nxd-inference/tutorials/qwen3-moe-tutorial
+        :link-type: doc
+        :class-card: sd-rounded-3
+
+        Learn how to deploy `Qwen/Qwen3-235B-A22B <https://huggingface.co/Qwen/Qwen3-235B-A22B>`__ with NxD Inference with various performance tuning options.
 
     .. grid-item-card:: Speculative Decoding (Qwen3-32B) on Trainium2
         :link: /libraries/nxd-inference/tutorials/sd-inference-tutorial

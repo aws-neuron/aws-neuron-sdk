@@ -169,6 +169,16 @@ If you have run the single worker training in a previous section, then you can s
 Known issues and limitations
 ----------------------------
 
+``RuntimeError: `fused=True` requires all the params to be floating point Tensors of supported devices: ['mps', 'cuda', 'xpu', 'hpu', 'cpu', 'mtia', 'privateuseone'] but torch.float32 and xla``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The error ``RuntimeError: `fused=True``` below indicates that the fused option for ``torch.optim.AdamW`` is turned on by default for PyTorch 2.8/2.9 in Hugging Face transformers versions 4.54 and newer. To work-around, use version <=4.53.3 or pass the option ``--optim adamw_torch`` to the ``run_glue.py`` script. This issue will be fixed with the upcoming Neuron PyTorch native which supports ``privateuseone`` device.
+
+.. code:: shell
+
+   RuntimeError: `fused=True` requires all the params to be floating point Tensors of supported devices: ['mps', 'cuda', 'xpu', 'hpu', 'cpu', 'mtia', 'privateuseone'] but torch.float32 and xla
+
+
 ``INVALID_ARGUMENT: Input dimension should be either 1 or equal to the output dimension ...`` during precompilation of evaluation phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

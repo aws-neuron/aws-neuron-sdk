@@ -25,6 +25,7 @@ NKI ISA
    scalar_tensor_tensor
    tensor_scalar
    tensor_scalar_reduce
+   tensor_scalar_cumulative
    tensor_copy
    tensor_copy_dynamic_src
    tensor_copy_dynamic_dst
@@ -45,6 +46,7 @@ NKI ISA
    dma_transpose
    dma_compute
    max8
+   nc_n_gather
    nc_find_index8
    nc_match_replace8
    nc_stream_shuffle
@@ -54,6 +56,11 @@ NKI ISA
    register_store
    core_barrier
    sendrecv
+   rng
+   rand2
+   rand_set_state
+   rand_get_state
+   set_rng_seed
 
 
 

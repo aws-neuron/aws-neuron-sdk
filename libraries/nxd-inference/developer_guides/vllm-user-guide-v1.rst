@@ -21,12 +21,13 @@ processing follow the default vLLM behavior.
 Supported Models
 ----------------
 
-Following models are supported on vLLM with NxD Inference:
+The following models are supported on vLLM with NxD Inference:
 
 - Llama 2/3.1/3.3
 - Llama 4 Scout, Maverick
 - Qwen 2.5
 - Qwen 3
+- Pixtral (limited, see Known Issues)
 
 If you are adding your own model to NxD Inference, see :ref:`Integrating Onboarded Model with vLLM<nxdi-onboarding-models-vllm>`.
 
@@ -44,14 +45,14 @@ Neuron DLAMIs and Neuron DLCs for quick setups.
 
 **Prerequisites:**
 
-- Latest AWS Neuron SDK (`Neuron SDK 2.26.1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.26.1.html>`_)
+- Latest AWS Neuron SDK (`Neuron SDK 2.27.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.27.0.html>`_)
 - Python 3.8+ (compatible with vLLM requirements)
 - Supported AWS instances: Inf2, Trn1/Trn1n, Trn2
 
 Installing the AWS Neuron fork of vLLM 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Neuron maintains a vLLM-Neuron Plugin that supports the latest features for NxD Inference. Follow the instructions below to obtain and configure it.
+AWS Neuron maintains a vLLM-Neuron Plugin that supports the latest features for NxD Inference. Follow the instructions below to obtain and configure it.
 
 Quickstart using Docker
 """""""""""""""""""""""""""
@@ -65,15 +66,11 @@ For a complete step-by-step tutorial on deploying the vLLM Neuron DLC, see :ref:
 Manually install from source
 """""""""""""""""""""""""""""""
 
-
-.. important::
-   This is beta preview of the vLLM Neuron plugin. For a more stable experience, consider using the `AWS Neuron vllm fork <https://github.com/aws-neuron/upstreaming-to-vllm/releases/tag/2.26.1>`_.
-
 Install the plugin from GitHub sources using the following commands. The plugin will automatically install the correct version of vLLM along with other required dependencies.
 
 .. code-block:: bash
 
-    git clone --branch 0.2.0 https://github.com/vllm-project/vllm-neuron.git
+    git clone --branch 0.2.1-lts https://github.com/vllm-project/vllm-neuron.git
     cd vllm-neuron
     pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 
@@ -88,7 +85,7 @@ Neuron Environment Setup
 Quickstart
 ^^^^^^^^^^^^
 
-Here is a quick and minimal example to get running.
+Here is a very basic example to get started:
 
 .. code-block:: python
 
@@ -130,6 +127,9 @@ Feature Support
      - 🟢
      -
    * - Prefix Caching
+     - 🟢
+     - 
+   * - Multi-LORA
      - 🟢
      - 
    * - Speculative Decoding
@@ -214,17 +214,17 @@ Scheduling and K/V Cache
 NxD Inference uses a contiguous memory layout for the K/V cache instead of PagedAttention support.
 It integrates into vLLM's block manager by setting the block size to the maximum length supported by the model
 and allocating one block per maximum number of sequences configured. However, the vLLM scheduler currently does
-not introspect the blocks associated to each sequence when (re-)scheduling running sequences. It requires an additional
+not introspect the blocks associated to each sequence when (re-)scheduling running sequences. The scheduler requires an additional
 free block regardless of space available in the current block resulting in preemption. This would lead to a large increase 
 in latency for the preempted sequence because it would be rescheduled in the context encoding phase. Since NxD Inference's implementation ensures each block
 is big enough to fit the maximum model length, preemption is never needed in our current integration. 
-Therefore, Neuron disabled the preemption checks done by the scheduler in our fork. This significantly improves
+As a result, AWS Neuron disabled the preemption checks done by the scheduler in our fork. This significantly improves
 E2E performance of the Neuron integration.
 
 Decoding
 ^^^^^^^^^^
 
-On-device samples is enabled by default, which performs sampling logic on the Neuron devices 
+On-device sampling is enabled by default, which performs sampling logic on the Neuron devices 
 rather than passing the generated logits back to CPU and sample through vLLM. This allows you to
 use Neuron hardware to accelerate sampling and reduce the amount of data transferred between devices 
 leading to improved latency.
@@ -431,9 +431,11 @@ Known Issues
 ---------------
 
 1. Chunked prefill is disabled by default on Neuron for optimal performance. To enable chunked prefill, set the environment variable ``DISABLE_NEURON_CUSTOM_SCHEDULER="1"``.
-2. Users are required to provide a ``num_gpu_blocks_override`` arg calculated as ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vLLM to avoid a potential OOB error.
-3. Prefix caching with ``batch_size=1`` generates incorrect outputs. Recommend to use ``batch_size>1`` when prefix caching is enabled.
-4. When using HuggingFace model IDs with both `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ and models that have ``tie_word_embeddings`` set to ``true`` in their config (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B/blob/main/config.json#L24>`_), you may encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
+2. Users are required to provide a ``num_gpu_blocks_override`` arg, which should be at least ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vLLM to avoid a potential OOB error.
+3. When using HuggingFace model IDs with both `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ and models that have ``tie_word_embeddings`` set to ``true`` in their config (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B/blob/main/config.json#L24>`_), you may encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
+4. For vLLM version 0.11.0 there is a bug where chat templates are not cached. This affects request preprocessing time. This is fixed in future vLLM versions.
+5. Async tokenization in vLLM V1 can increase request preprocessing time for small inputs and batch sizes. The Neuron team is investigating potential solutions.
+6. Pixtral has out of bounds issues for batch sizes greater than 4. The max sequence length is 10240.
 
 Support
 ----------

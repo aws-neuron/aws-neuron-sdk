@@ -16,7 +16,6 @@ This section contains the technical documentation specific to the NxD Inference 
 
     Overview </libraries/nxd-inference/overview-index>
     Setup </libraries/nxd-inference/nxdi-setup>
-    vLLM </libraries/nxd-inference/vllm/index>
     Tutorials  </libraries/nxd-inference/tutorials/index>
     Developer Guides  </libraries/nxd-inference/developer_guides/index>
     API Reference Guide </libraries/nxd-inference/api-guides/index>

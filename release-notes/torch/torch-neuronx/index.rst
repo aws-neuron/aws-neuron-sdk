@@ -10,9 +10,46 @@ PyTorch Neuron (``torch-neuronx``) release notes
    :local:
    :depth: 1
 
+.. note:: 
+  For Neuron PyTorch framework release notes on Neuron 2.25.0 up to the current release, see :doc:`/release-notes/prev/by-component/nx-torch`.
+
+
+----
+
 PyTorch Neuron for |Trn1|/|Inf2| is a software package that enables PyTorch
 users to train, evaluate, and perform inference on second-generation Neuron
 hardware (See: :ref:`NeuronCore-v2 <neuroncores-v2-arch>`).
+
+Release [2.9.0.2.11.*, 2.8.0.2.11.*, 2.7.0.2.11.*]
+--------------------------------------------------
+Date: TBD
+
+Summary
+~~~~~~~
+
+- :ref:`Introducing PyTorch 2.9 Support<introduce-pytorch-2-9>`
+
+Known limitations
+~~~~~~~~~~~~~~~~~
+
+* PyTorch NeuronX currently does not support GSPMD
+* PyTorch NeuronX currently does not support torch.compile
+* PyTorch NeuronX currently does not support DDP/FSDP
+
+Known issues
+~~~~~~~~~~~~
+
+Ubuntu 24.04 ships with Python 3.12 by default, and torch-xla 2.7 does not support Python 3.12
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ubuntu 24.04 comes with Python 3.12 by default. PyTorch NeuronX 2.7 is not supported with Python 3.12. If you need to use PyTorch 2.7 on Ubuntu 24.04, you will need to install Python 3.11 or earlier. Alternatively, upgrade to PyTorch NeuronX 2.8 or 2.9 which support Python 3.12.
+
+Please see the :ref:`Introducing PyTorch 2.9 Support<introduce-pytorch-2-9>` for a full list of known issues with v2.9.
+
+Please see the :ref:`Introducing PyTorch 2.8 Support<introduce-pytorch-2-8>` for a full list of known issues with v2.8.
+
+Please see the :ref:`Introducing PyTorch 2.7 Support<introduce-pytorch-2-7>` for a full list of known issues with v2.7.
+
 
 Release [2.7.0.2.8.*, 2.6.0.2.8.*, 2.5.1.2.8.*]
 -----------------------------------------------

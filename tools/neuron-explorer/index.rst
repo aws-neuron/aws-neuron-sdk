@@ -80,7 +80,7 @@ Visualization and Analysis
       Get streamlined performance insights and optimization recommendations with high-level metrics and visualizations.
 
    .. grid-item-card:: AI Recommendation Viewer
-      :link: overview-summary-page
+      :link: overview-ai-recommendations
       :link-type: doc
       :class-card: sd-border-1
 
@@ -93,7 +93,7 @@ Tutorials
    :gutter: 3
 
    .. grid-item-card:: Profile a NKI Kernel
-      :link: /nki/how-to-guides/use-neuron-profile
+      :link: /nki/deep-dives/use-neuron-profile
       :link-type: doc
       :class-card: sd-border-1
 
@@ -115,6 +115,25 @@ Tutorials
       :class-card: sd-border-1
 
       Capture and analyze system-level and device-level profiles for vLLM inference workloads on Trainium.
+
+
+.. _download-neuron-explorer-vsix:
+
+Download the Neuron Explorer Visual Studio Code Extension
+---------------------------------------------------------
+
+.. grid:: 1
+   :gutter: 3
+
+   .. grid-item-card:: 
+      :class-card: sd-border-2
+
+      **Get the Neuron Explorer VSCode Extension**
+      ^^^
+      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron.explorer-2.27.0.vsix>`
+
+Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuronXray-external-v1.1.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
+
 
 .. _neuron-explorer-faq:
 
@@ -168,7 +187,7 @@ Yes. Neuron Explorer is backwards compatible with profile data captured using Ne
    Get Started <get-started>
    Launch Profiles via UI, CLI, IDE <how-to-profile-workload>
    Device Viewer <overview-device-profiles>
-   Hierarcy Viewer <overview-hierarchy-view>
+   Hierarchy Viewer <overview-hierarchy-view>
    Source Code Viewer <how-to-link-view-source-code>
    Summary Viewer <overview-summary-page>
    AI Recommendation Viewer <overview-ai-recommendations>
