@@ -15,7 +15,18 @@ Overview
 
 NxD Inference integrates with vLLM by using `vLLM's Plugin System <https://docs.vllm.ai/en/latest/design/plugin_system.html>`_ to extend the model execution components responsible for loading and invoking models within vLLM's LLMEngine (see `vLLM architecture <https://docs.vllm.ai/en/latest/design/arch_overview.html#llm-engine>`_ 
 for more details). This means input processing, scheduling and output 
-processing follow the default vLLM behavior. 
+processing follow the default vLLM behavior.
+
+Versioning
+^^^^^^^^^^
+
+Plugin Version: ``0.2.2+lts``
+
+Neuron SDK Version: ``2.27.0``
+
+vLLM Version: ``0.11.0``
+
+PyTorch Version: ``2.8.0``
 
 
 Supported Models
@@ -39,14 +50,14 @@ Prerequisite: Launch an instance and install drivers and tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Before installing vLLM with the instructions below, you must launch an Inferentia or Trainium instance and install the necessary
-Neuron SDK dependency libraries. Refer to :ref:`these setup instructions<nxdi-setup>` for different ways to prepare your environment, including using
-Neuron DLAMIs and Neuron DLCs for quick setups.
+Neuron SDK dependency libraries. We recommend using a Neuron Deep Learning Container (DLC) for the best compatibility. 
+Refer to :ref:`these setup instructions<nxdi-setup>` for information on using Neuron DLCs.
 
 
 **Prerequisites:**
 
 - Latest AWS Neuron SDK (`Neuron SDK 2.27.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.27.0.html>`_)
-- Python 3.8+ (compatible with vLLM requirements)
+- Python 3.10+ (compatible with vLLM requirements)
 - Supported AWS instances: Inf2, Trn1/Trn1n, Trn2
 
 Installing the AWS Neuron fork of vLLM 
@@ -67,20 +78,17 @@ Manually install from source
 """""""""""""""""""""""""""""""
 
 Install the plugin from GitHub sources using the following commands. The plugin will automatically install the correct version of vLLM along with other required dependencies.
+This version of the plugin is intended to work with the Neuron SDK 2.27.0, PyTorch 2.8, and vLLM 0.11.0. This is not needed if using a DLC container with the vllm-neuron plugin already installed.
 
 .. code-block:: bash
 
-    git clone --branch 0.2.1-lts https://github.com/vllm-project/vllm-neuron.git
+    git clone --branch "0.2.2+lts" https://github.com/vllm-project/vllm-neuron.git
     cd vllm-neuron
     pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 
 
 Usage
 -----
-
-Neuron Environment Setup
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 
 Quickstart
 ^^^^^^^^^^^^
@@ -89,7 +97,6 @@ Here is a very basic example to get started:
 
 .. code-block:: python
 
-   import os
    from vllm import LLM, SamplingParams
 
    # Initialize the model
@@ -97,7 +104,8 @@ Here is a very basic example to get started:
        model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
        max_num_seqs=4,
        max_model_len=128,
-       tensor_parallel_size=32
+       tensor_parallel_size=2,
+       block_size=32
    )
 
    # Generate text
@@ -152,7 +160,7 @@ Feature Support
      - 
    * - Multimodal
      - 🚧
-     - Only Llama 4 is supported
+     - Llama4 and Pixtral are supported
 
 - 🟢 Functional: Fully operational, with ongoing optimizations.
 - 🚧 WIP: Under active development.
@@ -179,7 +187,7 @@ you configure the model with a default configuration that sets the required fiel
     )
 
 
-Use the ``additional_config`` field to provide an ``override_neuron_config`` dictionary that specifies your desired NxD Inference configuration settings. You provide the settings you want to override as a dictionary (or JSON object when starting vLLM from the CLI) containing basic types.  For example, to disable auto bucketing, run code similar to this:
+Use the ``additional_config`` field to provide an ``override_neuron_config`` dictionary that specifies your desired NxD Inference configuration settings. You provide the settings you want to override as a dictionary (or JSON object when starting vLLM from the CLI) containing basic types. For example, to enable prefix caching:
 
 .. code:: ipython3
     
@@ -194,14 +202,15 @@ Use the ``additional_config`` field to provide an ``override_neuron_config`` dic
 
 or when launching vLLM from the CLI
 
-.. code::
+.. code:: bash
 
     --additional-config '{
         "override-neuron-config": {
-            "is_prefix_caching":True, \
-            "is_block_kv_layout":True, \
-            "pa_num_blocks": 4096, \
-            "pa_block_size": 32}
+            "is_prefix_caching": true,
+            "is_block_kv_layout": true,
+            "pa_num_blocks": 4096,
+            "pa_block_size": 32
+        }
     }'
 
 
@@ -247,8 +256,8 @@ of the ``global_top_k`` configuration limiting the maximum value of ``top_k`` a 
 Quantization
 ^^^^^^^^^^^^^^
 
-NxD Inference supports quantization but has not yet been integrated with vLLMs configuration for quantization.
-If you want to use quantization, **do not** set vLLM’s  ``--quantization`` setting to ``neuron_quant``. 
+NxD Inference supports quantization but has not yet been integrated with vLLM's configuration for quantization.
+If you want to use quantization, **do not** set vLLM's ``--quantization`` setting to ``neuron_quant``. 
 Keep it unset and use the Neuron configuration of the model to configure quantization of the NxD Inference model directly.
 For more information on how to configure and use quantization with NxD Inference incl. requirements on checkpoints,
 refer to :ref:`Quantization<nxdi-quantization>` in the NxD Inference Feature Guide.
@@ -271,6 +280,7 @@ subdirectory in the directory of your model checkpoint.
 
 Prefix Caching
 ^^^^^^^^^^^^^^^^
+
 Starting in Neuron SDK 2.24, prefix caching is supported on the AWS Neuron fork of vLLM. Prefix caching allows developers to improve TTFT by 
 re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching<nxdi_prefix_caching>` for more information on how to 
 enable prefix caching with vLLM. 
@@ -279,54 +289,19 @@ enable prefix caching with vLLM.
 Examples
 --------
 
-For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials-index>`.
+For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials>`.
 
-The following examples use `meta-llama/Llama-3.3-70B-Instruct <https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct>`_ on a ``Trn2.48xlarge`` instance. 
+The following examples use `TinyLlama/TinyLlama-1.1B-Chat-v1.0 <https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0>`_
 
-If you have access to the model checkpoint locally, replace ``meta-llama/Llama-3.3-70B-Instruct`` with the path to your local copy. 
-Otherwise, you need to request access through HuggingFace and login via `huggingface-cli login <https://huggingface.co/docs/huggingface_hub/en/guides/cli#huggingface-cli-login>`_ using 
-a `HuggingFace user access token <https://huggingface.co/docs/hub/en/security-tokens>`_ before running the examples. 
+If you have access to the model checkpoint locally, replace ``TinyLlama/TinyLlama-1.1B-Chat-v1.0`` with the path to your local copy. 
 
-If you use a different instance type, you need to adjust the ``tp_degree`` according to the number of Neuron Cores 
+If you use a different instance type, you need to adjust the ``tensor_parallel_size`` according to the number of Neuron Cores 
 available on your instance type. (For more information see: :doc:`Tensor-parallelism support </libraries/nxd-inference/app-notes/parallelism>`.)
 
 Offline Inference Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here is an example for running offline inference. :ref:`Bucketing<nxdi-bucketing>` is only disabled to demonstrate 
-how to override Neuron configuration values. Keeping it enabled generally delivers better
-performance.
-
-.. code:: ipython3
-
-   import os
-   from vllm import LLM, SamplingParams
-
-   # Initialize the model
-   llm = LLM(
-       model="meta-llama/Llama-3.3-70B-Instruct",
-       max_num_seqs=4,
-       max_model_len=4096,
-       tensor_parallel_size=64,
-       additional_config=dict(
-           override_neuron_config=dict(
-               enable_bucketing=False,
-           )
-       ),
-   )
-
-   # Generate text
-   prompts = [
-       "Hello, my name is",
-       "The president of the United States is",
-       "The capital of France is",
-   ]
-   sampling_params = SamplingParams(temperature=0.0)
-   outputs = llm.generate(prompts, sampling_params)
-
-   for output in outputs:
-       print(f"Prompt: {output.prompt}")
-       print(f"Generated: {output.outputs[0].text}")
+For offline inference, refer to the code example in the Quickstart section above.
 
 Online Inference Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -334,25 +309,20 @@ Online Inference Example
 You can start an OpenAI API compatible server with the same settings as the offline example by running
 the following command:
 
-.. code::
+.. code:: bash
 
     python3 -m vllm.entrypoints.openai.api_server \
-    --model "meta-llama/Llama-3.3-70B-Instruct" \
-    --tensor-parallel-size 64 \
-    --max-model-len 4096 \
-    --max-num-seqs 4 \
-    --no-enable-prefix-caching \
-    --additional-config '{
-        "override_neuron_config": {
-            "enable_bucketing": False,
-        }
-    }' \
-    --port 8000
+        --model "TinyLlama/TinyLlama-1.1B-Chat-v1.0" \
+        --tensor-parallel-size 2 \
+        --max-model-len 128 \
+        --max-num-seqs 4 \
+        --block-size 32 \
+        --port 8000
 
 In addition to the sampling parameters supported by OpenAI, we also support ``top_k``.
 You can change the sampling parameters and enable or disable streaming.
 
-.. code::
+.. code:: python
 
     from openai import OpenAI
 
@@ -369,7 +339,7 @@ You can change the sampling parameters and enable or disable streaming.
     model_name = models.data[0].id
 
     # Sampling Parameters
-    max_tokens = 1024
+    max_tokens = 64
     temperature = 1.0
     top_p = 1.0
     top_k = 50
@@ -399,47 +369,21 @@ You can change the sampling parameters and enable or disable streaming.
     print(generated_text)
 
 
-Specifying context and token buckets (online inference)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can tune bucketing for **prefill** (context encoding) and **decode** (token generation) by
-passing ``override_neuron_config`` to the OpenAI-compatible server.  
-The example below targets a 1K-token workload on ``meta-llama/Llama-3.3-70B-Instruct`` with **single sequence** (BS=1) execution.
-
-.. code:: bash
-
-    python -m vllm.entrypoints.openai.api_server \
-      --model "meta-llama/Llama-3.3-70B-Instruct" \
-      --tensor-parallel-size 64 \
-      --max-num-seqs 1 \
-      --max-model-len 1024 \
-      --port 8080 \
-      --additional-config '{
-            "override-neuron-config": 
-                {"enable_bucketing": true, 
-                "context_encoding_buckets": [256, 512, 1024], 
-                "token_generation_buckets": [32, 64, 128, 256, 512, 768], 
-                "max_context_length": 1024, 
-                "seq_len": 1024, 
-                "batch_size": 1, 
-                "ctx_batch_size": 1, 
-                "tkg_batch_size": 1, 
-                "is_continuous_batching": true}
-        }'
-
 Known Issues
 ---------------
 
 1. Chunked prefill is disabled by default on Neuron for optimal performance. To enable chunked prefill, set the environment variable ``DISABLE_NEURON_CUSTOM_SCHEDULER="1"``.
-2. Users are required to provide a ``num_gpu_blocks_override`` arg, which should be at least ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vLLM to avoid a potential OOB error.
-3. When using HuggingFace model IDs with both `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ and models that have ``tie_word_embeddings`` set to ``true`` in their config (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B/blob/main/config.json#L24>`_), you may encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
-4. For vLLM version 0.11.0 there is a bug where chat templates are not cached. This affects request preprocessing time. This is fixed in future vLLM versions.
-5. Async tokenization in vLLM V1 can increase request preprocessing time for small inputs and batch sizes. The Neuron team is investigating potential solutions.
-6. Pixtral has out of bounds issues for batch sizes greater than 4. The max sequence length is 10240.
+   
+   * Users are required to provide a ``num_gpu_blocks_override`` arg, which should be at least ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vLLM to avoid a potential OOB error.
+
+2. When using HuggingFace model IDs with both `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ and models that have ``tie_word_embeddings`` set to ``true`` in their config (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B/blob/main/config.json#L24>`_), you may encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
+3. For vLLM version 0.11.0 there is a bug where chat templates are not cached. This affects request preprocessing time. This is fixed in future vLLM versions.
+4. Async tokenization in vLLM V1 can increase request preprocessing time for small inputs and batch sizes. The Neuron team is investigating potential solutions.
+5. Pixtral has out of bounds issues for batch sizes greater than 4. The max sequence length is 10240.
 
 Support
 ----------
 
 - **Documentation**: `AWS Neuron Documentation <https://awsdocs-neuron.readthedocs-hosted.com/>`_
 - **Issues**: `GitHub Issues <https://github.com/vllm-project/vllm-neuron/issues>`_
-- **Community**: `AWS Neuron Forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`_
+- **Community**: `AWS Neuron Forum <https://repost.aws/tags/TAjy-krivRTDqDPWNNBmV9lA>`_
