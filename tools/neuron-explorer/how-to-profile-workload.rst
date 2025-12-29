@@ -219,11 +219,11 @@ To enable profiling without code change, run your workload with the following en
 Setting up the Neuron Explorer UI
 ----------------------------------
 
-Use the ``neuron-profile`` tool from ``aws-neuronx-tools`` to start the UI and API servers that are required for viewing profiles.
+Use the ``neuron-explorer`` tool from ``aws-neuronx-tools`` to start the UI and API servers that are required for viewing profiles.
 
 .. code-block:: bash
 
-   neuron-profile view --ui-mode latest
+   neuron-explorer view
 
 By default, the UI will be launched on port 3001 and the API server will be launched on port 3002.
 
@@ -253,9 +253,9 @@ First, download the Visual Studio Code Extension (``.vsix``) file from https://g
 
       **Get the Neuron Explorer VSCode Extension**
       ^^^
-      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron.explorer-2.27.0.vsix>`
+      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron-explorer-2.27.0.vsix>`
 
-Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuronXray-external-v1.1.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
+Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuron-explorer-2.27.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
 
 .. image:: /tools/profiler/images/profile-workload-1.png
 

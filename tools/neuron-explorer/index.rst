@@ -130,9 +130,9 @@ Download the Neuron Explorer Visual Studio Code Extension
 
       **Get the Neuron Explorer VSCode Extension**
       ^^^
-      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron.explorer-2.27.0.vsix>`
+      :download:`Neuron Explorer Visual Studio Code Extension </tools/neuron-explorer/downloads/neuron-explorer-2.27.0.vsix>`
 
-Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuronXray-external-v1.1.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
+Once downloaded, open the command palette by pressing **CMD+Shift+P** (MacOS) or **Ctrl+Shift+P** (Windows), type ``> Extensions: Install from VSIX...`` and press **Enter**. When you are prompted to select a file, select ``neuron-explorer-2.27.0.vsix`` and then the **Install** button (or press **Enter**) to install the extension.
 
 
 .. _neuron-explorer-faq:
