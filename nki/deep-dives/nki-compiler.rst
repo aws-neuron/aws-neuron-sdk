@@ -42,7 +42,7 @@ NKI Compiler Open Source
 
 Neuron is planning to release the source code for the NKI Compiler to increase awareness and transparency, to enable easier development of tools, and to invite participation and collaboration as we evolve the NKI language. Developers will be able to download the compiler sources, modify them, build the compiler, and use their locally built compiler in their overall model compilation flow. 
 
-To do this, developers will be able to download our sources from our public git repository: https://github.com/aws-neuron/nki
+To do this, developers will be able to download our sources from our public git repository: https://github.com/aws-neuron/nki-library
 
 The repo contains all the sources for the entire NKI Compiler, as well as build instructions on how to produce a standalone nki.whl. Once built, developers can install their locally built wheel: ``pip install nki.whl``. This will replace the default NKI Compiler that is installed with the Neuron SDK package. The local wheel will then be registered to handle subsequent ``@nki.jit`` decorators and will be picked up and integrated with the rest of the Neuron Graph compiler flow.
 
