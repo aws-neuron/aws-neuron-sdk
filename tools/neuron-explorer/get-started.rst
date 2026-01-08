@@ -76,7 +76,7 @@ Start the Neuron Explorer web servers using the following command:
 
 .. code-block:: bash
 
-   neuron-explorer view -v 2 --data-path ./parquet_files --ui-mode latest
+   neuron-explorer view -v 2 --data-path ./parquet_files
 
 This command starts:
 
