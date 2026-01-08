@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <sys/types.h>
-#include <neuron/ndl.h>
+#include <ndl/ndl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,7 +46,7 @@ enum {
 
 // Aggregated data for all chunks of the same type/location
 typedef struct nds_mem_usage_info {
-    uint64_t total_size;        // Total size
+    size_t total_size;        // Total size
     uint32_t chunk_count;       // Number chunks that make up the total size
 } nds_mem_usage_info_t;
 
@@ -128,46 +128,46 @@ int nds_close(nds_instance_t *inst);
 /** Increments a simple per-nc counter
  *
  * @param inst[in]              - NDS instance
- * @param nc_index[in]          - Neuroncore index
+ * @param pnc_index[in]         - Neuroncore index
  * @param counter_index[in]     - Counter index
  * @param increment[in]         - Amount to increment
  *
  * @return 0 on success.
  */
-int nds_increment_nc_counter(nds_instance_t *inst, int nc_index, uint32_t counter_index, uint64_t increment);
+int nds_increment_nc_counter(nds_instance_t *inst, int pnc_index, uint32_t counter_index, uint64_t increment);
 
 /** Decrements a simple per-nc counter
  *
  * @param inst[in]              - NDS instance
- * @param nc_index[in]          - Neuroncore index
+ * @param pnc_index[in]         - Neuroncore index
  * @param counter_index[in]     - Counter index
  * @param increment[in]         - Amount to increment
  *
  * @return 0 on success.
  */
-int nds_decrement_nc_counter(nds_instance_t *inst, int nc_index, uint32_t counter_index, uint64_t decrement);
+int nds_decrement_nc_counter(nds_instance_t *inst, int pnc_index, uint32_t counter_index, uint64_t decrement);
 
 /** Gets a simple per-nc counter
  *
  * @param inst[in]              - NDS instance
- * @param nc_index[in]          - Neuroncore index
+ * @param pnc_index[in]         - Neuroncore index
  * @param counter_index[in]     - Counter index
  * @param value[out]            - Counter value
  *
  * @return 0 on success.
  */
-int nds_get_nc_counter(nds_instance_t *inst, int nc_index, uint32_t counter_index, uint64_t *value);
+int nds_get_nc_counter(nds_instance_t *inst, int pnc_index, uint32_t counter_index, uint64_t *value);
 
 /** Sets a simple per-nc counter
  *
  * @param inst[in]              - NDS instance
- * @param nc_index[in]          - Neuroncore index
+ * @param pnc_index[in]         - Neuroncore index
  * @param counter_index[in]     - Counter index
  * @param value[in]             - Value to set the counter to
  *
  * @return 0 on success.
  */
-int nds_set_nc_counter(nds_instance_t *inst, int nc_index, uint32_t counter_index, uint64_t *value);
+int nds_set_nc_counter(nds_instance_t *inst, int pnc_index, uint32_t counter_index, uint64_t *value);
 
 /* --------------------------------------------
  * NDS Neuron Device Counters
