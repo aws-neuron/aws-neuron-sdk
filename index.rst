@@ -11,7 +11,7 @@ AWS Neuron Documentation
 
 * **For more details, see** :doc:`What is AWS Neuron? </about-neuron/what-is-neuron>` and :doc:`What's New in AWS Neuron? </about-neuron/whats-new>`
 
-* **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`
+* **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`. The current release is :doc:`version 2.27.1 </release-notes/2.27.1>`, released on January 14, 2026.
 
 .. admonition:: Join our Beta program
 

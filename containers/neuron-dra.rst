@@ -22,7 +22,51 @@ enables the scheduler to see the device attributes, allowing workloads to select
 achieve topology aware allocation. Hardware vendors determine which attributes are published for their hardware. The AWS
 Neuron DRA driver implements the kubelet plugin for DRA for AWS Trainium instances.
 
-For more information on DRA, please refer to `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_.
+For more information on DRA, refer to `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_.
+
+Where can I get the Neuron DRA Beta driver and resource templates?
+-------------------------------------------------------------------
+
+To review and download the individual Neuron DRA Beta driver installation scripts, Kubernetes manifests, and resource claim templates, visit this page: 
+
+* :doc:`/containers/files/index-dra`.
+
+You can also download all of the Neuron DRA files and scripts from the link below:
+
+.. grid:: 1
+   :gutter: 3
+
+   .. grid-item-card:: 
+      :class-card: sd-border-2
+
+      **Download the scripts and YAML files as a TAR/GZIP archive**
+      ^^^
+      :download:`Neuron DRA support files as .tar.gz </containers/files/neuron-dra-beta-reinvent.tar.gz>`
+
+Preserve the directory structure when you extract the archive. The driver installation script uses this relative folder structure to find the corresponding YAML files.
+
+**Directory structure**:
+
+.. code-block:: text
+
+   containers/files/
+              ├── manifests/
+              │   ├── clusterrole.yaml
+              │   ├── clusterrolebinding.yaml
+              │   ├── daemonset.yaml
+              │   ├── deviceclass.yaml
+              │   ├── namespace.yaml
+              │   └── serviceaccount.yaml
+              └── examples/
+                  ├── scripts/
+                  │   └── install-dra-driver.sh
+                  └── specs/
+                      ├── 1x4-connected-devices.yaml
+                      ├── 2-node-inference-us.yaml
+                      ├── 4-node-inference-us.yaml
+                      ├── all-devices.yaml
+                      ├── lnc-setting-trn2.yaml
+                      └── specific-driver-version.yaml
 
 What are the benefits of using DRA over device plugin?
 -------------------------------------------------------
@@ -165,6 +209,8 @@ Example 1 – Connected Neuron Devices
 This section will demonstrate how to run a workload that needs to request a subset of connected Neuron Devices from a trn2.48xlarge instance.
 Before DRA, this use case required using Neuron Scheduler Extension. With DRA, this allocation is enabled natively.
 
+* [:download:`Download example YAML file </containers/files/specs/1x4-connected-devices.yaml>`]
+
 The supported subsets include set of 1, 4, 8 or 16. Specifically, these are ``resource.aws.com/devicegroup1_id``, ``resource.aws.com/devicegroup4_id``,
 ``resource.aws.com/devicegroup8_id``, ``resource.aws.com/devicegroup16_id`` respectively.
 
@@ -227,6 +273,7 @@ Next step is to reference the ``ResourceClaimTemplate`` in a pod definition as s
      resourceClaims:
      - name: neurons
        resourceClaimTemplateName: 1x4-connected-neurons
+
 
 Deploy the above workload using ``kubectl apply``. When the pod is running, examine the related ``ResourceClaim`` using:
 
@@ -365,6 +412,9 @@ Example 2 - Dynamic LNC config
 This example shows how to set LNC per workload. Earlier, overriding LNC on a Node required a node template. With DRA, workloads can
 override default LNC via ``ResourceClaim.``
 
+* [:download:`Download example YAML file </containers/files/specs/lnc-setting-trn2.yaml>`]
+
+
 Apply the following workload definition:
 
 .. code-block:: bash
@@ -429,6 +479,8 @@ A trn2u.48xlarge Trn2 UltraServer has 4 Trn2 nodes interconnected by Neuron Link
 trn2u.48xlarge instances can be allocated in set of 1, 2, or 4. The Neuron DRA driver can utilize 1 or more ``ResourceClaimTemplate`` definitions to convey the
 desired size of the set. The ``ResourceClaimTemplate`` allows end users to specify "UltraServerConfig" to declare their intent to use all 4 nodes of
 the UltraServer. This configuration value is passed by the Neuron DRA driver to the Neuron runtime and collectives inside the container.
+
+* [:download:`Download example YAML file </containers/files/specs/4-node-inference-us.yaml>`]
 
 Example yaml for 4-node inference on trn2u.48xlarge:
 
@@ -542,3 +594,9 @@ Where can I learn more about how to put together RCT using CEL expressions?
 To learn more about RCTs, please visit `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_. To learn more
 about CEL expressions, please visit `CEL Language <https://cel.dev/>`_. Send us feedback on the beta and let us know which additional RCT examples you would like
 us to provide in the source code.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   Support Files </containers/files/index-dra>

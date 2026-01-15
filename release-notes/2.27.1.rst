@@ -1,0 +1,43 @@
+.. meta::
+    :description: Release notes for AWS Neuron SDK release v2.7.1
+    :date-modified: 01/14/2026
+
+
+AWS Neuron SDK Release Notes - v2.27.1
+=======================================
+
+**Release Date**: January 14, 2026   
+
+Release **2.27.1** of the AWS Neuron SDK includes bug fixes applied to the AWS Neuron SDK v2.27.0. See :ref:`the Neuron SDK v2.27.0 release notes <neuron-2-27-0-whatsnew>` for the full set of changes that shipped with the 2.27.0 release.
+
+What's Changed?
+----------------
+
+**Neuron DLAMIs**
+
+* Support for NKI has been added to all DLAMI virtual environments.
+
+
+Bug Fixes
+----------
+
+**NxD Inference**
+
+* Fixed stability issue affecting Llama 4 that may occur when changing model configuration.
+* Removed a debug print statement from the Qwen3-MoE model implementation.
+
+----
+
+For information about known issues in Neuron DLCs, see the :doc:`Neuron DLC component release notes </release-notes/containers/neuron-dlc>`.
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card::
+                :link: latest-neuron-release-artifacts
+                :link-type: ref
+                :class-card: sd-border-1
+        
+                **Neuron 2.27.1 release artifacts**
+                ^^^
+                The libraries and packages updated in this Neuron release.

@@ -282,14 +282,14 @@ Prefix Caching
 ^^^^^^^^^^^^^^^^
 
 Starting in Neuron SDK 2.24, prefix caching is supported on the AWS Neuron fork of vLLM. Prefix caching allows developers to improve TTFT by 
-re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching<nxdi_prefix_caching>` for more information on how to 
+re-using the KV Cache of the common shared prompts across inference requests. See :ref:`Prefix Caching <nxdi_prefix_caching>` for more information on how to 
 enable prefix caching with vLLM. 
 
 
 Examples
 --------
 
-For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials<nxdi-tutorials>`.
+For more in depth NxD Inference tutorials that include vLLM deployment steps, refer to :ref:`Tutorials <nxdi-tutorials-index>`.
 
 The following examples use `TinyLlama/TinyLlama-1.1B-Chat-v1.0 <https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0>`_
 

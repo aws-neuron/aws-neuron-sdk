@@ -10,6 +10,7 @@ Containers - FAQ, Troubleshooting & ReleaseNotes
     /release-notes/containers/neuron-containers
     /release-notes/containers/neuron-k8
 
-
-
-.. include:: /containers/faq-troubleshooting-releasenote.txt
+* :ref:`container-faq`
+* :ref:`container-troubleshooting`
+* :ref:`neuron-containers-release-notes`
+* :ref:`neuron-k8-rn`

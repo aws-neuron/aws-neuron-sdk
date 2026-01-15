@@ -1,0 +1,36 @@
+apiVersion: resource.k8s.io/v1beta1
+kind: ResourceClaimTemplate
+metadata:
+  name: driver-version-neuron
+spec:
+  spec:
+    devices:
+      requests:
+      - name: neurons
+        deviceClassName: neuron.aws.com
+        selectors:
+          - cel:
+              expression: "device.attributes['neuron.aws.com'].neuronDriverVersion == '2.24.7.0'"
+        allocationMode: All
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: nginx
+        image: public.ecr.aws/docker/library/nginx:alpine
+      resourceClaims:
+      - name: neurons
+        resourceClaimTemplateName: driver-version-neuron

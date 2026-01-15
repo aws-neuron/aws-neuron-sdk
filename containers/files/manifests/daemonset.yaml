@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: neuron-dra-driver-kubelet-plugin
+  namespace: neuron-dra-driver
+  labels:
+    app: neuron-dra-driver-kubelet-plugin
+spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: neuron-dra-driver-kubelet-plugin
+  template:
+    metadata:
+      labels:
+        app: neuron-dra-driver-kubelet-plugin
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node.kubernetes.io/instance-type
+                operator: In
+                values:
+                - trn1.2xlarge
+                - trn1.32xlarge
+                - trn1n.32xlarge
+                - trn2.3xlarge
+                - trn2.48xlarge
+                - trn2n.48xlarge
+              - key: eks.amazonaws.com/compute-type
+                operator: NotIn
+                values:
+                - fargate
+                - hybrid
+                - auto
+      serviceAccountName: neuron-dra-driver-sa
+      hostNetwork: true
+      containers:
+      - name: neuron-dra-driver
+        image: NEURON_DRA_IMAGE
+        imagePullPolicy: Always
+        command: ["k8s-neuron-dra-driver"]
+        # args:
+        # - --v=6
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
+        - name: CDI_ROOT
+          value: "/var/run/cdi"
+        - name: KUBELET_REGISTRAR_DIRECTORY_PATH
+          value: "/var/lib/kubelet/plugins_registry"
+        - name: KUBELET_PLUGINS_DIRECTORY_PATH
+          value: "/var/lib/kubelet/plugins"
+        - name: HEALTHCHECK_PORT
+          value: "51515"
+        - name: NEURON_DRA_DRIVER_EMULATION_MODE
+          value: "trn2u"
+        resources:
+          limits:
+            cpu: 20m
+            memory: 256Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: kubelet-plugins-dir
+          mountPath: /var/lib/kubelet/plugins
+        - name: kubelet-registry-dir
+          mountPath: /var/lib/kubelet/plugins_registry
+        - name: cdi-dir
+          mountPath: /var/run/cdi
+        livenessProbe:
+          grpc:
+            port: 51515
+            service: liveness
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+      volumes:
+      - name: kubelet-plugins-dir
+        hostPath:
+          path: /var/lib/kubelet/plugins
+      - name: kubelet-registry-dir
+        hostPath:
+          path: /var/lib/kubelet/plugins_registry
+      - name: cdi-dir
+        hostPath:
+          path: /var/run/cdi
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: aws.amazon.com/neuron
+        operator: Exists
+        effect: NoSchedule
+      - key: sagemaker.amazonaws.com/node-health-status
+        operator: Equal
+        value: Unschedulable
+        effect: NoSchedule
+      # - key: "kwok.x-k8s.io/node"
+      #   operator: "Exists"
+      #   effect: "NoSchedule"

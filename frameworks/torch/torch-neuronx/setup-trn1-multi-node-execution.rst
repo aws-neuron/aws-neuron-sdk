@@ -147,6 +147,16 @@ The software required for EFA operation is distributed via aws-efa-installer pac
     cd 
     sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
+Application execution environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running an application make sure the following environment variables are set:
+
+.. code-block:: bash
+
+    FI_PROVIDER=efa
+    FI_EFA_USE_DEVICE_RDMA=1
+    FI_EFA_FORK_SAFE=1  # only required when running on AL2
 
 Containers
 ^^^^^^^^^^
@@ -166,18 +176,6 @@ The location of the libraries is distribution specific:
 
     /opt/amazon/efa/lib   # Ubuntu
     /opt/amazon/efa/lib64 # AL2
-
-
-Application execution environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When running an application make sure the following environment variables are set:
-
-.. code-block:: bash
-
-    FI_PROVIDER=efa
-    FI_EFA_USE_DEVICE_RDMA=1
-    FI_EFA_FORK_SAFE=1  # only required when running on AL2
 
 
 Appendix - trn1 instance launch example script

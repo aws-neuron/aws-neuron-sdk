@@ -1,0 +1,41 @@
+apiVersion: resource.k8s.io/v1beta1
+kind: ResourceClaimTemplate
+metadata:
+  name: all-neurons-lnc-1
+spec:
+  spec:
+    devices:
+      requests:
+      - name: neurons
+        deviceClassName: neuron.aws.com
+        selectors:
+        - cel:
+            expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
+        allocationMode: All
+      config:
+      - requests: ["neurons"]
+        opaque:
+          driver: neuron.aws.com
+          parameters:
+            apiVersion: neuron.aws.com/v1alphav1
+            kind: NeuronConfig
+            logicalNeuronCore: 1
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod0
+  labels:
+    app: pod
+spec:
+  containers:
+  - name: ctr0
+    image: public.ecr.aws/ubuntu/ubuntu:22.04
+    command: ["bash", "-c"]
+    args: ["export; trap 'exit 0' TERM; sleep 9999 & wait"]
+    resources:
+      claims:
+      - name: neurons
+  resourceClaims:
+  - name: neurons
+    resourceClaimTemplateName: all-neurons-lnc-1

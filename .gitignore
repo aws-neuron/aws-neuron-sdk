@@ -2,10 +2,6 @@ _build/
 __pycache__/
 .venv/
 .DS_Store
-*.gz
-*.tar
-*.tar.gz
-*.tgz
 src/examples/pytorch/libtorch_demo.tar.gz
 *-checkpoint.ipynb
 .idea/

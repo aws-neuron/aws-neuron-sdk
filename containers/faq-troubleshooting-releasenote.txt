@@ -1,5 +1,0 @@
-* :ref:`container-faq`
-* :ref:`container-troubleshooting`
-* :ref:`neuron-containers-release-notes`
-* :ref:`neuron-k8-rn`
-

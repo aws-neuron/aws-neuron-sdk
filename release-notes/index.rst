@@ -1,18 +1,20 @@
 .. _neuron_release_notes:
 
 .. meta::
-   :description: The AWS Neuron SDK release notes home page. Current release version: 2.27.0.
+   :description: The AWS Neuron SDK release notes home page. Current release version: 2.27.1.
 
 AWS Neuron SDK Release Notes
 ============================
 
-**Last updated**:  December 19, 2025
+**Last updated**:  January 14, 2026
 
 .. toctree::
     :maxdepth: 1
     :hidden:
 
+    Neuron 2.27.1 </release-notes/2.27.1>
     Neuron 2.27.0 </release-notes/2.27.0/index>
+    Release artifacts </release-notes/releasecontent>
     Previous versions </release-notes/prev/rn>
 
 Current Release Notes
@@ -25,14 +27,14 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
 
    .. grid-item-card:: 
       :class-card: sd-border-2
-      :link: /release-notes/2.27.0/index
+      :link: /release-notes/2.27.1
       :link-type: doc
 
-      **Latest AWS Neuron SDK release: 2.27.0**
+      **Latest AWS Neuron SDK release: 2.27.1**
       ^^^
-      On **12/19/2025**, AWS released version **2.27.0** of the Neuron SDK.
+      On **01/14/2026**, AWS released version **2.27.1** of the Neuron SDK. This is a patch release that includes bug fixes applied to the Neuron SDK v2.27.0.
 
-      For more details, select this card and browse the full release notes.
+      For more details, select this card and browse the release notes.
 
 ----
 
@@ -50,6 +52,8 @@ Release notes for prior versions from the past 12 months.
 
    * - SDK version
      - Date released
+   * - :doc:`2.27.0 </release-notes/2.27.0/index>`
+     - 12/19/25
    * - :doc:`2.26.1 <prev/2.26.1>`
      - 10/29/25
    * - :ref:`2.26.0 <neuron-2-26-0-whatsnew>`
