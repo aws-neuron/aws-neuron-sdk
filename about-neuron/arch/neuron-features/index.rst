@@ -7,13 +7,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
 .. grid:: 2
       :gutter: 2
 
-      .. grid-item-card:: Collective communication
-            :link: collective-communication
-            :link-type: doc
-            :class-body: sphinx-design-class-title-small
-
-            High-performance communication primitives for distributed training and inference across multiple devices.
-
       .. grid-item-card:: Custom C++ operators
             :link: custom-c++-operators
             :link-type: doc
@@ -67,7 +60,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
     :maxdepth: 1
     :hidden:
 
-    Collective communication <collective-communication>
     Custom C++ operators <custom-c++-operators>
     Data types <data-types>
     Logical NeuronCore configuration <logical-neuroncore-config>

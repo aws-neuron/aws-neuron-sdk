@@ -255,11 +255,6 @@ Ending support in 2.25.0
 Previous releases
 -----------------
 
-
-* :doc:`Neuron 2.24.1 </release-notes/prev/rn.html#2-24-1>`
-* :doc:`Neuron 2.24.0 </release-notes/prev/rn.html#2-24>`
-* :doc:`Earlier releases </release-notes/prev/rn.html>`
-
-* :ref:`prev-rn`
-* :ref:`pre-release-content`
-* :ref:`prev-n1-rn`
+* :ref:`Neuron 2.24.1 <neuron-2-24-1-whatsnew>`
+* :ref:`Neuron 2.24.0 <neuron-2-24-0-whatsnew>`
+* :doc:`Earlier releases </release-notes/prev/rn>`

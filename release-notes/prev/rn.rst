@@ -10,12 +10,26 @@ Previous release notes (Neuron 2.x)
    Neuron 2.26.1 </release-notes/prev/2.26.1>
    Neuron 2.26.0 </release-notes/prev/2.26.0/index>
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
+   Component release notes </release-notes/prev/by-component/index>
 
 * **The latest Neuron release is 2.27.0, released on 12/19/2025.** Read the :doc:`2.27.0 release notes </release-notes/2.27.0/index>` for more details.
   
 .. contents:: Table of contents
    :local:
    :depth: 1
+
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card::
+                :link: /release-notes/prev/by-component/index
+                :link-type: doc
+                :class-card: sd-border-1
+        
+                **Neuron component release notes**
+                ^^^
+                Release notes by component for prior Neuron SDK versions.
 
 Neuron 2.26.1 (10/29/2025)
 --------------------------

@@ -16,6 +16,11 @@ NxD Inference Release Notes (``neuronx-distributed-inference``)
 
 This document lists the release notes for Neuronx Distributed Inference library.
 
+Neuronx Distributed Inference [0.7.15603] (Neuron 2.27.1 Release)
+-----------------------------------------------------------------------
+
+* Fixed stability issue affecting Llama 4 that may occur when changing model configuration.
+
 Neuronx Distributed Inference [0.4.7422] (Neuron 2.24.0 Release)
 -----------------------------------------------------------------------
 

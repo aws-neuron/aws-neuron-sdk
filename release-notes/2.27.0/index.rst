@@ -3,19 +3,37 @@
 
 .. meta::
    :description: The official release notes for the AWS Neuron SDK, version 2.27.0. Release date: 12/19/2025
+   :date-modified: 01/14/2026
 
+Neuron 2.27.0 Component Release Notes
+=====================================
+
+.. important:: Neuron 2.27.1 patch release
+        **January 14, 2026**
+        
+        A patch release, Neuron version 2.27.1, is available that includes a fix for an issue with Llama 4 models found in Neuron SDK version 2.27.0. For details, see :doc:`the Neuron SDK v2.27.1 release note </release-notes/2.27.1>`.
+
+----
 
 **On December 19, 2025, AWS Neuron released the 2.27.0 version of the Neuron SDK**. 
 
 This page provides detailed component release notes for the Neuron SDK 2.27.0. For a an overview of the release content, see :ref:`What's New in AWS Neuron <whats-new-2025-12-19-v2_27>`.
 
-
-----
-
-Neuron 2.27.0 Component Release Notes
-=====================================
+**Update for Neuron 2.27.1**: A patch release, Neuron version 2.27.1, is available that includes a fix for an issue with Llama 4 models found in Neuron SDK version 2.27.0. For details, see :doc:`the Neuron SDK v2.27.1 release note </release-notes/2.27.1>`.
 
 Select a card below to review detailed release notes for each component of the Neuron SDK version 2.27.0. These component release notes contain details on specific new and improved features, as well as breaking changes, bug fixes, and known issues for that component area of the Neuron SDK.
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card::
+                :link: latest-neuron-release-artifacts
+                :link-type: ref
+                :class-card: sd-border-1
+        
+                **Neuron 2.27.0 release artifacts**
+                ^^^
+                The libraries and packages updated in this Neuron release.
 
 .. grid:: 1 1 2 2
         :gutter: 2
@@ -110,13 +128,6 @@ Select a card below to review detailed release notes for each component of the N
                 +++
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
-        .. grid-item-card::
-                :link: latest-neuron-release-artifacts
-                :link-type: ref
-        
-                Neuron 2.27.0 release artifacts
-                ^^^
-                The libraries and packages updated in this release.
 
 NxD Core and NxD Training Updates for 2.27
 ------------------------------------------
