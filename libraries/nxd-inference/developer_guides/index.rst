@@ -19,14 +19,14 @@ Comprehensive guides for using NxD Inference (neuronx-distributed-inference) to 
     Custom Quantization </libraries/nxd-inference/developer_guides/custom-quantization>
     Disaggregated Inference </libraries/nxd-inference/developer_guides/disaggregated-inference>
     Feature Guide </libraries/nxd-inference/developer_guides/feature-guide>
-    Using FPEM </libraries/nxd-inference/developer_guides/how-to-use-fpem>
+    Using Pipeline Execution Mode </libraries/nxd-inference/developer_guides/how-to-use-fpem>
     LLM Benchmarking </libraries/nxd-inference/developer_guides/llm-inference-benchmarking-guide>
     Migrate from TNX </libraries/nxd-inference/developer_guides/migrate-from-tnx-to-nxdi>
     Model Reference </libraries/nxd-inference/developer_guides/model-reference>
     MoE Architecture </libraries/nxd-inference/developer_guides/moe-arch-deep-dive>
-    Examples Migration </libraries/nxd-inference/developer_guides/nxd-examples-migration-guide>
+    Migrate from NxD Core </libraries/nxd-inference/developer_guides/nxd-examples-migration-guide>
     Onboarding Models </libraries/nxd-inference/developer_guides/onboarding-models>
-    Performance Parameters </libraries/nxd-inference/developer_guides/performance-cli-params>
+    Performance Benchmarking CLI </libraries/nxd-inference/developer_guides/performance-cli-params>
     vLLM Guide (Legacy) </libraries/nxd-inference/developer_guides/vllm-user-guide>
     vLLM Guide v1 </libraries/nxd-inference/developer_guides/vllm-user-guide-v1>
     Weights Sharding </libraries/nxd-inference/developer_guides/weights-sharding-guide>

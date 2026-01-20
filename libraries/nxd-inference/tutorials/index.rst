@@ -17,7 +17,7 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
     Disaggregated Inference (1P1D) </libraries/nxd-inference/tutorials/disaggregated-inference-tutorial-1p1d>
     Disaggregated Inference </libraries/nxd-inference/tutorials/disaggregated-inference-tutorial>
     Flux Inference </libraries/nxd-inference/tutorials/flux-inference-tutorial>
-    Generating Results with Performance CLI </libraries/nxd-inference/tutorials/generating-results-with-performance-cli>
+    Benchmark using Performance CLI </libraries/nxd-inference/tutorials/generating-results-with-performance-cli>
     GPT-OSS 120B </libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial>
     Llama3.1 405B on Trn2 </libraries/nxd-inference/tutorials/trn2-llama3.1-405b-tutorial>
     Llama3.1 405B with Speculative Decoding </libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial>
