@@ -97,10 +97,11 @@ Inside the container, start the vLLM inference server:
    python -m vllm.entrypoints.openai.api_server \
    --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
    --max-num-seqs=4 \
-   --max-model-len=1024 \
-   --tensor-parallel-size=8 \
+   --max-model-len=128 \
+   --tensor-parallel-size=2 \
+   --block-size=32 \
+   --num-gpu-blocks-override=16 \
    --port=8080 \
-   --no-enable-prefix-caching \
    --additional-config='{"override_neuron_config":{"enable_bucketing":false}}'
 
 .. note::
