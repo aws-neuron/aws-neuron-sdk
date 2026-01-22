@@ -120,7 +120,7 @@ Run the following command to generate a Perfetto compatible file from the system
 
 .. code-block:: bash
 
-    neuron-profile view -d ./neuron_profiles --ignore-device-profile \
+    neuron-explorer view -d ./neuron_profiles --ignore-device-profile \
       --output-format perfetto
 
 The above command generates a file called ``system_profile.pftrace`` in your working directory.
@@ -188,9 +188,9 @@ To view the Neuron Profile Web UI, execute the ``view`` command to start the Neu
 
 .. code-block:: bash
 
-    $ neuron-profile view --data-path ./<workspace> --output-format parquet --ui-mode latest
+    $ neuron-explorer view --data-path ./<workspace> --output-format parquet
 
-``<workspace>`` is a path that neuron-profile will use for storing and managing profiles.
+``<workspace>`` is a path that neuron-explorer will use for storing and managing profiles.
 
 The above command also prints a URL that you can click to open the web UI:
 
@@ -198,7 +198,7 @@ The above command also prints a URL that you can click to open the web UI:
 
     View a list of profiles at http://localhost:3001/
 
-If ``neuron-profile view`` is run on a remote instance, you may need to use port forwarding to access the web UI. By default, ``neuron-profile`` creates a web server on port 3001 and the API server on port 3002. To enable connection to your browser on your local computer, you must to establish an SSH tunnel to both ports 3001 and 3002.
+If ``neuron-explorer view`` is run on a remote instance, you may need to use port forwarding to access the web UI. By default, ``neuron-explorer`` creates a web server on port 3001 and the API server on port 3002. To enable connection to your browser on your local computer, you must to establish an SSH tunnel to both ports 3001 and 3002.
 
 For example:
 

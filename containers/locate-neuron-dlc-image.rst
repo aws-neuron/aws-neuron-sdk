@@ -46,8 +46,9 @@ Inference Containers
       -
 
     * - HuggingFace Inference Containers
-      - | `HuggingFace Text Generation Inference (TGI) Containers <https:https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-text-generation-inference-tgi-containers>`_
-        | `HuggingFace Neuron Inference Containers <https:https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-inference-containers>`_
+      - | `HuggingFace Neuron Inference Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-inference-containers>`_
+        | `HuggingFace Neuron vLLM Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-vllm-containers>`_
+        | `HuggingFace Text Generation Inference (TGI) Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-text-generation-inference-tgi-containers>`_
       -
 
     * - Triton Inference Containers
@@ -73,8 +74,11 @@ Training Containers
       - :ref:`tutorial-training`
 
     * - HuggingFace Training Containers
-      - `HuggingFace Neuron Training Containers <https:https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-training-containers>`_
+      - `HuggingFace Neuron Training Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-training-containers>`_
       -
+
+.. note::
+   Latest HuggingFace Neuron containers are also available on the `HuggingFace Optimum website <https://huggingface.co/docs/optimum-neuron/en/containers#available-optimum-neuron-containers>`_.
 
 
 Getting started with Neuron DLC using Docker

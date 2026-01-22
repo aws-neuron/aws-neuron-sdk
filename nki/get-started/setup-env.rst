@@ -414,7 +414,7 @@ To test the NKI environment is set up and ready to use, a ``venv`` that contains
 
             .. code-block:: bash
 
-               source /opt/aws_neuronx_venv_pytorch_2_8/bin/activate
+               source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
 
          .. tab:: JAX
 
