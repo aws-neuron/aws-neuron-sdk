@@ -3,7 +3,7 @@
 Neuron Profiler User Guide
 ============================
 
-The Neuron Profiler ,``neuron-profile``, is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler and run on NeuronDevices.
+The Neuron Profiler, ``neuron-profile``, is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler and run on NeuronDevices.
 
 .. important::
 
