@@ -63,19 +63,19 @@ Virtual Environments pre-installed
     * - Neuron Framework/Libraries supported
       - Virtual Environment
 
-    * - PyTorch 2.9 Torch NeuronX, NxD Core (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 Torch NeuronX, NxD Core (Ubuntu 24.04 / Amazon Linux 2023) [1]_
       - /opt/aws_neuronx_venv_pytorch_2_9
 
-    * - PyTorch 2.9 NxD Training, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 NxD Training, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023) [1]_
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_training
 
-    * - PyTorch 2.9 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023) [1]_
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_inference
 
     * - JAX 0.7 NeuronX (Ubuntu 22.04 / Ubuntu 24.04 / Amazon Linux 2023)
       - /opt/aws_neuronx_venv_jax_0_7
 
-    * - vLLM 0.11.0 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - vLLM 0.11.0 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023) [1]_
       - /opt/aws_neuronx_venv_pytorch_inference_vllm
 
     * - PyTorch 2.8 Torch NeuronX, NxD Core (Ubuntu 22.04)
@@ -90,6 +90,10 @@ Virtual Environments pre-installed
 
 We have included a setup script that installs required dependencies for the package within the PyTorch 2.8 and 2.9 NxD Training virtual environment. To run this script,
 activate the virtual environment and run ``setup_nxdt.sh`` and this will run :ref:`the setup steps here <nxdt_installation_guide>`.
+
+.. [1] **Known Issue (Amazon Linux 2023):** PyTorch 2.9 and vLLM environments on Amazon Linux 2023 may fail with 
+   ``GLIBC_2.35 not found`` error due to GLIBC version incompatibility. Use Ubuntu 24.04 DLAMI as a workaround.
+   See :ref:`GLIBC compatibility issue <glibc-compatibility-issue-on-amazon-linux-2023>` for details.
 
 You can easily get started with the multi-framework DLAMI through AWS console by following this :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`. If you are looking to 
 use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
