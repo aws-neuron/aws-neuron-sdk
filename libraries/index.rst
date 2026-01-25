@@ -27,7 +27,7 @@ About NxD Core Libraries
 NxD Core libraries provide distributed training and inference mechanisms for Neuron devices with XLA-friendly implementations. This includes:
         
 * :doc:`Tensor Parallel (TP) sharding </libraries/neuronx-distributed/ptl_developer_guide>` (:doc:`Overview </libraries/neuronx-distributed/tensor_parallelism_overview>`)
-* :doc:`Pipeline Parallel (PP) support </libraries/neuronx-distributed/pp_developer_guide>` (:doc:`Overview </libraries/neuronx-distributed/pipeline_parallelism_overview`)
+* :doc:`Pipeline Parallel (PP) support </libraries/neuronx-distributed/pp_developer_guide>` (:doc:`Overview </libraries/neuronx-distributed/pipeline_parallelism_overview>`)
 * :doc:`Model activation memory reduction support </libraries/neuronx-distributed/activation_memory_reduction_developer_guide>` (:doc:`Overview </libraries/neuronx-distributed/activation_memory_reduction>`)
 * Model partitioning across devices
 * XLA-optimized distributed operations
