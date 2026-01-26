@@ -22,7 +22,7 @@ What this means for your deployment:
 * As a best practice to prevent unrestricted access to host physical memory by any user/application, we recommend implementing a permission model where:
 
    * A dedicated system group owns the device nodes
-   * Only explicitly authorized user are added to this group
+   * Only explicitly authorized users are added to this group
    * Device permissions prevent access by users outside the group
   
 Customer responsibility: Ensure that only trusted applications have access to Tranium devices on Trainium instances. For more information, see `the AWS Shared Responsibility Model <https://aws.amazon.com/compliance/shared-responsibility-model/>`__.
