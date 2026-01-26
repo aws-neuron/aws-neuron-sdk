@@ -12,7 +12,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 # directories
 neuron1_dir = ['n1']
 neuronx_dir = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','neuron-customops']
-common_dir = ['tools','neuron-runtime','release-notes','containers','general','compiler','frameworks','src']
+common_dir = ['tools','neuron-runtime','release-notes','containers','compiler','frameworks','src','about-neuron']
 text_template = '**This document is relevant for**: '
 add_inf1_tag = ['about-neuron/arch',
                 'about-neuron/arch/index',
@@ -24,6 +24,7 @@ add_inf1_tag = ['about-neuron/arch',
                 ]
 add_trn1_tag = ['frameworks/neuron-customops/','frameworks/torch/inference-torch-neuronx', 'libraries/nemo-megatron/', 'libraries/nxd-training/']
 add_trn2_tag = ['libraries/nxd-training/', 'about-neuron/models/']
+add_trn3_tag = ['about-neuron/arch/neuron-hardware/neuron-core-v4','about-neuron/arch/neuron-hardware/trn3-arch']
 add_neuronx_tag = ['frameworks/torch/torch-neuronx/','frameworks/tensorflow/tensorflow-neuronx/','frameworks/torch/inference-torch-neuronx/','libraries/transformers-neuronx/','libraries/neuronx-distributed/','libraries/nxd-training', 'setup/tensorflow-neuronx']
 clear_inf1_tag = ['about-neuron/arch/neuron-features/neuron-caching',
                 'about-neuron/arch/neuron-features/eager-debug-mode',
@@ -79,11 +80,13 @@ clear_inf1_tag = ['about-neuron/arch/neuron-features/neuron-caching',
                  'frameworks/jax/',
                  'about-neuron/models/training-inference-trn2-samples',
                  'about-neuron/arch/neuron-hardware/trn2-arch',
+                 'about-neuron/arch/neuron-hardware/trn3-arch',
                  'about-neuron/arch/neuron-hardware/neuron-core-v3',
+                 'about-neuron/arch/neuron-hardware/neuron-core-v4',
                  '/about-neuron/announcements/neuron2.x/announce-neuron-trn2',
                  '/about-neuron/arch/neuron-features/logical-neuroncore-config',
                  '/libraries/neuronx-distributed/context_parallelism_overview',
-                 'libraries/nxd-training/'
+                 'libraries/nxd-training/',
                 ]
 
 clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
@@ -99,10 +102,11 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'about-neuron/models/training-inference-trn2-samples',
                   'about-neuron/arch/neuron-hardware/trn2-arch',
                   'about-neuron/arch/neuron-hardware/neuron-core-v3', 
-                  '/about-neuron/announcements/neuron2.x/announce-neuron-trn2',
-                  '/about-neuron/arch/neuron-features/logical-neuroncore-config',
+                  'about-neuron/announcements/neuron2.x/announce-neuron-trn2',
+                  'about-neuron/arch/neuron-features/logical-neuroncore-config',
                   'libraries/nxd-training/',
-                  '/about-neuron/arch/neuron-hardware/neuron-core-v4'
+                  'about-neuron/arch/neuron-hardware/trn3-arch',
+                  'about-neuron/arch/neuron-hardware/neuron-core-v4'
                ]
 
 
@@ -111,8 +115,10 @@ clear_trn1_tag = [ 'about-neuron/arch/neuron-hardware/inf2-arch',
                     'about-neuron/benchmarks/inf2/inf2-performance',
                     'about-neuron/models/training-inference-trn2-samples',
                     'about-neuron/arch/neuron-hardware/trn2-arch',
+                    'about-neuron/arch/neuron-hardware/trn3-arch',
                     'about-neuron/arch/neuron-hardware/trainium2',
                     'about-neuron/arch/neuron-hardware/neuron-core-v3',
+                    'about-neuron/arch/neuron-hardware/neuron-core-v4',
                     '/about-neuron/announcements/neuron2.x/announce-neuron-trn2',
                     '/about-neuron/arch/neuron-features/logical-neuroncore-config'
                ]
@@ -128,6 +134,8 @@ clear_trn2_tag = [ 'frameworks/tensorflow/',
                   'about-neuron/models/training-trn1-samples',
                   'about-neuron/arch/neuron-hardware/trainium',
                   'about-neuron/arch/neuron-hardware/neuron-core-v2',
+                  'about-neuron/arch/neuron-hardware/neuron-core-v4',
+                  'about-neuron/arch/neuron-hardware/trn3-arch',
                   '/libraries/neuronx-distributed/context_parallelism_overview',
                 ]
 clear_trn3_tag = [ 'frameworks/tensorflow/',
@@ -141,6 +149,7 @@ clear_trn3_tag = [ 'frameworks/tensorflow/',
                   'about-neuron/models/training-trn1-samples',
                   'about-neuron/arch/neuron-hardware/trainium',
                   'about-neuron/arch/neuron-hardware/neuron-core-v2',
+                  'about-neuron/arch/neuron-hardware/neuron-core-v3',
                   '/libraries/neuronx-distributed/context_parallelism_overview',
                  ]
 
@@ -232,6 +241,15 @@ class NeuronTag(SphinxDirective):
                 return_instances.append('Trn2')
                 return_instances.append('Trn3')
                 return_instances.append('Inf2')
+
+        if in_list(cur_file, add_trn2_tag):
+            if 'Trn2' not in return_instances:
+                return_instances.append('Trn2')
+                return_instances.append('Trn3')
+
+        if in_list(cur_file, add_trn3_tag):
+            if 'Trn3' not in return_instances:
+                return_instances.append('Trn3')
 
         if in_list(cur_file, add_neuronx_tag):
             if 'Trn1' not in return_instances:
