@@ -23,6 +23,17 @@ comes pre-installed with all the Neuron libraries including Neuron compiler and 
   Neuron DLAMIs released with version 2.26.1 no longer support ``Inf1`` instance types due to an incompatibility with the Neuron driver.
   If you'd like to run ``Inf1`` workloads, use previous DLAMIs released up to SDK version 2.26.
 
+.. note::
+  AL2023 DLAMIs released with version 2.27.1 no longer support ``PyTorch 2.9+`` due to an incompatibility issue with the default GLIB.c installed on AL2023.
+  PyTorch requires GLIB.c 2.35+ and upgrading the version within AL2023 can break other system dependencies. This is the error message:
+  
+  ``ImportError: /lib64/libm.so.6: version `GLIBC_2.35' not found``
+
+  Since the latest vLLM version depends on 
+  PyTorch 2.9 we have also removed that environment from the DLAMI.
+  
+  For a workaround, use the latest Ubuntu based AMIs instead.
+
 Multi Framework DLAMIs supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -75,7 +86,7 @@ Virtual Environments pre-installed
     * - JAX 0.7 NeuronX (Ubuntu 22.04 / Ubuntu 24.04 / Amazon Linux 2023)
       - /opt/aws_neuronx_venv_jax_0_7
 
-    * - vLLM 0.11.0 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - vLLM 0.13.0 NxD Inference, Torch NeuronX (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_inference_vllm
 
     * - PyTorch 2.8 Torch NeuronX, NxD Core (Ubuntu 22.04)
@@ -134,12 +145,7 @@ Single Framework DLAMIs supported
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning AMI Neuron JAX 0.7 (Ubuntu 24.04)
 
-    * - vLLM 0.11.0
-      - Amazon Linux 2023
-      - Inf2, Trn1, Trn1n, Trn2, Trn3
-      - Deep Learning AMI Neuron PyTorch Inference vLLM (Amazon Linux 2023)
-
-    * - vLLM 0.11.0
+    * - vLLM 0.13.0
       - Ubuntu 24.04
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning AMI Neuron PyTorch Inference vLLM (Ubuntu 24.04)
@@ -174,8 +180,8 @@ Virtual Environments pre-installed
       - JAX NeuronX 0.7
       - /opt/aws_neuronx_venv_jax_0_7
 
-    * - Deep Learning AMI Neuron PyTorch Inference vLLM (Ubuntu 24.04, Amazon Linux 2023) 
-      - vLLM NeuronX 0.11.0
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM (Ubuntu 24.04) 
+      - vLLM NeuronX 0.13.0
       - /opt/aws_neuronx_venv_pytorch_inference_vllm
 
 
@@ -272,9 +278,6 @@ SSM Parameter Prefix
 
     * - Deep Learning AMI Neuron JAX 0.7 (Ubuntu 24.04)
       - /aws/service/neuron/dlami/jax-0.7/ubuntu-24.04
-
-    * - Deep Learning AMI Neuron PyTorch Inference vLLM (Amazon Linux 2023)
-      - /aws/service/neuron/dlami/pytorch-inference-vllm/amazon-linux-2023
 
     * - Deep Learning AMI Neuron PyTorch Inference vLLM (Ubuntu 24.04)
       - /aws/service/neuron/dlami/pytorch-inference-vllm/ubuntu-24.04
