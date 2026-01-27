@@ -1,6 +1,6 @@
 .. meta::
    :description: Learn how to deploy a vLLM server using preconfigured Neuron Deep Learning Container with on Trainium and Inferentia instances.
-   :date_updated: 08/18/2025
+   :date_updated: 01/26/2026
 
 .. _quickstart_vllm_dlc_deploy:
 
@@ -47,7 +47,7 @@ Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-infer
 
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.27.0 released DLC image tag such as ``0.11.0-neuronx-py312-sdk2.27.0-ubuntu24.04``
+For example, replace ``<image_tag>`` with an SDK 2.27.1 released DLC image tag such as ``0.13.0-neuronx-py312-sdk2.27.1-ubuntu24.04``
 
 Step 2: Start the Docker container
 -----------------------------------
