@@ -7,6 +7,16 @@ Amazon EC2 Trn3 Architecture
 Amazon EC2 **Trn3** instances are accelerated computing instances powered by Trainium3 AI chips, purpose-built for high-performance deep learning training and inference. Trn3 is available in two UltraServer scale-up configurations: Gen1 with 64 Trainium3 chips per UltraServer, and Gen2 with 144 chips per UltraServer. Both configurations use NeuronSwitch-v1 interconnect technology to enable all-to-all connectivity between chips, especially optimized for workloads that leverage all-to-all communication patterns, such as Mixture of Experts models and autoregressive inference serving.
 
 =====================
+Trn3 Gen1 UltraServer
+=====================
+
+The EC2 Trn3 Gen1 UltraServers deliver 161 PetaFLOPS of dense MXFP8 compute, 314 TB/s of HBM bandwidth, and 9TB of HBM capacity. Each UltraServer consists of four servers with 16 Trainium3 devices per server. Therefore, the UltraServer integrates a total of 64 Trainium3 devices into a single scale-up domain, interconnected via our latest-generation NeuronLink-v4 and the newly introduced NeuronSwitch-v1. The chip-to-chip topology features an all-to-all connectivity design, replacing the previous 2D-torus architecture. This all-to-all topology is optimized for workloads that require efficient all-to-all communication patterns or ultra-low latency collectives, including Mixture of Experts models and autoregressive inference serving. The following diagram illustrates the Trn3 Gen1 UltraServer connectivity.
+
+.. image:: /images/architecture/trn3/trn3-ultraserver-gen1.png
+    :align: center
+
+
+=====================
 Trn3 Gen2 UltraServer
 =====================
 
