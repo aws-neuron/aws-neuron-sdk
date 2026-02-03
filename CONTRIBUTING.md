@@ -28,6 +28,19 @@ Contributions via pull requests are much appreciated. Before sending us a pull r
 
 **Important**: Currently, local doc builds require a Python 3.9 environment. If you are on MacOS, you can install it from the terminal with `brew install python@3.9`. Add it to your working path with `brew link python@3.9` and confirm it works by running `python3.9 --version`.
 
+### Docker Build
+
+If you don't have Python 3.9/3.10 or a compatible gcc toolchain, use the Docker workflow:
+
+```bash
+./build.sh build   # Build Docker image (first time only)
+./build.sh html    # Build HTML docs to _build/html/
+./build.sh shell   # Interactive shell for debugging
+./build.sh clean   # Remove _build/ directory
+```
+
+### Manual Build
+
 To send us a pull request, please:
 
 1. Clone the repository locally:
