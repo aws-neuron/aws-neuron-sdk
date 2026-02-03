@@ -210,10 +210,5 @@ Known issues: Samples
 Previous releases
 -----------------
 
-* :doc:`Neuron 2.25.0 </release-notes/prev/2.25.0/>`
-* :doc:`Neuron 2.24.0 </release-notes/prev/rn.html#2-24>`
+* :doc:`Neuron 2.25.0 </release-notes/prev/2.25.0/index>`
 * :doc:`Earlier releases </release-notes/prev/rn.html>`
-
-* :ref:`prev-rn`
-* :ref:`pre-release-content`
-* :ref:`prev-n1-rn`

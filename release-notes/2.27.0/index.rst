@@ -151,8 +151,7 @@ Known issues: Samples
 Previous releases
 -----------------
 
-* `Neuron 2.26.0 </release-notes/prev/2.26.0/>`_
-* `Neuron 2.25.0 </release-notes/prev/2.25.0/>`_
-* `Neuron 2.24.0 </release-notes/prev/rn.html#2-24>`_
-* `Earlier releases </release-notes/prev/rn.html>`_
+* :doc:`Neuron 2.26.0 </release-notes/prev/2.26.0/index>`
+* :doc:`Neuron 2.25.0 </release-notes/prev/2.25.0/index>`
+* :doc:`Earlier releases </release-notes/prev/rn.html>`
 
