@@ -196,5 +196,5 @@ of reinterpret cast from ``INT32`` to ``BF16``.
    cast_to_bf16 = t.ap(pattern=[
      [512, 128], [1, 512]
     ], # notice the number of elements is doubled due to dtype size change
-   offset = 0) # cast_to_bf16 has shape (128, 512)
+   offset = 0, dtype=nl.bfloat16) # cast_to_bf16 has shape (128, 512)
 
