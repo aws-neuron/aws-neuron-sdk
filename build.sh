@@ -9,7 +9,7 @@ case "${1:-build}" in
     docker build -t "$IMAGE_NAME" .
     ;;
   html)
-    docker run --rm -v "$(pwd):/docs" "$IMAGE_NAME" -c "sphinx-build -b html . _build/html"
+    docker run --rm -v "$(pwd):/docs" "$IMAGE_NAME" -c "sphinx-build -b html . _build/html -j auto"
     ;;
   shell)
     docker run --rm -it -v "$(pwd):/docs" "$IMAGE_NAME"
