@@ -97,6 +97,30 @@ It is also possible to run a distributed job while only capturing a profile for 
     profile_rank_5.ntff
 
 
+Providing per-worker inputs
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, ``neuron-profile capture`` uses all-zero inputs or a single set of inputs specified via positional arguments. For multi-worker jobs where each worker needs different inputs, use the ``--multi-input`` (``-m``) option to specify a file that maps inputs to each worker.
+
+Each line in the multi-input file corresponds to one worker and follows the same format as the positional ``inputs`` argument (``<NAME> <FILE_PATH>`` pairs separated by spaces). For example, for a 2-worker job:
+
+::
+
+    # inputs.txt
+    IN1 worker0_x.npy IN2 worker0_y.npy
+    IN1 worker1_x.npy IN2 worker1_y.npy
+
+Then capture the profile with:
+
+::
+
+    $ neuron-profile capture -n file.neff -m inputs.txt --collectives-workers-per-node 2 -s output/profile.ntff
+
+.. note::
+
+    The ``--multi-input`` option cannot be used together with the positional ``inputs`` argument.
+
+
 Capturing profiles for multi-node jobs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 For multi-node jobs, ``neuron-profile`` must be invoked on each node using the ``collectives-worker-start-id`` to specify the global index of the first worker on the given
@@ -522,6 +546,8 @@ CLI reference
 
 
     The following ``neuron-profile capture`` arguments are only relevant for multi-worker jobs
+
+    - :option:`-m,--multi-input` (string): path to a file that describes the input list for each requested worker. Each line in the file should correspond to one worker and follow the same format as the ``inputs`` positional argument (i.e. ``<NAME> <FILE_PATH>`` pairs separated by spaces). Cannot be used together with the ``inputs`` positional argument. If ``inputs`` is used instead, all workers will use the same inputs.
 
     - :option:`--collectives-profile-id` (string): worker id which will be profiled. Passing ``all`` profiles all workers. (default: ``all``)
 
