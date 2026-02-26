@@ -20,39 +20,45 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - 2.27.0
      - 2.15.54.0
    * - :doc:`Neuron Containers <containers>`
-     - 2.27.0
-     - N/A
+     - 2.28.0
+     - 2.28.0
    * - :doc:`Neuron Developer Tools <dev-tools>`
-     - 2.27.0
-     - N/A
+     - 2.28.0
+     - 2.28.0
    * - :doc:`Neuron DLAMI <dlamis>`
-     - 2.27.1
-     - N/A
+     - 2.28.0
+     - 2.28.0
    * - :doc:`JAX NeuronX <jax>`
      - 2.26.0
      - 0.6.2.1.0.*
    * - :doc:`NKI Library <nki-lib>`
-     - 2.270.0
-     - N/A
+     - 2.28.0
+     - 2.28.0
    * - :doc:`Neuron Kernel Interface <nki>`
-     - 2.27.0
-     - Beta 2
+     - 2.28.0
+     - Beta 2 (0.2.0)
    * - :doc:`NxD Core <nxd-core>`
      - 2.26.0
      - 0.15.22259
    * - :doc:`NxD Inference <nxd-inference>`
-     - 2.27.1
-     - 0.7.15603
+     - 2.28.0
+     - 0.8.16251
    * - :doc:`NxD Training <nxd-training>`
      - 2.25.0
      - 1.5.0
-   * - :doc:`PyTorch Neuron Framework <pytorch>`
-     - 2.27.0
-     - N/A
-   * - :doc:`Neuron Runtime <runtime>`
-     - 2.27.0
-     - 2.29.40.0
-
+   * - :doc:`PyTorch Neuron Framework (torch-neuronx) <pytorch>`
+     - 2.28.0
+     - 2.28.0
+   * - :doc:`Neuron Runtime Library <runtime>`
+     - 2.28.0
+     - 2.30.50.0
+   * - :doc:`Neuron Driver <runtime>`
+     - 2.28.0
+     - 2.26.5.0
+   * - :doc:`Neuron Collectives <runtime>`
+     - 2.28.0
+     - 2.30.58.0
+  
 * For older components and features that have not been updated recently or are out of support, see :doc:`../archive/index`.
 
 .. toctree::
