@@ -5,7 +5,7 @@
 AI Recommendation Viewer
 =========================
 
-The AI Recommendation Viewer helps users identify and understand bottlenecks and optimization opportunities for NKI kernels through AI-powered analysis of the user's profile and source code. Users receive actionable recommendations through the Neuron Explorer UI, CLI, or via their IDE. Each report provides the top 2-3 optimization opportunities ranked by effort and impact, including the symptom with quantified metrics, the optimization with implementation guidance, expected speedup estimates, and implementation tradeoffs. 
+In this guide, you'll learn how to use the AI Recommendation Viewer to identify and understand bottlenecks and optimization opportunities for NKI kernels through AI-powered analysis of the user's profile and source code. Users receive actionable recommendations through the Neuron Explorer UI, CLI, or via their IDE. Each report provides the top 2-3 optimization opportunities ranked by effort and impact, including the symptom with quantified metrics, the optimization with implementation guidance, expected speedup estimates, and implementation tradeoffs. 
 
 The feature is entirely opt-in and only enabled for profiles that the user explicitly requests a recommendation for.
 

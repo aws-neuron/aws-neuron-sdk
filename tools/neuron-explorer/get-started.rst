@@ -7,7 +7,7 @@
 Get Started with Neuron Explorer
 ========================================
 
-Neuron Explorer is a kernel profiling tool included with the AWS Neuron SDK that provides detailed performance insights for machine learning workloads running on AWS Trainium and Inferentia instances. This guide walks you through how to set up and launch Neuron Explorer, including the web-based UI for interactive analysis. By the end of this guide, you'll be able to visualize and analyze performance data for your models directly in your browser.
+In this guide, you'll learn how to set up and launch Neuron Explorer, including the web-based UI for interactive analysis. By the end of this guide, you'll be able to visualize and analyze performance data for your models directly in your browser.
 
 Overview
 ---------

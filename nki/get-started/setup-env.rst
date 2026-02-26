@@ -420,7 +420,7 @@ To test the NKI environment is set up and ready to use, a ``venv`` that contains
 
             .. code-block:: bash
 
-               source /opt/aws_neuronx_venv_jax_0_6/bin/activate
+               source /opt/aws_neuronx_venv_jax_0_7/bin/activate
 
    .. tab:: Standard AMI
       

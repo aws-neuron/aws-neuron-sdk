@@ -7,10 +7,8 @@ Containers - FAQ, Troubleshooting & ReleaseNotes
 
     FAQ </containers/faq>
     troubleshooting
-    /release-notes/containers/neuron-containers
-    /release-notes/containers/neuron-k8
+    /release-notes/components/containers
 
 * :ref:`container-faq`
 * :ref:`container-troubleshooting`
-* :ref:`neuron-containers-release-notes`
-* :ref:`neuron-k8-rn`
+* :ref:`containers_rn`

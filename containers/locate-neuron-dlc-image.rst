@@ -70,7 +70,8 @@ Training Containers
       - Tutorial(s)
 
     * - Neuron Training Containers
-      - `Neuronx PyTorch Training Containers <https://github.com/aws-neuron/deep-learning-containers#pytorch-training-neuronx>`_
+      - | `Neuronx PyTorch Training Containers <https://github.com/aws-neuron/deep-learning-containers#pytorch-training-neuronx>`_
+        | `Neuronx Jax Training Containers <https://github.com/aws-neuron/deep-learning-containers#jax-training-neuronx>`_
       - :ref:`tutorial-training`
 
     * - HuggingFace Training Containers

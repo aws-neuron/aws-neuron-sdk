@@ -150,7 +150,7 @@ The following examples show how to use {{ data.model.display_name }} with Neuron
    :linenos:
    :emphasize-lines: 2,3{% for key, value in config.vllm.items() %}{% if key != "extra" %},{{ loop.index + 3 }}{% endif %}{% endfor %}
 
-   VLLM_NEURON_FRAMEWORK='neuronx-distributed-inference' python -m vllm.entrypoints.openai.api_server \
+   vllm serve \
       --model="~/models/{{ data.model.name }}/"{% for key, value in config.vllm.items() %}{% if key != "extra" %} \
       --{{ key | replace("_", "-") }}{% if value is sameas true %}{% elif value is mapping %}='{{ value | tojson | replace("True", "true") | replace("False", "false") }}'{% elif value is string %}="{{ value }}"{% else %}={{ value }}{% endif %}{% endif %}{% endfor %} \
       --port=8080 

@@ -5,7 +5,7 @@ Trn1/Trn1n Training Performance
 
 This section provides benchmark results for training various deep learning models on AWS Trn1 and Trn1n instances powered by AWS Trainium chips. The benchmarks cover a range of model architectures, including encoder models, decoder models, and vision transformers, demonstrating the performance capabilities of Trn1/Trn1n instances for different training workloads.
 
-**Last update: December 19th, 2025**
+**Last update: February 19th, 2026**
 
 .. contents:: Table of contents
    :local:

@@ -1,61 +1,75 @@
 .. _k8s-neuron-monitor:
 
-Neuron monitor is primary observability tool for neuron devices. For details of neuron monitor, please refer to the `neuron monitor guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html>`_. This tutorial describes deploying neuron monitor as a daemonset on the kubernetes cluster.
+Neuron Monitor is a monitoring solution that collects and exposes metrics from Neuron devices and the Neuron runtime. It provides visibility into hardware utilization, performance counters, memory usage, and device health status. The monitor can export metrics in formats compatible with popular observability platforms like Prometheus, enabling integration with existing monitoring and alerting infrastructure. This allows operators to track Neuron device performance, identify bottlenecks, and troubleshoot issues in production environments.
 
-Deploy Neuron Monitor Daemonset
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For detailed information about Neuron Monitor, see the `Neuron Monitor User Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html>`_.
 
-* Download the neuron monitor  yaml file. :download:`k8s-neuron-monitor-daemonset.yml </src/k8/k8s-neuron-monitor-daemonset.yml>`
+.. note::
 
-* Apply the Neuron monitor yaml to create a daemonset on the cluster with the following command
+    Neuron Monitor does not currently support environments using the Neuron DRA (Dynamic Resource Allocation) Driver.
 
-    .. code:: bash
+Deploy Neuron Monitor DaemonSet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        kubectl apply -f k8s-neuron-monitor.yml
+**Step 1: Download the Configuration**
 
-* Verify that neuron monitor daemonset is running
+Download the Neuron Monitor YAML file: :download:`k8s-neuron-monitor-daemonset.yml </src/k8/k8s-neuron-monitor-daemonset.yml>`
 
-    .. code:: bash
+**Step 2: Apply the Configuration**
 
-        kubectl get ds neuron-monitor --namespace neuron-monitor
+Apply the Neuron Monitor YAML to create a DaemonSet on the cluster:
 
-    Expected result (with 2 nodes in cluster):
+.. code:: bash
 
-    .. code:: bash
+    kubectl apply -f k8s-neuron-monitor-daemonset.yml
 
-        NAME                             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-        neuron-monitor                     2         2         2       2            2           <none>          27h
+**Step 3: Verify Installation**
 
+Verify that the Neuron Monitor DaemonSet is running:
 
-* Get the neuron-monitor pod names
+.. code:: bash
 
-    .. code:: bash
+    kubectl get ds neuron-monitor --namespace neuron-monitor
 
-        kubectl get pods
+Expected output (example with 2 nodes in cluster):
 
-    Expected result
+.. code:: bash
 
-    .. code:: bash
+    NAME             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+    neuron-monitor   2         2         2       2            2           <none>          27h
 
-        NAME                   READY   STATUS    RESTARTS   AGE
-        neuron-monitor-slsxf   1/1     Running   0          17m
-        neuron-monitor-wc4f5   1/1     Running   0          17m
+**Step 4: Get Pod Names**
 
+Retrieve the Neuron Monitor pod names:
 
-* Verify the prometheus endpoint is available
+.. code:: bash
 
-    .. code:: bash
+    kubectl get pods --namespace neuron-monitor
 
-        kubectl exec neuron-monitor-wc4f5 -- wget -q --output-document - http://127.0.0.1:8000
+Expected output:
 
-    Expected result
+.. code:: bash
 
-    .. code:: bash
+    NAME                   READY   STATUS    RESTARTS   AGE
+    neuron-monitor-slsxf   1/1     Running   0          17m
+    neuron-monitor-wc4f5   1/1     Running   0          17m
 
-        # HELP python_gc_objects_collected_total Objects collected during gc
-        # TYPE python_gc_objects_collected_total counter
-        python_gc_objects_collected_total{generation="0"} 362.0
-        python_gc_objects_collected_total{generation="1"} 0.0
-        python_gc_objects_collected_total{generation="2"} 0.0
-        # HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
-        # TYPE python_gc_objects_uncollectable_total counter
+**Step 5: Verify Prometheus Endpoint**
+
+Verify that the Prometheus metrics endpoint is available:
+
+.. code:: bash
+
+    kubectl exec neuron-monitor-wc4f5 --namespace neuron-monitor -- wget -q --output-document - http://127.0.0.1:8000
+
+Expected output (sample metrics):
+
+.. code:: bash
+
+    # HELP python_gc_objects_collected_total Objects collected during gc
+    # TYPE python_gc_objects_collected_total counter
+    python_gc_objects_collected_total{generation="0"} 362.0
+    python_gc_objects_collected_total{generation="1"} 0.0
+    python_gc_objects_collected_total{generation="2"} 0.0
+    # HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+    # TYPE python_gc_objects_uncollectable_total counter

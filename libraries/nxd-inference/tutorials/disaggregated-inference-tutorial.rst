@@ -38,12 +38,12 @@ You need:
    Use the AWS Neuron Deep Learning Container (DLC) to avoid manual setup. We'll use the vllm-inference-neuronx DLC in this guide.
 
 Select and Compile Your Model
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 DI works best with large models that have billions of parameters. We'll use ``meta-llama/Llama-3.3-70B-Instruct`` as an example. First, compile your model following the :ref:`nxdi-trn2-llama3.3-70b-dp-tutorial` guide. Make sure to set the correct input shapes and tensor parallelism.
 
 Set Up the etcd Server
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Connect to your EC2 proxy instance using SSH or Session Manager
 2. Run these commands:

@@ -254,6 +254,8 @@ this code produces the expected result.
 Many other examples of troublesome control flow have been fixed, which should 
 make using NKI easier and more intuitive.
 
+.. _nki-mask:
+
 Deprecation of masking
 ----------------------
 
@@ -572,7 +574,9 @@ method, to represent this.
 
 The ``scalar_offset`` is an SBUF value that specifies the index on the 
 ``indirect_dim`` of the tensor. For example, the code block above accesses 
-``batch_idx`` on the 0-th dimension of the tensor ``A``.
+``batch_idx`` on the 0-th dimension of the tensor ``A``. It is important 
+to note that the dimension is relative to the **bast tensor**, not relative
+to the **pattern** specified. 
 
 This example will access the memory from ``A`` starting at the element offset below.
 
@@ -587,6 +591,9 @@ In the example above, the access would start from:
 .. code-block:: python
 
    0 + batch_idx * 512
+
+Again, we should notice that ``512`` is read from the shape of the **base tensor**, not 
+from the access pattern. The shape of the access pattern is ``(128, 256)``.
 
 In conventional NumPy syntax, the above means that we will are accessing 
 ``A[batch_idx:batch_idx+128, 0:256]``. Writing this in the canonical loop form, 
@@ -603,7 +610,12 @@ Vector Dynamic Access
 ^^^^^^^^^^^^^^^^^^^^^
 
 Vector dynamic access is similar to that of scalar, except that we need to specify 
-the field ``vector_offset``. Currently only ``indirect_dim=0`` is supported.
+the field ``vector_offset``. **Currently, only ``indirect_dim=0`` is supported**. 
+The stride on the leading dimension must be the the total number of 
+elements to the right of the leading dimension in the **base tensor**, and the stride
+specified in the leading dimension of the pattern in the `.ap()` is currently ignored.
+We still recommend setting the stride properly so that code would still work if this
+limitation is lifted in the future.
 
 .. code-block:: python
 
@@ -623,7 +635,8 @@ the field ``vector_offset``. Currently only ``indirect_dim=0`` is supported.
 
      return result_hbm
 
-For this particular case, the semantics of the access are:
+For this particular case, the semantics of the access are the following. Note that,
+the stride on the dynamic dimension is directly read from the **base tensor**.
 
 .. code-block:: python
 
@@ -636,29 +649,8 @@ For this particular case, the semantics of the access are:
                   // static offsets
                   offset +
                   // AP with the indirect dimension number replaced
+                  // Note that the 512 is read from the shape of the **base** tensor.
                   1 * z + 512 * dynamic_idx
-                 ]
-
-In general, the semantics are as follows. (Note: ``indirect_dimension=0`` is the only supported configuration at the moment).
-
-.. code-block:: python
-
-   # For access pattern [s3, W],[s2, Z],[s1, Y],[s0,X], with vector offset indirect_tensor
-
-   indirect_dimension = 0
-
-   for w in range(W):
-     for z in range(Z):
-       for y in range(Y):
-         for x in range(X):
-           // HBM
-           dynamic_idx = indirect_tensor[w]
-           
-           memloc[
-                  // static offsets
-                  base_addr + static_start +
-                  // AP with the indirect dimension number replaced
-                  s0 * x + s1 * y + s2 * z + s3 * dynamic_idx
                  ]
 
 Further reading

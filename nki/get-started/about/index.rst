@@ -563,9 +563,9 @@ The diagram below shows the detailed compilation process inside the Neuron compi
       :maxdepth: 1
       :hidden:
 
-      Data Representation <data-representation-overview>
-      Direct Memory Access <nki-dma-overview>
-      Indexing <indexing-overview>
       Memory Hierarchy <memory-hierarchy-overview>
+      Data Representation <data-representation-overview>
+      Indexing <indexing-overview>
       Tiling <tiling-overview>
+      Direct Memory Access <nki-dma-overview>
       Logical Neuron Cores <lnc>

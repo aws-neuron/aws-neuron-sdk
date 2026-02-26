@@ -1,3 +1,8 @@
+.. meta::
+   :description: Learn how to insert NKI kernels as custom operators into PyTorch or JAX models with code examples.
+   :keywords: NKI, custom operator, PyTorch, JAX, kernel integration, Neuron Kernel Interface
+   :date-modified: 02/26/2026
+
 .. _nki_framework_custom_op:
 
 NKI Kernel as a Framework Custom Operator
@@ -18,7 +23,7 @@ multiply the result by the two input tensors element-wise.
 This effectively calculates: ``a * b * (a + b)``.
 
 We define a common NKI kernel for addition. This is a tiled variation of the addition kernel from
-:doc:`Quickstart: Build and Run a Kernel <get-started/quickstart-implement-run-kernel>`.
+:doc:`Quickstart: Build and Run a Kernel </nki/get-started/quickstart-implement-run-kernel>`.
 
 .. nki_example:: /nki/examples/tensor_addition/tensor_addition_nki_kernels.py
    :language: python

@@ -30,3 +30,4 @@ ipython
 sphinxcontrib.datatemplates
 sphinxcontrib.spelling
 sphinx-tabs
+exhale

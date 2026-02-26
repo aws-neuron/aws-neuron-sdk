@@ -1,27 +1,53 @@
+.. meta::
+   :description: Neuron Deep Learning AMIs (DLAMIs) are pre-configured Amazon Machine Images with the Neuron SDK for easy deployment on AWS Inferentia and Trainium instances.
+   :keywords: Neuron DLAMI, Deep Learning AMI, AWS Neuron SDK, Inferentia, Trainium, PyTorch, JAX, TensorFlow, vLLM, SSM Parameters
+   :date-modified: 01/22/2026
+
 .. _neuron-dlami-overview:
 
 Neuron DLAMI User Guide
 =======================
 
+This guide helps you select, configure, and deploy AWS Neuron Deep Learning AMIs (DLAMIs) for running machine learning workloads on AWS Inferentia and Trainium instances. Learn about the different DLAMI types available, pre-installed virtual environments for popular ML frameworks like PyTorch and JAX, and how to automate DLAMI deployment.
 
 .. contents:: Table of Contents
    :local:
    :depth: 2
 
-Neuron DLAMI Overview
----------------------
-Neuron DLAMIs are an easy way to get started on Neuron SDK as they come pre-installed with Neuron SDK. Neuron currently supports 3 types of DLAMIs, multi-framework DLAMIs , single framework DLAMIs and base DLAMIs
-to easily get started on single Neuron instance. Below sections describe the supported Neuron DLAMIs, corresponding virtual environments and easy way to retrieve the DLAMI id using SSM parameters.
+What are Neuron DLAMIs?
+------------------------
 
+Neuron Deep Learning AMIs (DLAMIs) are pre-configured Amazon Machine Images that provide the easiest way to get started with the AWS Neuron SDK. Each DLAMI comes with Neuron drivers, frameworks, and libraries pre-installed, enabling you to quickly launch and run deep learning workloads on AWS Inferentia and Trainium instances without manual setup.
+
+Neuron currently supports three types of DLAMIs to meet different deployment needs:
+
+* **Multi-Framework DLAMIs**: Support multiple ML frameworks (PyTorch, JAX, vLLM) with separate virtual environments for each
+* **Single Framework DLAMIs**: Optimized for a specific framework version with focused virtual environments
+* **Base DLAMIs**: Include only Neuron drivers, EFA, and tools - ideal for containerized applications and custom builds
+
+All Neuron DLAMIs support automated discovery through AWS Systems Manager (SSM) parameters, making them easy to integrate into cloud automation workflows and infrastructure-as-code deployments.
+
+.. note::
+  Starting with version 2.26.1, Neuron DLAMIs no longer support ``Inf1`` instance types due to an incompatibility with the Neuron driver.  
+  If you'd like to run ``Inf1`` workloads, use previous DLAMIs released up to SDK version 2.26.
+
+----
 
 Neuron Multi Framework DLAMI
 ----------------------------
-Neuron Deep Learning AMI (DLAMI) is a multi-framework DLAMI that supports multiple Neuron framework/libraries. Each DLAMI is pre-installed with Neuron drivers and support all Neuron instance types. Each virtual environment that corresponds to a specific Neuron framework/library 
-comes pre-installed with all the Neuron libraries including Neuron compiler and Neuron runtime needed for you to easily get started. 
+
+Neuron Multi-Framework DLAMIs provide the most comprehensive environment, supporting multiple ML frameworks and libraries in isolated virtual environments. Each DLAMI is pre-installed with Neuron drivers and supports all current Neuron instance types (Inf2, Trn1, Trn1n, Trn2, Trn3). This is the recommended option for teams working with multiple frameworks or exploring different ML libraries.
 
 .. note::
-  Neuron DLAMIs released with version 2.26.1 no longer support ``Inf1`` instance types due to an incompatibility with the Neuron driver.
-  If you'd like to run ``Inf1`` workloads, use previous DLAMIs released up to SDK version 2.26.
+  Starting with version 2.27.1, AL2023 DLAMIs no longer support ``PyTorch 2.9+`` due to an incompatibility issue with the default GLIB.c installed on AL2023.
+  PyTorch requires GLIB.c 2.35+ and upgrading the version within AL2023 can break other system dependencies. This is the error message:
+  
+  ``ImportError: /lib64/libm.so.6: version `GLIBC_2.35' not found``
+
+  Since the latest vLLM version depends on 
+  PyTorch 2.9 we have also removed that environment from the DLAMI.
+  
+  For a workaround, use the latest Ubuntu based AMIs instead.
 
 .. note::
   AL2023 DLAMIs released with version 2.27.1 no longer support ``PyTorch 2.9+`` due to an incompatibility issue with the default GLIB.c installed on AL2023.
@@ -47,10 +73,6 @@ Multi Framework DLAMIs supported
       - Neuron Instances Supported
       - DLAMI Name
 
-    * - Amazon Linux 2023
-      - Inf2, Trn1, Trn1n, Trn2, Trn3
-      - Deep Learning AMI Neuron (Amazon Linux 2023)
-
     * - Ubuntu 24.04
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning AMI Neuron (Ubuntu 24.04)
@@ -74,13 +96,13 @@ Virtual Environments pre-installed
     * - Neuron Framework/Libraries supported
       - Virtual Environment
 
-    * - PyTorch 2.9 Torch NeuronX, NxD Core (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 Torch NeuronX, NxD Core (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_2_9
 
-    * - PyTorch 2.9 NxD Training, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 NxD Training, Torch NeuronX (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_training
 
-    * - PyTorch 2.9 NxD Inference, Torch NeuronX (Ubuntu 24.04 / Amazon Linux 2023)
+    * - PyTorch 2.9 NxD Inference, Torch NeuronX (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_inference
 
     * - JAX 0.7 NeuronX (Ubuntu 22.04 / Ubuntu 24.04 / Amazon Linux 2023)
@@ -105,11 +127,12 @@ activate the virtual environment and run ``setup_nxdt.sh`` and this will run :re
 You can easily get started with the multi-framework DLAMI through AWS console by following this :ref:`setup guide <setup-ubuntu22-multi-framework-dlami>`. If you are looking to 
 use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
 
+----
+
 Neuron Single Framework DLAMI
 -----------------------------
 
-Neuron supports single framework DLAMIs that correspond to a single framework version (ex:- TensorFlow 2.10). Each DLAMI is pre-installed with Neuron drivers and supports all Neuron instance types. Each virtual environment corresponding to a specific
-Neuron framework/library comes pre-installed with all the relevant Neuron libraries including Neuron compiler and Neuron run-time.
+Neuron Single Framework DLAMIs are optimized for specific framework versions, providing a streamlined environment when you know exactly which framework you'll be using. Each DLAMI is pre-installed with Neuron drivers and supports all Neuron instance types. These DLAMIs are ideal for production deployments where you want a focused, framework-specific environment. 
 
 
 Single Framework DLAMIs supported
@@ -124,11 +147,6 @@ Single Framework DLAMIs supported
       - Operating System
       - Neuron Instances Supported
       - DLAMI Name
-
-    * - PyTorch 2.9
-      - Amazon Linux 2023
-      - Inf2, Trn1, Trn1n, Trn2, Trn3
-      - Deep Learning AMI Neuron PyTorch 2.9 (Amazon Linux 2023)
 
     * - PyTorch 2.9
       - Ubuntu 24.04
@@ -164,15 +182,15 @@ Virtual Environments pre-installed
       - Neuron Libraries supported
       - Virtual Environment
   
-    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04, Amazon Linux 2023) 
+    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
       - PyTorch 2.9 Torch NeuronX, NxD Core
       - /opt/aws_neuronx_venv_pytorch_2_9
 
-    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04, Amazon Linux 2023) 
+    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
       - PyTorch 2.9 NxD Training, Torch NeuronX
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_training
 
-    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04, Amazon Linux 2023) 
+    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
       - PyTorch 2.9 NxD Inference, Torch NeuronX
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_inference
 
@@ -188,9 +206,12 @@ Virtual Environments pre-installed
 Get started with the single framework DLAMI through AWS console by following one of the corresponding setup guides. If you want to
 use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to retrieve the latest DLAMI id.
 
+----
+
 Neuron Base DLAMI
 -----------------
-Neuron Base DLAMIs comes pre-installed with Neuron driver, EFA, and Neuron tools. Base DLAMIs might be relevant if you are extending the DLAMI for containerized applications.
+
+Neuron Base DLAMIs provide a minimal foundation with only the essential components: Neuron driver, EFA (Elastic Fabric Adapter), and Neuron tools. These DLAMIs are designed for advanced users who want to build custom environments, create containerized applications, or have specific framework version requirements not covered by the pre-configured DLAMIs.
 
 
 Base DLAMIs supported
@@ -221,12 +242,21 @@ Base DLAMIs supported
 
 .. _ssm-parameter-neuron-dlami:
 
+----
 
-Using SSM parameters to find DLAMI id and trigger Cloud Automation flows
-------------------------------------------------------------------------
+Using SSM Parameters for Cloud Automation
+------------------------------------------
 
-Neuron DLAMIs support AWS SSM parameters to easily find the Neuron DLAMI id.  Currently we only support finding the latest DLAMI id that corresponds to latest Neuron SDK release with SSM parameter support.
-In the future releases, we will add support for finding the DLAMI id using SSM parameters for a specific Neuron release.
+Neuron DLAMIs support AWS Systems Manager (SSM) parameters for automated DLAMI discovery and deployment. This enables you to always use the latest Neuron SDK release in your infrastructure-as-code templates, CI/CD pipelines, and auto-scaling configurations without hardcoding AMI IDs.
+
+SSM parameters provide several key benefits:
+
+* **Always up-to-date**: Automatically reference the latest DLAMI with the newest Neuron SDK release
+* **Infrastructure-as-code friendly**: Use in CloudFormation, Terraform, and other IaC tools
+* **Auto Scaling integration**: Update Auto Scaling groups without modifying launch templates
+* **Multi-region support**: Available across all AWS regions where Neuron instances are supported
+
+Currently, SSM parameters support finding the latest DLAMI ID for each DLAMI type. Support for finding specific Neuron SDK version DLAMIs will be added in future releases.
 
 
 Finding specific DLAMI image id with the latest neuron release
@@ -258,17 +288,11 @@ SSM Parameter Prefix
     * - AMI Name
       - SSM parameter Prefix
 
-    * - Deep Learning AMI Neuron (Amazon Linux 2023)
-      - /aws/service/neuron/dlami/multi-framework/amazon-linux-2023
-
     * - Deep Learning AMI Neuron (Ubuntu 24.04)
       - /aws/service/neuron/dlami/multi-framework/ubuntu-24.04
 
     * - Deep Learning AMI Neuron (Ubuntu 22.04)
       - /aws/service/neuron/dlami/multi-framework/ubuntu-22.04
-
-    * - Deep Learning AMI Neuron PyTorch 2.9 (Amazon Linux 2023)
-      - /aws/service/neuron/dlami/pytorch-2.9/amazon-linux-2023
 
     * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04)
       - /aws/service/neuron/dlami/pytorch-2.9/ubuntu-24.04
@@ -298,7 +322,7 @@ SSM Parameter Prefix
       - /aws/service/neuron/dlami/base/ubuntu-22.04
 
 
-For example to find the latest DLAMI id for Multi-Framework DLAMI (Ubuntu 22) you can use the following
+For example to find the latest DLAMI id for Multi-Framework DLAMI (Ubuntu 22.04) you can use the following:
 
 .. code-block::
 
@@ -326,8 +350,9 @@ You can also view the SSM parameters supported in Neuron through AWS parameter s
 Use SSM Parameter to launch instance directly via CLI
 """""""""""""""""""""""""""""""""""""""""""""""""""""
 
-You can use CLI to find the latest DLAMI id and also launch the instance simulataneuosly.
-Below code snippet shows an example of launching inf2 instance using multi-framework DLAMI
+You can use the AWS CLI to resolve the latest DLAMI ID and launch an instance in a single command. This is particularly useful for scripting and automation workflows.
+
+Below is an example of launching an Inf2 instance using the TensorFlow 2.10 single-framework DLAMI: 
 
 
 .. code-block::
@@ -345,17 +370,18 @@ Below code snippet shows an example of launching inf2 instance using multi-frame
 Use SSM alias in EC2 launch templates
 """""""""""""""""""""""""""""""""""""
 
+SSM Parameters can be used directly in EC2 launch templates, enabling your Auto Scaling groups to automatically use the latest AMI IDs without requiring updates to launch templates or creating new versions each time an AMI ID changes. This significantly simplifies AMI lifecycle management in production environments.
 
-SSM Parameters can also be used directly in launch templates. So, you can update your Auto Scaling groups to use new AMI IDs without needing to create new launch templates or new versions of launch templates each time an AMI ID changes.
-Ref: https://docs.aws.amazon.com/autoscaling/ec2/userguide/using-systems-manager-parameters.html
+For more information, see: https://docs.aws.amazon.com/autoscaling/ec2/userguide/using-systems-manager-parameters.html
 
-
+----
 
 Other Resources
 ---------------
 
-https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html
+Learn more about AWS Deep Learning AMIs and Systems Manager:
 
-https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html
-
-https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
+* `AWS Deep Learning AMI Developer Guide <https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html>`_
+* `AWS DLAMI Release Notes <https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html>`_
+* `AWS Systems Manager Parameter Store <https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html>`_
+* :doc:`Neuron DLAMI Release Notes </release-notes/components/dlamis>`

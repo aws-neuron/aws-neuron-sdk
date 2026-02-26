@@ -61,7 +61,9 @@ Layout considerations
 
 When working with multi-dimensional arrays in any platform, it is important to consider the physical memory layout of the arrays, or how data is stored in memory. For example, in the context of 1D linear memory, we can store a 2D array in a row-major layout or a column-major layout. Row-major layouts place elements within each row in contiguous memory, and column-major layouts place elements within each column in contiguous memory.
 
-As discussed in :ref:`Memory hierarchy <nki-about-memory>`, the on-chip memories, SBUF and PSUM, are arranged as 2D memory arrays. The first dimension is always the partition dimension ``P`` with 128 memory partitions that can be read and written in parallel by compute engines. The second dimension is the free dimension ``F`` where elements are read and written sequentially. A tensor is placed in SBUF and PSUM across both P and ``F``, with the same start offset across all ``P`` partitions used by the tensor. :numref:`Fig. %s <nki-fig-pm-layout>` below illustrates a default tensor layout. Note that a tile in NKI must map shape[0] to the partition dimension.
+As discussed in :ref:`Memory hierarchy <nki-about-memory>`, the on-chip memories, SBUF and PSUM, are arranged as 2D memory arrays. The first dimension is always the partition dimension ``P`` with 128 memory partitions that can be read and written in parallel by compute engines. The second dimension is the free dimension ``F`` where elements are read and written sequentially. A tensor is placed in SBUF and PSUM across both P and ``F``, with the same start offset across all ``P`` partitions used by the tensor. The figure below illustrates a default tensor layout. Note that a tile in NKI must map shape[0] to the partition dimension.
+
+.. _nki-fig-pm-layout:
 
 .. figure:: /nki/img/overviews/tiling-1.png
    :align: center

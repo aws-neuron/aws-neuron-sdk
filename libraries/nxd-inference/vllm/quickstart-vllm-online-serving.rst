@@ -1,15 +1,15 @@
 .. meta::
-   :description: Learn how to run your first offline vLLM batch inference job on AWS Neuron.
-   :date_updated: 2025-12-02
+   :description: Launch the vLLM OpenAI-compatible server on AWS Neuron for interactive inference.
+   :date_updated: 2025-01-15
 
 .. _quickstart-online-serving:
 
-Quickstart: Run offline inference with vLLM on Neuron
-=======================================================
+Quickstart: Serve models online with vLLM on Neuron
+===================================================
 
-This quickstart walks you through running vLLM in offline (batch) inference mode on AWS Neuron. You install the ``vllm-neuron`` plugin, generate text for a batch of prompts, and cache the compiled artifacts so reruns stay fast.
+This quickstart shows you how to launch the vLLM OpenAI-compatible API server on AWS Neuron. You install the ``vllm-neuron`` plugin, start the server, validate it with ``curl``, and call it from the OpenAI Python SDK.
 
-**This quickstart is for**: Developers who want to run offline/batch inference on Neuron without an API server  
+**This quickstart is for**: Developers who need an interactive, low-latency serving endpoint on Neuron  
 **Time to complete**: ~20 minutes
 
 Prerequisites
@@ -18,12 +18,12 @@ Prerequisites
 Before you begin, make sure you have:
 
 * An EC2 instance with Neuron cores and network access to Hugging Face Hub.
-* The Neuron SDK installed (see :ref:`Setup Instructions <nxdi-setup>`).
+* The Neuron SDK installed (see :ref:`Setup Instructions<nxdi-setup>`).
 * Python 3.10 or later with ``pip``.
 * Basic familiarity with running Python scripts in a virtual environment.
 
 .. note::
-   For the fastest setup, consider the vLLM Neuron Deep Learning Container (DLC) which bundles the SDK, vLLM, and dependencies. See :ref:`quickstart_vllm_dlc_deploy`.
+   For the fastest setup, consider the vLLM Neuron Deep Learning Container (DLC), which bundles the SDK, vLLM, and dependencies. See :ref:`quickstart_vllm_dlc_deploy`.
 
 Step 1: Install the ``vllm-neuron`` plugin
 -------------------------------------------
@@ -43,130 +43,139 @@ In this step, you install the Neuron-enabled vLLM plugin inside your Python envi
    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 
 .. important::
-   The ``--extra-index-url`` flag ensures Neuron-compatible wheels are pulled from the AWS repository.
+   The ``--extra-index-url`` flag pulls the Neuron-compatible wheels from the AWS repository.
 
 To confirm the install succeeded, run ``python -c "import vllm"`` and verify no errors display.
 
-Step 2: Run a batch inference job
-----------------------------------
+Step 2: Launch the API server
+-----------------------------
 
-In this step, you run a short Python script that generates completions for three prompts using the Llama 3.1 8B Instruct model.
+In this step, you start an OpenAI-compatible endpoint with a LLaMA model.
 
-.. tip::
-   **Before your first run**, set the ``NEURON_COMPILED_ARTIFACTS`` environment variable to enable caching. This lets subsequent runs skip the Neuron compilation phase and load instantly:
+.. code-block:: bash
 
-   .. code-block:: bash
+    export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
 
-      export NEURON_COMPILED_ARTIFACTS="./compiled_models"
+    vllm serve \
+      --model meta-llama/Llama-3.1-8B-Instruct \
+      --tensor-parallel-size 8 \
+      --max-model-len 128 \
+      --max-num-seqs 4 \
+      --no-enable-prefix-caching \
+      --port 8000 \
+      --additional-config '{
+        "override_neuron_config": {
+          "enable_bucketing": false
+        }
+      }'
 
-   After the first run completes, the ``compiled_models`` directory will contain the cached artifacts.
+Key arguments:
 
-.. code-block:: python
+* ``--tensor-parallel-size``: Matches the number of Neuron cores you want to use.
+* ``--max-model-len`` and ``--max-num-seqs``: Duplicate limits from your offline workflow.
+* ``--additional-config``: Wrap Neuron overrides under ``override_neuron_config`` (``enable_bucketing`` here).
+* ``--port``: Choose the listening port for the API server.
 
-    from vllm import LLM, SamplingParams
+Step 3: Verify the endpoint with ``curl``
+------------------------------------------
 
-    llm = LLM(
-        model="meta-llama/Llama-3.1-8B-Instruct",
-        tensor_parallel_size=32,
-        max_num_seqs=1,
-        max_model_len=128,
-        enable_prefix_caching=False,
-        enable_chunked_prefill=False,
-        additional_config={
-            "override_neuron_config": {
-                "skip_warmup": True,
-            },
-        },
-    )
+In this step, you confirm the server is responding by sending a chat completion request.
 
-    prompts = [
-        "Hello, my name is",
-        "The capital of France is",
-        "The future of AI is",
-    ]
+.. code-block:: bash
 
-    outputs = llm.generate(prompts, SamplingParams(top_k=10))
-    for output in outputs:
-        prompt = output.prompt
-        generated_text = output.outputs[0].text
-        print(f"Prompt: {prompt!r}")
-        print(f"Generated: {generated_text!r}")
+    curl http://localhost:8000/v1/chat/completions \
+      -H "Content-Type: application/json" \
+      -d '{
+            "model": "meta-llama/Llama-3.1-8B-Instruct",
+            "messages": [
+              {"role": "system", "content": "You are a concise assistant."},
+              {"role": "user", "content": "List three Neuron optimization tips."}
+            ],
+            "temperature": 0.2
+          }'
 
-If the script succeeds, you will see each prompt followed by generated text in the console.
+If successful, the server returns a JSON payload containing the generated answer.
 
-Step 3: Optimize model loading with sharded checkpoints
--------------------------------------------------------
+Step 4: Call the API with the OpenAI SDK
+-----------------------------------------
 
-In this step, you configure vLLM to save sharded checkpoints, which significantly speeds up model loading on subsequent runs.
-
-By default, vLLM shards the model weights during every load, which can take considerable time. Setting ``save_sharded_checkpoint: true`` saves the sharded weights to disk after the first run, eliminating this overhead.
-
-.. code-block:: python
-
-    from vllm import LLM, SamplingParams
-
-    llm = LLM(
-        model="meta-llama/Llama-3.1-8B-Instruct",
-        tensor_parallel_size=32,
-        max_num_seqs=1,
-        max_model_len=128,
-        enable_prefix_caching=False,
-        enable_chunked_prefill=False,
-        additional_config={
-            "override_neuron_config": {
-                "skip_warmup": True,
-                "save_sharded_checkpoint": true,
-            },
-        },
-    )
-
-After the first run, the sharded checkpoint is saved alongside your model files. Subsequent runs will load the pre-sharded weights directly, reducing initialization time.
-
-Step 4: Try advanced configuration options (optional)
------------------------------------------------------
-
-In this step, you explore optional tuning features that can improve throughput for specific workloads.
-
-**Enable prefix caching when prompts share a long system prefix**:
-
-.. note::
-   To understand how to configure prefix caching parameters like ``num_gpu_blocks_override``, ``block_size``, ``pa_num_blocks``, and ``pa_block_size``, 
-   see the `Llama 3.3 70B prefix caching tutorial <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial.html#Scenario-1:-Run-Llama3.3-70B-on-Trn2-without-Prefix-Caching>`_.
+Now that the server is live, call it using the OpenAI Python SDK.
 
 .. code-block:: python
 
-    from vllm import LLM, SamplingParams
+    from openai import OpenAI
 
-    llm = LLM(
-        model="meta-llama/Llama-3.1-8B-Instruct",
-        tensor_parallel_size=32,
-        max_num_seqs=4,
-        max_model_len=2048,
-        num_gpu_blocks_override=4096,
-        block_size=32,
-        enable_prefix_caching=True,
-        additional_config={
-            "override_neuron_config": {
-                "is_prefix_caching": True,
-                "is_block_kv_layout": True,
-                "pa_num_blocks": 4096,
-                "pa_block_size": 32,
-                "skip_warmup": True,
-            },
-        },
+    # Client setup
+    client = OpenAI(
+        api_key="EMPTY",
+        base_url="http://localhost:8000/v1",
     )
 
-    prompts = [
-        "Hello, my name is",
-        "The president of the United States is",
-        "The capital of France is",
-    ]
+    models = client.models.list()
+    model_name = models.data[0].id
 
-    outputs = llm.generate(prompts, SamplingParams(temperature=0.0))
+    max_tokens = 50
+    temperature = 1.0
+    top_p = 1.0
+    top_k = 50
+    stream = False
 
-    for output in outputs:
-        print(f"Prompt: {output.prompt}")
-        print(f"Generated: {output.outputs[0].text}")
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[{"role": "user", "content": "Hello, my name is Llama"}],
+        max_tokens=max_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        stream=stream,
+        extra_body={"top_k": top_k},
+    )
+
+    generated_text = ""
+    if stream:
+        for chunk in response:
+            if chunk.choices[0].delta.content is not None:
+                generated_text += chunk.choices[0].delta.content
+    else:
+        generated_text = response.choices[0].message.content
+
+    print(generated_text)
+
+Step 5: Explore advanced configuration (optional)
+-------------------------------------------------
+
+The commands below show optional tuning features to adapt the server for different workloads.
+
+**Reuse compiled models to avoid recompilation**:
+
+.. code-block:: bash
+
+    # Create directory for compiled artifacts if it doesn't exist
+    mkdir -p ./neuron_compiled_models/llama3-8b
+    
+    # Set the environment variable before launching the server
+    export NEURON_COMPILED_ARTIFACTS="./neuron_compiled_models/llama3-8b"
+
+**Enable prefix caching when prompts share a long context**:
+
+.. code-block:: bash
+
+    vllm serve \
+      --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+      --tensor-parallel-size 32 \
+      --max-model-len 1024 \
+      --max-num-seqs 8 \
+      --enable-prefix-caching \
+      --block-size 32 \
+      --num-gpu-blocks-override 256 \
+      --additional-config '{
+        "override_neuron_config": {
+          "is_prefix_caching": true,
+          "is_block_kv_layout": true,
+          "pa_num_blocks": 256,
+          "pa_block_size": 32
+        }
+      }' \
+      --port 8000
 
 **Use Eagle speculative decoding when you have an EAGLE checkpoint available**:
 
@@ -175,67 +184,108 @@ Below is an example of how to run vLLM inference with an EAGLE V1 checkpoint
 .. note::
    Eagle draft checkpoints must be converted for NxD Inference compatibility and include the target model's LM head. Follow the guidance at `EAGLE Checkpoint Compatibility <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/feature-guide.html#eagle-checkpoint-compatibility>`_.
 
-.. code-block:: python
+.. code-block:: bash
 
-    from vllm import LLM, SamplingParams
+    vllm serve \
+      --model meta-llama/Llama-3.1-8B-Instruct \
+      --tensor-parallel-size 32 \
+      --max-model-len 2048 \
+      --max-num-seqs 4 \
+      --speculative-config '{"model": "./eagle_draft_converted", "method": "eagle", "num_speculative_tokens": 5, "max_model_len": 2048}' \
+      --port 8000
 
-    llm = LLM(
-        model="meta-llama/Llama-3.1-8B-Instruct",
-        tensor_parallel_size=32,
-        max_num_seqs=4,
-        max_model_len=256,
-        speculative_config={
-            "model": "./eagle_draft_converted",
-            "num_speculative_tokens": 5,
-            "max_model_len": 256,
-            "method": "eagle",
-        },
-    )
+**Use MultiLoRA**:
 
-    prompts = [
-        "The key benefits of cloud computing are",
-        "Python is a popular programming language because",
-        "Machine learning models can be improved by",
-    ]
+.. note::
+   For multi-LoRA serving, you can optionally create a JSON configuration file that maps LoRA adapter IDs to their checkpoint paths. This enables dynamic adapter loading and swapping between HBM and host memory.
 
-    outputs = llm.generate(prompts, SamplingParams(top_k=50, max_tokens=100))
+.. code-block:: bash
 
-    for output in outputs:
-        print(f"Prompt: {output.prompt}")
-        print(f"Generated: {output.outputs[0].text}")
+    # Example JSON configuration (save as lora_config.json):
+    # {
+    #   "lora-ckpt-dir": "/opt/lora/tinyllama/",
+    #   "lora-ckpt-paths": {
+    #     "tarot_adapter": "tarot",
+    #     "support_adapter": "mental-health"
+    #   },
+    #   "lora-ckpt-paths-cpu": {
+    #     "tarot_adapter": "tarot",
+    #     "support_adapter": "mental-health"
+    #   }
+    # }
+
+    vllm serve \
+      --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+      --tensor-parallel-size 32 \
+      --max-model-len 1024 \
+      --max-num-seqs 2 \
+      --enable-lora \
+      --max-loras 2 \
+      --max-cpu-loras 4 \
+      --lora-modules \
+        tarot_adapter=/opt/lora/tinyllama/tarot \
+        support_adapter=/opt/lora/tinyllama/mental-health \
+      --additional-config '{"override_neuron_config": {"lora_ckpt_json": "/path/to/lora_config.json"}}' \
+      --port 8000
+
+Clients can select an adapter per request by setting the ``model`` field to the adapter ID in the request. The ``max-loras`` parameter controls concurrent adapters in HBM, while ``max-cpu-loras`` controls adapters in host memory with dynamic swapping support.
+
+**Tune context and token buckets for long prompts**:
+
+.. code-block:: bash
+
+    export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
+
+    vllm serve \
+      --model "meta-llama/Llama-3.1-8B-Instruct" \
+      --tensor-parallel-size 32 \
+      --max-num-seqs 1 \
+      --max-model-len 1024 \
+      --port 8000 \
+      --no-enable-prefix-caching \
+      --additional-config '{
+        "override_neuron_config": {
+          "enable_bucketing": true,
+          "context_encoding_buckets": [256, 512, 1024],
+          "token_generation_buckets": [32, 64, 128, 256, 512, 768],
+          "max_context_length": 1024,
+          "seq_len": 1024,
+          "batch_size": 1,
+          "ctx_batch_size": 1,
+          "tkg_batch_size": 1,
+          "is_continuous_batching": true
+        }
+      }'
+
+Set ``NEURON_COMPILED_ARTIFACTS`` before launching if you want to reuse artifacts across runs.
 
 Confirmation
 ------------
 
-Re-run the script from Step 2. You should see completions printed again, and the log will indicate:
-
-* Compiled artifacts were loaded from cache (if ``NEURON_COMPILED_ARTIFACTS`` is set)
-* Sharded checkpoint was loaded directly (if ``save_sharded_checkpoint: true`` was used)
-
-If you enable Neuron debug logging, look for ``Loaded Neuron compiled artifacts`` messages.
+Resend the ``curl`` request from Step 3 or rerun the OpenAI SDK snippet from Step 4. Successful responses confirm that the server is up and reachable. You can also open ``http://localhost:8000/health`` to check the health probe.
 
 Common issues
 -------------
 
-- **Initial run takes too long**: Set ``NEURON_COMPILED_ARTIFACTS`` before running so the second run reuses the cache.
-- **Model loading is slow on every run**: Enable ``save_sharded_checkpoint: true`` in ``override_neuron_config`` to avoid re-sharding the model weights each time.
-- **Warmup adds latency**: Keep ``skip_warmup=True`` in ``override_neuron_config`` if your workload does not require the warmup pass.
+- **Server exits immediately**: Confirm ``--tensor-parallel-size`` matches the number of available Neuron cores.
+- **Requests return 5xx errors**: Lower ``--max-num-seqs`` or ``--max-model-len`` if the model runs out of memory.
+- **Initial requests take too long**: Set ``NEURON_COMPILED_ARTIFACTS`` so subsequent launches reuse compiled artifacts.
 
 Clean up
 --------
 
-Deactivate your Python environment with ``deactivate``. Delete the ``compiled_models`` directory if you no longer need the cached artifacts. Remove any sharded checkpoint directories created by ``save_sharded_checkpoint``. Remove the cloned ``vllm-neuron`` repository if finished testing.
+Stop the API server (Ctrl+C). Deactivate your Python environment with ``deactivate``. Remove the cloned ``vllm-neuron`` repository if you no longer need it, and clear any cached artifacts if disk space is a concern.
 
 Next steps
 ----------
 
 * Explore prefix caching, Eagle speculative decoding, and other options in :ref:`nxdi-feature-guide`.
 * Review supported model architectures in :ref:`nxdi-supported-model-architectures`.
-* Switch to the online serving quickstart (:ref:`quickstart-online-serving`) when you need an API endpoint.
+* Try the offline batch quickstart (:ref:`quickstart-offline-serving`) if you need non-interactive inference.
 
 Further reading
 ---------------
 
-- :ref:`nxdi-vllm-user-guide-v1`: Complete integration reference.
-- :ref:`nxdi-tutorials-index`: In-depth tutorials and workflow guides.
-- `Downloading models from Hugging Face <https://huggingface.co/docs/hub/en/models-downloading>`_: Instructions for obtaining model checkpoints.
+- :ref:`nxdi-vllm-user-guide-v1` – Complete integration reference.
+- :ref:`nxdi-tutorials-index` – In-depth tutorials and workflow guides.
+- `OpenAI Python SDK reference <https://github.com/openai/openai-python>`_ – API documentation for the client used in Step 4.

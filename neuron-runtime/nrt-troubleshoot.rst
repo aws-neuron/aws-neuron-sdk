@@ -116,7 +116,7 @@ Check for any process that is still using the Neuron driver by running lsmod:
 
 Or simply rerun the installation one more time.  The driver logs its version in dmesg:
 
-.. code:: base
+.. code:: bash
 
    $ sudo dmesg
    ...
@@ -158,7 +158,7 @@ Solution
 Use compatible versions of Neuron Compiler and Runtime. Updating to the
 latest version of both Neuron Compiler and Neuron Runtime is the
 simplest solution. If updating one of the two is not an option, please
-refer to the :ref:`neuron-runtime-release-notes`
+refer to the :ref:`runtime_rn`
 of the Neuron Runtime to determine NEFF version support.
 
 Unsupported Hardware Operator Code

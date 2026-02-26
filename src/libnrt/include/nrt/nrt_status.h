@@ -38,7 +38,7 @@ typedef enum {
     NRT_QUEUE_EMPTY = 15, // Accessed a queue with no data
 
 
-    NRT_EXEC_UNIT_DISABLED = 101,           // Encountered fatal error and Execution Unit is in limbo, cannot recover
+    NRT_EXEC_UNIT_UNRECOVERABLE = 101,      // Encountered fatal error and Execution Unit is in limbo, cannot recover. Need to reset
 
 
     NRT_EXEC_BAD_INPUT = 1002,              // invalid input has been submitted to exec()

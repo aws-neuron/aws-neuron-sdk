@@ -1,5 +1,5 @@
 .. meta::
-    :description: API reference for the Output Projection CTE kernel included in the NKI Library .
+    :description: Output Projection CTE kernel computes output projection optimized for Context Encoding.
     :date-modified: 11/28/2025
 
 .. currentmodule:: nkilib.core.output_projection.output_projection_cte
@@ -7,7 +7,7 @@
 Output Projection CTE Kernel API Reference
 ===========================================
 
-This topic provides the API reference for the ``Output Projection CTE`` kernel. The kernel computes the output projection operation typically used after an attention block in transformer models, optimized for Context Encoding (Prefill) use cases.
+Computes output projection (attention @ weight + bias) optimized for Context Encoding (prefill) use cases.
 
 The kernel supports:
 
@@ -27,12 +27,12 @@ The kernel employs efficient tiling strategies and memory access patterns to max
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `output_projection_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/output_projection/output_projection_cte.py>`_
 
 output_projection_cte
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: output_projection_cte(attention, weight, bias=None)
+.. py:function:: output_projection_cte(attention: nl.ndarray, weight: nl.ndarray, bias=None, quantization_type: QuantizationType = QuantizationType.NONE, input_scales: Optional[nl.ndarray] = None, weight_scales: Optional[nl.ndarray] = None)
 
    Output Projection Kernel optimized for Context Encoding (Prefill) use cases.
 
@@ -48,6 +48,12 @@ output_projection_cte
    :type weight: ``nl.ndarray``
    :param bias: Optional bias tensor in HBM. Shape: ``[1, H]``. Indexing: ``[1, h]``.
    :type bias: ``nl.ndarray``, optional
+   :param quantization_type: Type of quantization (NONE or STATIC for FP8). Default: QuantizationType.NONE.
+   :type quantization_type: ``QuantizationType``
+   :param input_scales: Input scale tensor for FP8 quantization. Shape: ``[128, 1]``.
+   :type input_scales: ``nl.ndarray``, optional
+   :param weight_scales: Weight scale tensor for FP8 quantization. Shape: ``[128, 1]``.
+   :type weight_scales: ``nl.ndarray``, optional
    :return: Output tensor in HBM. Shape: ``[B, S, H]``. Indexing: ``[b, s, h]``.
    :rtype: ``nl.ndarray``
 

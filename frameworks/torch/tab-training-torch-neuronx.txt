@@ -55,6 +55,6 @@
 
     * :ref:`pytorch-neuron-supported-operators`
     * :ref:`pytorch-neuron-traning-troubleshooting`
-    * :ref:`torch-neuronx-rn`
+    * :ref:`pytorch_rn`
 
 

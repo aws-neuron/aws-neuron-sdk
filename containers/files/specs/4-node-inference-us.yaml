@@ -1,4 +1,4 @@
-apiVersion: resource.k8s.io/v1beta1
+apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
   name: us-4-node-config
@@ -7,18 +7,19 @@ spec:
     devices:
       requests:
       - name: neurons
-        deviceClassName: neuron.aws.com
-        selectors:
-        - cel:
-            expression: "device.attributes['neuron.aws.com'].resourceType == 'neuron_node'"
-        allocationMode: ExactCount
-        count: 1
+        exactly:
+          deviceClassName: neuron.aws.com
+          selectors:
+          - cel:
+              expression: "device.attributes['neuron.aws.com'].resourceType == 'neuron_node'"
+          allocationMode: ExactCount
+          count: 1
       config:
       - requests: ["neurons"]
         opaque:
           driver: neuron.aws.com
           parameters:
-            apiVersion: neuron.aws.com/v1alphav1
+            apiVersion: neuron.aws.com/v1
             kind: UltraServerConfig
             ultraserverMode: 4
 ---

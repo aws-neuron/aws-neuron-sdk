@@ -1,29 +1,37 @@
+This approach integrates the Neuron Scheduler Extension directly with the Kubernetes default scheduler. This method requires access to modify the default scheduler configuration.
 
-.. _k8s-default-scheduler:
+**Prerequisites**
 
-* Make sure :ref:`Neuron device plugin<k8s-neuron-device-plugin>` is running
-* Enable the kube-scheduler with option to use configMap for scheduler policy. In your cluster.yml Please update the spec section with the following
+Ensure that the Neuron Device Plugin is running.
 
-   .. code:: bash
+**Step 1: Configure kube-scheduler**
 
-      spec:
-        kubeScheduler:
+Enable the kube-scheduler to use a ConfigMap for scheduler policy. In your ``cluster.yml``, update the spec section with the following:
+
+.. code:: yaml
+
+    spec:
+      kubeScheduler:
         usePolicyConfigMap: true
 
-* Launch the cluster
+**Step 2: Launch the Cluster**
 
-   .. code:: bash
+Create and launch the cluster:
 
-      kops create -f cluster.yml
-      kops create secret --name neuron-test-1.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub
-      kops update cluster --name neuron-test-1.k8s.local --yes
+.. code:: bash
 
-* Install the neuron-scheduler-extension [Registers neuron-scheduler-extension with kube-scheduler]
+    kops create -f cluster.yml
+    kops create secret --name neuron-test-1.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub
+    kops update cluster --name neuron-test-1.k8s.local --yes
 
-    .. code:: bash
+**Step 3: Install Neuron Scheduler Extension**
 
-        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
-            --set "scheduler.enabled=true" \
-            --set "scheduler.customScheduler.enabled=false" \
-            --set "scheduler.defaultScheduler.enabled=true" \
-            --set "npd.enabled=false"
+Install the Neuron Scheduler Extension and register it with kube-scheduler:
+
+.. code:: bash
+
+    helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+        --set "scheduler.enabled=true" \
+        --set "scheduler.customScheduler.enabled=false" \
+        --set "scheduler.defaultScheduler.enabled=true" \
+        --set "npd.enabled=false"

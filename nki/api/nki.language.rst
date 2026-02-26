@@ -16,6 +16,7 @@ Creation operations
 
    ndarray
    zeros
+   shared_constant
 
 Tensor manipulation operations
 -------------------------------
@@ -86,6 +87,7 @@ Data Types
    tfloat32
    float8_e4m3
    float8_e5m2
+   float8_e4m3fn
    float8_e5m2_x4
    float8_e4m3fn_x4
    float4_e2m1fn_x4

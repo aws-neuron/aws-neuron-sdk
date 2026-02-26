@@ -5,7 +5,7 @@
 Hierarchy Viewer
 ===================
 
-The Hierarchy Viewer shows an up-leveled representation of the hardware execution organized by the framework layers and HLO operations. It enables us to progressively drill down into nested layers or operators and map the execution of application level constructs to the Neuron device. This view interacts with other widgets such as the Device Timeline. For more information on available features, see :doc:`Device Profiles in Neuron Explorer <overview-device-profiles>`.
+The Hierarchy Viewer shows an up-leveled representation of the hardware execution organized by the framework layers and HLO operations. It enables you to progressively drill down into nested layers or operators and map the execution of application level constructs to the Neuron device. This view interacts with other tools such as the Device Trace Viewer.
 
 .. image:: /tools/profiler/images/hierarchy-view-1.gif
 
@@ -15,7 +15,7 @@ Zooming
 
 .. image:: /tools/profiler/images/hierarchy-view-2.png
 
-You can zoom in on the graph in a couple of ways:
+You can zoom in on the Hierarchy Viewer in a couple of ways:
 
 * Click-drag your mouse across the graph (support in both directions)
 * Scroll down using your mouse wheel, with the mouse cursor on the x-axis
@@ -39,7 +39,7 @@ Highlighting
 
 .. image:: /tools/profiler/images/hierarchy-view-4.png
 
-Right-clicking on an operator in Hierarchy View will highlight all the corresponding instructions in the Device Timeline for the operator using the same color. Multiple operators can be highlighted at once.
+Right-clicking on an operator in Hierarchy Viewer will highlight all the corresponding instructions in the Device Trace Viewer for the operator using the same color. Multiple operators can be highlighted at once.
 
 .. image:: /tools/profiler/images/hierarchy-view-5.png
 

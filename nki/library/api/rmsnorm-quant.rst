@@ -1,5 +1,5 @@
 .. meta::
-    :description: API reference for the RMSNorm-Quant kernel included in the NKI Library.
+    :description: RMSNorm-Quant kernel performs optional RMS normalization followed by fp8 quantization.
     :date-modified: 10/28/2025
 
 .. currentmodule:: nkilib.core.rmsnorm_quant.rmsnorm_quant
@@ -7,7 +7,7 @@
 RMSNorm-Quant Kernel API Reference
 ==================================
 
-This topic provides the API reference for the ``RMSNorm-Quant`` kernel. The kernel performs optional RMS normalization followed by quantization to fp8.
+Performs optional RMS normalization followed by quantization to fp8.
 
 The kernel supports:
 
@@ -28,7 +28,37 @@ For detailed information about the mathematical operations and implementation de
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `rmsnorm_quant.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/rmsnorm/rmsnorm_quant.py>`_
+
+rmsnorm_quant_kernel
+^^^^^^^^^^^^^^^^^^^^^
+
+.. py:function:: rmsnorm_quant_kernel(hidden: nl.ndarray, ln_w: nl.ndarray, kargs: RmsNormQuantKernelArgs, input_dequant_scale: nl.ndarray = None)
+
+   Entrypoint NKI kernel that performs one of the following:
+   
+   1. Perform RMSNorm and quantize the normalized hidden over the hidden dimension (``H``, or ``axis=-1``).
+   2. Quantize hidden over dimension ``H``.
+
+   The kernel supports no specialization, or specialization along 1 dimension (1D SPMD grid).
+
+   :param hidden: Input hidden states tensor with minimum 2 dimensions. For 3D inputs, expected layout is ``[B, S, H]``. For 2D inputs, layout is ``[outer_dim, processing_dim]`` where outer_dim is the product of all major dimensions.
+   :type hidden: ``nl.ndarray``
+   :param ln_w: Gamma multiplicative bias vector with ``[H]`` or ``[1, H]`` layout. Required when RMS normalization is enabled.
+   :type ln_w: ``nl.ndarray``
+   :param kargs: Kernel arguments specifying normalization type, bounds, and epsilon values. See :py:class:`RmsNormQuantKernelArgs` for details.
+   :type kargs: ``RmsNormQuantKernelArgs``
+   :param input_dequant_scale: Optional dequantization scale for input tensor.
+   :type input_dequant_scale: ``nl.ndarray``, optional
+   :return: Output tensor with shape ``[..., H + 4]`` on HBM where the last dimension is extended by 4 elements. The first H elements store the possibly normalized and quantized tensor, while the last 4 elements store fp8 floats that can be reinterpreted as fp32 dequantization scales.
+   :rtype: ``nl.ndarray``
+
+   **Constraints**:
+
+   * Input tensor must have at least 2 dimensions
+   * For 3D inputs: batch dimension ≤ MAX_B, sequence length ≤ MAX_S, hidden dimension ≤ MAX_H
+   * For 2D inputs: processing dimension ≤ MAX_H, outer dimension ≤ MAX_B × MAX_S
+   * When RMS normalization is enabled, ln_w must have shape [H] or [1, H] where H matches the processing dimension
 
 RmsNormQuantKernelArgs
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -48,6 +78,12 @@ RmsNormQuantKernelArgs
 
       Normalization type to use [``RMS_NORM``, ``NO_NORM``]
 
+   .. py:attribute:: quantization_type
+      :type: QuantizationType
+      :value: QuantizationType.ROW
+
+      Quantization type to use [``ROW``, ``STATIC``]
+
    .. py:attribute:: eps
       :type: float
       :value: 1e-6
@@ -65,34 +101,6 @@ RmsNormQuantKernelArgs
    **Raises**:
 
    * **AssertionError** – Raised when unsupported normalization types are used, negative bounds are provided, or invalid epsilon values are specified.
-
-rmsnorm_quant_kernel
-^^^^^^^^^^^^^^^^^^^^^
-
-.. py:function:: rmsnorm_quant_kernel(hidden: nl.ndarray, ln_w: nl.ndarray, kargs: RmsNormQuantKernelArgs)
-
-   Entrypoint NKI kernel that performs one of the following:
-   
-   1. Perform RMSNorm and quantize the normalized hidden over the hidden dimension (``H``, or ``axis=-1``).
-   2. Quantize hidden over dimension ``H``.
-
-   The kernel supports no specialization, or specialization along 1 dimension (1D SPMD grid).
-
-   :param hidden: Input hidden states tensor with minimum 2 dimensions. For 3D inputs, expected layout is ``[B, S, H]``. For 2D inputs, layout is ``[outer_dim, processing_dim]`` where outer_dim is the product of all major dimensions.
-   :type hidden: ``nl.ndarray``
-   :param ln_w: Gamma multiplicative bias vector with ``[H]`` or ``[1, H]`` layout. Required when RMS normalization is enabled.
-   :type ln_w: ``nl.ndarray``
-   :param kargs: Kernel arguments specifying normalization type, bounds, and epsilon values. See :py:class:`RmsNormQuantKernelArgs` for details.
-   :type kargs: ``RmsNormQuantKernelArgs``
-   :return: Output tensor with shape ``[..., H + 4]`` on HBM where the last dimension is extended by 4 elements. The first H elements store the possibly normalized and quantized tensor, while the last 4 elements store fp8 floats that can be reinterpreted as fp32 dequantization scales.
-   :rtype: ``nl.ndarray``
-
-   **Constraints**:
-
-   * Input tensor must have at least 2 dimensions
-   * For 3D inputs: batch dimension ≤ MAX_B, sequence length ≤ MAX_S, hidden dimension ≤ MAX_H
-   * For 2D inputs: processing dimension ≤ MAX_H, outer dimension ≤ MAX_B × MAX_S
-   * When RMS normalization is enabled, ln_w must have shape [H] or [1, H] where H matches the processing dimension
    * Supports 1D SPMD grid or no specialization
 
    .. note::

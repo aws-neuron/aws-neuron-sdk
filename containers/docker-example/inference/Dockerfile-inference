@@ -4,7 +4,7 @@
 # To run on EC2 Inf1 instances with AWS DLAMI:
 #    docker run -it --device=/dev/neuron0 neuron-container:pytorch
 
-FROM ubuntu:18.04
+FROM ubuntu:24.04
 
 LABEL maintainer=" "
 

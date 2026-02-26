@@ -106,7 +106,8 @@ clear_inf2_tag = ['frameworks/torch/torch-neuronx/training',
                   'about-neuron/arch/neuron-features/logical-neuroncore-config',
                   'libraries/nxd-training/',
                   'about-neuron/arch/neuron-hardware/trn3-arch',
-                  'about-neuron/arch/neuron-hardware/neuron-core-v4'
+                  'about-neuron/arch/neuron-hardware/neuron-core-v4',
+                  '/frameworks/tensorflow/'
                ]
 
 
@@ -150,7 +151,9 @@ clear_trn3_tag = [ 'frameworks/tensorflow/',
                   'about-neuron/arch/neuron-hardware/trainium',
                   'about-neuron/arch/neuron-hardware/neuron-core-v2',
                   'about-neuron/arch/neuron-hardware/neuron-core-v3',
-                  '/libraries/neuronx-distributed/context_parallelism_overview',
+                  'libraries/neuronx-distributed/context_parallelism_overview',
+                  'about-neuron/appnotes/',
+                  '/compiler/neuron-cc/'
                  ]
 
 clear_nc_v2_tag = [

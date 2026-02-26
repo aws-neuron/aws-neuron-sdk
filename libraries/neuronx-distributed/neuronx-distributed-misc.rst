@@ -5,6 +5,6 @@ Misc
     :maxdepth: 1
     :hidden:
     
-    /release-notes/neuronx-distributed/neuronx-distributed
+    /release-notes/components/nxd-core
 
 .. include:: /libraries/neuronx-distributed/neuronx-distributed-misc.txt

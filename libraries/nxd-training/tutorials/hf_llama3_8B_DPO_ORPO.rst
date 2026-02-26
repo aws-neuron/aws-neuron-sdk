@@ -397,6 +397,7 @@ which is considerably faster than the JIT flow.
 First, clone the open-source ``neuronx-distributed-training`` library
 
 .. code:: ipython3
+    
    git clone https://github.com/aws-neuron/neuronx-distributed-training
    cd neuronx-distributed-training/examples
 

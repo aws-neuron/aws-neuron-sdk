@@ -7,7 +7,7 @@
 Introducing New Neuron GitHub Repositories
 ------------------------------------------
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron Github repositories will be migrated
+Starting with Neuron release 2.3, Neuron Github repositories will be migrated
 to the new `AWS Neuron GitHub Organization <https://github.com/aws-neuron>`_. 
 
 The new AWS Neuron GitHub Organization will include the `Neuron SDK GitHub <https://github.com/aws-neuron/aws-neuron-sdk>`_ repository and will include the following additional new GitHub repositories:

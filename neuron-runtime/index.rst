@@ -3,7 +3,18 @@
 NeuronX Runtime
 ================
 
-The NeuronX Runtime consists of a kernel driver and C/C++ libraries which provides APIs to access Inferentia and Trainium Neuron devices. The Neuron ML frameworks plugins for TensorFlow, PyTorch and Apache MXNet use the Neuron runtime to load and run models on the NeuronCores. Neuron runtime loads compiled deep learning models, also referred to as Neuron Executable File Format (NEFF) to the Neuron devices and is optimized for high-throughput and low-latency. 
+The NeuronX Runtime is a high-performance execution engine that enables deep learning models to run on AWS Inferentia and Trainium accelerators. It consists of a kernel driver and C/C++ libraries that provide low-level APIs for accessing Neuron devices, managing model execution, and coordinating collective communications across NeuronCores.
+
+The Neuron Runtime serves as the foundation for all ML framework integrations (TensorFlow, PyTorch, JAX, and Apache MXNet), loading compiled models in Neuron Executable File Format (NEFF) and orchestrating their execution on Neuron hardware. It is optimized for high-throughput and low-latency inference and training workloads, with features including:
+
+* **Efficient model execution**: Loads and executes NEFF files on NeuronCores with optimized memory management
+* **Multi-model support**: Manages multiple models across multiple NeuronCores with flexible allocation strategies
+* **Collective communications**: Provides high-performance collective operations for distributed training and inference
+* **Device management**: Handles NeuronCore allocation, device discovery, and resource management
+* **Debugging support**: Offers core dump generation, debug streams, and detailed logging for troubleshooting
+* **Configuration flexibility**: Extensive environment variables for fine-tuning runtime behavior
+
+The Neuron Runtime is typically used transparently through ML framework plugins, but also provides direct C/C++ APIs for developers building custom frameworks or requiring low-level device control. 
 
 .. toctree::
     :maxdepth: 2
@@ -13,10 +24,12 @@ The NeuronX Runtime consists of a kernel driver and C/C++ libraries which provid
     Get Started </neuron-runtime/about/core-dump>
     Deep Dives </neuron-runtime/explore/index>
     /neuron-runtime/configuration-guide
-    /neuron-runtime/api-reference-guide
-    Runtime API <nrt-api-guide>
+    Developer Guide </neuron-runtime/nrt-developer-guide>
+    API Reference </neuron-runtime/api/index>
     NRT Debug Stream </neuron-runtime/api/debug-stream-api>
-    Resources </neuron-runtime/misc-runtime>
+    Troubleshooting on Inf1 and Trn1 </neuron-runtime/nrt-troubleshoot>
+    Release Notes </release-notes/components/runtime>
+    FAQ </neuron-runtime/faq>
 
 Get Started
 ------------
@@ -44,12 +57,19 @@ Reference
 .. grid:: 2
     :gutter: 2
 
-    .. grid-item-card:: Runtime API Reference
+    .. grid-item-card:: Runtime Developer Guide
         :link: nrt-api-guide
         :link-type: ref
         :class-header: sd-bg-primary sd-text-white
 
         Comprehensive guide to the Neuron Runtime API for developers building custom frameworks that call libnrt APIs directly.
+
+    .. grid-item-card:: Runtime API Reference Documentation
+        :link: /neuron-runtime/api/index
+        :link-type: doc
+        :class-header: sd-bg-primary sd-text-white
+
+        Documentation of the APIs in the public headers for the Neuron Runtime.
 
     .. grid-item-card:: Runtime Configuration
         :link: nrt-configuration
@@ -77,11 +97,6 @@ Learn More
 
 .. grid:: 1
     :gutter: 2
-
-    .. grid-item-card:: Runtime Configuration
-        :link: nrt-configuration
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
 
     .. grid-item-card:: Explore the Neuron Runtime
         :link: neuron-runtime-explore-home
@@ -123,26 +138,13 @@ Collectives
 Release Notes
 --------------
 
-.. grid:: 2
+.. grid:: 1
     :gutter: 2
 
     .. grid-item-card:: Runtime Release Notes
-        :link: neuron-runtime-rn
-        :link-type: ref
+        :link: /release-notes/components/runtime
+        :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        Latest updates, improvements, and bug fixes for the Neuron Runtime library.
+        Latest updates, improvements, and bug fixes for the Neuron Runtime library, driver, and collectives.
 
-    .. grid-item-card:: Driver Release Notes
-        :link: neuron-driver-release-notes
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
-
-        Release notes for the Neuron kernel driver that enables access to Neuron devices.
-
-    .. grid-item-card:: Collectives Release Notes
-        :link: neuron-collectives-rn
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
-
-        Release notes for the Neuron Collective Communication Library used for distributed training and inference.

@@ -6,8 +6,8 @@ Misc (mxnet-neuron)
     :hidden:
 
     /frameworks/mxnet-neuron/troubleshooting-guide
-    What's New </release-notes/mxnet-neuron/mxnet-neuron>
-    /release-notes/compiler/neuron-cc/neuron-cc-ops/neuron-cc-ops-mxnet
+    What's New </release-notes/archive/mxnet-neuron>
+    /release-notes/archive/neuron-cc/neuron-cc-ops/neuron-cc-ops-mxnet
 
 
 .. include:: /frameworks/mxnet-neuron/misc-mxnet-neuron.txt

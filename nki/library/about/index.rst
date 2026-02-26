@@ -21,9 +21,7 @@ The kernels in the NKI Library are provided in a public GitHub repository that y
 
 * **NKI Library repository**: https://github.com/aws-neuron/nki-library
 
-To get started using NKI Library kernels in your model development, clone or fork the repo and follow the instructions in the `README <https://github.com/aws-neuron/nki-library/blob/main/README.md>`_ file. 
-
-Follow this code-based tutorial to get hands-on experience with NKI Library by integrating a pre-built multi-layer perceptron (MLP) kernel into your PyTorch model: :doc:`/nki/library/tutorial-use-a-prebuilt-kernel`
+To get started using NKI Library kernels in your model development, clone or fork the repo and follow the instructions in the `README <https://github.com/aws-neuron/nki-library/blob/main/README.md>`_ file.
 
 Resources
 ---------

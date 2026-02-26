@@ -1,0 +1,152 @@
+# Article Entry Template
+# 
+# Copy this template and fill in your article details.
+# Then add it to the appropriate section in news-and-blogs.yaml
+#
+# For featured articles (requires AWS Neuron team approval):
+# Add to the 'featured_articles' section with featured: true and an icon
+#
+# For regular articles:
+# Add to the 'all_articles' section with featured: false
+
+# TEMPLATE - Copy everything below this line
+# ============================================
+
+- title: "Your Article Title Here"
+  url: "https://your-website.com/path-to-article"
+  description: "A clear, concise description of your article in 1-2 sentences. Explain what readers will learn or discover."
+  author: "Your Name or Organization Name"
+  author_url: "https://your-website.com"  # Optional: Your website or profile URL (for featured articles)
+  date: "YYYY-MM-DD"  # Publication date in YYYY-MM-DD format (e.g., 2026-01-27)
+  category: "blog"  # Choose ONE: blog, news, tutorial, case-study, benchmark
+  locale: "en-US"  # Language/region code (e.g., en-US, ja-JP, zh-CN, de-DE, fr-FR, es-ES, pt-BR, ko-KR)
+  keywords: ["keyword1", "keyword2", "keyword3"]  # List of 3-10 relevant keywords for filtering/search
+  featured: false  # Set to false unless approved by AWS Neuron team
+  icon: "📝"  # Optional: Single emoji for featured articles (e.g., 🚀 📊 🎯 💡 ⚡)
+
+# ============================================
+# FIELD DESCRIPTIONS
+# ============================================
+#
+# title (required):
+#   - Clear, descriptive title of your article
+#   - Keep under 100 characters
+#   - Use title case
+#
+# url (required):
+#   - Full HTTPS URL to your article
+#   - Must be publicly accessible
+#   - Should not require login or paywall
+#
+# description (required):
+#   - Brief summary of article content
+#   - 20-500 characters recommended
+#   - Focus on what readers will learn
+#   - Avoid marketing language
+#
+# author (required):
+#   - Your name or organization
+#   - Will be displayed as attribution
+#
+# author_url (optional):
+#   - Link to your website or profile
+#   - Only used in featured articles
+#   - Must be valid HTTPS URL
+#
+# date (required):
+#   - Publication date in YYYY-MM-DD format
+#   - Use the date the article was published
+#   - Not the date you're adding it here
+#
+# category (required):
+#   - blog: Technical blog posts and articles
+#   - news: News announcements and press releases
+#   - tutorial: Step-by-step guides and how-tos
+#   - case-study: Customer success stories and use cases
+#   - benchmark: Performance benchmarks and comparisons
+#
+# locale (required):
+#   - Language and region code in format: language-REGION
+#   - Examples: en-US (English-US), ja-JP (Japanese), zh-CN (Chinese-Simplified)
+#   - Common codes: en-US, en-GB, ja-JP, zh-CN, zh-TW, ko-KR, de-DE, fr-FR, 
+#     es-ES, es-MX, pt-BR, pt-PT, it-IT, nl-NL, ru-RU, ar-SA, hi-IN
+#   - A flag emoji will be displayed based on the locale
+#   - Unknown locales will display 🌐 globe icon
+#
+# keywords (required):
+#   - List of 3-10 relevant keywords for filtering and search
+#   - Use lowercase, hyphenated format (e.g., "machine-learning", "pytorch")
+#   - Include technology names, topics, and key concepts
+#   - Examples: ["trainium", "inference", "pytorch", "llm", "optimization"]
+#   - Keywords help users find your article through filtering and search
+#
+# featured (required):
+#   - true: Article appears in featured section (requires approval)
+#   - false: Article appears in all articles section
+#   - Most submissions should use false
+#
+# icon (optional):
+#   - Single emoji character
+#   - Only used for featured articles
+#   - Examples: 🚀 📊 🎯 💡 ⚡ 🔥 ✨ 🌟 📈 🛠️
+#
+# ============================================
+# EXAMPLES
+# ============================================
+
+# Example 1: Tutorial Article
+- title: "Getting Started with PyTorch on AWS Trainium"
+  url: "https://example.com/pytorch-trainium-tutorial"
+  description: "A comprehensive guide to training PyTorch models on AWS Trainium instances, including setup, optimization tips, and common pitfalls to avoid."
+  author: "Jane Developer"
+  date: "2026-01-15"
+  category: "tutorial"
+  locale: "en-US"
+  keywords: ["pytorch", "trainium", "training", "tutorial", "getting-started"]
+  featured: false
+
+# Example 2: Benchmark Article
+- title: "BERT Inference Performance: Inferentia2 vs GPU Comparison"
+  url: "https://example.com/bert-benchmark"
+  description: "Detailed performance comparison of BERT inference on AWS Inferentia2 vs leading GPU instances, including cost analysis and throughput metrics."
+  author: "ML Performance Lab"
+  date: "2026-01-20"
+  category: "benchmark"
+  locale: "en-US"
+  keywords: ["inferentia", "bert", "benchmark", "performance", "gpu-comparison"]
+  featured: false
+
+# Example 3: Case Study
+- title: "How Acme Corp Reduced ML Training Costs by 60% with Trainium"
+  url: "https://example.com/acme-case-study"
+  description: "Learn how Acme Corp migrated their large language model training to AWS Trainium and achieved significant cost savings while maintaining performance."
+  author: "Acme Corp Engineering Team"
+  date: "2026-01-25"
+  category: "case-study"
+  locale: "en-US"
+  keywords: ["trainium", "cost-optimization", "llm", "case-study", "migration"]
+  featured: false
+
+# Example 4: Featured Article (requires approval)
+- title: "Advanced Optimization Techniques for Neuron Compiler"
+  url: "https://example.com/neuron-optimization"
+  description: "Deep dive into advanced compiler optimization techniques for AWS Neuron, with practical examples and performance improvements."
+  author: "AWS Neuron Team"
+  author_url: "https://aws.amazon.com/machine-learning/neuron/"
+  date: "2026-01-27"
+  category: "blog"
+  locale: "en-US"
+  keywords: ["neuron", "compiler", "optimization", "performance", "advanced"]
+  featured: true
+  icon: "⚡"
+
+# Example 5: Japanese Article
+- title: "AWS Trainiumで大規模言語モデルを訓練する"
+  url: "https://example.jp/trainium-llm-training"
+  description: "AWS Trainiumを使用して大規模言語モデルを効率的に訓練する方法を詳しく解説します。"
+  author: "日本のMLエンジニア"
+  date: "2026-01-20"
+  category: "tutorial"
+  locale: "ja-JP"
+  keywords: ["trainium", "llm", "training", "japanese", "tutorial"]
+  featured: false

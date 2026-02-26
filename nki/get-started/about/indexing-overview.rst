@@ -3,12 +3,15 @@
    :date_updated: 12/02/2025
 
 .. _nki-about-indexing:
+.. _nki-tensor-indexing:
 
 =======================
 Tensor Indexing on NKI
 =======================
 
 This topic covers basic tensor indexing and how it applies to developing with the AWS Neuron SDK. This overview describes basic indexing of tensors with several examples of how to use indexing in NKI kernels.
+
+.. _nki-basic-tensor-indexing:
 
 Basic Tensor Indexing
 ^^^^^^^^^^^^^^^^^^^^^
@@ -51,6 +54,7 @@ partition dimension. That being said, device memory (HBM) is always more
 performant when accessed sequentially.
 
 .. _nki-advanced-tensor-indexing:
+.. _pm_sec_tile_indexing:
 
 Tensor Indexing by Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -66,14 +70,15 @@ output tensor gathers all the even columns from the input tensor,
 and the second output tensor gathers all the odd columns from the
 input tensor. We assume the rows of the input tensors are mapped to SBUF
 partitions. Therefore, we are effectively gathering elements along
-the free dimension of the input tensor. :numref:`Fig. %s <nki-fig-pm-index-1>`
-below visualizes the input and output tensors.
+the free dimension of the input tensor. The figure below visualizes the input and output tensors.
 
-.. figure:: /nki/img/pm-index-1.png
+.. _nki-fig-pm-index-1:
+
+.. image:: /nki/img/pm-index-1.png
    :align: center
    :width: 60%
 
-   Tensor split to even and odd columns
+*Tensor split to even and odd columns*
 
 .. nki_example:: /nki/examples/index-case-1.py
    :language: python
@@ -105,14 +110,15 @@ to the different SBUF partitions and the ``F1`` and ``F2`` axes are
 flattened and placed in each partition, with ``F1`` being the major
 dimension. Our goal in this example is to transpose the ``F1`` and
 ``F2`` axes with a parallel dimension ``P``,
-which would re-arrange the data within each partition. :numref:`Fig. %s <nki-fig-index-2>`
-below illustrates the input and output tensor layouts.
+which would re-arrange the data within each partition. The figure below illustrates the input and output tensor layouts.
 
-.. figure:: /nki/img/pm-index-2.png
+.. _nki-fig-index-2:
+
+.. image:: /nki/img/pm-index-2.png
    :align: center
    :width: 60%
 
-   Tensor F1:F2 Transpose
+*Tensor F1:F2 Transpose*
 
 .. nki_example:: /nki/examples/transpose2d/transpose2d_nki_kernels.py
    :language: python
@@ -138,15 +144,15 @@ axes. To leverage free-dimension flexible indexing, we can map the ``C``
 (parallel) axis to the ``P`` dimension and ``H/W`` (contraction)
 axes to the ``F`` dimension.
 Performing such a 2D pooling operation requires a 4D memory access
-pattern in the ``F`` dimension, with reduction along two axes.
-:numref:`Fig. %s <nki-fig-index-3>`
-below illustrates the input and output tensor layouts.
+pattern in the ``F`` dimension, with reduction along two axes. The figure below illustrates the input and output tensor layouts.
 
-.. figure:: /nki/img/pm-index-3.png
+.. _nki-fig-index-3:
+
+.. image:: /nki/img/pm-index-3.png
    :align: center
    :width: 60%
 
-   2D-Pooling Operation (reducing on axes F2 and F4)
+*2D-Pooling Operation (reducing on axes F2 and F4)*
 
 .. nki_example:: /nki/examples/index-case-3.py
    :language: python

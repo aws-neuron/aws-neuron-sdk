@@ -7,11 +7,6 @@ Summary Viewer
 
 The Neuron Explorer summary viewer provides a streamlined view of your profile's most critical performance insights, enabling quick identification of issues and optimization opportunities without navigating through detailed data.
 
-Overview
---------
-
-The Neuron Explorer summary viewer gives you a quick view of the critical parts of your profile. When you open a profile, the landing page opens first. It shows you the most important performance insights. You don't need to navigate through detailed data.
-
 .. image:: /tools/profiler/images/explorer-summary-page.png
 
 Benefits
@@ -24,10 +19,10 @@ Both new and experienced users benefit from this streamlined view of profiling d
 * Get actionable recommendations for optimization
 * View all key information on a single screen without scrolling
 
-How to use the landing page
----------------------------
+How to use
+-------------
 
-1. **Open your profile** - The landing page opens automatically when you open a profile in the Neuron Profiler.
+1. **Open your profile** - The Summary Viewer is accessible via the Profile Manager or Neuron Explorer UI.
 2. **Examine key metrics** - Review the metrics and graphs to understand your profile's performance characteristics.
 3. **Review recommendations** - Start with the **Performance Insights & Recommendations** section. This section highlights the most important performance issues.
 4. **Select specific time regions** - Use the "Region Selection" menu to view specific timeslices corresponding to network layers. This helps you drill down into specific sections of your profile. You can generate custom time regions using the "Add Region" button.

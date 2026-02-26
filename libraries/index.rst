@@ -183,5 +183,6 @@ with familiar NeMo YAML Interface.
 
    HF Transformers </libraries/transformers-neuronx/index>
    NeMo Megatron </libraries/nemo-megatron/index>
+   NxD Core Release Notes </release-notes/components/nxd-core>
 
   

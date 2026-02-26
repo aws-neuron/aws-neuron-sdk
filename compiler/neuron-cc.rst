@@ -7,5 +7,6 @@ Neuron Compiler for Inf1
     :maxdepth: 1
 
     API Reference Guide </compiler/neuron-cc/api-reference-guide>
+    CLI Reference </compiler/neuron-cc/command-line-reference>
     Developer Guide </compiler/neuron-cc/developer-guide>
-    Misc  </compiler/neuron-cc/misc-neuron-cc>
+    FAQ </compiler/neuron-cc/faq>

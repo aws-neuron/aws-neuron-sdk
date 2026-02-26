@@ -6,7 +6,7 @@ import torch_xla
 import shutil
 import ml_dtypes as mld
 from mx_cpu_utils import generate_stabilized_mx_data, nc_matmul_mx_golden, quantize_mx_golden
-from mx_kernels import kernel_offline_quantized_mx_matmul, kernel_on_device_quantize_matmul_mx, kernel_copy_strided_quantize_matmul_mx
+from mx_kernels import kernel_offline_quantized_mx_matmul, kernel_on_device_quantize_matmul_mx, kernel_copy_strided_quantize_matmul_mx, kernel_copy_strided_quantize_matmul_mx_packed_scale
 
 # Global compiler flags
 NEURON_CC_BASE_FLAGS = " --target trn3 --pipeline compile SaveTemps --internal-compiler-debug-mode=all --internal-backend-options='--print-format=json,condensed' "
@@ -62,6 +62,7 @@ def print_test_header(test_name):
   print(f"    {test_name}")
   print(f"{'='*border_length}\n")
 
+# [start-run_offline_quantized_matmul_mx_test]
 # This test will quantize to MXFP8 on the host.
 # Then execute Matmul-MX on the device using these offline-quantized tiles.
 def run_offline_quantized_matmul_mx_test(quantized_dtype):
@@ -97,6 +98,7 @@ def run_offline_quantized_matmul_mx_test(quantized_dtype):
   golden = nc_matmul_mx_golden(st_mx_data_x4, mv_mx_data_x4, st_mx_scale, mv_mx_scale, quantized_dtype, quantized_dtype)
 
   compare_and_print_results(output_kernel_np, golden)
+# [end-run_offline_quantized_matmul_mx_test]
 
 # This test will quantize the stationary tile to MXFP8 on the host, and moving tile on device.
 # Then execute Matmul-MX on the device,
@@ -140,16 +142,23 @@ def run_on_device_quantize_matmul_mx_test(quantized_dtype_stationary, quantized_
 
   compare_and_print_results(output_kernel_np, golden)
 
-# This example starts with two HBM tensors, establishes the required SBUF layout using
-# either TensorCopy on the NeuronCore or via DMA, quantizes both tensors, then does Matmul-MX
-def run_copy_strided_test(quantized_dtype, use_tensor_copy: bool = True):
+# This example:
+# 1. Starts with two HBM tensors.
+# 2. Establishes required SBUF layout using:
+#   - TensorCopy on the NeuronCore (if use_tensor_copy is True)
+#   - DMA (if use_tensor_copy is False)
+# 3. Quantizes both tensors on device, storing scale values:
+#   - In a single packed tile (if pack_scales is True)
+#   - In two separate tiles (if pack_scales is False)
+# 4. Performs Matmul-MX.
+def run_copy_strided_test(quantized_dtype, use_tensor_copy: bool = True, pack_scales: bool = False):
   # Choose max tile-sizes for TensorE. But here we're specifying unquantized shapes.
   # Since Matmul-MX allows for 4x larger contraction dimension, we choose K=512.
   K, M, N = 512, 128, 512
 
-  print_test_header(f"COPY_STRIDED_{'TENSOR_COPY' if use_tensor_copy else 'DMA'} - <{quantized_dtype.__name__}> @ <{quantized_dtype.__name__}>")
+  print_test_header(f"COPY_STRIDED_{'TENSOR_COPY' if use_tensor_copy else 'DMA'}_{'PACKED' if pack_scales else 'UNPACKED'} - <{quantized_dtype.__name__}> @ <{quantized_dtype.__name__}>")
 
-  setup_compiler_workdir(f"copy_strided_test_tensor_copy_{use_tensor_copy}")
+  setup_compiler_workdir(f"copy_strided_test_tensor_copy_{use_tensor_copy}_{pack_scales}")
 
   # Generate the stationary and moving tensors in bf16.
   # Using generate_stabilized_mx_data() to generate FP data that is within the MX data-type range.
@@ -161,7 +170,8 @@ def run_copy_strided_test(quantized_dtype, use_tensor_copy: bool = True):
   mv_data, _, _, _ = generate_stabilized_mx_data(quantized_dtype, mv_shape)
 
   # Call the kernel
-  output_kernel = kernel_copy_strided_quantize_matmul_mx(
+  kernel = kernel_copy_strided_quantize_matmul_mx_packed_scale if pack_scales else kernel_copy_strided_quantize_matmul_mx
+  output_kernel = kernel(
     torch.from_numpy(st_data).bfloat16().to(device),
     torch.from_numpy(mv_data).bfloat16().to(device),
     quantized_dtype_to_x4_map[quantized_dtype],
@@ -191,7 +201,13 @@ if __name__ == "__main__":
   run_on_device_quantize_matmul_mx_test(mld.float8_e5m2, mld.float8_e5m2) # FP8 @ FP8
 
   # Use TensorCopy to stride the data
-  run_copy_strided_test(mld.float8_e5m2, True) # FP8 @ FP8
+  run_copy_strided_test(mld.float8_e5m2, use_tensor_copy=True, pack_scales=False) # FP8 @ FP8
 
   # Use DMA to stride the data
-  run_copy_strided_test(mld.float8_e5m2, False) # FP8 @ FP8
+  run_copy_strided_test(mld.float8_e5m2, use_tensor_copy=False, pack_scales=False) # FP8 @ FP8
+
+  # Pack scale values into single tensor and use TensorCopy to stride the data
+  run_copy_strided_test(mld.float8_e5m2, use_tensor_copy=True, pack_scales=True) # FP8 @ FP8
+
+  # Pack scale values into single tensor and use DMA to stride the data
+  run_copy_strided_test(mld.float8_e5m2, use_tensor_copy=False, pack_scales=True) # FP8 @ FP8

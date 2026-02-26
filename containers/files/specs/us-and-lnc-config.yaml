@@ -1,0 +1,85 @@
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: us-and-lnc-config
+spec:
+  spec:
+    devices:
+      requests:
+        - name: neurons
+          exactly:
+            deviceClassName: neuron.aws.com
+            selectors:
+              - cel:
+                  expression: "device.attributes['neuron.aws.com'].resourceType == 'neuron_node'"
+            allocationMode: ExactCount
+            count: 1
+      config:
+        - requests: ["neurons"]
+          opaque:
+            driver: neuron.aws.com
+            parameters:
+              apiVersion: neuron.aws.com/v1
+              kind: UltraServerConfig
+              ultraserverMode: 2
+        - requests: ["neurons"]
+          opaque:
+            driver: neuron.aws.com
+            parameters:
+              apiVersion: neuron.aws.com/v1
+              kind: NeuronConfig
+              logicalNeuronCore: 1
+---
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: vllm
+  annotations:
+    leaderworkerset.sigs.k8s.io/exclusive-topology: neuron.amazonaws.com/ultraserver-server-id-2
+spec:
+  rolloutStrategy:
+    type: RollingUpdate
+    rollingUpdateConfiguration:
+      maxUnavailable: 1
+      maxSurge: 1
+  # Two replica groups of 2 nodes each
+  replicas: 2
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        containers:
+          - name: vllm-leader
+            image: public.ecr.aws/ubuntu/ubuntu:22.04
+            command:
+              - sh
+              - -c
+              - "sleep infinity"
+            resources:
+              claims:
+                - name: one-node-from-ultraserver
+        resourceClaims:
+          - name: one-node-from-ultraserver
+            resourceClaimTemplateName: us-and-lnc-config
+    workerTemplate:
+      metadata:
+        labels:
+          role: worker
+      spec:
+        containers:
+          - name: vllm-worker
+            image: public.ecr.aws/ubuntu/ubuntu:22.04
+            command:
+              - sh
+              - -c
+              - "sleep infinity"
+            resources:
+              claims:
+                - name: one-node-from-ultraserver
+        resourceClaims:
+          - name: one-node-from-ultraserver
+            resourceClaimTemplateName: us-and-lnc-config

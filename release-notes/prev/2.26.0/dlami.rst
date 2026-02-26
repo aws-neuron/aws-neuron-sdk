@@ -31,4 +31,4 @@ Previous release notes
 ----------------------
 
 * :ref:`neuron-2-25-0-dlami`
-* :ref:`neuron-dlami-release-notes`
+* :ref:`dlamis_rn`

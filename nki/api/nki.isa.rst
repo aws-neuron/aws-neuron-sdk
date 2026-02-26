@@ -27,9 +27,8 @@ NKI ISA
    tensor_scalar_reduce
    tensor_scalar_cumulative
    tensor_copy
-   tensor_copy_dynamic_src
-   tensor_copy_dynamic_dst
    tensor_copy_predicated
+   exponential
    reciprocal
    quantize_mx
    iota
@@ -42,11 +41,11 @@ NKI ISA
    bn_stats
    bn_aggr
    local_gather
+   nc_n_gather
    dma_copy
    dma_transpose
    dma_compute
    max8
-   nc_n_gather
    nc_find_index8
    nc_match_replace8
    nc_stream_shuffle
@@ -61,6 +60,7 @@ NKI ISA
    rand_set_state
    rand_get_state
    set_rng_seed
+   nonzero_with_count
 
 
 
@@ -74,6 +74,7 @@ NKI ISA Config Enums
    engine
    reduce_cmd
    dge_mode
+   oob_mode
 
 
 Target

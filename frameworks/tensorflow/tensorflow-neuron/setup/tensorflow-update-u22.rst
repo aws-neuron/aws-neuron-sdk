@@ -2,7 +2,7 @@
 .. _tensorflow-neuron-u20-update:
 
 Update to latest TensorFlow Neuron  (``tensorflow-neuron``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.
 

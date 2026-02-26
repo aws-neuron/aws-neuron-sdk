@@ -20,13 +20,13 @@ processing follow the default vLLM behavior.
 Versioning
 ^^^^^^^^^^
 
-Plugin Version: ``0.2.2+lts``
+Plugin Version: ``0.4.0``
 
-Neuron SDK Version: ``2.27.0``
+Neuron SDK Version: ``2.28.0``
 
-vLLM Version: ``0.11.0``
+vLLM Version: ``0.13.0``
 
-PyTorch Version: ``2.8.0``
+PyTorch Version: ``2.9.0``
 
 
 Supported Models
@@ -38,7 +38,9 @@ The following models are supported on vLLM with NxD Inference:
 - Llama 4 Scout, Maverick
 - Qwen 2.5
 - Qwen 3
-- Pixtral (limited, see Known Issues)
+- Qwen2-VL
+- Qwen3-VL
+- Pixtral
 
 If you are adding your own model to NxD Inference, see :ref:`Integrating Onboarded Model with vLLM<nxdi-onboarding-models-vllm>`.
 
@@ -56,14 +58,10 @@ Refer to :ref:`these setup instructions<nxdi-setup>` for information on using Ne
 
 **Prerequisites:**
 
-- Latest AWS Neuron SDK (`Neuron SDK 2.27.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.27.0.html>`_)
+- Latest AWS Neuron SDK (`Neuron SDK 2.28.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.28.0.html>`_)
 - Python 3.10+ (compatible with vLLM requirements)
 - Supported AWS instances: Inf2, Trn1/Trn1n, Trn2
 
-Installing the AWS Neuron fork of vLLM 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-AWS Neuron maintains a vLLM-Neuron Plugin that supports the latest features for NxD Inference. Follow the instructions below to obtain and configure it.
 
 Quickstart using Docker
 """""""""""""""""""""""""""
@@ -78,11 +76,11 @@ Manually install from source
 """""""""""""""""""""""""""""""
 
 Install the plugin from GitHub sources using the following commands. The plugin will automatically install the correct version of vLLM along with other required dependencies.
-This version of the plugin is intended to work with the Neuron SDK 2.27.0, PyTorch 2.8, and vLLM 0.11.0. This is not needed if using a DLC container with the vllm-neuron plugin already installed.
+This version of the plugin is intended to work with the Neuron SDK 2.28.0, PyTorch 2.9, and vLLM 0.13.0. This is not needed if using a DLC container with the vllm-neuron plugin already installed.
 
 .. code-block:: bash
 
-    git clone --branch "0.2.2+lts" https://github.com/vllm-project/vllm-neuron.git
+    git clone --branch "0.4.0" https://github.com/vllm-project/vllm-neuron.git
     cd vllm-neuron
     pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 
@@ -142,7 +140,7 @@ Feature Support
      - 
    * - Speculative Decoding
      - 🟢
-     - Only Eagle V1 is supported
+     - Eagle V1 and V3 are supported
    * - Quantization
      - 🟢
      - INT8/FP8 quantization support
@@ -155,18 +153,15 @@ Feature Support
    * - CPU Sampling
      - 🟢
      -
-   * - Chunked Prefill
-     - 🚧
-     - 
    * - Multimodal
-     - 🚧
+     - 🟢
      - Llama4 and Pixtral are supported
 
 - 🟢 Functional: Fully operational, with ongoing optimizations.
 - 🚧 WIP: Under active development.
 
 Feature Configuration
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 NxD Inference models provide many configuration options. When using NxD Inference through vLLM,
 you configure the model with a default configuration that sets the required fields from vLLM settings.
@@ -213,9 +208,233 @@ or when launching vLLM from the CLI
         }
     }'
 
+Here's a list of arguments that can be set to enable specific features from NxD Inference.
 
+.. list-table::
+   :header-rows: 1
+   :widths: 45 10 45
+
+   * - Neuronx Distributed Inference Feature
+     - Argument
+     - Description
+   * - :ref:`Sequence Parallelism <nxdi-feature-guide-sequence-parallelism>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "sequence_parallel_enabled": true
+                } 
+            }'
+    
+     - Sequence parallelism splits tensors across the sequence dimension
+   * - :ref:`QKV Weight Fusion <qkv-weight-fusion>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "fused_qkv": true
+                }
+        }'
+     - QKV weight fusion concatenates a model’s query, key and value weight matrices
+   * - :ref:`Bucketing <nxdi-bucketing>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "enable_bucketing": true,
+                "context_encoding_buckets": [512, 1024],
+                "token_generation_buckets": [1536, 2048]
+                }
+            }'
+     - Bucketing helps LLMs work optimally with different shapes.Setting only `enable_bucketing=True` enables automatic bucketing which creates context encoding and token generation buckets with powers of two from 128 and `max-model-len`.Set `context_encoding_buckets` and `token_generation_buckets` to explicit values if your use case needs to be optimized for specific sequence lengths. 
+   * - :ref:`Prefix Caching<nxdi_prefix_caching>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "is_prefix_caching": true,
+                "is_block_kv_layout": true,
+                "pa_num_blocks": 4096,
+                "pa_block_size": 32
+                }
+            }'
+     - ``is_prefix_caching`` and ``is_block_kv_layout`` enable prefix caching and block KV Cache layout respectively. Both arguments need to be enabled for automatic prefix caching. For optimal performance with Neuron, it’s recommended to set ``pa_block_size=32 or 16``. Also set ``num_gpu_blocks_override`` to the same value as ``pa_num_blocks``.
+   * - :ref:`Asyncronous Runtime Support<nxdi_async_mode_feature_guide>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "async_mode": true
+                }
+            }'
+     - Parallelizes CPU logic with Neuron device logic, eliminating CPU overheads
+   * - :ref:`Bucketing with Prefix Caching<bucketing-with-prefix-caching>`
+     - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "is_prefix_caching": true,
+                "is_block_kv_layout": true,
+                "pa_num_blocks": 4096,
+                "pa_block_size": 32,
+                "context_encoding_buckets": [512, 1024, 2048],
+                "prefix_buckets": [512, 1024],
+                "token_generation_buckets": [2048]
+                }
+            }'
+     - Bucketing is enabled by default, and Neuron automatically determines optimal bucket sizes. However, if needed, you can specify custom bucket sizes by defining the context_encoding_buckets and prefix_buckets parameters in ``override-neuron-config``.
+   
 For more information on NxD Inference features, see :ref:`NxD Inference Features Configuration Guide<nxdi-feature-guide>`
 and :ref:`NxD Inference API Reference<nxd-inference-api-guide>`.
+
+Enabling Kernels
+^^^^^^^^^^^^^^^^
+Kernels can be enabled in nxdi by using certain arguments through ``--additional-config`` via the ``overrride-neuron-config`` field.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Argument
+     - Description
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_kernel_enabled": true
+                } 
+            }'
+    
+     - Prefill attention kernel
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_block_tkg_nki_kernel_enabled": true
+                }
+        }'
+     - Token generation attention kernel with block kv layout. Improves performance when prefix caching is enabled.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_tkg_nki_kernel_enabled": true
+                }
+        }'
+     - Token generation attention kernel without block kv layout.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_block_tkg_nki_kernel_cascaded_attention": true
+                }
+        }'
+     - Token generation attention kernel. Use this for performance considerations. Performance is better at longer sequence lengths and high batches. Needs to be used with ``attn_block_tkg_nki_kernel``.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_block_tkg_nki_kernel_cache_update": true
+                }
+        }'
+     - Enables cache update inside the attention kernel 
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "attn_block_cte_nki_kernel_enabled": true
+                }
+        }'
+     - Prefill attention kernel with block KV for prefix caching support
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "mlp_kernel_enabled": true
+                }
+        }'
+     - Prefill MLP kernel
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "quantized_mlp_kernel_enabled": true
+                }
+        }'
+     - Prefill MLP kernell with fp8 (static / dynamic quantization)
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "mlp_tkg_nki_kernel_enabled": true
+                }
+        }'
+     - Token generation MLP kernel. Should be used with ``mlp_kernel_enabled``.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "mlp_kernel_fuse_residual_add": true
+                }
+        }'
+     - Fuses the residual add into the mlp kernel. This kernel cannot be used when ``sequence_parallel_enabled`` is used.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "qkv_kernel_enabled": true
+                }
+        }'
+     - QKV projection prefill kernel
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "qkv_nki_kernel_enabled": true
+                }
+        }'
+     - QKV projection prefill kernel (new NKI)
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "qkv_cte_nki_kernel_fuse_rope": true
+                }
+        }'
+     - QKV projection prefill with fused RoPE
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "qkv_kernel_fuse_residual_add": true
+                }
+        }'
+     - Fuses residual add into the qkv kernel. Can be used with ``qkv_kernel_enabled`` and cannot be used with ``sequence_parallel_enabled``
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "rmsnorm_quantize_kernel_enabled": true
+                }
+        }'
+     - Used in combination with quantized  mlp kernel for Prefill. Moves qunatization from MLP kenrel to rmsnorm, followed by collectives in fp8 and qunatized mlp. Use for better performance.
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "strided_context_parallel_kernel_enabled": true
+                }
+        }'
+     - Context parallel attention CTE kernel with striding for load balancing. To be used when using context parallelism. 
+   * - .. code-block::
+
+        --additional-config '{
+            "override-neuron-config": {
+                "k_cache_transposed": true
+                }
+        }'
+     - Decode optimization
+
 
 Scheduling and K/V Cache
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -311,7 +530,7 @@ the following command:
 
 .. code:: bash
 
-    python3 -m vllm.entrypoints.openai.api_server \
+    vllm serve \
         --model "TinyLlama/TinyLlama-1.1B-Chat-v1.0" \
         --tensor-parallel-size 2 \
         --max-model-len 128 \
@@ -372,14 +591,15 @@ You can change the sampling parameters and enable or disable streaming.
 Known Issues
 ---------------
 
-1. Chunked prefill is disabled by default on Neuron for optimal performance. To enable chunked prefill, set the environment variable ``DISABLE_NEURON_CUSTOM_SCHEDULER="1"``.
-   
-   * Users are required to provide a ``num_gpu_blocks_override`` arg, which should be at least ``ceil(max_model_len // block_size) * max_num_seqs`` when invoking vLLM to avoid a potential OOB error.
+1. Chunked prefill is not supported on Neuron.
+2. You must provide ``num_gpu_blocks_override`` to avoid out-of-bounds (OOB) errors. This override ensures vLLM's scheduler uses the same block count that you compiled into the model Currently NxDI does not support using different kv cache sizes at compile vs. runtime.
 
-2. When using HuggingFace model IDs with both `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ and models that have ``tie_word_embeddings`` set to ``true`` in their config (such as `Qwen3-8B <https://huggingface.co/Qwen/Qwen3-8B/blob/main/config.json#L24>`_), you may encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
-3. For vLLM version 0.11.0 there is a bug where chat templates are not cached. This affects request preprocessing time. This is fixed in future vLLM versions.
-4. Async tokenization in vLLM V1 can increase request preprocessing time for small inputs and batch sizes. The Neuron team is investigating potential solutions.
-5. Pixtral has out of bounds issues for batch sizes greater than 4. The max sequence length is 10240.
+   - With either chunked prefill or prefix caching: NxDI will internally use blockwise kv cache layout. Set ``num_gpu_blocks_override`` to at least ``ceil(max_model_len / block_size) * max_num_seqs``
+   - With neither chunked prefill nor prefix caching: NxDI will internally use contiguous kv cache layout, and overwrite ``block_size`` to ``max_model_len``. Set ``num_gpu_blocks_override`` to exactly ``max_num_seqs``
+
+3. When using HuggingFace model IDs with `shard on load <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/weights-sharding-guide.html#shard-on-load>`_ enabled, models with ``tie_word_embeddings=true`` in their config.json (including Qwen3-8B, Qwen2.5-7B, and other Qwen family models) will encounter the error ``NotImplementedError: Cannot copy out of meta tensor; no data!``. To resolve this, download the model checkpoint locally from Hugging Face and serve it from the local path instead of using the HuggingFace model ID.
+4. Async tokenization in vLLM V1 may result in increased time to first token (TTFT) compared to V0 for small inputs and low batch sizes, as the orchestration overhead can outweigh the efficiency gains from async processing.
+5. The following features are only supported on the legacy Neuron fork of vLLM v0 architecture that is no longer supported: disaggregated inference, mllama, and speculative decoding with a draft model. The fork can be found at https://github.com/aws-neuron/upstreaming-to-vllm/releases/tag/2.26.1. 
 
 Support
 ----------

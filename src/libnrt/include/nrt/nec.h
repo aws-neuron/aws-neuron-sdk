@@ -17,7 +17,25 @@ extern "C" {
 
 #define NEC_MAX_CHANNELS 32 /* matches MAXCHANNELS in NCCL */
 #define NEC_MAX_NR_CHANNEL_CHUNKS 32 /* Channel buffers for reduce operation */
-#define NEC_MAX_FOLD_N 8
+#define NEC_MAX_FOLD_N 16
+
+/*
+ * We can set max communicator to anything here but ultimately we will be
+ * limited by how much HW resources (such as TOP_SP semaphores or NX DRAM
+ * space etc) get used up as number of communicators go up.
+ */
+#define NEC_MAX_COMM_N 12   /* Max supported replica-groups in NEFF */
+
+#define NEC_MAX_NET_BUFFERS (2 * NEC_MAX_COMM_N) /* 2(hier & ring) x (# replica groups) */
+
+/*
+ * We can set max communicator to anything here but ultimately we will be
+ * limited by how much HW resources (such as TOP_SP semaphores or NX DRAM
+ * space etc) get used up as number of communicators go up.
+ */
+#define NEC_MAX_COMM_N 12   /* Max supported replica-groups in NEFF */
+
+#define NEC_MAX_NET_BUFFERS (2 * NEC_MAX_COMM_N) /* 2(hier & ring) x (# replica groups) */
 
 /*
  * We can set max communicator to anything here but ultimately we will be
@@ -65,6 +83,12 @@ typedef enum ofi_comm_type {
     LOCAL_SEND_COMM
 } ofi_comm_type_t;
 
+enum enc_comm_type {
+    H_COMM_INTRA_ID = 0,
+    H_COMM_INTER_ID = 1,
+    H_COMM_MAX_ID
+};
+
 /**
  * Neuron Elastic Collectives (NEC)
  *
@@ -87,31 +111,19 @@ typedef enum ofi_comm_type {
  * TODO: ENC will be renamed to NEC
  */
 
-typedef enum nec_op_type {
-    NEC_OP_ADD     = 0x0,
-    NEC_OP_FMA     = 0x1,
-    NEC_OP_MAX     = 0x2,
-    NEC_OP_MIN     = 0x3,
-    NEC_OP_INVALID = 0xF,
-} nec_op_type_t;
+typedef enum nec_pod_type {
+    NEC_POD_TYPE_NONE,
+    NEC_POD_TYPE_P2P,
+    NEC_POD_TYPE_SWITCH,
+    NEC_POD_TYPE_INVALID
+} nec_pod_type_t;
 
-typedef enum nec_data_type {
-    NEC_DTYPE_INVALID  = 0x0,
-    NEC_DTYPE_FP8_E3   = 0xD,
-    NEC_DTYPE_FP8_E4   = 0xE,
-    NEC_DTYPE_FP8_E5   = 0xF,
-    NEC_DTYPE_FP16     = 0x7,
-    NEC_DTYPE_BFLOAT16 = 0x6,
-    NEC_DTYPE_FP32     = 0xA,
-    NEC_DTYPE_UINT8    = 0x3,
-    NEC_DTYPE_UINT16   = 0x5,
-    NEC_DTYPE_UINT32   = 0x9,
-    NEC_DTYPE_UINT64   = 0x1,
-    NEC_DTYPE_INT8     = 0x2,
-    NEC_DTYPE_INT16    = 0x4,
-    NEC_DTYPE_INT32    = 0x8,
-    NEC_DTYPE_INT64    = 0xC,
-} nec_data_type_t;
+typedef enum nec_pod_type {
+    NEC_POD_TYPE_NONE,
+    NEC_POD_TYPE_P2P,
+    NEC_POD_TYPE_SWITCH,
+    NEC_POD_TYPE_INVALID
+} nec_pod_type_t;
 
 /* Translated from what KaenaDriver returns */
 typedef enum nec_pod_type {
@@ -250,6 +262,7 @@ struct enc_channel {
      * Neuron Runtime context
      */
     void *devmem_res;
+    void *two_step_pod_mesh_devmem_res;
     /* Gateway buffer is allocated only when hybrid ring is supported */
     void *devmem_gw_buf_res;
     void *nccl_mhandle;
@@ -279,6 +292,7 @@ struct enc_comm_info {
     int rank;
     int rank_n;
     int local_rank_n;
+    int local_rack_rank_n;
 
     int node;
     int node_n;
@@ -287,6 +301,7 @@ struct enc_comm_info {
 
     /* Pod information received from NCCL */
     bool enable_pod;
+    bool use_net; /* Whether network interface is used or not with the communicator */
     int pod;
     int pod_n;
     int pod_node;
@@ -305,7 +320,7 @@ struct enc_ring {
 };
 
 /* Kangaring */
-#define NEC_KANGARING_MAX_NUM_RANKS (128)
+#define NEC_KANGARING_MAX_NUM_RANKS (256)
 #define KANGARING_NUM_SENG_PER_DEV  (4)
 #define KANGARING_NUM_TPB_PER_DEV   (8)
 #define KANGARING_MAX_SECONDARIES   (3)
@@ -404,8 +419,11 @@ typedef enum enc_mesh_event_type {
 
     ENC_MESH_NUM_EVENT_START = ENC_COMMON_NUM_EVENT_TYPE,
     EVT_REDUCE_COPY = ENC_COMMON_NUM_EVENT_TYPE,
+    EVT_REDUCE_COPY_2,
     EVT_REDUCE_WRITE,
     EVT_INTER_GRP_BRDCST_2,
+    EVT_LOCAL_AND_POD_GRP_BRDCST,
+    EVT_LOCAL_AND_POD_GRP_BRDCST_2,
     ENC_MESH_NUM_EVENT_TYPE,
 
     ENC_A2A_NUM_EVENT_START = ENC_MESH_NUM_EVENT_TYPE,
@@ -460,7 +478,6 @@ typedef enum enc_mesh_event_type {
 #define KiB     (1024)
 #define MiB     (1024 * KiB)
 #define GiB     (1024 * MiB)
-#define ENC_MESH_CHANNEL_BUF_MAX_SIZE (8 * MiB)
 
 struct enc_mesh_nbr_grp {
     int *ranks;
@@ -478,6 +495,7 @@ typedef enum enc_alg_mesh_type {
     ENC_ALG_FULL_MESH,
     ENC_ALG_GROUPED_MESH,
     ENC_ALG_MESH_TRN2,
+    ENC_ALG_MESH_SWITCH,
     ENC_ALG_MESH_INVALID
 } enc_alg_mesh_type_t;
 
@@ -499,6 +517,9 @@ struct enc_alg_mesh_subtype {
     bool is_rdh;
     bool is_single_step_mesh;
     bool is_two_step_pod_mesh;
+    bool is_latency_opt;
+    bool is_bw_opt;
+    bool is_rmv_dst_routing;
     uint32_t alltoall_iteration;
 };
 
@@ -557,8 +578,9 @@ struct enc_alg_mesh {
 
     /* Whether to build RDH */
     bool build_rdh;
+    bool rdh_double_buffer;
     void *rdh_devmem_res;  /*intra rdh channel buffer */
-    bool use_rdh_2dev_proxy;
+    bool use_2dev_proxy;
 
     bool tokens_exchanged;    /* reinitialzed tokens from old mesh config*/
 
@@ -626,11 +648,13 @@ typedef struct nccl_comm_info {
     int rank;
     int rank_n;
     int local_rank_n;
+    int local_rack_rank_n;
 
     int node;
     int node_n;
 
     bool enable_pod;
+    bool use_net; /* Whether network interface is used or not with the communicator */
     int pod;
     int pod_n;
     int pod_node;
@@ -664,6 +688,7 @@ typedef struct enc_nccl_comm_node {
     bool global_nccl_comm_node;
     int refcnt;
     uint32_t stream_id;
+    uint32_t context_id;
 
     uint32_t num_local_participants;
     uint32_t num_local_leaders;
@@ -674,8 +699,8 @@ typedef struct enc_nccl_comm_node {
     bool intra_pod_interface; /* When intra-pod interface is used, we can't skip exeuction barrier */
 } enc_nccl_comm_node_t;
 
-/* Neuron Device information. This data structure is used to send the device information from KeanaRuntime to
- * KaenaNCCL for nccl communicator building.
+/* Neuron Device information. This data structure is used to send the device information from NRT to
+ * nccom for nccl communicator building.
  */
 #define ENC_PROXY_HISTOGRAM_OUTPUT_PATH_LENGTH_MAX (128)
 typedef struct enc_proxy_histogram_config {
@@ -797,6 +822,10 @@ struct enc_glb_comm {
      */
     void* intra_rdh_devmem_res[NEC_MAX_STREAM_N];
 
+    void* mesh_devmem_res_per_rg[NEC_MAX_STREAM_N * NEC_MAX_COMM_N * H_COMM_MAX_ID];
+
+    void* rdh_devmem_res_per_rg[NEC_MAX_STREAM_N * NEC_MAX_COMM_N];
+
     void *gateway_devmem_res[NEC_MAX_STREAM_N][NEC_MAX_CHANNELS];
 
     pthread_mutex_t gcomm_setup_mtx;
@@ -842,6 +871,9 @@ typedef struct net_src_addr {
     void* proxy_histogram_tag;
      /* Fields below are for mesh only */
     int dst_rank;
+    /* For local RDMA read */
+    void *dst_addr;
+    void *dst_mhandle;
 } net_src_addr_t;
 
 typedef struct net_dest_addr {
@@ -871,7 +903,6 @@ typedef struct net_ops_info {
     uint32_t ending_recv_credits;
     size_t data_type_sz;
     bool is_dynamic_send_recv_sz;
-    bool is_recv_sz_known_by_dst;
     bool variable_peer;
     bool add_to_histogram;
     /*
@@ -894,7 +925,6 @@ void nec_inc_semaphore(volatile uint32_t *sem_inc_addr, uint32_t val);
  */
 size_t nec_get_dynamic_send_size_bytes(enc_host_mem_t *dyn_input, size_t data_type_sz, int dst_rank, int rank_n);
 size_t nec_get_dynamic_send_offset_bytes(enc_host_mem_t *dyn_input, size_t data_type_sz, int dst_rank, int rank_n);
-size_t nec_get_dynamic_recv_size_bytes(enc_host_mem_t *dyn_input, size_t data_type_sz, int src_rank, int rank_n);
 size_t nec_get_dynamic_recv_offset_bytes(enc_host_mem_t *dyn_input, size_t data_type_sz, int src_rank, int rank_n);
 void nec_set_recv_size_bytes(enc_host_mem_t *dyn_input, size_t recv_size_bytes, size_t data_type_sz, int src_rank, int rank_n);
 

@@ -27,77 +27,84 @@ Key capabilities of the Neuron Graph Compiler include:
 
 * **Mixed precision support**: Offers fine-grained control over precision and performance through auto-casting options, supporting multiple numeric formats (FP32, TF32, FP16, BF16, FP8) with different strengths in dynamic range and numeric precision.
 
-The compilation process is typically transparent to users, as the compiler is invoked automatically within ML frameworks through Neuron Framework plugins. Models are analyzed, optimized, and compiled into a NEFF file (Neuron Executable File Format), which is then loaded by the :doc:`Neuron runtime </neuron-runtime/index>` for execution on Neuron devices.
+The compilation process is typically transparent to users, as the compiler is invoked automatically within ML frameworks through Neuron Framework plugins. Models are analyzed, optimized, and compiled into a NEFF file (Neuron Executable File Format), which is then loaded by the :doc:`Neuron Runtime </neuron-runtime/index>` for execution on Neuron devices.
+
+.. grid:: 1 
+   :gutter: 3
+
+   .. grid-item-card:: Neuron Graph Compiler Component Release Notes
+      :link: /release-notes/components/compiler
+      :link-type: doc
+
+      Review the Neuron Graph Compiler release notes for all versions of the Neuron SDK.
+
+.. tab-set::
+
+   .. tab-item:: Neuron Graph Compiler (neuronx-cc) for Trn1 & Inf2
+
+      .. grid:: 1 
+         :gutter: 3
+
+         .. grid-item-card:: CLI Reference Guide
+            :link: neuron-compiler-cli-reference-guide
+            :link-type: ref
+
+            Neuron Compiler CLI Reference Guide
+
+         .. grid-item-card:: Graph Compiler Developer Guide
+            :link: neuronx-cc-training-mixed-precision
+            :link-type: ref
+
+            Mixed precision training guide
+
+         .. grid-item-card:: Graph Compiler Error Code Reference
+            :link: ncc-errors-home
+            :link-type: ref
+
+            Error code reference
+
+         .. grid-item-card:: How To Convolute Kernels in UNet Training Models
+            :link: implement-convolution-kernels-unet
+            :link-type: ref
+
+            Learn how to modify UNet training models to use convolution kernels with the AWS Neuron SDK. 
+
+         .. grid-item-card:: Graph Compiler FAQ
+            :link: neuronx_compiler_faq
+            :link-type: ref
+
+            Frequently asked questions
+
+
+   .. tab-item:: Neuron Graph Compiler (neuron-cc) for Inf1
+
+      .. grid:: 1 
+         :gutter: 3
+
+         .. grid-item-card:: Graph Compiler API Reference Guide
+            :link: neuron-compiler-cli-reference
+            :link-type: ref
+
+            Neuron Compiler CLI Reference
+
+         .. grid-item-card:: Graph Compiler Developer Guide
+            :link: neuron-cc-training-mixed-precision
+            :link-type: ref
+
+            Mixed precision training guide
+
+         .. grid-item-card:: Graph Compiler FAQ
+            :link: neuron_compiler_faq
+            :link-type: ref
+
+            Frequently asked questions
+
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :hidden:
 
     /compiler/neuronx-cc
     /compiler/neuron-cc
-    Error codes </compiler/error-codes/index>
-
-.. tab-set::
-
-   .. tab-item:: Neuron Graph Compiler for Trn1 & Inf2
-
-         .. dropdown::  API Reference Guide
-               :class-title: sphinx-design-class-title-med
-               :class-body: sphinx-design-class-body-small
-               :animate: fade-in
-
-               * :ref:`Neuron Compiler CLI Reference Guide <neuron-compiler-cli-reference-guide>`
-
-         .. dropdown:: Graph Compiler Developer Guide
-                  :class-title: sphinx-design-class-title-med
-                  :class-body: sphinx-design-class-body-small
-                  :animate: fade-in
-
-                  * :ref:`neuronx-cc-training-mixed-precision`
-  
-         .. dropdown:: Graph Compiler Error Code Reference
-                  :class-title: sphinx-design-class-title-med
-                  :class-body: sphinx-design-class-body-small
-                  :animate: fade-in
-
-                  * :ref:`ncc-errors-home`
-
-         .. dropdown::  Misc
-               :class-title: sphinx-design-class-title-med
-               :class-body: sphinx-design-class-body-small
-               :animate: fade-in
-               :open:
-
-               * :ref:`FAQ <neuronx_compiler_faq>`
-               * :ref:`What's New <neuronx-cc-rn>`
-
-   .. tab-item:: Neuron Graph Compiler for Inf1
-
-
-         .. dropdown:: Graph Compiler API Reference Guide
-               :class-title: sphinx-design-class-title-med
-               :class-body: sphinx-design-class-body-small
-               :animate: fade-in
-
-               * :ref:`neuron-compiler-cli-reference`
-
-
-         .. dropdown:: Graph Compiler Developer Guide
-               :class-title: sphinx-design-class-title-med
-               :class-body: sphinx-design-class-body-small
-               :animate: fade-in
-
-
-               * :ref:`neuron-cc-training-mixed-precision`
-
-
-
-         .. dropdown::  Misc
-               :class-title: sphinx-design-class-title-med
-               :class-body: sphinx-design-class-body-small
-               :animate: fade-in
-               :open:
-
-               * :ref:`FAQ <neuron_compiler_faq>`
-               * :ref:`What's New <neuron-cc-rn>`
-               * :ref:`neuron-supported-operators`
+    Error Codes </compiler/error-codes/index>
+    Release Notes </release-notes/components/compiler>

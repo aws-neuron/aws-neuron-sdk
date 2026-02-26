@@ -124,4 +124,4 @@ Previous release notes
 ----------------------
 
 * :ref:`neuron-2-25-0-nxd-inference`
-* :ref:`neuronx-distributed-inference-rn`
+* :ref:`nxd-inference_rn`

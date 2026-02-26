@@ -1,7 +1,7 @@
 .. meta::
     :description: Guides for AWS Neuron Kernel Interface (NKI), including architectures, tutorials for implementing and optimizing kernels, and how to use kernels with common frameworks.
     :keywords: NKI, AWS Neuron, Guides, Tutorials, how-to
-    :date-modified: 12/14/2025
+    :date-modified: 2/26/2026
 
 .. _nki-guides:
 
@@ -99,7 +99,7 @@ Neuron recommends new NKI developers start with :doc:`Trainium/Inferentia2 Archi
 How-To Guides
 -------------
 
-.. grid:: 1
+.. grid:: 1 1 2 2
    :gutter: 3
 
    .. grid-item-card:: How to Insert NKI Kernels into Models
@@ -109,6 +109,13 @@ How-To Guides
 
       How to insert a NKI kernel as a custom operator into a PyTorch or JAX model using simple code examples.
 
+   .. grid-item-card:: How to Use the NKI Scheduling APIs
+      :link: how-to-scheduling-apis
+      :link-type: doc
+      :class-body: sphinx-design-class-title-small
+
+      Control instruction execution order using dependency edges and no-reorder blocks for kernel performance optimization.
+
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -116,3 +123,4 @@ How-To Guides
    Tutorials </nki/guides/tutorials/index>
    Architecture </nki/guides/architecture/index>
    Insert NKI Kernels into Models </nki/guides/framework_custom_op>
+   Use NKI Scheduling APIs </nki/guides/how-to-scheduling-apis>

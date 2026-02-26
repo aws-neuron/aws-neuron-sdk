@@ -47,7 +47,7 @@ Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-infer
 
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.27.1 released DLC image tag such as ``0.13.0-neuronx-py312-sdk2.27.1-ubuntu24.04``
+For example, replace ``<image_tag>`` with an SDK 2.28.0 released DLC image tag such as ``0.13.0-neuronx-py312-sdk2.28.0-ubuntu24.04``
 
 Step 2: Start the Docker container
 -----------------------------------
@@ -94,7 +94,7 @@ Inside the container, start the vLLM inference server:
 
 .. code-block:: bash
 
-   python -m vllm.entrypoints.openai.api_server \
+   vllm serve \
    --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
    --max-num-seqs=4 \
    --max-model-len=128 \

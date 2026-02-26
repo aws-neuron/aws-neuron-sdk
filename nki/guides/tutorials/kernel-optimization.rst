@@ -42,8 +42,11 @@ NKI provides the ``nki.isa.nc_matmul`` instruction to perform a matrix multiply.
     import nki
     import nki.language as nl
     import nki.isa as nisa
+    import os
 
-    @nki.jit(platform_target="trn2")
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
+    
+    @nki.jit
     def matrix_multiply_kernel(lhsT, rhs):
       """NKI kernel to compute a matrix multiplication operation on a single tile
 
@@ -111,6 +114,7 @@ This small kernel allows you to experiment with the ``nki.isa.nc_matmul`` instru
 
           import numpy as np
           import torch
+          import torch_xla
           from torch_xla.core import xla_model as xm
           from multiply_kernel import matrix_multiply_kernel
 
@@ -122,7 +126,7 @@ This small kernel allows you to experiment with the ``nki.isa.nc_matmul`` instru
           expected_result = np.matmul(lhs, rhs)
 
           # Setup the XLA device and generate input tensors.
-          device = xm.xla_device()
+          device = torch_xla.device()
 
           lhsT_torch = torch.from_numpy(lhs.T).to(device=device)
           rhs_torch = torch.from_numpy(rhs).to(device=device)
@@ -201,8 +205,11 @@ The simple start allowed us to validate our understanding of the ``nki.isa.matmu
     import nki
     import nki.language as nl
     import nki.isa as nisa
+    import os
 
-    @nki.jit(platform_target="trn2")
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
+
+    @nki.jit
     def matrix_multiply_kernel(lhsT, rhs):
       """NKI kernel to compute a matrix multiplication operation in a tiled manner
 
@@ -355,8 +362,11 @@ Looking at this, you might notice two things. First, since the data for each mat
     import nki
     import nki.language as nl
     import nki.isa as nisa
+    import os
 
-    @nki.jit(platform_target="trn2")
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
+
+    @nki.jit
     def matrix_multiply_kernel(lhsT, rhs):
       """NKI kernel to compute a matrix multiplication operation in a tiled manner
          while hoisting the load of the lhsT and rhs to outer loops.
@@ -478,8 +488,11 @@ Blocking is a technique to help load even larger amounts of data in at a time. I
     import nki
     import nki.language as nl
     import nki.isa as nisa
+    import os
 
-    @nki.jit(platform_target="trn2")
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
+
+    @nki.jit
     def matrix_multiply_kernel(lhsT, rhs):
       """NKI kernel to compute a matrix multiplication operation while blocking the
          free dimensions of the LHS and RHS to improve memory access pattern.
@@ -623,9 +636,11 @@ One of the advantages of leaving the K dimension unblocked was that you could re
    import nki
    import nki.language as nl
    import nki.isa as nisa
+   import os
 
+   os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
 
-   @nki.jit(platform_target="trn2")
+   @nki.jit
    def matrix_multiply_kernel(
        lhsT,
        rhs,

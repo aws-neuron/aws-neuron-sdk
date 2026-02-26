@@ -17,13 +17,13 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
     Disaggregated Inference (1P1D) </libraries/nxd-inference/tutorials/disaggregated-inference-tutorial-1p1d>
     Disaggregated Inference </libraries/nxd-inference/tutorials/disaggregated-inference-tutorial>
     Flux Inference </libraries/nxd-inference/tutorials/flux-inference-tutorial>
+    Flux Inpainting </libraries/nxd-inference/tutorials/flux-inpainting-inference-tutorial>
     Benchmark using Performance CLI </libraries/nxd-inference/tutorials/generating-results-with-performance-cli>
     GPT-OSS 120B </libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial>
     Llama3.1 405B on Trn2 </libraries/nxd-inference/tutorials/trn2-llama3.1-405b-tutorial>
     Llama3.1 405B with Speculative Decoding </libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial>
     Llama3.1 70B Instruct Accuracy Evaluation </libraries/nxd-inference/tutorials/trn1-llama3.1-70b-instruct-accuracy-eval-tutorial>
     Llama3.1 8B with Multi-LoRA </libraries/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial>
-    Llama3.2 Multimodal </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial>
     Llama3.3 70B with APC </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial>
     Llama3.3 70B with Data Parallelism </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial>
     Llama3.3 70B with Speculative Decoding </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial>
@@ -31,8 +31,9 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
     Llama4 Legacy </libraries/nxd-inference/tutorials/llama4-tutorial-v0>
     Pixtral </libraries/nxd-inference/tutorials/pixtral-tutorial>
     Qwen3 MoE 235B </libraries/nxd-inference/tutorials/qwen3-moe-tutorial>
+    Qwen2 VL 7B </libraries/nxd-inference/tutorials/qwen2-vl-tutorial>
     Speculative Decoding </libraries/nxd-inference/tutorials/sd-inference-tutorial>
-
+    Qwen3-VL 8B </libraries/nxd-inference/tutorials/qwen3-vl-tutorial>
     
 .. grid:: 2
     :gutter: 3
@@ -43,13 +44,6 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
         :class-card: sd-rounded-3
 
         Learn how to deploy Llama3.1 405B on a single Trn2 instance using NxD Inference with vLLM and explore performance optimization techniques.
-
-    .. grid-item-card:: Llama3.2 Multimodal
-        :link: /libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial
-        :link-type: doc
-        :class-card: sd-rounded-3
-
-        Deploy and run Llama3.2 Multimodal models on AWS Neuron hardware to process both text and image inputs for multimodal inference.
 
     .. grid-item-card:: Llama3.3 70B on Trn2
         :link: /libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial
@@ -134,6 +128,13 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
 
         Learn how to use Flux for efficient inference with NxD, enabling dynamic batch processing and optimized resource utilization.
 
+    .. grid-item-card:: Flux Inpainting
+        :link: /libraries/nxd-inference/tutorials/flux-inpainting-inference-tutorial
+        :link-type: doc
+        :class-card: sd-rounded-3
+
+        Learn how to use the Flux-Fill model for efficient inference with NxD, enabling image inpainting/outpainting.
+
     .. grid-item-card:: Pixtral Tutorial
         :link: /libraries/nxd-inference/tutorials/pixtral-tutorial
         :link-type: doc
@@ -148,9 +149,23 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
 
         Learn how to deploy `Qwen/Qwen3-235B-A22B <https://huggingface.co/Qwen/Qwen3-235B-A22B>`__ with NxD Inference with various performance tuning options.
 
+    .. grid-item-card:: Qwen3 VL 8B Tutorial
+        :link: /libraries/nxd-inference/tutorials/qwen3-vl-tutorial
+        :link-type: doc
+        :class-card: sd-rounded-3
+
+        Learn how to deploy `Qwen/Qwen3-VL-8B-Thinking <https://huggingface.co/Qwen/Qwen3-VL-8B-Thinking>`__ on a single `trn2.48xlarge` instance.
+    
     .. grid-item-card:: Speculative Decoding (Qwen3-32B) on Trainium2
         :link: /libraries/nxd-inference/tutorials/sd-inference-tutorial
         :link-type: doc
         :class-card: sd-rounded-3
 
         Implement speculative decoding techniques with Qwen3-32B on Trn2 instances to accelerate LLM inference with NxD Inference.
+
+    .. grid-item-card:: Qwen2 VL Inference
+        :link: /libraries/nxd-inference/tutorials/qwen2-vl-tutorial
+        :link-type: doc
+        :class-card: sd-rounded-3
+
+        Learn how to deploy `Qwen/Qwen2-VL-7B-Instruct <https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct>`__ with NxD Inference with various performance tuning options.

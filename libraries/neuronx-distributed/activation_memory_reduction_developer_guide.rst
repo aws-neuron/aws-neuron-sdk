@@ -9,7 +9,7 @@ Sequence Parallelism
 To combine sequence parallelism with tensor-parallelism, one needs to follow the steps below:
 
 Model changes for Tensor-Parallel block:
-'''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''
 
 For tensor-parallelism, we replace the linear layers with ColumnParallel and RowParallel Linear 
 layers as mentioned `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tp_developer_guide.html#creating-model>`__.
@@ -183,6 +183,6 @@ api as follows:
     else:
         attn_output = self._attn(query, key, value, attention_mask, head_mask)
 
-Note: To use torch.utils.checkpoint, it is mandatory to use `-O1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/neuronx-cc/api-reference-guide/neuron-compiler-cli-reference-guide.html?highlight=--O1#cmdoption-neuronx-cc-arg-0>`__ 
+Note: To use torch.utils.checkpoint, it is mandatory to use `-O1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/neuronx-cc/api-reference-guide/index.html?highlight=--O1#cmdoption-neuronx-cc-arg-0>`__ 
 compiler flag. If this is not enabled, the Neuron compiler would eliminate the duplicate recompute as an 
 optimization and hence you would not see any memory gains.

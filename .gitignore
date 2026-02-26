@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 .DS_Store
 src/examples/pytorch/libtorch_demo.tar.gz
+src/neuronperf.tar.gz
 *-checkpoint.ipynb
 .idea/
 .vscode/

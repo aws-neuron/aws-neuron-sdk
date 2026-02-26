@@ -31,7 +31,7 @@ Setup Environment
 .. code:: bash
 
    git clone https://github.com/aws-neuron/deep-learning-containers.git
-   cd deep-learning-containers/docker/pytorch/inference/2.7.0
+   cd deep-learning-containers/docker/pytorch/inference/2.9.0
 
 For additional prerequisites and setup requirements, see the `docker build prerequisites <https://github.com/aws-neuron/deep-learning-containers/blob/main/README.md#prerequisites>`_.
 

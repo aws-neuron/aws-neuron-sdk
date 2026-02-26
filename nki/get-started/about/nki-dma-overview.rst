@@ -21,7 +21,7 @@ You can also perform casting as part of DMA when the transfer has a different so
 DMA Triggers
 -------------
 
-DMA transfers can be triggered by any engine sequencer in the NeuronCore. (For details, refer to :doc:`/nki/about/trainium2_arch`.) The sequencer instruction to trigger the transfer may wait on any semaphore condition which is signaled by other compute engines to respect data dependencies. The Trigger Engine for a given transfer can be specified by setting the ``engine`` parameter when calling :doc:`nisa.dma_copy </nki/api/generated/nki.isa.dma_copy>`. This behavior is only allowed when using hardware DGE in the current NKI Beta 2 release.
+DMA transfers can be triggered by any engine sequencer in the NeuronCore. (For details, refer to :doc:`/nki/guides/architecture/trainium2_arch`.) The sequencer instruction to trigger the transfer may wait on any semaphore condition which is signaled by other compute engines to respect data dependencies. The Trigger Engine for a given transfer can be specified by setting the ``engine`` parameter when calling :doc:`nisa.dma_copy </nki/api/generated/nki.isa.dma_copy>`. This behavior is only allowed when using hardware DGE in the current NKI Beta 2 release.
 
 DMA Queues
 -----------
@@ -75,8 +75,9 @@ Here is the kernel to perform the DMA transfer.
 
     os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
     os.environ["NEURON_RT_ENABLE_DGE_NOTIFICATIONS"] = "1"
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
 
-    @nki.jit(platform_target="trn2", mode="torchxla")
+    @nki.jit(mode="torchxla")
     def tensor_exp_kernel_isa(in_tensor):
       """NKI kernel to compute elementwise exponential of an input tensor
       Args:
@@ -100,8 +101,9 @@ Here is the kernel to perform the DMA transfer.
 
     if __name__ == "__main__":
       import torch
+      import torch_xla
       from torch_xla.core import xla_model as xm
-      device = xm.xla_device()
+      device = torch_xla.device()
       shape = (4,4096) # Tensor shape : [4,4096]
       in_tensor = torch.ones(shape,  dtype=torch.bfloat16).to(device=device)
       out_tensor = tensor_exp_kernel_isa(in_tensor)
@@ -144,9 +146,10 @@ Example
     import os
     os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
     os.environ["NEURON_RT_ENABLE_DGE_NOTIFICATIONS"] = "1"
+    os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn2"
 
 
-    @nki.jit(platform_target="trn2", mode="torchxla")
+    @nki.jit(mode="torchxla")
     def tensor_exp_kernel_isa(in_tensor):
       """NKI kernel to compute elementwise exponential of an input tensor
       Args:

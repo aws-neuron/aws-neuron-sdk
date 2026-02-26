@@ -66,12 +66,12 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
 
       Tutorials for how to utilize all Neuron Tools.
 
-   .. grid-item-card:: What's New
-      :link: /release-notes/2.27.0/tools
+   .. grid-item-card:: Release Notes
+      :link: /release-notes/components/dev-tools
       :link-type: doc
       :class-header: sd-bg-secondary sd-text-white
 
-      Latest updates, new features, and improvements to Neuron Tools.
+      Latest updates, new features, and improvements to Neuron Tools and Neuron Explorer.
 
 .. toctree::
    :maxdepth: 1
@@ -79,3 +79,4 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
 
    Third-party Tools </tools/third-party-solutions>
    Tutorials </tools/tutorials/index>
+   Release Notes </release-notes/components/dev-tools>

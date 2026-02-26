@@ -45,7 +45,7 @@ of the compute engines and their connectivity to the two on-chip SRAMs: state bu
 
 .. _fig-arch-neuron-core-v2:
 
-.. figure:: /nki/img/pm-nc.png
+.. figure:: /nki/img/neuroncore_fig24.png
    :align: center
    :width: 60%
 

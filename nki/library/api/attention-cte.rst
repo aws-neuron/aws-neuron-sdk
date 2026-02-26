@@ -1,13 +1,13 @@
 .. meta::
-    :description: API reference for the Attention CTE kernel included in the NKI Library .
+    :description: Attention CTE kernel implements attention optimized for Context Encoding (prefill) use cases.
     :date-modified: 11/28/2025
 
-.. currentmodule:: nkilib.core.attention_cte
+.. currentmodule:: nkilib.core.attention.attention_cte
 
 Attention CTE Kernel API Reference
 ===================================
 
-This topic provides the API reference for the ``Attention CTE`` kernel. The kernel implements attention specifically optimized for Context Encoding (Prefill) use cases with long sequence lengths.
+Implements attention optimized for Context Encoding (prefill) use cases with long sequence lengths.
 
 The kernel supports:
 
@@ -30,13 +30,13 @@ The kernel employs efficient tiling strategies and memory access patterns to max
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `attention_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/attention/attention_cte.py>`_
 
 
 attention_cte
 ^^^^^^^^^^^^^^^
 
-.. py:function:: attention_cte(q, k, v, scale=1.0, causal_mask=True, k_prior=None, v_prior=None, prior_used_len=None, sink=None, sliding_window=None, tp_q=True, tp_k=False, tp_out=False, cache_softmax=False, softmax_dtype=nl.float32, cp_offset=None, global_cp_deg=None)
+.. py:function:: attention_cte(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, scale: float = 1.0, causal_mask: bool = True, k_prior: Optional[nl.ndarray] = None, v_prior: Optional[nl.ndarray] = None, prior_used_len: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, sliding_window: Optional[int] = None, tp_q: bool = True, tp_k: bool = False, tp_out: bool = False, cache_softmax: bool = False, softmax_dtype=nl.float32, cp_offset: Optional[nl.ndarray] = None, global_cp_deg: int = None, cp_strided_q_slicing: bool = False)
 
    Entrypoint NKI kernel that supports multiple attention variants.
 
@@ -76,6 +76,8 @@ attention_cte
    :type cp_offset: ``nl.ndarray``, optional
    :param global_cp_deg: Global context parallel degree
    :type global_cp_deg: ``int``, optional
+   :param cp_strided_q_slicing: Whether to use strided Q slicing for context parallelism. Default: False.
+   :type cp_strided_q_slicing: ``bool``
    :return: Output tensor with attention results. Shape depends on ``tp_out`` parameter. If ``cache_softmax`` is ``True``, returns tuple of ``(output, out_neg_max, out_sum_recip)``.
    :rtype: ``nl.ndarray`` or ``tuple``
 
@@ -161,28 +163,7 @@ The kernel implementation includes several key optimizations:
 
 6. **Optimized Memory Access**: Employs careful memory access patterns to optimize data movement between HBM and SBUF.
 
-Algorithm
-------------
 
-The kernel goes through the following steps:
-
-1. **Setup**: Initialize intermediate buffers, mask, and debug tensors.
-
-2. **Loop over K/V sections**: For long sequences, divide K/V into sections of 8K tokens.
-
-3. **For each section**:
-   
-   a. Load K and V to SBUF
-   b. Loop over Q (groups) - each group has seqlen 128
-   c. Within each group:
-
-      i.   Load Q
-      ii.  Compute QK^T (MM1) and max
-      iii. Compute exponential and transpose
-      iv.  Compute PV (MM2)
-      v.   Write to output
-
-4. **Flash Attention**: Maintain running statistics (max, sum) across sections and use these to update the output using flash attention rescaling.
 
 See Also
 -----------

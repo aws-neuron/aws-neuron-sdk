@@ -44,13 +44,36 @@ configurations:
       on_device_sampling_config: 
         do_sample: true
         dynamic: true
+      torch_dtype: "bfloat16"
     vllm:
       tensor_parallel_size: 64
       max_num_seqs: 1
       max_model_len: 16384
-      device: "neuron"
-      use_v2_block_manager: true
-      override_neuron_config: {}
+      additional_config:
+        override_neuron_config:
+          async_mode: true
+          batch_size: 1
+          tp_degree: 64
+          attn_block_tkg_nki_kernel_cache_update: true
+          attn_block_tkg_nki_kernel_enabled: true
+          attn_kernel_enabled: true
+          cc_pipeline_tiling_factor: 1
+          enable_bucketing: true
+          fused_qkv: true
+          is_continuous_batching: true
+          k_cache_transposed: true
+          kv_cache_tiling: false
+          logical_nc_config: 2
+          mlp_kernel_enabled: true
+          qkv_kernel_enabled: true
+          seq_len: 16384
+          sequence_parallel_enabled: true
+          token_generation_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+          context_encoding_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+          on_device_sampling_config:
+            do_sample: true
+            dynamic: true
+          torch_dtype: "bfloat16"
 
   config2:
     instance_type: "trn2.48xlarge"
@@ -80,13 +103,37 @@ configurations:
       on_device_sampling_config: 
         do_sample: true
         dynamic: true
+      torch_dtype: "bfloat16"
     vllm:
       tensor_parallel_size: 32
       max_num_seqs: 8
       max_model_len: 16384
-      device: "neuron"
-      use_v2_block_manager: true
-      override_neuron_config: {}
+      additional_config:
+        override_neuron_config:
+          async_mode: true
+          batch_size: 8
+          ctx_batch_size: 1
+          tp_degree: 32
+          attn_block_tkg_nki_kernel_cache_update: true
+          attn_block_tkg_nki_kernel_enabled: true
+          attn_kernel_enabled: true
+          cc_pipeline_tiling_factor: 1
+          enable_bucketing: true
+          fused_qkv: true
+          is_continuous_batching: true
+          k_cache_transposed: true
+          kv_cache_tiling: false
+          logical_nc_config: 2
+          mlp_kernel_enabled: true
+          qkv_kernel_enabled: true
+          seq_len: 16384
+          sequence_parallel_enabled: true
+          token_generation_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+          context_encoding_buckets: [256, 512, 1024, 2048, 4096, 8192, 10240, 12288, 16384]
+          on_device_sampling_config:
+            do_sample: true
+            dynamic: true
+          torch_dtype: "bfloat16"
   
   config3:
     instance_type: "trn2.48xlarge"
@@ -99,13 +146,20 @@ configurations:
       is_continuous_batching: true
       logical_nc_config: 2
       seq_len: 16384
+      torch_dtype: "bfloat16"
     vllm:
       tensor_parallel_size: 64
       max_num_seqs: 1
       max_model_len: 16384
-      device: "neuron"
-      use_v2_block_manager: true
-      override_neuron_config: {}
+      additional_config:
+        override_neuron_config:
+          batch_size: 1
+          tp_degree: 64
+          enable_bucketing: true
+          is_continuous_batching: true
+          logical_nc_config: 2
+          seq_len: 16384
+          torch_dtype: "bfloat16"
 
   config4:
     instance_type: "trn1.32xlarge"
@@ -118,13 +172,20 @@ configurations:
       is_continuous_batching: true
       logical_nc_config: 1
       seq_len: 16384
+      torch_dtype: "bfloat16"
     vllm:
       tensor_parallel_size: 32
       max_num_seqs: 1
       max_model_len: 16384
-      device: "neuron"
-      use_v2_block_manager: true
-      override_neuron_config: {}
+      additional_config:
+        override_neuron_config:
+          batch_size: 1
+          tp_degree: 32
+          enable_bucketing: true
+          is_continuous_batching: true
+          logical_nc_config: 1
+          seq_len: 16384
+          torch_dtype: "bfloat16"
 
 defaults:
   "trn2.48xlarge": 

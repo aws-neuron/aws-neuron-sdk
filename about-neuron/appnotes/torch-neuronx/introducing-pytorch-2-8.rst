@@ -210,7 +210,7 @@ The environment variables ``XLA_DOWNCAST_BF16`` and ``XLA_USE_BF16`` are depreca
 
 What features will be missing with PyTorch NeuronX 2.8?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-PyTorch NeuronX 2.8 has all of the supported features in PyTorch NeuronX 2.7, with known issues listed above, and unsupported features as listed in :ref:`torch-neuronx-rn`.
+PyTorch NeuronX 2.8 has all of the supported features in PyTorch NeuronX 2.7, with known issues listed above, and unsupported features as listed in :ref:`pytorch_rn`.
 
 Can I use Neuron Distributed libraries with PyTorch NeuronX 2.8?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

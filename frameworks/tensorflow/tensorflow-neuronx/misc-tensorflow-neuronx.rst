@@ -5,7 +5,7 @@ Misc (``tensorflow-neuronx``)
     :maxdepth: 1
     :hidden:
 
-    /release-notes/tensorflow/tensorflow-neuronx/tensorflow-neuronx
+    /release-notes/archive/tensorflow/tensorflow-neuronx/tensorflow-neuronx
 
 
 

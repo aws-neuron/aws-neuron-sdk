@@ -1,116 +1,72 @@
-.. meta::
-    :description: Introduction to AWS Neuron Kernel Interface (NKI), a bare-metal programming interface for direct access to AWS NeuronDevices on Inf2, Trn1, Trn2, and Trn3 instances.
-    :keywords: NKI, AWS Neuron, Kernel Interface, Trainium, Inferentia
-    :date-modified: 12/13/2025
-
 .. _neuron-nki:
 
-Neuron Kernel Interface (NKI) Documentation
-===========================================
+Neuron Kernel Interface (NKI) - Beta
+====================================
 
-.. admonition:: NKI Beta Versions
+Neuron Kernel Interface (NKI) is a bare-metal language and compiler for directly programming NeuronDevices
+available on AWS Trn/Inf instances. You can use NKI to develop, optimize and run new operators directly on
+NeuronCores while making full use of available compute and memory resources. NKI empowers ML developers to
+self-serve and invent new ways to use the NeuronCore hardware, starting NeuronCores v2 (Trainium1) and beyond.
 
-      NKI is currently in beta, with Beta 2 as the current version. Read more about :doc:`NKI beta versions </nki/deep-dives/nki-beta-versions>`.
+NKI provides developers with direct access to the NeuronCore ISA (Instruction Set Architecture), accessible from a
+Python-based programming environment, which has syntax and tile-level semantics that are similar to
+`Triton <https://triton-lang.org/main/index.html>`_ and `NumPy <https://numpy.org/doc/stable/>`_.
+This enables developers to get started quickly and optimize performance in a familiar environment, while at the same
+time get full control of the underlying hardware. At the hardware level, NeuronCore's tensorized memory access
+capability enables efficient reading and writing of multi-dimensional arrays on a per instruction basis,
+which makes NKI's tile-based programming highly suitable for the NeuronCore instruction set.
 
-The Neuron Kernel Interface (NKI) is a Python-embedded Domain Specific Language (DSL) that gives developers direct access to Neuron’s Instruction Set Architecture (NISA). NKI provides the ease-of-programming offered by tile-level operations and full access to the Neuron Instruct Set Architecture within a familiar pythonic programming environment. It provides the flexibility to implement architecture-specific optimizations rapidly, at a speed difficult to achieve in higher-level DSLs and frameworks. This has enabled developers to achieve optimal performance across a wide spectrum of machine learning models on Trainium, including Transformers, Mixture-of-Experts, State Space Models, and more. 
+For comparison, before NKI was introduced, the only way to program NeuronDevices was through defining high-level ML
+models in frameworks such as `PyTorch <https://pytorch.org/>`_
+and `JAX <https://jax.readthedocs.io/en/latest/index.html>`_.
+Neuron Compiler takes such high-level model definitions as input,
+performs multiple rounds of optimization, and eventually generates a NEFF (Neuron Executable File Format) that
+is executable on NeuronDevices. At a high level, Neuron Compiler runs the following optimization stages in order:
 
-In addition to directly exposing NISA, NKI provides easy-to-use APIs for controlling instruction scheduling, memory management across the memory hierarchy, software pipelining, and other optimization techniques. The APIs are carefully designed to help simplify the code while providing more control and flexibility to developers. This gives developers fine-grained tuning optimizations that work in concert with the capabilities provided by the compiler.
+1. **Hardware-agnostic graph-level optimizations.** These transformations are done in the compiler front-end,
+   using `XLA <https://openxla.org/xla>`_, including optimizations like constant propagation, re-materialization
+   and operator fusion.
 
-NKI currently supports multiple NeuronDevice generations:
+2. **Loop-level optimization.** Compiler turns the optimized graph from Step 1 into a series of loop nests
+   and performs layout, tiling and loop fusion optimizations.
 
-* Trainium/Inferentia2, available on AWS ``trn1``, ``trn1n`` and ``inf2`` instances
-* Trainium2, available on AWS ``trn2`` instances and UltraServers
-* Trainium3, available on AWS ``trn3`` instances and UltraServers
+3. **Hardware intrinsics mapping.** Compiler maps the architecture-agnostic loop nests from Step 2 into
+   architecture-specific instructions.
 
-Explore the comprehensive guides below to learn how to implement and optimize your kernels for AWS Neuron accelerators:
+4. **Hardware-specific optimizations.** These optimizations are mainly
+   done at the instruction level [#]_ in compiler back-end,
+   with a key goal of reducing memory pressure and improving instruction-level parallelism. For example, memory
+   allocation and instruction scheduling are done in this stage.
 
-.. grid:: 1
-      :margin: 2
+NKI kernels bypass the first 3 steps, and are compiled into IRs (intermediate representations) that the compiler's
+back-end (Step 4 above) can directly consume. Advanced features in NKI, such as direct allocation, also allow programmers
+to bypass certain compiler passes in Step 4. As a result, NKI developers can now have great control over NeuronDevices down to
+the instruction level. We highly recommend developers to study the underlying hardware architecture before
+optimizing performance of their NKI kernels. See the NKI guide below to learn more!
 
-      .. grid-item::
+.. _api_reference_guide:
 
-            .. card:: About NKI
-                  :link: nki_about_home
-                  :link-type: ref
-                  :class-body: sphinx-design-class-title-small
-
-                  Learn about Neuron Kernel Interface (NKI) and core concepts essential for working with it.
-
-      .. grid-item::
-
-            .. card:: NKI Language Guide
-                  :link: nki-language-guide
-                  :link-type: ref
-                  :class-body: sphinx-design-class-title-small
-
-                  Developer guide for NKI's Pythonic language syntax.
-
-      .. grid-item::
-
-            .. card:: NKI Compiler Documentation
-                  :link: /nki/deep-dives/nki-compiler
-                  :link-type: doc
-                  :class-body: sphinx-design-class-title-small
-
-                  Documentation for the NKI compiler and its integration with the Neuron Compiler.        
- 
-      .. grid-item::
-
-            .. card:: NKI Library Documentation
-                  :link: nkl_home
-                  :link-type: ref
-                  :class-body: sphinx-design-class-title-small
-
-                  API documentation for the set of pre-built kernels in the NKI Library.
-
-.. _functional_docs:
-
-Writing NKI Kernels
-^^^^^^^^^^^^^^^^^^^
-
-.. grid:: 2
-      :margin: 2 2 1 1
-
-      .. grid-item::
-
-            .. card:: Getting Started with NKI
-                  :link: quickstart-run-nki-kernel
-                  :link-type: ref
-                  :class-body: sphinx-design-class-title-small
-
-      .. grid-item::
-
-            .. card:: NKI Tutorials
-                  :link: /nki/guides/tutorials/index
-                  :link-type: doc
-                  :class-body: sphinx-design-class-title-small
-
-
-.. _performant_docs:
-
-Optimizing NKI Kernels
-^^^^^^^^^^^^^^^^^^^^^^
+API Reference Guide
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. grid:: 2
       :margin: 4 1 0 0
 
       .. grid-item::
 
-            .. card:: Profiling a NKI Kernel with Neuron Explorer
-                  :link: /nki/deep-dives/use-neuron-profile
-                  :link-type: doc
-                  :class-body: sphinx-design-class-title-small
-
-      .. grid-item::
-
-            .. card:: NKI Performance Optimizations
-                  :link: nki_perf_guide
+            .. card:: NKI API Reference Manual
+                  :link: nki_api_reference
                   :link-type: ref
                   :class-body: sphinx-design-class-title-small
+
 
 .. toctree::
       :maxdepth: 1
       :hidden:
 
-      NKI Release Notes </nki/nki_rn>
-      NKI FAQ <nki_faq>
+      API Reference Manual <api/index>
+
+.. rubric:: Footnotes
+
+.. [#] A small number of loop-level optimizations are performed after hardware intrinsic mappings in the current
+       Beta release. Subject to future changes.

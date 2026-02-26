@@ -1,4 +1,4 @@
-apiVersion: resource.k8s.io/v1beta1
+apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
   name: all-neurons-lnc-1
@@ -7,17 +7,18 @@ spec:
     devices:
       requests:
       - name: neurons
-        deviceClassName: neuron.aws.com
-        selectors:
-        - cel:
-            expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
-        allocationMode: All
+        exactly:
+          deviceClassName: neuron.aws.com
+          selectors:
+          - cel:
+              expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
+          allocationMode: All
       config:
       - requests: ["neurons"]
         opaque:
           driver: neuron.aws.com
           parameters:
-            apiVersion: neuron.aws.com/v1alphav1
+            apiVersion: neuron.aws.com/v1
             kind: NeuronConfig
             logicalNeuronCore: 1
 ---

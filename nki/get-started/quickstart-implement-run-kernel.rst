@@ -49,7 +49,7 @@ In this step, you define the ``nki_tensor_add_kernel`` function.
 
 .. code-block:: python
 
-    @nki.jit(platform_target="trn1")
+    @nki.jit
     def nki_tensor_add_kernel(a_input, b_input):
         """
         NKI kernel to compute element-wise addition of two input tensors.
@@ -141,7 +141,7 @@ You should now have an ``add_kernel.py`` file that looks as follows.
     import nki.language as nl
     import nki.isa as nisa
 
-    @nki.jit(platform_target="trn1")
+    @nki.jit
     def nki_tensor_add_kernel(a_input, b_input):
         """
         NKI kernel to compute element-wise addition of two input tensors.
@@ -239,7 +239,7 @@ You can confirm the success of the kernel by running the driver you created in s
 
     NEURON_PLATFORM_TARGET_OVERRIDE=trn2 python test_program.py
 
-Note that the ``NEURON_PLATFORM_OVERRIDE`` environment variable sets the target architecture. This can also be set in by using ``@nki.jit`` with the ``platform_target`` argument. In this example it is set to ``trn2``  which creates a binary suitable for running on Trn2 machines. For Trn1 / Inf2, specify ``trn1``; and for Trn3 specify ``trn3``.
+The ``NEURON_PLATFORM_TARGET_OVERRIDE`` environment variable sets the target architecture for compilation. In this example it is set to ``trn2`` which creates a binary suitable for running on Trn2 machines. For Trn1 and Inf2, specify ``trn1``; and for Trn3 specify ``trn3``.
 
 Whether you used PyTorch or JAX for the driver, you should see the following result.
 

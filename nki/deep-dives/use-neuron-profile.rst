@@ -2,6 +2,8 @@
     :description: Learn how to profile Neuron Kernel Interface (NKI) kernels using Neuron Explorer to analyze hardware-level performance characteristics on Trainium and Inferentia devices.
     :date-modified: 12/02/2025
 
+.. _use-neuron-profile:
+
 Profile a NKI Kernel
 ====================
 
@@ -391,7 +393,7 @@ Next Steps
 
 Great! Now that you've learned how to profile an NKI kernel, it's time to take this further:
 
-* Dive into the :doc:`NKI Performance Guide </nki/deep_dives/nki_perf_guide>` to discover techniques for making your kernels faster and more efficient.
+* Dive into the :doc:`NKI Performance Guide </nki/deep-dives/nki_perf_guide>` to discover techniques for making your kernels faster and more efficient.
 * Explore the `NKI sample kernels <https://github.com/aws-neuron/nki-samples>`__ to see real-world examples of high-performance kernel implementations — and get inspiration for your own NKI kernels.
 
 By combining profiling insights with optimization strategies and practical examples, you'll be well-equipped to write NKI kernels that leverage Neuron hardware in an efficient way.

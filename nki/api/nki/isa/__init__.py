@@ -65,8 +65,10 @@ class oob_mode(Enum):
     r"""Neuron OOB Access Mode"""
 
     error = 0
+    r"""Raise an error when an out-of-bounds access is detected"""
 
     skip = 1
+    r"""Skip the out-of-bounds access silently"""
 
 
 class reduce_cmd(Enum):
@@ -130,14 +132,14 @@ def activation(dst, op, data, bias=None, scale=1.0, reduce_op=None, reduce_res=N
 
     The following is the pseudo code for ``nisa.activation``:
 
-    .. math::
+    .. code-block::
 
         output = op(data * scale + bias)
 
         if reduce_cmd == nisa.reduce_cmd.reset or reduce_cmd == nisa.reduce_cmd.reset_reduce:
             reduce_regs = 0
 
-        result = reduce\_op(reduce_regs, reduce\_op(output, axis=<FreeAxis>))
+        result = reduce_op(reduce_regs, reduce_op(output, axis=<FreeAxis>))
 
         if reduce_cmd == nisa.reduce_cmd.reduce or reduce_cmd == nisa.reduce_cmd.reset_reduce:
             reduce_regs += result
@@ -419,7 +421,8 @@ def core_barrier(data, cores, engine=engine.unknown, name=None):
     This must be data in shared HBM that multiple cores are accessing.
 
     The ``engine`` parameter allows specifying which engine inside the NeuronCores should execute the barrier
-    instruction (that is, the remote semaphore update and local semaphore wait).
+    instruction (that is, the remote semaphore update and local semaphore wait). The barrier will block
+    execution on this engine, other engines will not be blocked.
 
     :param data: the shared data that all cores need to synchronize on; must be data in shared HBM
     :param cores: a tuple of core indices to synchronize; only ``(0, 1)`` is supported when LNC2 is enabled
@@ -495,7 +498,7 @@ def dma_compute(dst, srcs, scales, reduce_op, name=None):
     """
     ...
 
-def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mode.unknown, name=None):
+def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mode.unknown, unique_indices=True, name=None):
     r"""
     Copy data from ``src`` to ``dst`` using DMA engines with optional read-modify-write operations.
 
@@ -527,14 +530,14 @@ def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mo
     If ``dst_rmw_op`` is specified for these dynamic modes, only ``oob_mode.error`` is allowed.
     See Beta2 NKI kernel migration guide for the latest syntax to handle dynamic addresses or indices.
 
-    ``nisa.dma_copy`` also supports non-unique scatter indices when ``dge_mode=nisa.dge_mode.none``
-    and ``dst_rmw_op=nl.add`` are set. An example use case for this is performing embedding table entry updates
-    after a training backward pass to calcualte embedding table gradients.
-
     **Memory types.**
 
-    Both ``src`` and ``dst`` tiles can be in HBM or SBUF. However, if both tiles are in SBUF, consider using
-    :doc:`nisa.tensor_copy <nki.isa.tensor_copy>` instead for better performance.
+    Both ``src`` and ``dst`` tiles can be in HBM or SBUF. However, if both tiles are in SBUF, consider using an alternative
+    for better performance:
+
+    - :doc:`nisa.tensor_copy <nki.isa.tensor_copy>` for direct copies
+    - :doc:`nisa.nc_n_gather <nki.isa.nc_n_gather>` to gather elements within each partition independently
+    - :doc:`nisa.local_gather <nki.isa.local_gather>` to gather elements within groups of partitions
 
     **Data types.**
 
@@ -562,6 +565,8 @@ def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mo
     :param dst: the destination tensor to copy data into
     :param src: the source tensor to copy data from
     :param dst_rmw_op: optional read-modify-write operation (currently only ``nl.add`` is supported)
+    :param unique_indices: optional and is only used when dst_rmw_op is used. It indicates whether the
+      scatter indices provided are unique.
     :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for DMA descriptor generation: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). Hardware based DGE is only supported for NeuronCore-v3 or newer. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
     :param oob_mode: (optional) Specifies how to handle out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
 
@@ -573,7 +578,7 @@ def dma_copy(dst, src, dst_rmw_op=None, oob_mode=oob_mode.error, dge_mode=dge_mo
     """
     ...
 
-def dma_transpose(dst, src, axes=None, dge_mode=dge_mode.unknown, name=None):
+def dma_transpose(dst, src, axes=None, dge_mode=dge_mode.unknown, oob_mode=oob_mode.error, name=None):
     r"""
     Perform a transpose on input ``src`` using DMA Engine.
 
@@ -583,6 +588,8 @@ def dma_transpose(dst, src, axes=None, dge_mode=dge_mode.unknown, name=None):
     2. For 3-d input tile, the permutation will be [2, 1, 0]
     3. For 4-d input tile, the permutation will be [3, 1, 2, 0]
 
+    **DMA Transpose Constraints**
+
     The only valid ``dge_mode`` s are ``unknown`` and ``hwdge``. If ``hwdge``, this instruction will be lowered
     to a Hardware DGE transpose. This has additional restrictions:
 
@@ -590,11 +597,113 @@ def dma_transpose(dst, src, axes=None, dge_mode=dge_mode.unknown, name=None):
     2. ``src.shape[-1] % 128 == 0``
     3. ``dtype`` is 2 bytes
 
+    **DMA Indirect Transpose Constraints**
+
+    The only valid ``dge_mode`` s are ``unknown`` and ``swdge``. If ``swdge``, this instruction will be lowered to a Software DGE transpose. This has additional restrictions:
+
+    1. ``src`` is a 3-d tile
+    2. ``src.shape[-1] == 128``
+    3. ``src.dtype`` is 2 bytes
+    4. ``indices.shape[1] == 1``
+    5. ``indices.shape[0] % 16 == 0``
+    6. ``indices.dtype`` is np.uint32
+
     :param src: the source of transpose, must be a tile in HBM or SBUF.
     :param axes: transpose axes where the i-th axis of the transposed tile will correspond to the axes[i] of the source.
                  Supported axes are ``(1, 0)``, ``(2, 1, 0)``, and ``(3, 1, 2, 0)``.
     :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for DMA descriptor generation: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). Hardware based DGE is only supported for NeuronCore-v3 or newer. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
+    :param oob_mode: (optional) Specifies how to handle out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
 
+        - ``oob_mode.error``: (Default) Raises an error when encountering out-of-bounds indices.
+        - ``oob_mode.skip``: Silently skips any operations involving out-of-bounds indices.
+
+        For example, when using indirect gather/scatter operations, out-of-bounds indices can occur if the index array contains values that exceed the dimensions of the target array.
+
+    """
+    ...
+
+def exponential(dst, src, max_value=0.0, reduce_res=None, reduce_cmd=reduce_cmd.idle, reduce_init=0.0):
+    r"""
+    Apply exponential function to each element after subtracting a max_value using Vector Engine.
+
+    .. note::
+        Available only on NeuronCore-v4 and newer.
+
+    This instruction computes ``exp(src - max_value)`` for each element. The instruction can
+    optionally maintain a running sum of the exponential values using shared internal reduction
+    registers in the Vector Engine.
+
+    The exponential operation is performed as:
+
+    .. code-block::
+
+        dst[i] = exp(src[i] - max_value)
+
+    When accumulation is enabled through ``reduce_cmd``, the instruction also computes:
+
+    .. code-block::
+
+        reduce_res[i] = sum(dst[i])
+
+    The Vector Engine performs the computation in float32 precision internally and can
+    output results in various data types as specified by the ``dst`` dtype field.
+
+
+    **Constraints**
+
+    - Supported engines: Vector.
+    - ``src``, ``dst`` must have the same number of elements in the partition dimension.
+    - ``src``, ``dst`` must have the same number of elements in the free dimensions.
+    - ``src``, ``dst`` can be up to 4D tensor.
+    - ``reduce_init`` should be unset or set to ``0.0`` when ``reduce_cmd`` is not ``load_reduce``.
+
+
+    :param dst: The output tile with exponential function applied. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, tfloat32, int8, int16, int32, uint8, uint16.
+    :param src: The input tile to apply exponential function on. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, int8, int16, int32, uint8, uint16, uint32.
+    :param max_value: The maximum value to subtract from each element before applying exponential (for numerical stability). Can be a scalar or vector of shape ``(src.shape[0], 1)``. Supported dtypes: float32.
+    :param reduce_res: Optional tile to store reduction results (sum of exponentials). Must have shape ``(src.shape[0], 1)``. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, tfloat32.
+    :param reduce_cmd: Control the state of reduction registers for accumulating exponential results. Supported: ``idle``, ``reset_reduce``, ``reduce``, ``load_reduce``.
+    :param reduce_init: Initial value for reduction when using ``reduce_cmd.load_reduce``. Supported dtypes: float32.
+
+
+    **Accumulator behavior:**
+
+    The Vector Engine maintains internal accumulator registers that can be controlled via the ``reduce_cmd`` parameter:
+
+    - ``reduce_cmd.reset_reduce``: Reset accumulators to 0, then accumulate the current results.
+    - ``reduce_cmd.reduce``: Continue accumulating without resetting (useful for multi-step reductions).
+    - ``reduce_cmd.load_reduce``: Load the values from ``reduce_init`` into the accumulator, then accumulate the current result on top of it.
+    - ``reduce_cmd.idle``: (default) No accumulation performed, accumulator state unknown.
+
+    .. note::
+      Even when ``reduce_cmd`` is set to ``idle``, the accumulator state may still be modified.
+      Always use ``reset_reduce`` after any Vector Engine operation that ran with ``idle`` mode to ensure
+      consistent behavior.
+
+    .. note::
+      The accumulator registers are shared for other Vector Engine accumulation instructions such :doc:`nki.isa.range_select <nki.isa.range_select>`,
+      :doc:`nki.isa.select_reduce <nki.isa.select_reduce>`, :doc:`nki.isa.tensor_scalar_cumulative <nki.isa.tensor_scalar_cumulative>`,
+
+
+    **Behavior**
+
+    .. code-block:: python
+
+        # Initialize reduction if requested
+        if reduce_cmd == reduce_cmd.reset_reduce:
+            accumulator = 0
+        elif reduce_cmd == reduce_cmd.load_reduce:
+            accumulator = reduce_init
+        elif reduce_cmd == reduce_cmd.idle:
+            accumulator = undefined  # Not used
+
+        # Process each element
+        for i in range(num_elements):
+            dst[i] = exp(src[i] - max_value)
+
+            # Update reduction if active
+            if reduce_cmd != reduce_cmd.idle:
+                accumulator += dst[i]
 
     """
     ...
@@ -702,7 +811,8 @@ def local_gather(dst, src_buffer, index, num_elem_per_idx=1, num_valid_indices=N
     Each of the eight GpSimd cores in GpSimd Engine connects to 16 contiguous SBUF partitions
     (e.g., core[0] connected to partition[0:16]) and performs gather from the connected 16
     SBUF partitions *independently* in parallel. The indices used for gather on each core should also
-    come from the same 16 connected SBUF partitions.
+    come from the same 16 connected SBUF partitions. If you only need to gather elements within a partition,
+    consider using :doc:`nisa.nc_n_gather <nki.isa.nc_n_gather>` instead, which supports gathering more indices.
 
     During execution of the instruction, each GpSimd core reads a 16-partition slice from ``index``, flattens
     all indices into a 1D array ``indices_1d`` (along the partition dimension first).
@@ -726,10 +836,6 @@ def local_gather(dst, src_buffer, index, num_elem_per_idx=1, num_valid_indices=N
     As an example, if ``src_buffer`` is (128, 512) in shape and ``index`` is (128, 4) in shape, where the partition
     dimension size is 128, ``local_gather`` effectively performs the following operation:
 
-    .. nki_example:: ../../test/test_nki_isa_local_gather.py
-     :language: python
-     :marker:   NUMPY_SEMANTICS
-
     ``local_gather`` preserves the input data types from ``src_buffer`` in the gather output.
     Therefore, no data type casting is allowed in this API. The indices in ``index`` tile must be uint16 types.
 
@@ -749,9 +855,6 @@ def local_gather(dst, src_buffer, index, num_elem_per_idx=1, num_valid_indices=N
     :param num_valid_indices: an optional integer value to specify the number of valid indices per GpSimd core; default is
                               ``index.size / (index.shape[0] / 16)``.
 
-
-    Click :download:`here <../../test/test_nki_isa_local_gather.py>` to download the
-    full NKI code example with equivalent numpy implementation.
     """
     ...
 
@@ -957,21 +1060,6 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     write outputs to PSUM. Therefore, the ``stationary`` and ``moving`` must be SBUF tiles, and ``dst`` tile
     must be a PSUM tile.
 
-    The ``psum_accumulate_flag`` controls whether the matmul result data should overwrite or accumulate on top of
-    the ``dst`` PSUM tile. Multiple ``nisa.nc_matmul`` instructions accumulating into the same PSUM tile
-    can form an accumulation group before the PSUM tile content is evicted back to SBUF. The encoding of
-    ``psum_accumulate_flag`` is as follows:
-
-    - bit[0] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the first instruction
-      in the accumulation group. The matmul result should overwrite the existing content in the ``dst`` PSUM tile.
-    - bit[1] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the last instruction
-      in the accumulation group. The matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-    - bit[2] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul`` call is the first instruction
-      in the accumulation group. However, the matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-
-    ``nisa.nc_matmul`` calls that are not the first or last instruction of an accumulation group should not set any bit:
-    ``psum_accumulate_flag=0``.
-
     **Data types.**
 
     The input ``stationary`` and ``moving`` tiles can be one of these supported data types:
@@ -1014,6 +1102,24 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
 
     Explicit tiling is required when the high-level matmul operation exceeds the tile size limits of ``nc_matmul``.
 
+    **ISA operand syntax.**
+
+    When inspecting matmul instructions in profiler or debug output (e.g., neuron-profile), the operands
+    are displayed in a compact ISA syntax:
+
+    .. code-block:: text
+
+        src=<dtype>@<address>[<strides>][<num_elem>] dst=<dtype>@<address>[<strides>][<num_elem>] <M>*<K> acc_flags=<flags>
+
+    Where:
+
+    - ``<dtype>``: data type (e.g., ``bfloat16``, ``fp8e4``, ``fp8e5``)
+    - ``<address>``: hex memory address in SBUF (for src) or PSUM (for dst)
+    - ``[<strides>]``: element strides per dimension
+    - ``[<num_elem>]``: number of elements per dimension
+    - ``<M>*<K>``: matmul dimensions (M rows × K contraction)
+    - ``acc_flags``: accumulator control flags (e.g., ``2`` = reset accumulator)
+
     :param dst: the matmul output
     :param stationary: the stationary operand
     :param moving: the moving operand
@@ -1026,7 +1132,7 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     :param is_transpose: controls Tensor Engine transpose mode on/off starting NeuronCore-v3
     :param tile_position: a 2D tuple (start_row, start_column) to control starting row in Tensor Engine tiling mode; start_column must be 0
     :param tile_size: a 2D tuple (row_size, column_size) to control row tile size in Tensor Engine tiling mode; column_size must be 128
-    :param perf_mode: controls Tensor Engine FP8 double performance mode on/off starting NeuronCore-v3: ``matmul_perf_mode.none`` (default) disables double FP8 mode; ``matmul_perf_mode.double_row`` enables double FP8 mode which achieves 2x matmul throughput by packing two FP8 weight/ifmap element pairs and computing two multiplications in parallel per cycle; cannot be combined with column tiling mode. See the `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
+    :param perf_mode: controls Tensor Engine FP8 double performance mode on/off starting NeuronCore-v3: ``matmul_perf_mode.none`` (default) disables double FP8 mode; ``matmul_perf_mode.double_row`` enables double FP8 mode which achieves 2x matmul throughput by packing two FP8 weight/ifmap element pairs and computing two multiplications in parallel per cycle; cannot be combined with column tiling mode. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
 
 
     """
@@ -1043,9 +1149,10 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     The NeuronCore-v4 Tensor Engine supports matrix multiplication of MXFP8/MXFP4 quantized matrices as defined in the
     `OCP Microscaling standard <https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf>`__.
     This instruction performs matrix multiplication between quantized ``stationary`` and ``moving`` matrices while
-    applying dequantization scales during computation. The micro-scaling group size is 32 elements in groups of 8 partitions x 4 elements per partition of both ``stationary`` and ``moving`` tensors.
-
-    See the NKI-specific `Trainium3 architecture guide </nki/guides/architecture/trainium3_arch.html>`__ for more details.
+    applying dequantization scales during computation. The micro-scaling group size is 32 elements in groupss of
+    8 partitions × 4 elements per partition of both ``stationary`` and ``moving`` tensors.
+    See `Trainium3 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/about/trainium3_arch.html>`_
+    for more detailed discussion.
 
     **Tiling Mode.**
 
@@ -1075,20 +1182,6 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     The ``nc_matmul_mx`` instruction must read inputs from SBUF and write outputs to PSUM. Therefore, the
     ``stationary``, ``moving``, ``stationary_scale``, and ``moving_scale`` must be SBUF tiles, and ``dst``
     tile must be a PSUM tile.
-
-    The ``psum_accumulate_flag`` controls whether the matmul result data should overwrite or accumulate on top of
-    the ``dst`` PSUM tile. Multiple ``nisa.nc_matmul_mx`` instructions accumulating into the same PSUM tile
-    can form an accumulation group before the PSUM tile content is evicted back to SBUF. The
-
-    - bit[0] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the first instruction
-      in the accumulation group. The matmul result should overwrite the existing content in the ``dst`` PSUM tile.
-    - bit[1] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the last instruction
-      in the accumulation group. The matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-    - bit[2] of ``psum_accumulate_flag``: if set, indicates this ``nisa.nc_matmul_mx`` call is the first instruction
-      in the accumulation group. However, the matmul result should accumulate to the existing content in the ``dst`` PSUM tile.
-
-    ``nisa.nc_matmul_mx`` calls that are not the first or last instruction of an accumulation group should not set any bit:
-    ``psum_accumulate_flag=0``.
 
     **Data types.**
 
@@ -1121,6 +1214,27 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     - The scale tensors have partition dimensions that depend on whether the data tensors span multiple quadrants.
       See more details in ``nisa.quantize_mx`` API doc.
 
+    **ISA operand syntax.**
+
+    When inspecting ``nc_matmul_mx`` instructions in profiler or debug output (e.g., neuron-profile), the operands
+    use a compact ISA syntax. For MX matmul, the source operand includes scale information:
+
+    .. code-block:: text
+
+        src=<dtype>@$MX[<data_addr>,<scale_addr>,<start_scale_partition>]@[<step_elem>][<num_elem>]
+        dst=<dtype>@<address>[<strides>][<num_elem>] <M>*<K> acc_flags=<flags> psum_zero=<val>
+
+    Where the MX source access pattern ``$MX[...]`` contains:
+
+    - ``<data_addr>``: hex address of the quantized data in SBUF
+    - ``<scale_addr>``: hex address of the dequantization scales in SBUF
+    - ``<start_scale_partition>``: starting partition index for scale lookup
+    - ``[<step_elem>]``: element step size (typically 1)
+    - ``[<num_elem>]``: total number of elements
+
+    Additional fields:
+
+    - ``psum_zero``: PSUM zero-initialization control value
 
     :param dst: the matrix multiplication output (PSUM tile)
     :param stationary: the stationary quantized matrix (SBUF tile)
@@ -1129,7 +1243,6 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     :param moving_scale: the dequantization scales for moving matrix (SBUF tile)
     :param tile_position: a 2D tuple (start_row, start_column) to control starting row and column in Tensor Engine tiling mode
     :param tile_size: a 2D tuple (row_size, column_size) to control row and column tile sizes in Tensor Engine tiling mode
-    :param psum_accumulate_flag: controls PSUM near-memory accumulation in the ``dst`` tile
 
     """
     ...
@@ -1145,7 +1258,15 @@ def nc_n_gather(dst, data, indices, name=None):
 
     The gather operation works independently within each partition. For each partition, the free dimensions
     of ``data`` are conceptually flattened, and elements are gathered according to the corresponding
-    flattened indices from the same partition in ``indices``.
+    flattened indices from the same partition in ``indices``. If you need to gather elements across partitions
+    (within groups of partitions), consider using :doc:`nisa.local_gather <nki.isa.local_gather>`.
+
+    The ``n`` in ``nc_n_gather`` indicates that this instruction corresponds to ``n`` groups of instructions
+    in the underlying ISA, where ``n = ceil(elems_per_partition / 512)``.
+
+    Alternatively, we could gather elements by calling :doc:`nisa.dma_copy <nki.isa.dma_copy>` with an
+    indirect access pattern derived from ``indices``. However, this is less efficient than ``nc_n_gather``,
+    which uses GpSimd Engine to perform local data movement within SBUF, without using DMA engines.
 
     **Memory types.**
 
@@ -1168,7 +1289,7 @@ def nc_n_gather(dst, data, indices, name=None):
 
     The partition dimension size of ``data``, ``indices``, and ``dst`` must be the same and must not exceed 128.
     The number of elements per partition in ``dst`` must match the number of elements per partition in ``indices``.
-    The indices values must be within the valid range [0, data.size / data.shape[0]).
+    The indices' values must be within the range ``[0, data.size / data.shape[0])``.
 
     :param dst: output tile containing the gathered elements
     :param data: the input tile to gather elements from
@@ -1262,6 +1383,110 @@ def nc_transpose(dst, data, engine=engine.unknown, name=None):
     """
     ...
 
+def nonzero_with_count(dst, src, index_offset=0, padding_val=-1):
+    r"""
+    Find indices of nonzero elements in an input tensor and their total count using GpSimd Engine.
+
+    .. note::
+
+      Available only on NeuronCore-v3 and newer.
+
+    NOTE: this instruction only operates on partitions [0, 16, 32, ..., 112] of the input tile
+    and writes to partitions [0, 16, 32, ..., 112] of the destination tile. The data in other
+    partitions of the destination tile are not modified, including the last 'extra' slot for count.
+
+    This behavior is due to the physical connectivity of GpSimd engine. Each of the eight GpSimd cores
+    connects to 16 contiguous SBUF partitions (e.g., core[0] connects to partitions[0:16]).
+    In nonzero_with_count, each GpSimd core reads from and writes to its 0-th partition only.
+
+    This instruction takes an input array and produces an output array containing the indices of all
+    nonzero elements, followed by padding values, and ending with the count of nonzero elements found.
+
+    The output tensor has one more element in the free dimension than the input tensor:
+
+    - **First N elements**: 0-indexed positions of nonzero elements, offset by ``index_offset``
+    - **Next T-N elements**: Filled with ``padding_val``
+    - **Last element**: Count ``N`` of nonzero elements found
+
+    The ``index_offset`` parameter is useful when processing arrays in tiles, allowing
+    indices to be relative to the original array position rather than the tile.
+
+    Example for one partition of the tensor:
+
+    .. code-block::
+
+        Input array (T=8): [0, 1, 1, 0, 0, 1, 0, 0]
+        index_offset = 16
+        padding_val = -1
+
+        Output (T+1=9): [17, 18, 21, -1, -1, -1, -1, -1, 3]
+
+        Where:
+
+        - 17, 18, 21 are the indices (1, 2, 5) plus offset 16
+        - -1 is the padding value for unused slots
+        - 3 is the count of nonzero elements
+
+
+    **Constraints**
+
+    - Supported arch versions: NeuronCore-v3+.
+    - Supported engines: GpSimd.
+    - Parameters ``src``, ``dst`` must have the same number of elements in the partition dimension.
+    - Destination tensor must have exactly 1 more element than the source tensor in the free dimension.
+    - Only accesses the 0-th partition for each GpSimd core (i.e., [0, 16, 32, ..., 112]).
+    - ``src`` must be in SBUF with dtype float32 or int32.
+    - ``dst`` must be in SBUF with dtype int32.
+    - ``index_offset`` and ``padding_val`` must be int32.
+
+    :param src: Input tensor to find nonzero indices from. Only partitions [0, 16, 32, ..., 112] are read from. Supported buffers: SBUF. Supported dtypes: float32, int32.
+    :param dst: Output tensor containing nonzero indices, padding, and count. Only partitions [0, 16, 32, ..., 112] are written to. It must have one extra element than src in the free dimension. Supported buffers: SBUF. Supported dtypes: int32.
+    :param index_offset: Offset to add to the found indices (useful for tiled processing). Supported dtypes: int32.
+    :param padding_val: Value to use for padding unused output elements. Supported dtypes: int32.
+
+    **Behavior**
+
+    .. code-block:: python
+
+        # Find all nonzero elements in input
+        nonzero_indices = []
+        for i in range(len(input_array)):
+            if input_array[i] != 0:
+                nonzero_indices.append(i + index_offset)
+
+        # Build output array
+        output = []
+        # Add found indices
+        for idx in nonzero_indices:
+            output.append(idx)
+        # Add padding for remaining slots
+        for _ in range(len(input_array) - len(nonzero_indices)):
+            output.append(padding_val)
+        # Add count as last element
+        output.append(len(nonzero_indices))
+
+    **Example**
+
+    .. code-block:: python
+
+        def nonzero_with_count_kernel(in_tensor):
+            in_shape = in_tensor.shape
+            assert len(in_tensor.shape) == 2, "expected 2D tensor"
+
+            in_tile = nl.ndarray(in_shape, dtype=in_tensor.dtype, buffer=nl.sbuf)
+            nisa.dma_copy(dst=in_tile, src=in_tensor)
+
+            out_tile = nl.ndarray((in_shape[0], in_shape[1] + 1), dtype=nl.int32, buffer=nl.sbuf)
+            nisa.nonzero_with_count(dst=out_tile, src=in_tile, index_offset=0, padding_val=-1)
+
+            out_tensor = nl.ndarray(out_tile.shape, dtype=out_tile.dtype, buffer=nl.hbm)
+            nisa.dma_copy(dst=out_tensor, src=out_tile)
+
+            return out_tensor
+
+    """
+    ...
+
 def quantize_mx(dst, src, dst_scale, name=None):
     r"""
     Quantize FP16/BF16 data to MXFP8 tensors (both data and scales) using Vector Engine.
@@ -1279,6 +1504,7 @@ def quantize_mx(dst, src, dst_scale, name=None):
     **Memory types.**
 
     All input ``src`` and output tiles (``dst`` and ``dst_scale``) must be in SBUF.
+    The ``dst`` and ``dst_scale`` tiles must reside in the same SBUF quadrant(s) as each other.
 
     **Data types.**
 
@@ -1450,7 +1676,7 @@ def rand_set_state(src_seeds, engine=engine.unknown, name=None):
     """
     ...
 
-def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.idle, reduce_res=None, reduce_op=nl.maximum, range_start=0.0, on_false_value=0.0, name=None):
+def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.reset_reduce, reduce_res=None, reduce_op=nl.maximum, range_start=0.0, on_false_value=-3.4028235e+38, name=None):
     r"""
 
     Select elements from ``on_true_tile`` based on comparison with bounds using Vector Engine.
@@ -1513,13 +1739,13 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
 
     :param dst: output tile with selected elements
     :param on_true_tile: input tile containing elements to select from
-    :param on_false_value: constant value to use when selection condition is False.
-      Due to HW constraints, this must be FP32_MIN FP32 bit pattern
+    :param on_false_value: ignored. Always set to FP32_MIN (``-3.4028235e+38``) regardless of the value passed in.
     :param comp_op0: first comparison operator
     :param comp_op1: second comparison operator
     :param bound0: tile with one element per partition for first comparison
     :param bound1: tile with one element per partition for second comparison
     :param reduce_op: reduction operator to apply on across the selected output. Currently only ``nl.maximum`` is supported.
+    :param reduce_cmd: ignored. Always set to ``reduce_cmd.reset_reduce`` regardless of the value passed in.
     :param reduce_res: optional tile to store reduction results.
     :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``.
         Defaults to 0, and must be a compile-time integer.
@@ -1941,10 +2167,6 @@ def sequence_bounds(dst, segment_ids, name=None):
 
     **NumPy equivalent:**
 
-    .. nki_example:: ../../test/test_nki_isa_sequence_bounds.py
-     :language: python
-     :marker: NKI_EXAMPLE_1
-
     :param dst: tile containing the sequence bounds.
     :param segment_ids: tile containing the segment IDs. Elements with ID=0 are treated as padding.
 
@@ -1986,73 +2208,27 @@ def tensor_copy(dst, src, engine=engine.unknown, name=None):
     The output tile has the same partition axis size and also the same number of elements per partition
     as the input tile ``src``.
 
-    All three compute engines, Vector, Scalar and GpSimd Engine can perform tensor copy. However, their copy behavior
-    is slightly different across engines:
+    ``tensor_copy`` casting behavior depends on the input and output data types.
 
-    - Scalar Engine on NeuronCore-v2 performs copy by first casting the input tile to FP32 internally and then casting from
-      FP32 to ``dst.dtype``. Users should be cautious with assigning this instruction to Scalar Engine when the input data 
-      type cannot be precisely cast to FP32 (e.g., INT32).
-    - Both GpSimd and Vector Engine can operate in two modes: (1) bit-accurate copy when input and output data types are
-      the same or (2) intermediate FP32 cast when input and output data types differ, similar to Scalar Engine.
+    #. When ``src`` and ``dst`` data types are the same: ``tensor_copy`` performs a bit-accurate copy.
+    #. When ``src`` and ``dst`` data types differ: ``tensor_copy`` performs an intermediate FP32 cast.
 
     In addition, since GpSimd Engine cannot access PSUM in NeuronCore, Scalar or Vector Engine must be chosen when the input or
-    output tile is in PSUM (see :ref:`arch_sec_neuron_core_engines` for details). By default, this API returns
-    a tile in SBUF, unless the returned value is assigned to a pre-declared PSUM tile.
+    output tile is in PSUM (see :ref:`arch_sec_neuron_core_engines` for details).
 
+    On NeuronCore v2, ``tensor_copy`` is not supported on the Scalar Engine. Instead, use :doc:`nisa.activation <nki.isa.activation>` with ``op=nl.copy``.
+
+    **Constraints.**
+
+    - Supported engines:
+        - NeuronCore v2: Vector, GpSimd
+        - NeuronCore v3+: Vector, Scalar, GpSimd
+    - Since GpSimd cannot access PSUM, ``src`` and ``dst`` must be in SBUF when using GpSimd Engine.
 
     :param dst: a tile with the same content and partition axis size as the ``src`` tile.
     :param src: the source of copy, must be a tile in SBUF or PSUM.
     :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.scalar_engine`,
                   `nki.isa.gpsimd_engine` or `nki.isa.unknown_engine` (default, compiler selects best engine based on engine workload).
-    """
-    ...
-
-def tensor_copy_dynamic_dst(dst, src, engine=engine.unknown, name=None):
-    r"""
-    Create a copy of ``src`` tile within NeuronCore on-chip SRAMs using Vector or Scalar or GpSimd Engine,
-    with ``dst`` located at a dynamic offset within each partition.
-
-    Both source and destination tiles can be in either SBUF or PSUM.
-
-    The source and destination tiles must also have the same number of partitions and the same number of elements
-    per partition.
-
-    The dynamic offset must be a scalar value resided in SBUF. If you have a list of dynamic offsets
-    for scattering tiles in SBUF/PSUM, you may loop over each offset and call ``tensor_copy_dynamic_dst``
-    once per offset.
-
-
-    :param dst: the destination of copy, must be a tile in SBUF of PSUM that is dynamically indexed within each dimension.
-    :param src: the source of copy, must be a tile in SBUF or PSUM.
-    :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.gpsimd_engine`,
-                   `nki.isa.scalar_engine` or `nki.isa.unknown_engine` (default, let compiler select best engine).
-
-    """
-    ...
-
-def tensor_copy_dynamic_src(dst, src, engine=engine.unknown, name=None):
-    r"""
-    Create a copy of ``src`` tile within NeuronCore on-chip SRAMs using Vector or Scalar or GpSimd Engine,
-    with ``src`` located at a dynamic offset within each partition.
-
-    Both source and destination tiles can be in either SBUF or PSUM. By default, this API returns
-    a tile in SBUF, unless the returned value is assigned to a pre-declared PSUM tile.
-
-    The source and destination tiles must also have the same number of partitions and the same number of elements
-    per partition.
-
-    The dynamic offset must be a scalar value resided in SBUF. If you have a list of dynamic offsets
-    for gathering tiles in SBUF/PSUM, you may loop over each offset and call ``tensor_copy_dynamic_src``
-    once per offset.
-
-
-    :param src: the source of copy, must be a tile in SBUF or PSUM that is dynamically indexed within each partition.
-    :param engine: (optional) the engine to use for the operation: `nki.isa.vector_engine`, `nki.isa.gpsimd_engine`,
-                   `nki.isa.scalar_engine` or `nki.isa.unknown_engine` (default, let compiler select best engine).
-    :param return: the modified destination of copy.
-
-
-
     """
     ...
 
@@ -2194,11 +2370,12 @@ def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=N
       - ``op0=nl.multiply`` and ``op1=None``
       - ``op0=nl.add`` and ``op1=None``
 
-    Also, arithmetic operators impose no restriction on the input/output data types,
-    but the engine automatically casts input data types to float32
-    and performs the operators in float32 math. The float32 computation results are 
-    cast to ``dst.dtype`` at no additional performance cost.
-    
+    Also, arithmetic operators impose no restriction on the data types of input tensor ``data`` and output tensor ``dst``,
+    but the operand0 and operand1 (if used) must be float32.
+    The compute engine automatically casts ``data.dtype`` to float32
+    and performs the operators in float32 math.
+    The float32 computation results are cast to ``dst.dtype`` at no additional performance cost.
+
     :param dst: an output tile of ``(data <op0> operand0) <op1> operand1`` computation
     :param data: the input tile
     :param op0: the first math operator used with operand0 (see :ref:`nki-aluop` for supported operators)
@@ -2230,27 +2407,27 @@ def tensor_scalar_cumulative(dst, src, op0, op1, imm0, imm1=None, reduce_cmd=red
 
     .. code-block:: python
 
-    if reduce_cmd == reset_reduce:
-        if op1 == add or op1 == subtract:
-            reg = 0
-        elif op1 == mult:
-            reg = 1
-        elif op1 == max:
-            reg = -inf
-        elif op1 == min:
-            reg = +inf
-    elif reduce_cmd == reduce:
-        reg = reg
-    elif reduce_cmd == load_reduce:
-        reg = imm1
-
-    for i in len(in_tensor):
-        if not reverse0:
-            reg = op1(op0(in_tensor[i], imm0), reg)
-            out_tensor[i] = reg
-        else:
-            reg = op1(op0(imm0, in_tensor[i]), reg)
-            out_tensor[i] = reg
+        if reduce_cmd == reset_reduce:
+            if op1 == add or op1 == subtract:
+                reg = 0
+            elif op1 == mult:
+                reg = 1
+            elif op1 == max:
+                reg = -inf
+            elif op1 == min:
+                reg = +inf
+        elif reduce_cmd == reduce:
+            reg = reg
+        elif reduce_cmd == load_reduce:
+            reg = imm1
+        
+        for i in len(in_tensor):
+            if not reverse0:
+                reg = op1(op0(in_tensor[i], imm0), reg)
+                out_tensor[i] = reg
+            else:
+                reg = op1(op0(imm0, in_tensor[i]), reg)
+                out_tensor[i] = reg
 
     **Operation constraints:**
 
@@ -2324,7 +2501,7 @@ def tensor_tensor(dst, data1, data2, op, engine=engine.unknown, name=None):
 
     The element-wise operator is specified using the ``op`` field. Valid choices for ``op``:
 
-    1. Any supported *binary* operator that runs on the Vector Engine. (See :ref:`nki-aluop` for details.) 
+    1. Any supported *binary* operator that runs on the Vector Engine. (See :ref:`nki-aluop` for details.)
     2. ``nl.power``. (Which runs on the GpSimd engine.)
 
     For bitvec operators, the input/output data types must be integer types and Vector Engine treats
@@ -2400,7 +2577,7 @@ def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, rev
 
     Input/output data types can be any supported NKI data type (see :ref:`nki-dtype`),
     but the engine automatically casts input data types to float32
-    and performs the computation in float32 math. The float32 computation results are 
+    and performs the computation in float32 math. The float32 computation results are
     cast to ``dst.dtype`` at no additional performance cost.
 
     :param dst: an output tile of the scan operation

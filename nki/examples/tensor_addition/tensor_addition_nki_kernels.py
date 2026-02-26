@@ -8,8 +8,11 @@ NKI implementation for tensor addition NKI tutorial.
 import nki as nki
 import nki.language as nl
 import nki.isa as nisa
+import os
 
-@nki.jit(platform_target="trn1")
+os.environ["NEURON_PLATFORM_TARGET_OVERRIDE"] = "trn1"
+
+@nki.jit
 def nki_tensor_add(a_input, b_input):
   """NKI kernel to compute element-wise addition of two input tensors
 

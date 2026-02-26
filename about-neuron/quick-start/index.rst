@@ -31,6 +31,14 @@ This section walks you through the various options to get started with Neuron. Y
     :class-body: sphinx-design-class-title-small
 
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
 
+    /setup/torch-neuronx
+    /frameworks/jax/index
+    /libraries/nxd-inference/vllm/quickstart-vllm-online-serving
+    /libraries/nxd-inference/vllm/quickstart-vllm-offline-serving
+    /about-neuron/amazonq-getstarted
 
 

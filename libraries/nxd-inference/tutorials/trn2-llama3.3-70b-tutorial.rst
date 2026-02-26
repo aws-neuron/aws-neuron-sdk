@@ -50,7 +50,7 @@ Install packages
 ~~~~~~~~~~~~~~~~~
 NxD Inference supports running models with vLLM. This functionality is
 available in the AWS Neuron fork of the vLLM GitHub repository. Install the latest release branch of vLLM from the AWS Neuron fork 
-following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
+following instructions in the :ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide-v1>`.
 
 In this tutorial, you will use `llmperf <https://github.com/ray-project/llmperf>`_ to measure the performance.
 We will use the `load test <https://github.com/ray-project/llmperf?tab=readme-ov-file#load-test>`_ feature of LLMPerf and measure the performance for accepting
@@ -176,7 +176,7 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
 
     export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
     export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH
-    VLLM_RPC_TIMEOUT=100000 python -m vllm.entrypoints.openai.api_server \
+    VLLM_RPC_TIMEOUT=100000 vllm serve \
         --model $MODEL_PATH \
         --max-num-seqs 1 \
         --max-model-len 12800 \
@@ -422,7 +422,7 @@ Here is the complete script to run the model using vLLM with speculative decodin
 
     export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
     export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH
-    VLLM_RPC_TIMEOUT=100000 python -m vllm.entrypoints.openai.api_server \
+    VLLM_RPC_TIMEOUT=100000 vllm serve \
         --model $MODEL_PATH \
         --max-num-seqs 1 \
         --max-model-len 12800 \

@@ -7,10 +7,10 @@
 Introducing the first release of Neuron 2.x enabling EC2 Trn1 General Availability (GA)
 =======================================================================================
 
-:ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>` is the first release of Neuron 2.x that enables GA of the new EC2 Trn1 instances.
+Neuron release 2.3 is the first release of Neuron 2.x that enables GA of the new EC2 Trn1 instances.
 Neuron release 2.3 extends the latest release of Neuron 1.x (Neuron 1.19.2), adding support for Deep Learning training on the AWS Trainium chips.
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, developers can run Deep Learning training workloads on Trn1 instances, saving training costs by up to 
+Starting with Neuron release 2.3, developers can run Deep Learning training workloads on Trn1 instances, saving training costs by up to 
 50% over equivalent GPU-based EC2 instances, while achieving the highest training performance in the AWS cloud for popular NLP models.  Neuron 2.x introduces new capabilities and major architectural updates to support training neural-networks with the Trn1 instances. 
 
 In addition, starting with this release, Neuron introduces new packages, renames several packages, 

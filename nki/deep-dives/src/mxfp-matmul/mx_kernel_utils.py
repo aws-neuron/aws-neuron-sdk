@@ -98,9 +98,10 @@ def load_tensor_helper(stationary_hbm, moving_hbm):
 
   return stationary_sbuf, moving_sbuf
 
+# [start-allocate_mx_tiles]
 # shape_unquantized represents the 2D unquantized SBUF shape with interleaved
 # layout established (i.e. the shape immediately before calling Quantize-MX).
-def allocate_mx_tiles(shape_unquantized, mx_dtype):
+def allocate_mx_tiles(shape_unquantized, mx_dtype, alloc_scale: bool = True):
   assert len(shape_unquantized) == 2, f"shape_unquantized must have exactly 2 dimensions, got {len(shape_unquantized)}"
   
   P, F = shape_unquantized
@@ -108,6 +109,9 @@ def allocate_mx_tiles(shape_unquantized, mx_dtype):
   # Allocate data tile
   # Quantize-MX shrinks the free-dim by 4x because it packs 4 elements into 1.
   mx_data_sbuf = nl.ndarray((P, F//4), dtype=mx_dtype, buffer=nl.sbuf)
+
+  if not alloc_scale:
+      return mx_data_sbuf, None
   
   # Allocate scale tile
   # Nominally the scale tile is sized (P//8, F//4) given that the scaling
@@ -120,7 +124,9 @@ def allocate_mx_tiles(shape_unquantized, mx_dtype):
     mx_scale_sbuf = nl.ndarray((P, F//4), dtype=nl.uint8, buffer=nl.sbuf)
   
   return mx_data_sbuf, mx_scale_sbuf
+# [end-allocate_mx_tiles]
 
+# [start-copy_data_strided]
 # Read unquantized tensors from HBM and establish interleaved layout in SBUF.
 # use_tensor_copy=true: Straight read from HBM->SBUF, then use SBUF-to-SBUF TensorCopy to stride the data.
 #   Intended to demonstrate how to stride the tile using VectorE/ScalarE if tile already present on SBUF.
@@ -188,3 +194,4 @@ def copy_data_strided(stationary_hbm, moving_hbm, use_tensor_copy: bool = True):
 
   # Return as 2D.
   return stationary_sbuf_strided.reshape((P_st, F_st*4)), moving_sbuf_strided.reshape((P_mv, F_mv*4))
+# [end-copy_data_strided]

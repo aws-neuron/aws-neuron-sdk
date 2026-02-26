@@ -22,7 +22,7 @@ text = convert(text)
 
 # Step 2:
 # Replace image with sphinx figure directive
-# There can be two formats for images coming out of Quip markdown
+# There can be two formats for images coming out of markdown
 pattern1 = r"\[Image: image\.png\]\n(.*)\n"
 pattern2 = r"\[Image: image\.png\](.*)\n"
 

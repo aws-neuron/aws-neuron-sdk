@@ -1,2 +1,2 @@
-* :ref:`neuronx-distributed-inference-rn`
+* :ref:`nxd-inference_rn`
 * :ref:`nxdi-troubleshooting`

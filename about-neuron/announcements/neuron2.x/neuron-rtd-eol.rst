@@ -7,10 +7,10 @@
 Announcing Neuron Runtime 1.x (``neuron-rtd``) end-of-support
 -------------------------------------------------------------
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron components like Neuron System Tools
+Starting with Neuron release 2.3, Neuron components like Neuron System Tools
 and Neuron Driver will no longer support Neuron Runtime 1.x.
 
-In addition, starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, the `AWS Neuron Runtime Proto GitHub <https://github.com/aws-neuron/aws-neuron-runtime-proto>`_  and `AWS Neuron Driver GitHub <https://github.com/aws-neuron/aws-neuron-driver>`_ repositories will no longer be supported.
+In addition, starting with Neuron release 2.3, the `AWS Neuron Runtime Proto GitHub <https://github.com/aws-neuron/aws-neuron-runtime-proto>`_  and `AWS Neuron Driver GitHub <https://github.com/aws-neuron/aws-neuron-driver>`_ repositories will no longer be supported.
 
 Why are we removing support for Neuron Runtime 1.x?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

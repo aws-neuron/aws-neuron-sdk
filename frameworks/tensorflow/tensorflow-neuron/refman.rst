@@ -7,6 +7,6 @@ Reference manuals
    api-tracing-python-api
    tensorflow2-accelerated-ops
    api-compilation-python-api
-   /release-notes/compiler/neuron-cc/neuron-cc-ops/neuron-cc-ops-tensorflow
+   /release-notes/archive/neuron-cc/neuron-cc-ops/neuron-cc-ops-tensorflow
 
    

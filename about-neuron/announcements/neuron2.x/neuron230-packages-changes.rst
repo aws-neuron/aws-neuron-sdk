@@ -7,7 +7,7 @@
 Introducing Packaging and installation changes
 ----------------------------------------------
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron introduces changes in Neuron packages and installation instructions.
+Starting with Neuron release 2.3, Neuron introduces changes in Neuron packages and installation instructions.
 
 .. contents::  Table of contents
    :local:
@@ -18,7 +18,7 @@ Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron introduc
 New Neuron packages
 ^^^^^^^^^^^^^^^^^^^
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron introduces the following new packages:
+Starting with Neuron release 2.3, Neuron introduces the following new packages:
 
 .. list-table:: New Neuron packages
    :widths: auto
@@ -31,7 +31,7 @@ Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron introduc
      - Description
      - Supported Instances 
      
-       (At the time of releasing :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`)
+       (At the time of releasing Neuron release 2.3)
 
    * - ``torch-neuronx``
      - .whl (pip)
@@ -74,7 +74,7 @@ In addition, some of those updates and new capabilities are not backward compati
 Renamed Neuron Packages
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, the following  Neuron packages will change names: 
+Starting with Neuron release 2.3, the following  Neuron packages will change names: 
 
 
 .. list-table:: Neuron package with changed names
@@ -126,7 +126,7 @@ To avoid situations where customers may accidentally install Neuron packages wit
 Updated installation and update instructions 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Starting with :ref:`Neuron release 2.3 <neuron-2.3.0-whatsnew>`, Neuron installation and update instructions will include pinning of the major version of the Neuron package. For example, to install latest Neuron tools package, call ``sudo apt-get install aws-neuronx-tools=2.*`` and to install latest PyTorch Neuron package for Trn1, call ``pip install torch-neuronx==1.11.0.1.*``. 
+Starting with Neuron release 2.3, Neuron installation and update instructions will include pinning of the major version of the Neuron package. For example, to install latest Neuron tools package, call ``sudo apt-get install aws-neuronx-tools=2.*`` and to install latest PyTorch Neuron package for Trn1, call ``pip install torch-neuronx==1.11.0.1.*``. 
 
 
 Why are we changing installation and update instructions?

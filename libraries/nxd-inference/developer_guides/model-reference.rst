@@ -74,34 +74,10 @@ Compatible Checkpoint Examples
 - https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct
 - https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
 
-Llama (Multimodal)
-~~~~~~~~~~~~~~~~~~
+----
 
-NxD Inference supports Llama 3.2 multimodal models. You can use HuggingFace
-checkpoints or the original Meta checkpoints. To use the Meta checkpoint,
-you must first convert the checkpoint to Neuron format. For more information
-about how to run Llama3.2 multimodal inference, and for details about 
-how to convert the original Meta checkpoints to run on NxD Inference, see :ref:`/libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb`.
-
-.. _neuron-classes-0:
-
-Neuron Classes
-^^^^^^^^^^^^^^
-
-- Neuron config class: MultimodalVisionNeuronConfig
-- Inference config class: MllamaInferenceConfig
-- Causal LM model class: NeuronMllamaForCausalLM
-
-.. _compatible-checkpoint-examples-0:
-
-Compatible Checkpoint Examples
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct
-- https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct
-
-Llama4
-~~~~~~~~~~~~~~~~~~
+Llama 4
+~~~~~~~~
 
 NxD Inference supports Llama 4 models, including both Scout and Maverick checkpoints.
 You can use Hugging Face checkpoints. Both checkpoints leverage early fusion for native multimodality,
@@ -125,6 +101,8 @@ Compatible Checkpoint Examples
 - https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct
 - https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct
 
+----
+
 Mixtral
 ~~~~~~~
 
@@ -146,6 +124,8 @@ Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1
+
+----
 
 DBRX
 ~~~~
@@ -174,6 +154,8 @@ Qwen2.5
 
 NxD Inference supports models based on the Qwen2.5 model architecture.
 
+----
+
 .. _neuron-classes-4:
 
 Neuron Classes
@@ -195,6 +177,8 @@ Compatible Checkpoint Examples
 - https://huggingface.co/Qwen/Qwen2.5-3B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct (Not tested, but expected to work out of the box)
 - https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct
+
+----
 
 Qwen3
 ~~~~~~
@@ -222,6 +206,30 @@ Compatible Checkpoint Examples
 - https://huggingface.co/Qwen/Qwen3-14B
 - https://huggingface.co/Qwen/Qwen3-32B
 
+----
+
+Qwen3 MoE
+~~~~~~~~~~
+
+NxD Inference supports Qwen3 MoE language model which supports multilingual text inputs.
+
+.. _neuron-classes-6:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: MoENeuronConfig
+- Inference config class: Qwen3MoeInferenceConfig
+- Causal LM model class: NeuronQwen3MoeForCausalLM
+
+.. _compatible-checkpoint-examples-6:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/Qwen/Qwen3-235B-A22B
+
+----
 
 FLUX.1 [BETA]
 ~~~~~~~~~~~~~~~~~~
@@ -230,7 +238,7 @@ NxD Inference supports FLUX.1-dev model checkpoint for text to image generation.
 You can use Hugging Face checkpoints. For more information
 about how to run FLUX.1-dev inference, see :ref:`/libraries/nxd-inference/tutorials/flux-inference-tutorial.ipynb`.
 
-.. _neuron-classes-6:
+.. _neuron-classes-7:
 
 Neuron Classes
 ^^^^^^^^^^^^^^
@@ -239,9 +247,78 @@ Neuron Classes
 - Flux Pipeline class: NeuronFluxPipeline
 - Flux Backbone Neuron config class: FluxBackboneInferenceConfig
 
-.. _compatible-checkpoint-examples-6:
+.. _compatible-checkpoint-examples-7:
 
 Compatible Checkpoint Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - https://huggingface.co/black-forest-labs/FLUX.1-dev
+
+----
+
+Pixtral-Large-Instruct-2411
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NxD Inference supports Pixtral image understanding model which processes text and image inputs. You can use HuggingFace checkpoint.
+
+.. _neuron-classes-8:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: NeuronConfig
+- Inference config class: PixtralInferenceConfig
+- Causal LM model class: NeuronPixtralForCausalLM
+
+.. _compatible-checkpoint-examples-8:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/mistralai/Pixtral-Large-Instruct-2411
+
+----
+
+Qwen2-VL-7B-Instruct (Dense)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NxD Inference supports models based on the Qwen2-VL-7B-Instruct (Dense) model architecture.
+
+.. _neuron-classes-9:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: NeuronConfig
+- Inference config class: Qwen2VLInferenceConfig
+- Causal LM model class: NeuronQwen2VLForCausalLM
+
+.. _compatible-checkpoint-examples-9:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct
+
+----
+
+Qwen3-VL-8B-Thinking (Dense)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NxD Inference supports models based on the Qwen3-VL-8B-Thinking (Dense) model architecture.
+
+.. _neuron-classes-10:
+
+Neuron Classes
+^^^^^^^^^^^^^^
+
+- Neuron config class: Qwen3VLNeuronConfig
+- Inference config class: Qwen3VLInferenceConfig
+- Causal LM model class: NeuronQwen3VLForCausalLM
+
+.. _compatible-checkpoint-examples-10:
+
+Compatible Checkpoint Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- https://huggingface.co/Qwen/Qwen3-VL-8B-Thinking

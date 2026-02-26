@@ -114,8 +114,6 @@ NKI programmers can invoke double FP8 matmul using the ``nisa.nc_matmul()`` API 
 
 The ``nt.tensor[128, 2, 128]`` stationary and ``nt.tensor[128, 2, 512]`` moving tensor shapes reflect the maximum tile sizes for the double FP8 matmul instruction. Smaller tile sizes are supported, though the second dimension (the most major free dimension) of both input tensors must be two. In other words, if the contraction dimension of the matmul is not a multiple of two, programmers are required to explicitly pad the input tensors with zeros to enable the performance mode.
 
-A full NKI kernel example performing double FP8 matmul is available on `Github <https://github.com/aws-neuron/nki-samples/blob/main/src/nki_samples/reference/double_row_matmul.py>`_.
-
 Note that Double FP8 matmul performance mode cannot be combined with the following TensorE features:
 
 * Column tiling mode

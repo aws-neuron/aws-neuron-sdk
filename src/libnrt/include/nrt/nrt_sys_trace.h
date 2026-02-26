@@ -9,8 +9,10 @@ extern "C" {
 #endif
 
 /*
-This is a public interface used by both the fetch api which allows near real-time querying of captured events, and inspect profiling which saves captured events to disk as well as other profiling functions.
-*/
+ * This is a public interface used by both the fetch api (which allows near
+ * real-time querying of captured events), and inspect profiling (which saves
+ * captured events to disk), as well as other profiling functions.
+ */
 
 //------------------------------------------------
 // Section: System Trace Capture
@@ -19,24 +21,26 @@ This is a public interface used by both the fetch api which allows near real-tim
 typedef struct nrt_sys_trace_config nrt_sys_trace_config_t;
 
 /** Allocate memory for the options structure which is needed to
- * start profiling using nrt_sys_trace_start. This will set all options to defaults. The reason we use an _allocate function is so that users don't need to know the size or implementation details of the config struct.
- * 
- * @param options[in] - pointer to a pointer to options nrt_inspect_config struct
- * 
+ * start profiling using nrt_sys_trace_start. This will set all options to
+ * defaults. The reason we use an _allocate function is so that users don't need
+ * to know the size or implementation details of the config struct.
+ *
+ * @param options[in] - pointer to a pointer to options nrt_sys_trace_config struct
+ *
  */
 NRT_STATUS nrt_sys_trace_config_allocate(nrt_sys_trace_config_t **options);
 
-/** Set all fields of the nrt_inspect_config structure to their default values.
- * 
- * @param options[in,out] - Pointer to an nrt_inspect_config structure.
+/** Set all fields of the nrt_sys_trace_config structure to their default values.
+ *
+ * @param options[in,out] - Pointer to an nrt_sys_trace_config structure.
  */
 void nrt_sys_trace_config_set_defaults(nrt_sys_trace_config_t *options);
 
 /** Free up memory allocated for the options structure which is needed to
  * start profiling using nrt_sys_trace_start
- * 
- * @param options[in] - pointer to an options nrt_inspect_config struct
- * 
+ *
+ * @param options[in] - pointer to an options nrt_sys_trace_config struct
+ *
  */
 void nrt_sys_trace_config_free(nrt_sys_trace_config_t *options);
 
@@ -50,17 +54,17 @@ void nrt_sys_trace_config_set_max_events_per_nc(nrt_sys_trace_config_t *options,
 
 /**
  * @brief Sets system trace capture enabled for a specific NeuronCore
- * ring buffers won't be allocated for disabled NeuronCores
- * can save memory, reduce output size, and speed up trace processing
+ * ring buffers won't be allocated for disabled NeuronCores.
+ * Can save memory, reduce output size, and speed up trace processing.
  * @param[in,out] options Pointer to the options structure.
  * @param[in] nc_idx NeuronCore index.
  * @param[in] enabled Capture enabled flag.
  */
 void nrt_sys_trace_config_set_capture_enabled_for_nc(nrt_sys_trace_config_t *options, uint32_t nc_idx, bool enabled);
 
-/** 
- * @brief Sets system trace capture enabled for a specific event type
- * can save memory, reduce output size, and speed up trace processing
+/**
+ * @brief Sets system trace capture enabled for a specific event type.
+ * Can save memory, reduce output size, and speed up trace processing.
  * @param[in,out] options Pointer to the options structure.
  * @param[in] event_type Event type string, possible values are from nrt_sys_trace_get_event_types
  * @param[in] enabled Capture enabled flag.
@@ -92,7 +96,7 @@ NRT_STATUS nrt_sys_trace_get_event_types(const char ***event_types, size_t *coun
 /**
  * @brief Free the event types array allocated by nrt_sys_trace_get_event_types.
  * This function properly frees both the array and all individual strings.
- * 
+ *
  * @param[in] event_types Pointer to the event types array to be freed.
  * @param[in] count Number of event types in the array.
  */
@@ -127,7 +131,9 @@ void nrt_sys_trace_fetch_options_set_max_events_per_nc(nrt_sys_trace_fetch_optio
 // Fetch events only for specified NeuronCore
 void nrt_sys_trace_fetch_options_set_nc_idx(nrt_sys_trace_fetch_options_t *options, uint64_t nc_idx);
 
-/** Fetches system trace events from process memory and returns them as a JSON-formatted string. Once events are fetched, they cannot be fetched again.
+/**
+ * Fetches system trace events from process memory and returns them as a JSON-formatted string.
+ * Once events are fetched, they cannot be fetched again.
  *
  * @param[out] buffer       On successful return, will point to a dynamically allocated, null-terminated
  *                          JSON string containing the trace events. Memory for the output buffer is

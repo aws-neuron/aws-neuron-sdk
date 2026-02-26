@@ -5,7 +5,7 @@ Misc (``torch-neuronx``)
     :maxdepth: 1
     :hidden:
     
-    /release-notes/torch/torch-neuronx/index
+    /release-notes/components/pytorch
 
 .. include:: /frameworks/torch/torch-neuronx/misc-inference-torch-neuronx.txt
 

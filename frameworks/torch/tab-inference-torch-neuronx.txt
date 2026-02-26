@@ -46,5 +46,5 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    * :ref:`torch-neuronx-rn`
+    * :ref:`pytorch_rn`
 

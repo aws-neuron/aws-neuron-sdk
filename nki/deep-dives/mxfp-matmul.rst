@@ -15,7 +15,7 @@ Before You start
 * Read the MX-related sections of the :ref:`Trainium 3 Architecture Guide for NKI <trainium3_arch>` and become familiar with basic matrix multiplication concepts on Neuron in the :doc:`Matrix Multiplication tutorial </nki/guides/tutorials/matrix_multiplication>`.
 
 .. note::
-    The code snippets in this guide are taken from the `tutorial code package <https://github.com/aws-neuron/aws-neuron-sdk/tree/master/nki/deep-dives/src/mxfp-matmul>`_ which demonstrates how to execute all MX kernel examples from Torch. We recommend you browse and run the code as you read the tutorial.
+    The code snippets in this guide are taken from the `tutorial code package <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/mxfp-matmul>`_ which demonstrates how to execute all MX kernel examples from Torch. We recommend you browse and run the code as you read the tutorial.
 
 What is MXFP4/8 Matrix Multiplication?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,60 +133,10 @@ Basic Matmul-MX
 
 This NKI example performs a single Matmul-MX using offline-quantized, max-sized input tiles. For simplicity, it assumes the MX *data* tiles in HBM already satisfy the layout requirements so they may be simply loaded straight into SBUF. The MX *scale* tiles require some shuffling. Note that subsequent examples, instead, show how to establish this layout yourself in SBUF.
 
-.. code-block:: python
-
-  @nki.jit(platform_target="trn3")
-  def kernel_offline_quantized_mx_matmul(stationary_mx_data, stationary_mx_scale, moving_mx_data, moving_mx_scale, mx_dtype):    
-    
-    MAX_TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
-    MAX_TILE_K = nl.tile_size.pmax  # 128
-    MAX_TILE_N = nl.tile_size.gemm_moving_fmax  # 512
-
-    # View the input data as _x4 mx_dtype. This is done using an access pattern, specifying the target dtype and a simple
-    # linear pattern.
-    stationary_mx_data_hbm_x4 = stationary_mx_data.ap(dtype=mx_dtype, pattern=[[MAX_TILE_M,MAX_TILE_K],[1,MAX_TILE_M]], offset=0)
-    moving_mx_data_hbm_x4 = moving_mx_data.ap(dtype=mx_dtype, pattern=[[MAX_TILE_N,MAX_TILE_K],[1,MAX_TILE_N]], offset=0)
-
-    # Check that the input tiles are max-sized. This is merely for simplicity of the example but
-    # smaller shapes are also supported.
-    assert stationary_mx_data_hbm_x4.shape == (MAX_TILE_K, MAX_TILE_M)
-    assert moving_mx_data_hbm_x4.shape == (MAX_TILE_K, MAX_TILE_N)
-
-    # Load inputs directly from HBM to SBUF. Data is assumed to already have the 
-    # layout required by MX. Scales are assumed to be contiguous in HBM therefore we use
-    # load_scales_scattered() to spread them across SBUF partition-dim quadrants, as is required
-    # by Matmul-MX.
-
-    stationary_mx_data_sbuf_x4 = nl.ndarray(stationary_mx_data_hbm_x4.shape, dtype=mx_dtype, buffer=nl.sbuf)
-    nisa.dma_copy(src=stationary_mx_data_hbm_x4, dst=stationary_mx_data_sbuf_x4)
-    stationary_mx_scale_sbuf = load_scales_scattered(stationary_mx_data_sbuf_x4, stationary_mx_scale)
-
-    # Load moving
-    moving_mx_data_sbuf_x4 = nl.ndarray(moving_mx_data_hbm_x4.shape, dtype=mx_dtype, buffer=nl.sbuf)
-    nisa.dma_copy(src=moving_mx_data_hbm_x4, dst=moving_mx_data_sbuf_x4)
-    moving_mx_scale_sbuf = load_scales_scattered(moving_mx_data_sbuf_x4, moving_mx_scale)
-    
-    # Allocate a tile in PSUM. This could also be float32.
-    result_psum = nl.ndarray((MAX_TILE_M, MAX_TILE_N), dtype=nl.bfloat16, buffer=nl.psum)
-
-    # Matmul-MX
-    nisa.nc_matmul_mx(
-      dst=result_psum,
-      stationary=stationary_mx_data_sbuf_x4,
-      moving=moving_mx_data_sbuf_x4,
-      stationary_scale=stationary_mx_scale_sbuf,
-      moving_scale=moving_mx_scale_sbuf
-    )
-
-    # Copy the PSUM result back to SBUF
-    result_sbuf = nl.ndarray(result_psum.shape, dtype=nl.bfloat16, buffer=nl.sbuf)
-    nisa.tensor_copy(src=result_psum, dst=result_sbuf, dtype=nl.bfloat16)  
-
-    # Store to HBM
-    result_hbm = nl.ndarray(result_psum.shape, dtype=nl.bfloat16, buffer=nl.shared_hbm)  
-    nisa.dma_copy(src=result_sbuf, dst=result_hbm)
-    
-    return result_hbm
+.. literalinclude:: src/mxfp-matmul/mx_kernels.py
+   :language: python
+   :start-after: [start-kernel_offline_quantized_mx_matmul]
+   :end-before: [end-kernel_offline_quantized_mx_matmul]
 
 A few notes about the above example:
 
@@ -196,41 +146,10 @@ A few notes about the above example:
 
 Let's also look at the host code which calls this kernel as all subsequent examples use the same structure.
 
-.. code-block:: python
-
-  def run_offline_quantized_matmul_mx_test(quantized_dtype):
-    
-    # Choose max tile-sizes for TensorE.
-    M, K, N = 128, 128, 512
-
-    print_test_header(f"OFFLINE_QUANTIZED_MX_MATMUL - stationary <{quantized_dtype.__name__}> @ moving <{quantized_dtype.__name__}>")
-
-    setup_compiler_workdir(f"offline_quantized_mx_matmul")
-
-    # Generate stationary MX tile. Note the scales will be packed contiguously here. The kernel will later load the scales into SBUF
-    # in the required scattered fashion.
-    st_unquantized_shape = (K, M*4)
-    _, _, st_mx_data_x4, st_mx_scale = generate_stabilized_mx_data(quantized_dtype, st_unquantized_shape)
-
-    # Generate moving MX tile
-    mv_unquantized_shape = (K, N*4)
-    _, _, mv_mx_data_x4, mv_mx_scale = generate_stabilized_mx_data(quantized_dtype, mv_unquantized_shape)
-
-    # Call the Kernel. Perform matmul-mx: stationary_mx @ moving_mx
-    output_kernel = kernel_offline_quantized_mx_matmul(
-      torch.from_numpy(st_mx_data_x4).to(device), 
-      torch.from_numpy(st_mx_scale).to(device), 
-      torch.from_numpy(mv_mx_data_x4).to(device), 
-      torch.from_numpy(mv_mx_scale).to(device), 
-      quantized_dtype_to_x4_map[quantized_dtype]
-    )
-
-    output_kernel_np = output_kernel.cpu().float().numpy()
-
-    # Generate the golden
-    golden = nc_matmul_mx_golden(st_mx_data_x4, mv_mx_data_x4, st_mx_scale, mv_mx_scale, quantized_dtype, quantized_dtype)
-
-    compare_and_print_results(output_kernel_np, golden)
+.. literalinclude:: src/mxfp-matmul/mx_toplevel.py
+   :language: python
+   :start-after: [start-run_offline_quantized_matmul_mx_test]
+   :end-before: [end-run_offline_quantized_matmul_mx_test]
 
 * The ``generate_stabilized_mx_data()`` helper function is used to generate MX data on the host. "Stabilized" means the data is randomly generated but injected with certain properties to allow for lossless quantization/dequantization, including constraining the data to be in the FP4/8 range. It conveniently returns MX data as ``ml_dtypes`` FP4/FP8, the same data packed into ``uint`` to mimic the ``MXFP_x4`` packing (suitable for sending to a NKI kernel), MX scales, and a corresponding unquantized FP32 tensor. The input shape argument specifies the unquantized shape. The unquantized tensor is viewed as being in the required layout for MX operations. Therefore to generate an MX data tile of maximum size we must specify an unquantized free-dimension that is 4x larger. In this example the moving unquantized shape is ``[128P, 2048F]`` and the function will return a ``[128P, 512F]`` packed MX data tensor, as desired.
 * ``nc_matmul_mx_golden()`` is a utility to mimic the hardware's Matmul-MX operation and is therefore useful for verifying the hardware output. It assumes the input tensors meet the SBUF layout requirements and the data tensor is packed to mimic ``MXFP_x4``. Hence it can directly accept MX data generated by ``generate_stabilized_mx_data()``.
@@ -247,89 +166,15 @@ The two main changes in this example are:
 * The ``allocate_mx_tiles()`` helper function implements the data and scale tile allocation rules mentioned above.
 * ``load_scales_scattered()`` is again used for the stationary scales but is unnecessary for the moving scales since Quantize-MX will correctly spread the data across SBUF partition-dim quadrants.
 
-.. code-block:: python
+.. literalinclude:: src/mxfp-matmul/mx_kernel_utils.py
+   :language: python
+   :start-after: [start-allocate_mx_tiles]
+   :end-before: [end-allocate_mx_tiles]
 
-  # shape_unquantized represents the 2D unquantized SBUF shape with interleaved
-  # layout established (i.e. the shape immediately before calling Quantize-MX).
-  def allocate_mx_tiles(shape_unquantized, mx_dtype):
-    assert len(shape_unquantized) == 2, f"shape_unquantized must have exactly 2 dimensions, got {len(shape_unquantized)}"
-    
-    P, F = shape_unquantized
-    
-    # Allocate data tile
-    # Quantize-MX shrinks the free-dim by 4x because it packs 4 elements into 1.
-    mx_data_sbuf = nl.ndarray((P, F//4), dtype=mx_dtype, buffer=nl.sbuf)
-    
-    # Allocate scale tile
-    # Nominally the scale tile is sized (P//8, F//4) given that the scaling
-    # group shape is [8P, 4F]. But when P > 32, the scales must be placed in the
-    # partition-dim quadrant from which the corresponding scaling group originated 
-    # hence we must allocate the full P.
-    if P <= 32: # Can store all scales in first p-dim quadrant.
-      mx_scale_sbuf = nl.ndarray((P//8, F//4), dtype=nl.uint8, buffer=nl.sbuf)
-    else: # Must oversize and spread across quadrants.
-      mx_scale_sbuf = nl.ndarray((P, F//4), dtype=nl.uint8, buffer=nl.sbuf)
-    
-    return mx_data_sbuf, mx_scale_sbuf
-
-  @nki.jit(platform_target="trn3")
-  def kernel_on_device_quantize_matmul_mx(stationary_mx_data, stationary_mx_scale, moving_data_bf16, stationary_mx_dtype, moving_mx_dtype):
-
-    assert moving_mx_dtype != nl.float4_e2m1fn_x4, "FP4 not supported by Quantize-MX"
-
-    MAX_TILE_M = nl.tile_size.gemm_stationary_fmax  # 128
-    MAX_TILE_K = nl.tile_size.pmax  # 128
-    MAX_TILE_N = nl.tile_size.gemm_moving_fmax  # 512
-
-    # View the input MX data as _x4 mx_dtype. This is done using an access pattern, specifying the target dtype and a simple
-    # linear pattern.
-    stationary_mx_data_hbm_x4 = stationary_mx_data.ap(dtype=stationary_mx_dtype, pattern=[[MAX_TILE_M,MAX_TILE_K],[1,MAX_TILE_M]], offset=0)
-
-    # Check that the input tiles are max-sized. This is merely for simplicity of the example but
-    # smaller shapes are also supported.
-    assert stationary_mx_data_hbm_x4.shape == (MAX_TILE_K, MAX_TILE_M)
-    # Note the factor of 4 on the N free-dim. This is unquantized data whose free-dim will be packed and
-    # reduced by a factor of 4 during quantize_mx.
-    assert moving_data_bf16.shape == (MAX_TILE_K, MAX_TILE_N*4)
-
-    # Load stationary MX.
-    stationary_mx_data_sbuf_x4 = nl.ndarray(stationary_mx_data_hbm_x4.shape, dtype=stationary_mx_dtype, buffer=nl.sbuf)
-    nisa.dma_copy(src=stationary_mx_data_hbm_x4, dst=stationary_mx_data_sbuf_x4)
-    stationary_mx_scale_sbuf = load_scales_scattered(stationary_mx_data_sbuf_x4, stationary_mx_scale)
-    
-    # Load moving BF16
-    moving_bf16_sbuf = nl.ndarray(moving_data_bf16.shape, dtype=moving_data_bf16.dtype, buffer=nl.sbuf)
-    nisa.dma_copy(src=moving_data_bf16, dst=moving_bf16_sbuf)
-
-    # Allocate quantized moving tiles
-    moving_mx_data_sbuf_x4, moving_mx_scale_sbuf = allocate_mx_tiles(moving_data_bf16.shape, moving_mx_dtype)  
-
-    # Quantize-MX. Scales will automatically be spread across partition-dim quadrants.
-    nisa.quantize_mx(src=moving_bf16_sbuf,
-                    dst=moving_mx_data_sbuf_x4, 
-                    dst_scale=moving_mx_scale_sbuf)  
-
-    # Allocate a tile in PSUM
-    result_psum = nl.ndarray((MAX_TILE_M, MAX_TILE_N), dtype=nl.bfloat16, buffer=nl.psum)
-
-    # Matmul-MX
-    nisa.nc_matmul_mx(
-      dst=result_psum,
-      stationary=stationary_mx_data_sbuf_x4,
-      moving=moving_mx_data_sbuf_x4,
-      stationary_scale=stationary_mx_scale_sbuf,
-      moving_scale=moving_mx_scale_sbuf
-    )  
-
-    # Copy the PSUM result back to SBUF
-    result_sbuf = nl.ndarray(result_psum.shape, dtype=nl.bfloat16, buffer=nl.sbuf)
-    nisa.tensor_copy(src=result_psum, dst=result_sbuf, dtype=nl.bfloat16)  
-
-    # Store to HBM
-    result_hbm = nl.ndarray(result_psum.shape, dtype=nl.bfloat16, buffer=nl.shared_hbm)  
-    nisa.dma_copy(src=result_sbuf, dst=result_hbm)
-
-    return result_hbm
+.. literalinclude:: src/mxfp-matmul/mx_kernels.py
+   :language: python
+   :start-after: [start-kernel_on_device_quantize_matmul_mx]
+   :end-before: [end-kernel_on_device_quantize_matmul_mx]
 
 Please see the code package for the host code that calls this kernel.
 
@@ -361,71 +206,42 @@ Code
 
 This example demonstrates both techniques, selected by the ``use_tensor_copy`` argument. They are very similar but with slightly different read access patterns. It's useful to refer to the above layout diagrams as you read this code as the reshapes and access patterns directly correspond.
 
-.. code-block:: python
-
-   def copy_data_strided(stationary_hbm, moving_hbm, use_tensor_copy: bool = True):  
-       
-     # The HBM tensors have nominal shape [P,F]. Reshape into [4, P//4, F]. 
-     # In other words, we divide the contraction axis into 4 "P" tiles since we'll eventually
-     # need to read data from each tile and pack them together on SBUF.
-     
-     # These dimensions reflect the shape of each "P" tile.
-     P_st = stationary_hbm.shape[0] // 4
-     F_st = stationary_hbm.shape[1]
-     P_mv = moving_hbm.shape[0] // 4
-     F_mv = moving_hbm.shape[1]
-     
-     stationary_hbm_reshape = stationary_hbm.reshape((4, P_st, F_st))
-     moving_hbm_reshape = moving_hbm.reshape((4, P_mv, F_mv))
-
-     # Allocate SBUF tensors to store the strided result.
-     # The shape is [P//4, F, 4] where the [P,F] is the shape of the unquantized input tensor.
-     # In other words, we view the free-dim as having F_st/F_mv groups of 4 elements.
-     # Taking 3D views of both the HBM and SBUF tensors allows for cleaner indexing.
-     stationary_sbuf_strided = nl.ndarray((P_st, F_st, 4), dtype=stationary_hbm.dtype, buffer=nl.sbuf)
-     moving_sbuf_strided = nl.ndarray((P_mv, F_mv, 4), dtype=moving_hbm.dtype, buffer=nl.sbuf)    
-
-     # Perform a TensorCopy to achieve the required layout.
-     if (use_tensor_copy):
-
-       # First load from HBM -> SBUF. Take "P" tiles from HBM and write them
-       # contiguously (adjacent to each other) into the SBUF free-dim. 
-       # This load is not the focus of this example so its details are encapsulated in load_tensor_helper().
-       # The SBUF shapes will be stationary_sbuf [P_st, 4, F_st], moving_sbuf [P_mv, 4, F_mv]
-       stationary_sbuf, moving_sbuf = load_tensor_helper(stationary_hbm_reshape, moving_hbm_reshape)
-
-       # Perform SBUF-to-SBUF TensorCopy to shuffle the data into the required MX layout.
-       # Here are some tips on how to read this access pattern (AP).
-       # .ap(pattern) = tuple of [step_size, count], right-most is the inner (fastest changing) dimension of the access pattern (AP).
-       # The dst (*_strided) has no AP specified, meaning it is linearly written to.
-       # To understand the src AP it's useful to refer to the SBUF Layout diagram in load_tensor_helper().
-       # We read 1 element, then step F elements to the next tile, 4 times total. In other words, we gather a group
-       # of 4 elements (one from each tile).
-       # Then step 1 element and repeat the above F times to read an entire row of SBUF.
-       # Then step to the next row of SBUF and repeat the above for all P rows of SBUF.
-       # Note, this example is shown as a strided-read but it could be re-written as a strided-write, though it will be slower.
-       # Secondly, the source tile can be in PSUM (i.e. the result of a prior matmul).
-     
-       nisa.tensor_copy(src=stationary_sbuf.ap(pattern=[[4*F_st, P_st], [1, F_st], [F_st, 4]], offset=0), dst=stationary_sbuf_strided)
-       nisa.tensor_copy(src=moving_sbuf.ap(pattern=[[4*F_mv, P_mv], [1, F_mv], [F_mv, 4]], offset=0), dst=moving_sbuf_strided)
-
-     # Perform a strided DMA to achieve the required layout.
-     else:
-
-       # Similar to TensorCopy, the we linearly write to stationary_sbuf_strided.
-       # When reading from *_hbm_reshape, we read one element from each tile.
-       # Then step 1 element and repeat the above F times, thereby reading one full row of HBM.
-       # Then step to the next row of HBM and repeat the above P times.
-
-       nisa.dma_copy(src=stationary_hbm_reshape.ap(pattern=[[F_st, P_st], [1, F_st], [P_st*F_st, 4]], offset=0),
-                     dst=stationary_sbuf_strided)
-       nisa.dma_copy(src=moving_hbm_reshape.ap(pattern=[[F_mv, P_mv], [1, F_mv], [P_mv*F_mv, 4]], offset=0),
-                     dst=moving_sbuf_strided)
-
-     # Return as 2D.
-     return stationary_sbuf_strided.reshape((P_st, F_st*4)), moving_sbuf_strided.reshape((P_mv, F_mv*4))
+.. literalinclude:: src/mxfp-matmul/mx_kernel_utils.py
+   :language: python
+   :start-after: [start-copy_data_strided]
+   :end-before: [end-copy_data_strided]
 
 See the code package for an example kernel that calls ``copy_data_strided()`` to establish the interleaved layout for stationary and moving tiles, quantize both, and perform a Matmul-MX.
+
+.. _nki-mxfp-scale-packing:
+
+Packing Scale Values
+--------------------
+
+As discussed in `Scale Tensor`_, each element of a scale tensor corresponds to a group of 32 elements in the unquantized source tensor.
+Each scaling group spans 8 partitions, with 4 free elements per partition, giving scale tensors a logical size of ``[P // 8, F // 4]``.
+However, due to connectivity constraints between SBUF and VectorE, scale values must be placed in the same quadrant as their corresponding scaling group.
+When the unquantized source tensor spans multiple partitions (i.e., ``src.shape[0] > 32``), the scale tensor has physical shape ``[P, F // 4]``.
+Only the first 4 partitions (= 32 partitions per quadrant divided by 8 partitions per scaling group) of each quadrant are occupied, leaving the remaining 28 unused.
+
+Quantize-MX allows you to utilize some of this space by packing scale values from multiple Quantize-MX calls.
+Quantize-MX and Matmul-MX support writing/reading scales at an offset of 0, 4, 8, or 12 within each partition, allowing you to pack scale values from up to four tensors into a single tile.
+To illustrate, consider the scale tile from `Scale Tensor`_ shown with and without scale packing:
+
+.. image:: /nki/img/deep-dives/mxfp84-matmul-guide-6.drawio.png
+   :align: center
+
+Code
+~~~~
+
+This example demonstrates how to pack scale values from multiple Quantize-MX calls into a single tensor in SBUF, as mentioned in the :ref:`Trainium3 Architecture Guide <arch-trn3-quad-mxfp>`.
+We use tensor slicing to control the offset into each quadrant at which Quantize-MX writes scale values.
+
+.. literalinclude:: src/mxfp-matmul/mx_kernels.py
+   :language: python
+   :start-after: [start-kernel_copy_strided_quantize_matmul_mx_packed_scale]
+   :end-before: [end-kernel_copy_strided_quantize_matmul_mx_packed_scale]
+
 
 Additional Tips
 ----------------
@@ -440,7 +256,7 @@ Matmul-MX supports PE-tiling (row-tiling only) where matmuls with a small (<= 64
 
 Executing the Code
 ------------------
-After downloading the `tutorial code package <https://github.com/aws-neuron/aws-neuron-sdk/tree/master/nki/deep-dives/src/mxfp-matmul>`_ to your Trainium3 Neuron environment, simply execute it as follows and observe the sample output.
+After downloading the `tutorial code package <https://github.com/aws-neuron/nki-samples/tree/main/src/nki_samples/tutorials/mxfp-matmul>`_ to your Trainium3 Neuron environment, simply execute it as follows and observe the sample output.
 
 .. code-block:: bash
 

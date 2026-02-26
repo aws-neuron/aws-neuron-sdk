@@ -46,6 +46,9 @@ float8_e4m3 = 'float8_e4m3'
 float8_e5m2 = 'float8_e5m2'
 """8-bit floating-point number (1S,5E,2M)"""
 
+float8_e4m3fn = 'float8_e4m3fn'
+"""8-bit floating-point number (1S,4E,3M), Extended range: no inf, NaN represented by 0bS111'1111"""
+
 float8_e5m2_x4 = 'float8_e5m2_x4'
 """4x packed float8_e5m2 elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
@@ -64,8 +67,16 @@ def ndarray(shape, dtype, buffer=None, name=""):
     :param shape: the shape of the tensor.
     :param dtype: the data type of the tensor (see :ref:`nki-dtype` for more information).
     :param buffer: the specific buffer (ie, :doc:`sbuf<nki.language.sbuf>`, :doc:`psum<nki.language.psum>`, :doc:`hbm<nki.language.hbm>`), defaults to :doc:`sbuf<nki.language.sbuf>`.
-    :param name: the name of the tensor.
+    :param name: the name of the tensor. The ``name`` parameter has to be unique for tensors on each Physical NeuronCore(PNC) 
+                within each Logical NeuronCore(LNC). It is optional for SRAM tensors, IO tensors, and any HBM tensors that are
+                only visible to one Physical NeuronCore. 
+                For ``shared_hbm`` tensors that are not used as kernel 
+                inputs or outputs, ``name`` must be specified. In addition, the compiler uses the ``name``
+                to link non-IO ``shared_hbm`` tensors among PNCs. In other word, ``shared_hbm`` tensors
+                will point to the same underlying memory as long as they have the same name,
+                even if the tensors appear in different control flow. 
     :return: a new tensor allocated on the buffer.
+
     """
     ...
 
@@ -85,10 +96,55 @@ def zeros(shape, dtype, buffer=None, name=""):
 
 def shared_constant(constant, dtype=None):
     r"""
-    Create a new tensor filled with the data specified by data array.
+    Create a tensor filled with compile-time constant data.
 
-    :param constant: the constant data to be filled into a tensor
-    :return: a tensor which contains the constant data
+    This function creates a tensor that contains constant data specified by a trace-time tensor.
+    The constant data is evaluated at compile time and shared across all instances where the
+    same constant is used, making it memory efficient for frequently used constant values.
+
+    :param constant: A trace-time tensor containing the constant data to be filled into the output tensor.
+                    This can be created using functions from :mod:`nki.tensor` such as 
+                    :func:`nki.tensor.zeros`, :func:`nki.tensor.identity`, or :func:`nki.tensor.arange`.
+    :type constant: nki.tensor.TraceTimeTensor
+    :param dtype: The data type of the output tensor. Must be specified.
+                 Only types that can be serialized to npy files are supported.
+                 See :ref:`nki-dtype` for supported data types.
+    :type dtype: nki.language dtype
+    :return: A tensor containing the constant data with the specified dtype.
+    :rtype: Tensor
+
+    .. note::
+       The constant tensor is shared across all uses of the same constant data and dtype,
+       which helps reduce memory usage in the compiled kernel.
+
+    **Examples:**
+
+    Create a constant identity matrix::
+
+        import nki.tensor as ntensor
+        import nki.language as nl
+        
+        # Create a 128x128 identity matrix as a shared constant
+        identity_matrix = nl.shared_constant(
+            ntensor.identity(128, dtype=nl.int8), 
+            dtype=nl.float16
+        )
+
+    Create a constant tensor with sequential values::
+
+        # Create a constant tensor with values [0, 1, 2, ..., 31]
+        sequential_values = nl.shared_constant(
+            ntensor.arange(0, 32, 1, dtype=nl.int32),
+            dtype=nl.float32
+        )
+
+    Create a constant tensor with arithmetic operations::
+
+        # Create a constant tensor filled with ones
+        ones_tensor = nl.shared_constant(
+            ntensor.zeros((64, 64), dtype=nl.int8) + 1,
+            dtype=nl.int16
+        )
     """
     ...
 
@@ -111,9 +167,8 @@ def affine_range(start, stop=None, step=1):
     r"""
     Create a sequence of numbers for use as **parallel** loop iterators in NKI. ``affine_range`` should be the default
     loop iterator choice, when there is **no** loop carried dependency. Note, associative reductions are **not** considered
-    loop carried dependencies in this context. A concrete example of associative reduction
-    is multiple :doc:`nl.matmul <nki.language.matmul>`
-    or :doc:`nisa.nc_matmul <nki.isa.nc_matmul>` calls accumulating into the same
+    loop carried dependencies in this context. A concrete examplesof associative reduction
+    is the set of :doc:`nisa.nc_matmul <nki.isa.nc_matmul>`calls accumulating into the same
     output buffer defined outside of this loop level (see code example #2 below).
 
     When the above conditions are not met, we recommend using :doc:`sequential_range <nki.language.sequential_range>`
@@ -173,10 +228,6 @@ def affine_range(start, stop=None, step=1):
 def ds(start, size):
     r"""
     Construct a dynamic slice for simple tensor indexing.
-
-    .. nki_example:: ../../test/test_nki_nl_dslice.py
-     :language: python
-     :marker: NKI_EXAMPLE_1
 
     """
     ...
@@ -327,6 +378,16 @@ def gelu_apprx_sigmoid(x, dtype=None):
     :param x: a tile.
     :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
     :return: a tile that has gelu of ``x``.
+    """
+    ...
+
+def gelu_apprx_sigmoid_dx(x, dtype=None):
+    r"""
+    Derivative of Gaussian Error Linear Unit activation function on the input, element-wise, with sigmoid approximation.
+
+    :param x: a tile.
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
+    :return: a tile that has gelu_dx of ``x``.
     """
     ...
 

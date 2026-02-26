@@ -16,6 +16,7 @@ NKI Tutorials
    average_pool2d
    transpose2d
    fused_mamba
+   kernel-optimization
    SPMD Tensor Addition <spmd_tensor_addition>
    Multi-Core SPMD Addition <spmd_multiple_nc_tensor_addition>
 
@@ -67,6 +68,14 @@ Advanced Kernels
       **Fused Mamba**
       ^^^
       Implement fused Mamba state space model kernels
+
+   .. grid-item-card::
+      :link: kernel-optimization
+      :link-type: doc
+
+      **Kernel Optimization**
+      ^^^
+      Learn the recommended workflow for optimizing NKI kernels using profiling and performance analysis
 
 Distributed Computing
 ---------------------

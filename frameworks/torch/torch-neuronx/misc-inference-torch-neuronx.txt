@@ -1,1 +1,1 @@
-* :ref:`torch-neuronx-rn`
+* :ref:`pytorch_rn`

@@ -32,6 +32,24 @@ What is "NeuronX"?
 * Improved profiling and debugging tools
 * Ongoing feature development and support for new instance types
 
+Catch up on the latest Neuron news
+-----------------------------------
+
+.. grid:: 1
+   :gutter: 2
+
+   .. grid-item-card::
+      :link: /about-neuron/whats-new
+      :link-type: doc
+      :class-card: sd-border-1
+
+      **What's New in Neuron**
+      ^^^
+      Read about the latest releases and features of the Neuron SDK
+
+
+
+
 Learn about AWS Neuron
 ----------------------
 
@@ -145,7 +163,8 @@ Resources
 
 * :ref:`Setup Guide <setup-guide-index>`
 * :ref:`Release Notes <neuron_release_notes>`
-* :ref:`FAQ <neuron_faq>`
+* :ref:`Neuron FAQ <neuron_faq>`
+* :doc:`Older Neuron FAQs <faq/index>`
 
 Support
 -------
@@ -179,3 +198,4 @@ If you want to request a feature or report a critical issue, you can contact us 
    Term Glossary <arch/glossary>
    Troubleshooting <troubleshooting>
    What is AWS Neuron? <what-is-neuron>
+   Older Neuron FAQS <faq/index>

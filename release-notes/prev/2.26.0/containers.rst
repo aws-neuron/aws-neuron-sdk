@@ -33,6 +33,6 @@ Behavioral changes
 Previous release notes
 ----------------------
 
-* :ref:`neuron-containers-release-notes`
-* :ref:`neuron-dlc-release-notes`
-* :ref:`neuron-k8-rn`
+* :ref:`containers_rn`
+* :ref:`containers_rn`
+* :ref:`containers_rn`

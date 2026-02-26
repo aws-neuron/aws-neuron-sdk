@@ -26,6 +26,8 @@ typedef struct nrt_model nrt_model_t;
 
 typedef struct nrt_tensor nrt_tensor_t;
 
+typedef struct nrt_cc_context nrt_cc_context_t;
+
 /**
  * WARNING: Do not change the value of existing enums!
  * These values will be used by libnrt consumers, we
@@ -61,7 +63,8 @@ enum {
     NRT_INSTANCE_TRN2EU     = 11,
     NRT_INSTANCE_TRN2AC     = 12,
     NRT_INSTANCE_TRN2UAC    = 13,
-    NRT_INSTANCE_TRN3       = 14
+    NRT_INSTANCE_TRN3       = 14,
+    NRT_INSTANCE_TRN3PDS98  = 15
 };
 
 enum {
@@ -80,9 +83,45 @@ enum {
     NRT_INSTANCE_SIZE_NUM = NRT_INSTANCE_SIZE_UNKNOWN,
 };
 
+typedef enum nrt_op_type {
+    NRT_OP_ADD     = 0x0,
+    NRT_OP_FMA     = 0x1,
+    NRT_OP_MAX     = 0x2,
+    NRT_OP_MIN     = 0x3,
+    NRT_OP_INVALID = 0xF,
+} nrt_op_type_t;
+
+typedef enum nrt_dtype {
+    NRT_DTYPE_UNKNOWN  = 0x0,
+    NRT_DTYPE_INVALID  = 0x0,
+    NRT_DTYPE_FP8_E3   = 0xD,
+    NRT_DTYPE_FP8_E4   = 0xE,
+    NRT_DTYPE_FP8_E5   = 0xF,
+    NRT_DTYPE_FLOAT16  = 0x7,
+    NRT_DTYPE_BFLOAT16 = 0x6,
+    NRT_DTYPE_FLOAT32  = 0xA,
+    NRT_DTYPE_FP32R    = 0xB,
+    NRT_DTYPE_UINT8    = 0x3,
+    NRT_DTYPE_UINT16   = 0x5,
+    NRT_DTYPE_UINT32   = 0x9,
+    NRT_DTYPE_UINT64   = 0x1,
+    NRT_DTYPE_INT8     = 0x2,
+    NRT_DTYPE_INT16    = 0x4,
+    NRT_DTYPE_INT32    = 0x8,
+    NRT_DTYPE_INT64    = 0xC,
+} nrt_dtype_t;
+
+typedef enum nrt_cc_op_type {
+    NRT_CC_ALLGATHER,
+    NRT_CC_ALLREDUCE,
+    NRT_CC_REDUCESCATTER
+} nrt_cc_op_type_t;
+
 typedef struct nrt_instance_info {
     uint32_t family;
     uint32_t size;
+    char arch_name[16];
+    char device_revision[8];
 } nrt_instance_info_t;
 
 NRT_STATUS nrt_get_instance_info(nrt_instance_info_t *info, size_t instance_info_len);
@@ -105,13 +144,13 @@ void nrt_close();
  *
  * @param neff_bytes[in]    - Pointer to NEFF data.
  * @param size[in]          - Length of the NEFF data.
- * @param start_vnc[in]     - Starting VNC index where the NEFF should be loaded(-1 means runtime would automatically load in first free VNC).
- * @param vnc_count[in]     - Number of VNCs to use(-1 means runtime would automatically determine the need).
+ * @param vnc[in]           - VNC index where the NEFF should be loaded(-1 means runtime would automatically load in first free VNC).
+ * @param vnc_count[in]     - DEPRECATED: always use -1
  * @param model[out]        - Resulting model would be stored here.
  *
  * @return NRT_STATUS_SUCCESS on success.
  */
-NRT_STATUS nrt_load(const void *neff_bytes, size_t size, int32_t start_vnc, int32_t vnc_count, nrt_model_t **model);
+NRT_STATUS nrt_load(const void *neff_bytes, size_t size, int32_t vnc, int32_t vnc_count, nrt_model_t **model);
 
 /** Load given NEFF for collective operations and place it in one or more neuron cores.
  *
@@ -120,15 +159,15 @@ NRT_STATUS nrt_load(const void *neff_bytes, size_t size, int32_t start_vnc, int3
  *
  * @param neff_bytes[in]        - Pointer to NEFF data.
  * @param size[in]              - Length of the NEFF data.
- * @param start_vnc[in]         - Starting VNC index where the NEFF should be loaded(-1 means runtime would automatically load in first free VNC).
- * @param vnc_count[in]         - Number of VNCs to use(-1 means runtime would automatically determine the need).
+ * @param vnc[in]               - VNC index where the NEFF should be loaded(-1 means runtime would automatically load in first free VNC).
+ * @param vnc_count[in]         - DEPRECATED: always use -1
  * @param ctx_device_id[in]     - Device ID relative to the number of devices participating in this NEFF
  * @param ctx_device_count[in]  - Number of devices participating in collectives operations in this NEFF
  * @param model[out]            - Resulting model would be stored here.
  *
  * @return NRT_STATUS_SUCCESS on success.
  */
-NRT_STATUS nrt_load_collectives(const void *neff_bytes, size_t size, int32_t start_vnc, int32_t vnc_count,
+NRT_STATUS nrt_load_collectives(const void *neff_bytes, size_t size, int32_t vnc, int32_t vnc_count,
                                 uint32_t ctx_device_id, uint32_t ctx_device_count, nrt_model_t **model);
 
 /** Unload given model and free up device and host resources.
@@ -139,7 +178,7 @@ NRT_STATUS nrt_load_collectives(const void *neff_bytes, size_t size, int32_t sta
  */
 NRT_STATUS nrt_unload(nrt_model_t *model);
 
-/** Get the number of VNCs used by a loaded model (deprecated)
+/** Get the number of VNCs used by a loaded model. (deprecated)
  *
  * @param model[in] - Model.
  * @param vnc_count[out] - The number of VNCs used by the model.
@@ -148,7 +187,7 @@ NRT_STATUS nrt_unload(nrt_model_t *model);
  */
 NRT_STATUS nrt_get_model_nc_count(const nrt_model_t *model, uint32_t *vnc_count);
 
-/** Get the number of VNCs used by a loaded model
+/** Get the number of VNCs used by a loaded model. (deprecated)
  *
  * @param model[in] - Model.
  * @param vnc_count[out] - The number of VNCs used by the model.
@@ -510,7 +549,50 @@ typedef struct nrt_vnc_memory_stats {
  *
  * @return NRT_STATUS_SUCCESS on success.
  */
+
 NRT_STATUS nrt_get_vnc_memory_stats(uint32_t vnc, nrt_vnc_memory_stats_t *stats, size_t stats_size_in, size_t *stats_size_out);
+
+/** Get BDF of the EFA device attached to a Neuron device identified by VA of HBM allocation on that device
+ *
+ * @param va[in]            - VA of a memory allocated on a Neuron devices
+ * @param efa_bdf[out]      - a buffer (of sufficient size) to store BDF of the connected EFA device
+ * @param len[in/out]       - in: length of buffer (including NULL), out: length of string (excluding NULL)
+ *
+ * @return NRT_SUCCESS on success
+ *         NRT_RESOUCE if the buffer is not large enough to store the BDF string
+ *         NRT_FAILURE for other errors
+ */
+
+NRT_STATUS nrt_get_attached_efa_bdf(const void *va, char *efa_bdf, size_t *len);
+
+/******************************
+ * Out-of-NEFF collectives    *
+ ******************************/
+
+typedef struct nrt_cc_comm {
+    uint32_t *replica_group; /* a list of participants */
+    uint32_t rank; /* my rank in the replica_group */
+    uint32_t rank_n; /* size of replica_group */
+
+    uint32_t ctx_device_id;
+    uint32_t ctx_device_count;
+    uint32_t vnc;
+} nrt_cc_comm_t;
+
+typedef struct nrt_tensor_list {
+    nrt_tensor_t **tensors;
+    size_t num_tensors;
+} nrt_tensor_list_t;
+
+/** Build (initialize and setup) global communicator for host-driven collective operations.
+ *
+ * @param vnc[in]               - Local VNC (within the instance)
+ * @param g_device_id[in]       - Global device id
+ * @param g_device_count[in]    - Max world size of all participating workers
+ *
+ * @return NRT_STATUS_SUCCESS on success.
+ */
+NRT_STATUS nrt_cc_global_comm_init(uint32_t vnc, uint32_t g_device_id, uint32_t g_device_count);
 
 #ifdef __cplusplus
 }

@@ -5,7 +5,7 @@
 .. _neuron-dra:
 
 =================================================
-AWS Neuron Dynamic Resource Allocation (DRA) Beta
+AWS Neuron Dynamic Resource Allocation (DRA)
 =================================================
 
 What is DRA?
@@ -24,49 +24,27 @@ Neuron DRA driver implements the kubelet plugin for DRA for AWS Trainium instanc
 
 For more information on DRA, refer to `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_.
 
-Where can I get the Neuron DRA Beta driver and resource templates?
+Where can I get the Neuron DRA driver and resource templates?
 -------------------------------------------------------------------
 
-To review and download the individual Neuron DRA Beta driver installation scripts, Kubernetes manifests, and resource claim templates, visit this page: 
+To review and download the individual resource claim templates, visit this page: 
 
 * :doc:`/containers/files/index-dra`.
-
-You can also download all of the Neuron DRA files and scripts from the link below:
-
-.. grid:: 1
-   :gutter: 3
-
-   .. grid-item-card:: 
-      :class-card: sd-border-2
-
-      **Download the scripts and YAML files as a TAR/GZIP archive**
-      ^^^
-      :download:`Neuron DRA support files as .tar.gz </containers/files/neuron-dra-beta-reinvent.tar.gz>`
-
-Preserve the directory structure when you extract the archive. The driver installation script uses this relative folder structure to find the corresponding YAML files.
 
 **Directory structure**:
 
 .. code-block:: text
 
    containers/files/
-              ├── manifests/
-              │   ├── clusterrole.yaml
-              │   ├── clusterrolebinding.yaml
-              │   ├── daemonset.yaml
-              │   ├── deviceclass.yaml
-              │   ├── namespace.yaml
-              │   └── serviceaccount.yaml
-              └── examples/
-                  ├── scripts/
-                  │   └── install-dra-driver.sh
-                  └── specs/
-                      ├── 1x4-connected-devices.yaml
-                      ├── 2-node-inference-us.yaml
-                      ├── 4-node-inference-us.yaml
-                      ├── all-devices.yaml
-                      ├── lnc-setting-trn2.yaml
-                      └── specific-driver-version.yaml
+              └── specs/
+                  ├── 1x4-connected-devices.yaml
+                  ├── 2-node-inference-us.yaml
+                  ├── 4-node-inference-us.yaml
+                  ├── all-devices.yaml
+                  ├── lnc-setting-trn2.yaml
+                  ├── specific-driver-version.yaml
+                  └── us-and-lnc-config.yaml
+                      
 
 What are the benefits of using DRA over device plugin?
 -------------------------------------------------------
@@ -146,7 +124,7 @@ not configure LNC via launch template while using Neuron devices with Neuron DRA
 .. code-block:: yaml
 
    #Template will be vended by Neuron via documentation/code repo
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      namespace: neuron-test7
@@ -156,40 +134,34 @@ not configure LNC via launch template while using Neuron devices with Neuron DRA
        devices:
          requests:
          - name: neurons
-           deviceClassName: neuron.aws.com
-           selectors:
-           - cel:
-               expression: device.attributes['neuron.aws.com'].instanceType == "trn2.48xlarge"
-           allocationMode: All
+           exactly:
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: device.attributes['neuron.aws.com'].instanceType == "trn2.48xlarge"
+             allocationMode: all
          config:
          - opaque:
              driver: neuron.aws.com
              parameters:
-               apiVersion: resource.neuron.aws.com/v1alphav1
+               apiVersion: neuron.aws.com/v1
                kind: NeuronConfig
                logicalNeuronCore: 1
            requests: ["neurons"]
 
-Beta Access
------------
-
-.. note::
-   Neuron DRA driver is in private beta. Contact the Neuron product team to get access.
-
-Once allow-listing is done, you will have access to the container image for the DRA driver, and the source code which will contain
-installation manifests and example workloads.
-
-Prerequisites for the preview
+Prerequisites
 -----------------------------
 
-* **Kubernetes version** - For preview, please use control plane 1.34 and 1.33 node AMI.
-* **Instance type** - Trn2.48xlarge
+* **Kubernetes version** - Please use K8s control plane 1.34+
+* **Instance type** - Trn2.48xlarge launched with K8s version 1.34.2+
 
-Installation
--------------
+For instructions on how to setup an EKS cluster, please refer to :ref:`prerequisites<k8s-prerequisite>`.
 
-Install the DRA driver using the script provided with the source code. Connect to your cluster from local box. The cluster should have at least
-one trn2.48xlarge node. Do not install the Neuron device plugin on the cluster! Check out the source code for the package and run:
+Installation via Helm
+---------------------
+
+Connect to your cluster from local box. The cluster should have at least one trn2.48xlarge node. 
+Do not install the Neuron device plugin on the cluster! 
 
 Please confirm the cluster being used via:
 
@@ -201,7 +173,8 @@ Then install the DRA driver:
 
 .. code-block:: bash
 
-   ./examples/scripts/install-dra-driver.sh <image uri>
+   helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+     --set "devicePlugin.enabled=false" --set "npd.enabled=false" --set "draDriver.enabled=true"
 
 Example 1 – Connected Neuron Devices
 --------------------------------------
@@ -225,13 +198,13 @@ Neuron devices. From the package run:
 
 .. code-block:: bash
 
-   kubectl apply -f examples/specs/1x4-connected-devices.yaml
+   kubectl apply -f specs/1x4-connected-devices.yaml
 
 This workload definition (which includes the ``ResourceClaimTemplate``) is shown below for quick reference:
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      name: 1x4-connected-neurons
@@ -240,12 +213,13 @@ This workload definition (which includes the ``ResourceClaimTemplate``) is shown
        devices:
          requests:
          - name: neurons
-           deviceClassName: neuron.aws.com
-           allocationMode: ExactCount
-           count: 4
-           selectors:
-           - cel:
-               expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
+           exactly:
+             deviceClassName: neuron.aws.com
+             allocationMode: ExactCount
+             count: 4
+             selectors:
+             - cel:
+                 expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
          constraints:
          - requests: ["neurons"]
            matchAttribute: "resource.aws.com/devicegroup4_id"
@@ -336,7 +310,7 @@ Status shown below:
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      name: xl-trn2
@@ -344,19 +318,20 @@ Status shown below:
      spec:
        devices:
          requests:
-         - allocationMode: ExactCount
-           count: 16
-           deviceClassName: neuron.aws.com
-           name: neurons
-           selectors:
-           - cel:
-               expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'
+         - name: neurons
+           exactly: 
+             allocationMode: ExactCount
+             count: 16
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'
 
 **Example RCT2 - large - Allocate 8 devices**
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      name: l-trn2
@@ -368,24 +343,25 @@ Status shown below:
            requests:
            - neurons
          requests:
-         - allocationMode: ExactCount
-           count: 8
-           deviceClassName: neuron.aws.com
-           name: neurons
-           selectors:
-           - cel:
-               expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'
+         - name: neurons
+           exactly:
+             allocationMode: ExactCount
+             count: 8
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'
 
-**Example RCT2 - 2.26-driver – Allocate 8 devices with driver version at the driver published by Neuron SDK 2.26**
+**Example RCT2 - 2.27-driver – Allocate 8 devices with driver version at the driver published by Neuron SDK 2.27**
 
-`Neuron 2.26.0 Runtime <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.26.0/runtime.html#neuron-2-26-0-runtime>`_
+`Neuron 2.27.0 Runtime <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.27.0/runtime.html#neuron-2-27-0-runtime>`_
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
-     name: 2.26-driver-trn2
+     name: 2.27-driver-trn2
    spec:
      spec:
        devices:
@@ -394,17 +370,15 @@ Status shown below:
            requests:
            - neurons
          requests:
-         - allocationMode: ExactCount
-           count: 8
-           deviceClassName: neuron.aws.com
-           name: neurons
-           selectors:
-           - cel:
-               expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge' &&
-                          device.attributes['neuron.aws.com'].neuronDriverVersion == '2.24.7.0'
-
-Attributes published by Neuron DRA driver are described in the source code at pkg/consts/neuron_attributes.go. The RCT can set up expressions
-that can filter devices based on the attributes.
+         - name: neurons
+           exactly:
+             allocationMode: ExactCount
+             count: 8
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge' &&
+                            device.attributes['neuron.aws.com'].neuronDriverVersion == '2.25.4.0'
 
 Example 2 - Dynamic LNC config
 ------------------------------
@@ -419,13 +393,13 @@ Apply the following workload definition:
 
 .. code-block:: bash
 
-   kubectl apply -f examples/specs/lnc-setting-trn2.yaml
+   kubectl apply -f specs/lnc-setting-trn2.yaml
 
 This workload definition (which includes the ``ResourceClaimTemplate``) is shown below for quick reference:
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      name: all-neurons-lnc-1
@@ -434,17 +408,18 @@ This workload definition (which includes the ``ResourceClaimTemplate``) is shown
        devices:
          requests:
          - name: neurons
-           deviceClassName: neuron.aws.com
-           selectors:
-           - cel:
-               expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
-           allocationMode: All
+           exactly:
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: "device.attributes['neuron.aws.com'].instanceType == 'trn2.48xlarge'"
+             allocationMode: All
          config:
          - requests: ["neurons"]
            opaque:
              driver: neuron.aws.com
              parameters:
-               apiVersion: neuron.aws.com/v1alphav1
+               apiVersion: neuron.aws.com/v1
                kind: NeuronConfig
                logicalNeuronCore: 1
 
@@ -486,7 +461,7 @@ Example yaml for 4-node inference on trn2u.48xlarge:
 
 .. code-block:: yaml
 
-   apiVersion: resource.k8s.io/v1beta1
+   apiVersion: resource.k8s.io/v1
    kind: ResourceClaimTemplate
    metadata:
      name: us-4-node-config
@@ -495,18 +470,19 @@ Example yaml for 4-node inference on trn2u.48xlarge:
        devices:
          requests:
          - name: neurons
-           deviceClassName: neuron.aws.com
-           selectors:
-           - cel:
-               expression: "device.attributes['neuron.aws.com'].resourceType == 'neuron_node'"
-           allocationMode: ExactCount
-           count: 1
+           exactly: 
+             deviceClassName: neuron.aws.com
+             selectors:
+             - cel:
+                 expression: "device.attributes['neuron.aws.com'].resourceType == 'neuron_node'"
+             allocationMode: ExactCount
+             count: 1
          config:
          - requests: ["neurons"]
            opaque:
              driver: neuron.aws.com
              parameters:
-               apiVersion: neuron.aws.com/v1alphav1
+               apiVersion: neuron.aws.com/v1
                kind: UltraServerConfig
                ultraserverMode: 4
    ---
@@ -564,6 +540,54 @@ Example yaml for 4-node inference on trn2u.48xlarge:
            - name: one-node-from-ultraserver
              resourceClaimTemplateName: us-4-node-config
 
+
+Neuron DRA Driver Attributes Reference
+---------------------------------------
+
+The Neuron DRA driver publishes the following attributes in resource slices. These attributes can be used in ``ResourceClaimTemplate`` CEL expressions
+to filter and select specific devices for allocation.
+
+Common Attributes
+^^^^^^^^^^^^^^^^^
+
+These attributes are common to all Neuron instances and their devices:
+
+* ``deviceId`` - An integer value representing the ID of the Neuron device. Used to identify which device is chosen from allocation.
+* ``instanceType`` - A string value representing the EC2 instance type of the Neuron device. Used to specify devices of which instance(s) to choose for allocation.
+* ``neuronDriverVersion`` - A string value representing the Neuron driver version running on the instance. Used to claim instances with the same driver version for allocation.
+* ``draDriverVersion`` - A version value of the Neuron DRA driver version. Provides visibility on which Neuron DRA driver version published the resource slice.
+* ``resourceType`` - A string value to distinguish between devices and UltraServer nodes. For devices, this value is ``neuron_device``. For UltraServers, this value is ``neuron_node``.
+* ``networkNodeLayer1`` - A string value representing network node layer 1. Can be used during topology-aware scheduling to minimize network latency and optimize instance placement. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
+* ``networkNodeLayer2`` - A string value representing network node layer 2. Can be used to allocate workloads to nodes on the same spine. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
+* ``networkNodeLayer3`` - A string value representing network node layer 3. Can be used during topology-aware scheduling to minimize network latency and optimize instance placement. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
+
+Trn Non-UltraServer Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These attributes are only populated for Neuron instances that have grid topology (trn) and are not UltraServers:
+
+* ``topology_x`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same row.
+* ``topology_y`` - An integer value representing the column of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same column.
+* ``topology4_id`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select devices that belong to the same row.
+* ``topology8_id`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than or equal to 8. Can be used to select devices that belong to the same two rows.
+
+Trn UltraServer Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These attributes are only populated for Neuron instances that have grid topology (trn) and are UltraServers:
+
+* ``capacityBlockId`` - A string value representing the ID of the capacity block that the UltraServer instance is in. See `Instance Topology API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceTopology.html>`_.
+
+EFA-Enabled Instance Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These attributes are only populated for Neuron instances that are EFA-enabled:
+
+* ``resource.aws.com/devicegroup1_id`` - A string value representing the EFA Bus:Device:Function (BDF) corresponding to that device.
+* ``resource.aws.com/devicegroup4_id`` - A string value representing a hash, ensuring Neuron devices in the same topology group of 4 get the same group ID.
+* ``resource.aws.com/devicegroup8_id`` - A string value representing a hash, ensuring Neuron devices in the same topology group of 8 get the same group ID.
+* ``resource.aws.com/devicegroup16_id`` - A string value representing a hash, ensuring Neuron devices in the same topology group of 16 get the same group ID.
+
 FAQs
 ----
 
@@ -577,7 +601,7 @@ Ref: `Extended Resource <https://kubernetes.io/docs/concepts/scheduling-eviction
 Is DRA replacing Neuron Device Plugin and Scheduler Extension?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We will continue to support the Neuron Device Plugin and Sthe cheduler Extension as long as:
+We will continue to support the Neuron Device Plugin and Scheduler Extension as long as:
 
 1. Upstream Kubernetes continues to support device plugins.
 2. EKS continues to support Kubernetes versions below 1.34 (which do not support DRA).
@@ -585,14 +609,14 @@ We will continue to support the Neuron Device Plugin and Sthe cheduler Extension
 What Kubernetes versions are supported?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Kubernetes control plane must be on 1.34. For Node AMI, we support 1.33 and 1.34.2. We do not support Node AMI for 1.34 or 1.34.1
+Kubernetes control plane must be on 1.34. For Node AMI, we support 1.34.2+. We do not support Node AMI for 1.34.0 or 1.34.1
 since it had a regression in DRA. Upstream issue: `Kubernetes Issue #133920 <https://github.com/kubernetes/kubernetes/issues/133920>`_
 
 Where can I learn more about how to put together RCT using CEL expressions?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To learn more about RCTs, please visit `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_. To learn more
-about CEL expressions, please visit `CEL Language <https://cel.dev/>`_. Send us feedback on the beta and let us know which additional RCT examples you would like
+about CEL expressions, please visit `CEL Language <https://cel.dev/>`_. Send us feedback and let us know which additional RCT examples you would like
 us to provide in the source code.
 
 .. toctree::

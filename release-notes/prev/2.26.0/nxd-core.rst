@@ -60,4 +60,4 @@ Previous release notes
 ----------------------
 
 * :ref:`neuron-2-25-0-nxd-core`
-* :ref:`neuronx-distributed-rn`
+* :ref:`nxd-core_rn`

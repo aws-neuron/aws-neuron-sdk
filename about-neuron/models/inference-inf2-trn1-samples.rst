@@ -82,14 +82,6 @@ Decoders
        * :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial.ipynb`
        * :ref:`nxdi-sd-inference-tutorial`
 
-   * - meta-llama/Llama-3.2-11B-Vision-Instruct
-     - neuronx-distributed-inference
-     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb>`
-   
-   * - meta-llama/Llama-3.2-90B-Vision-Instruct
-     - neuronx-distributed-inference
-     - * :ref:`Tutorial for deploying Llama3.2 Multimodal Models on Trn1 & Inf2 instances </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial.ipynb>`
-   
    * - meta-llama/Llama-3.1-8b
      - transformers-neuronx
      - * `Run Hugging Face Llama 3.1 8B autoregressive sampling on Inf2 & Trn1 with 32k sequence length <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-32k-sampling.ipynb>`_

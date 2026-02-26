@@ -8,7 +8,7 @@
 # review when someone opens a pull request.
 # *       @global-owner1 @global-owner2
 
-*       @aws-maens @micwade-aws @musunita @aws-sadaf @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks @erickson-doug
+*       @aws-maens @micwade-aws @musunita @aws-sadaf @rgrandhiamzn @eshalakhotia @jluntamazon @jeffhataws @aws-rhsoln @hannanjgaws @PrashantSaraf @aws-donkrets @aws-singhada @gsnaws @awsjoshir @sidjoshiaws @pinak-p @vikas-paliwal-aws @aarondou @mrinalks @erickson-doug @lnixaws @micwade-aws 
 
 src/examples/mxnet/ @aws-rhsoln  @aws-sadaf @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia
 neuron-guide/neuron-frameworks/mxnet-neuron/  @aws-rhsoln @aws-maens @vikas-paliwal-aws @rgrandhiamzn @eshalakhotia

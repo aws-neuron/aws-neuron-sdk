@@ -7,7 +7,9 @@
 Neuron Runtime no longer supports Amazon Linux 2 (AL2)
 ========================================================
 
-Starting from :ref:`Neuron release 2.20 <neuron-2-20-2-whatsnew>`, the Neuron Runtime (``aws-neuronx-runtime-lib``) will no longer support Amazon Linux 2 (AL2). The Neuron Driver (``aws-neuronx-dkms``) is now the only Neuron package that supports Amazon Linux 2.
+Starting from :ref:`Neuron release 2.20 <neuron-2.20-whatsnew>`, the Neuron Runtime (``aws-neuronx-runtime-lib``) will no longer support Amazon Linux 2 (AL2). 
+The Neuron Driver (``aws-neuronx-dkms``) is now the only Neuron package that supports Amazon Linux 2. 
+However, the Neuron Driver requires Linux kernel 5.10 or higher. Since default AL2 AMIs ship with kernel 4.14, you must upgrade your AL2 kernel to 5.10+ before installing driver versions 2.18 and later, or migrate to Amazon Linux 2023 or Ubuntu which include compatible kernels by default.
 
 This change introduces the following constraint:
 
@@ -40,5 +42,4 @@ If you are using a base Amazon Linux 2 DLAMI, please ensure the Neuron Driver (`
 
 .. note::
    Neuron does not supports Linux kernel versions < 5.10. Customers using
-   Linux kernel versions < 5.10 must migrate to >= 5.10. To see
-   Linux kernel versions supported by the Neuron Driver, see :ref:`latest-neuron-release-artifacts`.
+   Linux kernel versions < 5.10 must migrate to >= 5.10.

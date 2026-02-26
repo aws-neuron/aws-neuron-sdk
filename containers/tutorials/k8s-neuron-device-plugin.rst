@@ -1,52 +1,66 @@
-.. _k8s-neuron-device-plugin:
+The Neuron Device Plugin is a Kubernetes device plugin that exposes Neuron hardware resources to the cluster's scheduler. It discovers available Neuron devices on each node, advertises them as allocatable resources, and manages their lifecycle. When Pods request Neuron resources, the device plugin handles the allocation and ensures exclusive access to the assigned devices. This integration enables Kubernetes to treat Neuron accelerators as first-class schedulable resources, similar to GPUs or other specialized hardware.
 
-Neuron device plugin exposes Neuron cores & devices to kubernetes as a resource. aws.amazon.com/neuroncore and aws.amazon.com/neuron are the resources that the neuron device plugin registers with the kubernetes. aws.amazon.com/neuroncore is used for allocating neuron cores to the container. aws.amazon.com/neuron is used for allocating neuron devices to the container. When resource name 'neuron' is used, all the cores belonging to the device will be allocated to container.
+The device plugin registers two resource types with Kubernetes:
 
-**Deploy the NeuronDevice Plugin for Kubernetes**
+* ``aws.amazon.com/neuroncore`` - Used for allocating individual Neuron cores to containers
+* ``aws.amazon.com/neuron`` - Used for allocating entire Neuron devices to containers (all cores belonging to the device)
 
-* Make sure :ref:`prequisite<k8s-prerequisite>` are satisified
-* Apply the Neuron device plugin as a daemonset on the cluster with the following command
+**Deploy Neuron Device Plugin**
 
-    .. code:: bash
+**Prerequisites**
 
-        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
-            --set "npd.enabled=false"
+Ensure that all :ref:`prerequisites<k8s-prerequisite>` are satisfied before proceeding.
 
-* Verify that neuron device plugin is running
+**Installation**
 
-    .. code:: bash
+Apply the Neuron Device Plugin as a DaemonSet on the cluster:
 
-        kubectl get ds neuron-device-plugin -n kube-system
+.. code:: bash
 
-    Expected result (with 2 nodes in cluster):
+    helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+        --set "npd.enabled=false"
 
-    .. code:: bash
+**Verify Installation**
 
-        NAME                   DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-        neuron-device-plugin   2         2         2       2            2           <none>          18h
+Verify that the Neuron Device Plugin is running:
 
-* Verify that the node has allocatable neuron cores and devices with the following command
+.. code:: bash
 
-    .. code:: bash
+    kubectl get ds neuron-device-plugin -n kube-system
 
-        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronCore:.status.allocatable.aws\.amazon\.com/neuroncore"
+Expected output (example with 2 nodes in cluster):
 
-    Expected result:
+.. code:: bash
 
-    .. code:: bash
+    NAME                   DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+    neuron-device-plugin   2         2         2       2            2           <none>          18h
 
-        NAME                                          NeuronCore
-        ip-192-168-65-41.us-west-2.compute.internal   32
-        ip-192-168-87-81.us-west-2.compute.internal   32
+**Verify Allocatable Resources**
 
-    .. code:: bash
+Verify that nodes have allocatable Neuron cores:
 
-        kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronDevice:.status.allocatable.aws\.amazon\.com/neuron"  
+.. code:: bash
 
-    Expected result:
+    kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronCore:.status.allocatable.aws\.amazon\.com/neuroncore"
 
-    .. code:: bash
+Expected output:
 
-        NAME                                          NeuronDevice
-        ip-192-168-65-41.us-west-2.compute.internal   16
-        ip-192-168-87-81.us-west-2.compute.internal   16
+.. code:: bash
+
+    NAME                                          NeuronCore
+    ip-192-168-65-41.us-west-2.compute.internal   32
+    ip-192-168-87-81.us-west-2.compute.internal   32
+
+Verify that nodes have allocatable Neuron devices:
+
+.. code:: bash
+
+    kubectl get nodes "-o=custom-columns=NAME:.metadata.name,NeuronDevice:.status.allocatable.aws\.amazon\.com/neuron"
+
+Expected output:
+
+.. code:: bash
+
+    NAME                                          NeuronDevice
+    ip-192-168-65-41.us-west-2.compute.internal   16
+    ip-192-168-87-81.us-west-2.compute.internal   16

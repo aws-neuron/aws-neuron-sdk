@@ -12,43 +12,49 @@ This page contains the packages, libraries, and other artifacts (and the version
 
 << :ref:`Back to the release notes <latest-neuron-release>`
 
-Neuron 2.27.1 (01/14/2026)
+Neuron 2.28.0 (02/26/2026)
 ---------------------------
 
 Trn1 packages
 ^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 Trn2 packages
 ^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 
 Inf2 packages
 ^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 Inf1 packages
 ^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 Supported Python Versions for Inf1 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.28.0
 
 Supported NumPy Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^
-Neuron supports versions >= 1.21.6 and <= 1.22.2
+
+Neuron currently supports NumPy versions 2.X. Neuron continues to support NumPy versions >= 1.21.6, as well.
+
+Supported vLLM Versions
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuron currently supports vLLM version 0.13.0.
 
 Supported Hugging Face Transformers Versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -56,20 +62,11 @@ Supported Hugging Face Transformers Versions
 | Package                          | Supported Hugging Face           |
 |                                  | Transformers Versions            |
 +==================================+==================================+
-| torch-neuronx                    | < 4.35 and >=4.37.2              |
+| torch-neuronx                    | >= 4.52                          |
 +----------------------------------+----------------------------------+
-| transformers-neuronx             | >= 4.36.0                        |
+| neuronx-distributed-inference    | >= 4.57                          |
 +----------------------------------+----------------------------------+
-| neuronx-distributed - Llama      | 4.31                             |
-| model class                      |                                  |
-+----------------------------------+----------------------------------+
-| neuronx-distributed - GPT NeoX   | 4.26                             |
-| model class                      |                                  |
-+----------------------------------+----------------------------------+
-| neuronx-distributed - Bert model | 4.26                             |
-| class                            |                                  |
-+----------------------------------+----------------------------------+
-| nemo-megatron                    | 4.31.0                           |
+| vllm                             | >= 4.56.0, < 5                   |
 +----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
@@ -82,8 +79,6 @@ Supported Protobuf Versions
 | torch-neuronx                    | >= 3.20                          |
 +----------------------------------+----------------------------------+
 | torch-neuron                     | < 3.20                           |
-+----------------------------------+----------------------------------+
-| transformers-neuronx             | >= 3.20                          |
 +----------------------------------+----------------------------------+
 | neuronx-distributed              | >= 3.20                          |
 +----------------------------------+----------------------------------+

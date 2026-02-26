@@ -80,7 +80,11 @@ To send us a pull request, please:
    sphinx-build -C -b html . _build/html
    ```
 
-   **IMPORTANT**: RTD runs LaTeX (latex.py) to generate the PDFs linked from each page. If you are getting build errors on RTD but your local builds are green, confirm that LaTeX builds are not failing locally by running: `sphinx-build -b latex . _build/html`. The most common cause of LaTeX build failures happens when an undefined ref ID (this is, not declared on any page in the form `.. _ref-id-here:`) is referenced in a link or toctree.
+   For speedier builds in multiprocessor environments, run:
+
+     ```bash
+   sphinx-build -b html . _build/html -j auto
+   ```
 
    **NOTE**: If you get an error for the spelling extension, like `Extension error: Could not import extension sphinxcontrib.spelling (exception: The 'enchant' C library was not found and maybe needs to be installed. See  https://pyenchant.github.io/pyenchant/install.html`, run `brew install enchant`.
 

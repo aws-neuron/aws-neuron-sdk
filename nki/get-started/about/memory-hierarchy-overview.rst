@@ -44,7 +44,7 @@ CPUs and all the NeuronCores attached to the instance. NKI kernels currently do
 not provide APIs to move data in and out of the host memory directly, but
 rather, rely on ML frameworks such as PyTorch or JAX to send input data from
 host memory to the NeuronDevice and vice versa. For an example of this, see
-:ref:`Getting Started with NKI </nki/get-started/quickstart-implement-run-kernel>`.
+:doc:`Getting Started with NKI </nki/get-started/quickstart-implement-run-kernel>`.
 
 The **device memory** resides within a NeuronDevice and uses High Bandwidth
 Memory (HBM) technologies starting from NeuronDevice v2. Currently, the input
@@ -76,7 +76,7 @@ for storing matrix multiplication (MatMult) results computed by the tensor
 engine. Tensor Engine is able to read-add-write to every address in PSUM.
 Therefore, PSUM is useful for performing large MatMult calculations using
 multiple tiles where multiple MatMult instructions need to accumulate into the
-same output tile. As is shown in :numref:`Fig. %s <nki-fig-pm-nc>`, PSUM memory
+same output tile. As is shown in :numref:`Fig. %s <nki-fig-pm-memory>`, PSUM memory
 can also be read and written by the vector and scalar engines. However, due to
 the limited capacity of PSUM, we recommend that you reserve PSUM space for the
 tensor engine to write MatMult outputs and to use the vector and scalar engines

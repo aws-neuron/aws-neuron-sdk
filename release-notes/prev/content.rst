@@ -7,6 +7,158 @@ Previous release artifacts (Neuron 2.x)
    :local:
    :depth: 1
 
+.. _neuron-2.27.1-artifacts:
+
+Neuron 2.27.1 (01/14/2026)
+---------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+Trn2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+
+Inf2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+Inf1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+Supported Python Versions for Inf1 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+Supported Python Versions for Inf2/Trn1/Trn2 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.1
+
+Supported NumPy Versions
+^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron currently supports NumPy versions 2.X. Neuron continues to support NumPy versions >= 1.21.6, as well.
+
+Supported Hugging Face Transformers Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Hugging Face           |
+|                                  | Transformers Versions            |
++==================================+==================================+
+| torch-neuronx                    | < 4.35 and >=4.37.2              |
++----------------------------------+----------------------------------+
+| neuronx-distributed - Llama      | 4.31                             |
+| model class                      |                                  |
++----------------------------------+----------------------------------+
+| neuronx-distributed - GPT NeoX   | 4.26                             |
+| model class                      |                                  |
++----------------------------------+----------------------------------+
+| neuronx-distributed - Bert model | 4.26                             |
+| class                            |                                  |
++----------------------------------+----------------------------------+
+
+Supported Protobuf Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Protobuf versions      |
++==================================+==================================+
+| neuronx-cc                       | > 3                              |
++----------------------------------+----------------------------------+
+| torch-neuronx                    | >= 3.20                          |
++----------------------------------+----------------------------------+
+| torch-neuron                     | < 3.20                           |
++----------------------------------+----------------------------------+
+| neuronx-distributed              | >= 3.20                          |
++----------------------------------+----------------------------------+
+| tensorflow-neuronx               | < 3.20                           |
++----------------------------------+----------------------------------+
+| tensorflow-neuron                | < 3.20                           |
++----------------------------------+----------------------------------+
+
+.. _neuron-2.27.0-artifacts:
+
+Neuron 2.27.0 (12/19/2025)
+---------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+Trn2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+
+Inf2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+Inf1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+Supported Python Versions for Inf1 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+Supported Python Versions for Inf2/Trn1/Trn2 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.27.0
+
+Supported NumPy Versions
+^^^^^^^^^^^^^^^^^^^^^^^^
+Neuron currently supports NumPy versions 2.X. Neuron continues to support NumPy versions >= 1.21.6, as well.
+
+Supported Hugging Face Transformers Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Hugging Face           |
+|                                  | Transformers Versions            |
++==================================+==================================+
+| torch-neuronx                    | < 4.35 and >=4.37.2              |
++----------------------------------+----------------------------------+
+| neuronx-distributed - Llama      | 4.31                             |
+| model class                      |                                  |
++----------------------------------+----------------------------------+
+| neuronx-distributed - GPT NeoX   | 4.26                             |
+| model class                      |                                  |
++----------------------------------+----------------------------------+
+| neuronx-distributed - Bert model | 4.26                             |
+| class                            |                                  |
++----------------------------------+----------------------------------+
+
+Supported Protobuf Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Protobuf versions      |
++==================================+==================================+
+| neuronx-cc                       | > 3                              |
++----------------------------------+----------------------------------+
+| torch-neuronx                    | >= 3.20                          |
++----------------------------------+----------------------------------+
+| torch-neuron                     | < 3.20                           |
++----------------------------------+----------------------------------+
+| neuronx-distributed              | >= 3.20                          |
++----------------------------------+----------------------------------+
+| tensorflow-neuronx               | < 3.20                           |
++----------------------------------+----------------------------------+
+| tensorflow-neuron                | < 3.20                           |
++----------------------------------+----------------------------------+
+
 .. _neuron-2.26.1-artifacts:
 
 Neuron 2.26.1 (10/29/2025)
@@ -39,7 +191,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.26.1
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.26.1
 
@@ -55,8 +207,6 @@ Supported Hugging Face Transformers Versions
 +==================================+==================================+
 | torch-neuronx                    | < 4.35 and >=4.37.2              |
 +----------------------------------+----------------------------------+
-| transformers-neuronx             | >= 4.36.0                        |
-+----------------------------------+----------------------------------+
 | neuronx-distributed - Llama      | 4.31                             |
 | model class                      |                                  |
 +----------------------------------+----------------------------------+
@@ -66,11 +216,9 @@ Supported Hugging Face Transformers Versions
 | neuronx-distributed - Bert model | 4.26                             |
 | class                            |                                  |
 +----------------------------------+----------------------------------+
-| nemo-megatron                    | 4.31.0                           |
-+----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -79,8 +227,6 @@ Supported Protobuf Versions
 | torch-neuronx                    | >= 3.20                          |
 +----------------------------------+----------------------------------+
 | torch-neuron                     | < 3.20                           |
-+----------------------------------+----------------------------------+
-| transformers-neuronx             | >= 3.20                          |
 +----------------------------------+----------------------------------+
 | neuronx-distributed              | >= 3.20                          |
 +----------------------------------+----------------------------------+
@@ -121,7 +267,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.25.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.25.0
 
@@ -148,11 +294,9 @@ Supported Hugging Face Transformers Versions
 | neuronx-distributed - Bert model | 4.26                             |
 | class                            |                                  |
 +----------------------------------+----------------------------------+
-| nemo-megatron                    | 4.31.0                           |
-+----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -203,7 +347,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.24.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.24.0
 
@@ -230,11 +374,9 @@ Supported Hugging Face Transformers Versions
 | neuronx-distributed - Bert model | 4.26                             |
 | class                            |                                  |
 +----------------------------------+----------------------------------+
-| nemo-megatron                    | 4.31.0                           |
-+----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -285,7 +427,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.23.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.23.0
 
@@ -312,11 +454,9 @@ Supported Hugging Face Transformers Versions
 | neuronx-distributed - Bert model | 4.26                             |
 | class                            |                                  |
 +----------------------------------+----------------------------------+
-| nemo-megatron                    | 4.31.0                           |
-+----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -367,7 +507,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.22.0
 
@@ -398,7 +538,7 @@ Supported Hugging Face Transformers Versions
 +----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -445,7 +585,7 @@ Supported Python Versions for Inf1 packages
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
 
 Supported Python Versions for Inf2/Trn1/Trn2 packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.21.0
 
@@ -476,7 +616,7 @@ Supported Hugging Face Transformers Versions
 +----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+
@@ -555,7 +695,7 @@ Supported Hugging Face Transformers Versions
 +----------------------------------+----------------------------------+
 
 Supported Protobuf Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +----------------------------------+----------------------------------+
 | Package                          | Supported Protobuf versions      |
 +==================================+==================================+

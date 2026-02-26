@@ -1,7 +1,7 @@
 .. _kubernetes-getting-started:
 
 Using Neuron with Amazon EKS
-============================
+=============================
 
 .. contents:: Table of Contents
    :local:
@@ -9,45 +9,43 @@ Using Neuron with Amazon EKS
 
 .. _tutorial-k8s-env-setup-for-neuron:
 
-EKS Setup For Neuron
+EKS Setup for Neuron
 --------------------
 
-Customers that use Kubernetes can conveniently integrate Inf1/Trn1 instances into their workflows. This section will go through steps for setting up EKS cluster for Neuron.
+Customers that use Kubernetes can conveniently integrate Inf/Trn instances into their workflows. This section provides step-by-step instructions for setting up an EKS cluster with Neuron support.
 
 Prerequisites
--------------
+~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-prerequisite.rst
 
+Neuron Helm Chart
+~~~~~~~~~~~~~~~~~
+
+.. include:: /containers/tutorials/k8s-neuron-helm-chart.rst
+
+.. _k8s-neuron-device-plugin:
+
 Neuron Device Plugin
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-neuron-device-plugin.rst
 
+.. _neuron_scheduler:
+
 Neuron Scheduler Extension
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-neuron-scheduler.rst
 
-Neuron Node Problem Detector Plugin
------------------------------------
-The Neuron Problem Detector Plugin facilitates error detection and recovery by continuously monitoring the health of Neuron devices across all Kubernetes nodes. It publishes CloudWatch metrics for node errors and can optionally trigger automatic recovery of affected nodes. Please follow the instructions below to enable the necessary permissions for the plugin.
-
-Permissions for Neuron Node Problem Detector Plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron Node Problem Detector and Recovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-neuron-problem-detector-and-recovery-irsa.rst
-
-Deploy Neuron Node Problem Detector And Recovery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-neuron-problem-detector-and-recovery.rst
 
 Neuron Monitor Daemonset
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /containers/tutorials/k8s-neuron-monitor.rst
-
-Neuron Helm Chart
------------------
-

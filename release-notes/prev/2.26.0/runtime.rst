@@ -43,6 +43,6 @@ Previous release notes
 ----------------------
 
 * :ref:`neuron-2-25-0-runtime`
-* :ref:`neuron-runtime-rn`
-* :ref:`neuron-driver-release-notes`
-* :ref:`neuron-collectives-rn`
+* :ref:`runtime_rn`
+* :ref:`runtime_rn`
+* :ref:`runtime_rn`

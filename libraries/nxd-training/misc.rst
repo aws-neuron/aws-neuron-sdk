@@ -7,7 +7,7 @@ Misc.
     :maxdepth: 1
     :hidden:
 
-    /release-notes/neuronx-distributed-training/neuronx-distributed-training
+    /release-notes/components/nxd-training
     /libraries/nxd-training/general/known_issues
 
 .. include:: /libraries/nxd-training/misc.txt

@@ -1,50 +1,46 @@
-Please refer to `EKS instructions <https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html>`_ to create a cluster. Once the cluster is ACTIVE, please add nodes to the cluster. We recommend using node template for neuron nodes. Following example demonstrates how to add neuron nodes using node template. The example adds managed nodes using `eksctl tool <https://eksctl.io/getting-started/>`__. For more details, please refer to `EKS User Guide <https://docs.aws.amazon.com/eks/latest/userguide/eks-compute.html>`_.
+.. _k8s-prerequisite:
 
+.. meta::
+   :description: Learn how to create an Amazon EKS cluster with AWS Trainium instances (Trn1, Trn2) for machine learning workloads using AWS Neuron SDK. Step-by-step guide with eksctl and CloudFormation templates.
+   :keywords: EKS, Kubernetes, Trainium, Trn1, Trn2, Neuron, AWS, machine learning, distributed training, eksctl, CloudFormation, EFA, node group
 
-As first step, please create a script to capture the parameters for the node template:
+Before setting up Neuron components on your EKS cluster, you must create an EKS cluster and add Neuron-enabled nodes. This section guides you through creating an Amazon Elastic Kubernetes Service (EKS) cluster with AWS Trainium-enabled nodes (Trn1 or Trn2 instances) using CloudFormation templates and the eksctl command-line tool. You'll configure optimized networking with Elastic Fabric Adapter (EFA) support and pre-configured Neuron components for distributed training and inference workloads.
 
-.. code-block:: bash
+For detailed information, refer to:
 
-    #!/bin/bash
+* `EKS Cluster Creation Guide <https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html>`_
+* `EKS Compute Resources Guide <https://docs.aws.amazon.com/eks/latest/userguide/eks-compute.html>`_
+* `eksctl Getting Started <https://eksctl.io/getting-started/>`_
 
-    CLUSTER_NAME=$1
-    CLUSTER_SG=$(eksctl get cluster $CLUSTER_NAME -o json|jq -r ".[0].ResourcesVpcConfig.ClusterSecurityGroupId")
-    VPC_ID=$(eksctl get cluster $CLUSTER_NAME -o json|jq -r ".[0].ResourcesVpcConfig.VpcId")
+**Step 1: Download Node Group Template**
 
-    cat <<EOF > cfn_params.json
-    [
-        {
-            "ParameterKey": "ClusterName",
-            "ParameterValue": "$CLUSTER_NAME"
-        },
+Download the node group CloudFormation template for your instance type.
 
-        {
-            "ParameterKey": "ClusterControlPlaneSecurityGroup",
-            "ParameterValue": "$CLUSTER_SG"
-        },
+.. tab-set::
 
-        {
-            "ParameterKey": "VpcId",
-            "ParameterValue": "$VPC_ID"
-        }
-    ]
-    EOF
+   .. tab-item:: Trn1
 
-These parameters include the name of the cluster, the security group the nodes can use to connect to the control plane and the vpcid.
-Next, get the node group template from tutorial below -
+      .. code-block:: bash
 
-.. code-block:: bash
+         wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-eks-samples/master/dp_bert_hf_pretrain/cfn/eks_trn1_ng_stack.yaml
 
-    wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-eks-samples/master/dp_bert_hf_pretrain/cfn/eks_trn1_ng_stack.yaml
+   .. tab-item:: Trn2
 
+      .. code-block:: bash
 
-This template file has a few important config settings -
+         wget https://raw.githubusercontent.com/aws-neuron/aws-neuron-eks-samples/master/dp_bert_hf_pretrain/cfn/eks_trn2_ng_stack_al2023.yaml
 
-* It places the node in a placement group. This optimizes the network speed between the nodes.
-* The template installs the EFA driver. Please note that the libfabric version should match between the AMI and the workload containers.
-* It uses the `EKS optimized accelerated AMI <https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html#gpu-ami>`__ which  has the necessary neuron components installed. The template uses AMI for Kubernetes version 1.25. Please update to appropriate version.
-* The template adds trn1.32xlarge nodes to the cluster. Please update to the desired instance type.
-* Trn2 instance types use a default LNC (Logical NeuronCore Configuration) setting of `2`, if you want to change it to `1`, update the UserData section of the launch template to a new LNC setting as shown below, and deploy the new/updated version of launch template.
+**Important template configuration information**
+
+* **Placement Group:** Optimizes network speed between nodes
+* **EFA Driver:** Installed automatically (ensure ``libfabric`` version matches between AMI and workload containers)
+* **AMI:** Uses `EKS optimized accelerated AMI <https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html#gpu-ami>`_ with Neuron components pre-installed
+* **Instance Type:** Configured for trn1.32xlarge or trn2.48xlarge (update to your desired instance type)
+* **Kubernetes Version:** Trn1 templates use Kubernetes 1.25+, Trn2 templates use Kubernetes 1.34+ (update as needed)
+
+Trn2 LNC configuration (Optional):
+
+Trn2 instances use a default Logical NeuronCore Configuration (LNC) of ``2``. To change it to ``1``, update the ``UserData`` section of the launch template:
 
 .. code-block:: bash
 
@@ -62,116 +58,301 @@ This template file has a few important config settings -
     fi
     --==BOUNDARY==--
 
-Finally, run the following command to create cloud formation stack:
+**Step 2: Create Cluster Parameter Script**
 
-.. code-block:: bash
+Create a bash script to capture the parameters needed for the node template:
 
-    aws cloudformation create-stack \
-    --stack-name eks-trn1-ng-stack \
-    --template-body file://eks_trn1_ng_stack.yaml \
-    --parameters file://cfn_params.json \
-    --capabilities CAPABILITY_IAM
+.. tab-set::
+
+   .. tab-item:: Trn1
+
+      .. code-block:: bash
+
+        #!/bin/bash
+
+        CLUSTER_NAME=$1
+        CLUSTER_SG=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].ResourcesVpcConfig.ClusterSecurityGroupId")
+        VPC_ID=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].ResourcesVpcConfig.VpcId")
+
+        cat <<EOF > cfn_params.json
+        [
+            {
+                "ParameterKey": "ClusterName",
+                "ParameterValue": "$CLUSTER_NAME"
+            },
+            {
+                "ParameterKey": "ClusterControlPlaneSecurityGroup",
+                "ParameterValue": "$CLUSTER_SG"
+            },
+            {
+                "ParameterKey": "VpcId",
+                "ParameterValue": "$VPC_ID"
+            }
+        ]
+        EOF
+
+   .. tab-item:: Trn2
+
+      .. code-block:: bash
+
+          #!/bin/bash
+
+          CLUSTER_NAME=$1
+          CLUSTER_SG=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].ResourcesVpcConfig.ClusterSecurityGroupId")
+          VPC_ID=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].ResourcesVpcConfig.VpcId")
+          CLUSTER_ENDPOINT=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].Endpoint")
+          CLUSTER_SERVICE_CIDR=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].KubernetesNetworkConfig.ServiceIpv4Cidr")
+          CLUSTER_CA=$(eksctl get cluster $CLUSTER_NAME -o json | jq -r ".[0].CertificateAuthority.Data")
+
+          cat <<EOF > cfn_params.json
+          [
+              {
+                  "ParameterKey": "ClusterName",
+                  "ParameterValue": "$CLUSTER_NAME"
+              },
+              {
+                  "ParameterKey": "ClusterControlPlaneSecurityGroup",
+                  "ParameterValue": "$CLUSTER_SG"
+              },
+              {
+                  "ParameterKey": "VpcId",
+                  "ParameterValue": "$VPC_ID"
+              },
+              {
+                  "ParameterKey": "ClusterEndpoint",
+                  "ParameterValue": "$CLUSTER_ENDPOINT"
+              },
+              {
+                  "ParameterKey": "ClusterServiceCidr",
+                  "ParameterValue": "$CLUSTER_SERVICE_CIDR"
+              },
+              {
+                  "ParameterKey": "ClusterCertificateAuthority",
+                  "ParameterValue": "$CLUSTER_CA"
+              }
+          ]
+          EOF
 
 
-The above command will create a stack named eks-trn1-ng-stack, which will be visible in cloudformation.
-Please wait for that stack creation to complete before proceeding to next step.
+This script captures the cluster name, security group for control plane connectivity, and VPC ID.
 
-Now we are ready to add the nodes. The example will demonstrate creating node groups using eksctl tool.
+**Step 3: Create CloudFormation Stack**
 
-Please run following command to determine the AZs:
+Create the CloudFormation stack for the node group.
+
+.. tab-set::
+
+   .. tab-item:: Trn1
+
+      .. code-block:: bash
+
+         aws cloudformation create-stack \
+             --stack-name eks-trn1-ng-stack \
+             --template-body file://eks_trn1_ng_stack.yaml \
+             --parameters file://cfn_params.json \
+             --capabilities CAPABILITY_IAM
+
+   .. tab-item:: Trn2
+
+      .. code-block:: bash
+
+         aws cloudformation create-stack \
+             --stack-name eks-trn2-ng-stack \
+             --template-body file://eks_trn2_ng_stack_al2023.yaml \
+             --parameters file://cfn_params.json \
+             --capabilities CAPABILITY_IAM
+
+Wait for the stack creation to complete before proceeding. You can monitor the progress in the AWS CloudFormation console.
+
+**Step 4: Determine Availability Zones**
+
+Identify the availability zones for your cluster:
 
 .. code-block:: bash
 
     aws ec2 describe-availability-zones \
-    --region $REGION_CODE \
-    --query "AvailabilityZones[]" \
-    --filters "Name=zone-id,Values=$1" \
-    --query "AvailabilityZones[].ZoneName" \
-    --output text
+        --region $REGION_CODE \
+        --query "AvailabilityZones[]" \
+        --filters "Name=zone-id,Values=$1" \
+        --query "AvailabilityZones[].ZoneName" \
+        --output text
 
-Next, create a script named create_ng_yaml.sh to generate node group yaml. The arguments to the script include the region, AZs, cluster name and name of the cloudformation stack created earlier (eks-trn1-ng-stack in case of this example):
+**Step 5: Generate Node Group Configuration**
+
+Create a script named ``create_ng_yaml.sh`` to generate the node group YAML configuration. The script requires: region, availability zones, cluster name, and CloudFormation stack name.
+
+.. tab-set::
+
+   .. tab-item:: Trn1
+
+      .. code-block:: bash
+
+         #!/bin/bash
+
+         REGION_CODE=$1
+         EKSAZ1=$2
+         EKSAZ2=$3
+         CLUSTER_NAME=$4
+         STACKNAME=$5
+
+         LT_ID_TRN1=$(aws cloudformation describe-stacks --stack-name $STACKNAME \
+                 --query "Stacks[0].Outputs[?OutputKey=='LaunchTemplateIdTrn1'].OutputValue" \
+                 --output text)
+
+         cat <<EOF > trn1_nodegroup.yaml
+         apiVersion: eksctl.io/v1alpha5
+         kind: ClusterConfig
+
+         metadata:
+           name: $CLUSTER_NAME
+           region: $REGION_CODE
+           version: "1.28"
+
+         iam:
+           withOIDC: true
+
+         availabilityZones: ["$EKSAZ1","$EKSAZ2"]
+
+         managedNodeGroups:
+           - name: trn1-32xl-ng1
+             launchTemplate:
+               id: $LT_ID_TRN1
+             minSize: 1
+             desiredCapacity: 1
+             maxSize: 1
+             availabilityZones: ["$EKSAZ1"]
+             privateNetworking: true
+             efaEnabled: true
+         EOF
+
+   .. tab-item:: Trn2
+
+      .. code-block:: bash
+
+         #!/bin/bash
+
+         REGION_CODE=$1
+         EKSAZ1=$2
+         EKSAZ2=$3
+         CLUSTER_NAME=$4
+         STACKNAME=$5
+
+         LT_ID_TRN2=$(aws cloudformation describe-stacks --stack-name $STACKNAME \
+                 --query "Stacks[0].Outputs[?OutputKey=='LaunchTemplateIdTrn2'].OutputValue" \
+                 --output text)
+
+         cat <<EOF > trn2_nodegroup.yaml
+         apiVersion: eksctl.io/v1alpha5
+         kind: ClusterConfig
+
+         metadata:
+           name: $CLUSTER_NAME
+           region: $REGION_CODE
+           version: "1.34"
+
+         iam:
+           withOIDC: true
+
+         availabilityZones: ["$EKSAZ1","$EKSAZ2"]
+
+         managedNodeGroups:
+           - name: trn2-48xl-ng1
+             launchTemplate:
+               id: $LT_ID_TRN2
+             minSize: 1
+             desiredCapacity: 1
+             maxSize: 1
+             availabilityZones: ["$EKSAZ1"]
+             privateNetworking: true
+             efaEnabled: true
+         EOF
+
+Run the script to generate the configuration file. Update the Kubernetes version as needed for your environment.
+
+Example output:
+
+.. tab-set::
+
+   .. tab-item:: Trn1
+
+      .. code-block:: yaml
+
+         apiVersion: eksctl.io/v1alpha5
+         kind: ClusterConfig
+
+         metadata:
+           name: nemo2
+           region: us-west-2
+           version: "1.28"
+
+         iam:
+           withOIDC: true
+
+         availabilityZones: ["us-west-2d","us-west-2c"]
+
+         managedNodeGroups:
+           - name: trn1-32xl-ng1
+             launchTemplate:
+               id: lt-093c222b35ea89009
+             minSize: 1
+             desiredCapacity: 1
+             maxSize: 1
+             availabilityZones: ["us-west-2d"]
+             privateNetworking: true
+             efaEnabled: true
+
+   .. tab-item:: Trn2
+
+      .. code-block:: yaml
+
+         apiVersion: eksctl.io/v1alpha5
+         kind: ClusterConfig
+
+         metadata:
+           name: nemo2
+           region: us-west-2
+           version: "1.34"
+
+         iam:
+           withOIDC: true
+
+         availabilityZones: ["us-west-2d","us-west-2c"]
+
+         managedNodeGroups:
+           - name: trn2-48xl-ng1
+             launchTemplate:
+               id: lt-093c222b35ea89010
+             minSize: 1
+             desiredCapacity: 1
+             maxSize: 1
+             availabilityZones: ["us-west-2d"]
+             privateNetworking: true
+             efaEnabled: true
+
+**Step 6: Create Node Group**
+
+Create the node group using the generated configuration.
+
+.. tab-set::
+
+   .. tab-item:: Trn1
+
+      .. code-block:: bash
+
+         eksctl create nodegroup -f trn1_nodegroup.yaml
+
+   .. tab-item:: Trn2
+
+      .. code-block:: bash
+
+         eksctl create nodegroup -f trn2_nodegroup.yaml
+
+Wait for the nodes to reach the ``Ready`` state. Verify using:
 
 .. code-block:: bash
 
-    #!/bin/bash
+    kubectl get nodes
 
-    REGION_CODE=$1
-    EKSAZ1=$2
-    EKSAZ2=$3
-    CLUSTER_NAME=$4
-    STACKNAME=$5
+**Step 7: Install EFA Device Plugin (Optional)**
 
-    LT_ID_TRN1=$(aws cloudformation describe-stacks --stack-name $STACKNAME \
-            --query "Stacks[0].Outputs[?OutputKey=='LaunchTemplateIdTrn1'].OutputValue" \
-            --output text)
-
-    cat <<EOF > trn1_nodegroup.yaml
-    apiVersion: eksctl.io/v1alpha5
-    kind: ClusterConfig
-
-    metadata:
-      name: $CLUSTER_NAME
-      region: $REGION_CODE
-      version: "1.28"
-
-    iam:
-      withOIDC: true
-
-    availabilityZones: ["$EKSAZ1","$EKSAZ2"]
-
-    managedNodeGroups:
-      - name: trn1-32xl-ng1
-        launchTemplate:
-          id: $LT_ID_TRN1
-        minSize: 1
-        desiredCapacity: 1
-        maxSize: 1
-        availabilityZones: ["$EKSAZ1"]
-        privateNetworking: true
-        efaEnabled: true
-    EOF
-
-Run the above script. It should produce a yaml similar to -
-
-.. code-block:: bash
-
-    apiVersion: eksctl.io/v1alpha5
-    kind: ClusterConfig
-
-    metadata:
-      name: nemo2
-      region: us-west-2
-      version: "1.25"
-
-    iam:
-      withOIDC: true
-
-    availabilityZones: ["us-west-2d","us-west-2c"]
-
-    managedNodeGroups:
-      - name: trn1-32xl-ng1
-        launchTemplate:
-          id: lt-093c222b35ea89009
-        minSize: 1
-        desiredCapacity: 1
-        maxSize: 1
-        availabilityZones: ["us-west-2d"]
-        privateNetworking: true
-        efaEnabled: true
-
-The example shows kubernetes version 1.25. Please update the version as needed. This yaml can now be used with eksctl.
-
-.. code-block:: bash
-
-    eksctl create nodegroup -f trn1_nodegroup.yaml
-
-
-This will add the nodes to the cluster. Please wait for the nodes to be 'Ready'. This can be verified using the get node command.
-
-.. code-block:: bash
-  
-    kubectl get node
-
-If you are running a distributed training or inference job, you will need EFA resources. Please install the EFA device plugin using instructions at `EFA device plugin repository <https://github.com/aws-samples/aws-efa-eks>`_.
-
-Next, we will install the Neuron Device Plugin.
+If you plan to run distributed training or inference jobs, install the EFA device plugin following the instructions at the `EFA device plugin repository <https://github.com/aws-samples/aws-efa-eks>`_.

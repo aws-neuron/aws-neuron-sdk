@@ -12,5 +12,5 @@ Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only s
 For ``Inf1`` instance users, Neuron driver versions <  2.21 will remain supported with regular security patches. 
 
 ``Inf1`` instance users are advised to pin the Neuron driver version to ``2.21.*`` in their installation script. 
-Refer to the :ref:`Neuron Driver release [2.22.2.0] <neuron-driver-release-notes>` for detailed instructions on pinning the Neuron Driver.  
+Refer to the :ref:`Neuron Driver release [2.22.2.0] <runtime_rn>` for detailed instructions on pinning the Neuron Driver.  
 

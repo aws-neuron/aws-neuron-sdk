@@ -74,11 +74,4 @@ Hardware compatibility matrix
      - N/A
      - ✅
      - N/A
-   * - **TensorFlow Neuron**
-     - ✅
-     - N/A
-     - N/A
-     - N/A
-     - ✅
-     - N/A
 

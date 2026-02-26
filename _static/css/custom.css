@@ -33,7 +33,7 @@ div.topic  {
 li.toctree-l1 {
     font-size:0.95em; 
 }
-th , tr, td{
+th , tr, td {
     white-space: normal !important;
 }
 th {
@@ -47,6 +47,11 @@ th {
 
 .ff div.section.p  {
     font-size:0.8em; 
+}
+
+hr {
+    border-color: #0000DD;
+    height: 2px;
 }
 
 

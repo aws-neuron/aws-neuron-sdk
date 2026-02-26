@@ -1033,6 +1033,15 @@ int ndl_memory_map_contiguous_scratchpad(uint64_t mem_handle, void **va, uint64_
  */
 int ndl_set_performance_profile(ndl_device_t *device, uint32_t profile);
 
+/** Enable or disable throttling notifications
+ *
+ * @param device[in]        - Device handle.
+ * @param enable[in]        - true to enable, false to disable.
+ *
+ * @return 0 on success.
+ */
+int ndl_enable_throttling_notifications(ndl_device_t *device, bool enable);
+
 bool ndl_feature_supported(int nd_fd, uint64_t feature);
 
 /** dynamically allocate h2t queues (rings)
@@ -1064,6 +1073,14 @@ int ndl_h2t_dma_queue_free(ndl_device_t *device,  uint32_t nc_id, uint32_t queue
  * @param mode[in]              - how to modify posting behavior (enable or disable periodic posting)
  */
 int ndl_metrics_ctrl(ndl_device_t *device, enum neuron_metrics_mode mode);
+
+/** get Neuron device and HBM index pointed by VA
+ *
+ * @param va[in]                - VA of Neuron memory
+ * @param device_index[out]     - Neuron device
+ * @param hbm_index[out]        - HBM index
+ */
+int ndl_get_va_placement(const void *va, int *device_index, int *hbm_index);
 
 /**
  * arbitrary size bitmap support

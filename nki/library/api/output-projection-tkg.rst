@@ -1,5 +1,5 @@
 .. meta::
-    :description: API reference for the Output Projection TKG kernel included in the NKI Library .
+    :description: Output Projection TKG kernel computes output projection optimized for Token Generation.
     :date-modified: 11/28/2025
 
 .. currentmodule:: nkilib.core.output_projection.output_projection_tkg
@@ -7,7 +7,7 @@
 Output Projection TKG Kernel API Reference
 ===========================================
 
-This topic provides the API reference for the ``Output Projection TKG`` kernel. The kernel computes the output projection operation typically used after an attention block in transformer models, optimized for Token Generation (Decode) use cases.
+Computes output projection (attention @ weight + bias) optimized for Token Generation (decode) use cases.
 
 The kernel supports:
 
@@ -31,12 +31,12 @@ The input layouts expected for this kernel are different from those for the CTE 
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `output_projection_tkg.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/output_projection/output_projection_tkg.py>`_
 
 output_projection_tkg
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: output_projection_tkg(attention, weight, bias, TRANSPOSE_OUT=False, OUT_IN_SB=False)
+.. py:function:: output_projection_tkg(attention: nl.ndarray, weight: nl.ndarray, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, weight_scale: Optional[nl.ndarray] = None, input_scale: Optional[nl.ndarray] = None, TRANSPOSE_OUT=False, OUT_IN_SB=False)
 
    Output Projection Kernel optimized for Token Generation (Decode) use cases.
 
@@ -49,7 +49,13 @@ output_projection_tkg
    :param weight: Weight tensor in HBM. Shape: ``[N*D, H]``, where ``H`` is hidden dimension size. Indexing: ``[n * D + d, h]``.
    :type weight: ``nl.ndarray``
    :param bias: Optional bias tensor in HBM. Shape: ``[1, H]``. Indexing: ``[1, h]``.
-   :type bias: ``nl.ndarray``
+   :type bias: ``nl.ndarray``, optional
+   :param quantization_type: Type of quantization to apply. Default: QuantizationType.NONE.
+   :type quantization_type: ``QuantizationType``
+   :param weight_scale: Weight scale tensor for quantization.
+   :type weight_scale: ``nl.ndarray``, optional
+   :param input_scale: Input scale tensor for quantization.
+   :type input_scale: ``nl.ndarray``, optional
    :param TRANSPOSE_OUT: Whether to store the output in transposed shape. If ``False``, output shape is ``[B*S, H]`` with indexing ``[b*S+s, h]``. If ``True``, output shape is ``[H_1, H_0, H_2, B*S]`` with indexing ``[h_1, h_0, h_2, b*S+s]``, where ``H_0 = logical core size (LNC)``, ``H_1 = 128``, ``H_2 = H/(H_0*H_1)``, such that ``h = h_0*H_1*H_2 + h_1*H_2 + h_2``.
    :type TRANSPOSE_OUT: ``bool``
    :param OUT_IN_SB: If ``True``, output is in SBUF. Else, it is written out to HBM.

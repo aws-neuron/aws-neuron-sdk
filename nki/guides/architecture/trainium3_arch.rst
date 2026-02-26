@@ -9,7 +9,7 @@ Trainium3 Architecture Guide for NKI
 ====================================
 
 .. note::
-   If nisa API is mentioned for a given architectural feature, that means NKI support is ready yet.
+   Some Trainium3 architecture features mentioned in this topic do not have ``nki.isa`` API support at this time.
 
 In this guide, we will dive into hardware architecture of fourth-generation NeuronDevices: Trainium3. This guide will highlight major architectural updates compared to the previous generation (Trainium2). Therefore, we assume readers are familiar with :doc:`Trainium/Inferentia2 Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>` and :doc:`Trainium2 Architecture Guide for NKI </nki/guides/architecture/trainium2_arch>` to understand the basics of NeuronDevice Architecture. 
 
@@ -70,6 +70,8 @@ Tensor Engine
 
 Tensor Engine is optimized for tensor computations such as GEMM, CONV, and Transpose. A NeuronCore-v4 Tensor Engine delivers 315 MXFP8/MXFP4 TFLOPS, where MXFP8/MXFP4 are OCP (Open Compute Project) compliant data type formats. Besides quantized data types, a NeuronCore-v4 Tensor Engine also delivers 79 BF16/FP16/TF32 and 20 FP32 TFLOPS of tensor computations. The rest of this section describes new architectural features introduced in the NeuronCore-v4 Tensor Engine. 
 
+.. _arch-trn3-quad-mxfp:
+
 Quad-MXFP8/MXFP4 Matmul Performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -103,7 +105,7 @@ Since MX matmul in TensorE performs dequantization in addition to the multiplica
 
 Let's focus on the stationary data and scale tensor layout below. On the left, the purple rectangle represents the 32-element scaling group that includes the four highlighted elements, which spans 8 SBUF partitions (8P) and 4 elements per partition. 
 
-A single scaling group corresponds to one 8-bit integer scale. Therefore, for every 32 partitions of the data tensor, we get 32/8=4 partitions worth of scale factors. As shown in the scale tensor below, the full scale tensor is split across four SBUF quadrants, where each quadrant holds 4 partitions worth of scales. Note the free dimension of the scale tensor is M=128, which is 4x smaller than the data tensor. This is because the four packed colored elements in the data tensor belong to the same scaling group and hence share a single scale. Within each SBUF quadrant, 32-4=28 partitions are unused in the scale tensor below. Multiple scale tensors for different MX matmul instructions can be packed together to fill up the unused partitions. See NKI tutorial for more discussion on working with scale tensors.
+A single scaling group corresponds to one 8-bit integer scale. Therefore, for every 32 partitions of the data tensor, we get 32/8=4 partitions worth of scale factors. As shown in the scale tensor below, the full scale tensor is split across four SBUF quadrants, where each quadrant holds 4 partitions worth of scales. Note the free dimension of the scale tensor is M=128, which is 4x smaller than the data tensor. This is because the four packed colored elements in the data tensor belong to the same scaling group and hence share a single scale. Within each SBUF quadrant, 32-4=28 partitions are unused in the scale tensor below. Multiple scale tensors for different MX matmul instructions can be packed together to fill up the unused partitions. See the :ref:`MXFP NKI tutorial <nki-mxfp-scale-packing>` for more discussion on packed scales.
 
 .. _fig-mx-scale-layout:
 

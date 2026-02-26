@@ -5,7 +5,7 @@ Misc (``tensorflow-neuron``)
     :maxdepth: 1
     :hidden:
 
-    /release-notes/tensorflow/tensorflow-neuron/tensorflow-neuron-v2                  
+    /release-notes/archive/tensorflow/tensorflow-neuron/tensorflow-neuron-v2                  
     /frameworks/tensorflow/tensorflow-neuron/tensorflow2-accelerated-ops
 
 

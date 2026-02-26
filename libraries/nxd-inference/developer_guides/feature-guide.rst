@@ -317,6 +317,8 @@ Temperature Support in On-Device Sampling
 To adjust temperature in on-device sampling, enable dynamic sampling,
 and specify ``temperature`` values in the ``sampling_params``.
 
+.. _qkv-weight-fusion:
+
 QKV Weight Fusion
 -----------------
 
@@ -941,6 +943,8 @@ first gathering the block KV cache using the block table, then converting it to 
 finally scattering the computed cache back to the block KV cache layout. This approach introduces overhead during
 token generation requests due to layout conversions, which can negatively impact performance as the ``max_model_len`` increases.
 
+.. _bucketing-with-prefix-caching:
+
 Bucketing with Prefix Caching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1002,9 +1006,8 @@ Multi-LoRA Serving
 
 NxD Inference supports serving with multiple LoRA adapters and users can specify different LoRA adapters for their requests at runtime. 
 It also supports multi-LoRA serving with vLLM as the frontend.
-NxD Inference currently supports loading of LoRA adapters for dense model families, including Llama-2, Llama-3.1, Llama-3.2, Llama-3.3, TinyLlama, and OpenLLaMA.
+NxD Inference currently supports loading of LoRA adapters for dense model families, including Llama-2, Llama-3.1, Llama-3.2, Llama-3.3, TinyLlama, OpenLLaMA, Qwen2, and Qwen3.
 A current prerequisite is that the LoRA adapter checkpoints must be stored locally before the server is initialized and started.
-The feature of streaming and dynamically adding new LoRA adapters at runtime from sources like HuggingFace or remote storage will be supported in future releases.
 
 Enable multi-LoRA serving
 ~~~~~~~~~~~~~~~~~~~~~~~~~

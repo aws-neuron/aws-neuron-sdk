@@ -1,41 +1,64 @@
 .. _k8s-neuron-problem-detector-and-recovery:
 
-Neuron node problem detector and recovery artifact checks the health of Neuron devices on each Kubernetes node. After detecting an unrecoverable Neuron error, it triggers a node replacement. In order to get started with Neuron node problem detector and recovery, make sure that the following requirements are satisfied:
+Deploy Neuron Node Problem Detector and Recovery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* The Neuron node problem detector and recovery requires Neuron driver 2.15+, and it requires the runtime to be at SDK 2.18 or later.
-* Make sure prerequisites are satisfied. This includes prerequisites for getting started with Kubernetes containers and prerequisites for the Neuron node problem detector and recovery.
-* Install the Neuron node problem detector and recovery as a DaemonSet on the cluster with the following command:
+The Neuron Node Problem Detector and Recovery is a critical resiliency component that continuously monitors the health of Neuron devices on each Kubernetes node by detecting hardware and software errors such as device failures, driver problems, and runtime errors. It integrates with the Kubernetes Node Problem Detector framework to report Neuron-specific conditions. When unrecoverable issues are detected, it can automatically remediate problems by marking nodes as unhealthy and triggering node replacement to prevent workload scheduling on faulty hardware. The component can also publish CloudWatch metrics under the ``NeuronHealthCheck`` namespace for monitoring and alerting purposes.
 
-    .. note::
+**Requirements**
 
-        The installation pulls the container image from the upstream repository for node problem detector registry.k8s.io/node-problem-detector.
+Before deploying the Neuron Node Problem Detector and Recovery, ensure the following requirements are met:
 
-    .. code:: bash
+* **Neuron Driver:** Version 2.15 or later
+* **Neuron Runtime:** SDK 2.18 or later
+* **Prerequisites:** All prerequisites for Kubernetes containers and the Neuron Node Problem Detector must be satisfied
 
-        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart
+**Installation**
 
-* By default, the Neuron node problem detector and recovery has monitor only mode enabled. To enable the recovery functionality:
+Install the Neuron Node Problem Detector and Recovery as a DaemonSet using Helm:
 
-    .. code:: bash
+.. note::
 
-        helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
-            --set "npd.nodeRecovery.enabled=true"
+    The installation pulls the container image from the upstream Node Problem Detector repository at ``registry.k8s.io/node-problem-detector``.
 
-* Verify that the Neuron device plugin is running:
+.. code:: bash
 
-    .. code:: bash
+    helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart
 
-        kubectl get pod -n neuron-healthcheck-system
+**Enable Node Recovery**
 
-    Expected result (with 4 nodes in cluster):
+By default, the Neuron Node Problem Detector runs in **monitor-only mode**. To enable automatic node recovery functionality:
 
-    .. code:: bash
+.. code:: bash
 
-        NAME                          READY   STATUS    RESTARTS   AGE
-        node-problem-detector-7qcrj   1/1     Running   0          59s
-        node-problem-detector-j45t5   1/1     Running   0          59s
-        node-problem-detector-mr2cl   1/1     Running   0          59s
-        node-problem-detector-vpjtk   1/1     Running   0          59s
+    helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+        --set "npd.nodeRecovery.enabled=true"
 
+**Verify Installation**
 
-* When any unrecoverable error occurs, Neuron node problem detector and recovery publishes a metric under the CloudWatch namespace NeuronHealthCheck. It also reflects in NodeCondition and can be seen with kubectl describe node.
+Verify that the Node Problem Detector pods are running:
+
+.. code:: bash
+
+    kubectl get pod -n neuron-healthcheck-system
+
+Expected output (example with 4 nodes in cluster):
+
+.. code:: bash
+
+    NAME                          READY   STATUS    RESTARTS   AGE
+    node-problem-detector-7qcrj   1/1     Running   0          59s
+    node-problem-detector-j45t5   1/1     Running   0          59s
+    node-problem-detector-mr2cl   1/1     Running   0          59s
+    node-problem-detector-vpjtk   1/1     Running   0          59s
+
+**Monitoring and Metrics**
+
+When an unrecoverable error occurs, the Neuron Node Problem Detector:
+
+* Publishes metrics to CloudWatch under the ``NeuronHealthCheck`` namespace
+* Updates the node's ``NodeCondition``, which can be viewed using:
+
+  .. code:: bash
+
+      kubectl describe node <node-name>

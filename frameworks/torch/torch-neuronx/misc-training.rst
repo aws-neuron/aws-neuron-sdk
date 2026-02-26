@@ -9,7 +9,7 @@ Misc (Training - torch-neuronx)
     /frameworks/torch/torch-neuronx/pytorch-neuron-supported-operators
     /frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution
     /frameworks/torch/torch-neuronx/training-troubleshooting
-    /release-notes/torch/torch-neuronx/index
+    /release-notes/components/pytorch
 
 
 .. include:: /frameworks/torch/torch-neuronx/misc-training.txt 

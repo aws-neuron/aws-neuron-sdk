@@ -6,11 +6,11 @@
 AWS Neuron SDK X.XX.0: PyTorch support release notes
 ====================================================
 
-**Date of release**: Month Day, 2025
+**Date of release**: Month Day, 2026
 
 .. contents:: In this release
    :local:
-   :depth: 2
+   :depth: 1
 
 
 * Go back to the :ref:`AWS Neuron 2.XX.0 release notes home <neuron-2-XX-0-whatsnew>`

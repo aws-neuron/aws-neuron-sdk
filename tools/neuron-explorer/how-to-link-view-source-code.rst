@@ -67,7 +67,7 @@ Navigating to Instructions
 
 Select lines in your source code and navigate to their corresponding instructions using Ctrl+Shift+G, the context menu, or the "Zoom into Instructions" command from the command palette. 
 
-The device timeline will then zoom to show all instructions associated with your selection.
+The Device Trace Viewer will then zoom to show all instructions associated with your selection.
 
 .. image:: /tools/profiler/images/view-link-5.png
 

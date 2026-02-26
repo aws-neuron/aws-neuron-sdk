@@ -5,9 +5,9 @@ Misc (``torch-neuron``)
 	:maxdepth: 1
 	:hidden:
 
-	/release-notes/compiler/neuron-cc/neuron-cc-ops/neuron-cc-ops-pytorch
+	/release-notes/archive/neuron-cc/neuron-cc-ops/neuron-cc-ops-pytorch
 	/frameworks/torch/torch-neuron/troubleshooting-guide
-	/release-notes/torch/torch-neuron/torch-neuron
+	/release-notes/components/pytorch
 
 
 .. include:: /frameworks/torch/torch-neuron/misc-inference-torch-neuron.txt

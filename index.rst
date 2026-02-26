@@ -1,6 +1,6 @@
 .. meta::
    :description: AWS Neuron SDK enables high-performance deep learning and generative AI on AWS Inferentia and Trainium instances. Get started with PyTorch, JAX, and distributed training.
-   :date-modified: 2025-12-02
+   :date-modified: 2026-02-16
 
 .. _neuron_home:
 
@@ -11,7 +11,7 @@ AWS Neuron Documentation
 
 * **For more details, see** :doc:`What is AWS Neuron? </about-neuron/what-is-neuron>` and :doc:`What's New in AWS Neuron? </about-neuron/whats-new>`
 
-* **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`. The current release is :doc:`version 2.27.1 </release-notes/2.27.1>`, released on January 14, 2026.
+* **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`. The current release is :doc:`version 2.28.0 </release-notes/2.28.0>`, released on February 26, 2026.
 
 .. admonition:: Join our Beta program
 
@@ -31,6 +31,8 @@ AWS Neuron Documentation
       * :doc:`Optimize model performance with Neuron Explorer </tools/neuron-explorer/index>`
       * :doc:`Launch a Inf/Trn instance on Amazon EC2 </devflows/ec2-flows>`
       * :doc:`Deploy a DLC </containers/get-started/quickstart-configure-deploy-dlc>`
+
+----
 
 Learn more about AWS Neuron
 ----------------------------
@@ -157,7 +159,7 @@ Learn more about AWS Neuron
    Neuron Architecture </about-neuron/arch/index>
    What's New </about-neuron/whats-new>
    Announcements </about-neuron/announcements/index>
-   Release Notes </release-notes/index>
+   News & Blogs </about-neuron/news-and-blogs/index>
    Contribute </about-neuron/oss/index>
 
 .. toctree::
@@ -171,18 +173,17 @@ Learn more about AWS Neuron
 
 .. toctree::
    :maxdepth: 1
-   :caption: Use ML Frameworks
+   :caption: ML Frameworks
    :hidden:
 
    Home </frameworks/index>
    Native PyTorch </frameworks/torch/pytorch-native-overview>
    PyTorch NeuronX </frameworks/torch/index>
-   JAX NeuronX</frameworks/jax/index>
-   TensorFlow NeuronX</frameworks/tensorflow/index>
+   JAX NeuronX </frameworks/jax/index>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Training Libraries
+   :caption: Training
    :hidden:
 
    NxD Training </libraries/nxd-training/index>
@@ -190,20 +191,13 @@ Learn more about AWS Neuron
 
 .. toctree::
    :maxdepth: 1
-   :caption: Inference Libraries
+   :caption: Inference
    :hidden:
 
    Overview </libraries/nxd-inference/neuron-inference-overview>
    vLLM </libraries/nxd-inference/vllm/index>
    NxD Inference </libraries/nxd-inference/index>
    NxD Core (Inference) </libraries/neuronx-distributed/index-inference>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: NxD Core Libraries
-   :hidden:
-
-   Overview </libraries/index>
 
 .. toctree::
    :maxdepth: 1

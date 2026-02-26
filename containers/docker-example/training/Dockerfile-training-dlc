@@ -5,7 +5,7 @@
 #    docker run -it --net=host --device=/dev/neuron0 neuron-container:pytorch
 
 # You can find the latest Pytorch Training Image here - https://gallery.ecr.aws/neuron/pytorch-training-neuronx
-FROM public.ecr.aws/neuron/pytorch-training-neuronx:2.7.0-neuronx-py310-sdk2.25.0-ubuntu22.04
+FROM public.ecr.aws/neuron/pytorch-training-neuronx:2.9.0-neuronx-py310-sdk2.27.0-ubuntu24.04
 RUN mkdir -p /opt/ml
 COPY model.py /opt/ml/model.py
-COPY mlp_train.py /opt/ml/mlp_train.py
+COPY mlp_train.py /opt/ml/mlp_train.py 

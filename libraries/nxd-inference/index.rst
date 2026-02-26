@@ -20,7 +20,7 @@ This section contains the technical documentation specific to the NxD Inference 
     Developer Guides  </libraries/nxd-inference/developer_guides/index>
     API Reference Guide </libraries/nxd-inference/api-guides/index>
     App Notes  </libraries/nxd-inference/app-notes/index>
-    Models </about-neuron/models/index>
+    Release Notes </release-notes/components/nxd-inference>
     Misc  </libraries/nxd-inference/misc/index>
 
 What is NxD Inference?
@@ -120,6 +120,13 @@ NxD Inference documentation
 
     .. grid-item-card:: Misc Resources
         :link: /libraries/nxd-inference/misc/index
+        :link-type: doc
+        :class-card: sd-rounded-3
+        
+        Release notes, troubleshooting guides, and other helpful resources for working with NxD Inference.
+
+    .. grid-item-card:: NxD Inference Release Notes
+        :link: /release-notes/components/nxd-inference
         :link-type: doc
         :class-card: sd-rounded-3
         

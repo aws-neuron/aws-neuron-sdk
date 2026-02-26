@@ -1,0 +1,142 @@
+.. _neuron-2-28-0-whatsnew:
+.. _latest-neuron-release:
+
+.. meta::
+   :description: The official release notes for the AWS Neuron SDK, version X.XX.0. Release date: 02/26/2026.
+
+AWS Neuron SDK 2.28.0 release notes
+===================================
+
+**Date of release**: February 26, 2026
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
+   PyTorch (torch-neuronx) <components/pytorch>
+   NxD Inference/vLLM  <components/nxd-inference>
+   NKI <components/nki>
+   NKI Library <components/nki-lib>
+   Neuron Runtime <components/runtime>
+   Developer tools <components/dev-tools>
+   Deep Learning AMIs <components/dlamis>
+   Deep Learning Containers <components/containers>
+
+This page provides detailed component release notes for the Neuron SDK 2.28.0. For a an overview of the release content, see :ref:`What's New in AWS Neuron <whats-new-2026-02-26-v2_28>`.
+
+Package and Library Updates
+---------------------------
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card::
+                :link: latest-neuron-release-artifacts
+                :link-type: ref
+                :class-card: sd-border-1
+        
+                **Neuron 2.28.0 release artifacts**
+                ^^^
+                The libraries and packages updated in this Neuron release.
+
+Component Release Notes
+-----------------------
+
+Select a card below to review detailed release notes for each component of the Neuron SDK version 2.28.0. These component release notes contain details on specific new and improved features, as well as breaking changes, bug fixes, and known issues for that component area of the Neuron SDK.
+
+* For the full set of component release notes across Neuron versions, see :doc:`/release-notes/components/index`.
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card:: 
+                :link: components/pytorch
+                :link-type: doc
+
+                **PyTorch Neuron (torch-neuronx)** 2.28.0 release notes
+                ^^^
+                Intergated, native support for PyTorch on Neuron.
+                +++
+                Supports: ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/nxd-inference
+                :link-type: doc
+
+                **NxD Inference** 2.28.0 release notes
+                ^^^
+                Neuron features and tools for LLM and agent ML model inference, and the vLLM Plugin for Neuron.
+                +++
+                Supports: ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``
+
+        .. grid-item-card:: 
+                :link: components/nki
+                :link-type: doc
+
+                **Neuron Kernel Interface (NKI)** 2.28.0 release notes
+                ^^^
+                Neuron's Python-based programming interface for developing and optimizing Neuron kernels.
+                +++
+                Supports: ``Inf2``, ``Trn1``, ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/nki-lib
+                :link-type: doc
+
+                **NKI Library (NKI-Lib)** 2.28.0 release notes
+                ^^^
+                Reference kernels and utilities for Neuron kernel development with NKI.
+                +++
+                Supports: ``Inf2``, ``Trn1``, ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/runtime
+                :link-type: doc
+
+                **Neuron Runtime** 2.28.0 release notes
+                ^^^
+                The Neuron kernel driver and C++ libraries for AWS Inferentia and Trainium instances.
+                +++
+                Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/dev-tools
+                :link-type: doc
+
+                **Neuron Developer Tools** 2.28.0 release notes
+                ^^^
+                Tools that support end-to-end development for AWS Neuron, including Neuron Explorer.
+                +++
+                Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/dlamis
+                :link-type: doc
+
+                **Neuron Deep Learning AWS Machine Images (DLAMIs)** 2.28.0 release notes
+                ^^^
+                AWS-specific machine images for building and deploying Neuron-based ML solutions.
+                +++
+                Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
+ 
+        .. grid-item-card:: 
+                :link: components/containers
+                :link-type: doc
+
+                **Neuron Deep Learning Containers (DLCs)** 2.28.0 release notes
+                ^^^
+                AWS-specific container definitions for building and deploying Neuron-based ML solutions.
+                +++
+                Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``
+
+Previous releases
+-----------------
+
+* :doc:`Neuron 2.27.0 </release-notes/prev/2.27.0/index>`
+* :doc:`Neuron 2.26.0 </release-notes/prev/2.26.0/index>`
+* :doc:`Neuron 2.25.0 </release-notes/prev/2.25.0/index>`
+* :doc:`Earlier releases </release-notes/prev/rn>`
+
+* :ref:`prev-rn`
+* :ref:`pre-release-content`
+* :ref:`prev-n1-rn`

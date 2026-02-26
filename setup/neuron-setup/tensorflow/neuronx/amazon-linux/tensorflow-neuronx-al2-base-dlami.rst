@@ -7,7 +7,7 @@
 
 
 Tensorflow Neuron ("tensorflow-neuronx") Setup on Amazon Linux 2 with DLAMI Base
-==============================================================================
+=================================================================================
 
 .. note::
    As of 2.20.0, Neuron Runtime no longer supports AL2. Upgrade to AL2023 following the :ref:`AL2 Migration guide <eos-al2>`
@@ -19,7 +19,7 @@ Tensorflow Neuron ("tensorflow-neuronx") Setup on Amazon Linux 2 with DLAMI Base
 .. include:: /setup/install-templates/al2-python.rst
 
 Get Started with Latest Release of Tensorflow Neuron (``tensorflow-neuronx``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This section provide links that will assist you to quickly start with a fresh installation of :ref:`tensorflow-neuronx-main`.
 

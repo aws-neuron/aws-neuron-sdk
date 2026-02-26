@@ -1,5 +1,5 @@
 .. meta::
-    :description: API reference for the Attention TKG kernel included in the NKI Library .
+    :description: Attention TKG kernel implements attention optimized for Token Generation (decode) use cases.
     :date-modified: 11/28/2025
 
 .. currentmodule:: nkilib.core.attention_tkg
@@ -7,7 +7,7 @@
 Attention TKG Kernel API Reference
 ===================================
 
-This topic provides the API reference for the ``Attention TKG`` kernel. The kernel implements attention specifically optimized for Token Generation (Decoding) use cases with small active sequence lengths.
+Implements attention optimized for Token Generation (decode) use cases with small active sequence lengths.
 
 The kernel supports:
 
@@ -30,7 +30,7 @@ The kernel employs efficient tiling strategies and memory access patterns to max
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `attention_tkg.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/attention/attention_tkg.py>`_
 
 AttnTKGConfig
 ^^^^^^^^^^^^^^^
@@ -135,7 +135,7 @@ AttnTKGConfig
 attention_tkg
 ^^^^^^^^^^^^^^^
 
-.. py:function:: attention_tkg(q, k_active, v_active, k_prior, v_prior, mask, out, cfg, sbm, inv_freqs=None, rope_pos_ids=None, sink=None, active_blocks_table=None, k_out=None, DBG_TENSORS=None)
+.. py:function:: attention_tkg(q: nl.ndarray, k_active: nl.ndarray, v_active: nl.ndarray, k_prior: nl.ndarray, v_prior: nl.ndarray, mask: nl.ndarray, out: nl.ndarray, cfg: AttnTKGConfig, sbm: SbufManager, inv_freqs: Optional[nl.ndarray] = None, rope_pos_ids: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, active_blocks_table: Optional[nl.ndarray] = None, k_out: Optional[nl.ndarray] = None, DBG_TENSORS: Optional[tuple] = None) -> Tuple[nl.ndarray, Optional[nl.ndarray]]
 
    Attention specifically optimized for token-gen (where s_active is small). Can optionally fuse RoPE at the start.
 
@@ -268,44 +268,7 @@ The kernel implementation includes several key optimizations:
 
 10. **Stack-based SBUF Allocation**: Uses SbufManager for efficient on-chip memory management with hierarchical scoping.
 
-Algorithm
-------------
 
-The kernel goes through the following steps:
-
-1. **Setup**: Initialize intermediate buffers, mask, block KV, and debug tensors.
-
-2. **Optional RoPE**: If ``fuse_rope`` is enabled, apply rotary position embeddings to Q and K tensors.
-
-3. **KQ^T Computation**: Perform the first matrix multiplication to compute attention scores.
-   
-   - Loop over each batch
-   - Load the current chunk of K based on configuration (block KV, transpose, etc.)
-   - Tile over the multiplication of K and Q in groups of 4k size
-
-4. **Max Reduction**: Compute the max reduction of KQ^T for softmax stability.
-   
-   - Compute the max in tiles of size 128 over ``bs * q_head * s_active``
-   - Prepare the sink if used
-   - Transpose and broadcast along the partition dimension
-
-5. **Exp(KQ^T - max(KQ^T))**: Apply the exponentiation for softmax computation.
-   
-   - Add/subtract the max based on whether it was negated
-   - Apply the exponentiation activation
-
-6. **Sum Reduction**: Compute sum reduction of the exponentiation result.
-   
-   - Compute the sum in tiles of size 128 over ``bs * q_head * s_active``
-   - Perform additional reductions based on sink or other optimization flags
-   - Compute the reciprocal with the same tiling scheme, and then broadcast
-
-7. **Final Matrix Multiplication**: Compute the product of the softmax output and V and store the result
-   
-   - Loop over each batch
-   - Load the current chunk of V based on configuration
-   - Perform the matmul over sprior tiles
-   - If needed, copy information over core boundaries or to HBM
 
 See Also
 -----------

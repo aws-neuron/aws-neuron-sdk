@@ -54,4 +54,4 @@ Previous versions
 -----------------
 
 * :ref:`neuron-2-25-0-tools`
-* :ref:`neuron-tools-rn`
+* :ref:`dev-tools_rn`

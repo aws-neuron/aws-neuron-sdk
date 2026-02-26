@@ -1,2 +1,2 @@
-* :ref:`neuronx-distributed-training-rn`
+* :ref:`nxd-training_rn`
 * :ref:`nxdt_known_issues`

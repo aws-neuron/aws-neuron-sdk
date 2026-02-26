@@ -67,7 +67,7 @@ Neuron system tools provide essential utilities for monitoring, debugging, and m
       Tutorials for how to utilize the Neuron system tools suite.
 
    .. grid-item-card:: What's New
-      :link: /release-notes/2.27.0/index
+      :link: /release-notes/prev/2.27.0/index
       :link-type: doc
       :class-header: sd-bg-secondary sd-text-white
 

@@ -1,0 +1,240 @@
+# AWS Neuron News and Blogs Data File
+# 
+# This file contains metadata for external articles, blog posts, and news about
+# AWS Neuron, Trainium, and Inferentia.
+#
+# To contribute a new article:
+# 1. Add a new entry to the appropriate section below
+# 2. Follow the existing format exactly
+# 3. Submit a pull request with your changes
+#
+# Entry format:
+#   - title: "Article Title"
+#     url: "https://example.com/article"
+#     description: "Brief description of the article content"
+#     author: "Author Name or Organization"
+#     date: "YYYY-MM-DD"
+#     category: "blog|news|tutorial|case-study|benchmark"
+#     locale: "en-US"  # Language/region code (e.g., en-US, ja-JP, zh-CN, de-DE, fr-FR, es-ES, pt-BR, ko-KR)
+#     keywords: ["keyword1", "keyword2", "keyword3"]  # List of relevant keywords for filtering
+#     featured: true|false  # Set to true for featured articles section
+
+featured_articles:
+  - title: "AWS Trainium: 50 Exercises"
+    url: "https://zenn.dev/karakuri_blog/articles/5ccedeee1beb08"
+    description: "Learn how to build LLMs for Trainium accelerators with this rich 50-lesson guide from customer Karakuri."
+    author: "Karakuri"
+    author_url: "https://about.karakuri.ai/"
+    date: "2026-02-19"
+    category: "tutorial"
+    locale: "en-US"
+    keywords: ["trainium", "llm", "training", "tutorial", "japanese"]
+    featured: true
+    icon: "🚀"
+
+  - title: "Cost-effective AI image generation with PixArt-Sigma inference on AWS Trainium and AWS Inferentia"
+    url: "https://aws.amazon.com/blogs/machine-learning/cost-effective-ai-image-generation-with-pixart-sigma-inference-on-aws-trainium-and-aws-inferentia/"
+    description: "Learn how to use AWS Trainium and Inferentia to deploy a PixArt-Sigma diffusion transformer model."
+    author: "AWS Neuron Team"
+    author_url: "https://aws.amazon.com/machine-learning/neuron/"
+    date: "2026-02-19"
+    category: "blog"
+    locale: "en-US"
+    keywords: ["inferentia", "trainium", "inference", "diffusion", "image-generation"]
+    featured: true
+    icon: "📊"
+
+all_articles:
+  # Japanese Articles
+  - title: "AWS Neuron 関連記事まとめ"
+    url: "https://zenn.dev/tosshi/articles/36f3615e26c323"
+    description: "AWS Neuron エコシステムに関する自身が作成した一連の技術記事のインデックス"
+    author: "littlemex"
+    date: "2026-02-20"
+    category: "blog"
+    locale: "ja-JP"
+    keywords: ["trainium", "neuron", "collective-communication", "architecture", "japanese"]
+    featured: false
+
+  - title: "【AWS re:Invent 2025 速報】AWS 自社設計 AIチップ AWS Trainium3 の全貌"
+    url: "https://zenn.dev/aws_japan/articles/06808526d5c75f"
+    description: "AWS re:Invent 2025で発表されたAWS Trainium3カスタムAIチップの完全な概要をお届けします。"
+    author: "AWS Japan"
+    date: "2025-12-06"
+    category: "news"
+    locale: "ja-JP"
+    keywords: ["trainium3", "reinvent", "announcement", "ai-chip"]
+    featured: false
+
+  - title: "【AWS Trainium 50本ノック #0】はじめに"
+    url: "https://zenn.dev/karakuri_blog/articles/77d93c40b27b60"
+    description: "AWS Trainium 50本ノックシリーズの紹介 - 入門ガイド。"
+    author: "Karakuri"
+    date: "2025-11-18"
+    category: "tutorial"
+    locale: "ja-JP"
+    keywords: ["trainium", "tutorial", "getting-started", "series"]
+    featured: false
+
+  - title: "「Syn Pro」開発レポート：AWS TrainiumとRFTによる高性能日本語LLMの実現"
+    url: "https://zenn.dev/karakuri_blog/articles/b923acfc86083b"
+    description: "AWS TrainiumとRFTを使用した高性能日本語LLMの構築に関する開発レポート。"
+    author: "Karakuri"
+    date: "2025-10-24"
+    category: "case-study"
+    locale: "ja-JP"
+    keywords: ["trainium", "llm", "japanese", "rft", "case-study"]
+    featured: false
+
+  - title: "AWS Inferentia2 + Llama 3.2 にできること"
+    url: "https://zenn.dev/exwzd/articles/20250930-inferentia-llama"
+    description: "AWS Inferentia2とLlama 3.2モデルでできることを紹介します。"
+    author: "exwzd"
+    date: "2025-09-30"
+    category: "blog"
+    locale: "ja-JP"
+    keywords: ["inferentia2", "llama", "capabilities", "inference"]
+    featured: false
+
+  - title: "AWS Inferentia2とvLLMでLlama 3.2の推論サーバーを構築する手順"
+    url: "https://zenn.dev/exwzd/articles/20250827_inferentia_compile"
+    description: "AWS Inferentia2とvLLMを使用してLlama 3.2推論サーバーを構築するステップバイステップガイド。"
+    author: "exwzd"
+    date: "2025-08-28"
+    category: "tutorial"
+    locale: "ja-JP"
+    keywords: ["inferentia2", "vllm", "llama", "inference", "tutorial"]
+    featured: false
+
+  - title: "【開催報告】Neuron Community – Vol.2"
+    url: "https://aws.amazon.com/jp/blogs/news/neuron-community-vol-2/"
+    description: "Neuron Community Vol.2の開催報告。"
+    author: "AWS Japan"
+    date: "2025-07-24"
+    category: "news"
+    locale: "ja-JP"
+    keywords: ["community", "event", "neuron", "japan"]
+    featured: false
+
+  - title: "KARAKURI VL - 日本語コンピュータユースに特化した視覚言語モデル"
+    url: "https://zenn.dev/karakuri_blog/articles/28c73f2ada797a"
+    description: "日本語コンピュータユースに特化したビジョン言語モデルKARAKURI VLの紹介。"
+    author: "Karakuri"
+    date: "2025-07-11"
+    category: "blog"
+    locale: "ja-JP"
+    keywords: ["vision-language", "japanese", "multimodal", "karakuri"]
+    featured: false
+
+  - title: "LLM-jp Chatbot Arenaを試験運用しました"
+    url: "https://llm-jp.nii.ac.jp/ja/blog/blog-836/"
+    description: "LLM-jp Chatbot Arenaの試験運用に関するレポート。"
+    author: "LLM-jp"
+    date: "2025-05-12"
+    category: "blog"
+    locale: "ja-JP"
+    keywords: ["llm", "chatbot", "arena", "japanese"]
+    featured: false
+
+  - title: "【開催報告】Neuron Community – Day One"
+    url: "https://aws.amazon.com/jp/blogs/news/neuron-community-day-one/"
+    description: "初回Neuron Community Dayの開催報告。"
+    author: "AWS Japan"
+    date: "2025-04-14"
+    category: "news"
+    locale: "ja-JP"
+    keywords: ["community", "event", "neuron", "japan"]
+    featured: false
+
+  - title: "EKS Auto Mode でサクッと機械学習用インスタンスを利用してみる。 AWS 独自設計チップ搭載の Trainium と Inferentia を使ってみた！"
+    url: "https://dev.classmethod.jp/articles/eks-auto-mode-gpu-aws-trainium-inferentia/"
+    description: "EKS Auto Modeを使用してMLインスタンスを簡単に利用する方法。AWS TrainiumとInferentiaチップの活用ガイド。"
+    author: "Classmethod"
+    date: "2025-01-02"
+    category: "tutorial"
+    locale: "ja-JP"
+    keywords: ["eks", "trainium", "inferentia", "kubernetes", "tutorial"]
+    featured: false
+
+  # Korean Articles
+  - title: "Nota AI가 제안하는 AWS Inferentia에서 다양한 LLM 모델 양자화 최적화기법 사용하기"
+    url: "https://aws.amazon.com/ko/blogs/tech/llm-model-quantization-techniques-for-aws-inferentia-by-nota-ai/"
+    description: "Nota AI가 제안하는 AWS Inferentia에서 LLM 모델 양자화 최적화 기법."
+    author: "Nota AI / AWS Korea"
+    date: "2026-01-20"
+    category: "blog"
+    locale: "ko-KR"
+    keywords: ["inferentia", "quantization", "llm", "optimization", "nota-ai"]
+    featured: false
+
+  - title: "Nota AI가 제안하는 Transformer 모델을 AWS Inferentia/Trainium에 손쉽게 배포하는 방법"
+    url: "https://aws.amazon.com/ko/blogs/tech/tips-for-using-transformer-models-on-aws-inf-and-trn/"
+    description: "Nota AI가 제안하는 AWS Inferentia/Trainium에서 Transformer 모델을 쉽게 배포하는 방법."
+    author: "Nota AI / AWS Korea"
+    date: "2025-04-09"
+    category: "blog"
+    locale: "ko-KR"
+    keywords: ["transformer", "deployment", "inferentia", "trainium", "nota-ai"]
+    featured: false
+
+  - title: "콜드스타트 추천 문제를 AWS Trainium과 vLLM으로 해결하는 자동화 전략"
+    url: "https://blog.a-cloud.co.kr/2025/07/25/%EC%BD%9C%EB%93%9C%EC%8A%A4%ED%83%80%ED%8A%B8-%EC%B6%94%EC%B2%9C-%EB%AC%B8%EC%A0%9C%EB%A5%BC-aws-trainium%EA%B3%BC-vllm%EC%9C%BC%EB%A1%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EB%8A%94-%EC%9E%90%EB%8F%99/"
+    description: "AWS Trainium과 vLLM을 사용하여 콜드 스타트 추천 문제를 해결하는 자동화 전략."
+    author: "A-Cloud"
+    date: "2025-07-25"
+    category: "blog"
+    locale: "ko-KR"
+    keywords: ["trainium", "vllm", "cold-start", "recommendations", "automation"]
+    featured: false
+
+  - title: "DeepSeek-R1 모델 AWS 출시"
+    url: "https://aws.amazon.com/ko/blogs/korea/deepseek-r1-models-now-available-on-aws/"
+    description: "AWS에서 DeepSeek-R1 모델을 사용할 수 있게 되었습니다."
+    author: "AWS Korea"
+    date: "2025-02-05"
+    category: "news"
+    locale: "ko-KR"
+    keywords: ["deepseek", "r1", "model", "launch", "aws"]
+    featured: false
+
+  # Chinese Articles
+  - title: "使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（一）"
+    url: "https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2/"
+    description: "使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（第一部分）。"
+    author: "AWS China"
+    date: "2025-02-12"
+    category: "tutorial"
+    locale: "zh-CN"
+    keywords: ["inferentia2", "deepseek", "r1", "deployment", "distillation"]
+    featured: false
+
+  - title: "使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（二）"
+    url: "https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2-part-two/"
+    description: "使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（第二部分）。"
+    author: "AWS China"
+    date: "2025-02-14"
+    category: "tutorial"
+    locale: "zh-CN"
+    keywords: ["inferentia2", "deepseek", "r1", "deployment", "distillation"]
+    featured: false
+
+  - title: "Bytedance processes billions of daily videos using their multimodal video understanding models on AWS Inferentia2"
+    url: "https://aws.amazon.com/blogs/machine-learning/bytedance-processes-billions-of-daily-videos-using-their-multimodal-video-understanding-models-on-aws-inferentia2/"
+    description: "How Bytedance processes billions of daily videos using multimodal models on AWS Inferentia2."
+    author: "AWS"
+    date: "2025-02-26"
+    category: "case-study"
+    locale: "en-US"
+    keywords: ["inferentia2", "bytedance", "video", "multimodal", "case-study"]
+    featured: false
+
+  - title: "基于 HAMi 实现亚马逊云科技 Trainium 与 Inferentia 核心级共享与策略性拓扑调度"
+    url: "https://aws.amazon.com/cn/blogs/china/achieve-trainium-and-inferentia-core-level-sharing-and-strategic-topology-scheduling/"
+    description: "基于 HAMi 实现亚马逊云科技 Trainium 与 Inferentia 核心级共享与策略性拓扑调度。"
+    author: "AWS China"
+    date: "2025-11-06"
+    category: "blog"
+    locale: "zh-CN"
+    keywords: ["trainium", "inferentia", "hami", "scheduling", "topology"]
+    featured: false
+

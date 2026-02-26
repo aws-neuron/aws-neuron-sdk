@@ -50,7 +50,7 @@ Install packages
 
 NxD Inference supports running models with vLLM via the upstream ``vllm-neuron``
 plugin. Install the latest release branch by following the steps in the
-:ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide>`.
+:ref:`vLLM User Guide for NxD Inference<nxdi-vllm-user-guide-v1>`.
 
 In this tutorial, you will use `llmperf <https://github.com/ray-project/llmperf>`_ to measure the inference performance of the base Llama-3.1-405b-Instruct configuration and the more
 optimized configuration. 
@@ -76,7 +76,7 @@ For more information, see
 in the Hugging Face documentation. 
 
 Scenario 1: Run Llama-3.1-405b inference with base configuration using ``bf16`` weights
-----------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 Step 1: Compile the model and run generate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -171,7 +171,7 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
 
     export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
     export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH  # Re-use the compiled artifacts
-    VLLM_RPC_TIMEOUT=100000 python -m vllm.entrypoints.openai.api_server \
+    VLLM_RPC_TIMEOUT=100000 vllm serve \
         --model "$MODEL_PATH" \
         --max-num-seqs 1 \
         --max-model-len 12800 \
@@ -423,7 +423,7 @@ shell script file, for example, ``start_vllm.sh`` and then run it.
 
     export VLLM_NEURON_FRAMEWORK="neuronx-distributed-inference"
     export NEURON_COMPILED_ARTIFACTS=$COMPILED_MODEL_PATH
-    VLLM_RPC_TIMEOUT=100000 python -m vllm.entrypoints.openai.api_server \
+    VLLM_RPC_TIMEOUT=100000 vllm serve \
         -—model $MODEL_PATH \
         -—max-num-seqs 1 \
         -—max-model-len 12800 \

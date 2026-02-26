@@ -89,4 +89,4 @@ Additional Resources
 
 * :ref:`nxdi-index`
 * :ref:`nxdi-overview`
-* :ref:`neuronx-distributed-inference-rn`
+* :ref:`nxd-inference_rn`

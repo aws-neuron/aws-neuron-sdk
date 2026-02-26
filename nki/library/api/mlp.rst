@@ -1,5 +1,5 @@
 .. meta::
-    :description: API reference for the MLP kernel included in the NKI Library .
+    :description: MLP kernel implements Multi-Layer Perceptron with optional normalization fusion and quantization.
     :date-modified: 11/12/2025
 
 .. currentmodule:: nkilib.core.mlp
@@ -7,7 +7,7 @@
 MLP Kernel API Reference
 =========================
 
-This topic provides the API reference for the ``MLP`` kernel. The kernel implements a Multi-Layer Perceptron with optional normalization fusion and various optimizations.
+Implements Multi-Layer Perceptron with optional normalization fusion and quantization support.
 
 The kernel supports:
 
@@ -28,19 +28,19 @@ Background
 The ``MLP`` kernel is a critical component in transformer architectures, responsible for processing token representations after the attention mechanism. This kernel optimizes the MLP computation by fusing it with optional normalization and supporting various optimizations for both context encoding and token generation scenarios.
 
 .. note::
-    This kernel automatically selects between TKG (Token Generation) and CTE (Context Encoding) implementations based on the batch size × sequence length threshold (currently 96, planned to increase to 128), ensuring optimal performance across different use cases.
+    This kernel automatically selects between TKG (Token Generation) and CTE (Context Encoding) implementations based on the batch size × sequence length, ensuring optimal performance across different use cases.
 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: https://github.com/aws-neuron/nki-library
+**Source code for this kernel API can be found at**: `mlp.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/mlp/mlp.py>`_
 
 mlp
 ^^^
 
-.. py:function:: mlp(hidden_tensor: nl.ndarray, gate_proj_weights_tensor: nl.ndarray, up_proj_weights_tensor: nl.ndarray, down_proj_weights_tensor: nl.ndarray, normalization_weights_tensor: Optional[nl.ndarray] = None, gate_proj_bias_tensor: Optional[nl.ndarray] = None, up_proj_bias_tensor: Optional[nl.ndarray] = None, down_proj_bias_tensor: Optional[nl.ndarray] = None, normalization_bias_tensor: Optional[nl.ndarray] = None, fused_add_tensor: Optional[nl.ndarray] = None, store_fused_add_result: bool = False, activation_fn: ActFnType = ActFnType.SiLU, normalization_type: NormType = NormType.NO_NORM, quantization_type: QuantizationType = QuantizationType.NONE, gate_w_scale: Optional[nl.ndarray] = None, up_w_scale: Optional[nl.ndarray] = None, down_w_scale: Optional[nl.ndarray] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, output_dtype = None, store_output_in_sbuf: bool = False, eps: float = 1e-6, skip_gate_proj: bool = False, use_tkg_gate_up_proj_column_tiling: bool = True, use_tkg_down_proj_column_tiling: bool = True, use_tkg_down_proj_optimized_layout: bool = False, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, force_cte_mode: bool = False)
+.. py:function:: mlp(hidden_tensor: nl.ndarray, gate_proj_weights_tensor: nl.ndarray, up_proj_weights_tensor: nl.ndarray, down_proj_weights_tensor: nl.ndarray, normalization_weights_tensor: Optional[nl.ndarray] = None, gate_proj_bias_tensor: Optional[nl.ndarray] = None, up_proj_bias_tensor: Optional[nl.ndarray] = None, down_proj_bias_tensor: Optional[nl.ndarray] = None, normalization_bias_tensor: Optional[nl.ndarray] = None, fused_add_tensor: Optional[nl.ndarray] = None, store_fused_add_result: bool = False, activation_fn: ActFnType = ActFnType.SiLU, normalization_type: NormType = NormType.NO_NORM, quantization_type: QuantizationType = QuantizationType.NONE, gate_w_scale: Optional[nl.ndarray] = None, up_w_scale: Optional[nl.ndarray] = None, down_w_scale: Optional[nl.ndarray] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, quant_clipping_bound: float = 0.0, output_dtype = None, store_output_in_sbuf: bool = False, eps: float = 1e-6, skip_gate_proj: bool = False, use_tkg_gate_up_proj_column_tiling: bool = True, use_tkg_down_proj_column_tiling: bool = True, use_tkg_down_proj_optimized_layout: bool = False, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, force_cte_mode: bool = False) -> list[nl.ndarray]
 
-   MLP(Multi-Layer Perceptron) Kernel implementation.
+   MLP (Multi-Layer Perceptron) Kernel implementation.
 
    Performs the standard MLP computation with support for both context encoding (CTE) and
    token generation (TKG) modes. Automatically selects the appropriate implementation based
@@ -84,6 +84,8 @@ mlp
    :type gate_up_in_scale: ``nl.ndarray``, optional
    :param down_in_scale: FP8 dequantization scales for down input. Used for static quantization with shape [128, 1]. Defaults to None.
    :type down_in_scale: ``nl.ndarray``, optional
+   :param quant_clipping_bound: Clipping bound for quantization. Default: 0.0.
+   :type quant_clipping_bound: ``float``
    :param output_dtype: Output tensor data type. Defaults to None; if None, the hidden tensor's ``dtype`` is used.
    :type output_dtype: ``nki.dtype``
    :param store_output_in_sbuf: If True, stores the output in SBUF instead of HBM, allowing the next layer to read it directly without an additional load operation. This option is only available in TKG mode where output tensor is small enough to fit in SBUF. Default: False.
@@ -124,7 +126,7 @@ Implementation Details
 
 The kernel implementation includes several key optimizations:
 
-1. **Dual Implementation Strategy**: Automatically selects between CTE (Context Encoding) and TKG (Token Generation) implementations based on ``batch_size × sequence_length`` threshold (currently 96, planned to increase to 128).
+1. **Dual Implementation Strategy**: Automatically selects between CTE (Context Encoding) and TKG (Token Generation) implementations based on ``batch_size × sequence_length``.
 
 2. **Normalization Fusion**: Optionally fuses RMSNorm or LayerNorm operations with the MLP computation for improved performance.
 

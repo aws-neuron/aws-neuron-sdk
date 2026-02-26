@@ -2,7 +2,7 @@
 
 .. meta::
     :description: AWS Neuron SDK model card for {Model Name}, version {version}. Overview, intended use, training data, performance, limitations, ethical considerations, and citations.
-    :date-modified: 2025-10-03
+    :date-modified: 2026-10-03
 
 Model Card: {Model Name}
 =======================

@@ -2,12 +2,98 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 12/19/2025
+    :date-modified: 02/26/2026
 
 What's New in the AWS Neuron SDK
 ================================
 
-*Explore detailed posts about the latest features, updates, and upcoming changes to the AWS Neuron SDK.*
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
+   Release Notes </release-notes/index>
+
+*Explore detailed posts about the latest releases, updates, and upcoming changes to the AWS Neuron SDK.*
+
+.. grid:: 1
+    :gutter: 2
+
+    .. grid-item-card:: Neuron Release Notes
+        :link: /release-notes/index
+        :link-type: doc
+        :class-header: sd-bg-primary sd-text-white
+
+        **Latest release**: 2.28.0 (2/26/2026)
+
+----
+
+.. _whats-new-2026-02-26-v2_28:
+
+AWS Neuron SDK 2.28.0: Enhanced Profiling, Vision Language Models, and Expanded NKI Capabilities
+--------------------------------------------------------------------------------------------------
+
+**Posted on**: February 26, 2026
+
+Today we are releasing AWS Neuron SDK 2.28.0. This release enhances Neuron Explorer with system profiling, Tensor Viewer, and Database Viewer for comprehensive performance analysis. NxD Inference adds support for Qwen2/Qwen3 VL vision language models, Flux.1 inpainting capabilities, and Eagle3 speculative decoding. The NKI Library expands with 9 new kernels including RoPE, MoE operations, and experimental kernels for attention and cross entropy. NKI (Beta 2) introduces LNC multi-core support with intra-LNC collectives and new APIs. Kubernetes users gain Neuron DRA Driver support for advanced resource allocation.
+
+
+Developer Tools and Profiling
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Neuron Explorer Enhancements** - Added system profiling support with drill-down navigation to device profiles. New Tensor Viewer helps identify memory bottlenecks by displaying tensor names, shapes, sizes, and memory usage. Database Viewer provides an interactive interface for querying profiling data using SQL or natural language. Profile Manager now supports tag-based organization and search. A migration guide from Neuron Profiler/Profiler 2.0 is now available.
+
+**nccom-test Improvements** - Enhanced data integrity checks use pseudo-random data patterns for better corruption detection. Added support for ``alltoallv`` collective operation for benchmarking variable-sized all-to-all communication patterns.
+
+For more details, see :ref:`dev-tools-2-28-0-rn`.
+
+Inference Updates
+^^^^^^^^^^^^^^^^^
+
+**NxD Inference 0.8.16251** - Added support for vision language models including Qwen2 VL (Qwen2-VL-7B-Instruct) and Qwen3 VL (Qwen3-VL-8B-Thinking) for processing text and image inputs (Beta). Pixtral model support improved with batch size 32 and sequence length 10240 on Trn2 with vLLM V1. Flux.1 model gains new functionality for in-paint, out-paint, canny edge detection, and depth-based image generation (Beta).
+
+**vLLM Neuron Plugin 0.4.0** - Multi-LoRA serving enhancements enable streaming LoRA adapters via vLLM's ``load_adapter`` API with dynamic runtime loading. Users can now run the base model alone when multi-LoRA serving is enabled. Added Eagle3 speculative decoding support for Llama 3.1 8B. Updated to support vLLM v0.13.0 and PyTorch 2.9.
+
+For more details, see :ref:`nxd-inference-2-28-0-rn`.
+
+NKI Library
+^^^^^^^^^^^
+
+**9 New Kernels** - The NKI Library expands from 7 to 16 documented kernel APIs. New core kernels include RoPE (Rotary Position Embedding), Router Top-K (expert selection for MoE), MoE CTE (Context Encoding), MoE TKG (Token Generation), and Cumsum. New experimental kernels include Attention Block TKG (fused attention for token generation), Cross Entropy (forward and backward passes), Depthwise Conv1D, and Blockwise MM Backward (for MoE training).
+
+**Enhanced Quantization Support** - Existing kernels receive FP8 and MX quantization support across QKV, MLP, and Output Projection kernels. QKV kernel adds fused FP8 KV cache quantization and block-based KV cache layout. MLP kernel adds gate/up projection clamping and fp16 support for TKG mode. Attention CTE kernel adds strided Q slicing for context parallelism.
+
+**Improved Utilities** - TensorView gains ``rearrange`` method for dimension reordering and ``has_dynamic_access`` for runtime-dependent addressing checks. SbufManager provides hierarchical tree-formatted allocation logging with new query methods for SBUF utilization. New utilities include ``rmsnorm_mx_quantize_tkg``, ``interleave_copy``, ``LncSubscriptable``, and ``TreeLogger``.
+
+For more details, see :ref:`nki-lib-2-28-0-rn`.
+
+Neuron Kernel Interface (NKI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**NKI Beta 2 (0.2.0)** - This release includes LNC multi-core support for LNC=2, enabling kernels to leverage multiple NeuronCores within a logical NeuronCore. The compiler now tracks ``shared_hbm`` tensors and canonicalizes LNC kernel outputs. Users can declare tensors private to a single NeuronCore using ``private_hbm`` memory type.
+
+**New nki.collectives Module** - Enables collective communication across multiple NeuronCores with operations including ``all_reduce``, ``all_gather``, ``reduce_scatter``, ``all_to_all``, ``collective_permute`` variants, and ``rank_id``.
+
+**New APIs and Features** - New ``nki.isa`` APIs include ``nonzero_with_count`` for sparse computation and ``exponential`` for element-wise operations. New ``float8_e4m3fn`` dtype supports FP8 workloads. Language features include ``no_reorder`` blocks for instruction ordering control, ``__call__`` special method support, ``tensor.view`` method for reshaping, and shared constants as string arguments.
+
+**API Improvements** - ``dma_transpose`` now supports indirect addressing, ``dma_copy`` adds the ``unique_indices`` parameter, and ``register_alloc`` accepts optional tensor arguments for pre-filling. The compiler no longer truncates diagnostic output.
+
+For more details, see :ref:`nki-2-28-0-rn`.
+
+Kubernetes Support
+^^^^^^^^^^^^^^^^^^
+
+**Neuron DRA Driver** - Introduced Neuron Dynamic Resource Allocation (DRA) Driver enabling advanced resource allocation using the Kubernetes DRA API for flexible and efficient Neuron device management. The DRA API provides topology-aware scheduling, atomic resource allocation, and per-workload configuration. Neuron Helm Charts now include DRA Driver support.
+
+For more details, see :ref:`containers-2-28-0-rn`.
+
+PyTorch Framework (torch-neuronx)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Transition to Native PyTorch Support** - Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will transition from PyTorch/XLA to native PyTorch support via TorchNeuron. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`native-pytorch-trainium` for migration guidance.
+
+For more details, see :ref:`pytorch-2-28-0-rn`.
+
+* Read the :doc:`Neuron 2.28.0 component release notes </release-notes/2.28.0>` for specific Neuron component improvements and details.
 
 .. _whats-new-2025-12-19-v2_27:
 
@@ -18,11 +104,8 @@ AWS Neuron SDK 2.27.0: Trainium3 Support, Enhanced NKI, and Unified Profiling wi
 
 Today we are releasing AWS Neuron SDK 2.27.0. This release adds support for Trainium3 (``Trn3``) instances. Enhanced NKI with new NKI Compiler introduces the ``nki.*`` namespace with updated APIs and language constructs. The NKI Library provides pre-optimized kernels for common model operations including attention, MLP, and normalization. Neuron Explorer delivers a unified profiling suite with AI-driven optimization recommendations. vLLM V1 integration is now available through the vLLM-Neuron Plugin. Deep Learning Containers and AMIs are updated with vLLM V1, PyTorch 2.9, JAX 0.7, Ubuntu 24.04, and Python 3.12.
 
-In addition to this release, we are introducing new capabilities and features in private beta access (see Private Beta Access section). We are also announcing our transition to PyTorch native support starting with PyTorch 2.10 in Neuron 2.28, plans to simplify NxDI in upcoming releases, and other important updates. See the End of Support and Migration Notices section for more details.
+In addition to this release, we are introducing new capabilities and features in private beta access (see Private Beta Access section). We are also announcing our transition to PyTorch native support starting with PyTorch 2.10 in Neuron 2.28, plans to simplify NxDI in upcoming releases, and other important updates.
 
-.. contents:: Explore what's new in Neuron
-   :local:
-   :depth: 1
 
 Private Beta Access
 ^^^^^^^^^^^^^^^^^^^
@@ -139,10 +222,7 @@ End of Support and Migration Notices
 Detailed Release Notes
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-* Read the :doc:`Neuron 2.27.0 component release notes </release-notes/2.27.0/index>` for specific Neuron component improvements and details.
-
-
-
+* Read the :doc:`Neuron 2.27.0 component release notes </release-notes/prev/2.27.0/index>` for specific Neuron component improvements and details.
 
 ----
 

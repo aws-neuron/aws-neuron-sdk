@@ -23,23 +23,6 @@ typedef enum nrt_tensor_usage {
 
 #define NRT_TENSOR_NAME_MAX 256
 
-/** dtypes for tensor data
- */
-typedef enum nrt_dtype {
-    NRT_DTYPE_UNKNOWN = 0,
-    NRT_DTYPE_FLOAT32,
-    NRT_DTYPE_FLOAT16,
-    NRT_DTYPE_BFLOAT16,
-    NRT_DTYPE_INT8,
-    NRT_DTYPE_UINT8,
-    NRT_DTYPE_INT16,
-    NRT_DTYPE_UINT16,
-    NRT_DTYPE_INT32,
-    NRT_DTYPE_UINT32,
-    NRT_DTYPE_INT64,
-    NRT_DTYPE_UINT64
-} nrt_dtype_t;
-
 typedef struct nrt_tensor_info {
     char name[NRT_TENSOR_NAME_MAX];     // Name of the tensor
     nrt_tensor_usage_t usage;           // Type of the tensor
@@ -66,7 +49,7 @@ typedef void (*NRT_ASYNC_EXEC_STATUS_CALLBACK)(void *params, uint32_t model_id, 
 */
 NRT_STATUS nrt_get_model_tensor_info(nrt_model_t *model, nrt_tensor_info_array_t **tensor_info);
 
-/** Return the instance count for this model handle (optimal number of concurrent threads that can call nrt_execute).
+/** Return the instance count for this model handle (optimal number of concurrent threads that can call nrt_execute). (deprecated)
 *
 * @param model[in]         - Model for the instance count needs to be returned.
 * @param instance[out]     - Pointer to store the result.
@@ -170,11 +153,11 @@ NRT_STATUS nrt_all_gather(int32_t vnc, uint32_t g_device_id, uint32_t g_device_c
 
 /** Blocks caller until all queued executions on async worker thread are drained.
  *
- * @param start_vnc - VNC index to block on.
+ * @param vnc - VNC index to block on.
  *
  * @return NRT_STATUS_SUCCESS on success.
  */
-NRT_STATUS nrt_async_drain_queued_execs(int32_t start_vnc);
+NRT_STATUS nrt_async_drain_queued_execs(int32_t vnc);
 
 typedef struct nrt_model_info {
     uint32_t vnc;

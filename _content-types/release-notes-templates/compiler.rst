@@ -1,18 +1,18 @@
 .. _neuron-2-XX-0-compiler:
 
 .. meta::
-   :description: The official release notes for the AWS Neuron SDK compiler component, version X.XX.0. Release date: XX/XX/2025.
+   :description: The official release notes for the AWS Neuron SDK compiler component, version X.XX.0. Release date: XX/XX/2026.
 
 AWS Neuron SDK 2.XX.X: Neuron Compiler release notes
 ====================================================
 
-**Date of release**: Month Day, 2025
+**Date of release**: Month Day, 2026
 
 .. contents:: In this release
    :local:
-   :depth: 2
+   :depth: 1
 
-* Go back to the :ref:`AWS Neuron 2.XX.0 release notes home <neuron-2-XX-X-whatsnew>`
+* Go back to the :ref:`AWS Neuron 2.XX.0 release notes home <neuron-2-XX-0-whatsnew>`
 
 Improvements
 ------------
