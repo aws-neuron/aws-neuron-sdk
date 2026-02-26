@@ -51,42 +51,48 @@ Each Neuron component has specific release notes across Neuron versions.
    * - Component
      - Updated in Neuron Version
      - Latest Component Version
-   * - :doc:`Neuron Compiler <components/compiler>`
+   * - :doc:`Neuron Compiler <compiler>`
      - 2.27.0
      - 2.15.54.0
-   * - :doc:`Neuron Containers <components/containers>`
+   * - :doc:`Neuron Containers <containers>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Developer Tools <components/dev-tools>`
+   * - :doc:`Neuron Developer Tools <dev-tools>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron DLAMI <components/dlamis>`
+   * - :doc:`Neuron DLAMI <dlamis>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`JAX NeuronX <components/jax>`
+   * - :doc:`JAX NeuronX <jax>`
      - 2.26.0
      - 0.6.2.1.0.*
-   * - :doc:`NKI Library <components/nki-lib>`
+   * - :doc:`NKI Library <nki-lib>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Kernel Interface <components/nki>`
+   * - :doc:`Neuron Kernel Interface <nki>`
      - 2.28.0
      - Beta 2 (0.2.0)
-   * - :doc:`NxD Core <components/nxd-core>`
+   * - :doc:`NxD Core <nxd-core>`
      - 2.26.0
      - 0.15.22259
-   * - :doc:`NxD Inference <components/nxd-inference>`
+   * - :doc:`NxD Inference <nxd-inference>`
      - 2.28.0
      - 0.8.16251
-   * - :doc:`NxD Training <components/nxd-training>`
+   * - :doc:`NxD Training <nxd-training>`
      - 2.25.0
      - 1.5.0
-   * - :doc:`PyTorch Neuron Framework (torch-neuronx) <components/pytorch>`
+   * - :doc:`PyTorch Neuron Framework (torch-neuronx) <pytorch>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Runtime <components/runtime>`
-     - 2.27.0
-     - 2.29.40.0
+   * - :doc:`Neuron Runtime Library <runtime>`
+     - 2.28.0
+     - 2.30.50.0
+   * - :doc:`Neuron Driver <runtime>`
+     - 2.28.0
+     - 2.26.5.0
+   * - :doc:`Neuron Collectives <runtime>`
+     - 2.28.0
+     - 2.30.58.0
   
 ----
 
