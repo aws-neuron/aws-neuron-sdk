@@ -20,7 +20,7 @@ processing follow the default vLLM behavior.
 Versioning
 ^^^^^^^^^^
 
-Plugin Version: ``0.4.0``
+Plugin Version: ``0.4.1``
 
 Neuron SDK Version: ``2.28.0``
 
@@ -80,7 +80,7 @@ This version of the plugin is intended to work with the Neuron SDK 2.28.0, PyTor
 
 .. code-block:: bash
 
-    git clone --branch "0.4.0" https://github.com/vllm-project/vllm-neuron.git
+    git clone --branch "0.4.1" https://github.com/vllm-project/vllm-neuron.git
     cd vllm-neuron
     pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 

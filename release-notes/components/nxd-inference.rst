@@ -12,7 +12,7 @@ Component Release Notes for NxD Inference
 
 The release notes for the NxD Inference Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
-NxD Inference [0.8.16251] + vLLM Neuron Plugin [0.4.0] (Neuron 2.28.0 Release)
+NxD Inference [0.8.16251] + vLLM Neuron Plugin [0.4.1] (Neuron 2.28.0 Release)
 ------------------------------------------------------------------------------
 
 Date of Release: 02/26/2026
@@ -46,7 +46,7 @@ Known Issues
 vLLM Plugin for Neuron
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Neuron SDK 2.28.0 includes the following updates for the vLLM Plugin 0.4.0 for Neuron:
+Neuron SDK 2.28.0 includes the following updates for the vLLM Plugin 0.4.1 for Neuron:
 
 Improvements
 ^^^^^^^^^^^^
