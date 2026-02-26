@@ -51,7 +51,7 @@ Inference Updates
 
 **NxD Inference 0.8.16251** - Added support for vision language models including Qwen2 VL (Qwen2-VL-7B-Instruct) and Qwen3 VL (Qwen3-VL-8B-Thinking) for processing text and image inputs (Beta). Pixtral model support improved with batch size 32 and sequence length 10240 on Trn2 with vLLM V1. Flux.1 model gains new functionality for in-paint, out-paint, canny edge detection, and depth-based image generation (Beta).
 
-**vLLM Neuron Plugin 0.4.0** - Multi-LoRA serving enhancements enable streaming LoRA adapters via vLLM's ``load_adapter`` API with dynamic runtime loading. Users can now run the base model alone when multi-LoRA serving is enabled. Added Eagle3 speculative decoding support for Llama 3.1 8B. Updated to support vLLM v0.13.0 and PyTorch 2.9.
+**vLLM Neuron Plugin 0.4.1** - Multi-LoRA serving enhancements enable streaming LoRA adapters via vLLM's ``load_adapter`` API with dynamic runtime loading. Users can now run the base model alone when multi-LoRA serving is enabled. Added Eagle3 speculative decoding support for Llama 3.1 8B. Updated to support vLLM v0.13.0 and PyTorch 2.9.
 
 For more details, see :ref:`nxd-inference-2-28-0-rn`.
 
