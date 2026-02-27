@@ -51,46 +51,46 @@ Each Neuron component has specific release notes across Neuron versions.
    * - Component
      - Updated in Neuron Version
      - Latest Component Version
-   * - :doc:`Neuron Compiler <compiler>`
+   * - :doc:`Neuron Compiler </release-notes/components/compiler>`
      - 2.27.0
      - 2.15.54.0
-   * - :doc:`Neuron Containers <containers>`
+   * - :doc:`Neuron Containers </release-notes/components/containers>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Developer Tools <dev-tools>`
+   * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron DLAMI <dlamis>`
+   * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`JAX NeuronX <jax>`
+   * - :doc:`JAX NeuronX </release-notes/components/jax>`
      - 2.26.0
      - 0.6.2.1.0.*
-   * - :doc:`NKI Library <nki-lib>`
+   * - :doc:`NKI Library </release-notes/components/nki-lib>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Kernel Interface <nki>`
+   * - :doc:`Neuron Kernel Interface </release-notes/components/nki>`
      - 2.28.0
      - Beta 2 (0.2.0)
-   * - :doc:`NxD Core <nxd-core>`
+   * - :doc:`NxD Core </release-notes/components/nxd-core>`
      - 2.26.0
      - 0.15.22259
-   * - :doc:`NxD Inference <nxd-inference>`
+   * - :doc:`NxD Inference </release-notes/components/nxd-inference>`
      - 2.28.0
      - 0.8.16251
-   * - :doc:`NxD Training <nxd-training>`
+   * - :doc:`NxD Training </release-notes/components/nxd-training>`
      - 2.25.0
      - 1.5.0
-   * - :doc:`PyTorch Neuron Framework (torch-neuronx) <pytorch>`
+   * - :doc:`PyTorch Neuron Framework (torch-neuronx) </release-notes/components/pytorch>`
      - 2.28.0
      - 2.28.0
-   * - :doc:`Neuron Runtime Library <runtime>`
+   * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
      - 2.28.0
      - 2.30.50.0
-   * - :doc:`Neuron Driver <runtime>`
+   * - :doc:`Neuron Driver </release-notes/components/runtime>`
      - 2.28.0
      - 2.26.5.0
-   * - :doc:`Neuron Collectives <runtime>`
+   * - :doc:`Neuron Collectives </release-notes/components/runtime>`
      - 2.28.0
      - 2.30.58.0
   
