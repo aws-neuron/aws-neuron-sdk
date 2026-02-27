@@ -106,19 +106,6 @@ Today we are releasing AWS Neuron SDK 2.27.0. This release adds support for Trai
 
 In addition to this release, we are introducing new capabilities and features in private beta access (see Private Beta Access section). We are also announcing our transition to PyTorch native support starting with PyTorch 2.10 in Neuron 2.28, plans to simplify NxDI in upcoming releases, and other important updates.
 
-
-Private Beta Access
-^^^^^^^^^^^^^^^^^^^
-
-We are also opening access to the following private betas:
-
-* **Native PyTorch (TorchNeuron)** - :doc:`Native PyTorch (TorchNeuron) </frameworks/torch/pytorch-native-overview>`
-* **Enhanced Neuron Kernel Interface (NKI)** - :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`
-* **vLLM support for Trn3** - :doc:`vLLM support for Trn3 </libraries/nxd-inference/vllm/index>`
-* **Neuron DRA for Kubernetes** - :doc:`Neuron DRA for Kubernetes </containers/neuron-dra>`
-
-To request access, visit the `Neuron Private Beta signup form <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
-
 Neuron Kernel Interface (NKI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

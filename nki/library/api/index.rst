@@ -1,13 +1,13 @@
 .. meta::
-    :description: API reference for the pre-built NKI Library kernels included with the AWS Neuron SDK.
+    :description: Reference for the pre-built NKI Library kernels included with the AWS Neuron SDK.
     :date-modified: 02/13/2026
 
 .. _nkl_api_ref_home:
 
-NKI Library Kernel API Reference
-=================================
+NKI Library Supported Kernel Reference
+======================================
 
-The NKI Library provides pre-built reference kernels you can use directly in your model development with the AWS Neuron SDK and NKI. These kernel APIs provide the default classes, functions, and parameters you can use to integrate the NKI Library kernels into your models.
+The NKI Library provides pre-built reference kernels you can use directly in your model development with the AWS Neuron SDK and NKI. These kernels provide the default classes, functions, and parameters you can use to integrate the NKI Library kernels into your models.
 
 **Source code for these kernel APIs can be found at**: https://github.com/aws-neuron/nki-library
 
