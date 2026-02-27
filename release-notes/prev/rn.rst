@@ -12,7 +12,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.26.1 </release-notes/prev/2.26.1>
    Neuron 2.26.0 </release-notes/prev/2.26.0/index>
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
-   Component release notes </release-notes/prev/by-component/index>
+   Component release notes </release-notes/components/index>
 
 * **The latest Neuron release is 2.28.0, released on 2/26/2026.** Read the :doc:`2.28.0 release notes </release-notes/2.28.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
   
