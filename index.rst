@@ -13,10 +13,6 @@ AWS Neuron Documentation
 
 * **For the latest release notes, see** :doc:`AWS Neuron Release Notes </release-notes/index>`. The current release is :doc:`version 2.28.0 </release-notes/2.28.0>`, released on February 26, 2026.
 
-.. admonition:: Join our Beta program
-
-   Get early access to new Neuron features and tools! `Fill out this form and apply to join our Beta program <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
-
 .. grid:: 1
    :gutter: 3
 

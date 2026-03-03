@@ -21,12 +21,12 @@ The NKI Library is a collection of pre-built kernels optimized for AWS Neuron-po
 
       Review the formal specifications for the pre-built NKI kernels available in the NKI Library.
 
-   .. grid-item-card:: **NKI Library Kernel API Reference**
+   .. grid-item-card:: **NKI Library Supported Kernel Reference**
       :class-card: sd-border-1
       :link: /nki/library/api/index
       :link-type: doc
 
-      Use the Kernel API reference to understand the functions, parameters, and usage of the pre-built NKI kernels in the NKI Library.
+      Use this kernel reference to understand the functions, parameters, and usage of the pre-built NKI kernels in the NKI Library.
 
 .. grid:: 1 
    :gutter: 3
