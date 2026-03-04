@@ -1,0 +1,231 @@
+# Auto-label issues based on content keywords
+name: auto-label-issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-label-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Analyze issue content
+        id: analyze_content
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        with:
+          script: |
+            const title = process.env.ISSUE_TITLE || '';
+            const body = process.env.ISSUE_BODY || '';
+            const content = `${title} ${body}`;
+            
+            const labels = [];
+            
+            // =============================================================================
+            // LABEL CONFIGURATION - Easy to update dictionary
+            // Add keywords, typos, or synonyms to the arrays below
+            // =============================================================================
+            
+            const labelConfig = {
+              // ----- Issue Type Labels (mutually exclusive) -----
+              bug: {
+                keywords: [
+                  // Standard terms
+                  'bug', 'error', 'crash', 'fail', 'failed', 'failure', 'failing',
+                  'broken', 'exception', 'traceback', 'segfault', 'segmentation fault',
+                  // Synonyms
+                  'issue', 'problem', 'defect', 'fault', 'glitch', 'malfunction',
+                  'wrong', 'incorrect', 'unexpected',
+                  'hang', 'hanging', 'hung', 'freeze', 'frozen',
+                  'timeout', 'timed out',
+                  'oom', 'out of memory', 'memory error',
+                  'nan', 'diverge', 'diverged',
+                  // Common typos
+                  'bugg', 'bgu', 'eror', 'errror', 'crahs', 'fial', 'brokn', 'broke'
+                ],
+                patterns: [/not\s*work/i, /doesn'?t\s*work/i, /won'?t\s*work/i, /can'?t\s*work/i]
+              },
+              
+              documentation: {
+                keywords: [
+                  // Standard terms
+                  'doc', 'docs', 'documentation', 'readme',
+                  'guide', 'tutorial', 'howto', 'how-to', 'how to',
+                  'typo', 'typos', 'spelling', 'grammar',
+                  'example', 'examples', 'sample', 'samples',
+                  'instruction', 'instructions',
+                  'clarify', 'clarification', 'unclear', 'confusing',
+                  'outdated', 'out of date', 'stale',
+                  'missing documentation', 'missing docs',
+                  'broken link', 'dead link', '404',
+                  // Common typos
+                  'documention', 'documenation', 'documentaion', 'tutoral', 'toturial'
+                ],
+                patterns: [/issue\s*on\s*page/i, /page\s*.*\.html/i]
+              },
+              
+              'feature-request': {
+                keywords: [
+                  // Standard terms
+                  'feature', 'feature request', 'feature-request',
+                  'enhancement', 'improvement',
+                  'implement', 'implementation',
+                  'new feature', 'add feature',
+                  'support for', 'add support',
+                  'would be nice', 'would be great', 'would be helpful',
+                  'suggestion', 'suggest', 'proposal', 'propose',
+                  'wishlist', 'wish list',
+                  // Common typos
+                  'feture', 'featrue', 'enchancement', 'improvment'
+                ],
+                patterns: [/add\s+support\s+for/i, /please\s+add/i, /would\s+be\s+(nice|great|helpful)/i]
+              },
+              
+              // ----- Hardware Labels (independent - multiple can be applied) -----
+              Trn1: {
+                keywords: [
+                  'trn1', 'trn-1', 'trn 1', 'trn1n',
+                  'trn1.2xlarge', 'trn1.32xlarge', 'trn1n.32xlarge',
+                  'trainium', 'trainium1', 'trainium 1', 'trainium-1',
+                  // Common typos
+                  'tranium', 'trainuim', 'trn-1n'
+                ],
+                patterns: [/trn1n?(?:\.[0-9]*xlarge)?/i, /trainium\s*1?(?!\s*2)/i]
+              },
+              
+              Trn2: {
+                keywords: [
+                  'trn2', 'trn-2', 'trn 2',
+                  'trn2.48xlarge',
+                  'trainium2', 'trainium 2', 'trainium-2',
+                  // Common typos
+                  'tranium2', 'trainuim2'
+                ],
+                patterns: [/trn2(?:\.[0-9]*xlarge)?/i, /trainium\s*2/i]
+              },
+              
+              Inf1: {
+                keywords: [
+                  'inf1', 'inf-1', 'inf 1',
+                  'inf1.xlarge', 'inf1.2xlarge', 'inf1.6xlarge', 'inf1.24xlarge',
+                  'inferentia', 'inferentia1', 'inferentia 1', 'inferentia-1',
+                  // Common typos
+                  'infertia', 'inferntia', 'infernita'
+                ],
+                patterns: [/inf1(?:\.[0-9]*xlarge)?/i, /inferentia\s*1?(?!\s*2)/i]
+              },
+              
+              Inf2: {
+                keywords: [
+                  'inf2', 'inf-2', 'inf 2',
+                  'inf2.xlarge', 'inf2.8xlarge', 'inf2.24xlarge', 'inf2.48xlarge',
+                  'inferentia2', 'inferentia 2', 'inferentia-2',
+                  // Common typos
+                  'infertia2', 'inferntia2', 'infernita2'
+                ],
+                patterns: [/inf2(?:\.[0-9]*xlarge)?/i, /inferentia\s*2/i]
+              },
+              
+              // ----- Use Case Labels (independent - both can be applied) -----
+              Inference: {
+                keywords: [
+                  // Standard terms
+                  'inference', 'inferencing',
+                  'predict', 'prediction', 'predictions', 'predicting',
+                  'serving', 'serve', 'server',
+                  'batch inference', 'real-time', 'realtime',
+                  'endpoint', 'endpoints',
+                  // Common typos
+                  'infernce', 'inferance', 'prediciton', 'deploymnet'
+                ],
+                patterns: [/infer(?:ence|ring)?/i, /predict(?:ion|ing)?/i, /deploy(?:ment|ing)?/i]
+              },
+              
+              Training: {
+                keywords: [
+                  // Standard terms
+                  'training', 'train', 'trained',
+                  'fine-tune', 'finetune', 'fine tune', 'finetuning', 'fine-tuning',
+                  'pretrain', 'pre-train', 'pretraining', 'pre-training',
+                  'learning', 'learn',
+                  'gradient', 'gradients',
+                  'backward', 'backprop', 'backpropagation',
+                  'loss', 'convergence', 'converge',
+                  'epoch', 'epochs',
+                  'checkpoint', 'checkpointing',
+                  // Common typos
+                  'trainig', 'traning', 'trainin', 'fintune', 'finetunning'
+                ],
+                patterns: [/train(?:ing|ed)?/i, /fine[\s-]?tun(?:e|ing)/i, /pre[\s-]?train(?:ing)?/i]
+              }
+            };
+            
+            // =============================================================================
+            // MATCHING LOGIC
+            // =============================================================================
+            
+            function matchesLabel(config) {
+              const contentLower = content.toLowerCase();
+              // Check keywords (case-insensitive substring match)
+              for (const keyword of config.keywords) {
+                if (contentLower.includes(keyword.toLowerCase())) {
+                  return true;
+                }
+              }
+              // Check regex patterns
+              for (const pattern of config.patterns) {
+                if (pattern.test(content)) {
+                  return true;
+                }
+              }
+              return false;
+            }
+            
+            // Issue Type Labels - MUTUALLY EXCLUSIVE (priority: bug > documentation > feature-request)
+            if (matchesLabel(labelConfig.bug)) {
+              labels.push('bug');
+            } else if (matchesLabel(labelConfig.documentation)) {
+              labels.push('documentation');
+            } else if (matchesLabel(labelConfig['feature-request'])) {
+              labels.push('feature-request');
+            }
+            
+            // Hardware/Instance Type Labels - INDEPENDENT (multiple can be applied)
+            if (matchesLabel(labelConfig.Trn1)) {
+              labels.push('Trn1');
+            }
+            if (matchesLabel(labelConfig.Trn2)) {
+              labels.push('Trn2');
+            }
+            if (matchesLabel(labelConfig.Inf1)) {
+              labels.push('Inf1');
+            }
+            if (matchesLabel(labelConfig.Inf2)) {
+              labels.push('Inf2');
+            }
+            
+            // Use Case Labels - INDEPENDENT (both can be applied)
+            if (matchesLabel(labelConfig.Inference)) {
+              labels.push('Inference');
+            }
+            if (matchesLabel(labelConfig.Training)) {
+              labels.push('Training');
+            }
+            
+            core.setOutput('labels', labels.join(','));
+            core.setOutput('has_labels', labels.length > 0);
+
+      - name: Apply labels to issue
+        if: steps.analyze_content.outputs.has_labels == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IFS=',' read -ra LABELS <<< "${{ steps.analyze_content.outputs.labels }}"
+          for label in "${LABELS[@]}"; do
+            gh issue edit ${{ github.event.issue.number }} --add-label "$label" -R ${{ github.repository }}
+          done
