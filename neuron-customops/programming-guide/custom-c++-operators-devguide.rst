@@ -160,7 +160,7 @@ In the example above, name refers to the name of the library file to be created 
 .. warning::
    The library file name should not be "builtin" as it is a reserved keyword.
 
-CustomOp also supports multicore execution mode. If you want to the library to run in multicore mode, pass the flag ``multicore=True`` into the ``load`` API. Notice that the execution mode is specified at the library level, so all the functions in the library run in the same mode. For more details of multicore CustomOp, please refer to `Using multiple GPSIMD cores` section in :ref:`custom-ops-api-ref-guide`.
+CustomOp also supports multicore execution mode. If you want the library to run in multicore mode, pass the flag ``multicore=True`` into the ``load`` API. Notice that the execution mode is specified at the library level, so all the functions in the library run in the same mode. For more details of multicore CustomOp, please refer to `Using multiple GPSIMD cores` section in :ref:`custom-ops-api-ref-guide`.
 
 Similar to PyTorch, the Neuron custom op will be available at ``torch.ops.<lib_name>.<op_name>`` where ``lib_name`` is defined in the ``NEURON_LIBRARY`` macro, and ``op_name`` is defined in the call to ``m.def``.
 ::
