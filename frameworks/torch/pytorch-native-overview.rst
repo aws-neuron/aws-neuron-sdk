@@ -17,6 +17,9 @@ Overview
 TorchNeuron
 ------------------
 
+.. important::
+    TorchNeuron is currently only available as part of a closed Beta progrm. If you would like to participate, contact your AWS Neuron support representative.
+
 ``TorchNeuron`` is an open-source PyTorch extension that provides new native backend integration for AWS Trainium. The implementation includes support for eager mode for rapid iteration and experimentation, ``torch.compile`` for just-in-time compilation, and standard distributed processing APIs. 
 TorchNeuron enables ecosystem compatibility and supports custom kernel development through the Neuron Kernel Interface (NKI) for performance optimization and research applications.
 

@@ -42,6 +42,29 @@ Bug Fixes
 * Fixed corrupted memory logs in multi-threaded model loads
 * Improved error handling to return a clear error instead of asserting during ``nrt_init``
 
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^
+The Neuron runtime was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.14              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Amazon Linux  AL2023         6.12              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Ubuntu        U24            6.14              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Amazon Linux  AL2023         6.12              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Ubuntu        U24            6.14              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Amazon Linux  AL2023         6.12              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+=========================== ============= ============== ================= ===============
+
 
 Neuron Driver
 ~~~~~~~~~~~~~
@@ -63,6 +86,32 @@ Bug Fixes
 * Added bounds checks on memory accesses where u64 wraparound attacks can lead to unauthorized memory access
 * Fixed use-after-free issues in sysfs cleanup flow that caused kernel crashes
 * Fixed race condition in sysfs access during driver initialization
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^
+The Neuron driver was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.14              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Amazon Linux  AL2023         6.12              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Inf2``                    Amazon Linux  AL2            5.10              2.26
+``Trn1``                    Ubuntu        U24            6.14              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Amazon Linux  AL2023         6.12              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Amazon Linux  AL2            5.10              2.26
+``Trn2``                    Ubuntu        U24            6.14              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Amazon Linux  AL2023         6.12              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Amazon Linux  AL2            5.10              2.26
+=========================== ============= ============== ================= ===============
 
 Neuron Collectives
 ~~~~~~~~~~~~~~~~~~~
