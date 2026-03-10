@@ -1,17 +1,14 @@
 .. meta::
    :description: Trainium3 Architecture Guide for NKI
    :keywords: AWS Neuron, Trainium3, NeuronCore-v4, NKI, architecture
-   :date-modified: 12/01/2025
+   :date-modified: 03/09/2026
 
 .. _trainium3_arch:
 
 Trainium3 Architecture Guide for NKI
 ====================================
 
-.. note::
-   Some Trainium3 architecture features mentioned in this topic do not have ``nki.isa`` API support at this time.
-
-In this guide, we will dive into hardware architecture of fourth-generation NeuronDevices: Trainium3. This guide will highlight major architectural updates compared to the previous generation (Trainium2). Therefore, we assume readers are familiar with :doc:`Trainium/Inferentia2 Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>` and :doc:`Trainium2 Architecture Guide for NKI </nki/guides/architecture/trainium2_arch>` to understand the basics of NeuronDevice Architecture. 
+In this guide, we will dive into the hardware architecture of fourth-generation NeuronDevices: Trainium3. This guide will highlight major architectural updates compared to the previous generation (Trainium2). Therefore, we assume readers are familiar with :doc:`Trainium/Inferentia2 Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>` and :doc:`Trainium2 Architecture Guide for NKI </nki/guides/architecture/trainium2_arch>` to understand the basics of NeuronDevice Architecture. 
 
 The diagram below shows a block diagram of a Trainium3 device, which consists of:
 
@@ -36,7 +33,7 @@ The figure below is a simplified NeuronCore-v4 diagram of the compute engines an
 
 .. image:: /nki/img/arch_images/nki-trn3-arch-2.png
 
-The NeuronCore-v4 SBUF capacity is 32MiB (up from 28 MiB in NeuronCore-v3), while the PSUM capacity remains the same at 2MiB. The engine data-path widths and frequencies are updated to the following:
+The NeuronCore-v4 SBUF capacity is 32 MiB (up from 28 MiB in NeuronCore-v3), while the PSUM capacity remains the same at 2 MiB. The engine data-path widths and frequencies are updated to the following:
 
 .. list-table:: Compute Engine Specifications
    :widths: 20 20 40 20
@@ -68,7 +65,7 @@ Sync Engine has not changed since :doc:`previous Trainium architectures </nki/gu
 Tensor Engine
 --------------
 
-Tensor Engine is optimized for tensor computations such as GEMM, CONV, and Transpose. A NeuronCore-v4 Tensor Engine delivers 315 MXFP8/MXFP4 TFLOPS, where MXFP8/MXFP4 are OCP (Open Compute Project) compliant data type formats. Besides quantized data types, a NeuronCore-v4 Tensor Engine also delivers 79 BF16/FP16/TF32 and 20 FP32 TFLOPS of tensor computations. The rest of this section describes new architectural features introduced in the NeuronCore-v4 Tensor Engine. 
+The Tensor Engine is optimized for tensor computations such as GEMM, CONV, and Transpose. A NeuronCore-v4 Tensor Engine delivers 315 MXFP8/MXFP4 TFLOPS, where MXFP8/MXFP4 are OCP (Open Compute Project) compliant data type formats. Besides quantized data types, a NeuronCore-v4 Tensor Engine also delivers 79 BF16/FP16/TF32 and 20 FP32 TFLOPS of tensor computations. The rest of this section describes new architectural features introduced in the NeuronCore-v4 Tensor Engine. 
 
 .. _arch-trn3-quad-mxfp:
 
@@ -79,15 +76,15 @@ The NeuronCore-v4 Tensor Engine (TensorE) supports two new input data types: MXF
 
 .. [1] Multiplying an MXFP8 matrix with an MXFP4 matrix is also allowed. 
 
-Logically, TensorE quadruples the MX matmul performance, as compared to BF16 performance, by quadrupling the maximum contraction dimension of the matmul instruction from 128 (for BF16/FP16) to 512, effectively presenting a 512x128 systolic array to the programmer. Under the hood, since the systolic array is still organized as a grid of 128x128 processing elements, each processing element performs four pairs of MX multiplications and also accumulation of the four multiplication results per cycle. This is similar to the Double-FP8 performance mode in the Trainium2 TensorE (discussed in :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>`), but the data layout requirements for MX matmul are distinct and discussed as below. 
+Logically, TensorE quadruples the MX matmul performance, as compared to BF16 performance, by quadrupling the maximum contraction dimension of the matmul instruction from 128 (for BF16/FP16) to 512, effectively presenting a 512x128 systolic array to the programmer. Under the hood, since the systolic array is still organized as a grid of 128x128 processing elements, each processing element performs four pairs of MX multiplications and also accumulation of the four multiplication results per cycle. This is similar to the Double-FP8 performance mode in the Trainium2 TensorE (discussed in :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>`), but the data layout requirements for MX matmul are distinct and discussed below. 
 
-Mathematically, an MX matmul instruction can perform a multiplication of an 128x512 matrix and a 512x512 matrix (that is, MxKxN matmul, M=128, K=512, N=512). The figure below shows a visualization of the two input matrices (x and y) and the matmul output matrix (output). The figure also highlights four elements (red, blue, yellow and green) in the first row of the x matrix and in the first column of the y matrix. These four elements are 128 (K//4) elements apart within the row and column. Each pair of same-colored elements from x and y matrices will get multiplied, and the multiplication results are subsequently accumulated in the matmul operation, inside the TensorE. We will use these elements to illustrate the SBUF layout requirements for these matrices next. 
+Mathematically, an MX matmul instruction can perform a multiplication of a 128x512 matrix and a 512x512 matrix (that is, MxKxN matmul, M=128, K=512, N=512). The figure below shows a visualization of the two input matrices (x and y) and the matmul output matrix (output). The figure also highlights four elements (red, blue, yellow and green) in the first row of the x matrix and in the first column of the y matrix. These four elements are 128 (K//4) elements apart within the row and column. Each pair of same-colored elements from x and y matrices will get multiplied, and the multiplication results are subsequently accumulated in the matmul operation, inside the TensorE. We will use these elements to illustrate the SBUF layout requirements for these matrices next. 
 
 .. _fig-mx-matmul:
 
 .. image:: /nki/img/arch_images/nki-trn3-arch-3.png
 
-The figure below shows how the above matrices should be laid out in SBUF in preparation for MX matmul. For visualization purposes, the x matrix is rotated 90 degrees, such that the contraction K dimension is aligned with the SBUF partition dimension. In addition, we pack the four highlighted elements that used to be 128 elements apart back-to-back along the free dimension. As a result, the matmul contraction dimension K=512 is split into two dimensions: (1) the partition dimension of size 128 and (2) the most minor (fastest) free dimension of size 4. The y (moving) matrix follows a similar four-element packing pattern along the free dimension. The MX matmul instruction requires that data is packed in such quads of elements. In NKI, programmers can directly work with MX data using special quad (x4) packed data types: float8_e5m2_x4, float8_e4m3fn_x4, and float4_e2m1fn_x4.
+The figure below shows how the above matrices should be laid out in SBUF in preparation for MX matmul. For visualization purposes, the x matrix is rotated 90 degrees, such that the contraction K dimension is aligned with the SBUF partition dimension. In addition, we pack the four highlighted elements that used to be 128 elements apart back-to-back along the free dimension. As a result, the matmul contraction dimension K=512 is split into two dimensions: (1) the partition dimension of size 128 and (2) the most minor (fastest) free dimension of size 4. The y (moving) matrix follows a similar four-element packing pattern along the free dimension. The MX matmul instruction requires that data is packed in such quads of elements. In NKI, programmers can directly work with MX data using special quad (x4) packed data types: ``float8_e5m2_x4``, ``float8_e4m3fn_x4``, and ``float4_e2m1fn_x4``.
 
 .. _fig-mx-sbuf-layout:
 
@@ -118,25 +115,18 @@ The moving data and scale tensor layout follows the same rules. Therefore, an MX
 3. moving data
 4. moving scale
 
-In NKI, programmers can define MX data tensors using the special x4 data types. The maximum tile size for stationary MX data tensor is [128, 128] in x4 data types ([128, 512] of actual values), while the maximum tile size for moving MX data tensor is [128, 512] in x4 data types ([128, 2048] of actual values). One convenience of the x4 datatypes is that the output matrix dimensions map directly to the sizes of the free dimensions of the input matrices. Similarly, the maximum tile size for stationary and moving MX scale tensors are [128, 128] and [128, 512] in nl.uint8, respectively. The API to invoke an MX matmul is:
+In NKI, programmers can define MX data tensors using the special x4 data types. The maximum tile size for stationary MX data tensor is [128, 128] in x4 data types ([128, 512] of actual values), while the maximum tile size for moving MX data tensor is [128, 512] in x4 data types ([128, 2048] of actual values). One convenience of the x4 datatypes is that the output matrix dimensions map directly to the sizes of the free dimensions of the input matrices. Similarly, the maximum tile size for stationary and moving MX scale tensors are [128, 128] and [128, 512] in ``nl.uint8``, respectively. The API to invoke an MX matmul is :doc:`nisa.nc_matmul_mx </nki/api/generated/nki.isa.nc_matmul_mx>`:
 
 .. code-block:: python
 
-   nisa.nc_matmul_mx(moving, stationary, moving_scale, stationary_scale)
+   nisa.nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale)
+
+.. _arch-trn3-bf16-psum:
 
 BF16 Matmul Results in PSUM
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Prior to the NeuronCore-v4, the Tensor Engine always passes FP32 matrix multiplication results to PSUM unless transpose mode is turned on. Similarly, the PSUM buffer was restricted to FP32 near-memory accumulation (fp32_psum_tensor += fp32_matmul_output). Starting with the NeuronCore-v4, the Tensor Engine allows the matrix multiplication instruction (nisa.nc_matmul) to store BF16 data into the PSUM buffer directly and also to perform addition to a BF16 tensor stored in PSUM. 
-
-NKI programmers can use this feature through the existing nisa.nc_matmul API: 
-
-.. code-block:: python
-
-   psum_tensor = nl.ndarray((128, 512), dtype=nl.bfloat16, buffer=nl.psum)
-
-   nisa.nc_matmul(..., dst=psum_tensor, psum_accumulate_flags=1)
-   nisa.nc_matmul(..., dst=psum_tensor, psum_accumulate_flags=0)
+Prior to the NeuronCore-v4, the Tensor Engine always passes FP32 matrix multiplication results to PSUM unless transpose mode is turned on. Similarly, the PSUM buffer was restricted to FP32 near-memory accumulation (fp32_psum_tensor += fp32_matmul_output). Starting with the NeuronCore-v4, the Tensor Engine allows the matrix multiplication instruction (:doc:`nisa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>`) to store BF16 data into the PSUM buffer directly and also to perform addition to a BF16 tensor stored in PSUM. 
 
 Note that the accumulation performed during a matmul operation within the systolic array is still performed using FP32 data. When writing the matmul results into a BF16 PSUM tensor location, the downcast from FP32 to BF16 is performed immediately before the write. The downcast can use the RNE (round nearest even) or SR (stochastic rounding) mode. The figure below illustrates this data flow. 
 
@@ -144,7 +134,7 @@ Note that the accumulation performed during a matmul operation within the systol
 
 .. image:: /nki/img/arch_images/nki-trn3-arch-8.png
 
-When adding the matmul results to an existing BF16 tensor stored in PSUM the following operations are performed:
+When adding the matmul results to an existing BF16 tensor stored in PSUM, the following operations are performed:
 
 * The existing PSUM tensor (red) is upcast to FP32.
 * The PSUM tensor (now in FP32) and the TensorE output (yellow) are added together at FP32 precision.
@@ -181,26 +171,26 @@ The VectorE can natively quantize BF16/FP16 data to produce this layout using th
 
 The source FP16/BF16 data must be in SBUF, and has to be in a layout that exactly matches the target MXFP8 data layout (QuantizeMX preserves the data layout). The target MXFP8 data and scales also have to be in SBUF. The quantization instruction can quantize four input elements per partition, per cycle (i.e., 4x Vector performance mode).
 
-In NKI, programmers can perform such an MX data type quantization using the nisa.quantize_mx API.
+In NKI, programmers can perform such an MX data type quantization using the :doc:`nisa.quantize_mx </nki/api/generated/nki.isa.quantize_mx>` API.
 
 Fast Exponential Evaluation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The NeuronCore-v4 Vector Engine introduces a new instruction to perform fast exponential evaluation (nisa.exponential(dst=out_tile, src=in_tile, ...)), at 4x the throughput compared to the nisa.activation(op=nl.exp) instruction on the Scalar Engine. In addition to the exponential function, the instruction on Vector Engine can also apply a subtraction before the exponential function and an accumulation after:
+The NeuronCore-v4 Vector Engine introduces a new instruction to perform fast exponential evaluation (:doc:`nisa.exponential </nki/api/generated/nki.isa.exponential>`), at 4x the throughput compared to the :doc:`nisa.activation </nki/api/generated/nki.isa.activation>` (``op=nl.exp``) instruction on the Scalar Engine. In addition to the exponential function, the instruction on Vector Engine can also apply a subtraction before the exponential function and an accumulation after:
 
 .. code-block:: python
 
    # Inputs:
    # src tile [M, N]
-   # row_max tile [M, 1]
+   # max_value tile [M, 1]
    # Outputs:
    # dst tile of the same shape [M, N]
-   # row_sum tile [M, 1]
+   # reduce_res tile [M, 1]
    for i in range(M): # parallel (partition) dimension
-       row_max[i, 0] = 0
+       reduce_res[i, 0] = 0
        for j in range(N): # sequential (free) dimension
-           dst[i, j] = exp(src[i, j] - row_max[i, 0])
-           row_max[i, 0] += dst[i, j]
+           dst[i, j] = exp(src[i, j] - max_value[i, 0])
+           reduce_res[i, 0] += dst[i, j]
 
 This particular pattern is useful to speed up the Softmax operator, which is commonly on the critical path of long context length self-attention in large language models (LLMs):
 
@@ -210,12 +200,12 @@ This particular pattern is useful to speed up the Softmax operator, which is com
 
 X is a vector of attention scores in the context of self-attention, which corresponds to a row in the src tile in the above instruction pseudo code.
 
-XORWOW-based PRNG 
+XORWOW-based PRNG
 ^^^^^^^^^^^^^^^^^
 
 The NeuronCore-v4 VectorE provides hardware support to produce PRNG (pseudo-random) values using XORWOW as the underlying algorithm. Compared to the LFSR-based algorithm used in VectorE prior to NeuronCore-v4, XORWOW produces higher quality random values. The NeuronCore-v4 VectorE can produce 4x 32-bit PRNG values per compute lane per engine cycle.
 
-In addition, the NeuronCore-v4 VectorE introduces support for loading and storing XORWOW random states from and to SBUF (or PSUM), across all 128 compute lanes. Within each compute lane, four XORWOW random states are tracked to maintain the ``nisa.rand2()`` instruction throughput, with each state comprising 6 ``uint32`` values. For more details, refer to the nisa.rand_set_state and nisa.rand_get_state API documentation. This new state load/store capability in NeuronCore-v4 VectorE, which was not available in previous NeuronCore versions, allows users to save and restore random states for reproducible training runs more easily. 
+In addition, the NeuronCore-v4 VectorE introduces support for loading and storing XORWOW random states from and to SBUF (or PSUM), across all 128 compute lanes. Within each compute lane, four XORWOW random states are tracked to maintain the :doc:`nisa.rand2 </nki/api/generated/nki.isa.rand2>` instruction throughput, with each state comprising 6 ``uint32`` values. For more details, refer to the :doc:`nisa.rand_set_state </nki/api/generated/nki.isa.rand_set_state>` and :doc:`nisa.rand_get_state </nki/api/generated/nki.isa.rand_get_state>` API documentation. This new state load/store capability in NeuronCore-v4 VectorE, which was not available in previous NeuronCore versions, allows users to save and restore random states for reproducible training runs more easily. 
 
 Scalar Engine
 --------------
@@ -225,26 +215,36 @@ The Scalar Engine is optimized for scalar computations in which every element of
 Performance mode
 ^^^^^^^^^^^^^^^^^
 
-The Trainium3 ScalarE now natively supports the tensor_scalar and tensor_copy instructions (same as VectorE), and offers up to 2x performance uplift for BF16/FP16 datatypes, which is the same as the 2x performance mode on VectorE introduced with Trainium2. For those instructions, NKI users are able to select the execution engine, which can help offload either one of the engines, or load balance between them, depending on workload characteristics.
+The Trainium3 ScalarE now natively supports the :doc:`tensor_scalar </nki/api/generated/nki.isa.tensor_scalar>` and :doc:`tensor_copy </nki/api/generated/nki.isa.tensor_copy>` instructions (same as VectorE), and offers up to 2x performance uplift for BF16/FP16 datatypes, which is the same as the 2x performance mode on VectorE introduced with Trainium2. For those instructions, NKI users are able to select the execution engine, which can help offload either one of the engines, or load balance between them, depending on workload characteristics.
 
-More flexible nisa.activation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. _arch-trn3-activation2:
+
+More flexible ``nisa.activation``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+   The Activation2 instruction does not have ``nki.isa`` API support at this time.
 
 Trainium3 introduces the Activation2 instruction, which provides more flexibility to users compared to the existing Activation instruction. Unlike Activation, which only supports the combination of scale multiplication and bias addition, Activation2 supports bias subtraction and allows users to disable scale multiplication and bias addition entirely. Further, while Activation only supported add as a reduce command, Activation2 supports add, max, min, absmax, and absmin reductions.
 
 Data Movement and DMA updates
 ------------------------------
 
-SBUF/PSUM indirect access 
+.. _arch-trn3-indirect-access:
+
+SBUF/PSUM indirect access
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The NeuronCore-v4 SBUF/PSUM introduce a new indirect addressing mode for all compute engines (TensorE/VectorE/ScalarE/GpsimdE), which allows gathering or scattering SBUF and PSUM tensors along the free (F) dimension. Consider a tensor of shape [128, 512] located in SBUF, which occupies 128 partitions with 512 elements per partition. Suppose a user is interested in only accessing the elements 0, 128 and 384 along the free dimension across all 128 partitions for a single computation operation, such as nisa.nc_matmul:
+.. note::
+   SBUF/PSUM indirect access for compute engines does not have ``nki.isa`` API support at this time.
+
+The NeuronCore-v4 SBUF/PSUM introduce a new indirect addressing mode for all compute engines (TensorE/VectorE/ScalarE/GpsimdE), which allows gathering or scattering SBUF and PSUM tensors along the free (F) dimension. Consider a tensor of shape [128, 512] located in SBUF, which occupies 128 partitions with 512 elements per partition. Suppose a user is interested in only accessing the elements 0, 128 and 384 along the free dimension across all 128 partitions for a single computation operation, such as ``nisa.nc_matmul``:
 
 .. _fig-indirect-access-1:
 
 .. image:: /nki/img/arch_images/nki-trn3-arch-12.png
 
-Since these three vectors do not have a uniform stride along the free dimension; the access pattern is not a tensorized pattern (i.e. a regular N-dimensional access pattern). Prior to NeuronCore-v4, such an access pattern would require three separate instructions (such as nisa.nc_matmul) to perform the computation on all three vectors. 
+Since these three vectors do not have a uniform stride along the free dimension, the access pattern is not a tensorized pattern (i.e. a regular N-dimensional access pattern). Prior to NeuronCore-v4, such an access pattern would require three separate instructions (such as ``nisa.nc_matmul``) to perform the computation on all three vectors. 
 
 In NeuronCore-v4, all compute engines can perform a gather access pattern to directly access those three vectors in a single instruction:
 
@@ -264,17 +264,23 @@ Both styles of indirection use a separate offset tensor to encode which vectors 
 SBUF Read-Add-Write
 ^^^^^^^^^^^^^^^^^^^^
 
+.. note::
+   SBUF Read-Add-Write does not have ``nki.isa`` API support at this time.
+
 NeuronCore-v4 introduces an enhanced SBUF capability that enables on-the-fly tensor accumulation near memory. This feature allows DMA engines to perform B+=A operations, where tensor B resides in SBUF and tensor A can be sourced from any accessible memory location (such as HBM or SBUF). Tensors A and B can be either BF16 or FP32 data types, but they must have a matching data type within a single DMA transfer performing the Read-Add-Write operation. This near-memory accumulation maintains the same throughput as standard DMA copy operations to SBUF (compared to 50% DMA throughput via DMA collective compute engines prior to NeuronCore-v4), enabling efficient in-place tensor updates without additional memory overhead.
 
-The figure below illustrates the data flow that is used to enable this SBUF accumulation feature. As the first, a DMA unit transfers tensor A to the ReadAddWrite unit adjacent to the SBUF. The ReadAddWrite unit then retrieves tensor B from SBUF, performs the addition of A and B, and writes the result back to tensor B's original location in SBUF. 
+The figure below illustrates the data flow that is used to enable this SBUF accumulation feature. First, a DMA unit transfers tensor A to the ReadAddWrite unit adjacent to the SBUF. The ReadAddWrite unit then retrieves tensor B from SBUF, performs the addition of A and B, and writes the result back to tensor B's original location in SBUF. 
 
 .. _fig-read-add-write:
 
 .. image:: /nki/img/arch_images/nki-trn3-arch-15.png
 
-Trainium3 DMA engines support Traffic Shaping, which enables configurable bandwidth allocation across different DMA operations. The DMA Traffic Shaping feature supports 4 distinct classes of service, enabling fine-grained control over the priorities of data movement. This capability is particular beneficial when optimizing parallel computation and communcation (collevives operations) across multiple NeuronCores.
+.. _arch-trn3-traffic-shaping:
 
-DMA QoS
-^^^^^^^
+DMA Traffic Shaping
+^^^^^^^^^^^^^^^^^^^^
 
-The Trainium3 DMA engines support QoS (quality-of-service), configured per DMA queue through user registers. Note that this implementation of QoS uses a "strict priority": the transfers in a DMA queue with the highest priority are always scheduled first, before any other DMA queues are serviced. This DMA queue-based QoS feature is particularly useful in the context of parallelizing computation and communication (collectives operation) among multiple NeuronCores.
+.. note::
+   DMA Traffic Shaping does not have ``nki.isa`` API support at this time.
+
+Trainium3 DMA engines support Traffic Shaping, which enables configurable bandwidth allocation across different DMA operations. The DMA Traffic Shaping feature supports 4 distinct classes of service, enabling fine-grained control over the priorities of data movement. This capability is particularly beneficial when optimizing parallel computation and communication (collective operations) across multiple NeuronCores.

@@ -15,11 +15,11 @@ Introducing NKI: Complete Kernel Development Solution
 
 Neuron Kernel Interface (NKI) is an open source tool for developing kernels for Trainium hardware. It has three main parts: 
 
-The first part is the NKI Programming Interface, which offers two APIs: ``nki.lang`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
+* The first part is the NKI Programming Interface, which offers two APIs: ``nki.lang`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
 
-The second part is the NKI Compiler, built on MLIR, which turns NKI kernel code into optimized hardware instructions. It keeps the execution order and memory allocation that developers specify. The third part is the NKI Library (``NKI-Lib``), which provides ready-to-use optimized kernels that developers can use directly or learn from.
+* The second part is the NKI Compiler, built on MLIR, which turns NKI kernel code into optimized hardware instructions. It keeps the execution order and memory allocation that developers specify. 
 
-The third is the NKI Compiler, which is available at https://github.com/aws-neuron/nki. Neuron also provides a kernel library with the NKI Library, found at https://github.com/aws-neuron/nki-library. (Both are released under the Apache 2.0 license.) 
+* The third part is the NKI Library (``NKI-Lib``), which provides ready-to-use optimized kernels that developers can use directly or learn from.
 
 Using MLIR enables NKI integration with the LLVM ecosystem and compiler research community. NKI's open-source code lets everyone see how the compilation works, from the Python code to the final hardware instructions. Researchers can try new compiler techniques, framework developers can learn how kernels work with their code, and the community can improve both the compiler and kernel library. If you want to start using NKI, you can find tutorials available at https://github.com/aws-neuron/nki-samples.
 

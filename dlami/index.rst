@@ -304,7 +304,7 @@ SSM Parameter Prefix
       - /aws/service/neuron/dlami/jax-0.7/ubuntu-24.04
 
     * - Deep Learning AMI Neuron PyTorch Inference vLLM (Ubuntu 24.04)
-      - /aws/service/neuron/dlami/pytorch-inference-vllm/ubuntu-24.04
+      - /aws/service/neuron/dlami/pytorch-inference-vllm-0.13/ubuntu-24.04
 
     * - Deep Learning AMI Neuron PyTorch 2.8 (Ubuntu 22.04)
       - /aws/service/neuron/dlami/pytorch-2.8/ubuntu-22.04

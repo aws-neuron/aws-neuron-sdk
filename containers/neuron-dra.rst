@@ -31,21 +31,6 @@ To review and download the individual resource claim templates, visit this page:
 
 * :doc:`/containers/files/index-dra`.
 
-**Directory structure**:
-
-.. code-block:: text
-
-   containers/files/
-              └── specs/
-                  ├── 1x4-connected-devices.yaml
-                  ├── 2-node-inference-us.yaml
-                  ├── 4-node-inference-us.yaml
-                  ├── all-devices.yaml
-                  ├── lnc-setting-trn2.yaml
-                  ├── specific-driver-version.yaml
-                  └── us-and-lnc-config.yaml
-                      
-
 What are the benefits of using DRA over device plugin?
 -------------------------------------------------------
 

@@ -6,21 +6,7 @@
 AWS Neuron Dynamic Resource Allocation (DRA) on Kubernetes: Support files
 =========================================================================
 
-This directory contains templates supporting AWS Neuron Dynamic Resource Allocation (DRA) on Kubernetes. You can view and download these files from the links below.
-
-**Directory structure**:
-
-.. code-block:: text
-
-   containers/files/
-              └── specs/
-                  ├── 1x4-connected-devices.yaml
-                  ├── 2-node-inference-us.yaml
-                  ├── 4-node-inference-us.yaml
-                  ├── all-devices.yaml
-                  ├── lnc-setting-trn2.yaml
-                  ├── specific-driver-version.yaml
-                  └── us-and-lnc-config.yaml
+This page provides templates supporting AWS Neuron Dynamic Resource Allocation (DRA) on Kubernetes. You can view and download these files from the links below.
 
 Resource Claim Specifications
 -----------------------------
