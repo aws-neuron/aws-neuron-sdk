@@ -41,6 +41,7 @@ When profiling LLMs it is usually desirable to use only a subset of the model's 
     model_id = "Qwen/Qwen3-8B-Base"
     config = transformers.AutoConfig.from_pretrained(model_id)
     config.num_hidden_layers = 4
+    config.layer_types = ["full_attention"] * 4
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_id)
     output_dir = "4layer_qwen3"
 
@@ -93,10 +94,12 @@ Begin by saving the following python script as ``qwen3_offline_inference.py``:
         model="4layer_qwen3",
         max_num_seqs=4,
         max_model_len=128,
-        override_neuron_config={
-            "enable_bucketing":False,
+        additional_config={
+            "override_neuron_config": {
+                "enable_bucketing":False,
+            },
         },
-        device="neuron",
+        enable_prefix_caching=False,
         tensor_parallel_size=8)
 
     # Run inference using the sample prompts

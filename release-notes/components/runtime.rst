@@ -462,9 +462,9 @@ Bug Fixes
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
-* Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types).
-* ``Inf1`` instance users, Neuron driver 2.21 and below will remain supported with regular security patches.
-* ``Inf1`` instance users are advised to pin the Neuron driver version to ``2.21.*`` in their installation script.
+* Starting with Neuron Release 2.26, Neuron driver versions above 2.24 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types).
+* ``Inf1`` instance users, only Neuron driver version 2.24 will remain supported with regular security patches.
+* ``Inf1`` instance users are advised to pin the Neuron driver version to ``2.24.*`` in their installation script.
 
 
 ----

@@ -26,6 +26,14 @@ Neuron Runtime Library 2.28.19.0
 * Added rank ID to all events emitted from the Profiler 2.0 system trace.
 * Improved timestamp alignment of Profiler 2.0 NeuronCore and CPU system trace events enhancing the accuracy of the trace timeline.
 
+Neuron Driver 2.24.13.0
+^^^^^^^^^^^^^^^^^^^^^^
+* Compatibility fixes for Linux kernel 6.18.
+
+.. note::
+
+   This is a patch release for ``Inf1`` users. Neuron driver version 2.24 is the last driver version to support ``Inf1`` instances.
+
 Neuron Driver 2.24.7.0
 ^^^^^^^^^^^^^^^^^^^^^^
 * Fixed installation issue causing builds to fail for Linux Kernels 6.13+.

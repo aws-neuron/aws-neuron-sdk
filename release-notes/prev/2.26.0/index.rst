@@ -197,7 +197,7 @@ Ending support in 2.26.0
 *" End-of-support" means that AWS Neuron no longer supports the feature, tool, or API indicated in the note as of this release.*
 
 * End-of-support for the Transformers NeuronX library starts with the 2.26.0 release of the AWS Neuron SDK. As a result, the PyTorch inference Deep Learning Container (DLC) will no longer include the ``transformers-neuronx`` package and Neuron no longer provides the ``transformers_neuronx`` virtual environment in both single and multi-framework DLAMIs. For more details, see :ref:`announce-eos-tnx`.
-* Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types). For ``Inf1`` instance users, Neuron driver versions less than 2.21 will remain supported with regular security patches.
+* Starting with Neuron Release 2.26, Neuron driver versions above 2.24 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types). For ``Inf1`` instance users, only Neuron driver version 2.24 will remain supported with regular security patches.
 * The Beta versions of the :ref:`PyTorch NeuronCore Placement APIs <torch_neuron_core_placement_guide>` are no longer supported with this release.
 
 Known issues: Samples
