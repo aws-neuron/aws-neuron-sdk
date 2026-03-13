@@ -728,7 +728,7 @@ Use the ``neuron-explorer`` tool from ``aws-neuronx-tools`` to start the UI and 
 
 .. code-block:: bash
 
-   neuron-explorer view
+   neuron-explorer view --data-path .
 
 By default, the UI will be launched on port 3001 and the API server will be launched on port 3002.
 

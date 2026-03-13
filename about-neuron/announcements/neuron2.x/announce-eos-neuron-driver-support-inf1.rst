@@ -8,6 +8,10 @@
 Upcoming changes to Neuron driver 2.21 support for Inf1 starting Neuron 2.26 release
 ------------------------------------------------------------------------------------
 
+.. note::
+
+   This announcement has been superseded. The correct last supported Neuron driver version for ``Inf1`` is **2.24**, not 2.21. See :ref:`announce-correction-neuron-driver-inf1-support` for details.
+
 Starting with Neuron Release 2.26, Neuron driver versions above 2.21 will only support non-Inf1 instances (such as ``Trn1``, ``Inf2``, or other instance types). 
 For ``Inf1`` instance users, Neuron driver versions <  2.21 will remain supported with regular security patches. 
 
