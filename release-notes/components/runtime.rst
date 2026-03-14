@@ -69,6 +69,17 @@ Instance Family               OS Type       OS Version     Kernel Version    GLI
 Neuron Driver
 ~~~~~~~~~~~~~
 
+**Version:** 2.26.10.0
+
+Date of Release: 03/12/2026
+
+Bug Fixes
+^^^^^^^^^
+
+* Compatibility fixes for Linux kernel 6.18.
+
+.. _neuron-driver-2-26-5-0:
+
 **Version:** 2.26.5.0
 
 Improvements
@@ -81,9 +92,12 @@ Improvements
 Bug Fixes
 ^^^^^^^^^
 
-* Fixed kernel crash where non-validated input could trigger BUG_ON in UDMA code requiring an instance reboot to recover
+* Fixed kernel crash where non-validated input to DMA-related IOCTLs could trigger BUG_ON requiring an instance reboot to recover
 * Added BAR bounds validation during ``ncdev_bar_read`` to prevent out-of-bounds register access through IOCTLs
-* Added bounds checks on memory accesses where u64 wraparound attacks can lead to unauthorized memory access
+* Fixed bounds checks on memory accesses where u64 wraparound attacks can lead to out-of-bounds memory access
+
+We would like to thank Shaul Ben Hai from SentinelOne Security Research for reporting the above three issues.
+
 * Fixed use-after-free issues in sysfs cleanup flow that caused kernel crashes
 * Fixed race condition in sysfs access during driver initialization
 
