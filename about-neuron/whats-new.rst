@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 02/26/2026
+    :date-modified: 03/13/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -23,9 +23,18 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.28.0 (2/26/2026)
+        **Latest release**: 2.28.1 (3/13/2026)
 
 ----
+
+.. _whats-new-2026-02-26-v2_28_1:
+
+AWS Neuron SDK 2.28.1 Patch Available
+--------------------------------------
+
+**Posted on**: Match 13, 2026
+
+AWS Neuron provides a patch version, 2.28.1, to address a Neuron Driver compatibility issue with Linux kernel 6.18. 
 
 .. _whats-new-2026-02-26-v2_28:
 

@@ -7,6 +7,13 @@ Neuron Custom C++ Library Release Notes
 
     Neuron Custom C++ Operators feature is currently supported on NeuronCore-v2 architecture only, which is found in Trainium (Trn1) and second-generation Inferentia (Inf2) chips.
 
+aws-neuronx-gpsimd-customop-lib [0.20.7]
+-----------------------------------------
+
+Date: 03/12/2026
+
+* Fixed package dependency issue with version 0.20.4, initially released as part of Neuron release 2.28.0.
+
 aws-neuronx-gpsimd-customop-lib [0.13]
 -------------------------------------
 

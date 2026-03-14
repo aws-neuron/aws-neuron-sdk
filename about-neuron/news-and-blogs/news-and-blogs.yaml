@@ -238,3 +238,44 @@ all_articles:
     keywords: ["trainium", "inferentia", "hami", "scheduling", "topology"]
     featured: false
 
+  # Red Hat / AWS Neuron Collaboration
+  - title: "Red Hat to Deliver Enhanced AI Inference Across AWS"
+    url: "https://www.redhat.com/en/about/press-releases/red-hat-deliver-enhanced-ai-inference-across-aws"
+    description: "Red Hat and AWS expand collaboration to power enterprise-grade generative AI using Red Hat AI Inference Server on AWS Inferentia2 and Trainium3."
+    author: "Red Hat"
+    date: "2025-12-02"
+    category: "news"
+    locale: "en-US"
+    keywords: ["red-hat", "inferentia2", "trainium3", "vllm", "openshift", "inference", "collaboration"]
+    featured: false
+
+  - title: "Run cost-effective AI workloads on OpenShift with AWS Neuron Operator"
+    url: "https://developers.redhat.com/articles/2025/12/02/cost-effective-ai-workloads-openshift-aws-neuron-operator"
+    description: "How to use the AWS Neuron Operator to run LLM inference with vLLM on AWS AI chips in Red Hat OpenShift."
+    author: "Red Hat"
+    date: "2025-12-02"
+    category: "tutorial"
+    locale: "en-US"
+    keywords: ["red-hat", "openshift", "neuron-operator", "vllm", "inferentia", "trainium", "kubernetes"]
+    featured: false
+
+  - title: "AWS Neuron Operator for AI Chips on AWS — GitHub Releases"
+    url: "https://github.com/awslabs/operator-for-ai-chips-on-aws/releases"
+    description: "Open-source AWS Neuron Operator for Kubernetes and Red Hat OpenShift, enabling native support for AWS Inferentia and Trainium accelerators."
+    author: "AWS"
+    date: "2025-12-02"
+    category: "news"
+    locale: "en-US"
+    keywords: ["neuron-operator", "kubernetes", "openshift", "open-source", "inferentia", "trainium"]
+    featured: false
+
+  - title: "Red Hat AI Inference Server — vLLM Neuron Container Image (RHEL 9)"
+    url: "https://catalog.redhat.com/en/software/containers/rhaiis/vllm-neuron-rhel9/698c42b20b626d81c97abd7f"
+    description: "Certified container image for the Red Hat AI Inference Server with vLLM optimized for AWS Inferentia and Trainium accelerators via the AWS Neuron SDK. Provides enterprise-grade, high-performance LLM inference serving on RHEL 9, enabling production deployment of generative AI models on AWS AI chips through Red Hat OpenShift or Podman."
+    author: "Red Hat"
+    date: "2025-12-02"
+    category: "news"
+    locale: "en-US"
+    keywords: ["red-hat", "vllm", "neuron", "inferentia", "trainium", "container", "rhel9", "inference", "openshift"]
+    featured: true
+

@@ -24,6 +24,8 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
     Llama3.1 405B with Speculative Decoding </libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial>
     Llama3.1 70B Instruct Accuracy Evaluation </libraries/nxd-inference/tutorials/trn1-llama3.1-70b-instruct-accuracy-eval-tutorial>
     Llama3.1 8B with Multi-LoRA </libraries/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial>
+    Llama3.2 Multimodal </libraries/nxd-inference/tutorials/llama3.2-multimodal-tutorial>
+    Llama3.3 70B FP8 </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-fp8>
     Llama3.3 70B with APC </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-apc-tutorial>
     Llama3.3 70B with Data Parallelism </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial>
     Llama3.3 70B with Speculative Decoding </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial>
@@ -105,7 +107,14 @@ Welcome to the NeuronX Distributed (NxD) Inference tutorials collection. These s
         :link-type: doc
         :class-card: sd-rounded-3
 
-        Deploy Llama3.3 70B on Trn2 with Attention Pattern Caching (APC) to improve inference performance for repetitive patterns.
+        Deploy Llama3.3 70B on Trn2 with Automatic Prefix Caching (APC) to improve inference performance for repetitive patterns.
+    
+    .. grid-item-card:: Llama3.3 70B FP8 on Trainium2
+        :link: /libraries/nxd-inference/tutorials/trn2-llama3.3-70b-fp8
+        :link-type: doc
+        :class-card: sd-rounded-3
+
+        Deploy Llama3.3 70B FP8 quantized model on Trainium2.
 
     .. grid-item-card:: Llama4 Tutorial
         :link: /libraries/nxd-inference/tutorials/llama4-tutorial

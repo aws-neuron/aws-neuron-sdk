@@ -27,12 +27,12 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
 
    .. grid-item-card:: 
       :class-card: sd-border-2
-      :link: /release-notes/2.28.0
+      :link: /release-notes/2.28.1
       :link-type: doc
 
       **Latest AWS Neuron SDK release: 2.28.0**
       ^^^
-      On **02/26/2026**, AWS released version **2.28.0** of the Neuron SDK.
+      On **03/13/2026**, AWS released version **2.28.1** of the Neuron SDK, a patch for Neuron SDK version **2.28.0**.
 
       For more details, select this card and browse the release notes. 
 
@@ -88,8 +88,8 @@ Each Neuron component has specific release notes across Neuron versions.
      - 2.28.0
      - 2.30.50.0
    * - :doc:`Neuron Driver </release-notes/components/runtime>`
-     - 2.28.0
-     - 2.26.5.0
+     - 2.28.1
+     - 2.26.10.0
    * - :doc:`Neuron Collectives </release-notes/components/runtime>`
      - 2.28.0
      - 2.30.58.0
