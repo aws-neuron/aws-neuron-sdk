@@ -17,13 +17,13 @@ Use Kiro, Quick, and Amazon Q in the AWS console as your Neuron Experts for gene
             :link: https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-on-aws.html
 
 .. card:: Ask Kiro IDE
-            :https://kiro.dev/
+            :link: https://kiro.dev/
 
 .. card:: Ask Kiro CLI
-            :https://kiro.dev/cli
+            :link: https://kiro.dev/cli
 
 .. card:: Ask Quick
-            :https://aws.amazon.com/quick/
+            :link: https://aws.amazon.com/quick/
 
 .. card:: Guidelines for Quality Results
             :link: amazon-q-dev-guidelines
