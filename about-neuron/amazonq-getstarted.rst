@@ -7,16 +7,23 @@
 
 .. _amazon-q-dev:
 
-Ask Q Developer
+Ask Amazon AI helper tools
 ==================
 
-Use Q Developer as your Neuron Expert for general Neuron technical guidance and to jumpstart your NKI kernel developement.
+Use Kiro, Quick, and Amazon Q in the AWS console as your Neuron Experts for general Neuron technical guidance and to jumpstart your NKI kernel developement.
 
-.. card:: Ask Q through Chat
-            :link: https://aws.amazon.com/q/
 
-.. card:: Ask Q in your IDE
-            :link: https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.amazon-q-vscode
+.. card:: Ask Q on AWS apps and websites
+            :link: https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-on-aws.html
+
+.. card:: Ask Kiro IDE
+            :https://kiro.dev/
+
+.. card:: Ask Kiro CLI
+            :https://kiro.dev/cli
+
+.. card:: Ask Quick
+            :https://aws.amazon.com/quick/
 
 .. card:: Guidelines for Quality Results
             :link: amazon-q-dev-guidelines
@@ -45,8 +52,7 @@ Example Prompts
 ~~~~~~~~~~~~~~~~~
 
 .. note::
-   Amazon Q Developer support for Neuron is currently in
-   Beta. Therefore, Q may not always produce optimal or fully accurate results.
+   Amazon AI helper tools may not be fully synched with the latest Neuron features. Therefore, they may not always produce optimal or fully accurate results.
 
 1. “Explain the key features and benefits of AWS Neuron Kernel Interface (NKI).”
 2. "How do different parallelism strategies (data, pipeline, tensor) affect training performance on Neuron?"
