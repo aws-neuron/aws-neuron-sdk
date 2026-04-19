@@ -186,7 +186,7 @@ If you want to request a feature or report a critical issue, you can contact us 
    :hidden:
 
    App Notes <appnotes/index>
-   Ask Amazon Q </about-neuron/amazonq-getstarted>
+   Ask Amazon AI helper tools </about-neuron/amazonq-getstarted>
    Benchmarks </about-neuron/benchmarks/index>
    Beta Participation </about-neuron/beta-participation>
    Model Samples </about-neuron/models/index>
