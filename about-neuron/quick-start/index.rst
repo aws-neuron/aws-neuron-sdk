@@ -78,7 +78,7 @@ Specialized Quickstarts
       
       :bdg-info:`Inf2` :bdg-info:`Trn1`
 
-   .. grid-item-card:: 🤖 Amazon Q Developer
+   .. grid-item-card:: 🤖 Amazon AI helper tools
       :link: amazon-q-dev
       :link-type: ref
       :class-card: sd-border-1
