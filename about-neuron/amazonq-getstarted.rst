@@ -8,7 +8,7 @@
 .. _amazon-q-dev:
 
 Ask Amazon AI helper tools
-==================
+===========================
 
 Use Kiro, Quick, and Amazon Q in the AWS console as your Neuron Experts for general Neuron technical guidance and to jumpstart your NKI kernel developement.
 
