@@ -23,7 +23,7 @@ Improvements
 
 * The System Trace Viewer now supports the full suite of Device widgets, enabling multi-device profile analysis. Users can analyze hardware events across all linked Device Profiles within a single System Profile. See :doc:`Neuron Explorer system profiling </tools/neuron-explorer/overview-system-profiles>`.
 * Introduced Memory Viewer in Neuron Explorer, enabling you to inspect low-level memory allocation details and usage patterns. See :doc:`Neuron Explorer Memory Viewer </tools/neuron-explorer/overview-memory-viewer>`.
-* Neuron Explorer for Visual Studio Code is now available on the Visual Studio Code Extension Marketplace, enabling simpler installation and automatic updates. It is also available on Open VSX - :download:`Neuron Explorer Visual Studio Code Extension <https://open-vsx.org/extension/amazonwebservices/neuron-explorer>`.
+* Neuron Explorer for Visual Studio Code is now available on the Visual Studio Code Extension Marketplace, enabling simpler installation and automatic updates. See :ref:`download-neuron-explorer-vscode`.
 * Summary Viewer page in Neuron Explorer now includes system-level profile data, enabling you to view summary metrics for system and device profiles in a single view. See :doc:`Neuron Explorer Summary Viewer </tools/neuron-explorer/overview-summary-page>`.
 * System Timeline now supports Neuron device HBM usage, showing a breakdown of memory allocation by usage category (such as tensors, scratchpad), enabling you to debug out-of-memory issues.
 * Introduced Box Selection Summary in Neuron Explorer, enabling you to view aggregated device profile information for a selected bounding box region. See :ref:`box-selection-summary`.

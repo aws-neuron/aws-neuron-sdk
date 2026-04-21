@@ -204,14 +204,14 @@ Optimization 2: Blocking M and N Dimension
 While hoisting the load out of the innermost loop eliminates some redundant
 loads, we can push this idea further to increase arithmetic intensity.
 
-Each time we load K elements from the MxK matrix stored in HBM, Optimization 1 allows us 
-to utilize those same elements N different times. 
-However, SBUF capacity is much higher than `K` elements currently cached from optimization 1. 
-We can load multiple K elements from the MxK matrix at a time, result in higher data reuse. 
+Each time we load K elements from the MxK matrix stored in HBM, Optimization 1 allows us
+to utilize those same elements N different times.
+However, SBUF capacity is much higher than `K` elements currently cached from optimization 1.
+We can load multiple K elements from the MxK matrix at a time, result in higher data reuse.
 This will increase arithmetic intensity.
 
 
-Block size must balance two constraints: it should be large enough to saturate arithmetic intensity, yet 
+Block size must balance two constraints: it should be large enough to saturate arithmetic intensity, yet
 small enough for all live blocks remain within SBUF capacity to avoid spilling, causing performance regression.
 
 
@@ -233,18 +233,18 @@ after blocking both free dimensions.
 
 Optimization 3: Blocking M, N and K Dimension
 ----------------------------------------------------------------
-Blocking only free dimension and requiring to load the whole partition dimension (K) will set an upper 
+Blocking only the free dimensions and requiring to load the whole partition dimension (K) will set an upper
 limit on block size (M and N) due to limited SBUF capacity.
 
-Matrix multiply with shapes `[M, K] @ [K, N] = [M, N]` requires `K` multiplies and `K` additions 
-(or `K-1` for accumulation) for each element in resulting `[M, N]` grid, totaling `2*K*M*N` FLOPS.
-It has to load `M*K + K*N + M*N` elements, resulting in arithemtic intensity `2*M*N*K/(2*(M*K + K*N + M*N))` 
-for 2 byte data type like FP16 or BF16. Since the full K has to fit in memory for optimization 2, 
-it will limit M and N size for a block. Arithmetic intensity will be lower any of the M, N or K is 
+Matrix multiply with shapes ``[M, K] @ [K, N] = [M, N]`` requires ``K`` multiplies and ``K`` additions
+(or ``K-1`` for accumulation) for each element in the resulting ``[M, N]`` grid, totaling ``2*K*M*N`` FLOPS.
+It has to load ``M*K + K*N + M*N`` elements, resulting in arithmetic intensity ``2*M*N*K/(2*(M*K + K*N + M*N))``
+for 2 byte data types like FP16 or BF16. Since the full K has to fit in memory for Optimization 2,
+it will limit M and N size for a block. Arithmetic intensity will be lower if any of the M, N or K is
 much smaller than the others.
 
-Blocking partition dimension also results in calculating partial matrix multiplies in each block that have to 
-be accumulated, resulting in addintional HBM traffic if not handled carefully.
+Blocking partition dimension also results in calculating partial matrix multiplies in each block that have to
+be accumulated, resulting in additional HBM traffic if not handled carefully.
 
 .. _nki-fig-mm-after-blocking-all:
 
@@ -262,19 +262,25 @@ certainly above the threshold of 222.
 At the same time, this blocking configuration keeps all the tensors within the
 SBUF limit as much as possible.  With all matrices in BF16 data type, the
 ``lhsT_tiles`` requires 4MB and ``rhs_tiles`` requires 2MB SBUF memory. The
-``result_tiles`` requires ``4 * NUM_BLOCK_M`` MB SBUF memory, where
+``result_m_tiles`` requires ``4 * NUM_BLOCK_M`` MB SBUF memory, where
 ``NUM_BLOCK_M`` is ``M // 2048``. Thus, as long as ``M <= 8192``, the required
 SBUF memory is under the 24 MB budget (4 + 2 + 4 * (8192 // 2048) == 22 MB).
 When the ``M`` dimension becomes bigger, spilling and reloading of the
-``result_tiles`` will happen, but because the frequency is relatively low, the
-computation can still be sufficient. 
-Block size must balance two constraints: it should be large enough to saturate arithmetic intensity, yet 
-small enough for all live blocks remain within SBUF capacity to avoid spilling, causing performance regression.
+``result_m_tiles`` will happen, but because the frequency is relatively low, the
+computation can still be sufficient.
+Block size must balance two constraints: it should be large enough to saturate arithmetic intensity, yet
+small enough for all live blocks to remain within SBUF capacity to avoid spilling, causing performance regression.
 
-Since the K blocking loop is hand optimized for our ideal data locality, we do
-not actually want the compiler to rewrite this loop during its vectorization and
-other loop-level optimization passes. To communicate this we use
-``nl.sequential_range()`` to construct the K blocking loop.
+We also use a contiguous N-block layout per M-tile to eliminate coalescing. Each
+result M-tile is allocated with shape ``(TILE_M, TILES_IN_BLOCK_N, TILE_N)``
+instead of separate ``(TILE_M, TILE_N)`` tiles. Because the N-block tiles are
+already contiguous in the free dimension, we can later reshape to
+``(TILE_M, BLOCK_N)`` and issue a single large ``nisa.dma_copy`` for SBUF to HBM
+eviction without needing a ``nisa.tensor_copy()`` coalescing step to remove work
+from VectorE.
+Furthermore, by splitting the N-block into individual M-tiles, the compiler can
+pipeline ``memset(0)``, matmul, ``tensor_tensor`` accumulation, and SBUF to HBM
+DMA eviction on M-tile granularity, overlapping all stages.
 
 .. nki_example:: ../../examples/matrix_multiplication/matrix_multiplication_nki_kernels.py
    :language: python

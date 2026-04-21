@@ -736,9 +736,7 @@ Neuron Explorer for Visual Studio Code
 
 The UI is also available as a VSCode extension, enabling better native integration for features such as code linking.
 
-Install the Neuron Explorer extension from the Visual Studio Code Marketplace. Open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
-
-.. TODO: Add screenshot of the Neuron Explorer extension in the VS Code Marketplace.
+Install the Neuron Explorer extension from the Visual Studio Code Marketplace. Open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer`` or ``amazonwebservices.neuron-explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
 
 .. image:: /tools/profiler/images/profile-workload-1.png
 

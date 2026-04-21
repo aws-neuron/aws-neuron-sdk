@@ -387,11 +387,11 @@ def nki_matmul_fully_optimized_(
 
   # Verify the size is a multiple of block size
   assert M % BLOCK_M == 0, \
-    f"Expected M {M} to be divisble by {BLOCK_M} when there are {TILES_IN_BLOCK_M}"
+    f"Expected M {M} to be divisible by {BLOCK_M} when there are {TILES_IN_BLOCK_M}"
   assert N % BLOCK_N == 0, \
-    f"Expected N {N} to be divisble by {BLOCK_N} when there are {TILES_IN_BLOCK_N}"
+    f"Expected N {N} to be divisible by {BLOCK_N} when there are {TILES_IN_BLOCK_N}"
   assert K % BLOCK_K == 0, \
-    f"Expected K {K} to be divisble by {BLOCK_K} when there are {TILES_IN_BLOCK_K}"
+    f"Expected K {K} to be divisible by {BLOCK_K} when there are {TILES_IN_BLOCK_K}"
 
   # Create a space for the result in HBM (not initialized)
   result = nl.ndarray((M, N), dtype=lhsT.dtype, buffer=nl.shared_hbm)
@@ -403,100 +403,111 @@ def nki_matmul_fully_optimized_(
 
   # Blocking N dimension (the RHS free dimension)
   for n in nl.affine_range(NUM_BLOCK_N):
-    # Create the initial result tiles in SBUF and initialize each tile to
-    # 0.0, since the final results will be accumulated here. Results in 3-d array.
-    result_tmps = []
-    for m_idx in range(NUM_BLOCK_M):
-      block_m = []
-      for bm_idx in range(TILES_IN_BLOCK_M):
-        block_n = []
-        for bn_idx in range(TILES_IN_BLOCK_N):
-          # Create the result tile (uninitialized)
-          tile = nl.ndarray(shape=(TILE_M, TILE_N), dtype=lhsT.dtype, buffer=nl.sbuf)
-          # Initialize the tile 0.0
-          nisa.memset(dst=tile, value=0.0)
-          # Append the tile to block_n array.
-          block_n.append(tile)
-        # Append block_n array to block_m array.
-        block_m.append(block_n)
-      # Append block_m array into result_tmps.
-      result_tmps.append(block_m)
+    n_start = n * BLOCK_N
+    n_end = n_start + BLOCK_N
+
+    # Allocate and initialize result matrix N-block to 0.0.
+    #
+    # Each result M-tile stores its N-block contiguous on the free-dim
+    # with shape (TILE_M, TILES_IN_BLOCK_N, TILE_N). This layout allows
+    # reshaping to (TILE_M, BLOCK_N) for SBUF->HBM DMA to operate on a
+    # large payload, enabling good DMA efficiency.
+    #
+    # We split the N-block into individual M-tiles so the compiler can
+    # pipeline memset(0), matmul, tensor_tensor, and SBUF->HBM DMA
+    # on M-tile granularity.
+    result_m_tiles = []
+    for m in nl.affine_range(NUM_BLOCK_M):
+      for m_tile in nl.affine_range(TILES_IN_BLOCK_M):
+        result_m_tile = nl.ndarray(
+          shape=(TILE_M, TILES_IN_BLOCK_N, TILE_N),
+          dtype=result.dtype,
+          buffer=nl.sbuf,
+        )
+        nisa.memset(dst=result_m_tile, value=0.0)
+        result_m_tiles.append(result_m_tile)
 
     # Blocking K dimension (the contraction dimension)
-    # Use `sequential_range` because we do not want the compiler
-    # to change this loop by, for example, vectorizing it
     for k in nl.sequential_range(NUM_BLOCK_K):
-      # Loading tiles from rhs
-      # setting the load tile to `TILE_K x BLOCK_SIZE_N` to optimize DMA performance
-      rhs_tiles = []
-      for bk_r in range(TILES_IN_BLOCK_K):
-        # Allocate rhs_tile tensor, TILE_K x BLOCK_N
-        rhs_tile = nl.ndarray(shape=(TILE_K, BLOCK_N),
-                              dtype=rhs.dtype,
-                              buffer=nl.sbuf)
-        # Copy block tile from rhs, to rhs_tile.
-        nisa.dma_copy(dst=rhs_tile[0:TILE_K, 0:BLOCK_N],
-                      src=rhs[(TILES_IN_BLOCK_K * k + bk_r) *
-                              TILE_K:(TILES_IN_BLOCK_K * k + bk_r + 1) * TILE_K,
-                              BLOCK_N * n:BLOCK_N * (n + 1)])
-        # Append rhs_tile to rhs_tiles.
-        rhs_tiles.append(rhs_tile)
+      k_block_tile_start = k * TILES_IN_BLOCK_K
 
+      # Load tiles from RHS
+      # Load tiles one N-block at a time for good DMA efficiency.
+      rhs_tiles = nl.ndarray(
+        shape=(TILE_K, TILES_IN_BLOCK_K, BLOCK_N),
+        dtype=rhs.dtype,
+        buffer=nl.sbuf,
+      )
+      for k_tile in range(TILES_IN_BLOCK_K):
+        k_tile_start = (k_block_tile_start + k_tile) * TILE_K
+        k_tile_end = k_tile_start + TILE_K
+        nisa.dma_copy(
+          dst=rhs_tiles[0:TILE_K, k_tile, 0:BLOCK_N],
+          src=rhs[k_tile_start:k_tile_end, n_start:n_end],
+        )
 
       # Blocking M dimension (the LHS free dimension)
       for m in nl.affine_range(NUM_BLOCK_M):
         # Loading tiles from lhsT
-        lhsT_tiles = []
-        for bk_l in nl.affine_range(TILES_IN_BLOCK_K):
-          # Allocate lhsT_tile in SBUF (uninitialized)
-          lhsT_tile = nl.ndarray(shape=(TILE_K, BLOCK_M),
-                                 dtype=lhsT.dtype,
-                                 buffer=nl.sbuf)
-          # Copy block tile from lhsT to lhsT_tile
-          nisa.dma_copy(dst=lhsT_tile[0:TILE_K, 0:BLOCK_M],
-                        src=lhsT[(TILES_IN_BLOCK_K * k + bk_l) *
-                                 TILE_K:(TILES_IN_BLOCK_K * k + bk_l + 1) * TILE_K,
-                                 BLOCK_M * m:BLOCK_M * (m + 1)])
-          # Append to list of lhsT tiles.
-          lhsT_tiles.append(lhsT_tile)
+        # Load tiles one M-block at a time for good DMA efficiency.
+        lhsT_tiles = nl.ndarray(
+          shape=(TILE_K, TILES_IN_BLOCK_K, BLOCK_M),
+          dtype=lhsT.dtype,
+          buffer=nl.sbuf,
+        )
+        m_start = m * BLOCK_M
+        m_end = m_start + BLOCK_M
+        for k_tile in nl.affine_range(TILES_IN_BLOCK_K):
+          k_tile_start = (k_block_tile_start + k_tile) * TILE_K
+          k_tile_end = k_tile_start + TILE_K
+          nisa.dma_copy(
+            dst=lhsT_tiles[0:TILE_K, k_tile, 0:BLOCK_M],
+            src=lhsT[k_tile_start:k_tile_end, m_start:m_end],
+          )
 
         # Do matmul with all tiles in the blocks
-        for bn in nl.affine_range(TILES_IN_BLOCK_N):
-          for bm in nl.affine_range(TILES_IN_BLOCK_M):
-            # Allocate result_tile in PSUM (uninitialized)
-            result_tile = nl.ndarray(shape=(TILE_M, TILE_N),
-                                     dtype=nl.float32,
-                                     buffer=nl.psum)
-            for bk in nl.affine_range(TILES_IN_BLOCK_K):
-              # Perform matrix multiply on a tile.
+        m_block_tile_start = m * TILES_IN_BLOCK_M
+        for n_tile in nl.affine_range(TILES_IN_BLOCK_N):
+          for m_tile in nl.affine_range(TILES_IN_BLOCK_M):
+            result_tile = nl.ndarray(
+              shape=(TILE_M, TILE_N), dtype=nl.float32, buffer=nl.psum
+            )
+            for k_tile in nl.affine_range(TILES_IN_BLOCK_K):
+              m_tile_start = m_tile * TILE_M
+              m_tile_end = m_tile_start + TILE_M
+              n_tile_start = n_tile * TILE_N
+              n_tile_end = n_tile_start + TILE_N
               nisa.nc_matmul(
                 dst=result_tile,
-                stationary=lhsT_tiles[bk][0:TILE_K, bm * TILE_M:(bm + 1) * TILE_M],
-                moving=rhs_tiles[bk][0:TILE_K, bn * TILE_N:(bn + 1) * TILE_N]
+                stationary=lhsT_tiles[0:TILE_K, k_tile, m_tile_start:m_tile_end],
+                moving=rhs_tiles[0:TILE_K, k_tile, n_tile_start:n_tile_end],
               )
-            # Accumulate the result into the result_tmps tile.
-            nisa.tensor_tensor(dst=result_tmps[m][bm][bn],
-                               data1=result_tmps[m][bm][bn],
-                               data2=result_tile,
-                               op=nl.add)
 
-    # Copying the result from SBUF to HBM
+            # Evict from PSUM to SBUF while accumulating into result M-tile.
+            m_tile_idx = m_block_tile_start + m_tile
+            result_m_tile = result_m_tiles[m_tile_idx]
+            nisa.tensor_tensor(
+              dst=result_m_tile[0:TILE_M, n_tile, 0:TILE_N],
+              data1=result_m_tile[0:TILE_M, n_tile, 0:TILE_N],
+              data2=result_tile,
+              op=nl.add,
+            )
+
+    # Evict the result M-tiles from SBUF to HBM.
+    # Copy on N-blocks granularity for good DMA efficiency.
     for m in nl.affine_range(NUM_BLOCK_M):
-      for bm in nl.affine_range(TILES_IN_BLOCK_M):
-        # coalesce result tiles for better DMA performance
-        result_packed = nl.ndarray(shape=(TILE_M, BLOCK_N),
-                                   dtype=nl.float32,
-                                   buffer=nl.sbuf)
-        for bn in nl.affine_range(TILES_IN_BLOCK_N):
-          nisa.tensor_copy(
-            dst=result_packed[0:TILE_M, bn * TILE_N:(bn + 1) * TILE_N],
-            src=result_tmps[m][bm][bn][0:TILE_M, 0:TILE_N])
+      m_block_tile_start = m * TILES_IN_BLOCK_M
+      for m_tile in nl.affine_range(TILES_IN_BLOCK_M):
+        m_tile_idx = m_block_tile_start + m_tile
+        result_m_tile = result_m_tiles[m_tile_idx]
+        result_m_tile_block = result_m_tile.reshape((TILE_M, BLOCK_N))
 
-        # Copy packed result from SBUF to HBM.
-        nisa.dma_copy(dst=result[(TILES_IN_BLOCK_M * m + bm) *
-                                 TILE_M:(TILES_IN_BLOCK_M * m + bm + 1) * TILE_M,
-                                 BLOCK_N * n:BLOCK_N * (n + 1)],
-                      src=result_packed[0:TILE_M, 0:BLOCK_N])
+        m_tile_start = m_tile_idx * TILE_M
+        m_tile_end = m_tile_start + TILE_M
+        nisa.dma_copy(
+          dst=result[m_tile_start:m_tile_end, n_start:n_end],
+          src=result_m_tile_block[0:TILE_M, 0:BLOCK_N],
+        )
 
   return result
 # NKI_EXAMPLE_21_END
