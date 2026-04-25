@@ -122,13 +122,13 @@ Programmers are responsible for breaking up your tensors according to these tile
      # allocate space for the result
      out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype, buffer=nl.shared_hbm)
      # allocate space for tile memory
-     in_tile = nl.ndarray((P_DIM, 256), dtype=nl.float32, buffer=nl.sbuf)
-     out_tile = nl.ndarray((P_DIM, 256), dtype=nl.float32, buffer=nl.sbuf)
+     in_tile = nl.ndarray((P_DIM, Y_SIZE), dtype=nl.float32, buffer=nl.sbuf)
+     out_tile = nl.ndarray((P_DIM, Y_SIZE), dtype=nl.float32, buffer=nl.sbuf)
 
      # Process first tile
-     nki.isa.dma_copy(dst=in_tile, src=in_tensor[0:P_DIM, 0:256])
+     nki.isa.dma_copy(dst=in_tile, src=in_tensor[0:P_DIM, 0:Y_SIZE])
      nki.isa.reciprocal(dst=out_tile, data=in_tile)
-     nki.isa.dma_copy(dst=out_tensor[0:P_DIM, 0:256], src=out_tile)
+     nki.isa.dma_copy(dst=out_tensor[0:P_DIM, 0:Y_SIZE], src=out_tile)
      
      return out_tensor
 
