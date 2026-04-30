@@ -94,6 +94,9 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF031 <error-code-evrf031>`
      - The compiler encountered a scatter out-of-bounds error.
      - Ensure that the iota size matches the operand dimension size.
+   * - :ref:`NCC_EVRF056 <error-code-evrf056>`
+     - Operation gather encountered out of bound indices.
+     - Ensure that the iota dimension size is less than or equal to the size of the corresponding operand dimension. Check that your model's max_position_embeddings is >= sequence_length.
    * - :ref:`NCC_EXSP001 <error-code-exsp001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -131,5 +134,6 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF019
     EVRF022
     EVRF031
+    EVRF056
     EXSP001
     EXTP004

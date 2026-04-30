@@ -22,11 +22,10 @@ AWS Neuron Documentation
       **Looking to dive into Neuron development? Follow these links:**
       ^^^
       * :doc:`Learn about Neuron's support for native PyTorch </frameworks/torch/pytorch-native-overview>`
+      * :doc:`Use AI agents to streamline your development with Neuron </about-neuron/agentic-development-overview>`
       * :doc:`Get started with vLLM </libraries/nxd-inference/vllm/index>` for :doc:`Offline </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>` or :doc:`Online </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>` inference model serving
       * :doc:`Implement and run your first NKI kernel </nki/get-started/quickstart-implement-run-kernel>`
       * :doc:`Optimize model performance with Neuron Explorer </tools/neuron-explorer/index>`
-      * :doc:`Launch a Inf/Trn instance on Amazon EC2 </devflows/ec2-flows>`
-      * :doc:`Deploy a DLC </containers/get-started/quickstart-configure-deploy-dlc>`
 
 ----
 
@@ -67,9 +66,8 @@ Learn more about AWS Neuron
       Profile and monitor your models as you develop, build, test, and deploy them with Neuron's developer tools.
 
       * :doc:`Neuron Explorer </tools/neuron-explorer/index>`
-      * :doc:`Neuron Profiler </tools/profiler/neuron-profile-user-guide>`
-      * :doc:`Neuron Profiler 2.0 </tools/profiler/neuron-profiler-2-0-beta-user-guide>`
-      * :doc:`Neuron System tools </tools/neuron-sys-tools/index>`
+      * :doc:`Neuron Agentic Development </about-neuron/agentic-development-overview>`
+      * :doc:`Neuron System Tools </tools/neuron-sys-tools/index>`
 
 .. grid:: 1
    :gutter: 3
@@ -203,6 +201,7 @@ Learn more about AWS Neuron
 
    Home </tools/index>
    Neuron Explorer </tools/neuron-explorer/index>
+   Neuron Agentic Development </about-neuron/agentic-development-overview>
 
 .. toctree::
    :maxdepth: 1

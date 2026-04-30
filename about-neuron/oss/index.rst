@@ -24,6 +24,15 @@ Neuron Open Source GitHub Repositories
 
    .. grid-item-card:: 
       :class-body: sphinx-design-class-title-small
+
+      **Neuron Agentic Development Open Source**
+      ^^^
+      AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. See :ref:`neuron-agentic-development-overview` for the full feature overview.
+
+      * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-agentic-development
+
+   .. grid-item-card:: 
+      :class-body: sphinx-design-class-title-small
  
       **Neuron Kernel Library Open Source**
       ^^^
@@ -73,6 +82,7 @@ GitHub provides documentation on `forking a repository <https://help.github.com/
 For the specific details on licenses and contributing to each OSS repo, review the ``CONTRIBUTING.md`` pages linked below:
 
 * Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md
+* Contribute to Neuron Agentic Development: https://github.com/aws-neuron/neuron-agentic-development/blob/main/CONTRIBUTING.md
 * Contribute to the NKI Library: https://github.com/aws-neuron/nki-library/blob/main/CONTRIBUTING.md
 * Contribute the the NKI samples: https://github.com/aws-neuron/nki-samples/blob/main/CONTRIBUTING.md
   

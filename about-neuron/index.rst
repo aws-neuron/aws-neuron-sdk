@@ -3,7 +3,7 @@
 About the AWS Neuron SDK
 ========================
 
-AWS Neuron is a software development kit (SDK) enabling high-performance deep learning acceleration using AWS Inferentia and Trainium, AWS's custom designed machine learning accelerators. It enables you to develop, profile, and deploy high-performance machine learning workloads on AWS Inferentia and Trainium instances. 
+AWS Neuron is a software development kit (SDK) enabling high-performance deep learning acceleration using AWS Inferentia and Trainium, AWS's custom designed machine learning accelerators. It enables you to develop, profile, and deploy high-performance machine learning workloads on AWS Inferentia and Trainium instances.
 
 The AWS Neuron SDK includes:
 
@@ -67,7 +67,7 @@ Learn about AWS Neuron
 
 .. grid:: 1 1 2 2
    :gutter: 2
-   
+
    .. grid-item-card::
       :link: /about-neuron/arch/index
       :link-type: doc
@@ -177,7 +177,7 @@ Support
 Contact us
 ----------
 
-For support, submit a request with AWS Neuron `Github issues <https://github.com/aws/aws-neuron-sdk/issues>`_ or visit the `Neuron AWS forums <https://forums.aws.amazon.com/forum.jspa?forumID=355>`_ for an answer. 
+For support, submit a request with AWS Neuron `Github issues <https://github.com/aws/aws-neuron-sdk/issues>`_ or visit the `Neuron AWS forums <https://forums.aws.amazon.com/forum.jspa?forumID=355>`_ for an answer.
 
 If you want to request a feature or report a critical issue, you can contact us directly at ``aws-neuron-support@amazon.com``.
 
@@ -186,7 +186,8 @@ If you want to request a feature or report a critical issue, you can contact us 
    :hidden:
 
    App Notes <appnotes/index>
-   Ask Amazon AI helper tools </about-neuron/amazonq-getstarted>
+   Ask Amazon AI Helper Tools </about-neuron/amazonq-getstarted>
+   Agentic Development </about-neuron/agentic-development-overview>
    Benchmarks </about-neuron/benchmarks/index>
    Beta Participation </about-neuron/beta-participation>
    Model Samples </about-neuron/models/index>

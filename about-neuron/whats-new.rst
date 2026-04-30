@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 03/13/2026
+    :date-modified: 04/30/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -24,6 +24,31 @@ What's New in the AWS Neuron SDK
         :class-header: sd-bg-primary sd-text-white
 
         **Latest release**: 2.29.0 (04/09/2026)
+
+----
+
+.. _whats-new-2026-04-30-neuron-agentic-development:
+
+Neuron Agentic Development: AI coding agents and skills to develop on Neuron
+-----------------------------------------------------------------------------
+
+**Posted on**: April 30, 2026
+
+Today we are releasing Neuron Agentic Development, an open-source suite of AI capabilities starting with agents and skills that author, debug, profile, and analyze Neuron Kernel Interface (NKI) kernels for AWS Trainium and AWS Inferentia. The agents and skills run inside agentic coding environments such as Claude Code and Kiro, letting you drive kernel development with natural language or reference implementations in PyTorch or NumPy.
+
+This first release focuses on the NKI kernel development lifecycle and includes:
+
+* **Kernel authoring**: Translate PyTorch, NumPy, or natural-language specifications into NKI kernel code.
+* **Compilation debugging**: Compile on-device, interpret compiler errors, and iteratively apply fixes.
+* **Profile capture and querying**: Capture NEFF and NTFF execution profiles and query engine utilization and execution behavior in the agent conversation.
+* **Profile analysis**: Detect intermediate-data spilling and redundant TensorEngine transposes, and attribute them to known inefficiency patterns.
+* **Documentation lookup**: Route questions to the right NKI API references, tutorials, and compiler error-code pages from within the agent.
+
+Skills chain automatically, so a single prompt such as "profile my kernel and tell me what's slow" can trigger the full capture, metric-extraction, and analysis sequence. You can also call individual skills directly for targeted tasks.
+
+Writing and documentation skills work in any supported IDE without hardware. Debugging, profiling, and analysis skills require access to Trainium or Inferentia hardware because they compile and execute on the NeuronCores.
+
+For an overview of capabilities, supported IDEs, and prerequisites, see :ref:`neuron-agentic-development-overview`. For installation, the current catalog of agents and skills, and contribution guidance, visit the `Neuron Agentic Development repository on GitHub <https://github.com/aws-neuron/neuron-agentic-development>`_.
 
 ----
 

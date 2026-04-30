@@ -98,7 +98,7 @@ The above represents the following access on the tensor ``t``, written below in 
        for y in range(y_num):
          for x in range(x_num):
            t_flatten = t.flatten() # first flatten the tensor to 1d
-           access[w, z, y, x] = [offset + (w * N) + (z * z_step)
+           access[w, z, y, x] = t_flatten[offset + (w * N) + (z * z_step)
                      + (y * y_step) + (x * x_step)]
 
 The access pattern has the following properties:

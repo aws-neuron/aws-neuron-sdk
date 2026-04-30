@@ -142,6 +142,11 @@
 - [Neuron Top](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-top-user-guide.html): Real-time monitoring of Neuron device utilization
 - [Neuron Monitor](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html): Collect metrics for monitoring and alerting
 
+### Agentic Development
+
+- [Neuron Agentic Development Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/agentic-development-overview.html): Open-source AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. Covers how skills chain (write → debug → profile → analyze), supported IDEs, hardware requirements, and limitations. Use this page when deciding whether agentic development applies to your workflow or when setting up the agents on a Trainium or Inferentia instance.
+- [Neuron Agentic Development on GitHub](https://github.com/aws-neuron/neuron-agentic-development): Open-source repository with installation steps, the current agent and skill catalog, and agent-ready code samples.
+
 ## Neuron Runtime & Compiler
 
 - [NeuronX Runtime](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/index.html): High-performance execution engine for running models on AWS Inferentia and Trainium

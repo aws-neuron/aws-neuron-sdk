@@ -5,20 +5,105 @@
 
 .. _compiler_rn:
 
-Component Release Notes for NeuronX Graph Compiler
+Component Release Notes for Neuron Graph Compiler
 ==================================================
 
 **Latest version (in 2.29.0)**: 2.24.5133.0
 
-The release notes for the NeuronX Graph Compiler (neuronx-cc) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+The release notes for the Neuron Graph Compiler (neuronx-cc) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
 
+.. _compiler-2-29-0-rn:
+
+Neuron Compiler [2.24.5133.0] (Neuron 2.29.0 Release)
+----------------------------------------------------
+
+Date of Release: 04/09/2026
+
+Changes
+~~~~~~~
+
+* **Gather bounds verification in HLO verifier**: The verifier now detects when gather operation iota indices exceed operand tensor bounds, providing a clear early error (:doc:`NCC_EVRF056 </compiler/error-codes/EVRF056>`) instead of confusing errors deep in compilation. This helps catch misconfigured models where ``max_position_embeddings < sequence_length``.
+
+* **Collective Broadcast to AllGather transformation**: The compiler automatically transforms collective broadcast operations into more efficient AllGather operations where applicable. 
+
+* **DVE Exponential instruction support**: The compiler now supports exponential operations on the DVE engine.
+
+Performance and Compile Time Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Cost model for tensor-contract vs mul+reduce-add trade-off**: A cycle-based cost model decides between TensorContract (PE engine) and multiply-reduce_add for matrix multiplication patterns. Fixes sub-optimal tiling on batch matmul, reducing compile time from 20 seconds to 1 second in affected cases.
+
+* **Dependency reduction parallelized for large sequence lengths**: The dependency reduction phase now runs in parallel, yielding ~2x pass-time reduction in internal bechmarks for 64K sequence length models.
+
+* **DMA coalescing uses interval tree for O(log n) conflict detection**:  ~20% median reduction in compile time improvements for DMA optimization passes across 408 Neuron internal benchmarks, with up to 50% reduction on the largest models.
+
+* **Improved hardware-aware tensor splitting**: DRAM splitting is now optional and the maximum unsplit tensor size is hardware-aware, reducing unnecessary splitting overhead.
+
+* **Improved index bounds checking for constant tensors**: Validation now checks against specific tensor dimension sizes and throws an ``NCC_ESMP002`` error if it is out of bound.
+
+Bug Fixes
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Area
+     - Error Code
+     - Fix
+   * - Compilation failure
+     - NCC_CFG015
+     - Fixed stack overflow in control flow graph validation for deeply nested models (e.g., flash-attention backward with 8193 blocks)
+   * - Compilation error
+     - NCC_IBIR229
+     - Fixed SimplifyTensor expanding SBUF tensors beyond per-partition capacity, causing downstream allocation failures
+   * - Compilation error
+     - NCC_INLA001
+     - Fixed legalization failure with >2 free access pattern dimensions, fixing 4 FalconH105b CrossEntropyLoss compilation failures
+   * - Compiler bug
+     - —
+     - Fixed inverted matmul accumulate flags causing incorrect accumulation behavior
+   * - Compiler bug
+     - —
+     - Fixed dead code elimination incorrectly removing writes to input tensors with no user
+   * - Compiler bug
+     - —
+     - Fixed dead code elimination handling of must-alias tensors with no reader
+   * - Compiler bug
+     - —
+     - Fixed ``-Inf`` being incorrectly replaced with constant in clamp operations
+   * - Compilation error
+     - —
+     - Fixed broadcast store optimization when load has multiple users — cloned loop variables were referencing out-of-scope indices
+   * - Compiler bug
+     - —
+     - Fixed SB partition address legalization for atomic load/store operations after post-split
+
+* Other minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
+
+----
+
+.. _compiler-2-28-0-rn:
+
+Neuron Compiler [2.23.6484.0] (Neuron 2.28.0 Release)
+-------------------------------------------------------
+
+Date of Release: 02/26/2026
+
+Bug Fixes
+~~~~~~~~~
+
+* Minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
+
+----
+
 .. _compiler-2-27-0-rn:
 
-Neuron Compiler [2.15.54.0] (Neuron 2.27.0 Release)
-----------------------------------------------------
+Neuron Compiler [2.22.12471.0] (Neuron 2.27.0 Release)
+--------------------------------------------------------
 
 Date of Release: 12/19/2025
 
@@ -39,20 +124,29 @@ Bug Fixes
 
 * Minor bug fixes and performance enhancements for both the ``trn1`` and ``trn2`` platforms.
 
+----
+
+.. _compiler-2-26-0-rn:
+
+Neuron Compiler [2.21.18209] (Neuron 2.26.0 Release)
+--------------------------------------------------------
+
+Date of Release: 09/08/2025
+
+Bug Fixes
+~~~~~~~~~
+
+* Minor bug fixes and performance enhancements for both the ``trn1`` and ``trn2`` platforms.
 
 ----
 
 .. _compiler-2-25-0-rn:
 
-Neuron Compiler [2.14.77.0] (Neuron 2.25.0 Release)
+Neuron Compiler [2.20.9961.0] (Neuron 2.25.0 Release)
 ----------------------------------------------------
 
 Date of Release: 07/31/2025
 
-Improvements
-~~~~~~~~~~~~~~~
-
-* Minor bug fixes and performance enhancements for both the ``trn1`` and ``trn2`` platforms.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
