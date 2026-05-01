@@ -1,5 +1,5 @@
 .. meta::
-    :description: Release notes for AWS Neuron SDK release v2.8.1
+    :description: Release notes for AWS Neuron SDK release v2.28.1
     :date-modified: 03/13/2026
 
 

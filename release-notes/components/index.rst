@@ -17,8 +17,8 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - Updated in Neuron Version
      - Latest Component Version
    * - :doc:`Neuron Compiler <compiler>`
-     - 2.27.0
-     - 2.24.5133.0
+     - 2.29.1
+     - 2.24.8799.0
    * - :doc:`Neuron Containers <containers>`
      - 2.29.0
      - 2.29.0

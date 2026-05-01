@@ -59,7 +59,7 @@ Refer to :ref:`these setup instructions<nxdi-setup>` for information on using Ne
 
 **Prerequisites:**
 
-- Latest AWS Neuron SDK (`Neuron SDK 2.29.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.29.0.html>`_)
+- Latest AWS Neuron SDK (`Neuron SDK 2.29.0 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.29.0.html>`_)
 - Python 3.10+ (compatible with vLLM requirements)
 - Supported AWS instances: Inf2, Trn1/Trn1n, Trn2
 

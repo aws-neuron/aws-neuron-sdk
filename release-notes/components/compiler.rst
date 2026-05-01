@@ -8,9 +8,9 @@
 Component Release Notes for Neuron Graph Compiler
 ==================================================
 
-**Latest version (in 2.29.0)**: 2.24.5133.0
+**Latest version (in 2.29.1)**: 2.24.8799.0
 
-The release notes for the Neuron Graph Compiler (neuronx-cc) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+The release notes for the Neuron Graph Compiler (``neuronx-cc``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
@@ -18,7 +18,7 @@ The release notes for the Neuron Graph Compiler (neuronx-cc) Neuron component. R
 .. _compiler-2-29-0-rn:
 
 Neuron Compiler [2.24.5133.0] (Neuron 2.29.0 Release)
-----------------------------------------------------
+-----------------------------------------------------
 
 Date of Release: 04/09/2026
 
@@ -83,20 +83,6 @@ Bug Fixes
      - Fixed SB partition address legalization for atomic load/store operations after post-split
 
 * Other minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
-
-----
-
-.. _compiler-2-28-0-rn:
-
-Neuron Compiler [2.23.6484.0] (Neuron 2.28.0 Release)
--------------------------------------------------------
-
-Date of Release: 02/26/2026
-
-Bug Fixes
-~~~~~~~~~
-
-* Minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
 
 ----
 

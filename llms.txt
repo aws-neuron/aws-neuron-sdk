@@ -204,7 +204,7 @@
 - [Profiling NKI Kernels](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/use-neuron-profile.html): Learn how to profile NKI kernels with Neuron Explorer
 - [NKI Compiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-compiler.html): Documentation for the NKI compiler
 - [NKI 0.3.0 Update Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-0-3-0-update-guide.html): Migration guide for NKI 0.3.0 changes
-- [NKI Beta2 Migration Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-beta2-migration-guide.html): Migrating to NKI Beta 2
+- [NKI 0.2.0 Migration Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-beta2-migration-guide.html): Migrating from NKI 0.1.0 to NKI 0.2.0
 - [NKI Block Dimension Migration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki_block_dimension_migration_guide.html): Migrating to new block dimension APIs
 - [NKI APS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-aps.html): Automatic Performance Scheduling in NKI
 - [NKI DGE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dge.html): Data Gather Engine programming
@@ -278,7 +278,7 @@
 
 - [Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html): Official home page for AWS Neuron SDK release notes
 - [What's New](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html): Latest releases and features of the Neuron SDK
-- [Latest Release (2.29.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.29.0.html): Release notes for Neuron SDK version 2.29.0
+- [Latest Release (2.29.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.29.0.html): Release notes for Neuron SDK version 2.29.0
 - [Component Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/index.html): Release notes for individual Neuron components
 - [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Solutions for common issues with AWS Neuron
 - [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq/index.html): Frequently asked questions about AWS Neuron

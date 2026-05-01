@@ -1,12 +1,12 @@
 .. meta::
-   :description: Best practices for migrating NKI kernels from Beta 1 to the Beta 2 NKI Compiler
+   :description: Best practices for migrating NKI kernels from NKI 0.1.0 to the NKI 0.2.0 Compiler
    :keywords: NKI kernels, Neuron Kernel Interface, AWS Neuron SDK, kernel compilation, Trainium, Inferentia, machine learning acceleration
 
 .. _nki-migration-guide:
 
-=========================================
-NKI Migration Guide from Beta 1 to Beta 2
-=========================================
+===============================================
+NKI Migration Guide from NKI 0.1.0 to NKI 0.2.0
+===============================================
 
 This topic covers best practices for migrating NKI kernels from the legacy 
 ``neuronxcc.nki.*`` namespace to the new ``nki.*`` namespace which uses the 
@@ -46,18 +46,18 @@ expected. However, if you find some curious errors or confusing behavior,
 reach out to us on the NKI Samples repository on AWS Neuron GitHub.
 
 This document is intended for experienced NKI developers who are looking to 
-migrate their existing kernels to the Beta 2 NKI compiler. Most code snippets 
+migrate their existing kernels to the NKI 0.2.0 compiler. Most code snippets 
 below are assumed to be executed within a valid NKI kernel.
 
 Key Migration Items
 ===================
 
-These are the key items to migrate existing kernel to the Beta 2 NKI Compiler.
+These are the key items to migrate existing kernel to the NKI 0.2.0 Compiler.
 
-What new features are available in NKI Beta 2?
+What new features are available in NKI 0.2.0?
 ----------------------------------------------
 
-* A new namespace for NKI Beta 2, ``nki.*``
+* A new namespace for NKI 0.2.0, ``nki.*``
 * ``device_print`` is available to inspect tensor values
 * The behavior of loops and branching is consistent with regular Python
 * Lists and dictionaries are available and their behavior in loops is consistent with regular Python
@@ -76,25 +76,25 @@ What features in ``neuronxcc.nki.*`` are not available in ``nki.*``?
 * Decorators on sub-kernels need to be removed
 * Dictionaries support only string keys
 
-New Features in NKI Beta 2
+New Features in NKI 0.2.0
 ===========================
 
 New namespace, new APIs
 -----------------------
 
-NKI Beta 2 introduces a number of changes to the language and to the 
-compilation process. While we are deprecating NKI Beta 1, the Beta 2 release 
-supports both versions of the language via namespaces. The Beta 1 APIs can 
-be used via the ``neuronxcc.nki.*`` namespace, while Beta 2 has moved to the 
+NKI 0.2.0 introduces a number of changes to the language and to the 
+compilation process. While we are deprecating NKI 0.1.0, the NKI 0.2.0 release 
+supports both versions of the language via namespaces. The NKI 0.1.0 APIs can 
+be used via the ``neuronxcc.nki.*`` namespace, while NKI 0.2.0 has moved to the 
 ``nki.*`` namespace.
 
 .. code-block:: python
 
-   # Legacy Beta 1 APIs
+   # Legacy NKI 0.1.0 APIs
    import neuronxcc.nki as nki
    import neuronxcc.nki.isa as nisa
 
-   # New Beta 2 APIs
+   # New NKI 0.2.0 APIs
    import nki
    import nki.isa as nisa
 
@@ -107,7 +107,7 @@ destination parameter.
 All ISA functions require a destination parameter
 -------------------------------------------------
 
-In Beta 2, all of the ISA functions now require a ``dst`` parameter instead 
+In NKI 0.2.0, all of the ISA functions now require a ``dst`` parameter instead 
 of returning a result. So, instead of writing:
 
 .. code-block:: python
@@ -128,7 +128,7 @@ or inadvertently introduce additional copy operations.
 Dynamic control flow
 --------------------
 
-NKI Beta 2 includes support for dynamic (on-chip) control flow. All of the 
+NKI 0.2.0 includes support for dynamic (on-chip) control flow. All of the 
 dynamic control flow uses on-chip registers to hold the conditional values. 
 See :ref:`trainium_inferentia2_arch` for more information. If a control flow 
 construct uses a register as a conditional, then the loop will be an on-chip, 
@@ -217,13 +217,13 @@ following example.
 If your use case cannot be represented with the slicing syntax above, see
 :ref:`nki-aps`.
 
-Changes in NKI Beta 2 from Beta 1
-==================================
+Changes in NKI 0.2.0 from NKI 0.1.0
+====================================
 
 Consistent control flow behavior
 --------------------------------
 
-In NKI Beta 1, range iterators were converted into special objects that allowed 
+In NKI 0.1.0, range iterators were converted into special objects that allowed 
 the eDSL to capture the loop body. Because of this, loops were only executed once 
 by the Python evaluator, which could lead to some surprising results. For example, 
 in the code below, the normal Python variable ``var`` ends up with a value of 1 
@@ -234,11 +234,11 @@ rather than the expected value of 8. This has been solved in the new NKI Compile
    val = 0
    for i in range(8):
      val += 1
-   print(val) # will print 1 in Beta 1, prints 8 in Beta 2
+   print(val) # will print 1 in NKI 0.1.0, prints 8 in NKI 0.2.0
 
 For similar reasons, sometimes Python control flow constructs, such as ``if`` 
 statements, could not be handled properly when nested within a ``for`` loop. 
-For example, in Beta 1 the code below produces an undefined result. In Beta 2, 
+For example, in NKI 0.1.0 the code below produces an undefined result. In NKI 0.2.0, 
 this code produces the expected result.
 
 .. code-block:: python
@@ -249,7 +249,7 @@ this code produces the expected result.
        val = 1
      else:
        val = 2
-   print(val) # undefined behaviour in Beta 1, prints 2 in Beta 2
+   print(val) # undefined behaviour in NKI 0.1.0, prints 2 in NKI 0.2.0
 
 Many other examples of troublesome control flow have been fixed, which should 
 make using NKI easier and more intuitive.
@@ -261,11 +261,11 @@ Deprecation of masking
 
 Follow this section if you are using the ``mask`` parameter in your kernel.
 
-In NKI Beta 1, the concept of masking was introduced to order modify the 
+In NKI 0.1.0, the concept of masking was introduced to order modify the 
 behavior of tensor indexing expressions. The use of masking was almost always 
 used to avoid out-of-bounds access. For example, suppose a developer is tiling 
 a tensor of size 129 x 513, and you want to use tiles of size 128 x 512. A 
-typical way to write a tiling loop in Beta 1 is shown below.
+typical way to write a tiling loop in NKI 0.1.0 is shown below.
 
 .. code-block:: python
 
@@ -282,9 +282,9 @@ Note, when ``i`` (or ``j``) is equal to 1, then the index expression
 expression ``mask=(i_p+128*i<129) & (i_f+512*i<513)`` modifies the indexing so 
 that the equations are true, and thus inbounds of the tensor. This mechanism 
 has many drawbacks, including being error-prone and non-intuitive for Python 
-developers. Therefore, this mechanism has been deprecated in Beta 2.
+developers. Therefore, this mechanism has been deprecated in NKI 0.2.0.
 
-In NKI Beta 2, developers can use standard constructs from Python such as 
+In NKI 0.2.0, developers can use standard constructs from Python such as 
 ``min`` and ``slice`` to build indexing expressions that are in bounds for 
 the tensor. For example, the above code can now be written as:
 
@@ -303,7 +303,7 @@ the tensor. For example, the above code can now be written as:
        nisa.tensor_copy(result[p, f], t[p, f])
 
 The developer may also choose to inline the slices, if that is more natural. 
-The below syntax is common in NKI Beta 1.
+The below syntax is common in NKI 0.1.0.
 
 .. code-block:: python
 
@@ -313,9 +313,9 @@ The below syntax is common in NKI Beta 1.
 Improved Allocation API
 -----------------------
 
-The manual allocation API has been simplified. In Beta 2 the there is a new 
+The manual allocation API has been simplified. In NKI 0.2.0 the there is a new 
 argument to ``nl.ndarray`` that allows the offset of each tensor to be specified: 
-(partition_offset, free_offset). Similar to the Beta 1, while the partition offset 
+(partition_offset, free_offset). Similar to NKI 0.1.0, while the partition offset 
 corresponds to a physical partition lane on the hardware, the free dimension offset 
 is the element offset within each partition. The free dimension offset is 
 translated into physical SBUF address in the compiler.
@@ -342,31 +342,31 @@ For example, the following code will allocate a PSUM tensor on bank 3:
    psum_t = nl.ndarray(dtype=nl.bfloat16, shape=(128, 1024), 
      address=(0, bank_id*PSUM_BANK_SIZE))
 
-Translate from the Beta 1 Direct Allocation API
------------------------------------------------
+Translate from the NKI 0.1.0 Direct Allocation API
+--------------------------------------------------
 
-To translate the direct allocated kernel in Beta 1, all data structures must 
+To translate the direct allocated kernel in NKI 0.1.0, all data structures must 
 not use the block dimension. This means reformatting tensors to place the 
 partition-dimension on the left-most position, using either lists or 
 multi-dimensional tensors for the rest of your dimensions. See 
 :ref:`nki_block_dimension_migration_guide` for more information.
 
 After this, translate the address of each block. For example, given the 
-following tensor in the Beta 1 that uses the modular allocation.
+following tensor in NKI 0.1.0 that uses the modular allocation.
 
 .. code-block:: python
 
-   # beta 1 - uses block dimension and mod allocator
+   # NKI 0.1.0 - uses block dimension and mod allocator
    k_loaded = nl.ndarray((num_512_tiles_cur_section, nl.par_dim(p_k), n_k), 
     dtype=nl.bfloat16, 
     buffer=sb_mod(base_addr=sca, num_free_tiles=(num_512_tiles_cur_section, )
 
-Now with Beta 2, developers can translate the block dimension into a list 
+Now with NKI 0.2.0, developers can translate the block dimension into a list 
 and compute the address for each block.
 
 .. code-block:: python
 
-   # beta 2 - use lists of tensors and get lists of virtual byte addresses
+   # NKI 0.2.0 - use lists of tensors and get lists of virtual byte addresses
    k_loaded_tensors = []
    for i in range(num_512_tiles_cur_section):
      k_loaded_tensors.append(nl.ndarray(shape=(p_k,n_k), dtype=nl.bfloat16, 
@@ -379,7 +379,7 @@ For kernels that call other kernels, or call any other functions that are
 decorated with a ``nki.jit`` decorator, the ``nki.jit`` decorated will need to
 be removed from sub-kernels.
 
-In NKI Beta 1, all the sub-kernels called from a top-level kernel could be 
+In NKI 0.1.0, all the sub-kernels called from a top-level kernel could be 
 decorated with ``nki.jit(mode='trace')`` decorator. This decorator needs to be 
 removed for the new NKI Compiler. Otherwise, you will see an error about classes 
 needing to inherent from ``nl.NKIObject`` thrown from the callsite of the sub-kernels.
@@ -403,15 +403,15 @@ Translation of Block Dimensions
 
 If the kernel uses block dimension, defined as a tensor with a partition 
 dimension set to any position other than the left-most position, this has been 
-removed in Beta 2. There are two performance-equivalent ways to translate block 
+removed in NKI 0.2.0. There are two performance-equivalent ways to translate block 
 dimensions. The first is to use a Python-like list and the second is to use a 
 differently-shaped tensor.
 
 Use a Python-like list
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Block dimension of tensors in Beta 1 was syntactic sugar for a list of tensors 
-managed by the compiler. In NKI Beta 2, users can directly code this patten using 
+Block dimension of tensors in NKI 0.1.0 was syntactic sugar for a list of tensors 
+managed by the compiler. In NKI 0.2.0, users can directly code this patten using 
 standard lists, without extra compiler support.
 
 .. code-block:: python
@@ -535,7 +535,7 @@ Dynamic Access Pattern
 Follow this section for a kernel that uses dynamic access, i.e. using a runtime value 
 to index another tensor.
 
-The syntax for representing dynamic access patterns has changed. In NKI Beta 1, 
+The syntax for representing dynamic access patterns has changed. In NKI 0.1.0, 
 an access with a dynamic scalar offset could be represented as shown below where 
 ``batch_idx`` is a dynamic value in the SBUF:
 
@@ -550,7 +550,7 @@ an access with a dynamic scalar offset could be represented as shown below where
 Scalar Dynamic Access
 ^^^^^^^^^^^^^^^^^^^^^
 
-In Beta 2, we need to use a physical access pattern, specified with the ``.ap`` 
+In NKI 0.2.0, we need to use a physical access pattern, specified with the ``.ap`` 
 method, to represent this.
 
 .. code-block:: python

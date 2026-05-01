@@ -24,7 +24,7 @@ You can use a single inf2 instance as a development environment to compile and d
 	**Model compilation can be executed on a non-inf2 instance** for later deployment. 
 	Follow the same EC2 Developer Flow Setup using other instance families and leverage `Amazon Simple Storage Service  <https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html>`_ (S3) to share the compiled models between different instances.   
 
-.. _ec2-then-ec2-setenv:
+.. _ec2-then-ec2-setenv-inf2:
 
 Setup Environment
 -----------------

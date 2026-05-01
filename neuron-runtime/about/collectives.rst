@@ -79,11 +79,9 @@ Permute Operation
 In the **Permute** operation, each rank sends its data to a designated destination rank and receives data from a designated source rank, according to a set of source-target pairs. The source-target pairs must form a valid ring topology with direct physical connectivity between adjacent ranks. Only ranks included in the source-target pairs participate in the collective execution; other ranks remain inactive during the operation. Currently, only circular permute patterns are supported.
 
 .. image:: /neuron-runtime/img/collectives/permute.gif
-   :alt: All-to-All Operation
+   :alt: Permute Operation
    :align: center
    :width: 80%
-
-
 
 Communication Scope
 --------------------

@@ -226,14 +226,14 @@ and announcements of software :ref:`end-of-support <software-end-of-support>` an
    -  Updated Tensorflow 2.5.x from Tensorflow 2.5.0 to Tensorflow
       2.5.1.
    -  Introducing :ref:`new operators support <tensorflow-ref-neuron-accelerated-ops>`
-   -  For more information visit :ref:`tensorflow-neuron`
+   -  For more information visit :doc:`/archive/tensorflow/index`
 
 -  **TensorFlow 1.x**
 
    -  TensorFlow 1.x now supports Neuron Runtime 2.x only. Please visit
       :ref:`introduce-libnrt` for more information.
    -  Introducing :ref:`new operators support <neuron-cc-ops-tensorflow>`.
-   -  For more information visit :ref:`tensorflow-neuron`
+   -  For more information visit :doc:`/archive/tensorflow/index`
 
 -  **MXNet 1.8**
 

@@ -34,6 +34,15 @@ TensorFlow Neuron enables native TensorFlow models to be accelerated on Neuron d
     Inference (Inf2 & Trn1)  </archive/tensorflow/tensorflow-neuronx-inference>
     Inference (Inf1)  </archive/tensorflow/tensorflow-neuron-inference>    
 
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    :caption: Archive indexes
+
+    TensorFlow Neuron (Inf1) </archive/tensorflow/tensorflow-neuron/index>
+    TensorFlow NeuronX (Inf2 & Trn1) </archive/tensorflow/tensorflow-neuronx/index>
+    Setup (legacy Inf1) </archive/tensorflow/setup-legacy-inf1-tensorflow>
+
 .. card:: Tensorflow NeuronX for Inference on ``Inf2`` & ``Trn1`` / ``Trn1n``
     :link: inference-tensorflow-neuronx
     :link-type: ref

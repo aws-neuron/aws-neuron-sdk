@@ -26,12 +26,12 @@ These guides help you migrate your NKI kernels between versions.
 
       Migrate NKI kernels to use block dimensions for improved performance and resource utilization on Trainium devices.
 
-   .. grid-item-card:: NKI Beta 2 Migration Guide
+   .. grid-item-card:: NKI 0.2.0 Migration Guide
       :link: nki-beta2-migration-guide
       :link-type: doc
       :class-body: sphinx-design-class-title-small
 
-      Migrate NKI kernels from Beta 1 to Beta 2.
+      Migrate NKI kernels from NKI 0.1.0 to NKI 0.2.0.
 
 .. toctree::
     :maxdepth: 1
@@ -39,4 +39,4 @@ These guides help you migrate your NKI kernels between versions.
 
     NKI 0.3.0 Update Guide <nki-0-3-0-update-guide>
     Block Dimension Migration Guide <nki_block_dimension_migration_guide>
-    Beta 2 Migration Guide <nki-beta2-migration-guide>
+    NKI 0.2.0 Migration Guide <nki-beta2-migration-guide>

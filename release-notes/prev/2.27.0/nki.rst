@@ -17,17 +17,17 @@ AWS Neuron SDK 2.27.0: Neuron Kernel Interface (NKI) release notes
 What's New
 ----------
 
-This release introduces NKI Beta 2, featuring the new :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`
+This release introduces NKI 0.2.0, featuring the new :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`
 and significant enhancements to the NKI language constructs and APIs, including changes to existing APIs. 
-For information about the different NKI Beta versions, see :doc:`About the NKI Compiler </nki/deep-dives/nki-compiler>`.
+For information about the different NKI versions, see :doc:`About the NKI Compiler </nki/deep-dives/nki-compiler>`.
 
-To take advantage of Beta 2 with the new compiler, import the ``nki.*`` namespace in your code
+To take advantage of NKI 0.2.0 with the new compiler, import the ``nki.*`` namespace in your code
 and annotate your top-level kernel function with ``@nki.jit``.
 
 **Backward Compatibility and Migration**
 
 Neuron 2.27 supports both the ``neuronxcc.nki.*`` and ``nki.*`` namespaces side by side,
-allowing existing Beta 1 kernels to continue working seamlessly. However, Neuron 2.27 will
+allowing existing NKI 0.1.0 kernels to continue working seamlessly. However, Neuron 2.27 will
 be the last release to include support for the ``neuronxcc.nki.*`` namespace. Starting with
 Neuron 2.28, this namespace will no longer be supported.
 
@@ -64,7 +64,7 @@ New dtypes
 Changes to Existing APIs
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Several nki.language APIs have been removed in NKI Beta 2
+* Several nki.language APIs have been removed in NKI 0.2.0
 * All nki.isa APIs have ``dst`` as an input param
 * All nki.isa APIs removed ``dtype`` and ``mask`` support
 * :doc:`nki.isa.memset </nki/api/generated/nki.isa.memset>` — removed ``shape`` positional arg , since we have ``dst``
@@ -94,6 +94,6 @@ Known issues
 ------------
 
 * :doc:`nki.isa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>` - ``is_moving_onezero`` was incorrectly named ``is_moving_zero`` in this release
-* NKI ISA semantic checks are not available with Beta 2, workaround is to reference the API docs
-* NKI Collectives are not available with Beta 2
+* NKI ISA semantic checks are not available with NKI 0.2.0, workaround is to reference the API docs
+* NKI Collectives are not available with NKI 0.2.0
 * nki.benchmark and nki.profile are not available

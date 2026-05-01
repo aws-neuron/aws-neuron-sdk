@@ -12,8 +12,8 @@ This topic explores Neuron runtime core dumps in depth and discusses the technic
 What you should know before reading
 ------------------------------------
 
-* :doc:`AWS NeuronCore Architecture </about-neuron/arch/neuron-hardware/neuroncores-arch>`
-* :doc:`Amazon EC2 AI Chips Architecture </about-neuron/arch/neuron-hardware/neuron-devices>`
+* :doc:`AWS NeuronCore Architecture </about-neuron/arch/index>`
+* :doc:`Amazon EC2 AI Chips Architecture </about-neuron/arch/index>`
 * :doc:`Generating a Neuron runtime core dump </neuron-runtime/about/core-dump>`
 
 Overview

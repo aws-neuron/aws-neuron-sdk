@@ -117,4 +117,4 @@ The kernel implementation includes several key optimizations:
 See Also
 -----------
 
-* :doc:`RoPE HuggingFace Kernel API Reference </nki/library/api/rope-hf>`
+* :doc:`/nki/library/api/index`

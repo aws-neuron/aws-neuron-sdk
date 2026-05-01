@@ -46,7 +46,7 @@ Setup Environment
 
 
 2. Set up the environment to compile a model, build your own container and deploy:
-    To compile your model on EC2 or SageMaker Notebook, follow the *Set up a development environment* section on the EC2 :ref:`ec2-then-ec2-setenv` documentation.
+    To compile your model on EC2 or SageMaker Notebook, follow the *Set up a development environment* section on the EC2 :ref:`ec2-then-ec2-setenv-inf2` documentation.
 
     Refer to `Adapting Your Own Inference Container <https://docs.aws.amazon.com/sagemaker/latest/dg/adapt-inference-container.html>`_ documentation for information on how to bring your own containers to SageMaker Hosting.
 

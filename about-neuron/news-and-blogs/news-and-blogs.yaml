@@ -20,6 +20,18 @@
 #     featured: true|false  # Set to true for featured articles section
 
 featured_articles:
+  - title: "Announcing AWS Neuron SDK 2.29 with NKI and Neuron Explorer out of Beta"
+    url: "https://aws.amazon.com/about-aws/whats-new/2026/04/announcing-neuron-2-29/"
+    description: "Neuron SDK 2.29 promotes NKI and Neuron Explorer from Beta to Stable, introduces the NKI Standard Library and CPU Simulator, expands the NKI Library with 7 new kernels, and updates the vLLM Neuron Plugin to 0.5.0."
+    author: "AWS"
+    author_url: "https://aws.amazon.com/machine-learning/neuron/"
+    date: "2026-04-07"
+    category: "news"
+    locale: "en-US"
+    keywords: ["neuron-2.29", "nki", "neuron-explorer", "nki-library", "vllm", "cpu-simulator", "release"]
+    featured: true
+    icon: "📣"
+
   - title: "AWS Trainium: 50 Exercises"
     url: "https://zenn.dev/karakuri_blog/articles/5ccedeee1beb08"
     description: "Learn how to build LLMs for Trainium accelerators with this rich 50-lesson guide from customer Karakuri."

@@ -1,7 +1,7 @@
 .. _neo-then-hosting-devflow:
 
 Compile with Sagemaker Neo and Deploy on Sagemaker Hosting (inf1)
-==========================================================
+=================================================================
 
 .. contents:: Table of Contents
    :local:

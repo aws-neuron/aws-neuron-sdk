@@ -50,12 +50,21 @@ Tutorials
 
    tutorials/tutorials-inference-torch-neuron
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Additional tutorials
+
+   tutorials/neuroncore_pipeline_pytorch
+   tutorials/pytorch-tutorial-setup
+
 Setup
 -----
 
 .. toctree::
    :maxdepth: 1
 
+   setup/index
    setup/pytorch-install
    setup/pytorch-update
 
@@ -65,5 +74,6 @@ Misc
 .. toctree::
    :maxdepth: 1
 
+   inference-torch-neuron
    additional-examples-inference-torch-neuron
    misc-inference-torch-neuron

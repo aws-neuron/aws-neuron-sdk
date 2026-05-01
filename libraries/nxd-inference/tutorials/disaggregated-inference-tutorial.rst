@@ -40,7 +40,7 @@ You need:
 Select and Compile Your Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-DI works best with large models that have billions of parameters. We'll use ``meta-llama/Llama-3.3-70B-Instruct`` as an example. First, compile your model following the :ref:`nxdi-trn2-llama3.3-70b-dp-tutorial` guide. Make sure to set the correct input shapes and tensor parallelism.
+DI works best with large models that have billions of parameters. We'll use ``meta-llama/Llama-3.3-70B-Instruct`` as an example. First, compile your model following the :doc:`Data Parallelism on Trn2 </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial>` guide. Make sure to set the correct input shapes and tensor parallelism.
 
 Set Up the etcd Server
 ~~~~~~~~~~~~~~~~~~~~~~~

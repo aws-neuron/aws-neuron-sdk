@@ -316,7 +316,7 @@ Select a use case to view the recommended Neuron configuration. For the definiti
       For most use cases, the configuration below can be used to optimize **throughput** on Neuron devices. You can also increase the ``batch_size`` or use quantization to improve throughput even further. 
 
       {% if throughput_config.dp_degree != 1 %}
-      For this specific configuration, we recommend using **Data Parallelism (DP) of {{ throughput_config.dp_degree }}**. For more details on how to implement data parallelism, refer to the :ref:`Data Parallelism on Trn2 <nxdi-trn2-llama3.3-70b-dp-tutorial>` tutorial.
+      For this specific configuration, we recommend using **Data Parallelism (DP) of {{ throughput_config.dp_degree }}**. For more details on how to implement data parallelism, refer to the :doc:`Data Parallelism on Trn2 </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial>` tutorial.
       {% endif %}
 
       :bdg-info:`{{ throughput_config.instance_type }}`
@@ -335,7 +335,7 @@ Select a use case to view the recommended Neuron configuration. For the definiti
       For most use cases, the configuration below can be used to optimize **latency** on Neuron devices.
 
       {% if latency_config.dp_degree != 1 %}
-      For this specific configuration, we recommend using **Data Parallelism (DP) of {{ latency_config.dp_degree }}**. For more details on how to implement data parallelism, refer to the :ref:`Data Parallelism on Trn2 <nxdi-trn2-llama3.3-70b-dp-tutorial>` tutorial.
+      For this specific configuration, we recommend using **Data Parallelism (DP) of {{ latency_config.dp_degree }}**. For more details on how to implement data parallelism, refer to the :doc:`Data Parallelism on Trn2 </libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial>` tutorial.
       {% endif %}
 
       :bdg-info:`{{ latency_config.instance_type }}`

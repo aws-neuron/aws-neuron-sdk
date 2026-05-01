@@ -1,5 +1,5 @@
 .. meta::
-   :description: NKI 0.3.0 Update Guide — update NKI kernels from Beta 2 to NKI 0.3.0
+   :description: NKI 0.3.0 Update Guide — update NKI kernels from NKI 0.2.0 to NKI 0.3.0
    :keywords: NKI, Neuron Kernel Interface, update guide, 0.3.0, Trainium, Inferentia
 
 .. _nki-0-3-0-update-guide:
@@ -7,20 +7,20 @@
 NKI 0.3.0 Update Guide
 =======================
 
-For developers with existing NKI Beta 2 kernels, this document provides guidance on updating to NKI 0.3.0.
+For developers with existing NKI 0.2.0 kernels, this document provides guidance on updating to NKI 0.3.0.
 
 NKI 0.3.0 is a significant update to the Neuron Kernel Interface, available in AWS Neuron SDK 2.29.0.
 This release moves NKI to General Availability with a new open-source NKI Standard Library (nki-stdlib),
 a built-in CPU Simulator, ``nki.language`` APIs, and several API improvements for correctness
 and consistency.
 
-This guide is intended for NKI developers updating existing kernels from Beta 2 to NKI 0.3.0. It covers
+This guide is intended for NKI developers updating existing kernels from NKI 0.2.0 to NKI 0.3.0. It covers
 new features, deprecated and removed APIs, and breaking changes with before-and-after code examples.
 
 .. note::
 
-   If you are migrating from NKI Beta 1 (``neuronxcc.nki.*``), first complete the
-   :doc:`NKI Beta 2 Migration Guide <nki-beta2-migration-guide>` before following this guide.
+   If you are migrating from NKI 0.1.0 (``neuronxcc.nki.*``), first complete the
+   :doc:`NKI 0.2.0 Migration Guide <nki-beta2-migration-guide>` before following this guide.
 
 .. contents:: Table of contents
    :local:
@@ -111,7 +111,7 @@ Matmul Accumulation
 
 ``nc_matmul`` and ``nc_matmul_mx`` now have an ``accumulate`` parameter that controls whether the operation
 overwrites or accumulates on the destination PSUM tile. The default (``accumulate=None``) auto-detects:
-the first write to a PSUM location overwrites, and subsequent writes accumulate. This matches Beta 2
+the first write to a PSUM location overwrites, and subsequent writes accumulate. This matches NKI 0.2.0
 behavior.
 
 .. code-block:: python
@@ -196,7 +196,7 @@ using ``nisa.tensor_copy``.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.dma_copy(dst=hbm_tensor, src=psum_tensor[0:TILE, 0:N])
 
    # NKI 0.3.0
@@ -209,14 +209,14 @@ using ``nisa.tensor_copy``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 NKI 0.3.0 enforces that source and destination element types must match when using
-``dge_mode=dge_mode.hwdge``. Beta 2 did not validate this, allowing mismatched types to pass silently.
+``dge_mode=dge_mode.hwdge``. NKI 0.2.0 did not validate this, allowing mismatched types to pass silently.
 
 The DMA hardware moves raw bytes — HWDGE generates descriptors without interpreting data content, so no
 type casting occurs. To reinterpret data as a different type, use ``.view()`` to match types before the copy.
 
 .. code-block:: python
 
-   # Beta 2 (no validation, undefined behavior)
+   # NKI 0.2.0 (no validation, undefined behavior)
    nisa.dma_copy(dst=dst_f4, src=src_ui16, dge_mode=nisa.dge_mode.hwdge)
 
    # NKI 0.3.0 — use .view() to reinterpret
@@ -233,7 +233,7 @@ parameters have been removed. Use ``nisa.dma_compute`` instead.
 
 .. code-block:: python
 
-   # Beta 2 — simple read-modify-write
+   # NKI 0.2.0 — simple read-modify-write
    nisa.dma_copy(dst, src, dst_rmw_op=nl.add)
 
    # NKI 0.3.0 — use dma_compute
@@ -243,7 +243,7 @@ For accumulation loops with indirect indexing:
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    for k_idx in range(K):
        dst_rmw_op = None if k_idx == 0 else nl.add
        nisa.dma_copy(
@@ -270,12 +270,12 @@ For accumulation loops with indirect indexing:
 ``nisa.memset`` — Strict Type Matching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NKI 0.3.0 enforces that the ``value`` argument must match the destination tensor's dtype. Beta 2 silently
+NKI 0.3.0 enforces that the ``value`` argument must match the destination tensor's dtype. NKI 0.2.0 silently
 cast float values to the destination type. For integer-typed tensors, pass an integer literal.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    buf = nl.ndarray((128, 128), dtype=nl.int32, buffer=nl.sbuf)
    nisa.memset(dst=buf, value=2.0)
 
@@ -287,11 +287,11 @@ cast float values to the destination type. For integer-typed tensors, pass an in
 ``nisa.tensor_reduce`` — Axis Handling Fix
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NKI 0.3.0 fixes incorrect axis handling that existed in Beta 2. Beta 2 incorrectly allowed ``axis=1`` to
+NKI 0.3.0 fixes incorrect axis handling that existed in NKI 0.2.0. NKI 0.2.0 incorrectly allowed ``axis=1`` to
 refer to the last free dimension even for 3D/4D tensors. NKI 0.3.0 corrects this so that axis values
 correspond to the actual tensor dimensions.
 
-Kernels that relied on the Beta 2 behavior (e.g., using ``axis=1`` to mean the last dimension of a 3D/4D
+Kernels that relied on the NKI 0.2.0 behavior (e.g., using ``axis=1`` to mean the last dimension of a 3D/4D
 tensor) will produce errors in NKI 0.3.0.
 
 
@@ -303,7 +303,7 @@ The ``scales`` and ``reduce_op`` parameters swapped positions. ``scales`` is now
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.dma_compute(dst, srcs, scales, reduce_op)
 
    # NKI 0.3.0
@@ -317,7 +317,7 @@ The boolean ``use_gpsimd_dma`` parameter is replaced by the ``dma_engine`` enum.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.sendrecv(..., use_gpsimd_dma=True)
 
    # NKI 0.3.0
@@ -334,7 +334,7 @@ Existing positional call sites will break.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.affine_select(dst, pattern, offset, channel_multiplier, on_true, on_false)
 
    # NKI 0.3.0
@@ -350,7 +350,7 @@ the constant value.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.register_move(dst, imm=42)
 
    # NKI 0.3.0
@@ -366,7 +366,7 @@ Collectives — ``num_channels`` Removed
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    rank_id = ncc.collective_permute_implicit_current_processing_rank_id(
        iteration_id=0, channel_id=ch, num_channels=N, replica_group=rg
    )
@@ -392,7 +392,7 @@ for output tensors will cause compilation failures.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    output = nl.ndarray((B, C, L), dtype=x.dtype, buffer=nl.hbm)
 
    # NKI 0.3.0
@@ -408,7 +408,7 @@ and ``nki.isa.nc_version``.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    nisa.dma_copy(src=src_tensor, dst=dst_tensor, dge_mode=2)
 
    # NKI 0.3.0
@@ -423,7 +423,7 @@ Use buffer objects from ``nki.language`` instead.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    buf = nl.ndarray((128, 512), dtype=nl.float16, buffer='sbuf')
 
    # NKI 0.3.0
@@ -434,7 +434,7 @@ Use buffer objects from ``nki.language`` instead.
    :header-rows: 1
    :widths: 50 50
 
-   * - Beta 2 (string)
+   * - NKI 0.2.0 (string)
      - NKI 0.3.0 (object)
    * - ``"sbuf"``
      - ``nl.sbuf``
@@ -451,7 +451,7 @@ Use buffer objects from ``nki.language`` instead.
 ``nki.isa.dma_engine`` Alias Repurposed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Beta 2 ``nki.isa.dma_engine`` module-level alias was unused and did not map correctly to a valid engine.
+The NKI 0.2.0 ``nki.isa.dma_engine`` module-level alias was unused and did not map correctly to a valid engine.
 In NKI 0.3.0, it has been replaced with the ``nki.isa.dma_engine`` enum, which provides explicit control
 over DMA transfer engines (``dma_engine.dma`` for shared DMA, ``dma_engine.gpsimd_dma`` for GPSIMD's
 internal DMA engine).
@@ -471,7 +471,7 @@ parameters with defaults to the end of the signature.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    @nki.jit
    def my_kernel(X: nl.ndarray, *, flag: bool = True, scale: float = 1.0):
        ...
@@ -490,7 +490,7 @@ object identity, which is not meaningful during NKI compilation tracing. Use ``=
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    if some_flag is True:
        ...
 
@@ -510,7 +510,7 @@ the compiler to cache compilations based on the kernel's arguments.
 
 .. code-block:: python
 
-   # Beta 2
+   # NKI 0.2.0
    @nki.jit
    def my_kernel(img, in_perm, stride=[1, 1]):
        ...
@@ -551,7 +551,7 @@ use ``nisa.dma_copy`` to load pre-computed x4 data from an HBM kernel argument.
 ``nisa.range_select`` — Parameter Fixes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Beta 2 silently overrode ``on_false_value`` to ``FP32_MIN`` and ``reduce_cmd`` to ``reset_reduce``,
+NKI 0.2.0 silently overrode ``on_false_value`` to ``FP32_MIN`` and ``reduce_cmd`` to ``reset_reduce``,
 regardless of user input. In NKI 0.3.0:
 
 * ``reduce_cmd`` now works as expected (default ``reset_reduce``)

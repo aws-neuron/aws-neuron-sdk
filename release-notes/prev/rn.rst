@@ -15,7 +15,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.26.0 </release-notes/prev/2.26.0/index>
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
-* **The latest Neuron release is 2.29.0, released on 04/09/2026.** Read the :doc:`2.29.0 release notes </release-notes/2.29.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+* **The latest Neuron release is 2.29.1, released on 05/01/2026.** Read the :doc:`2.29.1 release notes </release-notes/2.29.1>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
   
 .. contents:: Table of contents
    :local:

@@ -27,6 +27,13 @@ To install NeuronPerf in your Neuron environment, execute:
 Refer to the :ref:`neuronperf_examples` and :ref:`neuronperf_user_guide` to get started.
 
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   neuronperf_install
+
+
 .. _neuronperf_user_guide:
 
 NeuronPerf User Guide

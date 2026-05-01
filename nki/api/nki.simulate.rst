@@ -25,13 +25,13 @@ Overview
 ``nki.simulate`` is a CPU-based functional simulator for NKI kernels. It executes every ``nki.isa``
 and ``nki.language`` operation using Python and NumPy, producing results that approximate hardware behavior.
 You write your kernel once and can run it on both the simulator and real Trainium devices. Some kernels
-may require adjustments when moving to hardware — see :ref:`Simulation Limitations <simulation-limitations-api>` for details.
+may require adjustments when moving to hardware — see :ref:`Simulation Limitations <nki-simulate-simulation-limitations>` for details.
 
 **Why use the simulator?**
 
 - **No hardware required** — develop and test NKI kernels on any machine with Python.
 - **Cost savings** — avoid the cost of developing on Trainium instances; iterate locally, then deploy to hardware when ready.
-- **Same kernel code** — the same ``@nki.jit`` kernel can run on both hardware and the simulator. See :ref:`Simulation Limitations <simulation-limitations-api>` for cases where adjustments may be needed.
+- **Same kernel code** — the same ``@nki.jit`` kernel can run on both hardware and the simulator. See :ref:`Simulation Limitations <nki-simulate-simulation-limitations>` for cases where adjustments may be needed.
 - **Full debugging support** — use ``breakpoint()``, PDB, or IDE debuggers to step through kernel execution and inspect tensor values.
 - **Fast iteration** — test kernels instantly without compilation or deployment.
 - **Hardware constraint validation** — catches invalid shapes, buffer misuse, dtype errors, and other constraint violations at runtime with clear error messages.
@@ -237,7 +237,7 @@ Invalid operations raise clear Python exceptions with descriptive error messages
 
 
 
-.. _simulation-limitations-api:
+.. _nki-simulate-simulation-limitations:
 
 Simulation Limitations
 ----------------------

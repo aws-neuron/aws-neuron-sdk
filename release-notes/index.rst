@@ -7,13 +7,14 @@
 AWS Neuron SDK Release Notes
 ============================
 
-**Last updated**:  April 09, 2026
+**Last updated**:  May 01, 2026
 
 .. toctree::
     :maxdepth: 1
     :hidden:
 
-    Neuron 2.29.0 </release-notes/2.29.0>
+    Neuron 2.29.1 </release-notes/2.29.1>
+    Neuron 2.29.0 </release-notes/prev/2.29.0>
     Component release notes </release-notes/components/index>
     Release artifacts </release-notes/releasecontent>
     Previous versions </release-notes/prev/rn>
@@ -28,12 +29,12 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
 
    .. grid-item-card:: 
       :class-card: sd-border-2
-      :link: /release-notes/2.29.0
+      :link: /release-notes/2.29.1
       :link-type: doc
 
-      **Latest AWS Neuron SDK release: 2.29.0**
+      **Latest AWS Neuron SDK release: 2.29.1**
       ^^^
-      On **04/09/2026**, AWS released version **2.29.0** of the Neuron SDK.
+      On **05/01/2026**, AWS released version **2.29.1** of the Neuron SDK.
 
       For more details, select this card and browse the release notes. 
 
@@ -53,8 +54,8 @@ Each Neuron component has specific release notes across Neuron versions.
      - Updated in Neuron Version
      - Latest Component Version
    * - :doc:`Neuron Compiler </release-notes/components/compiler>`
-     - 2.27.0
-     - 2.24.5133.0
+     - **2.29.1**
+     - 2.24.8799.0
    * - :doc:`Neuron Containers <components/containers>`
      - **2.29.0**
      - 2.29.0
@@ -111,7 +112,7 @@ Current Release Package Versions
                 :link-type: ref
                 :class-card: sd-border-1
         
-                **Neuron 2.29.0 release artifacts**
+                **Neuron 2.29.1 release artifacts**
                 ^^^
                 The libraries and packages updated in the latest Neuron release.
 
@@ -131,6 +132,8 @@ Release notes for prior versions from the past 12 months.
 
    * - Neuron version
      - Date released
+   * - :doc:`2.29.0 <prev/2.29.0>`
+     - 04/09/26
    * - :doc:`2.28.1 <prev/2.28.1>`
      - 03/13/26
    * - :doc:`2.28.0 <prev/2.28.0>`

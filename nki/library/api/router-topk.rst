@@ -197,4 +197,4 @@ The kernel implementation includes several key optimizations:
 See Also
 -----------
 
-* :doc:`Router Top-K PyTorch Reference </nki/library/api/router-topk-torch>`
+* :doc:`/nki/library/api/index`

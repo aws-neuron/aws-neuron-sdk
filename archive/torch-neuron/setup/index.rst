@@ -24,3 +24,12 @@ Setup Guide for Inf1
 	Update to latest release </archive/torch-neuron/setup/pytorch-update>
 	Install previous releases </archive/torch-neuron/setup/pytorch-install-prev>
 	/archive/torch-neuron/setup/pytorch-install-cxx11
+
+.. toctree::
+	:maxdepth: 1
+	:hidden:
+	:caption: Previous-release installs and DLAMI updates
+
+	/archive/torch-neuron/setup/pytorch-install-prev-al2
+	/archive/torch-neuron/setup/pytorch-update-al2-dlami
+	/archive/torch-neuron/setup/pytorch-update-u20-dlami

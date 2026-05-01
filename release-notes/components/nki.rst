@@ -36,7 +36,7 @@ New Features
 
 * **nki.collectives.all_to_all_v**: Variable-length all-to-all collective. Unlike ``all_to_all``, uses a metadata tensor to specify per-rank send/recv counts. See :doc:`nki.collectives API Reference </nki/api/nki.collectives>`.
 
-* **Matmul accumulation**: ``nc_matmul`` and ``nc_matmul_mx`` now have an ``accumulate`` parameter that controls whether the operation overwrites or accumulates on the destination PSUM tile. The default (``accumulate=None``) auto-detects, matching Beta 2 behavior. See :doc:`nki.isa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>`.
+* **Matmul accumulation**: ``nc_matmul`` and ``nc_matmul_mx`` now have an ``accumulate`` parameter that controls whether the operation overwrites or accumulates on the destination PSUM tile. The default (``accumulate=None``) auto-detects, matching NKI 0.2.0 behavior. See :doc:`nki.isa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>`.
 
 * **Address placement**: The ``address`` parameter was added to ``nki.language.ndarray`` for explicit memory placement. See :doc:`nki.language.ndarray </nki/api/generated/nki.language.ndarray>`.
 
@@ -56,7 +56,7 @@ Breaking Changes
 
 .. note::
 
-   NKI 0.3.0 requires all NKI kernels in a model to be updated to NKI 0.3.0. Mixing NKI 0.3.0 and NKI Beta 2 kernels in the same model is not supported. For models that have not yet been updated, continue using Neuron SDK 2.28.
+   NKI 0.3.0 requires all NKI kernels in a model to be updated to NKI 0.3.0. Mixing NKI 0.3.0 and NKI 0.2.0 kernels in the same model is not supported. For models that have not yet been updated, continue using Neuron SDK 2.28.
 
 * ``nisa.dma_copy`` — No longer supports reading directly from PSUM. Copy the PSUM tensor to SBUF first using ``nisa.tensor_copy``.
 
@@ -116,7 +116,7 @@ Other Changes
 Bug Fixes
 ~~~~~~~~~
 
-* Fixed incorrect axis handling in ``nisa.tensor_reduce``. Beta 2 incorrectly allowed ``axis=1`` to refer to the last free dimension even for 3D/4D tensors. NKI 0.3.0 corrects this so that axis values correspond to the actual tensor dimensions.
+* Fixed incorrect axis handling in ``nisa.tensor_reduce``. NKI 0.2.0 incorrectly allowed ``axis=1`` to refer to the last free dimension even for 3D/4D tensors. NKI 0.3.0 corrects this so that axis values correspond to the actual tensor dimensions.
 
 * Fixed ``nisa.range_select`` silently overriding user-specified parameters. The ``on_false_value`` and ``reduce_cmd`` parameters were incorrectly ignored by the compiler — ``on_false_value`` was always set to ``-3.4028235e+38`` and ``reduce_cmd`` was always set to ``reset_reduce``, regardless of the values passed in. NKI 0.3.0 honors the ``reduce_cmd`` parameter and documents the ``FP32_MIN`` hardware constraint for ``on_false_value``.
 
@@ -172,8 +172,8 @@ Known Issues
 
 .. _nki-2-28-0-rn:   
 
-Neuron Kernel Interface (NKI) (Beta 2 - 0.2.0) [2.28] (Neuron 2.28.0 Release)
------------------------------------------------------------------------------
+Neuron Kernel Interface (NKI) (0.2.0) [2.28] (Neuron 2.28.0 Release)
+--------------------------------------------------------------------
 
 Date of Release: 02/26/2026
 
@@ -251,7 +251,7 @@ Breaking Changes
    been postponed from Neuron 2.28 to Neuron 2.29. Both the ``neuronxcc.nki.*`` 
    and ``nki.*`` namespaces continue to be supported in this release. We 
    encourage customers to migrate to the ``nki.*`` namespace using the 
-   :doc:`NKI Beta 2 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
+   :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
 
 Bug Fixes
 ~~~~~~~~~
@@ -331,7 +331,7 @@ Bug Fixes
   ``NotImplementedError("removed during code migration")`` message. Each now raises a specific
   message naming the unsupported API. Additionally, calling an ``nki.jit`` kernel with no
   arguments now raises a clear error instead.
-  See :doc:`NKI Beta 2 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
+  See :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
 
 * Fixed nested ``nki_jit`` decorators not being allowed. The NKI compiler only recognized
   ``@nki.jit``-decorated functions when they were plain function objects. Nested decorators
@@ -348,8 +348,8 @@ Known Issues
 
 .. _nki-2-27-0-rn:
 
-Neuron Kernel Interface (NKI) (Beta 2 - 0.1.0) [2.27] (Neuron 2.27.0 Release)
------------------------------------------------------------------------------
+Neuron Kernel Interface (NKI) (0.1.0) [2.27] (Neuron 2.27.0 Release)
+--------------------------------------------------------------------
 
 Date: 12/25/2025
 
@@ -380,7 +380,7 @@ Improvements
 
 * changes to existing APIs:
 
-  * several ``nki.language`` APIs have been removed in NKI Beta 2
+  * several ``nki.language`` APIs have been removed in NKI 0.2.0
   * all nki.isa APIs have ``dst`` as an input param
   * all nki.isa APIs removed ``dtype`` and ``mask`` support
   * ``nki.isa.memset`` — removed ``shape`` positional arg , since we have ``dst``
@@ -397,7 +397,7 @@ Improvements
   * added :doc:`Get Started with NKI </nki/get-started/quickstart-implement-run-kernel>`
   * added :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`
   * added :doc:`About the NKI Compiler </nki/deep-dives/nki-compiler>`
-  * added :doc:`About NKI Beta 2 Migration </nki/migration/nki-beta2-migration-guide>`
+  * added :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`
   * added :doc:`MXFP Matrix Multiplication with NKI </nki/deep-dives/mxfp-matmul>`
   * updated :doc:`Matrix Multiplication Tutorial </nki/guides/tutorials/matrix_multiplication>`
   * updated :doc:`Profile a NKI Kernel </nki/guides/use-neuron-profile>`
@@ -409,9 +409,9 @@ Known Issues
 ~~~~~~~~~~~~
 
 * ``nki.isa.nki.isa.nc_matmul`` - ``is_moving_onezero`` was incorrectly named ``is_moving_zero`` in this release
-* NKI ISA semantic checks are not available with Beta 2, workaround is to reference the API docs
-* NKI Collectives are not available with Beta 2
-* ``nki.benchmark`` and ``nki.profile`` are not available with Beta 2
+* NKI ISA semantic checks are not available with NKI 0.2.0, workaround is to reference the API docs
+* NKI Collectives are not available with NKI 0.2.0
+* ``nki.benchmark`` and ``nki.profile`` are not available with NKI 0.2.0
 
 
 ----
@@ -582,7 +582,7 @@ Improvements
 
 * Documentation updates:
 
-  * Tutorial for :doc:`SPMD usage with multiple Neuron Cores on Trn2 </nki/guides/tutorials/spmd_multiple_nc_tensor_addition>`
+  * Tutorial for :doc:`SPMD usage with multiple Neuron Cores on Trn2 </nki/guides/tutorials/index>`
 
 
 ----
@@ -599,7 +599,7 @@ Improvements
 
 * NKI support for Trainium2, including full integration with Neuron Compiler.
   Users can directly shard NKI kernels across multiple Neuron Cores from an SPMD launch grid.
-  See :doc:`tutorial </nki/guides/tutorials/spmd_multiple_nc_tensor_addition>` for more info.
+  See :doc:`tutorial </nki/guides/tutorials/index>` for more info.
   See :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>` for an initial version of the architecture specification
   (more details to come in future releases).
 * New calling convention in NKI kernels, where kernel output tensors are explicitly returned from the kernel instead

@@ -1785,7 +1785,7 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
     :param bound1: tile with one element per partition for second comparison
     :param reduce_op: reduction operator to apply on across the selected output. Currently only ``nl.maximum`` is supported.
     :param reduce_cmd: controls the state of the Vector Engine accumulator registers.
-      Defaults to ``reduce_cmd.reset_reduce``. See :ref:`nki-reduce-cmd` for supported values.
+      Defaults to ``reduce_cmd.reset_reduce``. See :class:`nki.isa.reduce_cmd` for supported values.
     :param reduce_res: optional tile to store reduction results.
     :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``.
         Defaults to 0, and must be a compile-time integer."""

@@ -82,7 +82,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/tutorials/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/tutorials/torch-neuronx-profiling-with-tb.html</loc>
@@ -142,7 +142,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/how-to-profile-workload.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-summary-page.html</loc>
@@ -938,7 +938,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/nki_faq.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/index.html</loc>
@@ -974,7 +974,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/about/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/transformer-tkg.html</loc>
@@ -1070,27 +1070,27 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/router-topk.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rope.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dge.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dynamic-loops.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-compiler.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/mxfp-matmul.html</loc>
@@ -1098,35 +1098,35 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dma-bandwidth-guide.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-aps.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki_perf_guide.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/how-to-scheduling-apis.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/use-neuron-profile.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/nki_simulator.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/framework_custom_op.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/index.html</loc>
@@ -1134,7 +1134,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/trainium2_arch.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/trainium3_arch.html</loc>
@@ -1142,23 +1142,23 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/trainium_inferentia2_arch.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/tutorials/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/tutorials/matrix_multiplication.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/tutorials/fused_mamba.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/tutorials/kernel-optimization.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/tutorials/transpose2d.html</loc>
@@ -1170,7 +1170,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.isa.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/index.html</loc>
@@ -1178,7 +1178,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.collectives.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.api.shared.html</loc>
@@ -1186,11 +1186,11 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.language.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.simulate.html</loc>
@@ -1958,11 +1958,11 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/migration/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/migration/nki_block_dimension_migration_guide.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/migration/nki-beta2-migration-guide.html</loc>
@@ -1970,7 +1970,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/migration/nki-0-3-0-update-guide.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/index.html</loc>
@@ -1978,7 +1978,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/quickstart-implement-run-kernel.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/nki-language-guide.html</loc>
@@ -1986,11 +1986,11 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/setup-env.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/about/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/about/tiling-overview.html</loc>
@@ -2010,7 +2010,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/about/nki-dma-overview.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/get-started/about/memory-hierarchy-overview.html</loc>
@@ -2166,7 +2166,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/pytorch/manual.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/pytorch/update-manual.html</loc>
@@ -2270,7 +2270,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/disaggregated-inference-tutorial.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html</loc>
@@ -2774,15 +2774,19 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html</loc>
     <lastmod>2026-04-27</lastmod>
   </url>
   <url>
-    <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.29.0.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.29.1.html</loc>
+    <lastmod>2026-04-30</lastmod>
+  </url>
+  <url>
+    <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.29.0.html</loc>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.27.1.html</loc>
@@ -2798,7 +2802,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.28.1.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.28.0.html</loc>
@@ -2922,11 +2926,11 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.27.0/tools.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.27.0/nki.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.27.0/containers.html</loc>
@@ -3026,7 +3030,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/archive/neuron1/prev/rn.html</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/archive/neuron1/neuronrelease/previous-content.html</loc>
@@ -3038,15 +3042,15 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/runtime.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/nxd-inference.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/nki-lib.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/dlamis.html</loc>
@@ -3054,11 +3058,11 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/dev-tools.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/nki.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/containers.html</loc>
@@ -3070,7 +3074,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/compiler.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/jax.html</loc>
@@ -3110,7 +3114,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/faq.html</loc>
-    <lastmod>2025-10-07</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/about/index.html</loc>
@@ -3142,7 +3146,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/explore/core-dump-deep-dive.html</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/explore/intranode-collective-comm.html</loc>
@@ -3570,15 +3574,15 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-update-u22.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-update-al2023.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-update-u24.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html</loc>
@@ -3774,7 +3778,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/amazonq-getstarted.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/agentic-development-overview.html</loc>
@@ -4542,7 +4546,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/quick-start/index.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/quick-start/mxnet-neuron.html</loc>
@@ -4654,7 +4658,7 @@
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/error-codes/index.html</loc>
-    <lastmod>2026-04-28</lastmod>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/error-codes/EVRF006.html</loc>

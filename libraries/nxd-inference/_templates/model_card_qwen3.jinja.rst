@@ -312,7 +312,7 @@ Select a use case to view the recommended Neuron configuration. For the definiti
       For most use cases, the configuration below can be used to optimize **throughput** on Neuron devices. You can also increase the ``batch_size`` or use quantization to improve throughput even further. 
 
       {% if throughput_config.neuron.moe_ep_degree != 1 %}
-      For this specific configuration, we recommend using **Expert Parallelism (EP) of {{ throughput_config.neuron.moe_ep_degree }}**. For more details, refer to the :ref:`Qwen3-MoE Inference on Trn2 <qwen3-moe-tutorial>` tutorial.
+      For this specific configuration, we recommend using **Expert Parallelism (EP) of {{ throughput_config.neuron.moe_ep_degree }}**. For more details, refer to the :doc:`Qwen3-MoE Inference on Trn2 </libraries/nxd-inference/tutorials/qwen3-moe-tutorial>` tutorial.
       {% endif %}
 
       :bdg-info:`{{ throughput_config.instance_type }}`
@@ -331,7 +331,7 @@ Select a use case to view the recommended Neuron configuration. For the definiti
       For most use cases, the configuration below can be used to optimize **latency** on Neuron devices.
 
       {% if latency_config.neuron.moe_ep_degree != 1 %}
-      For this specific configuration, we recommend using **Expert Parallelism (EP) of {{ latency_config.neuron.moe_ep_degree }}**. For more details, refer to the :ref:`qwen3-moe-tutorial` tutorial.
+      For this specific configuration, we recommend using **Expert Parallelism (EP) of {{ latency_config.neuron.moe_ep_degree }}**. For more details, refer to the :doc:`Qwen3-MoE Inference on Trn2 </libraries/nxd-inference/tutorials/qwen3-moe-tutorial>` tutorial.
       {% endif %}
 
       :bdg-info:`{{ latency_config.instance_type }}`

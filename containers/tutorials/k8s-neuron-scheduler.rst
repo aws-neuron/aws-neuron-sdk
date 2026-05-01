@@ -50,6 +50,32 @@ When requesting 8 devices, your container will be allocated one of the following
 
       .. include:: /containers/tutorials/k8s-default-scheduler.rst
 
+**Troubleshooting**
+
+.. warning::
+
+   **Neuron devices unavailable after scheduler extension restart**
+
+   If the Neuron scheduler extension is restarted, upgraded, or reinstalled while
+   Neuron pods are being deleted or completing, the per-node device allocation
+   annotations may become stale. This can cause Neuron devices to appear allocated to
+   pods that no longer exist, preventing new pods from being scheduled onto those
+   devices.
+
+   Symptoms:
+
+   - New pods requesting Neuron resources remain in ``Pending`` state.
+   - Scheduler extension logs indicate insufficient Neuron devices on nodes that should have
+     available capacity.
+
+   To resolve this, remove the stale allocation annotations from affected nodes. The
+   scheduler extension will regenerate them automatically on the next pod scheduling
+   event.
+
+   .. code-block:: bash
+
+      kubectl annotate node <node-name> NEURON_DEV_USAGE_MAP- NEURON_CORE_USAGE_MAP-
+
 
 .. |eks-inf2-device-set| image:: /images/eks-inf2-device-set.png
 .. |eks-trn1-device-set4| image:: /images/eks-trn1-device-set4.png

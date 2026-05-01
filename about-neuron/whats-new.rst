@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 04/30/2026
+    :date-modified: 05/01/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -23,7 +23,7 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.29.0 (04/09/2026)
+        **Latest release**: 2.29.1 (05/01/2026)
 
 ----
 
@@ -73,7 +73,7 @@ AWS Neuron SDK 2.29.0 introduces NKI 0.3.0, the latest update to the Neuron Kern
 
 **New ISA and Hardware Features**: Added the ability to set DMA priority of DMA operations and collectives operations for Trn3 (NeuronCore-v4). A dedicated ``nki.isa.exponential`` instruction is optimized for vectorising exponents (``exp``) with VectorE. Matmul accumulation control is added via the ``accumulate`` parameter on ``nc_matmul`` and ``nc_matmul_mx``. Variable-length all-to-all collectives are now available via ``nki.collectives.all_to_all_v``.
 
-**Breaking Changes**: NKI 0.3.0 includes several API breaking changes that improve correctness and consistency. All kernels must be updated to NKI 0.3.0; mixing with Beta 2 kernels in the same model is not supported. For the full list of changes and migration examples, see the :doc:`NKI 0.3.0 Update Guide </nki/migration/nki-0-3-0-update-guide>`.
+**Breaking Changes**: NKI 0.3.0 includes several API breaking changes that improve correctness and consistency. All kernels must be updated to NKI 0.3.0; mixing with NKI 0.2.0 kernels in the same model is not supported. For the full list of changes and migration examples, see the :doc:`NKI 0.3.0 Update Guide </nki/migration/nki-0-3-0-update-guide>`.
 
 For more details, see :ref:`nki-2-29-0-rn`.
 
@@ -152,7 +152,7 @@ End of Support and Migration Notices
 
 * PyTorch/XLA will be replaced by TorchNeuron.
 
-* Read the :doc:`Neuron 2.29.0 component release notes </release-notes/2.29.0>` for specific Neuron component improvements and details.
+* Read the :doc:`Neuron 2.29.0 component release notes </release-notes/prev/2.29.0>` for specific Neuron component improvements and details.
 
 ----
 
@@ -172,7 +172,7 @@ AWS Neuron SDK 2.28.0: Enhanced Profiling, Vision Language Models, and Expanded 
 
 **Posted on**: February 26, 2026
 
-Today we are releasing AWS Neuron SDK 2.28.0. This release enhances Neuron Explorer with system profiling, Tensor Viewer, and Database Viewer for comprehensive performance analysis. NxD Inference adds support for Qwen2/Qwen3 VL vision language models, Flux.1 inpainting capabilities, and Eagle3 speculative decoding. The NKI Library expands with 9 new kernels including RoPE, MoE operations, and experimental kernels for attention and cross entropy. NKI (Beta 2) introduces LNC multi-core support with intra-LNC collectives and new APIs. Kubernetes users gain Neuron DRA Driver support for advanced resource allocation.
+Today we are releasing AWS Neuron SDK 2.28.0. This release enhances Neuron Explorer with system profiling, Tensor Viewer, and Database Viewer for comprehensive performance analysis. NxD Inference adds support for Qwen2/Qwen3 VL vision language models, Flux.1 inpainting capabilities, and Eagle3 speculative decoding. The NKI Library expands with 9 new kernels including RoPE, MoE operations, and experimental kernels for attention and cross entropy. NKI 0.2.0 introduces LNC multi-core support with intra-LNC collectives and new APIs. Kubernetes users gain Neuron DRA Driver support for advanced resource allocation.
 
 
 Developer Tools and Profiling
@@ -207,7 +207,7 @@ For more details, see :ref:`nki-lib-2-28-0-rn`.
 Neuron Kernel Interface (NKI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**NKI Beta 2 (0.2.0)** - This release includes LNC multi-core support for LNC=2, enabling kernels to leverage multiple NeuronCores within a logical NeuronCore. The compiler now tracks ``shared_hbm`` tensors and canonicalizes LNC kernel outputs. Users can declare tensors private to a single NeuronCore using ``private_hbm`` memory type.
+**NKI 0.2.0** - This release includes LNC multi-core support for LNC=2, enabling kernels to leverage multiple NeuronCores within a logical NeuronCore. The compiler now tracks ``shared_hbm`` tensors and canonicalizes LNC kernel outputs. Users can declare tensors private to a single NeuronCore using ``private_hbm`` memory type.
 
 **New nki.collectives Module** - Enables collective communication across multiple NeuronCores with operations including ``all_reduce``, ``all_gather``, ``reduce_scatter``, ``all_to_all``, ``collective_permute`` variants, and ``rank_id``.
 
