@@ -102,7 +102,7 @@ Get started
 
 Source, installation steps, and the current catalog of agents and skills are maintained in the Neuron Agentic Development repository:
 
-- `Neuron Agentic Development on GitHub README <https://github.com/aws-neuron/neuron-agentic-development/README.md>`_
+- `Neuron Agentic Development on GitHub README <https://github.com/aws-neuron/neuron-agentic-development/blob/main/README.md>`_
 
 Follow the linked README for the supported installation paths (for example, Claude Code plugin install, Kiro setup script) and for the up-to-date list of available agents and skills.
 
