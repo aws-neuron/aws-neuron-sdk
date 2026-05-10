@@ -1,6 +1,9 @@
 """Stubs for nki.language"""
+from __future__ import annotations
+
 
 from enum import Enum
+from typing import *
 
 class MemoryRegion(Enum):
     r"""Memory region constants for NKI tensors."""
@@ -37,17 +40,423 @@ class tile_size:
 
 
 class NkiTensor(NKIObject):
-    r"""Tensor class with access pattern support.
+    """NKI tensor with shape-based view operations.
+
+    ``NkiTensor`` is the core tensor type in NKI. It represents a multi-dimensional
+    array allocated on a specific memory buffer (SBUF, PSUM, or HBM) with a dtype
+    and shape. All view operations (``slice``, ``permute``, ``reshape``, etc.) return
+    new ``NkiTensor`` objects that share the same underlying storage — no data is
+    copied. Views are consumed by NKI ISA instructions
+    (e.g., ``nisa.tensor_copy``, ``nisa.dma_copy``).
+
+    Tensors are created via :func:`nl.ndarray`:
+
+    .. code-block:: python
+
+        sb = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+        hbm = nl.ndarray((4, 128, 64), dtype=nl.float32, buffer=nl.shared_hbm)
+
+    **Partition dimension.**
+
+    On-chip tensors (SBUF, PSUM) have a partition dimension at dim 0 that maps to
+    the hardware's parallel partitions. Most view operations cannot modify this
+    dimension — see individual method docs for constraints.
 
     Attributes:
-        shape: Tuple of dimension sizes
-        dtype: NKI data type string
-        buffer: Buffer location (sbuf, psum, hbm, etc.)
-        _storage: Opaque storage handle, interpreted by the backend
-        _pattern: Access pattern as list of [step, num] tuples (None = identity)
-        offset: Element offset into storage"""
-    ...
+        shape (tuple[int, ...]): The size of each dimension of the view, e.g. ``(128, 64)``.
+        strides (tuple[int, ...]): Element step between consecutive indices along each dimension in the underlying storage. A stride of ``0`` means the dimension is broadcast.
+        offset (int): Element offset (not byte offset) from the start of the underlying storage at which this view begins. A freshly allocated tensor has ``offset == 0``; slicing produces views with non-zero offsets.
+        dtype (str): Element type, e.g. ``nl.float32`` or ``nl.bfloat16``. See :ref:`nki-dtype` for the full list.
+        buffer (MemoryRegion): Memory region the storage lives in: ``nl.sbuf``, ``nl.psum``, ``nl.hbm``, ``nl.private_hbm``, or ``nl.shared_hbm``.
+        ndim (int): Number of dimensions — equivalent to ``len(shape)``.
+        size (int): Total number of elements — equivalent to ``prod(shape)``.
+        name (str): Optional debug label propagated into compiler diagnostics and :ref:`scheduling <how-to-scheduling-apis>`."""
 
+    def __init__(self, shape: tuple[int, ...], dtype: str, storage: Any, buffer: Any=MemoryRegion.sbuf, name: str=''):
+        """Create an ``NkiTensor`` bound to an existing storage handle.
+
+        Most code should use :func:`nl.ndarray` instead — it allocates fresh
+        storage and wraps it in a tensor. This constructor is useful when you
+        need to re-bind a storage handle you already have (e.g. from a
+        framework integration or test fixture).
+
+        :param shape: tuple of positive integers.
+        :param dtype: NKI dtype string (e.g. ``nl.float32``).
+        :param storage: backend-specific storage handle. May be ``None`` when
+            the tensor is used as a signature placeholder and never materialized.
+        :param buffer: memory region (``nl.sbuf``, ``nl.psum``, ``nl.hbm``,
+            ``nl.shared_hbm``). Defaults to ``nl.sbuf``.
+        :param name: optional debug name, used in compiler diagnostics and
+            :ref:`scheduling <how-to-scheduling-apis>`."""
+        ...
+
+    def is_contiguous(self) -> bool:
+        """Return True if the view covers storage contiguously (row-major order).
+
+        Computed from the current strides: each non-size-1 dimension's stride
+        must equal the product of the shape sizes of inner dimensions."""
+        ...
+
+    def get_pattern(self) -> list[list[int]]:
+        """Return the view's access pattern as ``[[stride, count], ...]``.
+
+        Useful as a starting point when constructing a new ``.ap()`` that
+        keeps most of the current layout intact. The returned pattern
+        pairs each of the view's dimensions with its current stride, in
+        the same order as :attr:`shape` / :attr:`strides`."""
+        ...
+
+    def is_indirect(self) -> bool:
+        """Return True if this view already uses indirect addressing.
+
+        Indirect addressing is produced by dynamic :meth:`select`,
+        :meth:`vector_select`, or :meth:`ap` with ``scalar_offset`` /
+        ``vector_offset``. Indirect views cannot be re-indirected, and the
+        dimension that participates in the indirection cannot be further
+        sliced or selected — use this query to guard against those chains."""
+        ...
+
+    def permute(self, dims: tuple[int, ...]) -> NkiTensor:
+        """Reorder tensor dimensions.
+
+        Returns a new view with dimensions rearranged according to ``dims``.
+        No data is copied.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 4, 8), dtype=nl.float32, buffer=nl.sbuf)
+            t.permute((0, 2, 1))  # shape becomes (128, 8, 4)
+
+        **Constraints.**
+
+        - ``dims`` must be a permutation of ``range(t.ndim)``
+        - On-chip tensors: ``dims[0]`` must be 0 (partition dim stays outermost)
+        - After ``vector_select``: ``dims[0]`` must be 0 (indirect partition dim
+          stays outermost; see :meth:`is_indirect`)
+
+        :param dims: tuple of dimension indices in the desired order
+        :return: new ``NkiTensor`` view with reordered dimensions"""
+        ...
+
+    def broadcast(self, dim: int, size: int) -> NkiTensor:
+        """Expand a size-1 dimension to ``size`` by repeating elements.
+
+        The dimension must have size 1 before broadcasting. No data is copied.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 1, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.broadcast(1, 8)  # shape becomes (128, 8, 64)
+
+        **Constraints.**
+
+        - ``t.shape[dim]`` must be 1
+        - On-chip tensors: ``dim`` must not be 0 (partition dim)
+
+        :param dim: dimension to broadcast
+        :param size: new size for the dimension
+        :return: new ``NkiTensor`` view with the broadcasted dimension"""
+        ...
+
+    def expand_dim(self, dim: int) -> NkiTensor:
+        """Insert a new dimension of size 1 at position ``dim``.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.expand_dim(1)  # shape becomes (128, 1, 64)
+
+        **Constraints.**
+
+        - On-chip tensors: ``dim`` must not be 0
+        - After ``vector_select``: ``dim`` must not be 0 (cannot insert before
+          the indirect partition dim; see :meth:`is_indirect`)
+
+        :param dim: position at which to insert the new dimension
+        :return: new ``NkiTensor`` view with an additional size-1 dimension"""
+        ...
+
+    def squeeze_dim(self, dim: int) -> NkiTensor:
+        """Remove a dimension of size 1.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 1, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.squeeze_dim(1)  # shape becomes (128, 64)
+
+        **Constraints.**
+
+        - ``t.shape[dim]`` must be 1
+        - On-chip tensors: ``dim`` must not be 0
+        - After ``vector_select``: ``dim`` must not be 0
+
+        :param dim: dimension to remove (must have size 1)
+        :return: new ``NkiTensor`` view with the dimension removed"""
+        ...
+
+    def reshape_dim(self, dim: int, shape: tuple[int, ...]) -> NkiTensor:
+        """Split a single dimension into multiple dimensions.
+
+        The product of ``shape`` must equal ``t.shape[dim]``. One element of
+        ``shape`` may be -1, in which case its value is inferred.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 24), dtype=nl.float32, buffer=nl.sbuf)
+            t.reshape_dim(1, (4, 6))   # shape becomes (128, 4, 6)
+            t.reshape_dim(1, (4, -1))  # same result, 6 is inferred
+
+        **Constraints.**
+
+        - ``prod(shape) == t.shape[dim]``
+        - On-chip tensors: ``dim`` must not be 0 (unless ``shape`` is trivial, e.g., ``(128,)``)
+        - After ``vector_select``: ``dim`` must not be 0
+
+        :param dim: dimension to split
+        :param shape: tuple of sizes for the new dimensions (may contain one -1)
+        :return: new ``NkiTensor`` view with the dimension split"""
+        ...
+
+    def flatten_dims(self, start_dim: int, end_dim: int) -> NkiTensor:
+        """Merge a contiguous range of dimensions into one.
+
+        Dimensions ``start_dim`` through ``end_dim`` (inclusive) are merged into
+        a single dimension. The dimensions must already be contiguous in memory
+        (no ``permute`` or non-contiguous slicing across them) so the merged view
+        is itself a valid view of storage.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 2, 3, 4), dtype=nl.float32, buffer=nl.sbuf)
+            t.flatten_dims(1, 2)  # shape becomes (128, 6, 4)
+
+        **Constraints.**
+
+        - Dimensions ``start_dim..end_dim`` must be contiguous in memory
+        - On-chip tensors: ``start_dim`` must be > 0
+        - After ``vector_select``: ``start_dim`` must be > 0
+
+        :param start_dim: first dimension to merge (inclusive)
+        :param end_dim: last dimension to merge (inclusive)
+        :return: new ``NkiTensor`` view with the merged dimension"""
+        ...
+
+    def reshape(self, shape: tuple[int, ...]) -> NkiTensor:
+        """Reshape the tensor to a new shape without copying data.
+
+        The total number of elements must remain the same. Fails if the current
+        memory layout is incompatible with the requested shape (e.g. after a
+        non-contiguous slice or permute).
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 4, 6), dtype=nl.float32, buffer=nl.sbuf)
+            t.reshape((128, 24))       # merge last two dims
+            t.reshape((128, 2, 12))    # split differently
+
+        **Constraints.**
+
+        - ``prod(shape) == prod(t.shape)``
+        - On-chip tensors: ``shape[0]`` must equal ``t.shape[0]`` (partition dim preserved)
+        - After ``vector_select``: ``shape[0]`` must equal ``t.shape[0]`` (indirect
+          partition dim preserved)
+        - Fails if the current layout is incompatible with the requested shape
+
+        :param shape: tuple of new dimension sizes
+        :return: new ``NkiTensor`` view with the requested shape"""
+        ...
+
+    def rearrange(self, src_pattern: tuple, dst_pattern: tuple, fixed_sizes: dict[str, int] | None=None) -> NkiTensor:
+        """Rearrange tensor dimensions using einops-style patterns.
+
+        Combines splitting, reordering, and merging dimensions into a single
+        named operation. Patterns are tuples of strings (dimension names) or
+        tuples of strings (grouped dimensions that are split or merged).
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 24), dtype=nl.float32, buffer=nl.sbuf)
+            # Split dim 1 into (h, w), then reorder to (b, w, h):
+            t.rearrange(('b', ('h', 'w')), ('b', 'w', 'h'), {'h': 4})
+            # Result shape: (128, 6, 4)
+
+        :param src_pattern: source dimension pattern (tuple of str or tuple-of-str)
+        :param dst_pattern: destination dimension pattern (same dimension names)
+        :param fixed_sizes: dict mapping dimension names to known sizes (for -1 inference)
+        :return: new ``NkiTensor`` view with rearranged dimensions"""
+        ...
+
+    def slice(self, dim: int, start: int, end: int, step: int=1) -> NkiTensor:
+        """Slice along a single dimension.
+
+        Returns a view selecting elements from ``start`` to ``end`` (exclusive)
+        with the given ``step``. Equivalent to ``t[:, start:end:step, :]`` when
+        ``dim=1``.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.slice(1, 8, 24, 1)   # shape becomes (128, 16)
+            t.slice(1, 0, 64, 2)   # shape becomes (128, 32)
+
+        **Constraints.**
+
+        - ``0 <= start < end <= t.shape[dim]``
+        - ``step >= 1``
+        - On an indirect view (see :meth:`is_indirect`), cannot slice a
+          dimension that participates in the indirection.
+
+        :param dim: dimension to slice
+        :param start: start index (inclusive)
+        :param end: end index (exclusive)
+        :param step: step size (default 1)
+        :return: new ``NkiTensor`` view with the sliced dimension"""
+        ...
+
+    def select(self, dim: int, index: Union[int, NkiTensor]) -> NkiTensor:
+        """Select a single element along a dimension, removing it.
+
+        When ``index`` is an integer, performs static selection (equivalent to
+        ``t[:, index, :]`` when ``dim=1``). When ``index`` is an ``NkiTensor``
+        (e.g., a scalar loaded into SBUF), performs dynamic indirect selection
+        where the index is resolved at runtime.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 8, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.select(1, 3)          # static: shape becomes (128, 64)
+
+            # Dynamic select (HBM tensor, index resolved at runtime):
+            idx = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+            hbm_t = nl.ndarray((4, 128, 8), dtype=nl.float32, buffer=nl.shared_hbm)
+            hbm_t.select(0, idx)    # shape becomes (128, 8)
+
+        **Constraints.**
+
+        - Static: ``0 <= index < t.shape[dim]``
+        - Dynamic: only one dynamic select per tensor (no chaining);
+          check :meth:`is_indirect` to guard
+        - Dynamic on-chip: ``dim`` must not be 0 (partition dim)
+        - On an indirect view (see :meth:`is_indirect`), static selection
+          cannot target a dimension that participates in the indirection.
+
+        :param dim: dimension to select from
+        :param index: integer index (static) or ``NkiTensor`` scalar (dynamic)
+        :return: new ``NkiTensor`` view with the dimension removed"""
+        ...
+
+    def vector_select(self, dim: int, vector_offset: NkiTensor) -> NkiTensor:
+        """Per-partition indirect addressing using a vector of offsets.
+
+        Each partition uses its own index from ``vector_offset`` as the base
+        address for the selected dimension. The output partition count is
+        ``vector_offset.shape[0]``.
+
+        This is used for gather-style operations where different partitions
+        read from different locations in the source tensor.
+
+        .. code-block:: python
+
+            hbm_t = nl.ndarray((64, 128, 8), dtype=nl.float32, buffer=nl.shared_hbm)
+            offsets = nl.ndarray((128, 1), dtype=nl.int32, buffer=nl.sbuf)
+            # Each of 128 partitions reads from a different row of hbm_t
+            hbm_t.vector_select(0, offsets)  # shape becomes (128, 128, 8)
+
+        **Constraints.**
+
+        - ``dim`` must be 0
+        - Only supported on HBM tensors
+        - Only one dynamic select per tensor (cannot combine with a prior
+          dynamic :meth:`select` or :meth:`vector_select`); check
+          :meth:`is_indirect` to guard
+        - The result is an indirect view: the selected dimension cannot be
+          further sliced or selected.
+
+        :param dim: dimension to apply indirect addressing (must be 0)
+        :param vector_offset: SBUF tensor with per-partition indices, shape ``(num_partitions, 1)``
+        :return: new ``NkiTensor`` view with dim 0 size set to ``vector_offset.shape[0]``"""
+        ...
+
+    def ap(self, pattern: list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype: DType | None=None) -> NkiTensor:
+        """Low-level access pattern override (escape hatch).
+
+        Replaces shape and strides with an explicit
+        ``[[stride, count], ...]`` pattern addressing the underlying
+        storage directly. Analogous to ``torch.as_strided``.
+
+        .. code-block:: python
+
+            sb = nl.ndarray((128, 32), dtype=nl.float32, buffer=nl.sbuf)
+            # Explicit 2D pattern: partition stride=32, free stride=1
+            sb.ap(pattern=[[32, 128], [1, 32]])
+
+            # With indirect access and dtype reinterpret:
+            sb.ap(pattern=[[64, 128], [1, 16]], dtype=nl.bfloat16,
+                  scalar_offset=idx, indirect_dim=1)
+
+        :param pattern: list of ``[stride, count]`` pairs defining the access pattern
+        :param offset: element offset into storage. When ``None`` (default), inherits
+            the current view's storage offset — matching ``torch.as_strided``'s
+            ``storage_offset=None`` behaviour. Pass an explicit integer to override.
+        :param scalar_offset: dynamic scalar index tensor for indirect access
+        :param vector_offset: per-partition index tensor for indirect access
+        :param indirect_dim: dimension in ``self.shape`` whose stride scales
+            the indirect scalar/vector offset (default 0)
+        :param dtype: reinterpret storage as this dtype (default: tensor's dtype)
+        :return: new ``NkiTensor`` with the explicit access pattern"""
+        ...
+
+    def view(self, dtype: DType) -> NkiTensor:
+        """Reinterpret the tensor's data as a different dtype.
+
+        No data is copied. Equivalent to ``numpy.ndarray.view(dtype)`` or
+        C++ ``reinterpret_cast``. The last dimension's size is scaled by the
+        ratio of dtype sizes: reinterpreting a float32 tensor as uint8
+        multiplies the last-dim count by 4; reinterpreting uint8 as float32
+        divides it by 4.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.view(nl.uint8)     # shape becomes (128, 256), 4x expansion
+            t.view(nl.int32)     # shape stays (128, 64), same-size reinterpret
+
+            u = nl.ndarray((128, 256), dtype=nl.uint8, buffer=nl.sbuf)
+            u.view(nl.float32)   # shape becomes (128, 64), 4x contraction
+
+        **Constraints.**
+
+        - The last dimension must be contiguous in memory
+        - For contraction (larger dtype): last-dim size must be divisible by the ratio
+        - Not supported after dynamic / vector select
+
+        :param dtype: target NKI dtype to reinterpret as
+        :return: new ``NkiTensor`` view with the adjusted dtype and shape"""
+        ...
+
+    reinterpret_cast = ...
+
+    def indirect(self, index: NkiTensor, num_elem: int | None=None) -> NkiTensor:
+        """Create an indirect tensor view for Tensor Indirection (TI).
+
+        Available on NeuronCore-v4 (Trn3) and later.
+
+        TI allows reading or writing a column of data at given free-dimension
+        offsets across contiguous partition dimensions. Can be used as input
+        (gather) or output (scatter) in nisa operations.
+
+        Offsets are stored in a snake pattern across partition groups: offset i
+        comes from ``index[i % G, i // G]`` where G is the group size (16 for
+        vector/scalar/gpsimd engines, 32 for tensor engine).
+
+        :param index: SBUF tensor containing free-dimension offsets, shape ``(P, K)``
+            where ``P == self.shape[0]``.
+        :param num_elem: number of offsets to use. Defaults to ``index.size``.
+        :return: new ``NkiTensor`` view with TI attached. Output shape is
+            ``(P, num_elem)``."""
+        ...
+
+    ...
 
 def abs(x, dtype=None):
     r"""Absolute value of the input, element-wise.
@@ -2059,4 +2468,3 @@ def zeros_like(x, dtype=None, buffer=None, name=''):
     :param name: the name of the tensor, used in :ref:`scheduling <how-to-scheduling-apis>`.
     :return: a new :class:`NkiTensor` of zeros with the same shape as ``x``."""
     ...
-

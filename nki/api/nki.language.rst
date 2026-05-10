@@ -28,6 +28,25 @@ Creation operations
    rand
    random_seed
 
+.. _nl_tensor_class:
+
+Tensor class
+-------------
+
+The ``NkiTensor`` class is the core tensor type returned by all creation
+operations (``ndarray``, ``zeros``, ``load``, ...) and by every view
+primitive (``reshape``, ``permute``, ``slice``, ...). See the
+:ref:`Tensor Values <tensor-values>` section of the NKI Language Guide for
+the conceptual model; the page linked below lists every public method
+with full signatures and docstrings.
+
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-template.rst
+   :nosignatures:
+
+   NkiTensor
+
 .. _nl_tensor_ops:
 
 Tensor operations
