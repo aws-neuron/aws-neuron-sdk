@@ -200,16 +200,16 @@ We will discuss user-defined classes later in the guide. For now, let's take a c
 Tensor Values
 --------------
 
-Tensors are the main value you operate on in a NKI kernel. An ``NkiTensor`` is a view of a region of device memory — shape, dtype, and memory buffer on the outside; a strided layout over an underlying storage on the inside. The model is the same one PyTorch and NumPy use: creation routines allocate fresh storage and hand back a tensor; view operations (``slice``, ``reshape``, ``permute``, ``view``, ``ap``, …) share that storage and return new tensors pointing at the same data.
+Tensors are the main value you operate on in a NKI kernel. An ``NkiTensor`` has two parts: **storage** — a buffer in memory described by shape, dtype, memory type, and memory location — and a **view** on top of that storage — a strided access pattern with up to 5 dimensions. Creation routines allocate fresh storage and hand back a tensor; view operations (``slice``, ``reshape``, ``permute``, ``view``, ``ap``, etc.) define a new access pattern on top of the same storage, without touching the underlying data.
 
 .. note::
 
-   Tensors represent on-device memory at runtime. At compile time the compiler knows the *shape*, *dtype*, *strides*, and *buffer* — enough to reason about layout and schedule instructions — but not the actual element values. Any Python code that touches tensor contents directly (``t[0, 0] == 5.0``, printing tensor data, ...) is a kernel operation, not a compile-time expression.
+   Tensors represent on-device memory at runtime. At specialization time the compiler knows the *shape*, *dtype*, *strides*, and *buffer* — enough to reason about layout and schedule instructions — but not the actual element values. Any NKI meta-programming expression that needs to touch tensor contents directly (``nl.add(t, 5.0)``, ``device_print(t)``, ...) is a kernel operation, not a specialization-time expression.
 
 Anatomy of a tensor
 ~~~~~~~~~~~~~~~~~~~
 
-An ``NkiTensor`` is fully described by a small set of attributes. All of them are available at compile time.
+An ``NkiTensor`` is fully described by the following attributes. All of them are available at specialization time.
 
 .. list-table::
    :widths: 18 82
@@ -230,13 +230,13 @@ An ``NkiTensor`` is fully described by a small set of attributes. All of them ar
    * - ``ndim``, ``size``
      - Convenience attributes: ``len(shape)`` and ``prod(shape)``.
    * - ``name``
-     - Optional debug label, propagated into compiler diagnostics and :ref:`scheduling <how-to-scheduling-apis>`.
+     - Optional debug label — used in compiler warnings/errors, as debug symbols surfaced by the Neuron Explorer profiler, and by the :ref:`scheduling <how-to-scheduling-apis>` APIs.
 
 Given these attributes, the element addressed by an index tuple ``(i0, i1, …, i_{n-1})`` sits at element position::
 
     offset + sum_k (strides[k] * i_k)
 
-inside the underlying storage — the classic strided scheme used by NumPy and PyTorch.
+inside the underlying storage.
 
 **Example.** A contiguous SBUF tensor:
 
@@ -256,7 +256,7 @@ The free-dim stride is ``1`` (consecutive elements in the free dimension are adj
 
 .. note::
 
-   On on-chip tensors (SBUF, PSUM), the *first* dimension is the **partition dimension**. It maps to the NeuronCore's parallel partitions. Most view primitives are not allowed to alter the partition dimension — see individual method docs for exact rules. HBM tensors have no partition dim and can be reshaped freely.
+   SBUF and PSUM tensors have a partition dimension at dim 0 that maps to the NeuronCore's parallel partitions. The hardware does not support strided access along the partition dimension, which restricts the view operations that would otherwise produce a view with non-contiguous partition access — see individual method docs for exact rules. HBM tensors have no partition dim and can be reshaped freely.
 
 Views share storage
 ~~~~~~~~~~~~~~~~~~~
@@ -273,14 +273,14 @@ View primitives return a new ``NkiTensor`` that points into the *same* storage a
    nisa.memset(dst=u, value=1.0)
    # t[:, 16:32] now reads 1.0
 
-Taking a view is free at runtime (no copy, no allocation). Taking a view of a view is also free — views compose.
+Taking a view is free at runtime. Each view method composes a hardware access pattern at specialization time — see :ref:`ap-meta-programming` for the mechanism. The ``NkiTensor`` that flows into the next ISA instruction already has its final shape, strides, and offset computed; no view-tracking code runs on the NeuronCore.
 
 Querying layout
 ~~~~~~~~~~~~~~~
 
 Two predicates describe common layout questions:
 
-* :meth:`NkiTensor.is_contiguous` — does this view cover its storage in dense row-major order? A fresh ``nl.ndarray`` is contiguous; ``reshape`` and ``view(dtype)`` require a contiguous view; ``permute`` produces a non-contiguous view.
+* :meth:`NkiTensor.is_contiguous` — does this view cover its storage in dense row-major order? A fresh ``nl.ndarray`` is contiguous; ``reshape`` and ``view(dtype)`` require contiguity on the reshaped dimensions (see their individual docs); ``permute`` produces a non-contiguous view.
 
 * :meth:`NkiTensor.is_indirect` — does this view use runtime-resolved (dynamic) addressing? Indirect views are produced by :meth:`select` with a tensor index, :meth:`vector_select`, or :meth:`ap` with ``scalar_offset`` / ``vector_offset``. Once a view is indirect, the indirected dimension cannot be sliced or selected again — check ``is_indirect()`` to guard downstream logic.
 
@@ -289,9 +289,9 @@ For completeness, :meth:`NkiTensor.get_pattern` returns the view's layout as the
 View primitives
 ~~~~~~~~~~~~~~~
 
-The view primitives below all return a new ``NkiTensor`` sharing the same storage. They correspond closely to PyTorch / NumPy equivalents, with additional constraints where the Trainium hardware requires them. Full signatures and constraints live in the :doc:`NkiTensor API reference <../api/generated/nki.language.NkiTensor>`.
+The view primitives below all return a new ``NkiTensor`` sharing the same storage. Full signatures and constraints live in the :doc:`NkiTensor API reference <../api/generated/nki.language.NkiTensor>`.
 
-**Slicing (Python ``[...]`` syntax)** — Python indexing produces a view. Integer, slice, ellipsis, and tuple keys are supported.
+**Slicing with ``[...]``** — the indexing operator produces a view. Integer, slice, ellipsis, and tuple keys are supported.
 
 .. code-block:: python
 
@@ -300,7 +300,7 @@ The view primitives below all return a new ``NkiTensor`` sharing the same storag
    c = t[..., ::2]       # shape (128, 64, 16) — every other element
    d = t[:, :, 0]        # shape (128, 64) — integer index on free dim drops it
 
-On-chip tensors (SBUF, PSUM) are always at least 2-D — the partition dim is never removed. Integer indexing on the partition dim therefore keeps it as size 1 rather than dropping it, in the same way that NumPy and PyTorch keep a scalar selection from a 1-D array at 1-D rather than reducing to 0-D when the backing layout requires it:
+SBUF and PSUM tensors are always at least 2-D — the partition dim is never removed. Integer indexing on the partition dim therefore keeps it as size 1 rather than dropping it:
 
 .. code-block:: python
 
@@ -333,9 +333,9 @@ See :ref:`tensor-indexing` for the full indexing rules.
    t.reshape((128, 24))    # merge the two trailing dims
    t.reshape((128, 2, 12)) # split differently
 
-Like :meth:`torch.Tensor.view`, ``reshape`` only succeeds when the new shape is compatible with the current strides — each new dimension must either correspond to an existing dimension, or span several existing dimensions that are already contiguous in memory. If the layout cannot be expressed as a view, ``reshape`` fails; materialise a contiguous copy first (e.g. via :func:`nl.copy`). On-chip tensors additionally require ``shape[0] == t.shape[0]`` so the partition dimension is preserved.
+``reshape`` only needs contiguity on the dimensions it is reshaping — a dimension that splits or merges several existing dimensions requires those dimensions to be contiguous in memory, but other dimensions may have any stride. For example, ``t`` with shape ``(128, 2, 4, 256)`` and an inner free stride > 1 can still be reshaped into ``(128, 8, 256)`` because only the middle two dims are being merged. If the reshape cannot be expressed as a view of the same storage, ``reshape`` fails at specialization time — materialize a contiguous copy first (e.g. via :func:`nisa.tensor_copy`). For SBUF and PSUM tensors, ``new_shape[0] == t.shape[0]`` so the partition dimension is preserved.
 
-:meth:`NkiTensor.flatten_dims` and :meth:`NkiTensor.reshape_dim` are targeted versions that merge / split a single dim without touching the others. Because their operation is localised, they succeed on many views where a full ``reshape`` does not.
+:meth:`NkiTensor.flatten_dims` and :meth:`NkiTensor.reshape_dim` are targeted versions that merge / split a single dim. They succeed whenever the target dim (plus its immediate neighbours, for merge) is contiguous, even when a full ``reshape`` would fail on the tensor as a whole.
 
 **Permute** — :meth:`NkiTensor.permute` reorders dimensions.
 
@@ -344,7 +344,7 @@ Like :meth:`torch.Tensor.view`, ``reshape`` only succeeds when the new shape is 
    t = nl.ndarray((128, 4, 8), dtype=nl.float32, buffer=nl.sbuf)
    t.permute((0, 2, 1))   # shape becomes (128, 8, 4)
 
-The partition dim (dim 0) must remain at position 0 on on-chip tensors. Permuting free dims leaves the view non-contiguous along the permuted axes: consecutive elements in the new layout are no longer adjacent in memory. Targeted view operations (``reshape_dim``, ``flatten_dims`` within a still-contiguous range, ``slice``, ``select``) continue to work; a full :meth:`NkiTensor.reshape` across permuted dims does not, and needs a contiguous copy first.
+For SBUF and PSUM tensors, the partition dim (dim 0) must remain at position 0. Permuting free dims leaves the view non-contiguous along the permuted axes: consecutive elements in the new layout are no longer adjacent in memory. Targeted view operations (``reshape_dim``, ``flatten_dims`` within a still-contiguous range, ``slice``, ``select``) continue to work; a full :meth:`NkiTensor.reshape` across permuted dims fails at specialization time, and needs a contiguous copy first (e.g. via :func:`nisa.tensor_copy`).
 
 **Broadcast** — :meth:`NkiTensor.broadcast` expands a size-1 dimension without copying data. The underlying stride becomes ``0`` so every "repeated" index maps to the same storage element.
 
@@ -361,7 +361,7 @@ The partition dim (dim 0) must remain at position 0 on on-chip tensors. Permutin
    u = t.expand_dim(1)       # shape (128, 1, 64)
    v = u.squeeze_dim(1)      # back to (128, 64)
 
-**Select** — :meth:`NkiTensor.select` picks a single index along a dimension and removes that dimension. The index can be an integer (static, resolved at compile time) or an SBUF tensor (dynamic, resolved at runtime).
+**Select** — :meth:`NkiTensor.select` picks a single index along a dimension and removes that dimension. The index can be an integer (resolved at specialization time) or an SBUF tensor / :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>` (dynamic, resolved at runtime).
 
 .. code-block:: python
 
@@ -375,7 +375,7 @@ The partition dim (dim 0) must remain at position 0 on on-chip tensors. Permutin
 
 Dynamic select marks the view as indirect — see :meth:`NkiTensor.is_indirect`.
 
-**dtype reinterpret** — :meth:`NkiTensor.view` reinterprets the storage bits as a different dtype. The last dimension rescales by the ratio of dtype sizes.
+**dtype reinterpret** — :meth:`NkiTensor.view` reinterprets the storage bits as a different dtype. The last dimension (FCD) rescales by the ratio of dtype sizes. ``.view(dtype)`` only requires contiguity on the FCD, and only up to the alignment required by the new dtype size — other dimensions may have any stride.
 
 .. code-block:: python
 
@@ -391,7 +391,7 @@ Dynamic select marks the view as indirect — see :meth:`NkiTensor.is_indirect`.
    t.rearrange(('b', ('h', 'w')), ('b', 'w', 'h'), {'h': 4})
    # dim 1 split into (h=4, w=6), then re-ordered: shape (128, 6, 4)
 
-**Other view methods** — :meth:`NkiTensor.vector_select`, :meth:`NkiTensor.indirect`, and :meth:`NkiTensor.ap` are advanced primitives for gather patterns and hardware-native access patterns — see the API reference and the :doc:`NKI Access Patterns deep-dive <../deep-dives/nki-aps>` for details.
+**Other view methods** — :meth:`NkiTensor.vector_select`, :meth:`NkiTensor.indirect`, and :meth:`NkiTensor.ap` are lower-level primitives for gather patterns and hardware-native access patterns. :meth:`vector_select` can only be applied once per view — chaining (``t.vector_select(...).vector_select(...)``) fails at specialization time. See the API reference and the :doc:`NKI Access Patterns deep-dive <../deep-dives/nki-aps>` for details.
 
 Composition
 ~~~~~~~~~~~
@@ -406,12 +406,12 @@ View primitives return ``NkiTensor`` and every primitive accepts any ``NkiTensor
    u = t[0:64, :, :].permute((0, 2, 1))[:, 0, :]
    assert u.shape == (64, 4)
 
-Each step costs nothing at runtime — the result is a new tensor whose shape/strides/offset describe the composed view directly.
+Reminder: each NkiTensor view operation has no runtime cost. They are evaluated at specialization time to build the final hardware access pattern used by the ISA instruction that eventually consumes the tensor.
 
-The escape hatch: ``ap``
-~~~~~~~~~~~~~~~~~~~~~~~~
+Low-level raw access pattern: ``ap``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When the high-level primitives cannot express the layout you need, :meth:`NkiTensor.ap` is the low-level escape hatch. It takes an explicit hardware access pattern — a list of ``[stride, count]`` pairs, leading pair describing the partition dimension — and returns a new view over the same storage. This is analogous to PyTorch's ``torch.as_strided``.
+When one of the higher-level view primitives does not express the layout you need, drop down to :meth:`NkiTensor.ap`. It takes an explicit hardware access pattern — a list of ``[stride, count]`` pairs — and returns a new view over the same storage. ``.ap()`` can express any access pattern the hardware supports.
 
 .. code-block:: python
 
@@ -421,7 +421,7 @@ When the high-level primitives cannot express the layout you need, :meth:`NkiTen
    u = t.ap(pattern=[(1024, 128), (2, 512)])
    assert u.shape == (128, 512)
 
-The partition stride must equal the storage's free-dim element count so that every partition performs the same access in parallel — a hardware rule for on-chip (SBUF / PSUM) tensors. HBM tensors have no partition dimension and accept any pattern. When you already have a tensor whose layout you want to start from, :meth:`NkiTensor.get_pattern` returns a pattern you can mutate as input to ``.ap()``:
+For SBUF and PSUM tensors, the partition stride (the first ``[stride, count]`` pair) must be equal to the storage's free-dim element count so that every partition performs the same access in parallel. HBM tensors have no partition dimension and accept any pattern. When you already have a tensor whose layout you want to start from, :meth:`NkiTensor.get_pattern` returns a pattern you can mutate as input to ``.ap()``:
 
 .. code-block:: python
 
@@ -429,15 +429,13 @@ The partition stride must equal the storage's free-dim element count so that eve
    pattern[0][1] = 64          # read 64 partitions instead of 128
    u = t.ap(pattern=pattern)   # same layout, partition count overridden
 
-``offset`` defaults to ``None``, which means "inherit the current view's storage offset" (the same convention as ``torch.as_strided``'s ``storage_offset=None``). Pass an explicit integer to override.
+``offset`` defaults to ``None``, which means the new view inherits the current view's storage offset. Pass an explicit integer to override.
 
 Further details — nested indexing semantics, reinterpret cast with ``dtype=``, dynamic access with ``scalar_offset`` and ``vector_offset`` — are documented in :doc:`NKI Access Patterns <../deep-dives/nki-aps>`.
 
 .. warning::
 
-   Prefer the higher-level view primitives (``slice``, ``reshape``, ``permute``, ``broadcast``, ...) over ``.ap()`` — similar to the guidance on ``torch.as_strided``. ``.ap()`` is **not composable**: the pattern addresses the tensor's underlying storage directly, ignoring the shape, strides, and offset of the view it is called on. ``t.slice(...).ap(pattern=...)`` and ``t.ap(pattern=...)`` produce the same result.
-
-   Reach for ``.ap()`` only when the layout you need cannot be expressed as a composition of higher-level view primitives.
+   ``.ap()`` is **not composable**: the pattern addresses the tensor's underlying storage directly, ignoring the shape, strides, and offset of the view it is called on. ``t.slice(...).ap(pattern=...)`` and ``t.ap(pattern=...)`` produce the same result.
 
 Creating Tensors
 -----------------
@@ -519,16 +517,13 @@ For larger sub-tensors use Python slice expressions — ``start:stop:step`` — 
 
 .. code-block:: python
 
-   # The whole tensor t
+   # The whole tensor t — `...` and `:` both fill in missing dims, so
+   # t[...] and t[:, ...] are equivalent here.
    u = t[...]
    assert u.shape == (64, 64, 64)
 
-   # Same
-   u = t[:, ...]
-   assert u.shape == (64, 64, 64)
-
    # Use defaults for the inner dimensions; partition index 0 is kept at
-   # size 1 because on-chip tensors stay ≥ 2-D.
+   # size 1 because SBUF/PSUM tensors stay ≥ 2-D.
    u = t[0, ..., :]
    assert u.shape == (1, 64, 64)
 
@@ -542,11 +537,11 @@ Every indexing expression returns a new ``NkiTensor`` sharing storage with ``t``
    v = u[:, 0:32, :]
    assert v.shape == (1, 32, 64)
 
-   # All attributes are available at compile time:
+   # All attributes are available at specialization time:
    print(u.shape, u.strides, u.offset)
    print(u.get_pattern())       # [[stride, count], ...]
 
-For the rare case where the layout you need cannot be expressed via slicing or any of the other view primitives, :meth:`NkiTensor.ap` is the low-level escape hatch. See :doc:`NKI Access Patterns <../deep-dives/nki-aps>`.
+When the layout you need cannot be expressed via slicing or any of the other view primitives, :meth:`NkiTensor.ap` provides the low-level raw access pattern API. See :doc:`NKI Access Patterns <../deep-dives/nki-aps>`.
 
 Control Flow
 -------------

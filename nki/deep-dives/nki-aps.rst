@@ -14,16 +14,18 @@ the :meth:`NkiTensor.ap` method, letting developers specify precisely
 what they want their instructions to read from on the hardware.
 
 For most code, the higher-level NkiTensor view primitives — ``slice``,
-``reshape``, ``permute``, ``broadcast``, ``select``, ``view(dtype)``, and
-friends — are the right tool. See the :ref:`Tensor Values <tensor-values>`
+``reshape``, ``permute``, ``broadcast``, ``select``, ``view(dtype)``, etc.
+— should be sufficient. See the :ref:`Tensor Values <tensor-values>`
 section of the NKI Language Guide for an overview of those primitives.
-Access patterns are the escape hatch for layouts that cannot be expressed
-as a composition of view primitives.
+When none of the NkiTensor wrapper APIs expresses the access pattern you
+need, drop down to the lower-level ``.ap()`` API — it can express any
+access pattern the hardware supports.
 
 .. note::
 
-   The view primitives are implemented on top of ``.ap()`` under the
-   hood — ``.ap()`` is the lower-level building block.
+   The NkiTensor view primitives are implemented on top of ``.ap()``:
+   each view method composes a hardware access pattern at specialization
+   time, without any runtime cost. ``.ap()`` is the raw building block.
 
 Hardware Capability
 ===================
@@ -54,8 +56,8 @@ The ``nl.ndarray`` has an ``ap`` method.
 .. code-block:: python
 
    def ap(self, pattern: list[list[int]],
-      offset: int | None = None,
-      scalar_offset: NkiTensor | None = None,
+      offset: int | VirtualRegister | None = None,
+      scalar_offset: NkiTensor | VirtualRegister | None = None,
       vector_offset: NkiTensor | None = None,
       indirect_dim: int = 0,
       dtype: DType | None = None):
@@ -68,11 +70,41 @@ The parameters have the following definitions:
   * The shape of a pattern is the collection of num. For example, given pattern ``[[w_step, w_num], [z_step, z_num], [y_step, y_num], [x_step, x_num]]``, the shape is ``[w_num, z_num, y_num, x_num]``.
   * **Note**: The order of the pattern specified here is in the opposite order to what is actually accepted by the hardware. Therefore, the order of the tuples shown on the profiler will be in the opposite order of what is specified here.
 
-* ``offset``: The offset to start the access in terms of number of elements from the beginning of the tensor. When ``None`` (the default), the new view inherits the current view's storage offset.
-* ``scalar_offset``: An SBUF tensor of shape ``(1, 1)`` that specifies the location to start the access in terms of number of elements on the ``indirect_dim`` of the access pattern. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
+* ``offset``: The offset to start the access in terms of number of elements from the beginning of the tensor. Can be a compile-time integer or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>`. When ``None`` (the default), the new view inherits the current view's storage offset.
+* ``scalar_offset``: An SBUF tensor of shape ``(1, 1)`` or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>` that specifies the location to start the access in terms of number of elements on the ``indirect_dim`` of the access pattern. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``vector_offset``: An SBUF tensor that specifies the location to start the access in terms of number of elements from the beginning of the indirect dimension specified by ``indirect_dim``. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``indirect_dim``: The indirect dimension on which to apply ``scalar_offset`` and ``vector_offset``.
 * ``dtype``: The data type of the access pattern. The default value is the ``dtype`` of the tensor being accessed.
+
+.. _ap-meta-programming:
+
+View Primitives Build APs at Specialization Time
+=================================================
+
+The higher-level NkiTensor view primitives (``slice``, ``reshape``,
+``permute``, ``broadcast``, ``select``, ``view(dtype)``, ``rearrange``,
+etc.) are implemented as NKI meta-programming on top of ``.ap()``.
+Every view operation runs at specialization time: it reads the current
+view's shape, strides, and offset, applies its transform, and produces
+a new ``NkiTensor`` whose ``get_pattern()`` returns a hardware access
+pattern — the same pattern you would have written by hand with
+``.ap()``.
+
+.. code-block:: python
+
+   t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+   u = t.slice(dim=1, start=8, end=24)
+   assert u.get_pattern() == [[64, 128], [1, 16]]
+   assert u.offset == 8
+
+   # Equivalent to constructing the same AP by hand with .ap():
+   v = t.ap(pattern=[[64, 128], [1, 16]], offset=8)
+   assert v.get_pattern() == u.get_pattern()
+   assert v.offset == u.offset
+
+Because the view composition happens at specialization time, a chain of
+view operations has zero runtime cost: only the final pattern is handed
+to the ISA instruction that consumes the tensor.
 
 Semantics of the Access Pattern
 ================================
@@ -198,8 +230,8 @@ but the inner ``.ap`` is fully overridden by the outer one:
 For composable, view-on-view semantics that stay inside the NkiTensor
 model, use the higher-level view primitives exposed on ``NkiTensor`` —
 ``slice``, ``reshape``, ``permute``, ``broadcast``, ``select``,
-``view(dtype)``, and friends. They return new ``NkiTensor`` views of
-the same storage and chain freely:
+``view(dtype)``, etc. They return new ``NkiTensor`` views of the same
+storage and chain freely:
 
 .. code-block:: python
 
