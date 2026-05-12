@@ -102,7 +102,7 @@ Inter-node Collectives
 
 Modern distributed training frameworks automatically optimize collective operations by combining intra-node and inter-node communication strategies. For example, in a Trn2 cluster, an all-reduce operation across 256 accelerators distributed across 4 nodes might first perform local reductions within each 64-accelerator node, then execute inter-node communication between the 4 nodes, and finally broadcast results back within each node.
 
-  For more details, see :doc:`Inter-node Collective Communications with AWS Neuron </neuron-runtime/explore/internode-collective-comm>`.
+For more details, see :doc:`Inter-node Collective Communications with AWS Neuron </neuron-runtime/explore/internode-collective-comm>`.
 
 System Connectivity
 -------------------
