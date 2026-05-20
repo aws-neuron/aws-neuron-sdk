@@ -1,4 +1,7 @@
 _build/
+_utilities/
+_templates/
+_content-types/
 __pycache__/
 .venv/
 .DS_Store
