@@ -7,7 +7,7 @@ Device Trace Viewer
 
 The Neuron Device Trace Viewer displays a hardware instruction level granularity of execution on a NeuronCore. Neuron Explorer collects the timestamped start and end events that occur on the device into a NTFF. As a post-processing step, the profiler will correlate these events with information in the compiled NEFF to generate a detailed report of the hardware performance. The Neuron Explorer UI provides several different tools for an extensible and customizable workflow.
 
-.. image:: /tools/profiler/images/device-profile-1.png
+.. image:: /tools/images/device-profile-1.png
 
 Tools
 ------
@@ -17,12 +17,12 @@ Device Trace Viewer
 
 The Device Trace Viewer presents a timeline view of the device execution, including activity on the DMA and compute engines, Hardware FLOPs Utilization (HFU) and device memory utilization over time, and more.
 
-.. image:: /tools/profiler/images/device-profile-2.png
+.. image:: /tools/images/device-profile-2.png
 
 Hover
 ^^^^^
 
-.. image:: /tools/profiler/images/device-profile-3.png
+.. image:: /tools/images/device-profile-3.png
 
 Hover on events in the timeline to see important identifying information at a glance, such as the time window, the hierarchy, and the hardware instruction that was executed.
 
@@ -35,9 +35,9 @@ Color Scheme
    :header-rows: 0
    :widths: 50 50
 
-   * - .. image:: /tools/profiler/images/device-profile-4.png
+   * - .. image:: /tools/images/device-profile-4.png
           :width: 100%
-     - .. image:: /tools/profiler/images/device-profile-5.png
+     - .. image:: /tools/images/device-profile-5.png
           :width: 100%
 
 Instructions are color-coded according to their associated PyTorch operator. All instructions derived from the same PyTorch operator share an identical color.
@@ -48,7 +48,7 @@ Instructions are color-coded according to their associated PyTorch operator. All
 Panning
 ^^^^^^^
 
-.. image:: /tools/profiler/images/device-profile-6.gif
+.. image:: /tools/images/device-profile-6.gif
 
 Panning is supported in a couple of ways:
 
@@ -68,7 +68,7 @@ Upon clicking an event in the Device Trace Viewer, all details related to the ev
 * The Event Details table will populate with field data from clicked events from the instruction widget.
 * When filtering by fields through Search, all matching events will be rendered as pages in the Event Details. Users can navigate through each page to analyze data for each matching event.
   
-.. image:: /tools/profiler/images/device-profile-7.png
+.. image:: /tools/images/device-profile-7.png
 
 Annotations
 ~~~~~~~~~~~
@@ -77,7 +77,7 @@ Users can create annotations by right-clicking in the Device Trace Viewer. These
 
 The annotations tab will show more details on all available annotations in the profile, such as the time difference and summary metrics that occur between two markers. The option of which two annotations to compare is configurable in the diff vs column. You can also quickly zoom in to the region between two annotations by selecting the checkbox on the left. Users can rename, delete, save, and load annotations for better readability and collaboration.
 
-.. image:: /tools/profiler/images/device-profile-8.png
+.. image:: /tools/images/device-profile-8.png
 
 Operator Table
 ~~~~~~~~~~~~~~
@@ -86,21 +86,21 @@ The Operator Table aggregates the hardware level metrics into framework layers a
 
 Filters can be applied and columns can be sorted for more streamlined viewing.
 
-.. image:: /tools/profiler/images/device-profile-9.png
+.. image:: /tools/images/device-profile-9.png
 
 Overall Summary
 ~~~~~~~~~~~~~~~
 
 The Overall Summary displays performance metrics across the entire profile run, with metrics broken down into different categories such as by the NeuronCore engines. These can be used for quick insights into how well the model performed.
 
-.. image:: /tools/profiler/images/device-profile-10.png
+.. image:: /tools/images/device-profile-10.png
 
 Current Selection Summary
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Current Selection Summary provides metrics for the current time window. Zooming in and out in the Device Trace Viewer will update the summary. This can be used in conjunction with the zoom feature of Annotations for easy access to a region of interest.
 
-.. image:: /tools/profiler/images/device-profile-11.png
+.. image:: /tools/images/device-profile-11.png
 
 .. _box-selection-summary:
 
@@ -109,7 +109,7 @@ Box Selection Summary
 
 The Box Selection Summary provides metrics within a bounding box region. Select and drag regions within the timeline widget to update the summary.
 
-.. image:: /tools/profiler/images/box-select.gif
+.. image:: /tools/images/box-select.gif
 
 Box selection is supported in a couple of ways:
 
@@ -127,7 +127,7 @@ In the Device Trace Viewer, we can click on an event to highlight the source cod
 
 In the Code Viewer, clicking on a line in the source code will automatically highlight all associated events in the Device Trace Viewer. Similarly, highlighting multiple lines of the source code will also highlight all events in the timeline.
 
-.. image:: /tools/profiler/images/device-profile-12.png
+.. image:: /tools/images/device-profile-12.png
 
 See :ref:`neuron-explorer-source-code` for instructions on how to enable source code viewing.
 
@@ -136,4 +136,4 @@ Layout Customization
 
 Understanding and optimizing performance with the profiler can be overwhelming given the amount of information being processed and displayed. As part of preparing for optimization work, you can cross-reference different information, such as the Device Trace Viewer with the application source code. With the widget-based UI, you can customize the layout to best fit a specific workflow. Each widget can be added, removed, dragged around, and resized. Once you are happy with the layout, you can save it through the Layout dropdown at the top right. The layouts are not tied to a specific profile, so they can be loaded and re-used for future profiles as well.
 
-.. image:: /tools/profiler/images/device-profile-13.png
+.. image:: /tools/images/device-profile-13.png

@@ -87,7 +87,7 @@ The fastest way to get started with LLM inference on Neuron:
      763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
 
 For the latest image tags and a step-by-step walkthrough, see
-:doc:`/containers/get-started/quickstart-configure-deploy-dlc`.
+:doc:`/deploy/environments/quickstart-deploy-dlc`.
 
 Quick Start: Training Container
 --------------------------------
@@ -124,7 +124,7 @@ You can extend a Neuron DLC with additional packages by creating a custom Docker
    # Copy your application code
    COPY app/ /app/
 
-For more details, see :doc:`/containers/dlc-then-customize-devflow`.
+For more details, see :doc:`/deploy/environments/customize-dlc`.
 
 Deployment Platforms
 --------------------
@@ -135,21 +135,21 @@ Neuron DLCs can be deployed across multiple AWS services:
    :gutter: 3
 
    .. grid-item-card:: Amazon EC2
-      :link: /containers/dlc-then-ec2-devflow
+      :link: /deploy/ec2/inference
       :link-type: doc
       :class-card: sd-rounded-3
 
       Deploy containers directly on EC2 instances with Neuron devices.
 
    .. grid-item-card:: Amazon EKS
-      :link: /containers/dlc-then-eks-devflow
+      :link: /deploy/eks/inference
       :link-type: doc
       :class-card: sd-rounded-3
 
       Run containers on managed Kubernetes with the Neuron device plugin.
 
    .. grid-item-card:: Amazon ECS
-      :link: /containers/dlc-then-ecs-devflow
+      :link: /deploy/ecs/inference
       :link-type: doc
       :class-card: sd-rounded-3
 
@@ -158,8 +158,8 @@ Neuron DLCs can be deployed across multiple AWS services:
 Next Steps
 ----------
 
-- :doc:`/containers/get-started/quickstart-configure-deploy-dlc` - Full vLLM DLC deployment walkthrough
-- :doc:`/containers/locate-neuron-dlc-image` - Find the right DLC image for your workload
-- :doc:`/containers/index` - Full containers documentation
+- :doc:`/deploy/environments/quickstart-deploy-dlc` - Full vLLM DLC deployment walkthrough
+- :doc:`/deploy/environments/dlc-images` - Find the right DLC image for your workload
+- :doc:`/deploy/index` - Full containers documentation
 - :doc:`/frameworks/torch/training-torch-neuronx` - Training tutorials
 - :doc:`/frameworks/torch/inference-torch-neuronx` - Inference tutorials

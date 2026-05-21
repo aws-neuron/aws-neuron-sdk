@@ -50,7 +50,7 @@ Available container images
 
    JAX DLCs are currently available for training workloads. For the full list of available images and tags, see `JAX Training Containers <https://github.com/aws-neuron/deep-learning-containers#jax-training-neuronx>`_.
 
-For more information, see :doc:`/containers/locate-neuron-dlc-image`.
+For more information, see :doc:`/deploy/environments/dlc-images`.
 
 Installation steps
 ------------------
@@ -227,6 +227,9 @@ Installation steps
       :sync: ubuntu-22-04
       
       **Step 1: Install Neuron driver on host**
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       Configure the Neuron repository and install the driver:
       
@@ -434,7 +437,7 @@ Next steps
 
 Now that JAX is running in a container:
 
-1. **Find more container images**: Browse the full list of available Neuron DLC images at :doc:`/containers/locate-neuron-dlc-image`.
+1. **Find more container images**: Browse the full list of available Neuron DLC images at :doc:`/deploy/environments/dlc-images`.
 
 2. **Customize your container**: Learn how to extend a DLC with additional packages at :ref:`containers-dlc-then-customize-devflow`.
 
@@ -443,7 +446,7 @@ Now that JAX is running in a container:
 Additional resources
 --------------------
 
-- :doc:`/containers/locate-neuron-dlc-image` - Full DLC image list
-- :doc:`/containers/index` - Container documentation overview
+- :doc:`/deploy/environments/dlc-images` - Full DLC image list
+- :doc:`/deploy/index` - Container documentation overview
 - :doc:`../troubleshooting` - Common issues and solutions
 - :doc:`/release-notes/index` - Version compatibility information

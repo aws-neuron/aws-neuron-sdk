@@ -110,6 +110,11 @@ The only constructs that survive specialization and become runtime operations ar
 
 After specialization, this kernel becomes a flat sequence of ``dma_copy`` and ``tensor_scalar`` operations, with the loop and if-statement fully resolved.
 
+Kernel Caching
+^^^^^^^^^^^^^^
+
+NKI caches compiled kernels based on their input arguments (shapes, dtypes, and compile-time values). This means NKI kernels must be **pure functions** of their arguments — the kernel's output must be determined solely by its input arguments. If a kernel's behavior depends on external state such as global variables, closures over mutable objects, or side effects, the cache may return a stale compiled artifact and produce incorrect results.
+
 NKI Namespaces
 ---------------
 

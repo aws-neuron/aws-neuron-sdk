@@ -1,3 +1,0 @@
-* :ref:`ec2-then-ec2-devflow`
-* :ref:`ec2-then-ec2-devflow-inf2`
-       

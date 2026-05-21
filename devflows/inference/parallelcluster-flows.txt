@@ -1,3 +1,0 @@
-.. note::
-
-    AWS ParallelCluster support is coming soon.

@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 05/01/2026
+    :date-modified: 05/21/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -23,7 +23,48 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.29.1 (05/01/2026)
+        **Latest release**: 2.30.0 (05/21/2026)
+
+----
+
+.. _whats-new-2026-05-21-v2_30:
+
+Neuron Release 2.30.0: NKI 0.4.0, 22 new NKI Library kernels, and Neuron Agentic Development
+---------------------------------------------------------------------------------------------
+
+**Posted on**: May 21, 2026
+
+Today we are releasing Neuron 2.30.0. NKI 0.4.0 introduces new hardware capabilities for Trn3 and the NKI Library adds 22 new kernels spanning context parallelism, MXFP8 training, and state-space models. `Neuron Agentic Development <https://aws.amazon.com/about-aws/whats-new/2026/04/announcing-neuron-agentic-development/>`_, launched as a beta in April 2026, adds new model porting and numerical validation skills and is now included in all DLAMIs and DLCs by default. This release also introduces the `Neuron DRA Driver <https://aws.amazon.com/blogs/containers/simplify-ai-infrastructure-for-aws-trainium-and-elastic-fabric-adapter-with-kubernetes-dynamic-resource-allocation/>`_ for Kubernetes Dynamic Resource Allocation, enabling topology-aware scheduling of Trainium accelerators and EFA interfaces.
+
+What's in this release
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* **NKI 0.4.0** — New ``activate2`` Scalar Engine instruction for Trn3, OCP FP8 input support for matmul, absolute-value reductions on the Vector Engine, bytes-aware tile-size constants, and improved CPU simulator accuracy. See :ref:`nki-2-30-0-rn`.
+
+* **NKI Library** — 3 new core kernels (segmented attention, KV-parallel prefill, FP8 quantize) and 19 new experimental kernels covering context parallelism, MXFP8 training, state-space models, fused optimizers, and MoE dispatch. PyTorch reference implementations added for 29 kernels. See :ref:`nki-lib-2-30-0-rn`.
+
+* **Graph Compiler** — Significant compile-time improvements through rewritten memory liveness analysis. Max computation tile size doubled to 1024. Coalesced reduce-scatter now optimized as a single unit for distributed training. See :ref:`compiler-2-30-0-rn`.
+
+* **Runtime & Driver** — Zero-copy host-device transfers enabled by default, new async event APIs for framework integration, and Trn3 Gen2 UltraServer ring topology support in Collectives. See :ref:`runtime-2-30-0-rn`.
+
+* **Neuron Explorer** — Region Highlighter for targeted profile analysis, PCIe transfer visualization in the System Trace Viewer, and Dependency Chain Viewer for system profiles. See :ref:`dev-tools-2-30-0-rn`.
+
+* **Neuron Agentic Development** — `Launched as a beta in April 2026 <https://aws.amazon.com/about-aws/whats-new/2026/04/announcing-neuron-agentic-development/>`_, Neuron Agentic Development adds two new skills in this release: ``neuron-framework-autoport`` ports HuggingFace models to NxD Inference end to end, and ``neuron-framework-equivalence`` validates numerical equivalence of ported models. Both included in all DLAMIs/DLCs by default. See :ref:`agentic-development-2-30-0-rn`.
+
+* **DLAMIs & Containers** — All images now based on Ubuntu 24.04. Upgraded to JAX-NeuronX 0.10.0 (Python 3.13 in JAX SF DLAMI). See :ref:`dlami-2-30-0-rn` and :ref:`containers-2-30-0-rn`.
+
+
+Software lifecycle updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Neuron Profiler and Neuron Profiler 2.0 — migrate to :doc:`Neuron Explorer </tools/neuron-explorer/index>`
+* Ubuntu 22.04 base Neuron AMI — no longer published
+* NxDT and NxD Core training APIs — maintenance mode (security fixes only)
+* Implicit async execution mode — deprecation warning emitted
+* Inf1 VIRTUAL tensor type — removed
+* ``neuronxcc.nki.*`` namespace — now fails compilation (use ``nki.*``)
+
+Read the :doc:`Neuron 2.30.0 component release notes </release-notes/2.30.0>` for full details.
 
 ----
 
@@ -372,7 +413,7 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 * :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
 * :doc:`Neuron Explorer </tools/neuron-explorer/index>`: Tools suite to support developers and performance engineers in their performance optimization journey from framework operations to hardware instructions
-* :doc:`Neuron DRA for Kubernetes </containers/neuron-dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
+* :doc:`Neuron DRA for Kubernetes </deploy/eks/dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
 * :doc:`Expanded open source components </about-neuron/oss/index>`: Open sourcing more components including NKI Compiler, Native PyTorch, NKI Library, and more released under Apache 2.0
 
 
@@ -449,7 +490,7 @@ Neuron DRA supports EKS, SageMaker HyperPod, and UltraServer configurations. The
 
 Use Neuron DRA to simplify Kubernetes resource management for your Trainium workloads with native scheduling and topology-aware allocation.
 
-**Learn more**: :doc:`Neuron DRA documentation </containers/neuron-dra>`.
+**Learn more**: :doc:`Neuron DRA documentation </deploy/eks/dra>`.
 
 **Access**: Contact your AWS account team to participate in the Private Preview.
 

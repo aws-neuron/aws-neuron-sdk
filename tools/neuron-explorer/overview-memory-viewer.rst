@@ -7,7 +7,7 @@ Memory Viewer
 
 The Memory Viewer in Neuron Explorer offers deep, low-level insight into memory allocation, usage patterns, and potential inefficiencies — going well beyond surface-level metrics. With comprehensive visibility into how memory is consumed across the device, it enables kernel and performance engineers to make informed optimization decisions, reduce debugging time, and improve overall system performance.
 
-.. image:: /tools/neuron-explorer/images/memory_viewer_overview.png
+.. image:: /tools/images/memory_viewer_overview.png
    :alt: Memory Viewer overview showing memory allocation patterns across SBUF partitions
 
 
@@ -16,14 +16,14 @@ Enable Memory Viewer during Profile Upload
 
 To enable the Memory Viewer feature, check the option 'Enable Memory Viewer' when you upload your profile:
 
-.. image:: /tools/neuron-explorer/images/memory_viewer_enable.png
+.. image:: /tools/images/memory_viewer_enable.png
 
 View the Memory Viewer Widget
 ------------------------------
 
 Once your profile finishes processing and is ready to view, click the Add Widget button and select 'Memory Viewer':
 
-.. image:: /tools/neuron-explorer/images/memory_viewer_add_widget.png
+.. image:: /tools/images/memory_viewer_add_widget.png
 
 
 By hovering your mouse over each allocation, you can see the detailed information about this allocation. For allocations triggered by instructions, hover informations includes: 
@@ -45,4 +45,4 @@ By analyzing memory allocations, you can address memory fragmentation by identif
 
 You can also use the dropdown menu to inspect the memory allocations on different partitions and NC cores:  
 
-.. image:: /tools/neuron-explorer/images/memory_viewer_hover.png
+.. image:: /tools/images/memory_viewer_hover.png

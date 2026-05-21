@@ -1,7 +1,7 @@
 .. meta::
     :description: Release notes for the Neuron Kernel Interface (NKI) component across all Neuron SDK versions
     :keywords: NKI, Neuron Kernel Interface, release notes, nki.language, nki.isa, kernels
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _nki_rn:
 
@@ -9,6 +9,132 @@ Release Notes for Neuron Component: Neuron Kernel Interface (NKI)
 ==================================================================
 
 The release notes for the Neuron Kernel Interface (NKI) component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-2-30-0-rn:
+
+Neuron Kernel Interface (NKI) [0.4.0] (Neuron 2.30.0 Release)
+---------------------------------------------------------------------
+
+Date of Release: 05/21/2026
+
+New Features
+~~~~~~~~~~~~
+
+* **nki.language.abs_max and nki.language.abs_min**: New callable APIs for element-wise absolute maximum and absolute minimum. These are ``trn3`` only and run on the Vector Engine. Also usable as ``op0`` with ``nki.isa.tensor_scalar`` and ``nki.isa.tensor_scalar_reduce``. See :doc:`nki.isa.tensor_scalar </nki/api/generated/nki.isa.tensor_scalar>` and :doc:`nki.isa.tensor_scalar_reduce </nki/api/generated/nki.isa.tensor_scalar_reduce>`.
+
+* **nki.isa.activate2**: New ``trn3`` Scalar Engine API that applies an activation function to the result of a two-stage tensor-scalar preprocessing pipeline ``(data op0 imm0) op1 imm1``, with an optional reduction, all in a single instruction. Supports six ``(op0, op1)`` combinations (scale+bias, scale-only, bias-only, etc.) and optional operand reversal for non-commutative operations. Reduces instruction count compared to chaining ``nisa.tensor_scalar`` with ``nisa.activation``. See :doc:`nki.isa.activate2 </nki/api/generated/nki.isa.activate2>`.
+
+* **New opcodes for nki.isa.tensor_scalar and tensor_scalar_reduce**: ``square`` and ``relu`` are now accepted as ``op0`` on ``trn3``. See :doc:`nki.isa.tensor_scalar </nki/api/generated/nki.isa.tensor_scalar>` and :doc:`nki.isa.tensor_scalar_reduce </nki/api/generated/nki.isa.tensor_scalar_reduce>`.
+
+* **New activation and arithmetic opcodes in nki.language**: ``nl.prelu`` (parametric ReLU, used as ``op=nl.prelu`` with ``nki.isa.activate2``) and ``nl.bypass`` (pass-through op for ``nki.isa.activate2``). See the supported activation functions and arithmetic operator tables in :doc:`nki.api.shared </nki/api/nki.api.shared>`.
+
+* **tile_size bytes-aware constants**: New properties on ``nki.language.tile_size`` expose SBUF and PSUM capacity in both elements and bytes:
+
+  * ``tile_size.sbuf_size_bytes`` — total SBUF capacity across all 128 partitions, in bytes
+  * ``tile_size.sbuf_fmax`` — per-partition usable SBUF free dimension in FP32 elements
+  * ``tile_size.sbuf_fmax_bytes`` — per-partition usable SBUF free dimension in bytes
+  * ``tile_size.psum_bank_fmax`` — PSUM bank capacity in FP32 elements
+  * ``tile_size.psum_bank_fmax_bytes`` — PSUM bank capacity in bytes
+
+  See :doc:`nki.language.tile_size </nki/api/generated/nki.language.tile_size>`.
+
+* **nki.isa.dma_compute oob_mode parameter**: ``dma_compute`` now accepts an ``oob_mode`` parameter (``oob_mode.error`` or ``oob_mode.skip``) to control handling of out-of-bounds indices in indirect gather/scatter operations with ``vector_offset``, mirroring existing ``dma_copy`` behavior. Validation ensures ``oob_mode.skip`` is used only with indirect indexing. See :doc:`nki.isa.dma_compute </nki/api/generated/nki.isa.dma_compute>`.
+
+* **nc_matmul float8_e4m3fn input dtype**: On ``trn3``, ``nc_matmul`` now accepts ``float8_e4m3fn`` (OCP FP8) as an input dtype, distinct from the legacy ``float8_e4m3``. A new validation prevents mixing legacy ``float8_e4m3`` with OCP ``float8_e4m3fn`` operands in the same matmul. See :doc:`nki.isa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>`.
+
+* **JAX dtype support**: JAX scalar dtype types (``jnp.bfloat16``, ``jnp.float16``, ``jnp.float32``, etc.) are now accepted as kernel arguments and keyword arguments and automatically converted to the equivalent NKI dtype. Unsupported JAX dtypes raise ``TypeError``. See :doc:`NKI data types </nki/api/nki.language>`.
+
+Improvements
+~~~~~~~~~~~~
+
+* ``nki.isa.sendrecv`` — Removed the restriction that the ``src`` and ``dst`` partition dimension must be a multiple of 16. Note: ``sendrecv`` is an intra-LNC communication API and is only supported when running on LNC2 (``trn2`` or later). See :doc:`nki.isa.sendrecv </nki/api/generated/nki.isa.sendrecv>`.
+
+* ``nki.isa.dma_transpose`` with indirect indexing — Relaxed the ``src`` innermost dimension constraint from exactly ``128`` to ``<= 128`` when ``src`` uses an indirect access pattern (``vector_offset``). See :doc:`nki.isa.dma_transpose </nki/api/generated/nki.isa.dma_transpose>`.
+
+* **``nki.simulate`` default accuracy improved**: ``NKI_PRECISE_FP=1`` is now the default for CPU simulation. Low-precision dtypes (``bfloat16``, ``float8``) are now modeled accurately instead of being approximated with ``float32``, producing simulator results closer to hardware. Set ``NKI_PRECISE_FP=0`` to restore the previous behavior. See :doc:`nki.simulate </nki/api/generated/nki.simulate>`.
+
+* **``NKI_SIMULATOR=1`` environment variable**: Setting ``NKI_SIMULATOR=1`` now works with ``torch.Tensor`` inputs directly — no manual conversion to NumPy arrays required. See :doc:`nki.simulate </nki/api/generated/nki.simulate>`.
+
+* **Improved error messages for nested NKI calls**: Kernel compilation errors now show the full Python call stack instead of only the innermost frame, making it easier to locate the call site that triggered the error.
+
+Deprecated and Removed APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``nki.isa.tensor_copy_dynamic_src`` / ``nki.isa.tensor_copy_dynamic_dst`` — Removed. Use ``nisa.tensor_copy()`` with ``.ap()`` and ``scalar_offset`` instead. See :doc:`nki.isa.tensor_copy </nki/api/generated/nki.isa.tensor_copy>`.
+
+* ``nki.language.tile_size.total_available_sbuf_size`` — Deprecated. Despite the name, this attribute returns the usable SBUF free dimension *per partition*, not total SBUF capacity. Use ``tile_size.sbuf_size_bytes`` for total SBUF capacity across all partitions, or ``tile_size.sbuf_fmax_bytes`` for the per-partition size. The deprecated attribute continues to work and returns the same value as before. See :doc:`nki.language.tile_size </nki/api/generated/nki.language.tile_size>`.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* ``nisa.dma_transpose`` — Now enforces that ``dst.shape`` matches the transposed ``src.shape`` exactly, including rank. Previously, a lower-rank ``dst.shape`` was silently padded to match a higher-rank ``src.shape`` (e.g., a 3D ``dst`` against a 4D ``src``). The compiler now raises an assertion error if the ranks differ. To migrate: either match the ``dst`` rank to the ``src`` rank (e.g., use ``dst.shape=(128, 1, 1, 4096)`` for a 4D ``src``), or use a ``src`` and ``axes`` of the same rank as the intended ``dst`` (e.g., a 3D ``src`` with ``axes=(2, 1, 0)`` instead of a 4D ``src`` with ``axes=(3, 1, 2, 0)``). See :doc:`nki.isa.dma_transpose </nki/api/generated/nki.isa.dma_transpose>`.
+
+* ``neuronxcc.nki.*`` namespace — Usage of the deprecated ``neuronxcc.nki.*`` namespace inside NKI kernels now raises a compilation error instead of a warning. To migrate, follow the :ref:`NKI Beta 2 Migration Guide <nki-migration-guide>`.
+
+Bug Fixes
+~~~~~~~~~
+
+* **``nki.simulate`` correctness fixes**: The CPU simulator was corrected in several areas for closer matching to hardware behavior:
+
+  * ``nki.isa.dma_copy`` with ``oob_mode=oob_mode.skip`` no longer casts integer tiles to ``float32`` in the OOB skip path — integer bit patterns are now preserved.
+  * ``nki.isa.nc_stream_shuffle`` with ``mask=255`` now preserves existing destination data instead of zeroing it.
+  * ``nki.isa.local_gather`` now produces correct results, including when the destination uses a sub-view or ``.ap()`` access pattern.
+  * ``nki.isa.nc_matmul`` with 3D+ operand shapes now copies all elements (previously higher dimensions were silently dropped, producing zero-filled results).
+  * ``nki.isa.quantize_mx`` with ``float8_e4m3fn_x4`` output now simulates correctly.
+  * ``nki.isa.iota`` and ``nki.isa.affine_select`` now handle dynamic register offsets correctly.
+  * MX x4 packed dtypes (``float8_e4m3fn_x4``, ``float8_e5m2_x4``) now simulate correctly when targeting ``trn3``.
+  * ``nki.isa.dma_compute`` no longer applies a fictional additive scale mode that the hardware does not support.
+  * ``nl.logical_and`` in CPU simulation now produces correct results.
+
+  See :doc:`nki.simulate </nki/api/generated/nki.simulate>`.
+
+* Fixed ``NKIObject`` subclasses decorated with ``@dataclass(frozen=True)`` failing to instantiate with ``FrozenInstanceError``. Frozen NKI object subclasses can now be constructed normally.
+
+* Fixed ``nki.jit`` cache misses when ``NKIObject`` subclasses are decorated with ``@dataclass``. ``@dataclass`` removes ``__hash__`` by default, which prevented the cache key from being computed. ``NKIObject`` dataclass subclasses are now handled with a consistent cache key regardless of hashability. See :doc:`nki.jit </nki/api/generated/nki.jit>`.
+
+* Fixed bool output tensors being returned as ``uint8`` from PyTorch Native kernels. Bool dtype is now preserved end-to-end so output tensors are returned as ``torch.bool`` instead of ``torch.uint8``.
+
+* Fixed hardware race conditions in dynamic loop kernels when loop-body memory accesses overlapped with pre-loop accesses. Cross-scope memory dependencies are now tracked correctly across loop boundaries.
+
+* Fixed silent, undefined behavior when writing to the induction variable of an ``nl.dynamic_range`` loop. Writing to the induction variable (e.g., to try to break out of the loop early) had no effect but did not surface any error. Such writes now raise ``AssertionError`` at trace time. Additionally, the induction variable is now a ``VirtualRegister`` (previously a bare scalar), so it can be used as a ``scalar_offset`` in access patterns (e.g., ``nisa.dma_copy`` with a per-iteration dynamic offset) — resolving a 0.3.0 known issue. See :doc:`nki.language.dynamic_range </nki/api/generated/nki.language.dynamic_range>`.
+
+* Fixed ``nki.isa.nc_transpose`` silently ignoring the ``engine`` argument. An explicit ``engine=engine.vector`` or ``engine=engine.tensor`` is now honored; ``engine=engine.unknown`` (the default) continues to auto-select based on the destination buffer. See :doc:`nki.isa.nc_transpose </nki/api/generated/nki.isa.nc_transpose>`.
+
+* Fixed ``nki.jit`` kernel cache missing when a kernel is invoked with ``None`` arguments. Previously this triggered unnecessary recompilation on every such call. See :doc:`nki.jit </nki/api/generated/nki.jit>`.
+
+* Fixed ``nl.device_print`` failing verification on 1-D HBM tensors (e.g., after linearization). ``device_print`` now works with any tensor rank. See :doc:`nki.language.device_print </nki/api/generated/nki.language.device_print>`.
+
+Known Issues
+~~~~~~~~~~~~
+
+**Control Flow**
+
+* Nested ``nl.dynamic_range`` loops with loop-carried values fail to compile with a "Could not find register" error. Workaround: restructure to avoid nested dynamic loops, or use ``nl.static_range`` / ``nl.affine_range`` for the outer loop when the trip count is known at compile time.
+
+**CPU Simulator**
+
+* The CPU simulator has additional known limitations beyond those listed here. See the :ref:`Simulation Limitations <nki-simulate-simulation-limitations>` section of the simulator guide for the full list.
+
+**NKI Language (experimental)**
+
+The ``nki.language`` APIs are convenience wrappers around ``nki.isa`` instructions. They are experimental and have the following known limitations:
+
+* ``nki.language.divide`` is not supported — Division is not available as a hardware instruction. As a workaround, multiply by the reciprocal: ``nl.multiply(x, nl.reciprocal(y))``.
+
+* ``nki.language.fmod`` and ``nki.language.mod`` are not supported — Modulo operations are not available as hardware instructions. These APIs work in simulation but fail when compiled for Trainium hardware.
+
+* ``nki.language.power`` does not support scalar exponents — ``nl.power(tile, scalar)`` is not supported. Use ``nl.power(tile, tile)`` instead, where both operands are tiles.
+
+* Binary operations do not support broadcasting — Operations like ``nl.add(a, b)`` require both operands to have the same shape. Broadcasting (e.g., adding a ``(128, 1)`` tile to a ``(128, 512)`` tile) is not yet supported.
+
+* ``nki.language.random_seed`` requires a tensor, not a scalar — Pass a ``[1, 1]`` tensor on SBUF instead of a Python integer. For example: ``nl.random_seed(nl.full((1, 1), 42, dtype=nl.int32, buffer=nl.sbuf))``.
+
+* ``nki.language.rand`` and ``nki.language.random_seed`` engine behavior — On ``trn3``, ``rand`` uses ``nisa.rand2`` on the Vector Engine. On earlier targets, ``rand`` uses ``nisa.rng`` which may run on a different engine than ``random_seed``, potentially causing ``random_seed`` to have no effect on ``rand`` output.
+
+* ``nki.language.matmul`` without ``transpose_x=True`` is not supported — Calling ``nl.matmul(x, y)`` without setting ``transpose_x=True`` will fail. As a workaround, always use ``nl.matmul(x, y, transpose_x=True)`` and pre-arrange data accordingly.
+
+* ``nki.language.copy`` uses lossy FP32 casting — ``nl.copy`` uses the Scalar Engine which internally casts through ``float32``, which is lossy for integer types with values exceeding ``float32`` precision (e.g., ``int32`` values greater than 2^23). Additionally, cross-buffer copies (e.g., PSUM to SBUF) are not supported.
+
 
 .. _nki-2-29-0-rn:   
 
@@ -135,8 +261,6 @@ Known Issues
 
 * Binary operations do not support broadcasting — Operations like ``nl.add(a, b)`` require both operands to have the same shape. Broadcasting (e.g., adding a ``(128, 1)`` tile to a ``(128, 512)`` tile) is not yet supported.
 
-* ``nki.language.softmax`` and ``nki.language.rms_norm`` fail on hardware — These functions rely on internal broadcasting between full-size and reduced-size tiles, which is not supported on hardware. They work correctly in simulation.
-
 **Random Number Generation**
 
 * ``nki.language.random_seed`` requires a tensor, not a scalar — Pass a ``[1, 1]`` tensor on SBUF instead of a Python integer. For example: ``nl.random_seed(nl.full((1, 1), 42, dtype=nl.int32, buffer=nl.sbuf))``.
@@ -149,7 +273,7 @@ Known Issues
 
 **Data Movement**
 
-* ``nki.language.store`` does not support PSUM tiles directly — Storing a tile that resides in PSUM requires manually copying it to SBUF first using ``nisa.tensor_copy``. A future release will handle this automatically.
+* ``nki.language.store`` does not support PSUM tiles directly — Storing a tile that resides in PSUM requires manually copying it to SBUF first using ``nisa.tensor_copy``.
 
 * ``nki.language.copy`` uses lossy FP32 casting — ``nl.copy`` uses the Scalar Engine which internally casts through FP32, which is lossy for integer types with values exceeding FP32 precision (e.g., int32 values > 2^23). Additionally, cross-buffer copies (e.g., PSUM to SBUF) are not supported.
 
@@ -168,6 +292,10 @@ Known Issues
 **Compiler**
 
 * Address rotation cannot be disabled — Address rotation, a backend compiler optimization that rotates tensor addresses for improved memory utilization, is enabled by default and cannot be opted out of in this release.
+
+**Collectives**
+
+* :func:`nki.collectives.all_to_all_v`: ``has_rdispls=True`` has no effect on NeuronSwitch-based architectures (e.g., Trainium3 UltraServer); the receive layout is the same as ``has_rdispls=False``.
 
 
 .. _nki-2-28-0-rn:   
@@ -599,9 +727,7 @@ Improvements
 
 * NKI support for Trainium2, including full integration with Neuron Compiler.
   Users can directly shard NKI kernels across multiple Neuron Cores from an SPMD launch grid.
-  See :doc:`tutorial </nki/guides/tutorials/index>` for more info.
-  See :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>` for an initial version of the architecture specification
-  (more details to come in future releases).
+  See :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>` for the architecture specification.
 * New calling convention in NKI kernels, where kernel output tensors are explicitly returned from the kernel instead
   of pass-by-reference. See any :doc:`NKI tutorial </nki/guides/tutorials/index>` for code examples.
 

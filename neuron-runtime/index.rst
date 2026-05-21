@@ -23,8 +23,7 @@ The Neuron Runtime is typically used transparently through ML framework plugins,
     Overview </neuron-runtime/about/index>
     Get Started </neuron-runtime/about/core-dump>
     Deep Dives </neuron-runtime/explore/index>
-    /neuron-runtime/configuration-guide
-    Developer Guide </neuron-runtime/nrt-developer-guide>
+    How-To Guides </neuron-runtime/guides/index>
     API Reference </neuron-runtime/api/index>
     NRT Debug Stream </neuron-runtime/api/debug-stream-api>
     Troubleshooting on Inf1 and Trn1 </neuron-runtime/nrt-troubleshoot>
@@ -51,18 +50,45 @@ Get Started
 
         Learn how to generate a Neuron runtime core dump for debugging runtime failures and analyzing device state.
 
+How-to guides
+-------------
+
+.. grid:: 2
+    :gutter: 2
+
+    .. grid-item-card:: Runtime developer guide
+        :link: nrt-api-guide
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Build a C/C++ application against ``libnrt`` directly. Covers runtime architecture, driver and library installation, NEFF loading, tensor staging, execution, and the collective communication library.
+
+    .. grid-item-card:: Migrate to the explicit async APIs
+        :link: nrt-migrate-to-explicit-async
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Move a C/C++ application off the legacy ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS`` implicit async mode and onto the ``nrta_*`` explicit async APIs for fine-grained scheduling and completion tracking.
+
+    .. grid-item-card:: Runtime configuration guide
+        :link: nrt-configuration
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Configure the Neuron Runtime through environment variables. Covers NeuronCore visibility and allocation, execution timeouts, logging verbosity, and other runtime knobs.
+
+    .. grid-item-card:: All how-to guides
+        :link: neuron-runtime-guides
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Browse the full set of Neuron Runtime how-to guides for developers working directly with ``libnrt``.
+
 Reference
 ------------
 
 .. grid:: 2
     :gutter: 2
-
-    .. grid-item-card:: Runtime Developer Guide
-        :link: nrt-api-guide
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
-
-        Comprehensive guide to the Neuron Runtime API for developers building custom frameworks that call libnrt APIs directly.
 
     .. grid-item-card:: Runtime API Reference Documentation
         :link: /neuron-runtime/api/index
@@ -70,13 +96,6 @@ Reference
         :class-header: sd-bg-primary sd-text-white
 
         Documentation of the APIs in the public headers for the Neuron Runtime.
-
-    .. grid-item-card:: Runtime Configuration
-        :link: nrt-configuration
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
-
-        Learn how to configure the Neuron Runtime using environment variables to control NeuronCore allocation, logging, and more.
 
     .. grid-item-card:: Troubleshooting on Inf1 and Trn1
         :link: nrt-troubleshooting

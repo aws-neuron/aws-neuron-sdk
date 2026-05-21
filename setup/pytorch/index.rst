@@ -107,7 +107,7 @@ Before installing, ensure you have:
    * - Operating System
      - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
    * - Python Version
-     - Python 3.10, 3.11, or 3.12
+     - Python 3.11 or 3.12
    * - AWS Account
      - With EC2 launch permissions
    * - SSH Access
@@ -140,7 +140,7 @@ Version Information
    * - neuronx-cc
      - 2.15.0+
    * - Python
-     - 3.10, 3.11, 3.12
+     - 3.11, 3.12
 
 Next Steps
 ----------

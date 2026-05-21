@@ -611,9 +611,10 @@ Example benchmarking result
 Profiling Models
 ~~~~~~~~~~~~~~~~
 
-Neuron provides a profiling tool, ``neuron-profile``, which you can use
-to analyze the performance of a compiled Neuron model. For more
-information, see :ref:`neuron-profile-ug`.
+Neuron provides :ref:`Neuron Explorer <neuron-explorer-home>` as the
+recommended tool for profiling, analyzing, and optimizing compiled Neuron
+models. See the :doc:`Neuron Explorer documentation
+</tools/neuron-explorer/index>` to get started.
 
 Evaluating Models with the Inference Demo Script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

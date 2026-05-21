@@ -16,7 +16,7 @@ Source code linking helps you understand how your code changes affect device per
 
 The Framework Stack Trace feature shows up in the Event Details when an instruction on the device profile is clicked. This feature is used to map the device instructions back to framework level code in JAX or PyTorch to better understand what part of the application code resulted in a particular device instruction.
 
-.. image:: /tools/profiler/images/view-link-1.gif
+.. image:: /tools/images/view-link-1.gif
 
 Instructions
 -------------
@@ -44,14 +44,14 @@ Highlighting Instructions
 
 Select source code lines to highlight their corresponding instructions in the profiler view. You can select individual lines or multiple lines through block selection or multiple cursors.
 
-.. image:: /tools/profiler/images/view-link-2.png
+.. image:: /tools/images/view-link-2.png
 
 Navigating to Source Code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 (Ctrl/Cmd)+Click any instruction to jump to it's location in source code. If there are multiple matches, you will be prompted to select which file to navigate to.
 
-.. image:: /tools/profiler/images/view-link-3.png
+.. image:: /tools/images/view-link-3.png
 
 Source Code Decorations
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,7 +60,7 @@ Performance metrics appear as decorations directly in your source code, updating
 
 Configure which metrics to display and in the settings panel. Currently only instruction count and PE element count are supported.
 
-.. image:: /tools/profiler/images/view-link-4.png
+.. image:: /tools/images/view-link-4.png
 
 Navigating to Instructions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,11 +69,11 @@ Select lines in your source code and navigate to their corresponding instruction
 
 The Device Trace Viewer will then zoom to show all instructions associated with your selection.
 
-.. image:: /tools/profiler/images/view-link-5.png
+.. image:: /tools/images/view-link-5.png
 
 Dependency Annotations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 When enabled, selecting an instruction will highlight its dependent source code lines. The selected instruction's line will be highlighted in one color, with its dependencies shown in a different color.
 
-.. image:: /tools/profiler/images/view-link-6.png
+.. image:: /tools/images/view-link-6.png

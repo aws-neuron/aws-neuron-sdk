@@ -127,60 +127,55 @@ For memory allocation, developers can explicitly control tensor placement in the
     # Allocate tensor of FP16 elements in HBM (high-bandwidth memory, off-chip)
     y_in_hbm = nl.ndarray(shape, dtype=nl.float16, buffer=nl.shared_hbm)
 
-Scheduling options for loop
-----------------------------
+Scheduling options for loops
+-----------------------------
 
-Loops are a key part of tile and tensor programming. NKI offers three ways to write loops that control execution order and determine whether loops are optimized during compilation or depend on runtime values.
+Loops are a key part of tile and tensor programming. NKI gives you two distinct loop behaviors: loops that are unrolled at specialization time, and loops that execute on the device at runtime.
 
-Let's look at three types of loops, which serve as hints to the compiler. The compiler will always make sure your code works correctly, regardless of any optimizations it makes.
+Specialization-time unrolled loops
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sequential loop (default loops)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Loops with sequential ranges are loops that might carry dependencies between the result of one loop to the next loop.  The NKI compiler does not try to re-order or parallelize the executions of loops, and runs them in sequence order.  When in doubt, Neuron recommends you start with sequential loops.
+NKI meta-programming primitives like ``for`` loops over ``range()`` are fully unrolled at specialization time. The compiler expands the body once per iteration with the loop variable resolved as a compile-time constant in every copy. Because the loop is unrolled before compilation, you can use meta-programming inside the body — branching on the loop variable, calling NKI meta-programming functions, computing tile shapes, and so on. See :doc:`/nki/get-started/nki-language-guide` for more on specialization and the NKI meta-programming model.
 
 .. code-block:: python
 
     import nki.language as nl
 
-    # Sequential range - compiler will assume loop iteration n, *might* depend on 
-    # results from iterations n-1, n-2,...0, and will not try to unroll 
-    # or parallize the code execution
-    # when in doubt, developers should start with Sequential_range()
+    # Python `range()` -- unrolled at specialization time.
+    # Each iteration gets its own copy of the body with `i` resolved
+    # as a compile-time constant, so meta-programming on `i` works.
+    for i in range(input_tensor.shape[1] // 512):
+        offset = i * 512
+        tile = nl.load(input_tensor[0:128, offset:offset+512])
+        result = nl.multiply(tile, tile)
+        nl.store(out_tensor[0:128, offset:offset+512], result)
 
-    for i in nl.sequential_range(8):
-        # Compiler will not re-order
-        result = process_tile(result_from_previous_loop)
-        result_from_previous_loop = result
+On-device dynamic loops
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Affine loop 
-^^^^^^^^^^^^
+``nl.dynamic_range`` produces a loop that runs on the device at runtime. The compiler does not unroll dynamic loops. Use it when:
 
-Affine loops are a hint that developers can give to the compiler when developer is confident there are no carried dependencies between different loop iterations. This approach allows the compiler to unroll and optimize code ordering between different iterations of the loop to improve performance. 
-
-.. code-block:: python
-
-    import nki.language as nl
-
-    # Affine range - allows compiler optimizations like pipelining and unrolling
-    for i in nl.affine_range(8):
-        # Compiler can reorder and optimize these iterations
-        process_tile(i)
-
-On-device (Dynamic) loop 
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Some code does not know the number of loop iterations at compile time; or perhaps the code depends on dynamically generated integer values during runtime that decide the number of iterations. In this case, the NKI compiler does not attempt to optimize across loop iterations.
+* The number of iterations is not known at specialization time, or it depends on runtime values stored in virtual registers.
+* The number of iterations is large enough that unrolling would generate too many instructions to compile. This is common when iterating over tiles of a large activation tensor.
 
 .. code-block:: python
 
     import nki.language as nl
+    import nki.isa as nisa
 
-    # Dynamic range - runs on device at runtime, not compile-time
-    lower_bound = register_alloc(0)
-    upper_bound = register_alloc(10)
+    # Dynamic range -- compiled once, executed on device.
+    # Bounds are resolved at runtime from virtual registers.
+    lower_bound = nisa.register_alloc(0)
+    upper_bound = nisa.register_alloc(10)
     for i in nl.dynamic_range(lower_bound, upper_bound):
         process_tensor(t[i])
+
+.. note::
+
+    ``nl.static_range``, ``nl.sequential_range``, and ``nl.affine_range`` are
+    deprecated. They behave as aliases of ``range()`` (specialization-time
+    unrolling) and continue to work, but new code should use ``range()``
+    directly.
 
 Direct Hardware Control with nki.isa
 --------------------------------------
@@ -500,7 +495,7 @@ Static control flow includes standard if statements, for loops, and while loops 
             nki.isa.reciprocal(dst=outputs[i], data=inputs[i])
 
 
-The compiler provides special range functions as performance hints: sequential_range(), static_range(), and affine_range(). These don't change how your code works, but they give the compiler hints about how to optimize it.
+Python ``for`` loops over ``range()`` are unrolled at specialization time. The legacy NKI range helpers — ``static_range()``, ``sequential_range()``, and ``affine_range()`` — are deprecated and behave as aliases of ``range()``.
 
 **Dynamic control flow** runs on the Trainium device using register values and a special range function:
 

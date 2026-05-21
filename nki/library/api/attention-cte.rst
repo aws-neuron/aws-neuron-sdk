@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention CTE kernel implements attention optimized for Context Encoding (prefill) use cases.
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. currentmodule:: nkilib.core.attention.attention_cte
 
@@ -37,7 +37,7 @@ API Reference
 attention_cte
 ^^^^^^^^^^^^^^^
 
-.. py:function:: attention_cte(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, scale: float = 1.0, causal_mask: bool = True, k_prior: Optional[nl.ndarray] = None, v_prior: Optional[nl.ndarray] = None, prior_used_len: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, sliding_window: Optional[int] = None, tp_q: bool = True, tp_k: bool = False, tp_out: bool = False, cache_softmax: bool = False, softmax_dtype=nl.float32, mm_out_dtype=nl.float32, cp_offset: Optional[nl.ndarray] = None, global_cp_deg: int = None, cp_strided_q_slicing: bool = False, bound_min: Optional[nl.ndarray] = None, bound_max: Optional[nl.ndarray] = None)
+.. py:function:: attention_cte(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, scale: float = 1.0, causal_mask: bool = True, k_prior: Optional[nl.ndarray] = None, v_prior: Optional[nl.ndarray] = None, prior_used_len: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, sliding_window: Optional[int] = None, tp_q: bool = True, tp_k: bool = False, tp_out: bool = False, cache_softmax: bool = False, softmax_dtype=nl.float32, mm_out_dtype=nl.float32, cp_offset: Optional[nl.ndarray] = None, global_cp_deg: int = None, cp_strided_q_slicing: bool = False, bound_min: Optional[nl.ndarray] = None, bound_max: Optional[nl.ndarray] = None, cp_striped_input: bool = False, skip_output_normalization: bool = False)
 
    Entrypoint NKI kernel that supports multiple attention variants.
 
@@ -85,6 +85,10 @@ attention_cte
    :type bound_min: ``nl.ndarray``, optional
    :param bound_max: (Sequence packing) Per-query maximum KV index bounds with shape ``(batch_size, seqlen_q)``. When provided with ``bound_min``, restricts the KV range each query attends to. Default: ``None`` (no packing).
    :type bound_max: ``nl.ndarray``, optional
+   :param cp_striped_input: Whether the input sequence was distributed across CP ranks in round-robin (striped) order rather than contiguous chunks. When ``True``, the caller must set ``cp_offset`` to 0 (include diagonal, q_rank >= kv_rank) or -1 (exclude diagonal, q_rank < kv_rank). Requires ``causal_mask=True``. Not compatible with sliding window or prefix caching. Default: ``False``.
+   :type cp_striped_input: ``bool``, optional
+   :param skip_output_normalization: When ``True``, skips the final 1/S normalization of the output and returns the raw softmax denominator instead of its reciprocal. This avoids wasted work when the caller (e.g., ring attention) needs unnormalized outputs for cross-step reduction and will normalize once at the very end. Must be used together with ``cache_softmax=True``. When enabled, output is unnormalized and the third return value is the raw sum S (not 1/S). Default: ``False``.
+   :type skip_output_normalization: ``bool``
    :return: Output tensor with attention results. Shape depends on ``tp_out`` parameter. If ``cache_softmax`` is ``True``, returns tuple of ``(output, out_neg_max, out_sum_recip)``.
    :rtype: ``nl.ndarray`` or ``tuple``
 

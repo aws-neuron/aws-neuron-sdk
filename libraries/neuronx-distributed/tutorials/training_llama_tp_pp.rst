@@ -12,7 +12,7 @@ checkpoint as well as constant mask optimization in the ``neuronx-distributed`` 
 Setting up environment:
                        
 For this experiment, we will use a ParallelCluster with at least 32 trn1-32xl compute nodes.
-`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/training/parallelcluster/parallelcluster-training.html>`__
+`Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/parallelcluster/training.html>`__
 introduces how to setup and use a ParallelCluster.
 
 We also need to install the ``neuronx-distributed`` package using the following command:
@@ -137,7 +137,7 @@ thereby reducing performance. To mitigate this issue, one can use the :ref:`GQAQ
 using tp_degree of 32. This reduces the activation memory per device and thereby eventually allows using a pipeline 
 parallel degree of 4. This can be enabled by passing the argument:
 
-.. code-block:: python
+.. code:: bash
 
    torchrun $DISTRIBUTED_ARGS run_llama_nxd.py \
    ... \

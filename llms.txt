@@ -109,7 +109,7 @@
 - [vLLM on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/index.html): High-performance inference serving for large language models with OpenAI-compatible APIs
 - [vLLM Offline Serving Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/quickstart-vllm-offline-serving.html): Run batch inference with vLLM on Neuron
 - [vLLM Online Serving Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/quickstart-vllm-online-serving.html): Launch an OpenAI-compatible API server with vLLM on Neuron
-- [vLLM DLC Deployment](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/get-started/quickstart-configure-deploy-dlc.html): Deploy a vLLM server using a pre-configured Neuron Deep Learning Container
+- [vLLM DLC Deployment](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/quickstart-deploy-dlc.html): Deploy a vLLM server using a pre-configured Neuron Deep Learning Container
 - [vLLM V1 User Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/vllm-user-guide-v1.html): Complete guide for vLLM V1 with vLLM-Neuron Plugin
 - [vLLM User Guide (Legacy)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/vllm-user-guide.html): User guide for earlier vLLM versions
 - [NxD Training](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-training/index.html): PyTorch library for end-to-end distributed training with Neuron
@@ -132,6 +132,7 @@
 - [Database Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-database-viewer.html): SQL and natural language queries on profiling data
 - [Tensor Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-tensor-viewer.html): Tensor names, shapes, sizes, and memory usage details
 - [Memory Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-memory-viewer.html): Low-level memory allocation and usage pattern analysis
+- [Region Highlighter](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-region-highlighter.html): Generate regions of interest for a profile and target detailed analysis to interesting time spans, including the ``AnnotationRegion`` integration with the Annotation feature.
 - [AI Recommendation Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-ai-recommendations.html): AI-powered bottleneck analysis and optimization recommendations
 - [Migration from Neuron Profiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/migration-faq.html): Migration guide and FAQ for moving from Neuron Profiler to Neuron Explorer
 - [View Profiles with Perfetto](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/view-perfetto.html): View Neuron Explorer profiles using the Perfetto UI
@@ -144,7 +145,12 @@
 
 ### Agentic Development
 
-- [Neuron Agentic Development Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/agentic-development-overview.html): Open-source AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. Covers how skills chain (write → debug → profile → analyze), supported IDEs, hardware requirements, and limitations. Use this page when deciding whether agentic development applies to your workflow or when setting up the agents on a Trainium or Inferentia instance.
+- [Neuron Agentic Development Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/agentic-development-overview.html): Open-source AI agents and skills for authoring, debugging, profiling, and analyzing NKI kernels, plus model porting and equivalence validation, inside agentic IDEs such as Claude Code and Kiro. Covers how skills chain together, supported IDEs, hardware requirements, and limitations.
+- [Getting Started with Neuron Agentic Development](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/getting-started.html): Installation, environment setup, and first agent invocation.
+- [Autoport Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-autoport.html): How the ``neuron-framework-autoport`` skill ports HuggingFace transformer models to NxD Inference end to end (architecture analysis, implementation, compilation, inference testing, greedy-token-match validation).
+- [Equivalence Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-equivalence.html): How the ``neuron-framework-equivalence`` skill validates numerical equivalence between a HuggingFace reference model and its NxD Inference port using progressive 3-tensor R-ratio analysis, component-level testing, fault localization, and end-to-end accuracy verification.
+- [Autoport Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/autoport-tutorial.html): Step-by-step walkthrough of porting a HuggingFace model with the Autoport agent.
+- [Equivalence Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/equivalence-tutorial.html): Step-by-step walkthrough of validating a ported model with the Equivalence agent.
 - [Neuron Agentic Development on GitHub](https://github.com/aws-neuron/neuron-agentic-development): Open-source repository with installation steps, the current agent and skill catalog, and agent-ready code samples.
 
 ## Neuron Runtime & Compiler
@@ -253,6 +259,28 @@
 - [Fine-Grained All-Gather](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fg-allgather.html): Ring-based all-gather with compute overlap
 - [FGCC (All-Gather + Matmul)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fgcc.html): Fused fine-grained collective compute combining all-gather and matmul
 - [SBUF-to-SBUF All-Gather](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/sb2sb-allgather.html): SBUF-to-SBUF all-gather for small and large tensors
+- [Attention Segmented CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-segmented-cte.html): Segmented attention with block-based KV cache and prefix caching
+- [KV-Parallel Segmented Prefill](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/kv-parallel-segmented-prefill.html): KV-parallel segmented prefill attention
+- [FP8 Quantize](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fp8-quantize.html): Static and row-wise dynamic FP8 quantization with pre-combined dequantization scale
+- [Ring Attention Forward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ring-attention-fwd.html): Ring attention forward pass for context parallelism with collective permute and latency hiding
+- [Ring Attention Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ring-attention-bwd.html): Ring attention backward pass SPMD kernel for context parallelism
+- [Conv3D](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/conv3d.html): 3D convolution on Tensor Engine with K-replication and W-contiguous tiling; stride, padding, dilation, bias, activation fusion
+- [Foreach Elementwise](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/foreach-elementwise.html): Fused elementwise kernels (add, sub, mul, div, addcdiv, addcmul, lerp, sqrt) with SPMD tiling
+- [Foreach Norm](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/foreach-norm.html): L1, L2, and Linf norm computation kernels with SPMD parallelization
+- [Matmul MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/matmul-mxfp8-generic-kernel.html): Generic matmul with MXFP8 quantization, supporting pre-quantized and BF16 inputs and LNC2 parallelization
+- [MLP Forward MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mlp-fwd-mxfp8-kernel.html): MXFP8 SwiGLU MLP forward pass with optional activation checkpointing
+- [MLP Backward MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mlp-bwd-mxfp8-kernel.html): MXFP8 SwiGLU MLP backward pass with 4-phase gradient computation and activation checkpointing
+- [MX MoE Block TKG Wrapper](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mx-moe-block-tkg-wrapper.html): Wrapper that bitcasts unsigned integer weights to MX x4 dtype before calling the MoE block kernel
+- [Fused Adam/AdamW](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fused-adam.html): Fused Adam (L2 regularization) and AdamW (decoupled weight decay) optimizers with AMSGrad
+- [Pad](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/pad.html): Multi-mode tensor padding (constant, replicate, reflect, circular) with PyTorch semantics
+- [Quantize MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/quantize-mxfp8.html): Block-wise BF16-to-MXFP8 quantization with packed scale support
+- [RNG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rng.html): Random number generation kernels using GPSIMD engine with state management
+- [Linear Scan](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/linear-scan.html): First-order linear recurrence along the last dimension
+- [Selective Scan](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/selective-scan.html): Selective scan (SSM) as in Mamba models
+- [SSD](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ssd.html): State Space Duality scan for Mamba-2 models
+- [Argsort Unstable](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/argsort-unstable.html): Unstable argsort on a 1D input buffer
+- [Build All-to-All-V Metadata](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/build-all-to-all-v-metadata.html): Builds the metadata buffer for ``all_to_all_v`` collectives from MoE routing decisions
+- [Permute Routed Tokens](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/permute-routed-tokens.html): Sorts tokens by expert and packs hidden states, affinities, and token indices for MoE dispatch
 
 ### NKI Library Kernel Utilities
 
@@ -264,21 +292,23 @@
 
 ## Deployment & Orchestration
 
-- [AWS Workload Orchestration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/index.html): Deployment patterns and best practices for running Neuron-powered applications
-- [Amazon EC2](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/ec2-flows.html): Launching Inf/Trn instances on Amazon EC2
-- [Amazon EKS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/eks-flows.html): Deploy Neuron workloads on Kubernetes with Amazon Elastic Kubernetes Service
-- [Amazon SageMaker](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/sagemaker-flows.html): Deploy Neuron workloads on Amazon SageMaker
-- [Neuron Containers](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/index.html): Pre-configured Docker images for training and serving models
-- [Getting Started with Containers](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/getting-started.html): Step-by-step guide for building Neuron containers using Docker
-- [Kubernetes Getting Started](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/kubernetes-getting-started.html): Deploy Neuron workloads on Kubernetes
-- [Neuron DRA](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/neuron-dra.html): Dynamic Resource Allocation for Kubernetes
-- [Container Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/tutorials.html): Hands-on tutorials for deploying containers on EC2, EKS, ECS
+- [AWS Workload Orchestration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/index.html): Deployment patterns and best practices for running Neuron-powered applications
+- [Amazon EC2](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/ec2/index.html): Launching Inf/Trn instances on Amazon EC2
+- [Amazon EKS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/index.html): Deploy Neuron workloads on Kubernetes with Amazon Elastic Kubernetes Service
+- [Amazon SageMaker](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/sagemaker/index.html): Deploy Neuron workloads on Amazon SageMaker
+- [Neuron Containers](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/index.html): Pre-configured Docker images for training and serving models
+- [Getting Started with Containers](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/docker-setup.html): Step-by-step guide for building Neuron containers using Docker
+- [Kubernetes Getting Started](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/setup.html): Deploy Neuron workloads on Kubernetes
+- [Neuron DRA](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/dra.html): Dynamic Resource Allocation for Kubernetes
+- [Neuron UltraServer Operator (Beta)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/ultraserver-operator.html): Topology-aware provisioning and lifecycle management of Trn2 and Trn3 UltraServer workloads on Amazon EKS via the ``NeuronUltraServerWorkload`` custom resource.
+- [Schedule MPI Jobs on UltraServer (EKS)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/ultraserver.html): How-to for running MPI jobs on Trn2 or Trn3 UltraServers with the included init script.
+- [Container Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/tutorials/index.html): Hands-on tutorials for deploying containers on EC2, EKS, ECS
 
 ## Release Notes & Support
 
 - [Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html): Official home page for AWS Neuron SDK release notes
 - [What's New](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html): Latest releases and features of the Neuron SDK
-- [Latest Release (2.29.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/prev/2.29.0.html): Release notes for Neuron SDK version 2.29.0
+- [Latest Release (2.30.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.30.0.html): Release notes for Neuron SDK version 2.30.0
 - [Component Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/index.html): Release notes for individual Neuron components
 - [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Solutions for common issues with AWS Neuron
 - [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq/index.html): Frequently asked questions about AWS Neuron
@@ -296,12 +326,12 @@
 - [Third-party Tools](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/third-party-solutions.html): Third-party tools and integrations that support the AWS Neuron development experience
 - [Tool Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/tutorials/index.html): Tutorials for how to utilize all Neuron Tools
 - [Setup Troubleshooting (legacy)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/setup-troubleshooting.html): Solutions for common setup issues (legacy page)
-- [Amazon ECS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/ecs-flows.html): Run containerized Neuron applications using Amazon Elastic Container Service
-- [AWS ParallelCluster](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/parallelcluster-flows.html): Set up HPC clusters for distributed training and inference workloads
-- [AWS Batch](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/devflows/aws-batch-flows.html): Execute batch ML jobs with automatic scaling and resource management
-- [Container FAQ & Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/faq.html): Frequently asked questions and solutions for common issues with Neuron containers
+- [Amazon ECS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/ecs/index.html): Run containerized Neuron applications using Amazon Elastic Container Service
+- [AWS ParallelCluster](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/parallelcluster/index.html): Set up HPC clusters for distributed training and inference workloads
+- [AWS Batch](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/batch/index.html): Execute batch ML jobs with automatic scaling and resource management
+- [Container FAQ & Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/faq.html): Frequently asked questions and solutions for common issues with Neuron containers
 - [Runtime Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot.html): Solutions for common issues with the Neuron Runtime
 - [Neuron C++ Custom Operators](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-customops/index.html): Documentation for creating custom operators in C++ for Neuron
-- [AWS Neuron DLAMIs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/dlami/index.html): Pre-configured Amazon Machine Images with Neuron SDK
+- [AWS Neuron DLAMIs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/dlami.html): Pre-configured Amazon Machine Images with Neuron SDK
 - [Security](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/security.html): Security disclosures and notification for the AWS Neuron SDK
 - [SDK Maintenance Policy](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/sdk-policy.html): AWS Neuron SDK maintenance and support policy

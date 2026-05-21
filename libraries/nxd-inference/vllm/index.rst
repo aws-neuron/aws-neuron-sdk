@@ -46,7 +46,7 @@ Learn how to run high-performance inference workloads using vLLM on AWS Neuron a
    :gutter: 3
 
    .. grid-item-card:: Deploy a Deep Learning Container with vLLM
-      :link: /containers/get-started/quickstart-configure-deploy-dlc
+      :link: /deploy/environments/quickstart-deploy-dlc
       :link-type: doc
       :class-card: sd-border-1
 

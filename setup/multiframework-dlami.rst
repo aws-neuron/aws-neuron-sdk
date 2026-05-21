@@ -151,4 +151,4 @@ After setup, explore the framework documentation:
 - :doc:`/frameworks/torch/index` - PyTorch on Neuron
 - :doc:`/frameworks/jax/index` - JAX on Neuron
 - :doc:`/libraries/nxd-inference/vllm/index` - vLLM on Neuron
-- :doc:`/dlami/index` - Full DLAMI documentation and SSM parameters
+- :doc:`/deploy/environments/dlami` - Full DLAMI documentation and SSM parameters

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Developer Tools component across all AWS Neuron SDK versions.
     :keywords: neuron tools, developer tools, profiler, release notes, neuron explorer, aws neuron sdk
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _dev-tools_rn:
 
@@ -9,6 +9,39 @@ Component Release Notes for Neuron Developer Tools
 ==================================================
 
 The release notes for the Neuron Developer Tools. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+
+.. _dev-tools-2-30-0-rn:
+
+Neuron Developer Tools & Neuron Explorer (Neuron 2.30.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 05/21/2026
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* Implemented Region Highlighter tool in Neuron Explorer which enables users to quickly generate regions of interest for a profile and analyze them. Introduced AnnotationRegion to interact with the existing Annotation feature. See :doc:`/tools/neuron-explorer/overview-region-highlighter`.
+* The Neuron Explorer System Trace Viewer now visualizes host-device data transfers, showing ``host_to_device`` and ``device_to_host`` PCIe traffic as both per-transfer event tracks and bandwidth-over-time tracks. For distributed workloads, transfers are aggregated by Instance ID and NeuronCore. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Introduced the Dependency Chain Viewer widget in Neuron Explorer for system profiles in Neuron Explorer, enabling you to navigate between upstream and downstream dependent events. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Neuron Profiler and Profiler 2.0 (UI and CLI) are no longer supported. Users are asked to migrate to :doc:`Neuron Explorer </tools/neuron-explorer/index>`. For guidance on migration, see :doc:`Neuron Explorer </tools/neuron-explorer/migration-faq>`
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* None reported for this release.
+
+Bug Fixes
+~~~~~~~~~
+
+* None reported for this release.
+
+Known Issues
+~~~~~~~~~~~~
+
+* None reported for this release.
+
+*Release notes for this version will be added when Neuron 2.30.0 is released.*
 
 
 .. _dev-tools-2-29-0-rn:   

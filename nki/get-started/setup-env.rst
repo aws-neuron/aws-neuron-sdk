@@ -463,5 +463,5 @@ Uh oh! Did you encounter an error or other issue while working through this task
 Related information
 -------------------
 
-* :doc:`Neuron DLAMI User Guide </dlami/index>`
+* :doc:`Neuron DLAMI User Guide </deploy/environments/dlami>`
 * :doc:`Neuron Setup Guide </setup/index>`

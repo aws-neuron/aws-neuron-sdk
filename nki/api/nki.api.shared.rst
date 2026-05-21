@@ -107,20 +107,29 @@ into float32 before performing the operators.
   |                        +----------------------------+---------------------------------------------+------------------------+
   |                        | Logical Xor                | ``nki.language.logical_xor``                | Y                      |
   |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Power                      | ``nki.language.power``                      | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Absolute Maximum           | ``nki.language.abs_max``                    | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Absolute Minimum           | ``nki.language.abs_min``                    | N                      |
+  +------------------------+----------------------------+---------------------------------------------+------------------------+
+  | Arithmetic Unary       | Absolute                   | ``nki.language.abs``                        | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Square                     | ``nki.language.square``                     | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
+  |                        | Relu                       | ``nki.language.relu``                       | N                      |
+  |                        +----------------------------+---------------------------------------------+------------------------+
   |                        | Reverse Square Root        | ``nki.language.rsqrt``                      | N                      |
   |                        +----------------------------+---------------------------------------------+------------------------+
   |                        | Reciprocal                 | ``nki.language.reciprocal``                 | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Absolute                   | ``nki.language.abs``                        | N                      |
-  |                        +----------------------------+---------------------------------------------+------------------------+
-  |                        | Power                      | ``nki.language.power``                      | N                      |
   +------------------------+----------------------------+---------------------------------------------+------------------------+
 
 .. _nki-act-func:
 
 Supported Activation Functions for NKI ISA
 ==========================================
-:ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation`` API. These
+:ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation``
+and ``nki.isa.activate2`` APIs. These
 activation functions are approximated with piece-wise polynomials on Scalar Engine.
 *NOTE*: if input values fall outside the supported **Valid Input Range** listed below,
 the Scalar Engine will generate invalid output results.
@@ -139,6 +148,8 @@ the Scalar Engine will generate invalid output results.
    | Sigmoid                                    | ``nki.language.sigmoid``                            | ``[-inf, inf]``     |
    +--------------------------------------------+-----------------------------------------------------+---------------------+
    | Relu                                       | ``nki.language.relu``                               | ``[-inf, inf]``     |
+   +--------------------------------------------+-----------------------------------------------------+---------------------+
+   | PReLU                                      | ``nki.language.prelu``                              | ``[-inf, inf]``     |
    +--------------------------------------------+-----------------------------------------------------+---------------------+
    | Gelu                                       | ``nki.language.gelu``                               | ``[-inf, inf]``     |
    +--------------------------------------------+-----------------------------------------------------+---------------------+

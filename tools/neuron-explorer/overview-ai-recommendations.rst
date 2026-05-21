@@ -27,15 +27,15 @@ Getting an AI Recommendation From the UI
 
 To generate an AI Recommendation from the UI open your profile, click the "Add Widget" dropdown, and select **AI Recommendation**.
 
-.. image:: /tools/profiler/images/recommendation-button.png
+.. image:: /tools/images/recommendation-button.png
 
 Go to the **AI Recommendation** widget box and click the **Get AI Recommendation** button. This will perform additional analysis and send the recommendation request to AWS Bedrock and can take up to a minute to generate. Avoid refreshing the page during this time.
 
-.. image:: /tools/profiler/images/recommendation-widget.png
+.. image:: /tools/images/recommendation-widget.png
 
 Once the recommendation has been generated it will be displayed in the widget box. For each recommendation you will see the performance inefficiency symptoms that were observed, the suggested optimization to make, and potential tradeoffs to look out for when implementing the optimizations.
 
-.. image:: /tools/profiler/images/recommendation-view.png
+.. image:: /tools/images/recommendation-view.png
 
 Getting an AI Recommendation from the CLI
 ----------------------------------------------------

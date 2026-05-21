@@ -42,10 +42,3 @@ For the full setup guide with all options, see :doc:`Install PyTorch for Neuron 
       :class-card: sd-border-2
 
       Install on bare OS AMIs or existing systems with full control over dependencies.
-
-   .. grid-item-card:: Rocky Linux 9
-      :link: setup-rocky-linux-9
-      :link-type: ref
-      :class-card: sd-border-2
-
-      Install on Rocky Linux 9 using the Rocky-9-EC2-Base AMI.

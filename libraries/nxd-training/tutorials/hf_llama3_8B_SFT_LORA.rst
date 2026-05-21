@@ -27,7 +27,7 @@ Install Dependencies
 ^^^^^^^^^^^^^^^^^^^^
 
 First, you can launch a Trn1 instance by following the Neuron DLAMI guide:
-`Neuron DLAMI User Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/dlami/index.html>`_.
+`Neuron DLAMI User Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/dlami.html>`_.
 
 Once you have launched a Trn1 instance,
 follow this guide on how to install the latest Neuron packages:

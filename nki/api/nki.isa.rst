@@ -21,6 +21,7 @@ NKI ISA
    nc_transpose
    activation
    activation_reduce
+   activate2
    tensor_reduce
    tensor_partition_reduce
    tensor_tensor

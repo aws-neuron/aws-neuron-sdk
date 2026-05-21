@@ -1,9 +1,0 @@
-.. tab-set:: 
-
-    .. tab-item:: Inference
-    
-        * :ref:`containers-dlc-then-ec2-devflow`
-        * :ref:`containers-dlc-then-ecs-devflow`
-        * :ref:`containers-dlc-then-eks-devflow`
-        * :ref:`containers-byoc-hosting-devflow`
-        * :ref:`containers-dlc-then-customize-devflow`

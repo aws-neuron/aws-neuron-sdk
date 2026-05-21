@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the NKI Library component across all AWS Neuron SDK versions.
     :keywords: nki library, nki-lib, release notes, aws neuron sdk
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _nki-lib_rn:
 
@@ -9,6 +9,133 @@ Release Notes for Neuron Component: NKI Library
 ================================================
 
 The release notes for the NKI Library Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-lib-2-30-0-rn:
+
+NKI Library (NKI-Lib) (Neuron 2.30.0 Release)
+--------------------------------------------------------------------
+
+Date of Release: 05/21/2026
+
+What's New
+~~~~~~~~~~
+
+This release adds 19 new experimental kernels spanning attention, convolution, MLP training, MoE, optimizer, padding, quantization, RNG, state-space models, and collective communication subkernels. It also introduces 3 new core kernels including segmented attention with block-based KV cache, KV-parallel prefill, and FP8 quantization. Existing kernels receive context parallelism support, QK-norm fusion, transposed input layouts, and expanded MX quantization paths. PyTorch reference implementations are added for 29 kernels.
+
+New Core Kernels
+^^^^^^^^^^^^^^^^
+
+* :doc:`Attention Segmented CTE </nki/library/api/attention-segmented-cte>` — Segmented attention computation with block-based KV cache and prefix caching support, processing the KV cache in configurable segments.
+* :doc:`KV-Parallel Segmented Prefill </nki/library/api/kv-parallel-segmented-prefill>` — KV-parallel segmented prefill attention kernel.
+* :doc:`FP8 Quantize </nki/library/api/fp8-quantize>` — Static and row-wise dynamic FP8 quantization kernels with pre-combined dequantization scale support.
+
+New Experimental Kernels
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`Ring Attention Forward </nki/library/api/ring-attention-fwd>` — Ring attention forward pass for context parallelism across multiple workers using collective permute with latency hiding.
+* :doc:`Ring Attention Backward </nki/library/api/ring-attention-bwd>` — Ring attention backward pass SPMD kernel for context parallelism.
+* :doc:`Conv3D </nki/library/api/conv3d>` — 3D convolution using tensor engine with K-replication strategy and W-contiguous tiling. Supports stride, padding, dilation, bias, and activation fusion.
+* :doc:`Foreach Elementwise </nki/library/api/foreach-elementwise>` — Suite of fused elementwise kernels (add, sub, mul, div, addcdiv, addcmul, lerp, sqrt) with SPMD tiling.
+* :doc:`Foreach Norm </nki/library/api/foreach-norm>` — L1, L2, and Linf norm computation kernels with SPMD parallelization.
+* :doc:`Matmul MXFP8 </nki/library/api/matmul-mxfp8-generic-kernel>` — Generic matrix multiplication with MXFP8 quantization, supporting pre-quantized and BF16 inputs with LNC2 parallelization.
+* :doc:`MLP Forward MXFP8 </nki/library/api/mlp-fwd-mxfp8-kernel>` — MXFP8 SwiGLU MLP forward pass with optional activation checkpointing.
+* :doc:`MLP Backward MXFP8 </nki/library/api/mlp-bwd-mxfp8-kernel>` — MXFP8 SwiGLU MLP backward pass with 4-phase gradient computation and activation checkpointing.
+* :doc:`MX MoE Block TKG Wrapper </nki/library/api/mx-moe-block-tkg-wrapper>` — Wrapper that bitcasts unsigned integer weights to MX x4 dtype before calling the MoE block kernel.
+* :doc:`Fused Adam/AdamW </nki/library/api/fused-adam>` — Fused Adam (L2 regularization) and AdamW (decoupled weight decay) optimizer kernels with AMSGrad support.
+* :doc:`Pad </nki/library/api/pad>` — Multi-mode tensor padding (constant, replicate, reflect, circular) following PyTorch semantics.
+* :doc:`Quantize MXFP8 </nki/library/api/quantize-mxfp8>` — Block-wise BF16-to-MXFP8 quantization kernel with packed scale support.
+* :doc:`RNG </nki/library/api/rng>` — Random number generation kernels using GPSIMD engine with state management.
+* :doc:`Linear Scan </nki/library/api/linear-scan>` — First-order linear recurrence computation along the last dimension.
+* :doc:`Selective Scan </nki/library/api/selective-scan>` — Selective scan (SSM) as in Mamba models.
+* :doc:`SSD </nki/library/api/ssd>` — State Space Duality scan for Mamba-2 models.
+
+New Experimental Subkernels
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`Argsort Unstable </nki/library/api/argsort-unstable>` — Unstable argsort on 1D input buffer.
+* :doc:`Build All-to-All-V Metadata </nki/library/api/build-all-to-all-v-metadata>` — Builds metadata buffer for all_to_all_v collective from MoE routing decisions.
+* :doc:`Permute Routed Tokens </nki/library/api/permute-routed-tokens>` — Sorts tokens by expert and packs hidden states, affinities, and token indices for MoE dispatch.
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* :doc:`Attention CTE </nki/library/api/attention-cte>`: Added ``cp_striped_input`` for striped context parallelism and ``skip_output_normalization`` parameter.
+* :doc:`Attention BWD </nki/library/api/attention-cte>`: Added ``transpose_dv`` and ``cp_offset`` parameters for context parallelism support.
+* :doc:`MLP </nki/library/api/mlp>`: Added ``mode``, ``mx_dummy_scale_hbm``, ``transposed_in``, and ``transposed_out`` parameters for expanded layout and quantization support.
+* :doc:`MoE CTE </nki/library/api/moe-cte>`: Added ``gate_up_proj_scale`` and ``down_proj_scale`` parameters for per-projection scaling.
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: Added ``expert_gate_up_input_scale``, ``expert_down_input_scale``, ``input_dequant_scale``, ``all_to_all_v_strategy``, and ``outp_layout`` parameters. Replaced boolean sharding flags with ``LNCShardingStrategy`` enum.
+* :doc:`MoE Block TKG </nki/library/api/moe-cte>`: Added ``expert_gate_up_input_scale``, ``expert_down_input_scale``, ``is_all_expert_dynamic``, ``block_size``, ``inp_layout``, and ``outp_layout`` parameters.
+* :doc:`QKV </nki/library/api/qkv>`: Added ``k_cos_cache``, ``k_sin_cache``, ``transpose_k_cache`` for transposed K cache write, ``transposed_in`` for transposed input layout, ``qk_norm_pre_rope``/``qk_norm_post_rope`` for fused QK-norm, ``strided_input_config``, and ``output_hbm`` parameters.
+* :doc:`RMSNorm-Quant </nki/library/api/rmsnorm-quant>`: Added ``pre_norm_gamma``, ``residual``, and ``auto_resolve_fp8_dtype`` parameters.
+* :doc:`Attention Block TKG </nki/library/api/attention-block-tkg>`: Added ``transposed_in``, ``is_h_transposed_by_4``, ``KVDP_collective_mode``, ``pos_ids``, ``swa_start_pos_ids``, and ``S_ctx`` parameters for expanded KVDP and sliding window support.
+* :doc:`Transformer TKG </nki/library/api/transformer-tkg>`: Added ``attention_mask`` parameter (replaces removed ``mask_cache``/``mask_active``).
+* :doc:`Blockwise MM Backward </nki/library/api/blockwise-mm-backward>`: Added ``skip_grad_initialization`` and ``blocking_params`` parameters.
+* Added PyTorch reference implementations for 29 kernels for testing and validation.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: Parameters ``gate_up_input_scale`` and ``down_input_scale`` have been renamed to ``expert_gate_up_input_scale`` and ``expert_down_input_scale`` respectively. Callers using the old names must update.
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: Replaced boolean sharding flags (``shard_on_I``, ``shard_on_T``) with ``sharding_strategy`` enum in ``down_projection_mx`` interfaces. Callers using ``shard_on_I`` or ``shard_on_T`` keyword arguments must migrate to the new ``sharding_strategy`` parameter.
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: The ``gate_up_projection_mx_shard_I`` function has been removed. Use the unified ``gate_up_projection_mx`` function with the appropriate sharding strategy.
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: Parameters ``is_all_expert_dynamic`` and ``block_size`` removed from ``init_all_expert_mx_configs``. These are now determined automatically from the kernel configuration.
+* :doc:`MoE CTE </nki/library/api/moe-cte>`: The ``zeros`` parameter removed from ``reduce_outputs``. The ``skip_dma`` parameter default changed from ``SkipMode(False, False)`` to ``None``. New parameters ``gate_up_proj_scale`` and ``down_proj_scale`` inserted before ``gate_up_activations_T``, shifting positional arguments.
+* :doc:`MLP </nki/library/api/mlp>`: The ``bias`` parameter removed from ``down_projection``. The ``unsharded_weight``, ``shard_dim_hidden``, and ``shard_dim_intr`` parameters removed from ``gate_up_projection``. Functions ``down_projection_lhs_rhs_swap`` and ``gate_up_projection_lhs_rhs_swap`` moved to separate files. The ``convert_weight_scale_params_to_views`` utility function removed. The ``store_fused_add_result`` parameter removed from ``input_fused_add``. New parameter ``mode`` inserted before ``sbm``, shifting positional arguments.
+* :doc:`QKV </nki/library/api/qkv>`: New parameters ``k_cos_cache`` and ``k_sin_cache`` inserted before ``d_head``, shifting positional arguments for callers not using keyword arguments.
+* :doc:`Attention BWD </nki/library/api/attention-cte>`: The ``softmax_scale`` parameter removed from ``load_q_dy``. New parameters inserted in ``setup_config`` and ``recompute_qk_softmax``, shifting positional arguments.
+* :doc:`Transformer TKG </nki/library/api/transformer-tkg>`: Parameters ``mask_cache`` and ``mask_active`` removed and replaced by ``attention_mask``. Callers must update to use the new parameter.
+* :doc:`Blockwise MM Backward </nki/library/api/blockwise-mm-backward>`: New parameter ``skip_grad_initialization`` inserted before ``shard_option``, shifting positional arguments.
+* :doc:`Attention Block TKG </nki/library/api/attention-block-tkg>`: New parameter ``transposed_in`` inserted before ``softmax_scale``, and ``is_h_transposed_by_4`` inserted before ``KVDP``, shifting positional arguments.
+* :doc:`QKV </nki/library/api/qkv>` (CTE variant): New parameter ``transpose_k_cache`` inserted between ``use_block_kv`` and ``block_size``, shifting positional arguments for callers not using keyword arguments.
+* Removed ``apply_clamp`` from ``bwmm_shard_on_I_mx`` and ``validate_shapes_quantize_mx`` from ``norm_tkg_utils``.
+* Removed ``core/mlp/mlp_tkg/mlp_proj_mxfp4_torch.py`` (MXFP4 PyTorch reference replaced by updated implementation).
+
+Bug Fixes
+~~~~~~~~~
+
+Core Kernel Fixes
+^^^^^^^^^^^^^^^^^
+
+* **QKV**: Fixed invalid ``k_cache`` reshape when ``k_transpose`` is enabled.
+* **MoE TKG**: Fixed TKG MX down projection weight layout alignment with CTE (I-contiguous x4).
+* **Attention Segmented CTE**: Fixed sink token issue in segmented prefill kernel.
+* **Router Top-K**: Fixed large vocab handling in ``rotational_topk`` when BxS fits in pmax.
+* **Attention TKG**: Fixed tensor 4-byte alignment to resolve non-determinism error.
+* **MoE TKG**: Fixed DLoC RMSNorm threshold (raised from T >= 512 to T > 512).
+* **Attention BWD**: Fixed post-scale for softmax.
+* **Attention CTE**: Fixed Scalar Engine bottleneck in softmax normalization.
+* **Attention TKG**: Fixed SWA prior mask end clamping to ``pos_ids[b, 0]`` for speculation.
+* **MoE TKG**: Fixed router weight range widening scoped to fp16 configs only.
+* **MLP TKG**: Fixed weight tile layout to correctly fold contiguous groups of 4 elements onto the free dimension for gate/up and down projection contraction axes.
+* **Attention BWD**: Fixed D statistic computation hardwired to fp32.
+* **QKV**: Fixed K Transpose write to FP8 KV Cache.
+* Fixed ``output_specs`` no longer being overwritten with given ``output_names``.
+
+Experimental Kernel Fixes
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* **MXFP8 Utils**: Fixed preserve 4D shape in DGT load dst slice to fix ``dma_transpose`` assertion.
+* **Attention Block TKG**: Fixed ``pos_ids`` slicing per KVDP rank.
+* **MLP Backward MXFP8**: Fixed phase2 ``TILES_IN_BLOCK_K`` for shape (4096, 4096, 3072).
+* **MLP Forward MXFP8**: Fixed kernel now supports 128-divisible shapes.
+* Fixed invalid ``k_cache`` reshape when ``k_transpose`` is enabled in QKV.
+* Fixed preserve 4D shape in DGT load dst slice to fix ``dma_transpose`` assertion.
+* Fixed TKG MX down projection weight layout alignment with CTE (I-contiguous x4).
+* Fixed sink token issue in segmented prefill kernel.
+* Fixed large vocab handling in ``rotational_topk`` when BxS fits in pmax.
+* Fixed tensor 4-byte alignment to resolve non-determinism error.
+* Fixed DLoC RMSNorm threshold (raised from T >= 512 to T > 512).
+* Fixed ``pos_ids`` slicing per KVDP rank in attention block TKG.
+* Fixed post-scale for softmax in ``attention_bwd``.
+* Fixed Scalar Engine bottleneck in ``attention_cte`` softmax normalization.
+* Fixed MLP backward phase2 ``TILES_IN_BLOCK_K`` for shape (4096, 4096, 3072).
+* Fixed SWA prior mask end clamping to ``pos_ids[b, 0]`` for speculation.
+* Fixed router weight range widening scoped to fp16 configs only.
+* Fixed MLP TKG weight tile allocation size and fallback logic.
+* Fixed ``attention_bwd`` D statistic computation hardwired to fp32.
+* Fixed K Transpose write to FP8 KV Cache in QKV.
+* Fixed ``output_specs`` no longer being overwritten with given ``output_names``.
+* Fixed MLP forward MXFP8 kernel now supports 128-divisible shapes.
 
 .. _nki-lib-2-29-0-rn:
 

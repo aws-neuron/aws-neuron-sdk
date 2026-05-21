@@ -1,7 +1,7 @@
 .. _nki-reference:
 
 nki
-======
+============
 
 .. currentmodule:: nki
 

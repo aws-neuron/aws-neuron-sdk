@@ -12,8 +12,7 @@ processes from a :doc:`NEFF </neuron-runtime/explore/work-with-neff-files>` and 
 Use this tool to develop your own analyses, examine profiling data stored in database tables, or run ad-hoc queries during performance analysis. 
 You can access this data through natural language queries or raw SQL.
 
-
-.. image:: /tools/profiler/images/database-viewer.png
+.. image:: /tools/images/database-viewer.png
 
 Table Selection and Schema Inspection
 -------------------------------------
@@ -59,4 +58,4 @@ Results appear below the query input in reverse chronological order (newest firs
 
 Click **Export CSV** to download any result set as a CSV file.
 
-.. image:: /tools/profiler/images/database-viewer-query-result.png
+.. image:: /tools/images/database-viewer-query-result.png

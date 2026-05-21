@@ -1,8 +1,7 @@
 .. _neuron-2-29-0-whatsnew:
-.. _latest-neuron-release:
 
 .. meta::
-   :description: The official release notes for the AWS Neuron SDK, version 2.29.0. Release date: 04/09/2026.
+   :description: The official release notes for the AWS Neuron SDK, version 2.29.0. Release date: 04/06/2026.
 
 AWS Neuron SDK 2.29.0 release notes
 ===================================
@@ -31,7 +30,7 @@ Package and Library Updates
         :gutter: 2
 
         .. grid-item-card::
-                :link: latest-neuron-release-artifacts
+                :link: neuron-2.29.0-artifacts
                 :link-type: ref
                 :class-card: sd-border-1
         

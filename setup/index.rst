@@ -124,7 +124,7 @@ Common Issues
    If you see "No module named 'torch_neuronx'" or similar:
    
    1. Verify virtual environment is activated
-   2. Check Python version: ``python --version`` (should be 3.10+)
+   2. Check Python version: ``python --version`` (should be 3.11+)
    3. Reinstall: ``pip install --force-reinstall torch-neuronx``
    
    See :doc:`troubleshooting` for more details.
@@ -178,22 +178,10 @@ Legacy Inf1 Support
 Additional Resources
 --------------------
 
-- :doc:`/devflows/ec2-flows` - Launch Inf/Trn instances on Amazon EC2
-- :doc:`/containers/index` - Use Deep Learning Containers
+- :doc:`/deploy/ec2/index` - Launch Inf/Trn instances on Amazon EC2
+- :doc:`/deploy/index` - Use Deep Learning Containers
 - :doc:`troubleshooting` - Installation troubleshooting guide
 - :doc:`/release-notes/index` - Version compatibility information
-
-Other Platforms
----------------
-
-.. grid:: 1
-
-   .. grid-item-card:: Rocky Linux 9
-      :link: setup-rocky-linux-9
-      :link-type: ref
-      :class-card: sd-border-2
-
-      Install PyTorch Neuron on Rocky Linux 9 using the Rocky-9-EC2-Base AMI. Covers driver and tools setup, then follows the Amazon Linux 2023 guide for framework installation.
 
 .. toctree::
    :hidden:
@@ -203,5 +191,4 @@ Other Platforms
    JAX <jax/index>
    Multi-framework <multiframework-dlami>
    torch-neuron (Legacy) <legacy-inf1/index>
-   Use Rocky Linux 9 <setup-rocky-linux-9>
    Troubleshooting <troubleshooting>

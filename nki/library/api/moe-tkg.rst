@@ -1,6 +1,6 @@
 .. meta::
     :description: MoE TKG kernel implements Mixture of Experts MLP optimized for Token Generation.
-    :date-modified: 02/13/2026
+    :date-modified: 05/21/2026
 
 .. currentmodule:: nkilib.core.moe_tkg
 

@@ -1,7 +1,7 @@
 .. meta::
     :description: Documentation for the nki.simulate API in the Neuron SDK
     :keywords: nki, simulate, nki.simulate, test, kernels, aws neuron sdk
-    :date-modified: 04/02/2026
+    :date-modified: 05/11/2026
 
 .. _nki-simulator:
 
@@ -55,25 +55,45 @@ Usage
 Running the Simulator
 ^^^^^^^^^^^^^^^^^^^^^
 
-The simulator accepts **NumPy arrays** as inputs. If your script uses PyTorch or JAX tensors,
-convert them to NumPy arrays before passing them to simulated kernels (for example, ``tensor.numpy()``).
+There are two ways to invoke the simulator:
 
-**nki.simulate() API**
+**1. NKI_SIMULATOR=1 environment variable (recommended)**
+
+The easiest approach. Set this environment variable and run your existing PyTorch framework code with NKI kernel calls
+with **zero code changes** — every ``@nki.jit`` kernel automatically runs on the simulator:
+
+.. code-block:: bash
+
+   NKI_SIMULATOR=1 python my_script.py
+
+This is the recommended approach for PyTorch development, testing, and running existing scripts
+on the simulator without any code modifications.
+
+.. note::
+
+   ``NKI_SIMULATOR=1`` does not currently support JAX. For JAX workflows, use the
+   ``nki.simulate()`` explicit API instead.
+
+**2. nki.simulate() — Explicit API**
 
 Use the explicit API to run a kernel on the simulator. This is also useful when you want
 to run a kernel on *both* the simulator and hardware in the same script — for example,
 to compare results:
 
+
 .. code-block:: python
 
-   # Run on simulator
-   sim_result = nki.simulate(my_kernel)(a_np, b_np)
+   # Run on simulator with NumPy
+   sim_result_np = nki.simulate(my_kernel)(a_np, b_np)
+
+   # Run on simulator with PyTorch
+   sim_result = nki.simulate(my_kernel)(a_torch, b_torch)
 
    # Run on hardware (requires Trainium and neuronx-cc)
    hw_result = my_kernel(a_torch, b_torch)
 
    # Compare
-   np.testing.assert_allclose(sim_result, hw_result.numpy(), rtol=1e-2)
+   torch.testing.assert_close(sim_result, hw_result, rtol=1e-2, atol=1e-5)
 
 
 Target Platform
@@ -100,16 +120,29 @@ The simulator models different NeuronCore generations. Set the target using the
 Precise Floating-Point Mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By default, the simulator stores ``bfloat16``, ``float8_e4m3``, and ``float8_e5m2`` tensors as ``float32``
-for faster simulation performance and to let you examine kernel correctness in high-precision floating-point.
-To get numerical behavior similar to hardware, enable precise mode with ``NKI_PRECISE_FP=1``:
+By default, the simulator uses **precise floating-point mode** (``NKI_PRECISE_FP=1``). In this mode,
+low-precision dtypes (``bfloat16``, ``float8_e4m3``, ``float8_e5m2``) are stored using ``ml_dtypes``
+(``bfloat16``, ``float8``, etc.), producing numerical behavior similar to hardware.
+
+
+**Disabling precise mode (high-precision mode):**
+
+You can disable precise mode by setting ``NKI_PRECISE_FP=0``:
 
 .. code-block:: bash
 
-   NKI_PRECISE_FP=1 python my_script.py
+   NKI_PRECISE_FP=0 python my_script.py
 
-When enabled, low-precision dtypes are stored using ``ml_dtypes`` (real ``bfloat16``, ``float8``, etc.)
-instead of ``float32``. This is recommended for most use cases.
+When disabled, all low-precision tensors are stored as ``float32``, eliminating rounding and
+truncation effects. This mode is useful for **isolating accuracy loss due to downcasts**:
+
+1. Run your kernel with ``NKI_PRECISE_FP=0`` to see how the kernel logic performs in full ``float32``
+   precision — compare this result against your torch/numpy reference to verify algorithmic correctness
+   of your kernel.
+2. Run with the default (``NKI_PRECISE_FP=1``) to see how accuracy is impacted by the lower-precision
+   dtypes used in your kernel.
+
+This workflow helps you distinguish between algorithmic bugs and precision-related numerical differences.
 
 Debugging
 ^^^^^^^^^
@@ -257,10 +290,14 @@ unsupported Python constructs will execute successfully on the simulator but fai
 Numerical Precision
 ^^^^^^^^^^^^^^^^^^^
 
-By default, the simulator stores low-precision types (``bfloat16``, ``float8_e4m3``, ``float8_e5m2``)
-as ``float32``, which can mask rounding and precision issues that appear on hardware. Enable
-``NKI_PRECISE_FP=1`` (recommended) to use real low-precision storage via ``ml_dtypes`` for
-numerical behavior similar to hardware. See `Precise Floating-Point Mode`_ for details.
+The simulator uses precise floating-point mode by default (``NKI_PRECISE_FP=1``), storing
+low-precision types using ``ml_dtypes`` for numerical behavior close to hardware. However,
+simulation results may still differ slightly from hardware due to differences in how the
+simulator computes operations versus the hardware engines, as well as
+floating-point non-associativity (different accumulation ordering can produce different
+rounding results).
+See `Precise Floating-Point Mode`_ for details on how to use ``NKI_PRECISE_FP=0`` to isolate
+precision effects from algorithmic correctness.
 
 Performance
 ^^^^^^^^^^^
@@ -281,7 +318,7 @@ SBUF and PSUM are shared physical memory with capacity constraints.
 Known Gaps
 ^^^^^^^^^^
 
-- ``nki.collectives`` APIs are not implemented in the simulator.
-- Some ``nki.isa`` instructions produce incorrect results: ``local_gather``,
-  ``nc_stream_shuffle`` with ``mask=255``, ``nc_matmul_mx``, and ``quantize_mx``.
 - Some hardware constraint checks are missing — see `Hardware Constraint Validation`_ for details.
+- ``nki.collectives`` APIs are not implemented in the simulator.
+- ``oob_mode.skip`` with ``_x4`` dtypes will incorrectly raise an out-of-bounds error instead of skipping the oob access.
+- ``nki.isa.quantize_mx()`` scale packing fails when ``dst_scale`` number of partitions doesn't match ``src`` partitions.

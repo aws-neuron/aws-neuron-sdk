@@ -52,7 +52,7 @@ Use the NxD Inference (``neuronx-distributed-inference``) Developer Guides to le
     .. grid-item-card:: Disaggregated Inference
         :link: /libraries/nxd-inference/developer_guides/disaggregated-inference
         :link-type: doc
-        
+
         Guide for using disaggregated inference architecture that separates prefill and decode phases for improved performance.
 
     .. grid-item-card:: Feature Guide

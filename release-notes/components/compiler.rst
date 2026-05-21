@@ -8,12 +8,87 @@
 Component Release Notes for Neuron Graph Compiler
 ==================================================
 
-**Latest version (in 2.29.1)**: 2.24.8799.0
+**Latest version (in 2.30.0)**: 2.25.3371.0
 
 The release notes for the Neuron Graph Compiler (``neuronx-cc``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
+
+.. _compiler-2-30-0-rn:
+
+Neuron Compiler (Neuron 2.30.0 Release)
+----------------------------------------------------
+
+Date of Release: 05/21/2026
+
+Changes
+~~~~~~~
+
+* **Automatic boolean addition to OR conversion**: When a model uses addition on boolean tensors, the compiler now automatically treats it as a logical OR operation. This matches the behavior expected by popular ML frameworks and avoids unexpected numerical results.
+
+* **Coalesced ordered reduce-scatter support**: The compiler now recognizes grouped reduce-scatter operations (where multiple reduce-scatters execute in a defined order) and handles them as a single optimized unit, improving efficiency for distributed training communication patterns.
+
+Performance and Compile Time Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Faster compilation for large kernels (liveness analysis)**: The compiler's memory liveness analysis has been rewritten from an iterative fixpoint algorithm (which processed all tensors across all basic blocks simultaneously) to a per-tensor backward traversal that only visits blocks where each tensor is actually live. Tensors defined and used within a single basic block — common in NKI kernels — require zero traversal. This reduces the on-chip memory allocation phase from ~1,586s to ~42s (38×) on the most affected customer model, with a mean -1.4% total compile time improvement across Neuron internal benchmarks.
+
+* **Smarter memory analysis for strided tensors**: The compiler now applies conservative memory analysis only to tensors that actually need it (those exceeding 100K access intervals), rather than applying it globally. High-interval tensors are coarsened to 4KB-aligned intervals. This preserves optimization quality for most tensors while preventing excessive compile time on heavily-strided tensors.
+
+* **Faster dependency building for high-fanout operations**: Linearize dependencies for high-fanout memory locations when overlap-check cost exceeds 1M checks, eliminating quadratic compile-time overhead.
+
+* **Larger computation tiles (up to 1024)**: The maximum tile size for computation has been increased from 512 to 1024, allowing the compiler to choose larger tiles that reduce loop overhead and improve runtime performance for large tensor operations.
+
+* **Improved memory access patterns in load/compute separation**: The compiler now generates more efficient memory initialization patterns when separating load and compute phases, improving DMA performance.
+
+* **Better tensor layout selection for concatenated outputs**: The compiler now avoids placing concatenation dimensions in the innermost position, preventing inefficient single-element-per-partition DMA writes that previously degraded performance on certain models.
+
+* **Reduced memory pressure for matrix multiplication prefetch**: The compiler now avoids over-buffering matrix multiplication operands in certain tiling configurations, reducing on-chip memory pressure and improving allocation success.
+
+* **Improved handling of constant tensors**: The compiler can now cheaply regenerate constant values (zeros, sequential indices) on-chip instead of spilling them to DRAM, reducing memory traffic for kernels with many constant-initialized tensors. Additionally, repeated constant values larger than 16 bytes are now decomposed into scalar broadcasts, reducing NEFF file size and improving load-time DMA efficiency.
+
+Bug Fixes
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Area
+     - Fix
+   * - Compilation error
+     - Fixed a failure where certain tensor configurations exceeded on-chip memory capacity during compilation (NCC_IBIR229)
+   * - Compilation error
+     - Fixed a crash when compiling softmax backward operations with certain input shape combinations (NCC_ILIN902)
+   * - Compilation error
+     - Fixed an uninitialized read error when combining collective operations that include NKI kernel outputs (NCC_IBIR182)
+   * - Compilation error
+     - Fixed several compiler crashes affecting tensor spill/reload, collective operation coalescing, metric serialization at -O1, and constant folding with type conversion
+   * - Compilation error
+     - Fixed an internal verification failure after tiling broadcast operations
+   * - Compilation error
+     - Fixed a rare data race that could cause non-deterministic compilation failures in control flow validation
+   * - Compilation error
+     - Fixed out-of-bounds errors and hangs on multi-rank models during load/compute separation
+   * - Compilation error
+     - Fixed hangs caused by missing dependencies when separating indirect memory loads from compute
+   * - Compilation error
+     - Fixed a compilation failure for models with large vocabulary dimensions where on-chip tensor placement could not proceed
+   * - Compilation error
+     - Fixed a compilation failure where address pattern validation did not re-check constraints after unrolling
+   * - Compiler bug
+     - Fixed incorrect results in select-and-scatter (windowed reduction) operations due to missing boundary conditions
+   * - Compiler bug
+     - Fixed off-by-one errors in integer division operations caused by insufficient precision in internal computation
+   * - Compiler bug
+     - Fixed incorrect convolution output when kernel_size is smaller than dilation, where some output positions were not properly zero-initialized
+   * - Compiler bug
+     - Fixed incorrect tensor layout selection that could produce wrong results for certain partition configurations
+   * - Compiler bug
+     - Fixed a hang in multi-chip collective operations on trn2 and trn3 by enabling DMA transpose chaining with collectives and remote memory accesses by default
+
+* Other minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
 
 .. _compiler-2-29-0-rn:
 

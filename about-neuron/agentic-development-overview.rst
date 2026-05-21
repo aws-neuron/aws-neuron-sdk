@@ -13,6 +13,8 @@ Neuron Agentic Development is an open-source suite of AI capabilities starting w
 
 The goal is to meet you in your existing agentic IDE workflow: ask for a kernel in plain language or paste a PyTorch implementation, and the agent coordinates translation to NKI, on-device compilation, profiling, and targeted analysis without requiring you to learn Neuron-specific tooling one surface at a time.
 
+Look over the release notes at :doc:`Neuron AGentic Development Release Notes </release-notes/components/agentic-development>` to discover the latest changes and improvements to our agents and skills.
+
 .. note::
    Want to dive into working with agents on Neuron? Check out the full set of agents, skills, and samples in the open-source repo: `aws-neuron/neuron-agentic-development <https://github.com/aws-neuron/neuron-agentic-development>`_.
 

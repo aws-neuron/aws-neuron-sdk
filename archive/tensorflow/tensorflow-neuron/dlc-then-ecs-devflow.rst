@@ -18,7 +18,7 @@ The TensorFlow Neuron variant of this developer flow followed the same steps
 as the core Neuron Container on ECS flow. For the general procedure and
 prerequisites, see the current reference:
 
-- :doc:`Deploy Neuron Container on Elastic Container Service (ECS) for Inference </devflows/inference/dlc-then-ecs-devflow>`
+- :doc:`Deploy Neuron Container on Elastic Container Service (ECS) for Inference </deploy/ecs/inference>`
 
 TensorFlow Neuron is no longer supported by the SDK. If you are maintaining
 an existing TensorFlow Neuron workload, use the general procedure above with

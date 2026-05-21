@@ -5,7 +5,7 @@
    :installation-method: manual
    :instance-types: inf2, trn1, trn2, trn3
    :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.10, 3.11, 3.12
+   :python-versions: 3.11, 3.12
    :content-type: installation-guide
    :estimated-time: 15 minutes
    :date-modified: 2026-03-03
@@ -31,7 +31,7 @@ Prerequisites
    * - Operating System
      - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
    * - Python
-     - Python 3.10, 3.11, or 3.12
+     - Python 3.11, or 3.12
    * - Sudo Access
      - Required for driver installation
    * - Internet Access
@@ -80,7 +80,7 @@ Installation Steps
       
       .. code-block:: bash
          
-         python3.10 -m venv ~/neuron_venv_jax
+         python3.11 -m venv ~/neuron_venv_jax
          source ~/neuron_venv_jax/bin/activate
       
       **Step 5: Install JAX and Neuron Packages**
@@ -140,6 +140,9 @@ Installation Steps
       :sync: ubuntu-22-04
       
       **Step 1: Update System Packages**
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       .. code-block:: bash
          
@@ -174,7 +177,7 @@ Installation Steps
       
       .. code-block:: bash
          
-         python3.10 -m venv ~/neuron_venv_jax
+         python -m venv ~/neuron_venv_jax 
          source ~/neuron_venv_jax/bin/activate
       
       **Step 5: Install JAX and Neuron Packages**
@@ -251,7 +254,7 @@ Installation Steps
       
       .. code-block:: bash
          
-         python3.10 -m venv ~/neuron_venv_jax
+         python -m venv ~/neuron_venv_jax
          source ~/neuron_venv_jax/bin/activate
       
       **Step 5: Install JAX and Neuron Packages**
@@ -330,6 +333,6 @@ Additional Resources
 
 - :doc:`dlami` - Use pre-configured DLAMI instead
 - :doc:`dlc` - Use pre-configured Docker containers
-- :doc:`/containers/index` - Container-based deployment
+- :doc:`/deploy/index` - Container-based deployment
 - :doc:`../troubleshooting` - Common issues and solutions
 - :doc:`/release-notes/index` - Version compatibility information

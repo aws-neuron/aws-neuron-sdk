@@ -44,7 +44,7 @@ Check available tags at the ECR Public Gallery:
 - `PyTorch Inference <https://gallery.ecr.aws/neuron/pytorch-inference-neuronx>`_
 - `PyTorch vLLM Inference <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`_
 
-For the full list of available images and tags, see :doc:`/containers/locate-neuron-dlc-image`.
+For the full list of available images and tags, see :doc:`/deploy/environments/dlc-images`.
 
 
 Update Neuron driver on the host
@@ -63,6 +63,9 @@ when moving to a new Neuron SDK release.
          sudo apt-get install -y aws-neuronx-dkms
 
    .. tab-item:: Ubuntu 22.04
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
 
       .. code-block:: bash
 

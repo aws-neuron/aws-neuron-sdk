@@ -28,6 +28,9 @@ Update PyTorch on Ubuntu 24.04
 Update PyTorch on Ubuntu 22.04
 -------------------------------
 
+.. important::
+   Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
+
 .. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-u22.rst
    :start-after: _pytorch-neuronx-ubuntu22-update:
 
@@ -59,6 +62,9 @@ when updating to a new Neuron SDK release.
 
    .. tab-item:: Ubuntu 22.04
 
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
+
       .. code-block:: bash
 
          sudo apt-get update
@@ -68,6 +74,9 @@ when updating to a new Neuron SDK release.
          sudo apt-get install -y aws-neuronx-tools
 
    .. tab-item:: Amazon Linux 2023
+
+      .. note::
+            PyTorch versions 2.9 and earlier are not supported by Neuron for Amazon Linux 2023. If you are looking for setup instructions specific to PyTorch 2.9 on Amazon Linux 2023, see `the Neuron release 2.28.0 version of the setup docs <https://awsdocs-neuron.readthedocs-hosted.com/en/v2.28.0/setup/neuron-setup/pytorch/neuronx/amazon-linux/torch-neuronx-al2023.html>`__.
 
       .. code-block:: bash
 
@@ -133,6 +142,9 @@ Install previous releases on Ubuntu 24.04
 
 Install previous releases on Ubuntu 22.04
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. important::
+   Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
 
 .. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-u22.rst
    :start-after: _pytorch-neuronx-install-prev-u22:

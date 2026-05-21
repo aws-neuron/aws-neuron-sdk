@@ -13,4 +13,4 @@ The new ``nki.*`` namespace introduces changes to NKI APIs and language construc
 
 Existing kernels using ``neuronxcc.nki.*`` must migrate to the new nki.* namespace. A kernel migration guide is available in the Neuron 2.27 documentation.
 
-See :doc:`the NKI Kernel Migration Guide </nki/deep-dives/nki-migration-guide>` for more information.
+See :doc:`the NKI Kernel Migration Guide </nki/migration/nki-beta2-migration-guide>` for more information.

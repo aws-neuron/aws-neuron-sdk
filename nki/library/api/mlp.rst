@@ -1,6 +1,6 @@
 .. meta::
     :description: MLP kernel implements Multi-Layer Perceptron with optional normalization fusion and quantization.
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. currentmodule:: nkilib.core.mlp
 
@@ -39,7 +39,7 @@ API Reference
 mlp
 ^^^
 
-.. py:function:: mlp(hidden_tensor: nl.ndarray, gate_proj_weights_tensor: nl.ndarray, up_proj_weights_tensor: nl.ndarray, down_proj_weights_tensor: nl.ndarray, normalization_weights_tensor: Optional[nl.ndarray] = None, gate_proj_bias_tensor: Optional[nl.ndarray] = None, up_proj_bias_tensor: Optional[nl.ndarray] = None, down_proj_bias_tensor: Optional[nl.ndarray] = None, normalization_bias_tensor: Optional[nl.ndarray] = None, fused_add_tensor: Optional[nl.ndarray] = None, store_fused_add_result: bool = False, activation_fn: ActFnType = ActFnType.SiLU, normalization_type: NormType = NormType.NO_NORM, quantization_type: QuantizationType = QuantizationType.NONE, gate_w_scale: Optional[nl.ndarray] = None, up_w_scale: Optional[nl.ndarray] = None, down_w_scale: Optional[nl.ndarray] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, quant_clipping_bound: float = 0.0, output_dtype = None, store_output_in_sbuf: bool = False, eps: float = 1e-6, skip_gate_proj: bool = False, use_tkg_gate_up_proj_column_tiling: bool = True, use_tkg_down_proj_column_tiling: bool = True, use_tkg_down_proj_optimized_layout: bool = False, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, force_cte_mode: bool = False, sbm: Optional[BufferManager] = None) -> list[nl.ndarray]
+.. py:function:: mlp(hidden_tensor: nl.ndarray, gate_proj_weights_tensor: nl.ndarray, up_proj_weights_tensor: nl.ndarray, down_proj_weights_tensor: nl.ndarray, normalization_weights_tensor: Optional[nl.ndarray] = None, gate_proj_bias_tensor: Optional[nl.ndarray] = None, up_proj_bias_tensor: Optional[nl.ndarray] = None, down_proj_bias_tensor: Optional[nl.ndarray] = None, normalization_bias_tensor: Optional[nl.ndarray] = None, fused_add_tensor: Optional[nl.ndarray] = None, store_fused_add_result: bool = False, activation_fn: ActFnType = ActFnType.SiLU, normalization_type: NormType = NormType.NO_NORM, quantization_type: QuantizationType = QuantizationType.NONE, gate_w_scale: Optional[nl.ndarray] = None, up_w_scale: Optional[nl.ndarray] = None, down_w_scale: Optional[nl.ndarray] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, quant_clipping_bound: float = 0.0, output_dtype=None, store_output_in_sbuf: bool = False, eps: float = 1e-6, skip_gate_proj: bool = False, use_tkg_gate_up_proj_column_tiling: bool = True, use_tkg_down_proj_column_tiling: bool = True, use_tkg_down_proj_optimized_layout: bool = False, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, force_cte_mode: bool = False, mode: ComputationMode = ComputationMode.AUTO, sbm: Optional[BufferManager] = None, mx_dummy_scale_hbm: Optional[nl.ndarray] = None, transposed_in: bool = False, transposed_out: bool = False) -> list[nl.ndarray]
 
    MLP (Multi-Layer Perceptron) Kernel implementation.
 
@@ -111,8 +111,16 @@ mlp
    :type up_clamp_lower_limit: ``float``, optional
    :param force_cte_mode: If True, forces the use of CTE mode. Default: False.
    :type force_cte_mode: ``bool``
+   :param mode: Computation mode to use. ``AUTO`` (default) automatically chooses the more performant mode. ``PREFILL`` uses prefill computation mode. ``DECODE`` uses decode computation mode.
+   :type mode: ``ComputationMode``
    :param sbm: Optional BufferManager instance for custom SBUF memory management. When provided, the kernel uses the given buffer manager instead of creating its own. Default: ``None``.
    :type sbm: ``BufferManager``, optional
+   :param mx_dummy_scale_hbm: Pre-filled HBM tensor of all 127 values used as dummy MX scale tensors for MX matmul operations. When provided, scales are DMA'd from HBM instead of memset, avoiding per-layer memset overhead. Default: ``None``.
+   :type mx_dummy_scale_hbm: ``nl.ndarray``, optional
+   :param transposed_in: When ``True``, input is in transposed HBM layout ``[H0, n_prgs, H1_shard, BxS]`` instead of ``[B, S, H]``. Enables contiguous per-NC DMA loads. Only supported in TKG mode with NONE, STATIC, or ROW quantization. Not compatible with fused add or SBUF input. Default: ``False``.
+   :type transposed_in: ``bool``
+   :param transposed_out: When ``True``, output is in transposed HBM layout ``[H0, n_prgs, H1_shard, BxS]`` instead of ``[B, S, H]``. Each NC DMAs its shard directly without transpose_store. Only supported in TKG mode. Not compatible with down_proj column tiling or SBUF output. Default: ``False``.
+   :type transposed_out: ``bool``
    :return: The MLP output tensor(s). HBM output: Tensor with shape [B, S, H]. SBUF output: Shape depends on the mode setting. CTE: Not applicable. TKG when ``use_tkg_down_proj_column_tiling`` is ``True = [BxS, H]``. TKG when ``use_tkg_down_proj_column_tiling`` is ``False = [128(p_max), H/128, BxS``]``. If ``store_fused_add_result`` is ``True``, returns a list containing both the output and the stored fused output.
    :rtype: ``list[nl.ndarray]``
 

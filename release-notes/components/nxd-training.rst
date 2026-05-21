@@ -10,6 +10,14 @@ Component Release Notes for NxD Training
 
 The release notes for the NxD Training (``neuronx-distributed-training``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _nxd-training-2-30-0-rn:
+
+NxD Training (Neuron 2.30.0 Release)
+---------------------------------------------
+
+*Release notes for this version will be added when Neuron 2.30.0 is released.*
+
+
 .. _nxd-training-2-25-0-rn:
 
 NxD Training [1.5.0] (Neuron 2.25.0 Release)

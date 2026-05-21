@@ -13,26 +13,19 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
 .. grid:: 1
    :gutter: 3
 
+   .. grid-item-card:: Neuron Agentic Development
+      :link: /tools/neuron-agentic-development/index
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+
+      AI agents and skills for developing on Trainium and Inferentia. Write NKI kernels, debug compilation errors, profile performance, and port HuggingFace models to NxD Inference using natural language.
+
    .. grid-item-card:: Neuron Explorer
       :link: /tools/neuron-explorer/index
       :link-type: doc
       :class-header: sd-bg-primary sd-text-white
-        
+
       Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium, from model development through debugging, profiling, analysis, and optimization.
-
-   .. grid-item-card:: Neuron Profiler 2.0
-      :link: /tools/profiler/neuron-profiler-2-0-beta-user-guide
-      :link-type: doc
-      :class-header: sd-bg-primary sd-text-white
-        
-      Neuron Profiler 2.0 offers a user-friendly experience for capturing and analyzing application performance through both high-level system profiles and detailed device-level profiles.
-
-   .. grid-item-card:: Neuron Profiler
-      :link: /tools/profiler/neuron-profile-user-guide
-      :link-type: doc
-      :class-header: sd-bg-primary sd-text-white
-        
-      The Neuron Profiler is a tool to profile and analyze performance of a ML model compiled with the Neuron compiler and run on NeuronDevices.
 
    .. grid-item-card:: System Tools
       :link: /tools/neuron-sys-tools/index
@@ -77,8 +70,7 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
    :maxdepth: 1
    :hidden:
 
-   Neuron Profiler 2.0 </tools/profiler/neuron-profiler-2-0-beta-user-guide>
-   Neuron Profiler </tools/profiler/neuron-profile-user-guide>
+   Neuron Agentic Development </tools/neuron-agentic-development/index>
    System Tools </tools/neuron-sys-tools/index>
    Third-party Tools </tools/third-party-solutions>
    Tutorials </tools/tutorials/index>

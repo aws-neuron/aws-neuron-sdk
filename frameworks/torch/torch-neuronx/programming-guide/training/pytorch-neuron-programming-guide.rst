@@ -160,6 +160,18 @@ to hide CPU to device data load latency:
 
    parallel_loader = pl.MpDeviceLoader(dataloader, device)
 
+.. note:: 
+  If not using ``xm.optimizer_step()`` and ``pl.MpDeviceLoader``,
+  you will need to add the explicit gradient synchronization and mark-step to ensure proper graph execution.
+  For example:
+
+::
+
+   xm.reduce_gradients(optimizer)
+   optimizer.step()
+   optimizer.zero_grad()
+   xm.mark_step()
+
 Within the training code, use xm.xrt_world_size() to get the world size,
 and xm.get_ordinal to get the global rank of the current process.
 

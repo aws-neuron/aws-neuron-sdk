@@ -7,6 +7,8 @@ Previous release notes (Neuron 2.x)
    :maxdepth: 1
    :hidden:
 
+   Neuron 2.29.1 </release-notes/prev/2.29.1>
+   Neuron 2.29.0 </release-notes/prev/2.29.0>
    Neuron 2.28.1 </release-notes/prev/2.28.1>
    Neuron 2.28.0 </release-notes/prev/2.28.0> 
    Neuron 2.27.1 </release-notes/prev/2.27.1> 
@@ -15,7 +17,10 @@ Previous release notes (Neuron 2.x)
    Neuron 2.26.0 </release-notes/prev/2.26.0/index>
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
-* **The latest Neuron release is 2.29.1, released on 05/01/2026.** Read the :doc:`2.29.1 release notes </release-notes/2.29.1>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+
+* **The latest Neuron release is 2.30.0, released on 05/21/2026.** Read the :doc:`2.30.0 release notes </release-notes/2.30.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+
+----
   
 .. contents:: Table of contents
    :local:
@@ -33,6 +38,13 @@ Previous release notes (Neuron 2.x)
                 ^^^
                 Release notes by component for prior Neuron SDK versions.
 
+
+Neuron 2.29.0 (04/09/2026)
+--------------------------
+
+See :ref:`neuron-2-29-0-whatsnew` for the full Neuron 2.29.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
+
+* Neuron 2.29.1 was released as a patch for 2.29.0 on 5/1/2026. See the :doc:`2.29.1 (patch) release notes <2.29.1>` for details.
 
 Neuron 2.28.0 (02/26/2026)
 --------------------------
@@ -1162,9 +1174,9 @@ More release content can be found in the table below and each component release 
      - Inf1,Inf2,Trn1/Trn1n
 
    * - Neuron Tools
-     - * Support for new Neuron Node Problem Detector and Recovery plugin in EKS supported kubernetes environments that monitors health of Neuron instances and triggers automatic node replacement upon detecting an unrecoverable error. See :doc:`configuration </containers/tutorials/k8s-neuron-problem-detector-and-recovery-irsa>` and :ref:`tutorial <k8s-neuron-problem-detector-and-recovery>`.
+     - * Support for new Neuron Node Problem Detector and Recovery plugin in EKS supported kubernetes environments that monitors health of Neuron instances and triggers automatic node replacement upon detecting an unrecoverable error. See :doc:`configuration </deploy/infrastructure/problem-detector-irsa>` and :ref:`tutorial <k8s-neuron-problem-detector-and-recovery>`.
        * Support for new Neuron Monitor container to enable easy monitoring of Neuron metrics in Kubernetes. Supports monitoring with Prometheus and Grafana. See :ref:`tutorial <k8s-neuron-monitor>`
-       * Support for Neuron scheduler extension to enforce allocation of contiguous Neuron Devices for the pods based on the Neuron instance type. See :ref:`tutorial <neuron_scheduler>`
+       * Support for Neuron scheduler extension to enforce allocation of contiguous Neuron Devices for the pods based on the Neuron instance type. See :ref:`tutorial <neuron-scheduler-extension>`
        * Neuron Profiler bugfixes and UI updates, including improvements to visualizing collective operations and to the consistency of information being displayed
        * Added memory usage metrics and device count information to neuron-monitor 
        * See more at :ref:`dev-tools_rn`
@@ -1236,7 +1248,7 @@ Inf1, Trn1/Trn1n and Inf2 common packages
    * - Neuron DLAMI
      - Trn1/Trn1n, Inf1, Inf2
      - * 
-     - * `Neuron DLAMI Release Notes <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/dlami/index.html>`_.
+     - * `Neuron DLAMI Release Notes <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/dlami.html>`_.
 
    * - Neuron DLC
      - Trn1/Trn1n, Inf1, Inf2

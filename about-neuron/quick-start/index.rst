@@ -127,8 +127,8 @@ Additional Resources
 --------------------
 
 - :doc:`/about-neuron/models/index` - Pre-tested model samples and tutorials
-- :doc:`/devflows/ec2-flows` - Detailed EC2 deployment workflows
-- :doc:`/containers/index` - Use Deep Learning Containers
+- :doc:`/deploy/ec2/index` - Detailed EC2 deployment workflows
+- :doc:`/deploy/index` - Use Deep Learning Containers
 - :doc:`docs-quicklinks` - Quick links to all Neuron documentation
 - :doc:`github-samples` - GitHub sample repositories
 

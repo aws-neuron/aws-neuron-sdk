@@ -141,22 +141,22 @@ Learn about AWS Neuron
       Tools for profiling, debugging, and monitoring Neuron applications
 
    .. grid-item-card::
-      :link: /dlami/index
+      :link: /deploy/environments/dlami
       :link-type: doc
       :class-card: sd-border-1
 
-      **Neuron AWS Neuron Deep Learning AMIs**
+      **Deep Learning AMIs**
       ^^^
       Deploy the Neuron SDK on EC2 instances with pre-installed Amazon Machine Images (AMIs)
 
    .. grid-item-card::
-      :link: /containers/index
+      :link: /deploy/index
       :link-type: doc
       :class-card: sd-border-1
 
-      **Neuron AWS Neuron Deep Learning Containers**
+      **Deploy on AWS**
       ^^^
-      Deploy the Neuron SDK using pre-built Docker deep learning containers (DLCs)
+      Deploy Neuron workloads using Deep Learning Containers, EKS, ECS, Batch, and more
 
 Resources
 ---------

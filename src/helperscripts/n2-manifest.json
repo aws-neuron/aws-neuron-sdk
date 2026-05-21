@@ -4,14 +4,14 @@
       {"repo_type":"rpm", "repo_url":"https://yum.repos.neuron.amazonaws.com/"},
       {"repo_type":"deb", "repo_url":"https://apt.repos.neuron.amazonaws.com/"}
     ],
-    "manifest_date": "05/01/2026",
-    "manifest_version": "2.29.1",
+    "manifest_date": "05/20/2026",
+    "manifest_version": "2.30.0",
     "latest_release": [
-      {"instance":"inf1", "version":"2.29.1"},
-      {"instance":"trn1", "version":"2.29.1"},
-      {"instance":"trn2", "version":"2.29.1"},
-      {"instance":"inf2", "version":"2.29.1"},
-      {"instance":"trn1n", "version":"2.29.1"}
+      {"instance":"inf1", "version":"2.30.0"},
+      {"instance":"trn1", "version":"2.30.0"},
+      {"instance":"trn2", "version":"2.30.0"},
+      {"instance":"inf2", "version":"2.30.0"},
+      {"instance":"trn1n", "version":"2.30.0"}
     ],
     "os_properties": [
       {"os":"ubuntu18", "default_python_version":"3.7"},
@@ -95,6 +95,36 @@
       {"name":"nki","component":"NKI","category":"nki","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"}
     ],
     "neuron_releases": [
+      {"neuron_version":"2.30.0", "packages": [
+        {"name":"aws-neuronx-collectives","version":"2.32.28.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-dkms","version":"2.28.0.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-gpsimd-customop-lib","version":"0.22.2.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-gpsimd-tools","version":"14.09.x","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-oci-hook","version":"2.16.36.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-runtime-lib","version":"2.32.31.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-tools","version":"2.30.10.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"jax_neuronx","version":"0.10.0.1.0.9913","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"libneuronxla","version":"2.2.16974.0","supported_instances":["trn1","inf2"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"libneuronxla","version":"3.0.2891.0","supported_instances":["trn1","inf2"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"libtorch_neuronx_lite","version":"2.10.0.1.0.239","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12"]},
+        {"name":"neuron_agentic_development","version":"1.1","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"mx_neuron","version":"1.8.0.2.4.147.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"mxnet_neuron","version":"1.5.1.1.10.0.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"neuron-cc","version":"1.24.0.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"neuronperf","version":"1.8.93.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"neuronx-cc","version":"2.25.3371.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"neuronx_distributed","version":"0.19.28093","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"neuronx_distributed_inference","version":"0.10.17970","supported_instances":["inf2","trn2","trn1","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"nki","version":"0.4.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"tensorboard-plugin-neuronx","version":"2.0.918.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
+        {"name":"tensorflow-neuronx","version":"2.10.1.2.1.0","supported_instances":["trn1","inf1"],"supported_python_versions":["3.10","3.11","3.12"]},
+        {"name":"tensorflow-neuronx","version":"2.8.4.2.1.0","supported_instances":["trn1","inf1"],"supported_python_versions":["3.10","3.11","3.12"]},
+        {"name":"tensorflow-neuronx","version":"2.9.3.2.1.0","supported_instances":["trn1","inf1"],"supported_python_versions":["3.10","3.11","3.12"]},
+        {"name":"torch-neuron","version":"1.13.1.2.11.13.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"torch-neuronx","version":"2.9.0.2.14.27725","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"torch-xla","version":"2.10.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12"]},
+        {"name":"efa-installer","version":"1.47","supported_instances":["trn1","trn2","trn3"],"supported_python_versions":[]}
+        ]}, 
       {"neuron_version":"2.29.1", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.31.24.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-dkms","version":"2.27.4.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},

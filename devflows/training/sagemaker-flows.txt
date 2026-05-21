@@ -1,3 +1,0 @@
-* :ref:`sm-training-devflow`
-* `AWS Neuron Sagemaker Samples GitHub Repository <https://github.com/aws-neuron/aws-neuron-sagemaker-samples>`_
-
