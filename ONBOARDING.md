@@ -253,7 +253,7 @@ Add the reviewers to the GitHub PR, create a Slack group chat with the same peop
 
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — PR workflow and build details
 - [`README.md`](./README.md) — top-level product overview
-- Runbook: [Authoring a topic for the Neuron documentation](https://quip-amazon.com/e9B9AM7Npb17/Runbook-Authoring-a-topic-for-the-Neuron-documentation)
-- Internal Confluence: [AWS Neuron SDK Documentation Workflow, 2025 Edition](https://aws-neuron.atlassian.net/wiki/spaces/ND/pages/932118549)
-- Internal Confluence: [Joining the new GitHub organization and team](https://aws-neuron.atlassian.net/wiki/spaces/ND/pages/932380703)
-- Internal Confluence (legacy): [Neuron Sphinx/Read the Docs FAQ](https://aws-neuron.atlassian.net/wiki/spaces/ND/pages/930611219)
+- Runbook: [Authoring a topic for the Neuron documentation]()
+- Internal Confluence: [AWS Neuron SDK Documentation Workflow, 2025 Edition]()
+- Internal Confluence: [Joining the new GitHub organization and team]()
+- Internal Confluence (legacy): [Neuron Sphinx/Read the Docs FAQ]()
