@@ -1,12 +1,14 @@
 .. meta::
     :description: Complete release notes for the Neuron PyTorch framework component across all AWS Neuron SDK versions.
     :keywords: pytorch, torch-neuronx, torch-neuron, transformers-neuronx, release notes, aws neuron sdk
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _pytorch_rn:
 
 Component Release Notes for Neuron PyTorch Framework
 =====================================================
+
+**Latest version (in 2.30.0)**: 2.9.0.2.14.27711
 
 The release notes for the Neuron PyTorch framework component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 

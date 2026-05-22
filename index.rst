@@ -12,22 +12,20 @@ AWS Neuron Documentation
 .. grid:: 1
    :gutter: 2
 
-   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.29.1
-      :link: /release-notes/2.29.1
+   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.30.0
+      :link: /release-notes/2.30.0
       :link-type: doc
       :class-card: sd-border-2
       :class-title: sd-fs-6
 
-      **Released May 1, 2026**. Select this card for the details!
-      ^^^
-      Patch to Neuron 2.29.0 to address two Neuron Explorer issues.
+      **Released May 21, 2026**. Select this card for the details!
 
 ----
 
 Who Neuron is for
 -----------------
 
-* **ML engineers deploying production models** — Deploy prepared :doc:`Neuron Deep Learning AMIs (DLAMIs) </dlami/index>` and :doc:`Deep Learning Containers (DLCs) </containers/index>` on Amazon EC2 Trainium and Inferentia instances. Start with the :doc:`DLAMI setup guide </dlami/index>` or the :doc:`DLC quickstart </containers/get-started/quickstart-configure-deploy-dlc>`.
+* **ML engineers deploying production models** — Deploy prepared :doc:`Neuron Deep Learning AMIs (DLAMIs) </deploy/environments/dlami>` and :doc:`Deep Learning Containers (DLCs) </deploy/environments/index>` on Amazon EC2 Trainium and Inferentia instances. Start with the :doc:`DLAMI setup guide </deploy/environments/dlami>` or the :doc:`DLC quickstart </deploy/environments/quickstart-deploy-dlc>`.
 
   * **Serving LLMs** — Use vLLM on Neuron to serve open-source LLMs with minimal code changes. Start with the :doc:`online serving quickstart </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>` or :doc:`offline serving quickstart </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>`.
 * **ML researchers and model developers** — Use native PyTorch on Trainium with eager mode, ``torch.compile``, and standard distributed APIs. Start with :doc:`Native PyTorch on Neuron </frameworks/torch/pytorch-native-overview>`.
@@ -44,7 +42,7 @@ Pick the task that matches what you want to do.
    :gutter: 3
 
    .. grid-item-card:: :octicon:`rocket;1em;sd-text-primary` Get started with a Neuron DLAMI and PyTorch
-      :link: /dlami/index
+      :link: /deploy/environments/dlami
       :link-type: doc
       :class-card: sd-border-1
 
@@ -151,18 +149,18 @@ Deployment and Tools Support
       Profiling and optimization tool with support for framework, NKI, compiler, and runtime workloads. Covers every Neuron SDK component area.
 
    .. grid-item-card:: Neuron Agentic Development
-      :link: /about-neuron/agentic-development-overview
+      :link: /tools/neuron-agentic-development/index
       :link-type: doc
       :class-card: sd-border-1
 
       Open-source AI agents and skills for NKI kernel authoring, debugging, profiling, and analysis. Runs inside Claude Code, Kiro, and other agentic IDEs.
 
    .. grid-item-card:: Deploy on AWS
-      :link: /devflows/index
+      :link: /deploy/index
       :link-type: doc
       :class-card: sd-border-1
 
-      Pre-configured :doc:`DLAMIs </dlami/index>` and :doc:`DLCs </containers/index>` for EC2, EKS, ECS, SageMaker, and ParallelCluster.
+      Pre-configured :doc:`DLAMIs </deploy/environments/dlami>` and :doc:`DLCs </deploy/environments/index>` for EC2, EKS, ECS, SageMaker, and ParallelCluster.
 
 ----
 
@@ -231,15 +229,15 @@ Learn more
     :hidden:
 
     Quickstarts </about-neuron/quick-start/index>
-    Setup Guides </setup/index>
-    Developer Flows </devflows/index>
+    Set Up Environments </setup/index>
+    Deploy Model Workloads </deploy/index>
 
 .. toctree::
    :maxdepth: 1
    :caption: ML Frameworks
    :hidden:
 
-   Home </frameworks/index>
+   ML Framework Support </frameworks/index>
    PyTorch </frameworks/torch/index>
    JAX </frameworks/jax/index>
 
@@ -248,7 +246,7 @@ Learn more
    :caption: Training
    :hidden:
 
-   NxD Training </libraries/nxd-training/index>
+   Training on Neuron </libraries/nxd-training/index>
    NxD Core (Training) </libraries/neuronx-distributed/index-training>
 
 .. toctree::
@@ -256,7 +254,7 @@ Learn more
    :caption: Inference
    :hidden:
 
-   Overview </libraries/nxd-inference/neuron-inference-overview>
+   Inference on Neuron </libraries/nxd-inference/neuron-inference-overview>
    vLLM </libraries/nxd-inference/vllm/index>
    NxD Inference </libraries/nxd-inference/index>
    NxD Core (Inference) </libraries/neuronx-distributed/index-inference>
@@ -266,18 +264,9 @@ Learn more
    :caption: Developer Tools
    :hidden:
 
-   Home </tools/index>
+   Neuron Developer Tools </tools/index>
    Neuron Explorer </tools/neuron-explorer/index>
-   Neuron Agentic Development </about-neuron/agentic-development-overview>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Orchestrate and Deploy
-   :hidden:
-
-   AWS Workload Orchestration </devflows/index>
-   Neuron DLAMI </dlami/index>
-   Neuron Containers </containers/index>
+   Neuron Agentic Development </tools/neuron-agentic-development/index>
 
 .. toctree::
    :maxdepth: 1
@@ -301,11 +290,7 @@ Learn more
    :caption: Neuron Kernel Interface (NKI)
    :hidden:
 
-   Home </nki/index>
-   Get Started </nki/get-started/index>
-   Guides </nki/guides/index>
-   Deep Dives </nki/deep-dives/index>
-   Migration Guides </nki/migration/index>
+   NKI </nki/index>
    NKI API Reference </nki/api/index>
    NKI Library </nki/library/index>
 

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Containers component across all AWS Neuron SDK versions.
     :keywords: neuron containers, dlc, kubernetes, k8s, release notes, aws neuron sdk
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _containers_rn:
 
@@ -10,6 +10,31 @@ Component Release Notes for Neuron Containers
 
 The release notes for the Neuron Containers component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _containers-2-30-0-rn:
+
+Neuron Containers [2.30.0] (Neuron 2.30.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 5/21/2026
+
+Updates
+~~~~~~~~
+
+**DLC Support**
+
+* The ``jax-training-neuronx`` DLC has been upgraded to JAX 0.9.0 and ``jax-neuronx 0.10.0``, with Python 3.13 and related dependencies.
+* All DLCs released alongside Neuron SDK version 2.30.0 include the ``neuron_agentic_development`` package.
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.30.0.
+
+Known Issues
+~~~~~~~~~~~~
+
+* DLC images for Neuron SDK 2.30.0 include Neuron Runtime Library 2.32, which is not
+  backward-compatible with Neuron Driver 2.26 or earlier on the host. Update the host
+  Neuron Driver to the latest version before pulling the new container images. See
+  :doc:`/setup/pytorch/update-dlc` for instructions.
+
+
 .. _containers-2-29-0-rn:   
 
 Neuron Containers (Neuron 2.29.0 Release)
@@ -17,8 +42,8 @@ Neuron Containers (Neuron 2.29.0 Release)
 
 Date of Release: 04/09/2026
 
-Improvements
-~~~~~~~~~~~~~~~
+Updates
+~~~~~~~~
 
 **DLC Support**
 
@@ -50,8 +75,8 @@ Improvements
 
 **Kubernetes Support**
 
-* Introduced the Neuron DRA Driver, which enables advanced resource allocation capabilities using the Kubernetes Dynamic Resource Allocation (DRA) API for more flexible and efficient management of Neuron devices. For more details, see :doc:`/containers/neuron-dra`.
-* Added Neuron DRA Driver support to the Neuron Helm Charts. For more details, see :doc:`the updated Helm documentation under the Kubernetes Getting Started page </containers/kubernetes-getting-started>`.
+* Introduced the Neuron DRA Driver, which enables advanced resource allocation capabilities using the Kubernetes Dynamic Resource Allocation (DRA) API for more flexible and efficient management of Neuron devices. For more details, see :doc:`/deploy/eks/dra`.
+* Added Neuron DRA Driver support to the Neuron Helm Charts. For more details, see :doc:`the updated Helm documentation under the Kubernetes Getting Started page </deploy/eks/setup>`.
 
 .. _containers-2-27-0-rn:
 

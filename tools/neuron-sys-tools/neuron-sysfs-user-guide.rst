@@ -123,7 +123,7 @@ Each counter is represented as a directory, which holds two numerical values as 
 The total value starts accumulating metrics when the Driver is loaded. The present value records the last changed metric value. The peak value records the max value so far.
 Each counter has the same filesystem structure like this:
 
-.. code-block:: dash
+.. code-block:: text
 
     /sys/devices/virtual/neuron_device/neuron0/neuron_core0/status/
     ├── exec_bad_input/
@@ -286,7 +286,7 @@ By default, the Sysfs notification feature is turned off when the driver is load
 
 Here is a sample user space program using poll():
 
-.. code-block:: dash
+.. code-block:: c
 
 	#include <fcntl.h>
 	#include <poll.h>

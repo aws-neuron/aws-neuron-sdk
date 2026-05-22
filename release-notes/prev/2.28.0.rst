@@ -33,7 +33,7 @@ Package and Library Updates
         :gutter: 2
 
         .. grid-item-card::
-                :link: latest-neuron-release-artifacts
+                :link: neuron-2.28.0-artifacts
                 :link-type: ref
                 :class-card: sd-border-1
         

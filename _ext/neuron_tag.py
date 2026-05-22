@@ -98,9 +98,9 @@ clear_inf1_tag = [
     'release-notes/torch/transformers-neuronx/index',
     'release-notes/tensorflow/tensorflow-neuronx/',
     'release-notes/compiler/neuronx-cc/',
-    'tools/tutorials/tutorial-tensorboard-scalars-mnist',
+    'archive/tensorboard/tutorial-tensorboard-scalars-mnist',
     'tools/tutorials/tutorial-neuron-monitor-mnist',
-    'tools/tensorboard/getting-started-tensorboard-neuronx-plugin',
+    'archive/tensorboard/getting-started-tensorboard-neuronx-plugin',
     'tools/neuron-sys-tools/nccom-test',
     'setup/torch-neuronx',
     'setup/tensorflow-neuronx',
@@ -188,7 +188,7 @@ clear_nc_v2_tag = [
     'tools/tutorials/tutorial-neuron-check-model',
     'tools/tutorials/tutorial-neuron-gatherinfo',
     'tools/tutorials/getting-started-tensorboard-neuron-plugin',
-    'tools/tensorboard/getting-started-tensorboard-neuron-plugin',
+    'archive/tensorboard/getting-started-tensorboard-neuron-plugin',
     'tools/helper-tools/tutorial-neuron-check-model',
     'tools/helper-tools/tutorial-neuron-gatherinfo',
     'about-neuron/appnotes/neuron-cc/mixed-precision',
@@ -521,9 +521,9 @@ def _get_page_override(cur_file):
     # --- Tools ---------------------------------------------------------------
 
     # TensorBoard plugin (End Of Support)
-    if cur_file.startswith('tools/tensorboard/getting-started-tensorboard-neuronx') or \
-       cur_file == 'tools/tutorials/tutorial-tensorboard-scalars-mnist' or \
-       cur_file == 'tools/tutorials/torch-neuronx-profiling-with-tb':
+    if cur_file == 'archive/tensorboard/getting-started-tensorboard-neuronx-plugin' or \
+       cur_file == 'archive/tensorboard/tutorial-tensorboard-scalars-mnist' or \
+       cur_file == 'archive/tensorboard/torch-neuronx-profiling-with-tb':
         return ['Inf2', 'Trn1'], True
 
     # --- Announcements -------------------------------------------------------

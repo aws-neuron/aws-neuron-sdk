@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Runtime component across all AWS Neuron SDK versions.
     :keywords: neuron runtime, neuron driver, neuron collectives, release notes, aws neuron sdk
-    :date-modified: 02/26/2026
+    :date-modified: 05/21/2026
 
 .. _runtime_rn:
 
@@ -9,6 +9,173 @@ Component Release Notes for Neuron Runtime
 ==========================================
 
 The release notes for the Neuron Runtime Neuron component, including Neuron collectives, the Runtime driver, and the Runtime library. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _runtime-2-30-0-rn:
+
+Neuron Runtime (Neuron 2.30.0 Release)
+------------------------------------------------------------------------
+
+**Date of release**: 05/21/2026
+
+Neuron Runtime Library
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.32.31.0
+
+Announcement
+^^^^^^^^^^^^
+
+* Implicit async execution mode (``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS``) will be removed in an upcoming release. A warning is now emitted when used. Users should migrate to the explicit async APIs.
+
+New Features
+^^^^^^^^^^^^
+
+* Added new :doc:`async event APIs </neuron-runtime/api/nrt_async>` (``nrta_event_register_seq_id_completion`` and ``nrta_event_register_xu_completion``) which allow applications to register user-managed eventfds for completion notifications, simplifying framework integration.
+
+Updates
+^^^^^^^^^^^^
+
+* Mesh collective proxy buffers are now reused across NEFFs per-stream, reducing memory pressure loading many models that use collective operations.
+* UltraServer topology information is now included in ``nrt_infodump`` diagnostic output.
+* Profiling overhead reduced by caching device protobuf setup, with support for pre-populating the cache during warmup.
+* NEFF revision ID is now validated against the target device during loading, providing clear error messages for incompatible NEFFs.
+* Improved LNC mismatch error messages with actionable guidance.
+* Zero-copy for HOST <-> DEVICE data transfers are now enabled by default, improving data transfer performance.
+* ``nrt_tensor_read`` and ``nrt_tensor_write`` APIs now use separate DMA queues, eliminating head-of-line blocking between read and write operations improving bidirectional throughput.
+* Added support for context caching for Host-based collective communication, significantly reducing prepare-phase latency for repeated collective patterns.
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+
+* Support for VIRTUAL tensor type has been removed as part of Inf1 platform deprecation. Applications using virtual tensors should migrate to standard tensor allocation.
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed memory leak in continuous profiling session cleanup where map keys and pending serialization entries were not freed.
+* Fixed multiple memory leaks totaling 84+ MB in device driver shutdown and model error paths, including allocator destruction, scratchpad cleanup, and NEFF loader error paths.
+* Fixed additional memory leaks in profiling re-entry, ring buffer cleanup, config string parsing, and barrier descriptor preparation.
+* Fixed a Hybrid Ring deadlock in one-rank-per-chip configurations when running concurrently with Mesh algorithms in 2D sharding groups.
+* Fixed a bug where the NCCL initialization error tracker was cleared after first logging, causing subsequent calls to segfault.
+* Fixed ring algorithm selection bug with cached communicators that could cause incorrect algorithm selection in workloads with both intra-node and multi-node replica groups.
+* Fixed a double-free bug in DMA ring cleanup that could cause crashes during device teardown.
+* Fixed a crash during DMA queue set cleanup when initialization failed mid-allocation.
+* Fixed Hybrid Ring data corruption for coalesced operations when disjoint buffers span multiple page-table entries.
+* Fixed permute operations on Trn3 Gen2 UltraServer to fail immediately with a clear error when ring algorithm cannot be built, instead of segfaulting.
+* Fixed single-channel permute operations having their channel count incorrectly overridden by hybrid ring infrastructure.
+* Fixed 2-device allreduce regression where reduce-scatter dispatchers were missing rank count cases after tiling was added.
+* Fixed inconsistent safety checks for early recv/send optimizations in collective operations that could cause data corruption in edge cases.
+* Fixed correctness issue in variable-length AllToAllV inter-axis transfers where uniform recv_block_size caused stale data with variable send counts.
+* Fixed assertion failure when using inter-RDH algorithm on Trn3 Gen2 UltraServer platforms.
+
+Known Issues
+^^^^^^^^^^^^
+
+* Neuron Runtime Library 2.32 is not backward-compatible with Neuron Driver 2.26 or earlier.
+  Applications that upgrade the Runtime without also upgrading the Driver will fail to initialize.
+  To work around this issue, upgrade the Neuron Driver to the latest version.
+  A fix to restore backward compatibility is planned for a future patch release.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron runtime was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.12              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.12              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.12              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+=========================== ============= ============== ================= ===============
+
+Neuron Driver
+~~~~~~~~~~~~~
+
+**Version:** 2.28.0.0
+
+New Features
+^^^^^^^^^^^^
+
+* Added new sysfs nodes under ``stats/hardware/health_status/`` exposing cached device health metrics including HBM ECC error counts and hardware error event counter, with sysfs_notify support for event-driven monitoring.
+
+Improvements
+^^^^^^^^^^^^
+
+* The DKMS RPM package now uses SHA-512 file digests and xz payload compression, unblocking installation on Bottlerocket and other RPM v6 environments.
+* ``core_count`` and ``connected_devices`` sysfs attributes are now world-readable (0444), allowing non-root monitoring tools to query device information.
+
+Bug Fixes
+^^^^^^^^^
+
+* DMA page list pool allocation changed from kcalloc to kvcalloc, fixing allocation failures when host memory is fragmented.
+* Fixed a race condition in back-to-back NeuronCore resets where DMA ring teardown from a second reset could be overwritten by initialization from the first reset.
+* Fixed a bug where DMA rings were destroyed and recreated for all NeuronCores instead of only those in the NC map during no_reset path, causing DMA failures.
+* Fixed HBM ECC error reporting to correctly distinguish between repairable and unrepairable uncorrectable errors.
+* Fixed an off-by-one error in physical address to BAR4 mapping that rejected valid mappings at the end of the BAR region.
+* Fixed potential out-of-bounds array access in sysfs show functions.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron driver was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Red Hat       RHEL10         6.12              2.39
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.12              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Inf2``                    Amazon Linux  AL2            5.10              2.26
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Red Hat       RHEL10         6.12              2.39
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.12              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Amazon Linux  AL2            5.10              2.26
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Red Hat       RHEL10         6.12              2.39
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.12              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Amazon Linux  AL2            5.10              2.26
+=========================== ============= ============== ================= ===============
+
+Neuron Collectives
+~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.32.28.0 
+
+New Features
+^^^^^^^^^^^^
+
+* Added one-rank-per-chip and one-rank-per-JBOG graph support for Trn3 Gen2 UltraServer, constructing ring paths that maximize intra-JBOG link utilization.
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed memory leaks of net properties and duplicate channel allocation that accumulated over repeated communicator creation/destruction cycles.
+* Fixed spurious TIMEOUT warnings in mesh proxy due to variable_peer, where the timeout check compared against a zero-initialized timestamp instead of the configured 10-second timeout.
+
 
 .. _runtime-2-29-0-rn:
 

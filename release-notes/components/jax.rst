@@ -8,7 +8,7 @@
 Component Release Notes for JAX NeuronX
 ========================================
 
-**Latest Version (in 2.29.0)**: 0.7.0.1.0.*
+**Latest Version (in 2.30.0)**: 0.10.0.1.0.*
 
 The release notes for the JAX NeuronX component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 

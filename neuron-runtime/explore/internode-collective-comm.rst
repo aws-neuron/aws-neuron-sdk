@@ -78,7 +78,7 @@ As the name suggests, one-rank-per-node groups refer to the simple case where we
 Ring Algorithm
 ~~~~~~~~~~~~~~
 
-.. image:: /neuron-runtime/img/collectives/ring-algorithm.png
+.. image:: /neuron-runtime/images/collectives/ring-algorithm.png
    :alt: Ring Algorithm
    :align: center
 
@@ -106,7 +106,7 @@ This algorithm is a concatenation of the above two patterns (ReduceScatter follo
 Mesh Algorithm
 ~~~~~~~~~~~~~~
 
-.. image:: /neuron-runtime/img/collectives/mesh-algorithm.png
+.. image:: /neuron-runtime/images/collectives/mesh-algorithm.png
    :alt: Mesh Algorithm
    :align: center
 
@@ -157,7 +157,7 @@ The Single-step Mesh algorithm is a variant of Mesh specifically designed for Al
 Recursive Doubling and Halving (RDH) Algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /neuron-runtime/img/collectives/rdh-algorithm.png
+.. image:: /neuron-runtime/images/collectives/rdh-algorithm.png
    :alt: Recursive Doubling an Halving Algorithm
    :align: center
 
@@ -239,7 +239,7 @@ Let's assume there are X servers globally, each containing Y ranks. The first st
 
 Because the inter EFA interface has lower bandwidth than that of the intra-node interface, and that the first stage incurs less traffic than the second, we choose to run the inter-node communication first.
 
-.. image:: /neuron-runtime/img/collectives/global-allgather.png
+.. image:: /neuron-runtime/images/collectives/global-allgather.png
    :alt: Global All-Gather node communication
    :align: center
 
@@ -250,7 +250,7 @@ We can run intra-node ReduceScatter first on X parallel rank lists of Y local ra
 
 The order of the intra- and inter-node stages is flipped when compared to AllGather, because now the second stage has less traffic.
 
-.. image:: /neuron-runtime/img/collectives/global-reducescatter.png
+.. image:: /neuron-runtime/images/collectives/global-reducescatter.png
    :alt: Global ReduceScatter node communication
    :align: center
 
@@ -259,7 +259,7 @@ Global AllReduce = intra-node ReduceScatter + inter-node AllReduce + intra-node 
 
 We first run an intra-node ReduceScatter to break down the buffer size to 1/Y of the original. Then we run an inter-node AllReduce. Again, each inter-node group will work on a different 1/Y section of the original buffer, so there's no duplicated work. And lastly, we run an intra-node AllGather to broadcast the whole buffer to everyone.
 
-.. image:: /neuron-runtime/img/collectives/global-allreduce.png
+.. image:: /neuron-runtime/images/collectives/global-allreduce.png
    :alt: Global All-Reduce node communication
    :align: center
 
@@ -270,7 +270,7 @@ The Flat Ring algorithm works by connecting all the global ranks in a directed c
 
 The step latency is O(X * Y) - X is the number of nodes and Y intra-node ranks - and the network bandwidth utilization is high. However, one caveat is that each EFA interface is connected to a different Trainium Chip. So, to utilize all of them, we need to run multiple directed cycles (called channels) in parallel, thus reducing the transfer size and efficiency of each cycle, besides causing high context switching overheads in the collective execution cores. We only enable Flat Ring on Trn1 for large message size cases where it has a clear edge.
 
-.. image:: /neuron-runtime/img/collectives/flat-ring.png
+.. image:: /neuron-runtime/images/collectives/flat-ring.png
    :alt: Flat Ring algorithm
    :align: center
 

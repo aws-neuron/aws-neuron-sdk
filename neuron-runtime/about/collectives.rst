@@ -38,7 +38,7 @@ AllGather Operation
 
 In the **AllGather** operation, each rank shares its tensor and receives the aggregated tensors from all ranks, ordered by rank index.
 
-.. image:: /neuron-runtime/img/collectives/all-gather.gif
+.. image:: /neuron-runtime/images/collectives/all-gather.gif
    :alt: AllGather Operation
    :align: center
    :width: 80%
@@ -48,7 +48,7 @@ ReduceScatter Operation
 
 The **ReduceScatter** operation performs reductions on input data (for example, sum, min, max) across ranks, with each rank receiving an equal-sized block/piece of the result based on its rank index.
 
-.. image:: /neuron-runtime/img/collectives/reduce-scatter.gif
+.. image:: /neuron-runtime/images/collectives/reduce-scatter.gif
    :alt: ReduceScatter Operation
    :align: center
    :width: 80%
@@ -58,7 +58,7 @@ AllReduce Operation
 
 The **AllReduce** operation performs reductions on data (e.g., sum, max, min) across ranks and stores the result in the output buffer of every rank.
 
-.. image:: /neuron-runtime/img/collectives/all-reduce.gif
+.. image:: /neuron-runtime/images/collectives/all-reduce.gif
    :alt: AllReduce Operation
    :align: center
    :width: 80%
@@ -68,7 +68,7 @@ All-to-All Operation
 
 In **AlltoAll**, each rank sends different data to and receives different data from every other rank, resembling a distributed transpose.
 
-.. image:: /neuron-runtime/img/collectives/all-to-all.gif
+.. image:: /neuron-runtime/images/collectives/all-to-all.gif
    :alt: All-to-All Operation
    :align: center
    :width: 80%
@@ -78,7 +78,7 @@ Permute Operation
 
 In the **Permute** operation, each rank sends its data to a designated destination rank and receives data from a designated source rank, according to a set of source-target pairs. The source-target pairs must form a valid ring topology with direct physical connectivity between adjacent ranks. Only ranks included in the source-target pairs participate in the collective execution; other ranks remain inactive during the operation. Currently, only circular permute patterns are supported.
 
-.. image:: /neuron-runtime/img/collectives/permute.gif
+.. image:: /neuron-runtime/images/collectives/permute.gif
    :alt: Permute Operation
    :align: center
    :width: 80%
@@ -113,14 +113,14 @@ Each NeuronCore has dedicated components to actually realize collective operatio
 
 Latency-wise, Trn2.48xl instances are backed by the AWS `10p10u <https://www.aboutamazon.com/news/aws/aws-infrastructure-generative-ai>`__ network. When measured with the `RDMA core performance test ib_write_lat <https://enterprise-support.nvidia.com/s/article/ib-write-lat>`__, a minimal packet takes 15us (latency) to go from an HBM in one server to an HBM of another.
 
-.. image:: /neuron-runtime/img/collectives/trn2-topology.png
+.. image:: /neuron-runtime/images/collectives/trn2-topology.png
    :alt: Trn2 Topology
    :align: center
    :width: 80%  
 
 Each Trn2 server consists of 16 Trainium2 chips connected in a **2D Torus** — each chip is connected to 4 neighbors with a NeuronLink. For an :ref:`UltraServer configuration <trn2-ultraserver>`, we extend this to a **3D Torus**, with each chip adding connections on the Z dimensions to 2 neighbors with a bidirectional **NeuronLink** between each pair.
 
-.. image:: /neuron-runtime/img/collectives/trn2-ultraserver-topology.png
+.. image:: /neuron-runtime/images/collectives/trn2-ultraserver-topology.png
    :alt: Trn2 UltraServer Topology
    :align: center
    :width: 80%

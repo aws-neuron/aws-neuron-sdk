@@ -11,4 +11,4 @@ Some NKI Library kernels currently use the legacy ``neuronxcc.nki.*`` namespace.
 
 The new ``nki.*`` namespace introduces changes to NKI APIs and language constructs that improve usability and performance. This transition ensures consistency across all NKI kernels and allows us to focus development efforts on a single, modern namespace.
 
-See :doc:`the NKI Kernel Migration Guide </nki/deep-dives/nki-migration-guide>` for more information.
+See :doc:`the NKI Kernel Migration Guide </nki/migration/nki-beta2-migration-guide>` for more information.

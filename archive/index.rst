@@ -1,7 +1,7 @@
 .. meta::
    :description: Archived AWS Neuron SDK documentation
    :keywords: AWS Neuron SDK, archived tutorials, legacy documentation
-   :date-modified: 12-02-2025
+   :date-modified: 2026-05-11
 
 =====================================
 Archived AWS Neuron SDK documentation
@@ -26,9 +26,12 @@ Archived feature docs
    * - Feature
      - Last release supported
      - Date archived
-   * - :doc:`tensorboard/getting-started-tensorboard-neuron-plugin`
-     - Neuron 2.27.0
-     - Archived on: 12/2/2025
+   * - :doc:`profiler/index`
+     - Neuron 2.28.0
+     - Archived on: 5/11/2026
+   * - :doc:`tensorboard/index`
+     - Neuron 2.28.0 (Trn1 plugin); Neuron 2.27.0 (Inf1 plugin)
+     - Archived on: 5/11/2026
    * - :doc:`neuronperf/index`
      - Neuron 2.27.0
      - Archived on: 12/2/2025
@@ -51,6 +54,49 @@ Archived feature docs
      - Neuron 2.22.0
      - Archived on: 3/11/2026
 
+Archived deployment flows
+--------------------------
+
+The following deployment flow pages were archived during the consolidation of ``/containers/``, ``/devflows/``, and ``/dlami/`` into ``/deploy/``. These pages reference legacy patterns (Inf1, Neo compilation, BYOC hosting) that have been superseded by current deployment guides.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Page
+     - Reason archived
+     - Date archived
+   * - :doc:`devflows/inference/byoc-hosting-devflow`
+     - Legacy BYOC hosting flow
+     - Archived on: 4/20/2026
+   * - :doc:`devflows/inference/byoc-hosting-devflow-inf2`
+     - Legacy BYOC hosting flow
+     - Archived on: 4/20/2026
+   * - :doc:`devflows/inference/container-sm-hosting-devflow`
+     - Legacy SageMaker hosting flow
+     - Archived on: 4/20/2026
+   * - :doc:`devflows/inference/neo-then-hosting-devflow`
+     - Legacy Neo compilation flow
+     - Archived on: 4/20/2026
+   * - :doc:`devflows/inference/dlc-then-k8s-devflow`
+     - Superseded by EKS-specific guides
+     - Archived on: 4/20/2026
+   * - :doc:`containers/tutorial-docker-runtime1.0`
+     - Legacy runtime 1.0
+     - Archived on: 4/20/2026
+
+
+Archived setup guides
+---------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Page
+     - Reason archived
+     - Date archived
+   * - :doc:`setup/setup-rocky-linux-9`
+     - Rocky Linux 9 is no longer a supported install target
+     - Archived on: 5/15/2026
 
 Archived tutorials
 ------------------
@@ -85,6 +131,12 @@ Archived tutorials
    * - :doc:`tutorials/multinode-training-model-profiling`
      - Neuron 2.29.0
      - Archived on: 3/30/2026
+   * - :doc:`tensorboard/torch-neuronx-profiling-with-tb`
+     - Neuron 2.28.0
+     - Archived on: 5/11/2026
+   * - :doc:`tensorboard/tutorial-tensorboard-scalars-mnist`
+     - Neuron 2.28.0
+     - Archived on: 5/11/2026
 
 .. toctree::
     :maxdepth: 1
@@ -100,12 +152,20 @@ Archived tutorials
     tutorials/multinode-training-model-profiling
     tutorials/training-gpt-neox
     tensorboard/getting-started-tensorboard-neuron-plugin
+    tensorboard/index
     neuronperf/index
     helper-tools/index
     transformers-neuronx/index
     mxnet-neuron/index
     tensorflow/index
     torch-neuron/index
+    devflows/inference/byoc-hosting-devflow
+    devflows/inference/byoc-hosting-devflow-inf2
+    devflows/inference/container-sm-hosting-devflow
+    devflows/inference/neo-then-hosting-devflow
+    devflows/inference/dlc-then-k8s-devflow
+    containers/tutorial-docker-runtime1.0
+    setup/setup-rocky-linux-9
 
 Accessing Archived Content
 --------------------------

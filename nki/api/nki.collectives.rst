@@ -3,6 +3,7 @@ nki.collectives
 
 .. currentmodule:: nki.collectives
 
+
 The ``nki.collectives`` module provides APIs for multi-core collective communication
 operations such as all-reduce and all-gather across NeuronCores.
 

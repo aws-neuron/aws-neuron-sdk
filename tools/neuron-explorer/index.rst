@@ -11,7 +11,7 @@ Neuron Explorer
 
     Neuron Explorer is the recommended profiling tool for AWS Neuron workloads. It provides end-to-end profiling support along with the latest features and an improved user experience. 
     
-    **Note:** Neuron will end support for :ref:`Neuron Profiler 2.0 <neuron-profiler-2-0-guide>` and :ref:`Neuron Profiler <neuron-profile-ug>` in Neuron 2.29 release. Users are encouraged to migrate to Neuron Explorer. Please see :doc:`migration-faq` and :ref:`neuron-explorer-faq` for more details.
+    **Note:** Neuron ended support for the earlier :ref:`Neuron Profiler 2.0 <neuron-profiler-2-0-guide>` and :ref:`Neuron Profiler <neuron-profile-ug>` in the Neuron 2.29 release. Their user guides are preserved under :ref:`archived-neuron-profiler`. Migrate to Neuron Explorer using :doc:`migration-faq` and :ref:`neuron-explorer-faq`.
     
 Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. Neuron Explorer helps developers maintain context, iterate efficiently, and focus on building and optimizing high-performance models. Developers can access Neuron Explorer from CLI, UI, or inside their IDE through VSCode integration.
 
@@ -105,6 +105,13 @@ Visualization and Analysis
       :class-card: sd-border-1
 
       Analyze memory allocation, usage patterns, and potential inefficiencies across SBUF partitions.
+
+   .. grid-item-card:: Region Highlighter
+      :link: overview-region-highlighter
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Automatically identify optimization regions in your profiles based on collective operations, hierarchy data, and kernel stack frames.
 
    .. grid-item-card:: AI Recommendation Viewer
       :link: overview-ai-recommendations
@@ -208,6 +215,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
    Database Viewer <overview-database-viewer>
    Tensor Viewer <overview-tensor-viewer>
    Memory Viewer <overview-memory-viewer>
+   Region Highlighter <overview-region-highlighter>
    AI Recommendation Viewer <overview-ai-recommendations>
    View Profiles with Perfetto <view-perfetto>
    

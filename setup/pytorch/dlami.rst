@@ -5,7 +5,7 @@
    :installation-method: dlami
    :instance-types: inf2, trn1, trn2, trn3
    :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.10, 3.11, 3.12
+   :python-versions: 3.11, 3.12
    :content-type: installation-guide
    :estimated-time: 5 minutes
    :date-modified: 2026-03-03
@@ -18,7 +18,7 @@ Install PyTorch with Neuron support using pre-configured AWS Deep Learning AMIs.
 ⏱️ **Estimated time**: 5 minutes
 
 .. note::
-   Want to read about Neuron's Deep Learning machine images (DLAMIs) before diving in? Check out the :doc:`/dlami/index`.
+   Want to read about Neuron's Deep Learning machine images (DLAMIs) before diving in? Check out the :doc:`/deploy/environments/dlami`.
 
 ----
 
@@ -40,7 +40,7 @@ Prerequisites
    * - AWS CLI
      - Configured with credentials (optional)
 
-Installation Steps
+Installation steps
 ------------------
 
 .. tab-set::
@@ -48,7 +48,7 @@ Installation Steps
    .. tab-item:: Ubuntu 24.04
       :sync: ubuntu-24-04
       
-      **Step 1: Find the Latest AMI**
+      **Step 1: Find the latest AMI**
       
       Get the latest PyTorch DLAMI for Ubuntu 24.04 using the AWS CLI:
       
@@ -60,9 +60,9 @@ Installation Steps
            --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
            --output text
 
-      You can also use the AWS EC2 parameter store to find the ID of a DLAMI. See `https://docs.aws.amazon.com/dlami/latest/devguide/find-dlami-id.html`__ for details. Record the ID (``image-id``) for the next step.
+      You can also use the AWS EC2 parameter store to find the ID of a DLAMI. See `Find a DLAMI ID <https://docs.aws.amazon.com/dlami/latest/devguide/find-dlami-id.html>`__ for details. Record the ID (``image-id``) for the next step.
       
-      **Step 2: Launch Instance**
+      **Step 2: Launch instance**
       
       Launch a Trn1 or Inf2 instance with the AMI using the AWS CLI:
       
@@ -82,15 +82,15 @@ Installation Steps
       - ``sg-xxxxxxxxx`` with your security group ID
       - ``subnet-xxxxxxxxx`` with your subnet ID
 
-       You can also launch your DLAMI through the AWS EC2 web console, which also provides hints for security group and subnet IDs. For more details, see `https://docs.aws.amazon.com/dlami/latest/devguide/launch.html`__.
+      You can also launch your DLAMI through the AWS EC2 web console, which also provides hints for security group and subnet IDs. For more details, see `Launch a DLAMI <https://docs.aws.amazon.com/dlami/latest/devguide/launch.html>`__.
       
-      **Step 3: Connect to Instance**
+      **Step 3: Connect to instance**
       
       .. code-block:: bash
          
          ssh -i your-key-pair.pem ubuntu@<instance-public-ip>
       
-      **Step 4: Activate Environment**
+      **Step 4: Activate environment**
       
       The DLAMI includes a pre-configured virtual environment:
       
@@ -98,7 +98,7 @@ Installation Steps
          
          source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
       
-      **Step 5: Verify Installation**
+      **Step 5: Verify installation**
       
       .. code-block:: bash
 
@@ -138,7 +138,7 @@ Installation Steps
             .. code-block:: bash
                
                python --version
-               # Should be 3.10 or higher
+               # Should be 3.11 or higher
          
          3. Reinstall torch-neuronx:
             
@@ -176,7 +176,10 @@ Installation Steps
    .. tab-item:: Ubuntu 22.04
       :sync: ubuntu-22-04
       
-      **Step 1: Find the Latest AMI**
+      **Step 1: Find the latest AMI**
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       Get the latest PyTorch DLAMI for Ubuntu 22.04:
       
@@ -188,7 +191,7 @@ Installation Steps
            --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
            --output text
       
-      **Step 2: Launch Instance**
+      **Step 2: Launch instance**
       
       .. code-block:: bash
          
@@ -199,107 +202,21 @@ Installation Steps
            --security-group-ids sg-xxxxxxxxx \
            --subnet-id subnet-xxxxxxxxx
       
-      **Step 3: Connect to Instance**
+      **Step 3: Connect to instance**
       
       .. code-block:: bash
          
          ssh -i your-key-pair.pem ubuntu@<instance-public-ip>
       
-      **Step 4: Activate Environment**
-      
-      .. code-block:: bash
-         
-          source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
-      
-      **Step 5: Verify Installation**
-      
-      .. code-block:: bash
-
-         python3 -c "import torch; import torch_neuronx; print(f'PyTorch {torch.__version__}, torch-neuronx {torch_neuronx.__version__}')"
-         neuron-ls
-
-      You should see output similar to this (the versions, instance IDs, and details should match your expected ones, not the ones in this example):
-      
-      **Expected output**:
-      
-      .. code-block:: text
-         
-         PyTorch 2.9.0+cpu, torch-neuronx 2.9.0.1.0
-         
-         +--------+--------+--------+-----------+
-         | DEVICE | CORES  | MEMORY | CONNECTED |
-         +--------+--------+--------+-----------+
-         | 0      | 2      | 32 GB  | Yes       |
-         | 1      | 2      | 32 GB  | Yes       |
-         +--------+--------+--------+-----------+
-      
-      .. dropdown:: ⚠️ Troubleshooting: Module not found
-         :color: warning
-         :animate: fade-in
-         
-         If you see ``ModuleNotFoundError: No module named 'torch_neuronx'``:
-         
-         7. Verify virtual environment is activated
-         8. Check Python version: ``python --version`` (should be 3.10+)
-         9. Reinstall: ``pip install --force-reinstall torch-neuronx``
-      
-      .. dropdown:: ⚠️ Troubleshooting: No Neuron devices found
-         :color: warning
-         :animate: fade-in
-         
-         If ``neuron-ls`` shows no devices:
-         
-         10. Verify instance type
-         11. Check Neuron driver: ``lsmod | grep neuron``
-         12. Restart runtime: ``sudo systemctl restart neuron-monitor``
-
-   .. tab-item:: Amazon Linux 2023
-      :sync: al2023
-      
-      **Step 1: Find the Latest AMI**
-      
-      Get the latest PyTorch DLAMI for Amazon Linux 2023:
-      
-      .. code-block:: bash
-         
-         aws ec2 describe-images \
-           --owners amazon \
-           --filters "Name=name,Values=Deep Learning AMI Neuron PyTorch 2.9 (Amazon Linux 2023)*" \
-           --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
-           --output text
-      
-      **Step 2: Launch Instance**
-      
-      .. code-block:: bash
-         
-         aws ec2 run-instances \
-           --image-id ami-xxxxxxxxxxxxxxxxx \
-           --instance-type trn1.2xlarge \
-           --key-name your-key-pair \
-           --security-group-ids sg-xxxxxxxxx \
-           --subnet-id subnet-xxxxxxxxx
-      
-      **Step 3: Connect to Instance**
-      
-      .. code-block:: bash
-         
-         ssh -i your-key-pair.pem ec2-user@<instance-public-ip>
-      
-      .. note::
-         
-         Amazon Linux 2023 uses ``ec2-user`` instead of ``ubuntu``.
-      
-      **Step 4: Activate Environment**
+      **Step 4: Activate environment**
       
       .. code-block:: bash
          
          source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
       
-      **Step 5: Verify Installation**
+      **Step 5: Verify installation**
       
-      .. code-block:: python
-         
-         .. code-block:: bash
+      .. code-block:: bash
 
          python3 -c "import torch; import torch_neuronx; print(f'PyTorch {torch.__version__}, torch-neuronx {torch_neuronx.__version__}')"
          neuron-ls
@@ -326,7 +243,91 @@ Installation Steps
          If you see ``ModuleNotFoundError: No module named 'torch_neuronx'``:
          
          1. Verify virtual environment is activated
-         2. Check Python version: ``python --version`` (should be 3.10+)
+         2. Check Python version: ``python --version`` (should be 3.11+)
+         3. Reinstall: ``pip install --force-reinstall torch-neuronx``
+      
+      .. dropdown:: ⚠️ Troubleshooting: No Neuron devices found
+         :color: warning
+         :animate: fade-in
+         
+         If ``neuron-ls`` shows no devices:
+         
+         1. Verify instance type
+         2. Check Neuron driver: ``lsmod | grep neuron``
+         3. Restart runtime: ``sudo systemctl restart neuron-monitor``
+
+   .. tab-item:: Amazon Linux 2023
+      :sync: al2023
+      
+      **Step 1: Find the latest AMI**
+      
+      Get the latest PyTorch DLAMI for Amazon Linux 2023:
+      
+      .. code-block:: bash
+         
+         aws ec2 describe-images \
+           --owners amazon \
+           --filters "Name=name,Values=Deep Learning AMI Neuron PyTorch 2.9 (Amazon Linux 2023)*" \
+           --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
+           --output text
+      
+      **Step 2: Launch instance**
+      
+      .. code-block:: bash
+         
+         aws ec2 run-instances \
+           --image-id ami-xxxxxxxxxxxxxxxxx \
+           --instance-type trn1.2xlarge \
+           --key-name your-key-pair \
+           --security-group-ids sg-xxxxxxxxx \
+           --subnet-id subnet-xxxxxxxxx
+      
+      **Step 3: Connect to instance**
+      
+      .. code-block:: bash
+         
+         ssh -i your-key-pair.pem ec2-user@<instance-public-ip>
+      
+      .. note::
+         
+         Amazon Linux 2023 uses ``ec2-user`` instead of ``ubuntu``.
+      
+      **Step 4: Activate environment**
+      
+      .. code-block:: bash
+         
+         source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
+      
+      **Step 5: Verify installation**
+      
+      .. code-block:: bash
+
+         python3 -c "import torch; import torch_neuronx; print(f'PyTorch {torch.__version__}, torch-neuronx {torch_neuronx.__version__}')"
+         neuron-ls
+
+      You should see output similar to this (the versions, instance IDs, and details should match your expected ones, not the ones in this example):
+      
+      **Expected output**:
+      
+      .. code-block:: text
+         
+         PyTorch 2.9.0+cpu, torch-neuronx 2.9.0.1.0
+         
+         +--------+--------+--------+-----------+
+         | DEVICE | CORES  | MEMORY | CONNECTED |
+         +--------+--------+--------+-----------+
+         | 0      | 2      | 32 GB  | Yes       |
+         | 1      | 2      | 32 GB  | Yes       |
+         +--------+--------+--------+-----------+
+      
+      .. dropdown:: ⚠️ Troubleshooting: Module not found
+         :color: warning
+         :animate: fade-in
+         
+         If you see ``ModuleNotFoundError: No module named 'torch_neuronx'``:
+         
+         1. Verify virtual environment is activated
+         2. Check Python version: ``python --version`` (should be 3.11+)
          3. Reinstall: ``pip install --force-reinstall torch-neuronx``
       
       .. dropdown:: ⚠️ Troubleshooting: No Neuron devices found
@@ -360,9 +361,9 @@ To update PyTorch versions or Neuron drivers on an existing DLAMI, see
    Llama 2/3.1/3.3/4, Qwen 2.5/3, and multimodal models with quantization support (INT8/FP8).
    
    The vLLM environment is also available in the multi-framework DLAMI. For more details
-   on available DLAMIs and SSM parameters, see :doc:`/dlami/index`.
+   on available DLAMIs and SSM parameters, see :doc:`/deploy/environments/dlami`.
 
-Next Steps
+Next steps
 ----------
 
 Now that PyTorch is installed:
@@ -394,15 +395,15 @@ Now that PyTorch is installed:
 
 4. **Explore Tools**:
    
-   - :doc:`/tools/profiler/neuron-profile-user-guide`
+   - :doc:`/tools/neuron-explorer/index`
    - :doc:`/tools/neuron-sys-tools/neuron-top-user-guide`
 
-5. **Deploy LLM inference**: :doc:`/dlami/index` (vLLM on Neuron)
+5. **Deploy LLM inference**: :doc:`/deploy/environments/dlami` (vLLM on Neuron)
 
-Additional Resources
+Additional resources
 --------------------
 
-- :doc:`/dlami/index` - DLAMI documentation
-- :doc:`/containers/index` - Container-based deployment
+- :doc:`/deploy/environments/dlami` - DLAMI documentation
+- :doc:`/deploy/index` - Container-based deployment
 - :doc:`../troubleshooting` - Common issues and solutions
 - :doc:`/release-notes/index` - Version compatibility information

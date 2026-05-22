@@ -306,6 +306,6 @@ Further reading
 ---------------
 
 - :doc:`/setup/pytorch/index` - Detailed PyTorch installation options
-- :doc:`/devflows/ec2-flows` - EC2 deployment workflows
+- :doc:`/deploy/ec2/index` - EC2 deployment workflows
 - :doc:`/frameworks/torch/index` - Complete PyTorch Neuron documentation
 - :doc:`/compiler/index` - Understanding Neuron compilation

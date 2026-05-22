@@ -31,6 +31,15 @@ Neuron Open Source GitHub Repositories
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-agentic-development
 
+   .. grid-item-card::
+      :class-body: sphinx-design-class-title-small
+
+      **Neuron Explorer CDK Open Source**
+      ^^^
+      AWS Cloud Development Kit (CDK) app (TypeScript, CDK v2) that deploys a self-hosted Neuron Explorer stack in your AWS account. Provisions the full profiling service: CloudFront + S3 frontend, IAM-authenticated API Gateway with Lambda handlers, Fargate metadata and analysis engines on shared EFS, and an event-driven Fargate or EC2 profile processing pipeline with Bedrock-backed AI recommendations.
+
+      * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-explorer-cdk
+
    .. grid-item-card:: 
       :class-body: sphinx-design-class-title-small
  
@@ -83,6 +92,7 @@ For the specific details on licenses and contributing to each OSS repo, review t
 
 * Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md
 * Contribute to Neuron Agentic Development: https://github.com/aws-neuron/neuron-agentic-development/blob/main/CONTRIBUTING.md
+* Contribute to Neuron Explorer CDK: https://github.com/aws-neuron/neuron-explorer-cdk/blob/main/CONTRIBUTING.md
 * Contribute to the NKI Library: https://github.com/aws-neuron/nki-library/blob/main/CONTRIBUTING.md
 * Contribute the the NKI samples: https://github.com/aws-neuron/nki-samples/blob/main/CONTRIBUTING.md
   

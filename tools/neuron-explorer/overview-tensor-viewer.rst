@@ -21,7 +21,7 @@ The Tensor Viewer contains the following information about all tensors in the NE
 * **load_to_sbuf_dma_count** - The total number of DMAs that loaded this tensor into the State Buffer.
 * **load_to_sbuf_repeat_factor** - How many times the system loaded this tensor into the State Buffer. A value of 1 means one load, 2 means two loads, and so on.
 
-.. image:: /tools/profiler/images/tensor-viewer-table.png
+.. image:: /tools/images/tensor-viewer-table.png
 
 You can use this data to match with framework-level instructions or for kernel development. You can also use it to search for instructions in the Device Timeline Viewer. 
 The SBUF loading information in the table can help you verify tensors are loaded efficiently.
@@ -33,4 +33,4 @@ You can use the Tensor Viewer with the Device Timeline Viewer and Search tool to
 Enter the variable_name from the table, into the DMA search field to see all DMA instructions that relate to that tensor.
 The example below shows a complete search for the tensor token_position_to_id:
 
-.. image:: /tools/profiler/images/tensor-viewer-search-example.png
+.. image:: /tools/images/tensor-viewer-search-example.png

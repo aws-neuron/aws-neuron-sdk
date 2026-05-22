@@ -18,7 +18,7 @@ The TensorFlow Neuron variant of this developer flow followed the same steps
 as the core Neuron Container on EKS flow. For the general procedure and
 prerequisites, see the current reference:
 
-- :doc:`Deploy Neuron Container on Elastic Kubernetes Service (EKS) for Inference </devflows/inference/dlc-then-eks-devflow>`
+- :doc:`Deploy Neuron Container on Elastic Kubernetes Service (EKS) for Inference </deploy/eks/inference>`
 
 TensorFlow Neuron is no longer supported by the SDK. If you are maintaining
 an existing TensorFlow Neuron workload, use the general procedure above with

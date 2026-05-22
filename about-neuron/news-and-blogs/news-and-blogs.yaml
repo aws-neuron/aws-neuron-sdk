@@ -20,6 +20,18 @@
 #     featured: true|false  # Set to true for featured articles section
 
 featured_articles:
+  - title: "Simplify AI infrastructure for AWS Trainium and Elastic Fabric Adapter with Kubernetes Dynamic Resource Allocation"
+    url: "https://aws.amazon.com/blogs/containers/simplify-ai-infrastructure-for-aws-trainium-and-elastic-fabric-adapter-with-kubernetes-dynamic-resource-allocation/"
+    description: "How the Neuron DRA driver for AWS Trainium and the EFA DRA driver in the upstream DRANET project use Kubernetes Dynamic Resource Allocation to simplify provisioning of accelerators and high-performance networking for AI workloads on Amazon EKS."
+    author: "AWS"
+    author_url: "https://aws.amazon.com/blogs/containers/"
+    date: "2026-05-18"
+    category: "blog"
+    locale: "en-US"
+    keywords: ["trainium", "eks", "kubernetes", "dra", "dynamic-resource-allocation", "efa", "neuron-dra-driver", "ultraserver"]
+    featured: true
+    icon: "🧩"
+
   - title: "Announcing AWS Neuron SDK 2.29 with NKI and Neuron Explorer out of Beta"
     url: "https://aws.amazon.com/about-aws/whats-new/2026/04/announcing-neuron-2-29/"
     description: "Neuron SDK 2.29 promotes NKI and Neuron Explorer from Beta to Stable, introduces the NKI Standard Library and CPU Simulator, expands the NKI Library with 7 new kernels, and updates the vLLM Neuron Plugin to 0.5.0."

@@ -1,4 +1,0 @@
-* :ref:`byoc-hosting-devflow-inf2`
-* :ref:`byoc-hosting-devflow`
-* :ref:`neo-then-hosting-devflow`
-* `AWS Neuron Sagemaker Samples GitHub Repository <https://github.com/aws-neuron/aws-neuron-sagemaker-samples>`_

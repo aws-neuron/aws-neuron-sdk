@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron DLAMI component across all AWS Neuron SDK versions.
     :keywords: neuron dlami, deep learning ami, release notes, aws neuron sdk
-    :date-modified: 04/09/2026
+    :date-modified: 05/21/2026
 
 .. _dlamis_rn:
 .. _dlami-rn-known-issues:
@@ -10,6 +10,35 @@ Component Release Notes for Neuron DLAMI
 =========================================
 
 The release notes for the Neuron DLAMI component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _dlami-2-30-0-rn:
+
+Neuron DLAMIs (Neuron 2.30.0 Release)
+------------------------------------------------------------------------
+
+
+Date of Release: 5/21/2026
+
+Updates
+~~~~~~~~
+
+* The single-framework JAX AMI and multi-framework DLAMIs have been upgraded to JAX 0.9.0 and ``jax-neuronx 0.10.0``.
+* All single-framework and multi-framework DLAMIs released alongside Neuron SDK version 2.30.0 now include the ``neuron_agentic_development`` package. For details, see :doc:`/about-neuron/agentic-development-overview`.
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.30.0.
+
+Callouts
+~~~~~~~~~
+
+* Neuron no longer supports the Ubuntu 22.04 variant of the base Neuron AMI. Users who still need access to previously released versions can retrieve the last published AMI ID via SSM:
+
+  .. code-block::
+
+      aws ssm get-parameter \
+      --region us-east-1 \
+      --name /aws/service/neuron/dlami/base/ubuntu-22.04/latest/image_id \
+      --query "Parameter.Value" \
+      --output text
+
 
 .. _dlami-2-29-0-rn:   
 
@@ -20,13 +49,13 @@ Neuron DLAMIs (Neuron 2.29.0 Release)
 Date of Release: 04/09/2026
 
 Improvements
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 * All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.29.0.
 
 
 Callouts
-~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 .. important::
     Announcing maintenance mode for NxDT and NxD Core Training APIs starting next release. Starting with Neuron 2.30.0, NxDT and NxD Core Training APIs are entering maintenance mode. Future releases will address critical security issues only and support will be gradually ended. The NxDT virtual environment in both single and multi-framework DLAMIs has been pinned to include ``neuronx_distributed_training-1.7.0``.

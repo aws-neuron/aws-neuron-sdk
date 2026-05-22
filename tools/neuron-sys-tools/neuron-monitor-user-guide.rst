@@ -913,4 +913,4 @@ The default value for ``--period`` is ``15``.
 Running neuron monitor in Kubernetes environment
 -------------------------------------------------
 
-For running neuron monitor in Kubernetes environment, please refer to instructions `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/kubernetes-getting-started.html>`_.
+For running neuron monitor in Kubernetes environment, please refer to instructions `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/setup.html>`_.

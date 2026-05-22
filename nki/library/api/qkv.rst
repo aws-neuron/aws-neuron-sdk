@@ -1,6 +1,6 @@
 .. meta::
     :description: QKV kernel performs Query-Key-Value projection with optional normalization and RoPE fusion.
-    :date-modified: 02/13/2026
+    :date-modified: 05/21/2026
 
 .. currentmodule:: nkilib.core.qkv
 
@@ -36,7 +36,7 @@ API Reference
 qkv
 ^^^
 
-.. py:function:: qkv(input: nl.ndarray, fused_qkv_weights: nl.ndarray, output_layout: QKVOutputLayout = QKVOutputLayout.BSD, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, qkv_w_scale: Optional[nl.ndarray] = None, qkv_in_scale: Optional[nl.ndarray] = None, fused_residual_add: Optional[bool] = False, mlp_prev: Optional[nl.ndarray] = None, attention_prev: Optional[nl.ndarray] = None, fused_norm_type: NormType = NormType.NO_NORM, gamma_norm_weights: Optional[nl.ndarray] = None, layer_norm_bias: Optional[nl.ndarray] = None, norm_eps: float = 1e-6, hidden_actual: Optional[int] = None, fused_rope: Optional[bool] = False, cos_cache: Optional[nl.ndarray] = None, sin_cache: Optional[nl.ndarray] = None, d_head: Optional[int] = None, num_q_heads: Optional[int] = None, num_kv_heads: Optional[int] = None, k_cache: Optional[nl.ndarray] = None, v_cache: Optional[nl.ndarray] = None, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, fp8_max: Optional[float] = None, fp8_min: Optional[float] = None, kv_dtype: Optional[type] = None, use_block_kv: bool = False, block_size: Optional[int] = None, slot_mapping: Optional[nl.ndarray] = None, store_output_in_sbuf: bool = False, sbm: Optional[SbufManager] = None, use_auto_allocation: bool = False, load_input_with_DMA_transpose: bool = True, is_input_swizzled: bool = False) -> nl.ndarray
+.. py:function:: qkv(input: nl.ndarray, fused_qkv_weights: nl.ndarray, output_layout: QKVOutputLayout = QKVOutputLayout.BSD, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, qkv_w_scale: Optional[nl.ndarray] = None, qkv_in_scale: Optional[nl.ndarray] = None, fused_residual_add: Optional[bool] = False, mlp_prev: Optional[nl.ndarray] = None, attention_prev: Optional[nl.ndarray] = None, fused_norm_type: NormType = NormType.NO_NORM, gamma_norm_weights: Optional[nl.ndarray] = None, layer_norm_bias: Optional[nl.ndarray] = None, norm_eps: float = 1e-6, hidden_actual: Optional[int] = None, fused_rope: Optional[bool] = False, cos_cache: Optional[nl.ndarray] = None, sin_cache: Optional[nl.ndarray] = None, k_cos_cache: Optional[nl.ndarray] = None, k_sin_cache: Optional[nl.ndarray] = None, d_head: Optional[int] = None, num_q_heads: Optional[int] = None, num_kv_heads: Optional[int] = None, k_cache: Optional[nl.ndarray] = None, v_cache: Optional[nl.ndarray] = None, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, fp8_max: Optional[float] = None, fp8_min: Optional[float] = None, kv_dtype: Optional[type] = None, use_block_kv: bool = False, transpose_k_cache: bool = False, block_size: Optional[int] = None, slot_mapping: Optional[nl.ndarray] = None, store_output_in_sbuf: bool = False, sbm: Optional[SbufManager] = None, use_auto_allocation: bool = False, load_input_with_DMA_transpose: bool = True, is_h_dim_4h_transposed: bool = False, weight_layout: QKVWeightLayout = QKVWeightLayout.CONTIGUOUS, transposed_in: bool = False, qk_norm_pre_rope: Optional[QKNormConfig] = None, qk_norm_post_rope: Optional[QKNormConfig] = None, qk_norm_pre_rope_q_gamma: Optional[nl.ndarray] = None, qk_norm_pre_rope_k_gamma: Optional[nl.ndarray] = None, qk_norm_post_rope_q_gamma: Optional[nl.ndarray] = None, qk_norm_post_rope_k_gamma: Optional[nl.ndarray] = None, qk_norm_pre_rope_q_beta: Optional[nl.ndarray] = None, qk_norm_pre_rope_k_beta: Optional[nl.ndarray] = None, qk_norm_post_rope_q_beta: Optional[nl.ndarray] = None, qk_norm_post_rope_k_beta: Optional[nl.ndarray] = None, strided_input_config: Optional[StridedInputConfig] = None, output_hbm: Optional[nl.ndarray] = None) -> nl.ndarray
 
    QKV (Query, Key, Value) projection kernel with multiple optional fused operations.
     
@@ -80,6 +80,10 @@ qkv
    :type cos_cache: ``nl.ndarray``, optional
    :param sin_cache: Sine cache for RoPE. Shape: [B, S, d_head]. Required if fused_rope=True.
    :type sin_cache: ``nl.ndarray``, optional
+   :param k_cos_cache: Separate cosine cache for K heads when using QK-norm with separate Q/K RoPE caches. Shape: [B, S, d_head].
+   :type k_cos_cache: ``nl.ndarray``, optional
+   :param k_sin_cache: Separate sine cache for K heads when using QK-norm with separate Q/K RoPE caches. Shape: [B, S, d_head].
+   :type k_sin_cache: ``nl.ndarray``, optional
    :param d_head: Dimension per attention head. Required for QKVOutputLayout.NBSd and RoPE.
    :type d_head: ``int``, optional
    :param num_q_heads: Number of query heads. Required for RoPE.
@@ -102,6 +106,8 @@ qkv
    :type kv_dtype: ``type``, optional
    :param use_block_kv: Whether to use block-based KV cache layout. When ``True``, requires ``block_size`` and ``slot_mapping``. Default: False.
    :type use_block_kv: ``bool``
+   :param transpose_k_cache: Whether to write K cache in transposed layout (head_dim, block_size) for more efficient decode attention. Default: False.
+   :type transpose_k_cache: ``bool``
    :param block_size: Number of tokens per block in block KV cache. Required when ``use_block_kv=True``.
    :type block_size: ``int``, optional
    :param slot_mapping: Mapping from token positions to block slots for block KV cache. Required when ``use_block_kv=True``.
@@ -114,8 +120,36 @@ qkv
    :type use_auto_allocation: ``bool``
    :param load_input_with_DMA_transpose: Whether to use DMA transpose optimization. Default: True.
    :type load_input_with_DMA_transpose: ``bool``
-   :param is_input_swizzled: Whether the input tensor is swizzled (only applicable with MX Quantization). Default: False.
-   :type is_input_swizzled: ``bool``
+   :param is_h_dim_4h_transposed: Whether the weight tensor has the H dimension transposed by 4 (MX quantization layout). Default: False.
+   :type is_h_dim_4h_transposed: ``bool``
+   :param weight_layout: Weight tensor layout. Default: QKVWeightLayout.CONTIGUOUS.
+   :type weight_layout: ``QKVWeightLayout``
+   :param transposed_in: Whether the input tensor is in transposed layout [B, H, S]. Default: False.
+   :type transposed_in: ``bool``
+   :param qk_norm_pre_rope: QK-norm configuration to apply before RoPE rotation.
+   :type qk_norm_pre_rope: ``QKNormConfig``, optional
+   :param qk_norm_post_rope: QK-norm configuration to apply after RoPE rotation.
+   :type qk_norm_post_rope: ``QKNormConfig``, optional
+   :param qk_norm_pre_rope_q_gamma: Gamma weights for pre-RoPE Q normalization.
+   :type qk_norm_pre_rope_q_gamma: ``nl.ndarray``, optional
+   :param qk_norm_pre_rope_k_gamma: Gamma weights for pre-RoPE K normalization.
+   :type qk_norm_pre_rope_k_gamma: ``nl.ndarray``, optional
+   :param qk_norm_post_rope_q_gamma: Gamma weights for post-RoPE Q normalization.
+   :type qk_norm_post_rope_q_gamma: ``nl.ndarray``, optional
+   :param qk_norm_post_rope_k_gamma: Gamma weights for post-RoPE K normalization.
+   :type qk_norm_post_rope_k_gamma: ``nl.ndarray``, optional
+   :param qk_norm_pre_rope_q_beta: Beta weights for pre-RoPE Q normalization.
+   :type qk_norm_pre_rope_q_beta: ``nl.ndarray``, optional
+   :param qk_norm_pre_rope_k_beta: Beta weights for pre-RoPE K normalization.
+   :type qk_norm_pre_rope_k_beta: ``nl.ndarray``, optional
+   :param qk_norm_post_rope_q_beta: Beta weights for post-RoPE Q normalization.
+   :type qk_norm_post_rope_q_beta: ``nl.ndarray``, optional
+   :param qk_norm_post_rope_k_beta: Beta weights for post-RoPE K normalization.
+   :type qk_norm_post_rope_k_beta: ``nl.ndarray``, optional
+   :param strided_input_config: Configuration for strided input access patterns.
+   :type strided_input_config: ``StridedInputConfig``, optional
+   :param output_hbm: Pre-allocated output tensor in HBM. If provided, the kernel writes output directly to this tensor.
+   :type output_hbm: ``nl.ndarray``, optional
    :return: QKV projection output tensor with shape determined by output_layout.
    :rtype: ``nl.ndarray``
 

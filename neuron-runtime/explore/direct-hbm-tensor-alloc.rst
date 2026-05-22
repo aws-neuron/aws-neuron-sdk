@@ -23,13 +23,13 @@ Background
 
 * *Diagram 1: Device registration and allocation flow*
 
-  .. image:: /neuron-runtime/img/device-allocation-flow.png
+  .. image:: /neuron-runtime/images/device-allocation-flow.png
      :align: center
      :width: 80%
 
 * *Diagram 2: Tensor allocation behaviour*
 
-  .. image:: /neuron-runtime/img/tensor-allocation-behavior.png
+  .. image:: /neuron-runtime/images/tensor-allocation-behavior.png
      :align: center
      :width: 80%
 

@@ -63,7 +63,7 @@ The execution time of a collective communication operation consists of two porti
 Ring Algorithm
 --------------
 
-.. image:: /neuron-runtime/img/collectives/ring-algorithm.png
+.. image:: /neuron-runtime/images/collectives/ring-algorithm.png
    :alt: Ring Algorithm
    :align: center
 
@@ -87,7 +87,7 @@ This algorithm is a concatenation of the above two patterns (ReduceScatter follo
 Mesh Algorithm
 --------------
 
-.. image:: /neuron-runtime/img/collectives/mesh-algorithm.png
+.. image:: /neuron-runtime/images/collectives/mesh-algorithm.png
    :alt: Mesh Algorithm
    :align: center
 
@@ -116,7 +116,7 @@ The Single-step Mesh algorithm is a variant of Mesh specifically designed for Al
 KangaRing Algorithm
 -------------------
 
-.. image:: /neuron-runtime/img/collectives/kangaring-algorithm.png
+.. image:: /neuron-runtime/images/collectives/kangaring-algorithm.png
    :alt: KangaRing Algorithm
    :align: center
 
@@ -137,7 +137,7 @@ KangaRing is an option for TP replica-groups where all ranks in device are in sa
 Recursive Doubling and Halving (RDH) Algorithm
 -----------------------------------------------
 
-.. image:: /neuron-runtime/img/collectives/rdh-interchip-algorithm.png
+.. image:: /neuron-runtime/images/collectives/rdh-interchip-algorithm.png
    :alt: RDH Algorithm at the inter-node level
    :align: center
 
@@ -188,7 +188,7 @@ Algorithm Summary
      - Reduced
      - >56MB
 
-.. image:: /neuron-runtime/img/collectives/mesh-rdh-kr-summary.png
+.. image:: /neuron-runtime/images/collectives/mesh-rdh-kr-summary.png
    :alt: Comparison of message size for RDH, KangaRing, and Mesh algorithms
    :align: center
 

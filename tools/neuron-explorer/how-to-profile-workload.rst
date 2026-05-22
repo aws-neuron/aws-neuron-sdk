@@ -677,7 +677,7 @@ Profile Manager
 
 Profile Manager is a page for uploading artifact (NEFF, NTFF and source code) and selecting profiles to access.
 
-.. image:: /tools/profiler/images/profile-workload-3.png
+.. image:: /tools/images/profile-workload-3.png
 
 .. _profile-manager-upload-profile:
 
@@ -696,7 +696,7 @@ Select "Directory Upload" to upload profile files from a directory.
    * "Profile name" is a required field. You cannot upload a profile with existing name unless the option "Force Upload" is checked at the bottom. Force Upload currently will overwrite the existing profile with the same name.
    * For uploading source code, the UI only supports the upload of folders, individual files, or compressed files in the gzipped tar ``.tar.gz`` archive format.
 
-.. image:: /tools/neuron-explorer/images/device-profile-upload-ui.png
+.. image:: /tools/images/device-profile-upload-ui.png
 
 
 .. _profile-manager-system-profile-upload:
@@ -711,7 +711,7 @@ For an example see the output in :ref:`neuron-explorer inspect <neuron-explorer-
 .. note::
    System Profile uploads only support "Directory Upload".
 
-.. image:: /tools/neuron-explorer/images/system-profile-upload-ui.png
+.. image:: /tools/images/system-profile-upload-ui.png
 
 
 **Processing Status**
@@ -723,7 +723,7 @@ After uploading a profile, the processing task is shown under "User Uploaded" ta
 
 All uploaded profiles are provided in the Profile Manager page with details such as the processing status and upload time, along with various quick access actions.
 
-.. image:: /tools/profiler/images/profile-workload-5.png
+.. image:: /tools/images/profile-workload-5.png
 
 * **Pencil button**: Rename a profile.
 * **Star button**: Mark this profile as favorite profile. This profile will be shown in the User's favorites list.
@@ -738,11 +738,11 @@ The UI is also available as a VSCode extension, enabling better native integrati
 
 Install the Neuron Explorer extension from the Visual Studio Code Marketplace. Open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer`` or ``amazonwebservices.neuron-explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
 
-.. image:: /tools/profiler/images/profile-workload-1.png
+.. image:: /tools/images/profile-workload-1.png
 
 Ensure the SSH tunnel is established by following the steps above. Otherwise, specify a custom endpoint by selecting the extension in the left activity bar. Then, navigate to the "Endpoint" action on the bottom bar of your VSCode session and select "Custom endpoint", and enter ``localhost:3002``. 
 
-.. image:: /tools/profiler/images/profile-workload-2.png
+.. image:: /tools/images/profile-workload-2.png
 
 From there, navigate to the **Profile Manager** page through the extension UI in the left activity bar.
 

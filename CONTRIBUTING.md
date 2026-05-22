@@ -26,11 +26,11 @@ Contributions via pull requests are much appreciated. Before sending us a pull r
 2. You check existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
 3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
 
-**Important**: Currently, local doc builds require a Python 3.9 environment. If you are on MacOS, you can install it from the terminal with `brew install python@3.9`. Add it to your working path with `brew link python@3.9` and confirm it works by running `python3.9 --version`.
+**Important**: Currently, local doc builds require a Python 3.10.* environment. If you are on MacOS, you can install it from the terminal with `brew install python@3.10`. Add it to your working path with `brew link python@3.10` and confirm it works by running `python3.10 --version`.
 
 ### Docker Build
 
-If you don't have Python 3.9/3.10 or a compatible gcc toolchain, use the Docker workflow:
+If you don't have Python 3.10 or a compatible gcc toolchain, use the Docker workflow:
 
 ```bash
 ./build.sh build   # Build Docker image (first time only)
@@ -49,11 +49,11 @@ To send us a pull request, please:
     git clone git@github.com:YOUR-USERNAME/private-aws-neuron-sdk-staging.git
     ```
 
-2. Install the build dependencies. This requires a Python 3.9 installation and venv:
+2. Install the build dependencies. This requires a Python 3.10 installation and venv:
 
     ```bash
     cd .. # The root folder where you have your cloned Git repos; don't run this in the repo folder but one level up or you'll have venv files in your repo folder
-    python3.9 -m venv venv && . venv/bin/activate
+    python3.10 -m venv venv && . venv/bin/activate
     pip install -U pip
     cd private-aws-neuron-sdk-staging
     pip install -r requirements.txt
@@ -128,4 +128,44 @@ If you discover a potential security issue in this project we ask that you notif
 
 See the [LICENSE-DOCUMENTATION](./LICENSE-DOCUMENTATION), [LICENSE-SAMPLECODE](./LICENSE-SAMPLECODE) and [LICENSE-SUMMARY-DOCS-SAMPLES](./LICENSE-SUMMARY-DOCS-SAMPLES) files for our project's licensing. We will ask you to confirm the licensing of your contribution.
 
-We may ask you to sign a [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger chan
+We may ask you to sign a [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
+
+## Troubleshooting
+
+If you can't seem to launch a build, chances are your venv is not using Python 3.10. From a terminal, `cd` into your repo clone and perform the following steps:
+
+### Configure Python 3.10 and a supporting venv
+
+1. Install Python 3.10 via `brew`: brew install python@3.10
+
+2. Create the Python 3.10 venv:
+
+  ```
+  python3.10 -m venv .venv
+  source .venv/bin/activate
+  pip install --upgrade pip
+  pip install -r requirements.txt
+  ```
+
+3. Build the docs with `make html` or `sphinx-build -b html . _build/html -j auto`
+
+
+### Activate a Python 3.10 venv
+
+1. If you are still in the wrong venv, drop it from your shell.
+`deactivate`
+
+2. Activate the new 3.10 venv.
+`source .venv/bin/activate`
+
+#. Confirm.
+`python -V `             # should print 3.10.20
+`which sphinx-build`     # should print .../private-aws-neuron-sdk-staging/.venv/bin/sphinx-build
+                         # if it still prints `/opt/homebrew/...`, the venv didn't take
+
+4. Install the pinned Sphinx + extensions.
+`pip install --upgrade pip`
+`pip install -r requirements.txt`
+
+5. Build the docs with `make html` or `sphinx-build -b html . _build/html -j auto`
+

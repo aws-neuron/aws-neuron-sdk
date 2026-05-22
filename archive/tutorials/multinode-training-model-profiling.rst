@@ -170,7 +170,7 @@ Once the profile is loaded in Perfetto, you'll see both nodes (2 in our case) al
 
 If you hover over or click on one of these calls, Perfetto will display details about which NEFF is being executed. While you may see other runtime API calls, our primary interest is in ``nc_exec_running`` since it directly represents the model execution on Neuron hardware.
 
-.. image:: /tools/profiler/images/multinode-training-1.png
+.. image:: /tools/images/multinode-training-1.png
 
 In the example trace shown, the calls to ``nc_exec_running`` appear back-to-back with no significant delays in between. This indicates that, at a system level, the runtime is efficiently dispatching work to NeuronCores. The ``model_name`` field in the arguments section will display the name of the NEFF which is being used in the corresponding ``nc_exec_running``.
 

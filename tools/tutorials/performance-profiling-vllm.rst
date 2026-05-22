@@ -132,15 +132,15 @@ Copy the ``system_profile.pftrace`` file to your local machine and open up the P
 
 In the left-hand menu, choose "Open trace file" and select your ``system_profile.pftrace`` file to view the system profile. Expand the first row under Default Workspace and you will see a timeline view similar to the following:
 
-.. image:: /tools/profiler/images/perf-profiling-1.png
+.. image:: /tools/images/perf-profiling-1.png
 
 The system profile shows a high-level chronological view of the various Neuron Runtime API calls that took place during your example inference workload. If you hover the mouse cursor over the various pink/green bars you can see which specific API call occurred at each time point, such as ``nrt_tensor_read``, ``nrt_tensor_write``, ``nrt_execute``, and ``nrt_load_collectives``.
 
 Look for the **nrt_execute** bar identified below and select it. This will open an information dialog providing details of the specific ``nrt_execute`` call:
 
-.. image:: /tools/profiler/images/perf-profiling-2.png
+.. image:: /tools/images/perf-profiling-2.png
 
-.. image:: /tools/profiler/images/perf-profiling-3.png
+.. image:: /tools/images/perf-profiling-3.png
 
 In the Arguments pane you will find useful information such as the following:
 
@@ -167,9 +167,9 @@ If you look inside the ``neuron_profiles`` directory that was created during Ste
 
 While you are free to view any of the device-level profiles using the Neuron Explorer UI, it is often more useful to start from the system-level profile and identify a specific device-level profile of interest. Let's refer back to the nrt_execute region of the system-level profile that was covered in the previous section. Please find and left-click this region to bring up the information dialog at the bottom of Perfetto:
 
-.. image:: /tools/profiler/images/perf-profiling-4.png
+.. image:: /tools/images/perf-profiling-4.png
 
-.. image:: /tools/profiler/images/perf-profiling-5.png
+.. image:: /tools/images/perf-profiling-5.png
 
 In the device_profile field, note that numerical ID that is included at the end of the device profile name, in this case 2120860766. This ID is what you will use to locate the NEFF/NTFF pair associated with this specific nrt_execute API call.
 
@@ -179,7 +179,7 @@ Use the following find command (substituting-in your device profile ID) to locat
 
     find ./neuron_profiles -name \*2120860766\* | sort
 
-.. image:: /tools/profiler/images/perf-profiling-6.png
+.. image:: /tools/images/perf-profiling-6.png
 
 In the above output you can see that there is a single NEFF file ``neff_2120860766.neff``, and multiple NTFF files ``2120860766_instid_0_vnc_0.ntff`` ... ``2120860766_instid_0_vnc_7.ntff`` each representing the profile trace for one of the 8 NeuronCores that participated in this inference request.
 
@@ -219,19 +219,19 @@ Once the SSH tunnel is setup, you can now open a browser and navigate to http://
 
 With the Neuron Explorer UI open, go to "Profile Manager", and click "Upload Profile" at the top-right of the screen. Give your profile an appropriate name, and upload the NEFF and NTFF files that you previously identified:
 
-.. image:: /tools/profiler/images/perf-profiling-7.png
+.. image:: /tools/images/perf-profiling-7.png
 
 After a few seconds, you should receive a message indicating that NEFF/NTFF were uploaded successfully:
 
-.. image:: /tools/profiler/images/perf-profiling-8.png
+.. image:: /tools/images/perf-profiling-8.png
 
 Within the Neuron Explorer UI, go tot he Profile Manager screen and look for your newly uploaded profile.
 
-.. image:: /tools/profiler/images/perf-profiling-9.png
+.. image:: /tools/images/perf-profiling-9.png
 
 Depending on the size of your profile, it could take a few minutes before the Status field shows "PROCESSED". Once processing is complete, click the profile name to open the profile:
 
-.. image:: /tools/profiler/images/perf-profiling-10.png
+.. image:: /tools/images/perf-profiling-10.png
 
 Confirmation
 ------------

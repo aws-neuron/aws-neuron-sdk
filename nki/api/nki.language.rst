@@ -54,6 +54,8 @@ Math operations
    :nosignatures:
 
    abs
+   abs_max
+   abs_min
    add
    arctan
    ceil
@@ -207,7 +209,6 @@ Indexing operations
    where
    gather_flattened
 
-
 .. _nl_iterators:
 
 Iterators
@@ -299,3 +300,16 @@ Constants
    :hidden:
 
    nki.language.tile_size
+
+
+.. _nl_operator_constants:
+
+Operator Constants
+-------------------
+
+.. autosummary::
+   :toctree: generated
+   :nosignatures:
+
+   prelu
+   bypass

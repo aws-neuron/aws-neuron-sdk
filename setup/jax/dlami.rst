@@ -5,7 +5,7 @@
    :installation-method: dlami
    :instance-types: inf2, trn1, trn2, trn3
    :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.10, 3.11, 3.12
+   :python-versions: 3.11, 3.12
    :content-type: installation-guide
    :estimated-time: 5 minutes
    :date-modified: 2026-03-03
@@ -18,7 +18,7 @@ Install JAX with Neuron support using pre-configured AWS Deep Learning AMIs.
 ⏱️ **Estimated time**: 5 minutes
 
 .. note::
-   Want to read about Neuron's Deep Learning machine images (DLAMIs) before diving in? Check out the :doc:`/dlami/index`.
+   Want to read about Neuron's Deep Learning machine images (DLAMIs) before diving in? Check out the :doc:`/deploy/environments/dlami`.
 
 ----
 
@@ -143,7 +143,7 @@ Installation Steps
             .. code-block:: bash
                
                python --version
-               # Should be 3.10 or higher
+               # Should be 3.11 or higher
          
          3. Reinstall jax-neuronx:
             
@@ -182,6 +182,9 @@ Installation Steps
       :sync: ubuntu-22-04
       
       **Step 1: Find the Latest AMI**
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       Get the latest JAX DLAMI for Ubuntu 22.04:
       
@@ -240,7 +243,7 @@ Installation Steps
          If you see ``ModuleNotFoundError: No module named 'jax_neuronx'``:
          
          1. Verify virtual environment is activated
-         2. Check Python version: ``python --version`` (should be 3.10+)
+         2. Check Python version: ``python --version`` (should be 3.11+)
          3. Reinstall: ``pip install --force-reinstall jax-neuronx``
       
       .. dropdown:: ⚠️ Troubleshooting: No Neuron devices found
@@ -319,7 +322,7 @@ Installation Steps
          If you see ``ModuleNotFoundError: No module named 'jax_neuronx'``:
          
          1. Verify virtual environment is activated
-         2. Check Python version: ``python --version`` (should be 3.10+)
+         2. Check Python version: ``python --version`` (should be 3.11+)
          3. Reinstall: ``pip install --force-reinstall jax-neuronx``
       
       .. dropdown:: ⚠️ Troubleshooting: No Neuron devices found
@@ -362,7 +365,7 @@ Now that JAX is installed:
 Additional Resources
 --------------------
 
-- :doc:`/dlami/index` - DLAMI documentation
-- :doc:`/containers/index` - Container-based deployment
+- :doc:`/deploy/environments/dlami` - DLAMI documentation
+- :doc:`/deploy/index` - Container-based deployment
 - :doc:`../troubleshooting` - Common issues and solutions
 - :doc:`/release-notes/index` - Version compatibility information

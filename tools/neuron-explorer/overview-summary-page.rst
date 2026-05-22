@@ -7,7 +7,7 @@ Summary Viewer
 
 The Neuron Explorer summary viewer provides a streamlined view of your profile's most critical performance insights, enabling quick identification of issues and optimization opportunities without navigating through detailed data.
 
-.. image:: /tools/profiler/images/explorer-summary-page.png
+.. image:: /tools/images/explorer-summary-page.png
 
 Benefits
 --------

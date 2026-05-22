@@ -5,10 +5,10 @@
    :installation-method: manual
    :instance-types: inf2, trn1, trn2, trn3
    :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.10, 3.11, 3.12
+   :python-versions: 3.11, 3.12, 3.13
    :content-type: installation-guide
    :estimated-time: 15 minutes
-   :date-modified: 2026-03-30
+   :date-modified: 2026-05-15
 
 Install PyTorch via manual installation
 ========================================
@@ -38,7 +38,7 @@ Prerequisites
    * - Operating System
      - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
    * - Python Version
-     - Python 3.10, 3.11, or 3.12
+     - Python 3.11, 3.12 or 3.13
    * - AWS Account
      - With EC2 permissions
    * - SSH Key Pair
@@ -112,6 +112,9 @@ Installation steps
       :sync: ubuntu-22-04
 
       **Step 1: Launch instance**
+
+      .. important::
+         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
 
       * Follow the instructions to `launch an Amazon EC2 Instance <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance>`_.
       * Select Ubuntu Server 22 AMI.
@@ -199,7 +202,7 @@ Next steps
 
 - :doc:`/frameworks/torch/training-torch-neuronx` - Training on Trn1/Trn2
 - :doc:`/frameworks/torch/inference-torch-neuronx` - Inference on Inf2/Trn1/Trn2
-- :doc:`/tools/profiler/neuron-profile-user-guide` - Profile your workloads
+- :doc:`/tools/neuron-explorer/index` - Profile your workloads
 - :doc:`/tools/neuron-sys-tools/neuron-top-user-guide` - Monitor system resources
 
 Advanced
@@ -212,6 +215,6 @@ Additional resources
 
 - :doc:`dlami` - Use pre-configured DLAMI instead
 - :doc:`dlc` - Use pre-configured Docker containers
-- :doc:`/containers/index` - Container-based deployment
+- :doc:`/deploy/index` - Container-based deployment
 - :doc:`../troubleshooting` - Common issues and solutions
 - :doc:`/release-notes/index` - Version compatibility information

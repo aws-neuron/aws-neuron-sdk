@@ -8,7 +8,7 @@ NEURON_ULTRASERVER_MODE_X2H=2
 NEURON_ULTRASERVER_MODE_X2V=3
 NEURON_ULTRASERVER_MODE_X1=4
 
-ULTRASERVER_INIT_DIR=/root/ultraserver_init
+ULTRASERVER_INIT_DIR=/ultraserver_init
 SORTED_NODES_FILE=$ULTRASERVER_INIT_DIR/sorted_nodes.txt
 FQDN_MODE_FILE=$ULTRASERVER_INIT_DIR/fqdn_mode.txt
 ENV_VARS_FILE=$ULTRASERVER_INIT_DIR/us_env_vars.txt
@@ -21,6 +21,8 @@ export NEURON_GLOBAL_TOPOID0_HOST=""
 
 export NUM_WORKERS=0
 
+
+mkdir -p $ULTRASERVER_INIT_DIR
 cat /dev/null > $SORTED_NODES_FILE
 cat /dev/null > $FQDN_MODE_FILE
 cat /dev/null > $ENV_VARS_FILE
@@ -28,6 +30,8 @@ cat /dev/null > $NEW_HOST_FILE
 
 save_sorted_node_list() {
     # Gather ultraserver information from each worker node
+    # trn3pds exposes: node_id, reservation_id, ultraserver_mode
+    # trn2u exposes: node_id_N, server_id_N, ultraserver_mode
     mpirun --allow-run-as-root \
         --mca orte_keep_fqdn_hostnames 1 \
         -host $ip_list \
@@ -35,13 +39,19 @@ save_sorted_node_list() {
         -x NEURON_ULTRASERVER_NODE_ID_DEFAULT_VALUE \
         -x NEURON_ULTRASERVER_NODE_CONFIG \
         sh -c '
-            if [ -f "/sys/class/neuron_device/server_id_${NEURON_ULTRASERVER_NODE_CONFIG}" ]; then
+            # Read server ID: trn3pds uses reservation_id, trn2u uses server_id_N
+            if [ -f "/sys/class/neuron_device/reservation_id" ]; then
+                NEURON_ULTRASERVER_SERVER_ID=$(cat /sys/class/neuron_device/reservation_id)
+            elif [ -f "/sys/class/neuron_device/server_id_${NEURON_ULTRASERVER_NODE_CONFIG}" ]; then
                 NEURON_ULTRASERVER_SERVER_ID=$(cat /sys/class/neuron_device/server_id_${NEURON_ULTRASERVER_NODE_CONFIG})
             else
                 NEURON_ULTRASERVER_SERVER_ID=$NEURON_ULTRASERVER_SERVER_ID_DEFAULT_VALUE
             fi
 
-            if [ -f "/sys/class/neuron_device/node_id_${NEURON_ULTRASERVER_NODE_CONFIG}" ]; then
+            # Read node ID: trn3pds uses node_id, trn2u uses node_id_N
+            if [ -f "/sys/class/neuron_device/node_id" ]; then
+                NEURON_ULTRASERVER_NODE_ID=$(cat /sys/class/neuron_device/node_id)
+            elif [ -f "/sys/class/neuron_device/node_id_${NEURON_ULTRASERVER_NODE_CONFIG}" ]; then
                 NEURON_ULTRASERVER_NODE_ID=$(cat /sys/class/neuron_device/node_id_${NEURON_ULTRASERVER_NODE_CONFIG})
             else
                 NEURON_ULTRASERVER_NODE_ID=$NEURON_ULTRASERVER_NODE_ID_DEFAULT_VALUE
