@@ -70,7 +70,6 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
    :maxdepth: 1
    :hidden:
 
-   Neuron Agentic Development </tools/neuron-agentic-development/index>
    System Tools </tools/neuron-sys-tools/index>
    Third-party Tools </tools/third-party-solutions>
    Tutorials </tools/tutorials/index>
