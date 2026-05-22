@@ -69,6 +69,10 @@ API Reference Guide
       :maxdepth: 1
       :hidden:
 
+      Get started <get-started/index>
+      Guides <guides/index>
+      Deep dives <deep-dives/index>
+      Migration <migration/index>
       NKI FAQ <nki_faq>
 
 
