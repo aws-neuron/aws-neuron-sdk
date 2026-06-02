@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Documentation Landing Page for TorchNeuron, the native PyTorch backend for AWS Trainium
-    :date-modified: 12/02/2025
+    :date-modified: 05/29/2026
     :keywords: AWS Neuron, PyTorch
 
 Native PyTorch for AWS Trainium
@@ -202,7 +202,7 @@ Not in the initial release. We are considering equivalent constructs for future 
 
 **Q: Can I compile my model using torch.compile on a compute instance without Trainium hardware?**
 
-No. The initial release requires compilation on Trainium instances (Trn1, Trn2, or Trn3). Future releases will support compilation on non-Trainium instances.
+No. The initial release requires compilation on Trainium2 or Trainium3 (Trn2 or Trn3) instances. Future releases will support compilation on Trn1 and non-Trainium instances.
 
 Eager Mode Execution FAQ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
