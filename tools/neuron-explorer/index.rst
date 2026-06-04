@@ -31,14 +31,14 @@ Getting Started
       :link-type: doc
       :class-card: sd-border-1
 
-      Set up Neuron Explorer, launch the web UI, and configure SSH tunneling for secure access to profiling data.
+      Capture a profile of your Neuron workload, launch Neuron Explorer, and upload your profile for interactive analysis in the browser or VS Code.
 
-   .. grid-item-card:: Capture and View Profiles
+   .. grid-item-card:: Capture Profiles
       :link: how-to-profile-workload
       :link-type: doc
       :class-card: sd-border-1
 
-      Learn how to capture and view profiles in the Neuron Explorer UI or directly in your IDE via VSCode Integration.
+      Learn how to capture profiles using PyTorch, JAX, environment variables, or the CLI.
 
 Visualization and Analysis
 ---------------------------
@@ -205,8 +205,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
    :maxdepth: 1
 
    Get Started <get-started>
-   Neuron Profiler to Neuron Explorer Migration Guide <migration-faq>
-   Capture and View Profiles <how-to-profile-workload>
+   Capture Profiles <how-to-profile-workload>
    Device Trace Viewer <overview-device-profiles>
    System Trace Viewer <overview-system-profiles>
    Hierarchy Viewer <overview-hierarchy-view>
@@ -218,4 +217,5 @@ For detailed migration guidance, including CLI command mappings and feature comp
    Region Highlighter <overview-region-highlighter>
    AI Recommendation Viewer <overview-ai-recommendations>
    View Profiles with Perfetto <view-perfetto>
+   Neuron Profiler to Neuron Explorer Migration Guide <migration-faq>
    

@@ -327,7 +327,7 @@ For more details, see :ref:`neuron-2-27-0-nxd-inference`.
 Neuron Graph Compiler
 ^^^^^^^^^^^^^^^^^^^^^
 
-Default accuracy settings are now optimized for precision. The ``--auto-cast`` flag defaults to ``none`` (previously ``matmul``), and ``--enable-mixed-precision-accumulation`` is enabled by default. FP32 models may see performance impacts; restore previous behavior with ``--auto-cast=matmul`` and ``--disable-mixed-precision-accumulation``. Python 3.10 or higher is now required.
+Default accuracy settings are now optimized for precision. The ``--auto-cast`` flag defaults to ``none`` (previously ``matmul``), and ``--enable-mixed-precision-accumulation`` is enabled by default. FP32 models may see performance impacts; restore previous behavior with ``--auto-cast=matmult`` and ``--disable-mixed-precision-accumulation``. Python 3.10 or higher is now required.
 
 For more details, see :ref:`neuron-2-27-0-compiler`.
 

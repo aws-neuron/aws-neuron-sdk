@@ -1,57 +1,402 @@
 .. meta::
-    :description: Learn how to capture a profile, launch the Neuron Explorer UI, and use the Profile Manager to analyze your workload performance.
-    :date-modified: 12/02/2025
+    :description: Learn how to capture system and device profiles from your Neuron workloads using PyTorch, JAX, environment variables, or the CLI.
+    :date-modified: 06/02/2026
 
-Capture and View Profiles in Neuron Explorer
-================================================
+Capture profiles with Neuron Explorer
+======================================
 
-Capturing Profiles
-------------------
-In this guide, you'll learn how to capture a profile, launch the Neuron Explorer, use the Profile Manager, and view Neuron Explorer in your IDE.
+Overview
+--------
 
-To get a better understanding of your workload's performance, you must collect the raw device traces and runtime metadata in the form of an NTFF (Neuron Trace File Format) which you can then correlate with the compiled NEFF (Neuron Executable File Format) to derive insights.
+This guide covers every way to capture profiling data from your Neuron workloads. Once you have a profile, see the :ref:`Getting Started Guide <new-neuron-profiler-setup>` for how to launch Neuron Explorer, upload, and view results.
 
-Set the following environment variables before compiling to capture more descriptive layer names and stack frame information.
+**What you'll learn:**
+
+* How to capture system and device profiles using PyTorch, JAX, environment variables, or CLI
+* What output files to expect and how to verify a successful capture
+* How to filter captures to reduce memory usage and file size
+
+Prerequisites
+--------------
+
+* A working model on a Trainium or Inferentia instance
+* The Neuron SDK installed (``torch-neuronx`` or ``jax-neuronx``, ``aws-neuronx-tools``)
+
+.. _capture-how-profiling-works:
+
+What happens during profiling
+------------------------------
+
+When you profile a workload, the Neuron Runtime instruments your execution and writes trace data to disk:
+
+* **When** each operation started and how long it took
+* **Where** it ran (CPU, Neuron Runtime, or NeuronCore hardware)
+* **How much** memory and bandwidth was used
+
+.. _capture-setup:
+
+Setup (all methods)
+--------------------
+
+Set these environment variables **before compiling** to get descriptive layer names and source mapping in your profiles:
 
 .. code-block:: bash
 
    export XLA_IR_DEBUG=1
    export XLA_HLO_DEBUG=1
 
-For NKI developers, set ``NEURON_FRAMEWORK_DEBUG`` in addition to the two above to enable kernel source code tracking:
+For NKI kernel developers, also set:
 
 .. code-block:: bash
 
    export NEURON_FRAMEWORK_DEBUG=1
 
-If profiling was successful, you will see NEFF (``.neff``) and NTFF (``.ntff``) artifacts in the specified output directory similar to the following:
+These enable kernel source code tracking and richer op names in the timeline. They are recommended for all capture methods below.
+
+Choose your capture method
+----------------------------
+
+Choose the method that matches your framework and use case:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Method
+     - Best for
+   * - Native PyTorch Profiling (private beta)
+     - PyTorch models
+   * - JAX Profiling
+     - JAX models
+   * - Environment Variables
+     - Any framework, containerized workloads, EKS
+   * - CLI (``neuron-explorer inspect``)
+     - Quick system profiles without code changes
+
+.. _capture-pytorch:
+
+PyTorch profiling
+--------------------
+
+.. note::
+
+   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/frameworks/torch/pytorch-native-overview` to sign up.
+
+PyTorch profiling uses the standard ``torch.profiler.profile`` API extended with a ``NeuronConfig`` object that controls Neuron-specific data collection. For related Explorer viewers, see :doc:`System Trace Viewer </tools/neuron-explorer/overview-system-profiles>`.
+
+How it works
+~~~~~~~~~~~~
+
+Pass two activities to ``torch.profiler.profile``:
+
+* ``ProfilerActivity.CPU`` — framework-level CPU operations (PyTorch dispatch, Python stacks)
+* ``ProfilerActivity.PrivateUse1`` — Neuron runtime and device activity (controlled by NeuronConfig)
+
+Both are required for a complete CPU-to-device view.
+
+NeuronConfig profile modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each mode controls what gets collected and what output files are produced:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Mode
+     - What it captures
+     - Output files
+   * - ``ProfileMode.DEVICE``
+     - Hardware-level NeuronCore instructions
+     - ``.neff``, ``.ntff``
+   * - ``ProfileMode.RUNTIME``
+     - Neuron Runtime system-level trace
+     - ``trace_info.pb``, ``ntrace.pb``
+   * - ``ProfileMode.CPU_UTIL``
+     - Host CPU utilization
+     - ``cpu_util.pb``
+   * - ``ProfileMode.HOST_MEMORY``
+     - Host memory usage
+     - ``host_mem.pb``
+
+.. warning::
+
+   ``ProfileMode.DEVICE`` reserves approximately 5 GB of HBM on Trn2 for storing hardware notifications. Omit it if you don't need instruction-level device traces.
+
+NeuronConfig parameters
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Parameter
+     - Description
+   * - ``modes``
+     - List of ``ProfileMode`` values to enable. Defaults to ``[DEVICE, RUNTIME]``.
+   * - ``max_events_per_nc``
+     - Maximum number of trace events per NeuronCore.
+   * - ``capture_enabled_for_nc``
+     - Comma-separated NeuronCore indices or ranges to capture (for example, ``"0,1,2-5"``).
+   * - ``profile_output_dir``
+     - Directory for Neuron Runtime trace output files.
+   * - ``neff_cache_dir``
+     - Path to the NEFF cache directory. When set, cached NEFFs are copied into the
+       profile artifact directory on stop instead of creating additional copies at load time.
+   * - ``precache_node_info``
+     - When ``True`` (default), populates per-NEFF metadata during warm-up iterations
+       instead of lazily on the first profiled execution so that the actively profiled iteration has reduced overhead.
+
+Supported `torch.profiler.profile <https://docs.pytorch.org/docs/2.12/profiler.html>`_ arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following standard ``torch.profiler.profile`` arguments are supported when used with
+``NeuronConfig``:
+
+* ``schedule``
+* ``on_trace_ready``
+* ``record_shapes``
+* ``with_flops``
+* ``profile_memory``
+* ``with_stack``
+
+Basic example
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   import torch
+   from torch.profiler import profile, ProfilerActivity
+   from torch_neuronx.profiling import NeuronConfig, ProfileMode, NeuronProfiler
+
+   # Configure Neuron profiling
+   neuron_config = NeuronConfig(
+       modes=[ProfileMode.DEVICE, ProfileMode.RUNTIME],
+       profile_output_dir="./profile_output",
+   )
+
+   # NeuronProfiler.export_trace() places the framework trace
+   # in the same directory as Neuron system traces
+   exporter = NeuronProfiler(neuron_config)
+
+   # IMPORTANT: Warm up first (3+ iterations)
+   with torch.no_grad():
+       for _ in range(3):
+           model(x)
+
+   # Profile your workload
+   with profile(
+       activities=[ProfilerActivity.CPU, ProfilerActivity.PrivateUse1],
+       experimental_config=neuron_config,
+       on_trace_ready=exporter.export_trace,
+   ) as prof:
+       with torch.no_grad():
+           model(x)
+           torch.neuron.synchronize()  # Ensures device finishes before export
+
+**Why** ``torch.neuron.synchronize()``? Neuron is asynchronous, so the forward call queues work and returns immediately. Without sync, the profiler may export before the device finishes executing, producing an incomplete trace.
+
+Multi-rank example with host collective communication
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following demonstrates profiling a distributed workload that overlaps compute and
+collective communication:
+
+.. code-block:: python
+
+   import os
+   import torch
+   import torch.distributed as dist
+   import torch_neuronx
+   from torch_neuronx.profiling import NeuronConfig, ProfileMode, NeuronProfiler
+   from torch.profiler import ProfilerActivity, profile, record_function
+
+   def main():
+       dist.init_process_group(backend="neuron")
+       rank = dist.get_rank()
+       device = torch.device("neuron")
+       cc_stream = torch_neuronx.Stream(device)
+
+       exp_config = NeuronConfig(
+           modes=[ProfileMode.DEVICE, ProfileMode.RUNTIME,
+                  ProfileMode.CPU_UTIL, ProfileMode.HOST_MEMORY],
+           profile_output_dir="./profile_host_cc",
+           max_events_per_nc=100000,
+           capture_enabled_for_nc="0,1",
+       )
+       exporter = NeuronProfiler(exp_config)
+
+       with (
+           profile(
+               activities=[ProfilerActivity.CPU, ProfilerActivity.PrivateUse1],
+               experimental_config=exp_config,
+               with_stack=True,
+               on_trace_ready=exporter.export_trace,
+           ) as prof,
+           record_function("model_inference"),
+       ):
+           a = torch.randn(4096, 4096, device=device, dtype=torch.float32)
+           b = torch.randn(4096, 4096, device=device, dtype=torch.float32)
+           t = torch.randn(4 * 1024 * 1024, device=device, dtype=torch.float32)
+
+           # Warmup
+           for _ in range(3):
+               torch.matmul(a, b)
+               with torch_neuronx.stream(cc_stream):
+                   dist.all_reduce(t)
+           torch_neuronx.synchronize()
+           dist.barrier()
+
+           # Profiled iterations
+           for _ in range(10):
+               torch.matmul(a, b)
+               with torch_neuronx.stream(cc_stream):
+                   dist.all_reduce(t)
+           torch_neuronx.synchronize()
+           dist.barrier()
+
+       dist.destroy_process_group()
+
+   if __name__ == "__main__":
+       main()
+
+Launch command (Trn2, 4 ranks):
 
 .. code-block:: bash
 
-   output
-   └── i-0ade06f040a13f2bf_pid_210229
-       ├── 395760075800974_instid_0_vnc_0.ntff
-       └── neff_395760075800974.neff
+   TORCH_NEURONX_ENABLE_HOST_CC=1 \
+   TORCH_NEURONX_ENABLE_ASYNC_NRT=1 \
+   NEURON_RT_NUM_CORES=4 \
+   NEURON_RT_VIRTUAL_CORE_SIZE=2 \
+   torchrun \
+       --nproc_per_node 4 \
+       --rdzv_backend c10d \
+       --rdzv_endpoint localhost:29500 \
+       --local-ranks-filter 0 \
+       --tee 3 \
+       your_script.py
 
-Device profiles for the first execution of each NEFF per NeuronCore are captured, and NEFF/NTFF pairs with the same prefix (for PyTorch) or unique hash (for JAX or CLI) must be uploaded together. See the section on :ref:`uploading profiles <profile-manager-upload-profile>` for more details.
 
-JAX Profiling API
-~~~~~~~~~~~~~~~~~
+Ensuring NEFFs are in your output directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When using the JAX context-managed profiling API, set two extra environment variables to signal the profile plugin to begin capturing device profile data when the profiling API is invoked.
+If you don't see NEFF files in your profile output, they may be in a separate compiler cache.
+Set ``neff_cache_dir`` in NeuronConfig (or the ``TORCH_NEURONX_NEFF_CACHE_DIR`` environment
+variable) **before running your profiling script** to automatically include all relevant NEFFs
+in the profiler output directory. This also helps correlate ``nc_exec_running`` events to the
+relevant NEFF.
 
 .. code-block:: python
+
+   os.environ["TORCH_NEURONX_NEFF_CACHE_DIR"] = "./profile_output"
+
+Alternatively, find and copy them manually:
+
+.. code-block:: bash
+
+   find /tmp/neff_cache -name "*.neff" -printf '%T@ %p\n' | sort -rn | head -5
+   cp /tmp/neff_cache/<path>/*.neff ./profile_output/<instance_dir>/<session_dir>/
+
+.. _neuron-explorer-profile-expected-output:
+
+Expected output
+~~~~~~~~~~~~~~~
+
+.. code-block:: text
+
+   ./profile_output/
+   ├── <instance-id>_pid_<pid_0>/
+   │   └── <timestamp>/
+   │       ├── cpu_util.pb                 # CPU utilization
+   │       ├── host_mem.pb                 # Host memory
+   │       ├── neff_<hash_0>_vnc_0.neff
+   │       ├── neff_<hash_1>_vnc_0.neff
+   │       ├── ntrace.pb                   # System profile trace
+   │       ├── profile_nc_0_session_0.ntff # Device trace (NeuronCore 0)
+   │       ├── trace.json                  # Framework trace
+   │       └── trace_info.pb               # System profile metadata
+   └── <instance-id>_pid_<pid_1>/
+       └── ...                             # Same structure per rank
+
+What each file contains:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - File
+     - Description
+   * - ``.neff``
+     - Neuron Executable File Format — the compiled model graph. Required for device profile analysis.
+   * - ``.ntff``
+     - Neuron Trace File Format — raw device execution traces per NeuronCore.
+   * - ``ntrace.pb``
+     - System-level runtime events (API calls, model loads, executions).
+   * - ``trace_info.pb``
+     - Metadata about the system trace capture session.
+   * - ``cpu_util.pb``
+     - Sampled CPU utilization data per core.
+   * - ``host_mem.pb``
+     - Sampled host memory usage over time.
+   * - ``trace.json``
+     - Framework-level trace (PyTorch profiler output) showing CPU operations and call stacks.
+
+Verifying your capture was successful
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After profiling, check that your output directory is not empty and contains the expected files:
+
+.. code-block:: bash
+
+   ls -la ./profile_output/
+
+Common signs of a failed capture:
+
+* **Empty output directory** — profiling wasn't enabled or the workload didn't execute on Neuron.
+* **NTFF files are 0 bytes** — device profiling was enabled but no execution was captured (likely a warm-up issue).
+* **No .neff files** — see `Ensuring NEFFs are in your output directory`_ above.
+* **Only .pb files, no .ntff** — device profiling wasn't enabled; you captured a system profile only (may be intentional).
+
+For troubleshooting help, see :ref:`Troubleshooting <neuron-explorer-get-started-troubleshooting>` in the Getting Started guide.
+
+Correlating hardware execution with the NEFF
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the case of PyTorch eager profiling, you may come across many neffs. To correlate the hardware execution to the NEFF:
+
+* Use the ``neff_cache_dir`` from `NeuronConfig parameters`_.
+* In the profile find the events that led to a hardware execution by clicking on a ``nc_exec_running`` event in the hardware track of the system profile (has a ``/neuron_hw/`` in the track name). Find the full hierarchy of this event by clicking through the associated events in the dependency chain viewer.
+
+.. image:: /tools/images/dependency_chain_viewer_flow_id.png
+
+* Find the persistent NEFF cache name in the event details of the framework stream event linked to the hardware execution.
+
+.. image:: /tools/images/event_details_persistent_cache_key.png
+
+JAX profiling
+-------------
+
+JAX profiling uses the context-managed ``jax.profiler.trace`` API. Set two environment
+variables to enable device profile capture:
+
+.. code-block:: python
+
+   import os
+   import jax
 
    os.environ["NEURON_RT_INSPECT_DEVICE_PROFILE"] = "1"
    os.environ["NEURON_RT_INSPECT_OUTPUT_DIR"] = "./output"
 
-Then, profile a block of code:
-
-.. code-block:: python
-
    with jax.profiler.trace(os.environ["NEURON_RT_INSPECT_OUTPUT_DIR"]):
+       # Your JAX workload here
+       out = my_jax_function(inputs)
 
-Full code example:
+Full JAX example (distributed matmul with AllGather)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -59,64 +404,70 @@ Full code example:
    import os
    import jax
    import jax.numpy as jnp
-
    from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
    from jax.experimental.shard_map import shard_map
    from time import sleep
-   from functools import partial
 
    os.environ["NEURON_RT_INSPECT_DEVICE_PROFILE"] = "1"
    os.environ["NEURON_RT_INSPECT_OUTPUT_DIR"] = "./output"
 
    jax.config.update("jax_default_prng_impl", "rbg")
-
    mesh = Mesh(jax.devices(), ('i',))
 
    def device_put(x, pspec):
-     return jax.device_put(x, NamedSharding(mesh, pspec))
+       return jax.device_put(x, NamedSharding(mesh, pspec))
 
    lhs_spec = P('i', None)
    lhs = device_put(jax.random.normal(jax.random.key(0), (128, 128)), lhs_spec)
-
    rhs_spec = P('i', None)
    rhs = device_put(jax.random.normal(jax.random.key(1), (128, 16)), rhs_spec)
 
-
    @jax.jit
-   @partial(shard_map, mesh=mesh, in_specs=(lhs_spec, rhs_spec),
-            out_specs=rhs_spec)
+   @partial(shard_map, mesh=mesh, in_specs=(lhs_spec, rhs_spec), out_specs=rhs_spec)
    def matmul_allgather(lhs_block, rhs_block):
-     rhs = jax.lax.all_gather(rhs_block, 'i', tiled=True)
-     return lhs_block @ rhs
+       rhs = jax.lax.all_gather(rhs_block, 'i', tiled=True)
+       return lhs_block @ rhs
 
    with jax.profiler.trace(os.environ["NEURON_RT_INSPECT_OUTPUT_DIR"]):
-     out = matmul_allgather(lhs, rhs)
-     for i in range(10):
-         with jax.profiler.TraceAnnotation("my_label"+str(i)):
-             out = matmul_allgather(lhs, rhs)
-         sleep(0.001)
-
+       out = matmul_allgather(lhs, rhs)
+       for i in range(10):
+           with jax.profiler.TraceAnnotation("my_label" + str(i)):
+               out = matmul_allgather(lhs, rhs)
+           sleep(0.001)
 
    expected = lhs @ rhs
    with jax.default_device(jax.devices('cpu')[0]):
-     equal = jnp.allclose(jax.device_get(out), jax.device_get(expected), atol=1e-3, rtol=1e-3)
-     print("Tensors are the same") if equal else print("Tensors are different")
+       equal = jnp.allclose(jax.device_get(out), jax.device_get(expected), atol=1e-3, rtol=1e-3)
+   print("Tensors are the same") if equal else print("Tensors are different")
 
+Key differences from PyTorch profiling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _neuron-explorer-capture-environment-variables:
+* JAX uses ``jax.profiler.trace`` context manager instead of ``torch.profiler.profile``
+* Device profiling is controlled via environment variables (``NEURON_RT_INSPECT_DEVICE_PROFILE``),
+  not a NeuronConfig object
+* ``jax.profiler.TraceAnnotation`` lets you label regions in the timeline (similar to
+  ``record_function`` in PyTorch)
+
+.. important::
+
+   Do NOT set ``NEURON_RT_INSPECT_ENABLE=1`` when using ``jax.profiler``. These two mechanisms conflict: use one or the other.
+
 .. _neuron-explorer-non-framework-user-experience:
 
-Environment Variables
-~~~~~~~~~~~~~~~~~~~~~
+Environment variable profiling (framework-agnostic)
+----------------------------------------------------
 
-You can also control profiling with environment variables. This is useful when you can’t easily change your 
-application code, such as when running an executable which calls the Neuron Runtime or in a containerized 
-environment where the application code is built into the container image.
+Use environment variables when you cannot modify application code in containerized workloads, EKS deployments, or any executable that calls the Neuron Runtime.
+
+.. note::
+
+   When capturing with environment variables, profiling is enabled for the entire lifetime of the application. For finer-grained control over specific code regions, use the PyTorch or JAX APIs instead.
 
 .. _neuron-explorer-core-control-variables:
 
-Core Control Variables
-^^^^^^^^^^^^^^^^^^^^^^
+Core variables
+~~~~~~~~~~~~~~
 
 .. list-table::
    :widths: auto
@@ -125,24 +476,20 @@ Core Control Variables
 
    * - Variable
      - Description
-     - Default behavior
+     - Default
    * - ``NEURON_RT_INSPECT_ENABLE``
      - Set to ``1`` to enable profiling
-     - Enables system profiling and disables device profiling. To control which profile types are captured, see :ref:`Profile type selection <neuron-explorer-profile-type-selection>`
+     - Enables system profiling, disables device profiling
    * - ``NEURON_RT_INSPECT_OUTPUT_DIR``
-     - Directory for profile data output
-     - Default directory for captured profile data is ``./output``
+     - Directory for profile output
+     - ``./output``
 
 .. _neuron-explorer-profile-type-selection:
 
-Device or System Profile Type Selection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Profile type selection
+~~~~~~~~~~~~~~~~~~~~~~
 
-.. note:: 
-    
-    When ``NEURON_RT_INSPECT_ENABLE`` set to ``1``, ``NEURON_RT_INSPECT_SYSTEM_PROFILE`` is enabled by default (set to 1) and ``NEURON_RT_INSPECT_DEVICE_PROFILE`` is disabled by default (set to ``0``).
-
-When ``NEURON_RT_INSPECT_ENABLE`` = 1, two different profile types are available:
+When ``NEURON_RT_INSPECT_ENABLE=1``:
 
 .. list-table::
    :widths: auto
@@ -152,27 +499,30 @@ When ``NEURON_RT_INSPECT_ENABLE`` = 1, two different profile types are available
    * - Variable
      - Profile type
      - Description
-     - Enable capture
-     - Disable capture
+     - Default
+     - Valid values
    * - ``NEURON_RT_INSPECT_SYSTEM_PROFILE``
      - System-level
-     - Captures runtime system events and operations
-     - Set to ``1``
-     - Set to ``0``
+     - Runtime events and operations
+     - ``1`` (enabled)
+     - ``0`` (disabled), ``1`` (enabled)
    * - ``NEURON_RT_INSPECT_DEVICE_PROFILE``
      - Device-level
-     - Captures detailed NeuronCore hardware metrics
-     - Set to ``1``
-     - Set to ``0``
+     - NeuronCore hardware metrics
+     - ``0`` (disabled)
+     -
+       * ``0`` — disabled
+       * ``1`` or ``model`` — model-based profiling; captures the first execution of a unique NEFF per core as a separate NTFF (synchronous execution only)
+       * ``session`` — session-based profiling; captures all device activity per core in a single NTFF
 
 .. note::
 
-    These variables have no effect if ``NEURON_RT_INSPECT_ENABLE`` is not set to ``1``.
+   These variables have no effect unless ``NEURON_RT_INSPECT_ENABLE=1``.
 
 .. _neuron-explorer-advanced-config-vars:
-  
-Advanced configuration for System Profiles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Advanced configuration 
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :widths: auto
@@ -180,90 +530,16 @@ Advanced configuration for System Profiles
    :align: left
 
    * - Variable
-     - Profile type
      - Description
-     - Default behavior
+     - Default
    * - ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC``
-     - System-level
      - Maximum trace events per NeuronCore before oldest events are overwritten
      - 1,000,000
 
-.. note:: 
-    
-    Increasing the event limit will consume more host memory.
+Increasing the event limit consumes more host memory.
 
-Capture using nccom-test with Environment Variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Profiling can be enabled using environment variables. For simplicity, we have a quick way to generate a Neuron workload through using :ref:`nccom-test <nccom-test>`. nccom-test is a benchmarking tool which is already available with Neuron AMI.
-
-.. code-block:: shell
-
-    export NEURON_RT_INSPECT_ENABLE=1
-    export NEURON_RT_INSPECT_OUTPUT_DIR=./output
-    nccom-test allr allg -b 512kb -e 512kb -r 32 -n 10 -d fp32 -w 1 -f 512
-
-.. note::
-    If you have problems with nccom-test add the --debug flag.
-    If using a trn1.2xlarge instance, change -r 32 to -r 2 to use fewer neuron cores.
-
-To understand the profiling output see this section: :ref:`Inspect Output <neuron-explorer-inspect-output>`
-
-Capture with EKS
-^^^^^^^^^^^^^^^^
-
-Capturing a profile on EKS is most easily done through setting of environment variables as described in the section 
-:ref:`Non-framework specific User Experience <neuron-explorer-non-framework-user-experience>`. By using environment 
-variables, users do not need to change application code in their container image or modify their run commands. 
-
-Update the deployment yaml to include the ``NEURON_RT_INSPECT_ENABLE`` and ``NEURON_RT_INSPECT_OUTPUT_DIR`` 
-environment variables. For distributed workloads, it’s important that ``NEURON_RT_INSPECT_OUTPUT_DIR`` points to a 
-directory on a shared volume which all workers have access to.
-
-.. code-block:: yaml
-
-    apiVersion: v1
-    kind: Pod
-    metadata:
-    name: trn1-mlp
-    spec:
-    restartPolicy: Never
-    schedulerName: default-scheduler
-    nodeSelector:
-        beta.kubernetes.io/instance-type: trn1.32xlarge
-    containers:
-        - name: trn1-mlp
-        env:
-            - name: NEURON_RT_INSPECT_ENABLE
-            value: "1"
-            - name: NEURON_RT_INSPECT_OUTPUT_DIR
-            value: "/shared/output"
-        command: ['torchrun']
-        args:
-            - '--nnodes=1'
-            - '--nproc_per_node=32'
-            - 'train_torchrun.py'
-        image: ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO}:mlp
-        imagePullPolicy: IfNotPresent
-        resources:
-            limits: 
-            aws.amazon.com/neuron: 16
-
-
-.. note::
-
-    EKS users running PyTorch and JAX applications are still free to change their application code 
-    and use the PyTorch or JAX Python profiling APIs if they want finer-grained control over profiling. 
-    However, using the environment variables conveniently allows profiling without modifying the 
-    container image or application code.
-
-
-CLI
-~~~
-
-In certain cases, you may want to profile the application without requiring code modifications such as when deploying a containerized application through EKS. Note that when capturing with the CLI, profiling will be enabled for the entire lifetime of the application. If more granular control is required for profiling specific sections of the model, it is recommended to use the PyTorch or JAX APIs.
-
-To enable profiling without code change, run your workload with the following environment variables set:
+Basic usage
+~~~~~~~~~~~
 
 .. code-block:: bash
 
@@ -272,588 +548,309 @@ To enable profiling without code change, run your workload with the following en
    export NEURON_RT_INSPECT_OUTPUT_DIR=./output
    python train.py
 
-CLI reference for System Profiles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+EKS deployment
+~~~~~~~~~~~~~~
 
-In addition to controlling profiling with environment variables, you can use the ``neuron-explorer inspect`` command line interface 
-for profiling applications. This provides the same functionality as environment variables but helps you avoid typos, invalid arguments, 
-and provides a useful ``--help`` command to explain available options.
+Update your deployment YAML to include profiling environment variables. For distributed
+workloads, ``NEURON_RT_INSPECT_OUTPUT_DIR`` must point to a shared volume accessible by
+all workers.
 
-.. code-block:: shell
+.. code-block:: yaml
 
-   Usage:
-   neuron-explorer [OPTIONS] inspect [inspect-OPTIONS] [userscript...]
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: trn1-mlp
+   spec:
+     restartPolicy: Never
+     schedulerName: default-scheduler
+     nodeSelector:
+       beta.kubernetes.io/instance-type: trn1.32xlarge
+     containers:
+       - name: trn1-mlp
+         env:
+           - name: NEURON_RT_INSPECT_ENABLE
+             value: "1"
+           - name: NEURON_RT_INSPECT_OUTPUT_DIR
+             value: "/shared/output"
+         command: ['torchrun']
+         args:
+           - '--nnodes=1'
+           - '--nproc_per_node=32'
+           - 'train_torchrun.py'
+         image: ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO}:mlp
+         imagePullPolicy: IfNotPresent
+         resources:
+           limits:
+             aws.amazon.com/neuron: 16
 
-   Application Options:
-   -v, --version               Show version and exit
+CLI profiling with neuron-explorer inspect
+------------------------------------------
 
-   Help Options:
-   -h, --help                  Show this help message
+The ``neuron-explorer inspect`` command wraps your workload and captures a system profile
+without any code changes. It provides the same functionality as environment variables but
+with argument validation and a ``--help`` command.
 
-   [inspect command options]
-         -o, --output-dir=       Output directory for the inspection results (default: .)
-         -n, --num-trace-events= Maximum number of trace events to capture when profiling. Once hitting this limit, old events are dropped
+.. code-block:: bash
 
-   [inspect command arguments]
-   userscript:                 Run command/script that launches a Neuron workload. E.g. 'python app.py' or './runscript.sh'
-
-Example of using System Profiles CLI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-User can provide any type of their own script to generate a Neuron workload such as Pytorch to the System Profiles CLI. 
-For simplicity, we have a quick way to generate a Neuron workload 
-through using ``nccom-test``. ``nccom-test`` is a benchmarking tool which is already available with Neuron AMI and ``aws-neuronx-tools`` package.
-
-.. code-block:: shell
-
-    ubuntu@ip-172-31-63-210:~$ neuron-explorer inspect -o inspect-output-nccom-test nccom-test allg -b 512kb -e 512kb -r 32 -n 10 -d fp32 -w 1 -f 512
-    INFO[0000] Running command "nccom-test allg -b 512kb -e 512kb -r 32 -n 10 -d fp32 -w 1 -f 512" with profiling enabled
-        size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
-        524288          131072    fp32           24.15          21.71          21.03
-    Avg bus bandwidth:    21.0339GB/s
+   neuron-explorer inspect -o ./inspect-output nccom-test allg -b 512kb -e 512kb -r 32 -n 10 -d fp32 -w 1 -f 512
 
 .. note::
-    If you have problems with nccom-test add the --debug flag.
-    If using a trn1.2xlarge instance, change -r 32 to -r 2 to use fewer neuron cores.
+
+   If using a trn1.2xlarge instance, change ``-r 32`` to ``-r 2`` to use fewer NeuronCores.
+
+CLI reference
+~~~~~~~~~~~~~
+
+.. code-block:: text
+
+   Usage:
+     neuron-explorer [OPTIONS] inspect [inspect-OPTIONS] [userscript...]
+
+   Application Options:
+     -v, --version               Show version and exit
+
+   Help Options:
+     -h, --help                  Show this help message
+
+   [inspect command options]
+         -o, --output-dir=       Output directory for inspection results (default: .)
+         -n, --num-trace-events= Maximum number of trace events before old ones are dropped
+
+   [inspect command arguments]
+     userscript:                 Command that launches a Neuron workload
 
 .. _neuron-explorer-inspect-output:
 
-``neuron-explorer inspect`` Output
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+neuron-explorer inspect output example
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The above command traces a Neuron workload execution and saves the output to the ``inspect-output-nccom-test`` directory. 
-You will see the output directory contains a single NEFF file and a device profile (NTFF) for all Neuron Cores which executed that NEFF. 
-You will also see ``ntrace.pb`` and ``trace_info.pb`` files storing the system profile data.
-Below showing what the outputs will look like:
+The command traces a Neuron workload and saves output to the specified directory. You'll
+see NEFF files, device profiles (NTFF) for all NeuronCores that executed that NEFF, and
+system profile data:
 
-.. code-block:: shell
+.. code-block:: bash
 
-    ubuntu@ip-172-31-63-210:~$ tree inspect-output-nccom-test
-    inspect-output-nccom-test
-        ├── i-012590440bb9fd263_pid_98399
-        │   ├── 14382885777943380728_instid_0_vnc_0.ntff
-        │   ├── 14382885777943380728_instid_0_vnc_1.ntff
-        │   ├── 14382885777943380728_instid_0_vnc_10.ntff
-        │   ├── 14382885777943380728_instid_0_vnc_11.ntff
-        ...
-        │   ├── 14382885777943380728_instid_0_vnc_8.ntff
-        │   ├── 14382885777943380728_instid_0_vnc_9.ntff
-        │   ├── cpu_util.pb
-        │   ├── host_mem.pb
-        │   ├── neff_14382885777943380728.neff
-        │   ├── ntrace.pb
-        │   └── trace_info.pb
-        └──
+   ubuntu@ip-172-31-63-210:~$ tree inspect-output-nccom-test
+   inspect-output-nccom-test
+   ├── i-012590440bb9fd263_pid_98399
+   │   ├── 14382885777943380728_instid_0_vnc_0.ntff
+   │   ├── 14382885777943380728_instid_0_vnc_1.ntff
+   │   ├── 14382885777943380728_instid_0_vnc_10.ntff
+   │   ├── 14382885777943380728_instid_0_vnc_11.ntff
+   ...
+   │   ├── 14382885777943380728_instid_0_vnc_8.ntff
+   │   ├── 14382885777943380728_instid_0_vnc_9.ntff
+   │   ├── cpu_util.pb
+   │   ├── host_mem.pb
+   │   ├── neff_14382885777943380728.neff
+   │   ├── ntrace.pb
+   │   └── trace_info.pb
+   └──
 
-    2 directories, 74 files
+   2 directories, 74 files
 
+To view a summary of the captured profile data:
 
-To view a summary of the captured profile data run the command
+.. code-block:: bash
 
-.. code-block:: shell
-
-    neuron-explorer view -d inspect-output-nccom-test --output-format summary-text
+   neuron-explorer view -d inspect-output-nccom-test --output-format summary-text
 
 
 .. _neuron-explorer-filtering-system-profiles:
 
-Capture-time Filtering
-----------------------
+Filtering
+----------
 
-**Capture-time filtering** reduces memory usage and trace file size by only collecting specific events, but filtered data cannot be recovered later.
-Configure filters before trace capture using environment variables or API functions. 
-You can use NeuronCore filters to only capture events for specific NeuronCores (for example only events associated with NeuronCore 0 or all the NeuronCores on a specific NeuronDevice). 
-You can use event type filters to only capture specific events (for example model execute or collectives events). 
-It is possible to combine both NeuronCore and event type filters.
+You can filter at two points: **capture time** (before data is written) or **processing time** (when viewing). Capture-time filtering reduces memory and file size but discards data permanently.
 
-NeuronCore
-~~~~~~~~~~
+When to use capture-time vs processing-time filtering
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If capture is enabled for a NeuronCore then a ring buffer will be allocated in host memory for storing those core's events. Thus filtering by NeuronCore decreases host memory usage during capture.
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
 
-Default Behavior
-^^^^^^^^^^^^^^^^
+   * - Situation
+     - Use
+   * - You know exactly which NeuronCores to profile (for example, only core 0)
+     - Capture-time filtering saves host memory
+   * - You're profiling a large distributed workload and running out of host memory
+     - Capture-time filtering reduces buffer allocation
+   * - You want to explore the same trace from different angles
+     - Processing-time filtering preserves all data
+   * - You're not sure what you need yet
+     - Don't filter at capture time — filter later when viewing
 
-By default, all visible NeuronCores are enabled for capture. 
+**Rule of thumb:** If in doubt, capture everything. You can always filter when viewing. You can never recover data you didn't capture.
 
-Using Environment Variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. _capture-filtering:
 
-.. code-block:: shell
+Capture-time filtering
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-    # Filter to capture events only from NeuronCore 0
-    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0
+Reduces memory usage by only collecting specific events. Useful for large distributed workloads or when you know exactly which cores to profile.
 
-    # Filter to capture events from NeuronCores 0, 2, and 4
-    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0,2,4
+**NeuronCore filtering:**
 
-    # Filter to capture events from a range of NeuronCores (0 through 3)
-    export NEURON_RT_INSPECT_EVENT_FILTER_NC=0-3
+.. _neuron-explorer-core-filter-env:
 
-    # Reset to default behavior
-    unset NEURON_RT_INSPECT_EVENT_FILTER_NC # Back to capturing all visible cores
+Using environment variables:
 
-Using API Functions
-^^^^^^^^^^^^^^^^^^^
+.. code-block:: bash
+
+   # Only NeuronCore 0
+   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0
+
+   # NeuronCores 0, 2, and 4
+   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0,2,4
+
+   # Range: NeuronCores 0 through 3
+   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0-3
+
+   # Reset to all cores
+   unset NEURON_RT_INSPECT_EVENT_FILTER_NC
+
+Using C API:
 
 .. code-block:: c
 
-    #include <nrt/nrt_sys_trace.h>
+   #include <nrt/nrt_sys_trace.h>
 
-    // Allocate and configure trace options
-    nrt_sys_trace_config_t *config;
-    nrt_sys_trace_config_allocate(&config);
-    nrt_sys_trace_config_set_defaults(config);
+   nrt_sys_trace_config_t *config;
+   nrt_sys_trace_config_allocate(&config);
+   nrt_sys_trace_config_set_defaults(config);
 
-    // Enable capture only for specific NeuronCores
+   // Disable all cores, then enable specific ones
+   int num_cores = 128;
+   for (int i = 0; i < num_cores; i++) {
+       nrt_sys_trace_config_set_capture_enabled_for_nc(config, i, false);
+   }
+   nrt_sys_trace_config_set_capture_enabled_for_nc(config, 0, true);
+   nrt_sys_trace_config_set_capture_enabled_for_nc(config, 2, true);
 
-    // Disable all cores since by default they are all enabled
-    int num_cores = 128;
-    for (int i=0; i<num_cores; i++) {
-      nrt_sys_trace_config_set_capture_enabled_for_nc(config, i, false); // disable NC i
-    }
+   nrt_sys_trace_start(config);
+   // ... your workload ...
+   nrt_sys_trace_stop();
+   nrt_sys_trace_config_free(config);
 
-    // Then enable specific cores
-    nrt_sys_trace_config_set_capture_enabled_for_nc(config, 0, true);  // Enable NC 0
-    nrt_sys_trace_config_set_capture_enabled_for_nc(config, 2, true);  // Enable NC 2
+**Event type filtering**
 
-    // Start tracing with the configuration
-    nrt_sys_trace_start(config);
+Using environment variables:
 
-    // Your application code here...
+.. code-block:: bash
 
-    // Stop tracing and cleanup
-    nrt_sys_trace_stop();
-    nrt_sys_trace_config_free(config);
+   # Specific event types
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
 
-Event Type
-~~~~~~~~~~
+   # All hardware events
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
 
-Default Behavior
-^^^^^^^^^^^^^^^^
+   # All software events
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
 
-By default, all event types are enabled for capture.
+   # Hardware events EXCEPT cc_exec
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
 
-Getting Available Event Types
+   # Software events EXCEPT model_load
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^model_load
+
+   # Mix categories and specific events
+   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,tensor_read,tensor_write
+
+   # Reset to all event types
+   unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE
+
+Event groups: ``hardware``: ``nc_exec_running``, ``cc_running``, ``cc_exec_barrier``, ``numerical_err``, ``nrt_model_switch``, ``timestamp_sync_point``, ``hw_notify``. ``software``: all other events.
+
+Using C API:
+
+.. code-block:: c
+
+   #include <nrt/nrt_sys_trace.h>
+
+   nrt_sys_trace_config_t *config;
+   nrt_sys_trace_config_allocate(&config);
+   nrt_sys_trace_config_set_defaults(config);
+
+   // Discover available event types
+   const char **event_types = nullptr;
+   size_t count = 0;
+   nrt_sys_trace_get_event_types(&event_types, &count);
+
+   // Disable all event types first
+   for (size_t i = 0; i < count; ++i) {
+       nrt_sys_trace_config_set_capture_enabled_for_event_type(config, event_types[i], false);
+   }
+
+   // Enable only specific event types
+   nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "model_load", true);
+   nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "nrt_execute", true);
+
+   // Verify which event types are enabled
+   const char **enabled_types = nullptr;
+   size_t enabled_count = 0;
+   nrt_sys_trace_config_get_enabled_event_types(config, &enabled_types, &enabled_count);
+   printf("Enabled event types: %zu\n", enabled_count);
+   for (size_t i = 0; i < enabled_count; ++i) {
+       printf("  %s\n", enabled_types[i]);
+   }
+
+   // Clean up
+   for (size_t i = 0; i < enabled_count; ++i) free((void*)enabled_types[i]);
+   free((void*)enabled_types);
+   for (size_t i = 0; i < count; ++i) free((void*)event_types[i]);
+   free((void*)event_types);
+
+   nrt_sys_trace_start(config);
+   // ... your workload ...
+   nrt_sys_trace_stop();
+   nrt_sys_trace_config_free(config);
+
+Processing-time filtering
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can discover all available event types using the ``nrt_sys_trace_get_event_types`` API.
+Processing-time filtering preserves the complete trace and lets you analyze the same data with different filters without recapturing. Apply these when viewing or exporting profiles.
 
-.. code-block:: c
+**Filter by NeuronCore**
 
-    #include <nrt/nrt_sys_trace.h>
+.. code-block:: bash
 
-    // Get all available event types
-    const char **event_types = nullptr;
-    size_t count = 0;
-    NRT_STATUS status = nrt_sys_trace_get_event_types(&event_types, &count);
+   neuron-explorer view -d ./output --system-trace-filter-neuron-core "0"
+   neuron-explorer view -d ./output --system-trace-filter-neuron-core "0,1,2,3"
 
-    if (status == NRT_SUCCESS) {
-        printf("Available event types:\n");
-        for (size_t i = 0; i < count; ++i) {
-            printf("  %s\n", event_types[i]);
-        }
-        
-        // Free the event types array
-        for (size_t i = 0; i < count; ++i) {
-            free((void*)event_types[i]);
-        }
-        free((void*)event_types);
-    }
+**Filter by event type**
 
-Using Environment Variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: bash
 
-The ``NEURON_RT_INSPECT_EVENT_FILTER_TYPE`` environment variable supports:
+   neuron-explorer view -d ./output --system-trace-filter-event-type "nrt_execute"
+   neuron-explorer view -d ./output --system-trace-filter-event-type "nrt_execute,nrt_load"
 
-* **Default**: If not set, all event types are captured
-* **Specific event types**: Use exact event names from ``nrt_sys_trace_get_event_types()``
-* **Event categories**: Use ``hardware`` or ``software`` to filter by category
-* **Exclusion**: Use ``^`` prefix to exclude specific events from a category
+**Filter by instance ID**
 
-.. code-block:: shell
+.. code-block:: bash
 
-    # Filter to capture only specific event types
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
+   neuron-explorer view -d ./output --system-trace-filter-instance-id "i-abc123"
+   neuron-explorer view -d ./output --system-trace-filter-instance-id "i-abc123,i-def456"
 
-    # Filter to capture all hardware events
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
+**Skip system or device profiles**
 
-    # Filter to capture all software events
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
+Reduce processing time by skipping one profile type:
 
-    # Filter to capture all hardware events EXCEPT cc_exec
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
+.. code-block:: bash
 
-    # Filter to capture all software events EXCEPT model_load
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software,^model_load
+   # Skip device profiles (faster, system-only view)
+   neuron-explorer view -d ./output --ignore-device-profile
 
-    # Mix categories and specific events
-    export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,tensor_read,tensor_write
+   # Skip system profiles (device-only view)
+   neuron-explorer view -d ./output --ignore-system-profile
 
-    # Reset to default behavior
-    unset NEURON_RT_INSPECT_EVENT_FILTER_TYPE  # Back to capturing all event types
+These work with ``--output-format parquet`` (default) or ``json``.
 
-The ``hardware`` group contains events that are executed on the NeuronCore. 
-These are ``nc_exec_running``, ``cc_running``, ``cc_exec_barrier``, ``numerical_err``, ``nrt_model_switch``, ``timestamp_sync_point``, ``hw_notify``.
-The ``software`` group contains all other events.
+Next steps
+----------
 
-Using API Functions
-^^^^^^^^^^^^^^^^^^^
+* :doc:`Get Started with Neuron Explorer <get-started>` — Launch Explorer, upload profiles, and view results
+* :doc:`Neuron Explorer Full Documentation <index>` — Complete viewer and feature reference
 
-Use the ``nrt_sys_trace_config_set_capture_enabled_for_event_type`` API to filter by event type.
-
-.. code-block:: c
-
-    #include <nrt/nrt_sys_trace.h>
-
-    // Configure trace options
-    nrt_sys_trace_config_t *config;
-    nrt_sys_trace_config_allocate(&config);
-    nrt_sys_trace_config_set_defaults(config); // By default, all event types are enabled
-
-    // Disable specific event types (others remain enabled)
-    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "device_exec", false);
-
-    // Or disable all first, then enable only specific ones
-    const char **all_event_types = nullptr;
-    size_t all_count = 0;
-    nrt_sys_trace_get_event_types(&all_event_types, &all_count);
-
-    // Disable all event types first
-    for (size_t i = 0; i < all_count; ++i) {
-        nrt_sys_trace_config_set_capture_enabled_for_event_type(config, all_event_types[i], false);
-    }
-
-    // Enable only specific event types
-    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "model_load", true);
-    nrt_sys_trace_config_set_capture_enabled_for_event_type(config, "nrt_execute", true);
-
-    // Verify which event types are enabled
-    const char **enabled_types = nullptr;
-    size_t enabled_count = 0;
-    nrt_sys_trace_config_get_enabled_event_types(config, &enabled_types, &enabled_count);
-    printf("Enabled event types: %zu\n", enabled_count);
-    for (size_t i = 0; i < enabled_count; ++i) {
-        printf("  %s\n", enabled_types[i]);
-    }
-
-    // Clean up memory (caller is responsible)
-    for (size_t i = 0; i < enabled_count; ++i) {
-        free((void*)enabled_types[i]);
-    }
-    free((void*)enabled_types);
-
-    for (size_t i = 0; i < all_count; ++i) {
-        free((void*)all_event_types[i]);
-    }
-    free((void*)all_event_types);
-
-    // Start tracing
-    nrt_sys_trace_start(config);
-
-    // Your application code here...
-
-    // Cleanup
-    nrt_sys_trace_stop();
-    nrt_sys_trace_config_free(config);
-
-
-Processing-time Filtering
---------------------------
-
-**Processing-time filtering** preserves the complete trace and allows flexible analysis with different filters, but requires more memory and storage during capture.
-Apply filters when viewing or processing already captured profiles. This approach allows you to 
-analyze the same trace data in different ways without recapturing. The filters can be used for any 
-``neuron-explorer`` output format including ``--output-format json`` and ``--output-format perfetto``.
-
-NeuronCore
-~~~~~~~~~~
-
-Use the ``--system-trace-filter-neuron-core`` to only process events for specific NeuronCores. The IDs are local to the instance and not global IDs. 
-
-If the ``--system-trace-filter-neuron-core`` argument is not set then events from all NeuronCores will be included in the processed trace.
-
-
-**Single neuron core**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-neuron-core "0"
-
-**Multiple neuron cores**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-neuron-core "0,1,2,3"
-
-Event Type
-~~~~~~~~~~
-Use the ``--system-trace-filter-event-type`` to only process specific trace events types.
-
-If the ``--system-trace-filter-event-type`` argument is not set then all event types will be included in the processed trace.
-
-**Single event type**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-event-type "nrt_execute"
-
-**Multiple event type**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-event-type "nrt_execute,nrt_load"
-
-Instance ID
-~~~~~~~~~~~
-
-Use the ``--system-trace-filter-instance-id`` to only process events for specific ec2 instances.
-
-If the ``--system-trace-filter-instance-id`` argument is not set then events from all instances will be included in the processed trace.
-
-**Single instance**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-instance-id "i-abc123"
-
-**Multiple instances**
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --system-trace-filter-instance-id "i-abc123,i-def456,i-ghi789"
-
-Processing only system or device profiles
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can reduce processing times by skipping the processing of system or device profiles. Choose this when you are interested in only a specific profile, or when you want to start with a limited set of profiling data before exploring the full profile.
-
-To skip processing of device profiles use the ``--ignore-device-profile`` option. To skip processing of system profiles use the ``--ignore-system-profile`` option. These options can be used with the ``--output-format`` values ``parquet`` (default), ``perfetto``, or ``json``.
-
-For example:
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --ignore-device-profile --output-format perfetto
-
-
-View Profiles
--------------
-
-To view a profile in Neuron Explorer, follow these steps:
-
-1. **Start the Neuron Explorer UI and API servers** using the ``neuron-explorer`` tool from ``aws-neuronx-tools``:
-
-   .. code-block:: bash
-
-      neuron-explorer view --data-path /absolute/path/to/db
-
-   By default, the UI will be launched on port 3001 and the API server will be launched on port 3002.
-
-2. **Set up port-forwarding** (if running on a remote EC2 instance) to enable local viewing:
-
-   .. code-block:: bash
-
-      ssh -i <key.pem> <user>@<ip> -L 3001:localhost:3001 -L 3002:localhost:3002
-
-   note::
-      it is necessary to forward both 3001 (for the UI server) and 3002 (for the data server)
-
-3. **Open the UI** by navigating to ``localhost:3001`` in your browser.
-
-4. **Upload your profile** by clicking the **"Upload Profile"** button in the Profile Manager page. You can either:
-
-   * Upload the NEFF (``.neff``) and NTFF (``.ntff``) files individually using the "Individual Files" upload mode, or
-   * Upload the folder containing the NEFF and NTFF files using the "Directory Upload" mode.
-
-Neuron Explorer Browser UI
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. _neuron-explorer-profile-manager:
-
-Profile Manager
-^^^^^^^^^^^^^^^
-
-Profile Manager is a page for uploading artifact (NEFF, NTFF and source code) and selecting profiles to access.
-
-.. image:: /tools/images/profile-workload-3.png
-
-.. _profile-manager-upload-profile:
-
-
-
-Click on the "Upload Profile" button to open the Upload Profile modal.
-
-
-**Device Profile Upload**
-
-Select "Individual Files" upload mode to upload NEFF, NTFF, and source code individually.
-
-Select "Directory Upload" to upload profile files from a directory.
-
-.. note::
-   * "Profile name" is a required field. You cannot upload a profile with existing name unless the option "Force Upload" is checked at the bottom. Force Upload currently will overwrite the existing profile with the same name.
-   * For uploading source code, the UI only supports the upload of folders, individual files, or compressed files in the gzipped tar ``.tar.gz`` archive format.
-
-.. image:: /tools/images/device-profile-upload-ui.png
-
-
-.. _profile-manager-system-profile-upload:
-
-**System Profile Upload**
-
-Select "Directory Upload", then in the Profile Directory drag and drop area, select the directory containing the system profile files.
-
-The directory should contain instance sub-directories with the following: ``ntrace.pb``, ``trace_info.pb``, ``cpu_util.pb``, and ``host_mem.pb``.
-For an example see the output in :ref:`neuron-explorer inspect <neuron-explorer-inspect-output>`
-
-.. note::
-   System Profile uploads only support "Directory Upload".
-
-.. image:: /tools/images/system-profile-upload-ui.png
-
-
-**Processing Status**
-
-After uploading a profile, the processing task is shown under "User Uploaded" table. Use the "Refresh" button in the top-right to fetch the latest processing status and verify completion.
-
-
-**Listing profiles**
-
-All uploaded profiles are provided in the Profile Manager page with details such as the processing status and upload time, along with various quick access actions.
-
-.. image:: /tools/images/profile-workload-5.png
-
-* **Pencil button**: Rename a profile.
-* **Star button**: Mark this profile as favorite profile. This profile will be shown in the User's favorites list.
-* **Bulb button**: Navigate to the summary page of this profile. For more details on the summary page, see :doc:`this overview of the Neuron Explorer Summary Page </tools/neuron-explorer/overview-summary-page>`.
-
-Clicking on the name of profile takes you to its corresponding profile page.
-
-Neuron Explorer for Visual Studio Code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The UI is also available as a VSCode extension, enabling better native integration for features such as code linking.
-
-Install the Neuron Explorer extension from the Visual Studio Code Marketplace. Open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer`` or ``amazonwebservices.neuron-explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
-
-.. image:: /tools/images/profile-workload-1.png
-
-Ensure the SSH tunnel is established by following the steps above. Otherwise, specify a custom endpoint by selecting the extension in the left activity bar. Then, navigate to the "Endpoint" action on the bottom bar of your VSCode session and select "Custom endpoint", and enter ``localhost:3002``. 
-
-.. image:: /tools/images/profile-workload-2.png
-
-From there, navigate to the **Profile Manager** page through the extension UI in the left activity bar.
-
-JSON Output
-~~~~~~~~~~~
-
-The ``--output-format`` json option writes processed profile data to human-readable JSON that can be used for scripting and manual inspection.
-
-.. code-block:: shell
-
-    neuron-explorer view -d ./output --output-format json
-
-This will generate a ``system_profile.json`` file containing the system profile data and a ``device_profile_model_<model_id>.json`` file for each unique compiled model that was executed on a Neuron Device. 
-
-The  system_profile.json JSON contains the following data types:
-
-* ``trace_events``: Neuron Runtime API trace events and Framework/Application trace events containing timestamps, durations, names, and the ec2 instance-id to differentiate between events from different compute nodes in a distributed workload.
-
-.. code-block:: json
-
-    {
-        "Neuron_Runtime_API_Event": {
-            "duration": 27094,
-            "group": "nrt-nc-000",
-            "id": 1,
-            "instance_id": "i-0f207fb2a99bd2d08",
-            "lnc_idx": "0",
-            "name": "nrt_tensor_write",
-            "parent_id": 0,
-            "process_id": "1627711",
-            "size": "4",
-            "tensor_id": "4900392441224765051",
-            "tensor_name": "_unknown_",
-            "thread_id": 1627711,
-            "timestamp": 1729888371056597613,
-            "type": 11
-        },
-        "Framework_Event": {
-            "duration": 3758079,
-            "group": "framework-80375131",
-            "instance_id": "i-0f207fb2a99bd2d08",
-            "name": "PjitFunction(matmul_allgather)",
-            "process_id": "701",
-            "thread_id": 80375131,
-            "timestamp": 1729888382798557372,
-            "type": 99999
-        }
-    }
-
-* ``mem_usage``: sampled host memory usage 
-
-.. code-block:: json
-
-    {
-        "duration": 1,
-        "instance_id": "i-0f207fb2a99bd2d08",
-        "percent_usage": 9.728179797845964,
-        "timestamp": 1729888369286687792,
-        "usage": 51805806592
-    }
-
-* ``cpu_util``: sampled CPU utilization. Results are provided per core and per ec2 instance involved in a distributed workload
-
-.. code-block:: json
-
-    {
-        "cpu_id": "47",
-        "duration": 1,
-        "instance_id": "i-0f207fb2a99bd2d08",
-        "timestamp": 1729888371287337243,
-        "util": 2.3255813
-    },
-
-
-View in Perfetto
-~~~~~~~~~~~~~~~~
-
-Users can view their Neuron Explorer profiles in Perfetto. Please see :doc:`view-perfetto` for more information.
-
-.. note::
-    New Neuron Explorer features released in 2.27 and onwards may not be supported in Perfetto. For the full user experience and features set, please use the Neuron Explorer UI or VSCode Integration.
-
-
-Troubleshooting
----------------
-
-Incomplete JAX Profiles
-~~~~~~~~~~~~~~~~~~~~~~~
-
-If your JAX profile has fewer events than expected or lacks the Runtime API trace, check whether 
-``jax.profiler.stop_trace`` is being called inside a ``with jax.profiler.trace`` context block. 
-This can prematurely stop tracing. Use ``jax.profiler.stop_trace`` only when profiling was started 
-with ``jax.profiler.start_trace``, not when using the context-managed ``with jax.profiler.trace`` API.
-
-Also when using ``jax.profiler`` within your script ensure that the 
-environment variable ``NEURON_RT_INSPECT_ENABLE`` is not set to 1. 
-Additionally, ensure that ``NEURON_RT_INSPECT_OUTPUT_DIR`` is set to 
-the correct output directory and this is the output directory passed to 
-``with jax.profiler.trace``.
-
-Dropped Events in System Profile
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When processing a system profile, you may see a warning indicating that some trace events were dropped during capture.
-
-.. code-block:: shell
-
-    WARN[0000] Warning: 1001 trace events were dropped during capture (stored 530560 out of 531561 total events). Consider increasing buffer size, reducing trace duration, or filtering events.
-
-This means during capture the trace event buffers filled and oldest events were overwritten. If you need to avoid dropping events for the full duration of your workload consider the following adjustments:
-
-* Increase buffer size by setting ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC`` (see :ref:`Profile Capture Environment Variables <neuron-explorer-capture-environment-variables>`). This will increase host memory usage.
-* Apply capture-time filters (NeuronCores / event types) (see :ref:`Filtering System Profiles <neuron-explorer-filtering-system-profiles>`.)
-* Shorten profiled region: limit the code span under the profiling context / runtime.

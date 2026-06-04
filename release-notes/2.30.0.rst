@@ -22,6 +22,7 @@ AWS Neuron SDK 2.30.0 release notes
    Neuron Agentic Development <components/agentic-development>
    Deep Learning AMIs <components/dlamis>
    Deep Learning Containers <components/containers>
+   JAX <components/jax>
 
 This page provides detailed component release notes for the Neuron SDK 2.30.0. For a an overview of the release content, see :ref:`What's New in AWS Neuron <whats-new-2026-05-21-v2_30>`.
 
@@ -129,6 +130,16 @@ Select a card below to review detailed release notes for each component of the N
                 AWS-specific container definitions for building and deploying Neuron-based ML solutions.
                 +++
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
+
+        .. grid-item-card:: 
+                :link: components/jax
+                :link-type: doc
+
+                **JAX Support)** 2.30.0 release notes
+                ^^^
+                Neuron support for the JAX numerical method framework.
+                +++
+                Supports: ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
 Previous releases
 -----------------

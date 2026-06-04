@@ -10,7 +10,7 @@ Inf1 Inference Performance
 .. contents:: Table of contents
    :local:
 
-The following tables contain the reference inference performance for models in the tutorials. Follow the links on each row to replicate similar results in your own environment. Refer to :ref:`ec2-then-ec2-setenv` documentation to create a new environment based on the latest Neuron release.
+The following tables contain the reference inference performance for models in the tutorials. Follow the links on each row to replicate similar results in your own environment. Refer to :ref:`ec2-then-ec2-setenv-inf1` documentation to create a new environment based on the latest Neuron release.
 
 *Last update: September 16th, 2024*
 

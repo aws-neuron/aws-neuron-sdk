@@ -32,7 +32,7 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - **2.30.0**
      - 2.30.0
    * - :doc:`JAX NeuronX </release-notes/components/jax>`
-     - 2.26.0
+     - **2.30.0**
      - 0.10.0.1.0.*
    * - :doc:`NKI Library </release-notes/components/nki-lib>`
      - **2.30.0**

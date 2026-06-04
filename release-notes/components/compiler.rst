@@ -178,7 +178,7 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 
 * Python 3.9 no longer supported: The Neuron Compiler requires Python 3.10 or higher. Users currently on Python 3.9 must upgrade to continue using the Neuron Compiler with Python bindings.
-* Compiler accuracy flag defaults updated: These changes optimize accuracy but may impact performance for FP32 models and models using smaller bitwidth dtypes. To restore previous behavior, explicitly set ``--auto-cast=matmul`` and use the new ``--disable-mixed-precision-accumulation`` flag.
+* Compiler accuracy flag defaults updated: These changes optimize accuracy but may impact performance for FP32 models and models using smaller bitwidth dtypes. To restore previous behavior, explicitly set ``--auto-cast=matmult`` and use the new ``--disable-mixed-precision-accumulation`` flag.
 
 Bug Fixes
 ~~~~~~~~~
@@ -204,7 +204,7 @@ Bug Fixes
 .. _compiler-2-25-0-rn:
 
 Neuron Compiler [2.20.9961.0] (Neuron 2.25.0 Release)
-----------------------------------------------------
+------------------------------------------------------
 
 Date of Release: 07/31/2025
 

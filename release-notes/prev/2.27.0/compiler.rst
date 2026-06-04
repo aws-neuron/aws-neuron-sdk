@@ -20,7 +20,7 @@ Changes and improvements
 
 * **Error code docs** New error code documentation has been added to help developers better understand and troubleshoot issues encountered during model compilation. Check them out here: :doc:`Neuron Compiler Error Codes </compiler/error-codes/index>`
 
-* **Compiler accuracy flag defaults updated**: Two Neuron Compiler (neuronxcc) flags now have different default behaviors to improve accuracy. The ``--auto-cast`` flag now defaults to ``none`` (previously ``matmul``), and ``--enable-mixed-precision-accumulation`` is now enabled by default. These changes optimize accuracy but may impact performance for FP32 models and models using smaller bitwidth dtypes. To restore previous behavior, explicitly set ``--auto-cast=matmul`` and use the new ``--disable-mixed-precision-accumulation`` flag.
+* **Compiler accuracy flag defaults updated**: Two Neuron Compiler (neuronxcc) flags now have different default behaviors to improve accuracy. The ``--auto-cast`` flag now defaults to ``none`` (previously ``matmul``), and ``--enable-mixed-precision-accumulation`` is now enabled by default. These changes optimize accuracy but may impact performance for FP32 models and models using smaller bitwidth dtypes. To restore previous behavior, explicitly set ``--auto-cast=matmult`` and use the new ``--disable-mixed-precision-accumulation`` flag.
 
 * **Python 3.9 no longer supported**: The Neuron Compiler requires Python 3.10 or higher. Users currently on Python 3.9 must upgrade to continue using the Neuron Compiler with Python bindings.
 

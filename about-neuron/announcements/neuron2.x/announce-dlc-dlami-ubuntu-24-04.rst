@@ -29,5 +29,5 @@ Customers using Ubuntu 22.04-based DLCs or DLAMIs should migrate to the new Ubun
 
     Neuron continues to support Ubuntu 22.04 at the platform level. Customers can still install Neuron packages directly on Ubuntu 22.04. This change only affects pre-built DLC and DLAMI images.
 
-For more information, see :ref:`neuron-dlami-overview` and :doc:`/containers/index`.
+For more information, see :ref:`neuron-dlami-overview` and :doc:`/deploy/environments/dlc-images`.
 
