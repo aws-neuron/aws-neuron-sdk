@@ -159,7 +159,7 @@ Then install the DRA driver:
 .. code-block:: bash
 
    helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
-     --set "devicePlugin.enabled=false" --set "npd.enabled=false" --set "draDriver.enabled=true"
+     --set "draDriver.enabled=true"
 
 Example 1 – Connected Neuron Devices
 --------------------------------------
