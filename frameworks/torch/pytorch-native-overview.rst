@@ -202,7 +202,7 @@ Not in the initial release. We are considering equivalent constructs for future 
 
 **Q: Can I compile my model using torch.compile on a compute instance without Trainium hardware?**
 
-No. The initial release requires compilation on Trainium2 or Trainium3 (Trn2 or Trn3) instances. Future releases will support compilation on Trn1 and non-Trainium instances.
+No. The initial release requires compilation on Trainium2 or Trainium3 (Trn2 or Trn3) instances. Future releases will support compilation on non-Trainium instances.
 
 Eager Mode Execution FAQ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
