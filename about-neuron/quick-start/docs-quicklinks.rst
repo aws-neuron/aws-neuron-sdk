@@ -41,7 +41,7 @@ Neuron Quick Links
                 * :ref:`setup-guide-index`
                 * :ref:`neuron-dlami-overview`
                 * :ref:`neuron_containers`
-                * :ref:`neuron-devflows`
+                * :ref:`neuron-deploy`
 
         .. grid-item-card:: Learn AWS Neuron
 

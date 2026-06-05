@@ -15,11 +15,14 @@ Compile with SageMaker Neo and Deploy on SageMaker Hosting (Inf1) — Archived (
    framework support, see :doc:`/frameworks/index`.
 
 The MXNet variant of this developer flow followed the same steps as the core
-SageMaker Neo to SageMaker Hosting flow. For the general procedure and
-prerequisites, see the current reference:
+SageMaker Neo to SageMaker Hosting flow.
 
-- :doc:`Compile with SageMaker Neo and Deploy on SageMaker Hosting (Inf1) </devflows/inference/neo-then-hosting-devflow>`
+.. note::
+
+   The SageMaker Neo and SageMaker Hosting deployment path is no longer
+   covered in the current Neuron documentation. For current deployment
+   options, see :doc:`/deploy/index`.
 
 MXNet Neuron is no longer supported by the SDK. If you are maintaining an
-existing MXNet Neuron workload, use the general procedure above with the
-latest MXNet Neuron release you depend on.
+existing MXNet Neuron workload, refer to the latest MXNet Neuron release you
+depend on.

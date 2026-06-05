@@ -13,4 +13,4 @@ Neuron device plugin is a Neuron Software component that gets installed in Kuber
 
 In this release, we renamed resource name 'neurondevice' to 'neuron' to maintain consistency. Customers who are using the resource name 'neurondevice' in their YAML file need to update to use 'neuron'.
 
-Please see :ref:`k8s-neuron-device-plugin` for more details.
+Please see :ref:`neuron-container-plugins` for more details.

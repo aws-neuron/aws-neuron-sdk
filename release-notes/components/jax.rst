@@ -12,6 +12,19 @@ Component Release Notes for JAX NeuronX
 
 The release notes for the JAX NeuronX component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _jax-2-30-0-rn:
+
+JAX NeuronX [0.10.0.1.0.*] (Neuron 2.30.0 Release)
+---------------------------------------------------
+
+Date of Release: 05/21/2026
+
+Changes
+~~~~~~~~
+
+* Neuron now supports `Shardy <https://docs.jax.dev/en/latest/shardy_jax_migration.html>`__ for partitioning, replacing GSPMD as the default partitioner.
+* This Neuron release introduces support for JAX versions ``0.8.2`` and ``0.9.0.1``. To access these versions you must have ``libneuronxla`` version ``3.*`` in your environment.
+
 .. _jax-2-26-0-rn:
 
 JAX NeuronX [0.6.2.1.0.*] (Neuron 2.26.0 Release)
