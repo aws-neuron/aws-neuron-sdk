@@ -290,7 +290,7 @@ We can refer to specific elements of the tensor using an index expression.
 
 .. code-block:: python
 
-   # 10th element in partition 0
+   # 11th element in partition 0
    u = t[0,0,10]
 
    # 65th element in partition 0
