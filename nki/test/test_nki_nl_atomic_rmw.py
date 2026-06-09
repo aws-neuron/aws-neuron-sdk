@@ -46,7 +46,10 @@ def atomic_rmw_indirect_indices(in_tensor, indices_tensor, value_tensor):
   #   - write: saved back into rmw_tensor
   # resulting in rmw_tensor = rmw_tensor + value
   ########################################################################
-  nl.atomic_rmw(rmw_tensor[indices_tile, ix], value=value, op=np.add)
+  # Mask out sentinel indices (e.g., INT32_MAX) to avoid OOB access
+  sentinel_mask = nl.logical_not(nl.equal(indices_tile, nl.constant(np.iinfo(np.int32).max, dtype=indices_tile.dtype)))
+  masked_value = nl.select(sentinel_mask, value, nl.constant(0.0, dtype=value.dtype))
+  nl.atomic_rmw(rmw_tensor[indices_tile, ix], value=masked_value, op=np.add)
   # NKI_EXAMPLE_18_END
   return rmw_tensor
 
