@@ -101,7 +101,7 @@ to LHS_T (``[K,M]``) for optimal performance of the underlying TensorE.
        accum = zeros((128, 512))
        # Tile contraction dimension
        for k in range(0, K, 128):
-         lhsT_tile = LHS_T[m : m+128, k : k+128]
+         lhsT_tile = LHS_T[k : k+128, m : m+128]
          rhs_tile = RHS[k : k+128, n : n+512]
          accum += dot(lhsT_tile, rhs_tile)
        RES[m : m+128, n : n+512] = accum
