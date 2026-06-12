@@ -78,6 +78,9 @@ class oob_mode(Enum):
     skip = ...
     r"""Silently skip the runtime out-of-bounds access."""
 
+    ignore = ...
+    r"""Completely ignore out-of-bounds indices; no memory access occurs (used for max-int sentinel fill/drop semantics)."""
+
     ...
 
 class matmul_perf_mode(Enum):
