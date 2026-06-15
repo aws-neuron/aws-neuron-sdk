@@ -116,15 +116,14 @@ On the EC2 instance, run:
 
    neuron-explorer view
 
+   # Expected Output:
+   View a list of profiles at http://localhost:3001/
+   ctrl-c to exit
+
 This starts the **UI server** on port 3001 (web interface) and the **API server** on port 3002 (data backend).
 
 In your local browser, navigate to ``http://localhost:3001``:
 
-**Expected output:**
-
-.. image:: /tools/images/neuron_explorer_view_basic.png
-
-|
 
 .. image:: /tools/images/neuron-explorer-browser-landing.png
 
@@ -137,14 +136,33 @@ Using VS Code instead of the browser
 
   .. image:: /tools/images/VSCode_marketplace.png
 
-2. Ensure SSH tunnels are active (see :ref:`Step 2: Set up SSH tunneling <neuron-explorer-step2-ssh-tunneling>`).
-3. Configure the endpoint: click the extension in the left activity bar, select **Endpoint** on the bottom bar, choose **Custom endpoint**, and enter ``localhost:3002``.
+**Option A — Local Binary (no tunnel needed)**
+     
+  From the Neuron Explorer view in VS Code, and after you have connected to the Neuron EC2 instance with Remote-SSH:
+
+  1. Configure the endpoint: click the extension in the left activity bar, select **Local Binary** on the bottom bar.
+  
+    .. image:: /tools/images/VSCode_marketplace2.png
+  
+  2. Access Profile Manager from the extension sidebar.
+
+  .. image:: /tools/images/neuron-explorer-profile-manager-page.png
+  
+  3. Click **Upload Profile** and paste the path to the profile directory on the instance.
+
+  .. note::
+      No SSH tunnel is required when running Neuron Explorer on the remote device. The extension starts the ``neuron-explorer`` server for you automatically when you select **Local Binary**.
+
+**Option B — Custom endpoint (SSH tunnel)**
+
+1. Ensure SSH tunnels are active (see :ref:`Step 2: Set up SSH tunneling <neuron-explorer-step2-ssh-tunneling>`).
+2. Configure the endpoint: click the extension in the left activity bar, select **Endpoint** on the bottom bar, choose **Custom endpoint**, and enter ``localhost:3002``.
 
   .. image:: /tools/images/VSCode_marketplace2.png
 
   .. image:: /tools/images/VSCode_marketplace3.png
 
-4. Access Profile Manager from the extension sidebar.
+3. Access the **Profile Manager** from the Neuron Explorer extension sidebar.
 
   .. image:: /tools/images/neuron-explorer-profile-manager-page.png
 
