@@ -46,9 +46,8 @@ Inference Containers
       -
 
     * - HuggingFace Inference Containers
-      - | `HuggingFace Neuron Inference Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-inference-containers>`_
-        | `HuggingFace Neuron vLLM Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-vllm-containers>`_
-        | `HuggingFace Text Generation Inference (TGI) Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-text-generation-inference-tgi-containers>`_
+      - | `HuggingFace PyTorch Inference Neuronx Containers <https://aws.github.io/deep-learning-containers/reference/available_images/#huggingface-pytorch-inference-neuronx>`_
+        | `HuggingFace vLLM Inference Neuronx Containers <https://aws.github.io/deep-learning-containers/reference/available_images/#huggingface-vllm-inference-neuronx>`_
       -
 
     * - Triton Inference Containers
@@ -75,7 +74,7 @@ Training Containers
       - :ref:`tutorial-training`
 
     * - HuggingFace Training Containers
-      - `HuggingFace Neuron Training Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-neuron-training-containers>`_
+      - `HuggingFace PyTorch Training Neuronx Containers <https://aws.github.io/deep-learning-containers/reference/available_images/#huggingface-pytorch-training-neuronx>`_
       -
 
 .. note::

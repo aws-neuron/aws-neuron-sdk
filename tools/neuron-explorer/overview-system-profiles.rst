@@ -134,9 +134,14 @@ This will open a new Device Trace Viewer with the selected device profile showin
 Dependency Chain Viewer
 -----------------------
 
-The Dependency Chain Viewer widget enables you to navigate upstream and downstream between related ``neuron_rt`` and ``neuron_hw`` events.
-This helps you correlate runtime and hardware events to identify performance bottlenecks.
-For example, you can select a runtime event and navigate to its related hardware events to understand where time is being spent.
+The Dependency Chain Viewer widget enables you to navigate the dependency chain between system profile events. When you click a system profile event containing a ``flow-id``, the viewer draws arrows indicating the dependency relationship between events. Clicking the event name in the Dependency Chain Viewer triggers the System Trace Viewer to refocus on that specific event.
+For example, you can click a runtime event and navigate to its related hardware events to understand where time is being spent. 
+
+.. note::
+
+   The Dependency Chain Viewer currently displays the dependency chain between framework events (from PyTorch profiler), ``neuron_rt``, and ``neuron_hw`` events. 
+   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/frameworks/torch/pytorch-native-overview` to sign up. For more information, see :doc:`/tools/neuron-explorer/how-to-profile-workload`. 
+
 
 Clicking on an event with dependencies populates the UI with the following elements:
 
