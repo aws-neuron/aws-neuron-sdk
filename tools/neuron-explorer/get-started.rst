@@ -138,20 +138,20 @@ Using VS Code instead of the browser
 
 **Option A — Local Binary (no tunnel needed)**
      
-  From the Neuron Explorer view in VS Code, and after you have connected to the Neuron EC2 instance with Remote-SSH:
+From the Neuron Explorer view in VS Code, and after you have connected to the Neuron EC2 instance with Remote-SSH:
 
-  1. Configure the endpoint: click the extension in the left activity bar, select **Local Binary** on the bottom bar.
-  
-    .. image:: /tools/images/VSCode_marketplace2.png
-  
-  2. Access Profile Manager from the extension sidebar.
+1. Configure the endpoint: click the extension in the left activity bar, select **Local Binary** on the bottom bar.
+
+  .. image:: /tools/images/VSCode_marketplace2.png
+
+2. Access Profile Manager from the extension sidebar.
 
   .. image:: /tools/images/neuron-explorer-profile-manager-page.png
-  
-  3. Click **Upload Profile** and paste the path to the profile directory on the instance.
 
-  .. note::
-      No SSH tunnel is required when running Neuron Explorer on the remote device. The extension starts the ``neuron-explorer`` server for you automatically when you select **Local Binary**.
+3. Click **Upload Profile** and paste the path to the profile directory on the instance.
+
+.. note::
+   No SSH tunnel is required when running Neuron Explorer on the remote device. The extension starts the ``neuron-explorer`` server for you automatically when you select **Local Binary**.
 
 **Option B — Custom endpoint (SSH tunnel)**
 
