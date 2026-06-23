@@ -83,7 +83,7 @@ Decoders
    * - meta-llama/Llama-3.3-70B
      - neuronx-distributed-inference
      - * :ref:`nxdi-trn2-llama3.3-70b-tutorial`
-       * :ref:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial.ipynb`
+       * :doc:`/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-dp-tutorial`
        * :ref:`nxdi-sd-inference-tutorial`
 
    * - meta-llama/Llama-3.1-8b
