@@ -45,13 +45,6 @@ Enable PyTorch-Neuron
 
 .. include:: /setup/install-templates/inf1/dlami-enable-neuron-pytorch.rst
 
-Enable TensorFlow-Neuron
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include :: /setup/install-templates/inf1/note-setup-libnrt-warning.rst
-
-.. include:: /setup/install-templates/inf1/dlami-enable-neuron-tensorflow.rst
-
 Enable Apache MXNet
 ~~~~~~~~~~~~~~~~~~~~
 
