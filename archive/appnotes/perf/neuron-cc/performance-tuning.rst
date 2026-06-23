@@ -16,7 +16,7 @@ multi-threading and dynamic-batching) to improve inference performance.
 
 The following guides are considered to be prerequisites for this tutorial:
 
--  :ref:`/src/examples/tensorflow/tensorflow_resnet50/resnet50.ipynb`
+-  :doc:`/src/examples/tensorflow/tensorflow_resnet50/resnet50`
 -  TensorFlow Serving NeuronCore Group
 -  :ref:`neuron-batching`
 -  :ref:`neuroncore-pipeline`
@@ -175,4 +175,4 @@ ResNet-50 optimization example
 ------------------------------
 
 For an example demonstrating the concepts described here, see
-:ref:`/src/examples/tensorflow/keras_resnet50/keras_resnet50.ipynb`
+:doc:`/src/examples/tensorflow/keras_resnet50/keras_resnet50`

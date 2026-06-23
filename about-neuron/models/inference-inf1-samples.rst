@@ -29,14 +29,14 @@ Encoders
 
    * - bert-base-cased-finetuned-mrpc
      - torch-neuron
-     - * HuggingFace pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert.ipynb>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`
+     - * HuggingFace pretrained BERT tutorial :doc:`[html] </src/examples/pytorch/bert_tutorial/tutorial_pretrained_bert>` :pytorch-neuron-src:`[notebook] <bert_tutorial/tutorial_pretrained_bert.ipynb>`
        * `BertBaseCased Inference on Inf1 instances <https://github.com/aws-neuron/aws-neuron-samples/blob/master/archive/torch-neuron/inference/bertbasecased/BertBaseCased.ipynb>`_
        * Bert TorchServe tutorial :ref:`[html] <pytorch-tutorials-torchserve>`
-       * Bring your own HuggingFace pretrained BERT container to Sagemaker Tutorial :ref:`[html] </src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>` :pytorch-neuron-src:`[notebook] <byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>`
+       * Bring your own HuggingFace pretrained BERT container to Sagemaker Tutorial :doc:`[html] </src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron>` :pytorch-neuron-src:`[notebook] <byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>`
 
    * - bert-base-uncased
      - torch-neuron
-     - * NeuronCore Pipeline tutorial :ref:`[html] </src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb>` :pytorch-neuron-src:`[notebook] <pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb>`
+     - * NeuronCore Pipeline tutorial :doc:`[html] </src/examples/pytorch/pipeline_tutorial/neuroncore_pipeline_pytorch>` :pytorch-neuron-src:`[notebook] <pipeline_tutorial/neuroncore_pipeline_pytorch.ipynb>`
 
    * - bert-large-uncased
      - torch-neuron
@@ -48,11 +48,11 @@ Encoders
 
    * - distilbert-base-uncased-finetuned-sst-2-english
      - tensorflow-neuron 
-     - * Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :ref:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>` :github:`[notebook] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`
+     - * Tensorflow 2.x - HuggingFace Pipelines distilBERT with Tensorflow2 Neuron :doc:`[html] </src/examples/tensorflow/huggingface_bert/huggingface_bert>` :github:`[notebook] </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`
     
    * - gluon bert
      - mxnet-neuron 
-     - * MXNet 1.8: Using data parallel mode tutorial :ref:`[html] </src/examples/mxnet/data_parallel/data_parallel_tutorial.ipynb>` :mxnet-neuron-src:`[notebook] <data_parallel/data_parallel_tutorial.ipynb>`
+     - * MXNet 1.8: Using data parallel mode tutorial :doc:`[html] </src/examples/mxnet/data_parallel/data_parallel_tutorial>` :mxnet-neuron-src:`[notebook] <data_parallel/data_parallel_tutorial.ipynb>`
 
 
 
@@ -122,7 +122,7 @@ Convolutional Neural Networks(CNN)
 
    * - MarianMT
      - torch-neuron
-     - * HuggingFace MarianMT tutorial :ref:`[html] </src/examples/pytorch/transformers-marianmt.ipynb>` :pytorch-neuron-src:`[notebook] <transformers-marianmt.ipynb>`
+     - * HuggingFace MarianMT tutorial :doc:`[html] </src/examples/pytorch/transformers-marianmt>` :pytorch-neuron-src:`[notebook] <transformers-marianmt.ipynb>`
        * `Inference of Pre-trained MarianMT model on Inf1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/archive/torch-neuron/inference/marianmt/MarianMT.ipynb>`_
 
    * - Detectron2 R-CNN 
@@ -132,17 +132,17 @@ Convolutional Neural Networks(CNN)
    * - resnet
      - torch-neuron
      - * `Inference of Pre-trained Resnet model (18,34,50,101,152) on Inf1 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/archive/torch-neuron/inference/resnet/Resnet.ipynb>`_
-       * ResNet-50 tutorial :ref:`[html] </src/examples/pytorch/resnet50.ipynb>` :pytorch-neuron-src:`[notebook] <resnet50.ipynb>`
+       * ResNet-50 tutorial :doc:`[html] </src/examples/pytorch/resnet50>` :pytorch-neuron-src:`[notebook] <resnet50.ipynb>`
 
    * - resnet
      - tensorflow-neuron
-     - * Tensorflow 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :ref:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial.rst>`
+     - * Tensorflow 2.x - Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving :doc:`[html] </src/examples/tensorflow/tensorflow_serving_tutorial>`
    
    * - resnet
      - mxnet-neuron
-     - * ResNet-50 tutorial :ref:`[html] </src/examples/mxnet/resnet50/resnet50.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50/resnet50.ipynb>`
-       * Getting started with Gluon tutorial :ref:`[html] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>` :github:`[notebook] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>`
-       * NeuronCore Groups tutorial :ref:`[html] </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>` :mxnet-neuron-src:`[notebook] <resnet50_neuroncore_groups.ipynb>`
+     - * ResNet-50 tutorial :doc:`[html] </src/examples/mxnet/resnet50/resnet50>` :mxnet-neuron-src:`[notebook] <resnet50/resnet50.ipynb>`
+       * Getting started with Gluon tutorial :doc:`[html] </src/examples/mxnet/mxnet-gluon-tutorial>` :github:`[notebook] </src/examples/mxnet/mxnet-gluon-tutorial.ipynb>`
+       * NeuronCore Groups tutorial :doc:`[html] </src/examples/mxnet/resnet50_neuroncore_groups>` :mxnet-neuron-src:`[notebook] <resnet50_neuroncore_groups.ipynb>`
     
 
    * - Resnext
@@ -152,7 +152,7 @@ Convolutional Neural Networks(CNN)
 
    * - Yolov4
      - torch-neuron 
-     - * PyTorch YOLOv4 tutorial :ref:`[html] </src/examples/pytorch/yolo_v4.ipynb>` :pytorch-neuron-src:`[notebook] <yolo_v4.ipynb>`
+     - * PyTorch YOLOv4 tutorial :doc:`[html] </src/examples/pytorch/yolo_v4>` :pytorch-neuron-src:`[notebook] <yolo_v4.ipynb>`
 
    * - Yolov5
      - torch-neuron

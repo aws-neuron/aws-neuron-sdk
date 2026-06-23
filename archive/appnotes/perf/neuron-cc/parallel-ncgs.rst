@@ -215,8 +215,8 @@ process with ``NEURON_RT_NUM_CORES=2`` (data-parallel).
 
 Examples using ``NEURON_RT_NUM_CORES`` include:
 
-* :ref:`PyTorch example </src/examples/pytorch/resnet50.ipynb>`
-* :ref:`MXNet example </src/examples/mxnet/resnet50_neuroncore_groups.ipynb>`
+* :doc:`PyTorch example </src/examples/pytorch/resnet50>`
+* :doc:`MXNet example </src/examples/mxnet/resnet50_neuroncore_groups>`
 
 
 Auto Model Replication in TensorFlow Neuron (``tensorflow-neuron``) (Beta)
@@ -268,7 +268,7 @@ neuroncore-pipeline-cores set to 1 (default).
 You will still need to use threads in the scaffolding code, to feed the
 loaded replicated model instance, to achieve high throughput.
 
-Example of auto model replication: :ref:`/src/examples/tensorflow/openpose_demo/openpose.ipynb`
+Example of auto model replication: :doc:`/src/examples/tensorflow/openpose_demo/openpose`
 
 
 FAQ

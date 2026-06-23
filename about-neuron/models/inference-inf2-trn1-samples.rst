@@ -31,7 +31,7 @@ Encoders
    * - bert-base-cased-finetuned-mrpc
      - torch-neuronx
      - * :ref:`BERT TorchServe tutorial <pytorch-tutorials-torchserve-neuronx>`
-       * HuggingFace pretrained BERT tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/bert-base-cased-finetuned-mrpc-inference-on-trn1-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/bert-base-cased-finetuned-mrpc-inference-on-trn1-tutorial.ipynb>`
+       * HuggingFace pretrained BERT tutorial :doc:`[html] </src/examples/pytorch/torch-neuronx/bert-base-cased-finetuned-mrpc-inference-on-trn1-tutorial>` :pytorch-neuron-src:`[notebook] <torch-neuronx/bert-base-cased-finetuned-mrpc-inference-on-trn1-tutorial.ipynb>`
        * `LibTorch C++ Tutorial for HuggingFace Pretrained BERT <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/torch-neuron/tutorials/tutorial-libtorch.html#pytorch-tutorials-libtorch>`_
        * `Compiling and Deploying HuggingFace Pretrained BERT on Inf2 on Amazon SageMaker <https://github.com/aws-neuron/aws-neuron-sagemaker-samples/blob/master/inference/inf2-bert-on-sagemaker/inf2_bert_sagemaker.ipynb>`_
 
@@ -52,7 +52,7 @@ Encoders
 
    * - roberta-base
      - tensorflow-neuronx
-     - * HuggingFace Roberta-Base :ref:`[html]</src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>` :github:`[notebook] </src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>`
+     - * HuggingFace Roberta-Base :doc:`[html]</src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial>` :github:`[notebook] </src/examples/tensorflow/tensorflow-neuronx/tfneuronx-roberta-base-tutorial.ipynb>`
 
 
    * - roberta-large
@@ -180,15 +180,15 @@ Encoder-Decoders
    * - t5-large
      - * torch-neuronx
        * optimum-neuron
-     - * T5 inference tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/t5-inference-tutorial.ipynb>`
+     - * T5 inference tutorial :doc:`[html] </src/examples/pytorch/torch-neuronx/t5-inference-tutorial>` :pytorch-neuron-src:`[notebook] <torch-neuronx/t5-inference-tutorial.ipynb>`
 
    * - t5-3b
      - neuronx-distributed
-     - * T5 inference tutorial :ref:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`
+     - * T5 inference tutorial :doc:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`
 
    * - google/flan-t5-xl
      - neuronx-distributed
-     - * flan-t5-xl inference tutorial :ref:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`
+     - * flan-t5-xl inference tutorial :doc:`[html] </src/examples/pytorch/neuronx_distributed/t5-inference/t5-inference-tutorial>` :pytorch-neuron-src:`[notebook] <neuronx_distributed/t5-inference/t5-inference-tutorial.ipynb>`
 
 
 
@@ -241,7 +241,7 @@ Convolutional Neural Networks(CNN)
    * - resnet50
      - torch-neuronx
      - * `Torchvision Pretrained ResNet50 Inference on Trn1 / Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/tv_pretrained_resnet50_inference_on_trn1.ipynb>`_
-       *  Torchvision ResNet50 tutorial :ref:`[html] </src/examples/pytorch/torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>` :pytorch-neuron-src:`[notebook] <torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>`
+       *  Torchvision ResNet50 tutorial :doc:`[html] </src/examples/pytorch/torch-neuronx/resnet50-inference-on-trn1-tutorial>` :pytorch-neuron-src:`[notebook] <torch-neuronx/resnet50-inference-on-trn1-tutorial.ipynb>`
 
    * - resnet50
      - tensorflow-neuronx

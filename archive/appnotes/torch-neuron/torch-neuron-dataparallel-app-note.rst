@@ -196,4 +196,4 @@ Full tutorial with torch.neuron.DataParallel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For an end-to-end tutorial that uses DataParallel, see the
-:ref:`PyTorch Resnet Tutorial </src/examples/pytorch/resnet50.ipynb>`.
+:doc:`PyTorch Resnet Tutorial </src/examples/pytorch/resnet50>`.
