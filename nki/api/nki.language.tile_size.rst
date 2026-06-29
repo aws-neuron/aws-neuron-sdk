@@ -33,14 +33,6 @@ nki.language.tile\_size
 
       Number of usable PSUM banks per partition.
 
-   .. attribute:: psum_num_banks
-
-      Number of usable PSUM banks per partition.
-
-      Returns 7 when ``dma_transpose`` is lowered to PE transpose
-      (``NKI_DMA_TRANSPOSE_AS_PE_TRANSPOSE=true`` on trn2+), since bank 7 is
-      reserved for ``nc_transpose``. Otherwise returns 8.
-
    .. attribute:: sbuf_size_bytes
 
       Total SBUF capacity in bytes (all partitions combined).
