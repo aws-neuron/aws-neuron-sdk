@@ -80,7 +80,7 @@ The minimum free dimension size to reach the recommended 2 KiB per partition dep
      - 2 048 elements
      - 2 048
 
-We will look at two examples below, which show various shapes, sizes and access patterns, and how this affects the the achieved DMA throughput of the corresponding DMA transfers.
+We will look at two examples below, which show various shapes, sizes and access patterns, and how this affects the achieved DMA throughput of the corresponding DMA transfers.
 
 Examples
 ---------

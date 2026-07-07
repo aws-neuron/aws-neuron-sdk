@@ -51,7 +51,7 @@ Solution
 Contiguous Device ID's
 -----------------------
 
-Neuron runtime expects the inferentia/trainium device id's to be contigious. If the device id's
+Neuron runtime expects the inferentia/trainium device id's to be contiguous. If the device id's
 are not contiguous you might see error messages like below
 
 

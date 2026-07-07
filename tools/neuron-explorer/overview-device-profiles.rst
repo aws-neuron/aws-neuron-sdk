@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn about Neuron Explorer widgets for device profiling including timeline views, event details, annotations, and performance analysis tools.
-    :date-modified: 12/02/2025
+    :date-modified: 06/26/2026
 
 Device Trace Viewer
 ===================
@@ -116,7 +116,7 @@ Box selection is supported in a couple of ways:
 * Toggling the box selection button within the timeline widget
 * Clear selection with `esc` key
 
-Correponding summary information of the selected region is displayed within the box selection selection widget.
+Corresponding summary information of the selected region is displayed within the box selection widget.
 
 Code Viewer
 ~~~~~~~~~~~
@@ -137,3 +137,38 @@ Layout Customization
 Understanding and optimizing performance with the profiler can be overwhelming given the amount of information being processed and displayed. As part of preparing for optimization work, you can cross-reference different information, such as the Device Trace Viewer with the application source code. With the widget-based UI, you can customize the layout to best fit a specific workflow. Each widget can be added, removed, dragged around, and resized. Once you are happy with the layout, you can save it through the Layout dropdown at the top right. The layouts are not tied to a specific profile, so they can be loaded and re-used for future profiles as well.
 
 .. image:: /tools/images/device-profile-13.png
+
+Profile Comparison
+~~~~~~~~~~~~~~~~~~
+
+Profile Comparison lets you view two or more device profiles side by side to identify performance differences between runs — for example, before and after an optimization, across different compiler flags, or between model variants.
+
+.. image:: /tools/images/device-profile-comparison.png
+
+How to compare profiles
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Ensure you have two or more processed device profiles in the Profile Manager before starting.
+
+1. In the **Profile Manager**, select two or more device profiles using the checkboxes.
+2. Click **Actions** → **Compare profiles**. Neuron Explorer opens the comparison view with each profile's device timeline stacked vertically and comparison widgets below.
+
+To return to single-profile view, navigate back to the Profile Manager.
+
+Comparison view layout
+^^^^^^^^^^^^^^^^^^^^^^
+
+The comparison view contains:
+
+* **Stacked timelines** — One device timeline per profile, arranged vertically for visual comparison of execution patterns.
+* **Compare Operator Table** — Aggregates operator-level metrics (execution time, FLOPs) across profiles with inline deltas showing improvement or regression.
+* **Compare Overall Summary** — Compares high-level metrics such as engine utilization, throttle counts, and opcode breakdown.
+* **Compare Current Selection Summary** — Compares metrics for the currently zoomed time range across all profiles.
+
+In comparison tables, select a **base profile** using the dropdown. All other profiles display delta values relative to the base, so you can see which operations improved or regressed.
+
+Global zoom modes keep timelines aligned:
+
+* **Global relative zoom** — Zoom in and out proportionally to all timelines.
+* **Global absolute zoom** — Zoom to an exact nanosecond range across all timelines.
+* **Synchronized time range** — Set a specific start and end time (absolute or percentage) to all timelines simultaneously.

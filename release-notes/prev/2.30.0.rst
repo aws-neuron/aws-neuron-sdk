@@ -1,6 +1,5 @@
 .. _neuron-2-30-0-whatsnew:
 .. _neuron-2.30.0-whatsnew:
-.. _latest-neuron-release:
 
 .. meta::
    :description: The official release notes for the AWS Neuron SDK, version 2.30.0. Release date: 05/21/2026.
@@ -14,15 +13,15 @@ AWS Neuron SDK 2.30.0 release notes
    :hidden:
    :maxdepth: 1
 
-   NKI <components/nki>
-   NKI Library <components/nki-lib>
-   Neuron Compiler <components/compiler>
-   Neuron Runtime <components/runtime>
-   Developer tools <components/dev-tools>
-   Neuron Agentic Development <components/agentic-development>
-   Deep Learning AMIs <components/dlamis>
-   Deep Learning Containers <components/containers>
-   JAX <components/jax>
+   NKI </release-notes/components/nki>
+   NKI Library </release-notes/components/nki-lib>
+   Neuron Compiler </release-notes/components/compiler>
+   Neuron Runtime </release-notes/components/runtime>
+   Developer tools </release-notes/components/dev-tools>
+   Neuron Agentic Development </release-notes/components/agentic-development>
+   Deep Learning AMIs </release-notes/components/dlamis>
+   Deep Learning Containers </release-notes/components/containers>
+   JAX </release-notes/components/jax>
 
 This page provides detailed component release notes for the Neuron SDK 2.30.0. For a an overview of the release content, see :ref:`What's New in AWS Neuron <whats-new-2026-05-21-v2_30>`.
 
@@ -52,7 +51,7 @@ Select a card below to review detailed release notes for each component of the N
         :gutter: 2
 
         .. grid-item-card:: 
-                :link: components/nki
+                :link: /release-notes/components/nki
                 :link-type: doc
 
                 **Neuron Kernel Interface (NKI)** 2.30.0 release notes
@@ -62,7 +61,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf2``, ``Trn1``, ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/nki-lib
+                :link: /release-notes/components/nki-lib
                 :link-type: doc
 
                 **NKI Library (NKI-Lib)** 2.30.0 release notes
@@ -72,7 +71,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf2``, ``Trn1``, ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/compiler
+                :link: /release-notes/components/compiler
                 :link-type: doc
 
                 **Neuron Graph Compiler (neuronx-cc)** 2.30.0 release notes
@@ -82,7 +81,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/runtime
+                :link: /release-notes/components/runtime
                 :link-type: doc
 
                 **Neuron Runtime** 2.30.0 release notes
@@ -92,7 +91,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/dev-tools
+                :link: /release-notes/components/dev-tools
                 :link-type: doc
 
                 **Neuron Developer Tools** 2.30.0 release notes
@@ -102,7 +101,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/agentic-development
+                :link: /release-notes/components/agentic-development
                 :link-type: doc
 
                 **Neuron Agentic Development** 2.30.0 release notes
@@ -112,7 +111,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/dlamis
+                :link: /release-notes/components/dlamis
                 :link-type: doc
 
                 **Neuron Deep Learning AWS Machine Images (DLAMIs)** 2.30.0 release notes
@@ -122,7 +121,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
  
         .. grid-item-card:: 
-                :link: components/containers
+                :link: /release-notes/components/containers
                 :link-type: doc
 
                 **Neuron Deep Learning Containers (DLCs)** 2.30.0 release notes
@@ -132,7 +131,7 @@ Select a card below to review detailed release notes for each component of the N
                 Supports: ``Inf1``, ``Inf2``, ``Trn1`` / ``Trn1n``, ``Trn2``, ``Trn3``
 
         .. grid-item-card:: 
-                :link: components/jax
+                :link: /release-notes/components/jax
                 :link-type: doc
 
                 **JAX Support)** 2.30.0 release notes

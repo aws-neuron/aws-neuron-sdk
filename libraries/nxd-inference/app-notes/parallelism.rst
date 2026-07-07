@@ -48,7 +48,7 @@ final output (O) projection, then run AllReduce with input tensor size equal to
 ``batch_size x sequence_length x hidden_size x per_element_bytes`` bytes. Here,``per_element_bytes`` depends on the
 numerical format of your tensors. When using BF16, for example, it would be ``2``. 
 AllReduce input tensor size is the same for both MLP and attention blocks, resulting in two AllReduce operations
-with with the same input size and output size as per AllReduce algorithm per transformer layer.
+with the same input size and output size as per AllReduce algorithm per transformer layer.
 
 .. figure:: /images/sharding/tensor_parallel.png
    :alt: Image: sharding_tensor_parallel.png

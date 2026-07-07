@@ -1,19 +1,75 @@
 .. meta::
     :description: Complete release notes for the Neuron Compiler component across all AWS Neuron SDK versions.
     :keywords: neuron compiler, neuronx-cc, release notes, aws neuron sdk
-    :date-modified: 12/19/2025
+    :date-modified: 07/07/2026
 
 .. _compiler_rn:
 
 Component Release Notes for Neuron Graph Compiler
 ==================================================
 
-**Latest version (in 2.30.0)**: 2.25.3371.0
+**Latest version (in 2.31.0)**: 2.26.6360.0
 
 The release notes for the Neuron Graph Compiler (``neuronx-cc``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
+
+.. _compiler-2-31-0-rn:
+
+Neuron Compiler (Neuron 2.31.0 Release)
+----------------------------------------------------
+
+Date of Release: 07/07/2026
+
+Changes, Performance and Compile Time Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **StableHLO composite operation mapping**: The compiler can now map StableHLO composite operations (including attention kernels) directly, enabling more efficient compilation of models expressed using the StableHLO composite format.
+
+* **New code generation backend enabled by default on trn2 and trn3**: A redesigned instruction code generation backend is now the default for ``trn2`` and ``trn3`` targets.
+
+* **LNC-aware instruction scheduling**: The post-scheduler now accounts for Logical NeuronCore (LNC) constraints when ordering instructions, reducing synchronization overhead and improving runtime performance for LNC=2 workloads.
+
+* **Pre-scheduling DMA prefetch**: The compiler now inserts DMA prefetch hints during the pre-scheduling phase, allowing memory transfers to overlap with computation earlier in the execution pipeline. This reduces memory stall cycles on models with large weight tensors.
+
+* **Faster dependency analysis (ADA optimization)**: The anti-dependency analyzer now skips trailing read operations that have no subsequent write, eliminating unnecessary dependency edges. This reduces compile time for models with many read-heavy memory access patterns.
+
+* **Improved compilation for heterogeneous models**: The compiler now performs fuzzy re-splitting of computation tiles for models with heterogeneous layer structures, producing more balanced workload distribution that reduces peak memory usage and compile time.
+
+Bug Fixes
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Area
+     - Fix
+   * - Compilation error
+     - Fixed a crash in tensor initialization when processing non-shrink memset paths
+   * - Compilation error
+     - Fixed incorrect collective operation rank-0 semantics for permute and reduce-scatter, which could cause compilation failures or hangs on multi-node models
+   * - Compilation error
+     - Fixed a vector accumulation register collision caused by StreamTranspose cross-bank over-read during instruction scheduling
+   * - Compilation error
+     - Fixed incorrect bank address computation for preallocated tensors starting at non-aligned offsets when using vector accumulation registers, which could cause tensor overlap
+   * - Compilation error
+     - Fixed a segfault in DMA prefetch when rolling back performance simulation state
+   * - Compilation error
+     - Fixed scheduling quality regression on workloads with heavy synchronization
+   * - Compilation error
+     - Fixed non-deterministic compilation failures caused by data races in control flow validation, constant propagation ordering, and internal optimization heuristics
+   * - Compilation error
+     - Fixed a loop fusion crash when candidates would create imperfect loop nests
+   * - Compilation error
+     - Fixed a tensor initialization crash where memset was inserted at incorrect program points
+   * - Compiler bug
+     - Fixed incorrect tensor reordering in the simplifier that could produce non-deterministic optimization results
+   * - Compiler bug
+     - Fixed negative-stride copy fusion that incorrectly merged reverse operations into compute
+
+* Other minor bug fixes and performance enhancements for ``trn2`` and ``trn3`` platforms.
 
 .. _compiler-2-30-0-rn:
 
@@ -111,7 +167,7 @@ Performance and Compile Time Improvements
 
 * **Cost model for tensor-contract vs mul+reduce-add trade-off**: A cycle-based cost model decides between TensorContract (PE engine) and multiply-reduce_add for matrix multiplication patterns. Fixes sub-optimal tiling on batch matmul, reducing compile time from 20 seconds to 1 second in affected cases.
 
-* **Dependency reduction parallelized for large sequence lengths**: The dependency reduction phase now runs in parallel, yielding ~2x pass-time reduction in internal bechmarks for 64K sequence length models.
+* **Dependency reduction parallelized for large sequence lengths**: The dependency reduction phase now runs in parallel, yielding ~2x pass-time reduction in internal benchmarks for 64K sequence length models.
 
 * **DMA coalescing uses interval tree for O(log n) conflict detection**:  ~20% median reduction in compile time improvements for DMA optimization passes across 408 Neuron internal benchmarks, with up to 50% reduction on the largest models.
 
@@ -327,7 +383,7 @@ Neuron Compiler [2.13.66.0]
 ----------------------------
 Date: 04/01/2024
 
-* This release introduces a new ``--enable-mixed-precision-accumulation`` compiler option. This option instructs the compiler to perform intermediate calculations of reduction operators (such as the dot or reduce operators) in FP32 regardless of the operation's defined datatype. The final result of the operator will be cast from FP32 to the model-designated datatype (e.g., BF16). This helps to improve the operator's resulting acccuracy.
+* This release introduces a new ``--enable-mixed-precision-accumulation`` compiler option. This option instructs the compiler to perform intermediate calculations of reduction operators (such as the dot or reduce operators) in FP32 regardless of the operation's defined datatype. The final result of the operator will be cast from FP32 to the model-designated datatype (e.g., BF16). This helps to improve the operator's resulting accuracy.
 
 
 
@@ -459,7 +515,7 @@ Date: 03/28/2023
   
 * The compiler's usage message now includes the ``inf2`` option argument.
 
-* A new 8-bit floating point data type, ``fp8_e4m3``, is now supported and can be specificed using the ``auto-cast-type`` option.
+* A new 8-bit floating point data type, ``fp8_e4m3``, is now supported and can be specified using the ``auto-cast-type`` option.
   This instructs the compiler to convert the FP32 operations selected via the ``--auto-cast`` option to a signed FP8 size
   with 4-bit exponent and 3-bit mantissa. Care must be taken to ensure that the down-casted values are representable within the 8-bit data range.
 
@@ -482,7 +538,7 @@ Neuron Compiler [2.4.0.21]
 Date: 02/08/2023
 
 * Added support for the following HLO operators: ``SelectAndScatter``.
-* Beta: ``--enable-experimental-O1`` flag: This option reduces the compile-time with a neglible impact on model execution performance.
+* Beta: ``--enable-experimental-O1`` flag: This option reduces the compile-time with a negligible impact on model execution performance.
   It allows the compiler to execute compiler passes in parallel to perform the compilation. By default the compiler uses 8 processes.
   This can be changed via the CLI option ``--num-parallel-jobs``. This option is expected to become the default in a future SDK release.
 

@@ -1,5 +1,5 @@
 .. meta::
-    :description: Learn about the Hierarchy View in Neuron Explorer for analyzing framework layers and HLO operations with zooming, highlighting, and display options.
+    :description: Learn about the Hierarchy Viewer in Neuron Explorer for analyzing framework layers and HLO operations with zooming, highlighting, and display options.
     :date-modified: 12/02/2025
 
 Hierarchy Viewer

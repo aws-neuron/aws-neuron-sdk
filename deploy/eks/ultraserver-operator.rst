@@ -5,7 +5,7 @@
 .. _neuron-ultraserver-operator:
 
 ====================================
-AWS Neuron UltraServer Operator Beta
+AWS Neuron UltraServer Operator
 ====================================
 
 What is the Neuron UltraServer Operator?
@@ -67,23 +67,36 @@ Custom Resource Definitions
 * ``instanceType``: Instance type of the UltraServer nodes
 * ``topologySize``: Number of nodes per UltraServer (1, 2, or 4)
 * ``serverCount``: How many UltraServers to allocate
-* ``allocationPolicy.failureStrategy``: How to handle node failures (``RestartAll``, ``ReplaceAffected``, or ``NoOp``)
+* ``allocationPolicy.failureStrategy``: How to handle node failures (``RestartAll``, ``MigrateAffected``, or ``NoOp``)
 * ``resourceClaimTemplate.name``: Name for the auto-generated RCT
 
-Beta Access
------------
 
-.. note::
-    Neuron UltraServer Operator is in private beta. Contact the Neuron product team to get access, and for installation instructions.
-
-
-Prerequisites for the preview
+Prerequisites
 -----------------------------
 
 * **Kubernetes version** - Please use K8s control plane 1.34+
 * **Instance type** - Trn3pds launched with K8s version 1.34.2+
 
 For instructions on how to setup an EKS cluster, please refer to :ref:`prerequisites<k8s-prerequisite>`.
+
+Installation via Helm
+---------------------
+
+Connect to your cluster from local box. Do not install the Neuron device plugin on the cluster! 
+
+Please confirm the cluster being used via:
+
+.. code-block:: bash
+
+   kubectl config current-context
+
+Then install the UltraServer operator and DRA driver with operator support enabled:
+
+.. code-block:: bash
+
+   helm upgrade --install neuron-helm-chart oci://public.ecr.aws/neuron/neuron-helm-chart \
+     --set "draDriver.enabled=true" \
+     --set "ultraserverOperator.enabled=true"
 
 Operator Deployment Node Requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -115,7 +128,7 @@ Define your UltraServer requirements:
 
 .. code-block:: yaml
 
-    apiVersion: neuron.aws.com/v1beta1
+    apiVersion: neuron.aws.com/v1
     kind: NeuronUltraServerWorkload
     metadata:
         name: my-training-job
@@ -124,7 +137,7 @@ Define your UltraServer requirements:
         topologySize: 4                       # 4-node UltraServer
         serverCount: 2                        # Allocate 2 UltraServers (8 nodes total)
         allocationPolicy:
-            failureStrategy: NoOp             # Options: RestartAll, ReplaceAffected, NoOp
+            failureStrategy: NoOp             # Options: RestartAll, MigrateAffected, NoOp
         resourceClaimTemplate:
             name: my-training-job-rct         # Name for the auto-generated RCT
 
@@ -253,7 +266,7 @@ NeuronUltraServerWorkload Spec Reference
      - Number of UltraServers to allocate
    * - ``spec.allocationPolicy.failureStrategy``
      - No
-     - ``RestartAll``, ``ReplaceAffected``, or ``NoOp`` (default: ``NoOp``)
+     - ``RestartAll``, ``MigrateAffected``, or ``NoOp`` (default: ``NoOp``)
    * - ``spec.resourceClaimTemplate.name``
      - No
      - Name for the generated RCT (defaults to workload name)
@@ -273,7 +286,7 @@ NeuronUltraServerWorkload Spec Reference
      - Report failure status only. No automatic recovery.
    * - ``RestartAll``
      - Release all UltraServers and reallocate from scratch.
-   * - ``ReplaceAffected``
+   * - ``MigrateAffected``
      - Migrate affected pods to healthy UltraServer nodes.
 
 NeuronUltraServerWorkload Status Reference
@@ -327,7 +340,7 @@ Inspect a specific UltraServer:
 
 The status shows:
 
-* ``state``: ``Available``, ``PartiallyAllocated``, or ``FullyAllocated``
+* ``state``: ``Ready`` or ``Degraded``
 * ``allocations``: Which workloads are using which nodes
 * ``topology``: Mode config for Trn3 UltraServer instances
 

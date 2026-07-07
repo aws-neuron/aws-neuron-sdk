@@ -19,6 +19,9 @@ Deploy PyTorch with Neuron support using pre-configured Docker images from AWS E
    For a non-containerized setup, consider the :doc:`DLAMI-based installation <dlami>` or
    :doc:`manual installation <manual>` instead.
 
+.. warning::
+   The NeuronX Distributed (NxD) library for training (``neuronx_distributed_training``) is no longer included on Neuron DLAMIs and DLCs as of release v2.31.0. To manually configure your environment to use ``neuronx_distributed_training``, see :doc:`Install PyTorch via manual installation </setup/pytorch/manual>`.
+
 ----
 
 What are Neuron DLCs?
@@ -43,9 +46,6 @@ Available PyTorch Neuron DLC images:
    * - PyTorch Inference vLLM (NeuronX)
      - LLM serving with vLLM
      - `vLLM images <https://github.com/aws-neuron/deep-learning-containers#vllm-inference-neuronx>`__
-   * - PyTorch Training (NeuronX)
-     - Model training on Trn1/Trn2/Trn3
-     - `Training images <https://github.com/aws-neuron/deep-learning-containers#pytorch-training-neuronx>`__
    * - PyTorch Inference (Neuron)
      - Legacy inference on Inf1
      - `Inf1 images <https://github.com/aws-neuron/deep-learning-containers#pytorch-inference-neuron>`__
@@ -80,30 +80,14 @@ The fastest way to get started with LLM inference on Neuron:
      docker login --username AWS --password-stdin 763104351884.dkr.ecr.us-east-1.amazonaws.com
 
    # Pull the vLLM inference container
-   docker pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
+   docker pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-vllm-neuronx:0.16.0-neuronx-py312-sdk2.31.0-ubuntu24.04
 
    # Run with Neuron device access
    docker run -it --device=/dev/neuron0 \
-     763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
+     763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-vllm-neuronx:0.16.0-neuronx-py312-sdk2.31.0-ubuntu24.04
 
 For the latest image tags and a step-by-step walkthrough, see
 :doc:`/deploy/environments/quickstart-deploy-dlc`.
-
-Quick Start: Training Container
---------------------------------
-
-.. code-block:: bash
-
-   # Authenticate with ECR
-   aws ecr get-login-password --region us-east-1 | \
-     docker login --username AWS --password-stdin 763104351884.dkr.ecr.us-east-1.amazonaws.com
-
-   # Pull the training container
-   docker pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
-
-   # Run with all Neuron devices
-   docker run -it --device=/dev/neuron0 --device=/dev/neuron1 \
-     763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
 
 .. note::
    The image tags above are examples. For the latest available images, see the
@@ -116,7 +100,7 @@ You can extend a Neuron DLC with additional packages by creating a custom Docker
 
 .. code-block:: dockerfile
 
-   FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.1.2-neuronx-py310-sdk2.20.2-ubuntu20.04
+   FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.9.0-neuronx-py312-sdk2.31.0-ubuntu24.04
 
    # Install additional packages
    RUN pip install transformers datasets

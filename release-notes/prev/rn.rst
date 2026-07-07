@@ -7,6 +7,7 @@ Previous release notes (Neuron 2.x)
    :maxdepth: 1
    :hidden:
 
+   Neuron 2.30.0 </release-notes/prev/2.30.0>
    Neuron 2.29.1 </release-notes/prev/2.29.1>
    Neuron 2.29.0 </release-notes/prev/2.29.0>
    Neuron 2.28.1 </release-notes/prev/2.28.1>
@@ -18,7 +19,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
 
-* **The latest Neuron release is 2.30.0, released on 05/21/2026.** Read the :doc:`2.30.0 release notes </release-notes/2.30.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+* **The latest Neuron release is 2.31.0, released on 07/07/2026.** Read the :doc:`2.31.0 release notes </release-notes/2.31.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
 
 ----
   
@@ -38,6 +39,10 @@ Previous release notes (Neuron 2.x)
                 ^^^
                 Release notes by component for prior Neuron SDK versions.
 
+Neuron 2.30.0 (05/21/2026)
+--------------------------
+
+See :ref:`neuron-2-30-0-whatsnew` for the full Neuron 2.30.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
 
 Neuron 2.29.0 (04/09/2026)
 --------------------------
@@ -314,7 +319,7 @@ Neuron DLAMIs: This release updates MultiFramework AMIs to include PyTorch 2.6, 
        * See more at :ref:`announcements-main`
      - Inf1, Inf2, Trn1/Trn1n
 
-For detailed release artifiacts, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
+For detailed release artifacts, see :ref:`Release Artifacts <latest-neuron-release-artifacts>`.
 
 
 
@@ -643,7 +648,7 @@ More release content can be found in the table below and each component release 
        * See more at :ref:`runtime_rn`
      - Inf1,Inf2,Trn1/Trn1n,Trn2
 
-   * - Release Annoucements
+   * - Release Announcements
      - * :ref:`announce-eos-neuron-det`
        * :ref:`announce-eos-nxd-examples`
        * :ref:`announce-python-eos`
@@ -700,7 +705,7 @@ Neuron 2.20.2 release fixes a stability issue in Neuron Scheduler Extension that
 This release also addresses a security patch update to Neuron Driver that fixes a kernel address leak issue. 
 See more on :ref:`runtime_rn` and :ref:`runtime_rn`.
 
-Addtionally, Neuron 2.20.2 release updates ``torch-neuronx`` and ``libneuronxla`` packages to add support for ``torch-xla`` 2.1.5 package 
+Additionally, Neuron 2.20.2 release updates ``torch-neuronx`` and ``libneuronxla`` packages to add support for ``torch-xla`` 2.1.5 package
 which fixes checkpoint loading issues with Zero Redundancy Optimizer (ZeRO-1). See :ref:`pytorch_rn` and :ref:`libneuronxla-rn`.
 
 Neuron supported DLAMIs and DLCs are updated with this release (Neuron 2.20.2 SDK). The Training DLC is also updated to address the 
@@ -741,7 +746,7 @@ All of our NKI work is shared as open source, enabling the community developers 
 For more information see :ref:`NKI section <neuron-nki>` and check the NKI samples Github repository: https://github.com/aws-neuron/nki-samples
 
 **NxD Training (NxDT)**: NxDT is a PyTorch-based library that adds support for user-friendly distributed training experience through a YAML configuration file compatible with NeMo,, allowing users to easily set up their training workflows. At the same time, NxDT maintains flexibility, enabling users to choose between using the YAML configuration file, PyTorch Lightning Trainer, or writing their own custom training script using the NxD Core.
-The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing compatability with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.
+The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing compatibility with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.
 
 For more information see :ref:`NxD Training (beta) <nxdt>` and check the NxD Training Github repository: https://github.com/aws-neuron/neuronx-distributed-training 
 
@@ -757,11 +762,11 @@ Furthermore, this release improves model loading in Transformers Neuronx for mod
 **Neuron Driver**: This release adds support for the Rocky Linux 9.0 operating system. 
 
 **Neuron Containers**: This release introduces Neuron Helm Chart, which helps streamline the deployment of AWS Neuron components on Amazon EKS. See Neuron Helm Chart Github repository: https://github.com/aws-neuron/neuron-helm-charts. 
-Additionaly, this release adds ECS support for the "Neuron Node Problem Detector and Recovery" artifact. See :ref:`ecs-neuron-problem-detector-and-recovery`.
+Additionally, this release adds ECS support for the "Neuron Node Problem Detector and Recovery" artifact. See :ref:`ecs-neuron-problem-detector-and-recovery`.
 
 **Neuron DLAMIs and DLCs**: This release includes the addition of the NxDT package to various Neuron DLAMIs (Multi-Framework Neuron DLAMI, PyTorch 1.13 Neuron DLAMI, and PyTorch 2.1 Neuron DLAMI) and the inclusion of NxDT in the PyTorch 1.13 Training Neuron DLC and PyTorch 2.1 Training Neuron DLC.
 
-**Software Maintenance Policy**: This release also updates Neuron SDK software maintenance poclicy, For more information see :ref:`sdk-maintenance-policy`
+**Software Maintenance Policy**: This release also updates Neuron SDK software maintenance policy, For more information see :ref:`sdk-maintenance-policy`
 
 
 More release content can be found in the table below and each component release notes.
@@ -782,7 +787,7 @@ More release content can be found in the table below and each component release 
 
    * - Transformers NeuronX (transformers-neuronx) for Inference
      - * Support for on-device sampling (Top P) and dynamic sampling (per request parameters) with Continuous batching. See :ref:`developer guide <transformers_neuronx_readme>`
-       * Support for Flash Decoding to enable inference for higher sequence lengths of upto 128K. See :ref:`developer guide <transformers_neuronx_readme>`.
+       * Support for Flash Decoding to enable inference for higher sequence lengths of up to 128K. See :ref:`developer guide <transformers_neuronx_readme>`.
        * Support for multi-node inference for large models like ``Llama-3.1-405B``. See :ref:`developer guide <transformers_neuronx_readme>`.
        * Support for bucketing, multi-node inference , on-device sampling and other improvements in Neuron vLLM integration. See :ref:`developer guide <transformers_neuronx_readme>` 
        * Support for Llama 3.1 models (405B, 70B, and 8B variants). See samples for `Llama-3.1-405B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-405b-multinode-16k-sampling.ipynb>`_ , `Llama-3.1-70B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-70b-64k-sampling.ipynb>`_  and  `Llama-3.1-8B <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx/transformers-neuronx/inference/llama-3.1-8b-128k-sampling.ipynb>`_
@@ -800,7 +805,7 @@ More release content can be found in the table below and each component release 
 
        **Inference:**
        
-       * Suppport for DBRX and Mixtral inference samples. See  samples for `DBRX <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/dbrx>`_ and `Mixtral <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/mixtral>`_
+       * Support for DBRX and Mixtral inference samples. See  samples for `DBRX <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/dbrx>`_ and `Mixtral <https://github.com/aws-neuron/neuronx-distributed/tree/main/examples/inference/mixtral>`_
        * Support for sequence length autobucketing to improve inference performance.
        * Support for improved tracing in the inference samples.
        * See more at :ref:`nxd-core_rn`   
@@ -837,7 +842,7 @@ More release content can be found in the table below and each component release 
      - Trn1/Trn1n,Inf2
 
    * - Neuron Deep Learning AMIs (DLAMIs)
-     - * Support for ``neuronx-distributed-training`` library in PyTorch Neuron DLAMI virtual enviornments. See :ref:`neuron-dlami-overview`
+     - * Support for ``neuronx-distributed-training`` library in PyTorch Neuron DLAMI virtual environments. See :ref:`neuron-dlami-overview`
        * Updated existing Neuron supported DLAMIs with Neuron 2.20 SDK release.
        * See more at :ref:`Neuron DLAMI Release Notes <neuron-dlami-overview>`
      - Inf1,Inf2,Trn1/Trn1n
@@ -858,7 +863,7 @@ More release content can be found in the table below and each component release 
        * See more at :ref:`runtime_rn`
      - Inf1,Inf2,Trn1/Trn1n
 
-   * - Release Annoucements
+   * - Release Announcements
      - * :ref:`announce-component-name-change-nxdcore`
        * :ref:`eos-neurondevice`
        * :ref:`eos-neuron-device-version`
@@ -1094,7 +1099,7 @@ What's New
 
 Neuron 2.19 release adds Llama 3 training support and introduces Flash Attention kernel support to enable LLM training and inference for
 large sequence lengths. Neuron 2.19 also introduces new features and performance
-improvements to LLM training, improves LLM inference performance for Llama 3 model by upto 20%, and adds tools for monitoring, problem detection and recovery in Kubernetes (EKS) environments, improving efficiency and reliability.
+improvements to LLM training, improves LLM inference performance for Llama 3 model by up to 20%, and adds tools for monitoring, problem detection and recovery in Kubernetes (EKS) environments, improving efficiency and reliability.
 
 **Training highlights**: LLM model training user experience using
 NeuronX Distributed (NxD) is improved by support for Flash Attention to
@@ -2473,4 +2478,4 @@ In addition, this release introduces changes to the Neuron packaging and install
 Neuron 2.4.0 (10/27/2022)
 -------------------------
 
-This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Sheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc-index>` and :ref:`PyTorch Neuron <pytorch_rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.
+This release introduces new features and resolves issues that improve stability. The release introduces "memory utilization breakdown" feature in both :ref:`Neuron Monitor <neuron-monitor-ug>` and :ref:`Neuron Top <neuron-top-ug>` system tools. The release introduces support for "NeuronCore Based Scheduling" capability to the Neuron Kubernetes Scheduler and introduces new operators support in :ref:`Neuron Compiler <neuronx-cc-index>` and :ref:`PyTorch Neuron <pytorch_rn>`. This release introduces also additional eight (8) samples of models' fine tuning using PyTorch Neuron. The new samples can be found in the `AWS Neuron Samples GitHub <https://github.com/aws-neuron/aws-neuron-samples/tree/master/torch-neuronx>`_ repository.

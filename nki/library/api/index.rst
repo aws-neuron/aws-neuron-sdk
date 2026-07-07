@@ -1,6 +1,6 @@
 .. meta::
     :description: Reference for the pre-built NKI Library kernels included with the AWS Neuron SDK.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. _nkl_api_ref_home:
 
@@ -44,8 +44,8 @@ Attention Kernels
      - Segmented attention with block-based KV cache and prefix caching for decode.
    * - :doc:`Attention TKG </nki/library/api/attention-tkg>`
      - Implements attention optimized for Token Generation (decode) use cases with small active sequence lengths.
-   * - :doc:`KV-Parallel Segmented Prefill </nki/library/api/kv-parallel-segmented-prefill>`
-     - KV-parallel segmented prefill attention kernel.
+   * - :doc:`Attention KV-Parallel Segmented CTE </nki/library/api/attention-kv-parallel-segmented-cte>`
+     - KV-parallel segmented prefill attention with paged KV cache, sliding-window, and round-robin KV distribution.
 
 Rotary Position Embedding (RoPE) Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,6 +134,21 @@ Attention Kernels
      - Ring attention forward pass for context parallelism across multiple workers.
    * - :doc:`Ring Attention Backward </nki/library/api/ring-attention-bwd>`
      - Ring attention backward pass SPMD kernel for context parallelism.
+   * - :doc:`Ring Attention Unpermute </nki/library/api/ring-attention-unpermute>`
+     - Reorders striped ring-attention output back to contiguous sequence order.
+   * - :doc:`QKV CTE MLA </nki/library/api/qkv-cte-mla>`
+     - DeepSeek Multi-head Latent Attention (MLA) QKV projection with MX quantization for context encoding.
+
+Deformable Attention Kernels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`MS Deformable Attention </nki/library/api/ms-deformable-attention>`
+     - Multi-scale deformable attention using bilinear interpolation and indirect DMA transpose.
+   * - :doc:`MS Deformable Attention Backward </nki/library/api/ms-deformable-attention-bwd>`
+     - Backward pass for multi-scale deformable attention.
 
 Transformer Kernels
 ~~~~~~~~~~~~~~~~~~~~
@@ -169,6 +184,14 @@ Collective Communication Kernels
      - Fused all-gather and matrix multiplication for TRN2.
    * - :doc:`SBUF-to-SBUF All-Gather </nki/library/api/sb2sb-allgather>`
      - SBUF-to-SBUF all-gather with variants for small and large tensors.
+   * - :doc:`Collective Communication Kernels </nki/library/api/collectives>`
+     - HBM-based all-reduce, all-gather, reduce-scatter, and all-to-all kernels.
+   * - :doc:`Permute A2AV </nki/library/api/permute-a2av>`
+     - MoE training dispatch: permute tokens by destination EP rank and exchange via all-to-all-v.
+   * - :doc:`Unpermute A2AV </nki/library/api/unpermute-a2av>`
+     - MoE training combine: all-to-all-v exchange and unpermute to original token order.
+   * - :doc:`QKV Batch Shard </nki/library/api/batch-shard>`
+     - Q projection transition from tensor-parallel to tensor-and-data-parallel layout for batch-sharded attention.
 
 Foreach Kernels
 ~~~~~~~~~~~~~~~~
@@ -202,6 +225,23 @@ MoE Kernels
 
    * - :doc:`MX MoE Block TKG Wrapper </nki/library/api/mx-moe-block-tkg-wrapper>`
      - Wrapper that bitcasts unsigned integer weights to MX x4 dtype for MoE block.
+   * - :doc:`Blockwise MM Shard-on-Block </nki/library/api/bwmm-shard-on-block-v2>`
+     - Block-sharded blockwise matrix multiplication for context-encoding MoE layers.
+   * - :doc:`RMSNorm Router Top-K A2AV </nki/library/api/rmsnorm-router-topk-a2av>`
+     - Fused RMSNorm + router top-K for MoE token generation feeding the all-to-all-v dispatch path.
+   * - :doc:`RMSNorm Router Top-K TKG </nki/library/api/rmsnorm-router-topk-tkg>`
+     - Fused RMSNorm (+ optional MX quantize) + router top-K for MoE token generation.
+
+Indexing Kernels
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`Gather </nki/library/api/gather>`
+     - Gather rows from a 2D input by a 1D index using indirect DMA load.
+   * - :doc:`Scatter-Add </nki/library/api/scatter-add>`
+     - Scatter-add rows from src into a 2D input by a 1D index.
 
 Optimizer Kernels
 ~~~~~~~~~~~~~~~~~~
@@ -293,6 +333,8 @@ MoE Backward Kernels
 
    * - :doc:`Blockwise MM Backward </nki/library/api/blockwise-mm-backward>`
      - Computes backward pass for blockwise matrix multiplication in Mixture of Experts layers.
+   * - :doc:`Blockwise MM Backward MXFP8 </nki/library/api/blockwise-mm-backward-mxfp8>`
+     - MXFP8-quantized backward pass for blockwise Mixture of Experts.
 
 .. toctree::
     :maxdepth: 1
@@ -301,10 +343,14 @@ MoE Backward Kernels
     Argsort Unstable <argsort-unstable>
     Attention Block TKG <attention-block-tkg>
     Attention CTE <attention-cte>
+    Attention KV-Parallel Segmented CTE <attention-kv-parallel-segmented-cte>
     Attention Segmented CTE <attention-segmented-cte>
     Attention TKG <attention-tkg>
     Blockwise MM Backward <blockwise-mm-backward>
+    Blockwise MM Backward MXFP8 <blockwise-mm-backward-mxfp8>
+    Blockwise MM Shard-on-Block <bwmm-shard-on-block-v2>
     Build All-to-All-V Metadata <build-all-to-all-v-metadata>
+    Collective Communication Kernels <collectives>
     Conv1D <conv1d>
     Conv3D <conv3d>
     Cross Entropy <cross-entropy>
@@ -318,7 +364,7 @@ MoE Backward Kernels
     Foreach Norm <foreach-norm>
     FP8 Quantize <fp8-quantize>
     Fused Adam <fused-adam>
-    KV-Parallel Segmented Prefill <kv-parallel-segmented-prefill>
+    Gather <gather>
     Linear Scan <linear-scan>
     Matmul MXFP8 <matmul-mxfp8-generic-kernel>
     MLP <mlp>
@@ -326,21 +372,31 @@ MoE Backward Kernels
     MLP Forward MXFP8 <mlp-fwd-mxfp8-kernel>
     MoE CTE <moe-cte>
     MoE TKG <moe-tkg>
+    MS Deformable Attention <ms-deformable-attention>
+    MS Deformable Attention Backward <ms-deformable-attention-bwd>
     MX MoE Block TKG Wrapper <mx-moe-block-tkg-wrapper>
     Output Projection CTE <output-projection-cte>
     Output Projection TKG <output-projection-tkg>
     Pad <pad>
+    Permute A2AV <permute-a2av>
     Permute Routed Tokens <permute-routed-tokens>
     QKV <qkv>
+    QKV Batch Shard <batch-shard>
+    QKV CTE MLA <qkv-cte-mla>
     Quantize MXFP8 <quantize-mxfp8>
     Ring Attention Backward <ring-attention-bwd>
     Ring Attention Forward <ring-attention-fwd>
+    Ring Attention Unpermute <ring-attention-unpermute>
     RMSNorm-Quant <rmsnorm-quant>
+    RMSNorm Router Top-K A2AV <rmsnorm-router-topk-a2av>
+    RMSNorm Router Top-K TKG <rmsnorm-router-topk-tkg>
     RNG <rng>
     RoPE <rope>
     Router Top-K <router-topk>
     SBUF-to-SBUF All-Gather <sb2sb-allgather>
+    Scatter-Add <scatter-add>
     Selective Scan <selective-scan>
     SSD <ssd>
     Top-K Reduce <topk-reduce>
     Transformer TKG <transformer-tkg>
+    Unpermute A2AV <unpermute-a2av>

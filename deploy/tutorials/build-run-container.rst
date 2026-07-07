@@ -92,10 +92,10 @@ Devices
 
    .. note::
 
-      Only the number of devices can be specfied.
-      When only the neuron device plugin is running that does not guaratee the devices to be
+      Only the number of devices can be specified.
+      When only the neuron device plugin is running that does not guarantee the devices to be
       contiguous. Make sure to run the neuron scheduler extension :ref:`neuron-k8-scheduler-ext`
-      so that it makes sure that contigiuous devices are allocated to the containers
+      so that it makes sure that contiguous devices are allocated to the containers
 
 
 - Multiple container applications running in the same host can share the devices but the cores cannot be shared. This is similar to running multiple applications in the host. 
@@ -124,10 +124,10 @@ the environment variable NEURON_RT_VISIBLE_CORES and NEURON_RT_NUM_CORES. Please
 
    .. note::
 
-      Only the number of cores can be specfied.
-      When only the neuron device plugin is running that does not guaratee the cores to be
+      Only the number of cores can be specified.
+      When only the neuron device plugin is running that does not guarantee the cores to be
       contiguous. Make sure to run the neuron scheduler extension :ref:`neuron-k8-scheduler-ext`
-      so that it makes sure that contigiuous cores are allocated to the containers
+      so that it makes sure that contiguous cores are allocated to the containers
 
 - Multiple container applications running in the same host cannot share the cores. This is similar to running multiple applications in the host.
 - In the kubernetes environment the cores cannot be shared by multiple containers in the pod

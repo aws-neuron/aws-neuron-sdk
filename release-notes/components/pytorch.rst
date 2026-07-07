@@ -8,7 +8,8 @@
 Component Release Notes for Neuron PyTorch Framework
 =====================================================
 
-**Latest version (in 2.30.0)**: 2.9.0.2.14.27711
+
+**Latest version (in 2.31.0)**: 2.9.0.2.15.32035
 
 The release notes for the Neuron PyTorch framework component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Compute MoE Top-K reduction across sparse all_to_all_v() collective output buffer.
-    :date-modified: 04/09/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.experimental.subkernels
 
@@ -28,7 +28,7 @@ API Reference
 topk_reduce
 ^^^^^^^^^^^
 
-.. py:function:: topk_reduce(input: nl.ndarray, T: int, K: int)
+.. py:function:: topk_reduce(input: nl.ndarray, T: int, K: int, token_base_index: int = 1)
 
    Compute MoE Top-K reduction across sparse all_to_all_v() collective output buffer.
 
@@ -38,6 +38,8 @@ topk_reduce
    :type T: ``int``
    :param K: Number of routed experts per token.
    :type K: ``int``
+   :param token_base_index: Base offset for the packed global token indices (1-indexed by default). Use to handle sparse K.
+   :type token_base_index: ``int``
    :return: [T, H]@HBM, bf16/fp16. Ordered and reduced output.
    :rtype: ``nl.ndarray``
 

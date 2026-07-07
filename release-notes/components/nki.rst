@@ -1,7 +1,7 @@
 .. meta::
     :description: Release notes for the Neuron Kernel Interface (NKI) component across all Neuron SDK versions
     :keywords: NKI, Neuron Kernel Interface, release notes, nki.language, nki.isa, kernels
-    :date-modified: 05/21/2026
+    :date-modified: 06/26/2026
 
 .. _nki_rn:
 
@@ -9,6 +9,108 @@ Release Notes for Neuron Component: Neuron Kernel Interface (NKI)
 ==================================================================
 
 The release notes for the Neuron Kernel Interface (NKI) component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-2-31-0-rn:
+
+Neuron Kernel Interface (NKI) [0.5.0] (Neuron 2.31.0 Release)
+---------------------------------------------------------------------
+
+Date of Release: 07/07/2026
+
+AWS Neuron SDK 2.31.0 introduces NKI 0.5.0. This release adds the ``float8_e8m0fnu`` MX scale dtype,
+introduces tensor indirection (gather/scatter) support for on-chip compute operations, and
+expands :class:`~nki.language.NkiTensor` view and query methods.
+It also tightens several APIs for correctness and includes simulator and compiler bug fixes.
+
+New Features
+~~~~~~~~~~~~
+
+* **float8_e8m0fnu dtype**: Added OCP MX scale format support for :func:`~nki.isa.nc_matmul_mx` /
+  :func:`~nki.isa.quantize_mx` scale operands, where previously scale was represented as ``uint8``.
+  See :doc:`nki.language.float8_e8m0fnu </nki/api/generated/nki.language.float8_e8m0fnu>`.
+
+* **New NkiTensor view primitives**: Added composable view methods to :class:`~nki.language.NkiTensor`:
+  :meth:`~nki.language.NkiTensor.slice`, :meth:`~nki.language.NkiTensor.select`,
+  :meth:`~nki.language.NkiTensor.permute`, :meth:`~nki.language.NkiTensor.broadcast`,
+  :meth:`~nki.language.NkiTensor.expand_dim`, :meth:`~nki.language.NkiTensor.squeeze_dim`,
+  :meth:`~nki.language.NkiTensor.reshape_dim`, :meth:`~nki.language.NkiTensor.flatten_dims`,
+  :meth:`~nki.language.NkiTensor.rearrange`, and :meth:`~nki.language.NkiTensor.vector_select`.
+  Also adds query methods :meth:`~nki.language.NkiTensor.is_contiguous` and
+  :meth:`~nki.language.NkiTensor.is_indirect`. Added documentation and examples for
+  pre-existing methods :meth:`~nki.language.NkiTensor.reshape`, :meth:`~nki.language.NkiTensor.view`,
+  :meth:`~nki.language.NkiTensor.ap`, and :meth:`~nki.language.NkiTensor.get_pattern`.
+
+* **Tensor indirection on compute APIs**: Tensor indirection (gather/scatter) via :meth:`~nki.language.NkiTensor.indirect` — a new addressing mode
+  that uses an index tensor to indirectly select SBUF/PSUM partitions for on-chip compute
+  operations on NeuronCore-v4+. The ``dst`` and ``data`` tensors accept ``.indirect()`` views,
+  subject to quadrant/partition alignment rules.
+  This extends indirect addressing (previously only available on DMA ops via
+  ``vector_offset``) to non-DMA ISA operations:
+  :func:`~nki.isa.nc_matmul`, :func:`~nki.isa.nc_matmul_mx`, :func:`~nki.isa.tensor_tensor`,
+  :func:`~nki.isa.tensor_scalar`, :func:`~nki.isa.tensor_reduce`, :func:`~nki.isa.tensor_copy`,
+  :func:`~nki.isa.tensor_copy_predicated`, :func:`~nki.isa.tensor_scalar_reduce`,
+  :func:`~nki.isa.tensor_scalar_cumulative`, :func:`~nki.isa.activation`, :func:`~nki.isa.activation_reduce`,
+  :func:`~nki.isa.activate2`, and :func:`~nki.isa.exponential`.
+
+* :func:`~nki.isa.nc_matmul` now supports **8192 elements for bfloat16** dst output (previously
+  only 4096 fp32 elements were supported). Also updates :func:`~nki.isa.nc_matmul_mx` documentation
+  to clarify the correct PSUM limits (full 16384-byte PSUM bank).
+
+* :func:`~nki.isa.dma_transpose` with ``scalar_offset`` now supports ``oob_mode.skip`` for runtime indirect indexing.
+
+* Added :attr:`~nki.language.tile_size.psum_num_banks` to get the number of usable PSUM banks per partition.
+
+* NKI wheel now ships PEP 561 ``.pyi`` type stubs for IDE autocomplete, hover docs, and type checking.
+  Non-public modules are hidden from IDE autocomplete. Internal modules renamed with ``_`` prefix
+  per PEP 8 conventions (backward-compatibility shims are in place).
+
+
+Improvements
+~~~~~~~~~~~~
+
+* The CPU simulator now emits a warning when :func:`~nki.isa.nc_matmul` with ``accumulate=True``
+  is used on uninitialized PSUM (undefined behavior on hardware).
+* All :mod:`nki.collectives` APIs now accept an optional ``name`` parameter, like ``nki.isa`` instructions,
+  so that ``kernel.with_schedule()`` edges can target collective instructions with the
+  :ref:`NKI Scheduling APIs <how-to-scheduling-apis>`.
+* :meth:`~nki.language.NkiTensor.reshape` now asserts that the total element count is preserved.
+  Invalid reshapes raise a clear error at trace time.
+* Neuronx-cc allocator errors are now translated into actionable user-facing messages.
+* The experimental :func:`~nki.language.rsqrt` API now provides higher numerical precision using the GpSimd Engine.
+  PSUM inputs are no longer supported; use :func:`~nki.isa.activation` directly if you need PSUM input or Scalar Engine throughput.
+
+
+Deprecated and Removed APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **SPMD launch grid requirement for LNC2 kernels (deprecation notice)**:
+  Launching an LNC2 kernel currently relies on an SPMD launch grid whose dimension matches the LNC degree.
+  This requirement will be deprecated in a future release; the behavior does not change in NKI 0.5.0.
+  When this change takes effect:
+
+  (1) the SPMD launch grid will no longer be required to launch an LNC2 kernel;
+  (2) passing an SPMD dimension that differs from the LNC degree in use will raise a compile-time error; and
+  (3) regardless of whether an SPMD dimension is specified, the kernel will always be specialized
+      across all physical NeuronCores (PNCs) in the LNC.
+
+  Kernels that continue to pass a matching SPMD grid will keep working for backwards compatibility.
+  See :doc:`LNC Overview </nki/get-started/about/lnc>`.
+
+
+Bug Fixes
+~~~~~~~~~
+
+* Simulator fix for :func:`~nki.isa.dma_copy` out-of-bounds error with x4 dtypes and ``oob_mode.skip``.
+* Simulator fix for :func:`~nki.isa.nc_matmul` with >2D operands in conv-style kernels.
+* Simulator fix for while-loop failing to terminate correctly.
+* Simulator fix for gather transpose overwriting valid dst with OOB zeros.
+
+
+Known Issues
+~~~~~~~~~~~~
+
+* :meth:`~nki.language.NkiTensor.reinterpret_cast` + :meth:`~nki.language.NkiTensor.vector_select`: Combined usage is not yet supported.
+* Known issues carried forward from NKI 0.4.0 still apply unless noted above. See the NKI 0.4.0 release notes below.
 
 .. _nki-2-30-0-rn:
 

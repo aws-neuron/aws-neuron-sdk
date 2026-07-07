@@ -96,7 +96,7 @@ PyTorch NeuronX Tracing API for Inference
       One small exception is models traced with ``inline_weights_to_neff=False``. For these models,
       the NEFF is loaded onto the NeuronCore automatically, but the weights are not moved automatically. To move
       the weights to the NeuronCore, call :func:`torch_neuronx.move_trace_to_device`. If this is not
-      done, a perfomance penalty is incurred per inference, because on every inference call, the weights move from CPU
+      done, a performance penalty is incurred per inference, because on every inference call, the weights move from CPU
       to Neuron.
 
     Furthermore, the Neuron traced :class:`~torch.jit.ScriptModule` expects

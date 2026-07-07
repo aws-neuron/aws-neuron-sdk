@@ -40,6 +40,13 @@ Getting Started
 
       Learn how to capture profiles using PyTorch, JAX, environment variables, or the CLI.
 
+   .. grid-item-card:: UI Overview
+      :link: overview-ui-tour
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Guided tour of every viewer and tool in Neuron Explorer, grouped by use case.
+
 Visualization and Analysis
 ---------------------------
 
@@ -118,7 +125,7 @@ Visualization and Analysis
       :link-type: doc
       :class-card: sd-border-1
 
-      Get AI powered bottleneck analysis and optmization recommendations for NKI profiles.
+      Get AI powered bottleneck analysis and optimization recommendations for NKI profiles.
 
 Tutorials
 ----------
@@ -147,8 +154,15 @@ Tutorials
 Additional Resources
 --------------------
 
-.. grid:: 1
+.. grid:: 1 2 2 2
    :gutter: 3
+
+   .. grid-item-card:: Profile Parquet Schema Reference
+      :link: profile-schema-reference
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Reference for profile output data tables and fields, matching ``neuron-explorer --show-profile-schema``.
 
    .. grid-item-card:: Viewing Profiles with Perfetto
       :link: view-perfetto
@@ -206,6 +220,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
 
    Get Started <get-started>
    Capture Profiles <how-to-profile-workload>
+   UI Overview <overview-ui-tour>
    Device Trace Viewer <overview-device-profiles>
    System Trace Viewer <overview-system-profiles>
    Hierarchy Viewer <overview-hierarchy-view>
@@ -216,6 +231,10 @@ For detailed migration guidance, including CLI command mappings and feature comp
    Memory Viewer <overview-memory-viewer>
    Region Highlighter <overview-region-highlighter>
    AI Recommendation Viewer <overview-ai-recommendations>
+   Profile Parquet Schema Reference <profile-schema-reference>
    View Profiles with Perfetto <view-perfetto>
    Neuron Profiler to Neuron Explorer Migration Guide <migration-faq>
+   Troubleshooting & FAQs <troubleshooting>
+   Environment Variables <environment-variables>
+   Glossary <glossary>
    

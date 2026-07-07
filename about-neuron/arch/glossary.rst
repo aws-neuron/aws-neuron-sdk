@@ -33,7 +33,11 @@ Neuron Devices (Accelerated Machine Learning chips)
 
    * - .. glossary::
           Trainium2
-     - AWS second generation accelerated machine learning chip supporting training and inference
+     - AWS third generation accelerated machine learning chip supporting training and inference
+
+   * - .. glossary::
+          Trainium3
+     - AWS fourth generation accelerated machine learning chip supporting training and inference
 
    * - .. glossary::
           Neuron Device
@@ -68,6 +72,10 @@ Neuron powered Instances
           Trn2
      - Trainium2 powered accelerated compute EC2 instance
 
+   * - .. glossary::
+          Trn3
+     - Trainium3 powered accelerated compute EC2 instance
+
 
 NeuronCore terms
 ^^^^^^^^^^^^^^^^
@@ -98,6 +106,10 @@ NeuronCore terms
    * - .. glossary::
           NeuronCore-v3
      - Neuron Core within Trainium2
+
+   * - .. glossary::
+          NeuronCore-v4
+     - Neuron Core within Trainium3
 
    * - .. glossary::
           Tensor Engine
@@ -150,6 +162,10 @@ NeuronCore terms
    * - .. glossary::
           NeuronLink-v3
      - Interconnect between NeuronCores in Trainium2 device
+
+   * - .. glossary::
+          NeuronLink-v4
+     - Interconnect between NeuronCores in Trainium3 device
 
 Neuron SDK terms
 ^^^^^^^^^^^^^^^^

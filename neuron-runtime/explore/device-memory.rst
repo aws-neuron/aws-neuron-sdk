@@ -21,7 +21,7 @@ The Neuron Runtime's memory usage falls into the following categories:
 - ``tensors``: input and output tensors allocated by application
 - ``model constants``: compiled constants used by a NEFF program
 - ``model code``: the executable instructions for the Neuron Core. This also includes a micro-code overhead of 96MB per physical Neuron Core (this overhead is subject to future improvements)
-- ``profile buffers``: buffers used to store profling events
+- ``profile buffers``: buffers used to store profiling events
 - ``scratchpad`` and ``shared scratchpad``: additional space used to store intermediary SBUF and other computations. Read :ref:`nd-scratchpad` for details.
 - ``dma rings``: Data transfer instructions describing data movements during NEFF execution, used during NEFF execution.
 - ``collectives``: Memory overhead used to orchestrate collective communication
@@ -156,9 +156,7 @@ Shared scratchpad
 
 As the name implies, **shared scratchpad** is shared among all programs/NEFFs loaded on a particular NeuronCore. This is possible because only one NEFF executes at a time on a NeuronCore, and data cannot be passed from one NEFF to other through the scratchpad. That means the scratchpad dynamically grows/shrinks with NEFF loads/unloads. To achieve that, the **runtime allocates the shared scratchpad in chunks**, referred to as **scratchpad pages**.
 
-Once a variable is placed in a scratchpad page the variable's physical location cannot be changed, i.e. the variable cannot be moved to another page and the page itself cannot be moved. That is because during NEFF load the Runtime generates DMA descriptors that point to the variables' physical addresses and the descriptors are generated only once during NEFF load. The number of pages can grow and shrink as NEFFs are loaded and unloaded but the variables for the loaded NEFFs retain their physical locations. When a new NEFF is loaded, it might require larger **scratchpad** space than any of the currently loaded NEFFs. In that case new pages are allocated, but the pages are not necessarily contiguous with the previously allocated pages.
-
-Because the pages are not contiguous in HBM, a scratchpad variable must fit entirely within a page in order to be placed in the shared scratchpad (``(var_offset % NEURON_SCRATCHPAD_PAGE_SIZE) + var_size <= NEURON_SCRATCHPAD_PAGE_SIZE``). The default scratchpad page size in Runtime is 512 MB and through environment variables described later in this document, it can be set to any multiple of 512 MB, up to a maximum of 3.5 GB.
+Once a variable is placed in a scratchpad page the variable's physical location cannot be changed, i.e. the variable cannot be moved to another page and the page itself cannot be moved. That is because during NEFF load the Runtime generates DMA descriptors that point to the variables' physical addresses and the descriptors are generated only once during NEFF load. The number of pages can grow and shrink as NEFFs are loaded and unloaded but the variables for the loaded NEFFs retain their physical locations. When a new NEFF is loaded, it might require larger **scratchpad** space than any of the currently loaded NEFFs. In that case new pages are allocated.
 
 Shared scratchpad pages are shown in the OOM reporting in Runtime as category **"shared scratchpad"** and in sysfs under:
 
@@ -166,10 +164,30 @@ Shared scratchpad pages are shown in the OOM reporting in Runtime as category **
 
    /sys/devices/virtual/neuron_device/neuron<device_number>/neuron_core<nc_number>/stats/memory_usage/device_mem/model_shared_scratchpad/
 
+.. _contiguous-scratchpad:
+
+Contiguous shared scratchpad
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuron Runtime 2.33 and above support allocating the scratchpad pages in a contiguous manner, i.e. the pages are allocated adjacent to each other in the HBM. This is currently supported on Inf2, Trn1, and Trn2/Trn3 (LNC size 2 only). It is not supported for LNC size 1 on Trn2/Trn3. In addition, on supported platforms it requires Neuron Driver 2.24 or above. When supported, this option is enabled by default, and can be disabled by setting ``NEURON_RT_CONTIGUOUS_SCRATCHPAD=0``.
+
+Because the pages are contiguous, they form a single scratchpad region that Runtime grows or shrinks; a scratchpad variable can span this entire region.
+
+The page size in this case is 64 MB, which also means the Runtime grows or shrinks the scratchpad region in multiples of 64 MB. This size was chosen so that only a small amount of scratchpad region is potentially wasted, while still allowing the scratchpad to be grown in a reasonable number of allocations. This size is currently not configurable, and setting ``NEURON_SCRATCHPAD_PAGE_SIZE`` has no effect when contiguous scratchpad is enabled.
+
+Because scratchpad pages must be allocated adjacent to each other, in rare cases of high HBM fragmentation, the scratchpad region cannot be grown further despite the HBM having free space. In such a case, model load would fail with OOM, and it is recommended to disable contiguous scratchpad by setting ``NEURON_RT_CONTIGUOUS_SCRATCHPAD=0`` - along with the environment variables to specify page sizes (described later in this document).
+
+Non-contiguous page allocations (``NEURON_RT_CONTIGUOUS_SCRATCHPAD=0``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This mode is the default in case of LNC size 1 on Trn2/Trn3, and also the default if contiguous scratchpad cannot be used for any other reason (for example, if Neuron Driver is older than 2.24).
+
+In this case, because the pages are not necessarily contiguous in HBM, a scratchpad variable must fit entirely within a page in order to be placed in the shared scratchpad (``(var_offset % NEURON_SCRATCHPAD_PAGE_SIZE) + var_size <= NEURON_SCRATCHPAD_PAGE_SIZE``). The default scratchpad page size in Runtime is 512 MB and through environment variables described later in this document, it can be set to any multiple of 512 MB, up to a maximum of 3.5 GB.
+
 Non-shared/Private scratchpad allocations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If a variable cannot fit into a shared scratchpad page, Runtime makes a completely separate allocation for it.
+If a variable cannot fit into a shared scratchpad page, Runtime makes a completely separate allocation for it. This scenario would only arise with non-contiguous page allocations (``NEURON_RT_CONTIGUOUS_SCRATCHPAD=0``).
 
 As an example, let's say scratchpad page size is 512 MB, and we load the following two NEFFs:
 
@@ -197,7 +215,7 @@ If the page size is set to 2GB (by setting ``NEURON_SCRATCHPAD_PAGE_SIZE=2048`` 
 How to avoid high non-shared scratchpad usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the OOM report has a high amount of non-shared scratchpad usage (i.e. high ``scratchpad`` category usage, but not ``shared scratchpad`` category), it typically means that the scratchpad variables are larger than the default Runtime scratchpad page size.
+If the OOM report has a high amount of non-shared scratchpad usage (i.e. high ``scratchpad`` category usage, but not ``shared scratchpad`` category), it typically means Runtime is not using contiguous scratchpad and that the scratchpad variables are larger than the default Runtime scratchpad page size.
 
 Examples of non-shared scratchpad usage in OOM report:
 
@@ -229,7 +247,7 @@ You can try experimenting with larger scratchpad page sizes through the followin
    export NEURON_CC_FLAGS=' <other flags if required> --hbm-scratchpad-page-size=<size in MB> ' # Env var for Neuron Compiler
    export NEURON_SCRATCHPAD_PAGE_SIZE=<size in MB>  # Env var for Neuron Runtime
 
-Both these environment variables specify the scratchpad page size in MBs (megabytes)
+Both these environment variables specify the scratchpad page size in MBs (megabytes). Note that these environment variables do not apply when contiguous shared scratchpad is being used.
 
 As an example, setting scratchpad page size to 2 GB:
 

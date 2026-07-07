@@ -27,6 +27,11 @@ The schema table displays:
 * **Unit** - Measurement unit (if applicable).
 * **Example** - Example value for the field.
 
+.. tip::
+
+   For a complete, browsable reference of every table and field, see the :doc:`Profile Parquet Schema Reference
+   <profile-schema-reference>`. It documents the same schema that the Database Viewer inspects.
+
 Querying Data
 -------------
 

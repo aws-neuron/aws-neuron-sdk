@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 05/21/2026
+    :date-modified: 07/07/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -23,7 +23,57 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.30.0 (05/21/2026)
+        **Latest release**: 2.31.0 (07/07/2026)
+
+----
+
+.. _whats-new-2026-07-07-v2_31:
+
+Neuron Release 2.31.0: NKI 0.5.0 tensor indirection, 14 new NKI Library kernels, and updates to Neuron Explorer
+-------------------------------------------------------------------------------------------------------------------
+
+**Posted on**: July 7, 2026
+
+Today we are releasing Neuron 2.31.0. This release includes updates across the stack:
+:ref:`NKI 0.5.0 <nki-2-31-0-rn>` — new MX FP8 scale dtype support, fewer instructions for indexed access patterns via :ref:`tensor indirection <arch-trn3-indirect-access>`, and zero-cost tensor layout transformations via new :ref:`NkiTensor view APIs <tensor-values>`;
+:ref:`14 new NKI Library kernels <nki-lib-2-31-0-rn>` for MoE training and DeepSeek MLA workloads;
+:ref:`improved performance <compiler-2-31-0-rn>` on Trn2 and Trn3 via a redesigned code generation backend in the Neuron Compiler;
+simplified Runtime configuration by eliminating the need to manually set scratchpad page sizes via :ref:`contiguous shared scratchpad support <contiguous-scratchpad>`;
+enhanced workload debugging in :ref:`Neuron Explorer <dev-tools-2-31-0-rn>` via System Trace Viewer source code linking and updated default grouping;
+and the :ref:`UltraServer Operator <neuron-ultraserver-operator>` — a Kubernetes operator for automated UltraServer discovery, workload allocation, and resource claim generation on Amazon EKS — now in public beta.
+
+What's in this release
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* **NKI 0.5.0** — Introduces MX FP8 scale dtype support, tensor indirection (gather/scatter) on compute operations, and new NkiTensor view APIs for zero-cost tensor layout transformations. Also adds expanded ``nc_matmul`` output capacity and IDE type stub support. See :ref:`nki-2-31-0-rn`.
+
+* **NKI Library** — Adds 14 new experimental kernels covering deformable attention, MoE training collectives, indexed gather/scatter, DeepSeek MLA projection, and ring attention. Existing kernels gain a unified precision selector, FP8-packed KV paths, and PyTorch reference implementations. See :ref:`nki-lib-2-31-0-rn`.
+
+* **Graph Compiler** — A redesigned code generation backend is now the default on Trn2 and Trn3, with improved instruction scheduling and memory prefetch for better runtime performance. Adds support for StableHLO composite operations including attention kernels. See :ref:`compiler-2-31-0-rn`.
+
+* **Runtime & Driver** — Simplified device configuration with contiguous shared scratchpad support, improved collective communication with tensor list support and coalesced collective APIs, and enhanced debugging with out-of-bounds fault source reporting. The Driver adds live per-die power utilization monitoring, and Collectives adds multi-node ring communication on Trn2 and Trn3. See :ref:`runtime-2-31-0-rn`.
+
+* **Neuron Agentic Development** — Updated NKI agentic skills for compatibility with NKI 0.5.0. See :ref:`agentic-development-2-31-0-rn`.
+
+* **Neuron Explorer** — The System Trace Viewer adds source code linking and updated default grouping, and ``torch.compile`` and eager mode profiling are now supported. New supporting documentation includes a UI overview tour, environment variables reference, troubleshooting guide, glossary, and profile schema reference. See :ref:`dev-tools-2-31-0-rn`.
+
+* **UltraServer Operator** (Public Beta) — Automates UltraServer discovery, workload allocation, and resource claim generation for Trainium UltraServer workloads on Amazon EKS, eliminating the need for manual init containers, node label matching, and post-launch validation. See :ref:`neuron-ultraserver-operator`.
+
+* **DLAMIs & Containers** — All packages upgraded to Neuron SDK 2.31.0. See :ref:`dlami-2-31-0-rn` and :ref:`containers-2-31-0-rn`.
+
+
+Software lifecycle updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``pytorch-training-neuronx`` DLC — no longer published; use a 2.30.0 or earlier image if required (:ref:`announce-no-longer-publish-pytorch-training-dlc`)
+* NeuronX Distributed Training (NxDT) — no longer included in Neuron DLAMIs; use a 2.30.0 or earlier DLAMI if required (:ref:`announce-no-longer-include-nxdt-dlami`)
+* Implicit async execution mode — removed; ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS`` no longer enables async execution. Migrate to the explicit async execution APIs (:ref:`announce-no-support-implicit-async-mode`)
+* Neuron Driver 2.29 — requires Neuron Runtime Library 2.33 or later; upgrade both together (:ref:`runtime-2-31-0-rn`)
+* NKI Library — ``kv_parallel_segmented_prefill`` renamed to ``attention_kv_parallel_segmented_cte``; update import paths and the function name (:ref:`announce-nki-library-kernel-rename-segmented-cte`)
+* NKI — SPMD launch grid requirement for LNC2 kernels is deprecated and will be removed in a future release (:ref:`announce-intent-eos-nki-spmd-launch-grid`)
+
+Read the :doc:`Neuron 2.31.0 component release notes </release-notes/components/index>` for full details.
+
 
 ----
 
@@ -64,7 +114,7 @@ Software lifecycle updates
 * Inf1 VIRTUAL tensor type — removed
 * ``neuronxcc.nki.*`` namespace — now fails compilation (use ``nki.*``)
 
-Read the :doc:`Neuron 2.30.0 component release notes </release-notes/2.30.0>` for full details.
+Read the :doc:`Neuron 2.30.0 component release notes </release-notes/prev/2.30.0>` for full details.
 
 ----
 
@@ -302,7 +352,7 @@ For more details, see :ref:`neuron-2-27-0-nkilib`.
 Developer Tools
 ^^^^^^^^^^^^^^^
 
-**Neuron Explorer** - A a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. This release features improved performance and user expereince for device profiling, with four core viewers to provide insights into model performance:
+**Neuron Explorer** - A suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. This release features improved performance and user experience for device profiling, with four core viewers to provide insights into model performance:
 
 * **Hierarchy Viewer**: Visualizes model structure and component interactions
 * **AI Recommendation Viewer**: Delivers AI-driven optimization recommendations
@@ -499,7 +549,6 @@ Resources and Additional Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For more information visit the `AWS Trainium official page <https://aws.amazon.com/ai/machine-learning/trainium/>`__, the :doc:`AWS Neuron Documentation </index>`, and :doc:`the AWS Neuron GitHub repositories </about-neuron/oss/index>`.
-
 
 
 

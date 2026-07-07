@@ -89,6 +89,10 @@ Experimental APIs
    :hidden:
    :caption: Core Runtime APIs
 
+   NRT API <nrt>
+   NRT Status <nrt_status>
+   NRT Version <nrt_version>
+
 .. toctree::
    :maxdepth: 5
    :hidden:
@@ -102,6 +106,9 @@ Experimental APIs
    :hidden:
    :caption: Asynchronous Execution APIs
 
+   NRT Async APIs Overview <nrt-async-api-overview>
+   NRT Async APIs Best Practices <nrt-async-api-best-practices>
+   NRT Async APIs Examples <nrt-async-api-examples>
    NRT Async <nrt_async>
    NRT Async Send/Recv <nrt_async_sendrecv>
 

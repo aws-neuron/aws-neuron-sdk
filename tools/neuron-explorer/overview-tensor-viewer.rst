@@ -23,13 +23,13 @@ The Tensor Viewer contains the following information about all tensors in the NE
 
 .. image:: /tools/images/tensor-viewer-table.png
 
-You can use this data to match with framework-level instructions or for kernel development. You can also use it to search for instructions in the Device Timeline Viewer. 
+You can use this data to match with framework-level instructions or for kernel development. You can also use it to search for instructions in the Device Trace Viewer. 
 The SBUF loading information in the table can help you verify tensors are loaded efficiently.
 
 Searching
 ---------
 
-You can use the Tensor Viewer with the Device Timeline Viewer and Search tool to match tensor information in the table with instructions that run on the device. 
+You can use the Tensor Viewer with the Device Trace Viewer and Search tool to match tensor information in the table with instructions that run on the device. 
 Enter the variable_name from the table, into the DMA search field to see all DMA instructions that relate to that tensor.
 The example below shows a complete search for the tensor token_position_to_id:
 

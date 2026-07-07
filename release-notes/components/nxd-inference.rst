@@ -8,17 +8,23 @@
 Component Release Notes for NxD Inference
 =========================================
 
-**Latest version (in 2.30.0)**: 0.10.17970
+**Latest version (in 2.31.0)**: 0.10.18398
 
 The release notes for the NxD Inference Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
-.. _nxd-inference-2-30-0-rn:
+.. _nxd-inference-2-31-0-rn:
 
-NxD Inference (Neuron 2.30.0 Release)
+NxD Inference [0.10.18398] (Neuron 2.31.0 Release)
 ------------------------------------------------------------------------------
 
-*Release notes for this version will be added when Neuron 2.30.0 is released.*
+* ``neuronx_distributed_inference`` package updated to ``0.10.18399``.
 
+.. _nxd-inference-2-30-0-rn:
+
+NxD Inference [0.10.17970] (Neuron 2.30.0 Release)
+------------------------------------------------------------------------------
+
+* ``neuronx_distributed_inference`` package updated to ``0.10.17970``.
 
 .. _nxd-inference-2-29-0-rn:
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: RMSNorm-Quant kernel performs optional RMS normalization followed by fp8 quantization.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.rmsnorm_quant.rmsnorm_quant
 
@@ -33,7 +33,7 @@ API Reference
 rmsnorm_quant_kernel
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: rmsnorm_quant_kernel(hidden: nl.ndarray, ln_w: nl.ndarray, kargs: RmsNormQuantKernelArgs, input_dequant_scale: nl.ndarray = None, pre_norm_gamma: nl.ndarray = None, residual: nl.ndarray = None, auto_resolve_fp8_dtype: bool = False)
+.. py:function:: rmsnorm_quant_kernel(hidden: nl.NkiTensor, ln_w: nl.NkiTensor, kargs: RmsNormQuantKernelArgs, input_dequant_scale: nl.NkiTensor = None, pre_norm_gamma: nl.NkiTensor = None, residual: nl.NkiTensor = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP) -> nl.NkiTensor
 
    Entrypoint NKI kernel that performs one of the following:
    
@@ -54,8 +54,8 @@ rmsnorm_quant_kernel
    :type pre_norm_gamma: ``nl.ndarray``, optional
    :param residual: Optional residual tensor on HBM with shape ``[B, S, H]``. When provided, performs ``hidden + residual`` (after optional pre-norm) and returns the result alongside the quantized output. Can be used with or without ``pre_norm_gamma``.
    :type residual: ``nl.ndarray``, optional
-   :param auto_resolve_fp8_dtype: When ``True``, automatically resolves the FP8 output dtype based on the target hardware. Default: ``False``.
-   :type auto_resolve_fp8_dtype: ``bool``
+   :param dtype_mode: Precision-mode selector controlling the FP8 output dtype (e.g. OCP vs non-OCP). Replaces the previous ``auto_resolve_fp8_dtype`` flag. Default: ``DtypeMode.NON_OCP``.
+   :type dtype_mode: ``DtypeMode``
    :return: Output tensor with shape ``[..., H + 4]`` on HBM where the last dimension is extended by 4 elements. The first H elements store the possibly normalized and quantized tensor, while the last 4 elements store fp8 floats that can be reinterpreted as fp32 dequantization scales.
    :rtype: ``nl.ndarray``
 

@@ -11,6 +11,26 @@ Component Release Notes for Neuron DLAMI
 
 The release notes for the Neuron DLAMI component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _dlami-2-31-0-rn:
+
+Neuron DLAMIs (Neuron 2.31.0 Release)
+------------------------------------------------------------------------
+
+
+Date of Release: 7/7/2026
+
+Updates
+~~~~~~~~
+
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.31.0.
+
+Callouts
+~~~~~~~~~
+
+.. important::
+    Starting with Neuron SDK 2.31.0, NeuronX Distributed Training (NxDT) is no longer included in Neuron DLAMIs. If you require NxDT, please use a DLAMI associated with a previous Neuron SDK release (2.30.0 or earlier). The SDK version is included in each AMI's description.
+
+
 .. _dlami-2-30-0-rn:
 
 Neuron DLAMIs (Neuron 2.30.0 Release)

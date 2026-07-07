@@ -1,6 +1,6 @@
 .. meta::
     :description: Router Top-K kernel computes router logits and performs top-K selection for MoE models.
-    :date-modified: 01/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.router_topk
 
@@ -44,7 +44,7 @@ API Reference
 router_topk
 ^^^^^^^^^^^^^^^
 
-.. py:function:: router_topk(x, w, w_bias, router_logits, expert_affinities, expert_index, act_fn, k, x_hbm_layout, x_sb_layout, output_in_sbuf=False, router_pre_norm=True, norm_topk_prob=False, use_column_tiling=False, use_indirect_dma_scatter=False, return_eager_affi=False, use_PE_broadcast_w_bias=False, shard_on_tokens=False, skip_store_expert_index=False, skip_store_router_logits=False, x_input_in_sbuf=False, expert_affin_in_sb=False)
+.. py:function:: router_topk(x: nl.ndarray, w: nl.ndarray, w_bias: nl.ndarray, router_logits: nt.mutable_tensor, expert_affinities: nt.mutable_tensor, expert_index: nt.mutable_tensor, act_fn: RouterActFnType, k: int, x_hbm_layout: XHBMLayout_H_T__0, x_sb_layout: XSBLayout_tp102__0, router_pre_norm: bool = True, norm_topk_prob: bool = False, use_column_tiling: bool = False, use_indirect_dma_scatter: bool = False, return_eager_affi: bool = False, use_PE_broadcast_w_bias: bool = False, shard_on_tokens: bool = False, skip_store_expert_index: bool = False, skip_store_router_logits: bool = False)
 
    Router top-K kernel for Mixture of Experts (MoE) models.
 
@@ -72,8 +72,6 @@ router_topk
    :type x_hbm_layout: ``int``
    :param x_sb_layout: Layout of x in SBUF (0-3, see notes for details)
    :type x_sb_layout: ``int``
-   :param output_in_sbuf: If True, outputs are in SBUF (requires T ≤ 128). Default is False.
-   :type output_in_sbuf: ``bool``, optional
    :param router_pre_norm: If True, apply activation before top-K (ACT1 pipeline). Default is True.
    :type router_pre_norm: ``bool``, optional
    :param norm_topk_prob: If True, normalize top-K probabilities with L1 norm. Default is False.
@@ -92,10 +90,6 @@ router_topk
    :type skip_store_expert_index: ``bool``, optional
    :param skip_store_router_logits: Skip storing router logits to HBM. Default is False.
    :type skip_store_router_logits: ``bool``, optional
-   :param x_input_in_sbuf: If True, x is already in SBUF. Default is False.
-   :type x_input_in_sbuf: ``bool``, optional
-   :param expert_affin_in_sb: If True, expert affinities output is in SBUF. Default is False.
-   :type expert_affin_in_sb: ``bool``, optional
    :return: List of ``[router_logits, expert_index, expert_affinities, optional: expert_affinities_topk]``
    :rtype: ``list``
 
@@ -152,7 +146,7 @@ router_topk_input_x_load
 router_topk_input_w_load
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: router_topk_input_w_load(w, x_sb_layout, name='')
+.. py:function:: router_topk_input_w_load(w: nl.ndarray, x_sb_layout)
 
    Load weight tensor w from HBM to SBUF with layout matching x tensor.
 
@@ -160,8 +154,6 @@ router_topk_input_w_load
    :type w: ``nl.ndarray``
    :param x_sb_layout: Layout of x in SBUF (determines w layout)
    :type x_sb_layout: ``int``
-   :param name: Optional name for the tensor. Default is empty string.
-   :type name: ``str``, optional
    :return: Weight tensor in SBUF with appropriate layout
    :rtype: ``nl.ndarray``
 

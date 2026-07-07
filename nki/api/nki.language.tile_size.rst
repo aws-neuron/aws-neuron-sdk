@@ -15,11 +15,23 @@ nki.language.tile\_size
 
    .. attribute:: psum_fmax
 
-      Maximum free dimension of a tile on PSUM buffer, in FP32 elements.
+      Maximum free dimension per PSUM bank per partition, in FP32 elements.
 
-   .. attribute:: psum_fmax_bytes
+      .. deprecated:: 0.4.0
+         Despite the name, this does not represent the free-dim size per
+         partition. Use :py:attr:`psum_bank_fmax` instead.
 
-      Maximum free dimension of a tile on PSUM buffer, in bytes.
+   .. attribute:: psum_bank_fmax
+
+      Maximum free dimension per PSUM bank per partition, in FP32 elements.
+
+   .. attribute:: psum_bank_fmax_bytes
+
+      Maximum free dimension per PSUM bank per partition, in bytes.
+
+   .. attribute:: psum_num_banks
+
+      Number of usable PSUM banks per partition.
 
    .. attribute:: psum_num_banks
 
@@ -65,7 +77,7 @@ nki.language.tile\_size
 
       Usable SBUF free dimension per partition, in bytes.
 
-      .. deprecated:: 0.4.0b4
+      .. deprecated:: 0.4.0
          Despite the name, this returns the usable SBUF capacity *per
          partition*, not the total SBUF capacity. Use
          :py:attr:`sbuf_size_bytes` for the total SBUF capacity across all

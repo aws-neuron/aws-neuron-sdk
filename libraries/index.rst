@@ -33,7 +33,7 @@ NxD Core libraries provide distributed training and inference mechanisms for Neu
 * XLA-optimized distributed operations
 * Foundation for other NxD libraries
 
-The NxD Training and Inference documentation below provides documentation for NxD Core libraries in the context of of training and inference models respectively.
+The NxD Training and Inference documentation below provides documentation for NxD Core libraries in the context of training and inference models respectively.
 
 NxD Training and Inference Libraries 
 -------------------------------------

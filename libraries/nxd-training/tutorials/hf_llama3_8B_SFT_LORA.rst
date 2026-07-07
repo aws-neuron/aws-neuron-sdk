@@ -118,7 +118,7 @@ converted pretrained checkpoint path.
 LoRA SFT-YAML Configuration Overview
 ------------------------------------
 
-You can configure a variety of SFT, DPO, PEFT-specfic and model parameters for finetuning using the YAML file.
+You can configure a variety of SFT, DPO, PEFT-specific and model parameters for finetuning using the YAML file.
 
 .. code-block:: yaml
 
@@ -373,7 +373,7 @@ To view an ongoing training job in TensorBoard, you first need to identify the
 experiment directory associated with your ongoing job.
 This will typically be the most recently created directory under
 ``~/neuronx-distributed-training/examples/nemo_experiments/hf_llama3_8B/``.
-Once you have identifed the directory, cd into it, and then launch TensorBoard:
+Once you have identified the directory, cd into it, and then launch TensorBoard:
 
 .. code-block:: bash
 

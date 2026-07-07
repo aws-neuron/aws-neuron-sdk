@@ -17,7 +17,7 @@ Basic Tensor Indexing
 ^^^^^^^^^^^^^^^^^^^^^
 
 NKI supports basic indexing of tensors using integers as indexes. For example,
-we can index a 3-dimensional tensor with a single integer to get get a *view*
+we can index a 3-dimensional tensor with a single integer to get a *view*
 of a portion of the original tensor.
 
 .. code-block::

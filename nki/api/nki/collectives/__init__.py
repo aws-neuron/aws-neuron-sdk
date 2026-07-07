@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
@@ -12,7 +13,7 @@ class ReplicaGroup(NKIObject):
 
     ...
 
-def all_reduce(srcs: List, dsts: List, replica_group: ReplicaGroup, op, priority: Optional[int]=None) -> None:
+def all_reduce(srcs: List, dsts: List, replica_group: ReplicaGroup, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-reduce on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -28,10 +29,11 @@ def all_reduce(srcs: List, dsts: List, replica_group: ReplicaGroup, op, priority
     :param replica_group: ReplicaGroup defining rank groups for the collective
     :param op: The reduction operation to perform (``nl.add``, ``nl.minimum``, or ``nl.maximum``)
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def all_gather(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None) -> None:
+def all_gather(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-gather on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -50,10 +52,11 @@ def all_gather(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_d
         supported as SBUF collectives currently only operate on 2D tensors with a
         single free dimension.
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def reduce_scatter(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None) -> None:
+def reduce_scatter(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform a reduce-scatter on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -71,10 +74,11 @@ def reduce_scatter(srcs: List, dsts: List, replica_group: ReplicaGroup, collecti
         Currently only 0 is supported for both HBM and SBUF tensors.
     :param op: The reduction operation to perform (``nl.add``, ``nl.minimum``, or ``nl.maximum``)
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None) -> None:
+def all_to_all(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-to-all on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -89,10 +93,11 @@ def all_to_all(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_d
     :param collective_dim: Dimension along which input tensors are split and output tensors are concatenated.
         Currently only 0 is supported.
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_tensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None) -> None:
+def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_tensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Executes an all-to-all collective where each rank can send
     a different number of elements, known only at execution time (rather
     than at compile time).
@@ -161,16 +166,17 @@ def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_t
         - ``True``: row 3 is an **input**; recv_displs must be populated.
           The chunk from sender rank ``r`` is written at
           ``dst[recv_displs[r] : recv_displs[r] + recv_counts[r]]``.
-        - ``False``: row 3 may be omitted from ``metadata_tensor`` (pass a
+        - ``False`` (default): row 3 may be omitted from ``metadata_tensor`` (pass a
           3-row tensor). Incoming chunks are laid out equally-spaced at
           ``recv_displs[r] = (dst.total_elements / replica_group_size) * r``,
           regardless of the actual recv_count per rank.
 
     :param priority: DMA QoS priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)."""
+        priority (NeuronCore-v4+ only).
+    :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute(srcs: List, dsts: List, source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None) -> None:
+def collective_permute(srcs: List, dsts: List, source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Send and receive data between ranks based on explicitly defined source-target pairs.
 
     Each pair ``(source, target)`` specifies that data from the source rank
@@ -189,10 +195,11 @@ def collective_permute(srcs: List, dsts: List, source_target_pairs: List[Tuple[i
     :param dsts: List of destination tensors to receive into
     :param source_target_pairs: List of (source, target) rank ID pairs
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute_implicit(srcs_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, channel_ids: List[int]=[0], priority: Optional[int]=None) -> None:
+def collective_permute_implicit(srcs_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Send and receive data between ranks in a ring, where sources and destinations are
     implicitly determined by the ring structure during runtime.
 
@@ -220,10 +227,11 @@ def collective_permute_implicit(srcs_by_channel: List[List], dsts_by_channel: Li
     :param channel_ids: List of channel IDs to use for communication (default [0] for single channel).
         Currently must be consecutive integers starting from 0.
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute_implicit_reduce(srcs0_by_channel: List[List], srcs1_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, op, channel_ids: List[int]=[0], priority: Optional[int]=None) -> None:
+def collective_permute_implicit_reduce(srcs0_by_channel: List[List], srcs1_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, op, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an implicit collective permute with reduction in a ring, where sources and
     destinations are implicitly determined by the ring structure during runtime.
 
@@ -255,10 +263,11 @@ def collective_permute_implicit_reduce(srcs0_by_channel: List[List], srcs1_by_ch
     :param channel_ids: List of channel IDs to use for communication (default [0] for single channel).
         Currently must be consecutive integers starting from 0.
     :param priority: DMA quality-of-service priority level 0-3 where lower is higher
-        priority (NeuronCore-v4+ only)"""
+        priority (NeuronCore-v4+ only)
+    :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute_implicit_current_processing_rank_id(iteration_id: int, replica_group: ReplicaGroup, channel_id: int=0):
+def collective_permute_implicit_current_processing_rank_id(iteration_id: int, replica_group: ReplicaGroup, channel_id: int=0, name: Optional[str]=None):
     r"""Returns the rank ID of the data to be processed in the current ring iteration.
 
     This function is intended to be used in conjunction with
@@ -290,11 +299,13 @@ def collective_permute_implicit_current_processing_rank_id(iteration_id: int, re
     :param iteration_id: Current ring step (typically the loop counter).
     :param replica_group: ReplicaGroup defining the ring topology
     :param channel_id: Channel ID for the communication (0 to num_channels-1)
+    :param name: (optional) name for the instruction.
     :return: Scalar register containing the rank ID of the data to be processed"""
     ...
 
-def rank_id():
+def rank_id(name: Optional[str]=None):
     r"""Get the rank ID of the current rank.
 
+    :param name: (optional) name for the instruction.
     :return: The rank ID of the current rank within the collective group"""
     ...

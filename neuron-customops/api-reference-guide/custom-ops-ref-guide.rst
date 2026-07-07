@@ -491,7 +491,7 @@ Writing Directly to Output Tensor
             
             // Populate tcm_buffer with results
             ...
-            // Write to t_out throught tcm_accessor
+            // Write to t_out through tcm_accessor
             t_out_acc.tcm_to_tensor<float>(tcm_buffer, offset, copy_size);
             
             ...

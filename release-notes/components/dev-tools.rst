@@ -11,6 +11,40 @@ Component Release Notes for Neuron Developer Tools
 The release notes for the Neuron Developer Tools. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 
+.. _dev-tools-2-31-0-rn:
+
+Neuron Developer Tools & Neuron Explorer (Neuron 2.31.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 07/07/2026
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* Added UI overview tour page for Neuron Explorer, providing a guided walkthrough of all viewers and tools grouped by workflow, a clickable UI navigation map, and support for light and dark mode. See :doc:`/tools/neuron-explorer/overview-ui-tour`.
+* Added environment variables reference documenting all variables for Neuron Explorer profiling, capture, debug, filtering, and runtime configuration, including recommended combinations for common scenarios (system-only, full debug, vLLM/inference, distributed). See :doc:`/tools/neuron-explorer/environment-variables`.
+* Added troubleshooting guide and FAQ for Neuron Explorer covering error codes, processing failures, capture issues, missing data diagnosis, performance issues, and timing/measurement. See :doc:`/tools/neuron-explorer/troubleshooting`.
+* Standardized Neuron Explorer terminology across documentation and added a glossary covering viewers, profile types, UI components, and Neuron-specific acronyms. See :doc:`/tools/neuron-explorer/glossary`.
+* Enhanced the System Trace Viewer with source code linking for navigating from trace events to corresponding source code, and updated the default grouping mode to organize events by instance ID, process ID, and event source, with sub-grouping by thread ID for framework dispatch events, stream ID for device interaction events, Logical NeuronCore for runtime events, and physical NeuronCore for hardware events. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Documented ``torch.compile`` and eager mode profiling support in Neuron Explorer, clarifying differences in NEFF generation between the two modes. See :doc:`/tools/neuron-explorer/how-to-profile-workload`.
+* Added profile schema reference page documenting all Neuron Explorer parquet output tables and enums, including field names, types, units, and descriptions, enabling users to reference the output schema without requiring CLI access. See :doc:`/tools/neuron-explorer/profile-schema-reference`.
+* Updated ``nccom-test`` collective op latency values from integer to floating point values, providing more accurate latency measurement. Due to previous integer truncation, new floating point latency results may increase slightly (~0.5 us) for some operations.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* None reported for this release.
+
+Bug Fixes
+~~~~~~~~~
+
+* None reported for this release.
+
+Known Issues
+~~~~~~~~~~~~
+
+* None reported for this release.
+
 .. _dev-tools-2-30-0-rn:
 
 Neuron Developer Tools & Neuron Explorer (Neuron 2.30.0 Release)
@@ -40,9 +74,6 @@ Known Issues
 ~~~~~~~~~~~~
 
 * None reported for this release.
-
-*Release notes for this version will be added when Neuron 2.30.0 is released.*
-
 
 .. _dev-tools-2-29-0-rn:   
 

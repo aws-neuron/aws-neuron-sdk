@@ -20,6 +20,10 @@ Install PyTorch with Neuron support using pre-configured AWS Deep Learning AMIs.
 .. note::
    Want to read about Neuron's Deep Learning machine images (DLAMIs) before diving in? Check out the :doc:`/deploy/environments/dlami`.
 
+.. warning::
+   The NeuronX Distributed (NxD) library for training (``neuronx_distributed_training``) is no longer included on Neuron DLAMIs and DLCs as of release v2.31.0. To manually configure your environment to use ``neuronx_distributed_training``, see :doc:`Install PyTorch via manual installation </setup/pytorch/manual>`.
+
+
 ----
 
 Prerequisites

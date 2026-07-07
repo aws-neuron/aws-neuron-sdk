@@ -53,12 +53,13 @@ AWS Neuron supports the following Logical NeuronCore configurations:
         A Logical NeuronCore configuration (LNC) of two is the default setting on Trainium2 devices. It combines two physical 
         NeuronCore-v3 into a logical NeuronCore with the software id ``NC_V3d``. When you set Logical NeuronCore configuration to 
         two, it directs Trainium2 devices to expose four ``NC_v3d`` to your machine learning applications. On this setting, 
-        a ``Trn2.48xlarge`` instance presents 64 available NeuronCores. The folowing high-level diagram shows a ``Trn2.48xlarge`` 
+        a ``Trn2.48xlarge`` instance presents 64 available NeuronCores. The following high-level diagram shows a ``Trn2.48xlarge`` 
         instance, connected in a 2D torus topology, with the Logical NeuronCore configuration set to two.
 
         .. image:: /images/architecture/Trn2/trn2_lnc2.png
             :align: center
             :width: 750
+
         |
 
         Trainium2 devices contain four 24GB HBM banks. Each bank is shared by two physical NeuronCore-v3. 
@@ -70,6 +71,7 @@ AWS Neuron supports the following Logical NeuronCore configurations:
         .. image:: /images/architecture/NeuronCore/lnc_2.png
             :align: center
             :width: 450
+
         |
 
         To set the Logical NeuronCore configuration to two, use the following runtime and compiler flag combination:
@@ -92,6 +94,7 @@ AWS Neuron supports the following Logical NeuronCore configurations:
         .. image:: /images/architecture/Trn2/trn2_lnc1.png
             :align: center
             :width: 750
+
         |
 
         Trainium2 devices contain four 24GB HBM banks. Each bank is shared by two physical NeuronCore-v3. 
@@ -101,6 +104,7 @@ AWS Neuron supports the following Logical NeuronCore configurations:
         .. image:: /images/architecture/NeuronCore/lnc_1.png
             :align: center
             :width: 475
+
         |
 
         To set the Logical NeuronCore configuration to one, use the following runtime and compiler flag combination:

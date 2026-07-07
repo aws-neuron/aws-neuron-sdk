@@ -11,6 +11,16 @@ The NKI Library is a collection of pre-built kernels optimized for AWS Neuron-po
 
 **NKI Library GitHub repository**: https://github.com/aws-neuron/nki-library
 
+.. grid:: 1
+   :gutter: 3
+
+   .. grid-item-card:: **Get started with the NKI Library**
+      :class-card: sd-border-1
+      :link: nki-library-quickstart
+      :link-type: ref
+
+      Install the NKI Library package and use its kernels with the Neuron compiler in about 10 minutes.
+
 .. grid:: 1 1 2 2
    :gutter: 3
 
@@ -49,6 +59,7 @@ The NKI Library is a collection of pre-built kernels optimized for AWS Neuron-po
    :maxdepth: 1
    :hidden:
 
+   Get started <quickstart-nkl>
    Overview <about/index>
    Kernel Design Specs <specs/index>
    Kernel API Reference <api/index>

@@ -159,12 +159,12 @@ The default configuration for LoRA adapters in ``test_llama_lora_finetune.py`` i
 There are three checkpoint saving modes for LoRA fine-tuning and we can set different modes with LoRA flags ``save_lora_base`` and ``merge_lora``
 
 * ``save_lora_base=False, merge_lora=False`` Save the LoRA adapter only.
-* ``save_lora_base=True, merge_lora=False``  Save both the base model and the LoRA adapter seperately.
+* ``save_lora_base=True, merge_lora=False``  Save both the base model and the LoRA adapter separately.
 * ``save_lora_base=True, merge_lora=True``   Merge the LoRA adapter into the base model and then save the base model.
 
 
 Other than the adapter, LoRA also needs to save the LoRA configuration file for adapter loading. 
-The configuration can be saved into the same checkpoint with the adapter, or saved as a seperately json file.
+The configuration can be saved into the same checkpoint with the adapter, or saved as a separately json file.
 An example of configurations for LoRA saving is
 
 .. code-block:: ipython3

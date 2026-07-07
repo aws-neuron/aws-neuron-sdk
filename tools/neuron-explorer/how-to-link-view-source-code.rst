@@ -36,7 +36,13 @@ Once you have the NEFF, you can simply capture the profile as usual. To view you
 
     neuron-explorer view -n file.neff -s profile.ntff --framework-source-root /path/to/framework/source/files
 
-Code Viewer Widget
+    # Link to NKI source code only
+    neuron-explorer view -n file.neff -s profile.ntff --nki-source-root /path/to/nki/source/files
+
+    # Link to both framework and NKI source code
+    neuron-explorer view -n file.neff -s profile.ntff --framework-source-root /path/to/framework/source/files --nki-source-root /path/to/nki/source/files
+
+Source Code Viewer
 -------------------
 
 Highlighting Instructions

@@ -1,6 +1,6 @@
 .. meta::
     :description: Transformer token generation forward pass megakernel.
-    :date-modified: 04/09/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.experimental.transformer
 
@@ -32,7 +32,7 @@ API Reference
 transformer_tkg
 ^^^^^^^^^^^^^^^
 
-.. py:function:: transformer_tkg(X: nl.ndarray, W_qkvs: List[nl.ndarray], W_outs: List[nl.ndarray], W_gates: List[nl.ndarray], W_ups: List[nl.ndarray], W_downs: List[nl.ndarray], W_gamma_qkvs: List[nl.ndarray], W_gamma_mlps: List[nl.ndarray], K_caches: List[nl.ndarray], V_caches: List[nl.ndarray], RoPE_cos: nl.ndarray, RoPE_sin: nl.ndarray, mask_cache: nl.ndarray, mask_active: nl.ndarray, position_ids: Optional[nl.ndarray], num_layers: int, eps: float = 1e-06, replica_groups: Optional[List[List[int]]] = None, sbuf_residual_and_cc: bool = False, clamp_bound: float = 0.0, W_gate_scales: Optional[List[nl.ndarray]] = None, W_up_scales: Optional[List[nl.ndarray]] = None, W_down_scales: Optional[List[nl.ndarray]] = None)
+.. py:function:: transformer_tkg(X: nl.ndarray, W_qkvs: List[nl.ndarray], W_outs: List[nl.ndarray], W_gates: List[nl.ndarray], W_ups: List[nl.ndarray], W_downs: List[nl.ndarray], W_gamma_qkvs: List[nl.ndarray], W_gamma_mlps: List[nl.ndarray], K_caches: List[nl.ndarray], V_caches: List[nl.ndarray], RoPE_cos: nl.ndarray, RoPE_sin: nl.ndarray, attention_mask: nl.ndarray, position_ids: Optional[nl.ndarray], num_layers: int, eps: float = 1e-06, replica_groups: Optional[List[List[int]]] = None, sbuf_residual_and_cc: bool = False, clamp_bound: float = 0.0, W_gate_scales: Optional[List[nl.ndarray]] = None, W_up_scales: Optional[List[nl.ndarray]] = None, W_down_scales: Optional[List[nl.ndarray]] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP)
 
    Transformer token generation forward pass megakernel.
 
@@ -60,10 +60,8 @@ transformer_tkg
    :type RoPE_cos: ``nl.ndarray``
    :param RoPE_sin: [d_head//2, B, S_tkg], RoPE sine embeddings
    :type RoPE_sin: ``nl.ndarray``
-   :param mask_cache: Attention mask for cached KV context
-   :type mask_cache: ``nl.ndarray``
-   :param mask_active: Attention mask for active tokens
-   :type mask_active: ``nl.ndarray``
+   :param attention_mask: Attention mask covering both cached KV context and active tokens. Replaces the previous separate ``mask_cache`` and ``mask_active`` parameters.
+   :type attention_mask: ``nl.ndarray``
    :param position_ids: [B, 1], KV cache write positions (None = skip cache update)
    :type position_ids: ``Optional[nl.ndarray]``
    :param num_layers: Number of transformer layers to execute

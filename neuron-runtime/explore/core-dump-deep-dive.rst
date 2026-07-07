@@ -38,7 +38,7 @@ Organizations who are scaling up Neuron applications and encountering sporadic i
 When should Neuron Runtime core dumps be used?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Diagnoising correctness issues occuring infrequently in the fleet.
+Diagnosing correctness issues occurring infrequently in the fleet.
 
 How are core dumps enabled?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,7 +116,7 @@ The following CLI flags are provided to ``neuron-dump``::
     --instance-id: The instance id
     --cluster-id: the unique identifier for a single collectives execution. `0000000000000000` if collectives information is not available.
 
-    --error-location: The libnrt api where the error occured.
+    --error-location: The libnrt api where the error occurred.
     --error-code: The libnrt api return code: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-api-guide.html#api-return-codes.
 
     --local-output-dir: The directory specified by `NEURON_RT_LOCAL_CORE_DUMP_DIRECTORY` with format variables replaced.

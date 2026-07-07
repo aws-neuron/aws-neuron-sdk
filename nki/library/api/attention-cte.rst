@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention CTE kernel implements attention optimized for Context Encoding (prefill) use cases.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.attention.attention_cte
 
@@ -20,6 +20,7 @@ The kernel supports:
 * Native Grouped Query Attention (GQA) support
 * Softmax caching for training
 * Sequence packing with per-query KV range bounds
+* Additive position bias (dense or banded)
 
 Background
 --------------
@@ -37,7 +38,7 @@ API Reference
 attention_cte
 ^^^^^^^^^^^^^^^
 
-.. py:function:: attention_cte(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, scale: float = 1.0, causal_mask: bool = True, k_prior: Optional[nl.ndarray] = None, v_prior: Optional[nl.ndarray] = None, prior_used_len: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, sliding_window: Optional[int] = None, tp_q: bool = True, tp_k: bool = False, tp_out: bool = False, cache_softmax: bool = False, softmax_dtype=nl.float32, mm_out_dtype=nl.float32, cp_offset: Optional[nl.ndarray] = None, global_cp_deg: int = None, cp_strided_q_slicing: bool = False, bound_min: Optional[nl.ndarray] = None, bound_max: Optional[nl.ndarray] = None, cp_striped_input: bool = False, skip_output_normalization: bool = False)
+.. py:function:: attention_cte(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, scale: float = 1.0, causal_mask: bool = True, k_prior: Optional[nl.ndarray] = None, v_prior: Optional[nl.ndarray] = None, prior_used_len: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, sliding_window: Optional[int] = None, tp_q: bool = True, tp_k: bool = False, tp_out: bool = False, cache_softmax: bool = False, softmax_dtype = nl.float32, mm_out_dtype = nl.float32, cp_offset: Optional[nl.ndarray] = None, global_cp_deg: int = None, cp_strided_q_slicing: bool = False, bound_min: Optional[nl.ndarray] = None, bound_max: Optional[nl.ndarray] = None, cp_striped_input: bool = False, skip_output_normalization: bool = False, position_bias: Optional[nl.ndarray] = None, bias_layout: str = 'dense', bias_band_params: Optional[dict] = None)
 
    Entrypoint NKI kernel that supports multiple attention variants.
 
@@ -89,6 +90,12 @@ attention_cte
    :type cp_striped_input: ``bool``, optional
    :param skip_output_normalization: When ``True``, skips the final 1/S normalization of the output and returns the raw softmax denominator instead of its reciprocal. This avoids wasted work when the caller (e.g., ring attention) needs unnormalized outputs for cross-step reduction and will normalize once at the very end. Must be used together with ``cache_softmax=True``. When enabled, output is unnormalized and the third return value is the raw sum S (not 1/S). Default: ``False``.
    :type skip_output_normalization: ``bool``
+   :param position_bias: Optional additive position-bias tensor applied to the attention scores before softmax. Default: ``None``.
+   :type position_bias: ``nl.ndarray``, optional
+   :param bias_layout: Layout of ``position_bias``, either ``'dense'`` or a banded layout. Default: ``'dense'``.
+   :type bias_layout: ``str``
+   :param bias_band_params: Parameters describing the bias band when a banded ``bias_layout`` is used. Default: ``None``.
+   :type bias_band_params: ``dict``, optional
    :return: Output tensor with attention results. Shape depends on ``tp_out`` parameter. If ``cache_softmax`` is ``True``, returns tuple of ``(output, out_neg_max, out_sum_recip)``.
    :rtype: ``nl.ndarray`` or ``tuple``
 

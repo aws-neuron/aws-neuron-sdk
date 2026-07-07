@@ -8,15 +8,30 @@
 Component Release Notes for NxD Training
 ========================================
 
-The release notes for the NxD Training (``neuronx-distributed-training``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+The release notes for the NxD Training (``neuronx_distributed_training``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
-.. _nxd-training-2-30-0-rn:
+.. _nxd-training-2-31-0-rn:
 
-NxD Training (Neuron 2.30.0 Release)
+NxD Training (Neuron 2.31.0 Release)
 ---------------------------------------------
 
-*Release notes for this version will be added when Neuron 2.30.0 is released.*
+.. important::
+    AWS Neuron v2.31.0 is the last release to support ``neuronx-distributed-training`` (version pinned to ``1.7.0``) . For more information about training with native PyTorch on Neuron and migration guidance, see :ref:`Native PyTorch for AWS Trainium <native-pytorch-trainium>`.
 
+.. _nxd-training-2-29-0-rn:
+
+NxD Training [1.7.0] (Neuron 2.29.0 Release)
+---------------------------------------------
+
+* The ``neuronx-distributed-training`` package has been updated to ``1.7.0``.
+
+
+.. _nxd-training-2-27-0-rn:
+
+NxD Training [1.6.0] (Neuron 2.29.0 Release)
+---------------------------------------------
+
+* The ``neuronx-distributed-training`` package has been updated to ``1.6.0``.
 
 .. _nxd-training-2-25-0-rn:
 
@@ -172,7 +187,7 @@ Improvements
 ~~~~~~~~~~~~~~~
 
 * This is the first release of NxD Training (NxDT), NxDT is a PyTorch-based library that adds support for user-friendly distributed training experience through a YAML configuration file compatible with NeMo, allowing users to easily set up their training workflows. At the same time, NxDT maintains flexibility, enabling users to choose between using the YAML configuration file, PyTorch Lightning Trainer, or writing their own custom training script using the NxD Core.
-* The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing a compatability with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.
+* The library supports PyTorch model classes including Hugging Face and Megatron-LM. Additionally, it leverages NeMo's data engineering and data science modules enabling end-to-end training workflows on NxDT, and providing a compatibility with NeMo through minimal changes to the YAML configuration file for models that are already supported in NxDT. Furthermore, the functionality of the Neuron NeMo Megatron (NNM) library is now part of NxDT, ensuring a smooth migration path from NNM to NxDT.
 
 **This release of NxDT includes:**
 

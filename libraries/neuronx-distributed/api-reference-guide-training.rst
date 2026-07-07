@@ -256,14 +256,14 @@ NxD also uses ``neuronx_distributed.trainer.save_checkpoint()`` to save LoRA mod
 There are three modes for LoRA checkpoint saving:
 
 * ``save_lora_base=False, merge_lora=False``: Save the LoRA adapter only.
-* ``save_lora_base=True, merge_lora=False``: Save both the base model and the LoRA adapter seperately.
+* ``save_lora_base=True, merge_lora=False``: Save both the base model and the LoRA adapter separately.
 * ``save_lora_base=True, merge_lora=True``: Merge the LoRA adapter into the base model and then save the base model.
 
 
 Other than the adapter, NxD also needs to save the LoRA configuration file for LoRA loading. 
-The configuration can be saved into the same checkpoint with the adapter, or saved as a seperately json file.
+The configuration can be saved into the same checkpoint with the adapter, or saved as a separately json file.
 
-- ``save_lora_config_adapter (bool)``: If False, save the configuration file as a seperately json file.
+- ``save_lora_config_adapter (bool)``: If False, save the configuration file as a separately json file.
 
 Note that if LoRA configuration file is saved separately, it is named as ``lora_adapter/adapter_config.json``.
 

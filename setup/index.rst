@@ -97,7 +97,7 @@ Installation by Framework
       
       **For JAX users**
       
-      - JAX 0.7+ with Neuron backend
+      - JAX 0.7.0 - 0.10.0 with Neuron backend
       - XLA compilation
       - Supports: Inf2, Trn1, Trn2, Trn3
 

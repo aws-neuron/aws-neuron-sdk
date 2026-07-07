@@ -74,13 +74,13 @@ Common virtual environments include:
      - Use case
    * - PyTorch 2.9
      - ``aws_neuronx_venv_pytorch``
-     - Training and inference
+     - Inference
    * - PyTorch vLLM
      - ``aws_neuronx_venv_pytorch_inference_vllm``
      - LLM inference serving
    * - JAX
      - ``aws_neuronx_venv_jax``
-     - Training and inference
+     - Training
 
 .. note::
 

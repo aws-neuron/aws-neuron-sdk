@@ -28,6 +28,23 @@ Creation operations
    rand
    random_seed
 
+.. _nl_tensor_class:
+
+Tensor class
+------------
+
+:class:`NkiTensor` is the tensor type returned by the creation operations
+above. Its view methods (``slice``, ``select``, ``reshape``, ``permute``,
+``view``, ``ap``, etc.) return new ``NkiTensor`` views that share the same
+underlying storage, without copying data.
+
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-template.rst
+   :nosignatures:
+
+   NkiTensor
+
 .. _nl_tensor_ops:
 
 Tensor operations
@@ -281,6 +298,7 @@ Data Types
    float8_e4m3
    float8_e5m2
    float8_e4m3fn
+   float8_e8m0fnu
    float8_e5m2_x4
    float8_e4m3fn_x4
    float4_e2m1fn_x4
@@ -294,7 +312,7 @@ Constants
 .. list-table::
 
    * - :doc:`tile_size <nki.language.tile_size>`
-     - Hardware tile size constants (pmax, psum_fmax, gemm_stationary_fmax, etc.)
+     - Hardware tile size constants (pmax, psum_bank_fmax, gemm_stationary_fmax, etc.)
 
 .. toctree::
    :hidden:

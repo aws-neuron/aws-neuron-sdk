@@ -176,7 +176,7 @@ Description for Each Field
         * ``notifications`` - amount of device memory used to store instruction level trace information used to profile workloads ran on the device
         * ``runtime_memory`` - amount of device memory used by the Neuron Runtime (outside of the previous categories)
         * ``tensors`` - amount of device memory used for tensors
-        * ``uncategorized`` - amount of device memory that does not belong in any other catagory in this list
+        * ``uncategorized`` - amount of device memory that does not belong in any other category in this list
   
   * ``host_mem/``: The amount of memory that Neuron Runtime uses for input and output tensors.
 

@@ -312,4 +312,4 @@ You can test the endpoint using curl or any HTTP client:
 
 Conclusion
 ----------
-You have successully quantized a Llama3.3 70B model to fp8 and deployed the model on Trainium 2 for inference. To evaluate the accuracy of the quantized model, run accuracy evaluation tests using :ref:`accuracy-eval-with-datasets`.
+You have successfully quantized a Llama3.3 70B model to fp8 and deployed the model on Trainium 2 for inference. To evaluate the accuracy of the quantized model, run accuracy evaluation tests using :ref:`accuracy-eval-with-datasets`.

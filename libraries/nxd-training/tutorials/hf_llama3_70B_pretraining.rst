@@ -277,7 +277,7 @@ To view an ongoing training job in TensorBoard, you first need to identify the
 experiment directory associated with your ongoing job.
 This will typically be the most recently created directory under
 ``~/neuronx-distributed-training/examples/nemo_experiments/hf_llama/``.
-Once you have identifed the directory, ``cd`` into it, and then launch TensorBoard:
+Once you have identified the directory, ``cd`` into it, and then launch TensorBoard:
 
 .. code-block:: bash
 

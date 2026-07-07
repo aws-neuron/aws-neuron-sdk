@@ -413,7 +413,7 @@ Scalar Engine
 Scalar Engine (ScalarE) is specially designed to accelerate scalar operations where every element in the output tensor only
 depends on one element of the input tensor. In addition, ScalarE provides hardware acceleration to evaluate non-linear functions
 such as Gelu and Sqrt. The currently supported set of non-linear functions is listed in :ref:`here <nki-act-func>`.
-It it worth noting that we can support any new non-linear functions on ScalarE as they come up in new ML model architectures
+It is worth noting that we can support any new non-linear functions on ScalarE as they come up in new ML model architectures
 through Neuron SDK software updates. Similar to VectorE, ScalarE consists of 128 parallel lanes, each of which can stream
 data from a SBUF/PSUM partition, perform mathematical operations, and write data back to each SBUF/PSUM partition in a deeply
 pipelined fashion.

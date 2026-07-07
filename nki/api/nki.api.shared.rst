@@ -1,6 +1,6 @@
-=======================
-NKI API Common Fields
-=======================
+=========================
+NKI ISA API Common Fields
+=========================
 
 .. _nki-dtype:
 
@@ -34,6 +34,8 @@ which must be a `nki.language` data type.
   |                        +------------------------------+-------------------------------------------------+
   |                        | float8_e5m2 (1S,5E,2M)       | ``nki.language.float8_e5m2``                    |
   |                        +------------------------------+-------------------------------------------------+
+  |                        | float8_e4m3fn (1S,4E,3M)     | ``nki.language.float8_e4m3fn``                  |
+  |                        +------------------------------+-------------------------------------------------+
   |                        | float16 (1S,5E,10M)          | ``nki.language.float16``                        |
   |                        +------------------------------+-------------------------------------------------+
   | Float                  | bfloat16 (1S,8E,7M)          | ``nki.language.bfloat16``                       |
@@ -41,6 +43,12 @@ which must be a `nki.language` data type.
   |                        | tfloat32 (1S,8E,10M)         | ``nki.language.tfloat32``                       |
   |                        +------------------------------+-------------------------------------------------+
   |                        | float32 (1S,8E,23M)          | ``nki.language.float32``                        |
+  +------------------------+------------------------------+-------------------------------------------------+
+  |                        | float8_e5m2_x4               | ``nki.language.float8_e5m2_x4``                 |
+  |                        +------------------------------+-------------------------------------------------+
+  | Packed [#2]_           | float8_e4m3fn_x4             | ``nki.language.float8_e4m3fn_x4``               |
+  |                        +------------------------------+-------------------------------------------------+
+  |                        | float4_e2m1fn_x4             | ``nki.language.float4_e2m1fn_x4``               |
   +------------------------+------------------------------+-------------------------------------------------+
   | Boolean                | boolean stored as uint8      | ``nki.language.bool_``                          |
   +------------------------+------------------------------+-------------------------------------------------+
@@ -239,3 +247,4 @@ their needs. We take reciprocal and reverse square root as two examples and expl
 .. rubric:: Footnotes
 
 .. [#1] S: sign bits, E: exponent bits, M: mantissa bits
+.. [#2] 4x packed elements, custom data type for ``nki.isa.nc_matmul_mx`` and ``nki.isa.quantize_mx`` on NeuronCore-v4

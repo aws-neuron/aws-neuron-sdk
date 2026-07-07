@@ -1,6 +1,6 @@
 .. meta::
     :description: RoPE kernel applies Rotary Position Embedding to input embeddings.
-    :date-modified: 01/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.rope
 
@@ -70,7 +70,7 @@ RoPE
 RoPE_sbuf
 ^^^^^^^^^^^^^^^
 
-.. py:function:: RoPE_sbuf(x_in_sb, cos_sb, sin_sb, x_out_sb, convert_from_interleaved=False)
+.. py:function:: RoPE_sbuf(x_in_sb: nl.ndarray, cos_sb: Union[nl.ndarray, TensorView], sin_sb: Union[nl.ndarray, TensorView], x_out_sb: nl.ndarray, convert_from_interleaved: bool = False) -> nl.ndarray
 
    Apply RoPE on tensors in SBUF (for megakernel fusion).
    Helper function that operates entirely in SBUF without HBM I/O.

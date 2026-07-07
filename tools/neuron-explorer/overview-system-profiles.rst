@@ -76,7 +76,14 @@ You can switch between the following grouping modes in the settings to focus you
    * - Grouping Option
      - Description
      - Example
-   * - CPU vs Device Grouping (Default)
+   * - Default
+     - Groups events by instance ID, process ID, and event source, with an additional tier of grouping based on the event source.
+       For framework events, the operator dispatch events (``PrivateUse1 runtime``) will be grouped by thread ID, while device interaction events (``PrivateUse1 driver``) will be grouped by the stream ID.
+       For Neuron Runtime events, it will be grouped by the Logical NeuronCore.
+       For Neuron hardware events, it will be grouped by the physical NeuronCore.
+       See :ref:`logical-neuroncore-config` for more info.
+     - Framework dispatch events: ``i-0b1ea78ca2865fd32/PID:1765325/framework/TID:0``, Framework device events: ``i-0b1ea78ca2865fd32/PID:1765325/framework/Stream:0``, Runtime events: ``i-0b1ea78ca2865fd32/PID:1765325/neuron_rt/NC:0``, Hardware events: ``i-0b1ea78ca2865fd32/PID:1765325/neuron_hw/NC0:4``
+   * - CPU vs Device Grouping
      - Groups events by event source (CPU or Neuron device events)
      - Runtime events: ``i-0b1ea78ca2865fd32/PID:1765325/TID:0/neuron_rt``, Hardware events: ``i-0b1ea78ca2865fd32/PID:1765325/Worker:0/neuron_hw``
    * - NeuronCore Grouping
@@ -100,6 +107,15 @@ Event Details
 Clicking on trace events in the timeline populates the Event Details widget with a list of properties for the system trace event.
 
 .. image:: /tools/images/system-event-details.png
+
+Source Code Linking
+-------------------
+
+When capturing profiles through the native PyTorch profiling API, using ``with_stack=True`` will record source information in the framework events.
+If the source code is uploaded alongside the profile, for any framework event with ``<source_file>(<line_number>)`` in the name, you can (Ctrl/Cmd) + click on the event to scroll to the corresponding
+source code line in the Code Viewer.
+
+.. image:: /tools/neuron-explorer/images/system-source-linking.png
 
 Device Profile Linking
 ------------------------

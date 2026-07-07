@@ -123,6 +123,7 @@
 
 - [Neuron Explorer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/index.html): Unified profiling suite with AI-driven optimization recommendations
 - [Neuron Explorer Getting Started](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/get-started.html): Set up Neuron Explorer, launch the web UI, and configure SSH tunneling
+- [Neuron Explorer UI Overview Tour](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-ui-tour.html): Guided walkthrough of all viewers and tools grouped by workflow, with a clickable UI navigation map
 - [Capture and View Profiles](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/how-to-profile-workload.html): Capture and view profiles in the UI or via VSCode integration
 - [Device Trace Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-device-profiles.html): Hardware-level execution timeline, operator table, and dependency analysis
 - [System Trace Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-system-profiles.html): System-level execution timeline and analysis
@@ -136,6 +137,10 @@
 - [AI Recommendation Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-ai-recommendations.html): AI-powered bottleneck analysis and optimization recommendations
 - [Migration from Neuron Profiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/migration-faq.html): Migration guide and FAQ for moving from Neuron Profiler to Neuron Explorer
 - [View Profiles with Perfetto](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/view-perfetto.html): View Neuron Explorer profiles using the Perfetto UI
+- [Neuron Explorer Environment Variables](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/environment-variables.html): Reference for all Neuron Explorer profiling, capture, debug, filtering, and runtime environment variables, with recommended combinations
+- [Neuron Explorer Profile Schema Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/profile-schema-reference.html): Reference for all Neuron Explorer parquet output tables and enums, including field names, types, units, and descriptions
+- [Neuron Explorer Troubleshooting & FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/troubleshooting.html): Troubleshooting guide and FAQ covering error codes, processing failures, capture issues, missing data, and performance
+- [Neuron Explorer Glossary](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/glossary.html): Glossary of Neuron Explorer viewers, profile types, UI components, and Neuron-specific acronyms
 
 ### System Tools
 
@@ -156,7 +161,7 @@
 ## Neuron Runtime & Compiler
 
 - [NeuronX Runtime](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/index.html): High-performance execution engine for running models on AWS Inferentia and Trainium
-- [Runtime Configuration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/configuration-guide.html): Learn how to configure the Neuron Runtime using environment variables
+- [Runtime Configuration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/guides/configuration-guide.html): Learn how to configure the Neuron Runtime using environment variables
 - [Runtime API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/index.html): Comprehensive guide to the Neuron Runtime API
 - [Neuron Graph Compiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/index.html): Sophisticated compilation system that transforms ML models into optimized code
 - [Compiler Error Codes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/compiler/error-codes/index.html): Neuron Compiler error code documentation
@@ -227,13 +232,14 @@
 - [nki.language.tile_size](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.language.tile_size.html): Tile size constants for NKI programming
 - [nki.isa](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.isa.html): Instruction Set Architecture APIs for low-level operations
 - [nki.collectives](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.collectives.html): Collective communication operations across NeuronCores
-- [nki.simulate](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.simulate.html): NKI kernel simulation for CPU-based testing
+- [nki.simulate](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/generated/nki.simulate.html): NKI kernel simulation for CPU-based testing
 - [nki.api.shared](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.api.shared.html): Shared API utilities and types
 
 ### NKI Library
 
 - [NKI Library](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/index.html): Pre-built optimized kernels for common operations
 - [NKI Library About](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/about/index.html): Overview and design principles of the NKI Library
+- [NKI Library Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/quickstart-nkl.html): Get started using pre-built NKI Library kernels in your model code
 - [NKI Library API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/index.html): Complete API reference for all NKI Library kernels
 - [Attention CTE Kernel](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-cte.html): Fused attention for context encoding
 - [Attention TKG Kernel](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-tkg.html): Fused attention for token generation
@@ -260,7 +266,7 @@
 - [FGCC (All-Gather + Matmul)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fgcc.html): Fused fine-grained collective compute combining all-gather and matmul
 - [SBUF-to-SBUF All-Gather](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/sb2sb-allgather.html): SBUF-to-SBUF all-gather for small and large tensors
 - [Attention Segmented CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-segmented-cte.html): Segmented attention with block-based KV cache and prefix caching
-- [KV-Parallel Segmented Prefill](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/kv-parallel-segmented-prefill.html): KV-parallel segmented prefill attention
+- [Attention KV-Parallel Segmented CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-kv-parallel-segmented-cte.html): KV-parallel segmented prefill attention for context encoding (renamed from ``kv_parallel_segmented_prefill``)
 - [FP8 Quantize](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/fp8-quantize.html): Static and row-wise dynamic FP8 quantization with pre-combined dequantization scale
 - [Ring Attention Forward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ring-attention-fwd.html): Ring attention forward pass for context parallelism with collective permute and latency hiding
 - [Ring Attention Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ring-attention-bwd.html): Ring attention backward pass SPMD kernel for context parallelism
@@ -281,6 +287,20 @@
 - [Argsort Unstable](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/argsort-unstable.html): Unstable argsort on a 1D input buffer
 - [Build All-to-All-V Metadata](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/build-all-to-all-v-metadata.html): Builds the metadata buffer for ``all_to_all_v`` collectives from MoE routing decisions
 - [Permute Routed Tokens](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/permute-routed-tokens.html): Sorts tokens by expert and packs hidden states, affinities, and token indices for MoE dispatch
+- [MS Deformable Attention](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ms-deformable-attention.html): Multi-scale deformable attention sampling values from multiple feature-pyramid levels at learned locations with bilinear interpolation
+- [MS Deformable Attention Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ms-deformable-attention-bwd.html): Backward pass for multi-scale deformable attention, computing gradients w.r.t. value, sampling locations, and attention weights
+- [Gather](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gather.html): Gathers rows from a 2D input by a 1D index using indirect DMA load (equivalent to PyTorch ``input[index]`` on dim 0)
+- [Scatter-Add](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/scatter-add.html): Scatter-adds rows from a source into a 2D input by a 1D index (equivalent to PyTorch ``input.scatter_add(dim=0, ...)``)
+- [Permute A2AV](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/permute-a2av.html): MoE training dispatch that permutes tokens by destination EP rank and exchanges them via ``all_to_all_v``
+- [Unpermute A2AV](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/unpermute-a2av.html): MoE training combine that exchanges expert output via ``all_to_all_v`` and unpermutes tokens back to their original order
+- [QKV Batch Shard](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/batch-shard.html): Q projection transition from a tensor-parallel layout to a tensor-and-data-parallel layout for batch-sharded attention
+- [Collective Communication Kernels](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/collectives.html): HBM-based all_reduce, all_gather, reduce_scatter, and all_to_all kernels plus per-rank slice-selection helpers
+- [Ring Attention Unpermute](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/ring-attention-unpermute.html): Reorders striped ring-attention output back to contiguous sequence order after context-parallel attention
+- [RMSNorm Router Top-K A2AV](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rmsnorm-router-topk-a2av.html): Fused RMSNorm + router top-K for MoE token generation, feeding the all-to-all-v dispatch path
+- [RMSNorm Router Top-K TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rmsnorm-router-topk-tkg.html): Fused RMSNorm (+ optional MX quantize) + router top-K for MoE token generation
+- [Blockwise MM Backward MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/blockwise-mm-backward-mxfp8.html): MXFP8-quantized backward pass for blockwise Mixture of Experts, computing gradients per expert-assigned block
+- [QKV CTE MLA](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/qkv-cte-mla.html): DeepSeek Multi-head Latent Attention (MLA) QKV projection with MX (fp8) quantization for context encoding
+- [Blockwise MM Shard-on-Block](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/bwmm-shard-on-block-v2.html): Block-sharded blockwise matrix multiplication for context-encoding MoE layers with a hybrid static/dynamic loop structure
 
 ### NKI Library Kernel Utilities
 
@@ -308,7 +328,7 @@
 
 - [Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html): Official home page for AWS Neuron SDK release notes
 - [What's New](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html): Latest releases and features of the Neuron SDK
-- [Latest Release (2.30.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.30.0.html): Release notes for Neuron SDK version 2.30.0
+- [Latest Release (2.31.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.31.0.html): Release notes for Neuron SDK version 2.31.0
 - [Component Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/index.html): Release notes for individual Neuron components
 - [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Solutions for common issues with AWS Neuron
 - [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq/index.html): Frequently asked questions about AWS Neuron

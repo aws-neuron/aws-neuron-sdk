@@ -171,7 +171,7 @@ For single-instance run:
    ./compile.sh --tp-degree 32 --batch-size 4 --model-path path/to/your/downloaded/model
 
 We compile for ``tp-degree=32`` because 1 prefill server will take up half 
-of the Neuron Cores cores while the decode server will take up the other half.
+of the Neuron Cores while the decode server will take up the other half.
 
 
 Launch the Prefill and Decode Servers

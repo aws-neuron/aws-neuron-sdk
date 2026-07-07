@@ -10,6 +10,137 @@ Component Release Notes for Neuron Runtime
 
 The release notes for the Neuron Runtime Neuron component, including Neuron collectives, the Runtime driver, and the Runtime library. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _runtime-2-31-0-rn:
+
+Neuron Runtime (Neuron 2.31.0 Release)
+------------------------------------------------------------------------
+
+**Date of release**: 07/07/2026
+
+Neuron Runtime Library
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.33
+
+New Features
+^^^^^^^^^^^^
+
+* Added the ``NEURON_RT_ENABLE_DEVICE_MEMORY_OOM_LOG`` environment variable and the ``nrt_debug_log_oom_report()`` API so frameworks can suppress the runtime's verbose device-memory out-of-memory logs and trigger the utilization/OOM report on demand.
+* Added :ref:`contiguous shared scratchpad <contiguous-scratchpad>` support on Inf2/Trn1, Trn2 and Trn3 (not supported for LNC size 1 on Trn2/Trn3), eliminating the need to manually set scratchpad page sizes.
+* Added the ``nrt_dump_device_allocation_info()`` API to query per-logical-NeuronCore device-memory allocation chunk information for profiling and debugging tools.
+* Host collectives now accept tensor lists, enabling AllGather with one input and N output tensors and ReduceScatter with N input and one output tensor.
+* Added coalesced host collectives via the new ``nrt_cc_prepare_coalesced`` / ``nrta_cc_prepare_coalesced`` APIs, which batch multiple collective ops into a single prepare/schedule cycle.
+* Out-of-bounds memory-access faults on models compiled with debug info now report the originating source location, an IR trace, and a host stack trace instead of only a low-level instruction address.
+* Added native support for TopK operation on GpSimd engine on Trn2 and Trn3.
+* Added hardware descriptor-generation-engine support for MX (microscaling) data-type tensors in DMA transpose/reshape paths on Trn2 and Trn3.
+
+Bug Fixes
+^^^^^^^^^
+
+* Host collectives no longer return a spurious timeout failure caused by inter-rank skew; the runtime now waits for completion while emitting periodic warnings and diagnostic dumps.
+* Fixed a hang in reduce-scatter/all-gather mesh collectives with RDH double-buffering caused by a proxy/non-proxy handshake mismatch.
+* Fixed ``nrt_get_model_tensor_info`` reporting 1/4 of the correct size for ``_x4`` packed data types, which broke callers that size buffers from the info API (e.g. ``neuron-profile capture --io-from runtime``).
+* Improved collectives timeout handling to correctly process execution barrier only NEFFs.
+* Corrected error propagation for several Driver IOCTL calls (allocation, copy, async copy, DMA queue allocation, etc.) so failures return accurate status to callers.
+* Fixed incorrect data movement for negative-stride DMA access patterns on Trn1 and Trn2, where the descriptor generator previously computed addresses with an unsigned step.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron runtime was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.18              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.18              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.18              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+=========================== ============= ============== ================= ===============
+
+Neuron Driver
+~~~~~~~~~~~~~
+
+**Version:** 2.29
+
+New Features
+^^^^^^^^^^^^
+
+* Added a ``utilization_raw`` sysfs entry that reports live per-die power utilization from a cached sampler, pollable at the firmware refresh rate.
+
+Improvements
+^^^^^^^^^^^^
+
+* When a top-level DMA is stuck, the driver now fails fast after the first timeout instead of re-timing-out on every queued context, reducing time-to-fail and log noise.
+* Memory, DMA, and reset ioctls now return accurate errno values (e.g. ``-ENOENT``, ``-E2BIG``, ``-EBUSY``, ``-EFAULT``, ``-ENXIO``) instead of generic codes or positive byte counts, giving the Runtime precise failure diagnostics.
+
+Bug Fixes
+^^^^^^^^^
+
+* Fixed a NULL-pointer dereference (kernel oops) on Trn2 UltraServer during driver reload when topology election started before all devices finished probing.
+* Fixed the reset-readiness check so device-count gating works during probe when the driver is loaded with ``no_reset=1``.
+* Fixed a race in the memory-handle allocation path that could lose a handle under concurrent memory operations.
+
+Known Issues
+^^^^^^^^^^^^
+
+* Neuron Driver 2.29 requires Neuron Runtime Library 2.33 or later. Upgrading the Driver without also upgrading the Runtime Library will cause ``nrt_init()`` to fail. To work around this issue, upgrade the Neuron Runtime Library to 2.33 or later alongside the Driver.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron driver was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Red Hat       RHEL10         6.12              2.39
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.18              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Inf2``                    Amazon Linux  AL2            5.10              2.26
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Red Hat       RHEL10         6.12              2.39
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.18              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Amazon Linux  AL2            5.10              2.26
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Red Hat       RHEL10         6.12              2.39
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.18              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Amazon Linux  AL2            5.10              2.26
+=========================== ============= ============== ================= ===============
+
+
+Neuron Collectives
+~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.33
+
+New Features
+^^^^^^^^^^^^
+
+* Added multi-node ring collective communication for one-rank-per-chip communicators by converting per-node rings to routing-IDs and concatenating them into a single global ring on Trn2 and Trn3.
+
 .. _runtime-2-30-0-rn:
 
 Neuron Runtime (Neuron 2.30.0 Release)

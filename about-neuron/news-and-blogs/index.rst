@@ -38,7 +38,7 @@ Read recent blogs and technical content about Neuron, Trainium, and Inferentia f
    
    This page is regularly updated with new content. Bookmark it to stay informed about the latest developments in AWS Neuron, Trainium, and Inferentia.
  
-**For the full list of featured articles and posts, go to the :ref:`News & Blogs <all-articles>` section of this page.**
+For the full list of featured articles and posts, go to the :ref:`News & Blogs <all-articles>` section of this page.
 
 .. _all-articles:
 

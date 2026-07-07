@@ -12,13 +12,13 @@ AWS Neuron Documentation
 .. grid:: 1
    :gutter: 2
 
-   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.30.0
-      :link: /release-notes/2.30.0
+   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.31.0
+      :link: /release-notes/2.31.0
       :link-type: doc
       :class-card: sd-border-2
       :class-title: sd-fs-6
 
-      **Released May 21, 2026**. Select this card for the details!
+      **Released July 7, 2026**. Select this card for the details!
 
 ----
 

@@ -159,7 +159,7 @@ The following table outlines the details for each phase for Neuron software:
 | Release Candidate (RC)        | Once AWS identifies a release to be a stable product, it may be marked as a Release Candidate (RC).                  | This phase applies only to Neuron SDK            |
 |                               | This phase is usually short and during it AWS will provide for Neuron Software on an as-needed basis.                | and Neuron components                            |
 +-------------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
-| General Availability (Stable) | During this phase, AWS releases :ref:`regular <neuron-regular-updates>` updates for the Neuron Software based         |                                                  |
+| General Availability (Stable) | During this phase, AWS releases :ref:`regular <neuron-regular-updates>` updates for the Neuron Software based        |                                                  |
 |                               | on a predefined release cadence of the Neuron SDK or provides :ref:`maintenance updates <neuron-maintenance-updates>`|                                                  |
 |                               | for Neuron Software on an as-needed basis.                                                                           |                                                  |
 |                               | See :ref:`Neuron Software Classification <sdk-classification>` for more information                                  |                                                  |
@@ -451,10 +451,10 @@ Neuron Features
 +-----------------+-----------------+------------------------+-------------+
 |                 | Testing         | Functionality          | Performance |
 +=================+=================+========================+=============+
-|                 | No formal       | Partial funcitonality  | Not tested  |
+|                 | No formal       | Partial functionality  | Not tested  |
 |     Alpha       | testing done    | with limited set of    | or          |
 |                 |                 | core capabilities,     | evaluated   |
-|                 |                 | far from Minium Viable |             |
+|                 |                 | far from Minimum Viable|             |
 |                 |                 | Product (MVP) \*       |             |
 +-----------------+-----------------+------------------------+-------------+
 | Developer       | Basic           | Minimum Viable         |             |

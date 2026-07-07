@@ -1,6 +1,6 @@
 .. meta::
     :description: Ring Attention Backward SPMD kernel.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.experimental.attention
 
@@ -24,7 +24,7 @@ API Reference
 ring_attention_spmd_bwd
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: ring_attention_spmd_bwd(q_ref: nl.ndarray, k_ref: nl.ndarray, v_ref: nl.ndarray, o_ref: nl.ndarray, dy_ref: nl.ndarray, lse_ref: nl.ndarray, use_causal_mask: bool = False, mixed_precision: bool = True, softmax_scale: float = None, num_workers: int = 1, lnc_size: int = 1, replica_groups: tuple = None, striped_attention: bool = False)
+.. py:function:: ring_attention_spmd_bwd(q_ref: nl.ndarray, k_ref: nl.ndarray, v_ref: nl.ndarray, o_ref: nl.ndarray, dy_ref: nl.ndarray, lse_ref: nl.ndarray, use_causal_mask: bool = False, mixed_precision: bool = True, softmax_scale: float = None, num_workers: int = 1, lnc_size: int = 1, replica_groups: tuple = None, striped_attention: bool = False, bound_min: nl.ndarray = None, bound_max: nl.ndarray = None)
 
    Ring Attention Backward SPMD kernel.
 

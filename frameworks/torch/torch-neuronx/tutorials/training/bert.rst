@@ -127,7 +127,7 @@ Pre-compilation
 ~~~~~~~~~~~~~~~
 
 PyTorch Neuron evaluates operations lazily during execution of the training loops, which means it builds a symbolic
-graph in the background and the graph is executed in hardware only when the tensor is printed, transfered to CPU, or ``xm.mark_step()`` is encountered (``xm.mark_step()`` is implicitly called by ``pl.MpDeviceLoader/pl.ParallelLoader``). During execution of the training loops, PyTorch Neuron can build multiple graphs depending on the number of conditional paths taken. For BERT-Large pretraining, PyTorch Neuron builds multiple unique graphs that should be compiled before running on the NeuronCores. PyTorch Neuron will compile those graphs only if they are not in the XLA in-memory cache or the persistent cache. To reduce the compilation time of these graphs, you can pre-compile those graphs using the utility ``neuron_parallel_compile`` (provided by the ``libneuronxla`` package, a transitive dependency of ``torch-neuronx``) as shown:
+graph in the background and the graph is executed in hardware only when the tensor is printed, transferred to CPU, or ``xm.mark_step()`` is encountered (``xm.mark_step()`` is implicitly called by ``pl.MpDeviceLoader/pl.ParallelLoader``). During execution of the training loops, PyTorch Neuron can build multiple graphs depending on the number of conditional paths taken. For BERT-Large pretraining, PyTorch Neuron builds multiple unique graphs that should be compiled before running on the NeuronCores. PyTorch Neuron will compile those graphs only if they are not in the XLA in-memory cache or the persistent cache. To reduce the compilation time of these graphs, you can pre-compile those graphs using the utility ``neuron_parallel_compile`` (provided by the ``libneuronxla`` package, a transitive dependency of ``torch-neuronx``) as shown:
 
 .. literalinclude:: tutorial_source_code/bert_training/bert_precompilation_code.sh
    :language: shell
@@ -336,7 +336,7 @@ the BERT pretraining demo:
 
 Phase 1 BERT-Large pretraining with Layerwise Adaptive Moments based optimizer (LAMB)
 -------------------------------------------------------------------------------------
-Sometimes, to reduce the training wall time, you can use higher learning rate and larger global batch size. The approach is discussed in `LARGE BATCH OPTIMIZATION FOR DEEP LEARNING: TRAINING BERT IN 76 MINUTES <https://arxiv.org/pdf/1904.00962.pdf>`__. Tranium supports LAMB, and in this tutorial, we use publicly available XLA-friendly LAMB implemenation from https://github.com/rwightman/pytorch-image-models/blob/master/timm/optim/lamb.py.
+Sometimes, to reduce the training wall time, you can use higher learning rate and larger global batch size. The approach is discussed in `LARGE BATCH OPTIMIZATION FOR DEEP LEARNING: TRAINING BERT IN 76 MINUTES <https://arxiv.org/pdf/1904.00962.pdf>`__. Trainium supports LAMB, and in this tutorial, we use publicly available XLA-friendly LAMB implementation from https://github.com/rwightman/pytorch-image-models/blob/master/timm/optim/lamb.py.
 
 .. literalinclude:: tutorial_source_code/bert_training/bert_lamb_training_code.sh
    :language: shell

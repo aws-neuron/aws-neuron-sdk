@@ -103,5 +103,5 @@ After running a Neuron workload Pod, verify that the Neuron Scheduler successful
     2022/10/12 15:41:16 Allocated devices list [1] for other resource aws.amazon.com/neurondevice
     2022/10/12 15:41:16 Allocated devices list [2] for other resource aws.amazon.com/neurondevice
     2022/10/12 15:41:16 Return aws.amazon.com/neuroncore
-    2022/10/12 15:41:16 Succesfully updated the DevUsageMap [true true true true true true true true true false false false false false false false]  and otherDevUsageMap [true true true false] after alloc for node ip-192-168-2-25.ec2.internal
+    2022/10/12 15:41:16 Successfully updated the DevUsageMap [true true true true true true true true true false false false false false false false]  and otherDevUsageMap [true true true false] after alloc for node ip-192-168-2-25.ec2.internal
     2022/10/12 15:41:16 Finished executing Bind Request...

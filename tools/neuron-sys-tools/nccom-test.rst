@@ -52,7 +52,7 @@ seen in the previous example).
       - Number of elements in the data involved in this collective operation. For example, if **size(B)** is 4 and **type** is fp32,
         then **count** will be 1 since one single fp32 element has been processed.
     * - type
-      - Data type for the processed data. Can be: **uint8**, **int8**, **uint16**, **int16**, **fp16**, **bf16**, **int32**, **uint32**, **fp32**
+      - Data type for the processed data. Can be: **uint8**, **int8**, **uint16**, **int16**, **fp8 (fp8e4)**, **fp16**, **bf16**, **int32**, **uint32**, **fp32**
     * - time(us)
       - Time in microseconds representing the average of all durations for the Collective Communication operations executed during the benchmark.
     * - algbw(GB/s)
@@ -149,8 +149,8 @@ Required Arguments:
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
             - ``sendrecv``: Send-Receive
             - ``alltoall``: All-to-All
+            - ``alltoallv``: All-to-Allv
             - ``permute``: Permute
-            - ``alltoallv``: All-to-Allv (Currently only supported for inter-node configurations)
     * - ``-r, --nworkers``
       - N/A, required argument
       - Total number of workers (ranks) to use
@@ -248,7 +248,7 @@ Input/Output Data:
       - Description
     * - ``-d, --datatype``
       - ``uint8``
-      - Data type for the data used by the benchmark. Supported types: ``uint8``, ``int8``, ``uint16``, ``int16``,
+      - Data type for the data used by the benchmark. Supported types: ``uint8``, ``int8``, ``fp8 (fp8e4)``, ``uint16``, ``int16``,
         ``fp16``, ``bf16``, ``uint32``, ``int32``, ``fp32``. Input data will be zero filled, unless ``--check`` is
         provided in which case it will be filled with either pseudo-random data or ones.
     * - ``-c, --check``
@@ -272,12 +272,16 @@ Input/Output Data:
     * - ``--shared-output-buff``
       - false
       - For the CC operation, use a single, shared, HBM output buffer between 2 neuron cores in the same HBM domain.
-    * - ``--alltoallv-metadata``
+    * - ``--variable-size-op-metadata``
       - N/A
-      - For ``alltoallv`` collective operation, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation. 
+      - For ``alltoallv`` collective operations, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation. 
         Counts specify number of elements to send/receive between ranks, displacements specify where in buffer to send/receive data.
-        Length of count and displacement arrays should equal size of replica group over which ``alltoallv`` collective operation is performed. 
-        If one metadata entry is provided, it applies to all ranks, otherwise, specify one entry per rank. `AlltoAllV Example`_.
+        If one metadata entry is provided, it applies to all ranks, otherwise, specify one entry per rank.
+        Receive metadata is optional. However, if it is provided, it needs to match the corresponding send metadata. (e.g. send count for rank 0 to rank 1 needs to match receive count for rank 1 from rank 0).
+
+        For ``alltoallv``, length of count and displacement arrays should equal the size of replica group over which collective operation is performed. `AlltoAllV Example`_.
+
+
 
 .. _Data Integrity:
 
@@ -729,17 +733,17 @@ Multiple Instances Example
 
 
 .. _AlltoAllV Example:
-- Specify alltoallv-metadata as JSON for ``alltoallv`` operation ``--alltoallv-metadata``.
+- Specify variable-size-op-metadata as JSON for ``alltoallv`` operation.
 .. code-block::
 
-    NEURON_RT_ROOT_COMM_ID=172.32.137.79:44444 nccom-test -r 2 -N 2 -d fp32 alltoallv -b 1MB -e 1MB --hosts 127.0.0.1 172.32.253.16 --alltoallv-metadata alltoallv_metadata.json
+    NEURON_RT_ROOT_COMM_ID=172.32.137.79:44444 nccom-test -r 2 -N 2 -d fp32 alltoallv -b 1MB -e 1MB --hosts 127.0.0.1 172.32.253.16 --variable-size-op-metadata alltoallv_metadata.json
     size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
     1048608          262152    fp32          955.05           1.10           0.55
     Avg bus bandwidth:	0.5490GB/s
 
     cat alltoallv_metadata.json
     {
-      "alltoallv_metadata": [
+      "metadata": [
         {
           "send_counts": [512, 1024],
           "send_displs": [0, 512],

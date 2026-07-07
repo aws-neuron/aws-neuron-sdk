@@ -1,6 +1,6 @@
 .. meta::
     :description: Performs matrix multiplication with MXFP8 quantization.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.experimental.matmul_mxfp8
 
@@ -24,7 +24,7 @@ API Reference
 matmul_mxfp8
 ^^^^^^^^^^^^
 
-.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e5m2', output_dtype = nl.float32, run_with_lnc2: bool = True, lnc_2_shard_rhs: bool = True, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True) -> nl.ndarray
+.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e5m2', output_dtype = nl.bfloat16, run_with_lnc2: bool = True, lnc_2_shard_rhs = None, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True, load_with_PE_swizzle: bool = False, lhs_is_f_by_k: bool = True, rhs_is_f_by_k: bool = True) -> nl.ndarray
 
    Performs matrix multiplication with MXFP8 quantization.
 

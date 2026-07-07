@@ -58,7 +58,7 @@ using three interfaces:
 
 *   High-level `YAML <https://yaml.org/>`_  configuration file used in conjunction with models in NxD Training's model hub
 *   `PyTorch Lightning (PTL) <https://github.com/Lightning-AI/pytorch-lightning>`_ APIs and Trainer in conjunction with NxD Core primitives
-*   :ref:`NxD Core <neuronx-distributed-training-index>` foundational API, also refered to as NxD Core primitives
+*   :ref:`NxD Core <neuronx-distributed-index>` foundational API, also referred to as NxD Core primitives
 
 All three usage mechanisms employ the underlying NxD Core library either directly through programming interfaces or 
 configuration files and developers can choose the method that meets 

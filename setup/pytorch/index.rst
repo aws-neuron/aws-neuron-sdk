@@ -17,6 +17,9 @@ Install PyTorch with AWS Neuron support for training and inference on Inferentia
 
 **PyTorch Version**: 2.9+ with Native Neuron backend
 
+.. warning::
+   The NeuronX Distributed (NxD) library for training (``neuronx_distributed_training``) is no longer included on Neuron DLAMIs and DLCs as of release v2.31.0. To manually configure your environment to use ``neuronx_distributed_training``, see :doc:`Install PyTorch via manual installation </setup/pytorch/manual>`.
+
 Choose installation method
 ---------------------------
 

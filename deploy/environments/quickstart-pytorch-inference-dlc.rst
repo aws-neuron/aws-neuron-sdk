@@ -49,7 +49,7 @@ Get the latest PyTorch inference Docker image from Neuron's ECR public gallery `
 
    docker pull public.ecr.aws/neuron/pytorch-inference-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.30.0 released DLC image tag such as ``2.9.0-neuronx-py312-sdk2.30.0-ubuntu24.04``
+For example, replace ``<image_tag>`` with an SDK 2.31.0 released DLC image tag such as ``2.9.0-neuronx-py312-sdk2.31.0-ubuntu24.04``
 
 Step 2: Download the Llama-2-7b model
 --------------------------------------

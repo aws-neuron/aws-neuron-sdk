@@ -8,17 +8,19 @@
 Component Release Notes for NxD Core
 ====================================
 
-**Latest version (in 2.30.0)**: 0.19.28093
+**Latest version (in 2.31.0)**: 0.19.28492
 
 The release notes for the NxD Core (``neuronx-distributed``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
-.. _nxd-core-2-30-0-rn:
-
-NxD Core (Neuron 2.30.0 Release)
+NxD Core [0.19.28487] (Neuron 2.31.0 Release)
 -----------------------------------------------
 
-*Release notes for this version will be added when Neuron 2.30.0 is released.*
+* ``neuronx_distributed`` package updated to version ``0.19.28492``.
 
+NxD Core [0.19.28093] (Neuron 2.30.0 Release)
+-----------------------------------------------
+
+* ``neuronx_distributed`` package updated to version ``0.19.28093``.
 
 .. _nxd-core-2-26-0-rn:
 

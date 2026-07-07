@@ -9,13 +9,23 @@
 NKI Access Patterns
 ===================
 
-Starting with NKI 0.2.0, NKI supports the use of access patterns (AP) on 
-``nl.ndarray``, which provides users with the ability to specify 
-hardware-native access patterns. This low-level capability allows developers 
-to specify precisely what they want their instructions to read on the hardware.
+NKI supports hardware-native access patterns (APs) on ``NkiTensor`` via
+the :meth:`NkiTensor.ap` method, letting developers specify precisely
+what they want their instructions to read from on the hardware.
 
-Access patterns are only necessary if slicing cannot represent the desired 
-tensor access.
+For most code, the higher-level NkiTensor view primitives (``slice``,
+``reshape``, ``permute``, ``broadcast``, ``select``, ``view(dtype)``, etc.)
+should be sufficient. See the :ref:`Tensor Values <tensor-values>`
+section of the NKI Language Guide for an overview of those primitives.
+When none of the NkiTensor wrapper APIs expresses the access pattern you
+need, one can use the lower-level ``.ap()`` API, which can express any
+access pattern the hardware supports.
+
+.. note::
+
+   The NkiTensor view primitives are implemented on top of ``.ap()``:
+   each view method composes a hardware access pattern at specialization
+   time, without any runtime cost. ``.ap()`` is the raw building block.
 
 Hardware Capability
 ===================
@@ -45,12 +55,12 @@ The ``nl.ndarray`` has an ``ap`` method.
 
 .. code-block:: python
 
-   def ap(self, pattern: List[Tuple[int, int]], 
-      offset: Optional[int] = 0,
-      scalar_offset: Optional[Access] = None,
-      vector_offset: Optional[Access] = None,
-      indirect_dim: int = 0
-      dtype: Optional[Dtype] = None):
+   def ap(self, pattern: list[list[int]],
+      offset: int | VirtualRegister | None = None,
+      scalar_offset: NkiTensor | VirtualRegister | None = None,
+      vector_offset: NkiTensor | None = None,
+      indirect_dim: int = 0,
+      dtype: DType | None = None):
       pass
 
 The parameters have the following definitions:
@@ -60,11 +70,40 @@ The parameters have the following definitions:
   * The shape of a pattern is the collection of num. For example, given pattern ``[[w_step, w_num], [z_step, z_num], [y_step, y_num], [x_step, x_num]]``, the shape is ``[w_num, z_num, y_num, x_num]``.
   * **Note**: The order of the pattern specified here is in the opposite order to what is actually accepted by the hardware. Therefore, the order of the tuples shown on the profiler will be in the opposite order of what is specified here.
 
-* ``offset``: The offset to start the access in terms of number of elements from the beginning of the tensor. The default value is 0.
-* ``scalar_offset``: An SBUF tensor of shape ``(1, 1)`` that specifies the location to start the access in terms of number of elements on the ``indirect_dim`` of the access pattern. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
+* ``offset``: The offset to start the access in terms of number of elements from the beginning of the tensor. Can be a compile-time integer or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>`. When ``None`` (the default), the new view inherits the current view's storage offset.
+* ``scalar_offset``: An SBUF tensor of shape ``(1, 1)`` or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>` that specifies the location to start the access in terms of number of elements on the ``indirect_dim`` of the access pattern. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``vector_offset``: An SBUF tensor that specifies the location to start the access in terms of number of elements from the beginning of the indirect dimension specified by ``indirect_dim``. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``indirect_dim``: The indirect dimension on which to apply ``scalar_offset`` and ``vector_offset``.
 * ``dtype``: The data type of the access pattern. The default value is the ``dtype`` of the tensor being accessed.
+
+.. _ap-meta-programming:
+
+View Primitives Build APs at Specialization Time
+=================================================
+
+The higher-level NkiTensor view primitives (``slice``, ``reshape``,
+``permute``, ``broadcast``, ``select``, ``view(dtype)``, ``rearrange``,
+etc.) are implemented as NKI meta-programming on top of ``.ap()``.
+Every view operation runs at specialization time: it reads the current
+view's shape, strides, and offset, applies its transform, and produces
+a new ``NkiTensor`` whose ``get_pattern()`` returns a hardware access
+pattern equivalent to the one ``.ap()`` would have produced directly.
+
+.. code-block:: python
+
+   t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+   u = t.slice(dim=1, start=8, end=24)
+   assert u.get_pattern() == [[64, 128], [1, 16]]
+   assert u.offset == 8
+
+   # Equivalent to constructing the same AP by hand with .ap():
+   v = t.ap(pattern=[[64, 128], [1, 16]], offset=8)
+   assert v.get_pattern() == u.get_pattern()
+   assert v.offset == u.offset
+
+Because the view composition happens at specialization time, a chain of
+view operations has zero runtime cost: only the final pattern is handed
+to the ISA instruction that consumes the tensor.
 
 Semantics of the Access Pattern
 ================================
@@ -170,54 +209,48 @@ The following example is not allowed because it reads every other partition.
    :width: 80%
    :align: center
 
-Restriction on Nested Indexing
-===============================
+Composition and ``.ap`` on a view
+=================================
 
-The ``.ap`` method is only allowed on ``nl.ndarray`` and cannot be called on a 
-tile produced by it. For example, the following would result in an error.
-
-.. code-block:: python
-
-   t = nl.ndarray((128, 256), dtype=nl.float32, buffer=nl.sbuf)
-   t.ap(pattern=[[256, 128],[2, 128]], offset=0).ap(pattern=[[128, 64], [1, 64]], offset=0)
-        ^-- cannot specify an access pattern on an already indexed tensor
-
-To facilitate nested indexing, the :doc:`NKI Library </nki/library/index>`
-provides :doc:`TensorView </nki/library/kernel-utils/tensor-view>`. ``TensorView`` provides
-a convenient interface for tensor manipulation operations like slicing, permuting, broadcasting, and reshaping without copying data. It keeps track of the 
-operations performed on the tensor, and could efficiently generate NKI Access Pattern by calling ``get_view()``. For example, the nested tensor slicing 
-above could be represented as the following chain of TensorView operations.
+``.ap`` addresses the tensor's underlying storage directly: the pattern
+and offset are interpreted against ``storage``, ignoring any shape,
+strides, or offset carried by the view ``.ap`` is called on.  In
+particular, ``.ap`` is **not composable**: chaining ``.ap`` is allowed
+but the inner ``.ap`` is fully overridden by the outer one:
 
 .. code-block:: python
 
    t = nl.ndarray((128, 256), dtype=nl.float32, buffer=nl.sbuf)
-   t_view = TensorView(t)
+   inner = t.ap(pattern=[[256, 128], [2, 128]])
+   outer = inner.ap(pattern=[[256, 128], [1, 64]])
+   # outer is equivalent to t.ap(pattern=[[256, 128], [1, 64]]);
+   # inner's pattern has no effect on outer.
 
-   """
-   Equivalent to .ap(.ap(pattern=[[256, 128],[2, 128]], offset=0), 
-   notice the ``step`` parameter in TensorView is on the dimension it is slicing,
-   where in Access Patterns, the ``stride`` is computed by flattening the tensor to 1D. 
+For composable, view-on-view semantics that stay inside the NkiTensor
+model, use the higher-level view primitives exposed on ``NkiTensor``
+(``slice``, ``reshape``, ``permute``, ``broadcast``, ``select``,
+``view(dtype)``, etc.). They return new ``NkiTensor`` views of the same
+storage and chain freely:
 
-   Conceptually equivalent to t[0:128, 0:256:2], where the resulting view is of shape (128, 128)
-   """
-   t_access_0 = t.slice(dim=0, start=0, end=128, step=1).slice(dim=1, start=0, end=256, step=2)
+.. code-block:: python
 
-   """
-   Slice the t_access_0, conceptually equivalent to t_access_0[0:64, 0:64], where the resulting
-   view is of shape (64, 64)
-   """
-   t_access_1 = t_access_0.slice(dim=0, start=0, end=64).slice(dim=1, start=0, end=64, step=1)
+   t = nl.ndarray((128, 256), dtype=nl.float32, buffer=nl.sbuf)
 
-   # t_access_1.get_view() is equivalent to the nested indexing.
-   t_access_1.get_view() # Materialize the operations to the NKI Access Pattern
+   # Compose slicing on both dims, then slice again.
+   t_a = t.slice(dim=0, start=0, end=128).slice(dim=1, start=0, end=256, step=2)
+   t_b = t_a.slice(dim=0, start=0, end=64).slice(dim=1, start=0, end=64)
+   # t_b has shape (64, 64), storage shared with t.
+
+See the :ref:`Tensor Values <tensor-values>` section of the NKI Language
+Guide for the full catalogue of view primitives.
 
 
 Reinterpret Cast with ``ap``
 ============================
 
-The ``dtype`` parameter can be used for reinterpret casting the tensor. 
-Since both the pattern and the offset are in terms of number of elements, 
-not bytes, the count must be computed accordingly. See the following example 
+The ``dtype`` parameter can be used for reinterpret casting the tensor.
+Since both the pattern and the offset are in terms of number of elements,
+not bytes, the count must be computed accordingly. See the following example
 of reinterpret cast from ``INT32`` to ``BF16``.
 
 .. code-block:: python
@@ -228,16 +261,51 @@ of reinterpret cast from ``INT32`` to ``BF16``.
     ], # notice the number of elements is doubled due to dtype size change
    offset = 0, dtype=nl.bfloat16) # cast_to_bf16 has shape (128, 512)
 
+For the common case of reinterpreting the bits of an existing view
+without otherwise changing its layout, :meth:`NkiTensor.view` is the
+idiomatic alternative (e.g. ``t.view(nl.bfloat16)``) and takes care
+of scaling the last-dim size automatically.
+
 Dynamic Access with ``scalar_offset`` and ``vector_offset``
 ===========================================================
 
 The ``scalar_offset`` and ``vector_offset`` are for dynamic tensor access, i.e. using a 
 runtime value to index another tensor. 
 
+For most dynamic access, the higher-level view primitives
+:meth:`NkiTensor.select` (a single runtime index) and
+:meth:`NkiTensor.vector_select` (a per-partition vector of indices) are
+sufficient. They build the same access pattern that the ``.ap()`` forms
+below produce, without specifying the pattern by hand. The ``.ap()`` forms
+remain available when you need full control over the pattern.
+
 Scalar Dynamic Access
 ---------------------
 
-The ``scalar_offset`` is an SBUF value that specifies the index on the ``indirect_dim`` of the tensor. 
+When ``index`` is a runtime scalar in SBUF (rather than a Python ``int``),
+:meth:`NkiTensor.select` picks one slice along ``dim`` at an index resolved
+at runtime, removing that dimension.
+
+.. code-block:: python
+
+   def scalar_dynamic_select(A):
+      # A has shape (4, 128, 512): four (128, 512) batches in HBM.
+      # We want the batch at a runtime index held in SBUF.
+      batch_idx = nl.ndarray((1, 1), nl.int32, buffer=nl.sbuf)
+      nisa.memset(batch_idx, value=3)
+
+      src = A.select(0, batch_idx)   # src has shape (128, 512)
+
+      result = nl.ndarray((128, 512), A.dtype, buffer=nl.shared_hbm)
+      nisa.dma_copy(src=src, dst=result[...])
+      return result
+
+Only one dynamic select is allowed per view (no chaining); on SBUF / PSUM
+tensors the selected dimension must not be the partition dimension (dim 0).
+Use :meth:`NkiTensor.is_indirect` to test whether a view already carries an
+indirect index.
+
+The lower-level ``.ap`` form takes a ``scalar_offset``: an SBUF value that specifies the index on the ``indirect_dim`` of the tensor. 
 
 .. code-block:: python
    
@@ -282,8 +350,31 @@ Again, we should notice that 512 is read from the shape of the base tensor, not 
 Vector Dynamic Access
 ---------------------
 
-Vector dynamic access is similar to that of scalar, except that the dynamic offsets are in a vector. 
-We need to specify the field ``vector_offset``. **Currently, only ``indirect_dim=0`` is supported**. 
+:meth:`NkiTensor.vector_select` reads a different index per output partition,
+supplied as a per-partition vector of offsets in SBUF. This is the gather
+pattern where different partitions read different rows of the source. ``dim``
+must be ``0`` and the source must be an HBM tensor; the output partition count
+is ``vector_offset.shape[0]``.
+
+.. code-block:: python
+
+   def gather_rows(A):
+      # A has shape (128, 512) in HBM. Gather 64 rows chosen at runtime.
+      offsets = nl.ndarray((64, 1), nl.int32, nl.sbuf)
+      nisa.iota(offsets, [[1, 1]], 0, 2)        # e.g. rows 0, 2, 4, ...
+
+      # partition p reads row offsets[p]; result has shape (64, 512)
+      src = A.vector_select(0, offsets)
+
+      result = nl.ndarray((64, 512), nl.float32, buffer=nl.shared_hbm)
+      nisa.dma_copy(src=src, dst=result[...])
+      return result
+
+The result is an indirect view: the selected dimension cannot be further
+sliced or selected, and only one dynamic select is allowed per tensor.
+
+The lower-level ``.ap`` form takes a ``vector_offset``. Vector dynamic access is similar to that of scalar, except that the dynamic offsets are in a vector. 
+Specify the field ``vector_offset``. **Currently, only ``indirect_dim=0`` is supported**. 
 The stride on the leading dimension must be the total number of elements to the right of the 
 leading dimension in the base tensor, and the stride specified in the 
 leading dimension of the pattern in the .ap() is currently ignored. 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Ring attention forward using attention_cte with HBM I/O.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.experimental.attention
 
@@ -24,7 +24,7 @@ API Reference
 ring_attention_spmd_fwd
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: ring_attention_spmd_fwd(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, replica_groups: tuple = None, num_workers: int = 1, softmax_scale: float = None, use_causal_mask: bool = False, striped_input: bool = False, training: bool = False, lse_dtype: nki.dtype = nl.float32, tp_q: bool = False, tp_k: bool = False)
+.. py:function:: ring_attention_spmd_fwd(q: nl.ndarray, k: nl.ndarray, v: nl.ndarray, replica_groups: tuple = None, num_workers: int = 1, softmax_scale: float = None, use_causal_mask: bool = False, striped_input: bool = False, training: bool = False, lse_dtype: nki.dtype = nl.float32, tp_q: bool = False, tp_k: bool = False, bound_min: nl.ndarray = None, bound_max: nl.ndarray = None)
 
    Ring attention forward using attention_cte with HBM I/O.
 

@@ -1,11 +1,11 @@
 .. meta::
-    :description: Learn how to use the Neuron Explorer summary page to quickly identify performance issues, view key metrics, and get actionable optimization recommendations for your profiles.
+    :description: Learn how to use the Neuron Explorer Summary Viewer to quickly identify performance issues, view key metrics, and get actionable optimization recommendations for your profiles.
     :date-modified: 03/20/2026
 
 Summary Viewer
 ================
 
-The Neuron Explorer summary viewer provides a streamlined view of your profile's most critical performance insights, enabling quick identification of issues and optimization opportunities without navigating through detailed data.
+The Neuron Explorer Summary Viewer provides a streamlined view of your profile's most critical performance insights, enabling quick identification of issues and optimization opportunities without navigating through detailed data.
 
 .. image:: /tools/images/explorer-summary-page.png
 
@@ -131,7 +131,7 @@ This chart shows the instruction count breakdown between NKI-generated instructi
 
 Hovering over a bar displays a detailed breakdown of instruction counts by opcode for that engine and source type.
 
-When NKI instruction coverage is below 50% for a given engine, the summary page generates a recommendation to write NKI kernel code for the network operations in that profile section.
+When NKI instruction coverage is below 50% for a given engine, the Summary Viewer generates a recommendation to write NKI kernel code for the network operations in that profile section.
 
 DMA Utilization
 ^^^^^^^^^^^^^^^

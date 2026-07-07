@@ -10,6 +10,26 @@ Component Release Notes for Neuron Containers
 
 The release notes for the Neuron Containers component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _containers-2-31-0-rn:
+
+Neuron Containers (Neuron 2.31.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 7/7/2026
+
+Updates
+~~~~~~~~
+
+* We've moved the Neuron UltraServer operator from private to public beta! With this release, we've added a new UltraServer operator image to our `public ECR repository <https://gallery.ecr.aws/neuron/neuron-ultraserver-operator>`__, along with a public DRA driver image with Neuron UltraServer support. UltraServer support is disabled by default. Read more about it here: :doc:`AWS Neuron UltraServer Operator </deploy/eks/ultraserver-operator.rst>`
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.31.0
+
+Callouts
+~~~~~~~~~
+
+.. important::
+    Starting with Neuron SDK 2.31.0, the ``pytorch-training-neuronx`` DLC is no longer published. If you require this DLC, please use an image associated with a previous Neuron SDK release (2.30.0 or earlier). The SDK version is included in each image tag.
+
+
 .. _containers-2-30-0-rn:
 
 Neuron Containers [2.30.0] (Neuron 2.30.0 Release)

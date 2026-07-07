@@ -611,7 +611,7 @@ Vector Dynamic Access
 
 Vector dynamic access is similar to that of scalar, except that we need to specify 
 the field ``vector_offset``. **Currently, only ``indirect_dim=0`` is supported**. 
-The stride on the leading dimension must be the the total number of 
+The stride on the leading dimension must be the total number of 
 elements to the right of the leading dimension in the **base tensor**, and the stride
 specified in the leading dimension of the pattern in the `.ap()` is currently ignored.
 We still recommend setting the stride properly so that code would still work if this

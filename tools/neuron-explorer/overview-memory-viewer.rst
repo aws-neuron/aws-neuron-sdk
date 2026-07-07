@@ -1,5 +1,5 @@
 .. meta::
-    :description: Learn about the Memory View in Neuron Explorer for analyzing all the memory allocations on SBUF.
+    :description: Learn about the Memory Viewer in Neuron Explorer for analyzing all the memory allocations on SBUF.
     :date-modified: 03/24/2026
 
 Memory Viewer
@@ -26,7 +26,7 @@ Once your profile finishes processing and is ready to view, click the Add Widget
 .. image:: /tools/images/memory_viewer_add_widget.png
 
 
-By hovering your mouse over each allocation, you can see the detailed information about this allocation. For allocations triggered by instructions, hover informations includes: 
+By hovering your mouse over each allocation, you can see the detailed information about this allocation. For allocations triggered by instructions, hover information includes:
 * Start time and end time
 * Duration
 * Start address and end address 

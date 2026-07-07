@@ -1,6 +1,6 @@
 .. meta::
    :description: Getting started guide for Neuron Explorer — capture profiles, launch the UI, and start performance investigation.
-   :date_updated: 06/02/2026
+   :date_updated: 06/29/2026
 
 .. _new-neuron-profiler-setup:
 
@@ -71,7 +71,7 @@ From your **local machine**, open the tunnels:
      - Runs tunnel in background (no shell)
 
 .. important::
-   You must forward **both** ports. The UI on 3001 calls the API on 3002. If you only forward one, the page loads but shows no data. See :ref:`Troubleshooting <neuron-explorer-get-started-troubleshooting>` if you run into issues.
+   You must forward **both** ports. The UI on 3001 calls the API on 3002. If you only forward one, the page loads but shows no data. See :doc:`Troubleshooting </tools/neuron-explorer/troubleshooting>` if you run into issues.
 
 Step 3: Capture your profile
 ------------------------------
@@ -294,124 +294,15 @@ The file contains event objects. It also includes ``mem_usage`` (sampled host me
 
 .. _neuron-explorer-get-started-troubleshooting:
 
+.. note::
+   **Share your view with teammates.** After you open a profile, Neuron Explorer encodes your current time range, selected event, and active annotation in the page URL. Copy the URL and share it to give others the same view with no additional setup. The shared URL only works for users connected to the same Neuron Explorer instance.
+
 Troubleshooting
 ---------------
 
-Connection issues
-^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: 5 25 25 45
-   :header-rows: 1
-
-   * - #
-     - Symptom
-     - Cause
-     - Fix
-   * - 1
-     - UI does not load
-     - SSH tunnel misconfigured
-     - Verify both ports: ``ssh -L 3001:localhost:3001 -L 3002:localhost:3002 ...``
-   * - 2
-     - "Connection refused" on 3001/3002
-     - Servers not running
-     - Run ``neuron-explorer view`` on the instance first, then tunnel from local.
-   * - 3
-     - UI loads but shows no data
-     - Only port 3001 forwarded
-     - Add ``-L 3002:localhost:3002`` to your SSH command.
-   * - 4
-     - neuron-explorer not found
-     - Tools not installed
-     - ``sudo apt install aws-neuronx-tools`` or use the Neuron DLAMI.
-
-
-Upload and viewing issues
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: 5 35 30 30
-   :header-rows: 1
-
-   * - #
-     - Symptom
-     - Cause
-     - Fix
-   * - 1
-     - Upload "successful" but Profile Manager shows "error process incomplete"
-     - Missing required files
-     - System profiles need ntrace.pb + trace_info.pb. Device profiles need matched .neff + .ntff.
-   * - 2
-     - Profile hangs in "Uploaded" state indefinitely
-     - Processing failed silently
-     - Try uploading without source code. If that works, check source is .tar.gz format.
-   * - 3
-     - Directory upload returns 500
-     - Directory upload requires a system profile
-     - For device-only profiles, use Individual Files instead.
-   * - 4
-     - "No profiling data"
-     - Wrong directory
-     - Use ``neuron-explorer view`` without ``--data-path``. Use ``-d <dir>`` for profile output.
-
-
-Profiling results issues
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: 5 30 30 35
-   :header-rows: 1
-
-   * - #
-     - Symptom
-     - Cause
-     - Fix
-   * - 1
-     - "DMA results may not be accurate"
-     - 1. Compiler mismatch.
-       2. DGE notifications are not collected by default, and this can also result in this warning.
-     - 1. Update SDK and recompile. Safe to ignore for system profiling.
-       2. To enable more accurate DMA data, re-capture with ``--enable-dge-notifs`` flag. Warning, this can result in timeout errors for large NEFFs. If an error occurs you can run with the flag off.
-   * - 2
-     - Out-of-memory during profiling
-     - ``ProfileMode.DEVICE`` reserves ~5 GB HBM on Trn2
-     - Remove it from your modes list if you don't need instruction-level device traces.
-   * - 3
-     - No CPU Neuron traffic in timeline
-     - Framework trace not in correct subdirectory
-     - This is likely because framework trace JSONs are not in per-process directories. Move ``neuron_framework_trace_rank_<N>.json`` into the matching ``<instance-id>_pid_<pid>/`` subdirectory.
-   * - 4
-     - Profile shows compilation, not execution
-     - Didn't warm up
-     - Run 3+ forwards before starting profiler.
-   * - 5
-     - Compiled model shows 0.2 ms (impossibly fast)
-     - Async timing
-     - Async dispatch — torch.compile queues work and returns immediately. Add explicit synchronization before timing:
-
-       .. code-block:: python
-
-          torch.neuron.synchronize()  # drain queue before timing
-          t0 = time.time()
-          for _ in range(50):
-              compiled_model(x)
-          torch.neuron.synchronize()  # wait for all work to complete
-          avg_ms = (time.time() - t0) / 50 * 1000
-
-   * - 6
-     - Dropped events in system profile
-     - ``WARN[0000] Warning: 1001 trace events were dropped during capture (stored 530560 out of 531561 total events).`` The trace buffers filled and oldest events were overwritten.
-     -
-       1. Increase buffer: set ``NEURON_RT_INSPECT_SYS_TRACE_MAX_EVENTS_PER_NC`` (default: 1,000,000). Uses more host memory.
-       2. Apply capture-time filters (NeuronCore or event type).
-       3. Shorten the profiled code region.
-   * - 7
-     - Incomplete JAX profiles
-     - If your JAX profile has fewer events than expected, check:
-     -
-       1. Is ``jax.profiler.stop_trace`` called inside a ``with jax.profiler.trace`` block? Use ``stop_trace`` only with ``start_trace``.
-       2. Is ``NEURON_RT_INSPECT_ENABLE`` set to 1? It should NOT be set when using ``jax.profiler``.
-       3. Is ``NEURON_RT_INSPECT_OUTPUT_DIR`` set to the same directory passed to ``jax.profiler.trace``?
+For troubleshooting connection issues, upload errors, profiling results problems,
+and frequently asked questions, see the full
+:doc:`Troubleshooting & FAQs </tools/neuron-explorer/troubleshooting>` guide.
 
 
 Next steps
@@ -419,3 +310,4 @@ Next steps
 
 * :doc:`Capture Profiles in Neuron Explorer </tools/neuron-explorer/how-to-profile-workload>` — Full capturing and profiling reference (PyTorch, JAX, environment variables, CLI, filtering)
 * :doc:`Neuron Explorer Full Documentation </tools/neuron-explorer/index>` — Complete viewer and feature reference
+* :doc:`Profile Parquet Schema Reference </tools/neuron-explorer/profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer --show-profile-schema``

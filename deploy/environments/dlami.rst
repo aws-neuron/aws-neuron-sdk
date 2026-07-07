@@ -86,9 +86,6 @@ Virtual Environments pre-installed
     * - PyTorch 2.9 Torch NeuronX, NxD Core (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_2_9
 
-    * - PyTorch 2.9 NxD Training, Torch NeuronX (Ubuntu 24.04)
-      - /opt/aws_neuronx_venv_pytorch_2_9_nxd_training
-
     * - PyTorch 2.9 NxD Inference, Torch NeuronX (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_2_9_nxd_inference
 
@@ -98,9 +95,6 @@ Virtual Environments pre-installed
     * - vLLM 0.16.0 NxD Inference, Torch NeuronX (Ubuntu 24.04)
       - /opt/aws_neuronx_venv_pytorch_inference_vllm_0_16
 
-
-We have included a setup script that installs required dependencies for the package within the PyTorch 2.9 NxD Training virtual environment. To run this script,
-activate the virtual environment and run ``setup_nxdt.sh`` and this will run :ref:`the setup steps here <nxdt_installation_guide>`.
 
 You can easily get started with the multi-framework DLAMI through AWS console by following this :doc:`setup guide </setup/multiframework-dlami>`. If you are looking to 
 use the Neuron DLAMI in your cloud automation flows, Neuron also supports :ref:`SSM parameters <ssm-parameter-neuron-dlami>` to easily retrieve the latest DLAMI id.
@@ -163,10 +157,6 @@ Virtual Environments pre-installed
     * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
       - PyTorch 2.9 Torch NeuronX, NxD Core
       - /opt/aws_neuronx_venv_pytorch_2_9
-
-    * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
-      - PyTorch 2.9 NxD Training, Torch NeuronX
-      - /opt/aws_neuronx_venv_pytorch_2_9_nxd_training
 
     * - Deep Learning AMI Neuron PyTorch 2.9 (Ubuntu 24.04) 
       - PyTorch 2.9 NxD Inference, Torch NeuronX

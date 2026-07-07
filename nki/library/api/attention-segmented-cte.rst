@@ -1,6 +1,6 @@
 .. meta::
     :description: Segmented attention computation with block-based KV cache and prefix caching.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.attention
 
@@ -58,7 +58,7 @@ ceil_nisa_kernel
 load_kv_cache
 ^^^^^^^^^^^^^
 
-.. py:function:: load_kv_cache(k_cache, v_cache, block_tables, k_sbuf, v_sbuf, b_i, h_i, block_table_offset, num_blocks, allocator: ModularAllocator, k_pre_transposed: bool = False)
+.. py:function:: load_kv_cache(k_cache, v_cache, block_tables, k_sbuf, v_sbuf, b_i, h_i, block_table_offset, num_blocks, allocator: ModularAllocator, k_pre_transposed: bool = False, fp8_packed: bool = False)
 
    Load KV cache from block tables to SBUF for a single KV head.
 
@@ -79,7 +79,7 @@ load_kv_cache
 attention_segmented_cte
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: attention_segmented_cte(q: nl.ndarray, k_cache: nl.ndarray, v_cache: nl.ndarray, block_tables: nl.ndarray, prior_tokens: nl.ndarray, block_size: int, prior_seg_size: int, scale: float = 1.0, tp_q: bool = True, tp_out: bool = False, sliding_window: Optional[int] = None, sink: Optional[nl.ndarray] = None, num_q_heads: int = 1, kvp_offset: Optional[nl.ndarray] = None, k_pre_transposed: bool = False, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None)
+.. py:function:: attention_segmented_cte(q: nl.ndarray, k_cache: nl.ndarray, v_cache: nl.ndarray, block_tables: nl.ndarray, prior_tokens: nl.ndarray, block_size: int, prior_seg_size: int, scale: float = 1.0, tp_q: bool = True, tp_out: bool = False, sliding_window: Optional[int] = None, sink: Optional[nl.ndarray] = None, num_q_heads: int = 1, k_pre_transposed: bool = False, fp8_packed: bool = False, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, kvp_q_offset: Optional[nl.ndarray] = None, kvp_rank_id: Optional[nl.ndarray] = None, kvp_group_size: int = 0, kvp_cp_offset_int: int = 0, kvp_seg_block_offset_int: int = 0, kvp_prior_load_blocks: int = 0, kvp_prior_fully_visible: bool = False)
 
    Segmented attention computation with block-based KV cache and prefix caching.
 
@@ -105,8 +105,24 @@ attention_segmented_cte
    :type tp_out: ``bool``
    :param k_pre_transposed: If True, K cache is already stored in transposed layout (head_dim, block_size) per block, written by _quantize_and_store_k_transposed in qkv_cte.
    :type k_pre_transposed: ``bool``
+   :param fp8_packed: If True, the KV cache is stored in FP8-packed layout. Default: ``False``.
+   :type fp8_packed: ``bool``
    :param k_scale: Optional per-head-dim dequantization scale for K cache, shape (128, 1). When provided, Q is scaled by k_scale before QK^T matmul (delayed dequant).
    :type k_scale: ``Optional[nl.ndarray]``
    :param v_scale: Optional per-head-dim dequantization scale for V cache, shape (128, 1). When provided, the output is scaled by v_scale after PV matmul normalization.
    :type v_scale: ``Optional[nl.ndarray]``
+   :param kvp_q_offset: (KV-parallel) Causal-mask Q offset for this rank's KV shard. Replaces the previous ``kvp_offset`` parameter. Default: ``None``.
+   :type kvp_q_offset: ``Optional[nl.ndarray]``
+   :param kvp_rank_id: (KV-parallel) This rank's index within the KV-parallel group, used for interleaved (round-robin) KV distribution. Default: ``None``.
+   :type kvp_rank_id: ``Optional[nl.ndarray]``
+   :param kvp_group_size: (KV-parallel) Number of ranks sharing the KV cache in round-robin fashion (0 = disabled). Default: ``0``.
+   :type kvp_group_size: ``int``
+   :param kvp_cp_offset_int: (KV-parallel) Static context-parallel offset for this rank's KV shard. Default: ``0``.
+   :type kvp_cp_offset_int: ``int``
+   :param kvp_seg_block_offset_int: (KV-parallel) Static segment-block offset for this rank's KV shard. Default: ``0``.
+   :type kvp_seg_block_offset_int: ``int``
+   :param kvp_prior_load_blocks: (KV-parallel) Number of prior blocks to load for this rank. Default: ``0``.
+   :type kvp_prior_load_blocks: ``int``
+   :param kvp_prior_fully_visible: (KV-parallel) Whether the prior segment is fully visible to all queries on this rank. Default: ``False``.
+   :type kvp_prior_fully_visible: ``bool``
 

@@ -160,7 +160,7 @@ Instructions
 
          .. tab:: Upgrade
 
-            Upgrading an existing AL2023 install of of the Neuron SDK with NKI can be done with for PyTorch or JAX.
+            Upgrading an existing AL2023 install of the Neuron SDK with NKI can be done for PyTorch or JAX.
 
             .. tabs::
 
@@ -337,7 +337,7 @@ Instructions
 
          .. tab:: Upgrade
 
-            Upgrading an existing Ubuntu 24 install of of the Neuron SDK with NKI can be done with for PyTorch or JAX.
+            Upgrading an existing Ubuntu 24 install of the Neuron SDK with NKI can be done for PyTorch or JAX.
 
             .. tabs::
 

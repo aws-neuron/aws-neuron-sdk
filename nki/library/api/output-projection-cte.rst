@@ -1,6 +1,6 @@
 .. meta::
     :description: Output Projection CTE kernel computes output projection optimized for Context Encoding.
-    :date-modified: 11/28/2025
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.output_projection.output_projection_cte
 
@@ -32,7 +32,7 @@ API Reference
 output_projection_cte
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: output_projection_cte(attention: nl.ndarray, weight: nl.ndarray, bias=None, quantization_type: QuantizationType = QuantizationType.NONE, input_scales: Optional[nl.ndarray] = None, weight_scales: Optional[nl.ndarray] = None)
+.. py:function:: output_projection_cte(attention: nl.ndarray, weight: nl.ndarray, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, input_scales: Optional[nl.ndarray] = None, weight_scales: Optional[nl.ndarray] = None, output_dtype: Optional[type] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP, compact_weight_scales: bool = False)
 
    Output Projection Kernel optimized for Context Encoding (Prefill) use cases.
 

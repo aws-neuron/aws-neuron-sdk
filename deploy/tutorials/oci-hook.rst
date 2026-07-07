@@ -31,7 +31,7 @@ Install oci-add-hooks dependency on the Linux host
 `oci-add-hooks <https://github.com/awslabs/oci-add-hooks>`__ is an OCI
 runtime with the sole purpose of injecting OCI prestart, poststart, and
 poststop hooks into a container config.json before passing along to an
-OCI compatable runtime. oci-add-hooks is used to inject a hook that
+OCI compatible runtime. oci-add-hooks is used to inject a hook that
 exposes Inferentia devices to the container.
 
 .. code:: bash

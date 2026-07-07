@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
@@ -173,14 +174,29 @@ class VirtualRegister(NKIObject):
     ...
 
 tensor_engine = ...
+r"""Tensor engine constant (deprecated: use engine.tensor)"""
 
 vector_engine = ...
+r"""Vector engine constant (deprecated: use engine.vector)"""
 
 scalar_engine = ...
+r"""Scalar engine constant (deprecated: use engine.scalar)"""
 
 gpsimd_engine = ...
+r"""GPSIMD engine constant (deprecated: use engine.gpsimd)"""
 
 unknown_engine = ...
+r"""Unknown engine constant (deprecated: use engine.unknown)"""
+
+def get_nc_sub_version():
+    r"""Returns the sub-version integer for the current target context.
+
+    The sub-version distinguishes silicon revisions within the same
+    ``nc_version`` generation:
+
+    * ``0`` — first revision (default)
+    * ``1`` — second revision"""
+    ...
 
 def get_nc_version():
     r"""Returns the nc_version of the current target context."""
@@ -311,7 +327,7 @@ def dma_copy(dst, src, priority=None, oob_mode=oob_mode.error, dge_mode=dge_mode
 
     :param dst: the destination tensor to copy data into
     :param src: the source tensor to copy data from
-    :param priority: (optional): DMA quality-of-service priority level 0-3 where lower is higher priority (NeuronCore-v4+ only). Currently not supported when DGE is turned off (``dge_mode=nki.isa.dge_mode.none``).
+    :param priority: (optional): DMA quality-of-service priority level 0-3 where lower is higher priority (NeuronCore-v4+ only)
     :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for DMA descriptor generation: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). Hardware based DGE is only supported for NeuronCore-v3 or newer. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
     :param oob_mode: (optional) Specifies how to handle out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
 
@@ -344,6 +360,26 @@ def tensor_copy(dst, src, engine=engine.unknown, name=None):
     a tile in SBUF, unless the returned value is assigned to a pre-declared PSUM tile.
 
     On NeuronCore v2, ``tensor_copy`` is not supported on the Scalar Engine. Instead, use :doc:`nisa.activation <nki.isa.activation>` with ``op=nl.copy``.
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, both ``dst`` and ``src`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. When tensor
+    indirection is used, the operation must run on the Vector or Scalar engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``src`` uses ``.indirect()``, ``src`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``src``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``src``'s ``index``.
+
+    In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
     :param dst: a tile with the same content and partition axis size as the ``src`` tile.
     :param src: the source of copy, must be a tile in SBUF or PSUM.
@@ -384,6 +420,24 @@ def tensor_copy_predicated(dst, src, predicate, reverse_pred=False, name=None):
 
     - Where predicate is True: The corresponding elements from `src` are copied to `dst` tile. If `src` is a scalar, the scalar is copied to the `dst` tile.
     - Where predicate is False: The corresponding values in `dst` tile are unmodified
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``predicate`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``src`` does
+    **not** support tensor indirection. Runs on the Vector engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``predicate`` uses ``.indirect()``, ``predicate`` starts on the same
+      partition as its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``predicate`` is in SBUF, ``dst``'s
+      ``index`` starts on the same partition as ``predicate``;
+    - if ``dst`` uses ``.indirect()`` and ``predicate`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``predicate``'s ``index``.
 
     :param ``src``: The source tile or number to copy elements from when ``predicate`` is True
     :param ``dst``: The destination tile to copy elements to
@@ -440,12 +494,19 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
 
     **Accumulation mode.**
 
-    The ``accumulate`` parameter controls whether the matmul result should overwrite or accumulate on top of
-    the ``dst`` PSUM tile. When ``accumulate=False``, the result overwrites the existing content.
-    When ``accumulate=True``, the result is added to the existing content.
-    When ``accumulate=None`` (default), the behavior is auto-detected: the first write to a PSUM location
-    overwrites, and subsequent writes to the same location accumulate. Multiple ``nc_matmul`` instructions
-    with ``accumulate=True`` can form an accumulation group before the PSUM tile content is evicted back to SBUF.
+    The ``accumulate`` parameter controls whether the matmul result overwrites or accumulates onto the
+    ``dst`` PSUM tile:
+
+    - ``accumulate=False``: Overwrites the PSUM destination. The first matmul targeting a PSUM location
+      **must** use ``accumulate=False`` to initialize it.
+    - ``accumulate=True``: Adds the result to the existing PSUM content. Only valid after the PSUM
+      location has been initialized with ``accumulate=False``. Using ``accumulate=True`` on an
+      uninitialized PSUM location is undefined behavior.
+    - ``accumulate=None`` (default): The compiler automatically infers the correct flag — first write
+      overwrites, subsequent writes accumulate.
+
+    *Hint*: Use ``accumulate=(i > 0)`` in a loop to explicitly overwrite on the first iteration
+    and accumulate on subsequent iterations, or simply omit the parameter to let the compiler handle it.
 
     **Transpose mode.**
 
@@ -533,6 +594,25 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     - ``acc_flags``: accumulator control flags (e.g., ``2`` = reset accumulator)
     - ``psum_zero``: PSUM zero-initialization control value
 
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst``, ``stationary``, and ``moving`` support tensor
+    indirection (gather/scatter) by passing a view created with ``.indirect(index)``.
+    When ``is_transpose=True``, ``moving`` cannot use tensor indirection. Tensor
+    indirection is incompatible with hardware tiling, so ``tile_position`` must be
+    ``(0, 0)`` (or unset) when it is used. The indirect operands must be a Tensor-Engine
+    float dtype (``float16``, ``bfloat16``, ``float8_e4m3``, ``float8_e5m2``,
+    ``float8_e4m3fn``).
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``stationary`` or ``moving`` uses ``.indirect()``, the operand starts on
+      the same partition as its ``index``;
+    - if ``dst`` uses ``.indirect()``, ``dst``'s ``index`` starts on the same
+      partition as ``stationary``.
+
     :param dst: the matmul output
     :param stationary: the stationary operand
     :param moving: the moving operand
@@ -549,7 +629,40 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
                        Not exposed for ``nc_transpose``.
     :param tile_position: a 2D tuple (start_row, start_column) to control starting row in Tensor Engine tiling mode; start_column must be 0
     :param tile_size: a 2D tuple (row_size, column_size) to control row tile size in Tensor Engine tiling mode; column_size must be 128
-    :param perf_mode: controls Tensor Engine FP8 double performance mode on/off starting NeuronCore-v3: ``matmul_perf_mode.none`` (default) disables double FP8 mode; ``matmul_perf_mode.double_row`` enables double FP8 mode which achieves 2x matmul throughput by packing two FP8 weight/ifmap element pairs and computing two multiplications in parallel per cycle; cannot be combined with column tiling mode. See the `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information."""
+    :param perf_mode: controls Tensor Engine FP8 double performance mode on/off starting NeuronCore-v3: ``matmul_perf_mode.none`` (default) disables double FP8 mode; ``matmul_perf_mode.double_row`` enables double FP8 mode which achieves 2x matmul throughput by packing two FP8 weight/ifmap element pairs and computing two multiplications in parallel per cycle; cannot be combined with column tiling mode. See the `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
+
+    Examples:
+
+    .. code-block:: python
+
+        @nki.jit
+        def nc_matmul_accumulate_kernel(lhsT, rhs):
+            '''Tiled matmul with accumulate=(i > 0).
+
+            Tiles K=512 into 4 tiles of 128, accumulating partial products in PSUM.
+            The first iteration overwrites PSUM (accumulate=False via i > 0 == False),
+            subsequent iterations accumulate (accumulate=True via i > 0 == True).
+            '''
+            K, M = lhsT.shape
+            K_, N = rhs.shape
+            TILE_K = 128
+
+            result = nl.ndarray((M, N), dtype=nl.float32, buffer=nl.shared_hbm)
+            res_psum = nl.ndarray((M, N), dtype=nl.float32, buffer=nl.psum)
+
+            for i in nl.static_range(K // TILE_K):
+                lhs_sb = nl.ndarray((TILE_K, M), dtype=lhsT.dtype, buffer=nl.sbuf)
+                rhs_sb = nl.ndarray((TILE_K, N), dtype=rhs.dtype, buffer=nl.sbuf)
+                nisa.dma_copy(dst=lhs_sb, src=lhsT[i * TILE_K : (i + 1) * TILE_K, :])
+                nisa.dma_copy(dst=rhs_sb, src=rhs[i * TILE_K : (i + 1) * TILE_K, :])
+                nisa.nc_matmul(
+                    dst=res_psum, stationary=lhs_sb, moving=rhs_sb, accumulate=(i > 0)
+                )
+
+            res_sb = nl.ndarray((M, N), dtype=nl.float32, buffer=nl.sbuf)
+            nisa.tensor_copy(dst=res_sb, src=res_psum)
+            nisa.dma_copy(dst=result, src=res_sb)
+            return result"""
     ...
 
 def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_position=None, tile_size=None, accumulate=None, name=None):
@@ -599,7 +712,8 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     **Data types.**
 
     The input ``stationary`` and ``moving`` tiles must be float8_e5m2_x4, float8_e4m3fn_x4, or float4_e2m1fn_x4
-    (4-packed quantized data types). The ``stationary_scale`` and ``moving_scale`` tiles must be uint8.
+    (4-packed quantized data types). The ``stationary_scale`` and ``moving_scale`` tiles must be float8_e8m0fnu
+    or uint8 (prefer ``float8_e8m0fnu``: OCP MX standard; uint8 accepted for backward compatibility).
     The ``dst`` tile can be float32 or bfloat16.
 
     **Layout.**
@@ -619,7 +733,8 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     - The partition dimension size of ``stationary`` and ``moving`` must be identical and be a multiple of 32,
       not exceeding 128.
     - The free dimension size of ``stationary`` must be even and not exceed 128.
-    - The free dimension size of ``moving`` must not exceed 512 when ``dst`` is in float32 or 1024 when ``dst`` is in bfloat16.
+    - The free dimension size of ``moving`` must not exceed 4096 when ``dst`` is in float32 or 8192 when ``dst`` is in
+      bfloat16, matching the size of 8x PSUM banks (the entire PSUM).
     - The scale tensors have partition dimensions that depend on whether the data tensors span multiple quadrants.
       See more details in ``nisa.quantize_mx`` API doc.
 
@@ -628,6 +743,26 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
     ``nc_matmul_mx`` uses the same profiler output format as :doc:`nisa.nc_matmul <nki.isa.nc_matmul>`,
     except the source access pattern is interpreted as an MX-quantized tensor:
     ``src=<dtype>@$MX[<data_addr>,<scale_addr>,<start_scale_partition>]@[<step_elem>][<num_elem>]``.
+
+    **Tensor indirection.**
+
+    ``dst`` supports tensor indirection (gather/scatter) independently by passing a
+    view created with ``.indirect(index)``. The ``(stationary, stationary_scale)`` and
+    ``(moving, moving_scale)`` pairs must agree on tensor indirection: either both
+    members of a pair use ``.indirect()`` with the **same** index, or neither does —
+    because in MX format the data bytes and scale exponents form a single logical
+    tensor. Tensor indirection is incompatible with hardware tiling, so
+    ``tile_position`` must be ``(0, 0)`` (or unset) when it is used.
+    (``nc_matmul_mx`` itself is only available on NeuronCore-v4 and later.)
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``stationary`` or ``moving`` uses ``.indirect()``, the operand starts on
+      the same partition as its ``index``;
+    - if ``dst`` uses ``.indirect()``, ``dst``'s ``index`` starts on the same
+      partition as ``stationary``.
 
     :param dst: the matrix multiplication output (PSUM tile)
     :param stationary: the stationary quantized matrix (SBUF tile)
@@ -760,6 +895,13 @@ def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown,
 
         @nki.jit
         def gather_transpose_2d_kernel(src_hbm, idx_hbm):
+            '''Gather-transpose with 2D indices [128, N] to handle larger gather sets.
+
+            When indices.shape[1] > 1, indices.shape[0] must be exactly 128.
+            Total elements gathered = 128 * N (up to src.shape[0]).
+
+            Hardware uses column-major flattening: flat_indices = indices.T.flatten()
+            '''
             N_COLS = 2  # Number of columns in index tensor
             P = 128  # Partition dimension (max 128)
             F = 128 * N_COLS  # Free dimension: 256
@@ -787,6 +929,10 @@ def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown,
 
         @nki.jit
         def gather_transpose_4d_kernel(src_hbm, idx_hbm):
+            '''4D gather-transpose with 2D indices [128, N].
+
+            Pattern: [[d1*d2*d3, F], [d2*d3, d1], [d3, d2], [1, d3]]
+            '''
             T, d1, d2, d3 = src_hbm.shape
             _, N = idx_hbm.shape
             F = 128 * N
@@ -813,7 +959,7 @@ def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown,
     :param src: the source of transpose, must be a tile in HBM or SBUF. ``src.dtype == dst.dtype``
     :param axes: transpose axes where the i-th axis of the transposed tile will correspond to the axes[i] of the source.
                  Supported axes are ``(1, 0)``, ``(2, 1, 0)``, and ``(3, 1, 2, 0)``.
-    :param priority: (optional): DMA quality-of-service priority level 0-3 where lower is higher priority (NeuronCore-v4+ only). Currently not supported when DGE is turned off (``dge_mode=nki.isa.dge_mode.none``).
+    :param priority: (optional): DMA quality-of-service priority level 0-3 where lower is higher priority (NeuronCore-v4+ only)
     :param dge_mode: (optional) specify which Descriptor Generation Engine (DGE) mode to use for DMA descriptor generation: ``nki.isa.dge_mode.none`` (turn off DGE) or ``nki.isa.dge_mode.swdge`` (software DGE) or ``nki.isa.dge_mode.hwdge`` (hardware DGE)  or ``nki.isa.dge_mode.unknown`` (by default, let compiler select the best DGE mode). Hardware based DGE is only supported for NeuronCore-v3 or newer. See `Trainium2 arch guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/arch/trainium2_arch.html>`__ for more information.
     :param oob_mode: (optional) Specifies how to handle runtime out-of-bounds (oob) array indices during indirect access operations. Valid modes are:
 
@@ -856,6 +1002,25 @@ def tensor_tensor(dst, data1, data2, op, engine=engine.unknown, name=None):
     Note, if you need broadcasting capability in the free dimension for either input tile, you should consider
     using :doc:`nki.isa.tensor_scalar <nki.isa.tensor_scalar>` API instead,
     which has better performance than ``nki.isa.tensor_tensor`` in general.
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``data1`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``data2``
+    does **not** support tensor indirection. When tensor indirection is used, the
+    operation must run on the Vector or GpSimd engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data1`` uses ``.indirect()``, ``data1`` starts on the same partition
+      as its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data1`` is in SBUF, ``dst``'s
+      ``index`` starts on the same partition as ``data1``;
+    - if ``dst`` uses ``.indirect()`` and ``data1`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data1``'s ``index``.
 
     :param dst: an output tile of the element-wise operation
     :param data1: lhs input operand of the element-wise operation
@@ -902,6 +1067,29 @@ def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=N
     The compute engine automatically casts ``data.dtype`` to float32
     and performs the operators in float32 math.
     The float32 computation results are cast to ``dst.dtype`` at no additional performance cost.
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``data`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``operand0``
+    and ``operand1`` do **not** support tensor indirection. When tensor indirection is
+    used, the operation must run on the Vector, Scalar, or GpSimd engine. Tensor
+    indirection is **not** supported when the op matches the int32/uint32
+    address-arithmetic pattern (``tensor_scalar_addr``).
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
+    In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
     :param dst: an output tile of ``(data <op0> operand0) <op1> operand1`` computation
     :param data: the input tile
@@ -976,6 +1164,24 @@ def tensor_reduce(dst, op, data, axis, negate=False, keepdims=False, name=None):
     with the ``axis`` field. For example, if ``axis`` indicates all free dimensions of ``data`` are reduced,
     the number of elements per partition in ``dst`` must be 1.
 
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, both ``dst`` and ``data`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. Runs on the
+    Vector engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
     :param dst: output tile of the reduction result
     :param op: the reduction operator (see :ref:`nki-aluop` for supported reduction operators)
     :param data: the input tile to be reduced
@@ -993,7 +1199,7 @@ def tensor_partition_reduce(dst, op, data, name=None):
     r"""Apply a reduction operation across partitions of an input ``data`` tile using GpSimd Engine.
 
     :param dst: output tile with reduced result
-    :param op: the reduction operator (add, max, bitwise_or, bitwise_and)
+    :param op: the reduction operator (add, average, max, bitwise_or, bitwise_and)
     :param data: the input tile to be reduced"""
     ...
 
@@ -1049,6 +1255,24 @@ def tensor_scalar_cumulative(dst, src, op0, op1, imm0, imm1=None, reduce_cmd=red
       :doc:`nki.isa.exponential <nki.isa.exponential>`, :doc:`nki.isa.range_select <nki.isa.range_select>`,
       :doc:`nki.isa.select_reduce <nki.isa.select_reduce>`, and
       :doc:`nki.isa.tensor_scalar_reduce <nki.isa.tensor_scalar_reduce>`.
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``src`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``imm0`` and
+    ``imm1`` do **not** support tensor indirection. Runs on the Vector engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``src`` uses ``.indirect()``, ``src`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``src``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``src``'s ``index``.
 
     :param dst: The destination tensor to write cumulative results to
     :param src: The source tensor to process
@@ -1145,6 +1369,27 @@ def activation(dst, op, data, bias=None, scale=1.0, reduce_op=None, reduce_res=N
     The number of elements per partition of ``data`` and ``dst`` tiles must be the same and must not
     exceed the physical size of each SBUF partition.
 
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``data`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``bias``,
+    ``scale``, and ``reduce_res`` do **not** support tensor indirection. Runs on the
+    Scalar engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
+    In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
+
     :param dst: the activation output
     :param op: an activation function (see :ref:`nki-act-func` for supported functions)
     :param data: the input tile; layout: (partition axis <= 128, free axis)
@@ -1192,6 +1437,27 @@ def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0
 
         output = op(data * scale + bias)
         reduce_res = reduce_op(output, axis=<FreeAxis>)
+
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``data`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``bias``,
+    ``scale``, and ``reduce_res`` do **not** support tensor indirection. Runs on the
+    Scalar engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
+    In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
     :param dst: output tile of the activation instruction; layout: same as input ``data`` tile
     :param op: an activation function (see :ref:`nki-act-func` for supported functions)
@@ -1243,6 +1509,27 @@ def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=Fals
     - All immediates (``imm0``, ``imm1``) must have the same dtype when both are tensors.
     - ``op1`` requires ``op0`` to be set.
     - ``reverse0`` requires ``op0`` to be set; ``reverse1`` requires ``op1`` to be set.
+
+    **Tensor indirection.**
+
+    ``dst`` and ``data`` support tensor indirection (gather/scatter) by passing a view
+    created with ``.indirect(index)``. ``imm0``, ``imm1``, ``relu_param``, and
+    ``reduce_res`` do **not** support tensor indirection. Runs on the Scalar engine.
+    (``activate2`` itself is only available on NeuronCore-v4 and later.)
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
+    In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
     :param dst: the activation output tile. Supported buffers: SBUF, PSUM.
     :param op: an activation function (see :ref:`nki-act-func` for supported functions).
@@ -1298,6 +1585,7 @@ def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=Fals
 
         @nki.jit
         def activate2_scale_bias_kernel(data_tensor):
+            '''Apply scale-and-bias followed by GELU activation using activate2.'''
             out = nl.ndarray(data_tensor.shape, dtype=nl.float32, buffer=nl.shared_hbm)
 
             # Load input from HBM to SBUF
@@ -1718,7 +2006,7 @@ def nc_stream_shuffle(dst, src, shuffle_mask, name=None):
     :param shuffle_mask: a 32-element list that specifies the shuffle source and destination partition"""
     ...
 
-def rng(dst, engine=engine.unknown, name=None):
+def rng(dst, engine=engine.vector, name=None):
     r"""Generate pseudo random numbers using the Vector or GpSimd Engine.
 
     This instruction generates 32 random bits per element and writes them to the
@@ -1750,8 +2038,8 @@ def rng(dst, engine=engine.unknown, name=None):
     - Since GpSimd Engine cannot access PSUM, ``dst`` must be in SBUF when using GpSimd Engine.
 
     :param dst: the destination tensor to write random values to
-    :param engine: specify which engine to use: ``nki.isa.engine.vector``, ``nki.isa.engine.gpsimd``,
-                   or ``nki.isa.engine.unknown`` (default, the best engine will be selected)"""
+    :param engine: specify which engine to use: ``nki.isa.engine.vector`` (default)
+                   or ``nki.isa.engine.gpsimd`` (NeuronCore-v3+)"""
     ...
 
 def dropout(dst, data, prob, name=None):
@@ -1808,7 +2096,7 @@ def set_rng_seed(src_seeds, name=None):
     :param src_seeds: a [1,1] tensor on SBUF or PSUM with a 32-bit value to be used as the seed"""
     ...
 
-def rand_set_state(src_seeds, engine=engine.unknown, name=None):
+def rand_set_state(src_seeds, engine=engine.gpsimd, name=None):
     r"""Seed the pseudo random number generator (PRNG) inside the engine.
 
     This instruction initializes the PRNG state for future random number generation operations.
@@ -1839,11 +2127,11 @@ def rand_set_state(src_seeds, engine=engine.unknown, name=None):
     :param src_seeds: the source tensor containing seed values for the PRNG; must be a 2D uint32 tensor
                       with the partition dimension representing the compute lanes and the free dimension
                       containing the seed values
-    :param engine: specify which engine to use: ``nki.isa.engine.vector``, ``nki.isa.engine.gpsimd``,
-                   or ``nki.isa.engine.unknown`` (default, the best engine will be selected)"""
+    :param engine: specify which engine to use: ``nki.isa.engine.gpsimd`` (default)
+                   or ``nki.isa.engine.vector`` (NeuronCore-v4+)"""
     ...
 
-def rand_get_state(dst, engine=engine.unknown, name=None):
+def rand_get_state(dst, engine=engine.gpsimd, name=None):
     r"""Store the current pseudo random number generator (PRNG) states from the engine.
 
     This instruction stores the current PRNG states cached inside the engine to SBUF/PSUM.
@@ -1869,8 +2157,8 @@ def rand_get_state(dst, engine=engine.unknown, name=None):
     - Since GpSimd Engine cannot access PSUM, ``dst`` must be in SBUF when using GpSimd Engine.
 
     :param dst: the destination tensor to store PRNG state values; must be a 2D uint32 tensor
-    :param engine: specify which engine to use: ``nki.isa.engine.vector``, ``nki.isa.engine.gpsimd``,
-                   or ``nki.isa.engine.unknown`` (default, the best engine will be selected)"""
+    :param engine: specify which engine to use: ``nki.isa.engine.gpsimd`` (default)
+                   or ``nki.isa.engine.vector`` (NeuronCore-v4+)"""
     ...
 
 def rand2(dst, min, max, name=None):
@@ -1946,6 +2234,25 @@ def exponential(dst, src, max_value=0.0, reduce_res=None, reduce_cmd: reduce_cmd
     - ``src``, ``dst`` must have the same number of elements in the free dimensions.
     - ``src``, ``dst`` can be up to 4D tensor.
     - ``reduce_init`` should be unset or set to ``0.0`` when ``reduce_cmd`` is not ``load_reduce``.
+
+    **Tensor indirection.**
+
+    ``dst`` and ``src`` support tensor indirection (gather/scatter) by passing a view
+    created with ``.indirect(index)``. ``max_value``, ``reduce_res``, and
+    ``reduce_init`` do **not** support tensor indirection. Runs on the Vector engine.
+    (``exponential`` itself is only available on NeuronCore-v4 and later.)
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``src`` uses ``.indirect()``, ``src`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``src``;
+    - if ``dst`` uses ``.indirect()`` and ``src`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``src``'s ``index``.
 
     :param dst: The output tile with exponential function applied. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, tfloat32, int8, int16, int32, uint8, uint16.
     :param src: The input tile to apply exponential function on. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, int8, int16, int32, uint8, uint16, uint32.
@@ -2162,6 +2469,25 @@ def tensor_scalar_reduce(dst, data, op0, operand0, reduce_op, reduce_res, revers
       :doc:`nki.isa.select_reduce <nki.isa.select_reduce>`, and
       :doc:`nki.isa.tensor_scalar_cumulative <nki.isa.tensor_scalar_cumulative>`.
 
+    **Tensor indirection.**
+
+    On NeuronCore-v4 and later, ``dst`` and ``data`` support tensor indirection
+    (gather/scatter) by passing a view created with ``.indirect(index)``. ``operand0``,
+    ``reduce_res``, and ``reduce_init`` do **not** support tensor indirection. Runs on
+    the Vector engine.
+
+    When operands are manually allocated, their base partitions must satisfy:
+
+    - the ``index`` of every ``.indirect()`` view starts on a quadrant boundary
+      (a multiple of 32);
+    - if ``data`` uses ``.indirect()``, ``data`` starts on the same partition as
+      its ``index``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in SBUF, ``dst``'s ``index``
+      starts on the same partition as ``data``;
+    - if ``dst`` uses ``.indirect()`` and ``data`` is in PSUM and uses
+      ``.indirect()``, ``dst``'s ``index`` starts on the same partition as
+      ``data``'s ``index``.
+
     :param dst: an output tile of ``(data <op0> operand0)`` computation
     :param data: the input tile
     :param op0: the math operator used with operand0 (any arithmetic operator in :ref:`nki-aluop` is allowed).
@@ -2271,6 +2597,10 @@ def dma_compute(dst, srcs, reduce_op, scales=None, unique_indices=True, oob_mode
       - All ``scales`` must be ``1.0`` (or ``None``)
       - ``unique_indices`` must be ``True`` (non-unique indices not yet supported)
 
+    The only supported DGE mode for read-modify-write (scatter/gather) is SW DGE.
+    For ``dma_compute`` without ``vector_offset``, the only supported DGE mode is None (static DMA).
+    The compiler automatically assigns the correct DGE mode.
+
     **Memory types.**
 
     Both input ``srcs`` tensors and output ``dst`` tensor can be in HBM or SBUF.
@@ -2336,7 +2666,8 @@ def quantize_mx(dst, src, dst_scale, name=None):
     **Data types.**
 
     The input ``src`` tile must be float16 or bfloat16. The output ``dst`` tile must be float8_e5m2_x4 or
-    float8_e4m3fn_x4 (4-packed FP8 data types). The ``dst_scale`` tile must be uint8.
+    float8_e4m3fn_x4 (4-packed FP8 data types). The ``dst_scale`` tile must be float8_e8m0fnu or uint8
+    (prefer ``float8_e8m0fnu``: OCP MX standard; uint8 accepted for backward compatibility).
 
     The 4-packed data types (float8_e5m2_x4/float8_e4m3fn_x4) are 32-bit data types that pack four 8-bit
     float8_e5m2/float8_e4m3fn values.
@@ -2359,7 +2690,7 @@ def quantize_mx(dst, src, dst_scale, name=None):
 
     :param dst: the quantized MXFP8 output tile
     :param src: the input FP16/BF16 tile to be quantized
-    :param dst_scale: the output scale tile"""
+    :param dst_scale: the MXFP8 output scale tile (float8_e8m0fnu or uint8)"""
     ...
 
 def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.reset_reduce, reduce_res=None, reduce_op=maximum, range_start=0, on_false_value=..., name=None):
@@ -2431,7 +2762,7 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
     :param bound1: tile with one element per partition for second comparison
     :param reduce_op: reduction operator to apply on across the selected output. Currently only ``nl.maximum`` is supported.
     :param reduce_cmd: controls the state of the Vector Engine accumulator registers.
-      Defaults to ``reduce_cmd.reset_reduce``. See :class:`nki.isa.reduce_cmd` for supported values.
+      Defaults to ``reduce_cmd.reset_reduce``. See :ref:`nki-reduce-cmd` for supported values.
     :param reduce_res: optional tile to store reduction results.
     :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``.
         Defaults to 0, and must be a compile-time integer."""

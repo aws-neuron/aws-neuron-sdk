@@ -3,15 +3,98 @@
 .. meta::
    :description: Neuron Kernel Interface (NKI) - Low-level programming interface for custom kernel development on AWS Trainium and Inferentia with direct NeuronCore ISA access.
    :keywords: NKI, Neuron Kernel Interface, custom kernels, NeuronCore, AWS Neuron, Trainium, Inferentia, ISA, tile programming, torch.compile
-   :date-modified: 2026-04-02
+   :date-modified: 2026-06-15
 
 Neuron Kernel Interface (NKI)
-====================================
+=============================
 
-Neuron Kernel Interface (NKI) is a bare-metal language and compiler for directly programming NeuronDevices
-available on AWS Trn/Inf instances. You can use NKI to develop, optimize and run new operators directly on
-NeuronCores while making full use of available compute and memory resources. NKI empowers ML developers to
-self-serve and invent new ways to use the NeuronCore hardware, starting NeuronCores v2 (Trainium1) and beyond.
+NKI is a bare-metal language and compiler for programming AWS Trainium and
+Inferentia NeuronDevices directly, giving you instruction-level control to
+develop, optimize, and run custom operators on NeuronCores.
+
+Before you write a kernel, check the :ref:`NKI Library <nkl_home>` — it may
+already have an optimized kernel for your operation. New to NKI? Start with
+:ref:`Get started <nki-get-started>`. For how NKI fits into the Neuron
+compilation stack, see :ref:`How NKI works <nki-how-it-works>` below.
+
+Start here
+----------
+
+.. grid:: 1 1 2 2
+   :gutter: 3
+
+   .. grid-item-card:: Get started
+      :link: nki-get-started
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Set up your environment, then implement and run your first NKI kernel.
+
+   .. grid-item-card:: NKI Library
+      :link: nkl_home
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Use prebuilt, optimized kernels for common operations. Check here before
+      writing your own.
+
+Learn and build
+---------------
+
+.. grid:: 1 1 2 2
+   :gutter: 3
+
+   .. grid-item-card:: Tutorials
+      :link: nki-tutorials
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Step-by-step walkthroughs for building NKI kernels, from basics to
+      advanced patterns.
+
+   .. grid-item-card:: How-to guides
+      :link: nki-guides
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Task-focused guides: insert kernels into models, use the CPU simulator,
+      profile, and control scheduling.
+
+   .. grid-item-card:: Deep dives
+      :link: nki_deep-dives_home
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Performance optimization, access patterns, DMA, dynamic loops, and the
+      NKI compiler.
+
+   .. grid-item-card:: NKI FAQ
+      :link: nki_faq
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Common questions about programming with NKI.
+
+.. _api_reference_guide:
+
+Reference
+---------
+
+.. grid:: 1
+   :gutter: 3
+
+   .. grid-item-card:: NKI API reference manual
+      :link: nki_api_reference
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Complete API reference for ``nki``, ``nki.language``, ``nki.isa``, and
+      ``nki.collectives``.
+
+.. _nki-how-it-works:
+
+How NKI works
+-------------
 
 NKI provides developers with direct access to the NeuronCore ISA (Instruction Set Architecture), accessible from a
 Python-based programming environment, which has syntax and tile-level semantics that are similar to
@@ -46,33 +129,17 @@ is executable on NeuronDevices. At a high level, Neuron Compiler runs the follow
 NKI kernels bypass the first 3 steps, and are compiled into IRs (intermediate representations) that the compiler's
 back-end (Step 4 above) can directly consume. Advanced features in NKI, such as direct allocation, also allow programmers
 to bypass certain compiler passes in Step 4. As a result, NKI developers can now have great control over NeuronDevices down to
-the instruction level. We highly recommend developers to study the underlying hardware architecture before
-optimizing performance of their NKI kernels. See the NKI guide below to learn more!
+the instruction level.
 
-.. _api_reference_guide:
-
-API Reference Guide
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. grid:: 2
-      :margin: 4 1 0 0
-
-      .. grid-item::
-
-            .. card:: NKI API Reference Manual
-                  :link: nki_api_reference
-                  :link-type: ref
-                  :class-body: sphinx-design-class-title-small
-
+.. note::
+   Neuron highly recommends developers study the underlying hardware architecture before optimizing performance of their NKI kernels. To start, read :doc:`the NKI architecture guides for Trainium </nki/guides/architecture/index>` and :doc:`the NKI performance guide </nki/deep-dives/nki_perf_guide>`.
 
 .. toctree::
-      :maxdepth: 1
-      :hidden:
+   :maxdepth: 1
+   :hidden:
 
-      Get started <get-started/index>
-      Guides <guides/index>
-      Deep dives <deep-dives/index>
-      Migration <migration/index>
-      NKI FAQ <nki_faq>
-
-
+   Get started <get-started/index>
+   Guides <guides/index>
+   Deep dives <deep-dives/index>
+   Migration <migration/index>
+   NKI FAQ <nki_faq>

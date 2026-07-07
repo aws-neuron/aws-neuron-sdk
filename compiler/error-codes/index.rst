@@ -56,7 +56,7 @@ This page lists the error codes you can encounter while developing with the Neur
      - The compiler found usage of unsupported 8-bit floating-point data types. Convert to a supported type like torch.float16.
    * - :ref:`NCC_EVRF006 <error-code-evrf006>`
      - The compiler encountered a RNGBitGenerator operation using a random number generation algorithm other than RNG_DEFAULT.
-     - Ensure that you are using standard JAX/PyTorch random APIs and not explicity specifying an RNG algorithm.
+     - Ensure that you are using standard JAX/PyTorch random APIs and not explicitly specifying an RNG algorithm.
    * - :ref:`NCC_EVRF007 <error-code-evrf007>`
      - The number of instructions generated exceeds the limit.
      - Consider applying model parallelism as partitioning the model will help break large computational graphs into smaller subgraphs.
@@ -90,13 +90,15 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF022 <error-code-evrf022>`
      - Shift-right-arithmetic operation on non 32-bit inputs is not supported. Cast the first argument's data type to be S32, U32, or F32.
      - You need to use 32-bit data types for shift operations. Cast inputs to int32, uint32, or float32.
-     - Reduce batch/tensor size or utilize tensor parallelism via neuronx-distributed.
    * - :ref:`NCC_EVRF031 <error-code-evrf031>`
      - The compiler encountered a scatter out-of-bounds error.
      - Ensure that the iota size matches the operand dimension size.
    * - :ref:`NCC_EVRF056 <error-code-evrf056>`
      - Operation gather encountered out of bound indices.
      - Ensure that the iota dimension size is less than or equal to the size of the corresponding operand dimension. Check that your model's max_position_embeddings is >= sequence_length.
+   * - :ref:`NCC_EVRF059 <error-code-evrf059>`
+     - Kernel file referenced by AwsNeuronCustomNativeKernel instruction does not exist on the host.
+     - Ensure the NKI kernel artifact file exists at the specified path before compilation. Clear the NKI file cache and retrace the model, or copy artifacts into the compiler launch directory.
    * - :ref:`NCC_EXSP001 <error-code-exsp001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -135,5 +137,6 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF022
     EVRF031
     EVRF056
+    EVRF059
     EXSP001
     EXTP004

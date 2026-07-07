@@ -178,7 +178,7 @@ debugging ecosystem.
 **Using Python print:**
 
 Since the simulator executes kernels as standard Python, you can use ``print()`` to inspect any
-intermediate tensor or register value during execution. This is especially useful for both interactive
+intermediate tensor or register object during execution. This is especially useful for both interactive
 debugging and AI-assisted development workflows where agents iterate on kernels locally.
 
 **IDE Debugging (VSCode / PyCharm):**
@@ -320,5 +320,4 @@ Known Gaps
 
 - Some hardware constraint checks are missing — see `Hardware Constraint Validation`_ for details.
 - ``nki.collectives`` APIs are not implemented in the simulator.
-- ``oob_mode.skip`` with ``_x4`` dtypes will incorrectly raise an out-of-bounds error instead of skipping the oob access.
 - ``nki.isa.quantize_mx()`` scale packing fails when ``dst_scale`` number of partitions doesn't match ``src`` partitions.

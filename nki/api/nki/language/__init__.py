@@ -1,103 +1,8 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
 
-class MemoryRegion(Enum):
-    r"""Memory region constants for NKI tensors."""
-
-    sbuf = ...
-
-    psum = ...
-
-    private_hbm = ...
-
-    shared_hbm = ...
-
-    ...
-
-class NKIObject:
-    r"""Base class for NKI kernel dataclasses and configuration objects."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        ...
-
-    ...
-
-class NkiTensor(NKIObject):
-    r"""Tensor class with access pattern support.
-
-    Attributes:
-        shape: Tuple of dimension sizes
-        dtype: NKI data type string
-        buffer: Buffer location (sbuf, psum, hbm, etc.)
-        _storage: Opaque storage handle, interpreted by the backend
-        _pattern: Access pattern as list of [step, num] tuples (None = identity)
-        offset: Element offset into storage"""
-
-    def __init__(self, shape, dtype, storage, buffer=MemoryRegion.sbuf, name='', pattern=None, offset=0, scalar_offset=None, vector_offset=None, indirect_dim=0):
-        ...
-
-    def get_pattern(self):
-        r"""Return the access pattern, resolving identity (None) to explicit form."""
-        ...
-
-    def is_identity(self):
-        r"""Return True if tensor has identity pattern (no .ap() or slicing)."""
-        ...
-
-    @property
-    def sim_value(self):
-        r"""Simulator-computed value (current tensor data)."""
-        ...
-
-    @property
-    def device_value(self):
-        r"""Device dump value, or None if no device data."""
-        ...
-
-    def view(self, dtype):
-        r"""Reinterpret cast tensor to a different dtype.
-
-        The underlying storage bits are reinterpreted as the new dtype.
-        Supports both upcasting (e.g. int8 -> int32) and downcasting (e.g. int32 -> int8).
-
-        Args:
-            dtype: Target dtype for reinterpretation
-
-        Returns:
-            New NkiTensor viewing same storage as different dtype
-
-        Example:
-            # Reinterpret int32 bits as float32
-            int_tensor = nl.ndarray((128, 256), dtype=nl.int32, buffer=nl.sbuf)
-            float_tensor = int_tensor.view(nl.float32)"""
-        ...
-
-    def ap(self, pattern, offset=0, scalar_offset=None, vector_offset=None, indirect_dim=0, dtype=None):
-        r"""Create tensor with explicit access pattern sharing same storage.
-
-        Args:
-            pattern: List of [step, num] tuples defining access pattern
-            offset: Element offset from start of storage
-            scalar_offset: Dynamic offset applied on ``indirect_dim``.
-                Can be an SBUF tensor (1×1) or a :class:`nisa.VirtualRegister`.
-            vector_offset: SBUF location for per-partition dynamic offset
-            indirect_dim: Dimension to apply scalar/vector offset
-            dtype: Optional dtype for reinterpret casting
-
-        Returns:
-            New NkiTensor with specified access pattern
-
-        Raises:
-            NkiValidationError: If partition dimension access has holes (non-contiguous)
-            IndexError: If access pattern exceeds tensor bounds"""
-        ...
-
-    def reshape(self, new_shape=None, shape=None):
-        r"""Return a reshaped view of the tensor sharing storage."""
-        ...
-
-    ...
 
 bool_ = ...
 r"""Boolean (True or False) stored as a byte"""
@@ -147,32 +52,474 @@ r"""4x packed float8_e5m2 elements, custom data type for nki.isa.nc_matmul_mx on
 float8_e4m3fn_x4 = ...
 r"""4x packed float8_e4m3fn elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
+float8_e8m0fnu = ...
+r"""8-bit floating-point exponent type (0S,8E,0M) - unsigned, NaN represented by 0xFF. Used as power-of-two shared scale factor in MX quantization"""
+
 float4_e2m1fn_x4 = ...
 r"""4x packed float4_e2m1fn elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
 sbuf = ...
-r"""Memory region constants for NKI tensors."""
+r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid"""
 
 psum = ...
-r"""Memory region constants for NKI tensors."""
+r"""PSUM - Only visible to each individual kernel instance in the SPMD grid"""
 
 hbm = ...
-r"""Memory region constants for NKI tensors."""
+r"""HBM - Alias of private_hbm"""
 
 private_hbm = ...
-r"""Memory region constants for NKI tensors."""
+r"""HBM - Only visible to each individual kernel instance in the SPMD grid"""
 
 shared_hbm = ...
-r"""Memory region constants for NKI tensors."""
+r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
 
 tile_size = ...
-r"""Hardware tile size constants (pmax, psum_fmax, gemm_stationary_fmax, etc.)"""
+r"""Hardware tile size constants (pmax, psum_bank_fmax, gemm_stationary_fmax, etc.)"""
+
+average = ...
 
 prelu = ...
 r"""Parametric ReLU activation function. Used as the ``op`` parameter in activation ISA instructions such as :doc:`nki.isa.activation </nki/api/generated/nki.isa.activation>`. The slope for negative inputs is controlled by the ``relu_param`` argument (see :ref:`nki-act-func`)."""
 
 bypass = ...
 r"""No-op operator that passes data through unchanged. Used as the ``op0`` or ``op1`` parameter in tensor-scalar ISA instructions (e.g., :doc:`nki.isa.activation </nki/api/generated/nki.isa.activation>`) to skip a computation stage."""
+
+
+class MemoryRegion(Enum):
+    r"""Memory region constants for NKI tensors."""
+
+    sbuf = ...
+
+    psum = ...
+
+    private_hbm = ...
+
+    shared_hbm = ...
+
+    ...
+
+class NKIObject:
+    r"""Base class for NKI kernel dataclasses and configuration objects."""
+
+    def __init__(self, **kwargs: Any) -> None:
+        ...
+
+    ...
+
+class NkiTensor(NKIObject):
+    r"""NKI tensor with shape-based view operations.
+
+    ``NkiTensor`` is the core tensor type in NKI. It represents a multi-dimensional
+    array allocated on a specific memory buffer (SBUF, PSUM, or HBM) with a dtype
+    and shape. All view operations (``slice``, ``permute``, ``reshape``, etc.) return
+    new ``NkiTensor`` objects that share the same underlying storage — no data is
+    copied. Views are consumed by NKI ISA instructions
+    (e.g., ``nisa.tensor_copy``, ``nisa.dma_copy``).
+
+    Tensors are created via :func:`nl.ndarray`:
+
+    .. code-block:: python
+
+        sb = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+        hbm = nl.ndarray((4, 128, 64), dtype=nl.float32, buffer=nl.shared_hbm)
+
+    **Partition dimension.**
+
+    On-chip tensors (SBUF, PSUM) have a partition dimension at dim 0 that maps to
+    the hardware's parallel partitions. Most view operations cannot modify this
+    dimension — see individual method docs for constraints."""
+
+    def __init__(self, shape: tuple[int, ...], dtype: str, storage: Any, buffer: Any=sbuf, name: str=''):
+        r"""Create an ``NkiTensor`` bound to an existing storage handle.
+
+        Most code should use :func:`nl.ndarray` instead — it allocates fresh
+        storage and wraps it in a tensor. This constructor is useful when you
+        need to re-bind a storage handle you already have (e.g. from a
+        framework integration or test fixture).
+
+        :param shape: tuple of positive integers.
+        :param dtype: NKI dtype string (e.g. ``nl.float32``).
+        :param storage: backend-specific storage handle. May be ``None`` when
+            the tensor is used as a signature placeholder and never materialized.
+        :param buffer: memory region (``nl.sbuf``, ``nl.psum``, ``nl.hbm``,
+            ``nl.shared_hbm``). Defaults to ``nl.sbuf``.
+        :param name: optional debug name, used in compiler diagnostics and
+            :ref:`scheduling <how-to-scheduling-apis>`."""
+        ...
+
+    def is_contiguous(self) -> bool:
+        r"""Return True if the view covers storage contiguously (row-major order).
+
+        Computed from the current strides: each non-size-1 dimension's stride
+        must equal the product of the shape sizes of inner dimensions.
+
+        For on-chip tensors (SBUF, PSUM), the partition dim (dim 0) is skipped:
+        partitions are physically independent memory banks, so the partition
+        stride does not represent physical contiguity. Contiguity is evaluated
+        per-partition over the free dims only."""
+        ...
+
+    def get_pattern(self) -> list[list[int]]:
+        r"""Return the view's access pattern as ``[[stride, count], ...]``.
+
+        Useful as a starting point when constructing a new ``.ap()`` that
+        keeps most of the current layout intact. The returned pattern
+        pairs each of the view's dimensions with its current stride, in
+        the same order as :attr:`shape` / :attr:`strides`."""
+        ...
+
+    def is_indirect(self) -> bool:
+        r"""Return True if this view already uses indirect addressing.
+
+        Indirect addressing is produced by dynamic :meth:`select`,
+        :meth:`vector_select`, or :meth:`ap` with ``scalar_offset`` /
+        ``vector_offset``. Indirect views cannot be re-indirected, and the
+        dimension that participates in the indirection cannot be further
+        sliced or selected — use this query to guard against those chains."""
+        ...
+
+    def permute(self, dims: tuple[int, ...]) -> NkiTensor:
+        r"""Reorder tensor dimensions.
+
+        Returns a new view with dimensions rearranged according to ``dims``.
+        No data is copied.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 4, 8), dtype=nl.float32, buffer=nl.sbuf)
+            t.permute((0, 2, 1))  # shape becomes (128, 8, 4)
+
+        **Constraints.**
+
+        - ``dims`` must be a permutation of ``range(t.ndim)``
+        - On-chip tensors: ``dims[0]`` must be 0 (partition dim stays outermost)
+        - After ``vector_select``: ``dims[0]`` must be 0 (indirect partition dim
+          stays outermost; see :meth:`is_indirect`)
+
+        :param dims: tuple of dimension indices in the desired order
+        :return: new ``NkiTensor`` view with reordered dimensions"""
+        ...
+
+    def broadcast(self, dim: int, size: int) -> NkiTensor:
+        r"""Expand a size-1 dimension to ``size`` by repeating elements.
+
+        The dimension must have size 1 before broadcasting. No data is copied.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 1, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.broadcast(1, 8)  # shape becomes (128, 8, 64)
+
+        **Constraints.**
+
+        - ``t.shape[dim]`` must be 1
+        - On-chip tensors: ``dim`` must not be 0 (partition dim)
+
+        :param dim: dimension to broadcast
+        :param size: new size for the dimension
+        :return: new ``NkiTensor`` view with the broadcasted dimension"""
+        ...
+
+    def expand_dim(self, dim: int) -> NkiTensor:
+        r"""Insert a new dimension of size 1 at position ``dim``.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.expand_dim(1)  # shape becomes (128, 1, 64)
+
+        **Constraints.**
+
+        - On-chip tensors: ``dim`` must not be 0
+        - After ``vector_select``: ``dim`` must not be 0 (cannot insert before
+          the indirect partition dim; see :meth:`is_indirect`)
+
+        :param dim: position at which to insert the new dimension
+        :return: new ``NkiTensor`` view with an additional size-1 dimension"""
+        ...
+
+    def squeeze_dim(self, dim: int) -> NkiTensor:
+        r"""Remove a dimension of size 1.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 1, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.squeeze_dim(1)  # shape becomes (128, 64)
+
+        **Constraints.**
+
+        - ``t.shape[dim]`` must be 1
+        - On-chip tensors: ``dim`` must not be 0
+        - After ``vector_select``: ``dim`` must not be 0
+
+        :param dim: dimension to remove (must have size 1)
+        :return: new ``NkiTensor`` view with the dimension removed"""
+        ...
+
+    def reshape_dim(self, dim: int, shape: tuple[int, ...]) -> NkiTensor:
+        r"""Split a single dimension into multiple dimensions.
+
+        The product of ``shape`` must equal ``t.shape[dim]``. One element of
+        ``shape`` may be -1, in which case its value is inferred.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 24), dtype=nl.float32, buffer=nl.sbuf)
+            t.reshape_dim(1, (4, 6))   # shape becomes (128, 4, 6)
+            t.reshape_dim(1, (4, -1))  # same result, 6 is inferred
+
+        **Constraints.**
+
+        - ``prod(shape) == t.shape[dim]``
+        - On-chip tensors: ``dim`` must not be 0 (unless ``shape`` is trivial, e.g., ``(128,)``)
+        - After ``vector_select``: ``dim`` must not be 0
+
+        :param dim: dimension to split
+        :param shape: tuple of sizes for the new dimensions (may contain one -1)
+        :return: new ``NkiTensor`` view with the dimension split"""
+        ...
+
+    def flatten_dims(self, start_dim: int, end_dim: int) -> NkiTensor:
+        r"""Merge a contiguous range of dimensions into one.
+
+        Dimensions ``start_dim`` through ``end_dim`` (inclusive) are merged into
+        a single dimension. The dimensions must already be contiguous in memory
+        (no ``permute`` or non-contiguous slicing across them) so the merged view
+        is itself a valid view of storage.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 2, 3, 4), dtype=nl.float32, buffer=nl.sbuf)
+            t.flatten_dims(1, 2)  # shape becomes (128, 6, 4)
+
+        **Constraints.**
+
+        - Dimensions ``start_dim..end_dim`` must be contiguous in memory
+        - On-chip tensors: ``start_dim`` must be > 0
+        - After ``vector_select``: ``start_dim`` must be > 0
+
+        :param start_dim: first dimension to merge (inclusive)
+        :param end_dim: last dimension to merge (inclusive)
+        :return: new ``NkiTensor`` view with the merged dimension"""
+        ...
+
+    def reshape(self, shape: tuple[int, ...]) -> NkiTensor:
+        r"""Reshape the tensor to a new shape without copying data.
+
+        The total number of elements must remain the same. Fails if the current
+        memory layout is incompatible with the requested shape (e.g. after a
+        non-contiguous slice or permute).
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 4, 6), dtype=nl.float32, buffer=nl.sbuf)
+            t.reshape((128, 24))       # merge last two dims
+            t.reshape((128, 2, 12))    # split differently
+
+        **Constraints.**
+
+        - ``prod(shape) == prod(t.shape)``
+        - On-chip tensors: ``shape[0]`` must equal ``t.shape[0]`` (partition dim preserved)
+        - After ``vector_select``: ``shape[0]`` must equal ``t.shape[0]`` (indirect
+          partition dim preserved)
+        - Fails if the current layout is incompatible with the requested shape
+
+        :param shape: tuple of new dimension sizes
+        :return: new ``NkiTensor`` view with the requested shape"""
+        ...
+
+    def rearrange(self, src_pattern: tuple, dst_pattern: tuple, fixed_sizes: dict[str, int] | None=None) -> NkiTensor:
+        r"""Rearrange tensor dimensions using einops-style patterns.
+
+        Combines splitting, reordering, and merging dimensions into a single
+        named operation. Patterns are tuples of strings (dimension names) or
+        tuples of strings (grouped dimensions that are split or merged).
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 24), dtype=nl.float32, buffer=nl.sbuf)
+            # Split dim 1 into (h, w), then reorder to (b, w, h):
+            t.rearrange(('b', ('h', 'w')), ('b', 'w', 'h'), {'h': 4})
+            # Result shape: (128, 6, 4)
+
+        :param src_pattern: source dimension pattern (tuple of str or tuple-of-str)
+        :param dst_pattern: destination dimension pattern (same dimension names)
+        :param fixed_sizes: dict mapping dimension names to known sizes (for -1 inference)
+        :return: new ``NkiTensor`` view with rearranged dimensions"""
+        ...
+
+    def slice(self, dim: int, start: int, end: int, step: int=1) -> NkiTensor:
+        r"""Slice along a single dimension.
+
+        Returns a view selecting elements from ``start`` to ``end`` (exclusive)
+        with the given ``step``. Equivalent to ``t[:, start:end:step, :]`` when
+        ``dim=1``.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.slice(1, 8, 24, 1)   # shape becomes (128, 16)
+            t.slice(1, 0, 64, 2)   # shape becomes (128, 32)
+
+        **Constraints.**
+
+        - ``0 <= start < end <= t.shape[dim]``
+        - ``step >= 1``
+        - On an indirect view (see :meth:`is_indirect`), cannot slice a
+          dimension that participates in the indirection.
+
+        :param dim: dimension to slice
+        :param start: start index (inclusive)
+        :param end: end index (exclusive)
+        :param step: step size (default 1)
+        :return: new ``NkiTensor`` view with the sliced dimension"""
+        ...
+
+    def select(self, dim: int, index: Union[int, NkiTensor]) -> NkiTensor:
+        r"""Select a single element along a dimension, removing it.
+
+        When ``index`` is an integer, performs static selection (equivalent to
+        ``t[:, index, :]`` when ``dim=1``). When ``index`` is an ``NkiTensor``
+        (e.g., a scalar loaded into SBUF), performs dynamic indirect selection
+        where the index is resolved at runtime.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 8, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.select(1, 3)          # static: shape becomes (128, 64)
+
+            # Dynamic select (HBM tensor, index resolved at runtime):
+            idx = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+            hbm_t = nl.ndarray((4, 128, 8), dtype=nl.float32, buffer=nl.shared_hbm)
+            hbm_t.select(0, idx)    # shape becomes (128, 8)
+
+        **Constraints.**
+
+        - Static: ``0 <= index < t.shape[dim]``
+        - Dynamic: only one dynamic select per tensor (no chaining);
+          check :meth:`is_indirect` to guard
+        - Dynamic on-chip: ``dim`` must not be 0 (partition dim)
+        - On an indirect view (see :meth:`is_indirect`), static selection
+          cannot target a dimension that participates in the indirection.
+
+        :param dim: dimension to select from
+        :param index: integer index (static) or ``NkiTensor`` scalar (dynamic)
+        :return: new ``NkiTensor`` view with the dimension removed"""
+        ...
+
+    def vector_select(self, dim: int, vector_offset: NkiTensor) -> NkiTensor:
+        r"""Per-partition indirect addressing using a vector of offsets.
+
+        Each partition uses its own index from ``vector_offset`` as the base
+        address for the selected dimension. The output partition count is
+        ``vector_offset.shape[0]``.
+
+        This is used for gather-style operations where different partitions
+        read from different locations in the source tensor.
+
+        .. code-block:: python
+
+            hbm_t = nl.ndarray((64, 128, 8), dtype=nl.float32, buffer=nl.shared_hbm)
+            offsets = nl.ndarray((128, 1), dtype=nl.int32, buffer=nl.sbuf)
+            # Each of 128 partitions reads from a different row of hbm_t
+            hbm_t.vector_select(0, offsets)  # shape becomes (128, 128, 8)
+
+        **Constraints.**
+
+        - ``dim`` must be 0
+        - Only supported on HBM tensors
+        - Only one dynamic select per tensor (cannot combine with a prior
+          dynamic :meth:`select` or :meth:`vector_select`); check
+          :meth:`is_indirect` to guard
+        - The result is an indirect view: the selected dimension cannot be
+          further sliced or selected.
+
+        :param dim: dimension to apply indirect addressing (must be 0)
+        :param vector_offset: SBUF tensor with per-partition indices, shape ``(num_partitions, 1)``
+        :return: new ``NkiTensor`` view with dim 0 size set to ``vector_offset.shape[0]``"""
+        ...
+
+    def ap(self, pattern: list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype=None) -> NkiTensor:
+        r"""Low-level access pattern override (escape hatch).
+
+        Replaces shape and strides with an explicit
+        ``[[stride, count], ...]`` pattern addressing the underlying
+        storage directly. Analogous to ``torch.as_strided``.
+
+        .. code-block:: python
+
+            sb = nl.ndarray((128, 32), dtype=nl.float32, buffer=nl.sbuf)
+            # Explicit 2D pattern: partition stride=32, free stride=1
+            sb.ap(pattern=[[32, 128], [1, 32]])
+
+            # With indirect access and dtype reinterpret:
+            sb.ap(pattern=[[64, 128], [1, 16]], dtype=nl.bfloat16,
+                  scalar_offset=idx, indirect_dim=1)
+
+        :param pattern: list of ``[stride, count]`` pairs defining the access pattern
+        :param offset: element offset added to the view's base storage offset.
+            When ``None`` (default), inherits the current view's storage offset
+            unchanged. Pass an explicit integer to compose with the base offset
+            (e.g. offset=0 keeps the base, offset=N shifts by N additional elements).
+        :param scalar_offset: dynamic scalar index tensor for indirect access
+        :param vector_offset: per-partition index tensor for indirect access
+        :param indirect_dim: dimension in ``self.shape`` whose stride scales
+            the indirect scalar/vector offset (default 0)
+        :param dtype: reinterpret storage as this dtype (default: tensor's dtype)
+        :return: new ``NkiTensor`` with the explicit access pattern"""
+        ...
+
+    def view(self, dtype) -> NkiTensor:
+        r"""Reinterpret the tensor's data as a different dtype.
+
+        No data is copied. Equivalent to ``numpy.ndarray.view(dtype)`` or
+        C++ ``reinterpret_cast``. The last dimension's size is scaled by the
+        ratio of dtype sizes: reinterpreting a float32 tensor as uint8
+        multiplies the last-dim count by 4; reinterpreting uint8 as float32
+        divides it by 4.
+
+        .. code-block:: python
+
+            t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t.view(nl.uint8)     # shape becomes (128, 256), 4x expansion
+            t.view(nl.int32)     # shape stays (128, 64), same-size reinterpret
+
+            u = nl.ndarray((128, 256), dtype=nl.uint8, buffer=nl.sbuf)
+            u.view(nl.float32)   # shape becomes (128, 64), 4x contraction
+
+        **Constraints.**
+
+        - The last dimension must be contiguous in memory
+        - For contraction (larger dtype): last-dim size must be divisible by the ratio
+        - Not supported after dynamic / vector select
+
+        :param dtype: target NKI dtype to reinterpret as
+        :return: new ``NkiTensor`` view with the adjusted dtype and shape"""
+        ...
+
+    reinterpret_cast = ...
+
+    def indirect(self, index: NkiTensor, num_elem: int | None=None) -> NkiTensor:
+        r"""Create an indirect tensor view for Tensor Indirection (TI).
+
+        Available on NeuronCore-v4 (Trn3) and later.
+
+        TI allows reading or writing a column of data at given free-dimension
+        offsets across contiguous partition dimensions. Can be used as input
+        (gather) or output (scatter) in nisa operations.
+
+        Offsets are stored in a snake pattern across partition groups: offset i
+        comes from ``index[i % G, i // G]`` where G is the group size (16 for
+        vector/scalar/gpsimd engines, 32 for tensor engine).
+
+        :param index: SBUF tensor containing free-dimension offsets, shape ``(P, K)``
+            where ``P == self.shape[0]``.
+        :param num_elem: number of offsets to use. Defaults to ``index.size``.
+        :return: new ``NkiTensor`` view with TI attached. Output shape is
+            ``(P, num_elem)``."""
+        ...
+
+    ...
 
 def is_hbm(buffer):
     r"""Check if buffer is any HBM type."""
@@ -201,7 +548,7 @@ def add(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has ``x + y``, element-wise.
 
     Examples:
@@ -236,7 +583,7 @@ def subtract(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has ``x - y``, element-wise.
 
     Examples:
@@ -270,7 +617,7 @@ def multiply(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has ``x * y``, element-wise.
 
     Examples:
@@ -304,7 +651,7 @@ def divide(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has ``x / y``, element-wise.
     """
     ...
@@ -320,7 +667,7 @@ def maximum(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has the maximum of each element from x and y.
 
     Examples:
@@ -354,7 +701,7 @@ def minimum(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has the minimum of each element from x and y.
 
     Examples:
@@ -393,7 +740,7 @@ def abs_max(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile where each element is ``x`` if ``|x| > |y|``, else ``y``.
 
     Examples:
@@ -437,7 +784,7 @@ def abs_min(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile where each element is ``x`` if ``|x| < |y|``, else ``y``.
 
     Examples:
@@ -534,7 +881,7 @@ def power(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has values ``x`` to the power of ``y``.
 
     Examples:
@@ -660,7 +1007,7 @@ def bitwise_and(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the bitwise AND result."""
     ...
 
@@ -677,7 +1024,7 @@ def bitwise_or(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the bitwise OR result."""
     ...
 
@@ -694,7 +1041,7 @@ def bitwise_xor(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the bitwise XOR result."""
     ...
 
@@ -727,7 +1074,7 @@ def left_shift(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the left-shifted result."""
     ...
 
@@ -744,7 +1091,7 @@ def right_shift(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the right-shifted result."""
     ...
 
@@ -761,7 +1108,7 @@ def logical_and(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the logical AND result."""
     ...
 
@@ -778,7 +1125,7 @@ def logical_or(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the logical OR result."""
     ...
 
@@ -795,7 +1142,7 @@ def logical_xor(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile with the logical XOR result."""
     ...
 
@@ -1321,7 +1668,7 @@ def fmod(x, y, dtype=None):
 
     :param x: a tile. If x is a scalar value it will be broadcast to the shape of y.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has values ``x fmod y``.
     """
     ...
@@ -1340,7 +1687,7 @@ def mod(x, y, dtype=None):
 
     :param x: a tile. If x is a scalar value it will be broadcast to the shape of y.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
     :return: a tile that has values ``x mod y``.
     """
     ...
@@ -1855,7 +2202,6 @@ def gather_flattened(data, indices, axis=0, dtype=None):
 
 def ds(start, size):
     r"""Create a dynamic slice for tensor indexing.
-
     :param start: the start index of the slice.
     :param size: the size of the slice.
     :return: a dynamic slice object for use in tensor indexing."""
@@ -2048,7 +2394,8 @@ def shared_constant(constant):
     the data must not diverge across cores.
 
     Supported element types: float32, float16, bfloat16, int32, int16,
-    int8, uint32, uint16, uint8, float8_e4m3fn, float8_e5m2.
+    int8, uint32, uint16, uint8, float8_e4m3fn, float8_e5m2,
+    float8_e8m0fnu.
     Packed types (float8_e4m3fn_x4, float8_e5m2_x4, float4_e2m1fn_x4)
     and tfloat32 are supported at the MLIR level but not yet tested
     end-to-end on hardware.

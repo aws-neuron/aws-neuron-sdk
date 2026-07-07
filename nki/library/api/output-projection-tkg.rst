@@ -1,6 +1,6 @@
 .. meta::
     :description: Output Projection TKG kernel computes output projection optimized for Token Generation.
-    :date-modified: 11/28/2025
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.output_projection.output_projection_tkg
 
@@ -36,7 +36,7 @@ API Reference
 output_projection_tkg
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: output_projection_tkg(attention: nl.ndarray, weight: nl.ndarray, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, weight_scale: Optional[nl.ndarray] = None, input_scale: Optional[nl.ndarray] = None, TRANSPOSE_OUT=False, OUT_IN_SB=False)
+.. py:function:: output_projection_tkg(attention: nl.ndarray, weight: nl.ndarray, bias: Optional[nl.ndarray] = None, quantization_type: QuantizationType = QuantizationType.NONE, weight_scale: Optional[nl.ndarray] = None, input_scale: Optional[nl.ndarray] = None, TRANSPOSE_OUT: bool = False, OUT_IN_SB: bool = False, sbm: Optional[BufferManager] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP) -> nl.ndarray
 
    Output Projection Kernel optimized for Token Generation (Decode) use cases.
 

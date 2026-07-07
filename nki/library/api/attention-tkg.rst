@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention TKG kernel implements attention optimized for Token Generation (decode) use cases.
-    :date-modified: 11/28/2025
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.attention_tkg
 
@@ -135,7 +135,7 @@ AttnTKGConfig
 attention_tkg
 ^^^^^^^^^^^^^^^
 
-.. py:function:: attention_tkg(q: nl.ndarray, k_active: nl.ndarray, v_active: nl.ndarray, k_prior: nl.ndarray, v_prior: nl.ndarray, mask: nl.ndarray, out: nl.ndarray, cfg: AttnTKGConfig, sbm: SbufManager, inv_freqs: Optional[nl.ndarray] = None, rope_pos_ids: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, active_blocks_table: Optional[nl.ndarray] = None, k_out: Optional[nl.ndarray] = None, DBG_TENSORS: Optional[tuple] = None) -> Tuple[nl.ndarray, Optional[nl.ndarray]]
+.. py:function:: attention_tkg(q: nl.ndarray, k_active: nl.ndarray, v_active: nl.ndarray, k_prior: nl.ndarray, v_prior: nl.ndarray, mask: nl.ndarray, out: nl.ndarray, cfg: AttnTKGConfig, sbm: SbufManager, inv_freqs: Optional[nl.ndarray] = None, rope_pos_ids: Optional[nl.ndarray] = None, start_pos_ids: Optional[nl.ndarray] = None, sink: Optional[nl.ndarray] = None, active_blocks_table: Optional[nl.ndarray] = None, k_out: Optional[nl.ndarray] = None, DBG_TENSORS: Optional[tuple] = None, max_context_len: Optional[nl.ndarray] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP) -> Tuple[nl.ndarray, Optional[nl.ndarray]]
 
    Attention specifically optimized for token-gen (where s_active is small). Can optionally fuse RoPE at the start.
 

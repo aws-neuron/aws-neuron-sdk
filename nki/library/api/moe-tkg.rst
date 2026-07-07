@@ -1,6 +1,6 @@
 .. meta::
     :description: MoE TKG kernel implements Mixture of Experts MLP optimized for Token Generation.
-    :date-modified: 05/21/2026
+    :date-modified: 06/11/2026
 
 .. currentmodule:: nkilib.core.moe_tkg
 
@@ -46,7 +46,7 @@ API Reference
 moe_tkg
 ^^^^^^^^^^^^^^^
 
-.. py:function:: moe_tkg(hidden_input: nl.ndarray, expert_gate_up_weights: nl.ndarray, expert_down_weights: nl.ndarray, expert_affinities: nl.ndarray, expert_index: nl.ndarray, is_all_expert: bool, rank_id: Optional[nl.ndarray] = None, expert_gate_up_bias: Optional[nl.ndarray] = None, expert_down_bias: Optional[nl.ndarray] = None, expert_gate_up_weights_scale: Optional[nl.ndarray] = None, expert_down_weights_scale: Optional[nl.ndarray] = None, hidden_input_scale: Optional[nl.ndarray] = None, gate_up_input_scale: Optional[nl.ndarray] = None, down_input_scale: Optional[nl.ndarray] = None, mask_unselected_experts: bool = False, expert_affinities_eager: Optional[nl.ndarray] = None, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.NO_SCALE, activation_fn: ActFnType = ActFnType.SiLU, output_dtype=None, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, output_in_sbuf: bool = False, is_all_expert_dynamic: bool = False) -> nl.ndarray
+.. py:function:: moe_tkg(hidden_input: nl.ndarray, expert_gate_up_weights: nl.ndarray, expert_down_weights: nl.ndarray, expert_affinities: nl.ndarray, expert_index: nl.ndarray, is_all_expert: bool, rank_id: Optional[nl.ndarray] = None, expert_gate_up_bias: Optional[nl.ndarray] = None, expert_down_bias: Optional[nl.ndarray] = None, expert_gate_up_weights_scale: Optional[nl.ndarray] = None, expert_down_weights_scale: Optional[nl.ndarray] = None, hidden_input_scale: Optional[nl.ndarray] = None, expert_gate_up_input_scale: Optional[nl.ndarray] = None, expert_down_input_scale: Optional[nl.ndarray] = None, mask_unselected_experts: bool = False, expert_affinities_eager: Optional[nl.ndarray] = None, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.NO_SCALE, activation_fn: ActFnType = ActFnType.SiLU, output_dtype: nki.dtype = None, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, output_in_sbuf: bool = False, is_all_expert_dynamic: bool = False, block_size: int = None, input_dequant_scale: Optional[nl.ndarray] = None, all_to_all_v_strategy: MoEAllToAllVStrategy = MoEAllToAllVStrategy.DISABLED, output_layout: MoEBlockIOLayout = MoEBlockIOLayout.B_S_H, output: Optional[nl.ndarray] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP) -> nl.ndarray
 
    Mixture of Experts (MoE) MLP token generation kernel.
 

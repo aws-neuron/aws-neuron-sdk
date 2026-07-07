@@ -13,7 +13,7 @@ Customers that use Kubernetes can conveniently integrate Inf1/Trn1 instances int
       :class-body: sphinx-design-class-body-small
       :animate: fade-in
 
-      .. include:: /deploy/eks/prerequisites.rst
+      Before deploying Neuron components, create an EKS cluster and add Neuron-enabled nodes. For the full, step-by-step cluster and node group setup, see :ref:`k8s-prerequisite`.
 
 .. dropdown:: Deploy Neuron Device Plugin
       :class-title: sphinx-design-class-title-small
@@ -27,4 +27,4 @@ Customers that use Kubernetes can conveniently integrate Inf1/Trn1 instances int
       :class-body: sphinx-design-class-body-small
       :animate: fade-in
 
-      .. include:: /deploy/infrastructure/scheduler.rst
+      The Neuron scheduler extension provides topology-aware scheduling for workloads that request more than one Neuron core or device. For deployment steps and troubleshooting, see :ref:`neuron-scheduler-extension`.

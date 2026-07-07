@@ -361,7 +361,15 @@ Common signs of a failed capture:
 * **No .neff files** — see `Ensuring NEFFs are in your output directory`_ above.
 * **Only .pb files, no .ntff** — device profiling wasn't enabled; you captured a system profile only (may be intentional).
 
-For troubleshooting help, see :ref:`Troubleshooting <neuron-explorer-get-started-troubleshooting>` in the Getting Started guide.
+For troubleshooting help, see :doc:`Troubleshooting & FAQs </tools/neuron-explorer/troubleshooting>`.
+
+torch.compile vs eager mode profiling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Neuron Explorer supports profiling workloads compiled with both ``torch.compile``
+and PyTorch eager mode. Eager mode typically produces more NEFFs than
+``torch.compile``. See the next section on how to correlate hardware execution
+with the correct NEFF when multiple NEFFs are present.
 
 Correlating hardware execution with the NEFF
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -853,4 +861,5 @@ Next steps
 
 * :doc:`Get Started with Neuron Explorer <get-started>` — Launch Explorer, upload profiles, and view results
 * :doc:`Neuron Explorer Full Documentation <index>` — Complete viewer and feature reference
+* :doc:`Profile Parquet Schema Reference <profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer --show-profile-schema``
 

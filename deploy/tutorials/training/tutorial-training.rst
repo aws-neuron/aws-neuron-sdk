@@ -27,7 +27,7 @@ Setup Environment
 
 2. Set up docker environment according to :ref:`tutorial-docker-env-setup`
 
-3. A sample Dockerfile for for torch-neuron can be found here :ref:`trainium-dlc-dockerfile`.
+3. A sample Dockerfile for torch-neuron can be found here :ref:`trainium-dlc-dockerfile`.
 This dockerfile needs the mlp train script found here  :ref:`mlp-train`
 
 With the files in a dir, build the image with the following command:
