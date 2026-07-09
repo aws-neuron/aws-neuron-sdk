@@ -98,7 +98,6 @@
       {"neuron_version":"2.31.0", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.33.10.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-dkms","version":"2.29.0.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
-        {"name":"aws-neuronx-gpsimd-customop-lib","version":"0.23.4.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-gpsimd-tools","version":"14.09.x","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-oci-hook","version":"2.17.30.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-runtime-lib","version":"2.33.10.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
@@ -129,7 +128,6 @@
       {"neuron_version":"2.30.0", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.32.28.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-dkms","version":"2.28.0.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
-        {"name":"aws-neuronx-gpsimd-customop-lib","version":"0.22.2.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"aws-neuronx-gpsimd-tools","version":"14.09.x","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-oci-hook","version":"2.16.36.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-runtime-lib","version":"2.32.31.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
