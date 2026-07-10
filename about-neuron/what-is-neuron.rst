@@ -15,9 +15,9 @@ For more details, see the detailed documentation under :ref:`About the AWS Neuro
 Who is AWS Neuron for?
 -----------------------
 
-* **ML engineers** can use Neuron's vLLM integration to migrate their models to Trainium for improved performance and without code modifications. They can
+* **ML engineers** can use Neuron's vLLM integration to migrate their models to Trainium for improved performance without code modifications.
 * **Performance engineers** can use NKI and our Developer Tools to create new ML kernels and optimize existing ones.
-* **ML researchers** can use their existing PyTorch experience and ecosystem tools to experiment freely on Trainium using our native PyTorch implementatio, without having to learn new frameworks or APIs
+* **ML researchers** can use their existing PyTorch experience and ecosystem tools to experiment freely on Trainium using our native PyTorch implementation, without having to learn new frameworks or APIs.
 
 What is AWS Neuron used for?
 -----------------------------
