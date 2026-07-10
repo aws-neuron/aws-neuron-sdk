@@ -65,13 +65,13 @@ Each Neuron component has specific release notes across Neuron versions.
      - 2.31.0
    * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
      - **2.31.0**
-     - 2.31.11.0
+     - 2.31.13.0
    * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
      - **2.31.0**
      - 2.31.0
    * - :doc:`JAX NeuronX </release-notes/components/jax>`
      - **2.31.0**
-     - 0.10.0.*
+     - 0.10.0.* (supports up to JAX 0.9.0)
    * - :doc:`NKI Library </release-notes/components/nki-lib>`
      - **2.31.0**
      - 2.31.0
@@ -98,7 +98,7 @@ Each Neuron component has specific release notes across Neuron versions.
      - 2.33.10.0
    * - :doc:`vLLM plugin for Neuron </release-notes/components/nxd-inference>`
      - **2.31.0**
-     - 0.21.0.1.0.0 (supports vLLM version 0.21.0; vllm-neuron version is 1.0.0)
+     - 0.16.0.* (vllm-neuron version is 0.5.0)
 
   
 ----

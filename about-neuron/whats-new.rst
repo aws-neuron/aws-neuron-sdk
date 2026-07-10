@@ -101,7 +101,7 @@ What's in this release
 
 * **Neuron Agentic Development** — `Launched as a beta in April 2026 <https://aws.amazon.com/about-aws/whats-new/2026/04/announcing-neuron-agentic-development/>`_, Neuron Agentic Development adds two new skills in this release: ``neuron-framework-autoport`` ports HuggingFace models to NxD Inference end to end, and ``neuron-framework-equivalence`` validates numerical equivalence of ported models. Both included in all DLAMIs/DLCs by default. See :ref:`agentic-development-2-30-0-rn`.
 
-* **DLAMIs & Containers** — All images now based on Ubuntu 24.04. Upgraded to JAX-NeuronX 0.10.0 (Python 3.13 in JAX SF DLAMI). See :ref:`dlami-2-30-0-rn` and :ref:`containers-2-30-0-rn`.
+* **DLAMIs & Containers** — All images now based on Ubuntu 24.04. See :ref:`dlami-2-30-0-rn` and :ref:`containers-2-30-0-rn`.
 
 
 Software lifecycle updates
