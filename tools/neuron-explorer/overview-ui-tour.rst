@@ -1,7 +1,7 @@
 .. meta::
     :description: Guided overview of the Neuron Explorer UI — every viewer and tool grouped by use case with screenshots and descriptions.
     :keywords: neuron explorer, profiling, UI overview, performance analysis, debugging, memory, timeline, NKI, Trainium
-    :date-modified: 2026-06-22
+    :date-modified: 2026-07-13
 
 .. _neuron-explorer-ui-tour:
 
@@ -297,6 +297,8 @@ dropdown to switch profiles within any widget.
 
 **When to use:** Compare execution across NeuronCores or instances in a distributed
 workload.
+
+.. _neuron-explorer-dark-light-mode:
 
 Dark and light mode
 ~~~~~~~~~~~~~~~~~~~

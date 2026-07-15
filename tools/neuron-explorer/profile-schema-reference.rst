@@ -10,6 +10,7 @@
 Profile Parquet Schema Reference
 ================================
 
+All of the available Neuron Explorer metrics are viewable as Parquet files.
 When Neuron Explorer processes a profile it writes the results as a set of
 `Parquet <https://parquet.apache.org/>`_ tables (``Summary.parquet``,
 ``Instruction.parquet``, ``DmaPacket.parquet``, and so on). This page documents

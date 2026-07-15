@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Developer Tools component across all AWS Neuron SDK versions.
     :keywords: neuron tools, developer tools, profiler, release notes, neuron explorer, aws neuron sdk
-    :date-modified: 05/21/2026
+    :date-modified: 07/14/2026
 
 .. _dev-tools_rn:
 
@@ -21,14 +21,17 @@ Date of Release: 07/07/2026
 Improvements
 ~~~~~~~~~~~~~~~
 
+* Added PyTorch native profiling support in Neuron Explorer, enabling profiling of ``torch.compile`` and eager mode workloads with differences in NEFF generation between the two modes. See :doc:`/tools/neuron-explorer/how-to-profile-workload`.
+* Enhanced the System Trace Viewer with source code linking for PyTorch profiles, enabling navigation from trace events to corresponding source code. See :doc:`/tools/neuron-explorer/overview-system-profiles` and :doc:`/tools/neuron-explorer/how-to-link-view-source-code`.
+* Updated the default grouping mode in the System Trace Viewer to organize events by instance ID, process ID, and event source, with sub-grouping by thread ID for framework dispatch events, stream ID for device interaction events, Logical NeuronCore for runtime events, and physical NeuronCore for hardware events. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Added Profile Comparison (beta) to Neuron Explorer, enabling side-by-side comparison of two or more device profiles to identify performance differences between runs. See :ref:`profile-comparison`.
+* Added light mode support in Neuron Explorer, accessible through the Dark/Light Mode Toggle button. See :ref:`neuron-explorer-dark-light-mode`.
+* Updated ``nccom-test`` collective op latency values from integer to floating point values, providing more accurate latency measurement. Due to previous integer truncation, new floating point latency results may increase slightly (~0.5 us) for some operations.
+* Added profile schema reference page documenting all Neuron Explorer parquet output tables and enums, including field names, types, units, and descriptions, enabling users to reference the output schema without requiring CLI access. See :doc:`/tools/neuron-explorer/profile-schema-reference`.
 * Added UI overview tour page for Neuron Explorer, providing a guided walkthrough of all viewers and tools grouped by workflow, a clickable UI navigation map, and support for light and dark mode. See :doc:`/tools/neuron-explorer/overview-ui-tour`.
 * Added environment variables reference documenting all variables for Neuron Explorer profiling, capture, debug, filtering, and runtime configuration, including recommended combinations for common scenarios (system-only, full debug, vLLM/inference, distributed). See :doc:`/tools/neuron-explorer/environment-variables`.
 * Added troubleshooting guide and FAQ for Neuron Explorer covering error codes, processing failures, capture issues, missing data diagnosis, performance issues, and timing/measurement. See :doc:`/tools/neuron-explorer/troubleshooting`.
 * Standardized Neuron Explorer terminology across documentation and added a glossary covering viewers, profile types, UI components, and Neuron-specific acronyms. See :doc:`/tools/neuron-explorer/glossary`.
-* Enhanced the System Trace Viewer with source code linking for navigating from trace events to corresponding source code, and updated the default grouping mode to organize events by instance ID, process ID, and event source, with sub-grouping by thread ID for framework dispatch events, stream ID for device interaction events, Logical NeuronCore for runtime events, and physical NeuronCore for hardware events. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
-* Documented ``torch.compile`` and eager mode profiling support in Neuron Explorer, clarifying differences in NEFF generation between the two modes. See :doc:`/tools/neuron-explorer/how-to-profile-workload`.
-* Added profile schema reference page documenting all Neuron Explorer parquet output tables and enums, including field names, types, units, and descriptions, enabling users to reference the output schema without requiring CLI access. See :doc:`/tools/neuron-explorer/profile-schema-reference`.
-* Updated ``nccom-test`` collective op latency values from integer to floating point values, providing more accurate latency measurement. Due to previous integer truncation, new floating point latency results may increase slightly (~0.5 us) for some operations.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~

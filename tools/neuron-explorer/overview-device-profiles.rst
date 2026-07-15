@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn about Neuron Explorer widgets for device profiling including timeline views, event details, annotations, and performance analysis tools.
-    :date-modified: 06/26/2026
+    :date-modified: 07/13/2026
 
 Device Trace Viewer
 ===================
@@ -138,8 +138,15 @@ Understanding and optimizing performance with the profiler can be overwhelming g
 
 .. image:: /tools/images/device-profile-13.png
 
-Profile Comparison
-~~~~~~~~~~~~~~~~~~
+.. _profile-comparison:
+
+Profile Comparison (beta)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+   Profile Comparison is a beta feature in this release. The interface and
+   behavior might change in future releases based on user feedback.
 
 Profile Comparison lets you view two or more device profiles side by side to identify performance differences between runs — for example, before and after an optimization, across different compiler flags, or between model variants.
 

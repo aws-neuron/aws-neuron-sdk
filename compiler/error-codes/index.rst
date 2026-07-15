@@ -1,6 +1,6 @@
 .. meta::
     :description: "Neuron Compiler error code documentation home."
-    :date-modified: 12/02/2025
+    :date-modified: 07/14/2026
 
 .. _ncc-errors-home:
 
@@ -27,6 +27,9 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EHCA005 <error-code-ehca005>`
      - The compiler encountered a custom call instruction with a target name that is not recognized.
      - Use a supported custom call target from the list of recognized targets.
+   * - :ref:`NCC_EMOD025 <error-code-emod025>`
+     - Dynamic shape is not supported. The Neuron compiler requires all tensor dimensions to be statically sized.
+     - Recompile the model with fully static input shapes. When compiling via PyTorch torch.compile, set dynamic=False to disable dynamic shape specialization.
    * - :ref:`NCC_EOOM001 <error-code-eoom001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -93,9 +96,75 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF031 <error-code-evrf031>`
      - The compiler encountered a scatter out-of-bounds error.
      - Ensure that the iota size matches the operand dimension size.
+   * - :ref:`NCC_EVRF036 <error-code-evrf036>`
+     - QuantizeMX custom call has invalid backend_config JSON.
+     - Provide a valid JSON object in backend_config.
+   * - :ref:`NCC_EVRF037 <error-code-evrf037>`
+     - QuantizeMX custom call operand count must be exactly 1 (input tensor).
+     - Pass exactly one input tensor as the operand to QuantizeMX.
+   * - :ref:`NCC_EVRF038 <error-code-evrf038>`
+     - QuantizeMX custom call dim is invalid for input tensor rank.
+     - Use the last dimension, or the second-to-last dimension for inputs with rank 2 or greater.
+   * - :ref:`NCC_EVRF039 <error-code-evrf039>`
+     - QuantizeMX custom call block_size must be 32.
+     - Use block_size=32 as required by the OCP MXFP specification.
+   * - :ref:`NCC_EVRF040 <error-code-evrf040>`
+     - QuantizeMX custom call scale_method is unsupported.
+     - Use "EMAX", the only supported scale method.
+   * - :ref:`NCC_EVRF041 <error-code-evrf041>`
+     - QuantizeMX custom call input type is unsupported.
+     - Cast input tensor to BF16 or F16 before quantization.
+   * - :ref:`NCC_EVRF042 <error-code-evrf042>`
+     - QuantizeMX custom call is malformed.
+     - Use a supported logical FP8 dtype and a correctly shaped, U32-packed quantized_data output.
+   * - :ref:`NCC_EVRF043 <error-code-evrf043>`
+     - ScaledMatmul custom call must have exactly 4 operands.
+     - Pass all 4 operands: lhs, rhs, lhs_scale, rhs_scale.
+   * - :ref:`NCC_EVRF044 <error-code-evrf044>`
+     - ScaledMatmul custom call LHS input type is unsupported.
+     - Use the packed U32 quantized data tensor returned by QuantizeMX.
+   * - :ref:`NCC_EVRF045 <error-code-evrf045>`
+     - ScaledMatmul custom call output type is unsupported.
+     - Declare the result as F32 or BF16.
+   * - :ref:`NCC_EVRF046 <error-code-evrf046>`
+     - ScaledMatmul custom call LHS tensor must have rank >= 2.
+     - Reshape the LHS to have at least 2 dimensions.
+   * - :ref:`NCC_EVRF047 <error-code-evrf047>`
+     - ScaledMatmul custom call RHS tensor must have rank >= 2.
+     - Reshape the RHS to have at least 2 dimensions.
+   * - :ref:`NCC_EVRF048 <error-code-evrf048>`
+     - ScaledMatmul custom call batch dimension mismatch.
+     - Ensure the product of LHS and RHS batch dimension sizes match.
+   * - :ref:`NCC_EVRF049 <error-code-evrf049>`
+     - ScaledMatmul custom call could not parse backend_config.
+     - Provide valid JSON with integer values in each dimension array.
+   * - :ref:`NCC_EVRF050 <error-code-evrf050>`
+     - ScaledMatmul custom call contracting dimension sizes mismatch.
+     - Ensure LHS and RHS contracting dimensions have equal size.
+   * - :ref:`NCC_EVRF051 <error-code-evrf051>`
+     - Data type F8E4M3FN is not supported on TRN1/TRN2.
+     - For QuantizeMX, target Trn3 or later without the F8E4M3 conversion flag.
+   * - :ref:`NCC_EVRF052 <error-code-evrf052>`
+     - Data type F8E4M3 is not supported on hardware newer than Trn3.
+     - Use F8E4M3FN instead of F8E4M3.
+   * - :ref:`NCC_EVRF053 <error-code-evrf053>`
+     - ScaledMatmul custom call contracting dimension overlaps with batch dimension.
+     - Ensure batch dimensions and contracting dimensions are disjoint.
+   * - :ref:`NCC_EVRF054 <error-code-evrf054>`
+     - ScaledMatmul custom call batch dimension index out of bounds.
+     - Use dimension indices within valid range (0 <= dim < rank).
+   * - :ref:`NCC_EVRF055 <error-code-evrf055>`
+     - ScaledMatmul custom call contracting dimension index out of bounds.
+     - Use dimension indices within valid range (0 <= dim < rank).
    * - :ref:`NCC_EVRF056 <error-code-evrf056>`
      - Operation gather encountered out of bound indices.
      - Ensure that the iota dimension size is less than or equal to the size of the corresponding operand dimension. Check that your model's max_position_embeddings is >= sequence_length.
+   * - :ref:`NCC_EVRF057 <error-code-evrf057>`
+     - QuantizeMX custom call must return a tuple with exactly 2 outputs.
+     - Declare a 2-element tuple result type (quantized_data, scale).
+   * - :ref:`NCC_EVRF058 <error-code-evrf058>`
+     - QuantizeMX custom call input dimension must be divisible by 4.
+     - Pad or reshape the input so the quantization dimension size is a multiple of 4.
    * - :ref:`NCC_EVRF059 <error-code-evrf059>`
      - Kernel file referenced by AwsNeuronCustomNativeKernel instruction does not exist on the host.
      - Ensure the NKI kernel artifact file exists at the specified path before compilation. Clear the NKI file cache and retrace the model, or copy artifacts into the compiler launch directory.
@@ -114,6 +183,7 @@ This page lists the error codes you can encounter while developing with the Neur
     EBIR023
     EBVF030
     EHCA005
+    EMOD025
     EOOM001
     EOOM002
     ESFH002
@@ -136,7 +206,29 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF019
     EVRF022
     EVRF031
+    EVRF036
+    EVRF037
+    EVRF038
+    EVRF039
+    EVRF040
+    EVRF041
+    EVRF042
+    EVRF043
+    EVRF044
+    EVRF045
+    EVRF046
+    EVRF047
+    EVRF048
+    EVRF049
+    EVRF050
+    EVRF051
+    EVRF052
+    EVRF053
+    EVRF054
+    EVRF055
     EVRF056
+    EVRF057
+    EVRF058
     EVRF059
     EXSP001
     EXTP004
