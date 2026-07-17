@@ -442,8 +442,8 @@ typically require at least 128 elements/partition in the source tensor to be eff
 that increasing free dimension sizes might not be trivial due to the high-level computation definition. We suggest developers
 walking through the :doc:`architecture guide </nki/guides/architecture/trainium_inferentia2_arch>` in detail to better understand capabilities of
 different compute engines, and mapping/reformulating the high-level operators onto the engines using the most suitable instructions.
-Such instructions could be invoked either through the high-level ``[nki.lanaguage](api/nki.language)`` or low-level
-``[nki.isa](api/nki.isa)`` APIs.
+Such instructions could be invoked either through the high-level :doc:`nki.language </nki/api/nki.language>` or low-level
+:doc:`nki.isa </nki/api/nki.isa>` APIs.
 
 In addition, keep in mind there is a trade-off in choosing the free dimension size in instruction input tiles: Too small
 of a tile size exposes significant instruction overhead leading to inefficient engine execution, while too large of a tile
@@ -728,7 +728,7 @@ it is important to understand the root cause of these transposes.
 At a high level, tensor transposes are needed to adjust the data layout of tensors to match the partition dimension requirements
 of different ISA instructions. Refer to the :doc:`architecture guide </nki/guides/architecture/trainium_inferentia2_arch>`
 for layout requirements of each compute engine. Transposes are inserted explicitly into NKI kernels through 
-:doc:`nisa.sb_transpose </nki/api/generated/nki.isa.nc_transpose>` APIs, or calling ``nl.matmul`` with ``transpose_x=False``. 
+:doc:`nisa.nc_transpose </nki/api/generated/nki.isa.nc_transpose>` APIs, or calling ``nl.matmul`` with ``transpose_x=False``.
 These transposes are most commonly lowered down to Tensor Engine.
 
 Broadly speaking, there are 2 different types of tensor transposes, with different root causes:

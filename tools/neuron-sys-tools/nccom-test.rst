@@ -67,6 +67,7 @@ seen in the previous example).
   
 
 .. _Bus Bandwidth Calculation:
+
 **Bus Bandwidth Calculation:**
 
 The purpose of bus bandwidth is to provide a number reflecting how optimally hardware is used, normalizing for different rank counts.
@@ -302,6 +303,7 @@ and ``all_ones``.
 ``random`` mode should be preferred for more rigorous verification. However, for quicker, more easily understood verification, ``all_ones`` should be preferred.
 
 .. _MPI Execution:
+
 MPI Execution:
 ~~~~~~~~~~~~~~~
 
@@ -336,6 +338,7 @@ on the provided hosts.
 
 
 .. _Slurm Execution:
+
 Slurm Execution:
 ~~~~~~~~~~~~~~~~
 
@@ -733,7 +736,9 @@ Multiple Instances Example
 
 
 .. _AlltoAllV Example:
+
 - Specify variable-size-op-metadata as JSON for ``alltoallv`` operation.
+
 .. code-block::
 
     NEURON_RT_ROOT_COMM_ID=172.32.137.79:44444 nccom-test -r 2 -N 2 -d fp32 alltoallv -b 1MB -e 1MB --hosts 127.0.0.1 172.32.253.16 --variable-size-op-metadata alltoallv_metadata.json
@@ -747,8 +752,8 @@ Multiple Instances Example
         {
           "send_counts": [512, 1024],
           "send_displs": [0, 512],
-          "recv_counts": [256, 768],
-          "recv_displs": [0, 256]
+          "recv_counts": [],
+          "recv_displs": []
         }
       ]
     }

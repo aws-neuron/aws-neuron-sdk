@@ -68,6 +68,10 @@ New Features
 Improvements
 ~~~~~~~~~~~~
 
+* :func:`~nki.isa.quantize_mx` now uses a block scale two times larger than the sample conversion
+  algorithm described in the OCP Microscaling specification, mitigating a rounding bias where the
+  largest values in a group are clamped down rather than rounded up.
+  See :doc:`nki.isa.quantize_mx </nki/api/generated/nki.isa.quantize_mx>`.
 * The CPU simulator now emits a warning when :func:`~nki.isa.nc_matmul` with ``accumulate=True``
   is used on uninitialized PSUM (undefined behavior on hardware).
 * All :mod:`nki.collectives` APIs now accept an optional ``name`` parameter, like ``nki.isa`` instructions,
@@ -215,7 +219,7 @@ Known Issues
 
 **CPU Simulator**
 
-* The CPU simulator has additional known limitations beyond those listed here. See the :ref:`Simulation Limitations <nki-simulate-simulation-limitations>` section of the simulator guide for the full list.
+* The CPU simulator has additional known limitations beyond those listed here. See the :ref:`Simulation Limitations <simulation-limitations>` section of the simulator guide for the full list.
 
 **NKI Language (experimental)**
 
@@ -254,7 +258,7 @@ New Features
 
 * **NKI Standard Library (nki-stdlib)**: NKI 0.3.0 ships with the NKI Standard Library (nki-stdlib), which provides developer-visible code for all NKI APIs and native language objects (e.g., ``NkiTensor``).
 
-* **NKI CPU Simulator** *(Experimental)*: Executes NKI kernels entirely on CPU using NumPy, enabling local development, debugging, and functional correctness testing without Trainium hardware. Set the environment variable ``NKI_SIMULATOR=1`` to run existing kernels without code changes, or wrap the kernel call with ``nki.simulate(kernel)``. See :doc:`nki.simulate API Reference </nki/api/nki.simulate>`.
+* **NKI CPU Simulator** *(Experimental)*: Executes NKI kernels entirely on CPU using NumPy, enabling local development, debugging, and functional correctness testing without Trainium hardware. Set the environment variable ``NKI_SIMULATOR=1`` to run existing kernels without code changes, or wrap the kernel call with ``nki.simulate(kernel)``. See :doc:`nki.simulate API Reference </nki/api/generated/nki.simulate>`.
 
 * **nki.language APIs** *(Experimental)*: Introduces ``nki.language`` APIs as convenience wrappers around ``nki.isa`` APIs, including ``nl.load``, ``nl.store``, ``nl.copy``, ``nl.matmul``, ``nl.transpose``, ``nl.softmax``, and other high-level operations. See :doc:`nki.language API Reference </nki/api/nki.language>`.
 
@@ -481,7 +485,7 @@ Breaking Changes
    been postponed from Neuron 2.28 to Neuron 2.29. Both the ``neuronxcc.nki.*`` 
    and ``nki.*`` namespaces continue to be supported in this release. We 
    encourage customers to migrate to the ``nki.*`` namespace using the 
-   :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
+   :ref:`NKI 0.2.0 Migration Guide <nki-migration-guide>`.
 
 Bug Fixes
 ~~~~~~~~~
@@ -561,7 +565,7 @@ Bug Fixes
   ``NotImplementedError("removed during code migration")`` message. Each now raises a specific
   message naming the unsupported API. Additionally, calling an ``nki.jit`` kernel with no
   arguments now raises a clear error instead.
-  See :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`.
+  See :ref:`NKI 0.2.0 Migration Guide <nki-migration-guide>`.
 
 * Fixed nested ``nki_jit`` decorators not being allowed. The NKI compiler only recognized
   ``@nki.jit``-decorated functions when they were plain function objects. Nested decorators
@@ -627,7 +631,7 @@ Improvements
   * added :doc:`Get Started with NKI </nki/get-started/quickstart-implement-run-kernel>`
   * added :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`
   * added :doc:`About the NKI Compiler </nki/deep-dives/nki-compiler>`
-  * added :doc:`NKI 0.2.0 Migration Guide </nki/migration/nki-beta2-migration-guide>`
+  * added :ref:`NKI 0.2.0 Migration Guide <nki-migration-guide>`
   * added :doc:`MXFP Matrix Multiplication with NKI </nki/deep-dives/mxfp-matmul>`
   * updated :doc:`Matrix Multiplication Tutorial </nki/guides/tutorials/matrix_multiplication>`
   * updated :doc:`Profile a NKI Kernel </nki/guides/use-neuron-profile>`

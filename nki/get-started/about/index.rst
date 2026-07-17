@@ -15,7 +15,7 @@ Introducing NKI: Complete Kernel Development Solution
 
 Neuron Kernel Interface (NKI) is an open source tool for developing kernels for Trainium hardware. It has three main parts: 
 
-* The first part is the NKI Programming Interface, which offers two APIs: ``nki.lang`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
+* The first part is the NKI Programming Interface, which offers two APIs: ``nki.language`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
 
 * The second part is the NKI Compiler, built on MLIR, which turns NKI kernel code into optimized hardware instructions. It keeps the execution order and memory allocation that developers specify. 
 
@@ -101,17 +101,17 @@ NKI APIs
 
 NKI provides two sets of APIs:
 
-1. The higher-level ``nki.lang`` interface makes memory allocation, tensor indexing, and control of logical neuron core groups easier. Data scientists and ML engineers who know numpy and Triton will find this familiar.
+1. The higher-level ``nki.language`` interface makes memory allocation, tensor indexing, and control of logical neuron core groups easier. Data scientists and ML engineers who know numpy and Triton will find this familiar.
 2. The lower-level ``nki.isa`` interface gives direct access to the Neuron Instruction Set Architecture (NISA). This lets operations map directly to hardware instructions with full control over instruction selection, scheduling, and allocation. This helps developers get the most out of the hardware for better performance, throughput, and latency.
 
-These two APIs are designed to work together: ``nki.lang`` makes indexing and memory operations simpler, while ``nki.isa`` provides the hardware details needed for maximum efficiency.
+These two APIs are designed to work together: ``nki.language`` makes indexing and memory operations simpler, while ``nki.isa`` provides the hardware details needed for maximum efficiency.
 
 In the next section, we provide broad view of key concepts for NKI programming, starting with how tensors are allocated, how loop performance is controlled, and memory movement APIs.
 
 Tensor management and indexing 
 ------------------------------
 
-The ``nki.lang`` APIs provide tools for memory allocation, execution scheduling, tensor indexing, and tensor manipulation. The next two examples demonstrate memory allocation and scheduling APIs.
+The ``nki.language`` APIs provide tools for memory allocation, execution scheduling, tensor indexing, and tensor manipulation. The next two examples demonstrate memory allocation and scheduling APIs.
 
 For memory allocation, developers can explicitly control tensor placement in the memory hierarchy. For example:
 
@@ -194,8 +194,8 @@ Matrix operations execute on the Tensor Engine. For instance:
     # The input arguments must meet NISA requirements as defined 
     # in the Trainium architecture, such as data types, layout, tile sizes
     # and buffer memory types (SBUF or PSUM)
-    # dst is explicitly defined as instruciton parameter
-    nisa.nc_matmul(dst=output, stationary, moving)
+    # dst is explicitly defined as the first instruction parameter
+    nisa.nc_matmul(output, stationary, moving)
 
     # Element-wise operations between two tensors
     # in this specific example, x and y must have the same partition dimension size
@@ -214,9 +214,10 @@ Dynamic control flow uses register-based operations to enable runtime control de
     # this is used to load the scalar register used in the dynamic loop
     # memory allocation does NOT perform initialization
     cond = nl.ndarray((1, 1), buffer=nl.shared_hbm, dtype=nl.int32)
+    zero = nl.zeros((1, 1), dtype=nl.int32, buffer=nl.sbuf)
 
     # explicit initialization is required: initialize cond to zero
-    isa.dma_copy(dst=cond, src=nl.zeros())
+    nisa.dma_copy(dst=cond, src=zero)
 
     # Allocate a scalar register for control flow
     # initialize register to 1
@@ -236,11 +237,11 @@ Collective communication primitives enable kernels to coordinate and exchange da
 
     import nki.isa as nisa
 
-    # Synchronize all cores at a barrier point
-    nisa.barrier()
+    # Synchronize a group of cores at a barrier point
+    nisa.core_barrier(data, cores)
 
     # Send and receive data between cores
-    nisa.sendrecv()
+    nisa.sendrecv(src, dst, send_to_rank, recv_from_rank, pipe_id)
 
 The nki.isa interface gives developers detailed control over AWS Trainium's hardware. This direct access lets them fine-tune how computations work, manage memory, and optimize when instructions run. By controlling these elements precisely, developers can get the best performance from Trainium by creating custom versions of AI model parts like attention mechanisms, loss functions, and data preprocessing routines.
 
@@ -289,7 +290,7 @@ Beyond these automatic optimizations, developers who want more control can use N
     # Step 1: Define NKI kernel
     @nki.jit
     def my_kernel(in_ptr0, out_ptr):
-        # ... kernel implementation ...
+        ...  # kernel implementation
 
     # Step 2: Register as PyTorch custom operator
     @nki_op("mylib::my_op", mutates_args={})
@@ -298,14 +299,12 @@ Beyond these automatic optimizations, developers who want more control can use N
         my_kernel(x, out)
         return out
 
-    # Use in PyTorch code
+    # Use in PyTorch code through the registered custom operator
     x = torch.randn(128, device="neuron")
-    y = my_kernel(x)
-
-    # y = my_op(x)
+    y = my_op(x)
 
 
-Second, developers can create custom kernels for operations that aren't in the library or need special optimizations. You can start from scratch using the ``nki.lang`` or ``nki.isa`` APIs, or you can modify existing kernels from the NKI Library as starting points.
+Second, developers can create custom kernels for operations that aren't in the library or need special optimizations. You can start from scratch using the ``nki.language`` or ``nki.isa`` APIs, or you can modify existing kernels from the NKI Library as starting points.
 
 These three approaches (automatic optimization, using library kernels, and creating custom kernels) are widely used across ML frameworks and libraries. Frameworks like PyTorch use NKI kernels through ATen operator dispatch for seamless integration. NxD Inference (NxDI), Optimum Neuron, and vLLM use all three approaches: they benefit from automatic compiler optimizations, directly call kernels from the NKI Library when appropriate, and create custom kernels for their specific needs.
 
@@ -421,7 +420,7 @@ It also supports container types like tuples, lists, dictionaries with string ke
     l = [1, 2, 3]
     l.append(4.1)
     l.extend(("Hello", "List"))
-    size = l.count()
+    size = len(l)
 
     d = dict()
     d['a'] = 1
@@ -431,7 +430,7 @@ It also supports container types like tuples, lists, dictionaries with string ke
 Tensor Management and Memory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Tensors are the most important type in NKI. They represent on-chip memory regions with metadata you can query, including dtype, shape, address, offset, pattern, and buffer. The most commonly used fields are dtype and shape, which help with compatibility checking and iteration:
+Tensors are the most important type in NKI. They represent on-chip memory regions with metadata you can query, including ``dtype``, ``shape``, ``strides``, ``offset``, ``ndim``, ``size``, and ``buffer``. The access pattern is available through the ``get_pattern()`` method. The most commonly used fields are ``dtype`` and ``shape``, which help with compatibility checking and iteration:
 
 
 .. code-block:: python
@@ -473,8 +472,8 @@ Each indexing operation creates a new tensor reference with hardware access patt
 .. code-block:: python
 
     u = t[0, ...]
-    print(u.offset)   # Hardware access pattern offset
-    print(u.pattern)  # Hardware access pattern
+    print(u.offset)          # Hardware access pattern offset
+    print(u.get_pattern())   # Hardware access pattern
 
 Control Flow Constructs
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -502,12 +501,15 @@ Python ``for`` loops over ``range()`` are unrolled at specialization time. The l
 .. code-block:: python
 
     # Dynamic loop with static bounds
-    for i in dynamic_range(10):
+    for i in nl.dynamic_range(10):
         process_tensor(t[i])
 
-    # Dynamic loop with register-based bounds
-    count = nki.isa.register_alloc(count_tensor)
-    for i in dynamic_range(count):
+    # Dynamic loop with register-based bounds.
+    # register_alloc takes an optional immediate int, not a tensor; to use a
+    # runtime value from a tensor, allocate a register then load into it.
+    count = nki.isa.register_alloc()
+    nki.isa.register_load(count, count_tensor)
+    for i in nl.dynamic_range(count):
         process_tensor(t[i])
 
 

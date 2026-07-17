@@ -7,7 +7,7 @@
 Profile a NKI Kernel
 ====================
 
-Learn how to profile Neuron Kernel Interface (NKI) kernels using Neuron Explorer to analyze hardware-level performance characteristics on Trainium and Inferentia devices. This comprehensive guide covers two profiling methods: using the ``neuron-explorer capture`` command-line tool. You'll discover how to generate NEFF and NTFF files, identify performance bottlenecks, optimize kernel execution, and leverage the interactive web-based Neuron Profile UI to visualize execution traces with source code integration for efficient NKI kernel development and optimization.
+Learn how to profile Neuron Kernel Interface (NKI) kernels using Neuron Explorer to analyze hardware-level performance characteristics on Trainium and Inferentia devices. This guide covers profiling with the ``neuron-explorer capture`` command-line tool. You'll discover how to generate NEFF and NTFF files, identify performance bottlenecks, optimize kernel execution, and leverage the interactive web-based Neuron Profile UI to visualize execution traces with source code integration for efficient NKI kernel development and optimization.
 
 Install Neuron Explorer
 ------------------------
@@ -25,7 +25,7 @@ Profiling NKI (Neuron Kernel Interface) kernels helps you understand hardware le
 * **Optimize performance**: Analyze kernel-level execution time, investigate compute engine utilization, look for opportunities to implement operator fusion to fine-tune performance.
 * **Compare implementations**: Benchmark different kernel implementations or configurations to pick the most efficient kernel.
 
-You can profile NKI kernels using several approaches. In this guide, you'll learn two primary methods for profiling NKI kernels.
+You can profile NKI kernels using several approaches. In this guide, you'll learn to profile NKI kernels with ``neuron-explorer capture``.
 
 How to profile using neuron-explorer capture
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

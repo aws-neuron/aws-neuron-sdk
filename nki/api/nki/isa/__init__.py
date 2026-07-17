@@ -1928,7 +1928,7 @@ def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, rev
         import numpy as np
 
         result = np.ndarray(data0.shape, dtype=data0.dtype)
-        result[:, 0] = op1(op0(data0[:. 0], initial), data1[:, 0])
+        result[:, 0] = op1(op0(data0[:, 0], initial), data1[:, 0])
 
         for i in range(1, data0.shape[1]):
             result[:, i] = op1(op0(data0[:, i], result[:, i-1]), data1[:, i])
@@ -2653,10 +2653,17 @@ def quantize_mx(dst, src, dst_scale, name=None):
 
       Available only on NeuronCore-v4 and newer.
 
-    The resulting MXFP8 tensors, ``dst`` and ``dst_scale`` are as defined in the
+    The resulting ``dst`` and ``dst_scale`` tensors use the MXFP8 element and scale data types as defined in the
     `OCP Microscaling standard <https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf>`__.
     This instruction calculates the required scales for each group of 32 values in ``src``, divides them by the calculated scale,
-    and casts to the target MXFP8 datatype. The output layout is suitable for direct consumption by the
+    and casts to the target MXFP8 element data type.
+
+    The scale calculation differs from the sample conversion algorithm described in the OCP
+    specification: this instruction uses a block scale that is two times larger, reserving
+    additional range for rounding the largest values in each group without saturation. This
+    remains OCP MX-compliant.
+
+    The output layout is suitable for direct consumption by the
     ``nisa.nc_matmul_mx`` API running on Tensor Engine.
 
     **Memory types.**
@@ -2687,6 +2694,30 @@ def quantize_mx(dst, src, dst_scale, name=None):
       partition.
     - The ``dst`` tile has the same partition dimension size as ``src`` but a free dimension size
       that is 1/4 of ``src`` free dimension size due to the special 4-packed FP8 data types.
+
+    **Scale calculation.**
+
+    For a group :math:`V` of 32 values, let
+
+    .. math::
+
+       a_{\max} = \max_{V_i \in V} |V_i|
+
+    Let :math:`E_{\max}` be the maximum unbiased exponent of the destination
+    element data type: 8 for ``float8_e4m3fn`` and 15 for ``float8_e5m2``.
+
+    The block scale :math:`X` is calculated as
+
+    .. math::
+
+       X =
+       2^{
+         \left\lfloor \log_2(a_{\max}) \right\rfloor
+         - (E_{\max} - 1)
+       }
+
+    For an all-zero group, where :math:`a_{\max} = 0`, the block scale is set to
+    :math:`X = 2^{-127}`, the minimum value representable by ``float8_e8m0fnu``.
 
     :param dst: the quantized MXFP8 output tile
     :param src: the input FP16/BF16 tile to be quantized

@@ -209,7 +209,7 @@ NKI programmers can enable TensorE transpose mode on NeuronCore-v3 through the f
 
    nisa.nc_matmul(..., is_transpose=True)
    # OR
-   nisa.nc_transpose(..., engine=nisa.constants.engine.tensor)
+   nisa.nc_transpose(..., engine=nisa.engine.tensor)
 
 Vector Engine
 ----------------
@@ -249,8 +249,6 @@ Gpsimd Engine
 GpSimd Engine (GpSimdE) is intended to be a general-purpose engine that can run any ML operators that cannot be lowered onto the other highly specialized compute engines discussed above efficiently, such as applying a triangular mask to a tensor. A GpSimdE consists of eight fully programmable processors that can execute arbitrary C/C++ programs.
 
 In NeuronCore-v3, each processor in GpsimdE also comes with an integrated DMA engine that can move data in parallel to computation on GpsimdE and also parallel to data movements done by the main DMA engines on the Neuron Device. These integrated DMA engines can reach any SBUF/HBM on-chip or off-chip in the same trn2 instance. All eight processors together have a total integrated DMA bandwidth of 307 GB/s (153 GB/s per read/write direction).
-
-In NeuronCore-v3, each processor in GpsimdE also comes with an integrated DMA engine that can move data in parallel to computation on GpsimdE and also parallel to data movements done by the main DMA engines on the Neuron Device. These integrated DMA engines can reach any SBUF/HBM on-chip or off-chip in the same trn2 instance. All eight processors together have a total integrated DMA bandwidth of 307 GB/s (153 GB/s per read/write direction). 
 
 Data Movement Updates
 ----------------------
@@ -356,7 +354,7 @@ Prior to Trainium2, DMA descriptor generation was handled in two ways. They were
 
 In comparison, the new hardware-based DGE in Trainium2 generates descriptors on demand without requiring additional memory storage. It also frees up GpsimdE to perform useful computation. Therefore, it is recommended to leverage hardware-based DGE on Trainium2 whenever possible to initiate a DMA transfer.
 
-NKI programmers can invoke hardware-based DGE on NeuronCore-v3 using ``nisa.dma_copy`` and ``nisa.dma_transpose`` APIs, by setting ``dge_mode=nisa.dge_mode.hw_dge``. The compute engine to initiate a DGE command (Sync Engine or ScalarE) is currently determined by NKI compiler (subject to changes).
+NKI programmers can invoke hardware-based DGE on NeuronCore-v3 using ``nisa.dma_copy`` and ``nisa.dma_transpose`` APIs, by setting ``dge_mode=nisa.dge_mode.hwdge``. The compute engine to initiate a DGE command (Sync Engine or ScalarE) is currently determined by NKI compiler (subject to changes).
 
 .. note::
    NeuronCore-v3 hardware DGE currently does not support indirect DMA operations (gather/scatter). Refer to nisa API documentation for detailed implementation guidelines.

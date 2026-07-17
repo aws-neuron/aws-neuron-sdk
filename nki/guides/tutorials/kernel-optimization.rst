@@ -198,7 +198,7 @@ As you become more familiar with NKI, you will no longer need to start with quit
 Writing the kernel
 -------------------
 
-The simple start allowed us to validate our understanding of the ``nki.isa.matmul`` instruction. The following kernel shows how you can do this with input matrices that are larger than a single tile size. You may recognize the traditional three nested loop structure of matrix multiply, but instead of the inner body computing a scalar value it operates over a full tile.
+The simple start allowed us to validate our understanding of the ``nki.isa.nc_matmul`` instruction. The following kernel shows how you can do this with input matrices that are larger than a single tile size. You may recognize the traditional three nested loop structure of matrix multiply, but instead of the inner body computing a scalar value it operates over a full tile.
 
 .. code-block:: python
 
@@ -314,7 +314,7 @@ In addition to changing the size of the input to the kernel, you will also want 
                                 profile_type='system',
                                 target='neuron_profile_perfetto',
                                 output_dir='./output',
-                                ms_duration=600000) as profiler:
+                                ms_duration=600000) as prof:
               result_device = matrix_multiply_kernel(lhsT_device, rhs_device)
 
 
@@ -353,7 +353,7 @@ However, there are gaps between matrix multiply operations indicate that the Ten
 Analyzing the kernel
 ---------------------
 
-The first step to improving the performance of the kernel is to analyze the performance you observed and apply that to your understanding of the NeuronEngine Architecture. The NeuronEngine Architecture consists of a number of computational engines that can each run independently, assuming the inputs are available for each instruction. In the current example, the only computational engine you are using is the TensorE and all of its inputs are coming directly from the DMA engines just before the computation is performed with the output of each tile written back after the k inner-most loop completes. Considering that matrix multiply is compute bound, you would expect that the matrix multiply instruction should be the limiting factor of your performance. However, TensorE was only active about 69.83% of the time, which tells us you can likely get more data to it faster to improve the overall computation time.
+The first step to improving the performance of the kernel is to analyze the performance you observed and apply that to your understanding of the NeuronEngine Architecture. The NeuronEngine Architecture consists of a number of computational engines that can each run independently, assuming the inputs are available for each instruction. In the current example, the only computational engine you are using is the TensorE and all of its inputs are coming directly from the DMA engines just before the computation is performed with the output of each tile written back after the k inner-most loop completes. Considering that matrix multiply is compute bound, you would expect that the matrix multiply instruction should be the limiting factor of your performance. However, TensorE was only active about 87.28% of the time, which tells us you can likely get more data to it faster to improve the overall computation time.
 
 Looking at this, you might notice two things. First, since the data for each matrix multiply is being loaded just before the multiply, you are always waiting on these loads to complete before you can start the next multiply. If you look at the structure of the iteration, you can also see that you will load the same tile more than once. For instance the m=0, k=0 tile will be loaded N // TILE_N times. One change you could make is to load all of the tiles needed to compute a given output tile before you start the computation. You can accomplish this by moving the loads out into the outer loops, loading all K // TILE_K tiles for a given value of m from the stationary matrix at the start of the m loop, and all K // TILE_K tiles for a given value of n from the stationary matrix at the start of the n loop.
 

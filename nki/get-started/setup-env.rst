@@ -197,12 +197,12 @@ Instructions
                      # Install External Dependency
                      sudo dnf install -y libxcrypt-compat
 
-                     # Activate Python venv 
-                     source aws_neuron_venv_pytorch/bin/activate
+                     # Activate Python venv
+                     source aws_neuron_venv_jax/bin/activate
 
-                     # Install wget, awscli 
-                     pip install wget 
-                     pip install awscli 
+                     # Install wget, awscli
+                     pip install wget
+                     pip install awscli
 
                   JAX upgrade can be done with either the combined jax-neuronx package which is tested to work together as follows.
 
@@ -239,7 +239,7 @@ Instructions
 
             1. Launch the instance using the Ubuntu 24
                
-               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then in the Ubuntu Server 22 AMI. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages. Note: You will need to allocate at least 50 GB of storage.
+               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then select the Ubuntu Server 24.04 AMI. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages. Note: You will need to allocate at least 50 GB of storage.
             
             2. Install Drivers and Tools
 

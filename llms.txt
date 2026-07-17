@@ -203,6 +203,8 @@
 - [NKI Guides](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/index.html): Comprehensive guides for NKI development
 - [Framework Custom Operators](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/framework_custom_op.html): Integrate NKI kernels with PyTorch and JAX
 - [Scheduling APIs Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/how-to-scheduling-apis.html): Using NKI scheduling APIs for instruction control
+- [NKI CPU Simulator](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/nki_simulator.html): Develop and debug NKI kernels on CPU with no hardware required
+- [Profile a NKI Kernel](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/use-neuron-profile.html): Profile NKI kernels with Neuron Explorer to analyze hardware-level performance
 - [Architecture Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/index.html): Hardware architecture guides
 - [Trainium & Inferentia2 Architecture](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/trainium_inferentia2_arch.html): Architecture details for Trn1 and Inf2
 - [Trainium2 Architecture](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/guides/architecture/trainium2_arch.html): Architecture details for Trn2
@@ -212,16 +214,16 @@
 
 - [NKI Deep Dives](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/index.html): In-depth documentation on NKI concepts and optimization
 - [NKI Performance Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki_perf_guide.html): Optimization techniques for NKI kernels
-- [Profiling NKI Kernels](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/use-neuron-profile.html): Learn how to profile NKI kernels with Neuron Explorer
 - [NKI Compiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-compiler.html): Documentation for the NKI compiler
-- [NKI 0.3.0 Update Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-0-3-0-update-guide.html): Migration guide for NKI 0.3.0 changes
-- [NKI 0.2.0 Migration Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-beta2-migration-guide.html): Migrating from NKI 0.1.0 to NKI 0.2.0
-- [NKI Block Dimension Migration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki_block_dimension_migration_guide.html): Migrating to new block dimension APIs
-- [NKI APS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-aps.html): Automatic Performance Scheduling in NKI
-- [NKI DGE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dge.html): Data Gather Engine programming
-- [NKI Dynamic Range](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dynamic-range.html): Dynamic range indexing in NKI
-- [NKI HBM CRC Hashing](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-hbm-crc-hashing.html): HBM CRC hashing for data integrity
-- [MxFP MatMul Deep Dive](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/mxfp-matmul.html): Microscaling floating-point matrix multiplication
+- [NKI Access Patterns](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-aps.html): Use Access Patterns (AP) to specify how Trainium hardware accesses tensors
+- [Descriptor Generation Engine (DGE)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dge.html): Control how DMA descriptors are generated (pre-computed, software GpSimd, or hardware DGE)
+- [NKI Dynamic Loops](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dynamic-loops.html): Dynamic loops with runtime-determined trip counts via hardware loop instructions
+- [DMA Bandwidth Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dma-bandwidth-guide.html): Guidelines for maximizing DMA bandwidth with large contiguous payloads
+- [MXFP4/8 MatMul Deep Dive](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/mxfp-matmul.html): Matrix multiplication with MXFP8 data types, including layout, quantization, and tiling
+
+### NKI Migration
+
+- [NKI Migration Guides](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/migration/index.html): Migrate NKI kernels between versions
 
 ### NKI API Reference
 

@@ -335,7 +335,7 @@ instruction-specific layout constraint of different VectorE instructions.
 In terms of tile size, the majority of VectorE instructions only have limitation on the input/output tile partition dimension
 size which must not exceed 128, while the free dimension size can be up to 64K elements for SBUF or 4K elements for PSUM.
 However, there are a few notable exceptions, such as :doc:`nki.isa.bn_stats </nki/api/generated/nki.isa.bn_stats>`
-which further imposes free dimension size of input tile cannot exceed 512. Refer to the `nki.isa API manual <nki.language>`
+which further imposes free dimension size of input tile cannot exceed 512. Refer to the :doc:`nki.isa API manual </nki/api/nki.isa>`
 for instruction-specific tile size constraints.
 
 .. _arch_guide_cross_partition_data_movement:

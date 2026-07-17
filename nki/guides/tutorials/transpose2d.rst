@@ -15,7 +15,7 @@ As background, there are two main types of transposition in NKI:
    free-dimension axes, which is achieved via the
    :literal:`nki.isa.nc_transpose` instruction.
 2. Transposition between two axes on the free-dimension, which is achieved
-   via a ``nki.language.copy`` instruction, with indexing manipulation
+   via a :literal:`nki.isa.tensor_copy` instruction, with indexing manipulation
    in the free axis to re-arrange the data.
 
 

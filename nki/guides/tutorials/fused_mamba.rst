@@ -174,7 +174,7 @@ are needed.
 
 **Option 2: Map ``seq_len`` to partition dimension.** Alternatively, if we choose a transposed layout for ``delta_i`` in
 SBUF for computation, we will need a partition-dimension broadcast of ``A_i`` using a separate instruction on TensorE
-(``A_i.broadcast_to(...)``) and then a :doc:`nisa.tensor_tensor </nki/api/generated/nki.isa.tensor_tensor>`
+(``nl.broadcast_to(A_i, ...)``) and then a :doc:`nisa.tensor_tensor </nki/api/generated/nki.isa.tensor_tensor>`
 operation between ``delta_i`` and the broadcast ``A_i`` on VectorE. As a reminder, we need to tile the ``seq_len`` dimension
 to meet the tile size constraint ``nl.tile_size.pmax=128``. Figure below illustrates the computation done for Option 2.
 
@@ -200,8 +200,8 @@ The associated NKI code is as follows:
    # delta_i: [par_dim(seq_len_tiled), channels]
    # A_i:     [par_dim(1), channels]
 
-   A_i_bcast = A_i.broadcast_to((nl.tile_size.pmax, channels))
-   deltaA_i = nisa.tensor_tensor(delta_i, A_i_bcast, op=ml.multiply)
+   A_i_bcast = nl.broadcast_to(A_i, (nl.tile_size.pmax, channels))
+   deltaA_i = nisa.tensor_tensor(delta_i, A_i_bcast, op=nl.multiply)
 
 Assuming the same ``delta_i`` device memory layout ``[channels, seq_len]``\ , before performing the ``nisa.tensor_tensor``
 instruction, we will need to either:
@@ -310,9 +310,9 @@ The associated NKI code is as follows:
    # u_i:     [par_dim(channels_tiled), seq_len]
    # B_i:     [par_dim(1), seq_len]
 
-   deltaU_i = nisa.tensor_tensor(delta_i, u_i, op=ml.multiply)
-   B_i_bcast = B_i.broadcast_to((nl.tile_size.pmax, seq_len))
-   deltaBu_i = nisa.tensor_tensor(deltaU_i, B_i_bcast, op=ml.multiply)
+   deltaU_i = nisa.tensor_tensor(delta_i, u_i, op=nl.multiply)
+   B_i_bcast = nl.broadcast_to(B_i, (nl.tile_size.pmax, seq_len))
+   deltaBu_i = nisa.tensor_tensor(deltaU_i, B_i_bcast, op=nl.multiply)
 
 Step 4: Associative scan between deltaA_i and deltaBu_i
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -382,7 +382,7 @@ the previous time step internally in VectorE without going through SBUF.
 .. code-block::
 
    scan_i = nisa.tensor_tensor_scan(deltaA_i, deltaBu_i, initial=0,
-                                    op0=np.multiply, op1=np.add)
+                                    op0=nl.multiply, op1=nl.add)
 
 Note, the shape of ``scan_i`` is exactly the same as the input ``deltaA_i/deltaBu_i``\ : ``[channels_tiled, seq_len]``.
 
@@ -418,8 +418,8 @@ The corresponding NKI code is:
 
 .. code-block::
 
-   C_i_bcast = C_i.broadcast((nl.tile_size.pmax, seq_len))
-   scanC_i = nisa.tensor_tensor(scan_i, C_i_bcast, op=ml.multiply)
+   C_i_bcast = nl.broadcast_to(C_i, (nl.tile_size.pmax, seq_len))
+   scanC_i = nisa.tensor_tensor(scan_i, C_i_bcast, op=nl.multiply)
 
 Step 6: Accumulation of scanC_i along ``state_size`` dimension
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -671,7 +671,7 @@ loop nests at the same level now:
 
 .. code-block::
 
-   scanC_accum = nl.zeros((n_channel_tile, nl.par_dim(channel_psize), seq_len), ...)
+   scanC_accum = nl.zeros((n_channel_tile, channel_psize, seq_len), ...)
    ...
 
    # First i_channel_tile loop
@@ -698,7 +698,7 @@ inside the ``i_channel_tile`` loop and further reduce the ``scanC_accum`` size r
 
    # First i_channel_tile loop
    for i_channel_tile in nl.affine_range(n_channel_tile):
-       scanC_accum = nl.zeros((nl.par_dim(channel_psize), seq_len), ...)
+       scanC_accum = nl.zeros((channel_psize, seq_len), ...)
 
        delta_i = nl.load(...)
        u_i = nl.load(...)
@@ -799,7 +799,7 @@ through the ``initial`` input parameter:
 
    for i_seq_len_tile in static_range(seq_len // seq_len_fsize):
        scan_i = nisa.tensor_tensor_scan(deltaA, deltaBu, initial=scan_init,
-                                             op0=np.multiply, op1=np.add)
+                                             op0=nl.multiply, op1=nl.add)
        scan_init = scan_i[0:channel_psize, seq_len_fsize-1]
 
 Note, we choose to use ``static_range`` instead of ``affine_range`` due to the new loop-carried dependencies.
@@ -812,10 +812,10 @@ Note, we choose to use ``static_range`` instead of ``affine_range`` due to the n
    for i_batch in nl.affine_range(batch_size):
 
        for i_channel_tile in nl.affine_range(n_channel_tile):
-           scanC_accum = nl.zeros((nl.par_dim(channel_psize), **seq_len**), ...)
+           scanC_accum = nl.zeros((channel_psize, seq_len), ...)
 
-           delta_i = nl.load(delta[i_batch, channel_start:channel_start+channel_psize, 0:**seq_len**])
-           u_i = nl.load(u[i_batch, channel_start:channel_start+channel_psize, 0:**seq_len**])
+           delta_i = nl.load(delta[i_batch, channel_start:channel_start+channel_psize, 0:seq_len])
+           u_i = nl.load(u[i_batch, channel_start:channel_start+channel_psize, 0:seq_len])
 
            for i_state in nl.affine_range(state_size):
                A_i = nl.load(A[channel_start:channel_start+channel_psize, i_state])

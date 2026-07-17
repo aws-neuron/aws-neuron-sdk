@@ -142,7 +142,7 @@ A few notes about the above example:
 
 * The ``MXFP_x4`` packed data types are custom to NKI and are not supported in Torch. Therefore, we mimic the packed data using ``uint8`` in Torch and simply view it as ``MXFP_x4`` in the kernel, as shown.
 * The ``load_scales_scattered()`` helper function reads contiguously packed offline scales from HBM and spreads them across partition-dim quadrants.
-* The PSUM output tile is allocated with data type BF16 to indicate the desired output data type of the Matmul-MX. Note that Matmul-MX (:doc:`nki.isa.nc_matmul </nki/api/generated/nki.isa.nc_matmul_mx>`) supports both BF16 and FP32 output dtypes.
+* The PSUM output tile is allocated with data type BF16 to indicate the desired output data type of the Matmul-MX. Note that Matmul-MX (:doc:`nki.isa.nc_matmul_mx </nki/api/generated/nki.isa.nc_matmul_mx>`) supports both BF16 and FP32 output dtypes.
 
 Let's also look at the host code which calls this kernel as all subsequent examples use the same structure.
 

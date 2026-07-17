@@ -532,9 +532,9 @@ Major New Features
 
 -  Profiling can now be enabled by specifying the profiling work
    directory using NEURON_PROFILE environment variable during inference.
-   For an example of using profiling, see :ref:`tensorboard-neuron`.
-   (Note that graph view of MXNet graph is not available via
-   TensorBoard).
+   For an example of using profiling, see the archived TensorBoard-Neuron
+   plugin documentation. (Note that graph view of MXNet graph is not
+   available via TensorBoard).
 
 .. _mx-resolved-issues-4:
 

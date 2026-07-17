@@ -50,11 +50,6 @@ What ML Frameworks support NKI kernels?
 NKI is integrated with :ref:`nki_framework_custom_op_pytorch` and :ref:`nki_framework_custom_op_jax`
 frameworks. For more details, see the :ref:`nki_framework_custom_op`.
 
-What Neuron software does not currently support NKI?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-NKI does not currently support integration with
-Neuron Custom C++ Operators, Transformers NeuronX, and Neuron Collective Communication.
-
 Where can I find NKI sample kernels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

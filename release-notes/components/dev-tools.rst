@@ -122,7 +122,7 @@ Improvements
 
 * Added system profiling support in Neuron Explorer, enabling you to capture and analyze system-level performance data with drill-down navigation to device profiles. See :doc:`Neuron Explorer system profiling </tools/neuron-explorer/overview-system-profiles>`.
 * Added migration guide from Neuron Profiler/Profiler 2.0 to Neuron Explorer. See :ref:`neuron-profiler-migration-guide`.
-* Added ability to save and search by tags in Neuron Explorer Profile Manager, allowing you to organize and quickly locate profiles across multiple profiling sessions. See :ref:`neuron-explorer-profile-manager`.
+* Added ability to save and search by tags in Neuron Explorer Profile Manager, allowing you to organize and quickly locate profiles across multiple profiling sessions. See :ref:`Get started with Neuron Explorer <new-neuron-profiler-setup>`.
 * Added help pop-up for the ``Device Trace Viewer`` in Neuron Explorer to see shortcuts and dependency color legend. See :doc:`Device Trace Viewer </tools/neuron-explorer/overview-device-profiles>`.
 * Introduced ``Tensor Viewer`` in Neuron Explorer, enabling you to quickly identify memory bottlenecks by viewing tensor names, shapes, sizes, and memory usage in a single interface. See :ref:`tensor-viewer-overview`.
 * Introduced ``Database Viewer`` in Neuron Explorer as an interactive interface for querying and exploring profiling data using SQL or natural language, allowing you to perform custom analysis without writing code. See :ref:`database-viewer-overview`.

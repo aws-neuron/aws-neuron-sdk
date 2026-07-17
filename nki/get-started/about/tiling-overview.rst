@@ -93,9 +93,9 @@ Tile size considerations
 
 Besides layout constraints, NeuronCore hardware further imposes three tile-size constraints (TC) in NKI:
 
-* **[Tile-Size Constraint#1]** The P dimension size of a tile in both SBUF and PSUM must never exceed ``nki.tile_size.pmax == 128``.
-* **[Tile-Size Constraint#2]** For tiles in PSUM, the F dimension size must not exceed ``nki.tile_size.psum_fmax == 512``.
-* **[TileSize Constraint#3]** Matrix multiplication input tiles F dimension size must not exceed ``nki.tile_size.gemm_stationary_fmax == 128`` on the left-hand side (LHS), or ``nki.tile_size.gemm_moving_fmax == 512`` on the right-hand side (RHS).
+* **[Tile-Size Constraint#1]** The P dimension size of a tile in both SBUF and PSUM must never exceed ``nki.language.tile_size.pmax == 128``.
+* **[Tile-Size Constraint#2]** For tiles in PSUM, the F dimension size must not exceed ``nki.language.tile_size.psum_bank_fmax == 512``.
+* **[TileSize Constraint#3]** Matrix multiplication input tiles F dimension size must not exceed ``nki.language.tile_size.gemm_stationary_fmax == 128`` on the left-hand side (LHS), or ``nki.language.tile_size.gemm_moving_fmax == 512`` on the right-hand side (RHS).
 
 Programmers are responsible for breaking up your tensors according to these tile-size constraints. For example, below is a simple kernel that applies the exponential function to every element of an input tensor. The kernel expects a shape of ``(128, 512)`` for both input and output tensors:
 
@@ -189,7 +189,7 @@ Now, let's see how to build a kernel that properly handles ``(256, 512)`` input/
      Returns:
          out_tensor: an output tensor of shape [256,512]
      """
-     X_SIZE = 128
+     X_SIZE = 256
      Y_SIZE = 512
      assert in_tensor.shape == (X_SIZE, Y_SIZE)
      # allocate space for the result
@@ -198,7 +198,7 @@ Now, let's see how to build a kernel that properly handles ``(256, 512)`` input/
      in_tile = nl.ndarray((P_DIM, Y_SIZE), dtype=nl.float32, buffer=nl.sbuf)
      out_tile = nl.ndarray((P_DIM, Y_SIZE), dtype=nl.float32, buffer=nl.sbuf)
 
-     for k in nl.affine_range(in_tensor.shape[0] / nl.tile_size.pmax):
+     for k in nl.affine_range(in_tensor.shape[0] // nl.tile_size.pmax):
        # Generate tensor indices for the input/output tensors
        p_start = k * nl.tile_size.pmax
        i_p = nl.ds(p_start, nl.tile_size.pmax)
@@ -234,7 +234,7 @@ While the code above does handle ``(256, 512)`` tensors correctly, it is rather 
      """
 
      sz_p, sz_f = in_tensor.shape
-     assert sz_f < nl.tile_size.total_available_sbuf_size
+     assert sz_f < nl.tile_size.sbuf_fmax_bytes
     
      # allocate space for the result
      out_tensor = nl.ndarray(in_tensor.shape, dtype=in_tensor.dtype, buffer=nl.shared_hbm)

@@ -22,6 +22,10 @@ def add_kernel(a_ptr, b_ptr):
 
 
 # NKI_EXAMPLE_SIMULATE_RUN_BEGIN
+# Create example inputs
+a = np.random.rand(128, 512).astype(np.float32)
+b = np.random.rand(128, 512).astype(np.float32)
+
 # Run on the CPU simulator
 result = nki.simulate(add_kernel)(a, b)
 

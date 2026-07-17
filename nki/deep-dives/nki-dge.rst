@@ -51,7 +51,7 @@ specific reason to force a specific mode.
                  dge_mode=nisa.dge_mode.none)
 
 DMA descriptors are pre-computed on the Trainium host **before** NEFF
-execution. The pre-computed descriptors are stored them in HBM. At runtime the
+execution. The pre-computed descriptors are stored in HBM. At runtime the
 DMA engine reads the pre-built descriptor directly---no on-device generation is
 needed.
 

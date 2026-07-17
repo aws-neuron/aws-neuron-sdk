@@ -4,7 +4,6 @@
    :date-modified: 2026-05-11
 
 .. _neuron-agentic-development:
-.. _neuron-agentic-development-overview:
 
 ==============================
 Neuron Agentic Development

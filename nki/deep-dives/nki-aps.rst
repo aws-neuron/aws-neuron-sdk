@@ -56,7 +56,7 @@ The ``nl.ndarray`` has an ``ap`` method.
 .. code-block:: python
 
    def ap(self, pattern: list[list[int]],
-      offset: int | VirtualRegister | None = None,
+      offset: int | None = None,
       scalar_offset: NkiTensor | VirtualRegister | None = None,
       vector_offset: NkiTensor | None = None,
       indirect_dim: int = 0,
@@ -70,7 +70,7 @@ The parameters have the following definitions:
   * The shape of a pattern is the collection of num. For example, given pattern ``[[w_step, w_num], [z_step, z_num], [y_step, y_num], [x_step, x_num]]``, the shape is ``[w_num, z_num, y_num, x_num]``.
   * **Note**: The order of the pattern specified here is in the opposite order to what is actually accepted by the hardware. Therefore, the order of the tuples shown on the profiler will be in the opposite order of what is specified here.
 
-* ``offset``: The offset to start the access in terms of number of elements from the beginning of the tensor. Can be a compile-time integer or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>`. When ``None`` (the default), the new view inherits the current view's storage offset.
+* ``offset``: The compile-time integer offset to start the access in terms of number of elements from the beginning of the tensor. When ``None`` (the default), the new view inherits the current view's storage offset. For a runtime (dynamic) offset, use ``scalar_offset`` or ``vector_offset`` instead.
 * ``scalar_offset``: An SBUF tensor of shape ``(1, 1)`` or a :doc:`VirtualRegister <../api/generated/nki.isa.VirtualRegister>` that specifies the location to start the access in terms of number of elements on the ``indirect_dim`` of the access pattern. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``vector_offset``: An SBUF tensor that specifies the location to start the access in terms of number of elements from the beginning of the indirect dimension specified by ``indirect_dim``. At most one of the ``scalar_offset`` and ``vector_offset`` can be specified.
 * ``indirect_dim``: The indirect dimension on which to apply ``scalar_offset`` and ``vector_offset``.
