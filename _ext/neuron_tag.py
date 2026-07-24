@@ -523,6 +523,10 @@ def _get_page_override(cur_file):
 
     # --- Tools ---------------------------------------------------------------
 
+    # Neuron Explorer (not supported on Inf1)
+    if cur_file.startswith('tools/neuron-explorer/'):
+        return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
+
     # TensorBoard plugin (End Of Support)
     if cur_file == 'archive/tensorboard/getting-started-tensorboard-neuronx-plugin' or \
        cur_file == 'archive/tensorboard/tutorial-tensorboard-scalars-mnist' or \
