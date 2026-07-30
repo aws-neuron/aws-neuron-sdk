@@ -4,6 +4,7 @@
    :date-modified: 2026-05-11
 
 .. _neuron-agentic-development:
+.. _neuron-agentic-development-overview:
 
 ==============================
 Neuron Agentic Development
@@ -27,6 +28,31 @@ The package covers two areas today.
 .. note::
    Source code, installation, and the full catalog of agents and skills live in the
    `Neuron Agentic Development GitHub repository <https://github.com/aws-neuron/neuron-agentic-development>`_.
+
+Applies to
+----------
+
+Neuron Agentic Development applies to:
+
+- Authoring new NKI kernels from PyTorch, NumPy, or natural-language specifications.
+- Debugging NKI kernel compilation errors.
+- Capturing and querying on-device execution profiles.
+- Identifying kernel inefficiencies such as intermediate-data spilling and redundant TensorEngine transposes.
+- Porting HuggingFace transformer models to run on Trainium through NxD Inference.
+- Looking up NKI documentation, API references, tutorials, and error codes from within an agent conversation.
+
+What problem does it solve?
+---------------------------
+
+NKI is the programming interface for writing custom compute kernels that run directly on
+Trainium and Inferentia NeuronCores. It gives you fine-grained control over the hardware's
+tensor engines, vector engines, and DMA subsystem, so you can reach performance beyond what
+framework-level compilation alone achieves. Model porting to NxD Inference lets you bring
+new HuggingFace architectures to Trainium without manually implementing each layer.
+
+Both workflows involve multi-step technical processes — compilation, validation, profiling,
+debugging — that an agent can coordinate for you. You describe the goal in natural language,
+and the agent selects the right skills and iterates until the task is complete.
 
 .. toctree::
    :maxdepth: 1

@@ -153,7 +153,7 @@ For conceptual overview, see [Compilation](features-guide.md#compilation).
 
 | Variable | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
-| `NEURON_COMPILED_ARTIFACTS` | str | -- | Path to cache/load compiled models. Skips recompilation when valid artifacts exist. |
+| `VLLM_CACHE_ROOT` | str | `~/.cache/vllm` | Root directory for all vLLM caches. Compiled model artifacts (NEFFs) are stored under `$VLLM_CACHE_ROOT/neuron/compile_cache`. Change this to persist or relocate the compile cache. |
 | `VLLM_NEURON_CPU_COMPILE` | bool | 0 | Enable CPU-only compilation mode (compile NEFFs without Neuron hardware). |
 | `NEURON_PLATFORM_TARGET_OVERRIDE` | str | -- | Target platform for CPU compile mode (e.g., `trn2`). Required when `VLLM_NEURON_CPU_COMPILE=1`. |
 | `VLLM_NEURON_PARALLEL_COMPILE_WORKERS` | int | -- | Number of parallel compilation workers. |
@@ -161,7 +161,6 @@ For conceptual overview, see [Compilation](features-guide.md#compilation).
 | `VLLM_NEURON_DISABLE_COMPILE_CACHE` | bool | 0 | Disable compilation cache entirely. Forces recompilation on every startup. |
 | `VLLM_NEURON_COMPILATION_TIMEOUT` | int | -- | Timeout in seconds for individual NEFF compilation. |
 | `VLLM_NEURON_DISABLE_WARMUP_COMPILE` | bool | 0 | Treat cache miss as fatal error. Use when all graphs must be pre-compiled. |
-| `VLLM_CACHE_ROOT` | str | `~/.cache/vllm` | Root directory for vLLM cache storage. |
 
 ### What triggers recompilation
 
@@ -237,7 +236,7 @@ outputs = llm.generate(prompts, sampling_params)
 Equivalent CLI:
 
 ```bash
-export NEURON_COMPILED_ARTIFACTS=/opt/neuron-cache/gpt-oss-20b
+export VLLM_CACHE_ROOT=/opt/neuron-cache
 export VLLM_NEURON_PARALLEL_COMPILE_WORKERS=4
 export VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION=0.35
 
