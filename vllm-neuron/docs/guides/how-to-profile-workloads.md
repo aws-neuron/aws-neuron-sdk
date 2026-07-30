@@ -224,8 +224,8 @@ Open in Neuron Explorer to verify traces were captured correctly.
 
 - **Possible solution**: Ensure NEFFs are present in the `neffs/`
   subdirectory of the output. They should be auto-copied from the
-  compile cache. If missing, set the compile cache path via
-  `NEURON_COMPILED_ARTIFACTS`.
+  compile cache. If missing, verify the compile cache path via
+  `VLLM_CACHE_ROOT` (artifacts are at `$VLLM_CACHE_ROOT/neuron/compile_cache`).
 
 ### Profile shows no activity
 

@@ -186,7 +186,7 @@ If you want to request a feature or report a critical issue, you can contact us 
    :hidden:
 
    Ask Amazon AI Helper Tools </about-neuron/amazonq-getstarted>
-   Agentic Development </about-neuron/agentic-development-overview>
+   Agentic Development </tools/neuron-agentic-development/index>
    Benchmarks </about-neuron/benchmarks/index>
    Calculator </about-neuron/calculator/neuron-calculator>
    Beta Participation </about-neuron/beta-participation>

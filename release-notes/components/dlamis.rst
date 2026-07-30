@@ -43,7 +43,7 @@ Updates
 ~~~~~~~~
 
 * The single-framework JAX AMI and multi-framework DLAMIs have been upgraded to JAX 0.9.0 and ``jax-neuronx 0.10.0``.
-* All single-framework and multi-framework DLAMIs released alongside Neuron SDK version 2.30.0 now include the ``neuron_agentic_development`` package. For details, see :doc:`/about-neuron/agentic-development-overview`.
+* All single-framework and multi-framework DLAMIs released alongside Neuron SDK version 2.30.0 now include the ``neuron_agentic_development`` package. For details, see :doc:`/tools/neuron-agentic-development/index`.
 * All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.30.0.
 
 Callouts

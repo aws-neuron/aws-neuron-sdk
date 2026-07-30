@@ -41,17 +41,18 @@ nodes never compile at startup.
 
 ### Pre-compiled model artifacts
 
-You can also use `NEURON_COMPILED_ARTIFACTS` to point at a directory of
-pre-compiled models:
+You can set `VLLM_CACHE_ROOT` to point at a directory where compiled
+models are stored:
 
 ```bash
-export NEURON_COMPILED_ARTIFACTS=/path/to/cache
+export VLLM_CACHE_ROOT=/path/to/cache
 vllm serve openai/gpt-oss-20b --tensor-parallel-size 8
 ```
 
-If the path contains valid artifacts, they are loaded directly with no
-recompilation. If the path is empty, the model is compiled and saved
-there for future use.
+Compiled artifacts (NEFFs) are stored under
+`$VLLM_CACHE_ROOT/neuron/compile_cache`. If valid artifacts exist there,
+they are loaded directly with no recompilation. If the cache is empty,
+the model is compiled and saved there for future use.
 
 ## Bucketing and dynamic shapes
 
@@ -987,8 +988,8 @@ reference, see [Configuration options](reference-configuration.md).
 
 - Reduce the number of `num_batched_tokens_buckets` and
   `num_seqs_buckets`
-- Use `NEURON_COMPILED_ARTIFACTS` to cache compiled models between
-  restarts
+- Use `VLLM_CACHE_ROOT` to persist compiled models between
+  restarts (artifacts are stored at `$VLLM_CACHE_ROOT/neuron/compile_cache`)
 - Set `VLLM_NEURON_PARALLEL_COMPILE_WORKERS` to increase parallel
   compilation
 

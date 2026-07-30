@@ -27,7 +27,7 @@ Neuron Open Source GitHub Repositories
 
       **Neuron Agentic Development Open Source**
       ^^^
-      AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. See :ref:`neuron-agentic-development-overview` for the full feature overview.
+      AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. See :ref:`neuron-agentic-development` for the full feature overview.
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-agentic-development
 

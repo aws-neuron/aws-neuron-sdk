@@ -44,8 +44,10 @@ cd vllm-neuron
 pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 ```
 
-This installs the vLLM Neuron plugin along with vLLM and all required Neuron
-SDK packages.
+This installs the vLLM Neuron plugin along with vLLM. The Neuron framework and
+compiler packages (`neuronxcc`, `torch_neuronx`, `nki`) are **not** included and must
+be installed separately (e.g., via the Neuron DLAMI in Option B, or by following the
+[Neuron installation guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/setup/torch-neuronx.html)).
 
 ### Option B: Use the Neuron DLAMI
 

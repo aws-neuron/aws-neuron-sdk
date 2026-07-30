@@ -16,7 +16,7 @@ HuggingFace models to NxD Inference, and validate numerical equivalence of
 ported models on AWS Trainium from inside agentic IDEs such as Claude Code
 and Kiro. Read these notes for the changes, improvements, and bug fixes in
 each AWS Neuron SDK release. For an introduction to the feature, see
-:ref:`neuron-agentic-development-overview`.
+:ref:`neuron-agentic-development`.
 
 Source, installation instructions, and the current catalog of agents and
 skills are maintained in the open-source repository:

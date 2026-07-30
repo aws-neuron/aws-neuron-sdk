@@ -267,8 +267,6 @@ Launch command (Trn2, 4 ranks):
 
 .. code-block:: bash
 
-   TORCH_NEURONX_ENABLE_HOST_CC=1 \
-   TORCH_NEURONX_ENABLE_ASYNC_NRT=1 \
    NEURON_RT_NUM_CORES=4 \
    NEURON_RT_VIRTUAL_CORE_SIZE=2 \
    torchrun \

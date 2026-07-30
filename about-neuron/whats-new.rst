@@ -171,7 +171,7 @@ Skills chain automatically, so a single prompt such as "profile my kernel and te
 
 Writing and documentation skills work in any supported IDE without hardware. Debugging, profiling, and analysis skills require access to Trainium or Inferentia hardware because they compile and execute on the NeuronCores.
 
-For an overview of capabilities, supported IDEs, and prerequisites, see :ref:`neuron-agentic-development-overview`. For installation, the current catalog of agents and skills, and contribution guidance, visit the `Neuron Agentic Development repository on GitHub <https://github.com/aws-neuron/neuron-agentic-development>`_.
+For an overview of capabilities, supported IDEs, and prerequisites, see :ref:`neuron-agentic-development`. For installation, the current catalog of agents and skills, and contribution guidance, visit the `Neuron Agentic Development repository on GitHub <https://github.com/aws-neuron/neuron-agentic-development>`_.
 
 ----
 
