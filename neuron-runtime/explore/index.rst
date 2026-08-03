@@ -11,7 +11,6 @@ Neuron Runtime Deep Dives
    :hidden:
    :maxdepth: 1
 
-   Understand NEFF Files <work-with-neff-files>
    Compute-Communication Overlap <compute-comm-overlap>
    Neuron Device Memory <device-memory>
    Direct HBM Tensor Allocation <direct-hbm-tensor-alloc>
@@ -27,12 +26,6 @@ NeuronX Runtime Deep Dives
 
 .. grid:: 2
         :gutter: 2
-
-        .. grid-item-card:: Understand NEFF Files
-
-                * :ref:`work-with-neff-files`
-
-                Explore the structure and contents of NEFF files, the compiled model format used by the Neuron Runtime.
 
         .. grid-item-card:: Compute-Communication Overlap
 
