@@ -139,7 +139,17 @@ templates_path = [
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '_backup-rn', '_backup-setup', '_content-types','**.ipynb_checkpoints','.venv','_utilities', 'nki/_templates']
+exclude_patterns = [
+    '_build',
+    '_backup-rn',
+    '_backup-setup',
+    '_content-types',
+    '**.ipynb_checkpoints',
+    '.venv',
+    '_utilities',
+    'nki/_templates',
+    'neuron-runtime/explore/work-with-neff-files.rst',
+]
 html_extra_path = ['static']
 
 # remove bash/python/ipython/jupyter prompts and continuations
