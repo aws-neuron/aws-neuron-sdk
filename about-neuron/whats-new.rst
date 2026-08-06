@@ -295,13 +295,13 @@ AWS Neuron SDK 2.28.0: Enhanced Profiling, Vision Language Models, and Expanded 
 
 **Posted on**: February 26, 2026
 
-Today we are releasing AWS Neuron SDK 2.28.0. This release enhances Neuron Explorer with system profiling, Tensor Viewer, and Database Viewer for comprehensive performance analysis. NxD Inference adds support for Qwen2/Qwen3 VL vision language models, Flux.1 inpainting capabilities, and Eagle3 speculative decoding. The NKI Library expands with 9 new kernels including RoPE, MoE operations, and experimental kernels for attention and cross entropy. NKI 0.2.0 introduces LNC multi-core support with intra-LNC collectives and new APIs. Kubernetes users gain Neuron DRA Driver support for advanced resource allocation.
+Today we are releasing AWS Neuron SDK 2.28.0. This release enhances Neuron Explorer with system profiling and Tensor Viewer for comprehensive performance analysis. NxD Inference adds support for Qwen2/Qwen3 VL vision language models, Flux.1 inpainting capabilities, and Eagle3 speculative decoding. The NKI Library expands with 9 new kernels including RoPE, MoE operations, and experimental kernels for attention and cross entropy. NKI 0.2.0 introduces LNC multi-core support with intra-LNC collectives and new APIs. Kubernetes users gain Neuron DRA Driver support for advanced resource allocation.
 
 
 Developer Tools and Profiling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Neuron Explorer Enhancements** - Added system profiling support with drill-down navigation to device profiles. New Tensor Viewer helps identify memory bottlenecks by displaying tensor names, shapes, sizes, and memory usage. Database Viewer provides an interactive interface for querying profiling data using SQL or natural language. Profile Manager now supports tag-based organization and search. A migration guide from Neuron Profiler/Profiler 2.0 is now available.
+**Neuron Explorer Enhancements** - Added system profiling support with drill-down navigation to device profiles. New Tensor Viewer helps identify memory bottlenecks by displaying tensor names, shapes, sizes, and memory usage. Profile Manager now supports tag-based organization and search. A migration guide from Neuron Profiler/Profiler 2.0 is now available.
 
 **nccom-test Improvements** - Enhanced data integrity checks use pseudo-random data patterns for better corruption detection. Added support for ``alltoallv`` collective operation for benchmarking variable-sized all-to-all communication patterns.
 

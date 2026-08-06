@@ -193,21 +193,6 @@ memory compactness for NKI kernel optimization.
 
 **Learn more:** :doc:`overview-memory-viewer`
 
-Database Viewer
-~~~~~~~~~~~~~~~
-
-Provides direct access to all underlying profiling data tables via SQL or natural
-language queries. Inspect table schemas, run ad-hoc queries, and export results as
-CSV. Use it to build custom analyses that the built-in viewers don't cover.
-
-.. image:: /tools/images/database-viewer.png
-   :target: ../../_images/database-viewer.png
-
-**When to use:** Run custom queries on profiling data — when the standard viewers
-don't answer your specific question.
-
-**Learn more:** :doc:`overview-database-viewer`
-
 Code correlation
 ----------------
 

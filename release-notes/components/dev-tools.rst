@@ -125,7 +125,6 @@ Improvements
 * Added ability to save and search by tags in Neuron Explorer Profile Manager, allowing you to organize and quickly locate profiles across multiple profiling sessions. See :ref:`Get started with Neuron Explorer <new-neuron-profiler-setup>`.
 * Added help pop-up for the ``Device Trace Viewer`` in Neuron Explorer to see shortcuts and dependency color legend. See :doc:`Device Trace Viewer </tools/neuron-explorer/overview-device-profiles>`.
 * Introduced ``Tensor Viewer`` in Neuron Explorer, enabling you to quickly identify memory bottlenecks by viewing tensor names, shapes, sizes, and memory usage in a single interface. See :ref:`tensor-viewer-overview`.
-* Introduced ``Database Viewer`` in Neuron Explorer as an interactive interface for querying and exploring profiling data using SQL or natural language, allowing you to perform custom analysis without writing code. See :ref:`database-viewer-overview`.
 * Enhanced data integrity checks in ``nccom-test`` by using pseudo-random data patterns instead of fixed patterns, improving detection of data corruption during collective operations. See *Data Integrity* in the nccom-test documentation.
 * Added support for ``alltoallv`` collective operation in ``nccom-test``, enabling benchmarking of variable-sized all-to-all communication patterns. See *AlltoAllV Example* in the nccom-test documentation.
 

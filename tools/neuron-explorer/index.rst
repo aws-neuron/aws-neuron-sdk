@@ -92,13 +92,6 @@ Visualization and Analysis
 
       Get streamlined performance insights and optimization recommendations with high-level metrics and visualizations.
 
-   .. grid-item-card:: Database Viewer
-      :link: overview-database-viewer
-      :link-type: doc
-      :class-card: sd-border-1
-
-      Develop your own analyses, examine profiling data stored in database tables, or run ad-hoc queries during performance analysis. 
-
    .. grid-item-card:: Tensor Viewer
       :link: overview-tensor-viewer
       :link-type: doc
@@ -226,7 +219,6 @@ For detailed migration guidance, including CLI command mappings and feature comp
    Hierarchy Viewer <overview-hierarchy-view>
    Source Code Viewer <how-to-link-view-source-code>
    Summary Viewer <overview-summary-page>
-   Database Viewer <overview-database-viewer>
    Tensor Viewer <overview-tensor-viewer>
    Memory Viewer <overview-memory-viewer>
    Region Highlighter <overview-region-highlighter>

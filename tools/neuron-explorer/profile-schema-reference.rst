@@ -98,7 +98,7 @@ The table description will note if the table is transient.
 The output Parquet is also self-describing. After a profile is processed, the
 ``SchemaFields`` Parquet table contains one row per ``(table, field)`` with its type,
 description, unit, and other metadata. This ``SchemaFields`` table contains the same
-information shown on this page, in a queryable format and is viewable using the :ref:`Database Viewer <database-viewer-overview>`.
+information shown on this page, in a queryable format.
 
 .. _profile-schema-reference-tables:
 
