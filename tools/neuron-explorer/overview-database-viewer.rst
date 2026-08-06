@@ -8,7 +8,7 @@ Database Viewer
 =====================
 
 The Database Viewer offers an interactive interface providing visibility to all underlying data that the Neuron Explorer
-processes from a :doc:`NEFF </neuron-runtime/explore/work-with-neff-files>` and NTFF. 
+processes from a NEFF and NTFF.
 Use this tool to develop your own analyses, examine profiling data stored in database tables, or run ad-hoc queries during performance analysis. 
 You can access this data through natural language queries or raw SQL.
 
