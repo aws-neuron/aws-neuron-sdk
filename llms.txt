@@ -130,7 +130,6 @@
 - [Hierarchy Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-hierarchy-view.html): Model layer to hardware execution visualization
 - [Source Code Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/how-to-link-view-source-code.html): Bidirectional linking between source code and profile data
 - [Summary Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-summary-page.html): High-level performance metrics and optimization recommendations
-- [Database Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-database-viewer.html): SQL and natural language queries on profiling data
 - [Tensor Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-tensor-viewer.html): Tensor names, shapes, sizes, and memory usage details
 - [Memory Viewer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-memory-viewer.html): Low-level memory allocation and usage pattern analysis
 - [Region Highlighter](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-explorer/overview-region-highlighter.html): Generate regions of interest for a profile and target detailed analysis to interesting time spans, including the ``AnnotationRegion`` integration with the Annotation feature.

@@ -388,8 +388,7 @@ Viewing and analysis
    total Tensor Engine utilization.
 
 **How do I export annotations or profile data to CSV/Excel?**
-   Use the Database Viewer to run SQL queries and export results. For
-   annotations, there is no direct CSV export — use the annotation save/load
+   For annotations, there is no direct CSV export — use the annotation save/load
    feature to persist them as JSON.
 
 **Can I view multi-rank profiles (one NEFF, many NTFFs per rank)?**

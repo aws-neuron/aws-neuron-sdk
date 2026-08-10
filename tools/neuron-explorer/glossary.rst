@@ -308,11 +308,6 @@ Summary Viewer
    memory bandwidth, collective operations, and AI-generated recommendations.
    Supports region selection for per-layer analysis.
 
-Database Viewer
-   Widget for running custom SQL queries or natural-language queries against
-   processed profile data (Parquet tables). Useful for ad-hoc analysis not
-   covered by other viewers.
-
 Tensor Viewer
    Widget displaying tensor information including names, sizes, shapes, and
    memory usage details (SBUF allocation per tensor).
