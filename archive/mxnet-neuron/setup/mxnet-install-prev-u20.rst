@@ -7,12 +7,24 @@ Use the tabs below to install a specific previous Neuron SDK release. Select the
 
     .. tab-item:: Neuron 2.20.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --neuron-version=2.20.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.
 
     .. tab-item:: Neuron 2.19.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --neuron-version=2.19.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.
 
     .. tab-item:: Neuron 2.18.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --neuron-version=2.18.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.

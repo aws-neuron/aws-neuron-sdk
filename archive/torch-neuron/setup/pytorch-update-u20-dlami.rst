@@ -26,4 +26,8 @@ If you already have a previous Neuron release installed, this section provide li
 
         .. include:: /setup/install-templates/inf1/note-setup-general.rst
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=dlami-framework
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.

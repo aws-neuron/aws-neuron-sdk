@@ -23,7 +23,7 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.31.0 (07/07/2026)
+        **Latest release**: 2.31.1 (08/12/2026)
 
 ----
 

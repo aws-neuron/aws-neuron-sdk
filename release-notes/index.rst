@@ -3,17 +3,18 @@
 .. meta::
    :description: The AWS Neuron SDK release notes home page. Current release version: 2.31.0.
    :keywords: aws, neuron, what's new, release notes
-   :date-modified: 07/07/2026
+   :date-modified: 08/12/2026
 
 AWS Neuron SDK Release Notes
 ============================
 
-**Last updated**:  July 7, 2026
+**Last updated**:  August 12, 2026
 
 .. toctree::
     :maxdepth: 1
     :hidden:
 
+    Neuron 2.31.1 </release-notes/2.31.1>
     Neuron 2.31.0 </release-notes/2.31.0>
     Neuron 2.30.0 </release-notes/prev/2.30.0>
     Previous Neuron versions </release-notes/prev/rn>
@@ -30,12 +31,12 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
 
    .. grid-item-card:: 
       :class-card: sd-border-2
-      :link: /release-notes/2.31.0
+      :link: /release-notes/2.31.1
       :link-type: doc
 
-      **Latest AWS Neuron SDK release: 2.31.0**
+      **Latest AWS Neuron SDK release: 2.31.1**
       ^^^
-      On **07/07/2026**, AWS released version **2.31.0** of the Neuron SDK.
+      On **08/12/2026**, AWS released version **2.31.1** of the Neuron SDK.
 
       For more details, select this card and browse the release notes. 
 
@@ -64,8 +65,8 @@ Each Neuron component has specific release notes across Neuron versions.
      - **2.31.0**
      - 2.31.0
    * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
-     - **2.31.0**
-     - 2.31.13.0
+     - **2.31.1**
+     - 2.31.15.0
    * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
      - **2.31.0**
      - 2.31.0
@@ -114,7 +115,7 @@ Current Release Package Versions
                 :link-type: ref
                 :class-card: sd-border-1
         
-                **Neuron 2.31.0 release artifacts**
+                **Neuron 2.31.1 release artifacts**
                 ^^^
                 The libraries and packages updated in the latest Neuron release.
 
@@ -134,6 +135,8 @@ Release notes for prior versions from the past 12 months.
 
    * - Neuron version
      - Date released
+   * - :doc:`2.31.0 <2.31.0>`
+     - 07/06/26
    * - :doc:`2.30.0 <prev/2.30.0>`
      - 05/21/26
    * - :doc:`2.29.1 <prev/2.29.1>`

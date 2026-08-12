@@ -11,6 +11,16 @@ Component Release Notes for Neuron Developer Tools
 The release notes for the Neuron Developer Tools. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 
+.. _dev-tools-2-31-1-rn:
+
+Neuron Developer Tools & Neuron Explorer (Neuron 2.31.1 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 08/12/2026
+
+* Updated the ``aws-neuron-tools-*`` package from version ``2.31.13`` to ``2.31.15`` for both RPM and Debian distributions.
+
+
 .. _dev-tools-2-31-0-rn:
 
 Neuron Developer Tools & Neuron Explorer (Neuron 2.31.0 Release)
