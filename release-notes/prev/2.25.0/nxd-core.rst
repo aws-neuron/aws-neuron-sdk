@@ -25,7 +25,7 @@ Inference
 ^^^^^^^^^
 
 ModelBuilder V2
-"""""""""
+"""""""""""""""
 
 ModelBuilder V2 provides a simplified version of the ModelBuilder API that is more flexible and extensible.
 This API includes basic building blocks that you can use to trace, compile, and load modules to Neuron.
@@ -36,7 +36,7 @@ Training
 ^^^^^^^^
 
 Support for Shared Experts
-"""""""""
+""""""""""""""""""""""""""
 
 Shared Experts allow multiple model components to utilize the same expert neural networks. This release adds full support for Shared Experts in training workloads.
   

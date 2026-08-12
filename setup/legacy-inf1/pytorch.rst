@@ -58,7 +58,11 @@ Setup instructions
 
       **Install Drivers and Tools**
 
-      .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
+      .. note::
+
+         Inf1 instances are no longer supported. The installation and upgrade
+         commands that were previously generated on this page have been removed.
+         This document is retained for archival reference only.
 
       .. include:: /includes/setup/tab-inference-torch-neuron-u20.txt
 
@@ -72,7 +76,11 @@ Setup instructions
 
       **Install Drivers and Tools**
 
-      .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
+      .. note::
+
+         Inf1 instances are no longer supported. The installation and upgrade
+         commands that were previously generated on this page have been removed.
+         This document is retained for archival reference only.
 
       .. include:: /includes/setup/tab-inference-torch-neuron-u22.txt
 
@@ -86,7 +94,11 @@ Setup instructions
 
       **Install Drivers and Tools**
 
-      .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --framework=pytorch --framework-version=1.13.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami --category=driver_runtime_tools
+      .. note::
+
+         Inf1 instances are no longer supported. The installation and upgrade
+         commands that were previously generated on this page have been removed.
+         This document is retained for archival reference only.
 
       .. include:: /includes/setup/tab-inference-torch-neuron-al2023.txt
 

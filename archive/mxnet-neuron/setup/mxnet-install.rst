@@ -42,13 +42,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: MXNet 1.5.1
 
@@ -58,13 +66,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
 Compile on compute instance
@@ -83,13 +99,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=compile --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=compile --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: MXNet 1.5.1
 
@@ -99,13 +123,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=compile --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=compile --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 Deploy on AWS ML accelerator instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -125,13 +157,21 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=deploy --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=deploy --category=compiler_framework --framework=mxnet --framework-version=1.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: MXNet 1.5.1
 
@@ -141,10 +181,18 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=deploy --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --mode=deploy --category=compiler_framework --framework=mxnet --framework-version=1.5.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.

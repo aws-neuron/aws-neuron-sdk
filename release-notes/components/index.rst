@@ -26,8 +26,8 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - **2.31.0**
      - 2.31.0
    * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
-     - **2.31.0**
-     - 2.31.13.0
+     - **2.31.1**
+     - 2.31.15.0
    * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
      - **2.31.0**
      - 2.31.0

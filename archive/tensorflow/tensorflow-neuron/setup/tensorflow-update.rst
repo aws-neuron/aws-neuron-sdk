@@ -41,13 +41,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 2.9.3
 
@@ -57,13 +65,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
    .. tab-item:: TensorFlow 2.8.4
@@ -74,13 +90,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
    .. tab-item:: TensorFlow 2.7.4
@@ -91,13 +115,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
    .. tab-item:: TensorFlow 1.15.5
@@ -108,13 +140,21 @@ Develop on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
          
 
 Compile on compute instance
@@ -132,13 +172,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 2.9.3
 
@@ -148,13 +196,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
    .. tab-item:: TensorFlow 2.8.4
@@ -165,13 +221,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 2.7.4
 
@@ -181,13 +245,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 1.15.5
 
@@ -197,13 +269,21 @@ Compile on compute instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=compile --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
 Deploy on AWS ML accelerator instance
@@ -223,13 +303,21 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.10.1 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 2.9.3
 
@@ -239,13 +327,21 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.9.3 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 
    .. tab-item:: TensorFlow 2.8.4
@@ -256,13 +352,21 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.8.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 2.7.4
 
@@ -272,13 +376,21 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=2.7.4 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
    .. tab-item:: TensorFlow 1.15.5
 
@@ -288,12 +400,20 @@ Deploy on AWS ML accelerator instance
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
          .. tab-item:: Amazon Linux 2 DLAMI Base
 
             .. include :: /setup/install-templates/inf1/note-setup-general.rst
 
-            .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=update --mode=deploy --category=compiler_framework --framework=tensorflow --framework-version=1.15.5 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=inf1 --ami=non-dlami
+            .. note::
+
+               Inf1 instances are no longer supported. The installation and upgrade
+               commands that were previously generated on this page have been removed.
+               This document is retained for archival reference only.
 
 

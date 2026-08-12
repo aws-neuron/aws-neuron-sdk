@@ -9,12 +9,24 @@ Use the tabs below to install a specific previous Neuron SDK release. Select the
 
     .. tab-item:: Neuron 2.21.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --neuron-version=2.21.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.
 
     .. tab-item:: Neuron 2.20.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --neuron-version=2.20.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.
 
     .. tab-item:: Neuron 2.19.0
 
-        .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=pytorch --framework-version=1.13.1 --neuron-version=2.19.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2023 --instance=inf1 --ami=non-dlami
+        .. note::
+
+           Inf1 instances are no longer supported. The installation and upgrade
+           commands that were previously generated on this page have been removed.
+           This document is retained for archival reference only.
