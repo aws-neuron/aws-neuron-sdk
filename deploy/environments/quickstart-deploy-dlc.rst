@@ -32,7 +32,7 @@ Before you begin, ensure you have:
 * SSH access to your instance
 
 .. note::
-   This tutorial is compatible with Trn2 and Trn3 instances only. If you are using Trn1 instances, use the legacy vLLM 0.16 DLC instead.
+   This tutorial is compatible with Trn2 and Trn3 instances only, and requires the vLLM 0.21+ DLC.
 
 Prepare your environment
 ------------------------
@@ -42,7 +42,7 @@ Launch an AWS Trainium or Inferentia instance with sufficient resources for your
 Step 1: Pull the vLLM Docker image
 -----------------------------------
 
-In this step, you will download the vLLM Docker image from AWS ECR.
+In this step, you will download the pre-configured vLLM DLC from AWS ECR. This image comes with the vLLM Neuron plugin already installed.
 
 Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-inference-vllm-neuronx <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`_ repository, and then get the latest published image tag and use it in the command below:
 
@@ -50,7 +50,9 @@ Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-infer
 
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.31.0 released DLC image tag such as ``0.21.0.1.0.0-neuronx-py312-sdk2.31.0-ubuntu24.04``
+For example, replace ``<image_tag>`` with an SDK 2.32.0 released DLC image tag such as ``0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04``
+
+.. _quickstart_vllm_dlc_step2:
 
 Step 2: Start the Docker container
 -----------------------------------
@@ -108,21 +110,6 @@ Inside the container, start the vLLM inference server:
 
 .. note::
    If EFA (Elastic Fabric Adapter) is not installed on your host instance, the server will fail to start. To work around this, prepend ``NEURON_SKIP_EFA_AFFINITY=1`` to the ``vllm serve`` command.
-
-.. note::
-   If you are using the legacy vLLM 0.16 DLC, use the following server startup command instead:
-
-   .. code-block:: bash
-
-      vllm serve \
-      --model='TinyLlama/TinyLlama-1.1B-Chat-v1.0' \
-      --max-num-seqs=4 \
-      --max-model-len=128 \
-      --tensor-parallel-size=2 \
-      --block-size=32 \
-      --num-gpu-blocks-override=16 \
-      --port=8080 \
-      --additional-config='{"override_neuron_config":{"enable_bucketing":false}}'
 
 .. important::
    * Choose the appropriate model for your use case

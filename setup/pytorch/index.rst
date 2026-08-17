@@ -18,6 +18,9 @@ Install PyTorch with AWS Neuron support for training and inference on Inferentia
 **PyTorch Version**: 2.9+ with Native Neuron backend
 
 .. warning::
+
+   The ``torch-neuronx`` library is no longer included on Neuron DLAMIs and DLCs starting with Neuron release v2.32.0. The setup instructions in this document assume your environment uses Neuron v2.31.0 or earlier. If you are using ``torch-neuronx`` for training your models, pin your environment to Neuron v2.31.0. 
+
    The NeuronX Distributed (NxD) library for training (``neuronx_distributed_training``) is no longer included on Neuron DLAMIs and DLCs as of release v2.31.0. To manually configure your environment to use ``neuronx_distributed_training``, see :doc:`Install PyTorch via manual installation </setup/pytorch/manual>`.
 
 Choose installation method
@@ -110,7 +113,7 @@ Before installing, ensure you have:
    * - Operating System
      - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
    * - Python Version
-     - Python 3.11 or 3.12
+     - Python 3.11, 3.12 or 3.13
    * - AWS Account
      - With EC2 launch permissions
    * - SSH Access
@@ -143,7 +146,7 @@ Version Information
    * - neuronx-cc
      - 2.15.0+
    * - Python
-     - 3.11, 3.12
+     - 3.11, 3.12, 3.13
 
 Next Steps
 ----------
@@ -153,10 +156,10 @@ After installation:
 1. **Verify Installation**: Run verification commands in the installation guide
 2. **Try a Tutorial**: 
    
-   * **Inference**: :doc:`/libraries/nxd-inference/vllm/quickstart-vllm-online-serving`
-   * **Training**: :doc:`/frameworks/torch/torch-neuronx/tutorials/training/mlp`
+   * **Inference**: :doc:`/vllm-neuron/docs/getting-started/quickstart-online-serving`
+   * **Training**: :doc:`MLP training tutorial [archived content] </archive/nxd-training/mlp>`
   
-3. **Read the torch-neuronx Programming Guide**: :doc:`/frameworks/torch/torch-neuronx/programming-guide/training/index`
+3. **Read the torch-neuronx Programming Guide**: :doc:`Training developer guide [archived content] </archive/nxd-training/index>`
 4. **Explore Examples**: :doc:`/frameworks/torch/index`
 
 Update an existing installation

@@ -73,7 +73,7 @@ You can use a Deep Learning Container (DLC) which bundles the SDK and dependenci
 Refer to the `pytorch-inference-neuronx container <https://github.com/aws-neuron/deep-learning-containers?tab=readme-ov-file#pytorch-inference-neuronx>`_
 on `https://github.com/aws-neuron/deep-learning-containers <https://github.com/aws-neuron/deep-learning-containers>`_ to get started.
 
-For a complete step-by-step tutorial, see :ref:`Option B in the DLC quickstart <quickstart_vllm_dlc_option_b>`. After entering the container, proceed to `Manually install from source`_ below to install the vLLM Neuron plugin.
+After entering the container, proceed to `Manually install from source`_ below to install the vLLM Neuron plugin.
 
 Manually install from source
 """""""""""""""""""""""""""""""

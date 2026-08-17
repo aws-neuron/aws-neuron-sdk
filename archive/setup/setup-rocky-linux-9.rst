@@ -25,5 +25,5 @@ For current setup paths, see:
   (Ubuntu 22.04, Ubuntu 24.04, Amazon Linux 2023).
 - :doc:`Install PyTorch Neuron manually </setup/pytorch/manual>` for the
   current PyTorch (``torch-neuronx``) install path.
-- :doc:`Install PyTorch Neuron for Inf1 (legacy) </setup/legacy-inf1/pytorch>`
+- :doc:`Install PyTorch Neuron for Inf1 (legacy) </archive/setup/legacy-inf1/pytorch>`
   for the legacy ``torch-neuron`` (Inf1) install path.

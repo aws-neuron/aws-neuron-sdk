@@ -42,7 +42,7 @@
 
 ## DO NOT:
 
-- **Include internal code names** - Remove references like "TRN3PDS", "Mariana", "Penguin"
+- **Include internal code names** - Remove internal project, hardware, or feature codenames; use official public product names instead
 - **Document undocumented features** - If documentation doesn't exist, exclude the feature
 - **Include features without documentation URLs** - Every new feature must have a documentation link
 - **List unreleased features** - Only include features available to customers
@@ -104,7 +104,7 @@
 
 | Avoid | Prefer |
 |-------|--------|
-| "Added support for TRN3PDS platform" | "Added support for [public instance type name] with optimized topology configurations for distributed training. See [documentation URL]" |
+| "Added support for [internal codename] platform" | "Added support for [public instance type name] with optimized topology configurations for distributed training. See [documentation URL]" |
 | "Added IOCTL to lookup Neuron device/HBM for a given virtual address" | "Added capability to lookup Neuron device for a given virtual address, enabling frameworks to identify which device holds a tensor. See [documentation link] for API details" |
 
 ### Known Issues:
@@ -112,7 +112,7 @@
 | Avoid | Prefer |
 |-------|--------|
 | "may incorrectly interpret tensor shapes in certain multi-dimensional transpose patterns" | "can produce incorrect results when transposing tensors with certain multi-dimensional shapes" |
-| "Training, Inference, and Penguin kernels compilation and execution validation is in progress" | Remove entirely (internal project name and not customer-actionable) |
+| "Training, Inference, and [internal codename] kernels compilation and execution validation is in progress" | Remove entirely (internal project name and not customer-actionable) |
 | "Chunked prefill is not supported on Neuron for now" | "Chunked prefill is not supported. If you attempt to enable it with DISABLE_NEURON_CUSTOM_SCHEDULER='1', the system will fail to start with an error. Use standard prefill mode instead." |
 
 ## Breaking Changes Checklist

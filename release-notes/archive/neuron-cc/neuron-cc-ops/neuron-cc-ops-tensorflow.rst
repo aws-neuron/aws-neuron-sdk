@@ -7,7 +7,7 @@ To see a list of supported operators for TensorFlow 1.x, run the following comma
 
 ``neuron-cc list-operators --framework TENSORFLOW``
 
-.. _neuron-compiler-release-1910:
+.. _tf-neuron-compiler-release-1910:
 
 Neuron Compiler Release [1.9.1.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,7 +22,7 @@ Added
  isNan
  FusedBatchNormV3
 
-.. _neuron-compiler-release-1730:
+.. _tf-neuron-compiler-release-1730:
 
 Neuron Compiler Release [1.7.3.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,28 +36,28 @@ Added
 
 
 
-.. _neuron-compiler-release-16130:
+.. _tf-neuron-compiler-release-16130:
 
 Neuron Compiler Release [1.6.13.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1550:
+.. _tf-neuron-compiler-release-1550:
 
 Neuron Compiler Release [1.5.5.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1400:
+.. _tf-neuron-compiler-release-1400:
 
 Neuron Compiler Release [1.4.0.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1300:
+.. _tf-neuron-compiler-release-1300:
 
 Neuron Compiler Release [1.3.0.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,14 +75,14 @@ Added
  Size
 
 
-.. _neuron-compiler-release-1270:
+.. _tf-neuron-compiler-release-1270:
 
 Neuron Compiler Release [1.2.7.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1220:
+.. _tf-neuron-compiler-release-1220:
 
 Neuron Compiler Release [1.2.2.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,7 +119,7 @@ Added
 
 
 
-.. _neuron-compiler-release-10240450:
+.. _tf-neuron-compiler-release-10240450:
 
 Neuron Compiler Release [1.0.24045.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,14 +127,14 @@ Neuron Compiler Release [1.0.24045.0]
 Added ``FloorDiv``, ``Softplus``, ``Unstack``
 
 
-.. _neuron-compiler-release-1018001:
+.. _tf-neuron-compiler-release-1018001:
 
 Neuron Compiler Release [1.0.18001]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1016764:
+.. _tf-neuron-compiler-release-1016764:
 
 Neuron Compiler Release [1.0.16764]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,7 +148,7 @@ Added:
    ResizeBilinear
    ResizeNearestNeighbor
 
-.. _neuron-compiler-release-1015275:
+.. _tf-neuron-compiler-release-1015275:
 
 Neuron Compiler Release [1.0.15275]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,49 +167,49 @@ Removed
 
 (was inadvertently advertised as supported)
 
-.. _neuron-compiler-release-1012696:
+.. _tf-neuron-compiler-release-1012696:
 
 Neuron Compiler Release [1.0.12696]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-109410:
+.. _tf-neuron-compiler-release-109410:
 
 Neuron Compiler Release [1.0.9410]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-107878:
+.. _tf-neuron-compiler-release-107878:
 
 Neuron Compiler Release [1.0.7878]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-106801:
+.. _tf-neuron-compiler-release-106801:
 
 Neuron Compiler Release [1.0.6801]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-105939:
+.. _tf-neuron-compiler-release-105939:
 
 Neuron Compiler Release [1.0.5939]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-105301:
+.. _tf-neuron-compiler-release-105301:
 
 Neuron Compiler Release [1.0.5301]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No changes
 
-.. _neuron-compiler-release-1046800:
+.. _tf-neuron-compiler-release-1046800:
 
 Neuron Compiler Release [1.0.4680.0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

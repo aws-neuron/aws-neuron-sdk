@@ -178,6 +178,38 @@ average_dma_size
    Target ≥ 32768 bytes.
 
 
+.. _neuron-explorer-throttling-glossary:
+
+Throttling
+^^^^^^^^^^
+
+Throttling
+   Hardware temporarily limiting the maximum utilization of the Tensor Engine,
+   to stay within power, current, and thermal safety limits. Neuron Explorer
+   reports throttling as a hardware *utilization limit*; it indicates how much
+   and when an engine was limited. See
+   :ref:`neuron-explorer-understanding-throttling`.
+
+Utilization limit (K/N)
+   The fraction of peak Tensor Engine utilization allowed during a throttling
+   event, reported by the hardware as a ratio ``K/N`` between 0 and 1. A value
+   of 1.0 means no throttling. Explorer exposes time-weighted averages of Tensor Engine utilization 
+   as ``average_utilization_limit_percent`` (Current Selection Summary)
+   and ``max_achievable_util_with_throttling_percent`` (ThrottleSummary table).
+   The throttling percentage is the inverse of the utilization limit:
+   ``throttling % = 1 − utilization_limit``.
+
+dI/dt (delta current) throttling
+   On Trn2 and Trn3, a peak-current protection mechanism that limits the maximum utilization of the Tensor
+   Engine when ramping up from low utilization. After work begins the engine starts
+   at roughly 50% utilization and ramps to full over the first ~3
+   microseconds. If utilization drops below 50% over any ~3 microsecond
+   window — for example during an idle gap — the limit re-engages, so the next
+   burst again runs at roughly 50% until it ramps back up. Bursty workloads that
+   repeatedly leave the Tensor Engine below 50% utilization can therefore be
+   dI/dt-throttled.
+
+
 FLOPs breakdown
 ^^^^^^^^^^^^^^^
 
@@ -193,8 +225,12 @@ active_flops
    fully utilized (undersized tiles, poor pipelining).
 
 throttled_flops
-   FLOPs wasted due to hardware throttling. Worth investigating if
-   significant.
+   Percentage of Tensor Engine FLOPs unavailable due to hardware throttling.
+   Split into *active throttled* (FLOPs lost while the engine was actively
+   computing — the portion that costs real work) and *unused throttled*
+   (throttling during otherwise-idle periods, which has little performance
+   impact). Worth investigating when the active throttled portion is
+   significant. See :ref:`neuron-explorer-understanding-throttling`.
 
 
 Memory metrics
@@ -246,7 +282,7 @@ MPMD (Multiple Program Multiple Data)
    with SPMD where all ranks run the same NEFF.
 
 DGE notifications
-   Data Gather Engine notifications that label DMA transfers with tensor
+   Descriptor Generation Engine notifications that label DMA transfers with tensor
    variable names. Without them, DMAs show ``variable: unknown``.
 
 
@@ -458,7 +494,7 @@ DMA Source Types
 
    - **Static** — Compiler-generated transfers (determined at compile time)
    - **Software Dynamic** — GPSIMD-generated transfers (runtime decisions in custom code)
-   - **Hardware Dynamic** — DGE (Data Gather Engine) hardware-generated transfers
+   - **Hardware Dynamic** — DGE (Descriptor Generation Engine) hardware-generated transfers
 
 Spill
    When the working set exceeds SBUF capacity, data is evicted ("spilled")

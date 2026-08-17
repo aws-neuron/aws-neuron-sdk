@@ -32,8 +32,8 @@ Enable the profiler at server startup. We reuse `"cuda"` as the
 profiler kind to mount the HTTP endpoints:
 
 ```bash
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --profiler-config '{"profiler": "cuda"}' \
     --additional-config '{
       "neuron_profiler": {
@@ -60,7 +60,7 @@ Send requests that represent your production traffic pattern:
 curl http://localhost:8000/v1/completions \
     -H "Content-Type: application/json" \
     -d '{
-      "model": "openai/gpt-oss-20b",
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
       "prompt": "Explain quantum computing in simple terms.",
       "max_tokens": 200
     }'
@@ -135,7 +135,7 @@ For quick benchmarking with profiling:
 ```bash
 vllm bench serve \
     --backend vllm \
-    --model openai/gpt-oss-20b \
+    --model meta-llama/Llama-3.3-70B-Instruct \
     --dataset-name sharegpt \
     --dataset-path sharegpt.json \
     --profile \
@@ -224,8 +224,8 @@ Open in Neuron Explorer to verify traces were captured correctly.
 
 - **Possible solution**: Ensure NEFFs are present in the `neffs/`
   subdirectory of the output. They should be auto-copied from the
-  compile cache. If missing, verify the compile cache path via
-  `VLLM_CACHE_ROOT` (artifacts are at `$VLLM_CACHE_ROOT/neuron/compile_cache`).
+  compile cache. If missing, set the compile cache path via
+  `NEURON_COMPILED_ARTIFACTS`.
 
 ### Profile shows no activity
 

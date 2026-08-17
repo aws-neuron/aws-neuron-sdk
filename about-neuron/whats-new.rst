@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 07/20/2026
+    :date-modified: 08/17/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -23,7 +23,65 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.31.1 (08/12/2026)
+        **Latest release**: 2.32.0 (08/17/2026)
+
+----
+
+
+.. _whats-new-2026-08-13-v2_32:
+
+Neuron Release 2.32.0: new kernels for MoE training and sparse attention, variable-length collectives, and expanded NKI programming
+-----------------------------------------------------------------------------------------------------------------------------------
+
+**Posted on**: August 17, 2026
+
+Today we are releasing Neuron 2.32.0. This release includes updates across the stack:
+:ref:`NKI 0.6.0 <nki-2-32-0-rn>` — on-device top-K reduction, variable-length collectives for ragged per-rank data, and data-dependent runtime loops;
+:ref:`13 new NKI Library kernels <nki-lib-2-32-0-rn>` for DeepSeek-V3.2 sparse-MLA context encoding and MXFP8 Mixture-of-Experts training;
+explicit native 64-bit integer control in the :ref:`Neuron Compiler <compiler-2-32-0-rn>`;
+uneven per-rank data distribution via variable-size collectives in the :ref:`Runtime <runtime-2-32-0-rn>` on Trn2 and Trn3;
+and a new :ref:`Neuron Agentic Development <agentic-development-2-32-0-rn>` skill that ports HuggingFace models to the vLLM Neuron backend. This release also upgrades :ref:`vLLM Neuron <whats-new-2026-07-20-vllm-neuron-beta>`, launched in July 2026, to vLLM 0.24.0.
+
+What's in this release
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* **NKI 0.6.0** — Adds a GpSimd Engine top-K instruction via ``nisa.topk``, variable-length collectives for ragged per-rank data via ``all_gather_v``, and new runtime-loop constructs (``fori_loop``/``while_loop``) for data-dependent iteration that replace ``nl.dynamic_range``. Relaxes DMA transpose constraints. See :ref:`nki-2-32-0-rn`.
+
+* **NKI Library** — Adds 12 new experimental kernels and 1 new core kernel, including the split DeepSeek-V3.2 sparse-MLA context path, MXFP8 flash-decode attention, MXFP8 blockwise-MoE forward paired with an MXFP8 matmul backward for training, a fused GPT-OSS sliding-window-attention block, and a GpSIMD top-K. Adds PyTorch reference implementations for 22 more kernels. See :ref:`nki-lib-2-32-0-rn`.
+
+* **Graph Compiler** — Adds explicit control over 64-bit integer compilation via ``--native-int64`` and ``--implicit-integer-downcast``, expands complex64 coverage to 30 operations, and rewrites one-hot embedding lookups into gather operations, reducing compile time up to 64% and NEFF size up to 96% for affected patterns. Adds MXFP8 factorized scale layout and reduced weight-load frequency on Trn3. See :ref:`compiler-2-32-0-rn`.
+
+* **Runtime & Driver** — Adds variable-size collectives (``AllGatherV``, ``ReduceScatterV``, ``AllToAllV``) for workloads with uneven per-rank data on Trn2 and Trn3, one-rank-per-die ring and barrier support on the Trn3 Gen2 UltraServer topology, and the Mesh collective algorithm in multi-stream mode. Raises the maximum NCCL communicators per NEFF from 12 to 16. See :ref:`runtime-2-32-0-rn`.
+
+* **Neuron Agentic Development** — A new ``neuron-framework-autoport-vllm-neuron`` skill ports HuggingFace models to the vLLM Neuron backend end to end, and the model-equivalence skill now validates vLLM Neuron ports. Updated for NKI 0.6.0. See :ref:`agentic-development-2-32-0-rn`.
+
+* **Neuron Explorer** — Adds per-core host CPU utilization to the System Trace Viewer, CSV export of the current timeline selection from the Device Trace Viewer, a Tensor Engine throttling explainer with an automatic small-DMA-transfer warning, and profile folders and deletion in the Profile Manager. The ``neuron-explorer capture`` CLI replaces ``neuron-profile capture``. See :ref:`dev-tools-2-32-0-rn`.
+
+* **vLLM Neuron** — Upgraded to vLLM 0.24.0 (``vllm-neuron 0.24.0.1.1.0``) and integrated into the 2.32.0 DLAMIs and DLCs. See :ref:`vllm-neuron_rn`.
+
+* **DLAMIs & Containers** — All packages upgraded to Neuron SDK 2.32.0, with JAX 0.10.0 and vLLM 0.24.0. See :ref:`dlami-2-32-0-rn` and :ref:`containers-2-32-0-rn`.
+
+
+Software lifecycle updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* NxD Inference (NxDI) — now in maintenance mode; no new feature releases are planned. Migrate to vLLM Neuron (:ref:`announce-nxdi-maintenance-support-2-31`)
+* NxD Inference and NxD Core — no longer included in Neuron DLAMIs; the PyTorch 2.9 single-framework DLAMI, the vLLM 0.16 single-framework DLAMI, and the PyTorch 2.9 Torch NeuronX/NxD Core and NxD Inference virtual environments are no longer published. Use a 2.31.0 or earlier DLAMI if required (:ref:`dlami-2-32-0-rn`)
+* NxD Inference and NxD Core — no longer included in Neuron DLCs; the ``pytorch-inference-neuronx`` DLC and the legacy vLLM 0.16 ``pytorch-inference-vllm-neuronx`` DLC are no longer published. Use a 2.31.0 or earlier image if required (:ref:`containers-2-32-0-rn`)
+* NKI — ``nl.dynamic_range`` for-loops and dynamic ``while`` loops are deprecated and will be removed in a future release; migrate to ``fori_loop`` and ``while_loop`` (:ref:`nki-2-32-0-rn`)
+* Neuron Compiler — in the next SDK release the defaults change to ``--native-int64=enabled`` and ``--implicit-integer-downcast=none``, enabling native int64 execution and hard-erroring on unsupported ops; pin ``--native-int64=disabled --implicit-integer-downcast=all`` to keep the current downcast behavior (:ref:`compiler-2-32-0-rn`)
+
+
+Software dependency changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This release includes multiple software dependency changes. Update your environment before upgrading to Neuron 2.32.0.
+
+* NumPy 2.1 — no longer supported; use NumPy 2.2 or 2.3. NumPy 2.1 reaches upstream end of life on August 19, 2026.
+* vLLM 0.21 — the vLLM Neuron plugin is updated to vLLM 0.24.0. Migrate to vLLM 0.24.0.
+* JAX — Neuron now supports JAX 0.10.0. Migrate your code from older versions of JAX to v0.10.0 to use its features on Neuron hardware.
+
+Read the :doc:`Neuron 2.32.0 component release notes </release-notes/components/index>` for full details.
 
 ----
 
@@ -42,7 +100,7 @@ vLLM Neuron highlights
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 * Supported models: GPT-OSS 20B/120B (text) and Qwen3-VL (multimodal) on Trn2 and Trn3
-* Disaggregated inference with prefill/decode separation (1P1D, xPyD) via NiXL KV transfer
+* Disaggregated inference with prefill/decode separation (1P1D, xPyD)
 * Segmented prefill for long-context serving (tested up to 128K sequence length)
 * EAGLE3 speculative decoding
 * Structured outputs with on-device enforcement and tool calling

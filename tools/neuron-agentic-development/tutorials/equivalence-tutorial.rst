@@ -1,7 +1,7 @@
 .. meta::
    :description: Tutorial for validating a ported model using the Neuron Agentic Development Equivalence skill.
-   :keywords: equivalence, tutorial, model validation, NxD Inference, Neuron Agentic Development, Trainium, R-ratio
-   :date-modified: 2026-05-12
+   :keywords: equivalence, tutorial, model validation, NxD Inference, vLLM, vLLM Neuron, Neuron Agentic Development, Trainium, R-ratio
+   :date-modified: 2026-08-13
 
 .. _equivalence-tutorial:
 
@@ -40,8 +40,9 @@ You should see 32 NeuronCores. If you see 0, your instance does not have Neuron 
 attached. Stop here and fix that first.
 
 .. note::
-   Stages 0 through 4 of the Equivalence workflow run in CPU mode and do not require
-   Neuron hardware. Only Stages 5 through 7 require a compiled model and device access.
+   Stages 0, 2, 3, and 4 of the Equivalence workflow run in CPU mode and do not require
+   Neuron hardware. Stages 1, 5, 6, and 7 require a compiled model and device access —
+   note that this includes Stage 1, the smoke test, even though its stage number is low.
 
 Install Neuron Agentic Development
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -64,7 +65,7 @@ Activate your Python environment
 
 .. code-block:: bash
 
-   source ~/opt/aws_neuronx_venv_pytorch_2_9/bin/activate
+   source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
 
 Verify the required packages are installed.
 
@@ -84,6 +85,15 @@ You need:
 
 If you do not have a port yet, use the :ref:`Autoport skill <autoport-tutorial>` first.
 
+.. warning::
+   Your model must be a **causal LM** — it needs a ``ForCausalLM`` class and a next-token
+   distribution, because every stage compares tokens or logits. A pooling or embedding
+   model (no ``lm_head``, no sampler, fixed-size embedding output) has nothing to supply
+   for ``TARGET_CAUSAL_CLASS`` and no logits to compare, so this tutorial does not apply.
+   See the scope section of the
+   :doc:`/tools/neuron-agentic-development/developer_guides/neuron-framework-equivalence`
+   guide for the embedding-cosine alternative.
+
 Download your model weights
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -98,7 +108,7 @@ small model to keep validation fast.
 Step 1. Gather your model parameters
 --------------------------------------
 
-The Equivalence agent needs nine pieces of information about your model. Gather these
+The Equivalence agent needs eight pieces of information about your model. Gather these
 before you start.
 
 .. list-table::
@@ -128,10 +138,7 @@ before you start.
      - ``ArceeInferenceConfig``
    * - ``VENV``
      - Path to Python virtual environment with torch and neuronx packages
-     - ``~/opt/aws_neuronx_venv_pytorch_2_9``
-   * - ``MODEL_VALIDATION_DIR``
-     - Path to the ``model_validation`` package directory
-     - ``path/to/NeuroborosFoundations/model_validation``
+     - ``/opt/aws_neuronx_venv_pytorch_2_9``
    * - ``EXP_DIR``
      - Experiment output directory for all artifacts
      - ``agent_artifacts/equiv_arcee``
@@ -155,8 +162,7 @@ Invoke the agent with your parameters.
    TARGET_INNER_CLASS is NeuronArceeModel,
    TARGET_CAUSAL_CLASS is NeuronArceeForCausalLM,
    TARGET_CONFIG_CLASS is ArceeInferenceConfig,
-   VENV is ~/opt/aws_neuronx_venv_pytorch_2_9,
-   MODEL_VALIDATION_DIR is path/to/NeuroborosFoundations/model_validation,
+   VENV is /opt/aws_neuronx_venv_pytorch_2_9,
    EXP_DIR is agent_artifacts/equiv_arcee
 
 The agent confirms your parameters and starts working. You do not need to do anything
@@ -175,7 +181,8 @@ seconds.
 
 **Stage 1: Smoke test.** The agent runs 10 prompts through both models with greedy decoding
 and checks token match rate. This is a quick liveness check — if the port produces
-coherent output, it passes. A match rate above 30% is sufficient to continue.
+coherent output, it passes. A match rate above 30% is sufficient to continue. This stage
+requires the compiled model and a Neuron device.
 
 **Stage 2: Component-level testing.** The agent writes test files for each mapped
 component using the 3-tensor R-ratio method. It tests normalization, embeddings, linear
@@ -282,11 +289,47 @@ tests after a code change:
 
 .. code-block:: bash
 
-   source ~/opt/aws_neuronx_venv_pytorch_2_9/bin/activate
+   source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
    NXD_CPU_MODE=1 python3 ${SCRIPTS_DIR}/run_stage2.py \
      --tests-dir agent_artifacts/equiv_arcee/tests \
      --tau-r 1.2 \
      --output agent_artifacts/equiv_arcee/results/stage2.json
+
+Step 7. Validate a vLLM Neuron port (optional)
+------------------------------------------------
+
+The steps above assume an NxD Inference target. The Equivalence agent also validates
+`vLLM Neuron <https://github.com/vllm-project/vllm-neuron>`_ ports — ports whose
+modeling file imports from ``vllm_neuron``. The eight-stage workflow is the same; the agent
+swaps in a vLLM Neuron stack adapter that handles the framework-specific differences for
+you. You invoke the agent exactly as in Step 2.
+
+The agent detects the stack automatically from your modeling file's imports. If you want to
+be explicit, tell it ``target_stack is vllm_neuron`` when you provide your parameters.
+
+Here is what changes under the hood, so the output makes sense when you read it:
+
+- **Comparison metric.** vLLM Neuron ports are not scored with the R-ratio. The agent uses
+  vLLM Neuron's own accuracy tooling, which reports the **Bhattacharyya Coefficient (BC)**
+  and the **σ-ratio** instead. A component passes when ``BC >= 0.99`` or ``σ-ratio <= 1.0``,
+  with the L-infinity ratio under 5.0 and the L2 ratio under 3.0.
+- **Config class.** Point ``TARGET_CONFIG_CLASS`` at the model's ``config.py`` module. The
+  agent builds the config with ``from_configs()`` rather than ``from_pretrained()``.
+- **Weights.** All linear weights are transposed relative to HuggingFace, and q/k/v are
+  fused into a single ``qkv_proj_weight``. The agent handles this when it loads weights and
+  writes the component tests — you do not transpose anything by hand.
+- **Attention tests.** Full attention is not testable on its own (it needs a live KV cache),
+  so the agent tests the QKV projection and the output projection as separate components.
+
+.. warning::
+   On ``trn2.48xlarge``, running a vLLM Neuron model with **TP=1 can crash with a SIGSEGV
+   and no error message** if the model requires multi-core sharding. The correct TP degree is
+   model-specific — check the model's example run script
+   (``examples/vllm_neuron/models/<MODEL>/run.py``) for the value it uses.
+
+For the full list of weight transforms, the forward signature, KV cache shapes, and the
+diagnostic tools the agent uses on failure, see the
+:ref:`vLLM Neuron section of the deep dive <equiv-vllm-neuron>`.
 
 Troubleshooting
 ---------------
@@ -307,8 +350,8 @@ automatically, but manual re-runs may need you to verify the test directory stru
 
 **Stage 5 fails but all Stage 2 tests passed.** This typically indicates
 compilation-induced divergence (operator fusion or kernel numerics) rather than a porting
-bug. The agent will note this in its output and may recommend escalating to the compiler
-team.
+bug. The agent will note this in its output. Capture the compiled artifacts and the
+Stage 2/Stage 5 result JSON, and open an issue on the Neuron SDK GitHub repository.
 
 **Validation keeps failing on the same component.** Check the
 ``class_divergence_report.json`` — the component may use a different class on device than
@@ -317,7 +360,16 @@ but complex NKI kernels may need manual inspection.
 
 **No NeuronCores detected.** Run ``neuron-ls``. If it shows 0 devices, your instance
 either does not have Neuron hardware or the driver is not loaded. Check that
-``aws-neuronx-dkms`` is installed. Note that Stages 0 through 4 do not need hardware.
+``aws-neuronx-dkms`` is installed. Note that Stages 0, 2, 3, and 4 do not need hardware,
+but Stages 1, 5, 6, and 7 do.
+
+**vLLM Neuron port crashes with a SIGSEGV and no error.** One common cause is running with
+a TP degree that is too low for the model's memory requirements (for example, TP=1 for a
+model that needs multi-core sharding). Other possible causes include mismatched Neuron SDK
+versions, incorrect ``NEURON_SKIP_EFA_AFFINITY`` settings, or a corrupted compiled model
+artifact. Start by checking the tensor parallel size in the model's example ``run.py`` and
+verifying it matches your invocation. If the TP size is correct, verify the Neuron SDK
+version matches the version the model was compiled against.
 
 Related resources
 -----------------

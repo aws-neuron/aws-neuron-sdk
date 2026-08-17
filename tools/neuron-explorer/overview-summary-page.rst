@@ -117,6 +117,47 @@ There are a few key things to look for in this graph:
 2. **model_flops relative to transpose_flops**. It is desired to have little-to-no ``transpose_flops`` consuming tensor engine utilization. Ideally the ``model_flops`` amount is much larger than the amount of transposes.
 3. **active_throttled_flops**: FLOPs lost due to throttling during active periods is undesirable. It is worth identifying the root cause for the throttling if there is indication of this happening.
 
+.. _neuron-explorer-understanding-throttling:
+
+Understanding throttling
+""""""""""""""""""""""""
+
+The ``throttled_flops`` portion of the chart, along with the **Active FLOPS Throttling Detected** insight and the device timeline's **Throttling** track, all report the same underlying hardware behavior. This section explains what throttling is, how to read the percentages, and how to reduce it.
+
+**What throttling is and why it occurs**
+
+Throttling is the hardware temporarily limiting how much of the Tensor Engine you can use in order to stay within its power, current, and thermal safety limits. When a limit is approached, the hardware caps the engine's max utilization for a short window, then releases it once conditions allow. Common causes on Trainium and Inferentia are:
+
+* **Peak / delta current (dI/dt)** - rapid current swings when the Tensor Engine ramps up quickly from low utilization. To smooth these swings, the hardware limits the maximum Tensor Engine utilization. This has the largest practical impact on Tensor Engine performance for bursty workloads. On Trn2 and Trn3 the Tensor Engine starts at roughly **50% utilization** of maximum utilization and ramps to full over about the first **~3 microseconds** after work begins. If utilization drops below 50% over any ~3 microsecond window — for example during an idle gap — the limit re-engages, so the next burst again runs at roughly 50% of maximum Tensor Engine utilization until it ramps back up. Keeping the Tensor Engine at or above 50% utilization avoids this penalty.
+* **Thermal design power (TDP) driven limits** - sustained power and thermal pressure that push the chip toward its thermal design power budget.
+
+Neuron Explorer reports throttling as a **hardware utilization limit** reported by the hardware. It tells you *how much* the engine was limited and *when*.
+
+**How to interpret "x% throttling" in a profile**
+
+Internally the hardware reports a *utilization limit* between 0 and 1 (a value of 1.0 means no throttling). The throttling percentage is the inverse of that limit:
+
+   ``throttling % = 1 − utilization_limit``
+
+You will see throttling expressed a few different ways in the Summary Viewer and Device Trace Viewer:
+
+* **Active Throttled %** (FLOPs Utilization chart, Tensor Engine) - the percentage of the Tensor Engine's peak FLOPs (its BF16-adjusted hardware maximum) that throttling made unavailable *while the engine was actively trying to compute*. This is the throttling that costs you real work, and it drives the **Active FLOPS Throttling Detected** insight.
+* **Unused Throttled %** (FLOPs Utilization chart, Tensor Engine) - the percentage of peak FLOPs that throttling made unavailable *while the engine was idle anyway*. Because no useful work was happening in those windows, it has little to no performance impact; it is shown only to complete the utilization picture and to make clear that throttling can also occur outside active-compute windows.
+* **average_utilization_limit_percent** (Current Selection Summary) - the time-weighted average utilization limit over the selected time range. 1.0 (100%) means no throttling was active; lower values mean the hardware was limited for part of the selection.
+* **Throttling track** (Device Trace Viewer timeline) - a step line showing the instantaneous hardware utilization limit over time, so you can locate exactly when throttling occurred. See :doc:`overview-device-profiles`.
+
+When judging impact, focus on **Active Throttled %**. A large Unused Throttled % with a near-zero Active Throttled % generally does not need action.
+
+**Performance impact and mitigation**
+
+Active throttling directly lowers Tensor Engine utilization, which shows up as reduced MFU/HFU. To reduce it:
+
+* **Keep the Tensor Engine busy.** Avoid frequent dips below 50% utilization on the Tensor Engine. On Trn2 and Trn3, keeping the engine at or above 50% utilization prevents the dI/dt ramp penalty described above.
+* **Improve pipelining and overlap.** Overlap DMA/data movement with compute so the engine does not stall waiting for inputs, keeping utilization above the dI/dt re-engagement threshold.
+* **Reduce sustained power and thermal pressure.** If throttling correlates with long, dense high-power regions rather than post-idle bursts, the cause is more likely a TDP-driven limit. Consider spreading heavy compute rather than running at sustained peak.
+
+See the :ref:`throttling glossary entries <neuron-explorer-throttling-glossary>` for definitions of the underlying terms, and the :ref:`troubleshooting guide <neuron-explorer-troubleshooting>` for a symptom-based checklist.
+
 Other Engines (Scalar, Vector, GpSimd)
 """""""""""""""""""""""""""""""""""""""
 
@@ -178,6 +219,7 @@ Displays metadata about the system and software versions used during profiling:
 * Driver Version
 * Runtime Version
 * Collectives Version
+* NKI Version
 
 System Profile Summary
 ======================

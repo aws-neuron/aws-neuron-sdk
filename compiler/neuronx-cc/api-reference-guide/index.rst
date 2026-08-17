@@ -16,7 +16,7 @@ Usage
 
 *Optional parameters are shown in square brackets.*
 
-.. _neuron_cli:
+.. _neuronx-cc-cli:
 
 .. rubric:: Neuron Compiler Command-Line Interface
 
@@ -43,8 +43,6 @@ Common parameters for the Neuron CLI:
 
 .. option:: neuronx-cc compile [parameters]
 
-  .. _description-1:
-
   Compile a model for use on the AWS Machine Learning Accelerator.
 
 
@@ -56,6 +54,8 @@ Common parameters for the Neuron CLI:
      [--model-type <model>]
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
+     [--native-int64 <mode>]
+     [--implicit-integer-downcast <mode>]
      [--distribution-strategy <distribution_type>]
      [--logical-nc-config <shard_degree>], or [-lnc <shard_degree>]
      [--optlevel <opt_level>], or [-O <opt_level>]
@@ -123,6 +123,27 @@ Common parameters for the Neuron CLI:
 
     .. note:: If multiple competing options are specified then the option right-most on the command line will supercede previous options.
 
+  - ``--native-int64 <mode>``: Controls whether 64-bit integer (``int64``) operations are executed natively or downcast to ``int32``. (Only available on ``trn2`` and later; Default: ``default``)
+
+    Valid values:
+
+    - ``default``: (default) Preserve the current shipped behavior. ``int64`` operations are downcast to ``int32`` for execution, which may lose precision for values outside the signed 32-bit range.
+    - ``enabled``: Execute ``int64`` operations natively, preserving full 64-bit precision. A small number of operations cannot run natively on ``int64`` operands — matrix multiplication, scatter-with-compute, all-reduce, and reduce-scatter have no integer datapath at all (they compute in floating point), and integer power has no ``int64`` datapath. For these the compiler falls back to a lossy downcast as permitted by ``--implicit-integer-downcast``, or reports an error if downcasting is not permitted for that operation. Enabling native ``int64`` execution can reduce performance by approximately 20–30% relative to the ``int32`` datapath.
+    - ``disabled``: Force ``int64`` operations to be downcast to ``int32``, equivalent to the current default behavior.
+
+    .. note:: Native ``int64`` execution is supported on ``trn2`` and later targets. On earlier targets ``int64`` operations are always downcast to ``int32``.
+
+  - ``--implicit-integer-downcast <mode>``: Selects which operations that lack a native integer datapath are permitted to run by lossily downcasting their operands rather than reporting an error. This applies to both ``int32`` and ``int64`` operands, and is independent of the ``--native-int64`` setting. Matrix multiplication, scatter-with-compute (a scatter that accumulates into the destination, such as ``scatter_add`` or ``index_add``, rather than overwriting it), all-reduce, and reduce-scatter have no integer datapath at all — they compute in floating point, so both ``int32`` and ``int64`` operands are downcast to FP32 (lossy for magnitudes above 2\ :sup:`24`). Integer power (``pow``) runs natively in ``int32``, so only ``int64`` operands require a downcast, to ``int32`` (lossy for magnitudes above 2\ :sup:`31`). (Default: ``default``)
+
+    Valid values:
+
+    - ``default``: (default) Preserve the current shipped behavior, which permits the lossy downcast for all such operations (equivalent to ``all``).
+    - ``all``: Permit the lossy downcast for every operation that lacks a native integer datapath.
+    - ``none``: Do not permit the downcast for any operation. Operations that would require a lossy downcast report a compilation error (see :ref:`NCC_EVRF035 <error-code-evrf035>`, :ref:`NCC_EVRF060 <error-code-evrf060>`, :ref:`NCC_EVRF061 <error-code-evrf061>`, :ref:`NCC_EVRF062 <error-code-evrf062>`, and :ref:`NCC_EVRF063 <error-code-evrf063>`) instead of silently losing precision.
+    - ``<op_list>``: A comma-separated list of operations for which the downcast is permitted (for example, ``dot,pow``). Supported operation names are ``dot``, ``scatter``, ``all_reduce``, ``reduce_scatter``, and ``pow``. Operations not named in the list still report an error.
+
+    .. note:: Operations that already have a native integer datapath are never affected by this option; they always run natively regardless of the value.
+
   - ``--distribution-strategy <distribution_type>``: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
     Valid values:
@@ -186,8 +207,6 @@ Common parameters for the Neuron CLI:
 ------------------------
 
 .. option:: neuronx-cc list-operators [parameters]
-
-  .. _description-1:
 
   Returns a newline (‘\\n’) separated list of operators supported by the Neuron Compiler.
 

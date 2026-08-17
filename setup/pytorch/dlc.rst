@@ -40,15 +40,9 @@ Available PyTorch Neuron DLC images:
    * - Container Type
      - Use Case
      - Links
-   * - PyTorch Inference (NeuronX)
-     - Model serving on Inf2/Trn1/Trn2/Trn3
-     - `Inference images <https://github.com/aws-neuron/deep-learning-containers#pytorch-inference-neuronx>`__
    * - PyTorch Inference vLLM (NeuronX)
      - LLM serving with vLLM
      - `vLLM images <https://github.com/aws-neuron/deep-learning-containers#vllm-inference-neuronx>`__
-   * - PyTorch Inference (Neuron)
-     - Legacy inference on Inf1
-     - `Inf1 images <https://github.com/aws-neuron/deep-learning-containers#pytorch-inference-neuron>`__
 
 Prerequisites
 -------------
@@ -75,16 +69,12 @@ The fastest way to get started with LLM inference on Neuron:
 
 .. code-block:: bash
 
-   # Authenticate with ECR
-   aws ecr get-login-password --region us-east-1 | \
-     docker login --username AWS --password-stdin 763104351884.dkr.ecr.us-east-1.amazonaws.com
-
    # Pull the vLLM inference container
-   docker pull 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-vllm-neuronx:0.21.0.1.0.0-neuronx-py312-sdk2.31.0-ubuntu24.04
+   docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04
 
    # Run with Neuron device access
    docker run -it --device=/dev/neuron0 \
-     763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-vllm-neuronx:0.21.0.1.0.0-neuronx-py312-sdk2.31.0-ubuntu24.04
+     public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04
 
 For the latest image tags and a step-by-step walkthrough, see
 :doc:`/deploy/environments/quickstart-deploy-dlc`.
@@ -100,7 +90,7 @@ You can extend a Neuron DLC with additional packages by creating a custom Docker
 
 .. code-block:: dockerfile
 
-   FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference-neuronx:2.9.0-neuronx-py312-sdk2.31.0-ubuntu24.04
+   FROM public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04
 
    # Install additional packages
    RUN pip install transformers datasets
@@ -145,5 +135,5 @@ Next Steps
 - :doc:`/deploy/environments/quickstart-deploy-dlc` - Full vLLM DLC deployment walkthrough
 - :doc:`/deploy/environments/dlc-images` - Find the right DLC image for your workload
 - :doc:`/deploy/index` - Full containers documentation
-- :doc:`/frameworks/torch/training-torch-neuronx` - Training tutorials
+- :doc:`Training with torch-neuronx [archived content] </archive/nxd-training/index>` - Training tutorials
 - :doc:`/frameworks/torch/inference-torch-neuronx` - Inference tutorials

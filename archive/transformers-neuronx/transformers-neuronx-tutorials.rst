@@ -18,4 +18,4 @@ Transformers NeuronX Tutorials
     Hugging Face facebook/opt-66b autoregressive sampling on Inf2 <https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/facebook-opt-66b-sampling.ipynb>
 
 
-.. include:: /libraries/transformers-neuronx/transformers-neuronx-tutorials.txt
+.. include:: /archive/transformers-neuronx/transformers-neuronx-tutorials.txt

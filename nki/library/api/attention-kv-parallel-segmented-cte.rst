@@ -1,6 +1,6 @@
 .. meta::
     :description: KV-parallel segmented prefill attention.
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. currentmodule:: nkilib.core.attention
 
@@ -24,7 +24,7 @@ API Reference
 attention_kv_parallel_segmented_cte
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: attention_kv_parallel_segmented_cte(q: nl.ndarray, k_cache: nl.ndarray, v_cache: nl.ndarray, block_tables: nl.ndarray, kvp_q_offset: nl.ndarray, replica_groups: ReplicaGroup, group_size: int, block_size: int, seg_size: int, scale: float = 1.0, global_q_offset: int = 0, tp_out: bool = False, sliding_window: int = 0, kvp_rank_id: Optional[nl.ndarray] = None, kvp_group_size: int = 0) -> nl.ndarray
+.. py:function:: attention_kv_parallel_segmented_cte(q: nl.ndarray, k_cache: nl.ndarray, v_cache: nl.ndarray, block_tables: nl.ndarray, kvp_q_offset: nl.ndarray, replica_groups: ReplicaGroup, group_size: int, block_size: int, seg_size: int, scale: float = 1.0, global_q_offset: int = 0, tp_out: bool = False, sliding_window: int = 0, kvp_rank_id: Optional[nl.ndarray] = None, kvp_group_size: int = 0, apc_mode: bool = False, valid_num_prior_tokens: nl.ndarray = None) -> nl.ndarray
 
    KV-parallel segmented prefill attention.
 
@@ -57,6 +57,10 @@ attention_kv_parallel_segmented_cte
    :param kvp_rank_id: [1, 1] int32, This rank's index within the KV-parallel group. Required for interleaved (round-robin) KV distribution to convert global K positions to segment-local positions.
    :type kvp_rank_id: ``Optional[nl.ndarray]``
    :param kvp_group_size: Number of ranks sharing the KV cache in round-robin fashion. When > 0, enables interleaved KV mode where rank r holds global blocks r, r+R, r+2R, ... (R = kvp_group_size).
+
+   :param apc_mode: Automated prefix caching mode (default ``False``). When ``True``, the prior token count is taken from ``valid_num_prior_tokens`` (required) and compile-time tile-visibility optimizations are disabled; set ``global_q_offset=0``.
+
+   :param valid_num_prior_tokens: ``[1, 1]`` int32. Required when ``apc_mode`` is ``True``. The number of fully-visible local prior tokens for Q chunk 0 on this rank.
    :type kvp_group_size: ``int``
    :return: [BS, S, D], Merged attention output for this rank's Q heads.
    :rtype: ``nl.ndarray``

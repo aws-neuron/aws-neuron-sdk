@@ -338,11 +338,19 @@ def _get_explicit_override(cur_file):
     if cur_file == 'libraries/vllm-neuron/neuron-inference-overview':
         return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
 
+    if cur_file == 'release-notes/components/vllm-neuron':
+        return ['Trn2', 'Trn3'], True
+
     if cur_file.startswith('libraries/nxd-inference/'):
         return ['Inf2', 'Trn1', 'Trn2'], True
 
     if cur_file.startswith('libraries/nemo-megatron/'):
         return ['Trn1', 'Trn2'], True
+
+    # --- Tools ---------------------------------------------------------
+
+    if cur_file == 'release-notes/components/dev-tools':
+        return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
 
     # --- NKI -----------------------------------------------------------------
 
@@ -522,6 +530,9 @@ def _get_page_override(cur_file):
         return ['Inf2', 'Trn1', 'Trn2'], True
 
     # --- Tools ---------------------------------------------------------------
+
+    if cur_file == 'tools/tutorials/performance-profiling-vllm':
+        return ['Trn2', 'Trn3'], True
 
     # Neuron Explorer (not supported on Inf1)
     if cur_file.startswith('tools/neuron-explorer/'):

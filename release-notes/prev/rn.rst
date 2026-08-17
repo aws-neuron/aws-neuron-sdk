@@ -7,6 +7,7 @@ Previous release notes (Neuron 2.x)
    :maxdepth: 1
    :hidden:
 
+   Neuron 2.31.0 </release-notes/prev/2.31.0>
    Neuron 2.30.0 </release-notes/prev/2.30.0>
    Neuron 2.29.1 </release-notes/prev/2.29.1>
    Neuron 2.29.0 </release-notes/prev/2.29.0>
@@ -19,7 +20,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
 
-* **The latest Neuron release is 2.31.0, released on 07/07/2026.** Read the :doc:`2.31.0 release notes </release-notes/2.31.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+* **The latest Neuron release is 2.32.0, released on 08/17/2026.** Read the :doc:`2.32.0 release notes </release-notes/2.32.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
 
 ----
   
@@ -38,6 +39,11 @@ Previous release notes (Neuron 2.x)
                 **Neuron component release notes**
                 ^^^
                 Release notes by component for prior Neuron SDK versions.
+
+Neuron 2.31.0 (05/21/2026)
+--------------------------
+
+See :ref:`neuron-2-31-0-whatsnew` for the full Neuron 2.31.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
 
 Neuron 2.30.0 (05/21/2026)
 --------------------------
@@ -484,7 +490,7 @@ Inference Github repository: `aws-neuron/neuronx-distributed-inference <https://
 **Transformers NeuronX (TNx)**: This release introduces several new features, including flash decoding support for speculative decoding, and on-device generation in speculative decoding flows. It adds :ref:`Eagle speculative decoding <cb-eagle-speculative-decoding>` with greedy and lossless sampling, as well as support for :ref:`CPU compilation <transformers_neuronx_readme>` and sharded model saving. Performance improvements include optimized MLP and QKV for Llama models with sequence parallel norm and control over concurrent compilation workers.
 
 **Training Highlights:** NxD Training in this release adds support for
-HuggingFace :ref:`Llama3/3.1 70B <hf_llama3_70B_pretraining>` on trn2 instances, introduces :doc:`DPO support </libraries/nxd-training/tutorials/hf_llama3_8B_DPO_ORPO>` for
+HuggingFace :ref:`Llama3/3.1 70B <hf_llama3_70B_pretraining>` on trn2 instances, introduces :doc:`DPO support [archived content] </archive/nxd-training/hf_llama3_8B_DPO_ORPO>` for
 post-training model alignment, and adds support for Mixture-of-Experts
 (MoE) models including Mixtral 7B. The release includes improved
 :ref:`checkpoint conversion <checkpoint_conversion>` capabilities and supports MoE with Tensor,

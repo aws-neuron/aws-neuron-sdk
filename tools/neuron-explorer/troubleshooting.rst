@@ -285,6 +285,20 @@ Performance issues
    * - ``neuron-explorer`` assertion failure with multiple process groups
      - Known issue profiling MPMD workloads (e.g., TP2+EP2). Workaround:
        profile with single process group, or use session-based capture.
+   * - "Active FLOPS Throttling Detected" / large Active Throttled % in the FLOPs chart
+     - The Tensor Engine is losing useful work to hardware throttling, which
+       reduces MFU/HFU. Throttling protects the hardware against power,
+       current, and thermal limits. On Trn2 and Trn3, a common cause is bursty
+       Tensor Engine activity: when utilization drops below 50% over any ~3 µs
+       window, the dI/dt current limit re-engages, so the next burst again runs
+       at roughly 50% of maximum utilization until it ramps back up.
+
+       **Fix:** Keep the Tensor Engine at or above 50% utilization —
+       improve pipelining and overlap DMA with compute. In NKI kernels you can
+       also insert dummy matmuls to bridge idle gaps and keep the engine warm.
+       Use the **Throttling** track in the Device Trace Viewer
+       to locate when it occurs. See
+       :ref:`neuron-explorer-understanding-throttling`.
 
 
 Timing and measurement issues
@@ -318,6 +332,13 @@ Frequently asked questions
 
 Capture and setup
 ^^^^^^^^^^^^^^^^^
+
+**What happens when I run ``neuron-explorer capture`` without inputs?**
+   Neuron Explorer executes the NEFF with zero-filled buffers using the input names and sizes
+   declared in the NEFF. The zero-filled input tensors may not be semantically valid for the
+   model and may result in execution errors or an unrepresentative profile. See
+   :ref:`capture input behavior <neuron-explorer-capture-default-inputs>` for details and
+   input syntax.
 
 **How do I determine NEFF execution time without profiling?**
    There is no built-in non-profiling timer for NEFF execution. The
@@ -414,6 +435,21 @@ Viewing and analysis
    NKI kernel code vs the Neuron compiler. Low NKI coverage (<50%) means
    most execution is compiler-generated — writing NKI kernels for those
    operations could improve performance.
+
+**What does the amber "Small DMA transfers" band on the timeline mean?**
+   Neuron Explorer automatically flags regions dominated by very small,
+   persistent hardware-dynamic (DGE) DMA transfers, which are inefficient and can
+   back-pressure HBM, resulting in profiling data loss.
+
+   **Fix:** Batch or vectorize the transfers so each DMA moves more
+   data. See :ref:`neuron-explorer-small-dma-warning`.
+
+**Why does the FLOPs chart show throttling, and how do I interpret it?**
+   Throttling is the hardware limiting Tensor Engine utilization to stay
+   within power, current, and thermal limits. Focus on **Active Throttled %**
+   (work lost while the engine was computing); **Unused Throttled %** during
+   idle periods has little impact. See
+   :ref:`neuron-explorer-understanding-throttling`.
 
 **Is ``summary-json`` still supported?**
    Yes. Use ``neuron-explorer view -d <dir> --output-format summary-json``

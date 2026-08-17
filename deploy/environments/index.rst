@@ -85,13 +85,6 @@ Quickstarts
 
       Configure and deploy a Deep Learning Container with vLLM for inference. ~30 minutes.
 
-   .. grid-item-card:: Quickstart: PyTorch inference with DLC
-      :link: /deploy/environments/quickstart-pytorch-inference-dlc
-      :link-type: doc
-      :class-card: sd-border-1
-
-      Run PyTorch inference using a pre-built Neuron DLC on EC2.
-
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -101,4 +94,3 @@ Quickstarts
    Customize DLC </deploy/environments/customize-dlc>
    Docker Setup </deploy/environments/docker-setup>
    Quickstart: Deploy DLC with vLLM </deploy/environments/quickstart-deploy-dlc>
-   Quickstart: PyTorch Inference DLC </deploy/environments/quickstart-pytorch-inference-dlc>

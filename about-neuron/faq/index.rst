@@ -1,4 +1,4 @@
-.. _neuron_faq:
+.. _neuron-faq-other:
 
 Other Neuron FAQs
 =================
@@ -13,15 +13,6 @@ General FAQs
 
 .. grid:: 1 1 2 2
    :gutter: 2
-
-   .. grid-item-card::
-      :link: neuron2-intro-faq
-      :link-type: doc
-      :class-card: sd-border-1
-
-      **Neuron 2.x Introduction FAQ**
-      ^^^
-      Common questions about Neuron 2.x and Trn1 general availability
 
    .. grid-item-card::
       :link: onnx-faq
@@ -84,7 +75,6 @@ Training FAQs
    :maxdepth: 1
    :hidden:
 
-   Neuron 2.x Introduction FAQ <neuron2-intro-faq>
    ONNX FAQ <onnx-faq>
    Contributing Guidelines FAQ <contributing-faq>
    Inference with Neuron FAQ <inference/neuron-faq>

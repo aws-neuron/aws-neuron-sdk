@@ -3,7 +3,7 @@
 <!-- meta: description: Complete reference for all Neuron-specific
 configuration parameters available through additional_config and environment
 variables. -->
-<!-- meta: date_updated: 2026-07-20 -->
+<!-- meta: date_updated: 2026-08-13 -->
 <!-- Content type: reference-general -->
 
 ## Overview
@@ -19,9 +19,9 @@ two config namespaces:
 from vllm import LLM
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3.3-70B-Instruct",
     max_model_len=4096,
-    tensor_parallel_size=8,
+    tensor_parallel_size=32,
     additional_config={
         "neuron_config": {
             "num_batched_tokens_buckets": [128, 256, 512, 1024, 2048, 4096],
@@ -34,8 +34,8 @@ llm = LLM(
 Or via CLI:
 
 ```bash
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --additional-config '{"neuron_config": {"num_batched_tokens_buckets": [256, 512, 1024]}}'
 ```
 
@@ -47,7 +47,7 @@ For conceptual overview and trade-offs, see [Bucketing and dynamic shapes](featu
 | ---- | ---- | ---- | ---- |
 | `num_batched_tokens_buckets` | list[int] | Power-of-2 from 128 to `max_num_batched_tokens` | Compiled prefill token counts. Inputs padded to nearest bucket. Fewer = faster startup, more padding. Largest must equal `max_num_batched_tokens`. When segmented prefill is enabled, must match `kv_segment_size_buckets` (kernel constraint). |
 | `num_seqs_buckets` | list[int] | Power-of-2 from 1 to `max_num_seqs` | Compiled decode batch sizes. Requests batched to smallest bucket >= current size. Largest must equal `max_num_seqs`. |
-| `kv_segment_size_buckets` | list[int] or null | null (disabled) | KV segment sizes for segmented attention kernel. Values must be in {512, 1024, 2048, 4096}, divisible by `block_size`. |
+| `kv_segment_size_buckets` | list[int] or null | null (disabled) | KV segment sizes for segmented attention kernel. Values must be in {512, 1024, 2048, 4096, 8192}, divisible by `block_size`. |
 | `decode_context_length_buckets` | list[int] or null | null (disabled) | Second decode bucketing dimension. Compiles smaller NEFFs sized to typical context lengths instead of `max_model_len`. Values must be ascending, < `max_model_len`, divisible by 128. |
 
 ## KV cache options
@@ -67,7 +67,7 @@ directly to `LLM(...)` or on the CLI.
 
 ```bash
 # FP8 KV cache via CLI
-vllm serve openai/gpt-oss-20b --kv-cache-dtype fp8
+vllm serve meta-llama/Llama-3.3-70B-Instruct --kv-cache-dtype fp8
 ```
 
 ## Sampling options
@@ -103,7 +103,7 @@ For conceptual overview, see [Prompt embeddings](features-guide.md#prompt-embedd
 | `enable_prompt_embeds` (vLLM parameter) | bool | false | Enable passing precomputed embedding tensors instead of token IDs. Not nested under `neuron_config`. Requests include `prompt_embeds` with shape `[seq_len, hidden_size]`. |
 
 ```bash
-vllm serve openai/gpt-oss-20b --enable-prompt-embeds
+vllm serve meta-llama/Llama-3.3-70B-Instruct --enable-prompt-embeds
 ```
 
 ## Quantization options
@@ -129,6 +129,10 @@ For multimodal models (e.g., Qwen3-VL). See [Multimodal support](features-guide.
 | `num_vision_tokens_buckets` | list[int] | auto | Vision encoder buckets over the number of vision patches per encoder forward pass. Scales with image count and resolution. |
 | `vision_attention_block_size` | int | 2048 | Attention block size for the vision encoder. Must be large enough to hold the largest single image; if `mm_processor_kwargs.max_pixels` implies more tokens, it is auto-raised to fit (with a warning). |
 | `max_vision_seq_len` | int | -- | Caps the largest auto-generated bucket, limiting how many buckets compile. Use it to bound compile time/memory when your workload won't need the full token ceiling. Ignored if `num_vision_tokens_buckets` is set explicitly. |
+| `tp_size` | int | 1 | Tensor parallel degree for the vision encoder. Whichever of `tp_size`/`dp_size` is left at 1 is inferred from `world_size`; if both are set, `tp_size * dp_size` must equal `world_size`. |
+| `dp_size` | int | 1 | Data parallel degree for the vision encoder — vision blocks are scattered across `dp_size` ranks. Same inference rule as `tp_size`. |
+| `encoder_cache_num_blocks` | int or null | null (auto) | Block count for the on-device encoder cache. Auto-derived from the scheduler's `encoder_cache_size` budget. Acts as a floor, not an override: a value below the derived minimum is raised to it (logged). Set it above that minimum for workloads with many small images — the scheduler sizes by token count and is unaware of per-block padding waste, so each small item still consumes a whole block. |
+| `encoder_cache_min_hold_time_ms` | float or null | null (auto: 0 monolithic, 100 EPD) | Minimum time a written cache block stays allocated before it can be freed. Guards against reuse while a remote reader is still pulling the data, which is why EPD defaults to 100 ms and a single-server deployment to 0. |
 
 If `num_vision_tokens_buckets` is omitted, buckets are auto-generated at
 startup as a power-of-2 progression from `vision_attention_block_size` up to a
@@ -145,6 +149,38 @@ forward pass, so size buckets for total images processed together:
 | `[2048, 8192]` | Up to ~8 images |
 | `[2048, 8192, 20480]` | Up to ~20 images |
 
+For details, see [Vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md).
+
+### EPD construction roles
+
+These two flags select which half of a vision-language model an engine builds,
+and are what split a multimodal deployment into an encoder pool and a
+prefill+decode pool. See
+[Encoder-disaggregated inference (EPD)](features-guide.md#encoder-disaggregated-inference-epd).
+
+| Option | Where it goes | Type | Default | Description |
+| ---- | ---- | ---- | ---- | ---- |
+| `mm_encoder_only` | `--mm-encoder-only` (CLI flag) | bool | false | Build **vision-only** — the Vision Encoder (VE) pool. The language model is dropped, so no prefill/decode warmup runs. This is an upstream vLLM flag, not a `neuron_config` field. |
+| `mm_language_model_only` | top level of `additional_config` | bool | false | Build **language-only** — the Prefill+Decode (PD) pool. The vision tower is dropped, so no encoder warmup runs. Plugin-specific: upstream has no equivalent because its disaggregated-encoder consumer loads the full model and leaves the vision tower unused. |
+
+:::{important}
+`mm_language_model_only` sits at the **top level** of `additional_config`, not
+inside `vision_neuron_config` or `neuron_config`, and there is no
+`--mm-language-model-only` CLI flag. Nesting it produces no error — the flag is
+silently ignored and the engine builds both towers, wasting device memory on a
+vision tower it never runs.
+
+```bash
+# Correct — top level, sibling of neuron_config / vision_neuron_config.
+--additional-config '{"neuron_config": {...}, "vision_neuron_config": {...}, "mm_language_model_only": true}'
+```
+
+:::
+
+The two are mutually exclusive: a pool is either vision-only or language-only.
+Setting both raises `ValueError` at startup. Leaving both unset is the default
+monolithic path, where one engine builds and runs both towers.
+
 ## Environment variables
 
 ### Compilation and caching
@@ -153,14 +189,15 @@ For conceptual overview, see [Compilation](features-guide.md#compilation).
 
 | Variable | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
-| `VLLM_CACHE_ROOT` | str | `~/.cache/vllm` | Root directory for all vLLM caches. Compiled model artifacts (NEFFs) are stored under `$VLLM_CACHE_ROOT/neuron/compile_cache`. Change this to persist or relocate the compile cache. |
+| `NEURON_COMPILED_ARTIFACTS` | str | -- | Path to cache/load compiled models. Skips recompilation when valid artifacts exist. |
 | `VLLM_NEURON_CPU_COMPILE` | bool | 0 | Enable CPU-only compilation mode (compile NEFFs without Neuron hardware). |
 | `NEURON_PLATFORM_TARGET_OVERRIDE` | str | -- | Target platform for CPU compile mode (e.g., `trn2`). Required when `VLLM_NEURON_CPU_COMPILE=1`. |
-| `VLLM_NEURON_PARALLEL_COMPILE_WORKERS` | int | -- | Number of parallel compilation workers. |
-| `VLLM_NEURON_REMOTE_CACHE` | str | -- | Path to NFS/FSx mount for shared persistent cache across nodes. |
-| `VLLM_NEURON_DISABLE_COMPILE_CACHE` | bool | 0 | Disable compilation cache entirely. Forces recompilation on every startup. |
-| `VLLM_NEURON_COMPILATION_TIMEOUT` | int | -- | Timeout in seconds for individual NEFF compilation. |
+| `NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS` | int | -- | Number of parallel compilation workers. |
+| `NEURON_LIBTORCH_REMOTE_CACHE` | str | -- | Path to NFS/FSx mount for shared persistent cache across nodes. |
+| `NEURON_LIBTORCH_DISABLE_COMPILE_CACHE` | bool | 0 | Disable compilation cache entirely. Forces recompilation on every startup. |
+| `NEURON_LIBTORCH_COMPILATION_TIMEOUT` | int | -- | Timeout in seconds for individual NEFF compilation. |
 | `VLLM_NEURON_DISABLE_WARMUP_COMPILE` | bool | 0 | Treat cache miss as fatal error. Use when all graphs must be pre-compiled. |
+| `VLLM_CACHE_ROOT` | str | `~/.cache/vllm` | Root directory for vLLM cache storage. |
 
 ### What triggers recompilation
 
@@ -174,6 +211,8 @@ Your compilation cache is invalidated (causing a full recompile on next startup)
 - Different tensor parallel degree
 
 Restarts on the same instance with the same versions will hit the local cache — no recompilation. New nodes with a remote cache configured will fetch from the remote store — also no recompilation.
+
+For full details on cache key composition, see [Compilation cache design](../design/compilation/compilation_cache.md#cache-key).
 
 ### Runtime and execution
 
@@ -204,10 +243,10 @@ For conceptual overview, see [Memory management](features-guide.md#memory-manage
 from vllm import LLM, SamplingParams
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3.3-70B-Instruct",
     max_model_len=4096,
     max_num_seqs=8,
-    tensor_parallel_size=8,
+    tensor_parallel_size=32,
     block_size=128,
     kv_cache_dtype="fp8",
     enable_prompt_embeds=True,
@@ -236,14 +275,14 @@ outputs = llm.generate(prompts, sampling_params)
 Equivalent CLI:
 
 ```bash
-export VLLM_CACHE_ROOT=/opt/neuron-cache
-export VLLM_NEURON_PARALLEL_COMPILE_WORKERS=4
+export NEURON_COMPILED_ARTIFACTS=/opt/neuron-cache/llama-70b
+export NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS=4
 export VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION=0.35
 
-vllm serve openai/gpt-oss-20b \
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
     --max-model-len 4096 \
     --max-num-seqs 8 \
-    --tensor-parallel-size 8 \
+    --tensor-parallel-size 32 \
     --block-size 128 \
     --kv-cache-dtype fp8 \
     --enable-prompt-embeds \

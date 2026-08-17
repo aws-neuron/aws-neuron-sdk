@@ -298,7 +298,7 @@ Now that you've completed this quickstart, explore more advanced inference topic
 
 - :doc:`/frameworks/torch/torch-neuronx/programming-guide/inference/index` - Comprehensive inference guide
 - :doc:`/libraries/nxd-inference/index` - Production inference with NeuronX Distributed
-- :doc:`/libraries/nxd-inference/vllm/quickstart-vllm-online-serving` - Deploy LLMs with vLLM
+- :doc:`/vllm-neuron/docs/getting-started/quickstart-online-serving` - Deploy LLMs with vLLM
 - :doc:`/about-neuron/models/index` - Pre-tested model samples
 - :doc:`/tools/neuron-explorer/index` - Profile and optimize inference performance
 

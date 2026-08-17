@@ -72,14 +72,11 @@ Common virtual environments include:
    * - Framework
      - Virtual environment
      - Use case
-   * - PyTorch 2.9
-     - ``aws_neuronx_venv_pytorch``
-     - Inference
-   * - PyTorch vLLM
-     - ``aws_neuronx_venv_pytorch_inference_vllm``
+   * - vLLM 0.24.0
+     - ``aws_neuronx_venv_pytorch_inference_vllm_0_24_0_1_1_0``
      - LLM inference serving
-   * - JAX
-     - ``aws_neuronx_venv_jax``
+   * - JAX 0.10
+     - ``aws_neuronx_venv_jax_0_10``
      - Training
 
 .. note::
@@ -94,20 +91,22 @@ After activating a virtual environment, verify the installation:
 
 .. tab-set::
 
-   .. tab-item:: PyTorch
+   .. tab-item:: vLLM
 
       .. code-block:: bash
 
-         python3 -c "import torch; import torch_neuronx; print(f'PyTorch {torch.__version__}, torch-neuronx {torch_neuronx.__version__}')"
+         pip list | grep -E "vllm|neuron|torch"
          neuron-ls
 
       You should see output similar to this (the framework, versions, instance IDs, and details should match your expected ones, not the ones in this example):
 
       .. code-block::
 
-         PyTorch 2.9.1+cu128, torch-neuronx 2.9.0.2.13.23887+8e870898
+         vllm                          0.24.0
+         vllm-neuron                   0.24.0.1.1.0
+         torch                         2.11.0
          $ neuron-ls
-         instance-type: trn1.2xlarge
+         instance-type: trn2.48xlarge
          instance-id: i-0bea223b1afb7e159
          +--------+--------+----------+--------+--------------+----------+------+
          | NEURON | NEURON |  NEURON  | NEURON |     PCI      |   CPU    | NUMA |
@@ -120,14 +119,14 @@ After activating a virtual environment, verify the installation:
 
       .. code-block:: bash
 
-         python3 -c "import jax; print(f'JAX {jax.__version__}'); print(f'Devices: {jax.devices()}')"
+         python3 -c "import jax; print(f'JAX {jax.__version__}')"
          neuron-ls
 
       You should see output similar to this (the framework, versions, instance IDs, and details should match your expected ones, not the ones in this example):
 
       .. code-block::
 
-         JAX 0.6.2.1.0.1, torch-neuronx 2.9.0.2.13.23887+8e870898
+         JAX 0.10.0
          $ neuron-ls
          instance-type: trn1.2xlarge
          instance-id: i-0bea223b1afb7e159

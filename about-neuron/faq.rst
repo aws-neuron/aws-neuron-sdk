@@ -1,27 +1,13 @@
-.. _neuron_faq:
-
 .. meta::
    :description: Frequently Asked Questions (FAQ) about the AWS Neuron SDK, including topics on Neuron 2.x, training, inference, runtime, compiler, containers, and ONNX support.
    :date-modified: 2025-10-03
+
+.. _neuron_faq:
 
 Neuron FAQ
 ==========
 
 This topic provides links to frequently asked questions (FAQs) about the AWS Neuron SDK, organized by Neuron component.
-
-Neuron 2.x FAQ
---------------
-
-.. grid:: 1
-   :gutter: 2
-
-   .. grid-item-card::
-      :link: neuron2-intro-faq
-      :link-type: ref
-
-      **Neuron 2.x Introduction FAQ**
-      ^^^
-      Common questions about Neuron 2.x features and migration
 
 Training-specific FAQ
 ---------------------

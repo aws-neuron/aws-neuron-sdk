@@ -230,7 +230,6 @@ If no devices appear, check instance type and driver installation.
 
 - Use larger batch sizes
 - Enable XLA compilation with ``torch.compile()``
-- See :doc:`/frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide` for optimization techniques
 
 Clean up
 --------
@@ -249,8 +248,7 @@ Next steps
 
 Now that you've completed this quickstart, explore more advanced training topics:
 
-- :doc:`/frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide` - Comprehensive training guide
-- :doc:`/libraries/nxd-training/index` - Distributed training with NeuronX Distributed
+- :doc:`NxD Training [archived content] </archive/nxd-training/index>` - Distributed training with NeuronX Distributed
 - :doc:`/about-neuron/models/index` - Pre-tested model samples
 - :doc:`/tools/neuron-explorer/index` - Profile and optimize training performance
 

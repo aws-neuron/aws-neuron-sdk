@@ -1,1 +1,1 @@
-* :ref:`transformers-neuronx-rn`
+* :ref:`transformers-neuronx-misc`

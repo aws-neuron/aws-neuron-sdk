@@ -129,7 +129,7 @@ tensorflow-neuron 1.x release [2.1.13.0]
 Date: 02/16/2022
 
 * Fixed a bug that caused a memory leak. The memory leak was approximately 128b for each inference and 
-  exists in all versions of TensorFlow Neuron versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`pre-release-content` 
+  exists in all versions of TensorFlow Neuron versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`neuron1-pre-release-content` 
   for exact versions included in each release.
 
 
@@ -504,7 +504,7 @@ Resolved Issues
 Known Issues and limitations
 ----------------------------
 
-.. _11501012400:
+.. _tfn-11501012400:
 
 [1.15.0.1.0.1240.0]
 ^^^^^^^^^^^^^^^^^^^
@@ -596,7 +596,7 @@ Solution: run compilation on c5.4xlarge instance type or larger.
 Other Notes
 -----------
 
-.. _1150108030:
+.. _tfn-1150108030:
 
 [1.15.0.1.0.803.0]
 ^^^^^^^^^^^^^^^^^^
@@ -691,7 +691,7 @@ Within a Conda environment:
 Other Notes
 -----------
 
-.. _1150106630:
+.. _tfn-1150106630:
 
 [1.15.0.1.0.663.0]
 ^^^^^^^^^^^^^^^^^^

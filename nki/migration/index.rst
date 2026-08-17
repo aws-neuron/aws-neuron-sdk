@@ -19,6 +19,9 @@ each subsequent section until you reach your target version.
    * - NKI version
      - Neuron SDK
      - Migration section
+   * - 0.6.0
+     - 2.32.0
+     - :ref:`nki-migrate-0-5-to-0-6`
    * - 0.5.0
      - 2.31.0
      - :ref:`nki-migrate-0-4-to-0-5`
@@ -44,6 +47,102 @@ each subsequent section until you reach your target version.
    :depth: 2
 
 
+.. _nki-migrate-0-5-to-0-6:
+
+Migrating from NKI 0.5.0 to NKI 0.6.0
+=====================================
+
+NKI 0.6.0 ships in AWS Neuron SDK 2.32.0. NKI kernels that use runtime-driven loops should migrate
+to the new loop constructs, covered below.
+
+Deprecated: dynamic ``nl.dynamic_range`` and ``while`` loops
+------------------------------------------------------------
+
+Two ways of writing runtime-driven loops are deprecated and will be removed in a future release:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Deprecated
+     - Use instead
+   * - ``for i in nl.dynamic_range(...)``
+     - :func:`~nki.language.fori_loop`
+   * - bare ``while reg:``
+     - :func:`~nki.language.while_loop`
+
+If your kernels use either construct, now is the time to migrate. The replacements keep working with no further
+changes as the deprecated constructs are removed in a future release.
+
+Pattern 1: counted loop with a runtime bound
+--------------------------------------------
+
+Replace ``nl.dynamic_range(reg)`` with :func:`~nki.language.fori_loop`, moving the loop body into a
+callable that receives the iteration value.
+
+Before:
+
+.. code-block:: python
+
+   for i in nl.dynamic_range(reg):
+       nisa.dma_copy(dst=temp, src=data.ap([[1, 1], [1, 1]], scalar_offset=i, indirect_dim=1))
+
+After:
+
+.. code-block:: python
+
+   def body(i):
+       nisa.dma_copy(dst=temp, src=data.ap([[1, 1], [1, 1]], scalar_offset=i, indirect_dim=1))
+
+   nl.fori_loop(0, reg, body)
+
+Pattern 2: data-dependent (``while``) loop
+------------------------------------------
+
+Replace a register-conditioned ``while`` with :func:`~nki.language.while_loop`. The body returns the
+next condition value. It is a true ``while`` in that the body is skipped if the initial condition is zero.
+
+Before:
+
+.. code-block:: python
+
+   while reg:
+       nisa.tensor_tensor(dst=acc, data1=acc, data2=val, op=nl.add)
+       nisa.tensor_tensor(dst=count_sb, data1=count_sb, data2=one_sb, op=nl.subtract)
+       nisa.register_load(reg, count_sb)
+
+After:
+
+.. code-block:: python
+
+   def body(r):
+       nisa.tensor_tensor(dst=acc, data1=acc, data2=val, op=nl.add)
+       nisa.tensor_tensor(dst=count_sb, data1=count_sb, data2=one_sb, op=nl.subtract)
+       nisa.register_load(r, count_sb)
+       return r
+
+   nl.while_loop(reg, body)
+
+Rules for migrated loops
+------------------------
+
+* Keep cross-iteration state in SBUF or HBM. Carry running values (accumulators, counters,
+  running max/sum) in SBUF/HBM and update them in place, rather than passing them between
+  iterations.
+* The loop variable is read-only. Do not write to it or perform Python arithmetic on it. Read it
+  as a runtime offset via ``.ap(scalar_offset=...)``.
+* The loop step must be a positive compile-time integer. :func:`~nki.language.fori_loop` only
+  counts up.
+* The ``while_loop`` body can only return the condition for the next iteration.
+  :func:`~nki.language.while_loop` continues while that register is non-zero.
+* The ``fori_loop`` body function cannot return a value.
+* Tensors (``nl.ndarray``) declared inside a body function cannot be referenced outside of the
+  loop. Any tensor that needs to be used outside of the body function must be declared outside the body.
+* These loops cannot sit inside an ``nl.no_reorder()`` block.
+
+For the full list of changes in NKI 0.6.0, see the :ref:`NKI 0.6.0 release notes <nki-2-32-0-rn>`.
+
+
 .. _nki-migrate-0-4-to-0-5:
 
 Migrating from NKI 0.4.0 to NKI 0.5.0
@@ -60,9 +159,9 @@ Breaking changes
 ``nki.language.rsqrt`` — PSUM inputs no longer supported
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The experimental ``nl.rsqrt`` now runs on the GpSimd Engine for higher numerical precision and
-no longer accepts PSUM inputs. If you need a PSUM input or Scalar Engine throughput, call
-``nki.isa.activation`` directly with the reciprocal-square-root op instead.
+The experimental :func:`~nki.language.rsqrt` now runs on the GpSimd Engine for higher numerical
+precision and no longer accepts PSUM inputs. If you need a PSUM input or Scalar Engine throughput,
+call :func:`~nki.isa.activation` directly with the reciprocal-square-root op instead.
 
 ``nki.language.NkiTensor.reshape`` — element count now validated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1322,7 +1421,7 @@ Migration for SBUF tensors
 --------------------------
 
 If blocks need to be alive at the same time, move the block dimension into the free dimension
-****************************************************************************************************
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -1355,7 +1454,7 @@ loop finishes. Therefore, the block dimension needs to be folded into the free d
         return res
 
 If blocks do not need to be alive at the same time, remove the block dimension and hoist it down
-****************************************************************************************************
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 

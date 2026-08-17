@@ -314,7 +314,7 @@ An unlimited number of active stream accessors (in total, across all ``Tensors``
 Example Usage
 ^^^^^^^^^^^^^
 
-Element-wise add of two tensors using ``TensorWriteStreamAccessor`` and ``TensorWriteStreamAccessor``.
+Element-wise add of two tensors using ``TensorReadStreamAccessor`` and ``TensorWriteStreamAccessor``.
 
 .. code-block:: c++
 
@@ -332,10 +332,10 @@ Element-wise add of two tensors using ``TensorWriteStreamAccessor`` and ``Tensor
         return t_out;
     }
 
-Class torch::TensorWriteStreamAccessor
+Class torch::TensorReadStreamAccessor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:class:: template<typename T> TensorReadStreamAccessor
+.. cpp:class:: template<typename T> torch::TensorReadStreamAccessor
 
     The class template parameter ``T`` is the scalar type of the tensor data.
 
@@ -346,7 +346,7 @@ Member Functions
 
     Reads from next element in the stream. User is responsible for knowing when to stop reading from ``TensorReadStreamAccessor``. Reading past the end of the stream or on a closed stream results in undefined behaviour.
 
-.. cpp:function:: int close()
+.. cpp:function:: int torch::TensorReadStreamAccessor::close()
 
     Closes stream. Do not read from the stream after calling ``close()``.
 
@@ -364,7 +364,7 @@ Member Functions
 
     Writes to next element in the stream. Written value is not guaranteed to be written back to the Tensor's memory until the ``TensorWriteStreamAccessor`` goes out of scope, or the user explicitly calls ``close()``. User is responsible for knowing when to stop writing to a stream accessor. Writing past the end of the stream or on a closed stream results in undefined behaviour.
 
-.. cpp:function:: int close()
+.. cpp:function:: int torch::TensorWriteStreamAccessor::close()
 
     Closes stream. Flushes write data to the ``Tensor``'s memory. Do not write to the stream after calling ``close()``.
 

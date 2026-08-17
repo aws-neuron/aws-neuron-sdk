@@ -106,7 +106,7 @@ DGE and DMA configuration
      - Description
      - Default
    * - ``NEURON_RT_ENABLE_DGE_NOTIFICATIONS``
-     - Enables Data Gather Engine notifications so DMA transfers are labeled
+     - Enables Descriptor Generation Engine notifications so DMA transfers are labeled
        with their tensor variable name (instead of ``unknown``).
      - ``0`` (off)
 

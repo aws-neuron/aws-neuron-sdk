@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Developer Tools component across all AWS Neuron SDK versions.
     :keywords: neuron tools, developer tools, profiler, release notes, neuron explorer, aws neuron sdk
-    :date-modified: 07/14/2026
+    :date-modified: 08/10/2026
 
 .. _dev-tools_rn:
 
@@ -10,6 +10,40 @@ Component Release Notes for Neuron Developer Tools
 
 The release notes for the Neuron Developer Tools. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+
+.. _dev-tools-2-32-0-rn:
+
+Neuron Developer Tools & Neuron Explorer (Neuron 2.32.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 08/17/2026
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* Added the ``neuron-explorer capture`` CLI reference, which replaces the deprecated ``neuron-profile capture`` command (the interface is unchanged — only the executable name changed), along with guidance on choosing between system and device profile types and on capturing multi-node workloads using environment variables. See :doc:`/tools/neuron-explorer/how-to-profile-workload`.
+* Added per-core host CPU utilization visualization to the System Trace Viewer, enabling you to identify host-side CPU bottlenecks and correlate them with runtime and hardware activity. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Added the ability to export the current timeline selection to CSV from the Device Trace Viewer's **Export to CSV** button, which writes the events in the visible time range as one file per table. A new how-to page covers programmatically analyzing profile output in both parquet and CSV formats. See :doc:`/tools/neuron-explorer/how-to-analyze-profile-output`.
+* Added an explanation of Tensor Engine throttling (covering dI/dt current throttling on Trn2) and documented the automatic **Small DMA transfers** warning that highlights inefficient Descriptor Generation Engine (DGE) transfers in the Device Trace Viewer. See :ref:`neuron-explorer-understanding-throttling` and :ref:`neuron-explorer-small-dma-warning`.
+* Added a tutorial for capturing and analyzing system-level and device-level profiles for a vLLM Neuron inference workload on AWS Trainium using Neuron Explorer. See :doc:`/tools/tutorials/performance-profiling-vllm`.
+* Updated the UI overview tour page for Neuron Explorer covering the redesigned sidebar navigation (Favorites, Recently Viewed, Recently Uploaded, and Resources), Focus Mode for maximizing timeline workspace, and Notifications. See :doc:`/tools/neuron-explorer/overview-ui-tour`.
+* Added an **NKI Version** field to the Summary Viewer's System Information card, which reports the NKI version used to build the profiled workload. See :doc:`/tools/neuron-explorer/overview-summary-page`.
+* Added the ability to delete profiles and organize profiles into folders from the Profile Manager. See :doc:`/tools/neuron-explorer/get-started`.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* None reported for this release.
+
+Bug Fixes
+~~~~~~~~~
+
+* None reported for this release.
+
+Known Issues
+~~~~~~~~~~~~
+
+* None reported for this release.
 
 .. _dev-tools-2-31-1-rn:
 

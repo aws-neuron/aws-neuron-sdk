@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention Block TKG kernel implements fused attention block optimized for Token Generation.
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. currentmodule:: nkilib.core.attention_block_tkg.attention_block_tkg
 
@@ -57,7 +57,7 @@ API Reference
 attention_block_tkg
 ^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: attention_block_tkg(X: nl.ndarray, X_hidden_dim_actual: Optional[int], rmsnorm_X_enabled: bool, rmsnorm_X_eps: Optional[float], rmsnorm_X_gamma: Optional[nl.ndarray], W_qkv: nl.ndarray, bias_qkv: Optional[nl.ndarray], quantization_type_qkv: QuantizationType, weight_dequant_scale_qkv: Optional[nl.ndarray], input_dequant_scale_qkv: Optional[nl.ndarray], rmsnorm_QK_pre_rope_enabled: bool, rmsnorm_QK_pre_rope_eps: float, rmsnorm_QK_pre_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_pre_rope_W_K: Optional[nl.ndarray], cos: Optional[nl.ndarray], sin: Optional[nl.ndarray], rope_contiguous_layout: bool, rmsnorm_QK_post_rope_enabled: bool, rmsnorm_QK_post_rope_eps: float, rmsnorm_QK_post_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_post_rope_W_K: Optional[nl.ndarray], K_cache_transposed: bool, active_blocks_table: Optional[nl.ndarray], K_cache: nl.ndarray, V_cache: nl.ndarray, attention_mask: nl.ndarray, sink: Optional[nl.ndarray], update_cache: bool, kv_cache_update_idx: Optional[nl.ndarray], W_out: Optional[nl.ndarray], bias_out: Optional[nl.ndarray], quantization_type_out: QuantizationType, weight_dequant_scale_out: Optional[nl.ndarray], input_dequant_scale_out: Optional[nl.ndarray], transposed_out: bool, out_in_sb: bool, transposed_in: bool = False, softmax_scale: Optional[float] = None, enable_fa_s_prior_tiling: bool = True, fp8_packed: bool = False, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, sbm: Optional[SbufManager] = None, skip_attention: bool = False, is_h_transposed_by_4: bool = False, KVDP: int = 1, KVDP_replica_group: Optional[ReplicaGroup] = None, KVDP_collective_mode: Optional[KVDPCollectiveMode] = None, KVDP_rank: Optional[nl.ndarray] = None, pos_ids: Optional[nl.ndarray] = None, swa_start_pos_ids: Optional[nl.ndarray] = None, S_ctx: Optional[int] = None, max_context_len: Optional[nl.ndarray] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP)
+.. py:function:: attention_block_tkg(X: nl.ndarray, X_hidden_dim_actual: Optional[int], rmsnorm_X_enabled: bool, rmsnorm_X_eps: Optional[float], rmsnorm_X_gamma: Optional[nl.ndarray], W_qkv: nl.ndarray, bias_qkv: Optional[nl.ndarray], quantization_type_qkv: QuantizationType, weight_dequant_scale_qkv: Optional[nl.ndarray], input_dequant_scale_qkv: Optional[nl.ndarray], rmsnorm_QK_pre_rope_enabled: bool, rmsnorm_QK_pre_rope_eps: float, rmsnorm_QK_pre_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_pre_rope_W_K: Optional[nl.ndarray], cos: Optional[nl.ndarray], sin: Optional[nl.ndarray], rope_contiguous_layout: bool, rmsnorm_QK_post_rope_enabled: bool, rmsnorm_QK_post_rope_eps: float, rmsnorm_QK_post_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_post_rope_W_K: Optional[nl.ndarray], K_cache_transposed: bool, active_blocks_table: Optional[nl.ndarray], K_cache: nl.ndarray, V_cache: nl.ndarray, attention_mask: nl.ndarray, sink: Optional[nl.ndarray], update_cache: bool, kv_cache_update_idx: Optional[nl.ndarray], W_out: Optional[nl.ndarray], bias_out: Optional[nl.ndarray], quantization_type_out: QuantizationType, weight_dequant_scale_out: Optional[nl.ndarray], input_dequant_scale_out: Optional[nl.ndarray], transposed_out: bool, out_in_sb: bool, transposed_in: bool = False, softmax_scale: Optional[float] = None, enable_fa_s_prior_tiling: bool = True, fp8_packed: bool = False, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, sbm: Optional[SbufManager] = None, skip_attention: bool = False, is_h_transposed_by_4: bool = False, KVDP: int = 1, KVDP_replica_group: Optional[ReplicaGroup] = None, KVDP_collective_mode: Optional[KVDPCollectiveMode] = None, KVDP_rank: Optional[nl.ndarray] = None, pos_ids: Optional[nl.ndarray] = None, swa_start_pos_ids: Optional[nl.ndarray] = None, S_ctx: Optional[int] = None, max_context_len: Optional[nl.ndarray] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP, CP: int = 1, CP_replica_group: Optional[ReplicaGroup] = None, CP_collective_mode: Optional[CPCollectiveMode] = None)
 
    Fused Attention Block for Token Generation (TKG).
 
@@ -144,6 +144,12 @@ attention_block_tkg
    :param sbm: SBUF memory manager (otherwise auto-allocated)
    :type sbm: ``SbufManager``, optional
    :param skip_attention: Skip attention computation (for testing). Default: False.
+
+   :param CP: Context-parallelism degree - number of ranks that shard the KV cache along the sequence dimension (``1`` = disabled). Each rank holds an ``S_ctx/CP`` slice of the prior KV cache and runs local flash attention; results are combined across ranks by the CP collectives.
+
+   :param CP_replica_group: Replica group for CP collective ops. Required when ``CP > 1``.
+
+   :param CP_collective_mode: Collective mode for CP output redistribution (``ALL_TO_ALL`` or ``REDUCE_SCATTER``). Defaults to ``ALL_TO_ALL`` when ``None``.
    :type skip_attention: ``bool``
    :return: Tuple of (out, K_out, V_out) - Output tensor, updated K cache or new K tokens, updated V cache or new V tokens
    :rtype: ``tuple``

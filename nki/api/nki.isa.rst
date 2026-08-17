@@ -65,6 +65,7 @@ NKI ISA
    rand_get_state
    set_rng_seed
    nonzero_with_count
+   topk
 
 
 
@@ -103,3 +104,4 @@ Constants
    :nosignatures:
 
    VirtualRegister
+   NkiInstruction

@@ -66,7 +66,7 @@ To see details of Neuron component versions please see :ref:`latest-neuron-relea
       * Stop Neuron Runtime 1.x daemon (``neuron-rtd``) by running: ``sudo systemctl stop neuron-rtd``
       * Uninstall ``neuron-rtd`` by running: ``sudo apt remove aws-neuron-runtime`` or ``sudo dnf remove aws-neuron-runtime``
       * Install or upgrade to the latest Neuron Driver (``aws-neuron-dkms``) by following the :ref:`install-guide-index` instructions.
-      * Starting with Neuron version 2.3, ``aws-neuron-dkms`` the package name has been changed to ``aws-neuronx-dkms``, see :ref:`neuron2-intro`
+      * Starting with Neuron version 2.3, the ``aws-neuron-dkms`` package name changed to ``aws-neuronx-dkms``.
 
 
 Neuron Runtime
@@ -152,7 +152,7 @@ To see details of Neuron component versions see :ref:`latest-neuron-release-arti
 
 .. :important:
 
-   Starting Neuron version 2.3, the ``aws-neuron-dkms`` package name is changed to ``aws-neuronx-dkms``, see :ref:`neuron2-intro`
+   Starting with Neuron version 2.3, the ``aws-neuron-dkms`` package name changed to ``aws-neuronx-dkms``.
 
 TensorFlow model server
 ^^^^^^^^^^^^^^^^^^^^^^^

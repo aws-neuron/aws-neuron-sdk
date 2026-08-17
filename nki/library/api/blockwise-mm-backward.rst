@@ -1,6 +1,6 @@
 .. meta::
     :description: Blockwise MM Backward kernel computes backward pass for blockwise Mixture of Experts layers.
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. currentmodule:: nkilib.experimental.moe.bwd
 
@@ -40,7 +40,7 @@ API Reference
 blockwise_mm_bwd
 ^^^^^^^^^^^^^^^^^
 
-.. py:function:: blockwise_mm_bwd(hidden_states: nl.ndarray, expert_affinities_masked: nl.ndarray, gate_up_proj_weight: nl.ndarray, down_proj_weight: nl.ndarray, gate_up_proj_act_checkpoint_T: nl.ndarray, down_proj_act_checkpoint: nl.ndarray, token_position_to_id: nl.ndarray, block_to_expert: nl.ndarray, output_hidden_states_grad: nl.ndarray, block_size: int, skip_dma: SkipMode = None, compute_dtype: nki.dtype = nl.bfloat16, is_tensor_update_accumulating: bool = True, skip_grad_initialization: bool = False, shard_option: ShardOption = ShardOption.SHARD_ON_HIDDEN, affinity_option: AffinityOption = AffinityOption.AFFINITY_ON_H, kernel_type_option: KernelTypeOption = KernelTypeOption.DROPLESS, clamp_limits: ClampLimits = None, bias: bool = False, activation_type: ActFnType = ActFnType.SiLU, block_tile_size: int = None, blocking_params: MOEBwdDroplessBlockingParams = None, hidden_states_grad_out: nl.ndarray = None, expert_affinities_masked_grad_out: nl.ndarray = None, gate_up_proj_weight_grad_out: nl.ndarray = None, down_proj_weight_grad_out: nl.ndarray = None, accumulation_dtype: nki.dtype = None) -> tuple
+.. py:function:: blockwise_mm_bwd(hidden_states: nl.ndarray, expert_affinities_masked: nl.ndarray, gate_up_proj_weight: nl.ndarray, down_proj_weight: nl.ndarray, gate_up_proj_act_checkpoint_T: nl.ndarray, down_proj_act_checkpoint: nl.ndarray, token_position_to_id: nl.ndarray, block_to_expert: nl.ndarray, output_hidden_states_grad: nl.ndarray, block_size: int, skip_dma: SkipMode = None, compute_dtype: nki.dtype = nl.bfloat16, is_tensor_update_accumulating: bool = True, skip_grad_initialization: bool = False, shard_option: ShardOption = ShardOption.SHARD_ON_HIDDEN, affinity_option: AffinityOption = AffinityOption.AFFINITY_ON_H, kernel_type_option: KernelTypeOption = KernelTypeOption.DROPLESS, clamp_limits: ClampLimits = None, bias: bool = False, activation_type: ActFnType = ActFnType.SiLU, block_tile_size: int = None, blocking_params: MOEBwdDroplessBlockingParams = None, hidden_states_grad_out: nl.ndarray = None, expert_affinities_masked_grad_out: nl.ndarray = None, gate_up_proj_weight_grad_out: nl.ndarray = None, down_proj_weight_grad_out: nl.ndarray = None, accumulation_dtype: nki.dtype = None, skip_gate_proj: bool = False) -> tuple
 
    Compute backward pass for blockwise MoE layer.
 
@@ -86,6 +86,8 @@ blockwise_mm_bwd
    :param activation_type: Activation function type. Default: ``SiLU``.
    :type activation_type: ``ActFnType``
    :param block_tile_size: Optional tile size override for block processing.
+
+   :param skip_gate_proj: When ``True``, skip the gate projection in the backward pass. Default: ``False``.
    :type block_tile_size: ``int``, optional
    :return: Tuple of gradient tensors. When ``bias=False``: ``(hidden_states_grad, expert_affinities_masked_grad, gate_up_proj_weight_grad, down_proj_weight_grad)``. When ``bias=True``: additionally includes ``gate_and_up_proj_bias_grad`` and ``down_proj_bias_grad``.
    :rtype: ``tuple``

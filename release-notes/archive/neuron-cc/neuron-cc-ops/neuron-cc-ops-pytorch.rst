@@ -162,7 +162,7 @@ Added support for new operators:
 .. _pytorch-neuron-release-15210:
 
 PyTorch Neuron Release [1.5.21.0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No change
 

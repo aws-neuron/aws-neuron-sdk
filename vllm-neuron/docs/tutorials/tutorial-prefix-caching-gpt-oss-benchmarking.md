@@ -73,7 +73,7 @@ Server settings for this tutorial:
 Set environment variables required for gpt-oss compilation:
 
 ```bash
-export VLLM_NEURON_COMPILATION_TIMEOUT=1200
+export NEURON_LIBTORCH_COMPILATION_TIMEOUT=1200
 export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1200
 export NEURON_RT_ALLOW_LEGACY_NEFF=1  # Trn3 only
 ```
@@ -460,6 +460,9 @@ Supported values: `[512]`, `[1024]`, `[2048]`, `[4096]`.
 
 - [Tutorial: Deploy gpt-oss](tutorial-gpt-oss.md) — Production deployment recipe
   for gpt-oss 20B and 120B.
+- [EAGLE3 speculative decoding tutorial (GPT-OSS)](tutorial-eagle3-speculative-decoding-gpt-oss.md)
+  — Stack speculative decoding with prefix caching for both prefill and decode
+  acceleration.
 - [Features guide](../guides/features-guide.md) — Full feature reference
   including prefix caching configuration.
 - [Prefill processing design](../design/vllm/prefix-caching.md) — Deep-dive on

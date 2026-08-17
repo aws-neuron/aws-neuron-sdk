@@ -30,7 +30,7 @@ For migration guidance from NxD Inference to vLLM Neuron, see
 - **Neuron SDK version**: Neuron 2.31 or later.
 - **Python**: Python 3.11 or later.
 - **Hugging Face access (optional)**: An accepted model license and a Hugging
-  Face token if you plan to pull gated models.
+  Face token if you plan to pull gated models such as Llama.
 
 ## Instructions
 
@@ -236,17 +236,16 @@ export HF_TOKEN=hf_your_token_here
 ## Confirm your work
 
 Run a minimal `vllm serve` command to confirm the full stack is wired up. This
-example uses gpt-oss-20b with a small context and a single compiled bucket to
-keep compilation time short:
+example uses TinyLlama (a small open model) to keep compilation time short:
 
 ```bash
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+vllm serve TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+    --tensor-parallel-size 2 \
     --max-num-seqs 1 \
-    --max-model-len 1024 \
-    --max-num-batched-tokens 512 \
-    --hf-overrides '{"quantization_config": {}}' \
-    --additional-config '{"neuron_config": {"num_batched_tokens_buckets": [512], "num_seqs_buckets": [1]}}'
+    --max-model-len 128 \
+    --max-num-batched-tokens 128 \
+    --no-enable-prefix-caching \
+    --additional-config '{"neuron_config": {"num_batched_tokens_buckets": [128], "num_seqs_buckets": [1]}}'
 ```
 
 Wait for the server to print `Uvicorn running on ...`. Then, in a second terminal
@@ -256,7 +255,7 @@ on the same instance:
 curl -s http://localhost:8000/v1/chat/completions \
     -H "Content-Type: application/json" \
     -d '{
-      "model": "openai/gpt-oss-20b",
+      "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
       "messages": [{"role": "user", "content": "Hello, Neuron!"}],
       "max_tokens": 16
     }'

@@ -24,6 +24,7 @@ Creation operations
    full
    zeros_like
    empty_like
+   shared_constant
    shared_identity_matrix
    rand
    random_seed
@@ -239,6 +240,19 @@ Iterators
    dynamic_range
    sequential_range
    static_range
+
+
+.. _nl_control_flow:
+
+Control Flow
+------------
+
+.. autosummary::
+   :toctree: generated
+   :nosignatures:
+
+   fori_loop
+   while_loop
 
 
 .. _nl_memory_hierarchy:

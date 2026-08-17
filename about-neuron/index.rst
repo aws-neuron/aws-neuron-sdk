@@ -186,13 +186,12 @@ If you want to request a feature or report a critical issue, you can contact us 
    :hidden:
 
    Ask Amazon AI Helper Tools </about-neuron/amazonq-getstarted>
-   Agentic Development </tools/neuron-agentic-development/index>
    Benchmarks </about-neuron/benchmarks/index>
    Calculator </about-neuron/calculator/neuron-calculator>
    Beta Participation </about-neuron/beta-participation>
    Generative LLM Inference on Neuron </about-neuron/transformers/generative-llm-inference-with-neuron>
    Model Samples </about-neuron/models/index>
-   Neuron FAQ <faq> 
+   Neuron FAQ <faq>
    Neuron Features </about-neuron/arch/neuron-features/index>
    Open Source </about-neuron/oss/index>
    SDK Maintenance Policy <sdk-policy>

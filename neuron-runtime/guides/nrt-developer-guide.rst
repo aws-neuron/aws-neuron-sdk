@@ -30,7 +30,7 @@ The Neuron Runtime Library (``libnrt``) is the intermediate layer between an app
     Processes working together on executing models across multiple instances - libnccom, libfabric and the EFA driver handle communication
 
 
-.. _reqs:
+.. _nrt_reqs:
 
 Requirements
 ------------
@@ -362,12 +362,12 @@ Prerequisites
 Before you start, you must have the following available in your local environment:
 
 * A recent version of GCC C++ compiler
-* An installation of the ``aws-neuronx-runtime-lib`` package as described in :ref:`reqs`
+* An installation of the ``aws-neuronx-runtime-lib`` package as described in :ref:`nrt_reqs`
 
 Running the built application requires:
 
 * A Neuron-equipped EC2 compute instance as shown in :ref:`insttypes`
-* Installing the ``aws-neuronx-runtime-lib`` and the ``aws-neuronx-dkms`` package on the instance as described in :ref:`reqs`
+* Installing the ``aws-neuronx-runtime-lib`` and the ``aws-neuronx-dkms`` package on the instance as described in :ref:`nrt_reqs`
 * A NEFF file
 
 

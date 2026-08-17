@@ -33,6 +33,28 @@ When you profile a workload, the Neuron Runtime instruments your execution and w
 * **Where** it ran (CPU, Neuron Runtime, or NeuronCore hardware)
 * **How much** memory and bandwidth was used
 
+.. _capture-profile-types:
+
+Profile types: system vs device
+--------------------------------
+
+Neuron Explorer supports two complementary profile types. You can capture one or both
+depending on what you need to analyze:
+
+**System profile**
+   Software execution data: framework operations, Neuron Runtime API calls, CPU utilization,
+   and memory usage. Use system-level profiling to analyze framework overhead, identify CPU
+   bottlenecks, and debug runtime issues.
+
+**Device profile**
+   Hardware execution data from NeuronCores: compute engine instructions, DMA operations,
+   and hardware utilization. Use device-level profiling to analyze hardware performance,
+   identify compute or memory bottlenecks, and optimize kernel implementations.
+
+For most initial investigations, start with a system profile. Add device profiling when you
+need instruction-level hardware analysis. See the :doc:`System Trace Viewer <overview-system-profiles>`
+and :doc:`Device Trace Viewer <overview-device-profiles>` for details on each viewer.
+
 .. _capture-setup:
 
 Setup (all methods)
@@ -71,6 +93,8 @@ Choose the method that matches your framework and use case:
      - JAX models
    * - Environment Variables
      - Any framework, containerized workloads, EKS
+   * - CLI (``neuron-explorer capture``)
+     - Profiling compiled NEFFs directly, multi-worker distributed jobs, NKI kernels
    * - CLI (``neuron-explorer inspect``)
      - Quick system profiles without code changes
 
@@ -589,6 +613,241 @@ all workers.
          resources:
            limits:
              aws.amazon.com/neuron: 16
+
+.. _neuron-explorer-multinode-env-vars:
+
+Multi-node profiling with environment variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For multi-node workloads outside of EKS (for example, ``torchrun`` or custom launcher
+scripts), set the same environment variables on all nodes. The runtime saves profile data
+organized by instance ID and process ID, so there are no filename collisions when
+``NEURON_RT_INSPECT_OUTPUT_DIR`` points to a shared filesystem.
+
+.. code-block:: bash
+
+   # Set on all nodes before launching
+   export NEURON_RT_INSPECT_ENABLE=1
+   export NEURON_RT_INSPECT_DEVICE_PROFILE=session
+   export NEURON_RT_INSPECT_SYSTEM_PROFILE=1
+   export NEURON_RT_INSPECT_CPU_UTIL=1
+   export NEURON_RT_INSPECT_HOST_MEMORY=1
+   export NEURON_RT_INSPECT_OUTPUT_DIR=/shared/profiles/my-run
+
+   # Launch your distributed workload as usual
+
+The runtime writes ``NEFF + NTFF + system-profile .pb`` files into
+``NEURON_RT_INSPECT_OUTPUT_DIR``. Setting ``NEURON_RT_INSPECT_DEVICE_PROFILE=session``
+is required on PJRT runtimes (PyTorch native, JAX) for the runtime to emit the device
+trace (``.ntff``). The ``CPU_UTIL`` and ``HOST_MEMORY`` variables add host-side time
+series that keep the system profile complete.
+
+View the combined multi-node profile:
+
+.. code-block:: bash
+
+   neuron-explorer view -d /shared/profiles/my-run
+
+.. _neuron-explorer-capture-cli:
+
+CLI profiling with neuron-explorer capture
+-------------------------------------------
+
+The ``neuron-explorer capture`` command takes a compiled NEFF, executes it with profiling
+enabled, and saves the results. This is the most direct way to profile a compiled model
+without modifying application code.
+
+.. note::
+
+   ``neuron-explorer capture`` replaces the deprecated ``neuron-profile capture`` command.
+   The interface is identical — only the executable name changed.
+
+Basic usage
+~~~~~~~~~~~
+
+.. code-block:: bash
+
+   neuron-explorer capture -n file.neff -s profile.ntff
+
+.. _neuron-explorer-capture-default-inputs:
+
+When no inputs are provided, Neuron Explorer reads each input name and size from the NEFF,
+allocates the corresponding buffers, and fills them with zero bytes before executing. These
+buffers have the expected sizes, but the zero-filled input tensors may not be semantically
+valid for the model. This may result in execution errors or a profile that does not represent
+the real workload. Use ``--ignore-exec-errors`` to continue profiling after execution errors.
+
+To profile with representative inputs, pass ``<NAME> <FILE_PATH>`` pairs as positional
+arguments:
+
+.. code-block:: bash
+
+   neuron-explorer capture -n file.neff -s profile.ntff IN1 x.npy IN2 y.npy
+
+CLI reference
+~~~~~~~~~~~~~
+
+.. code-block:: text
+
+   neuron-explorer capture [parameters] [inputs...]
+
+**Core parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Flag
+     - Description
+     - Default
+   * - ``-n, --neff``
+     - Compiled NEFF file
+     - ``file.neff``
+   * - ``-s, --session-file``
+     - File to store profile session information
+     - ``profile.ntff``
+   * - ``--num-exec``
+     - Number of executions to run
+     - ``1``
+   * - ``--profile-nth-exec``
+     - Profile every Nth execution rather than all executions. Passing 0 disables profiling.
+     - ``1``
+   * - ``-t, --capture-type``
+     - Determines what to capture. ``profile`` collects device-level information. ``systrace`` collects runtime-level information.
+     - ``profile``
+   * - ``--exec-mode``
+     - Execution mode: ``sync`` (blocking nrt_execute), ``async`` (queues all then waits), ``async-wait`` (schedules and waits one at a time)
+     - ``sync``
+   * - ``--ignore-exec-errors``
+     - Ignore errors during execution
+     -
+   * - ``--disable-profile``
+     - Load and execute a NEFF without capturing a profile. Useful for running a minimal execution when profiling-related runtime calls fail due to insufficient device memory.
+     -
+   * - ``--enable-dge-notifs``
+     - Enable DGE notifications in Runtime for tracing dynamic DMAs
+     -
+
+**I/O parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Flag
+     - Description
+     - Default
+   * - ``inputs`` (positional)
+     - List of inputs as ``<NAME> <FILE_PATH>`` pairs separated by space (for example, ``IN1 x.npy IN2 y.npy``)
+     -
+   * - ``--single-io``
+     - Create a single tensor for all I/O equaling the size of the largest I/O tensor. Individual tensors point to a slice of this tensor. Lowers device memory usage, but outputs are not correct.
+     -
+   * - ``--single-io-threshold``
+     - When using ``--single-io``, give any I/O tensor whose size in bytes is at or below this value its own buffer instead of aliasing it onto the shared buffer. Useful to keep small index tensors correct. ``0`` aliases all tensors.
+     - ``0``
+   * - ``--save-output``
+     - Save raw tensor outputs to a plain binary file (filename matches the output name)
+     -
+   * - ``--save-output-npy``
+     - Save tensor outputs to a ``.npy`` file (filename matches the output name)
+     -
+   * - ``--check-output-determinism``
+     - Check output determinism using CRC32 checksums. Compares CRC of all executions against the first and fails if any mismatch is detected.
+     -
+
+**Multi-worker parameters (collectives)**
+
+These parameters enable profiling NEFFs that use collective communication across
+multiple NeuronCores, NeuronDevices, or nodes. Providing ``--collectives-worker-count``
+or ``--collectives-workers-per-node`` automatically enables collectives mode.
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Flag
+     - Description
+     - Default
+   * - ``-r, --collectives-workers-per-node``
+     - The number of workers on the current node. The global worker ID (rank) of worker *n* on the current node is ``collectives-worker-start-id + n``.
+     -
+   * - ``--collectives-worker-count``
+     - Total number of Neuron workers across all nodes for this collectives run
+     -
+   * - ``--collectives-worker-start-id``
+     - The rank offset for the first worker on the current node. For example, if node 0 has workers 0,1 and node 1 has workers 2,3 then the value for node 0 is 0 and for node 1 is 2.
+     - ``0``
+   * - ``-i, --collectives-profile-id``
+     - Worker ID to profile. Pass ``all`` to profile all workers.
+     - ``all``
+   * - ``-m, --multi-input``
+     - Path to a file that describes the input list for each requested worker. Each line corresponds to one worker and follows the same ``<NAME> <FILE_PATH>`` format as the positional inputs. Cannot be used together with positional inputs.
+     -
+
+**Multi-worker output files**
+
+When profiling multiple workers, the session file is renamed with a ``_rank_{id}`` suffix
+for each worker. For example, if ``-s output/profile.ntff`` is used with
+``--collectives-workers-per-node 4``, the output files are:
+
+.. code-block:: text
+
+   output/profile_rank_0.ntff
+   output/profile_rank_1.ntff
+   output/profile_rank_2.ntff
+   output/profile_rank_3.ntff
+
+To profile only a specific worker, pass its rank to ``--collectives-profile-id``:
+
+.. code-block:: bash
+
+   neuron-explorer capture -n file.neff -r 4 -i 1 -s output/profile.ntff
+   # Output: output/profile_rank_1.ntff
+
+**Multi-node usage**
+
+For multi-node jobs, run ``neuron-explorer capture`` on each node. Use
+``--collectives-worker-start-id`` to offset the rank for each node and
+``--collectives-worker-count`` to specify the total number of workers across all nodes:
+
+.. code-block:: bash
+
+   # On node 0 (workers 0, 1)
+   neuron-explorer capture -n file.neff \
+       --collectives-worker-start-id 0 \
+       --collectives-workers-per-node 2 \
+       --collectives-worker-count 4 \
+       -s output/profile.ntff
+
+   # On node 1 (workers 2, 3)
+   neuron-explorer capture -n file.neff \
+       --collectives-worker-start-id 2 \
+       --collectives-workers-per-node 2 \
+       --collectives-worker-count 4 \
+       -s output/profile.ntff
+
+**Systrace parameters** (used when ``--capture-type systrace``)
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Flag
+     - Description
+   * - ``--systrace-get-event-types``
+     - Query runtime for list of available event types and exit
+   * - ``--systrace-event-filter``
+     - Events to enable in the system trace. All events are enabled if no filters are specified. Can be passed multiple times.
+
+.. tip::
+
+   For NKI kernel profiling workflows — including source code linking, hierarchy navigation,
+   and instruction-level analysis — see :doc:`/nki/guides/use-neuron-profile`.
 
 CLI profiling with neuron-explorer inspect
 ------------------------------------------

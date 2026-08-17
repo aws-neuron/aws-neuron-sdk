@@ -138,10 +138,10 @@ Read More
 
 **Training Resources**
 
-* :doc:`Training with torch-neuronx </frameworks/torch/training-torch-neuronx>` - Training guides and tutorials for Trainium
-* :doc:`PyTorch Neuron Programming Guide </frameworks/torch/torch-neuronx/programming-guide/training/pytorch-neuron-programming-guide>` - Core concepts for training on Neuron
-* :doc:`NeuronX Distributed (NxD) Training </libraries/nxd-training/index>` - Distributed training library for large-scale models
-* :doc:`PyTorch Training Tutorials </frameworks/torch/torch-neuronx/tutorials/training/tutorials-training-torch-neuronx>` - Step-by-step training examples
+* :doc:`Training with torch-neuronx [archived content] </archive/nxd-training/index>` - Training guides and tutorials for Trainium
+* :doc:`PyTorch Neuron Programming Guide [archived content] </archive/nxd-training/pytorch-neuron-programming-guide>` - Core concepts for training on Neuron
+* :doc:`NeuronX Distributed (NxD) Training [archived content] </archive/nxd-training/index>` - Distributed training library for large-scale models
+* :doc:`PyTorch Training Tutorials [archived content] </archive/nxd-training/index>` - Step-by-step training examples
 
 **Inference Resources**
 

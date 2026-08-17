@@ -143,36 +143,6 @@ Vision TP shards weights across the vision TP group using the same column/row pa
 - **Small vision encoder**: When the encoder fits in a single device's weight memory, TP provides no benefit. Full DP (`tp_size=1`) avoids TP communication overhead entirely.
 - **Combined TP+DP**: For very large encoders that don't fit on one device AND have high block counts, use both.
 
-## Block-Level DP vs. Model-Level DP
+## Cross-request batching
 
-The current implementation is **block-level DP**: blocks from a single `embed_multimodal` call are scattered across ranks within one compiled graph. All ranks participate in every encoder invocation and the result is all-gathered before returning.
-
-**Model-level DP** is a different approach: multiple independent encoder replicas, each handling separate requests (or subsets of images) concurrently with no communication between replicas.
-
-| Aspect | Block-level DP (current) | Model-level DP (future) |
-|--------|--------------------------|-------------------------|
-| Scope | Within one `embed_multimodal` call | Across concurrent calls |
-| What's distributed | Blocks from one batched image set | Entire requests to independent replicas |
-| Communication | All-gather after compute | None between replicas |
-| Compiled bucket | One bucket per call (all images share it) | Each replica selects its own bucket |
-| Latency | Reduces single-call latency | Does not reduce single-call latency |
-| Throughput | Increases via cross-request batching | Increases via parallel independent calls |
-
-### Cross-request batching
-
-The scheduler already batches images from multiple requests into a single `embed_multimodal` call (via `group_and_batch_mm_kwargs`). This means block-level DP naturally benefits from concurrent request load — more pending images → more blocks → better DP utilization.
-
-### Where model-level DP adds unique value
-
-Block-level DP has a fundamental constraint: all images in one call must use the **same compiled bucket**. When a small image (256 tokens → bucket 1024) and a large image (4096 tokens → bucket 4096) are batched together, the small image pays the latency cost of the larger bucket.
-
-Model-level DP solves this by routing images to replicas with different optimal buckets:
-
-```text
-Block-level DP (current):
-  Small + Large images → both use bucket 4096 → wasted compute on small image
-
-Model-level DP (future):
-  Replica 0: Small image → bucket 1024 (fast)
-  Replica 1: Large image → bucket 4096 (parallel)
-```
+The scheduler batches images from multiple requests into a single `embed_multimodal` call by using `group_and_batch_mm_kwargs`. Block-level DP therefore benefits from concurrent request load: more pending images produce more blocks and improve DP utilization.

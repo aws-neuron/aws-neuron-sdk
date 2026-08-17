@@ -31,7 +31,7 @@ Prerequisites
    * - Operating System
      - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
    * - Python
-     - Python 3.11, or 3.12
+     - Python 3.11, 3.12, or 3.13
    * - Sudo Access
      - Required for driver installation
    * - Internet Access

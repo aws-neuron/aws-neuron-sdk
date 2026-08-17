@@ -30,7 +30,7 @@ look briefly at each of these, specifically we will describe:
 3. How to tell which core a kernel is running on
 
 Launching a kernel on multiple cores
------------
+------------------------------------
 
 To launch a NKI kernel on multiple cores, you specify the number of cores to
 use, in square brackets, when calling the kernel. For example, suppose we have
@@ -60,7 +60,7 @@ too large for the current architecture, then you will receive an error.
    lnc_test[8](input)
 
 Programming for multiple cores
------
+------------------------------
 
 When writing a NKI kernel for multiple cores, there are two important APIs that
 can be used to tell how many cores are being used and which core the current

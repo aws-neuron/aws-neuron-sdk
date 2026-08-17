@@ -26,8 +26,11 @@ Known issues
 *Something doesn't work. Check here to find out if we already knew about it. We hope to fix these soon!*
 
 * ``pytorch-training-neuronx`` 2.7.0 DLC has two HIGH CVEs related to ``sagemaker-python-sdk`` package. We are actively working to resolve these high CVEs:
-- * `CVE-2024-34072 <https://nvd.nist.gov/vuln/detail/CVE-2024-34072>`_
-- * `CVE-2024-34073 <https://nvd.nist.gov/vuln/detail/CVE-2024-34073>`_
+
+  * `CVE-2024-34072 <https://nvd.nist.gov/vuln/detail/CVE-2024-34072>`_
+  * `CVE-2024-34073 <https://nvd.nist.gov/vuln/detail/CVE-2024-34073>`_
+
 * ``pytorch-inference-vllm-neuronx`` 0.9.1 DLC has CRITICAL and HIGH CVEs . We are actively working to resolve these high CVEs:
-- * `CVE-2024-35515 <https://nvd.nist.gov/vuln/detail/CVE-2024-35515>`_
-- * `CVE-2022-4296 <https://nvd.nist.gov/vuln/detail/CVE-2022-42969>`_
+
+  * `CVE-2024-35515 <https://nvd.nist.gov/vuln/detail/CVE-2024-35515>`_
+  * `CVE-2022-4296 <https://nvd.nist.gov/vuln/detail/CVE-2022-42969>`_

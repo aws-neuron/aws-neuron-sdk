@@ -1,7 +1,7 @@
 .. meta::
     :description: AI inference on AWS Neuron — deploy production-ready models on Trainium and Inferentia.
     :keywords: neuron, inference, vllm, nxd inference, trainium, inferentia, llm serving
-    :date-modified: 07/20/2026
+    :date-modified: 08/17/2026
 
 .. _neuron-inference-overview:
 
@@ -79,12 +79,12 @@ model implementations live directly within the plugin. It supports advanced
 inference features including disaggregated inference, segmented prefill, and
 EAGLE3 speculative decoding.
 
-vLLM Neuron is currently in Beta and active development. It supports vLLM 0.21.0+
+vLLM Neuron is currently in Beta and active development. It supports vLLM 0.24.0
 on Trn2 and Trn3 instances.
 
 .. code-block:: bash
 
-    git clone -b release-0.21.0.1.0.0 https://github.com/vllm-project/vllm-neuron.git
+    git clone -b release-0.24.0.1.1.0 https://github.com/vllm-project/vllm-neuron.git
     cd vllm-neuron
     pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
 

@@ -220,8 +220,8 @@ The compiler middle-end-transformation passes contain heuristic-driven optimizat
 Kernel API
 ----------
 
-.. autodata:: rmsnorm_quant_kernel
-   :noindex:
+For the ``rmsnorm_quant_kernel`` API signature and parameters, see
+:doc:`/nki/library/api/rmsnorm-quant`.
 
 Evaluation
 ----------

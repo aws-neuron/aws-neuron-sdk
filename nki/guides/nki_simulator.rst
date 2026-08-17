@@ -320,4 +320,3 @@ Known Gaps
 
 - Some hardware constraint checks are missing — see `Hardware Constraint Validation`_ for details.
 - ``nki.collectives`` APIs are not implemented in the simulator.
-- ``nki.isa.quantize_mx()`` scale packing fails when ``dst_scale`` number of partitions doesn't match ``src`` partitions.

@@ -220,7 +220,7 @@ vllm serve openai/gpt-oss-120b \
     --no-disable-hybrid-kv-cache-manager \
     --port 8200 \
     --hf-overrides '{"quantization_config": {}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
     --additional-config '{
         "neuron_config": {
             "quantization": "mxfp4",
@@ -264,7 +264,7 @@ vllm serve openai/gpt-oss-120b \
     --no-disable-hybrid-kv-cache-manager \
     --port 8100 \
     --hf-overrides '{"quantization_config": {}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
     --additional-config '{
         "neuron_config": {
             "quantization": "mxfp4",
@@ -412,7 +412,8 @@ The response is an OpenAI-compatible JSON payload. Confirm the following:
 With default top-k sampling, completion content varies across runs. For
 deterministic outputs, add `"on_device_sampling_config": {"all_greedy": true}`
 to the `neuron_config` on both roles. For substantive accuracy validation, see
-the [accuracy debugging guide](../model-dev/accuracy-debugging-guide.md).
+the [accuracy debugging guide](../model-dev/accuracy-debugging-guide.md) and the
+[accuracy debugger tool](../model-dev/how-to-use-accuracy-debugger.md).
 :::
 
 ### 7. Benchmark and tune prefix caching

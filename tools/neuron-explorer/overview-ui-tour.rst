@@ -1,7 +1,7 @@
 .. meta::
     :description: Guided overview of the Neuron Explorer UI — every viewer and tool grouped by use case with screenshots and descriptions.
     :keywords: neuron explorer, profiling, UI overview, performance analysis, debugging, memory, timeline, NKI, Trainium
-    :date-modified: 2026-07-13
+    :date-modified: 2026-07-31
 
 .. _neuron-explorer-ui-tour:
 
@@ -30,6 +30,55 @@ Explorer UI. Use it as a navigation map.
    :target: ../../_images/Neuron-Explorer-UI-NavMap.png
 
 *Click the image to enlarge.*
+
+Navigation and workspace
+-------------------------
+
+The navigation provides multiple ways to access profiles and tools,
+organized around common workflows.
+
+Sidebar navigation
+~~~~~~~~~~~~~~~~~~
+
+The left sidebar provides quick access to profile management without leaving your
+current workspace:
+
+* **Favourites** — Profiles you have starred appear directly in the sidebar for
+  one-click access. Star a profile from the overflow menu or the Profile Manager
+  page.
+* **Recently Viewed** — Your most recently opened profiles, ordered by last access
+  time. Quickly switch between profiles you are actively working with.
+* **Recently Uploaded** — Newly uploaded profiles appear here automatically. 
+  Use this to find profiles you just uploaded.
+* **Resources** — Links to documentation and getting started guides.
+
+Click **Profile Manager** in the sidebar header to return to the full profile
+management page for uploading, searching, and bulk operations.
+
+Focus Mode
+~~~~~~~~~~
+
+Focus Mode hides the top and side bars to maximize the workspace
+area for timeline analysis. Toggle Focus Mode from the button cluster in the
+top-right corner of the navigation bar.
+
+Use Focus Mode when you need fewer distractions or more space to do your work.
+
+Widget Tab Visibility
+~~~~~~~~~~~~~~~~~~~~~
+
+Widget tabs can now be hidden for less visual clutter when viewing widgets.
+
+To control how widget tab handles are displayed, open **Settings**, choose
+**Workspace settings**, and set **Tab bar visibility** to **Always visible**,
+**Hide single-tab bars**, or **Hide all tab bars**.
+
+Notifications
+~~~~~~~~~~~~~
+
+Notifications tell you anything that's wrong or could be wrong with your profile.
+Click the notification icon to view recent alerts, profile processing status updates,
+and system messages without leaving your current workspace.
 
 Performance overview and triage
 -------------------------------

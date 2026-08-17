@@ -96,6 +96,9 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF031 <error-code-evrf031>`
      - The compiler encountered a scatter out-of-bounds error.
      - Ensure that the iota size matches the operand dimension size.
+   * - :ref:`NCC_EVRF035 <error-code-evrf035>`
+     - Matrix multiplication (dot) does not support 32-bit or 64-bit integer operands on this target.
+     - Cast the operands to a floating-point type, or pass ``--implicit-integer-downcast=dot`` to allow the lossy f32 fallback.
    * - :ref:`NCC_EVRF036 <error-code-evrf036>`
      - QuantizeMX custom call has invalid backend_config JSON.
      - Provide a valid JSON object in backend_config.
@@ -168,6 +171,24 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF059 <error-code-evrf059>`
      - Kernel file referenced by AwsNeuronCustomNativeKernel instruction does not exist on the host.
      - Ensure the NKI kernel artifact file exists at the specified path before compilation. Clear the NKI file cache and retrace the model, or copy artifacts into the compiler launch directory.
+   * - :ref:`NCC_EVRF060 <error-code-evrf060>`
+     - Scatter does not support integer operands on this target; they are converted to f32, which loses precision for values larger than 2^24.
+     - Cast the scatter operands to a floating-point type, or pass ``--implicit-integer-downcast=scatter`` to allow the lossy f32 fallback.
+   * - :ref:`NCC_EVRF061 <error-code-evrf061>`
+     - AllReduce performs its reduction compute in floating point (f32) and does not support 32-bit or 64-bit integer operands on this target.
+     - Cast the collective operands to a floating-point type, or pass ``--implicit-integer-downcast=all_reduce`` to allow the lossy f32 fallback.
+   * - :ref:`NCC_EVRF062 <error-code-evrf062>`
+     - Operation does not support 64-bit integer operands on this target; they are downcast to 32-bit integer, which loses precision for values larger than 2^31.
+     - Cast the operands to a supported type, or pass ``--implicit-integer-downcast=pow`` to allow the lossy int64 to int32 fallback.
+   * - :ref:`NCC_EVRF063 <error-code-evrf063>`
+     - ReduceScatter performs its reduction compute in floating point (f32) and does not support 32-bit or 64-bit integer operands on this target.
+     - Cast the collective operands to a floating-point type, or pass ``--implicit-integer-downcast=reduce_scatter`` to allow the lossy f32 fallback.
+   * - :ref:`NCC_EVRF064 <error-code-evrf064>`
+     - HLO verification failed since the input HLO graph contains an illegal instruction that violates XLA shape constraints.
+     - Check the neuronx-cc logs for the specific issue with the HLO, and inspect the reported instruction and ensure all operand shapes are valid.
+   * - :ref:`NCC_EVRF065 <error-code-evrf065>`
+     - NKI kernel was traced with an unsupported NKI version.
+     - Upgrade the installed NKI version and rerun your model to retrace the NKI kernel.
    * - :ref:`NCC_EXSP001 <error-code-exsp001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -206,6 +227,7 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF019
     EVRF022
     EVRF031
+    EVRF035
     EVRF036
     EVRF037
     EVRF038
@@ -230,5 +252,11 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF057
     EVRF058
     EVRF059
+    EVRF060
+    EVRF061
+    EVRF062
+    EVRF063
+    EVRF064
+    EVRF065
     EXSP001
     EXTP004

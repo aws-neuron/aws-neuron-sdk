@@ -6,7 +6,7 @@ in the features guide.
 
 | Topic | Description |
 | --- | --- |
-| [Block Packing Vision Attention](block_packing_attention.md) | FFD block packing for multi-image attention efficiency |
+| [Block Packing Attention](block_packing_attention.md) | FFD block packing for multi-image attention efficiency |
 | [On-Device Encoder Cache](on_device_encoder_cache.md) | Block-based on-device cache for vision encoder outputs |
 | [M-RoPE](mrope.md) | Spatial position embeddings for VLMs |
 

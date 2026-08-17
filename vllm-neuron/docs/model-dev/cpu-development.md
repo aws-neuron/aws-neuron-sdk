@@ -57,22 +57,33 @@ In CPU mode:
 - Catches wrong weight mappings, shape mismatches, incorrect collectives,
   bad RoPE variants, and transposition errors
 
-### 3. Use the NKI CPU simulator (optional)
+### 3. Run unit tests
+
+```bash
+VLLM_NEURON_CPU_MODE=1 pytest test/unit -v --timeout=300
+```
+
+### 4. Run functional tests in CPU mode
+
+```bash
+VLLM_NEURON_CPU_MODE=1 pytest test/vllm_neuron/functional/ -v --timeout=60
+```
+
+### 5. Use the NKI CPU simulator (optional)
 
 The NKI CPU simulator executes NKI kernels on CPU using NumPy, enabling
 correctness validation without Neuron hardware. It must be explicitly
-enabled — it is not auto-activated by CPU mode. Set both environment
-variables:
+enabled — it is not auto-activated by CPU mode.
 
 ```bash
-export VLLM_NEURON_CPU_MODE=1
-export NKI_SIMULATOR=1
+VLLM_NEURON_CPU_MODE=1 NKI_SIMULATOR=1 pytest \
+    test/vllm_neuron/nki/test_nki_cpu_sim.py -v --timeout=60
 ```
 
 :::{note}
 The simulator is slow — it runs NKI kernels through a Python-based NumPy
 backend. Use it only for single functions, modules, or layers with small
-tensor shapes or tiny model configs (<10M params).
+tensor shapes or tiny model configs (<10M params). Always set `--timeout`.
 :::
 
 #### How the simulator works
@@ -107,7 +118,7 @@ The simulator supports both eager mode (`--enforce-eager`) and
 - Simulator execution is not representative of hardware performance
 - Some kernels may not yet be supported by the simulator
 
-### 4. Use CPU compilation mode
+### 6. Use CPU compilation mode
 
 CPU Compilation (`VLLM_NEURON_CPU_COMPILE=1`) compiles model graphs on
 a CPU instance without executing them. This eliminates the need for
@@ -118,8 +129,8 @@ later device execution.
 VLLM_NEURON_CPU_COMPILE=1 \
 NEURON_PLATFORM_TARGET_OVERRIDE=trn2 \
 python3 -m vllm.entrypoints.openai.api_server \
-    --model openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+    --model meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --max-model-len 4096
 ```
 
@@ -131,29 +142,29 @@ graphs without execution.
 
 #### Remote cache workflow for production
 
-1. **Compile on CPU instance** — set `VLLM_NEURON_REMOTE_CACHE` to a
+1. **Compile on CPU instance** — set `NEURON_LIBTORCH_REMOTE_CACHE` to a
    shared filesystem (NFS/FSx):
 
    ```bash
    VLLM_NEURON_CPU_COMPILE=1 \
    NEURON_PLATFORM_TARGET_OVERRIDE=trn2 \
-   VLLM_NEURON_REMOTE_CACHE=/shared/neff_cache \
-   VLLM_NEURON_PARALLEL_COMPILE_WORKERS=16 \
+   NEURON_LIBTORCH_REMOTE_CACHE=/shared/neff_cache \
+   NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS=16 \
    python3 -m vllm.entrypoints.openai.api_server \
-       --model openai/gpt-oss-20b \
-       --tensor-parallel-size 8
+       --model meta-llama/Llama-3.3-70B-Instruct \
+       --tensor-parallel-size 32
    ```
 
 2. **Deploy to production Neuron instances** — ensure the remote cache
    is accessible, then disable compilation entirely:
 
    ```bash
-   VLLM_NEURON_REMOTE_CACHE=/shared/neff_cache \
-   VLLM_NEURON_DISABLE_GRAPH_CAPTURE_BACKEND=1 \
+   NEURON_LIBTORCH_REMOTE_CACHE=/shared/neff_cache \
+   NEURON_LIBTORCH_DISABLE_GRAPH_CAPTURE_BACKEND=1 \
    VLLM_NEURON_DISABLE_WARMUP_COMPILE=1 \
    python3 -m vllm.entrypoints.openai.api_server \
-       --model openai/gpt-oss-20b \
-       --tensor-parallel-size 8
+       --model meta-llama/Llama-3.3-70B-Instruct \
+       --tensor-parallel-size 32
    ```
 
 The `VLLM_NEURON_DISABLE_WARMUP_COMPILE=1` flag treats any cache miss as
@@ -164,6 +175,22 @@ a fatal `RuntimeError`, ensuring production never silently compiles.
 - Speculative decoding is not supported in CPU compile mode
 - Cannot validate numerical outputs — only confirms compilation
   succeeds
+
+### 7. Use the dev container (alternative)
+
+For flows that require `torch_neuronx` import paths (XLA tracing,
+specific backend code):
+
+```bash
+ci/dev-container.sh login          # One-time: refresh ECR creds
+ci/dev-container.sh pull           # Pull latest postmerge image
+ci/dev-container.sh shell          # Interactive shell
+ci/dev-container.sh exec pytest test/unit/ -x -q --no-cov
+ci/dev-container.sh stop           # Remove container
+```
+
+The container bind-mounts the host repo — edits on your host appear
+immediately inside the container.
 
 ## Debugging techniques
 
@@ -261,9 +288,9 @@ Your CPU development environment is working when:
 | `NKI_PRECISE_FP`                            | `1` (when sim on) | Enable ml_dtypes for low-precision accuracy |
 | `VLLM_NEURON_CPU_COMPILE`                   | `0`               | Enable CPU compilation mode (no execution)  |
 | `NEURON_PLATFORM_TARGET_OVERRIDE`           | —                 | Target platform for CPU compilation         |
-| `VLLM_NEURON_PARALLEL_COMPILE_WORKERS`      | `8`               | Number of parallel compile workers          |
-| `VLLM_NEURON_REMOTE_CACHE`                  | —                 | Path to shared remote NEFF cache            |
-| `VLLM_NEURON_DISABLE_GRAPH_CAPTURE_BACKEND` | `0`               | Disable graph capture backend entirely      |
+| `NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS`      | `8`               | Number of parallel compile workers          |
+| `NEURON_LIBTORCH_REMOTE_CACHE`                  | —                 | Path to shared remote NEFF cache            |
+| `NEURON_LIBTORCH_DISABLE_GRAPH_CAPTURE_BACKEND` | `0`               | Disable graph capture backend entirely      |
 | `VLLM_NEURON_DISABLE_WARMUP_COMPILE`        | `0`               | Treat cache miss as fatal error             |
 | `VLLM_ENABLE_V1_MULTIPROCESSING`            | `1`               | Set to 0 for single-process pdb             |
 
@@ -271,9 +298,9 @@ Your CPU development environment is working when:
 
 ### "No module named torch_neuronx"
 
-- **Possible solution**: In pure CPU mode, most tests skip the paths that
-  require `torch_neuronx` automatically. Run in an environment where
-  `torch_neuronx` is installed if you need those paths.
+- **Possible solution**: Use the dev container
+  (`ci/dev-container.sh shell`) which has it pre-installed. In pure
+  CPU mode, most tests skip these paths automatically.
 
 ### Tests hang indefinitely
 

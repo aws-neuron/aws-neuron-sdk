@@ -1,7 +1,7 @@
 .. _neuron-runtime-faq:
 
 NeuronX runtime FAQ
-==================
+===================
 
 .. contents:: Table of Contents
    :local:
@@ -32,7 +32,7 @@ Do I need to change my application launch command?
 No.
 
 How do I restart/start/stop the NeuronX Runtime?
------------------------------------------------
+------------------------------------------------
 Since Neuron Runtime is a library, starting/stopping application would result in starting/stopping the Neuron Runtime.
 
 
@@ -42,12 +42,12 @@ How do I know which runtimes are associated with which Neuron Device(s)?
 
 
 What about RedHat or other versions of Linux and Windows?
---------------------------------------------------------
+---------------------------------------------------------
 
 We don't officially support it yet.
 
 
 How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?
----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
 
 See the :doc:`PyTorch NeuronX inference guides </frameworks/torch/inference-torch-neuronx>` and the :doc:`JAX NeuronX documentation </frameworks/jax/index>` for current examples of parallel inference across NeuronCores.

@@ -69,21 +69,21 @@ Date: 04/01/2024
 * Minor updates.
 
 tensorflow-neuron 2.x release [2.10.8.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 12/21/2023
 
 * Minor updates.
 
 tensorflow-neuron 2.x release [2.10.2.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 10/15/2023
 
 * Minor updates.
 
 tensorflow-neuron 2.x release [2.10.1.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 09/15/2023
 
@@ -190,7 +190,7 @@ tensorflow-neuron 2.x release [2.1.13.0]
 Date: 02/16/2022
 
 * Fixed a bug that caused a memory leak. The memory leak was approximately 128b for each inference and 
-  exists in all versions of TensorFlow Neuron versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`pre-release-content` 
+  exists in all versions of TensorFlow Neuron versions part of Neuron 1.16.0 to Neuron 1.17.0 releases. see :ref:`neuron1-pre-release-content` 
   for exact versions included in each release.  This release only addresses the leak in TensorFlow Neuron 2.5.  Future release of TensorFlow Neuron will fix the leak in other versions as well (2.1, 2.2, 2.3, 2.4).
 
 
@@ -260,7 +260,8 @@ New in this release
 * First release of TensorFlow 2.x integration, Neuron support now TensorFlow versions 2.1.4, 2.2.3, 2.3.3, 2.4.2, and 2.5.0.
 
 * New public API tensorflow.neuron.trace: trace a TensorFlow 2.x keras.Model or a Python callable that can be decorated by tf.function, and return an AWS-Neuron-optimized keras.Model that can execute on AWS Machine Learning Accelerators.
- **Please note** that TensorFlow 1.x SavedModel compilation API tensorflow.neuron.saved_model.compile is not supported in tensorflow-neuron 2.x . It continues to function in tensorflow-neuron 1.15.x .
+
+  **Please note** that TensorFlow 1.x SavedModel compilation API tensorflow.neuron.saved_model.compile is not supported in tensorflow-neuron 2.x . It continues to function in tensorflow-neuron 1.15.x .
 
 * Included versions:
 
