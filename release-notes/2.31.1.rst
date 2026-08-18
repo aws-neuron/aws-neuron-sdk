@@ -1,5 +1,5 @@
 .. meta::
-    :description: Release notes for AWS Neuron SDK release v2.29.1
+    :description: Release notes for AWS Neuron SDK release v2.31.1
     :date-modified: 08/12/2026
 
 
@@ -8,7 +8,7 @@ AWS Neuron SDK Release Notes - v2.31.1
 
 **Release Date**: August 12, 2026   
 
-Release **2.31.1** of the AWS Neuron SDK includes bug fixes applied to the AWS Neuron SDK v2.31.0. See :doc:`the Neuron SDK v2.29.0 release notes </release-notes/2.31.0>` for the full set of changes that shipped with the 2.31.0 release.
+Release **2.31.1** of the AWS Neuron SDK includes bug fixes applied to the AWS Neuron SDK v2.31.0. See :doc:`the Neuron SDK v2.31.0 release notes </release-notes/prev/2.31.0>` for the full set of changes that shipped with the 2.31.0 release.
 
 Bug Fixes
 ----------
@@ -38,5 +38,5 @@ Neuron Developer Tools
 Previous releases
 -----------------
 
-* :doc:`Neuron 2.31.0 </release-notes/2.31.0>`
+* :doc:`Neuron 2.31.0 </release-notes/prev/2.31.0>`
 * :doc:`Neuron 2.30.0 </release-notes/prev/2.30.0>`

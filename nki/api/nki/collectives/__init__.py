@@ -4,6 +4,7 @@ from enum import Enum
 from typing import *
 
 from nki.language import NKIObject
+from nki.language import NkiTensor
 
 @dataclass
 class ReplicaGroup(NKIObject):
@@ -13,7 +14,7 @@ class ReplicaGroup(NKIObject):
 
     ...
 
-def all_reduce(srcs: List, dsts: List, replica_group: ReplicaGroup, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_reduce(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-reduce on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -33,7 +34,7 @@ def all_reduce(srcs: List, dsts: List, replica_group: ReplicaGroup, op, priority
     :param name: (optional) name for the instruction."""
     ...
 
-def all_gather(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_gather(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-gather on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -56,7 +57,91 @@ def all_gather(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_d
     :param name: (optional) name for the instruction."""
     ...
 
-def reduce_scatter(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_gather_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+    r"""Perform a variable-length all-gather on the given replica group.
+
+    Unlike ``all_gather`` which concatenates along a collective dimension,
+    ``all_gather_v`` treats tensors as flat element buffers. Each rank
+    contributes a single chunk ``src[send_displ : send_displ + send_count]``
+    that is broadcast to every rank in the replica group — the same chunk
+    is sent to all destinations. Each rank ``r``'s ``dst`` is partitioned
+    into equal-sized slots (one per source rank); the chunk from sender
+    ``s`` lands at ``dst[s * slot_elems : s * slot_elems + slot_elems]``,
+    where ``slot_elems = dst.total_elements / rank_list_size``.
+
+    The send side is uniform, not per-destination: ``send_count`` and
+    ``send_displ`` are single values that define the one chunk broadcast
+    to every destination. (Contrast ``all_to_all_v``, where each
+    destination gets its own count/displacement.) Although rows 0/1 are
+    sized with one column per rank, only the first column is read.
+
+    Recv-side counts and displacements remain per-src-rank and live in
+    rows 2/3.
+
+    :param srcs: Input tensor list. Currently supports exactly one tensor.
+        Must be HBM-backed.
+    :param dsts: Output tensor list. Currently supports exactly one tensor.
+        Must be HBM-backed. ``src`` and ``dst`` element counts are free to
+        differ; sizes are validated against the metadata at execution time.
+    :param replica_group: ReplicaGroup defining which ranks participate.
+    :param metadata_tensor: ``uint32`` tensor laid out contiguously in
+        memory. Shape depends on backing buffer, where ``rows`` is 3 when
+        ``has_rdispls=False`` and 4 when ``has_rdispls=True``:
+
+        - HBM: ``(rows, rank_list_size)``.
+        - SBUF: ``(1, rows, rank_list_size)`` — the whole buffer must
+          live on a single partition, so a trivial partition dim is
+          prepended.
+
+        Rows 0/1 are single-valued for all-gather: only their first
+        column is read.
+
+        The rows are:
+
+        - Row 0 ``send_count``: number of elements in the chunk broadcast
+          to every rank. Only the first column is read; the same count
+          applies to all destinations. Always an input.
+        - Row 1 ``send_displ``: offset in elements within ``src`` where the
+          broadcast chunk begins. Only the first column is read; the same
+          displacement applies to all destinations. Always an input.
+        - Row 2 ``recv_counts[r]``: number of elements received from rank
+          ``r``. Per-src-rank. Controlled by ``recv_counts_known`` — see
+          that flag.
+        - Row 3 ``recv_displs[r]``: offset in elements within ``dst`` where
+          the chunk from rank ``r`` is written. Per-src-rank. Only present
+          when ``has_rdispls=True``.
+
+    :param recv_counts_known:
+        Controls whether row 2 is populated by the collective during
+        execution. Row 2 is never read as input.
+
+        - ``True``: row 2 is left untouched, avoiding a small per-rank
+          writeback.
+        - ``False`` (default): row 2 is an **output** — per-rank received
+          counts are written during execution, and can be read after the
+          op to learn received sizes.
+    :param has_rdispls:
+        - ``True``: row 3 is an **input**; recv_displs must be populated.
+          The chunk from sender rank ``r`` is written at
+          ``dst[recv_displs[r] : recv_displs[r] + recv_counts[r]]``.
+        - ``False`` (default): row 3 may be omitted from ``metadata_tensor``
+          (pass a 3-row tensor). Incoming chunks are laid out
+          equally-spaced at
+          ``block_offset(r) = dst.total_elements / rank_list_size * r``,
+          regardless of the actual recv_count per rank.
+
+    Current limitations:
+
+    - ``has_rdispls=True`` is not supported.
+    - Only LNC=2 is supported.
+    - Each rank-list must have exactly 4 ranks (intra-chip).
+
+    :param priority: DMA QoS priority level 0-3 where lower is higher
+        priority (NeuronCore-v4+ only).
+    :param name: (optional) name for the instruction."""
+    ...
+
+def reduce_scatter(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform a reduce-scatter on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -78,7 +163,7 @@ def reduce_scatter(srcs: List, dsts: List, replica_group: ReplicaGroup, collecti
     :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_to_all(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an all-to-all on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -97,7 +182,7 @@ def all_to_all(srcs: List, dsts: List, replica_group: ReplicaGroup, collective_d
     :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_tensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Executes an all-to-all collective where each rank can send
     a different number of elements, known only at execution time (rather
     than at compile time).
@@ -135,8 +220,8 @@ def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_t
         memory. Shape depends on backing buffer, where ``rows`` is 3 when
         ``has_rdispls=False`` and 4 when ``has_rdispls=True``:
 
-        - HBM: ``(rows, replica_group_size)``.
-        - SBUF: ``(1, rows, replica_group_size)`` — the whole buffer must
+        - HBM: ``(rows, rank_list_size)``.
+        - SBUF: ``(1, rows, rank_list_size)`` — the whole buffer must
           live on a single partition, so a trivial partition dim is
           prepended.
 
@@ -166,9 +251,11 @@ def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_t
         - ``True``: row 3 is an **input**; recv_displs must be populated.
           The chunk from sender rank ``r`` is written at
           ``dst[recv_displs[r] : recv_displs[r] + recv_counts[r]]``.
+          Currently only supported on NeuronSwitch-based instances (trn3
+          today).
         - ``False`` (default): row 3 may be omitted from ``metadata_tensor`` (pass a
           3-row tensor). Incoming chunks are laid out equally-spaced at
-          ``recv_displs[r] = (dst.total_elements / replica_group_size) * r``,
+          ``recv_displs[r] = (dst.total_elements / rank_list_size) * r``,
           regardless of the actual recv_count per rank.
 
     :param priority: DMA QoS priority level 0-3 where lower is higher
@@ -176,7 +263,7 @@ def all_to_all_v(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_t
     :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute(srcs: List, dsts: List, source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def collective_permute(srcs: List[NkiTensor], dsts: List[NkiTensor], source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Send and receive data between ranks based on explicitly defined source-target pairs.
 
     Each pair ``(source, target)`` specifies that data from the source rank
@@ -199,7 +286,7 @@ def collective_permute(srcs: List, dsts: List, source_target_pairs: List[Tuple[i
     :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute_implicit(srcs_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def collective_permute_implicit(srcs_by_channel: List[List[NkiTensor]], dsts_by_channel: List[List[NkiTensor]], replica_group: ReplicaGroup, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Send and receive data between ranks in a ring, where sources and destinations are
     implicitly determined by the ring structure during runtime.
 
@@ -231,7 +318,7 @@ def collective_permute_implicit(srcs_by_channel: List[List], dsts_by_channel: Li
     :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute_implicit_reduce(srcs0_by_channel: List[List], srcs1_by_channel: List[List], dsts_by_channel: List[List], replica_group: ReplicaGroup, op, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def collective_permute_implicit_reduce(srcs0_by_channel: List[List[NkiTensor]], srcs1_by_channel: List[List[NkiTensor]], dsts_by_channel: List[List[NkiTensor]], replica_group: ReplicaGroup, op, channel_ids: List[int]=[0], priority: Optional[int]=None, name: Optional[str]=None) -> None:
     r"""Perform an implicit collective permute with reduction in a ring, where sources and
     destinations are implicitly determined by the ring structure during runtime.
 

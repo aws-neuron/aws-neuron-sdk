@@ -172,7 +172,7 @@ Bug fixes
 ---------
 
 * Fixed assertion errors when inference was completed with NaNs. The expected behavior is to complete inference successfully and warn the 
-  user that ``NaN``s were seen during the current inference. 
+  user that ``NaN`` values were seen during the current inference. 
 * Fixed compile issue when individual output nodes have multiple output nodes. Because the output index was being dropped, fewer number 
   of output feature maps were being considered and that caused failures during inference. 
 
@@ -403,9 +403,9 @@ Resolved Issues
 -  Issue: MXNet Model Server is not able to clean up Neuron RTD states
    after model is unloaded (deleted) from model server.
 
-    -  Workaround for earlier versions: run “\ ``/opt/aws/neuron/bin/neuron-cli reset``\ “ to
-   clear Neuron RTD states after all models are unloaded and server is
-   shut down.
+   -  Workaround for earlier versions: run “\ ``/opt/aws/neuron/bin/neuron-cli reset``\ “ to
+      clear Neuron RTD states after all models are unloaded and server is
+      shut down.
 
 [1.5.1.1.1.52.0]
 ^^^^^^^^^^^^^^^^

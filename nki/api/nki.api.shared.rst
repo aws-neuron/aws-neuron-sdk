@@ -36,6 +36,8 @@ which must be a `nki.language` data type.
   |                        +------------------------------+-------------------------------------------------+
   |                        | float8_e4m3fn (1S,4E,3M)     | ``nki.language.float8_e4m3fn``                  |
   |                        +------------------------------+-------------------------------------------------+
+  |                        | float8_e8m0fnu (0S,8E,0M)    | ``nki.language.float8_e8m0fnu``                 |
+  |                        +------------------------------+-------------------------------------------------+
   |                        | float16 (1S,5E,10M)          | ``nki.language.float16``                        |
   |                        +------------------------------+-------------------------------------------------+
   | Float                  | bfloat16 (1S,8E,7M)          | ``nki.language.bfloat16``                       |
@@ -201,6 +203,22 @@ the Scalar Engine will generate invalid output results.
    +--------------------------------------------+-----------------------------------------------------+---------------------+
    | Absolute                                   | ``nki.language.abs``                                | ``[-inf, inf]``     |
    +--------------------------------------------+-----------------------------------------------------+---------------------+
+
+.. note::
+
+   Functions whose **Valid Input Range** is narrower than ``[-inf, inf]``
+   (``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``, ``reciprocal``) may
+   produce invalid results outside that range. For ``sin`` specifically, the
+   Scalar Engine performs **no argument range reduction or clamping**. It
+   evaluates the fitting polynomial directly, so ``nki.isa.activation(op=nl.sin)``
+   extrapolates a cubic outside ``[-PI, PI]`` and ``sin(9.0)`` returns ~27.65
+   (not ~0.41). The Python simulator (``nki.simulate``) reproduces this hardware
+   behavior for ``sin`` only.
+
+   ``nki.language.sin`` applies additional instructions to perform range
+   reduction *before* the activation, so it stays accurate over the full input
+   domain. Call ``nki.language.sin`` instead of the ``nki.isa`` activation
+   instructions when you need correct results for inputs outside ``[-PI, PI]``.
 
 .. _nki-engine-sel:
 

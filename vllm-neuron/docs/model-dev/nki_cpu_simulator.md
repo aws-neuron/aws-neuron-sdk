@@ -70,6 +70,19 @@ Always use a timeout (e.g. `--timeout 60`) when running tests with the simulator
 | `NKI_SIMULATOR` | unset (off) | Set to `1` to enable the NKI CPU simulator. Must be set explicitly — not auto-enabled by CPU mode. |
 | `NKI_PRECISE_FP` | `1` (when simulator on) | Enables ml_dtypes for low-precision accuracy (bfloat16, float8). Auto-set when `NKI_SIMULATOR=1`. Set to `0` to use float32 approximations. |
 
+## Running tests
+
+``` bash
+# NKI unit tests (dtype conversion, can_run_kernel)
+VLLM_NEURON_CPU_MODE=1 pytest test/vllm_neuron/nki/test_nki_cpu_sim.py -v --timeout=60
+
+# Functional tests in CPU mode (no simulator — fast)
+VLLM_NEURON_CPU_MODE=1 pytest test/vllm_neuron/functional/ -v --timeout=60
+
+# Functional tests with simulator (slow — small shapes only)
+VLLM_NEURON_CPU_MODE=1 NKI_SIMULATOR=1 pytest test/vllm_neuron/functional/ -v --timeout=60
+```
+
 ## Limitations
 
 - **Numerical differences**: CPU float arithmetic differs from NeuronCore arithmetic. Tests should use appropriate tolerances.

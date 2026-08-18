@@ -16,9 +16,6 @@ vLLM uses `prometheus_client` with a global default registry. In the default sin
 
 vLLM Neuron cannot use this IPC path because `SchedulerStats` is not extensible by plugins. Instead, vLLM Neuron enables `prometheus_client` multiprocess mode so that metrics observed in the EngineCore and Worker processes are written to shared mmap files and aggregated by the API server's `/metrics` endpoint.
 
-> [!NOTE]
-> A future improvement would be to propose an upstream vLLM API for plugin metrics that uses the existing IPC path.
-
 ### Multiprocess Prometheus Setup
 
 `PROMETHEUS_MULTIPROC_DIR` is set at module level in `vllm_neuron/__init__.py` before `prometheus_client` is imported anywhere. This ensures all processes (API server, EngineCore, workers) use multiprocess mode for metric storage.

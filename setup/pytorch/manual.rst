@@ -61,25 +61,89 @@ Installation steps
 
       **Step 2: Install drivers and tools**
 
-      .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-          :start-line: 299
-          :end-line: 300
+      .. code-block:: bash
+
+         # Configure Linux for Neuron repository updates
+         . /etc/os-release
+         sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         EOF
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+
+         # Update OS packages
+         sudo apt-get update -y
+
+         # Install OS headers
+         sudo apt-get install linux-headers-$(uname -r) -y
+
+         # Install git
+         sudo apt-get install git -y
+
+         # Install Neuron Driver (Neuron 2.31 versions)
+         sudo apt-get install aws-neuronx-dkms=2.29.0.0* -y
+
+         # Install Neuron Runtime
+         sudo apt-get install aws-neuronx-collectives=2.33.10.0* -y
+         sudo apt-get install aws-neuronx-runtime-lib=2.33.10.0* -y
+
+         # Install Neuron Tools
+         sudo apt-get install aws-neuronx-tools=2.31.13.0* -y
+
+         # Add PATH
+         export PATH=/opt/aws/neuron/bin:$PATH
 
       **Step 3: Install EFA** (Trn1/Trn1n/Trn2/Trn3 only)
 
-      .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-          :start-line: 290
-          :end-line: 293
+      .. code-block:: bash
+
+         # Install EFA Driver (only required for multi-instance training)
+         curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
+         wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
+         cat aws-efa-installer.key | gpg --fingerprint
+         wget https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz.sig && gpg --verify ./aws-efa-installer-latest.tar.gz.sig
+         tar -xvf aws-efa-installer-latest.tar.gz
+         cd aws-efa-installer && sudo bash efa_installer.sh --yes
+         cd
+         sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
       **Step 4: Install PyTorch and Neuron packages**
+
+      .. important::
+         ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To install
+         ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
+         The commands below install the Neuron 2.31 package versions.
 
       .. tab-set::
 
           .. tab-item:: PyTorch 2.9.0
 
-              .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                  :start-line: 296
-                  :end-line: 297
+              .. code-block:: bash
+
+                 # Install Python venv
+                 sudo apt-get install -y python3.12-venv g++
+
+                 # Create Python venv
+                 python3.12 -m venv aws_neuron_venv_pytorch
+
+                 # Activate Python venv
+                 source aws_neuron_venv_pytorch/bin/activate
+                 python -m pip install -U pip
+
+                 # Install Jupyter notebook kernel
+                 pip install ipykernel
+                 python3.12 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+                 pip install jupyter notebook
+                 pip install environment_kernels
+
+                 # Set pip repository pointing to the Neuron repository
+                 python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+                 # Install wget, awscli
+                 python -m pip install wget
+                 python -m pip install awscli
+
+                 # Install Neuron Compiler and Framework (Neuron 2.31 versions)
+                 python -m pip install neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
 
           .. tab-item:: PyTorch 2.8.0
 
@@ -123,25 +187,93 @@ Installation steps
 
       **Step 2: Install drivers and tools**
 
-      .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-          :start-line: 242
-          :end-line: 243
+      .. code-block:: bash
+
+         # Configure Linux for Neuron repository updates
+         . /etc/os-release
+         sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         EOF
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+
+         # Update OS packages
+         sudo apt-get update -y
+
+         # Install OS headers
+         sudo apt-get install linux-headers-$(uname -r) -y
+
+         # Install git
+         sudo apt-get install git -y
+
+         # Install Neuron Driver (Neuron 2.31 versions)
+         sudo apt-get install aws-neuronx-dkms=2.29.0.0* -y
+
+         # Install Neuron Runtime
+         sudo apt-get install aws-neuronx-collectives=2.33.10.0* -y
+         sudo apt-get install aws-neuronx-runtime-lib=2.33.10.0* -y
+
+         # Install Neuron Tools
+         sudo apt-get install aws-neuronx-tools=2.31.13.0* -y
+
+         # Add PATH
+         export PATH=/opt/aws/neuron/bin:$PATH
 
       **Step 3: Install EFA** (Trn1/Trn1n/Trn2/Trn3 only)
 
-      .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-          :start-line: 248
-          :end-line: 249
+      .. code-block:: bash
+
+         # Install EFA Driver (only required for multi-instance training)
+         curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
+         wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
+         cat aws-efa-installer.key | gpg --fingerprint
+         wget https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz.sig && gpg --verify ./aws-efa-installer-latest.tar.gz.sig
+         tar -xvf aws-efa-installer-latest.tar.gz
+         cd aws-efa-installer && sudo bash efa_installer.sh --yes
+         cd
+         sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
       **Step 4: Install PyTorch and Neuron packages**
+
+      .. important::
+         ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To install
+         ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
+         The commands below install the Neuron 2.31 package versions.
 
       .. tab-set::
 
           .. tab-item:: PyTorch 2.9.0
 
-              .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-                  :start-line: 286
-                  :end-line: 287
+              .. code-block:: bash
+
+                 # Install Python (PyTorch 2.9 requires Python 3.11-3.13, newer than the Ubuntu 22.04 default)
+                 sudo add-apt-repository ppa:deadsnakes/ppa
+                 sudo apt-get install python3.13
+
+                 # Install Python venv
+                 sudo apt-get install -y python3.13-venv g++
+
+                 # Create Python venv
+                 python3.13 -m venv aws_neuron_venv_pytorch
+
+                 # Activate Python venv
+                 source aws_neuron_venv_pytorch/bin/activate
+                 python -m pip install -U pip
+
+                 # Install Jupyter notebook kernel
+                 pip install ipykernel
+                 python3.13 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+                 pip install jupyter notebook
+                 pip install environment_kernels
+
+                 # Set pip repository pointing to the Neuron repository
+                 python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+                 # Install wget, awscli
+                 python -m pip install wget
+                 python -m pip install awscli
+
+                 # Install Neuron Compiler and Framework (Neuron 2.31 versions)
+                 python -m pip install neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
 
           .. tab-item:: PyTorch 2.8.0
 
@@ -200,7 +332,7 @@ To update PyTorch versions or Neuron drivers on an existing manual installation,
 Next steps
 ----------
 
-- :doc:`/frameworks/torch/training-torch-neuronx` - Training on Trn1/Trn2
+- :doc:`Training with torch-neuronx [archived content] </archive/nxd-training/index>` - Training on Trn1/Trn2
 - :doc:`/frameworks/torch/inference-torch-neuronx` - Inference on Inf2/Trn1/Trn2
 - :doc:`/tools/neuron-explorer/index` - Profile your workloads
 - :doc:`/tools/neuron-sys-tools/neuron-top-user-guide` - Monitor system resources

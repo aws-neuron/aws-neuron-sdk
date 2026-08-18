@@ -1,5 +1,3 @@
-.. _mxnet-neuron-install-prev-al2023:
-
 .. meta::
    :noindex:
    :nofollow:

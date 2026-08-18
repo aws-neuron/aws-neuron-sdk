@@ -26,18 +26,14 @@ latest image tag from ECR:
 
 .. code-block:: bash
 
-   # Inference
-   docker pull public.ecr.aws/neuron/pytorch-inference-neuronx:<new_image_tag>
-
    # vLLM Inference
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<new_image_tag>
 
 Replace ``<new_image_tag>`` with the tag for the desired SDK version (e.g.,
-``2.9.0-neuronx-py312-sdk2.31.0-ubuntu24.04``).
+``0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04``).
 
 Check available tags at the ECR Public Gallery:
 
-- `PyTorch Inference <https://gallery.ecr.aws/neuron/pytorch-inference-neuronx>`_
 - `PyTorch vLLM Inference <https://gallery.ecr.aws/neuron/pytorch-inference-vllm-neuronx>`_
 
 For the full list of available images and tags, see :doc:`/deploy/environments/dlc-images`.
@@ -86,7 +82,7 @@ Launch the new container and verify:
      --device=/dev/neuron0 \
      --cap-add SYS_ADMIN \
      --cap-add IPC_LOCK \
-     public.ecr.aws/neuron/pytorch-inference-neuronx:<new_image_tag> \
+     public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<new_image_tag> \
      bash
 
 Inside the container:

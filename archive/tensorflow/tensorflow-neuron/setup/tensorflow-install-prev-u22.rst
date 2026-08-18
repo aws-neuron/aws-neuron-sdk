@@ -1,4 +1,4 @@
-.. _tensorflow-neuron-install-prev-u20:
+.. _tensorflow-neuron-install-prev-u22:
 
 .. meta::
    :noindex:

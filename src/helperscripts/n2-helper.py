@@ -221,6 +221,9 @@ class manifest:
         elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "pytorch" and args.framework_version == "2.1"):
             str_dlami = '\n# Activate Python venv for Pytorch 2.1 \n'
             str_dlami += "source /opt/aws_neuronx_venv_pytorch_2_1/bin/activate"
+        elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "pytorch" and args.framework_version == "2.9.0"):
+            str_dlami = '\n# Activate Python venv for Pytorch 2.9 \n'
+            str_dlami += "source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate"
         elif ((args.instance == 'trn1' or args.instance == 'inf2') and args.framework == "tensorflow" and args.framework_version == "2.10.1"):
             str_dlami = '\n# Activate Python venv for Tensorflow 2.10 \n'
             str_dlami += "source /opt/aws_neuronx_venv_tensorflow_2_10/bin/activate"
@@ -250,6 +253,11 @@ class manifest:
         str_jupiter += 'aws_neuron_venv_' + args.framework
         if args.instance == 'inf1':
             str_jupiter += '_inf1'
+        elif hasattr(args, 'framework_version') and args.framework_version:
+            # Include major_minor version in venv name (e.g., pytorch_2_9)
+            version_parts = args.framework_version.split('.')
+            if len(version_parts) >= 2:
+                str_jupiter += '_' + version_parts[0] + '_' + version_parts[1]
         str_jupiter += ' --display-name "Python (' + framework_name + ')"' + '\n'
         str_jupiter += 'pip install jupyter notebook' + '\n'
         str_jupiter += 'pip install environment_kernels' + '\n'
@@ -623,6 +631,11 @@ class manifest:
             str_venv_name = 'aws_neuron_venv_' + args.framework
             if args.instance == 'inf1':
                 str_venv_name += '_inf1'
+            elif hasattr(args, 'framework_version') and args.framework_version:
+                # Include major_minor version in venv name (e.g., pytorch_2_9)
+                version_parts = args.framework_version.split('.')
+                if len(version_parts) >= 2:
+                    str_venv_name += '_' + version_parts[0] + '_' + version_parts[1]
 
             str += f'{indentation}python{target_python_version} -m venv ' + str_venv_name + ' \n'
 
@@ -643,6 +656,11 @@ class manifest:
 
         if args.instance == 'inf1':
             str_venv_name += '_inf1'
+        elif hasattr(args, 'framework_version') and args.framework_version:
+            # Include major_minor version in venv name (e.g., pytorch_2_9)
+            version_parts = args.framework_version.split('.')
+            if len(version_parts) >= 2:
+                str_venv_name += '_' + version_parts[0] + '_' + version_parts[1]
 
         str += f'{indentation}source ' + str_venv_name + '/bin/activate \n'
 

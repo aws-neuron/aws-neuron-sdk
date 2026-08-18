@@ -1,5 +1,3 @@
-.. _nki-reference:
-
 nki
 ============
 

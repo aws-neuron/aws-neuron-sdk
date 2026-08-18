@@ -1,7 +1,9 @@
+:orphan:
+
 .. _neuron-cc-ops-xla:
 
 TensorFlow Neuron (``tensorflow-neuron (TF1.x)``) Supported operators [XLA]
-=====================================================================
+===========================================================================
 
 To see a list of supported operators for XLA, run the following command:
 

@@ -41,6 +41,9 @@ Archived feature docs
    * - :doc:`transformers-neuronx/index`
      - Neuron 2.25.0
      - Archived on: 9/15/2025
+   * - :doc:`AWS Neuron Reference for NeMo Megatron <nemo-megatron/index>`
+     - Neuron 2.22.0
+     - Archived on: 7/24/2026
    * - :doc:`MXNet Neuron Setup Guides <mxnet-neuron/index>`
      - Neuron 2.27.0
      - Archived on: 3/30/2026
@@ -56,6 +59,9 @@ Archived feature docs
    * - :doc:`Neuron application notes <appnotes/index>`
      - Mixed — legacy per-component app notes
      - Archived on: 7/21/2026
+   * - :doc:`NxD Training (NeuronX Distributed Training) <nxd-training/index>`
+     - Neuron 2.32.0
+     - Archived on: 7/24/2026
 
 Archived deployment flows
 --------------------------
@@ -88,18 +94,14 @@ The following deployment flow pages were archived during the consolidation of ``
      - Archived on: 4/20/2026
 
 
-Archived setup guides
----------------------
+Legacy setup
+------------
 
-.. list-table::
-   :header-rows: 1
-
-   * - Page
-     - Reason archived
-     - Date archived
-   * - :doc:`setup/setup-rocky-linux-9`
-     - Rocky Linux 9 is no longer a supported install target
-     - Archived on: 5/15/2026
+Setup and installation guides for unsupported install targets and superseded
+Neuron releases have been archived. See the
+:doc:`Archived setup guides <setup/index>` landing page for the full list —
+including Rocky Linux 9, Ubuntu 20.04, and Amazon Linux 2 install targets, and
+previous-release PyTorch NeuronX installs (Neuron 2.7.0–2.9.0).
 
 Archived tutorials
 ------------------
@@ -148,6 +150,7 @@ Archived tutorials
     tutorials/finetune_t5
     tutorials/ssd300_demo/ssd300_demo
     tutorials/megatron_gpt_pretraining
+    tutorials/gpt3_neuronx_nemo_megatron_pretraining
     tutorials/training-gpt-neox-20b
     tutorials/finetuning_llama2_7b_ptl
     tutorials/training_llama2_tp_pp_ptl
@@ -161,6 +164,7 @@ Archived tutorials
     profiler/index
     helper-tools/index
     transformers-neuronx/index
+    nemo-megatron/index
     mxnet-neuron/index
     tensorflow/index
     torch-neuron/index
@@ -170,7 +174,8 @@ Archived tutorials
     devflows/inference/neo-then-hosting-devflow
     devflows/inference/dlc-then-k8s-devflow
     containers/tutorial-docker-runtime1.0
-    setup/setup-rocky-linux-9
+    setup/index
+    nxd-training/index
 
 Accessing Archived Content
 --------------------------

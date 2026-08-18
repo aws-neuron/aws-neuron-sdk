@@ -4,7 +4,7 @@
 .. _libneuronxla-rn:
 
 Neuron XLA pluggable device (``libneuronxla``) release notes
-================================================
+============================================================
 
 .. contents:: Table of Contents
    :local:

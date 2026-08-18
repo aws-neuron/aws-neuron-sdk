@@ -61,7 +61,7 @@ Any operators that Neuron doesn't support?
 
 Models with control-flow and dynamic shapes are not supported. You will
 need to partition the model using the framework prior to compilation.
-See the :ref:`neuron-cc`.
+See the :ref:`neuron-cc-index`.
 
 Will I need to recompile again if I updated runtime/driver version?
 ----------------------------------------------------------------------

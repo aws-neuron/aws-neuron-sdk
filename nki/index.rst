@@ -134,6 +134,19 @@ the instruction level.
 .. note::
    Neuron highly recommends developers study the underlying hardware architecture before optimizing performance of their NKI kernels. To start, read :doc:`the NKI architecture guides for Trainium </nki/guides/architecture/index>` and :doc:`the NKI performance guide </nki/deep-dives/nki_perf_guide>`.
 
+.. _nki-run-with-nrtpy:
+
+Run compiled kernels with nrtpy
+-------------------------------
+
+``nrtpy`` (Neuron Runtime Python) is available for running the kernels you build with NKI. It is a Pythonic layer over the Neuron Runtime Library (``libnrt``) that
+loads and executes the NEFF files your NKI kernels compile to — directly from Python, without going through PyTorch or JAX. This is useful for benchmarking a compiled kernel or building test harnesses.
+
+``nrtpy`` runs in its own Python environment, separate from your NKI environment: compile your NKI kernels to NEFFs, then load and run them with ``nrtpy``.
+
+* :ref:`nrtpy overview <nrtpy-guide>`: What ``nrtpy`` is, its architecture, and when to use it.
+* :ref:`Get started with nrtpy <nrtpy-getting-started>`: Install ``nrtpy`` and run your first NEFF.
+
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -143,3 +156,4 @@ the instruction level.
    Deep dives <deep-dives/index>
    Migration <migration/index>
    NKI FAQ <nki_faq>
+

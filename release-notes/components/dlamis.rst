@@ -11,6 +11,26 @@ Component Release Notes for Neuron DLAMI
 
 The release notes for the Neuron DLAMI component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _dlami-2-32-0-rn:
+
+Neuron DLAMIs (Neuron 2.32.0 Release)
+------------------------------------------------------------------------
+
+Date of Release: 08/17/2026
+
+Updates
+~~~~~~~~
+
+* The single-framework JAX AMI and multi-framework DLAMIs have been upgraded to JAX 0.10.0 and related dependencies.
+* The single-framework vLLM AMI and multi-framework DLAMIs have been upgraded to vLLM 0.24.0 and ``vllm-neuron 0.24.0.1.1.0``, with related dependencies.
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.32.0.
+
+Callouts
+~~~~~~~~~
+
+.. important::
+    Starting with Neuron SDK 2.32.0, NeuronX Distributed Inference (NxDI) and NeuronX Distributed (NxD) are no longer included in Neuron DLAMIs. As a result, the PyTorch 2.9 single-framework DLAMI, the vLLM 0.16 single-framework DLAMI, and the PyTorch 2.9 Torch NeuronX/NxD Core and NxD Inference virtual environments are no longer published. If you require these DLAMIs, please use a DLAMI associated with a previous Neuron SDK release (2.31.0 or earlier). The SDK version is included in each AMI's description.
+
 .. _dlami-2-31-0-rn:
 
 Neuron DLAMIs (Neuron 2.31.0 Release)

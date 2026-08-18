@@ -25,6 +25,7 @@ The Neuron Runtime is typically used transparently through ML framework plugins,
     Deep Dives </neuron-runtime/explore/index>
     How-To Guides </neuron-runtime/guides/index>
     API Reference </neuron-runtime/api/index>
+    nrtpy (Neuron Runtime Python) </neuron-runtime/nrtpy/index>
     NRT Debug Stream </neuron-runtime/api/debug-stream-api>
     Troubleshooting on Inf1 and Trn1 </neuron-runtime/nrt-troubleshoot>
     Release Notes </release-notes/components/runtime>

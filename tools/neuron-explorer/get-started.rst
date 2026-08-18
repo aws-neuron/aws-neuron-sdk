@@ -1,6 +1,6 @@
 .. meta::
-   :description: Getting started guide for Neuron Explorer — capture profiles, launch the UI, and start performance investigation.
-   :date_updated: 06/29/2026
+   :description: Getting started guide for Neuron Explorer — capture profiles, launch the UI, start performance investigation, organize profiles into folders, and delete profiles.
+   :date_updated: 07/31/2026
 
 .. _new-neuron-profiler-setup:
 
@@ -169,6 +169,8 @@ Using VS Code instead of the browser
 .. note::
    The VS Code extension uses the same API server. All upload methods (CLI, web UI) work interchangeably — once a profile is uploaded, it's visible in both interfaces.
 
+.. _neuron-explorer-step5-upload-profile:
+
 Step 5: Upload your profile
 -----------------------------
 
@@ -241,7 +243,7 @@ Option B: Web UI upload
    .. image:: /tools/images/device-only-profile.png
       :width: 65%
 
-**Expected outcome:** The profile appears in the **User Uploaded** table. Click **Refresh** to check processing status. Once complete, click the profile name to open the interactive timeline.
+**Expected outcome:** The profile appears on the **My Uploads** tab. Click **Refresh** to check processing status. Once complete, click the profile name to open the interactive timeline.
 
    .. image:: /tools/images/profile-expected-outcome.png
 
@@ -292,10 +294,96 @@ The file contains event objects. It also includes ``mem_usage`` (sampled host me
    }
 
 
-.. _neuron-explorer-get-started-troubleshooting:
-
 .. note::
    **Share your view with teammates.** After you open a profile, Neuron Explorer encodes your current time range, selected event, and active annotation in the page URL. Copy the URL and share it to give others the same view with no additional setup. The shared URL only works for users connected to the same Neuron Explorer instance.
+
+Organize profiles into folders
+------------------------------
+
+Folders group related profiles — for example, every run from one experiment. Folders are private to
+you. A profile can belong to more than one folder. Folders support only one level, so you cannot
+nest one folder inside another.
+
+To create a folder, open the **Profile Manager** page, select the **My Folders** tab, and choose
+**Create Folder** — or **Create your first folder** if you have none yet. Names are limited to 100
+characters and cannot contain spaces; use underscores, hyphens, or dots instead.
+
+To file profiles, go to the **My Uploads** tab and either choose the folder icon in a profile's
+**Actions** column, or select one or more profiles and choose **Actions** > **Add to folder**. In
+the **Add to Folder** dialog, select an existing folder — or choose **Create new folder...** — and
+then choose **Add**. The upload form also has a **Folder** field, which defaults to
+**None (no folder)**, so you can file a profile as you upload it.
+
+.. image:: /tools/neuron-explorer/images/add-to-folder-actions-menu.png
+   :alt: A selected profile in the My Uploaded Profiles table with the Actions menu open on Add to folder, and the folder icon visible in the Actions column of the row.
+
+The **My Folders** tab lists each folder with the number of profiles it holds. Choose a folder name
+to open it and see those profiles in the same table the **My Uploads** tab uses, then use the
+**My Folders** breadcrumb to go back. From the **My Folders** tab you can also rename a folder with
+the edit icon beside its name, or delete folders by selecting them, choosing **Delete**, and
+confirming. To take a profile out of a folder, open the folder and choose the remove icon in the
+profile's row, or select profiles and choose **Actions** > **Remove from folder**.
+
+.. image:: /tools/neuron-explorer/images/my-folders-tab.png
+   :alt: The My Folders tab listing two folders with the number of profiles in each, an edit icon beside each folder name, and the Delete and Create Folder buttons.
+
+.. note::
+   Removing a profile from a folder, or deleting the folder itself, leaves the profile in place on
+   the **My Uploads** tab. Deleting a folder takes its profiles out of that folder only; they remain
+   in any other folders that contain them. Deleting a profile is a separate, permanent action, and
+   it removes that profile from every folder that contains it. See
+   :ref:`Delete a profile <neuron-explorer-get-started-delete-profile>`.
+
+.. _neuron-explorer-get-started-delete-profile:
+
+Delete a profile
+----------------
+
+When you no longer need a profile, delete it from the **Profile Manager** page to free up storage.
+
+**Before you start:** The delete action is available only on the **My Uploads** tab. You can delete
+only the profiles that you uploaded. If you try to delete a profile that someone else uploaded,
+Neuron Explorer reports an error and leaves the profile in place.
+
+To delete one or more profiles:
+
+1. Open the **Profile Manager** page and select the **My Uploads** tab.
+
+2. Start the deletion in one of two ways:
+
+   * Choose the delete icon in the **Actions** column of a profile's row to delete only that
+     profile.
+
+   * Select the checkbox for one or more profiles, choose **Actions**, and then choose
+     **Delete profile**.
+
+   .. image:: /tools/neuron-explorer/images/delete-profile-actions-menu.png
+      :alt: The My Uploaded Profiles table with a profile selected, the delete icon in the Actions column, and the Actions menu open on Delete profile.
+
+3. In the confirmation dialog, review the profiles to be deleted, type ``delete`` in the
+   confirmation field, and then choose **Delete**. The **Delete** button stays disabled until you
+   type the confirmation text exactly.
+
+   .. image:: /tools/neuron-explorer/images/delete-profile-confirmation.png
+      :alt: The Delete profile confirmation dialog, showing the permanence warning and the field for typing the word delete.
+
+**Expected outcome:** A success notification confirms the deletion, and the profiles no longer
+appear on the **My Uploads** tab.
+
+.. warning::
+   Deleting a profile is permanent and cannot be undone. Neuron Explorer removes the profile's
+   stored files and metadata, along with its tags, annotations, and folder membership, and makes
+   any persistent link to the profile inaccessible, including the view links described earlier in
+   this guide. To recover a deleted profile, upload it again as described in
+   :ref:`Step 5 <neuron-explorer-step5-upload-profile>`, and then recreate any tags and
+   annotations.
+
+.. note::
+   When you delete several profiles at once, each profile is deleted independently. If some
+   deletions fail, Neuron Explorer deletes the rest and reports the names of the profiles it could
+   not delete. Select those profiles and retry.
+
+.. _neuron-explorer-get-started-troubleshooting:
 
 Troubleshooting
 ---------------

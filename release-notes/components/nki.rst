@@ -10,6 +10,101 @@ Release Notes for Neuron Component: Neuron Kernel Interface (NKI)
 
 The release notes for the Neuron Kernel Interface (NKI) component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _nki-2-32-0-rn:
+
+Neuron Kernel Interface (NKI) [0.6.0] (Neuron 2.32.0 Release)
+----------------------------------------------------------------------------
+
+Date of Release: 08/17/2026
+
+AWS Neuron SDK 2.32.0 introduces NKI 0.6.0. This release adds the :func:`~nki.isa.topk`
+GpSimdE instruction and the :func:`~nki.collectives.all_gather_v` variable-length
+collective, introduces replacement APIs for loops executed at runtime,
+:func:`~nki.language.fori_loop` and :func:`~nki.language.while_loop` loop
+constructs, and relaxes several DMA transpose constraints. It also includes several bug fixes.
+
+New Features
+~~~~~~~~~~~~
+
+* **nl.fori_loop and nl.while_loop**: :func:`~nki.language.fori_loop` and
+  :func:`~nki.language.while_loop` are now available for expressing runtime-bounded and
+  condition-driven loops. These are replacing ``for i in nl.dynamic_range(...)`` or ``while reg:``
+  loops, which will be removed in a future release.
+* **all_gather_v collective**: New :func:`~nki.collectives.all_gather_v` is an all-gather
+  collective where each rank contributes a variable-sized input tensor, determined at execution time.
+* **nisa.topk**: New :func:`~nki.isa.topk` uses the GpSimd Engine to return the K
+  largest values and their indices from a source tile.
+* **DmaTranspose relaxations**: :func:`~nki.isa.dma_transpose` now accepts ``src.shape[0]`` in
+  {1,2,4,8,16} when using HWDGE (previously required ==16) and ``src.shape[-1] <= 128``
+  (previously required ==128).
+* **tensor_scalar_reduce with optional reduce_res**: :func:`~nki.isa.tensor_scalar_reduce` now
+  accepts ``reduce_res=None`` on non-final iterations of a reduction chain, keeping the result in
+  the VectorE accumulator and only spilling to SBUF on the final call.
+* **nki.language.copy**: :func:`~nki.language.copy` is a stable API that creates a copy of an
+  SBUF or PSUM tile on SBUF, with the same layout as the input. It uses the Vector engine
+  (``tensor_copy``), making it bit-accurate when source and destination dtypes match.
+
+Improvements
+~~~~~~~~~~~~
+
+* Compute instructions (Vector/Scalar/GpSimd/Tensor engines) now raise a clear verification error
+  when an SBUF or PSUM operand exceeds the 128-partition hardware limit.
+
+Deprecated and Removed APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``nl.dynamic_range`` **for-loops and dynamic** ``while`` **loops**: NKI emits a
+  deprecation warning when it encounters ``for i in nl.dynamic_range(...)`` or ``while reg:``
+  loops. These constructs are deprecated and will be removed in a future release; migrate to
+  :func:`~nki.language.fori_loop` and :func:`~nki.language.while_loop`.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+None.
+
+Bug Fixes
+~~~~~~~~~
+
+* ``nki.simulate`` correctness fixes. See :func:`~nki.simulate`.
+
+  * fp32-to-integer casts match hardware (round to nearest, ties to even; saturate to the
+    destination range) instead of numpy's default behavior.
+  * :func:`~nki.isa.nc_match_replace8` iterates values in reverse to match hardware tie-break
+    ordering when the search values contain duplicates.
+  * :func:`~nki.isa.nc_find_index8` unmatched slots now return all-ones, matching hardware
+    (previously returned 0, a valid index). Duplicate search values now advance through successive
+    occurrences, instead of all mapping to the first match.
+  * :func:`~nki.isa.activation` with a ``reduce_res`` tile that aliases ``dst`` no longer clobbers
+    the reduction result.
+  * :func:`~nki.isa.quantize_mx` and :func:`~nki.isa.nc_matmul_mx` handle sliced MX scale
+    buffers correctly. Previously a sliced scale view raised a ``ValueError`` in
+    :func:`~nki.isa.quantize_mx` and could corrupt scales already written to the shared buffer.
+  * :func:`~nki.isa.nc_matmul` with ``matmul_perf_mode.double_row`` is detected correctly in
+    simulation; previously the perf mode could be missed, producing an oversized result.
+  * :func:`~nki.isa.nc_matmul` accumulation into overlapping PSUM regions (the convolution
+    pattern) accumulates correctly; previously each write was treated as a first write, so the
+    overlap was not accumulated.
+  * :func:`~nki.isa.nc_matmul` warns on PSUM accumulation patterns that produce incorrect
+    results on hardware.
+  * :func:`~nki.isa.tensor_copy_predicated` and :func:`~nki.isa.select_reduce` now handle
+    source, destination, and predicate operands with mismatched ranks but matching
+    free-element counts (e.g. a 2D source with a 4D destination/predicate).
+  * :func:`~nki.isa.range_select` and :func:`~nki.isa.affine_select` now accept
+    a Python ``float`` ``on_false_value`` (e.g. ``float(np.finfo(np.float32).min)``
+    used as an fp32 sentinel) without raising a dtype error.
+
+Known Issues
+~~~~~~~~~~~~
+
+* :func:`~nki.isa.local_gather`: the value of ``num_elem_per_idx`` (default or explicit) is
+  currently ignored unless ``num_valid_indices * num_elem_per_idx == dst.size / dst.shape[0]``.
+  Pass both ``num_valid_indices`` and ``num_elem_per_idx`` explicitly, and size ``dst`` such that
+  ``num_valid_indices * num_elem_per_idx == dst.size / dst.shape[0]``.
+
+* Known issues carried forward from NKI 0.5.0 still apply unless noted above. See the NKI 0.5.0
+  release notes below.
+
 .. _nki-2-31-0-rn:
 
 Neuron Kernel Interface (NKI) [0.5.0] (Neuron 2.31.0 Release)

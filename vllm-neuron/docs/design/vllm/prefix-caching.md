@@ -259,7 +259,7 @@ The kernel internally computes the number of segments as `prior_tokens / kv_segm
 
 - `kv_segment_size` must be one of {512, 1024, 2048, 4096}
 - `kv_segment_size` must be divisible by `block_size`
-- Query sequence length must equal `kv_segment_size` (temporary constraint — will be relaxed)
+- Query sequence length must equal `kv_segment_size` (current constraint)
 - `prior_tokens` must be a multiple of `block_size`
 
 **kv_segment_size_buckets Configuration:**
@@ -311,7 +311,7 @@ attn_metadata_i = {
 The model's attention layer then conditionally uses the segmented kernel:
 
 ``` python
-# In model attention forward
+# In model attention forward (e.g., Llama3Attention)
 cached_seq_len = attn_metadata[layer_name]["cached_seq_len"]
 kv_segment_size = attn_metadata[layer_name]["kv_segment_size"]
 

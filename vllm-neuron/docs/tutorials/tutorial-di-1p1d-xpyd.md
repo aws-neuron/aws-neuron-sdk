@@ -4,7 +4,7 @@
 using simple 1P1D and xPyD examples on AWS Trainium and Inferentia. -->
 <!-- meta: keywords: disaggregated inference, 1P1D, xPyD, prefill, decode,
 KV cache, NIXL, vLLM, Neuron, Trainium, Inferentia -->
-<!-- meta: date_updated: 2026-07-10 -->
+<!-- meta: date_updated: 2026-08-12 -->
 <!-- Content type: procedural-tutorial -->
 <!-- Jira: NDOC-188 -->
 
@@ -21,7 +21,7 @@ decode phase (token generation) across different servers. This separation lets
 you:
 
 - Scale prefill and decode independently based on your traffic mix.
-- Use different parallelism configurations for each phase (for example, TP=8 for
+- Use different parallelism configurations for each phase (for example, TP=4 for
   prefill, DP4×TP8 with expert parallelism for decode).
 - Reduce head-of-line blocking where long prompts delay short decode requests.
 
@@ -68,9 +68,9 @@ This tutorial assumes that you have experience in the following areas:
 
 ## Prerequisites
 
-- **Neuron instance**: A supported Trainium instance with enough NeuronCores for
-  both prefill and decode (for example, `trn2.48xlarge` with 64 NeuronCores). For
-  multi-node, two or more instances with EFA connectivity.
+- **Neuron instance**: DI is supported on Trn2 and Trn3. For single-node DI, use
+  an instance with enough free NeuronCores for both engines. For multi-node DI,
+  use two or more instances with EFA connectivity.
 - **vLLM Neuron environment**: Installed and verified. See
   [setup guide](../getting-started/setup-guide.md).
 - **NIXL and its runtime libraries**: The NIXL KV transfer library. Install with:
@@ -89,21 +89,54 @@ This tutorial assumes that you have experience in the following areas:
 - **Model access**: Ability to pull the model on each server (for example, via
   Hugging Face Hub or a shared filesystem).
 
+:::{note}
+The GPT-OSS commands in this tutorial run on Trn3 with MXFP4 weights.
+GPT-OSS DI also runs on Trn2 with BF16 weights; see the
+[GPT-OSS model recipe](../model-recipes/gpt-oss.md) for platform-specific model
+support.
+:::
+
 ## Prepare your environment
 
-Activate the vLLM virtual environment and set the NIXL side channel to listen on
-all interfaces:
+Run these commands in every terminal that will launch a prefill or decode
+server. Each server runs in its own foreground process, and exports do not carry
+between shells.
 
 ```bash
-source /opt/aws_neuronx_venv_pytorch_inference_vllm_0_21/bin/activate
+source /opt/aws_neuronx_venv_pytorch_inference_vllm_*/bin/activate
 export VLLM_NIXL_SIDE_CHANNEL_HOST="0.0.0.0"
+export FI_EFA_ENABLE_SHM_TRANSFER=0
+
+# GPT-OSS compilation and startup can exceed the vLLM defaults.
+export VLLM_NEURON_COMPILATION_TIMEOUT=2400
+export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1200
+export VLLM_ENGINE_READY_TIMEOUT_S=1800
 ```
 
-Set your model path:
+The activation command assumes that only one matching vLLM environment is
+installed. If multiple versions are present, replace the wildcard with the exact
+environment path for your installed release.
+
+`FI_EFA_ENABLE_SHM_TRANSFER=0` is required for single-node DI. It prevents
+Libfabric from selecting its shared-memory transport for the on-device KV cache
+transfer between the colocated engines. Without it, both servers can start
+successfully but requests can produce inaccurate output.
+
+Set the model for the single-node example:
 
 ```bash
 MODEL="openai/gpt-oss-20b"
 ```
+
+:::{note}
+The `NEURON_VISIBLE_DEVICES` ranges in this tutorial assume direct host
+execution and host-level NeuronCore numbering. With EKS and Kubernetes Dynamic
+Resource Allocation (DRA), a pod can expose its allocation under different,
+pod-local NeuronCore IDs. Run `neuron-ls` inside each prefill and decode pod,
+then adjust `NEURON_VISIBLE_DEVICES` to the IDs visible in that pod instead of
+copying the host ranges verbatim. Ensure the DRA allocations give each engine
+enough NeuronCores and keep the prefill and decode allocations disjoint.
+:::
 
 ## Step 1: Launch the prefill server
 
@@ -112,29 +145,45 @@ server handles prompt processing and produces the KV cache that the decode serve
 will consume.
 
 ```bash
-NEURON_VISIBLE_DEVICES=0-7 VLLM_NIXL_SIDE_CHANNEL_PORT=5559 vllm serve $MODEL \
+NEURON_VISIBLE_DEVICES=0-3 VLLM_NIXL_SIDE_CHANNEL_PORT=5559 vllm serve "$MODEL" \
     --port 8100 \
-    --tensor-parallel-size 8 \
+    --tensor-parallel-size 4 \
+    --data-parallel-size 1 \
+    --enable-expert-parallel \
+    --dtype bfloat16 \
     --max-num-seqs 1 \
-    --max-model-len 4096 \
-    --max-num-batched-tokens 4096 \
-    --no-enable-chunked-prefill \
-    --no-enable-prefix-caching \
-    --additional-config '{"nixl_side_channel_port": 5559, "neuron_config": {"on_device_sampling_config": {"all_greedy": true}, "num_batched_tokens_buckets": [4096], "num_seqs_buckets": [1]}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
-    --hf-overrides '{"quantization_config": {}}'
+    --max-model-len 16384 \
+    --max-num-batched-tokens 8192 \
+    --no-disable-hybrid-kv-cache-manager \
+    --hf-overrides '{"quantization_config": {}}' \
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --additional-config '{
+        "neuron_config": {
+            "quantization": "mxfp4",
+            "ep_degree": 2,
+            "kv_segment_size_buckets": [8192],
+            "num_batched_tokens_buckets": [8192],
+            "num_seqs_buckets": [1]
+        }
+    }'
 ```
 
 Key parameters:
 
-- `NEURON_VISIBLE_DEVICES=0-7` — restricts this server to NeuronCores 0–7.
+- `NEURON_VISIBLE_DEVICES=0-3` — exposes exactly four host-level NeuronCores to
+  the TP4 prefill process. The collective world size is determined by TP, so a
+  wider visible range is not required.
 - `VLLM_NIXL_SIDE_CHANNEL_PORT=5559` — the port NIXL uses for metadata exchange
   between servers.
 - `--kv-transfer-config` — configures the NIXL connector with
   `kv_role: "kv_producer"` (this server produces KV cache).
+- `NeuronNixlConnector` — required for GPT-OSS because the generic
+  `NixlConnector` does not include Neuron's sliding-window transfer alignment.
+- `--tensor-parallel-size 4` and `ep_degree: 2` — use the tested GPT-OSS
+  prefill sharding.
 - `--port 8100` — the prefill server's API port.
 
-Wait for the server to print `Uvicorn running on http://0.0.0.0:8100`.
+Wait for the server to print `Application startup complete`.
 
 ## Step 2: Launch the decode server
 
@@ -142,40 +191,58 @@ In this step, you will start the decode server in the `kv_consumer` role. This
 server pulls KV cache from the prefill server and generates tokens.
 
 The decode server can use a different parallelism configuration. This example
-uses DP=4 with TP=8 and expert parallelism on NeuronCores 8–39:
+uses DP=4 with TP=8 and expert parallelism on NeuronCores 32–63:
 
 ```bash
-NEURON_VISIBLE_DEVICES=8-39 VLLM_NIXL_SIDE_CHANNEL_PORT=5659 vllm serve $MODEL \
+NEURON_VISIBLE_DEVICES=32-63 VLLM_NIXL_SIDE_CHANNEL_PORT=5659 vllm serve "$MODEL" \
     --port 8200 \
     --tensor-parallel-size 8 \
     --data-parallel-size 4 \
     --enable-expert-parallel \
-    --max-num-seqs 1 \
-    --max-model-len 4096 \
-    --max-num-batched-tokens 4096 \
-    --no-enable-chunked-prefill \
-    --no-enable-prefix-caching \
-    --additional-config '{"nixl_side_channel_port": 5659, "neuron_config": {"on_device_sampling_config": {"all_greedy": true}, "num_batched_tokens_buckets": [4096], "num_seqs_buckets": [1]}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
-    --hf-overrides '{"quantization_config": {}}'
+    --optimization-level 2 \
+    --dtype bfloat16 \
+    --max-num-seqs 4 \
+    --max-model-len 16384 \
+    --max-num-batched-tokens 8192 \
+    --max-logprobs 0 \
+    --no-disable-hybrid-kv-cache-manager \
+    --hf-overrides '{"quantization_config": {}}' \
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --additional-config '{
+        "neuron_config": {
+            "quantization": "mxfp4",
+            "embedding_dp_size": 4,
+            "lm_head_dp_size": 4,
+            "kv_segment_size_buckets": [8192],
+            "num_batched_tokens_buckets": [8192],
+            "num_seqs_buckets": [4]
+        }
+    }'
 ```
 
 Key parameters:
 
-- `NEURON_VISIBLE_DEVICES=8-39` — uses NeuronCores 8–39 (32 cores for DP4×TP8).
+- `NEURON_VISIBLE_DEVICES=32-63` — uses the second half of the instance (32
+  NeuronCores for DP4×TP8).
 - `VLLM_NIXL_SIDE_CHANNEL_PORT=5659` — a different port than the prefill server to
   avoid conflicts on the same host.
 - `kv_role: "kv_consumer"` — this server consumes KV cache from the producer.
-- `--data-parallel-size 4 --enable-expert-parallel` — the decode side can use more
-  parallelism for higher throughput.
+- `--data-parallel-size 4 --enable-expert-parallel` — with expert parallelism
+  enabled, the decode EP degree is derived from TP x DP. This configuration uses
+  TP8 x DP4 = EP32, so `ep_degree` does not need to be set separately.
+- `--optimization-level 2` — uses the compiler optimization level validated by
+  the GPT-OSS MXFP4 decode workload.
+- `embedding_dp_size: 4` and `lm_head_dp_size: 4` — match the embedding and
+  LM-head replication to the decode data-parallel degree.
 
-Wait for the server to print `Uvicorn running on http://0.0.0.0:8200`.
+Wait for the server to print `Application startup complete`.
 
 :::{note}
 The prefill and decode servers do not need identical parallelism configurations.
-You can use TP=8 for prefill (optimized for large prompt processing) and DP4×TP8
-for decode (optimized for concurrent token generation). This is called **hybrid
-TP** and is a key advantage of disaggregated inference.
+This example uses attention TP4 for prefill and DP4×TP8 for decode. This is
+called **hybrid TP** and is a key advantage of disaggregated inference. These
+settings match the GPT-OSS 20B configuration in the
+[GPT-OSS tutorial](tutorial-gpt-oss.md).
 :::
 
 ## Step 3: Launch the proxy server
@@ -229,8 +296,8 @@ nodes across separate instances.
 
 For a multi-node deployment, the configuration changes are:
 
-1. Each server runs on its own instance (no `NEURON_VISIBLE_DEVICES` partitioning
-   needed).
+1. Each server runs on its own instance, with its own
+   `NEURON_VISIBLE_DEVICES` assignment.
 2. The proxy server specifies remote hosts.
 3. Security groups must allow traffic between instances on the server ports and
    NIXL side channel ports.
@@ -269,35 +336,74 @@ group must allow inbound traffic on:
 - EFA traffic — allow **all traffic between members of the same security group**
   (a self-referencing rule), which EFA/Libfabric requires for the RDMA path.
 
+The 120B servers can take longer to compile and start than the single-node 20B
+servers. Override the earlier engine-ready timeout in both server terminals:
+
+```bash
+export VLLM_ENGINE_READY_TIMEOUT_S=5400
+```
+
 **Prefill server** (on instance at `10.0.1.10`):
 
 ```bash
-VLLM_NIXL_SIDE_CHANNEL_PORT=5559 vllm serve $MODEL \
+MODEL="openai/gpt-oss-120b"
+NEURON_VISIBLE_DEVICES=0-3 VLLM_NIXL_SIDE_CHANNEL_PORT=5559 vllm serve "$MODEL" \
     --port 8100 \
-    --tensor-parallel-size 8 \
-    --max-num-seqs 4 \
-    --max-model-len 8192 \
+    --tensor-parallel-size 4 \
+    --data-parallel-size 1 \
+    --enable-expert-parallel \
+    --dtype bfloat16 \
+    --max-num-seqs 1 \
+    --max-model-len 16384 \
     --max-num-batched-tokens 8192 \
-    --no-enable-prefix-caching \
+    --no-disable-hybrid-kv-cache-manager \
     --hf-overrides '{"quantization_config": {}}' \
-    --additional-config '{"nixl_side_channel_port": 5559, "neuron_config": {"num_batched_tokens_buckets": [8192], "num_seqs_buckets": [4]}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}'
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_producer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --additional-config '{
+        "neuron_config": {
+            "quantization": "mxfp4",
+            "ep_degree": 2,
+            "kv_segment_size_buckets": [8192],
+            "num_batched_tokens_buckets": [8192],
+            "num_seqs_buckets": [1]
+        }
+    }'
 ```
 
 **Decode server** (on instance at `10.0.1.20`):
 
 ```bash
-VLLM_NIXL_SIDE_CHANNEL_PORT=5659 vllm serve $MODEL \
+MODEL="openai/gpt-oss-120b"
+NEURON_VISIBLE_DEVICES=0-63 VLLM_NIXL_SIDE_CHANNEL_PORT=5659 vllm serve "$MODEL" \
     --port 8200 \
     --tensor-parallel-size 8 \
+    --data-parallel-size 8 \
+    --enable-expert-parallel \
+    --optimization-level 2 \
+    --dtype bfloat16 \
     --max-num-seqs 4 \
-    --max-model-len 8192 \
+    --max-model-len 16384 \
     --max-num-batched-tokens 8192 \
-    --no-enable-prefix-caching \
+    --max-logprobs 0 \
+    --no-disable-hybrid-kv-cache-manager \
     --hf-overrides '{"quantization_config": {}}' \
-    --additional-config '{"nixl_side_channel_port": 5659, "neuron_config": {"num_batched_tokens_buckets": [8192], "num_seqs_buckets": [4]}}' \
-    --kv-transfer-config '{"kv_connector": "NixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}'
+    --kv-transfer-config '{"kv_connector": "NeuronNixlConnector", "kv_role": "kv_consumer", "kv_buffer_device": "cuda", "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}}' \
+    --additional-config '{
+        "neuron_config": {
+            "quantization": "mxfp4",
+            "embedding_dp_size": 8,
+            "lm_head_dp_size": 8,
+            "kv_segment_size_buckets": [8192],
+            "num_batched_tokens_buckets": [8192],
+            "num_seqs_buckets": [4]
+        }
+    }'
 ```
+
+These commands use TP4 DP1 EP2 on prefill and TP8 DP8 EP64 on decode. As in the
+single-node example, the decode EP degree is derived from TP x DP. Run the
+environment preparation commands, including `FI_EFA_ENABLE_SHM_TRANSFER=0`, in
+both server terminals before launching them.
 
 **Proxy server** with remote hosts:
 
@@ -349,17 +455,44 @@ You have a working DI deployment that:
 
 ## Common issues
 
+### Enable NIXL and EFA debug logs
+
+If the servers start but the NIXL handshake or KV transfer fails, enable
+transport logging in both the prefill and decode terminals before starting the
+servers:
+
+```bash
+export NIXL_LOG_LEVEL=trace
+export NIXL_DEBUG_LOGGING=yes
+export FI_LOG_LEVEL=info
+```
+
+`NIXL_LOG_LEVEL` and `NIXL_DEBUG_LOGGING` expose NIXL agent setup, memory
+registration, and transfer activity. `FI_LOG_LEVEL` enables Libfabric provider
+logs, including EFA endpoint selection and connection errors. These settings
+produce verbose output; remove them after debugging:
+
+```bash
+unset NIXL_LOG_LEVEL NIXL_DEBUG_LOGGING FI_LOG_LEVEL
+```
+
+### Troubleshoot the deployment
+
 - **Requests stall after prefill completes**: Verify that
   `VLLM_NIXL_SIDE_CHANNEL_HOST="0.0.0.0"` is set on both servers. Check that the
   NIXL side channel ports (5559, 5659) are reachable between the servers.
 
+- **Inaccurate output from single-node DI**: Verify that
+  `FI_EFA_ENABLE_SHM_TRANSFER=0` is set in both server processes.
+
 - **`Connection refused` from proxy to servers**: Both vLLM servers must be fully
   started before the proxy can route requests. First-time Neuron compilation can
-  take several minutes — wait for the `Uvicorn running` message on each server.
+  take several minutes — wait for `Application startup complete` on each server.
 
 - **KV transfer timeout or errors**: Ensure LIBFABRIC/EFA is available. On
-  multi-node, confirm instances are in the same placement group or subnet. Check
-  that `nixl` is installed (`python -c "import nixl"`).
+  multi-node, confirm instances are in the same placement group and subnet.
+  Check that `nixl` is installed (`python -c "import nixl"`), then enable the
+  NIXL and EFA debug logs above in both server terminals.
 
 - **Decode server OOM**: The decode server must hold KV cache for all in-flight
   requests. Reduce `--max-num-seqs` or `--max-model-len` if memory is tight.

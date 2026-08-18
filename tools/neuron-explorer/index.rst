@@ -15,6 +15,35 @@ Neuron Explorer
     
 Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. Neuron Explorer helps developers maintain context, iterate efficiently, and focus on building and optimizing high-performance models. Developers can access Neuron Explorer from CLI, UI, or inside their IDE through VSCode integration.
 
+Supported hardware
+~~~~~~~~~~~~~~~~~~~
+
+* AWS Trainium: trn1, trn2, trn3
+* AWS Inferentia 2: inf2
+
+Neuron Explorer is not supported on Inf1.
+
+When to use Neuron Explorer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+   :align: left
+
+   * - Scenario
+     - Start with
+   * - "My training step is slower than expected"
+     - System profile — identify which phase (forward, backward, optimizer, communication) dominates
+   * - "My model has low hardware utilization"
+     - Device profile — see engine utilization, DMA activity, and idle time
+   * - "Collective operations are slow"
+     - Multi-worker system profile — compare timing across ranks
+   * - "My NKI kernel is underperforming"
+     - Device profile with source code linking — correlate instructions to kernel code
+   * - "I need to compare before/after an optimization"
+     - Capture both, view side-by-side in the database or summary viewer
+
 Profiling Viewers
 --------------------
 
@@ -157,6 +186,13 @@ Additional Resources
 
       Reference for profile output data tables and fields, matching ``neuron-explorer --show-profile-schema``.
 
+   .. grid-item-card:: Analyze Profile Output
+      :link: how-to-analyze-profile-output
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Query the Parquet tables or export a timeline region to CSV.
+
    .. grid-item-card:: Viewing Profiles with Perfetto
       :link: view-perfetto
       :link-type: doc
@@ -224,6 +260,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
    Region Highlighter <overview-region-highlighter>
    AI Recommendation Viewer <overview-ai-recommendations>
    Profile Parquet Schema Reference <profile-schema-reference>
+   Analyze Profile Output <how-to-analyze-profile-output>
    View Profiles with Perfetto <view-perfetto>
    Neuron Profiler to Neuron Explorer Migration Guide <migration-faq>
    Troubleshooting & FAQs <troubleshooting>

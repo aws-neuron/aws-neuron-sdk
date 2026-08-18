@@ -5,14 +5,14 @@
 Profiling Multi-Node Training Jobs with Neuron Explorer
 ========================================================
 
-This tutorial demonstrates how to use Neuron Explorer to analyze performance during multi-node training on AWS Trainium instances. We will run a scaled-down version of the :doc:`NxD Training Llama3 8B tutorial </libraries/nxd-training/tutorials/hf_llama3_8B_pretraining>` across 2 nodes, capture performance traces, and visualize them using Perfetto. we will run training across 2 nodes with reduced steps and layers so that compilation and profiling complete quickly.
+This tutorial demonstrates how to use Neuron Explorer to analyze performance during multi-node training on AWS Trainium instances. We will run a scaled-down version of the :doc:`NxD Training Llama3 8B tutorial </archive/nxd-training/hf_llama3_8B_pretraining>` across 2 nodes, capture performance traces, and visualize them using Perfetto. we will run training across 2 nodes with reduced steps and layers so that compilation and profiling complete quickly.
 
 Prerequisites
 -------------
 
 * Access to a multi-node Trainium cluster (4 nodes in this example)
-* Neuron SDK installed and configured along with :doc:`NxD Training library installation </libraries/nxd-training/general/installation_guide>`
-* Review of the :doc:`NxD Training Llama3 8B tutorial </libraries/nxd-training/tutorials/hf_llama3_8B_pretraining>`
+* Neuron SDK installed and configured along with :doc:`NxD Training library installation </archive/nxd-training/installation_guide>`
+* Review of the :doc:`NxD Training Llama3 8B tutorial </archive/nxd-training/hf_llama3_8B_pretraining>`
 * Familiarity with SLURM job scheduling
 
 Setup and Configuration

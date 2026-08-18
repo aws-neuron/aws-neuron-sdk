@@ -1,4 +1,6 @@
-.. _pre-release-content:
+:orphan:
+
+.. _neuron1-pre-release-content:
 
 Previous Releases Content
 =========================
@@ -21,7 +23,7 @@ See :ref:`neuron-maintenance-policy` for more information.
 Release supported frameworks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=2,5.0
+.. program-output:: python3 src/helperscripts/neuronsetuphelper.py --file src/helperscripts/neuron-releases-manifest.json --list frameworks --neuron-version=2.5.0
 
 
 Neuron 1.19.1 (05/27/2022)

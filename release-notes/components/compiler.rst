@@ -1,19 +1,76 @@
 .. meta::
     :description: Complete release notes for the Neuron Compiler component across all AWS Neuron SDK versions.
     :keywords: neuron compiler, neuronx-cc, release notes, aws neuron sdk
-    :date-modified: 07/07/2026
+    :date-modified: 08/04/2026
 
 .. _compiler_rn:
 
 Component Release Notes for Neuron Graph Compiler
 ==================================================
 
-**Latest version (in 2.31.0)**: 2.26.6360.0
+**Latest version (in 2.32.0)**: 2.27.4747.0
 
 The release notes for the Neuron Graph Compiler (``neuronx-cc``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
+
+.. _compiler-2-32-0-rn:
+
+Neuron Compiler [2.27.5334.0] (Neuron 2.32.0 Release)
+------------------------------------------------------
+
+Date of Release: 08/17/2026
+
+Changes
+~~~~~~~
+
+* **New public flags for 64-bit integer control (--native-int64 and --implicit-integer-downcast)**: Two new flags give users explicit control over 64-bit integer compilation behavior. ``--native-int64=enabled`` runs int64 ops natively without precision loss on ``trn2`` and later; ``--implicit-integer-downcast`` controls which ops with no native integer datapath (dot, scatter, all_reduce, reduce_scatter, pow) are silently downcast versus hard-errored. The default posture preserves backward compatibility: int64 ops are downcast to int32, and unsupported ops downcast with a warning. **In the next SDK release, the defaults will change to --native-int64=enabled and --implicit-integer-downcast=none, which enables native int64 execution and hard-errors on unsupported ops. Users who depend on the current lossy downcast behavior should pin --native-int64=disabled and --implicit-integer-downcast=all explicitly.**
+
+* **Expanded complex64 data type support**: Additional complex64 operations are now supported, bringing the total to 30 operations including: add, subtract, multiply, divide, compare, abs, exponential, sine, cosine, reshape, complex, real, imag, dot_general, broadcast_in_dim, iota, negate, power, log, log_plus_one, exponential_minus_one, sqrt, rsqrt, tan, tanh, logistic, sign, select, transpose, reverse, slice, dynamic_slice, dynamic_update_slice, concatenate, pad, and dot. Models using complex arithmetic through these operations can now compile without manual decomposition.
+
+Performance and Compile Time Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **One-hot embedding lookup optimization**: The compiler now automatically rewrites one-hot matmul embedding lookups (``dot(one_hot(indices), table)``) into equivalent gather operations. This eliminates the materialized one-hot intermediate tensor (often ~256 MB) and replaces an expensive matmul with a single gather, reducing compile time by up to 64% and NEFF size by up to 96% for affected patterns.
+
+* **Factorized MX scale layout support on trn3**: The compiler now supports factorized scale layouts for MXFP8 quantized models on ``trn3``, enabling more efficient memory access patterns for mixed-precision training workloads.
+
+* **Reduced weight load frequency for MXFP8 matrix multiplication on trn3**: When consecutive matrix multiplications share the same stationary weight operand (common in MoE and multi-head architectures), the compiler now reuses the loaded weight and scale data instead of re-fetching from HBM for each operation. On affected models this eliminates redundant weight loads (e.g., 1 load instead of 128 for a shared-weight sequence), reducing HBM bandwidth pressure and improving throughput for MXFP8 quantized workloads on ``trn3``.
+
+Bug Fixes
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Area
+     - Fix
+   * - Compilation error
+     - Fixed a crash in loop predication when comparing shard indices outside the loop nest (NCC_IRPX902)
+   * - Compilation error
+     - Fixed a LoopFusion crash when candidate fusions would create imperfect loop nests with conflicting schedules
+   * - Compilation error
+     - Fixed a crash when lowering scatter operations with scalar operands
+   * - Compilation error
+     - Fixed a crash in quantized model compilation when shared MXFP8 activations were lowered
+   * - Compilation error
+     - Fixed a DMA engine assignment crash for unassigned copy operations
+   * - Compilation error
+     - Fixed a compilation failure where on-chip memory live-range hints were not cleared between allocation passes, causing spurious conflicts
+   * - Compilation error
+     - Fixed a compilation failure for convolution operations where output buffer overlap occurred with multiple tile configurations
+   * - Compilation error
+     - Fixed a linker failure for LNC=1 configurations with certain subgraph layout patterns
+   * - Compiler bug
+     - Fixed incorrect results from the Simplifier pass when a multiply-reduce operation was broadcast across dimensions
+   * - Compiler bug
+     - Fixed incorrect partition vectorization that corrupted transpose annotations, leading to wrong output values
+   * - Compiler bug
+     - Fixed incorrect results when 64-bit to 32-bit integer casts were incorrectly folded into DMA operations
+
+* Other minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
 
 .. _compiler-2-31-0-rn:
 

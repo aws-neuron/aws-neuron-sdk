@@ -1,3 +1,8 @@
+.. meta::
+   :description: Packages, libraries, and artifacts (with versions) shipped in previous AWS Neuron 2.x SDK releases for Trainium and Inferentia instances.
+   :date-modified: 2026-08-13
+   :keywords: AWS Neuron, previous releases, release artifacts, packages, versions, Trainium, Inferentia
+
 .. _pre-release-content:
 
 Previous release artifacts (Neuron 2.x)
@@ -6,6 +11,91 @@ Previous release artifacts (Neuron 2.x)
 .. contents:: Table of contents
    :local:
    :depth: 1
+
+
+This page contains component and library package versions for prior releases.
+
+* **Current release**: :doc:`Neuron 2.32.0 </release-notes/2.32.0>`
+* **Previous release**: :doc:`Neuron 2.31.1 </release-notes/2.31.1>`
+
+.. _neuron-2.31.1-artifacts:
+
+Neuron 2.31.1 (08/12/2026)
+---------------------------
+
+Trn1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+Trn2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=trn2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+
+Inf2 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+Inf1 packages
+^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=packages --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+Supported Python Versions for Inf1 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf1 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+Supported Python Versions for Inf2/Trn1/Trn2 packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. program-output:: python3 src/helperscripts/n2-helper.py --list=pyversions --instance=inf2 --file=src/helperscripts/n2-manifest.json --neuron-version=2.31.1
+
+Supported NumPy Versions
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuron currently supports NumPy versions 2.X. Neuron continues to support NumPy versions >= 1.21.6, as well.
+
+Supported vLLM Versions
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuron currently supports vLLM version 0.16.0.
+
+Supported Hugging Face Transformers Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Hugging Face           |
+|                                  | Transformers Versions            |
++==================================+==================================+
+| torch-neuronx                    | >= 4.52                          |
++----------------------------------+----------------------------------+
+| neuronx-distributed-inference    | == 4.57.*                        |
++----------------------------------+----------------------------------+
+| vllm                             | >= 4.56.0, < 5                   |
++----------------------------------+----------------------------------+
+
+Supported Protobuf Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------------+----------------------------------+
+| Package                          | Supported Protobuf versions      |
++==================================+==================================+
+| neuronx-cc                       | > 3                              |
++----------------------------------+----------------------------------+
+| torch-neuronx                    | >= 3.20                          |
++----------------------------------+----------------------------------+
+| jax-neuronx                      | >= 3.20                          |
++----------------------------------+----------------------------------+
+| torch-neuron                     | < 3.20                           |
++----------------------------------+----------------------------------+
+| neuronx-distributed              | >= 3.20                          |
++----------------------------------+----------------------------------+
+| tensorflow-neuronx               | < 3.20                           |
++----------------------------------+----------------------------------+
+| tensorflow-neuron                | < 3.20                           |
++----------------------------------+----------------------------------+
 
 
 .. _neuron-2.30.0-artifacts:
@@ -88,6 +178,8 @@ Supported Protobuf Versions
 | tensorflow-neuron                | < 3.20                           |
 +----------------------------------+----------------------------------+
 
+
+.. _neuron-2.29.1-artifacts:
 
 Neuron 2.29.1 (04/29/2026)
 ---------------------------

@@ -4,6 +4,10 @@
 <!-- meta: content_type: conceptual-deep-dive -->
 <!-- meta: date_updated: 2026-06-22 -->
 
+## Overview
+
+For a comprehensive overview of how vLLM works and its integration architecture, see `vllm-integration-design-reference`.
+
 ## vLLM Integration
 
 vLLM's KV caching system relies on four key integration points that work together to manage memory-efficient inference:

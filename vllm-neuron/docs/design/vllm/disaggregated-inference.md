@@ -1,7 +1,7 @@
 # Disaggregated Inference — Design Document
 <!-- meta: description: Disaggregated inference architecture and Neuron extensions -->
 <!-- meta: content_type: conceptual-deep-dive -->
-<!-- meta: date_updated: 2026-07-10 -->
+<!-- meta: date_updated: 2026-08-12 -->
 
 ## Overview
 
@@ -124,8 +124,28 @@ WAITING → WAITING_FOR_REMOTE_KVS → WAITING → RUNNING → FINISHED
 
 ### Integration Strategy
 
-Neuron DI uses the upstream **`NixlConnector`** for all topologies, including
-hybrid-TP. EFA/LIBFABRIC is also upstream: it is selected via the
+Neuron DI uses the upstream **`NixlConnector`** for standard TP topologies.
+**`NeuronNixlConnector`** extends it with **DCP (Decode Context Parallel)**
+mapping and Neuron-specific sliding-window handling. Use `NeuronNixlConnector`
+for DCP topologies and sliding-window models such as GPT-OSS.
+
+### NeuronNixlConnector
+
+```text
+vllm_neuron/vllm/kv_connector/neuron_nixl_connector.py
+```
+
+Extends the upstream NIXL connector for DCP and sliding-window topologies:
+
+- **DCP-aware block mapping** — when prefill uses DCP (Decode Context Parallel), KV blocks are interleaved across multiple CP ranks. The connector remaps block IDs to the correct remote ranks via unified `head_ratio` / `seq_ratio` math, covering DCP→TP, DCP→DCP, and TP→DCP.
+- **NeuronNixlAgentMetadata** — extends the upstream handshake with `dcp_size` so decode auto-detects DCP prefill without user config.
+- **Sliding-window transfer alignment** — keeps prefill and decode block
+  accounting aligned so the oldest in-window block is not dropped during a
+  GPT-OSS KV transfer.
+
+Hybrid TP alone (different TP on P vs D, e.g. TP4 prefill → TP8 decode) does not
+require this connector, but a sliding-window model using that topology does.
+EFA/LIBFABRIC is selected independently through the
 `kv_connector_extra_config` `{"backends": ["LIBFABRIC"]}` option.
 
 ### Neuron-Specific DI Features
@@ -140,6 +160,22 @@ Decode:  TP=8 (more cores, optimized for memory-bandwidth-bound generation)
 ```
 
 The connector handles the head-count mismatch by computing `head_ratio` and `inverse_head_ratio` during the NIXL handshake.
+
+#### Decode Context Parallel (DCP)
+
+DCP shards the KV cache across multiple ranks on the decode side, enabling larger context windows without OOM:
+
+```text
+--decode-context-parallel-size 4
+```
+
+**Prefill DCP** (`apply_prefill_dcp: true`): The prefill server itself uses DCP to shard attention computation across a CP sub-group, then transfers KV to the decode side.
+
+**Constraints:**
+
+- DCP decode requires `tp > num_kv_heads`
+- DCP ≤ tp // num_kv_heads
+- (num_q_heads // num_kv_heads) % dcp == 0
 
 #### Component DP (Decode-Side Module Sharding)
 
@@ -205,6 +241,10 @@ Saves compilation time — no need to compile prefill NEFFs on a decode-only ser
 
 ## Configuration Reference
 
+The standard TP examples below use `NixlConnector`. Use
+`NeuronNixlConnector` on both servers for DCP topologies and sliding-window
+models such as GPT-OSS.
+
 ### Prefill Server
 
 ```bash
@@ -235,6 +275,21 @@ vllm serve $MODEL \
 
 # DP+EP (MoE) decode adds:
 #   --data-parallel-size 4 --enable-expert-parallel
+```
+
+### DCP Prefill Server
+
+```bash
+vllm serve $MODEL \
+    --tensor-parallel-size 8 \
+    --decode-context-parallel-size 4 \
+    --additional-config '{"neuron_config": {"apply_prefill_dcp": true}}' \
+    --kv-transfer-config '{
+        "kv_connector": "NeuronNixlConnector",
+        "kv_role": "kv_producer",
+        "kv_buffer_device": "cuda",
+        "kv_connector_extra_config": {"backends": ["LIBFABRIC"]}
+    }'
 ```
 
 ### Environment Variables
@@ -271,6 +326,7 @@ python examples/vllm_neuron/vllm/disaggregated_inference/toy_proxy_server.py \
 | xPyD | General multi-prefill multi-decode (covers 1P1D, 2P1D, 1P2D, …) | ✓¹ | ✓ |
 | Hybrid TP | Different TP per role | ✓ | ✓ |
 | DP+EP | Data parallel with expert parallel on decode | ✓ | ✓ |
+| DCP | Decode Context Parallel | ✓ | ✓ |
 | Spec decode (Eagle3) + DI | Draft model on decode side | ✓ | ✓ |
 
 ¹ Single-node xPyD is supported as long as the device has enough cores and memory for all prefill + decode instances.
@@ -284,6 +340,7 @@ python examples/vllm_neuron/vllm/disaggregated_inference/toy_proxy_server.py \
 | KV Connector framework (base interfaces) | ✓ | — |
 | NixlConnector (RDMA transfer) | ✓ | — |
 | LIBFABRIC/EFA backend | ✓ | — |
+| DCP-aware block mapping | — | ✓ |
 | Hybrid TP head splitting | ✓ | — |
 | Bi-directional KV (D→P) | ✓ | ✓ (config/enablement) |
 | Streaming kv_transfer_params in SSE | ✓ (≥ 0.21.0) | — |
@@ -340,7 +397,7 @@ Decode worker                              Prefill worker
    → Create block descriptors                → Create block descriptors
 
 2. Handshake (one-time per P-D pair)
-   ← Exchange: agent handles, block lens, base addrs
+   ← Exchange: agent handles, block lens, base addrs, DCP metadata
 
 3. Transfer (per request)
    → Map block_ids to descriptor_ids

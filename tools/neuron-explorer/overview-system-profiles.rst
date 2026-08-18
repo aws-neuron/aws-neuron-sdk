@@ -37,6 +37,23 @@ For distributed workloads, transfer tracks are aggregated by Instance ID and Neu
 Other grouping options are available in the System Timeline settings. The default ``Instance + NeuronCore`` grouping renders one set of transfer tracks per NeuronCore on each instance in the workload, which is useful for pinpointing per-core behavior. The ``Instance`` grouping aggregates transfers across all NeuronCores on a given instance, producing a single set of tracks per instance, which is useful for comparing total host-device traffic between instances.
 
 
+Visualizing Host CPU Utilization
+--------------------------------
+
+The System Trace Viewer can display per-core host CPU utilization at the bottom of the timeline. Each CPU core is shown as a separate track that plots its utilization percentage (0–100%) over time, which helps identify host-side CPU bottlenecks and correlate them with runtime and hardware activity.
+
+**Prerequisite:** CPU utilization must be captured during profiling by including ``ProfileMode.CPU_UTIL`` in the profiling modes, which produces the ``cpu_util.pb`` output file. See :doc:`/tools/neuron-explorer/how-to-profile-workload` for details. If the profile does not contain CPU utilization data, no tracks are shown.
+
+This visualization is off by default. To enable it, open the System Timeline settings and turn on the **Host CPU Utilization** toggle (``Show CPU utilization``). The tracks are added at the bottom of the timeline, one per core, labeled ``<instance_id>/CPU:<cpu_id>/host_cpu_util``.
+
+.. image:: /tools/images/system-timeline-cpu-utilization.png
+
+Hovering over a point shows the utilization value at that time. When utilization varies within a sampled window, the hover text reports the average, minimum, and maximum utilization for that window so you can spot short spikes in CPU activity.
+
+.. note::
+
+   All sampled cores are shown, regardless of whether they correspond to Neuron-related activity.
+
 Adding Widgets
 ---------------
 The System Profile supports both System and Device widgets, enabling multi-profile analysis, for example comparing annotated device events across different devices.

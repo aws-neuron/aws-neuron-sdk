@@ -36,7 +36,7 @@ Make sure you get a commitment from these reviewers in advance! It's hard to get
 
 ### Engineering reviewer checklist
 
-- [ ] I've confirmed that the contributions in this PR meet the current  [AWS Neuron writing guidelines](https://quip-amazon.com/m97CAO0kQFEU/Writing-for-AWS-Neuron).
+- [ ] I've confirmed that the contributions in this PR meet the current AWS Neuron writing guidelines (internal Amazon contributors: see the "Writing for AWS Neuron" doc).
 - [ ] I've confirmed that the documentation submitted is technically correct to the best of my knowledge.
 - [ ] I've confirmed that the documentation submitted has no spelling or grammar errors or use of internal jargon/terminology.
 - [ ] I've verified the changes render correctly on RTD (link above).

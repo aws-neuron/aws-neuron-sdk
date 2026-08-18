@@ -69,6 +69,9 @@ Pass/fail criteria: Output tensors match HF reference within tolerance.
 :::{note}
 Start at Level 1 to confirm there is a real accuracy issue, then use Level 2 to
 isolate which tokens and layers diverge, and Level 3 to pinpoint the exact module.
+For the internal architecture of this framework (debugger pipeline, plugin system,
+KV-cache reconstruction, tensor capture/compare, tensor replacement), see the
+[deep dive: accuracy debugging framework](../design/accuracy/accuracy_debugging_design.md).
 :::
 
 ## Debugging instructions
@@ -338,10 +341,17 @@ To confirm the accuracy issue is resolved:
 ## Accuracy tools reference
 
 For API details on logit validation, KV cache analysis, tensor capture,
-tensor comparison, and module-level testing, see [Accuracy examples](https://github.com/vllm-project/vllm-neuron/tree/HEAD/examples/vllm_neuron/accuracy).
+tensor comparison, and module-level testing, see [Accuracy examples](https://github.com/vllm-project/vllm-neuron/blob/HEAD/examples/vllm_neuron/accuracy/) and [deep dive: accuracy debugging framework](../design/accuracy/accuracy_debugging_design.md).
+
+For accuracy debugger tools, see [Accuracy debugger tools](how-to-use-accuracy-debugger.md) and [deep dive: accuracy debugging framework](../design/accuracy/accuracy_debugging_design.md).
 
 ## Related information
 
+- [Deep dive: accuracy debugging framework](../design/accuracy/accuracy_debugging_design.md)
+  — Internal architecture of the debugger pipeline, plugin system, KV-cache
+  reconstruction, tensor capture/compare, and tensor replacement.
+- [Accuracy debugger tools](how-to-use-accuracy-debugger.md) —
+  Step-by-step procedure for running the accuracy debugger tools.
 - For supported models and features, see the [README](https://github.com/vllm-project/vllm-neuron#supported-models)
   and [model cards](../model-recipes/index.md).
 - [Features guide](../guides/features-guide.md) — Feature configuration options that can

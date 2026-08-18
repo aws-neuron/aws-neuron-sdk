@@ -145,7 +145,7 @@ Getting started with Neuron DLC using Docker
             :class-body: sphinx-design-class-body-small
             :animate: fade-in
 
-            .. include:: /setup/install-templates/launch-inf1.txt
+            .. include:: /setup/install-templates/launch-instance.txt
 
       .. dropdown:: Install Drivers
             :class-title: sphinx-design-class-title-small

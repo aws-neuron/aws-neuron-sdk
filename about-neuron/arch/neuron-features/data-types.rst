@@ -12,8 +12,10 @@ Introduction
 
 Inferentia and Trainium NeuronDevices include different NeuronCore versions, which support different data-types. This section describes what data-types are supported in each NeuronCore version.
 
-NeuronCore v1 Data Types
-------------------------
+.. _neuron-data-types-v1:
+
+Inf1 (NeuronCore v1)
+--------------------
 
 Neuron Data-Types
 ^^^^^^^^^^^^^^^^^
@@ -91,16 +93,17 @@ conversions.
 
 .. _neuron-data-types-v2:
 
-NeuronCore v2 Data Types
-------------------------
+Trn1 / Inf2 (NeuronCore v2)
+---------------------------
 
-The NeuronCore v2 supports the following data types:
+Trn1 supports the following data types:
 
 * 32 and 16-bit Floating Point (FP32 / FP16)
 * TensorFloat-32 (TF32)
 * Brain Floating Point (BFloat16)
 * 8-bit Floating point with configurable range and precision (cFP8)
 * Unsigned 8-bit integer (UINT8)
+* 32-bit signed and unsigned integer (INT32 and UINT32)
 
 The layout for these is as follows:
 
@@ -178,6 +181,15 @@ The layout for these is as follows:
   			<td bgcolor="#AFEFA9" colspan="8">8 bits</td>
          <td colspan="23" />
   		</tr>
+      <tr>
+  			<td>INT32</td>
+  			<td bgcolor="#ad3bff">1</td>
+  			<td bgcolor="#AFEFA9" colspan="31">31 bits</td>
+  		</tr>
+      <tr>
+  			<td>UINT32</td>
+  			<td bgcolor="#AFEFA9" colspan="32">32 bits</td>
+  		</tr>
   </table>
   <p/>
 
@@ -188,12 +200,41 @@ Model Type Conversion
 
 The Neuron SDK supports automatic model conversion from FP32 to BF16 by default. This capability allows developers to train their models using FP32 format for the highest accuracy, and then achieve run-time performance benefits without having to worry about low-precision training (e.g. no need for loss-scaling during training). ML models are typically robust to FP32 to BF16 conversion, with minimal to no impact on accuracy. Since conversion accuracy is model dependent, users are encouraged to benchmark the accuracy of the auto-converted model against the original FP32 trained model.
 
-See :ref:`Mixed Precision and Performance-accuracy Tuning for Training<neuronx-cc-training-mixed-precision>` for more details on supported data types and their properties.
-
 The Neuron compiler offers the ``--auto-cast`` and ``--auto-cast-type`` options to specify automatic casting of FP32 tensors to other data types to address performance and accuracy tradeoffs. See the :ref:`Neuron Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>` for a description of these options.
 
+See :ref:`Mixed Precision and Performance-accuracy Tuning for Training<neuronx-cc-training-mixed-precision>` for more details on supported data types and their properties.
 
-NeuronCore v2 Rounding Modes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Rounding Modes
+^^^^^^^^^^^^^^
 
-Because floating point values are represented by a finite number of bits, they cannot represent all real numbers accurately. Floating point calculations that exceed their defined data type size are rounded. The NeuronCore v2 performs a Round-to-Nearest (RNE) algorithm with ties to Even by default. It also provides a new Stochastic Rounding mode. When Stochastic Rounding is enabled, the hardware will round the floating point value up or down using a proportional probability. This could lead to improved model convergence. Use the environment variable NEURON_RT_STOCHASTIC_ROUNDING_EN to select a rounding mode.
+Because floating point values are represented by a finite number of bits, they cannot represent all real numbers accurately. Floating point calculations that exceed their defined data type size are rounded. Trn1 performs a Round-to-Nearest (RNE) algorithm with ties to Even by default. It also provides a new Stochastic Rounding mode. When Stochastic Rounding is enabled, the hardware will round the floating point value up or down using a proportional probability. This could lead to improved model convergence. Use the environment variable NEURON_RT_STOCHASTIC_ROUNDING_EN to select a rounding mode.
+
+Integer Type Conversion
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+On Trn1, 64-bit integers are always auto-converted to 32-bit integers.
+
+Some operations lack a native integer datapath: scatter-with-compute, all-reduce, reduce-scatter, and matrix multiplication are auto-converted to FP32, and 64-bit integer power is auto-converted to 32-bit integers. The ``--implicit-integer-downcast`` option controls whether each of these conversions throws a warning or an error.
+
+.. _neuron-data-types-v3:
+
+Trn2 (NeuronCore v3)
+--------------------
+
+Trn2 supports all of the data types available on :ref:`NeuronCore v2<neuron-data-types-v2>`, along with the same Model Type Conversion and rounding-mode behaviors. In addition, Trn2 adds support for native execution of 64-bit integers (INT64 and UINT64).
+
+Integer Type Conversion
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``--native-int64`` option enables native execution of 64-bit integer operations. Without it, 64-bit integers are auto-converted to 32-bit integers.
+
+Some operations lack a native integer datapath: scatter-with-compute, all-reduce, reduce-scatter, and matrix multiplication are auto-converted to FP32, and 64-bit integer power is auto-converted to 32-bit integers. The ``--implicit-integer-downcast`` option controls whether each of these conversions throws a warning or an error.
+
+See the :ref:`Neuron Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>` for a description of these options.
+
+.. _neuron-data-types-v4:
+
+Trn3 (NeuronCore v4)
+--------------------
+
+Trn3 supports all of the data types available on :ref:`NeuronCore v3<neuron-data-types-v3>`, along with the same Model Type Conversion, rounding-mode, and Integer Type Conversion behaviors, including native execution of 64-bit integers via the ``--native-int64`` option.

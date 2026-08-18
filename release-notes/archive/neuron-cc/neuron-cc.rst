@@ -65,7 +65,7 @@ Date: 09/15/2023
 * Minor bug fixes.
 
 Neuron Compiler release [1.17.0.0]]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 7/19/2023
 
@@ -97,7 +97,7 @@ Date: 04/19/2023
 * Minor bug fixes.
 
 Neuron Compiler release [1.13.3.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Date: 11/23/2022
 
 * Resolved long compile-times when compiling the YOLOv5 and YOLOv6 models. [GitHub · aws-neuron-sdk · #434]
@@ -105,7 +105,7 @@ Date: 11/23/2022
 * Support was added for additional XLA operators
 
 Neuron Compiler release [1.11.7.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 08/02/2022
 
@@ -113,7 +113,7 @@ Date: 08/02/2022
 
 
 Neuron Compiler release [1.11.4.0]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Date: 04/29/2022
 
@@ -285,7 +285,7 @@ New in this release
 - The following models are now supported: Resnext 224x224, specific BERT variations applied to natural language processing and translation.
 
 - A number of new operators is now supported on Inferentia, see the full lists :ref:`neuron-cc-ops-tensorflow`
- and :ref:`neuron-cc-ops-mxnet`
+  and :ref:`neuron-cc-ops-mxnet`
 
 - Improved inference performance on yolov4 BERT base sequence 64 (on 16 pipelined cores) and openpose 184.
 

@@ -3,7 +3,7 @@
 <!-- meta: description: Detailed reference companion to the quickstarts,
 covering every significant feature and configuration option for vLLM on
 Neuron. -->
-<!-- meta: date_updated: 2026-06-09 -->
+<!-- meta: date_updated: 2026-08-13 -->
 <!-- Content type: procedural-how-to -->
 <!-- Jira: NDOC-182 -->
 
@@ -13,7 +13,7 @@ use it, how to enable it, and trade-offs.
 
 For supported models and per-model feature availability, see the
 [model cards](../model-recipes/index.md) and the
-[Supported Models](https://github.com/aws-neuron/vllm-neuron#supported-models)
+[Supported Models](https://github.com/vllm-project/vllm-neuron#supported-models)
 section in the README.
 
 ## Prerequisites
@@ -37,22 +37,23 @@ cached on disk and reused on subsequent restarts.
 
 For production, you can pre-compile on a Neuron instance or a CPU
 instance and distribute artifacts via a shared filesystem so production
-nodes never compile at startup.
+nodes never compile at startup. See
+[compilation cache](../design/compilation/compilation_cache.md) and
+[CPU compilation](../design/compilation/cpu_compilation.md).
 
 ### Pre-compiled model artifacts
 
-You can set `VLLM_CACHE_ROOT` to point at a directory where compiled
-models are stored:
+You can also use `NEURON_COMPILED_ARTIFACTS` to point at a directory of
+pre-compiled models:
 
 ```bash
-export VLLM_CACHE_ROOT=/path/to/cache
-vllm serve openai/gpt-oss-20b --tensor-parallel-size 8
+export NEURON_COMPILED_ARTIFACTS=/path/to/cache
+vllm serve meta-llama/Llama-3.3-70B-Instruct --tensor-parallel-size 32
 ```
 
-Compiled artifacts (NEFFs) are stored under
-`$VLLM_CACHE_ROOT/neuron/compile_cache`. If valid artifacts exist there,
-they are loaded directly with no recompilation. If the cache is empty,
-the model is compiled and saved there for future use.
+If the path contains valid artifacts, they are loaded directly with no
+recompilation. If the path is empty, the model is compiled and saved
+there for future use.
 
 ## Bucketing and dynamic shapes
 
@@ -93,6 +94,8 @@ There are three bucketing dimensions:
 
 For the full parameter reference, see
 [Configuration options](reference-configuration.md#compilation-options).
+For the decode context-length bucketing design, see
+[Decode context-length bucketing](../design/vllm/decode-context-length-bucketing.md).
 
 ## Continuous batching
 
@@ -114,7 +117,7 @@ from openai import OpenAI
 client = OpenAI(base_url="http://localhost:8000/v1", api_key="EMPTY")
 
 response = client.chat.completions.create(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3.3-70B-Instruct",
     messages=[{"role": "user", "content": "Hello"}],
     stream=True,
 )
@@ -133,8 +136,8 @@ Segmentation is controlled by `max_num_batched_tokens` — prompts
 exceeding this limit are processed in multiple iterations:
 
 ```bash
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --max-model-len 131072 \
     --max-num-batched-tokens 8192
 ```
@@ -178,10 +181,9 @@ prefixes across requests. On Neuron, block count is set explicitly via
 `num_gpu_blocks_override`, and `block_size` must be specified:
 
 ```bash
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --max-model-len 4096 \
-    --max-num-batched-tokens 2048 \
     --max-num-seqs 8 \
     --block-size 32 \
     --num-gpu-blocks-override 4096
@@ -193,10 +195,9 @@ The equivalent `LLM` invocation:
 from vllm import LLM
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
-    tensor_parallel_size=8,
+    model="meta-llama/Llama-3.3-70B-Instruct",
+    tensor_parallel_size=32,
     max_model_len=4096,
-    max_num_batched_tokens=2048,
     max_num_seqs=8,
     block_size=32,
     num_gpu_blocks_override=4096,
@@ -235,8 +236,8 @@ vLLM Neuron exposes three parallelism dimensions:
 
 ```bash
 # TP only, single replica
-vllm serve openai/gpt-oss-20b \
-    --tensor-parallel-size 8
+vllm serve meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 64
 
 # TP + DP, multiple replicas
 vllm serve openai/gpt-oss-20b \
@@ -282,7 +283,6 @@ parallelism to your bottleneck.
       --tensor-parallel-size 8 \
       --max-model-len 8192 \
       --max-num-batched-tokens 8192 \
-      --no-enable-prefix-caching \
       --additional-config '{
           "vision_neuron_config": {
               "tp_size": 1,
@@ -291,7 +291,9 @@ parallelism to your bottleneck.
       }'
   ```
 
-  Constraint: `tp_size * dp_size` must equal `world_size`.
+  Constraint: `tp_size * dp_size` must equal `world_size`. See
+  [Vision encoder parallelism design](../design/parallelism/vision_encoder_parallelism.md)
+  for block-level DP semantics, process groups, and configuration details.
 
 ## Disaggregated inference
 
@@ -324,8 +326,8 @@ Quantization reduces model memory footprint and improves throughput by
 using lower-precision arithmetic for inference. vLLM Neuron supports two
 model-weight quantization paths — FP8 static (Trn2) and MXFP4 (gpt-oss on
 Trn3) — plus FP8 KV-cache quantization. See the
-[feature/model compatibility matrix](reference-feature-model-compatibility.md)
-for per-platform support.
+[model recipes](../model-recipes/index.md)
+for per-model feature support.
 
 Always validate with the
 [accuracy debugging guide](../model-dev/accuracy-debugging-guide.md) after
@@ -364,7 +366,7 @@ vllm serve openai/gpt-oss-120b \
 ```
 
 MXFP4 is supported only for gpt-oss on Trn3. The worker rejects `mxfp4` on Trn2
-(gpt-oss falls back to BF16 there) and fails at startup with a clear error.
+(gpt-oss falls back to BF16 there) — this fails at startup with a clear error.
 
 ### KV cache FP8 quantization
 
@@ -377,8 +379,8 @@ parameter (not `neuron_config`).
 from vllm import LLM
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
-    tensor_parallel_size=8,
+    model="meta-llama/Llama-3.3-70B-Instruct",
+    tensor_parallel_size=32,
     max_model_len=4096,
     kv_cache_dtype="fp8",  # FP8 KV cache
 )
@@ -388,8 +390,8 @@ Or via CLI:
 
 ```bash
 python3 -m vllm.entrypoints.openai.api_server \
-    --model openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+    --model meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --kv-cache-dtype fp8
 ```
 
@@ -488,7 +490,7 @@ Async scheduling is **on by default** and requires on-device sampling.
 ```bash
 # Disable async scheduling
 python3 -m vllm.entrypoints.openai.api_server \
-    --model openai/gpt-oss-20b \
+    --model meta-llama/Llama-3.3-70B-Instruct \
     --no-async-scheduling
 ```
 
@@ -519,9 +521,15 @@ forward pass.
 
 :::{note}
 **Mutually exclusive with async scheduling.** Setting `--speculative-config`
-disables async scheduling automatically with a startup warning. EAGLE3 is the
-supported speculative method in 2.31; for supported model/draft combinations see
-the [model cards](../model-recipes/index.md).
+disables async scheduling automatically with a startup warning.
+
+EAGLE3 and DFlash are supported speculative methods. The examples below use
+EAGLE3. For per-model compatibility, see the
+[model recipes](../model-recipes/index.md).
+For compatible target/draft pairings and worked examples, see the EAGLE3
+speculative decoding tutorials for
+[Llama 3.1](../tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.md) and
+[GPT-OSS](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md).
 :::
 
 ### How it works
@@ -541,9 +549,9 @@ improving throughput by accepting multiple tokens per step.
 
 ```bash
 python3 -m vllm.entrypoints.openai.api_server \
-    --model openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
-    --speculative-config '{"method": "eagle3", "model": "RedHatAI/gpt-oss-20b-speculator.eagle3", "num_speculative_tokens": 5}' \
+    --model meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
+    --speculative-config '{"method": "eagle3", "model": "eagle3-llama3.3-70b", "num_speculative_tokens": 5}' \
     --max-model-len 4096 \
     --max-num-seqs 8 \
     --additional-config '{"neuron_config": {"on_device_sampling_config": {"temperature": "0"}}}'
@@ -555,13 +563,13 @@ python3 -m vllm.entrypoints.openai.api_server \
 from vllm import LLM, SamplingParams
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
-    tensor_parallel_size=8,
+    model="meta-llama/Llama-3.3-70B-Instruct",
+    tensor_parallel_size=32,
     max_model_len=4096,
     max_num_seqs=8,
     speculative_config={
         "method": "eagle3",
-        "model": "RedHatAI/gpt-oss-20b-speculator.eagle3",
+        "model": "eagle3-llama3.3-70b",
         "num_speculative_tokens": 5,
     },
     additional_config={
@@ -612,7 +620,9 @@ structured output constraints internally.
 
 Structured outputs use the same on-device bitmask approach as vLLM
 upstream — a grammar-derived bitmask is applied to logits before
-sampling, ensuring only grammar-valid tokens can be selected.
+sampling, ensuring only grammar-valid tokens can be selected. For
+implementation details, see
+[Structured outputs design](../design/vllm/structured-outputs-and-tool-calling.md).
 
 ### Performance
 
@@ -636,7 +646,7 @@ from openai import OpenAI
 client = OpenAI(base_url="http://localhost:8000/v1", api_key="EMPTY")
 
 response = client.chat.completions.create(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3.3-70B-Instruct",
     messages=[{"role": "user", "content": "List 3 colors as JSON"}],
     response_format={
         "type": "json_schema",
@@ -662,7 +672,7 @@ response = client.chat.completions.create(
 Tool calling uses two paths depending on `tool_choice`:
 
 - **auto/none**: No structured output constraints. The model generates
-  free text and the model's tool-call parser extracts tool calls via regex
+  free text and `Llama3JsonToolParser` extracts tool calls via regex
   post-generation.
 - **required/named**: vLLM converts the tool schema into a JSON grammar
   constraint and routes it through the same bitmask pipeline as
@@ -670,7 +680,7 @@ Tool calling uses two paths depending on `tool_choice`:
 
 ```python
 response = client.chat.completions.create(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3.3-70B-Instruct",
     messages=[
         {"role": "user", "content": "What's the weather in Seattle?"}
     ],
@@ -815,6 +825,45 @@ response = client.chat.completions.create(
 Refer to the vLLM [docs](https://docs.vllm.ai/en/stable/features/multimodal_inputs/) for more detailed examples.
 For more details on how to configure the vision encoder, refer to the [vision encoder options](reference-configuration.md#vision-encoder-options-vision_neuron_config).
 
+## Encoder-disaggregated inference (EPD)
+
+Encoder-disaggregated inference separates the vision encoder from the language
+model onto a **Vision Encoder (VE)** pool and a **Prefill+Decode (PD)** pool,
+allowing each stage to be scaled and given its own parallelism, with an
+OpenAI-compatible router fronting both. Unlike
+[disaggregated inference](#disaggregated-inference), which moves KV cache over a
+`--kv-transfer-config` connector, EPD moves vision embeddings over an
+`--ec-transfer-config` connector. EPD is strictly two-way; prefill and decode
+stay co-located in one PD engine.
+
+Each engine sets a construction role (`--mm-encoder-only` for a VE,
+`"mm_language_model_only": true` for a PD; see
+[EPD construction roles](reference-configuration.md#epd-construction-roles)) and
+a transport role (`ec_producer` or `ec_consumer`). EPD transfers embeddings over
+NIXL/LIBFABRIC (EFA) as an HBM→HBM RDMA read, which requires NIXL plus the
+`libcuda.so.1` and `libfabric.so.1` shared libraries on the loader path — see
+[Install dependencies for disaggregated inference](../getting-started/setup-guide.md#install-dependencies-for-disaggregated-inference).
+
+### EPD configurations
+
+- **1E1PD**: 1 vision encoder pool + 1 prefill+decode pool
+- **xEyPD**: Multiple VE and PD engines, scaled independently — add VEs for
+  image-heavy traffic, PDs for token-heavy traffic
+
+### When to use EPD
+
+- Multimodal serving where image encoding and text generation saturate at
+  different rates, so one monolithic engine leaves one of the two idle
+- Workloads whose image-to-text ratio shifts over time, where you want to add
+  encoder capacity without recompiling or resizing the language-model pool
+- Deployments that want asymmetric parallelism between the two stages
+
+For the full launch commands, the required EFA environment variables, core
+alignment rules, and the failure modes with their error signatures, see the
+[EPD tutorial](../tutorials/tutorial-epd-1e-1pd-xeypd.md). For how embeddings
+are stored and read on device, see
+[On-device encoder cache](../design/multimodal/on_device_encoder_cache.md).
+
 ## Prompt embeddings
 
 Prompt embeddings allow you to pass precomputed embedding tensors
@@ -827,8 +876,8 @@ produced embeddings (e.g., a multimodal encoder or retrieval pipeline).
 from vllm import LLM
 
 llm = LLM(
-    model="openai/gpt-oss-20b",
-    tensor_parallel_size=8,
+    model="meta-llama/Llama-3.3-70B-Instruct",
+    tensor_parallel_size=32,
     enable_prompt_embeds=True,
 )
 ```
@@ -837,8 +886,8 @@ Or via CLI:
 
 ```bash
 python3 -m vllm.entrypoints.openai.api_server \
-    --model openai/gpt-oss-20b \
-    --tensor-parallel-size 8 \
+    --model meta-llama/Llama-3.3-70B-Instruct \
+    --tensor-parallel-size 32 \
     --enable-prompt-embeds
 ```
 
@@ -850,6 +899,9 @@ python3 -m vllm.entrypoints.openai.api_server \
    unchanged)
 3. The model merges your embeddings with token-derived hidden states
    during the forward pass
+
+For implementation details, see
+[Prompt embeddings design](../design/vllm/prompt-embeddings.md).
 
 ### When to use prompt embeddings
 
@@ -988,9 +1040,9 @@ reference, see [Configuration options](reference-configuration.md).
 
 - Reduce the number of `num_batched_tokens_buckets` and
   `num_seqs_buckets`
-- Use `VLLM_CACHE_ROOT` to persist compiled models between
-  restarts (artifacts are stored at `$VLLM_CACHE_ROOT/neuron/compile_cache`)
-- Set `VLLM_NEURON_PARALLEL_COMPILE_WORKERS` to increase parallel
+- Use `NEURON_COMPILED_ARTIFACTS` to cache compiled models between
+  restarts
+- Set `NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS` to increase parallel
   compilation
 
 ### Structured outputs produce unexpected results
@@ -1021,7 +1073,14 @@ reference, see [Configuration options](reference-configuration.md).
   Neuron.
 - [Accuracy debugging guide](../model-dev/accuracy-debugging-guide.md) — Diagnose accuracy
   issues if feature changes affect outputs.
+- [Llama 3 recipe](../model-recipes/llama-3.md) — Llama 3 family (1B, 8B, 70B)
+  model recipe.
 - [gpt-oss deployment tutorial](../tutorials/tutorial-gpt-oss.md) — End-to-end
   gpt-oss deployment recipe.
+- [EAGLE3 speculative decoding tutorial (Llama 3.1)](../tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.md)
+- [EAGLE3 speculative decoding tutorial (GPT-OSS)](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md)
+  — Worked Eagle3 deployment.
 - [Disaggregated inference (1P1D / xPyD) tutorial](../tutorials/tutorial-di-1p1d-xpyd.md)
   — Worked disaggregated inference deployment.
+- [Encoder-disaggregated inference (1E1PD / xEyPD) tutorial](../tutorials/tutorial-epd-1e-1pd-xeypd.md)
+  — Worked EPD multimodal deployment.

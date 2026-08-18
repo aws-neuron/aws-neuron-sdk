@@ -51,7 +51,13 @@ The compilation process is typically transparent to users, as the compiler is in
 
             Neuron Compiler CLI Reference Guide
 
-         .. grid-item-card:: Graph Compiler Developer Guide
+         .. grid-item-card:: How to Generate a NEFF File
+            :link: neuronx-cc-generate-neff-how-to
+            :link-type: ref
+
+            Compile an XLA HLO graph into a NEFF file with neuronx-cc.
+
+         .. grid-item-card:: Mixed Precision Training Guide
             :link: neuronx-cc-training-mixed-precision
             :link-type: ref
 
@@ -87,7 +93,7 @@ The compilation process is typically transparent to users, as the compiler is in
 
             Neuron Compiler CLI Reference
 
-         .. grid-item-card:: Graph Compiler Developer Guide
+         .. grid-item-card:: Mixed Precision Training Guide
             :link: neuron-cc-training-mixed-precision
             :link-type: ref
 
@@ -104,7 +110,8 @@ The compilation process is typically transparent to users, as the compiler is in
     :maxdepth: 2
     :hidden:
 
+    About neuronx-cc </compiler/about-neuronx-cc>
     /compiler/neuronx-cc
-    /compiler/neuron-cc
     Error Codes </compiler/error-codes/index>
     Release Notes </release-notes/components/compiler>
+    neuron-cc (Legacy) </compiler/neuron-cc>

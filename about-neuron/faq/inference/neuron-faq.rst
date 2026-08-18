@@ -53,7 +53,7 @@ instances with multiple Inferentia accelerators, such as inf1.6xlarge or
 inf1.24xlarge support it thanks to the fast chip-to-chip interconnect.
 
 Developers can choose to use NeuronCore Pipeline mode during compile
-stage, with an opt-in flag. :ref:`neuron-cc` provides further details.
+stage, with an opt-in flag. :ref:`neuron-cc-index` provides further details.
 
 NeuronCores, NeuronCore Groups and NeuronCore Pipelines: What do they do?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

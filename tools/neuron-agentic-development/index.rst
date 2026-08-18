@@ -1,7 +1,7 @@
 .. meta::
    :description: Neuron Agentic Development is a package of AI agents and skills for developing on AWS Trainium, including NKI kernel development and model porting to NxD Inference.
    :keywords: Neuron Agentic Development, AI agents, skills, NKI, model porting, autoport, Claude Code, Kiro, Trainium
-   :date-modified: 2026-05-11
+   :date-modified: 2026-08-13
 
 .. _neuron-agentic-development:
 .. _neuron-agentic-development-overview:
@@ -115,9 +115,12 @@ The package provides specialized skills that follow natural development pipeline
    * - ``neuron-framework-autoport``
      - Model porting
      - Ports HuggingFace models to NxD Inference with full compilation and validation.
+   * - ``neuron-framework-autoport-vllm-neuron``
+     - Model porting
+     - Ports GPU-compatible models to the vLLM Neuron Trainium2 backend with code generation, registration, and validation.
    * - ``neuron-framework-equivalence``
      - Validation
-     - Validates numerical equivalence between a HuggingFace model and its NxD Inference port.
+     - Validates numerical equivalence between a reference model and its port, for both NxD Inference and vLLM Neuron targets.
 
 Agents
 ------

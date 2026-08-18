@@ -22,6 +22,8 @@ Normalization and Quantization Kernels
 
    * - :doc:`RMSNorm-Quant </nki/library/api/rmsnorm-quant>`
      - Performs optional RMS normalization followed by quantization to ``fp8``.
+   * - :doc:`RMSNorm MX Prefill </nki/library/api/rmsnorm-mx-prefill>`
+     - Fused RMSNorm + MX quantization (+ optional router top-K) for prefill, with optional residual add.
 
 QKV Projection Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,6 +140,18 @@ Attention Kernels
      - Reorders striped ring-attention output back to contiguous sequence order.
    * - :doc:`QKV CTE MLA </nki/library/api/qkv-cte-mla>`
      - DeepSeek Multi-head Latent Attention (MLA) QKV projection with MX quantization for context encoding.
+   * - :doc:`SWA Fused CTE </nki/library/api/swa-fused-cte>`
+     - Fused GPT-OSS sliding-window-attention block with QKV projection, RoPE, attention with sink, and output projection; updates the K/V caches in place.
+   * - :doc:`Attention MXFP8 TKG </nki/library/api/attention-mxfp8-tkg>`
+     - MXFP8 flash-decode attention over a quantized block KV cache with packed-Q eviction (Trainium 3).
+   * - :doc:`Sparse Attention Indexer (MX + BF16 Score) </nki/library/api/sparse-attention-indexer-mx-bf16score>`
+     - DeepSeek Sparse Attention Indexer with MX projections and a BF16 score path.
+   * - :doc:`MLA QKV CTE </nki/library/api/mla-qkv-cte>`
+     - DeepSeek MLA QKV projection (MX) for context encoding, emitting absorbed latents.
+   * - :doc:`MLA Sparse Attention CTE </nki/library/api/mla-sparse-attention-cte>`
+     - Standalone sparse latent + RoPE attention (kernel A of the split DeepSeek-V3.2 sparse-MLA forward).
+   * - :doc:`MLA V-Up O-Proj CTE </nki/library/api/mla-vup-oproj-cte>`
+     - Standalone MX V-up + MX output projection (kernel B of the split DeepSeek-V3.2 sparse-MLA forward).
 
 Deformable Attention Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -171,6 +185,10 @@ Convolution Kernels
      - 3D convolution using tensor engine with K-replication strategy and W-contiguous tiling.
    * - :doc:`Depthwise Conv1D </nki/library/api/depthwise-conv1d>`
      - Implements depthwise 1D convolution using implicit GEMM algorithm.
+   * - :doc:`Conv3D Temporal Unroll </nki/library/api/conv3d-temporal-unroll>`
+     - 3D convolution with temporal unrolling and column tiling for small ``C_out``.
+   * - :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>`
+     - 3D transposed convolution (ConvTranspose3d) via an embedded 3D convolution core with remapped parameters.
 
 Collective Communication Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -216,6 +234,8 @@ Matmul and MLP MXFP8 Kernels
      - MXFP8 SwiGLU MLP forward pass with optional activation checkpointing.
    * - :doc:`MLP Backward MXFP8 </nki/library/api/mlp-bwd-mxfp8-kernel>`
      - MXFP8 SwiGLU MLP backward pass with 4-phase gradient computation.
+   * - :doc:`Matmul MXFP8 Backward </nki/library/api/matmul-mxfp8-generic-backward-kernel>`
+     - Backward pass for a linear layer with MXFP8 quantization, computing both input (dX) and weight (dW) gradients.
 
 MoE Kernels
 ~~~~~~~~~~~~~
@@ -231,6 +251,10 @@ MoE Kernels
      - Fused RMSNorm + router top-K for MoE token generation feeding the all-to-all-v dispatch path.
    * - :doc:`RMSNorm Router Top-K TKG </nki/library/api/rmsnorm-router-topk-tkg>`
      - Fused RMSNorm (+ optional MX quantize) + router top-K for MoE token generation.
+   * - :doc:`Blockwise MM Forward MXFP8 </nki/library/api/blockwise-mm-forward-mxfp8>`
+     - MXFP8 forward pass for blockwise (dropless) MoE; emits activation checkpoints for the MXFP8 MoE backward.
+   * - :doc:`Build All2All Dispatch Metadata </nki/library/api/build-all2all-dispatch-metadata>`
+     - Builds per-rank send counts (with token deduplication) and displacements from ``expert_index`` for MoE all-to-all dispatch.
 
 Indexing Kernels
 ~~~~~~~~~~~~~~~~~
@@ -242,6 +266,15 @@ Indexing Kernels
      - Gather rows from a 2D input by a 1D index using indirect DMA load.
    * - :doc:`Scatter-Add </nki/library/api/scatter-add>`
      - Scatter-add rows from src into a 2D input by a 1D index.
+
+Top-K Kernels
+~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`GPSIMD Top-K </nki/library/api/gpsimd-topk>`
+     - Top-k over the last dimension using the GpSIMD ``nisa.topk`` instruction.
 
 Optimizer Kernels
 ~~~~~~~~~~~~~~~~~~
@@ -344,15 +377,20 @@ MoE Backward Kernels
     Attention Block TKG <attention-block-tkg>
     Attention CTE <attention-cte>
     Attention KV-Parallel Segmented CTE <attention-kv-parallel-segmented-cte>
+    Attention MXFP8 TKG <attention-mxfp8-tkg>
     Attention Segmented CTE <attention-segmented-cte>
     Attention TKG <attention-tkg>
     Blockwise MM Backward <blockwise-mm-backward>
     Blockwise MM Backward MXFP8 <blockwise-mm-backward-mxfp8>
+    Blockwise MM Forward MXFP8 <blockwise-mm-forward-mxfp8>
     Blockwise MM Shard-on-Block <bwmm-shard-on-block-v2>
     Build All-to-All-V Metadata <build-all-to-all-v-metadata>
+    Build All2All Dispatch Metadata <build-all2all-dispatch-metadata>
     Collective Communication Kernels <collectives>
     Conv1D <conv1d>
     Conv3D <conv3d>
+    Conv3D Temporal Unroll <conv3d-temporal-unroll>
+    Conv3D Transpose <conv3d-transpose>
     Cross Entropy <cross-entropy>
     Cumsum <cumsum>
     Depthwise Conv1D <depthwise-conv1d>
@@ -365,8 +403,13 @@ MoE Backward Kernels
     FP8 Quantize <fp8-quantize>
     Fused Adam <fused-adam>
     Gather <gather>
+    GPSIMD Top-K <gpsimd-topk>
     Linear Scan <linear-scan>
     Matmul MXFP8 <matmul-mxfp8-generic-kernel>
+    Matmul MXFP8 Backward <matmul-mxfp8-generic-backward-kernel>
+    MLA QKV CTE <mla-qkv-cte>
+    MLA Sparse Attention CTE <mla-sparse-attention-cte>
+    MLA V-Up O-Proj CTE <mla-vup-oproj-cte>
     MLP <mlp>
     MLP Backward MXFP8 <mlp-bwd-mxfp8-kernel>
     MLP Forward MXFP8 <mlp-fwd-mxfp8-kernel>
@@ -388,6 +431,7 @@ MoE Backward Kernels
     Ring Attention Forward <ring-attention-fwd>
     Ring Attention Unpermute <ring-attention-unpermute>
     RMSNorm-Quant <rmsnorm-quant>
+    RMSNorm MX Prefill <rmsnorm-mx-prefill>
     RMSNorm Router Top-K A2AV <rmsnorm-router-topk-a2av>
     RMSNorm Router Top-K TKG <rmsnorm-router-topk-tkg>
     RNG <rng>
@@ -396,7 +440,9 @@ MoE Backward Kernels
     SBUF-to-SBUF All-Gather <sb2sb-allgather>
     Scatter-Add <scatter-add>
     Selective Scan <selective-scan>
+    Sparse Attention Indexer MX BF16Score <sparse-attention-indexer-mx-bf16score>
     SSD <ssd>
+    SWA Fused CTE <swa-fused-cte>
     Top-K Reduce <topk-reduce>
     Transformer TKG <transformer-tkg>
     Unpermute A2AV <unpermute-a2av>

@@ -82,12 +82,6 @@ Other Libraries
       :link-type: doc
       :class-header: bg-success text-white
       :class-body: library-card-body
-          
-  .. grid-item-card:: NeMo Megatron
-      :link: /libraries/nemo-megatron/index
-      :link-type: doc
-      :class-header: bg-success text-white
-      :class-body: library-card-body
 
 Hardware Compatibility
 ----------------------
@@ -182,7 +176,6 @@ with familiar NeMo YAML Interface.
    :maxdepth: 1
 
    HF Transformers </libraries/transformers-neuronx/index>
-   NeMo Megatron </libraries/nemo-megatron/index>
    NxD Core Release Notes </release-notes/components/nxd-core>
 
   

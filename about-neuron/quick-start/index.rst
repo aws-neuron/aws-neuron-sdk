@@ -63,10 +63,10 @@ LLM serving and agentic tooling
 
       Deploy large language models for production inference:
 
-      - :doc:`Online serving (OpenAI-compatible API) </libraries/nxd-inference/vllm/quickstart-vllm-online-serving>`
-      - :doc:`Offline batch inference </libraries/nxd-inference/vllm/quickstart-vllm-offline-serving>`
+      - :doc:`Online serving (OpenAI-compatible API) </vllm-neuron/docs/getting-started/quickstart-online-serving>`
+      - :doc:`Offline batch inference </vllm-neuron/docs/getting-started/quickstart-offline-serving>`
 
-      :bdg-info:`Inf2` :bdg-info:`Trn1` :bdg-info:`Trn2`
+      :bdg-info:`Trn2` :bdg-info:`Trn3`
 
    .. grid-item-card:: 🤖 Amazon AI helper tools
       :link: amazon-q-dev
@@ -92,7 +92,6 @@ Quickstarts by component
       :class-card: sd-border-1
 
       - :ref:`Deploy a vLLM server with a Neuron DLC <quickstart_vllm_dlc_deploy>`
-      - :ref:`Run PyTorch inference with a Neuron DLC <quickstart_pytorch_inference_dlc>`
       - :ref:`Get started with Neuron DLC using Docker <containers-getting-started>`
       - :ref:`Get started with the multi-framework DLAMI <setup-multiframework-dlami>`
 
@@ -106,6 +105,7 @@ Quickstarts by component
       :class-card: sd-border-1
 
       - :ref:`Generate a Neuron runtime core dump <runtime-core-dump-quickstart>`
+      - :ref:`Getting started with nrtpy <nrtpy-getting-started>`
 
 Framework setup guides
 ----------------------

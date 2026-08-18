@@ -1,6 +1,6 @@
 .. meta::
     :description: MoE CTE kernel implements Mixture of Experts MLP optimized for Context Encoding.
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. currentmodule:: nkilib.core.moe_cte
 
@@ -45,7 +45,7 @@ API Reference
 moe_cte
 ^^^^^^^^
 
-.. py:function:: moe_cte(hidden_states: nl.ndarray, expert_affinities_masked: nl.ndarray, gate_up_proj_weight: nl.ndarray, down_proj_weight: nl.ndarray, token_position_to_id: nl.ndarray, block_to_expert: nl.ndarray, block_size: int, spec: MoECTESpec, conditions: Optional[nl.ndarray] = None, gate_and_up_proj_bias: Optional[nl.ndarray] = None, down_proj_bias: Optional[nl.ndarray] = None, quantization_config: Optional[QuantizationConfig] = None, gate_up_proj_scale: Optional[nl.ndarray] = None, down_proj_scale: Optional[nl.ndarray] = None, gate_up_activations_T: Optional[nl.ndarray] = None, down_activations: Optional[nl.ndarray] = None, activation_function: ActFnType = ActFnType.SiLU, skip_dma: Optional[SkipMode] = None, compute_dtype: Any = nl.bfloat16, is_tensor_update_accumulating: bool = True, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.POST_SCALE, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None)
+.. py:function:: moe_cte(hidden_states: nl.ndarray, expert_affinities_masked: nl.ndarray, gate_up_proj_weight: nl.ndarray, down_proj_weight: nl.ndarray, token_position_to_id: nl.ndarray, block_to_expert: nl.ndarray, block_size: int, spec: MoECTESpec, conditions: Optional[nl.ndarray] = None, gate_and_up_proj_bias: Optional[nl.ndarray] = None, down_proj_bias: Optional[nl.ndarray] = None, quantization_config: Optional[QuantizationConfig] = None, gate_up_proj_scale: Optional[nl.ndarray] = None, down_proj_scale: Optional[nl.ndarray] = None, gate_up_activations_T: Optional[nl.ndarray] = None, down_activations: Optional[nl.ndarray] = None, activation_function: ActFnType = ActFnType.SiLU, skip_dma: Optional[SkipMode] = None, compute_dtype: Any = nl.bfloat16, is_tensor_update_accumulating: bool = True, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.POST_SCALE, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, accumulation_dtype=None, skip_gate_proj: bool = False)
 
    Unified entry point for MoE CTE blockwise matrix multiplication kernels.
 
@@ -101,6 +101,10 @@ moe_cte
    :param up_clamp_upper_limit: Upper clamp limit for up projection
    :type up_clamp_upper_limit: ``float``, optional
    :param up_clamp_lower_limit: Lower clamp limit for up projection
+
+   :param accumulation_dtype: Optional dtype for matmul accumulation. Defaults to ``None`` (use the kernel default).
+
+   :param skip_gate_proj: When ``True``, skip the gate projection (up-only MLP). Default: ``False``.
    :type up_clamp_lower_limit: ``float``, optional
    :return: Output hidden states with shape ``[T+1, H]``. When activation checkpointing is enabled, may return a tuple including saved activations.
    :rtype: ``nl.ndarray`` or ``Tuple[nl.ndarray, ...]``

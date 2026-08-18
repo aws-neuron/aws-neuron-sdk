@@ -35,12 +35,7 @@ def simulate(kernel):
 
     .. warning::
 
-      **This API is experimental and may change in future releases**. It has not been tested or confirmed to work on all hardware platforms and operating systems.
-
-      Currently, Neuron confirms support for ``nki.simulate`` on these 2 operating systems:
-
-      * Ubuntu 22.04
-      * Amazon Linux 2023
+       This API is experimental and may change in future releases.
 
     See :ref:`nki-simulator` for full documentation including target platform
     selection, precise floating-point mode, debugging, and known limitations.

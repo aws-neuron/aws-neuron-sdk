@@ -96,7 +96,7 @@ To send us a pull request, please:
     * See: [pull request guide](https://help.github.com/articles/creating-a-pull-request/)).
 8. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
-Updated process documentation can be found here: [Runbook: Authoring a topic for the Neuron documentation](https://quip-amazon.com/e9B9AM7Npb17/Runbook-Authoring-a-topic-for-the-Neuron-documentation).
+Internal Amazon contributors: see the internal authoring runbook ("Runbook: Authoring a topic for the Neuron documentation") for updated process documentation.
 
 ## Updating the sitemap
 

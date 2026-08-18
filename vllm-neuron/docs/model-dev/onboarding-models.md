@@ -16,6 +16,9 @@ through vLLM Neuron. You will implement the model using the vLLM Neuron
 plugin's building blocks, register it with vLLM's model registry, compile,
 validate accuracy, and benchmark performance.
 
+For annotated code patterns and per-component implementation details, refer to
+the canonical reference implementation in `vllm_neuron/model/gpt_oss/`.
+
 :::{note}
 The vLLM Neuron plugin implements models directly using `torch_neuronx`, NKI
 (Neuron Kernel Interface) kernels, and its own parallel infrastructure. The
@@ -39,7 +42,7 @@ For models deployed through NxD Inference directly (without vLLM), see the legac
   satisfies the runner interface described below.
 - **Familiarity with the plugin codebase**: The
   [vLLM Neuron plugin source](https://github.com/vllm-project/vllm-neuron) contains
-  annotated reference implementations (Llama, GPT-OSS) that demonstrate
+  annotated reference implementations (Llama, GPT-OSS, Qwen3 MoE) that demonstrate
   common patterns. These are useful as examples, not mandatory templates.
 
 ## End-to-end onboarding flow
@@ -330,6 +333,8 @@ class YourModelMLP(nn.Module):
         return output
 ```
 
+(top-level-model-class-yourmodelforcausallm)=
+
 ##### Top-level model class (`YourModelForCausalLM`)
 
 This class implements the interface methods that the vLLM Neuron runtime calls.
@@ -440,6 +445,8 @@ class YourModelForCausalLM(nn.Module):
         # Add validation rules (unsupported features, incompatible settings)
         pass
 ```
+
+(text-model-implement-weight-loading)=
 
 #### 1d. Implement weight loading
 
@@ -664,8 +671,13 @@ If a draft checkpoint exists:
    in Step 1b).
 5. Implement `set_aux_hidden_state_layers()` and
    `get_eagle3_aux_hidden_state_layers()`.
+6. Add an `examples/.../run_eagle3.py` script.
 
-If no draft checkpoint exists, skip this and mark EAGLE3 as not supported.
+If no draft checkpoint exists, skip this and mark EAGLE3 as not supported. For
+deployment steps, see the
+EAGLE3 speculative decoding tutorials for
+[Llama 3.1](../tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.md) and
+[GPT-OSS](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md).
 
 #### 1f. (Optional) Write the model README
 
@@ -803,8 +815,9 @@ If comparing against a reference:
 2. Compare generated tokens. For large models, token-level divergence at later
    positions is expected — use logit-level comparison to confirm outputs are
    within tolerance.
-3. If accuracy issues appear, use the systematic workflow in the
-   [accuracy debugging guide](accuracy-debugging-guide.md) to isolate the cause.
+3. If accuracy issues appear, use the systematic workflow in
+   [accuracy debugging guide](accuracy-debugging-guide.md) and the
+   [accuracy debugger tool](how-to-use-accuracy-debugger.md) to isolate the cause.
 
 #### Running on CPU for debugging
 
@@ -865,6 +878,7 @@ assert_close_three_way(
 without real weights or Neuron hardware keeps regressions cheap to catch:
 
 ```python
+# test/model/<name>/tiny/test_tiny_<name>_e2e.py
 import tempfile
 import pytest
 import torch
@@ -1019,11 +1033,20 @@ To confirm the model is correctly onboarded:
 
 ## Related information
 
+- [Onboard a vision-language model](onboarding-vlm-models.md) — VLM-specific
+  companion to this guide: adds a vision encoder tower, block-packed attention,
+  M-RoPE, and the on-device encoder cache.
 - [Features guide](../guides/features-guide.md) — Features you can enable once the model is
   onboarded.
 - [Accuracy debugging guide](accuracy-debugging-guide.md) — Diagnose accuracy
   issues discovered during onboarding.
+- [Accuracy debugger tool](how-to-use-accuracy-debugger.md) — Step-by-step
+  procedure for the accuracy debugger tool.
 - For supported models and features, see the [README](https://github.com/vllm-project/vllm-neuron#supported-models)
   and [model cards](../model-recipes/index.md).
+- [Deep dive: vLLM integration](../design/vllm/vllm-integration-design-reference.md) —
+  Architecture reference for the Neuron backend.
+- [NxDI model onboarding guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/onboarding-models.html)
+  — Legacy onboarding guide for NxDI-only deployments (without vLLM).
 - [vLLM Neuron plugin source](https://github.com/vllm-project/vllm-neuron) — Plugin
   source code with annotated reference implementations.

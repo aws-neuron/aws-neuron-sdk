@@ -6,15 +6,37 @@
 If you already have a previous Neuron release installed, select the PyTorch version tab below to get the update commands for your environment.
 
 
+.. important::
+   ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To update to
+   ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
+   The commands below install the Neuron 2.31 package versions.
+
 .. tab-set::
 
     .. tab-item:: PyTorch 2.9.0
 
         .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 284
-            :end-line: 285
+        .. code-block:: bash
+
+           # Activate your existing Python virtual environment
+           source aws_neuron_venv_pytorch/bin/activate
+
+           # Install Jupyter notebook kernel
+           pip install ipykernel
+           python3.13 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+           pip install jupyter notebook
+           pip install environment_kernels
+
+           # Set pip repository pointing to the Neuron repository
+           python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+           # Install wget, awscli
+           python -m pip install wget
+           python -m pip install awscli
+
+           # Update Neuron Compiler and Framework (Neuron 2.31 versions)
+           python -m pip install --upgrade neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
 
     .. tab-item:: PyTorch 2.8.0
 

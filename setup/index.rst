@@ -166,14 +166,14 @@ Legacy Inf1 Support
 
 .. grid:: 1
 
-   .. grid-item-card:: Inf1 Installation (Legacy)
-      :link: legacy-inf1/index
+   .. grid-item-card:: Inf1 Installation (Legacy, Archived)
+      :link: /archive/setup/legacy-inf1/index
       :link-type: doc
       :class-card: sd-border-2
       
-      Install Neuron SDK for Inferentia 1 instances
+      Install Neuron SDK for Inferentia 1 instances (archived)
       
-      :bdg-warning:`Legacy Hardware`
+      :bdg-danger:`Archived`
 
 Additional Resources
 --------------------
@@ -190,5 +190,4 @@ Additional Resources
    PyTorch <pytorch/index>
    JAX <jax/index>
    Multi-framework <multiframework-dlami>
-   torch-neuron (Legacy) <legacy-inf1/index>
    Troubleshooting <troubleshooting>

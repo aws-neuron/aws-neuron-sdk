@@ -4,8 +4,24 @@ from enum import Enum
 from typing import *
 
 from nki.language import NKIObject
+from nki.language import NkiTensor
 from nki.language import equal
 from nki.language import maximum
+
+tensor_engine: engine = ...
+r"""Tensor engine constant (deprecated: use engine.tensor)"""
+
+vector_engine: engine = ...
+r"""Vector engine constant (deprecated: use engine.vector)"""
+
+scalar_engine: engine = ...
+r"""Scalar engine constant (deprecated: use engine.scalar)"""
+
+gpsimd_engine: engine = ...
+r"""GPSIMD engine constant (deprecated: use engine.gpsimd)"""
+
+unknown_engine: engine = ...
+r"""Unknown engine constant (deprecated: use engine.unknown)"""
 
 class engine(Enum):
     r"""Neuron Device engines."""
@@ -119,6 +135,36 @@ class dma_engine(Enum):
 
     ...
 
+class NkiInstruction(NKIObject):
+    r"""Opaque handle to a traced NKI instruction.
+
+    Returned by nki.isa operations during tracing. Use
+    ``.depends_on(*producers)`` to add scheduling dependencies (this
+    instruction runs after every listed producer completes)."""
+
+    def __init__(self, handle):
+        ...
+
+    def depends_on(self, *producers: NkiInstruction) -> NkiInstruction:
+        r"""Add scheduling dependencies: self (consumer) runs after each producer.
+
+        Returns self, so the two forms compose::
+
+            c.depends_on(b, a)             # one call, two edges
+            c.depends_on(b).depends_on(a)  # chained, same effect
+
+        A dependency is not a trace-time hint: it lowers to a hardware
+        semaphore wait that the device executes every time this instruction
+        runs. Because it is fixed at compile time and fires unconditionally,
+        both instructions must sit at the same dynamic-loop nesting (or the
+        producer in an enclosing scope). You cannot wire an edge into or out of
+        a dynamic loop (``nl.fori_loop`` / ``nl.while_loop``), or its semaphore
+        could fire unconditionally or never fire (deadlock). Static Python
+        ``for``/``if`` are unrolled at trace time and do not count."""
+        ...
+
+    ...
+
 class NkiValidationError(Exception):
     r"""Raised when hardware constraints are violated."""
 
@@ -137,6 +183,16 @@ class VirtualRegister(NKIObject):
     In addition to NKI APIs, virtual registers can be used to represent dynamic
     loop bounds for for loops using :doc:`dynamic_range <nki.language.dynamic_range>`,
     and while loops.
+
+    .. note::
+
+        ``nl.dynamic_range`` and bare ``while reg:`` are supported by the **parser**
+        frontend. Under the **tracer** frontend a register's value is not known while
+        the kernel is being built, so using a register in Python control flow
+        (``if``/``while``) or converting it with ``int()`` / ``range()`` raises
+        ``TypeError``. For the tracer, use
+        :doc:`nl.fori_loop <nki.language.fori_loop>` for counted loops and
+        ``nki.experimental.while_loop`` for data-dependent loops.
 
     .. code-block:: python
 
@@ -173,21 +229,6 @@ class VirtualRegister(NKIObject):
 
     ...
 
-tensor_engine = ...
-r"""Tensor engine constant (deprecated: use engine.tensor)"""
-
-vector_engine = ...
-r"""Vector engine constant (deprecated: use engine.vector)"""
-
-scalar_engine = ...
-r"""Scalar engine constant (deprecated: use engine.scalar)"""
-
-gpsimd_engine = ...
-r"""GPSIMD engine constant (deprecated: use engine.gpsimd)"""
-
-unknown_engine = ...
-r"""Unknown engine constant (deprecated: use engine.unknown)"""
-
 def get_nc_sub_version():
     r"""Returns the sub-version integer for the current target context.
 
@@ -202,7 +243,7 @@ def get_nc_version():
     r"""Returns the nc_version of the current target context."""
     ...
 
-def dma_copy(dst, src, priority=None, oob_mode=oob_mode.error, dge_mode=dge_mode.unknown, engine=engine.unknown, name=None):
+def dma_copy(dst: NkiTensor, src: NkiTensor, priority=None, oob_mode=oob_mode.error, dge_mode=dge_mode.unknown, engine=engine.unknown, name=None):
     r"""Copy data from ``src`` to ``dst`` using DMA engines.
 
     This instruction performs data movement between memory locations (SBUF or HBM) using DMA engines.
@@ -340,7 +381,7 @@ def dma_copy(dst, src, priority=None, oob_mode=oob_mode.error, dge_mode=dge_mode
                    Only valid when ``dge_mode=nisa.dge_mode.hwdge``. ``nki.isa.engine.unknown`` by default."""
     ...
 
-def tensor_copy(dst, src, engine=engine.unknown, name=None):
+def tensor_copy(dst: NkiTensor, src: NkiTensor, engine=engine.unknown, name=None):
     r"""Create a copy of ``src`` tile within NeuronCore on-chip SRAMs using Vector, Scalar or GpSimd Engine.
 
     The output tile has the same partition axis size and also the same number of elements per partition
@@ -387,7 +428,7 @@ def tensor_copy(dst, src, engine=engine.unknown, name=None):
                   `nki.isa.engine.gpsimd` or `nki.isa.engine.unknown` (default, compiler selects best engine based on engine workload)."""
     ...
 
-def memset(dst, value, engine=engine.unknown, name=None):
+def memset(dst: NkiTensor, value, engine=engine.unknown, name=None):
     r"""Initialize ``dst`` by filling it with a compile-time constant ``value``, using Vector or GpSimd Engine.
     The memset instruction supports all valid NKI dtypes (see :ref:`nki-dtype`).
 
@@ -402,7 +443,7 @@ def memset(dst, value, engine=engine.unknown, name=None):
         ``float4_e2m1fn_x4``), only ``value=0`` is supported."""
     ...
 
-def tensor_copy_predicated(dst, src, predicate, reverse_pred=False, name=None):
+def tensor_copy_predicated(dst: NkiTensor, src: float | NkiTensor, predicate: NkiTensor, reverse_pred=False, name=None):
     r"""Conditionally copy elements from the ``src`` tile to the destination tile on SBUF / PSUM
     based on a ``predicate`` using Vector Engine.
 
@@ -445,7 +486,7 @@ def tensor_copy_predicated(dst, src, predicate, reverse_pred=False, name=None):
     :param reverse_pred: A boolean that reverses the effect of ``predicate``."""
     ...
 
-def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_onezero=False, is_transpose=False, accumulate=None, tile_position=(), tile_size=(), perf_mode=matmul_perf_mode.none, name=None):
+def nc_matmul(dst: NkiTensor, stationary: NkiTensor, moving: NkiTensor, is_stationary_onezero=False, is_moving_onezero=False, is_transpose=False, accumulate=None, tile_position=(), tile_size=(), perf_mode=matmul_perf_mode.none, name=None):
     r"""Compute ``dst = stationary.T @ moving`` matrix multiplication using Tensor Engine.
 
     The figure below illustrates how to map a matrix multiplication from a mathematical definition
@@ -497,16 +538,21 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
     The ``accumulate`` parameter controls whether the matmul result overwrites or accumulates onto the
     ``dst`` PSUM tile:
 
-    - ``accumulate=False``: Overwrites the PSUM destination. The first matmul targeting a PSUM location
-      **must** use ``accumulate=False`` to initialize it.
-    - ``accumulate=True``: Adds the result to the existing PSUM content. Only valid after the PSUM
-      location has been initialized with ``accumulate=False``. Using ``accumulate=True`` on an
-      uninitialized PSUM location is undefined behavior.
+    - ``accumulate=False``: **Overwrites** the PSUM destination. The first matmul targeting a PSUM location
+      **must** use this overwrite mode to start the accumulation.
+    - ``accumulate=True``: **Accumulates** the result to the existing PSUM content. Only valid after the PSUM
+      location has been initialized by a matmul with ``accumulate=False``. Using ``accumulate=True``
+      on an uninitialized PSUM location is undefined behavior on all targets.
     - ``accumulate=None`` (default): The compiler automatically infers the correct flag — first write
       overwrites, subsequent writes accumulate.
 
     *Hint*: Use ``accumulate=(i > 0)`` in a loop to explicitly overwrite on the first iteration
     and accumulate on subsequent iterations, or simply omit the parameter to let the compiler handle it.
+
+    .. note::
+       On NeuronCore-v2 and NeuronCore-v3, matmul accumulating into a PSUM location that was value-initialized
+       by a non-matmul instruction (e.g., ``memset``, ``tensor_copy``) is not supported and is
+       undefined behavior on hardware.
 
     **Transpose mode.**
 
@@ -665,7 +711,7 @@ def nc_matmul(dst, stationary, moving, is_stationary_onezero=False, is_moving_on
             return result"""
     ...
 
-def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_position=None, tile_size=None, accumulate=None, name=None):
+def nc_matmul_mx(dst: NkiTensor, stationary: NkiTensor, moving: NkiTensor, stationary_scale: NkiTensor, moving_scale: NkiTensor, tile_position=None, tile_size=None, accumulate=None, name=None):
     r"""Compute matrix multiplication of MXFP8/MXFP4 quantized matrices with integrated dequantization using Tensor Engine.
 
     .. note::
@@ -780,7 +826,7 @@ def nc_matmul_mx(dst, stationary, moving, stationary_scale, moving_scale, tile_p
                        whether this PSUM location was previously written"""
     ...
 
-def nc_transpose(dst, data, engine=engine.unknown, name=None):
+def nc_transpose(dst: NkiTensor, data: NkiTensor, engine=engine.unknown, name=None):
     r"""Perform a 2D transpose between the partition axis and the free axis of input ``data`` using Tensor or Vector Engine.
 
     If the ``data`` tile has more than one free axis, this API implicitly flattens all free axes into one axis
@@ -820,7 +866,7 @@ def nc_transpose(dst, data, engine=engine.unknown, name=None):
                    by default, the best engine will be selected for the given input tile shape"""
     ...
 
-def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown, oob_mode=oob_mode.error, name=None):
+def dma_transpose(dst: NkiTensor, src: NkiTensor, axes=None, priority=None, dge_mode=dge_mode.unknown, oob_mode=oob_mode.error, name=None):
     r"""Perform a transpose on input ``src`` using DMA Engine.
 
     The permutation of transpose follow the rules described below:
@@ -834,8 +880,10 @@ def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown,
     The only valid ``dge_mode`` s are ``unknown`` and ``hwdge``. If ``hwdge``, this instruction will be lowered
     to a Hardware DGE transpose. This has additional restrictions:
 
-    1. ``src.shape[0] == 16``
-    2. ``src.shape[-1] % 128 == 0``
+    1. For 2-d input tiles, ``src.shape[0] == 16``.
+       For 3-d/4-d input tiles, ``src.shape[0]`` must be in ``{1, 2, 4, 8, 16}``
+       and ``(src.shape[0] * src.shape[-2]) % 16 == 0``.
+    2. ``src.shape[-1] <= 128``
     3. ``src.dtype`` is 2 bytes
 
     **DMA Indirect Transpose Constraints**
@@ -968,7 +1016,7 @@ def dma_transpose(dst, src, axes=None, priority=None, dge_mode=dge_mode.unknown,
         - ``oob_mode.skip``: Silently skips any operations involving out-of-bounds indices. Only valid when ``src`` uses indirect indexing."""
     ...
 
-def tensor_tensor(dst, data1, data2, op, engine=engine.unknown, name=None):
+def tensor_tensor(dst: NkiTensor, data1: NkiTensor, data2: NkiTensor, op, engine=engine.unknown, name=None):
     r"""Perform an element-wise operation of input two tiles using Vector Engine or GpSimd Engine.
     The two tiles must have the same partition axis size and the same number of elements per partition.
 
@@ -1030,7 +1078,7 @@ def tensor_tensor(dst, data1, data2, op, engine=engine.unknown, name=None):
                    or `nki.isa.engine.unknown` (default, let compiler select best engine based on the input tile shape)."""
     ...
 
-def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=None, reverse1=False, engine=engine.unknown, name=None):
+def tensor_scalar(dst: NkiTensor, data: NkiTensor, op0, operand0: float | NkiTensor, reverse0=False, op1=None, operand1: float | NkiTensor | None=None, reverse1=False, engine=engine.unknown, name=None):
     r"""Apply up to two math operators to the input ``data`` tile by broadcasting scalar/vector operands
     in the free dimension using Vector or Scalar or GpSimd Engine: ``(data <op0> operand0) <op1> operand1``.
 
@@ -1110,7 +1158,7 @@ def tensor_scalar(dst, data, op0, operand0, reverse0=False, op1=None, operand1=N
                    compiler select best engine based on the input tile shape)."""
     ...
 
-def tensor_reduce(dst, op, data, axis, negate=False, keepdims=False, name=None):
+def tensor_reduce(dst: NkiTensor, op, data: NkiTensor, axis, negate=False, keepdims=False, name=None):
     r"""Apply a reduction operation to the free axes of an input ``data`` tile using Vector Engine.
 
     The reduction operator is specified in the ``op`` input field
@@ -1195,7 +1243,7 @@ def tensor_reduce(dst, op, data, axis, negate=False, keepdims=False, name=None):
                      With this option, the result will broadcast correctly against the input array."""
     ...
 
-def tensor_partition_reduce(dst, op, data, name=None):
+def tensor_partition_reduce(dst: NkiTensor, op, data: NkiTensor, name=None):
     r"""Apply a reduction operation across partitions of an input ``data`` tile using GpSimd Engine.
 
     :param dst: output tile with reduced result
@@ -1203,7 +1251,7 @@ def tensor_partition_reduce(dst, op, data, name=None):
     :param data: the input tile to be reduced"""
     ...
 
-def tensor_scalar_cumulative(dst, src, op0, op1, imm0, imm1=None, reduce_cmd=reduce_cmd.reset_reduce, name=None):
+def tensor_scalar_cumulative(dst: NkiTensor, src: NkiTensor, op0, op1, imm0: float | NkiTensor, imm1: float | NkiTensor | None=None, reduce_cmd=reduce_cmd.reset_reduce, name=None):
     r"""Perform tensor-scalar arithmetic operation with cumulative reduction using Vector Engine.
 
     The operation applies a scalar operation to each tensor element, then performs a cumulative
@@ -1285,7 +1333,7 @@ def tensor_scalar_cumulative(dst, src, op0, op1, imm0, imm1=None, reduce_cmd=red
                                 defaults to ``reset_reduce``"""
     ...
 
-def activation(dst, op, data, bias=None, scale=1.0, reduce_op=None, reduce_res=None, reduce_cmd=reduce_cmd.idle, name=None):
+def activation(dst: NkiTensor, op, data: NkiTensor, bias: float | NkiTensor | None=None, scale: float | NkiTensor=1.0, reduce_op=None, reduce_res: NkiTensor | None=None, reduce_cmd=reduce_cmd.idle, name=None):
     r"""Apply an activation function on every element of the input tile using Scalar Engine, with an optional scale/bias operation
     before the activation and an optional reduction operation after the activation in the same instruction.
 
@@ -1390,17 +1438,27 @@ def activation(dst, op, data, bias=None, scale=1.0, reduce_op=None, reduce_res=N
 
     In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
+    .. note::
+        ``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``, and ``reciprocal``
+        have limited valid input ranges. See :ref:`nki-act-func` for their
+        ranges and out-of-range behavior.
+
     :param dst: the activation output
-    :param op: an activation function (see :ref:`nki-act-func` for supported functions)
+    :param op: an activation function (see :ref:`nki-act-func` for supported functions).
     :param data: the input tile; layout: (partition axis <= 128, free axis)
     :param scale: a scalar or a vector for multiplication
     :param bias: a scalar (NeuronCore-v3 or newer) or a vector for addition
     :param reduce_op: the reduce operation to perform on the free dimension of the activated data
     :param reduce_res: a tile of shape ``(data.shape[0], 1)`` to hold the final state of ``reduce_regs``.
+
+        Pass ``None`` to keep the reduction result in the Scalar Engine's internal
+        accumulator without writing it out. This is useful when chaining multiple
+        calls that reduce into the same accumulator — only the final call needs to
+        pass a tile to retrieve the accumulated result.
     :param reduce_cmd: an enum member from ``nisa.reduce_cmd`` to control the state of ``reduce_regs``."""
     ...
 
-def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0, name=None):
+def activation_reduce(dst: NkiTensor, op, data: NkiTensor, reduce_op, reduce_res: NkiTensor, bias: float | NkiTensor | None=None, scale: float | NkiTensor=1.0, name=None):
     r"""Perform the same computation as ``nisa.activation`` and also a reduction along the free dimension of the
     ``nisa.activation`` result using Scalar Engine. The results for the reduction is stored
     in the reduce_res.
@@ -1413,7 +1471,7 @@ def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0
 
     In addition to :doc:`nisa.activation <nki.isa.activation>` computation, this API also performs a reduction
     along the free dimension(s) of the :doc:`nisa.activation <nki.isa.activation>` result, at a small additional
-    performance cost. The reduction result is returned in ``reduce_res`` in-place, which must be a
+    performance cost. The reduction result is written into ``reduce_res``, which must be a
     SBUF/PSUM tile with the same partition axis size as the input tile ``data`` and one element per partition.
     On NeuronCore-v2, the ``reduce_op`` must be ``nl.add``.
 
@@ -1459,20 +1517,30 @@ def activation_reduce(dst, op, data, reduce_op, reduce_res, bias=None, scale=1.0
 
     In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
+    .. note::
+        ``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``, and ``reciprocal``
+        have limited valid input ranges. See :ref:`nki-act-func` for their
+        ranges and out-of-range behavior.
+
     :param dst: output tile of the activation instruction; layout: same as input ``data`` tile
-    :param op: an activation function (see :ref:`nki-act-func` for supported functions)
+    :param op: an activation function (see :ref:`nki-act-func` for supported functions).
     :param data: the input tile; layout: (partition axis <= 128, free axis)
     :param reduce_op: the reduce operation to perform on the free dimension of the activation result
     :param reduce_res: a tile of shape ``(data.shape[0], 1)``, where data.shape[0]
                     is the partition axis size of the input ``data`` tile. The result of ``sum(ReductionResult)``
-                    is written in-place into the tensor.
+                    is written into the tensor.
+
+                    Pass ``None`` to keep the reduction result in the Scalar Engine's internal
+                    accumulator without writing it out. This is useful when chaining multiple
+                    calls that reduce into the same accumulator — only the final call needs to
+                    pass a tile to retrieve the accumulated result.
     :param bias: a vector with the same partition axis size as ``data``
                  for broadcast add (after broadcast multiply with ``scale``)
     :param scale: a scalar or a vector with the same partition axis size as ``data``
                   for broadcast multiply"""
     ...
 
-def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=False, reverse1=False, reduce_op=None, reduce_res=None, reduce_cmd=reduce_cmd.idle, name=None):
+def activate2(dst: NkiTensor, op, data: NkiTensor, imm0: float | NkiTensor, imm1: float | NkiTensor, op0, op1, relu_param: float | NkiTensor=0.0, reverse0=False, reverse1=False, reduce_op=None, reduce_res: NkiTensor | None=None, reduce_cmd=reduce_cmd.idle, name=None):
     r"""Perform tensor activation with configurable tensor-scalar operations and optional reduction
     using Scalar Engine.
 
@@ -1531,6 +1599,11 @@ def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=Fals
 
     In addition, on the Scalar engine a scattered ``dst`` cannot be in PSUM.
 
+    .. note::
+        ``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``, and ``reciprocal``
+        have limited valid input ranges. See :ref:`nki-act-func` for their
+        ranges and out-of-range behavior.
+
     :param dst: the activation output tile. Supported buffers: SBUF, PSUM.
     :param op: an activation function (see :ref:`nki-act-func` for supported functions).
     :param data: the input tile; layout: (partition axis <= 128, free axis). Supported buffers: SBUF, PSUM.
@@ -1552,6 +1625,11 @@ def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=Fals
         Supported: ``nl.add``, ``nl.maximum``, ``nl.minimum``, ``nl.abs_max``, ``nl.abs_min``.
     :param reduce_res: a tile of shape ``(data.shape[0], 1)`` to hold the final state of the
         reduction registers. Supported buffers: SBUF, PSUM.
+
+        Pass ``None`` to keep the reduction result in the Scalar Engine's internal
+        accumulator without writing it out. This is useful when chaining multiple
+        calls that reduce into the same accumulator — only the final call needs to
+        pass a tile to retrieve the accumulated result.
     :param reduce_cmd: an enum member from ``nisa.reduce_cmd`` to control the state of the
         reduction registers.
 
@@ -1627,7 +1705,7 @@ def activate2(dst, op, data, imm0, imm1, op0, op1, relu_param=0.0, reverse0=Fals
                 accumulator = reduce_op(accumulator, dst[i])"""
     ...
 
-def iota(dst, pattern, offset=0, channel_multiplier=0, name=None):
+def iota(dst: NkiTensor, pattern, offset=0, channel_multiplier=0, name=None):
     r"""Generate a constant literal pattern into SBUF using GpSimd Engine.
 
     The pattern is defined by an int32 ``offset``, a tensor access pattern of up to 4D ``pattern`` and
@@ -1683,7 +1761,7 @@ def iota(dst, pattern, offset=0, channel_multiplier=0, name=None):
     :param channel_multiplier: an int32 multiplier to be applied to the channel (parition) ID"""
     ...
 
-def affine_select(dst, pattern, channel_multiplier, on_true_tile, on_false_value, cmp_op=equal, offset=0, name=None):
+def affine_select(dst: NkiTensor, pattern, channel_multiplier, on_true_tile: NkiTensor, on_false_value, cmp_op=equal, offset=0, name=None):
     r"""Select elements between an input tile ``on_true_tile`` and a scalar value ``on_false_value``
     according to a boolean predicate tile using GpSimd Engine.
 
@@ -1757,7 +1835,7 @@ def affine_select(dst, pattern, channel_multiplier, on_true_tile, on_false_value
     :param cmp_op: comparison operator to use for predicate evaluation (default: nl.equal)"""
     ...
 
-def local_gather(dst, src_buffer, index, num_elem_per_idx=1, num_valid_indices=None, name=None):
+def local_gather(dst: NkiTensor, src_buffer: NkiTensor, index: NkiTensor, num_elem_per_idx=1, num_valid_indices=None, name=None):
     r"""Gather SBUF data in ``src_buffer`` using ``index`` on GpSimd Engine.
 
     Each of the eight GpSimd cores in GpSimd Engine connects to 16 contiguous SBUF partitions
@@ -1810,7 +1888,7 @@ def local_gather(dst, src_buffer, index, num_elem_per_idx=1, num_valid_indices=N
     full NKI code example with equivalent numpy implementation."""
     ...
 
-def nc_n_gather(dst, data, indices, name=None):
+def nc_n_gather(dst: NkiTensor, data: NkiTensor, indices: NkiTensor, name=None):
     r"""Gather elements from ``data`` according to ``indices`` using GpSimd Engine.
 
     This instruction performs a gather operation where elements are selected from the input ``data`` tile
@@ -1858,7 +1936,7 @@ def nc_n_gather(dst, data, indices, name=None):
     :param indices: the indices tile (uint32) specifying which elements to gather"""
     ...
 
-def bn_stats(dst, data, name=None):
+def bn_stats(dst: NkiTensor, data: NkiTensor, name=None):
     r"""Compute mean- and variance-related statistics for each partition of an input tile ``data``
     in parallel using Vector Engine.
 
@@ -1894,7 +1972,7 @@ def bn_stats(dst, data, name=None):
     :param data: the input tile (up to 512 elements per partition)"""
     ...
 
-def bn_aggr(dst, data, name=None):
+def bn_aggr(dst: NkiTensor, data: NkiTensor, name=None):
     r"""Aggregate one or multiple ``bn_stats`` outputs to generate
     a mean and variance per partition using Vector Engine.
 
@@ -1916,7 +1994,7 @@ def bn_aggr(dst, data, name=None):
     :param data: an input tile with results of one or more :doc:`bn_stats <nki.isa.bn_stats>`"""
     ...
 
-def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, reverse1=False, name=None):
+def tensor_tensor_scan(dst: NkiTensor, data0: NkiTensor, data1: NkiTensor, initial: float | NkiTensor, op0, op1, reverse0=False, reverse1=False, name=None):
     r"""Perform a scan operation of two input tiles using Vector Engine.
 
     Mathematically, the tensor_tensor_scan instruction on Vector Engine performs
@@ -1941,9 +2019,9 @@ def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, rev
 
     The two input tiles, ``data0`` and ``data1`` cannot both reside in PSUM. The three legal cases are:
 
-    1. Both ``data1`` and ``data2`` are in SBUF.
-    2. ``data1`` is in SBUF, while ``data2`` is in PSUM.
-    3. ``data1`` is in PSUM, while ``data2`` is in SBUF.
+    1. Both ``data0`` and ``data1`` are in SBUF.
+    2. ``data0`` is in SBUF, while ``data1`` is in PSUM.
+    3. ``data0`` is in PSUM, while ``data1`` is in SBUF.
 
     The scan operation supported by this API has two programmable
     math operators in ``op0`` and ``op1`` fields.
@@ -1971,7 +2049,7 @@ def tensor_tensor_scan(dst, data0, data1, initial, op0, op1, reverse0=False, rev
                    if true, ``data1`` is the lhs of ``op1``"""
     ...
 
-def nc_stream_shuffle(dst, src, shuffle_mask, name=None):
+def nc_stream_shuffle(dst: NkiTensor, src: NkiTensor, shuffle_mask, name=None):
     r"""Apply cross-partition data movement within a quadrant of 32 partitions from source tile
     ``src`` to destination tile ``dst`` using Vector Engine.
 
@@ -2006,7 +2084,7 @@ def nc_stream_shuffle(dst, src, shuffle_mask, name=None):
     :param shuffle_mask: a 32-element list that specifies the shuffle source and destination partition"""
     ...
 
-def rng(dst, engine=engine.vector, name=None):
+def rng(dst: NkiTensor, engine=engine.vector, name=None):
     r"""Generate pseudo random numbers using the Vector or GpSimd Engine.
 
     This instruction generates 32 random bits per element and writes them to the
@@ -2042,7 +2120,7 @@ def rng(dst, engine=engine.vector, name=None):
                    or ``nki.isa.engine.gpsimd`` (NeuronCore-v3+)"""
     ...
 
-def dropout(dst, data, prob, name=None):
+def dropout(dst: NkiTensor, data: NkiTensor, prob: float | NkiTensor, name=None):
     r"""Randomly replace some elements of the input tile ``data`` with zeros
     based on input probabilities using Vector Engine.
     The probability of replacing input elements with zeros (i.e., drop probability)
@@ -2072,7 +2150,7 @@ def dropout(dst, data, prob, name=None):
                  probability of replacing elements with zeros"""
     ...
 
-def set_rng_seed(src_seeds, name=None):
+def set_rng_seed(src_seeds: NkiTensor, name=None):
     r"""Seed the pseudo random number generator (PRNG) inside the Vector Engine.
 
     The PRNG state is cached inside the engine as a persistent state during the rest of NEFF
@@ -2096,7 +2174,7 @@ def set_rng_seed(src_seeds, name=None):
     :param src_seeds: a [1,1] tensor on SBUF or PSUM with a 32-bit value to be used as the seed"""
     ...
 
-def rand_set_state(src_seeds, engine=engine.gpsimd, name=None):
+def rand_set_state(src_seeds: NkiTensor, engine=engine.gpsimd, name=None):
     r"""Seed the pseudo random number generator (PRNG) inside the engine.
 
     This instruction initializes the PRNG state for future random number generation operations.
@@ -2131,7 +2209,7 @@ def rand_set_state(src_seeds, engine=engine.gpsimd, name=None):
                    or ``nki.isa.engine.vector`` (NeuronCore-v4+)"""
     ...
 
-def rand_get_state(dst, engine=engine.gpsimd, name=None):
+def rand_get_state(dst: NkiTensor, engine=engine.gpsimd, name=None):
     r"""Store the current pseudo random number generator (PRNG) states from the engine.
 
     This instruction stores the current PRNG states cached inside the engine to SBUF/PSUM.
@@ -2161,7 +2239,7 @@ def rand_get_state(dst, engine=engine.gpsimd, name=None):
                    or ``nki.isa.engine.vector`` (NeuronCore-v4+)"""
     ...
 
-def rand2(dst, min, max, name=None):
+def rand2(dst: NkiTensor, min: float | NkiTensor, max: float | NkiTensor, name=None):
     r"""Generate pseudo random numbers with uniform distribution using Vector Engine.
 
     .. note::
@@ -2202,7 +2280,7 @@ def rand2(dst, min, max, name=None):
     :param max: maximum value for uniform distribution range (FP32), can be a scalar or vector value"""
     ...
 
-def exponential(dst, src, max_value=0.0, reduce_res=None, reduce_cmd: reduce_cmd=reduce_cmd.idle, reduce_init=0.0, name=None):
+def exponential(dst: NkiTensor, src: NkiTensor, max_value: float | NkiTensor=0.0, reduce_res: NkiTensor | None=None, reduce_cmd: reduce_cmd=reduce_cmd.idle, reduce_init: float | NkiTensor=0.0, name=None):
     r"""Apply exponential function to each element after subtracting a max_value using Vector Engine.
 
     .. note::
@@ -2258,6 +2336,11 @@ def exponential(dst, src, max_value=0.0, reduce_res=None, reduce_cmd: reduce_cmd
     :param src: The input tile to apply exponential function on. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, int8, int16, int32, uint8, uint16, uint32.
     :param max_value: The maximum value to subtract from each element before applying exponential (for numerical stability). Can be a scalar or vector of shape ``(src.shape[0], 1)``. Supported dtypes: float32.
     :param reduce_res: Optional tile to store reduction results (sum of exponentials). Must have shape ``(src.shape[0], 1)``. Supported buffers: SBUF, PSUM. Supported dtypes: float8_e4m3, float8_e5m2, float16, bfloat16, float32, tfloat32.
+
+        Pass ``None`` to keep the reduction result in the Vector Engine's internal
+        accumulator without writing it out. This is useful when chaining multiple
+        calls that reduce into the same accumulator — only the final call needs to
+        pass a tile to retrieve the accumulated result.
     :param reduce_cmd: Control the state of reduction registers for accumulating exponential results. Supported: ``idle``, ``reset_reduce``, ``reduce``, ``load_reduce``.
     :param reduce_init: Initial value for reduction when using ``reduce_cmd.load_reduce``. Supported dtypes: float32.
 
@@ -2302,7 +2385,7 @@ def exponential(dst, src, max_value=0.0, reduce_res=None, reduce_cmd: reduce_cmd
                 accumulator += dst[i]"""
     ...
 
-def reciprocal(dst, data, name=None):
+def reciprocal(dst: NkiTensor, data: NkiTensor, name=None):
     r"""Compute element-wise reciprocal (1.0/x) of the input ``data`` tile using Vector Engine.
 
     **Memory types.**
@@ -2329,7 +2412,7 @@ def reciprocal(dst, data, name=None):
     :param data: the input tile"""
     ...
 
-def max8(dst, src, name=None):
+def max8(dst: NkiTensor, src: NkiTensor, name=None):
     r"""Find the 8 largest values in each partition of the source tile.
 
     This instruction reads the input elements, converts them to fp32 internally, and outputs
@@ -2348,7 +2431,7 @@ def max8(dst, src, name=None):
     :param src: the source tile to find maximum values from"""
     ...
 
-def sequence_bounds(dst, segment_ids, name=None):
+def sequence_bounds(dst: NkiTensor, segment_ids: NkiTensor, name=None):
     r"""Compute the sequence bounds for a given set of segment IDs using GpSIMD Engine.
 
     Given a tile of segment IDs, this function identifies where each segment begins and ends.
@@ -2371,7 +2454,7 @@ def sequence_bounds(dst, segment_ids, name=None):
     :param segment_ids: tile containing the segment IDs. Elements with ID=0 are treated as padding."""
     ...
 
-def scalar_tensor_tensor(dst, data, op0, operand0, op1, operand1, reverse0=False, reverse1=False, name=None):
+def scalar_tensor_tensor(dst: NkiTensor, data: NkiTensor, op0, operand0: float | NkiTensor, op1, operand1: NkiTensor, reverse0=False, reverse1=False, name=None):
     r"""Apply two math operators in sequence using Vector Engine: ``(data <op0> operand0) <op1> operand1``.
 
     This instruction is equivalent to running two operations back-to-back:
@@ -2429,7 +2512,7 @@ def scalar_tensor_tensor(dst, data, op0, operand0, op1, operand1, reverse0=False
                      if true, ``operand1`` is the lhs of ``op1``"""
     ...
 
-def tensor_scalar_reduce(dst, data, op0, operand0, reduce_op, reduce_res, reverse0=False, reduce_cmd: reduce_cmd=reduce_cmd.reset_reduce, reduce_init=None, name=None):
+def tensor_scalar_reduce(dst: NkiTensor, data: NkiTensor, op0, operand0: float | NkiTensor, reduce_op, reduce_res: NkiTensor | None=None, reverse0=False, reduce_cmd: reduce_cmd=reduce_cmd.reset_reduce, reduce_init: float | NkiTensor | None=None, reduce_res_negate=False, name=None):
     r"""Perform the same computation as ``nisa.tensor_scalar`` with one math operator
     and also a reduction along the free dimension of the ``nisa.tensor_scalar`` result using Vector Engine.
 
@@ -2440,7 +2523,7 @@ def tensor_scalar_reduce(dst, data, op0, operand0, reduce_op, reduce_res, revers
 
     In addition to :doc:`nisa.tensor_scalar <nki.isa.tensor_scalar>` computation, this API also performs a reduction
     along the free dimension(s) of the :doc:`nisa.tensor_scalar <nki.isa.tensor_scalar>` result, at a small additional
-    performance cost. The reduction result is returned in ``reduce_res`` in-place, which must be a
+    performance cost. The reduction result is written into ``reduce_res``, which must be a
     SBUF/PSUM tile with the same partition axis size as the input tile ``data`` and one element per partition.
     The ``reduce_op`` can be any of ``nl.add``, ``nl.multiply``, ``nl.max`` or ``nl.min``.
 
@@ -2455,7 +2538,9 @@ def tensor_scalar_reduce(dst, data, op0, operand0, reduce_op, reduce_res, revers
 
     The Vector Engine maintains internal accumulator registers that can be controlled via the ``reduce_cmd`` parameter:
 
-    - ``reduce_cmd.reset_reduce``: (default) Reset accumulators to 0, then accumulate the current results.
+    - ``reduce_cmd.reset_reduce``: (default) Reset accumulators to the identity value for ``reduce_op``,
+      then accumulate the current results. The identity is ``0`` for ``nl.add``, ``1`` for ``nl.multiply``,
+      ``-inf`` for ``nl.max`` and ``+inf`` for ``nl.min``.
     - ``reduce_cmd.reduce``: Continue accumulating without resetting (useful for multi-step reductions across tiles).
     - ``reduce_cmd.load_reduce``: Load the values from ``reduce_init`` into the accumulator, then accumulate
       the current result on top of it.
@@ -2499,14 +2584,21 @@ def tensor_scalar_reduce(dst, data, op0, operand0, reduce_op, reduce_res, revers
     :param reduce_op: the reduce operation to perform on the free dimension of ``data <op0> operand0``
     :param reduce_res: a tile of shape ``(data.shape[0], 1)``, where data.shape[0]
                     is the partition axis size of the input ``data`` tile. The result of ``reduce_op(data <op0> operand0)``
-                    is written in-place into the tile.
+                    is written into the tile.
+
+                    Pass ``None`` to keep the reduction result in the Vector Engine's internal
+                    accumulator without writing it out. This is useful when chaining multiple
+                    calls that reduce into the same accumulator — only the final call needs to
+                    pass a tile to retrieve the accumulated result.
     :param reduce_cmd: Control the state of reduction registers for accumulating reduction results.
                        Supported: ``reset_reduce`` (default), ``reduce``, ``load_reduce``.
     :param reduce_init: Initial value for reduction when using ``reduce_cmd.load_reduce``.
-                        Must be provided when ``reduce_cmd`` is ``load_reduce``. Supported dtypes: float32."""
+                        Must be provided when ``reduce_cmd`` is ``load_reduce``. Supported dtypes: float32.
+    :param reduce_res_negate: Negate the reduction result before writing it to ``reduce_res``, does not modify
+                              the internal reduction registers."""
     ...
 
-def core_barrier(data, cores, engine=engine.gpsimd, name=None):
+def core_barrier(data: NkiTensor, cores, engine=engine.gpsimd, name=None):
     r"""Synchronize execution across multiple NeuronCores by implementing a barrier mechanism.
 
     .. note::
@@ -2561,7 +2653,7 @@ def core_barrier(data, cores, engine=engine.gpsimd, name=None):
         # Now both cores can safely read the complete tensor"""
     ...
 
-def dma_compute(dst, srcs, reduce_op, scales=None, unique_indices=True, oob_mode=oob_mode.error, name=None):
+def dma_compute(dst: NkiTensor, srcs: list[NkiTensor], reduce_op, scales=None, unique_indices=True, oob_mode=oob_mode.error, name=None):
     r"""Perform math operations using compute logic inside DMA engines with element-wise scaling and reduction.
 
     This instruction leverages the compute capabilities within DMA engines to perform scaled element-wise operations
@@ -2646,7 +2738,7 @@ def dma_compute(dst, srcs, reduce_op, scales=None, unique_indices=True, oob_mode
         array contains values that exceed the dimensions of the target array."""
     ...
 
-def quantize_mx(dst, src, dst_scale, name=None):
+def quantize_mx(dst: NkiTensor, src: NkiTensor, dst_scale: NkiTensor, name=None):
     r"""Quantize FP16/BF16 data to MXFP8 tensors (both data and scales) using Vector Engine.
 
     .. note::
@@ -2724,7 +2816,7 @@ def quantize_mx(dst, src, dst_scale, name=None):
     :param dst_scale: the MXFP8 output scale tile (float8_e8m0fnu or uint8)"""
     ...
 
-def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_cmd=reduce_cmd.reset_reduce, reduce_res=None, reduce_op=maximum, range_start=0, on_false_value=..., name=None):
+def range_select(dst: NkiTensor, on_true_tile: NkiTensor, comp_op0, comp_op1, bound0: NkiTensor, bound1: NkiTensor, reduce_cmd=reduce_cmd.reset_reduce, reduce_res: NkiTensor | None=None, reduce_op=maximum, range_start=0, on_false_value=..., name=None):
     r"""Select elements from ``on_true_tile`` based on comparison with bounds using Vector Engine.
 
     .. note::
@@ -2793,13 +2885,18 @@ def range_select(dst, on_true_tile, comp_op0, comp_op1, bound0, bound1, reduce_c
     :param bound1: tile with one element per partition for second comparison
     :param reduce_op: reduction operator to apply on across the selected output. Currently only ``nl.maximum`` is supported.
     :param reduce_cmd: controls the state of the Vector Engine accumulator registers.
-      Defaults to ``reduce_cmd.reset_reduce``. See :doc:`nki.isa.reduce_cmd </nki/api/generated/nki.isa.reduce_cmd>` for supported values.
+      Defaults to ``reduce_cmd.reset_reduce``. See ``nisa.reduce_cmd`` for supported values.
     :param reduce_res: optional tile to store reduction results.
+
+      Pass ``None`` to keep the reduction result in the Vector Engine's internal
+      accumulator without writing it out. This is useful when chaining multiple
+      calls that reduce into the same accumulator — only the final call needs to
+      pass a tile to retrieve the accumulated result.
     :param range_start: starting base offset for index array for the free dimension of ``on_true_tile``.
         Defaults to 0, and must be a compile-time integer."""
     ...
 
-def select_reduce(dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd=reduce_cmd.idle, reduce_op=maximum, reverse_pred=False, name=None):
+def select_reduce(dst: NkiTensor, predicate: NkiTensor, on_true: NkiTensor, on_false: float | NkiTensor, reduce_res: NkiTensor | None=None, reduce_cmd=reduce_cmd.idle, reduce_op=maximum, reverse_pred=False, name=None):
     r"""Selectively copy elements from either ``on_true`` or ``on_false`` to the destination tile
     based on a ``predicate`` using Vector Engine, with optional reduction (max).
 
@@ -2861,6 +2958,11 @@ def select_reduce(dst, predicate, on_true, on_false, reduce_res=None, reduce_cmd
     :param on_true: Tile to select from when predicate is True
     :param on_false: Value to use when predicate is False, can be a scalar value or a vector tile of ``(on_true.shape[0], 1)``
     :param reduce_res: (optional) Tile to store reduction results, must have shape ``(on_true.shape[0], 1)``
+
+        Pass ``None`` to keep the reduction result in the Vector Engine's internal
+        accumulator without writing it out. This is useful when chaining multiple
+        calls that reduce into the same accumulator — only the final call needs to
+        pass a tile to retrieve the accumulated result.
     :param reduce_cmd: (optional) Control accumulator behavior using ``nisa.reduce_cmd`` values, defaults to idle
     :param reduce_op: (optional) Reduction operator to apply (only ``nl.maximum`` is supported)
     :param reverse_pred: (optional) Reverse the meaning of the predicate condition, defaults to False"""
@@ -3014,7 +3116,7 @@ def register_move(dst, src):
         nisa.register_move(reg2, loop_count)  # Copy value from loop_count"""
     ...
 
-def register_load(dst, src):
+def register_load(dst, src: NkiTensor):
     r"""Load a scalar value from memory (HBM or SBUF) into a virtual register.
 
     This instruction reads a single scalar value (up to 32-bit) from a memory location (HBM or SBUF)
@@ -3039,7 +3141,7 @@ def register_load(dst, src):
         nisa.register_load(loop_reg, computed_bound)"""
     ...
 
-def register_store(dst, src):
+def register_store(dst: NkiTensor, src):
     r"""Store the value from a virtual register into memory (HBM/SBUF).
 
     This instruction writes the scalar value (up to 32-bit) stored in a virtual register to a memory location
@@ -3064,7 +3166,7 @@ def register_store(dst, src):
         nisa.register_store(result_tensor, counter_reg)"""
     ...
 
-def nc_find_index8(dst, data, vals, name=None):
+def nc_find_index8(dst: NkiTensor, data: NkiTensor, vals: NkiTensor, name=None):
     r"""Find indices of the 8 given vals in each partition of the data tensor.
 
     This instruction first loads the 8 values,
@@ -3077,8 +3179,9 @@ def nc_find_index8(dst, data, vals, name=None):
     The output will contain exactly 8 elements per partition and will be uint16 or
     uint32 type. Default output type is uint32.
 
-    Behavior is undefined if vals tensor contains values that are not in
-    the data tensor.
+    If a value in the vals tensor is not present in the data tensor, its
+    output slot is set to an all-ones sentinel (``0xFFFFFFFF`` for uint32,
+    ``0xFFFF`` for uint16).
 
     If provided, a mask is applied only to the data tensor.
 
@@ -3087,10 +3190,26 @@ def nc_find_index8(dst, data, vals, name=None):
     :param vals: tensor containing the 8 values per partition whose indices will be found"""
     ...
 
-def nc_match_replace8(dst, data, vals, imm: float, dst_idx=None, name=None):
+def nc_match_replace8(dst: NkiTensor, data: NkiTensor, vals: NkiTensor, imm: float, dst_idx: NkiTensor | None=None, name=None):
     r"""Replace first occurrence of each value in ``vals`` with ``imm`` in ``data``
     using the Vector engine and return the replaced tensor. If ``dst_idx``
     tile is provided, the indices of the matched values are written to ``dst_idx``.
+
+    Behavior with duplicate vals: when ``vals`` contains the same value multiple
+    times within a partition, the instruction processes ``vals`` in reverse
+    order (``i = 7, 6, ..., 0``), so each occurrence of a duplicate in ``data``
+    is paired with a distinct column of ``dst_idx``. The first matched data
+    position (smallest input-position index) is written to the highest
+    ``dst_idx`` slot among the duplicates, and subsequent occurrences fill
+    lower slots in descending order. For example, with
+    ``data = [1, 2, 3, 4, 8, 8, 8, 8, 8, 8, 8]`` and
+    ``vals = [3, 8, 8, 8, 8, 8, 8, 8]``, ``dst_idx`` is
+    ``[2, 10, 9, 8, 7, 6, 5, 4]``: column 0 holds the unique match for
+    ``vals[0] = 3`` at position 2, and the seven duplicate ``8`` values are
+    paired with their seven matching positions ``[4, 5, 6, 7, 8, 9, 10]`` in
+    descending order across columns 1-7. This duplicate-vals tie-break is the
+    opposite of :func:`nc_find_index8`, which pairs duplicate vals with their
+    matching positions in ascending order across ``dst_idx`` columns.
 
     :param dst: output tile with replaced values
     :param data: the data tensor to search and replace in
@@ -3099,7 +3218,7 @@ def nc_match_replace8(dst, data, vals, imm: float, dst_idx=None, name=None):
     :param dst_idx: optional tile to store indices of matched values"""
     ...
 
-def nonzero_with_count(dst, src, index_offset=0, padding_val=-1, name=None):
+def nonzero_with_count(dst: NkiTensor, src: NkiTensor, index_offset=0, padding_val=-1, name=None):
     r"""Find indices of nonzero elements in an input tensor and their total count using GpSimd Engine.
 
     .. note::
@@ -3197,4 +3316,64 @@ def nonzero_with_count(dst, src, index_offset=0, padding_val=-1, name=None):
             nisa.dma_copy(dst=out_tensor, src=out_tile)
 
             return out_tensor"""
+    ...
+
+def topk(val_dst: NkiTensor, idx_dst: NkiTensor, src: NkiTensor, n, name=None):
+    r"""Find the K largest values and their indices from a source tile using GpSIMD Engine.
+
+    Each partition operates independently. The source tile is interpreted as a
+    16-partition snake layout: elements 0..15 fill partitions 0..15 of free-dim
+    column 0, elements 16..31 fill column 1, etc. The parameter ``n`` specifies
+    the total number of active BF16 elements in this snake (which may be less
+    than ``src_x * 16``).
+
+    For each partition, the instruction selects the top-K elements by value
+    from the source data and writes:
+
+    - ``val_dst``: the K largest values in ascending order (BF16)
+    - ``idx_dst``: the original 0-based indices of those values (uint32)
+
+    The source and outputs must be in SBUF. The source must be BF16.
+    K is derived from the free dimension of ``val_dst``.
+
+    **Estimated instruction cost:**
+
+    ``4*n + K`` GpSIMD Engine cycles per partition, where:
+
+    - ``n`` is the number of BF16 elements in the 16P input snake
+    - ``K`` is the number of top elements to select (= val_dst free dim)
+
+    **Constraints:**
+
+    - Source must be BF16 in SBUF.
+    - ``val_dst`` must be BF16 in SBUF with shape ``[par_dim, k]``.
+    - ``idx_dst`` must be uint32 in SBUF with shape ``[par_dim, k]``.
+    - 8 <= n < 65536
+    - 1 <= K < 32768 and K <= n
+    - src free dim >= ceil(n / 16)
+    - partition dim must be a multiple of 16
+
+    :param val_dst: Output tile for top-K values (BF16), shape [par_dim, k].
+    :param idx_dst: Output tile for top-K indices (uint32), shape [par_dim, k].
+    :param src: Source tile containing the input snake (BF16), shape [par_dim, src_x].
+    :param n: Number of BF16 elements in the 16P input snake.
+
+    **Example**
+
+    .. code-block:: python
+
+        def topk_kernel(in_tensor):
+            par_dim = in_tensor.shape[0]
+            n = 42  # actual number of BF16 elements in the snake
+            src_x = (n + 15) // 16  # = 3
+            k = 8
+
+            src = nl.ndarray((par_dim, src_x), dtype=nl.bfloat16, buffer=nl.sbuf)
+            nisa.dma_copy(dst=src, src=in_tensor)
+
+            val_dst = nl.ndarray((par_dim, k), dtype=nl.bfloat16, buffer=nl.sbuf)
+            idx_dst = nl.ndarray((par_dim, k), dtype=nl.uint32, buffer=nl.sbuf)
+            nisa.topk(val_dst=val_dst, idx_dst=idx_dst, src=src, n=n)
+
+            return val_dst, idx_dst"""
     ...

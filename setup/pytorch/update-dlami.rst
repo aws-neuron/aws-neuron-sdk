@@ -13,6 +13,9 @@ Update PyTorch on a Deep Learning AMI
 
 Update PyTorch and Neuron components on an existing DLAMI to the latest release.
 
+.. warning::
+   Starting with Neuron SDK 2.32.0, PyTorch (torch-neuronx) is no longer pre-installed on Neuron DLAMIs. If you'd like to use PyTorch on a DLAMI, use one associated with SDK 2.31.0 or earlier. For more information on how to query for SDK-specific DLAMIs, see :ref:`the DLAMI User Guide <neuron-dlami-overview>`.
+
 .. contents:: On this page
    :local:
    :depth: 2
@@ -23,15 +26,37 @@ Update PyTorch on Ubuntu 24.04
 
 If you already have a previous Neuron release installed, select the PyTorch version tab below to get the update commands for your environment.
 
+.. important::
+   ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To update to
+   ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
+   The commands below install the Neuron 2.31 package versions.
+
 .. tab-set::
 
     .. tab-item:: PyTorch 2.9.0
 
         .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 293
-            :end-line: 294
+        .. code-block:: bash
+
+           # Activate your existing Python virtual environment
+           source aws_neuron_venv_pytorch/bin/activate
+
+           # Install Jupyter notebook kernel
+           pip install ipykernel
+           python3.12 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+           pip install jupyter notebook
+           pip install environment_kernels
+
+           # Set pip repository pointing to the Neuron repository
+           python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+           # Install wget, awscli
+           python -m pip install wget
+           python -m pip install awscli
+
+           # Update Neuron Compiler and Framework (Neuron 2.31 versions)
+           python -m pip install --upgrade neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
 
     .. tab-item:: PyTorch 2.8.0
 
@@ -48,15 +73,37 @@ Update PyTorch on Ubuntu 22.04
 
 If you already have a previous Neuron release installed, select the PyTorch version tab below to get the update commands for your environment.
 
+.. important::
+   ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To update to
+   ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
+   The commands below install the Neuron 2.31 package versions.
+
 .. tab-set::
 
     .. tab-item:: PyTorch 2.9.0
 
         .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
-        .. include:: /src/helperscripts/installationScripts/python_instructions.txt
-            :start-line: 284
-            :end-line: 285
+        .. code-block:: bash
+
+           # Activate your existing Python virtual environment
+           source aws_neuron_venv_pytorch/bin/activate
+
+           # Install Jupyter notebook kernel
+           pip install ipykernel
+           python3.13 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+           pip install jupyter notebook
+           pip install environment_kernels
+
+           # Set pip repository pointing to the Neuron repository
+           python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+           # Install wget, awscli
+           python -m pip install wget
+           python -m pip install awscli
+
+           # Update Neuron Compiler and Framework (Neuron 2.31 versions)
+           python -m pip install --upgrade neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
 
     .. tab-item:: PyTorch 2.8.0
 
@@ -130,11 +177,15 @@ when updating to a new Neuron SDK release.
 Verify the update
 ------------------
 
-After updating, activate your virtual environment:
+After updating, activate your virtual environment. The venv name includes the framework version (e.g., ``pytorch_2_9``):
 
 .. code-block:: bash
 
-   source /opt/aws_neuronx_venv_pytorch/bin/activate
+   # List available Neuron virtual environments
+   ls /opt/aws_neuronx_venv_*
+
+   # Activate the one matching your framework version
+   source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
 
 
 And verify the update: 

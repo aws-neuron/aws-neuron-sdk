@@ -34,8 +34,7 @@ Trainium2 (`trn2`) and Trainium3 (`trn3`) hardware.
 ## Features
 
 Per-model feature availability for gpt-oss. See the
-[features guide](../guides/features-guide.md) for configuration details and the
-cross-model feature compatibility matrix.
+[features guide](../guides/features-guide.md) for configuration details.
 
 | Category | Feature | Status |
 |---|---|---|

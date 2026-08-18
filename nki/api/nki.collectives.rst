@@ -20,6 +20,7 @@ Collective operations for multi-rank communication.
 
    all_reduce
    all_gather
+   all_gather_v
    reduce_scatter
    all_to_all
    all_to_all_v

@@ -1,5 +1,3 @@
-.. _mxnet-neuron-install-prev-u22:
-
 .. meta::
    :noindex:
    :nofollow:

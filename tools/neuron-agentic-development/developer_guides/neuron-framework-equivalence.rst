@@ -1,7 +1,7 @@
 .. meta::
    :description: Use the Neuron Framework Equivalence skill to validate functional and numerical equivalence between a HuggingFace reference model and a NxD Inference ported implementation on AWS Trainium.
-   :keywords: equivalence, model validation, NxD Inference, NeuronX, Trainium, R-ratio, tensor comparison, accuracy, porting verification
-   :date-modified: 2026-05-11
+   :keywords: equivalence, model validation, NxD Inference, vLLM, vLLM Neuron, NeuronX, Trainium, R-ratio, tensor comparison, accuracy, porting verification
+   :date-modified: 2026-08-13
 
 .. _neuron-framework-equivalence:
 
@@ -62,6 +62,42 @@ It works with dense transformer models (decoder-only, encoder-decoder), Mixture 
 multi-latent attention), models requiring weight dequantization (MXFP4, INT8), and
 cross-framework ports with precision regime changes.
 
+Scope: causal-LM models only
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning::
+   This pipeline assumes a model with a sampler and a token-generation output. Teacher-forced
+   token/logit comparison, the ``TARGET_CAUSAL_CLASS`` input, and the R-ratio on logits all
+   depend on a next-token distribution existing.
+
+   It has **no defined behavior for a pooling or embedding model** — one served with
+   ``--runner pooling``, with no ``lm_head`` or sampler, whose output is a fixed-size
+   embedding vector. Such a model has no ``ForCausalLM`` class to supply for
+   ``TARGET_CAUSAL_CLASS`` and no logits to compare, so the standard flow has no valid
+   inputs. Do not force-fit one into this skill.
+
+For a pooling or embedding model, validate with embedding cosine similarity against a
+trusted reference instead:
+
+1. Run the target and the reference (typically HuggingFace CPU-eager, BF16) over the same
+   set of diverse prompts — short factual, technical, narrative, and code, so that
+   different attention and pooling behavior is exercised.
+2. Compute ``cos(embedding_target, embedding_reference)`` per prompt.
+3. Treat **> 0.999 as a pass** for a well-ported BF16 model. Correct ports typically land
+   at 0.9999 or better, and tensor-parallel sharding should not measurably move this number.
+4. Also check a **cross-prompt discriminative** cosine — two unrelated prompts compared
+   against each other should score far lower (roughly 0.3 versus 0.9999). A pooling bug
+   that collapses every output toward a constant vector still yields a plausible
+   same-prompt cosine, and only this cross-check catches it.
+5. If the model supports batched or packed prefill, verify **no cross-sequence leakage**:
+   a sequence's embedding computed alone versus computed alongside others should match to
+   ~1.000000. This catches bidirectional-attention bugs where padding or a neighboring
+   sequence leaks into a query's attention window.
+
+This is a lighter-weight, model-specific check — not this skill's eight-stage pipeline. Do
+not route it through ``run_stage0.py``, ``run_stage5.py``, or the other stage scripts, which
+all assume a ``ForCausalLM`` class exists.
+
 The workflow has eight stages:
 
 1. **Structural scaffolding** — build model trees and create a component mapping
@@ -84,7 +120,7 @@ Hardware and software requirements
 -----------------------------------
 
 * **Instance type:** ``trn1.32xlarge`` (32 NeuronCores, 16 GB per core) or equivalent
-  Trainium instance. CPU-mode testing (Stages 0-4) can run on any instance.
+  Trainium instance. CPU-mode testing (Stages 0, 2, 3, 4) can run on any instance.
 * **Neuron SDK:** Version 2.28+ with the following system packages installed:
 
   - ``aws-neuronx-dkms``
@@ -102,17 +138,21 @@ Hardware and software requirements
   - ``numpy``
   - ``matplotlib``
 
-* **Model validation package:** The ``model_validation`` package from
-  NeuroborosFoundations must be available on ``PYTHONPATH``.
 * **Model weights:** Downloaded from HuggingFace Hub or available locally.
 * **Compiled model:** A compiled (NEFF) version of the target model for device-mode
-  testing (Stages 5-7).
+  testing (Stages 1, 5, 6, 7).
 * **Disk space:** Sufficient for model weights, compiled artifacts, and experiment
   outputs (typically 2-5x the model size).
 
 .. note::
-   Stages 0 through 4 run in **CPU mode** (``NXD_CPU_MODE=1``, TP=1) and do not require
-   Neuron hardware. Only Stages 5-7 require a compiled model and Neuron device access.
+   Stages 0, 2, 3, and 4 run in **CPU mode** (``NXD_CPU_MODE=1``, TP=1) and do not require
+   Neuron hardware. Stages **1**, 5, 6, and 7 require a compiled model and Neuron device
+   access.
+
+   Stage 1 is a device stage despite its low stage number — the smoke test runs the
+   compiled model through the adapter's ``device_inference()`` and needs
+   ``COMPILED_MODEL_PATH``. Stages 0-4 are therefore **not** a contiguous hardware-free
+   block.
 
 .. _equiv-parameters:
 
@@ -141,8 +181,6 @@ Before the agent begins the workflow, it collects these required parameters from
      - ``InferenceConfig`` class name.
    * - ``VENV``
      - Path to Python virtual environment with torch and neuronx packages.
-   * - ``MODEL_VALIDATION_DIR``
-     - Path to the ``model_validation`` package directory.
    * - ``EXP_DIR``
      - Experiment output directory for all artifacts.
 
@@ -354,7 +392,7 @@ Quick liveness check — does the port produce coherent output?
 
 .. code-block:: bash
 
-   PYTHONPATH=${MODEL_VALIDATION_DIR} python3 ${SCRIPTS_DIR}/run_stage1.py \
+   PYTHONPATH=${SCRIPTS_DIR} python3 ${SCRIPTS_DIR}/run_stage1.py \
      --model-path ${SOURCE_MODEL_PATH} \
      --compiled-model-path ${COMPILED_MODEL_PATH} \
      --model-class ${TARGET_MODELING_FILE}:${TARGET_CAUSAL_CLASS} \
@@ -387,6 +425,12 @@ metrics: cosine similarity, KL divergence, top-k agreement, and relative L2 erro
 High cosine similarity (> 0.95) with low token match suggests margin-sensitive divergence
 — the top two token probabilities are close, and BF16 rounding flips the argmax. This is
 expected behavior and not a bug.
+
+.. note::
+   Stage 1's gate is the 30% liveness threshold above — ``run_stage1.py --pass-threshold``,
+   default ``0.30``. It is deliberately permissive: this stage only asks whether the port
+   runs and produces coherent text, not whether it is numerically correct. Correctness is
+   established by Stages 2 and 5/6.
 
 .. _equiv-stage2:
 
@@ -606,7 +650,7 @@ Verify the assembled model with real weights under teacher forcing.
 
 .. code-block:: bash
 
-   PYTHONPATH=${MODEL_VALIDATION_DIR}:${SCRIPTS_DIR} \
+   PYTHONPATH=${SCRIPTS_DIR} \
    python3 ${SCRIPTS_DIR}/run_teacher_forced_comparison.py \
      --model-path ${SOURCE_MODEL_PATH} \
      --compiled-model-path ${COMPILED_MODEL_PATH} \
@@ -664,7 +708,8 @@ Interpreting Stage 5/6 results
      - Action
    * - Stage 2 all-pass + Stage 5 fail
      - Compilation-induced divergence (operator fusion, kernel numerics)
-     - Not a porting bug; escalate to compiler team
+     - Not a porting bug. Capture the compiled artifacts and the Stage 2/Stage 5 result
+       JSON, and open an issue on the Neuron SDK GitHub repository.
    * - Stage 2 fail + Stage 5 fail
      - Porting bug propagates to E2E
      - Fix via Stage 4 first
@@ -728,6 +773,276 @@ Benchmark configuration
      - Fundamental porting issue
      - Return to Stage 2
 
+.. _equiv-vllm-neuron:
+
+Validate a vLLM Neuron port
+---------------------------
+
+The Equivalence *functionality* is stack-agnostic: the eight-stage workflow, the 3-tensor
+method, and the progressive structure → component → end-to-end logic apply no matter which
+serving stack your target port uses. What is **not** shared is the comparison machinery
+itself. When the target is a `vLLM Neuron <https://github.com/vllm-project/vllm-neuron>`_
+port, the skill delegates the actual three-way tensor comparison and the failure
+diagnostics to vLLM Neuron's own ``accuracy`` and ``accuracy_debugger`` modules rather than
+the bundled Frobenius-norm R-ratio.
+
+The integration points that touch the target model — distributed init, model construction,
+weight loading, the forward signature, device inference, and the comparison metrics — are
+isolated behind a *stack adapter*. This section covers what differs when your target port
+imports from ``vllm_neuron`` instead of ``neuronx_distributed_inference``. If you are
+validating an NxD Inference port, you can skip it — the defaults already apply to you.
+
+Select the vLLM Neuron stack
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The skill supports two target stacks today:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Stack
+     - Adapter
+     - Target imports
+   * - NxD Inference (default)
+     - ``scripts/adapters/nxdi.py``
+     - ``from neuronx_distributed_inference.*``
+   * - vLLM Neuron
+     - ``scripts/adapters/vllm_neuron.py``
+     - ``from vllm_neuron.*``
+
+The skill auto-detects the stack by reading the imports in your ``TARGET_MODELING_FILE``.
+If the modeling file imports from ``vllm_neuron``, the vLLM Neuron adapter is selected
+automatically. To select it explicitly, set ``target_stack`` in the experiment config:
+
+.. code-block:: json
+
+   {
+       "target_stack": "vllm_neuron",
+       "model_class": "modeling_xxx.py:XxxForCausalLM",
+       "config_class": "config.py:XxxConfig"
+   }
+
+.. note::
+   vLLM Neuron uses a separate config module. Point ``config_class`` at the ``config.py``
+   that defines the model config, not at the modeling file, and the adapter loads it with
+   ``ConfigClass.from_configs(hf_config)`` rather than ``from_pretrained()``.
+
+Weight differences
+^^^^^^^^^^^^^^^^^^
+
+The single most important difference is that **all linear weights in vLLM Neuron are
+transposed** relative to HuggingFace, and the separate q/k/v projections are fused into a
+single ``qkv_proj_weight``. The adapter applies these transforms when it loads weights, but
+you must account for them when you write component tests.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 50
+
+   * - Weight
+     - HuggingFace shape
+     - vLLM Neuron transform
+   * - ``gate_proj`` / ``up_proj``
+     - ``[I, H]``
+     - ``.t()`` → ``[H, I]``
+   * - ``down_proj``
+     - ``[H, I]``
+     - ``.t()`` → ``[I, H]``
+   * - ``o_proj``
+     - ``[H, q]``
+     - ``.t()`` → ``[q, H]``
+   * - Fused QKV
+     - ``q_proj``, ``k_proj``, ``v_proj`` separate
+     - ``cat([Q.t(), K.t(), V.t()], dim=-1)`` → ``[H, q+2kv]``
+   * - Norms, embedding, LM head
+     - ``[H]`` / ``[V, H]``
+     - Direct copy (no transpose)
+
+vLLM Neuron also names weights differently: HuggingFace uses ``module.weight`` (an
+``nn.Parameter`` inside an ``nn.Linear``), while vLLM Neuron uses a bare ``module_weight``
+parameter. For example, ``self_attn.q_proj.weight`` becomes ``self_attn.qkv_proj_weight``.
+
+.. warning::
+   Do not call vLLM Neuron's own ``load_weights()`` for equivalence testing. It calls
+   ``get_current_vllm_config()``, which only resolves inside the vLLM serving stack. The
+   adapter bypasses it and maps HuggingFace weights manually with the transposes and QKV
+   fusion shown above.
+
+Forward signature and shapes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+vLLM Neuron's forward signature is different from HuggingFace's. The adapter constructs the
+``attn_metadata`` and ``sampling_positions`` arguments for you, but you should understand
+the shape conventions when comparing outputs:
+
+.. code-block:: python
+
+   model(
+       input_ids,           # [seq_len] — no batch dimension
+       positions,           # [seq_len] — position IDs
+       attn_metadata,       # dict[str, dict] — per-layer attention config
+       sampling_positions,  # [num_positions] — which positions return logits
+   )
+
+Two shape rules follow from this:
+
+- **Squeeze the batch dimension before comparison.** HuggingFace outputs ``[1, T, H]``;
+  vLLM Neuron outputs ``[T, H]``. Align the two before comparing.
+- **The KV cache layout is** ``[num_blocks, kv_heads_per_rank, block_size, head_dim]`` —
+  heads come *before* ``block_size``. Getting this order wrong is a common source of wasted
+  debugging time.
+
+Component test differences
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you write Stage 2 component tests for a vLLM Neuron target, account for these
+per-component differences:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 30 20
+
+   * - Component
+     - HuggingFace forward
+     - vLLM Neuron forward
+     - Weight setup
+   * - MLP
+     - ``forward(x)``
+     - ``forward(x, is_prefill=True)``
+     - ``.t()`` on gate/up/down
+   * - Q/K/V
+     - 3 separate ``F.linear()``
+     - Single fused ``qkv_proj()``
+     - ``cat([Q.t(), K.t(), V.t()], dim=-1)``
+   * - O projection
+     - ``F.linear(x, o_proj.weight)``
+     - ``o_proj(x, o_proj_weight)``
+     - ``.t()``
+   * - Full attention
+     - Independently testable
+     - Needs KV cache + ``attn_metadata``
+     - Test QKV and O projections separately
+
+.. important::
+   Full attention is **not** independently testable for vLLM Neuron, because it requires a
+   live KV cache and ``attn_metadata``. Test the QKV projection and the O projection as
+   separate components instead.
+
+Use the ``conftest_vllm_template.py`` template (not the default ``conftest_template.py``)
+for the test infrastructure. It initializes the vLLM distributed environment instead of the
+NxDI one:
+
+.. code-block:: python
+
+   from vllm.distributed.parallel_state import (
+       init_distributed_environment,
+       initialize_model_parallel,
+   )
+   init_distributed_environment(world_size=1, rank=0, local_rank=0, backend="gloo")
+   initialize_model_parallel(tensor_model_parallel_size=1)
+
+Environment variables and tensor parallelism
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CPU-mode and device-mode testing require different environment variables for vLLM Neuron:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Context
+     - Required environment variables
+   * - CPU testing (Stages 0, 2, 3, 4)
+     - ``NXD_CPU_MODE=1``, ``WORLD_SIZE`` = TP degree (``1`` for CPU-mode testing),
+       ``MASTER_ADDR=localhost``, ``MASTER_PORT=8099``, ``RANK=0``
+   * - Device testing (Stages 1, 5, 6, 7)
+     - ``NEURON_SKIP_EFA_AFFINITY=1``, ``TOKENIZERS_PARALLELISM=false``, and
+       ``NXD_CPU_MODE`` **unset** — a value left over from a CPU-mode stage keeps the model
+       off the device
+   * - Expert-parallel (EP) models
+     - Add ``NXDI_SWITCH_CC=1``
+
+The adapter sets these itself, so you normally do not export them by hand. It also points
+``NEURON_COMPILE_CACHE_URL`` at ``${COMPILED_MODEL_PATH}/neuron/compile_cache`` when that
+directory exists, so the device stages reuse pre-compiled NEFFs instead of recompiling.
+
+.. warning::
+   On ``trn2.48xlarge``, **TP=1 can cause a SIGSEGV with no diagnostic output** for models
+   that require multi-core sharding. The minimum TP degree is model-specific (it depends on
+   model size and the per-core memory budget). Always read the model's example run script
+   (``examples/vllm_neuron/models/<MODEL>/run.py``) for the correct tensor parallel size.
+
+Comparison metrics
+^^^^^^^^^^^^^^^^^^
+
+The vLLM Neuron adapter does **not** compute the Frobenius-norm R-ratio. It delegates the
+three-way comparison to ``assert_close_three_way`` from ``vllm_neuron.accuracy.testing``.
+
+The three tensors being compared are the same as the NxDI path:
+
+1. **Baseline** — the HuggingFace reference in FP32 (ground truth).
+2. **Expected** — the HuggingFace reference in BF16 (precision baseline).
+3. **Actual** — the vLLM Neuron port in BF16 (target under test).
+
+The function computes the element-wise errors ``expected - baseline`` (the irreducible
+precision error) and ``actual - baseline`` (the port's total error), then compares the two
+error distributions using these metrics:
+
+- **BC (Bhattacharyya Coefficient)** — overlap between the port's error distribution and
+  the precision-baseline error distribution. A BC near 1.0 means the port's errors look
+  statistically identical to the precision-only errors — no porting bug.
+- **σ-ratio** — ``RMS(actual_errors) / RMS(baseline_errors)``, aggregated across all
+  inputs. A σ-ratio at or below 1.0 means the port is no less accurate than the baseline.
+
+A comparison passes when ``BC >= bc_threshold`` **or** ``σ-ratio <= 1.0``, *and* both the
+L-infinity and L2 error ratios stay under their guards:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Metric
+     - Default threshold
+   * - BC (Bhattacharyya Coefficient)
+     - >= 0.99
+   * - σ-ratio
+     - <= 1.0
+   * - L-infinity ratio
+     - < 5.0
+   * - L2 ratio
+     - < 3.0
+
+Diagnostic tools
+^^^^^^^^^^^^^^^^
+
+Because vLLM Neuron ships its own ``accuracy_debugger`` module, the adapter exposes
+additional diagnostics beyond the standard stages. The agent invokes these automatically
+when a stage fails:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 28 52 20
+
+   * - Diagnostic
+     - What it does
+     - Used by
+   * - Logit validation (``LogitValPlugin``)
+     - Compares device logits against the FP32 baseline per token.
+     - Stage 5
+   * - KV cache analysis (``KvCachePlugin``)
+     - Three-way per-layer, per-position KV cache comparison (FP32 vs HF-dtype vs vLLM).
+     - Stage 5
+   * - Accuracy analysis (``LmEvalAnalyzer``)
+     - Task-level accuracy with per-sample deviation tracking, run against a vLLM server.
+     - Stage 7
+
+These diagnostics are driven through ``run_prompt_analysis`` and ``run_task_analysis`` from
+the ``accuracy_debugger`` module in
+`vLLM Neuron <https://github.com/vllm-project/vllm-neuron>`_. See the
+``vllm-neuron-adaptation.md`` and ``adapter-contract.md`` references in the
+:ref:`knowledge base <equiv-knowledge-base>` for the full per-stack detail.
+
 .. _equiv-file-organization:
 
 File organization
@@ -760,13 +1075,33 @@ The Equivalence skill enforces a strict file organization:
    │   ├── test_05_attention_qkv.py
    │   ├── test_06_lm_head.py
    │   └── test_07_decoder_layer.py       # Most complex last
+   ├── patches/                           # Stage 4 monkey patches (one file per fix)
+   │   ├── rmsnorm_patch.py
+   │   └── rotary_patch.py
    ├── results/                           # Test results (JSON)
    │   ├── stage1.json
    │   ├── stage2.json
    │   ├── stage3.json
    │   ├── teacher_forced.json
    │   └── stage7/
-   └── bench_config.yaml                  # Stage 7 benchmark configuration
+   ├── bench_config.yaml                  # Stage 7 benchmark configuration
+   └── EQUIVALENCE_REPORT.md              # Final aggregated report
+
+For a vLLM Neuron target (see :ref:`equiv-vllm-neuron`), the layout is the same with two
+additions:
+
+* ``tests/conftest.py`` is created from ``conftest_vllm_template.py`` instead of the default
+  ``conftest_template.py`` — the file name is the same, but it initializes the vLLM
+  distributed environment.
+* When the failure diagnostics run, the ``accuracy_debugger`` reports are written under
+  ``results/``:
+
+.. code-block:: text
+
+   ${EXP_DIR}/results/
+   ├── kv_analysis/                       # Stage 5 KV cache analysis (--kv-analysis-on-fail)
+   └── stage7/
+       └── prompt_diagnosis/              # Stage 7 per-prompt diagnosis (--diagnose-failures)
 
 .. _equiv-tools-reference:
 
@@ -796,8 +1131,14 @@ Smoke test runner
 
 **Module:** ``scripts/run_stage1.py``
 
-Runs 10-prompt greedy token matching and computes per-position distribution metrics.
-Delegates to ``model_validation.check_accuracy_with_hf_golden`` for the core comparison.
+Runs 10-prompt greedy token matching against an FP32 ``AutoModelForCausalLM`` reference,
+computed in the script itself. The output JSON reports the overall and per-prompt token
+match rates.
+
+**NxDI targets only:** the compiled model is loaded through
+``scripts/nxdi_compiled_loader.py``, which rebuilds the ``NeuronConfig`` from the compiled
+directory's ``neuron_config.json`` using public NxDI API only. This loader does **not**
+apply to vLLM Neuron targets — that adapter runs inference through ``vllm.LLM`` instead.
 
 Component test runner
 ^^^^^^^^^^^^^^^^^^^^^
@@ -939,7 +1280,9 @@ The Equivalence skill enforces these rules during the validation process:
 - **Follow stage order strictly.** Do not skip ahead, reorder, or parallelize stages.
 - **Show full output from every script run.** Do not summarize or truncate.
 - **No try/except statements** in test files. Let errors surface directly.
-- **No additional pip installs.** Use only the packages in the provided virtual environment.
+- **No additional pip installs during the run.** Use only the packages already present in
+  the virtual environment — the Neuron SDK packages listed under
+  :ref:`equiv-prerequisites`. Satisfy every dependency before starting Stage 0.
 
 .. _equiv-knowledge-base:
 
@@ -970,7 +1313,24 @@ Debugging guides
   cycle.
 - ``cpu-e2e-debugging.md`` — CPU E2E with ``mp.spawn``, TP > 1, and bias restoration.
 - ``dump-tensors.md`` — intermediate tensor capture methodology for per-layer comparison.
-- ``neuronxcc-debugging.md`` — NeuronX compiler debugging tools and escalation procedures.
+- ``debug-orchestration.md`` — the five-stage debugging escalation workflow, with stage
+  gates and subagent delegation.
+- ``enable-model-run.md`` — device compilation workflow, troubleshooting, and the BF16
+  gloo fix. Prerequisite for the device stages.
+
+Reporting
+^^^^^^^^^
+
+- ``report-template.md`` — ``EQUIVALENCE_REPORT.md`` structure and the completion gate that
+  must be satisfied before a report is generated.
+
+Multi-stack support
+^^^^^^^^^^^^^^^^^^^
+
+- ``adapter-contract.md`` — the five-method adapter interface for adding a serving stack,
+  plus the optional diagnostic methods.
+- ``vllm-neuron-adaptation.md`` — vLLM Neuron weight transpositions, forward signature, TP
+  detection, KV cache shapes, and BC / σ-ratio metrics.
 
 Case studies
 ^^^^^^^^^^^^

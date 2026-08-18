@@ -3,77 +3,78 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import *
 
+DType = str
 
-bool_ = ...
+bool_: DType = ...
 r"""Boolean (True or False) stored as a byte"""
 
-int8 = ...
+int8: DType = ...
 r"""8-bit signed integer number"""
 
-int16 = ...
+int16: DType = ...
 r"""16-bit signed integer number"""
 
-int32 = ...
+int32: DType = ...
 r"""32-bit signed integer number"""
 
-uint8 = ...
+uint8: DType = ...
 r"""8-bit unsigned integer number"""
 
-uint16 = ...
+uint16: DType = ...
 r"""16-bit unsigned integer number"""
 
-uint32 = ...
+uint32: DType = ...
 r"""32-bit unsigned integer number"""
 
-float16 = ...
+float16: DType = ...
 r"""16-bit floating-point number"""
 
-float32 = ...
+float32: DType = ...
 r"""32-bit floating-point number"""
 
-bfloat16 = ...
+bfloat16: DType = ...
 r"""16-bit floating-point number (1S,8E,7M)"""
 
-tfloat32 = ...
+tfloat32: DType = ...
 r"""32-bit floating-point number (1S,8E,10M)"""
 
-float8_e4m3 = ...
+float8_e4m3: DType = ...
 r"""8-bit floating-point number (1S,4E,3M)"""
 
-float8_e4m3fn = ...
+float8_e4m3fn: DType = ...
 r"""8-bit floating-point number (1S,4E,3M), Extended range: no inf, NaN represented by 0bS111'1111"""
 
-float8_e5m2 = ...
+float8_e5m2: DType = ...
 r"""8-bit floating-point number (1S,5E,2M)"""
 
-float8_e5m2_x4 = ...
+float8_e5m2_x4: DType = ...
 r"""4x packed float8_e5m2 elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
-float8_e4m3fn_x4 = ...
+float8_e4m3fn_x4: DType = ...
 r"""4x packed float8_e4m3fn elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
-float8_e8m0fnu = ...
+float8_e8m0fnu: DType = ...
 r"""8-bit floating-point exponent type (0S,8E,0M) - unsigned, NaN represented by 0xFF. Used as power-of-two shared scale factor in MX quantization"""
 
-float4_e2m1fn_x4 = ...
+float4_e2m1fn_x4: DType = ...
 r"""4x packed float4_e2m1fn elements, custom data type for nki.isa.nc_matmul_mx on NeuronCore-v4"""
 
-sbuf = ...
+sbuf: MemoryRegion = ...
 r"""State Buffer - Only visible to each individual kernel instance in the SPMD grid"""
 
-psum = ...
+psum: MemoryRegion = ...
 r"""PSUM - Only visible to each individual kernel instance in the SPMD grid"""
 
-hbm = ...
+hbm: MemoryRegion = ...
 r"""HBM - Alias of private_hbm"""
 
-private_hbm = ...
+private_hbm: MemoryRegion = ...
 r"""HBM - Only visible to each individual kernel instance in the SPMD grid"""
 
-shared_hbm = ...
+shared_hbm: MemoryRegion = ...
 r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
 
-tile_size = ...
+tile_size: _TileSize = ...
 r"""Hardware tile size constants (pmax, psum_bank_fmax, gemm_stationary_fmax, etc.)"""
 
 average = ...
@@ -83,7 +84,6 @@ r"""Parametric ReLU activation function. Used as the ``op`` parameter in activat
 
 bypass = ...
 r"""No-op operator that passes data through unchanged. Used as the ``op0`` or ``op1`` parameter in tensor-scalar ISA instructions (e.g., :doc:`nki.isa.activation </nki/api/generated/nki.isa.activation>`) to skip a computation stage."""
-
 
 class MemoryRegion(Enum):
     r"""Memory region constants for NKI tensors."""
@@ -98,7 +98,7 @@ class MemoryRegion(Enum):
 
     ...
 
-class NKIObject:
+class NKIObject():
     r"""Base class for NKI kernel dataclasses and configuration objects."""
 
     def __init__(self, **kwargs: Any) -> None:
@@ -129,7 +129,23 @@ class NkiTensor(NKIObject):
     the hardware's parallel partitions. Most view operations cannot modify this
     dimension — see individual method docs for constraints."""
 
-    def __init__(self, shape: tuple[int, ...], dtype: str, storage: Any, buffer: Any=sbuf, name: str=''):
+    shape: tuple[int, ...] = ...
+
+    strides: tuple[int, ...] = ...
+
+    offset: int = ...
+
+    name: str = ...
+
+    dtype: DType = ...
+
+    buffer: MemoryRegion | str = ...
+
+    ndim: int = ...
+
+    size: int = ...
+
+    def __init__(self, shape: tuple[int, ...], dtype: DType, storage: Any, buffer: MemoryRegion | str=sbuf, name: str=''):
         r"""Create an ``NkiTensor`` bound to an existing storage handle.
 
         Most code should use :func:`nl.ndarray` instead — it allocates fresh
@@ -176,6 +192,31 @@ class NkiTensor(NKIObject):
         ``vector_offset``. Indirect views cannot be re-indirected, and the
         dimension that participates in the indirection cannot be further
         sliced or selected — use this query to guard against those chains."""
+        ...
+
+    def __getitem__(self, key) -> NkiTensor:
+        r"""Index the tensor using NumPy-style slicing and selection.
+
+        Returns a new view sharing the same storage. Supports integers (select),
+        slices, ``Ellipsis``, negative indices, and :func:`nl.ds` (DynamicSlice).
+
+        .. code-block:: python
+
+            sb = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+            a = sb[:, 0:32]          # slice dim 1
+            b = sb[:, 0:32:2]        # slice with step
+            c = sb[..., 0]           # select last dim
+            d = sb[nl.ds(i, 8), :]   # dynamic slice on partition dim
+
+        **On-chip tensors** (SBUF, PSUM): integer indexing on dim 0 produces a
+        size-1 slice (partition dim is preserved, not removed). Result is always
+        at least 2D.
+
+        **HBM tensors**: integer indexing removes the dimension. Result is at
+        least 1D.
+
+        :param key: index expression (int, slice, Ellipsis, tuple, or DynamicSlice)
+        :return: new ``NkiTensor`` view"""
         ...
 
     def permute(self, dims: tuple[int, ...]) -> NkiTensor:
@@ -348,6 +389,9 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with rearranged dimensions"""
         ...
 
+    def __setitem__(self, key, value):
+        ...
+
     def slice(self, dim: int, start: int, end: int, step: int=1) -> NkiTensor:
         r"""Slice along a single dimension.
 
@@ -439,7 +483,7 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with dim 0 size set to ``vector_offset.shape[0]``"""
         ...
 
-    def ap(self, pattern: list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype=None) -> NkiTensor:
+    def ap(self, pattern: list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype: DType | None=None) -> NkiTensor:
         r"""Low-level access pattern override (escape hatch).
 
         Replaces shape and strides with an explicit
@@ -469,7 +513,7 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` with the explicit access pattern"""
         ...
 
-    def view(self, dtype) -> NkiTensor:
+    def view(self, dtype: DType) -> NkiTensor:
         r"""Reinterpret the tensor's data as a different dtype.
 
         No data is copied. Equivalent to ``numpy.ndarray.view(dtype)`` or
@@ -521,6 +565,73 @@ class NkiTensor(NKIObject):
 
     ...
 
+class _TileSize(NKIObject):
+    r"""Hardware tile size constants (pmax, psum_bank_fmax, gemm_stationary_fmax, etc.)."""
+
+    pmax: int = ...
+    r"""Maximum partition dimension of a tile."""
+
+    psum_fmax: int = ...
+    r"""Maximum free dimension per PSUM bank per partition, in FP32 elements.
+
+    .. deprecated:: 0.4.0
+        Despite the name, this does not represent the free-dim size per
+        partition. Use :py:attr:`psum_bank_fmax` instead."""
+
+    psum_bank_fmax: int = ...
+    r"""Maximum free dimension per PSUM bank per partition, in FP32 elements."""
+
+    psum_bank_fmax_bytes: int = ...
+    r"""Maximum free dimension per PSUM bank per partition, in bytes."""
+
+    gemm_stationary_fmax: int = ...
+    r"""Maximum free dimension of the stationary operand of General Matrix Multiplication on Tensor Engine"""
+
+    gemm_moving_fmax: int = ...
+    r"""Maximum free dimension of the moving operand of General Matrix Multiplication on Tensor Engine"""
+
+    bn_stats_fmax: int = ...
+    r"""Maximum free dimension of BN_STATS"""
+
+    psum_min_align: int = ...
+    r"""Minimum byte alignment requirement for PSUM free dimension address"""
+
+    sbuf_min_align: int = ...
+    r"""Minimum byte alignment requirement for SBUF free dimension address"""
+
+    @property
+    def psum_num_banks(self) -> int:
+        r"""Number of usable PSUM banks per partition"""
+        ...
+
+    @property
+    def sbuf_size_bytes(self) -> int:
+        r"""Total SBUF capacity in bytes (all partitions combined)."""
+        ...
+
+    @property
+    def sbuf_fmax(self) -> int:
+        r"""Maximum free dimension of a tile on SBUF buffer, in FP32 elements."""
+        ...
+
+    @property
+    def sbuf_fmax_bytes(self) -> int:
+        r"""Maximum free dimension of a tile on SBUF buffer, in bytes."""
+        ...
+
+    @property
+    def total_available_sbuf_size(self) -> int:
+        r"""Usable SBUF free dimension per partition, in bytes.
+
+        .. deprecated:: 0.4.0
+            Despite the name, this returns the usable SBUF capacity *per
+            partition*, not the total SBUF capacity. Use :py:attr:`sbuf_size_bytes`
+            for the total SBUF capacity across all partitions, or
+            :py:attr:`sbuf_fmax_bytes` for the usable per-partition size."""
+        ...
+
+    ...
+
 def is_hbm(buffer):
     r"""Check if buffer is any HBM type."""
     ...
@@ -548,7 +659,7 @@ def add(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has ``x + y``, element-wise.
 
     Examples:
@@ -583,7 +694,7 @@ def subtract(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has ``x - y``, element-wise.
 
     Examples:
@@ -617,7 +728,7 @@ def multiply(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has ``x * y``, element-wise.
 
     Examples:
@@ -651,7 +762,7 @@ def divide(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has ``x / y``, element-wise.
     """
     ...
@@ -667,7 +778,7 @@ def maximum(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has the maximum of each element from x and y.
 
     Examples:
@@ -701,7 +812,7 @@ def minimum(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has the minimum of each element from x and y.
 
     Examples:
@@ -740,7 +851,7 @@ def abs_max(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile where each element is ``x`` if ``|x| > |y|``, else ``y``.
 
     Examples:
@@ -784,7 +895,7 @@ def abs_min(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile where each element is ``x`` if ``|x| < |y|``, else ``y``.
 
     Examples:
@@ -881,7 +992,7 @@ def power(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has values ``x`` to the power of ``y``.
 
     Examples:
@@ -1007,7 +1118,7 @@ def bitwise_and(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the bitwise AND result."""
     ...
 
@@ -1024,7 +1135,7 @@ def bitwise_or(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the bitwise OR result."""
     ...
 
@@ -1041,7 +1152,7 @@ def bitwise_xor(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the bitwise XOR result."""
     ...
 
@@ -1074,7 +1185,7 @@ def left_shift(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the left-shifted result."""
     ...
 
@@ -1091,7 +1202,7 @@ def right_shift(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the right-shifted result."""
     ...
 
@@ -1108,7 +1219,7 @@ def logical_and(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the logical AND result."""
     ...
 
@@ -1125,7 +1236,7 @@ def logical_or(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the logical OR result."""
     ...
 
@@ -1142,7 +1253,7 @@ def logical_xor(x, y, dtype=None):
 
     :param x: a tile or a scalar value.
     :param y: a tile or a scalar value. At least one of x, y must be a tile.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile with the logical XOR result."""
     ...
 
@@ -1365,20 +1476,28 @@ def reciprocal(x, dtype=None):
     ...
 
 def copy(x, dtype=None):
-    r"""Create a copy of the input tile.
+    r"""Create a copy of the input tile on SBUF.
 
-    .. warning::
-
-       This API is experimental and may change in future releases.
-
-    Uses the Scalar Engine via ``activation(op=copy)``. Note that the Scalar Engine
-    internally casts through FP32, which may be lossy for integer types with
-    values exceeding FP32 precision (e.g. int32 values > 2^23).
+    .. note::
+        Using a ``dtype`` different from the input's data type may result in
+        precision loss.
 
     :param x: the source of copy, must be a tile in SBUF or PSUM.
     :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
-    :return: a new tile with the same layout as ``x``, allocated on the same buffer
-        as ``x`` (SBUF or PSUM)."""
+    :return: a new tile with the same layout as ``x``, allocated on SBUF.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki.language as nl
+
+        # nki.language.copy -- copy an nl.matmul result from PSUM back to SBUF.
+        # nl.matmul writes its result to PSUM; nl.copy brings it to SBUF.
+        x = nl.load(x_tensor)
+        y = nl.load(y_tensor)
+        result_psum = nl.matmul(x, y, transpose_x=True)  # x.T @ y, in PSUM
+        result = nl.copy(result_psum)  # PSUM -> SBUF"""
     ...
 
 def sin(x, dtype=None):
@@ -1668,7 +1787,7 @@ def fmod(x, y, dtype=None):
 
     :param x: a tile. If x is a scalar value it will be broadcast to the shape of y.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has values ``x fmod y``.
     """
     ...
@@ -1687,7 +1806,7 @@ def mod(x, y, dtype=None):
 
     :param x: a tile. If x is a scalar value it will be broadcast to the shape of y.
     :param y: a tile or a scalar value.
-    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); 
+    :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information);
     :return: a tile that has values ``x mod y``.
     """
     ...
@@ -1826,14 +1945,6 @@ def softmax(x, axis=-1, dtype=None):
     .. warning::
 
        This API is experimental and may change in future releases.
-
-    Args:
-        x: A tile.
-        axis: int or tuple/list of ints. The axis (or axes) along which to operate;
-            must be free dimensions, not partition dimension (0); can only be the
-            last contiguous dim(s) of the tile: [1], [1,2], [1,2,3], [1,2,3,4]
-        dtype: (optional) data type to cast the output type to; if not specified,
-            it will default to be the same as the data type of the input tile.
 
     :param x: a tile.
     :param axis: int or tuple/list of ints. The axis (or axes) along which to operate; must be free dimensions, not partition dimension (0); can only be the last contiguous dim(s) of the tile: ``[1], [1,2], [1,2,3], [1,2,3,4]``
@@ -1986,7 +2097,7 @@ def zeros_like(x, dtype=None, buffer=None, name=''):
     :return: a new :class:`NkiTensor` of zeros with the same shape as ``x``."""
     ...
 
-def empty_like(x, dtype=None, buffer=None, name=''):
+def empty_like(x: NkiTensor, dtype=None, buffer=None, name=''):
     r"""Create a new tensor with the same shape and type as a given tensor.
 
     ((Similar to `numpy.empty_like <https://numpy.org/doc/stable/reference/generated/numpy.empty_like.html>`_))
@@ -2137,10 +2248,10 @@ def no_reorder():
     directive, the compiler scheduler is free to reorder independent
     operations for better hardware utilization.
 
-    Dynamic loops (``nl.dynamic_range``) are not supported inside a
-    ``no_reorder`` block. Static loops (``nl.affine_range``,
-    ``nl.sequential_range``, ``nl.static_range``) are allowed because
-    they are fully unrolled at compile time.
+    Register-based dynamic loops (``nl.fori_loop``, ``nl.while_loop``) are
+    not supported inside a ``no_reorder`` block. Static loops
+    (``nl.affine_range``, ``nl.sequential_range``, ``nl.static_range``) are
+    allowed.
 
     Examples:
 
@@ -2157,7 +2268,7 @@ def no_reorder():
         assert nl.equal(c, expected)"""
     ...
 
-def load_transpose2d(src, dtype=None):
+def load_transpose2d(src: NkiTensor, dtype=None):
     r"""Load a tensor from device memory (HBM) and 2D-transpose the data before storing into on-chip memory (SBUF).
 
     .. warning::
@@ -2169,7 +2280,7 @@ def load_transpose2d(src, dtype=None):
     :return: a new tile on SBUF with values from ``src`` 2D-transposed."""
     ...
 
-def gather_flattened(data, indices, axis=0, dtype=None):
+def gather_flattened(data: NkiTensor, indices: NkiTensor, axis=0, dtype=None):
     r"""Gather elements from data tensor using indices after flattening.
 
     This instruction gathers elements from the data tensor using integer indices
@@ -2201,17 +2312,14 @@ def gather_flattened(data, indices, axis=0, dtype=None):
     ...
 
 def ds(start, size):
-    r"""Create a dynamic slice for tensor indexing.
-    :param start: the start index of the slice.
-    :param size: the size of the slice.
-    :return: a dynamic slice object for use in tensor indexing."""
     ...
 
 def affine_range(start, stop=None, step=1):
     r"""Create a sequence for fully unrolled loop iteration.
 
     Create a sequence of numbers for use as loop iterators in NKI, resulting in
-    a fully unrolled loop. Prefer :doc:`static_range <nki.language.static_range>` instead.
+    a fully unrolled loop. This function is an alias for Python's ``range()``
+    function. Prefer using ``range()`` directly instead.
 
     .. warning::
 
@@ -2240,7 +2348,8 @@ def sequential_range(start, stop=None, step=1):
     r"""Create a sequence for fully unrolled loop iteration.
 
     Create a sequence of numbers for use as loop iterators in NKI, resulting in
-    a fully unrolled loop. Prefer :doc:`static_range <nki.language.static_range>` instead.
+    a fully unrolled loop. This function is an alias for Python's ``range()``
+    function. Prefer using ``range()`` directly instead.
 
     .. warning::
 
@@ -2269,8 +2378,12 @@ def static_range(start, stop=None, step=1):
     r"""Create a sequence for fully unrolled loop iteration.
 
     Create a sequence of numbers for use as loop iterators in NKI, resulting in
-    a fully unrolled loop. Prefer this method over :doc:`affine_range <nki.language.affine_range>`
-    and :doc:`sequential_range <nki.language.sequential_range>`.
+    a fully unrolled loop. This function is an alias for Python's ``range()``
+    function. Prefer using ``range()`` directly instead.
+
+    .. warning::
+
+        This API is deprecated and will be removed in future releases.
 
     :param start: start value (or stop if ``stop`` is None).
     :param stop: stop value (exclusive).
@@ -2315,6 +2428,120 @@ def dynamic_range(start, stop=None, step=1):
             nl.store(out_tensor[0:128, 0:512], result)"""
     ...
 
+def fori_loop(lower, upper, body_fun, step=1):
+    r"""Structured for loop with dynamic bounds.
+
+    Executes ``body_fun(i)`` for each iteration value from ``lower`` to
+    ``upper`` (exclusive) with the given ``step``. The body is a callable that
+    receives the current iteration value.
+
+    The loop is roughly equivalent to the following Python code:
+
+    .. code-block:: python
+
+        for i in range(lower, upper, step):
+            body_fun(i)
+
+    The body receives the current iteration value ``i`` as a VirtualRegister,
+    passed by value. Read it inside the body (for example, as a ``scalar_offset``
+    into a tensor). The loop controls iteration via ``lower``/``upper``/``step``,
+    so writing to ``i`` has no effect on the loop; carry any other loop state
+    through SBUF/HBM.
+
+    :param lower: start value (int or VirtualRegister).
+    :param upper: end value (exclusive) (int or VirtualRegister).
+    :param body_fun: function ``(i: VirtualRegister) -> None`` called each
+                    iteration with the current iteration value.
+    :param step: step size, must be a compile-time positive integer.
+    :return: None. Side effects in ``body_fun`` persist after the loop.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki.isa as nisa
+        import nki.language as nl
+
+        # nki.language.fori_loop -- counted loop with a runtime (dynamic) upper bound
+        ub_sb = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+        nisa.dma_copy(dst=ub_sb, src=ub_input)
+        ub_reg = nisa.register_alloc()
+        nisa.register_load(ub_reg, ub_sb)
+
+        zeros = nl.zeros((1, N), dtype=nl.float32, buffer=nl.sbuf)
+        nisa.dma_copy(dst=output, src=zeros)
+        temp = nl.ndarray((1, 1), dtype=nl.float32, buffer=nl.sbuf)
+
+        def body(i):
+            # `i` is the loop induction register; read it as a dynamic offset
+            nisa.dma_copy(
+                dst=temp,
+                src=data.ap([[1, 1], [1, 1]], scalar_offset=i, indirect_dim=1),
+            )
+            nisa.dma_copy(
+                dst=output.ap([[1, 1], [1, 1]], scalar_offset=i, indirect_dim=1),
+                src=temp,
+            )
+
+        nl.fori_loop(0, ub_reg, body)"""
+    ...
+
+def while_loop(init, body_fun):
+    r"""Structured while loop with a register condition.
+
+    Loops while the condition register is nonzero, checking the condition before
+    each iteration (a true ``while``, not ``do-while``: if ``init`` is zero the
+    body never runs).
+
+    The loop is roughly equivalent to the following Python code:
+
+    .. code-block:: python
+
+        r = init
+        while r != 0:
+            r = body_fun(r)
+
+    The body receives the current condition value ``r`` as a VirtualRegister,
+    passed by value. Read it inside the body (for example, materialize it with
+    ``register_store`` and use it as a ``scalar_offset``). The loop's next
+    condition is the register the body **returns**; carry any other loop state
+    through SBUF/HBM.
+
+    :param init: Initial condition register (VirtualRegister).
+    :param body_fun: function ``(r: VirtualRegister) -> VirtualRegister`` called
+                    each iteration with the current condition value; returns the
+                    next condition register.
+    :return: None. Side effects in ``body_fun`` persist after the loop.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki.isa as nisa
+        import nki.language as nl
+
+        # nki.language.while_loop -- flag-driven loop with a register condition
+        val = nl.ndarray((1, 1), dtype=nl.float32, buffer=nl.sbuf)
+        nisa.dma_copy(dst=val, src=data)
+        acc = nl.zeros((1, 1), dtype=nl.float32, buffer=nl.sbuf)
+
+        count_sb = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+        nisa.dma_copy(dst=count_sb, src=count_input)
+        one_sb = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+        nisa.memset(dst=one_sb, value=1)
+
+        reg = nisa.register_alloc()
+        nisa.register_load(reg, count_sb)
+
+        def body(r):
+            nisa.tensor_tensor(dst=acc, data1=acc, data2=val, op=nl.add)
+            nisa.tensor_tensor(dst=count_sb, data1=count_sb, data2=one_sb, op=nl.subtract)
+            nisa.register_load(r, count_sb)
+            return r
+
+        nl.while_loop(reg, body)"""
+    ...
+
 def ndarray(shape, dtype, buffer=sbuf, name='', address=None):
     r"""Create a new tensor of given shape and dtype on the specified buffer.
 
@@ -2342,7 +2569,7 @@ def zeros(shape, dtype, buffer=sbuf, name=''):
     :return: a new :class:`NkiTensor` allocated on the buffer."""
     ...
 
-def load(src, dtype=None):
+def load(src: NkiTensor, dtype=None):
     r"""Load a tensor from device memory (HBM) into on-chip memory (SBUF).
 
     .. warning::
@@ -2354,7 +2581,7 @@ def load(src, dtype=None):
     :return: a new tile on SBUF with values from ``src``."""
     ...
 
-def store(dst, value):
+def store(dst: NkiTensor, value: NkiTensor):
     r"""Store into a tensor on device memory (HBM) from on-chip memory (SBUF).
 
     .. warning::
@@ -2405,7 +2632,7 @@ def shared_constant(constant):
     :return: an NkiTensor in shared_hbm containing the constant data."""
     ...
 
-def shared_identity_matrix(n, dtype=uint8, dst=None):
+def shared_identity_matrix(n, dtype=uint8, dst: NkiTensor | None=None):
     r"""Create an identity matrix in SBUF with the specified data type.
 
     This function has the same behavior to :doc:`nki.language.shared_constant <nki.language.shared_constant>` but
@@ -2430,7 +2657,7 @@ def shared_identity_matrix(n, dtype=uint8, dst=None):
         nl.store(actual_tensor[0:128, 0:128], identity)"""
     ...
 
-def device_print(print_prefix, tensor):
+def device_print(print_prefix, tensor: NkiTensor):
     r"""Print a message with a string prefix followed by the value of a tile.
 
     During kernel execution on hardware, the Neuron Runtime (NRT) exports device-printed tensors

@@ -1,6 +1,6 @@
 .. meta::
     :description: Performs matrix multiplication with MXFP8 quantization.
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. currentmodule:: nkilib.experimental.matmul_mxfp8
 
@@ -24,7 +24,7 @@ API Reference
 matmul_mxfp8
 ^^^^^^^^^^^^
 
-.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e5m2', output_dtype = nl.bfloat16, run_with_lnc2: bool = True, lnc_2_shard_rhs = None, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True, load_with_PE_swizzle: bool = False, lhs_is_f_by_k: bool = True, rhs_is_f_by_k: bool = True) -> nl.ndarray
+.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e5m2', output_dtype = nl.bfloat16, run_with_lnc2: bool = True, lnc_2_shard_rhs = None, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True, load_with_PE_swizzle: bool = False, lhs_is_f_by_k: bool = True, rhs_is_f_by_k: bool = True, fast_dma_transpose: bool = False, enable_psum_copy_in=None, quant_scheme: str = 'wrapX') -> nl.ndarray
 
    Performs matrix multiplication with MXFP8 quantization.
 
@@ -64,6 +64,12 @@ matmul_mxfp8
    :param lhs_is_swizzled: Whether LHS BF16 tensor is pre-swizzled [K/4, M*4], default True. If False, expects [M, K] layout.
    :type lhs_is_swizzled: ``bool``
    :param rhs_is_swizzled: Whether RHS BF16 tensor is pre-swizzled [K/4, N*4], default True. If False, expects [N, K] layout.
+
+   :param fast_dma_transpose: When ``True``, use a direct 4D access pattern on the source tensor for the DMA gather-transpose instead of flattening + vector offsets, avoiding ``vector_offset_pattern`` SBUF buffers. Only applies to unswizzled inputs. Default ``False``.
+
+   :param enable_psum_copy_in: Optional control for the PSUM copy-in path. Default ``None``.
+
+   :param quant_scheme: MXFP8 quantization scheme, ``'wrapX'`` (default) or ``'1x32'``.
    :type rhs_is_swizzled: ``bool``
 
    **Notes**:

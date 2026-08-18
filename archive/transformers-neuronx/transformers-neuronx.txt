@@ -3,7 +3,7 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include:: /libraries/transformers-neuronx/setup/index.rst
+    .. include:: /archive/transformers-neuronx/setup/index.txt
 
 
 .. dropdown::  Developer Guide  (``transformers-neuronx``)
@@ -11,7 +11,7 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include:: /libraries/transformers-neuronx/developer-guide.txt
+    .. include:: /archive/transformers-neuronx/developer-guide.txt
 
 
 .. dropdown::  Tutorials  (``transformers-neuronx``)
@@ -19,7 +19,7 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include:: /libraries/transformers-neuronx/transformers-neuronx-tutorials.txt
+    .. include:: /archive/transformers-neuronx/transformers-neuronx-tutorials.txt
 
 
 .. dropdown::  Misc  (``transformers-neuronx``)
@@ -27,4 +27,4 @@
     :class-body: sphinx-design-class-body-small
     :animate: fade-in
 
-    .. include:: /libraries/transformers-neuronx/transformers-neuronx-misc.txt
+    .. include:: /archive/transformers-neuronx/transformers-neuronx-misc.txt

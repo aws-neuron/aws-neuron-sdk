@@ -28,7 +28,7 @@ Performance-accuracy tradeoffs for models trained in FP32
 ---------------------------------------------------------
 
 Models that are trained using FP32 data types can be deployed on Neuron
-through ahead of time compilation using the :ref:`Neuron Compiler <neuron_cli>`.
+through ahead of time compilation using the :ref:`Neuron Compiler <neuron-cc-index>`.
 
 
 .. important::

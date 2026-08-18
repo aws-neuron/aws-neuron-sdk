@@ -7,7 +7,7 @@
    :date-modified: 2026-03-11
 
 Update to latest TensorFlow Neuron
-===============================
+==================================
 
 .. warning::
 

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the NKI Library component across all AWS Neuron SDK versions.
     :keywords: nki library, nki-lib, release notes, aws neuron sdk
-    :date-modified: 06/11/2026
+    :date-modified: 08/17/2026
 
 .. _nki-lib_rn:
 
@@ -9,6 +9,94 @@ Release Notes for Neuron Component: NKI Library
 ================================================
 
 The release notes for the NKI Library Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-lib-2-32-0-rn:
+
+NKI Library (NKI-Lib) (Neuron 2.32.0 Release)
+--------------------------------------------------------------------
+
+Date of Release: 08/17/2026
+
+What's New
+~~~~~~~~~~
+
+This release adds 12 new experimental kernels and 1 new core kernel. Highlights include the split DeepSeek-V3.2 MLA context-encoding path (QKV projection, sparse latent attention, and V-up + output projection), the DeepSeek Sparse Attention Indexer, an MXFP8 flash-decode attention kernel, MXFP8 forward blockwise MoE and MXFP8 matmul backward, 3D transposed and temporally-unrolled convolutions, a fused GPT-OSS sliding-window-attention block, a GpSIMD-based top-K, and an all-to-all dispatch-metadata builder for MoE. A new fused RMSNorm + MX-quantize (+ optional router top-K) prefill kernel is added to core. Existing kernels gain context-parallel options across attention (``attention_tkg``, ``attention_block_tkg``, ``gen_mask_tkg``), squared-sum outputs in ``qkv``, ``skip_gate_proj``/``accumulation_dtype`` controls across the blockwise MoE kernels, expanded MX quantization options, and new precision/layout controls in the MXFP8 matmul kernel. The ``mlp_cte`` kernel's internal implementation was refactored into separate ``basic`` and MX variants with no change to its public entry point. PyTorch reference implementations were added for 22 additional kernels. This release also removes several deprecated ``neurotile`` helper APIs and legacy tensor-view utilities — see Breaking Changes.
+
+New Experimental Kernels
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`SWA Fused CTE </nki/library/api/swa-fused-cte>` — Fused GPT-OSS sliding-window-attention block (QKV projection, RoPE, attention with sink, and output projection); returns the attention output with the K/V caches updated in place, including a packed-FP8 KV-cache path.
+* :doc:`Attention MXFP8 TKG </nki/library/api/attention-mxfp8-tkg>` — MXFP8 flash-decode attention over a quantized block KV cache with separate active/prior KV blocks and packed-Q eviction (Trainium 3).
+* :doc:`Conv3D Temporal Unroll </nki/library/api/conv3d-temporal-unroll>` — 3D convolution with temporal unrolling and column tiling for small ``C_out``, plus a ``should_use_temporal_unroll`` advisory check.
+* :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>` — 3D transposed convolution (ConvTranspose3d) implemented by delegating to an embedded 3D convolution core with remapped parameters.
+* :doc:`Matmul MXFP8 Backward </nki/library/api/matmul-mxfp8-generic-backward-kernel>` — Backward pass for a linear layer with MXFP8 quantization, computing both input gradients (dX) and weight gradients (dW).
+* :doc:`MLA QKV CTE </nki/library/api/mla-qkv-cte>` — DeepSeek MLA QKV projection (MX) for context encoding, consuming the packed MX activation from ``rmsnorm_mx_prefill`` and emitting absorbed latents.
+* :doc:`MLA Sparse Attention CTE </nki/library/api/mla-sparse-attention-cte>` — Standalone sparse latent + RoPE attention (kernel A of the split DeepSeek-V3.2 sparse-MLA forward), S-sharded across cores.
+* :doc:`MLA V-Up O-Proj CTE </nki/library/api/mla-vup-oproj-cte>` — Standalone MX V-up + MX output projection (kernel B of the split DeepSeek-V3.2 sparse-MLA forward), S-sharded across cores.
+* :doc:`Build All2All Dispatch Metadata </nki/library/api/build-all2all-dispatch-metadata>` — Builds per-rank ``send_counts`` (with token deduplication) and ``send_displs`` from ``expert_index`` for MoE all-to-all dispatch.
+* :doc:`Blockwise MM Forward MXFP8 </nki/library/api/blockwise-mm-forward-mxfp8>` — MXFP8 forward pass for blockwise (dropless) Mixture of Experts; emits the activation checkpoints consumed by the MXFP8 MoE backward, forming a validated training pair.
+* :doc:`Sparse Attention Indexer (MX + BF16 Score) </nki/library/api/sparse-attention-indexer-mx-bf16score>` — DeepSeek Sparse Attention Indexer with MX projections and a BF16 score path.
+* :doc:`GPSIMD Top-K </nki/library/api/gpsimd-topk>` — Top-k over the last dimension using the GpSIMD ``nisa.topk`` instruction, with a ``create_gpsimd_topk_config`` helper.
+
+New Core Kernels
+^^^^^^^^^^^^^^^^
+
+* :doc:`RMSNorm MX Prefill </nki/library/api/rmsnorm-mx-prefill>` — Fused RMSNorm ``[T,H]`` + MX quantization (+ optional router top-K) for prefill, with optional residual add and an optional bf16 norm output.
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* :doc:`Attention TKG </nki/library/api/attention-tkg>`: Added ``cp_softmax_stats_out`` for context-parallel softmax statistics.
+* :doc:`Attention KV-Parallel Segmented CTE </nki/library/api/attention-kv-parallel-segmented-cte>`: Added ``apc_mode`` and ``valid_num_prior_tokens`` parameters.
+* :doc:`Attention Block TKG </nki/library/api/attention-block-tkg>`: Added context-parallel parameters ``CP``, ``CP_replica_group``, and ``CP_collective_mode``.
+* **Gen Mask TKG**: Added ``transposed_out`` and ``cp_seq_offset`` parameters to ``gen_mask_tkg`` and ``gen_mask_tkg_hbm``.
+* :doc:`QKV </nki/library/api/qkv>`: Added ``q_squared_sum_out``, ``k_squared_sum_out``, and ``v_squared_sum_out`` outputs (also added to the CTE variant).
+* :doc:`MoE CTE </nki/library/api/moe-cte>`: Added ``accumulation_dtype`` and ``skip_gate_proj`` parameters.
+* **Blockwise MM (shard-on-I / shard-on-I-MX)**: Added ``skip_gate_proj``, ``accumulation_dtype``, and ``use_block128_scales`` parameters to the intermediate-sharded blockwise MoE kernels.
+* :doc:`Blockwise MM Backward </nki/library/api/blockwise-mm-backward>`: Added ``skip_gate_proj``.
+* **Blockwise MM (shard-on-H)**: Added ``activation_dtype`` and ``accum_dtype`` to the hidden-sharded blockwise MoE kernel.
+* :doc:`Matmul MXFP8 </nki/library/api/matmul-mxfp8-generic-kernel>`: Added ``fast_dma_transpose``, ``enable_psum_copy_in``, and ``quant_scheme`` parameters; added ``inputs_were_prequantized`` to the block-level entry and ``enable_psum_copy_in`` to the default config generator.
+* **RMSNorm MX Quantize TKG**: Added ``is_static_mx`` for static MX scaling.
+* **MLP CTE**: Internal implementation refactored into separate ``basic`` (NONE/ROW/STATIC) and MX (MX/STATIC_MX/ROW_MX) variants dispatched by the existing ``mlp_cte`` router; no change to the public entry point.
+* Added PyTorch reference implementations for 22 additional kernels for testing and validation.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* **Neurotile core APIs**: In ``experimental/neurotile/core``, the public helpers ``tensor_view`` (``factories.py``), ``is_identity_tensor`` (``_helpers.py``), and the shape-transform helpers ``compute_reshape``, ``compute_reshape_dim``, ``compute_permute``, ``compute_flatten_dims``, ``compute_squeeze_dim``, ``compute_expand_dim``, and ``compute_broadcast`` (``transforms.py``) have been removed. In addition, the ``root`` and ``buffer_type`` parameters were removed from ``factories.tiles`` and ``factories.blocks``. Callers must migrate off these APIs and drop the removed keyword arguments.
+* **Legacy tensor-view helpers**: The tensor-view convenience helpers ``alloc_tensor_view`` and ``convert_params_to_views`` (``core/mlp/mlp_tkg/mlp_tkg_utils.py``), ``safe_tensor_view`` (``core/moe/moe_tkg/moe_tkg_utils.py``), and ``alloc_tensor_view`` (``core/moe/moe_tkg/projection_utils.py``) have been removed. Callers must use ``TensorView`` directly.
+* **MXFP8 load utils**: ``load_tile_fp32_transpose`` and ``load_tile_bf16_PE_transpose`` have been removed from ``experimental/mxfp_utils/mxfp8_utils/load_apis.py``. Callers must switch to the remaining load APIs.
+* **Rotational Top-K**: The public functions ``prepare_rotational_constants`` and ``cleanup_rotational_constants`` (``core/topk/rotational_topk.py``) and the ``RotationalConstants`` class (``core/topk/rotational_topk_utils.py``) have been removed without an alias. Callers depending on these must migrate.
+* **MoE TKG down projection**: The ``is_row_quant`` parameter has been removed from ``down_projection_mx`` (``core/moe/moe_tkg/down_projection_mx.py``). Callers using this keyword argument will get a ``TypeError`` and must remove it.
+* **RMSNorm MX Quantize TKG (validation)**: The ``has_gate_up_in_scale`` parameter has been removed from ``validate_rmsnorm_mx_quantize_tkg`` (``core/subkernels/norm_tkg_utils.py``).
+* **Positional-argument shifts (use keyword arguments)**: Several kernels inserted new parameters in the middle of their signatures, shifting later positional arguments. Callers passing these arguments positionally must switch to keyword arguments:
+
+  * :doc:`Attention TKG </nki/library/api/attention-tkg>`: ``cp_softmax_stats_out`` inserted before ``DBG_TENSORS``.
+  * :doc:`QKV </nki/library/api/qkv>` (``qkv_cte``): ``q_squared_sum_out``/``k_squared_sum_out``/``v_squared_sum_out`` inserted before ``strided_input_config``.
+  * **Gate-Up Projection MX** (``gate_up_projection_mx_tp``): ``is_packed_moving_scale`` inserted before ``activation_op``.
+  * **RMSNorm MX Quantize TKG** (``rmsnorm_mx_quantize_tkg``): ``is_static_mx`` inserted before ``output_row_dequant_scale``.
+
+Bug Fixes
+~~~~~~~~~
+
+* **SWA Fused CTE**: Guarded the indirect-DGE and block-table K/V gathers with ``oob_mode.skip`` so ``-1``-padded ``block_tables`` and packed-FP8 padded prefill do not read out of bounds; unified the fused projection tile width to 256 so TP8 compiles on Trainium 3; corrected the V-cache layout in the packed-FP8 KV cache.
+* **Attention TKG**: Removed ``no_reorder`` on attention TKG MM1.
+* **Attention CTE**: Share one GpSimd register for V-tile indirect offsets; disabled row-tiled attention with manual allocation.
+* **QKV CTE**: Guard ``flatten_dims`` for a 1-D ``slot_mapping``.
+* **Gen Mask TKG**: Thorough cleanup of gen-mask-tkg.
+* **Segmented Prefill**: Added packed-FP8 support for V in the segmented prefill kernel.
+* **Ring Attention**: Handle fully masked ring-attention rows.
+* **RoPE**: Group-tile ``(B, n_heads)`` so the SBUF working set fits.
+* **MoE (Blockwise)**: Weight-skipping budget fix for ``bwmm_shard_on_block_mx``; prevent invalid gate reads in the blockwise MoE backward.
+* **MoE TKG**: Dropped redundant ``TensorView`` wrapping in the MX loaders; materialize ``TensorView`` to ``NkiTensor`` before ``dma_copy``.
+* **MLP TKG**: Made the LayerNorm reduction non-shard-on-H to remove an LNC2 race.
+* **GPSIMD / Rotational Top-K**: Corrected ``gpsimd_topk`` small-tile races and padding masking; restricted reads to valid partitions to eliminate uninitialized reads in LNC-2 rotational top-K.
+* **MX Quantize**: Zero-initialize the MX scale buffer (memset) to avoid uninitialized reads; avoid uninitialized SBUF reads in ``pad_compute``.
+* **Transformer TKG**: Fixed timeout errors in the separation pass.
+* **MXFP8 kernels**: Added ``with_active_sbm`` cleanup to the MXFP8 production kernels; fixed an incorrect output initialization that caused end-to-end numeric failures.
+
+Known Issues
+~~~~~~~~~~~~
 
 .. _nki-lib-2-31-0-rn:
 

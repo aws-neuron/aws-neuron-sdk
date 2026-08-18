@@ -29,6 +29,8 @@ NeuronAsyncScheduler ◄──────────────────�
 
 `NeuronScheduler` extends `Scheduler` directly and uses a `_call_base_schedule()` virtual method to delegate to the parent. `NeuronAsyncScheduler` overrides this to call `AsyncScheduler.schedule()` instead of `Scheduler.schedule()`, enabling async output placeholders.
 
+For comprehensive vLLM integration background, see `vllm-integration-design-reference`.
+
 ## Scheduler Configuration
 
 The scheduler behavior can be controlled through several key configuration parameters:
@@ -40,7 +42,7 @@ This parameter controls the maximum number of requests that can be scheduled in 
 ``` python
 # In vLLM engine initialization
 LLM(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3-8b",
     max_num_seqs=8,  # Max 8 concurrent decode requests
     ...
 )
@@ -58,7 +60,7 @@ This is a **vLLM-level parameter** (not Neuron-specific). vLLM uses it to chunk 
 ``` python
 # In vLLM engine initialization
 LLM(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3-8b",
     max_num_batched_tokens=8192,  # Process up to 8192 tokens per iteration
     ...
 )
@@ -161,7 +163,7 @@ This means:
 ``` python
 # Typical configuration
 LLM(
-    model="openai/gpt-oss-20b",
+    model="meta-llama/Llama-3-8b",
     max_num_seqs=8,              # Max 8 concurrent decode requests
     max_num_batched_tokens=8192, # vLLM chunks prefills at 8192 tokens
     max_model_len=131072,        # Max sequence length (128k context)
@@ -856,4 +858,5 @@ The full `can_schedule()` check order in Step 2 of `schedule()`:
 ## See Also
 
 - `prefix-caching` - Prefill segmentation and prefix caching
+- `vllm-integration-design-reference` - Overall vLLM integration architecture
 - `vllm-integration-kv-cache` - KV cache management and memory allocation

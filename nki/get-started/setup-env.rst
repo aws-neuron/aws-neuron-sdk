@@ -446,6 +446,44 @@ Once the ``venv`` is activated, confirm that NKI is available.
 
 If the environment is setup correctly, Python should return without reporting any errors.
 
+.. _nki-setup-run-with-nrtpy:
+
+(Optional) Run compiled kernels with nrtpy
+------------------------------------------
+
+This step is **optional**. You only need it if you want to use the ``nrtpy``
+libraries as part of your NKI kernel development. Your NKI environment above is
+already complete for writing and compiling kernels, so skip this section if you
+don't plan to use ``nrtpy``.
+
+After you compile NKI kernels to Neuron Executable File Format (NEFF) files, you can
+load and run them directly from Python with :ref:`nrtpy <nrtpy-guide>`, the Neuron
+Runtime Python layer. This is useful for benchmarking a compiled kernel or building
+test harnesses without going through PyTorch or JAX.
+
+.. important::
+
+   ``nrtpy`` and ``nki`` currently (as of Neuron release 2.32.0) cannot be installed in the same Python environment because
+   of a namespace conflict. Keep using the NKI environment above to compile kernels
+   to NEFFs, and create a **separate** ``nrtpy`` environment to load and run them.
+
+Create a dedicated ``nrtpy`` environment, separate from the NKI ``venv`` above:
+
+.. code-block:: bash
+
+   # Create and activate a separate venv for nrtpy
+   python3 -m venv ~/nrtpy_venv
+   source ~/nrtpy_venv/bin/activate
+
+   # Let nrtpy find the Neuron Runtime library (libnrt)
+   export LD_LIBRARY_PATH=/opt/aws/neuron/lib:$LD_LIBRARY_PATH
+
+   # Install nrtpy from the Neuron pip repository
+   pip install nrtpy --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+For the full walkthrough, including how to verify the install, see
+:ref:`Get started with nrtpy <nrtpy-getting-started>`.
+
 Common issues
 ---------------
 
@@ -465,3 +503,5 @@ Related information
 
 * :doc:`Neuron DLAMI User Guide </deploy/environments/dlami>`
 * :doc:`Neuron Setup Guide </setup/index>`
+* :ref:`nrtpy (Neuron Runtime Python) <nrtpy-guide>` — load and run compiled NEFFs from Python (optional).
+* :ref:`Get started with nrtpy <nrtpy-getting-started>`

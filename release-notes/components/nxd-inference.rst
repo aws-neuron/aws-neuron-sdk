@@ -12,6 +12,16 @@ Component Release Notes for NxD Inference
 
 The release notes for the NxD Inference Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _nxd-inference-2-32-0-rn:
+
+NxD Inference (Neuron 2.32.0 Release)
+------------------------------------------------------------------------------
+
+NxD Inference is in maintenance mode starting with Neuron 2.32.0, and no new feature
+releases are planned for this component. For details, see the
+:ref:`NxD Inference maintenance support announcement <announce-nxdi-maintenance-support-2-31>`.
+For migration guidance, see :doc:`/vllm-neuron/docs/getting-started/migration-nxdi-to-vllm-neuron`.
+
 .. _nxd-inference-2-31-0-rn:
 
 NxD Inference [0.10.18398] (Neuron 2.31.0 Release)

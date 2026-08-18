@@ -147,6 +147,7 @@ Required Arguments:
 
             - ``all_reduce`` / ``allr``: All-Reduce
             - ``all_gather`` / ``allg``: All-Gather
+            - ``all_gatherv`` / ``allgv``: All-Gatherv (Currently only supported for single Trainium device replica groups)
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
             - ``sendrecv``: Send-Receive
             - ``alltoall``: All-to-All
@@ -275,13 +276,14 @@ Input/Output Data:
       - For the CC operation, use a single, shared, HBM output buffer between 2 neuron cores in the same HBM domain.
     * - ``--variable-size-op-metadata``
       - N/A
-      - For ``alltoallv`` collective operations, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation. 
+      - For ``alltoallv`` and ``all_gatherv`` collective operations, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation.
         Counts specify number of elements to send/receive between ranks, displacements specify where in buffer to send/receive data.
         If one metadata entry is provided, it applies to all ranks, otherwise, specify one entry per rank.
-        Receive metadata is optional. However, if it is provided, it needs to match the corresponding send metadata. (e.g. send count for rank 0 to rank 1 needs to match receive count for rank 1 from rank 0).
+        Receive metadata is optional. However, if it is provided, it needs to match the corresponding send metadata. (e.g. For ``alltoallv``, send count for rank 0 to rank 1 needs to match receive count for rank 1 from rank 0).
 
         For ``alltoallv``, length of count and displacement arrays should equal the size of replica group over which collective operation is performed. `AlltoAllV Example`_.
 
+        For ``all_gatherv``, since the same count is sent to all ranks, send metadata (counts/displs) arrays should have only 1 entry, but receive metadata arrays should have length equal to the size of the replica group. `AllGatherV Example`_.
 
 
 .. _Data Integrity:
@@ -455,12 +457,79 @@ Flags to control which subset of ranks a collective operation will be executed o
       - Run the given collective operation in parallel across multiple sub-groups of size ``data-parallel-dimension``. For 128 ranks and data parallel dimension of 2, 
         there would be 64 parallel collective operations happening at the same time, each with 2 ranks. Primarily intended for multi-node executions with one-rank-per-node
         replica groups.
-    * - ``--custom-replica-group``
+    * - ``--custom-replica-groups``
       - N/A
       - Provide the JSON file for custom-defined replica groups.
     * - ``--custom-src-target-pairs``
       - N/A
       - Provide the JSON file for custom-defined source_target_pairs for the collective permute operation.
+
+
+Multistream:
+~~~~~~~~~~~~
+
+.. list-table::
+    :widths: 40 80 260
+    :header-rows: 1
+
+    * - Argument
+      - Default value
+      - Description
+    * - ``--streams-json``
+      - N/A
+      - Path to a JSON file containing an array defining which operation to run on each stream. The stream id of each operation corresponds to its index in the provided array. For each operation,
+        users can apply any collective operation flag. Flag names specified in JSON are identical to the longform CLI names, except that ``-`` is replaced with ``_``.
+        Additionally, each operation can specify its own ``ops_per_iter`` (default=1) argument, which controls the number of operations run per iteration.
+
+
+Multistream support gives ``nccom-test`` users the ability to run multiple collective operations in parallel, each on a unique stream. Users specify the operation to run on each stream using JSON,
+supplying arguments (``datatype``, ``operation``, ...) for each operation in the ``streams`` array. Any collective operation arguments specified in the top-level CLI command apply to every operation, unless explicitly overridden.
+This multistream API represents a superset of all supported multistream configurations. Not all possible configurations can be run successfully on real hardware.
+
+Examples:
+
+.. code-block::
+
+    nccom-test allg -r 64 -c --streams-json streams_example.json
+
+    cat streams_example.json
+    {
+      "streams": [
+        {
+          "operation": "all_reduce",
+          "datatype": "bf16",
+          "stepfactor": 2,
+          "minbytes": "1KB",
+          "maxbytes": "1MB",
+          "custom_replica_groups": "stream_0_rg.json"
+        },
+        {
+          "operation": "allg",
+          "datatype": "fp32",
+          "ops_per_iter": 2,
+          "minbytes": "1KB",
+          "maxbytes": "1KB"
+        }
+      ]
+    }
+
+    cat stream_0_rg.json
+    {
+      "replica_groups": [
+        [
+          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+          [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+          [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
+        ]
+      ]
+    }
+
+For the above example, the ``all_reduce`` operation will run on stream 0 over the ``stream_0_rg.json`` replica group. The ``all_gather`` operation will run in parallel on stream 1 over all 64 ranks. Since the ``all_gather`` operation specifies
+an ``ops_per_iter`` value of two, there will be two ``all_gather`` operations run for every one of the ``all_reduce`` operations. ``nccom-test`` will continue to execute the entire stream configuration until all ops have reached their specified size limit.
+For this example, ``nccom-test`` will run benchmarks with the following sizes: ``(1KB, 1KB), (2KB, 1KB), (4KB, 1KB), ..., (1MB, 1KB)``. For each stream/operation, ``nccom-test`` will output one output block with collective operation latencies and other statistics.
+See output for this example below: `Multistream Example`_.
+
 
 Additional Flags:
 ~~~~~~~~~~~~~~~~~
@@ -693,6 +762,65 @@ Single Instance Examples
      33554432         8388608    fp32         2754.15          12.18          22.84    kangaring
     536870912       134217728    fp32         9689.51          55.41         103.89    kangaring
     Avg bus bandwidth:	16.6181GB/s
+
+.. _AllGatherV Example:
+
+- Specify variable-size-op-metadata as JSON for ``all_gatherv`` operation.
+
+.. code-block::
+
+    nccom-test allgv -r 4 -N 1 -b 2048 -e 2048 -d fp16 --variable-size-op-metadata allgv_metadata.json
+    size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       2048            1024    fp16           16.28           0.13           0.09
+    Avg bus bandwidth:	0.0944GB/s
+
+
+    cat allgv_metadata.json
+    {
+      "metadata": [
+        {
+          "send_counts": [256],
+          "send_displs": [0],
+          "recv_counts": [256, 256, 256, 256],
+          "recv_displs": [0, 256, 512, 768]
+        }
+      ]
+    }
+
+.. _Multistream Example:
+
+- Example results with ``--streams-json`` flag. The first output block belongs to stream 0. The second belongs to stream 1.
+
+.. code-block::
+
+    nccom-test allg -r 64 -c --streams-json streams_example.json
+    size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       1024             512    bf16          101.14           0.01           0.02
+       2048            1024    bf16          101.93           0.02           0.04
+       4096            2048    bf16          101.45           0.04           0.08
+       8192            4096    bf16          101.84           0.08           0.15
+      16384            8192    bf16          102.21           0.16           0.30
+      32768           16384    bf16          102.36           0.32           0.60
+      65536           32768    bf16          103.28           0.63           1.19
+     131072           65536    bf16          105.03           1.25           2.34
+     262144          131072    bf16          107.37           2.44           4.58
+     524288          262144    bf16          110.07           4.76           8.93
+    1048576          524288    bf16          117.67           8.91          16.71
+    Avg bus bandwidth:	3.1756GB/s
+    size(B)    count(elems)    type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       1024             256    fp32          257.65           0.00           0.00
+       1024             256    fp32          258.55           0.00           0.00
+       1024             256    fp32          257.86           0.00           0.00
+       1024             256    fp32          258.51           0.00           0.00
+       1024             256    fp32          259.04           0.00           0.00
+       1024             256    fp32          257.72           0.00           0.00
+       1024             256    fp32          258.24           0.00           0.00
+       1024             256    fp32          258.33           0.00           0.00
+       1024             256    fp32          258.95           0.00           0.00
+       1024             256    fp32          259.09           0.00           0.00
+       1024             256    fp32           260.6           0.00           0.00
+    Avg bus bandwidth:	0.0039GB/s
+
 
 
 Multiple Instances Example
