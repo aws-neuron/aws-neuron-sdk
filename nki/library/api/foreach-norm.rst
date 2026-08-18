@@ -19,7 +19,7 @@ The ``l2_norm_kernel`` kernel computes the L2 norm (Euclidean norm) of an input 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `foreach_norm.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/foreach/foreach_norm.py>`_
+**Source code for this kernel API can be found at**: `foreach_norm.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/foreach/foreach_norm.py>`_
 
 l2_norm_kernel
 ^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``unpermute_a2av`` kernel is the MoE training combine step: it exchanges exp
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `unpermute_a2av.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/a2av_train/unpermute_a2av.py>`_
+**Source code for this kernel API can be found at**: `unpermute_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/a2av_train/unpermute_a2av.py>`_
 
 unpermute_a2av
 ^^^^^^^^^^^^^^

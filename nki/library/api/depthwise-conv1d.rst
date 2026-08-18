@@ -24,7 +24,7 @@ The ``depthwise_conv1d_implicit_gemm`` kernel performs depthwise 1D convolution 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `depthwise_conv1d.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/conv/depthwise_conv1d.py>`_
+**Source code for this kernel API can be found at**: `depthwise_conv1d.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/depthwise_conv1d.py>`_
 
 depthwise_conv1d_implicit_gemm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

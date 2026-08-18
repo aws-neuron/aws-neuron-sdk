@@ -19,7 +19,7 @@ The ``mla_qkv_cte_kernel`` kernel performs DeepSeek MLA QKV projection (MX), emi
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mla_qkv_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_qkv_cte.py>`_
+**Source code for this kernel API can be found at**: `mla_qkv_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_qkv_cte.py>`_
 
 mla_qkv_cte_kernel
 ^^^^^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``ring_attention_spmd_bwd`` kernel computes the backward pass for ring atten
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ring_attention_bwd.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/attention/ring_attention_bwd.py>`_
+**Source code for this kernel API can be found at**: `ring_attention_bwd.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention/ring_attention_bwd.py>`_
 
 ring_attention_spmd_bwd
 ^^^^^^^^^^^^^^^^^^^^^^^

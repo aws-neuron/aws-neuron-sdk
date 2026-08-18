@@ -19,7 +19,7 @@ The ``gather`` kernel gathers rows from a 2D input tensor based on a 1D index te
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `gather.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/misc/gather.py>`_
+**Source code for this kernel API can be found at**: `gather.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/misc/gather.py>`_
 
 gather
 ^^^^^^

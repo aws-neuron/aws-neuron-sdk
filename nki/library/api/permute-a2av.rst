@@ -19,7 +19,7 @@ The ``permute_a2av`` kernel is the MoE training dispatch step: it permutes token
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `permute_a2av.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/a2av_train/permute_a2av.py>`_
+**Source code for this kernel API can be found at**: `permute_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/a2av_train/permute_a2av.py>`_
 
 permute_a2av
 ^^^^^^^^^^^^

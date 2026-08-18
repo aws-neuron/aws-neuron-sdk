@@ -32,7 +32,7 @@ A companion ``cross_entropy_backward`` kernel computes gradients with respect to
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `cross_entropy.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/loss/cross_entropy.py>`_
+**Source code for this kernel API can be found at**: `cross_entropy.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/loss/cross_entropy.py>`_
 
 cross_entropy_forward
 ^^^^^^^^^^^^^^^^^^^^^

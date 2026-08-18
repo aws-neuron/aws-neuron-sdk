@@ -19,7 +19,7 @@ The ``adam_kernel`` and ``adamw_kernel`` implement fused Adam and AdamW optimize
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fused_adam.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/optimizer/fused_adam.py>`_
+**Source code for this kernel API can be found at**: `fused_adam.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/optimizer/fused_adam.py>`_
 
 adam_kernel
 ^^^^^^^^^^^

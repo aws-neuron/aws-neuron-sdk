@@ -22,7 +22,7 @@ This module provides a suite of HBM-based collective communication kernels for e
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `collectives.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/collectives.py>`_
+**Source code for this kernel API can be found at**: `collectives.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/collectives.py>`_
 
 all_reduce_hbm_kernel
 ^^^^^^^^^^^^^^^^^^^^^

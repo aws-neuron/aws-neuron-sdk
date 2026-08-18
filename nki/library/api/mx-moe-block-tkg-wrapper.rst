@@ -19,7 +19,7 @@ The ``mx_moe_block_tkg_wrapper`` kernel provides a wrapper that bitcasts unsigne
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mx_moe_block_tkg_wrapper.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe_block/mx_moe_block_tkg_wrapper.py>`_
+**Source code for this kernel API can be found at**: `mx_moe_block_tkg_wrapper.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_block/mx_moe_block_tkg_wrapper.py>`_
 
 mx_moe_block_tkg_wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^

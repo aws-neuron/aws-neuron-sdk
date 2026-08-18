@@ -19,7 +19,7 @@ The ``conv3d_transpose`` kernel implements a 3D transposed convolution (ConvTran
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `conv3d_transpose.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/conv/conv3d_transpose.py>`_
+**Source code for this kernel API can be found at**: `conv3d_transpose.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/conv3d_transpose.py>`_
 
 conv3d_transpose
 ^^^^^^^^^^^^^^^^

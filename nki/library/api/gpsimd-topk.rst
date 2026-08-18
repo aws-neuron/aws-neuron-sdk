@@ -17,7 +17,7 @@ The ``gpsimd_topk`` kernel computes top-k over the last dimension using the GpSI
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `gpsimd_topk.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/topk/gpsimd_topk.py>`_
+**Source code for this kernel API can be found at**: `gpsimd_topk.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/topk/gpsimd_topk.py>`_
 
 create_gpsimd_topk_config
 ^^^^^^^^^^^^^^^^^^^^^^^^^

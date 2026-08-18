@@ -31,7 +31,7 @@ The input layouts expected for this kernel are different from those for the CTE 
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `output_projection_tkg.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/output_projection/output_projection_tkg.py>`_
+**Source code for this kernel API can be found at**: `output_projection_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/output_projection/output_projection_tkg.py>`_
 
 output_projection_tkg
 ^^^^^^^^^^^^^^^^^^^^^^^

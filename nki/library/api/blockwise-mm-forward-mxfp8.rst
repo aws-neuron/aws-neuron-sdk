@@ -19,7 +19,7 @@ The ``blockwise_mm_fwd_mxfp8`` kernel computes the MXFP8 forward pass for blockw
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `blockwise_mm_forward_mxfp8.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe_mxfp8/fwd/blockwise_mm_forward_mxfp8.py>`_
+**Source code for this kernel API can be found at**: `blockwise_mm_forward_mxfp8.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_mxfp8/fwd/blockwise_mm_forward_mxfp8.py>`_
 
 blockwise_mm_fwd_mxfp8
 ^^^^^^^^^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``qkv_mla_mx`` kernel implements the full QKV projection pipeline for DeepSe
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `qkv_cte_mla.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/qkv/qkv_cte_mla.py>`_
+**Source code for this kernel API can be found at**: `qkv_cte_mla.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/qkv/qkv_cte_mla.py>`_
 
 qkv_mla_mx
 ^^^^^^^^^^

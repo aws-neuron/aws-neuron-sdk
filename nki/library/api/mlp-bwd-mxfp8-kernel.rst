@@ -17,7 +17,7 @@ The ``get_program_sharding_info`` kernel returns the LNC2 sharding configuration
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mlp_bwd_mxfp8_kernel.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/mlp_mxfp8/mlp_bwd_mxfp8/mlp_bwd_mxfp8_kernel.py>`_
+**Source code for this kernel API can be found at**: `mlp_bwd_mxfp8_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mlp_mxfp8/mlp_bwd_mxfp8/mlp_bwd_mxfp8_kernel.py>`_
 
 get_program_sharding_info
 ^^^^^^^^^^^^^^^^^^^^^^^^^

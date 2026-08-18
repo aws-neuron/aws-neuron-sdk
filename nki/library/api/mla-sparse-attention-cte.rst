@@ -19,7 +19,7 @@ The ``mla_sparse_attention_cte_kernel`` kernel performs standalone sparse latent
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mla_sparse_attention_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_sparse_attention_cte.py>`_
+**Source code for this kernel API can be found at**: `mla_sparse_attention_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_sparse_attention_cte.py>`_
 
 mla_sparse_attention_cte_kernel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

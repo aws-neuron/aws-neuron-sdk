@@ -19,7 +19,7 @@ The ``static_quantization`` kernel performs tensor-wise static FP8 quantization 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fp8_quantize.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/quantization/fp8_quantize.py>`_
+**Source code for this kernel API can be found at**: `fp8_quantize.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/quantization/fp8_quantize.py>`_
 
 static_quantization
 ^^^^^^^^^^^^^^^^^^^

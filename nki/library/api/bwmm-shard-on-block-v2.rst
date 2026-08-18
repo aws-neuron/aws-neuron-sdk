@@ -19,7 +19,7 @@ The ``bwmm_shard_on_block`` kernel implements blockwise matrix multiplication fo
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `bwmm_shard_on_block_v2.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe/moe_cte/bwmm_shard_on_block_v2.py>`_
+**Source code for this kernel API can be found at**: `bwmm_shard_on_block_v2.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe/moe_cte/bwmm_shard_on_block_v2.py>`_
 
 bwmm_shard_on_block
 ^^^^^^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``pad`` kernel pads a tensor using one of four modes: constant, replicate, r
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `pad.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/pad/pad.py>`_
+**Source code for this kernel API can be found at**: `pad.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/pad/pad.py>`_
 
 pad
 ^^^

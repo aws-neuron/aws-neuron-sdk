@@ -23,7 +23,7 @@ The ``topk_reduce`` kernel gathers scattered rows by packed global token index a
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `topk_reduce.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/subkernels/topk_reduce.py>`_
+**Source code for this kernel API can be found at**: `topk_reduce.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/subkernels/topk_reduce.py>`_
 
 topk_reduce
 ^^^^^^^^^^^

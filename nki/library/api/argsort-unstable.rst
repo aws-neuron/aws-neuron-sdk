@@ -19,7 +19,7 @@ The ``argsort_unstable`` kernel performs an unstable argsort on a 1D input buffe
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `argsort_unstable.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/subkernels/argsort_unstable.py>`_
+**Source code for this kernel API can be found at**: `argsort_unstable.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/subkernels/argsort_unstable.py>`_
 
 argsort_unstable
 ^^^^^^^^^^^^^^^^

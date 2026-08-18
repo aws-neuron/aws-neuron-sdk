@@ -19,7 +19,7 @@ The ``add_scalar_kernel`` kernel performs elementwise arithmetic operations (add
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `foreach_elementwise.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/foreach/foreach_elementwise.py>`_
+**Source code for this kernel API can be found at**: `foreach_elementwise.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/foreach/foreach_elementwise.py>`_
 
 add_scalar_kernel
 ^^^^^^^^^^^^^^^^^
