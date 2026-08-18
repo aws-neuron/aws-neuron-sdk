@@ -19,7 +19,7 @@ The ``conv3d`` kernel implements 3D convolution using the tensor engine with a K
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `conv3d.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/conv/conv3d.py>`_
+**Source code for this kernel API can be found at**: `conv3d.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/conv3d.py>`_
 
 conv3d
 ^^^^^^

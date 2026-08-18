@@ -19,7 +19,7 @@ The ``ring_attention_unpermute`` kernel reorders striped ring-attention output b
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ring_attention_unpermute.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/attention/ring_attention_unpermute.py>`_
+**Source code for this kernel API can be found at**: `ring_attention_unpermute.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention/ring_attention_unpermute.py>`_
 
 ring_attention_unpermute
 ^^^^^^^^^^^^^^^^^^^^^^^^

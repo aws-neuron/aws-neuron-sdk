@@ -22,7 +22,7 @@ The ``allgather_sb2sb`` kernels gather input tensors from all ranks along the la
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `sb2sb_allgather.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/sb2sb_allgather.py>`_
+**Source code for this kernel API can be found at**: `sb2sb_allgather.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/sb2sb_allgather.py>`_
 
 allgather_sb2sb
 ^^^^^^^^^^^^^^^

@@ -23,7 +23,7 @@ The ``fine_grained_allgather`` kernel performs all-gather on the input tensor ac
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fg_allgather.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/fg_allgather.py>`_
+**Source code for this kernel API can be found at**: `fg_allgather.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/fg_allgather.py>`_
 
 fine_grained_allgather
 ^^^^^^^^^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``scatter_add`` kernel scatter-adds rows from ``src`` into a 2D input tensor
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `scatter_add.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/misc/scatter_add.py>`_
+**Source code for this kernel API can be found at**: `scatter_add.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/misc/scatter_add.py>`_
 
 scatter_add
 ^^^^^^^^^^^

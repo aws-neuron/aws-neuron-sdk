@@ -17,7 +17,7 @@ The ``ms_deformable_attention`` kernel computes multi-scale deformable attention
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ms_deformable_attention.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/deformable_attention/ms_deformable_attention.py>`_
+**Source code for this kernel API can be found at**: `ms_deformable_attention.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/deformable_attention/ms_deformable_attention.py>`_
 
 ms_deformable_attention
 ^^^^^^^^^^^^^^^^^^^^^^^

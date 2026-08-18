@@ -19,7 +19,7 @@ The ``attention_kv_parallel_segmented_cte`` kernel enables context parallelism f
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `attention_kv_parallel_segmented_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/attention/attention_kv_parallel_segmented_cte.py>`_
+**Source code for this kernel API can be found at**: `attention_kv_parallel_segmented_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/attention/attention_kv_parallel_segmented_cte.py>`_
 
 attention_kv_parallel_segmented_cte
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -35,7 +35,7 @@ The kernel uses activation checkpoints saved during the forward pass (``gate_up_
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `blockwise_mm_backward.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe/bwd/blockwise_mm_backward.py>`_
+**Source code for this kernel API can be found at**: `blockwise_mm_backward.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe/bwd/blockwise_mm_backward.py>`_
 
 blockwise_mm_bwd
 ^^^^^^^^^^^^^^^^^

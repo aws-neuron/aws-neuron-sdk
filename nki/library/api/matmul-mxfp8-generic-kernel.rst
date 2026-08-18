@@ -19,7 +19,7 @@ The ``matmul_mxfp8`` kernel implements efficient matrix multiplication using MXF
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `matmul_mxfp8_generic_kernel.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/matmul_mxfp8/matmul_mxfp8_generic_kernel.py>`_
+**Source code for this kernel API can be found at**: `matmul_mxfp8_generic_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/matmul_mxfp8/matmul_mxfp8_generic_kernel.py>`_
 
 matmul_mxfp8
 ^^^^^^^^^^^^

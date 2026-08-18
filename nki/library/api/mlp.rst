@@ -34,7 +34,7 @@ The ``MLP`` kernel is a critical component in transformer architectures, respons
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mlp.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/mlp/mlp.py>`_
+**Source code for this kernel API can be found at**: `mlp.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/mlp/mlp.py>`_
 
 mlp
 ^^^

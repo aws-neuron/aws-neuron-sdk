@@ -24,7 +24,7 @@ The ``allgather_compute_matmul`` kernel performs all-gather on the left-hand sid
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fgcc.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/collectives/fgcc.py>`_
+**Source code for this kernel API can be found at**: `fgcc.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/fgcc.py>`_
 
 allgather_compute_matmul
 ^^^^^^^^^^^^^^^^^^^^^^^^

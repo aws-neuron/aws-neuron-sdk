@@ -19,7 +19,7 @@ The ``build_all2all_dispatch_metadata`` kernel builds metadata for all2all dispa
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `build_all2all_dispatch_metadata.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe_block/build_all2all_dispatch_metadata.py>`_
+**Source code for this kernel API can be found at**: `build_all2all_dispatch_metadata.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_block/build_all2all_dispatch_metadata.py>`_
 
 build_all2all_dispatch_metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

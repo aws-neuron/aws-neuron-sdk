@@ -17,7 +17,7 @@ The ``rmsnorm_router_topk_tkg`` kernel fuses RMSNorm, optional MX (fp8) quantiza
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `rmsnorm_router_topk_tkg.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/moe_block/rmsnorm_router_topk_tkg.py>`_
+**Source code for this kernel API can be found at**: `rmsnorm_router_topk_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_block/rmsnorm_router_topk_tkg.py>`_
 
 rmsnorm_router_topk_tkg
 ^^^^^^^^^^^^^^^^^^^^^^^

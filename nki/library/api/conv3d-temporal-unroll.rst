@@ -19,7 +19,7 @@ The ``conv3d_temporal_unroll`` kernel performs 3D convolution with temporal unro
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `conv3d_temporal_unroll.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/conv/conv3d_temporal_unroll.py>`_
+**Source code for this kernel API can be found at**: `conv3d_temporal_unroll.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/conv3d_temporal_unroll.py>`_
 
 should_use_temporal_unroll
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -19,7 +19,7 @@ The ``linear_scan`` kernel computes a first-order linear recurrence along the la
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `linear_scan.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/scan/linear_scan.py>`_
+**Source code for this kernel API can be found at**: `linear_scan.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/scan/linear_scan.py>`_
 
 linear_scan
 ^^^^^^^^^^^

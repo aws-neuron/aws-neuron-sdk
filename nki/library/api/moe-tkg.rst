@@ -41,7 +41,7 @@ The kernel supports two operational modes:
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `moe_tkg.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/moe/moe_tkg/moe_tkg.py>`_
+**Source code for this kernel API can be found at**: `moe_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/moe/moe_tkg/moe_tkg.py>`_
 
 moe_tkg
 ^^^^^^^^^^^^^^^

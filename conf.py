@@ -12,6 +12,7 @@
 
 import datetime
 import os
+import re
 import sys
 
 sys.path.append(os.path.abspath("./_ext"))
@@ -49,6 +50,50 @@ def get_env_vars():
 
 
 project_name, branch_name = get_env_vars()
+
+
+# -- NKI Library source-link pinning -----------------------------------------
+#
+# The NKI Library kernel API reference pages (nki/library/api/*.rst) link their
+# "Source code for this kernel API can be found at" URLs into the separate
+# aws-neuron/nki-library repo. Those pages are generated upstream and emit a
+# git ref (historically `main`) baked into each URL, so the links drift from
+# the code that actually shipped with a given Neuron release.
+#
+# Instead of maintaining the ref by hand across ~70 generated files, we stamp
+# it at build time (see the source-read handler in setup()). The ref is derived
+# from the docs version being built:
+#   * a release build (RTD version "release-2.32.0" or "2.32.0") -> tag "2.32"
+#   * master / latest / feature branches            -> NKILIB_LATEST_RELEASE
+#
+# Per release you only bump NKILIB_LATEST_RELEASE below (same cadence as the
+# "Neuron X.YY.0 is released!" banner); release-* branches need no change.
+#
+# nki-library tags are "X.YY" (e.g. "2.32"); verified against the repo.
+NKILIB_LATEST_RELEASE = "2.32"
+
+
+def get_nkilib_ref():
+    """Resolve the nki-library git ref for source links in this build."""
+    match = re.match(r"(?:release-)?(\d+\.\d+)", branch_name or "")
+    return match.group(1) if match else NKILIB_LATEST_RELEASE
+
+
+nkilib_ref = get_nkilib_ref()
+
+# Rewrite the ref segment of nki-library kernel-source URLs, scoped to the
+# /src/nkilib_src/ path so repo-onboarding links (README.md, CONTRIBUTING.md)
+# are left pointing at `main`. Matches whatever ref is currently in the source
+# (`main`, a pinned tag, etc.) so it stays correct across regenerations.
+_NKILIB_SRC_RE = re.compile(r"(nki-library/blob/)[^/]+(/src/nkilib_src/)")
+
+
+def pin_nkilib_source_links(app, docname, source):
+    """Sphinx 'source-read' handler: stamp the nki-library ref at build time."""
+    if source and source[0]:
+        source[0] = _NKILIB_SRC_RE.sub(rf"\g<1>{nkilib_ref}\g<2>", source[0])
+
+
 # -- Project information -----------------------------------------------------
 
 project = "AWS Neuron"
@@ -383,4 +428,12 @@ linkcheck_exclude_documents = [
     r"containers/.*",
 ]
 nitpicky = False
+
+
+# -- Sphinx setup ------------------------------------------------------------
+
+
+def setup(app):
+    # Stamp the nki-library git ref into kernel-source links at build time.
+    app.connect("source-read", pin_nkilib_source_links)
 

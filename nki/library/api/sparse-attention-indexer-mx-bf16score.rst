@@ -19,7 +19,7 @@ The ``sparse_attention_indexer_mx_bf16score`` kernel implements the DeepSeek Spa
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `sparse_attention_indexer_mx_bf16score.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/sparse_attention_indexer/sparse_attention_indexer_mx_bf16score.py>`_
+**Source code for this kernel API can be found at**: `sparse_attention_indexer_mx_bf16score.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/sparse_attention_indexer/sparse_attention_indexer_mx_bf16score.py>`_
 
 sparse_attention_indexer_mx_bf16score
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

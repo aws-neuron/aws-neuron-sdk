@@ -40,7 +40,7 @@ The unified ``moe_cte`` entry point dispatches to the appropriate implementation
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `moe_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/moe/moe_cte/moe_cte.py>`_
+**Source code for this kernel API can be found at**: `moe_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/moe/moe_cte/moe_cte.py>`_
 
 moe_cte
 ^^^^^^^^

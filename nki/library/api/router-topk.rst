@@ -39,7 +39,7 @@ The kernel supports multiple pipeline configurations:
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `router_topk.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/router_topk/router_topk.py>`_
+**Source code for this kernel API can be found at**: `router_topk.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/router_topk/router_topk.py>`_
 
 router_topk
 ^^^^^^^^^^^^^^^

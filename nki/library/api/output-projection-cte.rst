@@ -27,7 +27,7 @@ The kernel employs efficient tiling strategies and memory access patterns to max
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `output_projection_cte.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/core/output_projection/output_projection_cte.py>`_
+**Source code for this kernel API can be found at**: `output_projection_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/output_projection/output_projection_cte/output_projection_cte.py>`_
 
 output_projection_cte
 ^^^^^^^^^^^^^^^^^^^^^^^

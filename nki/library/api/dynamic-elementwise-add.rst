@@ -19,7 +19,7 @@ The ``dynamic_elementwise_add`` kernel computes elementwise addition where the n
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `dynamic_elementwise_add.py <https://github.com/aws-neuron/nki-library/blob/main/src/nkilib_src/nkilib/experimental/dynamic_shapes/dynamic_elementwise_add.py>`_
+**Source code for this kernel API can be found at**: `dynamic_elementwise_add.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/dynamic_shapes/dynamic_elementwise_add.py>`_
 
 dynamic_elementwise_add
 ^^^^^^^^^^^^^^^^^^^^^^^
