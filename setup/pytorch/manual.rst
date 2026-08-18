@@ -8,7 +8,7 @@
    :python-versions: 3.11, 3.12, 3.13
    :content-type: installation-guide
    :estimated-time: 15 minutes
-   :date-modified: 2026-05-15
+   :date-modified: 2026-08-18
 
 Install PyTorch via manual installation
 ========================================
@@ -79,15 +79,15 @@ Installation steps
          # Install git
          sudo apt-get install git -y
 
-         # Install Neuron Driver (Neuron 2.31 versions)
-         sudo apt-get install aws-neuronx-dkms=2.29.0.0* -y
+         # Install Neuron Driver (Neuron 2.32 versions)
+         sudo apt-get install aws-neuronx-dkms=2.30.2.0* -y
 
          # Install Neuron Runtime
-         sudo apt-get install aws-neuronx-collectives=2.33.10.0* -y
-         sudo apt-get install aws-neuronx-runtime-lib=2.33.10.0* -y
+         sudo apt-get install aws-neuronx-collectives=2.34.10.0* -y
+         sudo apt-get install aws-neuronx-runtime-lib=2.34.10.0* -y
 
          # Install Neuron Tools
-         sudo apt-get install aws-neuronx-tools=2.31.13.0* -y
+         sudo apt-get install aws-neuronx-tools=2.32.28.0* -y
 
          # Add PATH
          export PATH=/opt/aws/neuron/bin:$PATH
@@ -111,7 +111,8 @@ Installation steps
       .. important::
          ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To install
          ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
-         The commands below install the Neuron 2.31 package versions.
+         The commands below install the Neuron 2.32 compiler with the Neuron 2.31
+         ``torch-neuronx`` package.
 
       .. tab-set::
 
@@ -142,8 +143,8 @@ Installation steps
                  python -m pip install wget
                  python -m pip install awscli
 
-                 # Install Neuron Compiler and Framework (Neuron 2.31 versions)
-                 python -m pip install neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
+                 # Install Neuron Compiler and Framework (torch-neuronx pinned to Neuron 2.31 as XLA support ended with that release)
+                 python -m pip install neuronx-cc==2.27.5334.0 torch-neuronx==2.9.0.2.15.32035
 
           .. tab-item:: PyTorch 2.8.0
 
@@ -205,15 +206,15 @@ Installation steps
          # Install git
          sudo apt-get install git -y
 
-         # Install Neuron Driver (Neuron 2.31 versions)
-         sudo apt-get install aws-neuronx-dkms=2.29.0.0* -y
+         # Install Neuron Driver (Neuron 2.32 versions)
+         sudo apt-get install aws-neuronx-dkms=2.30.2.0* -y
 
          # Install Neuron Runtime
-         sudo apt-get install aws-neuronx-collectives=2.33.10.0* -y
-         sudo apt-get install aws-neuronx-runtime-lib=2.33.10.0* -y
+         sudo apt-get install aws-neuronx-collectives=2.34.10.0* -y
+         sudo apt-get install aws-neuronx-runtime-lib=2.34.10.0* -y
 
          # Install Neuron Tools
-         sudo apt-get install aws-neuronx-tools=2.31.13.0* -y
+         sudo apt-get install aws-neuronx-tools=2.32.28.0* -y
 
          # Add PATH
          export PATH=/opt/aws/neuron/bin:$PATH
@@ -237,7 +238,8 @@ Installation steps
       .. important::
          ``torch-neuronx`` (PyTorch/XLA) is not included in Neuron 2.32.0. To install
          ``torch-neuronx``, use the latest Neuron release that ships it, **Neuron 2.31**.
-         The commands below install the Neuron 2.31 package versions.
+         The commands below install the Neuron 2.32 compiler with the Neuron 2.31
+         ``torch-neuronx`` package.
 
       .. tab-set::
 
@@ -272,8 +274,8 @@ Installation steps
                  python -m pip install wget
                  python -m pip install awscli
 
-                 # Install Neuron Compiler and Framework (Neuron 2.31 versions)
-                 python -m pip install neuronx-cc==2.26.6360.0 torch-neuronx==2.9.0.2.15.32035
+                 # Install Neuron Compiler and Framework (torch-neuronx pinned to Neuron 2.31 as XLA support ended with that release)
+                 python -m pip install neuronx-cc==2.27.5334.0 torch-neuronx==2.9.0.2.15.32035
 
           .. tab-item:: PyTorch 2.8.0
 
