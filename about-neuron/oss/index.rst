@@ -7,6 +7,9 @@ Neuron Open Source Repositories and Contribution
 
 AWS Neuron provides open source code and samples for some of its components, libraries, and tools under the Apache 2.0 license. The current public repositories open to contribution at this time are listed below.
 
+.. important::
+   This page lists the AWS Neuron repositories that are currently open to contribution. For the complete list of public AWS Neuron open source projects, see the aws-neuron GitHub organization <https://github.com/orgs/aws-neuron/repositories>__.
+
 Neuron Open Source GitHub Repositories
 ---------------------------------------
 
@@ -19,6 +22,7 @@ Neuron Open Source GitHub Repositories
       **TorchNeuron PyTorch Extension Open Source**
       ^^^
       Source code for the Neuron Native PyTorch extension and the TorchNeuron library that implements it for AWS Trainium.
+      **Note**: TorchNeuron is currently in private Beta. Contact your Neuron account representative to request access.
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/torch-neuronx
 
@@ -30,15 +34,6 @@ Neuron Open Source GitHub Repositories
       AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. See :ref:`neuron-agentic-development` for the full feature overview.
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-agentic-development
-
-   .. grid-item-card::
-      :class-body: sphinx-design-class-title-small
-
-      **Neuron Explorer CDK Open Source**
-      ^^^
-      AWS Cloud Development Kit (CDK) app (TypeScript, CDK v2) that deploys a self-hosted Neuron Explorer stack in your AWS account. Provisions the full profiling service: CloudFront + S3 frontend, IAM-authenticated API Gateway with Lambda handlers, Fargate metadata and analysis engines on shared EFS, and an event-driven Fargate or EC2 profile processing pipeline with Bedrock-backed AI recommendations.
-
-      * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-explorer-cdk
 
    .. grid-item-card:: 
       :class-body: sphinx-design-class-title-small
@@ -90,10 +85,9 @@ GitHub provides documentation on `forking a repository <https://help.github.com/
 
 For the specific details on licenses and contributing to each OSS repo, review the ``CONTRIBUTING.md`` pages linked below:
 
-* Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md
+* Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md **Note**: TorchNeuron is in private Beta. Request access from your Neuron account representative.
 * Contribute to Neuron Agentic Development: https://github.com/aws-neuron/neuron-agentic-development/blob/main/CONTRIBUTING.md
-* Contribute to Neuron Explorer CDK: https://github.com/aws-neuron/neuron-explorer-cdk/blob/main/CONTRIBUTING.md
 * Contribute to the NKI Library: https://github.com/aws-neuron/nki-library/blob/main/CONTRIBUTING.md
-* Contribute the the NKI samples: https://github.com/aws-neuron/nki-samples/blob/main/CONTRIBUTING.md
+* Contribute to the NKI samples: https://github.com/aws-neuron/nki-samples/blob/main/CONTRIBUTING.md
   
 .. Re-add this when available: * Contribute to vLLM Neuron: https://github.com/vllm-project/vllm-neuron/blob/main/CONTRIBUTING.md
