@@ -8,7 +8,7 @@ Neuron Open Source Repositories and Contribution
 AWS Neuron provides open source code and samples for some of its components, libraries, and tools under the Apache 2.0 license. The current public repositories open to contribution at this time are listed below.
 
 .. important::
-   This page lists the AWS Neuron repositories that are currently open to contribution. For the complete list of public AWS Neuron open source projects, see the aws-neuron GitHub organization <https://github.com/orgs/aws-neuron/repositories>__.
+   This page lists the AWS Neuron repositories that are currently open to contribution. For the complete list of public AWS Neuron open source projects, see `the aws-neuron GitHub organization <https://github.com/orgs/aws-neuron/repositories>`__.
 
 Neuron Open Source GitHub Repositories
 ---------------------------------------
