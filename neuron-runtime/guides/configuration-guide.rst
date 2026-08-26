@@ -78,9 +78,23 @@ This guide provides an overview of the environment variables available to config
      - TRUE or FALSE
      - FALSE
      - 2.25+
+   * - ``NEURON_RT_NUMERICAL_ERRORS_VERBOSITY``
+     - Controls which classes of numerical error notifications the runtime
+       collects and reports during execution. Each level is cumulative:
+       ``none`` disables all numerical error reporting, ``critical`` reports
+       NaNs only, ``debug`` adds overflows and underflows, and ``verbose``
+       additionally reports infinities.
+     - string
+     - ``none``, ``critical``, ``debug``, ``verbose`` (case-insensitive). Any
+       other value causes ``nrt_init()`` to fail with ``NRT_INVALID``.
+     - ``none``
+     - 2.24+
 
 .. warning::
   When applying ``NEURON_RT_ALLOW_LEGACY_NEFF``, note that not all NEFF files, especially those from older architectures, may be compatible. In the case of an incompatibility, the operation will fail with a data mismatch error or stall out.
+
+.. warning::
+  When enabling ``NEURON_RT_NUMERICAL_ERRORS_VERBOSITY``, there is a hardware limitation that can cause numerical errors to be sticky and falsely reported. Once a numerical condition is flagged on an engine, the hardware status can remain set, so the same error may be reported again for subsequent operations that did not actually produce it. Treat the reports at any verbosity level as an indication that a numerical condition occurred somewhere in the execution, not as exact per-operation attribution, and expect possible false positives after a first genuine occurrence. This sticky hardware state is cleared when restarting the application.
 
 NeuronCore allocation
 ---------------------
