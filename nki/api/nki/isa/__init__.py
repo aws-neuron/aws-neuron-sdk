@@ -1103,7 +1103,7 @@ def tensor_scalar(dst: NkiTensor, data: NkiTensor, op0, operand0: float | NkiTen
     data types must be integer types, and input elements are treated as bit patterns without any data type casting.
 
     If arithmetic operators are used, the ``tensor_scalar`` instruction can run on Vector or Scalar or GpSimd Engine.
-    However, each engine supports limited arithmetic operators (see :ref:``tbl-aluop``). The Scalar Engine on trn2 only
+    However, each engine supports limited arithmetic operators (see :ref:`tbl-aluop`). The Scalar Engine on trn2 only
     supports some operator combinations:
 
       - ``op0=nl.multiply`` and ``op1=nl.add``
