@@ -37,18 +37,6 @@ The diagram below shows the detailed compilation flow inside the Neuron compiler
 
 Using Python features within NKI kernels that are not supported will result in useful errors from the NKI Compiler indicating that the feature is not a valid NKI feature. Neuron has intentionally constrained the NKI meta-programming language to be as minimal as possible while serving the needs of building high performance kernels for today's popular models and will continue to grow and evolve the language over time. 
 
-NKI Compiler Open Source
--------------------------
-
-Neuron is planning to release the source code for the NKI Compiler to increase awareness and transparency, to enable easier development of tools, and to invite participation and collaboration as we evolve the NKI language. Developers will be able to download the compiler sources, modify them, build the compiler, and use their locally built compiler in their overall model compilation flow. 
-
-To do this, developers will be able to download our sources from our public git repository in the ``aws-neuron`` GitHub organization (https://github.com/aws-neuron/).
-
-The repo contains all the sources for the entire NKI Compiler, as well as build instructions on how to produce a standalone nki.whl. Once built, developers can install their locally built wheel: ``pip install nki.whl``. This will replace the default NKI Compiler that is installed with the Neuron SDK package. The local wheel will then be registered to handle subsequent ``@nki.jit`` decorators and will be picked up and integrated with the rest of the Neuron Graph compiler flow.
-
-Note that upon installing a locally-built wheel, developers must reinstall the Neuron SDK in order to revert their changes to the official version of the NKI Compiler. Also, the officially built compiler will have an officially tagged version whereas locally built versions will not. Any bug and error reports will contain the version of the compiler used.
-
-
 How the NKI Compiler Works with the Graph Compiler
 --------------------------------------------------
 

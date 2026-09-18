@@ -26,7 +26,7 @@ What is AWS Neuron used for?
 
 **Production Inference**: Neuron implements vLLM V1 API compatibility on Trainium and Inferentia with optimizations for large-scale inference workloads. The runtime supports Expert Parallelism for MoE models, disaggregated inference architectures, and speculative decoding. Optimized kernels from the NKI Library provide hardware-specific implementations. Training workflows integrate with HuggingFace Optimum Neuron, PyTorch Lightning, and TorchTitan, with seamless deployment through standard vLLM interfaces. 
 
-**Performance Engineering**: Neuron Kernel Interface (NKI) provides direct access to Trainium instruction set architecture with APIs for memory management, execution scheduling, and low-level kernel development. The NKI Compiler, built on MLIR, offers full visibility into the compilation pipeline from high-level operations to hardware instructions. The NKI Library contains optimized kernel implementations with source code and performance benchmarks. Neuron Explorer enables comprehensive profiling from application code to hardware execution, supporting both single-node and distributed workload analysis with detailed performance metrics and optimization recommendations.
+**Performance Engineering**: Neuron Kernel Interface (NKI) provides direct access to Trainium instruction set architecture with APIs for memory management, execution scheduling, and low-level kernel development. The NKI Compiler, built on MLIR, compiles NKI kernels for Neuron hardware. The NKI Library contains optimized kernel implementations with source code and performance benchmarks. Neuron Explorer enables comprehensive profiling from application code to hardware execution, supporting both single-node and distributed workload analysis with detailed performance metrics and optimization recommendations.
 
 AWS Neuron Core Components
 ----------------------------
@@ -57,7 +57,7 @@ AWS Neuron Core Components
 
     It includes:
 
-    * The NKI Compiler, built on MLIR, which provides greater transparency into the kernel compilation process
+    * The NKI Compiler, built on MLIR, which compiles NKI kernels for Neuron hardware
     * The NKI Library , which provides pre-built kernels you can use to optimize the performance of your models
 
 **Neuron Tools**

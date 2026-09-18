@@ -17,10 +17,6 @@ The AWS Neuron SDK includes:
 
 For a full list of AWS Neuron features, see :ref:`what-is-neuron`.
 
-.. admonition:: Join our Beta program
-
-   Get early access to new Neuron features and tools! `Fill out this form and apply to join our Beta program <https://pulse.aws/survey/NZU6MQGW?p=0>`__.
-
 What is "NeuronX"?
 ------------------
 

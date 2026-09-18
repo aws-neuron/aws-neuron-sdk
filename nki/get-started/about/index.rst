@@ -13,7 +13,7 @@ This section covers core concepts Neuron Kernel Interface (NKI) within the AWS N
 Introducing NKI: Complete Kernel Development Solution 
 -------------------------------------------------------
 
-Neuron Kernel Interface (NKI) is an open source tool for developing kernels for Trainium hardware. It has three main parts: 
+Neuron Kernel Interface (NKI) is a tool for developing kernels for Trainium hardware. It has three main parts:
 
 * The first part is the NKI Programming Interface, which offers two APIs: ``nki.language`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
 
@@ -21,9 +21,9 @@ Neuron Kernel Interface (NKI) is an open source tool for developing kernels for 
 
 * The third part is the NKI Library (``NKI-Lib``), which provides ready-to-use optimized kernels that developers can use directly or learn from.
 
-Using MLIR enables NKI integration with the LLVM ecosystem and compiler research community. NKI's open-source code lets everyone see how the compilation works, from the Python code to the final hardware instructions. Researchers can try new compiler techniques, framework developers can learn how kernels work with their code, and the community can improve both the compiler and kernel library. If you want to start using NKI, you can find tutorials available at https://github.com/aws-neuron/nki-samples.
+To start using NKI, see the tutorials at https://github.com/aws-neuron/nki-samples.
 
-For more details on NKI and Neuron open source GitHub repos, see :doc:`/about-neuron/oss/index`.
+For more details on open source Neuron libraries and samples, see :doc:`/about-neuron/oss/index`.
 
 NKI and Neuron Hardware 
 ------------------------
@@ -245,12 +245,12 @@ Collective communication primitives enable kernels to coordinate and exchange da
 
 The nki.isa interface gives developers detailed control over AWS Trainium's hardware. This direct access lets them fine-tune how computations work, manage memory, and optimize when instructions run. By controlling these elements precisely, developers can get the best performance from Trainium by creating custom versions of AI model parts like attention mechanisms, loss functions, and data preprocessing routines.
 
-NKI Open Source Compiler
----------------------------
+NKI Compiler
+------------
 
 The NKI Compiler, built on MLIR, turns kernel source code into optimized NKI IR (Intermediate Representation). The Neuron Compiler Back-end then turns this NKI IR into NeuronISA instructions. When a framework model includes NKI source code, the framework calls the NKI Compiler to process these kernels separately. The NKI Compiler creates optimized NKI IR that gets added to the larger Neuron IR representing the complete model, which then goes to the Neuron Graph Compiler.
 
-The NKI Compiler processes one kernel at a time, creating NKI intermediate representation (NKI IR). This IR, along with other kernels and compilation graphs, is used to create a Neuron Executable (NEFF). We've put the NKI Compiler code on GitHub so performance engineers, researchers, compiler developers, and MLIR enthusiasts can understand how the compilation works and contribute to research or development.
+The NKI Compiler processes one kernel at a time, creating NKI intermediate representation (NKI IR). This IR, along with other kernels and compilation graphs, is used to create a Neuron Executable (NEFF).
 
 The diagram below shows how PyTorch or JAX models are turned into optimized NeuronISA instructions. When developers create a model with NKI kernels (marked with the @nki.jit decorator), the framework starts tracing the model through the Neuron Backend. During this process, when the framework finds NKI kernels, it calls the NKI Compiler to process them right away. The NKI Compiler creates optimized NKI IR that is saved and referenced by custom-call nodes in the Neuron IR. The framework continues building the complete Neuron IR, adding these custom-call nodes alongside regular model operations. When the Neuron IR is complete, the Graph Compiler processes the entire model, and the Neuron Compiler Back-end generates code for both standard operations and the NKI kernels by turning the referenced NKI IR into NeuronISA instructions.
 

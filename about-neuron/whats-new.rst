@@ -550,18 +550,14 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 
 * :doc:`Trainium3 UltraServer support </about-neuron/arch/neuron-hardware/trn3-arch>`: Enabling customers to scale AI workloads with improved performance
 * :doc:`Native PyTorch support </frameworks/torch/pytorch-native-overview>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
-* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
+* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
 * :doc:`Neuron Explorer </tools/neuron-explorer/index>`: Tools suite to support developers and performance engineers in their performance optimization journey from framework operations to hardware instructions
 * :doc:`Neuron DRA for Kubernetes </deploy/eks/dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
-* :doc:`Expanded open source components </about-neuron/oss/index>`: Open sourcing more components including NKI Compiler, Native PyTorch, NKI Library, and more released under Apache 2.0
+* :doc:`Expanded open source components </about-neuron/oss/index>`: Open sourcing more components including Native PyTorch, NKI Library, and more released under Apache 2.0
 
 
 AI development requires rapid experimentation, hardware optimization, and production scale workloads. These updates enable researchers to experiment with novel architectures using familiar workflows, ML developers to build AI applications using standard frameworks, and performance engineers to optimize workloads using low-level hardware optimization.
-
-.. admonition:: Looking to try out our Beta features?
-
-   Submit your beta access request through `this form <https://pulse.aws/survey/NZU6MQGW?p=0>`__ and the Neuron Product team will get back to you.
 
 Native PyTorch Support
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -586,12 +582,9 @@ Enhanced NKI
 
 The enhanced Neuron Kernel Interface (NKI) provides developers with complete hardware control through advanced APIs for fine-grained scheduling and allocation. The enhanced NKI enables instruction-level programming, memory allocation control, and execution scheduling with direct access to the Trainium ISA. 
 
-We are also releasing the NKI Compiler as open source under Apache 2.0, built on MLIR to enable transparency and collaboration with the broader compiler community. NKI integrates with PyTorch and JAX, enabling developers to use custom kernels within their training workflows.
+NKI integrates with PyTorch and JAX, enabling developers to use custom kernels within their training workflows.
 
-Use Enhanced NKI to innovate and build optimized kernels on Trainium. Explore the NKI Compiler source code to inspect and contribute to the MLIR-based compilation pipeline. 
-
-.. note::
-  The NKI Compiler source code is currently in **Private Preview**, while the NKI programming interface is in **Public Preview**.
+Use Enhanced NKI to innovate and build optimized kernels on Trainium.
 
 **Learn more**: :doc:`NKI home page </nki/index>` and :doc:`NKI Language Guide </nki/get-started/nki-language-guide>`.
 
