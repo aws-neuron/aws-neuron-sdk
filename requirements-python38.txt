@@ -5,7 +5,7 @@ Sphinx==4.5.0
 sphinx-book-theme==0.3.3
 pydata-sphinx-theme==0.8.1
 sphinx_design==0.3.0
-Jinja2==2.11.3
+Jinja2==3.1.6
 MarkupSafe==1.1.1
 ablog==0.10.29
 ipython-genutils==0.2.0
