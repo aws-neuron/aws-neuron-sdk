@@ -4,8 +4,9 @@ NKI Performance Optimizations
 =============================
 
 In this document, we describe a recipe to find performance bottlenecks of NKI kernels and apply common software optimizations
-to address such bottlenecks. During this process, we will showcase how to leverage :doc:`neuron-profile </nki/guides/use-neuron-profile>`,
-a GUI-based performance profiler designed for NeuronDevices, to guide your performance optimization efforts. Before proceeding
+to address such bottlenecks. During this process, we will showcase how to leverage :doc:`Neuron Explorer </tools/neuron-explorer/index>`,
+a GUI-based performance profiler designed for NeuronDevices, to guide your performance optimization efforts. See
+:doc:`Profile a NKI Kernel </nki/guides/use-neuron-profile>` for how to capture a profile of a NKI kernel. Before proceeding
 with this document, make sure to read through :doc:`NeuronDevice Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>`
 to familiarize yourself with Neuron hardware architecture.
 
@@ -15,23 +16,23 @@ of the compute engines is active close to 100% of the kernel execution time (90%
 while memory-bound typically means the achieved device memory bandwidth utilization (MBU) is close to 100% (60%+
 is considered good in practice). For compute-bound kernels that are matrix-multiplication dominated, we should also aim
 for close to 100% model flops utilization (MFU) in the execution. All of these metrics are available under the ``Summary``
-tab in ``neuron-profile`` GUI:
+tab in Neuron Explorer GUI:
 
 .. _perf_guide_mbu:
 
 .. figure:: /nki/img/nki_perf_guide/fig1.png
    :align: center
-   :width: 60%
+   :width: 100%
 
-   MBU metric in neuron-profile.
+   MBU metric in Neuron Explorer.
 
 .. _perf_guide_compute_metrics:
 
 .. figure:: /nki/img/nki_perf_guide/fig2.png
    :align: center
-   :width: 60%
+   :width: 50%
 
-   Compute-related metrics in neuron-profile.
+   Compute-related metrics in Neuron Explorer.
 
 The rest of this document is divided into three sections, focusing on three categories of performance optimizations. The
 first section covers optimizations to maximize achieved arithmetic intensity, with the goal of minimizing compute engine
@@ -67,7 +68,7 @@ of an algorithm.
 compute algorithm. In reality, due to limited capacity in SBUF, the *achieved* arithmetic intensity of a NKI kernel implementation
 of such workload could be lower than the algorithmic arithmetic intensity. This could lead to excessive compute engine idle
 time blocked by completion of data movements. The two typical reasons behind this are *input data reloading* and *intermediate
-data spillage*. Let's discuss how to identify their symptoms in ``neuron-profile`` and how to mitigate these issues to improve
+data spillage*. Let's discuss how to identify their symptoms in Neuron Explorer and how to mitigate these issues to improve
 arithmetic intensity next.
 
 .. _perf_guide_temporal_locality:
@@ -76,21 +77,23 @@ Opt #1. Exploit temporal locality to minimize input data reloading
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-**Symptom**: In neuron-profile, if a NKI kernel triggers DMAs (\ ``nl.load``\ ) for the same input tensor multiple times,
-you would see the relevant DMA activities (on the timeline row with a label starting with ``q`` and ending with ``IO``\
-) being highlighted in an orange box. Hovering over the “+” sign of the box in top-left corner, a performance warning pop-up
-will show up, indicating which input tensor is being reloaded, the size of it and how many times it was reloaded. For example,
-figure below is a screenshot of such warning pop-up showing the ``u`` input tensor defined in my NKI kernel was reloaded
-~7 times:
+**Symptom**: If a NKI kernel triggers DMAs (\ ``nl.load``\ ) for the same tensor multiple times, the same data travels from
+device memory into SBUF repeatedly. In Neuron Explorer, the ``Tensor Info`` widget quantifies this per tensor: alongside each
+tensor's ``Size``\ , it reports ``Load to SBUF Total Size (Bytes)``\ , ``Load to SBUF DMA Count`` and
+``Load to SBUF Repeat Factor``\ . The repeat factor is the total number of bytes loaded into SBUF divided by the size of the
+tensor itself, so a factor near 1 means the tensor was loaded once, while a factor well above 1 means it was loaded that many
+times over. Sorting the ``Load to SBUF Repeat Factor`` column in descending order brings the most heavily reloaded tensors to
+the top. In the example below, ``variable4`` is only 32 KiB, but 512 KiB was loaded into SBUF for it across 16 DMAs, giving a
+repeat factor of 16:
 
 
-.. _perf_guide_input_reload_warning:
+.. _perf_guide_input_reload:
 
 .. figure:: /nki/img/nki_perf_guide/fig4.png
    :align: center
-   :width: 50%
+   :width: 100%
 
-   Performance warning on input data reloading.
+   Per-tensor SBUF load statistics in the Tensor Info widget.
 
 **Optimization**: Input tensor reloading could be avoided if the same data stay in SBUF across all the operations that consume
 it at different points of the execution. However, keeping too much data in SBUF across operations can increase the memory
@@ -117,16 +120,16 @@ kernel tutorial, where programmers can minimize reloading of largest input tenso
 Opt #2.  Fuse operations to minimize intermediate data spilling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Symptom**: In ``neuron-profile`` , we can find many useful data movement related metrics in the ``Summary`` tab:
+**Symptom**: In Neuron Explorer, we can find many useful data movement related metrics in the ``Summary`` tab:
 
 
 .. _perf_guide_summary:
 
 .. figure:: /nki/img/nki_perf_guide/fig6.png
    :align: center
-   :width: 60%
+   :width: 80%
 
-   ``neuron-profile`` Summary tab.
+   Neuron Explorer Summary tab.
 
 Below we highlight four relevant metrics to assess severity of data spilling under the ``data_movement`` section (tip: hovering
 over any metric name will show a detailed description of the metric):
@@ -139,10 +142,10 @@ over any metric name will show a detailed description of the metric):
 
    Data movement metrics
 
-Here, ``spill_save_bytes`` refers to the total size of intermediate data in bytes the workload spills from SBUF into device
-memory, while ``spill_reload_bytes`` indicates total size of spilled data in bytes the workload reloads back into SBUF.
-By comparing ``spill_save_bytes`` against ``sb_read_bytes``\ , you can get a feel on how much of the data movement traffic
-from SBUF to device memory is related to spilling. Similarly, comparing ``spill_reload_bytes`` against ``sb_write_bytes``
+Here, ``Spill Save Bytes`` refers to the total size of intermediate data in bytes the workload spills from SBUF into device
+memory, while ``Spill Reload Bytes`` indicates total size of spilled data in bytes the workload reloads back into SBUF.
+By comparing ``Spill Save Bytes`` against ``Sbuf Read Bytes``\ , you can get a feel on how much of the data movement traffic
+from SBUF to device memory is related to spilling. Similarly, comparing ``Spill Reload Bytes`` against ``Sbuf Write Bytes``
 indicates how much of traffic from device memory back to SBUF is related to spilling. If the spill related traffic takes
 up a significant portion (for example over 30%), it is likely worthwhile to take a close look at this optimization.
 
@@ -211,7 +214,7 @@ we need to implement:
 
 With the above aforementioned optimizations, the kernel execution should achieve an arithmetic intensity that is somewhat
 close to the algorithmic arithmetic intensity. At this point, you should be able to observe from the execution timeline
-in ``neuron-profile`` whether the kernel spends more time in compute or DMA engines. The ``engine/dma_active_time_percent``
+in Neuron Explorer whether the kernel spends more time in compute or DMA engines. The ``engine/dma_active_time_percent``
 metrics reported in the Summary tab should also give you good hints. If your kernel execution is dominated by computation,
 we recommend going over :ref:`Optimizing Compute Efficiency <perf_guide_compute>`
 first to optimize compute efficiency. Otherwise, jump straight to :ref:`Optimizing Data Movement Efficiency <perf_guide_memory>`
@@ -237,7 +240,7 @@ Reducing engine idle time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To improve the active time of a compute engine, we need to understand the exact reasons for the engine to enter an idle
-state. In neuron-profile, we can focus on the execution trace of the bottlenecked engine and zoom into the visually large
+state. In Neuron Explorer, we can focus on the execution trace of the bottlenecked engine and zoom into the visually large
 engine idle gaps. For example, in the below profile, we expect VectorE to be the bottlenecked engine and therefore focus
 on the idle gaps on VectorE:
 
@@ -248,19 +251,6 @@ on the idle gaps on VectorE:
    :width: 100%
 
    Engine idle gaps.
-
-*Side note*\ , for faster GUI rendering, neuron-profile enables data sampling by default and “hides” certain instructions
-from the timeline with a large profile. To confirm whether an engine indeed has an idle gap, we recommend zooming into a
-smaller region of the profile and turn on “Show unsampled data” in ``View Edit Settings`` to make sure all instructions
-are rendered:
-
-.. _perf_guide_unsampled:
-
-.. figure:: /nki/img/nki_perf_guide/fig9.png
-   :align: center
-   :width: 100%
-
-   Show unsampled data in neuron-profile.
 
 For each engine idle gap, you can find out the reasons why the engine cannot execute instructions by inspecting the **semaphore
 wait condition** of the first instruction executed on the engine after the gap. Broadly speaking, these semaphore wait conditions
@@ -276,7 +266,7 @@ Opt #3.  Overlap execution across compute engines through pipelining
 compute engine name in NeuronCore: Vector, Scalar, GpSimd and Tensor. These semaphores are associated with instruction completion
 on the corresponding compute engine.
 
-For example, the below ``TENSOR_TENSOR`` instruction on VectorE is waiting for ``S[4] (Scalar)`` to reach a value of 36.
+For example, the below ``TENSOR_TENSOR`` instruction on VectorE is waiting for ``S[4] (Scalar)`` to reach a value of 6.
 This means VectorE was waiting for ScalarE to finish certain instructions.
 
 .. _perf_guide_wait_engine:
@@ -307,7 +297,7 @@ as soon as the first tile is processed. Overall, engine pipelining shortens the 
    Engine timeline with and without engine pipelining.
 
 Choosing a proper tile size is crucial to the performance of such engine pipelining. It is up to NKI programmers to make
-this choice in kernel implementation and iterate on it using performance profiling data in neuron-profile. For complex kernels,
+this choice in kernel implementation and iterate on it using performance profiling data in Neuron Explorer. For complex kernels,
 we often need to schedule a pipeline among all engines: Tensor/Scalar/Vector/GpSimd Engine.
 
 For example, in Transformer's self-attention layer, in addition to fusing matmul_0(Q, K) → softmax → matmul_1(softmax_out,
@@ -342,13 +332,13 @@ For example, hovering on an instruction will bring up the key instruction detail
 
    Instruction waiting for input data loading.
 
-In this particular screenshot, the ``EVENT_SEMAPHORE`` instruction could not start earlier even though VectorE was idle
-because it was waiting for semaphore S[22] (\ ``qSyncIO0``\ ) to reach a value of 240. The semaphore is only incremented
+In this particular screenshot, the ``EVENT_SEMAPHORE`` instruction could not start earlier even though its Vector engine was idle
+because it was waiting for semaphore S[32] (\ ``qSyncIO0``\ ) to reach a value of 16. The semaphore is only incremented
 whenever the corresponding DMA activities shown on the ``qSyncIO0`` execution trace are completed. Clicking on the DMA activities
 on ``qSyncIO0`` immediately before the ``EVENT_SEMAPHORE`` instruction, you may follow the ``nki_source_location`` to find
 out which line of code is related to this DMA activity (\ ``nl.load()`` call).
 
-Similarly, if an instruction is blocked on ``S[47] (qSyncSpillReload0``\ ), that means it is blocked by DMA activities for
+Similarly, if an instruction is blocked on ``S[75] (qSyncSpillReload0``\ ), that means it is blocked by DMA activities for
 spilling:
 
 .. _perf_guide_wait_spill:
@@ -361,7 +351,8 @@ spilling:
 
 Clicking on the DMA activities on ``qSyncSpillReload0`` immediately before the ``EVENT_SEMAPHORE`` instruction, you may
 find out the name of the intermediate NKI tensor that was spilled/reloaded. For example, the below DMA transfer reloads
-the tensor named ``deltaU`` as defined in our NKI kernel. Note, spill/reload DMA transfers are generated by Neuron Compiler
+48 KiB for the tensor named ``inst__I-35-0:a_dst_L3_sg0000`` out of a temporary HBM buffer (\ ``Source: [[TMPBUF]]``\ ) and
+back into SBUF (\ ``Dest: [SB]``\ ). Note, spill/reload DMA transfers are generated by Neuron Compiler
 automatically by analyzing SBUF usage in NKI kernels. Therefore, these DMA transfers do not have an associated explicit
 NKI API call or ``nki_source_location`` information.
 
@@ -405,12 +396,11 @@ Opt #5a: Use sufficiently large input tiles in free dimension
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Symptom**: Certain operators might trigger many back-to-back instructions with small free dimension sizes in the input
-tensors. For example, in the below profile, ScalarE is busy with many repeated ``activation`` instructions with IDENTITY
-(scale/bias enabled) activation function, which is equivalent to calling ``nki.isa.tensor_scalar(op0=nl.multiply, op1=add)``
-APIs. If you click on one of the instructions to pull up the instruction detailed view, you can see the source tensor access
-pattern is ``fp32@20580[1,1,1][1,1,1]`` , where the first set of bracket indicates 3D strides and the second set indicates
-3D shape in FP32 elements. More detailed discussion of ISA access pattern can be found by clicking on the ``i`` button at
-the end of the ``Operands`` row.
+tensors. For example, in the below profile, ScalarE is busy with many repeated ``TENSOR_SCALAR`` instructions with
+``ops=MULTIPLY,ADD`` , which corresponds to calling the ``nki.isa.tensor_scalar(op0=nl.multiply, op1=nl.add)``
+API. If you hover over one of the instructions to pull up the instruction details, you can see the source tensor access
+pattern is ``fp32@0x4000[1,1,1][1,1,1]`` , where the first set of bracket indicates 3D strides and the second set indicates
+3D shape in FP32 elements.
 
 In this example, each of the back-to-back instructions is reading **one** element per partition from SBUF, which would take
 about one engine cycle to perform useful computation within the instruction. Such instructions are extremely inefficient
@@ -418,14 +408,14 @@ since the static instruction overhead in the order of ~100 cycles would be limit
 
 To make things worse, these instructions also have data dependency (read after write) between consecutive instructions,
 which means the next instruction cannot start data read until the previous instruction has all of its output committed to
-the local SRAM. In neuron-profile, you can inspect data dependency between instructions by clicking on an instruction of
-interests (\ ``Inst1`` in the below profile), which will highlight the clicked instruction and also the instruction that
-produces input for the clicked instruction (\ ``Inst0`` in the below profile). The dependency information can also be viewed
-in the details “instruction dependency pcs”. In fact, all the neighboring instructions also have a similar dependency patterns
-in this profile.
+the local SRAM. You can inspect data dependency between instructions by clicking on an instruction of
+interests (\ ``inst1`` in the below profile), which will highlight the clicked instruction and also the instruction that
+produces input for the clicked instruction (\ ``inst0`` in the below profile). The dependency is also visible in the
+instruction details, where the ``src`` address of ``inst1`` matches the ``dst`` address of ``inst0``. In fact, all the
+neighboring instructions also have a similar dependency patterns in this profile.
 
 With the above inefficiencies, the initiation interval (the time between the starting points of two consecutive instructions)
-for these instructions on ScalarE is around ``189 ns (264 ScalarE cycles on NC-v2)`` , which is much higher than the useful
+for these instructions on ScalarE is around ``222 ns (266 ScalarE cycles on NC-v3)`` , which is much higher than the useful
 computation cost (one ScalarE cycle throughput-wise).
 
 .. _perf_guide_small_instr:
@@ -475,8 +465,9 @@ field. If we were to increase the ``channels`` field to 128, the instruction wou
    An instruction that read/write less than 128 partitions.
 
 
-Similarly, for a ``MultiplyMoving`` instruction (Matmul opcode in neuron-profile) TensorE, if the instruction reads/writes
-tiles do not span the full SBUF/PSUM partitions, we would be underutilizing TensorE. As an example, the below ``MultiplyMoving``
+Similarly, for a ``MATMUL`` instruction on TensorE (the matrix-multiply instruction, labeled ``MultiplyMoving`` in the
+deprecated neuron-profile), if the instruction reads/writes tiles do not span the full SBUF/PSUM partitions, we would be
+underutilizing TensorE. As an example, the below ``MATMUL``
 instruction only writes to 96 partitions in PSUM, as indicated by the operand ``128*96``\ , which means the instruction
 only uses 128 rows and 96 columns of the processing elements out of the available 128x128 systolic array.
 
@@ -486,7 +477,7 @@ only uses 128 rows and 96 columns of the processing elements out of the availabl
    :align: center
    :width: 70%
 
-   MultiplyMoving instruction that uses <128 TensorE columns
+   MATMUL instruction that uses <128 TensorE columns
 
 
 **Optimization**:
@@ -606,8 +597,8 @@ In NKI, if the matrix with ``min(M, N)`` dimension is mapped to the **stationary
 and ``nisa.nc_matmul``\ ) for the TensorE ``LoadStationary`` instruction (details see :ref:`architecture guide <arch_guide_tensor_engine>`
 ), we will typically end up under-utilizing TensorE more severely compared to mapping such matrix to the **moving tensor**.
 
-In ``neuron-profile``\ , programmers can identify also this inefficient case by inspecting the ``src`` access patterns for
-LoadStationary and MultiplyMoving instructions on TensorE. For example, the below screenshot indicates a stationary tensor
+In Neuron Explorer, programmers can also identify this inefficient case by inspecting the ``src`` access patterns for
+the ``LDWEIGHTS`` (weight load) and ``MATMUL`` instructions on TensorE. For example, the below screenshot indicates a stationary tensor
 with 1 element per partition and a moving tensor with 128 elements per partition:
 
 
@@ -694,8 +685,8 @@ Opt #8: TensorE only: Mitigating overhead from tensor transposes
 useful computations as much as possible, especially in matmul-heavy kernels. The most common “not useful” computation that
 could occupy precious TensorE cycles is tensor PF-transposes, which swap the partition and free dimensions of a NKI tile.
 When you have a profile with TensorE visually extremely busy, we recommend doing a sanity check on how much of the TensorE
-activities are performing transposes. One easy way to check is by selecting ``Instruction Type`` as the ``Instruction Grouping``
-in ``View Settings`` :
+activities are performing transposes. One easy way to check is by selecting ``tensor_instruction_type`` as the ``Device Timeline event color theme``
+in ``Device Timeline`` :
 
 .. _perf_guide_transpose_setting:
 
@@ -703,7 +694,7 @@ in ``View Settings`` :
    :align: center
    :width: 60%
 
-   Change view settings to visualize transposes.
+   Change Device Timeline event color theme to visualize transposes.
 
 With this instruction coloring, TensorE instructions will be highlighted in two different colors: one for Transpose and
 one for Regular (useful matmuls). As an example, the below profile has an execution trace with TensorE being the performance
@@ -801,7 +792,7 @@ Optimizing Data Movement Efficiency
 -----------------------------------
 
 The key goal of optimizing memory-bound kernels is to keep the DMA engines running at high bandwidth utilization as much
-as possible. If you are seeing major DMA engine idle gaps in neuron-profile, you should first find ways to hide compute
+as possible. If you are seeing major DMA engine idle gaps in Neuron Explorer, you should first find ways to hide compute
 behind DMA activities using techniques discussed in :ref:`Opt #4 <perf_guide_opt4>`.
 The rest of this section is going to focus on optimizations to improve DMA bandwidth utilization. All the optimizations
 below are applicable to a common symptom: computation blocked by DMA activities, which are keeping the DMA engines “busy”
@@ -825,7 +816,7 @@ Opt #9: Perform sufficiently large DMA transfers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Symptoms**: A quick way to determine whether the DMA transfers are moving large enough amount of data per transfer is to
-visualize the DMA activities per engine in ``neuron-profile``:
+visualize the DMA activities per engine in Neuron Explorer:
 
 .. _perf_guide_dma_setting:
 
@@ -838,7 +829,7 @@ visualize the DMA activities per engine in ``neuron-profile``:
 With the above view settings, each DMA transfer will be shown with a continuous bar on the execution trace, grouped by DMA
 engines. Below is a profile example with small DMA transfers going on all 16 DMA engines. Visually, we can see DMA engine
 empty gaps (due to DMA overhead) are taking up more time than active DMA transfers. Hovering over some of DMA transfers,
-we can also see a transfer size of 4B, which is extremely tiny. For reference, the transfer size on Trainium/Inferential2
+we can also see a transfer size of 32B, which is extremely tiny. For reference, the transfer size on Trainium/Inferentia2
 should be larger than 32KiB to achieve ideal bandwidth.
 
 .. _perf_guide_tiny_dma:
@@ -849,7 +840,7 @@ should be larger than 32KiB to achieve ideal bandwidth.
 
    Example timeline with tiny DMA transfers.
 
-For comparison, here's another profile with sufficiently large DMA transfers, achieving close 70% DMA throughput utilization:
+For comparison, here's another profile with sufficiently large DMA transfers, achieving close to 85% DMA throughput utilization:
 
 .. _perf_guide_large_dma:
 
@@ -896,7 +887,7 @@ Opt #10: Minimize use of DMA transposes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Symptom**: Excessive use of DMA transposes, invoked through ``nl.load_transpose2d``, can degrade DMA bandwidth significantly.
-In ``neuron-profile``, you can find out whether  ``nl.load_transpose2d`` is taking up substantial amount of execution
+In Neuron Explorer, you can find out whether  ``nl.load_transpose2d`` is taking up substantial amount of execution
 time by using the search functionality, which will highlight all the DMA activities that perform transposes on the fly:
 
 .. _perf_guide_search_transpose:
