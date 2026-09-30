@@ -341,6 +341,11 @@ def _get_explicit_override(cur_file):
     if cur_file == 'release-notes/components/vllm-neuron':
         return ['Trn2', 'Trn3'], True
 
+    # vLLM Omni Neuron (Beta) — Trn2/Trn3 only. Covers the docs landing
+    # page and all synced plugin docs.
+    if cur_file.startswith('vllm-omni-neuron/docs/'):
+        return ['Trn2', 'Trn3'], True
+
     if cur_file.startswith('libraries/nxd-inference/'):
         return ['Inf2', 'Trn1', 'Trn2'], True
 
@@ -708,12 +713,14 @@ class NeuronTag(SphinxDirective):
 
 
 def _inject_vllm_neuron_myst_tags(app, docname, source):
-    """Add instance tags to vLLM Neuron MyST pages.
+    """Add Trn2/Trn3 instance tags to vLLM Neuron and vLLM Omni Neuron MyST pages.
 
     ``rst_prolog`` and ``rst_epilog`` add the directive to RST pages, but
-    Sphinx does not apply them to MyST Markdown sources.
+    Sphinx does not apply them to MyST Markdown sources. These docs are synced
+    from their plugin repos as Markdown and are Trn2/Trn3 only.
     """
-    if not docname.startswith('vllm-neuron/docs/'):
+    if not (docname.startswith('vllm-neuron/docs/')
+            or docname.startswith('vllm-omni-neuron/docs/')):
         return
 
     tag_text = TEXT_TEMPLATE + '`Trn2`, `Trn3`'

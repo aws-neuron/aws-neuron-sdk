@@ -151,6 +151,7 @@ include_patterns = [
     '*.rst', '**/*.rst',
     '*.ipynb', '**/*.ipynb',
     'vllm-neuron/docs/**',
+    'vllm-omni-neuron/docs/**',
 ]
 
 
