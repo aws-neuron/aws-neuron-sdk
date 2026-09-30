@@ -1,7 +1,7 @@
 .. meta::
     :description: AI inference on AWS Neuron — deploy production-ready models on Trainium and Inferentia.
     :keywords: neuron, inference, vllm, nxd inference, trainium, inferentia, llm serving
-    :date-modified: 08/17/2026
+    :date-modified: 09/28/2026
 
 .. _neuron-inference-overview:
 
@@ -98,13 +98,43 @@ For Inf2 and Trn1, or models not yet supported, use Option 1.
 See the :doc:`vLLM Neuron documentation </vllm-neuron/docs/index>`.
 
 
+**Option 3: vLLM Omni Neuron (Beta — diffusion/multimodal, Trn2/Trn3 only)**
+
+For diffusion and multimodal generation models such as video generation, use the
+vLLM Omni Neuron plugin. It is an out-of-tree Neuron backend for
+`vLLM Omni <https://github.com/vllm-project/vllm-omni>`_ that reuses vLLM Omni's
+upstream serving components and adds Neuron-specific execution, caching, and
+sharding.
+
+vLLM Omni Neuron is currently in Beta and active development. The initial release
+supports the Wan2.2-T2V-A14B (text-to-video) and Wan2.2-I2V-A14B (image-to-video)
+models on Trn2 and Trn3, and supports vLLM Omni 0.24.0.
+
+.. code-block:: bash
+
+    git clone https://github.com/aws-neuron/vllm-omni-neuron.git
+    cd vllm-omni-neuron
+    pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com -e .
+
+vLLM Omni Neuron is also available as a published Neuron Deep Learning Container
+(DLC) that bundles vLLM Neuron, the compiler, NKI, and the Neuron runtime. For the
+DLC install and full setup details, see the
+:doc:`vLLM Omni Neuron setup guide </vllm-omni-neuron/docs/getting-started/setup-guide>`.
+
+vLLM Omni Neuron provides offline generation through the ``Omni.generate`` API and
+online serving through an OpenAI-compatible ``/v1/videos`` endpoint. For detailed
+quickstart guides and documentation, see the
+:doc:`vLLM Omni Neuron documentation </vllm-omni-neuron/docs/index>`.
+
+
 Integrate with NxD Inference APIs for Custom Model Serving Deployments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you are looking to deploy models beyond standard LLM architectures, such as
-Diffusion Transformers which are not supported in vLLM, NxD Inference provides
-direct API integration options that you can integrate with general-purpose model
-serving frameworks like FastAPI or Triton Inference Server. You can refer to the
+If you are looking to deploy models beyond standard LLM architectures, and beyond
+the diffusion and multimodal models supported by vLLM Omni Neuron, NxD Inference
+provides direct API integration options that you can integrate with
+general-purpose model serving frameworks like FastAPI or Triton Inference Server.
+For example, you can refer to the
 `Flux tutorial <../nxd-inference/tutorials/flux-inference-tutorial.html>`_
 to learn how to integrate directly with NxD Inference APIs.
 
@@ -149,6 +179,17 @@ If you are targeting Trn2/Trn3 and looking to implement custom model
 implementations using the enhanced vLLM Neuron plugin (Beta), see the
 :doc:`model onboarding guide </vllm-neuron/docs/model-dev/onboarding-models>`
 and :doc:`vLLM Neuron documentation </vllm-neuron/docs/index>`.
+
+
+Implementing Custom Diffusion Models in vLLM Omni Neuron (Beta)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are targeting Trn2/Trn3 and looking to bring up a custom diffusion or
+multimodal generation model, the vLLM Omni Neuron plugin (Beta) ships
+Neuron-optimized NKI kernels and reference model implementations that you can
+adapt for your own model. See the
+:doc:`model onboarding guide </vllm-omni-neuron/docs/model-dev/onboarding-models>`
+and :doc:`vLLM Omni Neuron documentation </vllm-omni-neuron/docs/index>`.
 
 
 Implementing Custom Models Directly on PyTorch

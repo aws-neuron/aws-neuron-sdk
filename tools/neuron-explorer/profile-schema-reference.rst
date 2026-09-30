@@ -3,7 +3,7 @@
    schema YAML or that script and regenerate.
 
 .. meta::
-   :description: Reference for the parquet table schemas produced by Neuron Explorer, matching ``neuron-explorer --show-profile-schema``.
+   :description: Reference for the parquet table schemas produced by Neuron Explorer, matching ``neuron-explorer view --show-profile-schema``.
 
 .. _neuron-explorer-profile-schema-reference:
 
@@ -19,7 +19,7 @@ every table and field in that output to assist in interpreting all the profile d
 The profile schema is defined as an OpenAPI document that is embedded in the
 ``neuron-explorer`` binary. The :ref:`Schema Reference <profile-schema-reference-tables>`
 section below is generated directly from that definition, so it matches exactly
-what ``neuron-explorer --show-profile-schema`` prints. This page reflects schema version ``7.4.0`` released in version **2.31.0** of the Neuron SDK.
+what ``neuron-explorer view --show-profile-schema`` prints. This page reflects schema version ``7.4.0`` released in version **2.31.0** of the Neuron SDK.
 
 Getting the schema for your installed version
 ---------------------------------------------
@@ -29,7 +29,7 @@ version you have installed:
 
 .. code-block:: bash
 
-   neuron-explorer --show-profile-schema
+   neuron-explorer view --show-profile-schema
 
 This prints the OpenAPI schema as YAML, one block per table, covering both
 device-profile and system-profile tables. The schema is built into the `neuron-explorer`

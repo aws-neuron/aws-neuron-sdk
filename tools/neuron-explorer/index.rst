@@ -184,7 +184,7 @@ Additional Resources
       :link-type: doc
       :class-card: sd-border-1
 
-      Reference for profile output data tables and fields, matching ``neuron-explorer --show-profile-schema``.
+      Reference for profile output data tables and fields, matching ``neuron-explorer view --show-profile-schema``.
 
    .. grid-item-card:: Analyze Profile Output
       :link: how-to-analyze-profile-output

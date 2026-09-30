@@ -398,4 +398,4 @@ Next steps
 
 * :doc:`Capture Profiles in Neuron Explorer </tools/neuron-explorer/how-to-profile-workload>` — Full capturing and profiling reference (PyTorch, JAX, environment variables, CLI, filtering)
 * :doc:`Neuron Explorer Full Documentation </tools/neuron-explorer/index>` — Complete viewer and feature reference
-* :doc:`Profile Parquet Schema Reference </tools/neuron-explorer/profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer --show-profile-schema``
+* :doc:`Profile Parquet Schema Reference </tools/neuron-explorer/profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer view --show-profile-schema``

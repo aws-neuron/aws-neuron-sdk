@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 08/17/2026
+    :date-modified: 09/30/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -27,6 +27,22 @@ What's New in the AWS Neuron SDK
 
 ----
 
+
+.. _whats-new-vllm-omni-neuron-beta:
+
+vLLM Omni Neuron Beta now available
+-----------------------------------
+
+**Posted on**: September 30, 2026
+
+We are releasing **vLLM Omni Neuron Beta**, a plugin for running diffusion and
+multimodal generation models on Trn2 and Trn3. This release supports
+**WAN 2.2-T2V-A14B** for text-to-video generation and **WAN 2.2-I2V-A14B** for
+image-to-video generation.
+
+For the complete list of features, see the
+`vLLM Omni Neuron release notes on GitHub <https://github.com/aws-neuron/vllm-omni-neuron/releases>`_.
+For full documentation, see :doc:`vLLM Omni Neuron documentation </vllm-omni-neuron/docs/index>`.
 
 .. _whats-new-2026-08-13-v2_32:
 

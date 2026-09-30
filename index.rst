@@ -58,6 +58,13 @@ Pick the task that matches what you want to do.
 
       Run LLM inference on Trainium and Inferentia with **vLLM Neuron**. Supports OpenAI-compatible APIs, continuous batching, and speculative decoding. See the :doc:`offline </vllm-neuron/docs/getting-started/quickstart-offline-serving>` or :doc:`online </vllm-neuron/docs/getting-started/quickstart-online-serving>` serving quickstart.
 
+   .. grid-item-card:: :octicon:`device-camera-video;1em;sd-text-primary` Serve a diffusion or video model
+      :link: /vllm-omni-neuron/docs/index
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Run diffusion and multimodal generation models (such as WAN 2.2 video generation) on Trainium 2 and Trainium 3 with **vLLM Omni Neuron** (Beta). See the :doc:`offline </vllm-omni-neuron/docs/getting-started/quickstart-offline-serving-wan22>` or :doc:`online </vllm-omni-neuron/docs/getting-started/quickstart-online-serving-wan22>` serving quickstart.
+
    .. grid-item-card:: :octicon:`graph;1em;sd-text-primary` Train a model with PyTorch
       :link: /frameworks/torch/pytorch-native-overview
       :link-type: doc
@@ -236,6 +243,7 @@ Learn more
    NxD Inference + vLLM </libraries/nxd-inference/index>
    NxD Core (Inference) </libraries/neuronx-distributed/index-inference>
    vLLM Neuron (Beta) </vllm-neuron/docs/index>
+   vLLM Omni Neuron (Beta) </vllm-omni-neuron/docs/index>
 
 .. toctree::
    :maxdepth: 1

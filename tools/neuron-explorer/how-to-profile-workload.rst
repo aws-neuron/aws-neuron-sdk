@@ -1174,5 +1174,5 @@ Next steps
 
 * :doc:`Get Started with Neuron Explorer <get-started>` — Launch Explorer, upload profiles, and view results
 * :doc:`Neuron Explorer Full Documentation <index>` — Complete viewer and feature reference
-* :doc:`Profile Parquet Schema Reference <profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer --show-profile-schema``
+* :doc:`Profile Parquet Schema Reference <profile-schema-reference>` — Complete profile data reference, matching ``neuron-explorer view --show-profile-schema``
 
