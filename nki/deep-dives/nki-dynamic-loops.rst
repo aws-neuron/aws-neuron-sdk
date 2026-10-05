@@ -129,6 +129,31 @@ compiler full freedom to schedule instructions across the flattened instruction
 stream. However, this does not solve the issue when the trip count is unknown
 at compile time---which is precisely when ``dynamic_range`` is needed.
 
+Iterations Do Not Overlap
+---------------------------
+
+The compiler ends every iteration of a dynamic loop (``nl.fori_loop``,
+``nl.while_loop`` and ``dynamic_range``) with a drain and a barrier across all
+engines, and resets the semaphores before the next iteration starts. No
+instruction of iteration ``i + 1`` starts before every engine has finished
+iteration ``i``, so the loop does not pipeline across iterations: the next
+iteration's DMA loads do not overlap the current iteration's compute, and each
+iteration pays its own pipeline fill and drain. An unrolled loop does not have
+this cost, because the compiler schedules all iterations as one instruction
+stream.
+
+For example, a loop whose body loads a ``[128, 2048]`` fp32 tile from HBM,
+applies ``nisa.activation`` and ``nisa.tensor_scalar`` to it and stores it back
+took about 7.5 us per iteration as a ``range`` loop and about 17.9 us per
+iteration as ``nl.fori_loop``, with a constant or a register bound alike
+(64 iterations on trn1, NKI 0.6.0).
+
+To recover most of the overlap when the trip count must stay dynamic, process
+several tiles per loop iteration with an unrolled inner loop, so that the loads
+of one tile overlap the compute of the previous one inside the body, and the
+barrier is paid once per group of tiles. In the example above, four tiles per
+iteration took about 10.2 us per tile.
+
 Interaction with ``no_reorder``
 ---------------------------------
 

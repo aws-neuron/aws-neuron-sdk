@@ -2455,6 +2455,12 @@ def fori_loop(lower, upper, body_fun, step=1):
     :param step: step size, must be a compile-time positive integer.
     :return: None. Side effects in ``body_fun`` persist after the loop.
 
+    .. note::
+       Every iteration ends with a drain and a barrier across all engines, so iterations do not
+       overlap: the DMA loads of iteration ``i + 1`` start only after all of iteration ``i`` has
+       finished. To overlap data movement and compute, process several tiles per iteration with an
+       unrolled loop inside ``body_fun``. See :ref:`nki-dynamic-loops`.
+
     Examples:
 
     .. code-block:: python
