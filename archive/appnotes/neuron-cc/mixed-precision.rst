@@ -7,59 +7,35 @@ Mixed precision and performance-accuracy tuning (``neuron-cc``)
    :local:
    :depth: 2
 
-The Neuron Compiler supports machine learning models with FP32,
-FP16 and BF16 (Bfloat16) tensors and operators. The Neuron hardware supports a
-mix of 32 and 16 bit datatypes.
-The available auto-cast methods and their performance / accuracy trade-offs
-are explained in this document.
+The Neuron Compiler supports machine learning models with FP32, FP16, and BF16 (Bfloat16) tensors and operators. The Neuron hardware supports a mix of 32-bit and 16-bit datatypes.
 
-Neuron Hardware
--------------------
+Neuron hardware
+---------------
 
-The Neuron hardware supports matrix multiplication using FP16 or BF16 on its Matmult Engine, and
-accumulations using FP32.
-Similarly, operators such as activations or vector operations
-are supported using FP16, BF16 and FP32.
-Neuron supports tensor transpose in two ways - by fast matrix
-multiplication in FP16/BF16 or by slower byte-by-byte data movements.
-
+The Neuron hardware performs matrix multiplication in FP16 or BF16 on its Matmult Engine, and accumulations in FP32. Operators such as activations and vector operations run in FP16, BF16, and FP32. Neuron transposes tensors in two ways: fast matrix multiplication in FP16/BF16, or slower byte-by-byte data movement.
 
 Performance-accuracy tradeoffs for models trained in FP32
 ---------------------------------------------------------
 
-Models that are trained using FP32 data types can be deployed on Neuron
-through ahead of time compilation using the :ref:`Neuron Compiler <neuron-cc-index>`.
-
+You can deploy models trained in FP32 on Neuron by compiling them ahead of time with the :ref:`Neuron Compiler <neuron-cc-index>`.
 
 .. important::
-    **By default**, the Neuron Compiler disables auto-casting and uses the data types defined within the model.
-    This provides the best accuracy for FP32 trained models, but does not provide the best performance.
+    By default, the Neuron Compiler applies (``--fast-math all``) and casts FP32 weights and operations to BF16, and keeps only partial sums (accumulations) in FP32. This default gives the highest performance for an FP32-trained model, but not the best accuracy. To optimize for accuracy instead, use ``--fast-math none``.
 
-weights and operations to BF16**. Only partial sums are left in FP32. The default, casting will generate the highest
-performance for a FP32 trained model.
+Use the ``--fast-math`` CLI option to choose the tradeoff between performance and accuracy. The right settings depend on your application.
 
-Using the ``--fast-math`` CLI option, you can choose the right 
-tradeoff between performance and accuracy. The tradeoff usually is between achieving high performance or optimal accuracy, and decision what settings to use will be application specific.
+We recommend that you start by compiling for high performance (the default), then test the accuracy of your application. If you need more accuracy, try the next higher-precision casting option until you reach the accuracy and performance you need. A typical flow:
 
-It is recommended that the you start with compiling the model to achieve the high performance (default), you can then 
-test the accuracy of the application and, if needed, try the next higher precision casting option until the desired 
-accuracy and performance are achieved. A typical flow can be:
+1. Compile without options (default) or with ``--fast-math all``, which optimizes for performance.
+2. If accuracy is not sufficient, try ``--fast-math fp32-cast-matmult``.
+3. If accuracy is not sufficient, try ``--fast-math fp32-cast-matmult no-fast-relayout``.
+4. If accuracy is not sufficient, try ``--fast-math none``, which optimizes for accuracy.
 
-1. You can compile without options (default) or with ``--fast-math all`` which will optimize for performance.
+Between steps 2 and 3, and between steps 3 and 4, you have additional options that provide different levels of accuracy. The following section explains them.
 
-2. If accuracy is not sufficient you can try ``--fast-math fp32-cast-matmult``  
+The compiler must preserve the input/output (I/O) tensor types requested by the framework, so it does not cast the I/O tensors. You can gain additional speedup by casting them in the framework before compilation.
 
-3. If accuracy is not sufficient you can try ``--fast-math fp32-cast-matmult no-fast-relayout``
-
-4. If accuracy is not sufficient you can try ``--fast-math none`` which will optimize for accuracy .
-
- 
-Between step 2 and step 3, and between step 3 and step 4 you have additional options that can provide different level of accuracy and which are explained in the below section.
-
-Note that compiler has to preserve the input/output (i/o) tensor types requested by Framework, therefore no casting is done on the i/o tensors. Additional speedup can be obtained by casting them in the Framework prior compilation.
-
-To learn how to use compiler command line interface (CLI) options with your application's framework, please see :ref:`torch_neuron_trace_api`, :ref:`tensorflow-ref-neuron-compile-api` and :ref:`tensorflow-ref-neuron-tracing-api`.
-
+To learn how to use compiler command line interface (CLI) options with your application's framework, see :ref:`torch_neuron_trace_api`, :ref:`tensorflow-ref-neuron-compile-api`, and :ref:`tensorflow-ref-neuron-tracing-api`.
 
 Compiler casting options
 ------------------------
@@ -67,14 +43,12 @@ Compiler casting options
 ``--fast-math`` option
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``--fast-math`` option is intended to replace the ``--fp32-cast`` option. It is recommended to
-to start using or migrating to ``--fast-math`` option. The ``--fast-math`` option provides the same level of functionality
-as the ``--fp32-cast`` option in addition to the following:
+The ``--fast-math`` option is intended to replace the ``--fp32-cast`` option, and we recommend migrating to ``--fast-math``. It provides the same functionality as ``--fp32-cast``, plus the following:
 
-* The ``--fast-math`` option introduces the ``no-fast-relayout`` option to enable lossless transpose operation. This was not possible with the ``--fp32-cast`` option.
-* The ``--fast-math`` option provides finer control than the ``--fp32-cast`` option. The transpose operation and the cast operation are controlled independently:
+* ``--fast-math`` adds the ``no-fast-relayout`` option for lossless transpose, which ``--fp32-cast`` does not support.
+* ``--fast-math`` gives finer control than ``--fp32-cast``. You control the transpose operation and the cast operation independently:
 
-    - ``no-fast-relayout`` and ``fast-relayout`` provide control for the transpose operation.
-    - ``fp32-cast-*`` provide control for casting.
+    - ``no-fast-relayout`` and ``fast-relayout`` control the transpose operation.
+    - ``fp32-cast-*`` control casting.
 
-See the detailed list of the options in :ref:`/compiler/neuron-cc/command-line-reference.rst`.
+See the full list of options in :doc:`/compiler/neuron-cc/command-line-reference`.

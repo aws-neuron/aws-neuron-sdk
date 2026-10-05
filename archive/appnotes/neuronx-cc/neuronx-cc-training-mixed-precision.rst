@@ -23,7 +23,7 @@ The Neuron v2 hardware supports matrix multiplication using FP16, BF16, TF32, an
 Performance-accuracy tradeoffs
 ------------------------------
 
-**By default**, the Neuron Compiler will **automatically cast FP32 matrix multiplication operations to BF16**. The remaining operations are performed in the data type specified by the model. The Neuron Compiler provides CLI options that direct the compiler to cast to other data types, thereby giving the ability to choose an accuracy-to-performance tradeoff in model execution. Deciding what CLI settings to use will be application specific and may require some experimentation. See :ref:`Neuron Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>` for details.
+**By default** (since ``neuronx-cc`` 2.22 / Neuron SDK 2.27), the Neuron Compiler performs **all operations in the data types defined by the model** (``--auto-cast=none``) and does not cast FP32 to a lower-precision data type. Earlier versions cast FP32 matrix multiplication operations to BF16 by default. To cast FP32 matrix multiplication operations to BF16 for higher performance, pass ``--auto-cast=matmult --auto-cast-type=bf16``. The Neuron Compiler provides CLI options that direct the compiler to cast to other data types, thereby giving the ability to choose an accuracy-to-performance tradeoff in model execution. Deciding what CLI settings to use will be application specific and may require some experimentation. See :ref:`Neuron Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>` for details.
 
 
 What is the difference between  Data Types?
@@ -58,7 +58,7 @@ Should I downcast operations to smaller Data Types?
 
 This choice here is driven entirely by accuracy vs performance tradeoff. Casting operations to smaller 16-bit data types will provide a significant performance benefit but may end up sacrificing accuracy.
 
-The compiler uses BF16 casting **by default** for matrix multiplication operations. The speedup from casting operations gives a significant performance boost and the range of representable values in BF16 allows for more safety compared to FP16 when the possible numeric range of input values is unknown.
+BF16 casting for matrix multiplication operations, enabled with ``--auto-cast=matmult --auto-cast-type=bf16``, is a common choice. The speedup from casting operations gives a significant performance boost and the range of representable values in BF16 allows for more safety compared to FP16 when the possible numeric range of input values is unknown.
 
 The Neuron Compiler's  ``--auto-cast`` and ``--auto-cast-type`` CLI options are used to direct the compiler to perform alternate casting operations. See the detailed list of the options in :ref:`Neuron v2 Compiler CLI Reference Guide<neuron-compiler-cli-reference-guide>`. The default setting is ``--auto-cast=none``, which is applied if the ``--auto-cast`` flag is not provided.
 

@@ -12,7 +12,7 @@ The Neuron compiler is available in two versions to support different AWS ML acc
 
 Key capabilities of the Neuron Graph Compiler include:
 
-* **Performance optimization**: Intelligently converts FP32 operations to more efficient formats (BF16/FP16/TF32/FP8) with configurable precision-performance tradeoffs. By default, the compiler automatically casts FP32 matrix multiplication operations to BF16 for optimal performance while maintaining accuracy.
+* **Performance optimization**: Optionally converts FP32 operations to more efficient formats (BF16/FP16/TF32/FP8) with configurable precision-performance tradeoffs. By default, ``neuronx-cc`` compiles matrix multiplication operations in the model's own datatype (``--auto-cast=none``), and ``--enable-mixed-precision-accumulation`` is enabled by default. These defaults changed in ``neuronx-cc`` 2.22.12471.0 (Neuron SDK 2.27.0); earlier versions cast FP32 matrix multiplication operations to BF16 by default. To enable BF16 casting for matrix multiplication operations, explicitly pass ``--auto-cast=matmult --auto-cast-type=bf16``. See :ref:`neuronx-cc-training-mixed-precision` for guidance.
 
 * **Model-specific optimizations**: Provides specialized optimizations for different model architectures:
   * **Generic**: Applies general optimizations suitable for all model types
@@ -26,6 +26,10 @@ Key capabilities of the Neuron Graph Compiler include:
 * **Optimization levels**: Provides multiple optimization levels (1-3) to balance compilation time against runtime performance, allowing users to choose the appropriate tradeoff for their workflow.
 
 * **Mixed precision support**: Offers fine-grained control over precision and performance through auto-casting options, supporting multiple numeric formats (FP32, TF32, FP16, BF16, FP8) with different strengths in dynamic range and numeric precision.
+
+.. note::
+
+   The compiler's default precision behavior changed in ``neuronx-cc`` 2.22.12471.0 (Neuron SDK 2.27.0). If you rely on default behavior and upgrade the SDK version, verify your ``--auto-cast`` settings. Models compiled without an explicit ``--auto-cast`` value now run matrix multiplication operations in FP32 instead of BF16, which can reduce inference throughput and increase compiled model size. To keep the earlier behavior, set ``--auto-cast=matmult --auto-cast-type=bf16`` explicitly. See :ref:`neuronx-cc-training-mixed-precision` for guidance.
 
 The compilation process is typically transparent to users, as the compiler is invoked automatically within ML frameworks through Neuron Framework plugins. Models are analyzed, optimized, and compiled into a NEFF file (Neuron Executable File Format), which is then loaded by the :doc:`Neuron Runtime </neuron-runtime/index>` for execution on Neuron devices.
 
