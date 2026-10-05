@@ -861,6 +861,17 @@ tutorial for a detailed implementation.
    the first write to a PSUM location overwrites, and subsequent writes accumulate. Accumulation
    can also be controlled explicitly with ``accumulate=True`` or ``accumulate=False``.
 
+.. note::
+
+   One PSUM tile holds one open accumulation group at a time. A matmul with ``accumulate=False`` starts a
+   new group for its whole PSUM tile (up to one bank per partition), including the columns it does not
+   write, so a later ``accumulate=True`` matmul into another column slice of the same tile overwrites that
+   slice instead of adding to it. To build several results at once, give each accumulation group its own
+   PSUM tile, or copy each group's result out of PSUM before the next group starts in the same tile. The
+   compiler may reorder matmuls of different groups that write disjoint slices of one tile, so writing the
+   groups one after another in program order is not enough on its own; ``nl.no_reorder()`` around each
+   group keeps the program order. See the accumulation notes of :doc:`nisa.nc_matmul </nki/api/generated/nki.isa.nc_matmul>`.
+
 Finally, with 8 PSUM banks per partition, TensorE can have up to eight outstanding matmul accumulation groups, which allows
 flexible scheduling of matmul instructions on TensorE. Also, the extra buffering from multiple PSUM banks allows us to pipeline
 TensorE computation with other compute engines: TensorE can move onto the next accumulation group without waiting for VectorE/ScalarE

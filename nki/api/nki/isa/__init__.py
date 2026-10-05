@@ -554,6 +554,21 @@ def nc_matmul(dst: NkiTensor, stationary: NkiTensor, moving: NkiTensor, is_stati
        by a non-matmul instruction (e.g., ``memset``, ``tensor_copy``) is not supported and is
        undefined behavior on hardware.
 
+    .. note::
+       An accumulation group covers its whole PSUM tile (a tile of up to 2 KiB per partition, one PSUM
+       bank), not only the slice a matmul writes. A matmul with ``accumulate=False`` starts a new group
+       for the whole ``dst`` PSUM tile, including the columns it does not write. If a
+       tile holds several groups in different column slices, an ``accumulate=True`` matmul that runs after
+       another group has started in the same tile overwrites its slice instead of adding to it, so the
+       earlier terms of that group are lost. ``nki.simulate`` warns only when the program order itself
+       interleaves the groups, and it still returns the accumulated value.
+
+       Keep one open accumulation group per PSUM tile: give each group its own PSUM tile, or copy each
+       group's result out of PSUM before the next group starts in the same tile. Writing the groups one
+       after another in program order is not enough on its own, because the compiler may reorder
+       ``nc_matmul`` calls of different groups that write disjoint slices of one tile; wrapping each group
+       in ``nl.no_reorder()`` keeps the program order.
+
     **Transpose mode.**
 
     Tensor Engine can transpose a tile in SBUF by loading it as a stationary tile and using an identity matrix

@@ -102,6 +102,14 @@ Known Issues
   Pass both ``num_valid_indices`` and ``num_elem_per_idx`` explicitly, and size ``dst`` such that
   ``num_valid_indices * num_elem_per_idx == dst.size / dst.shape[0]``.
 
+* :func:`~nki.isa.nc_matmul`: when several accumulation groups are built in different column slices of
+  one PSUM tile, the compiler can issue the first (``accumulate=False``) matmul of a later group before
+  the remaining matmuls of an earlier group, even when the program completes each group before starting
+  the next. Because ``accumulate=False`` starts a new group for the whole tile, the earlier group then
+  loses its first term on hardware, while ``nki.simulate`` returns the correct sum without a warning. Give
+  each group its own PSUM tile, copy each group's result out of PSUM before starting the next group in
+  the same tile, or wrap each group in ``nl.no_reorder()``.
+
 * Known issues carried forward from NKI 0.5.0 still apply unless noted above. See the NKI 0.5.0
   release notes below.
 
