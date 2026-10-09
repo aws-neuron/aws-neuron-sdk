@@ -14,7 +14,6 @@ What you should know before reading
 
 * :doc:`AWS NeuronCore Architecture </about-neuron/arch/index>`
 * :doc:`Amazon EC2 AI Chips Architecture </about-neuron/arch/index>`
-* :doc:`Generating a Neuron runtime core dump </neuron-runtime/about/core-dump>`
 
 Overview
 --------

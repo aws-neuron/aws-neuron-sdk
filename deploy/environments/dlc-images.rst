@@ -34,8 +34,9 @@ Inference Containers
       - Tutorial(s)
 
     * - Neuron Inference Containers
-      - `Neuronx PyTorch vLLM Inference Containers <https://github.com/aws-neuron/deep-learning-containers#vllm-inference-neuronx>`_
-      - :ref:`quickstart_vllm_dlc_deploy`
+      - | `Neuronx PyTorch vLLM Inference Containers <https://github.com/aws-neuron/deep-learning-containers#vllm-inference-neuronx>`_
+        | `Neuronx PyTorch vLLM Omni Inference Containers <https://github.com/aws-neuron/deep-learning-containers#vllm-omni-inference-neuronx>`_
+      - | :ref:`quickstart_vllm_dlc_deploy`
 
     * - Large Model Inference (LMI)/Deep Java Library (DJL) Containers
       - `LMI Containers <https://github.com/aws/deep-learning-containers/blob/master/available_images.md#large-model-inference-containers>`_
