@@ -21,7 +21,6 @@ The Neuron Runtime is typically used transparently through ML framework plugins,
     :hidden:
 
     Overview </neuron-runtime/about/index>
-    Get Started </neuron-runtime/about/core-dump>
     Deep Dives </neuron-runtime/explore/index>
     How-To Guides </neuron-runtime/guides/index>
     API Reference </neuron-runtime/api/index>
@@ -43,13 +42,6 @@ Get Started
         :class-header: sd-bg-primary sd-text-white
 
         Learn about the AWS Neuron Runtime, its features, and capabilities for accessing Inferentia and Trainium Neuron devices.
-
-    .. grid-item-card:: Quickstart: Generate a Core Dump
-        :link: runtime-core-dump-quickstart
-        :link-type: ref
-        :class-header: sd-bg-primary sd-text-white
-
-        Learn how to generate a Neuron runtime core dump for debugging runtime failures and analyzing device state.
 
 How-to guides
 -------------

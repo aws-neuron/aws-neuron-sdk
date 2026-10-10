@@ -104,7 +104,6 @@ Quickstarts by component
    .. grid-item-card:: Neuron Runtime
       :class-card: sd-border-1
 
-      - :ref:`Generate a Neuron runtime core dump <runtime-core-dump-quickstart>`
       - :ref:`Getting started with nrtpy <nrtpy-getting-started>`
 
 Framework setup guides

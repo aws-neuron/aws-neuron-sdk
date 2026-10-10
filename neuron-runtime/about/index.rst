@@ -21,19 +21,6 @@ Neuron Collectives are distributed communication primitives that coordinate data
 
 These operations enable efficient gradient aggregation during distributed training and parameter sharing during distributed inference. Collectives operate at two levels: intra-node communication uses high-bandwidth NeuronLink interconnects between chips within a node, while inter-node communication leverages EFA (Elastic Fabric Adapter) networks to coordinate across multiple physical nodes. The runtime automatically selects optimal algorithms based on message size, cluster topology, and latency requirements.
 
-Get Started
-------------  
-
-.. grid:: 1
-   :gutter: 2
-
-   .. grid-item-card:: Quickstart: Generate a Neuron Runtime Core Dump
-      :link: runtime-core-dump-quickstart
-      :link-type: ref
-      :class-header: sd-bg-primary sd-text-white
-
-      Learn how to generate a Neuron runtime core dump for debugging runtime failures and analyzing device state.
-
 Neuron Runtime Collectives
 ---------------------------
 
