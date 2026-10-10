@@ -260,11 +260,15 @@ intensity of 683 Flops/Byte (2048*1024*1024/(2048*1024 + 1024*1024)). This is
 certainly above the threshold of 222.
 
 At the same time, this blocking configuration keeps all the tensors within the
-SBUF limit as much as possible.  With all matrices in BF16 data type, the
+SBUF limit as much as possible.  With the input matrices in BF16 data type, the
 ``lhsT_tiles`` requires 4MB and ``rhs_tiles`` requires 2MB SBUF memory. The
-``result_m_tiles`` requires ``4 * NUM_BLOCK_M`` MB SBUF memory, where
-``NUM_BLOCK_M`` is ``M // 2048``. Thus, as long as ``M <= 8192``, the required
-SBUF memory is under the 24 MB budget (4 + 2 + 4 * (8192 // 2048) == 22 MB).
+``result_m_tiles`` accumulate the partial sums of every K-block, so they are
+kept in FP32: an accumulator in BF16 would round every output once per K-block,
+and the error would grow with ``K``. The ``nisa.dma_copy`` that evicts them to
+HBM converts to the output data type, rounding each output once. The
+``result_m_tiles`` requires ``8 * NUM_BLOCK_M`` MB SBUF memory, where
+``NUM_BLOCK_M`` is ``M // 2048``. Thus, as long as ``M <= 4096``, the required
+SBUF memory is under the 24 MB budget (4 + 2 + 8 * (4096 // 2048) == 22 MB).
 When the ``M`` dimension becomes bigger, spilling and reloading of the
 ``result_m_tiles`` will happen, but because the frequency is relatively low, the
 computation can still be sufficient.
