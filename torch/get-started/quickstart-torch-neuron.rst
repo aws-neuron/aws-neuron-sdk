@@ -1,7 +1,7 @@
 .. meta::
    :description: Install torch-neuronx and verify it on AWS Trainium.
    :keywords: TorchNeuron, torch-neuronx, install, verify, quickstart, Trainium, PyTorch, Neuron
-   :date-modified: 2026-10-15
+   :date-modified: 2026-10-19
 
 .. _torchneuron-quickstart-install-verify:
 
@@ -23,8 +23,8 @@ TorchNeuron supports the Trn2 and Trn3 instance families. You need these resourc
 
 * An instance from the Trn2 or Trn3 family, for example ``trn2.3xlarge`` or
   ``trn2.48xlarge``
-* A :doc:`Neuron Base DLAMI </deploy/environments/dlami>` for Ubuntu 26.04, or an
-  Ubuntu 26.04 AMI
+* A :doc:`Neuron Base DLAMI </deploy/environments/dlami>` for Ubuntu 24.04 or
+  Ubuntu 26.04, or an Ubuntu 24.04 or Ubuntu 26.04 AMI
 * SSH access to the system
 
 Use a Base DLAMI for a custom environment or container application. This quickstart
@@ -42,8 +42,8 @@ Use the Neuron Base DLAMI
 Neuron Base DLAMIs include the Neuron driver, EFA, and Neuron tools. Continue to
 Step 2.
 
-Use an Ubuntu 26.04 AMI
-~~~~~~~~~~~~~~~~~~~~~~~
+Use an Ubuntu 24.04 or Ubuntu 26.04 AMI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An Ubuntu AMI does not include Neuron packages. Configure the Neuron repository:
 
