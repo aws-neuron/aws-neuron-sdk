@@ -32,6 +32,30 @@ featured_articles:
     featured: true
     icon: "🔥"
 
+  - title: "TorchNeuron: running HF models on AWS Trainium is easier than ever"
+    url: "https://huggingface.co/blog/hf-torchneuron"
+    description: "Hugging Face explains how Transformers, Diffusers, Accelerate, PEFT, TRL, and Kernels run directly on AWS Trainium with the TorchNeuron backend, using eager mode, torch.compile, and native distributed APIs. Hugging Face now recommends these libraries over Optimum Neuron for Neuron users."
+    author: "Hugging Face"
+    author_url: "https://huggingface.co/blog"
+    date: "2026-10-19"
+    category: "blog"
+    locale: "en-US"
+    keywords: ["torchneuron", "pytorch", "hugging-face", "transformers", "diffusers", "trainium", "torch-compile", "optimum-neuron"]
+    featured: true
+    icon: "🤗"
+
+  - title: "Celebrating the release of TorchNeuron"
+    url: "https://lokahq.github.io/tech-blog/celebrating-the-release-of-torchneuron/"
+    description: "Loka describes its path from porting BEVFusion with NKI and custom C++ operators to running native PyTorch on AWS Trainium with TorchNeuron, including ESMC-300M protein-variant scoring on Trainium2 with torch.compile and no model rewrite."
+    author: "Bojan Jakimovski (Loka)"
+    author_url: "https://lokahq.github.io/tech-blog/"
+    date: "2026-10-13"
+    category: "case-study"
+    locale: "en-US"
+    keywords: ["torchneuron", "pytorch", "trainium2", "torch-compile", "eager-mode", "esmc", "case-study", "loka"]
+    featured: true
+    icon: "🎉"
+
   - title: "AWS Neuron 2.31.0 now available with NKI 0.5.0 and UltraServer Operator"
     url: "https://aws.amazon.com/about-aws/whats-new/2026/07/aws-announce-neuron-2-31-0/"
     description: "Neuron SDK 2.31.0 introduces NKI 0.5.0 with MX FP8 scale dtype support, tensor indirection, and new NkiTensor view APIs, plus the Neuron UltraServer Operator for Amazon EKS in public beta for Trainium UltraServer workloads."
@@ -116,18 +140,19 @@ featured_articles:
     featured: true
     icon: "📊"
 
-all_articles:
-  # English Community Articles
-  - title: "Celebrating the release of TorchNeuron"
-    url: "https://lokahq.github.io/tech-blog/celebrating-the-release-of-torchneuron/"
-    description: "Loka describes its path from porting BEVFusion with NKI and custom C++ operators to running native PyTorch on AWS Trainium with TorchNeuron, including ESMC-300M protein-variant scoring on Trainium2 with torch.compile and no model rewrite."
-    author: "Bojan Jakimovski (Loka)"
-    date: "2026-10-13"
-    category: "case-study"
+  - title: "Red Hat AI Inference Server — vLLM Neuron Container Image (RHEL 9)"
+    url: "https://catalog.redhat.com/en/software/containers/rhaiis/vllm-neuron-rhel9/698c42b20b626d81c97abd7f"
+    description: "Certified container image for the Red Hat AI Inference Server with vLLM optimized for AWS Inferentia and Trainium accelerators via the AWS Neuron SDK. Provides enterprise-grade, high-performance LLM inference serving on RHEL 9, enabling production deployment of generative AI models on AWS AI chips through Red Hat OpenShift or Podman."
+    author: "Red Hat"
+    author_url: "https://catalog.redhat.com/"
+    date: "2025-12-02"
+    category: "news"
     locale: "en-US"
-    keywords: ["torchneuron", "pytorch", "trainium2", "torch-compile", "eager-mode", "esmc", "case-study", "loka"]
-    featured: false
+    keywords: ["red-hat", "vllm", "neuron", "inferentia", "trainium", "container", "rhel9", "inference", "openshift"]
+    featured: true
+    icon: "🎩"
 
+all_articles:
   # Japanese Articles
   - title: "AWS Neuron 関連記事まとめ"
     url: "https://zenn.dev/tosshi/articles/36f3615e26c323"
@@ -351,14 +376,4 @@ all_articles:
     locale: "en-US"
     keywords: ["neuron-operator", "kubernetes", "openshift", "open-source", "inferentia", "trainium"]
     featured: false
-
-  - title: "Red Hat AI Inference Server — vLLM Neuron Container Image (RHEL 9)"
-    url: "https://catalog.redhat.com/en/software/containers/rhaiis/vllm-neuron-rhel9/698c42b20b626d81c97abd7f"
-    description: "Certified container image for the Red Hat AI Inference Server with vLLM optimized for AWS Inferentia and Trainium accelerators via the AWS Neuron SDK. Provides enterprise-grade, high-performance LLM inference serving on RHEL 9, enabling production deployment of generative AI models on AWS AI chips through Red Hat OpenShift or Podman."
-    author: "Red Hat"
-    date: "2025-12-02"
-    category: "news"
-    locale: "en-US"
-    keywords: ["red-hat", "vllm", "neuron", "inferentia", "trainium", "container", "rhel9", "inference", "openshift"]
-    featured: true
 
