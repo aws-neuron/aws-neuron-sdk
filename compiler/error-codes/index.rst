@@ -30,6 +30,9 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EMOD025 <error-code-emod025>`
      - Dynamic shape is not supported. The Neuron compiler requires all tensor dimensions to be statically sized.
      - Recompile the model with fully static input shapes. When compiling via PyTorch torch.compile, set dynamic=False to disable dynamic shape specialization.
+   * - :ref:`NCC_ENKI003 <error-code-enki003>`
+     - NKI kernel was traced for more NeuronCores than the number of Logical Neuron Cores (LNC) the graph is compiled for.
+     - Re-trace the kernel for the compiled LNC, or compile the graph for the LNC the kernel was traced for, so the two match. Set NEURON_LOGICAL_NC_CONFIG or the --lnc flag.
    * - :ref:`NCC_EOOM001 <error-code-eoom001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -189,6 +192,9 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EVRF065 <error-code-evrf065>`
      - NKI kernel was traced with an unsupported NKI version.
      - Upgrade the installed NKI version and rerun your model to retrace the NKI kernel.
+   * - :ref:`NCC_EVRF066 <error-code-evrf066>`
+     - NKI kernel is configured with an LNC degree that differs from the LNC degree used by neuronx-cc.
+     - Set ``NEURON_LOGICAL_NC_CONFIG`` and remove any bracket syntax at kernel call sites.
    * - :ref:`NCC_EXSP001 <error-code-exsp001>`
      - The combined memory needed for the model's activation tensors exceeds the high-bandwidth memory limit.
      - You may need to reduce batch/tensor size or utilize pipeline/tensor parallelism via neuronx-distributed.
@@ -205,6 +211,7 @@ This page lists the error codes you can encounter while developing with the Neur
     EBVF030
     EHCA005
     EMOD025
+    ENKI003
     EOOM001
     EOOM002
     ESFH002
@@ -258,5 +265,6 @@ This page lists the error codes you can encounter while developing with the Neur
     EVRF063
     EVRF064
     EVRF065
+    EVRF066
     EXSP001
     EXTP004
