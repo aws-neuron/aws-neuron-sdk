@@ -1,3 +1,7 @@
+.. meta::
+   :description: Troubleshoot common issues with AWS Neuron Deep Learning Containers, including Neuron runtime, driver, and device access errors inside containers.
+   :date-modified: 2026-10-13
+
 .. _container-troubleshooting:
 
 Troubleshooting Neuron Containers
@@ -10,10 +14,8 @@ potentially correct the issue.
 
 
 If your issue is not listed below or you have a more nuanced problem, contact
-us via `issues <https://github.com/aws/aws-neuron-sdk/issues>`__ posted
-to this repo, the `AWS Neuron developer
-forum <https://forums.aws.amazon.com/forum.jspa?forumID=355>`__, or
-through AWS support.
+us through `AWS Neuron GitHub issues <https://github.com/aws-neuron/aws-neuron-sdk/issues>`__
+or through AWS support.
 
 Neuron Container includes the following Neuron Components. For issues relating to 
 these components inside the container refer the individual component troubleshooting

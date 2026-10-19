@@ -2,15 +2,19 @@
 
 <!-- meta: description: Component DP sharding design -->
 <!-- meta: content_type: conceptual-deep-dive -->
-<!-- meta: date_updated: 2026-06-23 -->
+<!-- meta: date_updated: 2026-09-01 -->
 
 ## Overview
 
-Each model component (Attention, Embedding, MLP, LM Head) can independently shard its weights across `TP * component_dp_size` devices instead of just TP. This reduces per-device weight memory at the cost of additional collectives during decode.
+Each model component (Attention, Embedding, MLP, LM Head) can independently shard its weights across `TP * component_dp_size` devices instead of just TP. This reduces the per-device weight memory. The cost is an additional collective on each path that uses the enlarged group.
 
-**Decode-only.** Prefill uses standard TP sharding and is unaffected by these flags.
+**The MLP shards on both paths.** The MLP shards over `TP * mlp_dp_size` on the prefill graph and on the decode graph. The prefill path gathers the rows and reduces the results over the same enlarged group. So one process can serve the prefill shape and the decode shape from one graph.
 
-**DI (Disaggregated Inference) required.** Since prefill and decode use different effective TP sizes, weights must be loaded separately per graph. This is naturally supported in DI setups where prefill and decode run on separate compiled graphs.
+**The target and the Eagle3 draft shard their MLP separately.** `mlp_dp_size` widens the group for the target MLP. `draft_mlp_dp_size` widens it for the Eagle3 draft MLP. The two degrees are independent, because a MoE target must keep `mlp_dp_size` at 1 (see the constraints below) while its dense draft MLP still gains from the wider group.
+
+**Decode-only for the other components.** Prefill uses standard TP sharding for the attention, the embedding, and the LM head. `attention_dp_size`, `embedding_dp_size`, and `lm_head_dp_size` do not change the prefill graph.
+
+**DI (Disaggregated Inference) recommended.** A component that uses a different effective TP size on prefill and on decode must load its weights separately per graph. DI supports this, because prefill and decode run on separate compiled graphs. `mlp_dp_size` does not have this constraint. It uses the same group on both paths.
 
 ## Configuration
 
@@ -18,7 +22,8 @@ Each model component (Attention, Embedding, MLP, LM Head) can independently shar
 NeuronConfig(
     attention_dp_size=4,  # existing — Q/O (and optionally K/V) sharding
     embedding_dp_size=4,            # new — Embedding vocab sharding
-    mlp_dp_size=4,                  # new — MLP intermediate sharding
+    mlp_dp_size=4,                  # new — target MLP intermediate sharding
+    draft_mlp_dp_size=4,            # new — Eagle3 draft MLP intermediate sharding
     lm_head_dp_size=4,              # new — LM Head vocab sharding
 )
 ```
@@ -29,14 +34,17 @@ Each parameter controls one component independently:
 |-----------|-----------|---------------|---------|
 | `attention_dp_size` | Attention Q/O/KV | Q heads, O projection, optionally KV heads | 1 |
 | `embedding_dp_size` | Embedding | Vocabulary dimension | 1 |
-| `mlp_dp_size` | Dense MLP | Intermediate dimension (gate/up/down projections) | 1 |
+| `mlp_dp_size` | Dense MLP (target) | Intermediate dimension (gate/up/down projections) | 1 |
+| `draft_mlp_dp_size` | Dense MLP (Eagle3 draft) | Intermediate dimension (gate/up/down projections) | 1 |
 | `lm_head_dp_size` | LM Head | Vocabulary dimension (output projection) | 1 |
 
 **Constraints:**
 
 - Each `*_dp_size` must be a positive integer that divides the overall `dp_size`
 - `embedding_dp_size` and `lm_head_dp_size` are independent (can differ even with tied embeddings — weights are loaded separately)
-- `mlp_dp_size > 1` is incompatible with `ep_degree > 1` (MoE models use EP for expert sharding instead)
+- `mlp_dp_size > 1` is incompatible with expert parallelism (`ep_degree > 1` or `--enable-expert-parallel`) **on the static cross-DP-EP dispatch**. A MoE model shards its experts with EP, so `mlp_dp_size` would only change the batch layout of the target: the decoder layer all-gathers the rows over the MLP DP column and the dispatch all-gathers them again over the same ranks, which makes `mlp_dp_size` identical copies of one row block. The expert kernel computes every copy and the combine slices the copies back off. The platform validation rejects that combination when a server asks for it. The check lives there rather than on `NeuronConfig`, because which dispatch the MoE takes depends on the vLLM parallel config and the resolved all2all backend, and a `NeuronConfig` built on its own sees neither. Use `draft_mlp_dp_size` to widen the draft MLP group on a MoE target.
+- The all2all-v dispatch (`all2all_backend="neuron"`) is exempt. It keeps the rows sequence parallel, so the decoder layer skips the MLP DP transition and the dispatch never gathers over the DP group. There is no second gather, so `mlp_dp_size > 1` is allowed there.
+- `draft_mlp_dp_size` is compatible with expert parallelism, because it changes the draft MLP only. It does not change the row layout that the target hands to the draft.
 
 ## Process Groups
 
@@ -207,8 +215,8 @@ Internal all-to-all for Q/KV head swapping is unchanged (handled by the megakern
 
 | File | Change |
 |------|--------|
-| `model/neuron_config.py` | `embedding_dp_size`, `lm_head_dp_size`, `mlp_dp_size` config fields |
+| `model/neuron_config.py` | `embedding_dp_size`, `lm_head_dp_size`, `mlp_dp_size`, `draft_mlp_dp_size` config fields; rejects `mlp_dp_size > 1` with EP |
 | `parallel/neuron_parallel_state.py` | Component TP groups (`_NEURON_*_TP`) and DP column groups (`_NEURON_*_DP`) for all components; `_build_component_tp_group_ranks()` helper; `_NEURON_ATTENTION_TP` component TP group |
 | `model/llama3/model.py` | `_dp_transition()` helper; `LlamaDecoderLayer` batch state transitions; `LlamaMLP` uses MLP Component TP group; `LlamaModel` embedding DP bracket; `LlamaForCausalLM` LM head DP bracket; `LlamaAttention` uses attention Component TP group all-reduce |
-| `utils/executor.py` | `embedding_dp_size`, `lm_head_dp_size`, `mlp_dp_size` params threaded through |
+| `utils/executor.py` | `embedding_dp_size`, `lm_head_dp_size`, `mlp_dp_size`, `draft_mlp_dp_size` params threaded through |
 | `vllm/worker/neuron_worker.py` | Reads new config fields and passes to `init_neuron_distributed_environment` |

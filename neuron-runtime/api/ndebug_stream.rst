@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the ndebug_stream.h header in the AWS Neuron Runtime: Consume debug events from the runtime per Logical NeuronCore.
+   :date-modified: 2026-10-13
+
 .. _api_ndebug_stream_h:
 
 ndebug_stream.h

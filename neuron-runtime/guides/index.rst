@@ -63,6 +63,7 @@ Related topics
 --------------
 
 * :ref:`neuron-runtime` — Neuron Runtime overview and landing page
+* :ref:`nrt-env-var-reference` — complete reference for all runtime environment variables, grouped by use class
 * :ref:`neuron-runtime-explore-home` — deep dives into runtime internals
   (NEFF files, device memory, collectives, core dumps)
 * :doc:`/neuron-runtime/api/index` — Neuron Runtime API reference

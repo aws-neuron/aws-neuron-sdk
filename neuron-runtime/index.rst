@@ -1,3 +1,7 @@
+.. meta::
+   :description: The AWS Neuron Runtime loads and runs compiled NEFF models on Inferentia and Trainium NeuronCores. Find runtime guides, configuration, API reference, and collectives documentation.
+   :date-modified: 2026-10-13
+
 .. _neuron_runtime:
 
 NeuronX Runtime
@@ -26,6 +30,7 @@ The Neuron Runtime is typically used transparently through ML framework plugins,
     API Reference </neuron-runtime/api/index>
     nrtpy (Neuron Runtime Python) </neuron-runtime/nrtpy/index>
     NRT Debug Stream </neuron-runtime/api/debug-stream-api>
+    Compatibility </neuron-runtime/compatibility>
     Troubleshooting on Inf1 and Trn1 </neuron-runtime/nrt-troubleshoot>
     Release Notes </release-notes/components/runtime>
     FAQ </neuron-runtime/faq>
@@ -42,6 +47,13 @@ Get Started
         :class-header: sd-bg-primary sd-text-white
 
         Learn about the AWS Neuron Runtime, its features, and capabilities for accessing Inferentia and Trainium Neuron devices.
+
+    .. grid-item-card:: Quickstart: Generating a core dump
+        :link: runtime-core-dump-quickstart
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Generate your first Neuron runtime core dump in about 15 minutes, using a NKI kernel that faults on purpose.
 
 How-to guides
 -------------
@@ -89,6 +101,13 @@ Reference
         :class-header: sd-bg-primary sd-text-white
 
         Documentation of the APIs in the public headers for the Neuron Runtime.
+
+    .. grid-item-card:: Environment variable reference
+        :link: nrt-env-var-reference
+        :link-type: ref
+        :class-header: sd-bg-primary sd-text-white
+
+        Complete, categorized reference for the runtime environment variables that configure core allocation, collectives, memory, logging, profiling, and debugging.
 
     .. grid-item-card:: Troubleshooting on Inf1 and Trn1
         :link: nrt-troubleshooting

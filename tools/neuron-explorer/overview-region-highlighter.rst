@@ -73,6 +73,49 @@ Region Highlighter regions automatically populate the Summary Viewer's region se
 
 Select a region from the "Region Selection" menu in the Summary Viewer to view its performance data. See :doc:`overview-summary-page` for details on interpreting region-level insights.
 
+.. _neuron-explorer-nki-regions:
+
+NKI Regions
+------------
+
+NKI kernel developers can mark sections of their kernel source as NKI Regions, using ``nki.language.profiler_region_open`` and ``nki.language.profiler_region_close``. Those regions appear in the Region Highlighter panel alongside the automatically generated ones, so you can compare the performance of different phases of a kernel. For how to define them, see :ref:`Define NKI Regions in Your Kernel <nki-define-regions>`.
+
+Each region spans the execution time of all hardware instructions compiled from the marked code, even where the compiler reordered them. A region opened inside another appears on the instructions of both, so nested regions overlap on the timeline.
+
+NKI Regions require ``NKI_DEBUG_INFO=True`` at compile time. Without it the compiler emits no region metadata and the panel shows none. See :doc:`environment-variables`.
+
+.. image:: /tools/neuron-explorer/images/region-highlighter-nki-regions.png
+
+Filtering regions by invocation and iteration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A region label that is opened from more than one call to the kernel, or opened inside a loop, covers more than one span of time. The NKI Regions table gives each label a filter box so you can narrow it to the occurrences you care about.
+
+**Invocation**
+    Which call to the kernel the region belongs to. This column appears only when the label was reached from more than one call.
+
+**Iteration**
+    Which loop pass within that call. This column appears when the region was opened inside a loop.
+
+Each box accepts the same syntax, also available from the info icon in the column header:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Input
+     - Matches
+   * - *(empty)*
+     - All occurrences.
+   * - ``0``
+     - A single value.
+   * - ``0,2,5``
+     - A list of values.
+   * - ``1-4``
+     - An inclusive range.
+   * - ``0,3-5``
+     - A list and a range combined.
+
 Data requirements
 -----------------
 

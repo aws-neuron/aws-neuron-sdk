@@ -1,29 +1,97 @@
+# AUTO GENERATED FILE - DO NOT MANUALLY MODIFY.
+
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
 
 from nki.language import NKIObject
-from nki.language import NkiTensor
+
+if TYPE_CHECKING:
+    from nki.isa import NkiInstruction
+    from nki.language import NkiTensor
 
 @dataclass
 class ReplicaGroup(NKIObject):
-    r"""Defines a group of ranks that participate in a collective operation.
+    r"""The set of ranks a collective is executed on, as a list of rank-lists.
 
-    Sub-groups represented by lists of ranks should not have any overlap."""
+    The collective executes independently within each rank-list, and executes
+    on all rank-lists in parallel. Each rank in the replica-group must
+    participate in only one rank-list.
+
+    e.g. with ``[[0, 1, 2, 3], [4, 5, 6, 7]]``, the collective runs
+    independently within ranks 0-3 and within ranks 4-7, in parallel."""
+
+    @staticmethod
+    def from_partition_op(world_size: int, op: rg_partition_op, operand: int) -> 'ReplicaGroup':
+        r"""Build a ReplicaGroup by partitioning ranks ``[0, world_size)``.
+
+        Ranks sharing the same ``rank_list_id = op(rank, operand)`` form one
+        rank-list.
+
+        Examples (8 ranks)::
+
+            >>> ReplicaGroup.from_partition_op(8, rg_partition_op.bitwise_and, 0)
+            ReplicaGroup([[0, 1, 2, 3, 4, 5, 6, 7]])       # all ranks, one rank-list
+            >>> ReplicaGroup.from_partition_op(8, rg_partition_op.div, 4)
+            ReplicaGroup([[0, 1, 2, 3], [4, 5, 6, 7]])     # contiguous
+            >>> ReplicaGroup.from_partition_op(8, rg_partition_op.mod, 4)
+            ReplicaGroup([[0, 4], [1, 5], [2, 6], [3, 7]]) # strided"""
+        ...
 
     ...
 
-def all_reduce(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+class rg_partition_op(Enum):
+    r"""How to map ranks ``[0, world_size)`` to rank-list ids.
+
+    Ranks sharing the same ``rank_list_id = op(rank, operand)`` land in the
+    same rank-list."""
+
+    div = 'div'
+    r"""``rank_list_id = rank // operand``: ``operand`` consecutive ranks per
+    rank-list. ``operand`` is the rank-list size. Groups neighbouring ranks,
+    e.g. tensor-parallelism.
+
+    ``world_size=8, operand=4`` -> ``[[0, 1, 2, 3], [4, 5, 6, 7]]``."""
+
+    mod = 'mod'
+    r"""``rank_list_id = rank % operand``: ranks ``operand`` apart share a
+    rank-list. ``operand`` is the number of rank-lists. Interleaves ranks,
+    e.g. context-parallelism.
+
+    ``world_size=8, operand=4`` -> ``[[0, 4], [1, 5], [2, 6], [3, 7]]``."""
+
+    bitwise_and = 'and'
+    r"""``rank_list_id = rank & operand``: ranks sharing the bits selected by
+    the ``operand`` bitmask share a rank-list. ``operand = 0`` puts all ranks
+    in one rank-list.
+
+    ``world_size=8, operand=0`` -> ``[[0, 1, 2, 3, 4, 5, 6, 7]]``."""
+
+    ...
+
+def all_reduce(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, op, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Perform an all-reduce on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
     collective communication, which allows multiple tensors to be reduced in a single
     collective operation for improved efficiency.
 
-    Tensors can reside on either HBM or SBUF. However, mixing memory spaces is not
-    supported: all tensors must be on HBM or all must be on SBUF. Coalesced collective
-    communication (multiple tensors) is only supported when tensors are on HBM.
+    Tensors can reside on either HBM or SBUF, but not a mix of the two. Coalesced
+    collective communication (multiple tensors) is only supported when tensors are
+    on HBM.
+
+    On HBM, the tensors within ``srcs`` must be either all ``private_hbm`` or all
+    ``shared_hbm``, and likewise within ``dsts``, but ``srcs`` and ``dsts`` need
+    not match. When LNC degree is 1, the ``srcs`` must be on ``private_hbm``; only
+    the ``dsts`` may be shared, and only when ``NKI_LNC1_SHARED_HBM=1`` is set.
+
+    A ``shared_hbm`` destination is a single allocation that both NeuronCores on
+    an HBM stack address, rather than one buffer per core. An all-reduce produces
+    the same result on every rank, so when the LNC degree is 1 and both ranks of
+    a replica group share an HBM, the collective can write the result once and
+    both ranks read it. A ``private_hbm`` destination gives each rank its own
+    copy of identical data, costing twice the capacity and bandwidth.
 
     :param srcs: List of input tensors to reduce
     :param dsts: List of output tensors to store results
@@ -34,16 +102,28 @@ def all_reduce(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Repl
     :param name: (optional) name for the instruction."""
     ...
 
-def all_gather(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_gather(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Perform an all-gather on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
     collective communication, which allows multiple tensors to be gathered in a single
     collective operation for improved efficiency.
 
-    Tensors can reside on either HBM or SBUF. However, mixing memory spaces is not
-    supported: all tensors must be on HBM or all must be on SBUF. Coalesced collective
-    communication (multiple tensors) is only supported when tensors are on HBM.
+    Tensors can reside on either HBM or SBUF, but not a mix of the two. Coalesced
+    collective communication (multiple tensors) is only supported when tensors are
+    on HBM.
+
+    On HBM, the tensors within ``srcs`` must be either all ``private_hbm`` or all
+    ``shared_hbm``, and likewise within ``dsts``, but ``srcs`` and ``dsts`` need
+    not match. When LNC degree is 1, the ``srcs`` must be on ``private_hbm``; only
+    the ``dsts`` may be shared, and only when ``NKI_LNC1_SHARED_HBM=1`` is set.
+
+    A ``shared_hbm`` destination is a single allocation that both NeuronCores on
+    an HBM stack address, rather than one buffer per core. An all-gather produces
+    the same result on every rank, so when the LNC degree is 1 and both ranks of
+    a replica group share an HBM, the collective can write the result once and
+    both ranks read it. A ``private_hbm`` destination gives each rank its own
+    copy of identical data, costing twice the capacity and bandwidth.
 
     :param srcs: List of input tensors to gather
     :param dsts: List of output tensors to store results
@@ -57,7 +137,7 @@ def all_gather(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Repl
     :param name: (optional) name for the instruction."""
     ...
 
-def all_gather_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_gather_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Perform a variable-length all-gather on the given replica group.
 
     Unlike ``all_gather`` which concatenates along a collective dimension,
@@ -133,15 +213,61 @@ def all_gather_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Re
     Current limitations:
 
     - ``has_rdispls=True`` is not supported.
-    - Only LNC=2 is supported.
-    - Each rank-list must have exactly 4 ranks (intra-chip).
+    - Intra-chip rank-lists must contain 8 ranks under LNC=1 or 4 ranks
+      under LNC=2.
 
     :param priority: DMA QoS priority level 0-3 where lower is higher
         priority (NeuronCore-v4+ only).
     :param name: (optional) name for the instruction."""
     ...
 
-def reduce_scatter(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_gather_v_prepare(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_tensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
+    r"""Begin a split :func:`all_gather_v`.
+
+    A plain :func:`all_gather_v` couples its metadata setup with the
+    execution of the ag-v collective, so the setup cannot start until the
+    instruction that fills ``srcs`` has completed. Splitting it into
+    ``prepare`` + ``trigger`` lets the setup run ahead and overlap with
+    unrelated compute, hiding its latency.
+
+    ``prepare`` reads ``metadata_tensor``, which must already hold valid data.
+    It does not read the contents of ``srcs``/``dsts``, so it may be issued
+    before they are filled.
+
+    Each prepare must be followed by exactly one :func:`all_gather_v_trigger`,
+    with no other prepare in between. Prepares share a single slot, so an
+    intervening prepare of any kind is rejected.
+
+    All arguments match :func:`all_gather_v`; see it for their meaning and
+    current restrictions.
+
+    **Current restrictions:**
+
+    NeuronSwitch-based instances (the :ref:`Trn3 Ultraserver <aws-trn3-arch>`)
+    do not currently support the prepare/trigger split. Use plain
+    :func:`all_gather_v` on those instance types.
+
+    :return: The :class:`~nki.isa.NkiInstruction` to pass to the paired
+        :func:`all_gather_v_trigger`."""
+    ...
+
+def all_gather_v_trigger(prepare_instr: NkiInstruction, name: Optional[str]=None) -> NkiInstruction:
+    r"""Complete a split :func:`all_gather_v`.
+
+    Run the ag-v collective whose metadata setup was done by
+    :func:`all_gather_v_prepare`. This is the phase that reads ``srcs`` and
+    writes ``dsts``.
+
+    The trigger reuses the buffers, replica group, and every other argument
+    from the paired :func:`all_gather_v_prepare`, so it takes only the
+    prepare instruction.
+
+    :param prepare_instr: The instruction returned by the paired
+        :func:`all_gather_v_prepare`. It links this trigger to that prepare and
+        supplies the operands."""
+    ...
+
+def reduce_scatter(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, op, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Perform a reduce-scatter on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -163,7 +289,7 @@ def reduce_scatter(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: 
     :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_to_all(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, collective_dim: int, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Perform an all-to-all on the given replica group and input/output tensors.
 
     The ``srcs`` and ``dsts`` parameters accept lists of tensors to support coalesced
@@ -182,7 +308,7 @@ def all_to_all(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Repl
     :param name: (optional) name for the instruction."""
     ...
 
-def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: ReplicaGroup, metadata_tensor: NkiTensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Executes an all-to-all collective where each rank can send
     a different number of elements, known only at execution time (rather
     than at compile time).
@@ -194,8 +320,7 @@ def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Re
 
     **Current restrictions:**
 
-    On instances with a NeuronSwitch fabric (see `Trn3 architecture
-    <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trn3-arch.html>`_),
+    On instances with a NeuronSwitch fabric (see :ref:`Trn3 architecture <aws-trn3-arch>`),
     ``all_to_all_v`` requires LNC=2 and more than one participating
     device. Multiple ranks per device are supported, but for every
     replica-group rank-list, every device participating in that
@@ -204,10 +329,17 @@ def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Re
     in the world (e.g. ``[[1, 2, 3, 4], [5, 6, 7, 8]]``). To exclude a
     rank, keep it in the replica group and set its ``send_count`` to 0.
 
-    On other instances, ``all_to_all_v`` currently supports only
-    inter-node replica groups: each rank-list contains same-indexed
-    ranks from different nodes (a node refers to a different Trn EC2
-    instance).
+    On other instances, ``has_rdispls=True`` is currently only
+    supported on inter-node replica groups: each rank-list contains
+    same-indexed ranks from different nodes (a node refers to a
+    different Trn EC2 instance). For example, on a trn2.48xlarge (64
+    LNCs per node with LNC degree of 2, see `Logical NeuronCore
+    configuration
+    <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-features/logical-neuroncore-config.html>`_;
+    ranks ``0-63`` on node 0, ``64-127`` on node 1), an inter-node
+    replica group of 16 ranks per node at stride 4 pairs each rank
+    with its same-indexed peer on the other node: ``[[0, 64], [4, 68],
+    ..., [60, 124]]``.
 
     :param srcs: Input tensor list. Currently supports exactly one tensor.
         Must be HBM-backed.
@@ -250,9 +382,8 @@ def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Re
     :param has_rdispls:
         - ``True``: row 3 is an **input**; recv_displs must be populated.
           The chunk from sender rank ``r`` is written at
-          ``dst[recv_displs[r] : recv_displs[r] + recv_counts[r]]``.
-          Currently only supported on NeuronSwitch-based instances (trn3
-          today).
+          ``dst[recv_displs[r] : recv_displs[r] + recv_counts[r]]``. See
+          **Current restrictions** for supported replica groups on different instances.
         - ``False`` (default): row 3 may be omitted from ``metadata_tensor`` (pass a
           3-row tensor). Incoming chunks are laid out equally-spaced at
           ``recv_displs[r] = (dst.total_elements / rank_list_size) * r``,
@@ -263,7 +394,56 @@ def all_to_all_v(srcs: List[NkiTensor], dsts: List[NkiTensor], replica_group: Re
     :param name: (optional) name for the instruction."""
     ...
 
-def collective_permute(srcs: List[NkiTensor], dsts: List[NkiTensor], source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None, name: Optional[str]=None) -> None:
+def all_to_all_v_prepare(srcs: List, dsts: List, replica_group: ReplicaGroup, metadata_tensor, recv_counts_known: bool=False, has_rdispls: bool=False, priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
+    r"""Begin a split :func:`all_to_all_v`.
+
+    A plain :func:`all_to_all_v` couples its metadata setup with the
+    execution of the a2a-v collective, so the setup cannot start until the
+    instruction that fills ``srcs`` has completed. Splitting it into
+    ``prepare`` + ``trigger`` lets the setup run ahead and overlap with
+    unrelated compute, hiding its latency. This helps when the per-rank
+    counts are known before the data is — e.g. in MoE, where ``send_counts``
+    follow the router/top-k while ``srcs`` are only filled after a reshuffle.
+
+    ``prepare`` reads ``metadata_tensor``, which must already hold valid data.
+    It does not read the contents of ``srcs``/``dsts``, so it may be issued
+    before they are filled.
+
+    Each prepare must be followed by exactly one :func:`all_to_all_v_trigger`,
+    with no other prepare in between. Prepares share a single slot, so an
+    intervening prepare of any kind is rejected.
+
+    All arguments match :func:`all_to_all_v`; see it for their meaning. The
+    trigger reuses them from this call, so :func:`all_to_all_v_trigger` takes
+    only the instruction this call returns.
+
+    **Current restrictions:**
+
+    NeuronSwitch-based instances (the :ref:`Trn3 Ultraserver <aws-trn3-arch>`)
+    do not currently support the prepare/trigger split. Use plain
+    :func:`all_to_all_v` on those instance types.
+
+    :return: The :class:`~nki.isa.NkiInstruction` to pass to the paired
+        :func:`all_to_all_v_trigger`."""
+    ...
+
+def all_to_all_v_trigger(prepare_instr: NkiInstruction, name: Optional[str]=None) -> NkiInstruction:
+    r"""Complete a split :func:`all_to_all_v`.
+
+    Run the a2a-v collective whose metadata setup was done by
+    :func:`all_to_all_v_prepare`. This is the phase that reads ``srcs`` and
+    writes ``dsts``.
+
+    The trigger reuses the buffers, replica group, and every other argument
+    from the paired :func:`all_to_all_v_prepare`, so it takes only the
+    prepare instruction.
+
+    :param prepare_instr: The instruction returned by the paired
+        :func:`all_to_all_v_prepare`. It links this trigger to that prepare and
+        supplies the operands."""
+    ...
+
+def collective_permute(srcs: List[NkiTensor], dsts: List[NkiTensor], source_target_pairs: List[Tuple[int, int]], priority: Optional[int]=None, name: Optional[str]=None) -> NkiInstruction:
     r"""Send and receive data between ranks based on explicitly defined source-target pairs.
 
     Each pair ``(source, target)`` specifies that data from the source rank
@@ -383,6 +563,11 @@ def collective_permute_implicit_current_processing_rank_id(iteration_id: int, re
     The maximum number of channels is 4 for replica groups containing all devices inside a node
     and 2 for other supported replica groups.
 
+    .. note::
+
+        This returns a ``VirtualRegister`` today. In a future release it will
+        return an :class:`~nki.isa.NkiScalar`.
+
     :param iteration_id: Current ring step (typically the loop counter).
     :param replica_group: ReplicaGroup defining the ring topology
     :param channel_id: Channel ID for the communication (0 to num_channels-1)
@@ -392,6 +577,11 @@ def collective_permute_implicit_current_processing_rank_id(iteration_id: int, re
 
 def rank_id(name: Optional[str]=None):
     r"""Get the rank ID of the current rank.
+
+    .. note::
+
+        This returns a ``VirtualRegister`` today. In a future release it will
+        return an :class:`~nki.isa.NkiScalar`.
 
     :param name: (optional) name for the instruction.
     :return: The rank ID of the current rank within the collective group"""

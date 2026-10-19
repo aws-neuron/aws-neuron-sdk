@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_experimental.h header in the AWS Neuron Runtime: Experimental Neuron Runtime features that are under development and subject to change.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_experimental_h:
 
 nrt_experimental.h

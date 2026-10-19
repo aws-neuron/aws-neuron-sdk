@@ -1,6 +1,6 @@
 .. meta::
     :description: Fused gate/up + SiLU + multiply + down projection using TensorDescriptors.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.mlp_mxfp8.mlp_fwd_mxfp8
 
@@ -19,7 +19,7 @@ The ``compute_fused_gate_up_down_mxfp8`` kernel implements a fused SwiGLU MLP fo
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mlp_fwd_mxfp8_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mlp_mxfp8/mlp_fwd_mxfp8/mlp_fwd_mxfp8_kernel.py>`_
+**Source code for this kernel API can be found at**: `mlp_fwd_mxfp8_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/mlp_mxfp8/mlp_fwd_mxfp8/mlp_fwd_mxfp8_kernel.py>`_
 
 compute_fused_gate_up_down_mxfp8
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

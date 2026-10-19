@@ -1,6 +1,6 @@
 .. meta::
     :description: Router Top-K kernel computes router logits and performs top-K selection for MoE models.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.router_topk
 
@@ -39,12 +39,12 @@ The kernel supports multiple pipeline configurations:
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `router_topk.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/router_topk/router_topk.py>`_
+**Source code for this kernel API can be found at**: `router_topk.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/router_topk/router_topk.py>`_
 
 router_topk
 ^^^^^^^^^^^^^^^
 
-.. py:function:: router_topk(x: nl.ndarray, w: nl.ndarray, w_bias: nl.ndarray, router_logits: nt.mutable_tensor, expert_affinities: nt.mutable_tensor, expert_index: nt.mutable_tensor, act_fn: RouterActFnType, k: int, x_hbm_layout: XHBMLayout_H_T__0, x_sb_layout: XSBLayout_tp102__0, router_pre_norm: bool = True, norm_topk_prob: bool = False, use_column_tiling: bool = False, use_indirect_dma_scatter: bool = False, return_eager_affi: bool = False, use_PE_broadcast_w_bias: bool = False, shard_on_tokens: bool = False, skip_store_expert_index: bool = False, skip_store_router_logits: bool = False)
+.. py:function:: router_topk(x: nl.NkiTensor, w: nl.NkiTensor, w_bias: nl.NkiTensor, router_logits: nl.NkiTensor, expert_affinities: nl.NkiTensor, expert_index: nl.NkiTensor, act_fn: RouterActFnType, k: int, x_hbm_layout: int, x_sb_layout: int, router_pre_norm: bool = True, norm_topk_prob: bool = False, use_column_tiling: bool = False, use_indirect_dma_scatter: bool = False, return_eager_affi: bool = False, use_PE_broadcast_w_bias: bool = False, shard_on_tokens: bool = False, skip_store_expert_index: bool = False, skip_store_router_logits: bool = False, skip_store_expert_affinities: bool = False, expert_affinities_eager_out: nl.NkiTensor = None)
 
    Router top-K kernel for Mixture of Experts (MoE) models.
 
@@ -52,46 +52,50 @@ router_topk
    and scatters expert affinities. Supports multiple layout configurations, sharding strategies,
    and optimization modes.
 
-   :param x: Input tensor. Shape depends on ``x_hbm_layout`` and ``x_input_in_sbuf``. If in HBM: ``[H, T]`` or ``[T, H]``. If in SBUF: a permutation of ``[128, T, H/128]``.
-   :type x: ``nl.ndarray``
-   :param w: Weight tensor with shape ``[H, E]`` in HBM
-   :type w: ``nl.ndarray``
-   :param w_bias: Optional bias tensor with shape ``[1, E]`` or ``[E]`` in HBM
-   :type w_bias: ``nl.ndarray``
-   :param router_logits: Output router logits with shape ``[T, E]`` in HBM
-   :type router_logits: ``nt.mutable_tensor``
-   :param expert_affinities: Output expert affinities with shape ``[T, E]`` in HBM or SBUF
-   :type expert_affinities: ``nt.mutable_tensor``
-   :param expert_index: Output expert indices with shape ``[T, K]`` in HBM or SBUF
-   :type expert_index: ``nt.mutable_tensor``
+   :param x: Input tensor. Buffer type is auto-detected. If in HBM: [H, T] or [T, H] depending on x_hbm_layout. If in SBUF: a permutation of [128, T, H/128] depending on x_sb_layout.
+   :type x: ``nl.NkiTensor``
+   :param w: Weight tensor [H, E] in HBM
+   :type w: ``nl.NkiTensor``
+   :param w_bias: Optional bias tensor [1, E] or [E] in HBM
+   :type w_bias: ``nl.NkiTensor``
+   :param router_logits: Output router logits [T, E] in HBM
+   :type router_logits: ``nl.NkiTensor``
+   :param expert_affinities: Output expert affinities [T, E] in HBM or SBUF. Buffer type is auto-detected.
+   :type expert_affinities: ``nl.NkiTensor``
+   :param expert_index: Output expert indices [T, K] in HBM or SBUF. Buffer type is auto-detected.
+   :type expert_index: ``nl.NkiTensor``
    :param act_fn: Activation function (SOFTMAX or SIGMOID)
-   :type act_fn: ``common_types.RouterActFnType``
-   :param k: Number of top experts to select (must be ≤ 8)
+   :type act_fn: ``RouterActFnType``
+   :param k: Number of top experts to select (must be <= 8)
    :type k: ``int``
    :param x_hbm_layout: Layout of x in HBM (0=[H,T], 1=[T,H])
    :type x_hbm_layout: ``int``
-   :param x_sb_layout: Layout of x in SBUF (0-3, see notes for details)
+   :param x_sb_layout: Layout of x in SBUF (0-3, see router_topk_input_x_load for details)
    :type x_sb_layout: ``int``
-   :param router_pre_norm: If True, apply activation before top-K (ACT1 pipeline). Default is True.
-   :type router_pre_norm: ``bool``, optional
-   :param norm_topk_prob: If True, normalize top-K probabilities with L1 norm. Default is False.
-   :type norm_topk_prob: ``bool``, optional
-   :param use_column_tiling: Enable PE array column tiling for small T. Default is False.
-   :type use_column_tiling: ``bool``, optional
-   :param use_indirect_dma_scatter: Use indirect DMA for expert affinity scatter. Default is False.
-   :type use_indirect_dma_scatter: ``bool``, optional
-   :param return_eager_affi: If True, return top-K affinities in addition to scattered. Default is False.
-   :type return_eager_affi: ``bool``, optional
-   :param use_PE_broadcast_w_bias: Use tensor engine for bias broadcast. Default is False.
-   :type use_PE_broadcast_w_bias: ``bool``, optional
-   :param shard_on_tokens: Enable LNC sharding across token dimension. Default is False.
-   :type shard_on_tokens: ``bool``, optional
-   :param skip_store_expert_index: Skip storing expert indices to HBM. Default is False.
-   :type skip_store_expert_index: ``bool``, optional
-   :param skip_store_router_logits: Skip storing router logits to HBM. Default is False.
-   :type skip_store_router_logits: ``bool``, optional
-   :return: List of ``[router_logits, expert_index, expert_affinities, optional: expert_affinities_topk]``
-   :rtype: ``list``
+   :param router_pre_norm: If True, apply activation before top-K (ACT1 pipeline)
+   :type router_pre_norm: ``bool``
+   :param norm_topk_prob: If True, normalize top-K probabilities with L1 norm
+   :type norm_topk_prob: ``bool``
+   :param use_column_tiling: Enable PE array column tiling for small T
+   :type use_column_tiling: ``bool``
+   :param use_indirect_dma_scatter: Use indirect DMA for expert affinity scatter
+   :type use_indirect_dma_scatter: ``bool``
+   :param return_eager_affi: If True, return top-K affinities in addition to scattered
+   :type return_eager_affi: ``bool``
+   :param use_PE_broadcast_w_bias: Use tensor engine for bias broadcast
+   :type use_PE_broadcast_w_bias: ``bool``
+   :param shard_on_tokens: Enable LNC sharding across token dimension
+   :type shard_on_tokens: ``bool``
+   :param skip_store_expert_index: Skip storing expert indices to HBM
+   :type skip_store_expert_index: ``bool``
+   :param skip_store_router_logits: Skip storing router logits to HBM
+   :type skip_store_router_logits: ``bool``
+   :param skip_store_expert_affinities: Skip scattering/storing the dense [T, E] expert affinities. Only valid with return_eager_affi=True, where the dense [T, k] eager affinities carry all the affinity values the caller needs. Avoids the [T, E] HBM allocation, the zero-init, and the indirect-DMA scatter.
+   :type skip_store_expert_affinities: ``bool``
+   :param expert_affinities_eager_out: Optional [T, k] HBM output for the dense eager affinities. When provided (requires return_eager_affi=True), each LNC core writes ONLY its own T_local slice directly to expert_affinities_eager_out[T_offset : T_offset + T_local] — the two cores' disjoint slices compose in shared HBM with no cross-core sendrecv or cross-partition assembly (mirrors the direct expert_index store). This is strictly cheaper than assembling the full [T, k] in SBUF and is the preferred path when the eager consumer reads from HBM.
+   :type expert_affinities_eager_out: ``nl.NkiTensor``
+   :return: [router_logits, expert_index, expert_affinities, optional: expert_affinities_topk]
+   :rtype: ``nl.NkiTensor``
 
    **Dimensions**:
 
@@ -121,7 +125,7 @@ router_topk
 router_topk_input_x_load
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: router_topk_input_x_load(x, hbm_layout=0, sb_layout=1)
+.. py:function:: router_topk_input_x_load(x: nl.NkiTensor, hbm_layout = XHBMLayout_H_T__0, sb_layout = XSBLayout_tp2013__1)
 
    Load input tensor x from HBM to SBUF with specified layout transformations.
 
@@ -146,7 +150,7 @@ router_topk_input_x_load
 router_topk_input_w_load
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: router_topk_input_w_load(w: nl.ndarray, x_sb_layout)
+.. py:function:: router_topk_input_w_load(w: nl.NkiTensor, x_sb_layout)
 
    Load weight tensor w from HBM to SBUF with layout matching x tensor.
 

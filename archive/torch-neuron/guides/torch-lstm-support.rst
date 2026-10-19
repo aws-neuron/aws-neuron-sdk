@@ -13,7 +13,7 @@ Developer Guide - PyTorch Neuron (``torch-neuron``) |LSTM| Support
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The `torch-neuron` package can support |LSTM| operations and yield

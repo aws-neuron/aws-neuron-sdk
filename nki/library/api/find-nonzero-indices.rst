@@ -1,6 +1,6 @@
 .. meta::
     :description: Find indices of nonzero elements along the T dimension.
-    :date-modified: 04/09/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.subkernels
 
@@ -25,7 +25,7 @@ The ``find_nonzero_indices`` subkernel computes the indices of nonzero elements 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `find_nonzero_indices.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/subkernels/find_nonzero_indices.py>`_
+**Source code for this kernel API can be found at**: `find_nonzero_indices.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/subkernels/find_nonzero_indices.py>`_
 
 find_nonzero_indices
 ^^^^^^^^^^^^^^^^^^^^

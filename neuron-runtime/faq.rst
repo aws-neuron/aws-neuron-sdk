@@ -1,3 +1,7 @@
+.. meta::
+   :description: Frequently asked questions about the AWS Neuron Runtime (NeuronX Runtime) and the libnrt library.
+   :date-modified: 2026-10-13
+
 .. _neuron-runtime-faq:
 
 NeuronX runtime FAQ
@@ -50,4 +54,4 @@ We don't officially support it yet.
 How can I take advantage of multiple NeuronCores to run multiple inferences in parallel?
 ----------------------------------------------------------------------------------------
 
-See the :doc:`PyTorch NeuronX inference guides </frameworks/torch/inference-torch-neuronx>` and the :doc:`JAX NeuronX documentation </frameworks/jax/index>` for current examples of parallel inference across NeuronCores.
+See the :doc:`PyTorch NeuronX inference guides </archive/frameworks/torch/inference-torch-neuronx>` and the :doc:`JAX NeuronX documentation </jax/index>` for current examples of parallel inference across NeuronCores.

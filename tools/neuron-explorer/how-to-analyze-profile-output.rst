@@ -1,7 +1,7 @@
 .. meta::
     :description: Learn how to programmatically analyze Neuron Explorer profile output using the Parquet tables and CSV exports from the UI.
     :date-modified: 08/17/2026
-
+    
 .. _neuron-explorer-analyze-profile-output:
 
 Analyze Profile Output
@@ -122,7 +122,7 @@ For a table split across numbered files, read them together:
        ignore_index=True,
    )
 
-For every table and field, with units and descriptions, see the :ref:`Profile Parquet Schema Reference <neuron-explorer-profile-schema-reference>`. The ``SchemaFields`` table in the profile carries the same information, so you can query the schema alongside the data.
+For every table and field, with units, value ranges and descriptions, see the :ref:`Profile Parquet Schema Reference <neuron-explorer-profile-schema-reference>`. Fields ending in ``_percent`` are fractions between 0 and 1 unless the reference says otherwise. The ``SchemaFields`` table in the profile carries the same information, so you can query the schema alongside the data.
 
 
 CSV output

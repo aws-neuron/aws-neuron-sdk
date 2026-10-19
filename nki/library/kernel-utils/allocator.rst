@@ -1,6 +1,6 @@
 .. meta::
     :description: API reference for the SbufManager (Allocator) utility in the NKI Library.
-    :date-modified: 02/13/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.utils.allocator
 
@@ -301,8 +301,3 @@ Debug output for ``N=4``:
        ◀ END 'double_buffer' freed=2048 B
 
 Note how allocations alternate between addresses 0 and 1024.
-
-See Also
---------
-
-* :doc:`TensorView </nki/library/kernel-utils/tensor-view>` - Zero-copy tensor view operations

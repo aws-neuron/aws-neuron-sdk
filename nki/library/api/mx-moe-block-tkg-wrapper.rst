@@ -1,6 +1,6 @@
 .. meta::
     :description: Wrapper that bitcasts unsigned integer weights to MX x4 dtype before calling the kernel.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.moe_block
 
@@ -9,17 +9,17 @@ Mx Moe Block Tkg Wrapper Kernel API Reference
 
 Wrapper that bitcasts unsigned integer weights to MX x4 dtype before calling the kernel.
 
-Simulates how NxD passes MX weights — as raw uint16/uint32 tensors that need to be reinterpreted as float4_e2m1fn_x4 or float8_e4m3fn_x4 dtype.
+Use this wrapper when MX weights arrive as raw uint16/uint32 tensors that must be reinterpreted as the float4_e2m1fn_x4 or float8_e4m3fn_x4 dtype.
 
 Background
 -----------
 
-The ``mx_moe_block_tkg_wrapper`` kernel provides a wrapper that bitcasts unsigned integer weight tensors to MX x4 dtype (float4_e2m1fn_x4 or float8_e4m3fn_x4) before invoking the MoE TKG kernel, simulating how NxD passes MX weights as raw integer tensors.
+The ``mx_moe_block_tkg_wrapper`` kernel provides a wrapper that bitcasts unsigned integer weight tensors to MX x4 dtype (float4_e2m1fn_x4 or float8_e4m3fn_x4) before invoking the MoE TKG kernel. Some frameworks and model checkpoints store MX weights as raw integer tensors, and the wrapper converts them to the dtype that the MoE TKG kernel expects.
 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mx_moe_block_tkg_wrapper.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_block/mx_moe_block_tkg_wrapper.py>`_
+**Source code for this kernel API can be found at**: `mx_moe_block_tkg_wrapper.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/moe_block/mx_moe_block_tkg_wrapper.py>`_
 
 mx_moe_block_tkg_wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^

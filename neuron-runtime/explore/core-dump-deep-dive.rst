@@ -154,3 +154,9 @@ As well, these values are agreed upon by all participating ranks in a collective
 
     export NEURON_RT_LOCAL_CORE_DUMP_DIRECTORY="/your/base/path/%d-%c"
     export NEURON_RT_S3_CORE_DUMP_PREFIX="s3://your/s3/bucket/%d-%c"
+
+See also
+--------
+
+* :ref:`nrt-env-var-reference` — reference for the core-dump environment variables (``NEURON_RT_LOCAL_CORE_DUMP_DIRECTORY``, ``NEURON_RT_S3_CORE_DUMP_PREFIX``, ``NEURON_RT_OOM_DUMP_DIRECTORY``) and all other runtime environment variables.
+* :doc:`Generating a Neuron runtime core dump </neuron-runtime/about/core-dump>`

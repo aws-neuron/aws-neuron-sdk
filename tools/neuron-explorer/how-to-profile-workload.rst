@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn how to capture system and device profiles from your Neuron workloads using PyTorch, JAX, environment variables, or the CLI.
-    :date-modified: 06/02/2026
+    :date-modified: 10/19/2026
 
 Capture profiles with Neuron Explorer
 ======================================
@@ -67,13 +67,15 @@ Set these environment variables **before compiling** to get descriptive layer na
    export XLA_IR_DEBUG=1
    export XLA_HLO_DEBUG=1
 
+They are recommended for all capture methods below.
+
 For NKI kernel developers, also set:
 
 .. code-block:: bash
 
-   export NEURON_FRAMEWORK_DEBUG=1
+   export NKI_DEBUG_INFO=True
 
-These enable kernel source code tracking and richer op names in the timeline. They are recommended for all capture methods below.
+This adds the debug info that the Source Code Viewer and the NKI Call Stack read. Without it, neither shows data for your kernels.
 
 Choose your capture method
 ----------------------------
@@ -87,7 +89,7 @@ Choose the method that matches your framework and use case:
 
    * - Method
      - Best for
-   * - Native PyTorch Profiling (private beta)
+   * - Native PyTorch Profiling (beta)
      - PyTorch models
    * - JAX Profiling
      - JAX models
@@ -105,7 +107,7 @@ PyTorch profiling
 
 .. note::
 
-   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/frameworks/torch/pytorch-native-overview` to sign up.
+   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/torch/about-pytorch-neuron` to sign up.
 
 PyTorch profiling uses the standard ``torch.profiler.profile`` API extended with a ``NeuronConfig`` object that controls Neuron-specific data collection. For related Explorer viewers, see :doc:`System Trace Viewer </tools/neuron-explorer/overview-system-profiles>`.
 
@@ -302,6 +304,89 @@ Launch command (Trn2, 4 ranks):
        --tee 3 \
        your_script.py
 
+
+.. _capture-pytorch-memory-snapshot:
+
+Capturing a PyTorch memory snapshot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To populate the PyTorch Allocator tab of the :doc:`Memory Viewer </tools/neuron-explorer/overview-memory-viewer>`, record a memory snapshot while profiling and write it into the profile session directory next to the system trace:
+
+* ``torch_neuronx.memory._record_memory_history()`` starts recording caching-allocator events, including the Python stack trace of each allocation. Call it before the allocations that you want to analyze.
+* ``NeuronProfiler.export_snapshot()`` writes the snapshot into the current session directory, alongside ``ntrace.pb`` and the ``trace.json`` that ``export_trace()`` writes. Call it after the profiled region, in the same process that recorded the history. The session directory is per rank, so each rank's snapshot is stored with its own system trace.
+
+Because the snapshot is stored with the system trace, Neuron Explorer processes them together. The runtime stamps each allocation with a trace ID, so Neuron Explorer can link PyTorch allocations to the runtime HBM allocations and add stack traces to the HBM tab.
+
+The following example adds memory snapshot capture to the multi-rank example above. The lines that enable memory snapshot capture are highlighted. For distributed workloads, include ``rank<N>`` in the snapshot file name so that Neuron Explorer can identify which rank each snapshot belongs to. If the file name has no ``rank<N>`` token, Neuron Explorer assigns the snapshot to rank 0. A single-process run works without the suffix, but in a multi-rank run every snapshot would be assigned to rank 0:
+
+.. code-block:: python
+   :emphasize-lines: 5,24,25,56,57,58
+
+   import os
+   import torch
+   import torch.distributed as dist
+   import torch_neuronx
+   from torch_neuronx import memory as mem
+   from torch_neuronx.profiling import NeuronConfig, ProfileMode, NeuronProfiler
+   from torch.profiler import ProfilerActivity, profile, record_function
+
+   def main():
+       dist.init_process_group(backend="neuron")
+       rank = dist.get_rank()
+       device = torch.device("neuron")
+       cc_stream = torch_neuronx.Stream(device)
+
+       exp_config = NeuronConfig(
+           modes=[ProfileMode.DEVICE, ProfileMode.RUNTIME,
+                  ProfileMode.CPU_UTIL, ProfileMode.HOST_MEMORY],
+           profile_output_dir="./profile_memory",
+           max_events_per_nc=100000,
+           capture_enabled_for_nc="0,1",
+       )
+       exporter = NeuronProfiler(exp_config)
+
+       # Record caching-allocator history with Python stack traces
+       mem._record_memory_history()
+
+       with (
+           profile(
+               activities=[ProfilerActivity.CPU, ProfilerActivity.PrivateUse1],
+               experimental_config=exp_config,
+               with_stack=True,
+               on_trace_ready=exporter.export_trace,
+           ) as prof,
+           record_function("model_inference"),
+       ):
+           a = torch.randn(4096, 4096, device=device, dtype=torch.float32)
+           b = torch.randn(4096, 4096, device=device, dtype=torch.float32)
+           t = torch.randn(4 * 1024 * 1024, device=device, dtype=torch.float32)
+
+           # Warmup
+           for _ in range(3):
+               torch.matmul(a, b)
+               with torch_neuronx.stream(cc_stream):
+                   dist.all_reduce(t)
+           torch_neuronx.synchronize()
+           dist.barrier()
+
+           # Profiled iterations
+           for _ in range(10):
+               torch.matmul(a, b)
+               with torch_neuronx.stream(cc_stream):
+                   dist.all_reduce(t)
+           torch_neuronx.synchronize()
+           dist.barrier()
+
+       # Write this rank's snapshot into its session directory, next to ntrace.pb
+       exporter.export_snapshot(f"memory_snapshot_rank{rank}.pickle")
+       mem._record_memory_history(enabled=False)
+
+       dist.destroy_process_group()
+
+   if __name__ == "__main__":
+       main()
+
+Launch the script with the same ``torchrun`` command as the multi-rank example. Each rank's session directory then contains a ``memory_snapshot_rank<N>.pickle`` file alongside ``ntrace.pb``, ``trace_info.pb``, and ``trace.json``. Open the ``./profile_memory`` directory in Neuron Explorer the same way as any other system profile. No additional processing options are required.
 
 Ensuring NEFFs are in your output directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1113,7 +1198,7 @@ Reduce processing time by skipping one profile type:
    # Skip system profiles (device-only view)
    neuron-explorer view -d ./output --ignore-system-profile
 
-These work with ``--output-format parquet`` (default) or ``json``.
+These work with ``--output-format parquet`` (default) or ``json``. We intend to end support for the ``json`` output format in Neuron 2.34.
 
 .. _neuron-explorer-dropped-events:
 

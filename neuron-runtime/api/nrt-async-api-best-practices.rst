@@ -1,3 +1,9 @@
+.. meta::
+   :description: Best practices for the Neuron Runtime async APIs: choose between sync and async APIs, keep execution queues full, and handle execution errors.
+   :date-modified: 2026-10-13
+
+.. _nrt-async-api-best-practices:
+
 ##############
 Best Practices
 ##############

@@ -26,6 +26,20 @@ All Neuron-specific options in `additional_config` and environment variables.
 Capture Neuron Runtime profiles via built-in profiler endpoints.
 :::
 
+:::{grid-item-card} Compilation route
+:link: how-to-choose-compilation-route
+:link-type: doc
+
+Keep the default native route, go back to the XLA route, and confirm which route runs.
+:::
+
+:::{grid-item-card} Precompile cache
+:link: how-to-precompile-cache
+:link-type: doc
+
+Understand the Precompile Cache, confirm a warm hit, and know what invalidates it.
+:::
+
 :::{grid-item-card} Model recipes
 :link: ../model-recipes/index
 :link-type: doc
@@ -42,5 +56,7 @@ Supported models and their feature tables.
 Features guide <features-guide>
 Configuration reference <reference-configuration>
 Profiling workloads <how-to-profile-workloads>
+Compilation route <how-to-choose-compilation-route>
+Precompile cache <how-to-precompile-cache>
 Feature–model compatibility <reference-feature-model-compatibility>
 :::

@@ -4,20 +4,22 @@
       {"repo_type":"rpm", "repo_url":"https://yum.repos.neuron.amazonaws.com/"},
       {"repo_type":"deb", "repo_url":"https://apt.repos.neuron.amazonaws.com/"}
     ],
-    "manifest_date": "08/17/2026",
-    "manifest_version": "2.32.0",
+    "manifest_date": "10/19/2026",
+    "manifest_version": "2.33.0",
     "latest_release": [
-      {"instance":"inf1", "version":"2.32.0"},
-      {"instance":"trn1", "version":"2.32.0"},
-      {"instance":"trn2", "version":"2.32.0"},
-      {"instance":"inf2", "version":"2.32.0"},
-      {"instance":"trn1n", "version":"2.32.0"}
+      {"instance":"inf1", "version":"2.33.0"},
+      {"instance":"trn1", "version":"2.33.0"},
+      {"instance":"trn2", "version":"2.33.0"},
+      {"instance":"inf2", "version":"2.33.0"},
+      {"instance":"trn1n", "version":"2.33.0"},
+      {"instance":"trn3", "version":"2.33.0"}
     ],
     "os_properties": [
       {"os":"ubuntu18", "default_python_version":"3.7"},
       {"os":"ubuntu20", "default_python_version":"3.8"},
       {"os":"ubuntu22", "default_python_version":"3.10"},
       {"os":"ubuntu24", "default_python_version":"3.12"},
+      {"os":"ubuntu26", "default_python_version":"3.14"},
       {"os":"amazonlinux2", "default_python_version":"3.8"},
       {"os":"amazonlinux2023", "default_python_version":"3.9"},
       {"os":"rockylinux9", "default_python_version":"3.9"}
@@ -50,7 +52,8 @@
       {"name":"libtorch_neuronx_lite","trn2":"2","trn3":"2"},
       {"name":"torch-xla","trn2":"2","trn3":"2"},
       {"name":"vllm-neuron","trn2":"1","trn3":"1"},
-      {"name":"neuron_agentic_development","trn1":"1","inf2":"1","trn2":"1","trn3":"1"}
+      {"name":"neuron_agentic_development","trn1":"1","inf2":"1","trn2":"1","trn3":"1"},
+      {"name":"vllm-omni-neuron","trn2":"1","trn3":"1"}
     ],
     "package_properties": [
       {"name":"aws-neuronx-runtime-discovery", "component":"General","category":"general","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
@@ -67,7 +70,7 @@
       {"name":"tensorflow","component":"TensorFlow","category":"tensorflow","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"tensorflow-neuronx","component":"TensorFlow","category":"tensorflow","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"torch-neuron","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
-      {"name":"torch-neuronx","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
+      {"name":"torch-neuronx","component":"Torch Neuron (native PyTorch)","category":"pytorch","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"transformers-neuronx","component":"Transformers Neuron","category":"transformers-neuronx","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"mxnet_neuron","component":"MXNet","category":"mxnet","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
       {"name":"mx_neuron","component":"MXNet","category":"mxnet","package_type":"pip","use_cases":["inference"],"pin_major":"false"},
@@ -101,9 +104,40 @@
       {"name":"torch-xla","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"neuron_agentic_development","component":"Neuron Agentic Development","category":"agents","package_type":"na","use_cases":["inference","training"],"pin_major":"true"},
       {"name":"libtorch_neuronx_lite","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["inference","training"],"pin_major":"true"},
-      {"name":"vllm-neuron","component":"vllm-neuron","category":"vllm-neuron","package_type":"pip","use_cases":["inference"],"pin_major":"true"}
+      {"name":"vllm-neuron","component":"vllm-neuron","category":"vllm-neuron","package_type":"pip","use_cases":["inference"],"pin_major":"true"},
+      {"name":"vllm-omni-neuron","component":"vllm-omni-neuron","category":"vllm-omni-neuron","package_type":"pip","use_cases":["inference"],"pin_major":"true"},
+      {"name":"torchtitan","component":"PyTorch","category":"pytorch","package_type":"pip","use_cases":["training"],"pin_major":"false"}
     ],
     "neuron_releases": [
+      {"neuron_version":"2.33.0", "packages": [
+        {"name":"aws-neuronx-collectives","version":"2.35.43.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-dkms","version":"2.31.7.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-gpsimd-customop-lib","version":"0.25.12.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-gpsimd-tools","version":"14.09.x","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-oci-hook","version":"2.19.65.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-runtime-discovery","version":"2.9","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-runtime-lib","version":"2.35.30.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"aws-neuronx-tools","version":"2.33.38.0","supported_instances":["inf1","trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
+        {"name":"jax_neuronx","version":"0.10.0.1.0.14198","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"libneuronxla","version":"3.0.10135.0","supported_instances":["trn1","inf2"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"libtorch_neuronx_lite","version":"2.11.0.1.0.3112","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"libtorch_neuronx_lite","version":"2.12.0.1.0.3112","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"libtorch_neuronx_lite","version":"2.13.0.1.0.3112","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"neuron_agentic_development","version":"1.4","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"neuronx-cc","version":"2.28.7631.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"nki","version":"0.7.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"nrtpy","version":"2.35.30","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"torch-neuronx","version":"2.9.0.2.15.32035","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
+        {"name":"torch-neuronx","version":"2.13.3.0","supported_instances":["trn2","trn3"],"supported_python_versions":["3.12","3.13","3.14"]},
+        {"name":"torch-neuronx","version":"2.14.3.0","supported_instances":["trn2","trn3"],"supported_python_versions":["3.12","3.13","3.14"]},
+        {"name":"torch-xla","version":"2.11.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"torch-xla","version":"2.12.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"torch-xla","version":"2.13.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"torchtitan","version":"0.2.2+neuron.1","supported_instances":["trn2","trn3"],"supported_python_versions":["3.12","3.13","3.14"]},
+        {"name":"vllm-neuron","version":"0.29.0.1.2.0","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"vllm-omni-neuron","version":"0.29.0.0.2.0","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13","3.14"]},
+        {"name":"efa-installer","version":"1.47","supported_instances":["trn1","trn2","trn3"],"supported_python_versions":[]}
+        ]},
       {"neuron_version":"2.32.0", "packages": [
         {"name":"aws-neuronx-collectives","version":"2.34.10.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
         {"name":"aws-neuronx-dkms","version":"2.30.2.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":[]},
@@ -126,6 +160,7 @@
         {"name":"nrtpy","version":"2.34.10","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
         {"name":"tensorboard-plugin-neuronx","version":"2.0.918.0","supported_instances":["trn1","inf2"],"supported_python_versions":[]},
         {"name":"torch-neuron","version":"1.13.1.2.11.13.0","supported_instances":["inf1"],"supported_python_versions":["3.9","3.10"]},
+        {"name":"torch-neuronx","version":"2.9.0.2.15.32035","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"],"_stub_verify":"STUB restored 2026-10-02: torch-neuronx was missing from the 2.32.0 block (regression); version/python copied from 2.31.1. Confirm the authoritative 2.32.0 torch-neuronx version and remove this key."},
         {"name":"torch-xla","version":"2.11.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
         {"name":"torch-xla","version":"2.12.0","supported_instances":["trn1","inf2","trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},
         {"name":"vllm-neuron","version":"0.24.0.1.1.0","supported_instances":["trn2","trn3"],"supported_python_versions":["3.11","3.12","3.13"]},

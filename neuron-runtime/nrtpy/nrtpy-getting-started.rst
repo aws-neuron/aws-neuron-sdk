@@ -1,6 +1,6 @@
 .. meta::
    :description: Install and configure nrtpy on a Neuron instance.
-   :date-modified: 2026-07-31
+   :date-modified: 2026-10-13
    :keywords: Neuron, nrtpy, install, setup, NeuronCore, pip, venv
 
 .. _nrtpy-getting-started:
@@ -20,7 +20,7 @@ You need a Trainium or Inferentia2 EC2 instance with the Neuron SDK installed.
 The simplest way to get started is to launch an instance using the latest
 `Neuron Deep Learning AMI (DLAMI) <https://docs.aws.amazon.com/dlami/latest/devguide/>`_.
 For detailed instructions on launching and connecting to a Neuron instance, see
-:ref:`training-quickstart`.
+:doc:`Amazon EC2 deployment for Neuron </deploy/ec2/index>`.
 
 Set up your environment
 -----------------------
@@ -52,8 +52,8 @@ Install ``nrtpy`` from the Neuron pip repository:
 
    pip install nrtpy --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
-For general information about installing Neuron packages, see
-:ref:`training-quickstart`.
+For general information about installing Neuron packages, see the
+:doc:`Neuron setup guide </setup/index>`.
 
 Using nrtpy with NKI
 ---------------------

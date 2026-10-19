@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn how to use the Neuron Explorer Summary Viewer to quickly identify performance issues, view key metrics, and get actionable optimization recommendations for your profiles.
-    :date-modified: 03/20/2026
+    :date-modified: 07/28/2026
 
 Summary Viewer
 ================
@@ -80,10 +80,19 @@ Key Metrics
 
 This section displays tables and graphs that summarize your profile's performance metrics.
 
+.. note::
+
+   With a few exceptions, metric names ending in ``_percent`` are stored as **fractions between 0 and 1**, where ``1.0`` means 100%.
+   The Summary Viewer multiplies them by 100 for display, but ``neuron-explorer view --output-format summary-json``,
+   ``--output-format summary-text`` and the ``Summary`` Parquet table report the fraction: an
+   ``mfu_estimated_percent`` of ``0.378`` is 37.8%. For each metric's definition, unit and range, see the
+   :ref:`Profile Parquet Schema Reference <neuron-explorer-profile-schema-reference>`, which labels each
+   exception and also covers the ``summary-json`` output.
+
 Compute Performance Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* **total_time** - Total duration of on-device time for the run in seconds. This doesn't include host-device data movement overhead or host runtime/framework overhead.
+* **Total Runtime** - Elapsed time in the selected device timeline region (region end minus start), in seconds. For a full timeline that begins at zero, it normally has the same value as the backend Summary-table ``total_time`` field because both use the same duration rule. The card calculates its own value and changes with the selection. For the field definition and a comparison with system-level time metrics, see :ref:`neuron-explorer-time-metrics`.
 * **mm_arithmetic_intensity** - The ratio of regular Matrix Multiplication (MATMUL) Floating Point Operations (FLOPs) to total Dynamic Random Access Memory (DRAM) transfer size. This metric helps you determine if your workload is memory-bound or compute-bound.
 * **hfu_estimated_percent** - Hardware FLOPs Utilization reflects the Tensor Engine utilization calculated from all Tensor Engine instructions.
 * **mfu_estimated_percent** - Model FLOPs Utilization reflects the Tensor Engine utilization for useful compute (matrix multiplications from your model definition).
@@ -128,7 +137,7 @@ The ``throttled_flops`` portion of the chart, along with the **Active FLOPS Thro
 
 Throttling is the hardware temporarily limiting how much of the Tensor Engine you can use in order to stay within its power, current, and thermal safety limits. When a limit is approached, the hardware caps the engine's max utilization for a short window, then releases it once conditions allow. Common causes on Trainium and Inferentia are:
 
-* **Peak / delta current (dI/dt)** - rapid current swings when the Tensor Engine ramps up quickly from low utilization. To smooth these swings, the hardware limits the maximum Tensor Engine utilization. This has the largest practical impact on Tensor Engine performance for bursty workloads. On Trn2 and Trn3 the Tensor Engine starts at roughly **50% utilization** of maximum utilization and ramps to full over about the first **~3 microseconds** after work begins. If utilization drops below 50% over any ~3 microsecond window — for example during an idle gap — the limit re-engages, so the next burst again runs at roughly 50% of maximum Tensor Engine utilization until it ramps back up. Keeping the Tensor Engine at or above 50% utilization avoids this penalty.
+* **Peak / delta current (dI/dt)** - rapid current swings when the Tensor Engine ramps up quickly from low utilization. To smooth these swings, the hardware limits the maximum Tensor Engine utilization. This has the largest practical impact on Tensor Engine performance for bursty workloads. On Trn2 and Trn3 the Tensor Engine starts at roughly **50% utilization** of maximum utilization and ramps to full over about the first **~3 microseconds on Trn2** (**~1.6 microseconds on Trn3**) after work begins. If utilization drops below 50% over any such window (~3 microseconds on Trn2, ~1.6 microseconds on Trn3) — for example during an idle gap — the limit re-engages, so the next burst again runs at roughly 50% of maximum Tensor Engine utilization until it ramps back up. Keeping the Tensor Engine at or above 50% utilization avoids this penalty.
 * **Thermal design power (TDP) driven limits** - sustained power and thermal pressure that push the chip toward its thermal design power budget.
 
 Neuron Explorer reports throttling as a **hardware utilization limit** reported by the hardware. It tells you *how much* the engine was limited and *when*.
@@ -243,9 +252,16 @@ Displays aggregate information about the profiling session:
 
 * **Instances** - Number of unique instances captured in the profile
 * **Processes** - Number of unique processes captured
-* **System Profile Time** - Total wall-clock duration of the system profiling session
-* **Total Device Runtime** - Cumulative on-device execution time across all device profiles
+* **System Profile Time** - Elapsed span across system trace events, CPU-utilization samples, host-memory samples, and framework events. The UI computes ``last_ts_ns - first_ts_ns`` from system profile metadata; the current backend stores ``first_ts_ns`` as zero and ``last_ts_ns`` as the elapsed span.
+* **Total Device Runtime** - Sum of ``duration_ns`` from all ``nc_exec_running`` system profile events. Each event's duration is computed as the end timestamp minus start timestamp (after device-clock-to-CPU-clock alignment). This is an additive sum — overlapping executions on different NeuronCores are each counted independently.
 * **Total Device Profiles** - Number of individual device profiles in the system profile
+
+.. tip::
+
+   System Profile Time and Total Device Runtime measure different things:
+   System Profile Time is a single span (last minus first timestamp), while
+   Total Device Runtime is an additive sum of individual event durations.
+   For detailed definitions, see :ref:`neuron-explorer-time-metrics`.
 
 HBM Memory Usage Chart
 -----------------------

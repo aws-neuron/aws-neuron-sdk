@@ -28,7 +28,7 @@ Wan2.2-I2V-A14B is now supported for inference serving with [vLLM Omni](https://
 
 ## Features
 
-Per-model feature availability for Wan2.2-I2V-A14B. See the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md) for configuration details.
+Per-model feature availability for Wan2.2-I2V-A14B. See the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md) for configuration details.
 
 | Category | Feature | Status |
 |---|---|---|
@@ -55,9 +55,9 @@ Per-model feature availability for Wan2.2-I2V-A14B. See the [README](https://git
 
 ### Recommended configurations
 
-The recommended **480P** configuration runs on 64 NeuronCores (e.g., `trn3`), matching the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_i2v_stage.yaml): `tensor_parallel_size=4` × `ring_degree=8` (context parallelism) × `cfg_parallel_size=2` = 64.
+The recommended **480P** configuration runs on 64 NeuronCores (e.g., `trn3`), matching the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_i2v_stage.yaml): `tensor_parallel_size=4` × `ring_degree=8` (context parallelism) × `cfg_parallel_size=2` = 64.
 
-The recommended **720P** configuration runs on 32 NeuronCores with `tensor_parallel_size=8` × `ring_degree=4` (context parallelism) × `cfg_parallel_size=1` = 32, with a higher `vae_patch_parallel_size` to shard the large-resolution tiled VAE encode/decode.
+The recommended **720P** configuration runs on 32 NeuronCores, matching [`wan22_i2v_stage_tp8cp4cfg1_720p.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_i2v_stage_tp8cp4cfg1_720p.yaml): `tensor_parallel_size=8` × `ring_degree=4` (context parallelism) × `cfg_parallel_size=1` = 32, with a higher `vae_patch_parallel_size` to shard the large-resolution tiled VAE encode/decode.
 
 The I2V stage config carries a few model-specific engine args beyond the T2V stage:
 

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Runtime component across all AWS Neuron SDK versions.
     :keywords: neuron runtime, neuron driver, neuron collectives, release notes, aws neuron sdk
-    :date-modified: 05/21/2026
+    :date-modified: 2026-10-08
 
 .. _runtime_rn:
 
@@ -10,12 +10,349 @@ Component Release Notes for Neuron Runtime
 
 The release notes for the Neuron Runtime Neuron component, including Neuron collectives, the Runtime driver, and the Runtime library. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _runtime-2-33-0-rn:
+
+Neuron Runtime (Neuron 2.33.0 Release)
+------------------------------------------------------------------------
+
+**Date of release**: 10/19/2026
+
+Neuron Runtime Library
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.35
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* Added the ``nrt_tensor_cast`` (sync) / ``nrta_tensor_cast`` (async) APIs, which offload tensor data-type conversion from the host CPU to the Neuron device. Requires Neuron Driver 2.31 or later.
+* Added the ``nrt_tensor_compute`` (sync) / ``nrta_tensor_compute`` (async) APIs, which apply an element-wise ADD, MIN, or MAX across one or more source tensors, on TRN2 and TRN3 without loading a NEFF. Requires Neuron Driver 2.31 or later.
+* Added support for Host to Device and Device to Host DMA profiling, which reserves an additional 64 MB of device memory per NeuronCore by default. Requires Neuron Driver 2.31 or later.
+* Added the ``nrt_inspect_config_set_device_profile_num_warmup`` API, which skips the first N executions of each model in model-mode device profiling so that warmup runs do not appear in the profile.
+* On TRN3, the GpSimd engine can now run the Activate, Activate2, and ActivationReadAccumulator instructions with high-precision FP32 implementations of exp, ln, log1p, sqrt, rsqrt, sigmoid, SiLU, and softplus.
+* DMA gather-transpose operations on TRN2 and TRN3 can now cast 1-byte source data to a 2-byte output data type during the transfer.
+* DMA transfers that accumulate into an FP32 SBUF tensor now accept BF16 input on TRN3.
+
+Improvements
+^^^^^^^^^^^^
+
+.. Improvements changes are small, user-facing changes that you may notice after upgrading to this version.
+
+* The asynchronous tensor APIs ``nrta_tensor_write``, ``nrta_tensor_read``, and ``nrta_tensor_copy`` now submit transfers directly to the Neuron Driver's new asynchronous I/O path allowing the DMA to drive the requests completely. This improves request throughput by 10%. Requires Neuron Driver 2.31 or later.
+* The runtime now uses dma-buf by default to register device memory with EFA and falls back to the previous peer-to-peer path, with a warning, when the Neuron Driver does not support dma-buf or Libfabric is older than 2.4.0amzn5.0; set ``NEURON_RT_ENABLE_P2P=1`` to keep the previous behavior.
+* Improved time it takes to load large NEFFs by up to 6.7x.
+* System traces now include events for asynchronous tensor I/O (with transfer direction) and for building collectives at model load, and when DMA packet notifications are enabled indirect DMA operations on TRN2 and TRN3 emit phase markers.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Fixed indirect DMAs that request index bounds checking on a tensor shape where the check cannot be applied running without the check; they are now rejected as an illegal instruction.
+* Fixed ``nrt_get_device_id``, ``nrt_dump_device_allocation_info``, and ``nrt_debug_log_oom_report`` treating ``lnc_idx`` as a global NeuronCore ID instead of an index into the NeuronCores visible to the process.
+* Fixed a 30-second wait and misleading "Model stop timeout" errors during shutdown or model unload after a fatal execution error.
+* Fixed a host memory leak when several threads submit executions with the same input and output tensor sets at the same time.
+* Fixed repairable HBM uncorrectable errors being reported with a generic error code instead of ``NRT_EXEC_HW_ERR_REPAIRABLE_HBM_UE`` (1205).
+* Fixed a bug where DGE could incorrectly fetch stale table cache entries, leading to corrupt DMA transfers.
+* Fixed indirect DMA gathers with more indices than SBUF partitions silently skipping the out-of-bounds index check and desynchronizing the transfer.
+* Fixed SBUF-to-SBUF DMA transposes on TRN3 that could cause DMA aborts, hangs, or corrupt SBUF results.
+* Fixed DMA gather-transpose with out-of-bounds indices corrupting GpSimd memory on TRN2 and TRN3.
+* Fixed register tensor load and store on TRN2 and TRN3 using a 32-bit access for FP8, BF16, FP16, and INT64 data types, and added INT4 and FP4 support.
+* Fixed GpSimd tensor-tensor operations not computing INT32 absolute difference or UINT32 multiplication on TRN2 and TRN3.
+* Fixed GpSimd tensor-scalar instructions with register-value scalar operands using unrelated memory as the scalar.
+* Fixed RandSetState overwriting the random-number generator state of inactive channels.
+* Fixed a one-past-the-end write in the GpSimd TopK operation with large inputs.
+
+Known Issues
+^^^^^^^^^^^^
+
+.. Something doesn't work. Check here to find out if we already knew about it. We hope to fix these soon!
+
+* The runtime logs a warning for models that use vector DMA instructions whose source and destination element sizes differ, because the out-of-bounds index check cannot be applied to them; a future release will reject such models, so recompile affected models with a newer compiler.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For the operating system, Linux kernel, and GLIBC versions tested with the Neuron Runtime library 2.35, see :ref:`neuron-runtime-compatibility`.
+
+Neuron Driver
+~~~~~~~~~~~~~
+
+**Version:** 2.31
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* Added support for Linux kernel 7.0, the default kernel in Ubuntu 26.04. For the tested operating system, kernel, and GLIBC versions, see :ref:`neuron-runtime-compatibility`.
+
+* Added driver support for asynchronous DMA transfers. This can improve throughput by up to 10%.
+* Added support for enabling Host to Device/Device to Host DMA notifications.
+* Added read-only platform information under ``/sys/class/neuron_device/``: ``neuron_soc/{version, sub_version, hbm_capacity}``, ``efa/version``, ``platform/{family, num_chips, num_sleds_per_server, num_chips_per_sled, num_cores_per_chip, supported_lnc_degrees, intra_rack_topology, intra_rack_switch_type, inter_rack_topology, inter_rack_switch_type}``, and a per-NeuronCore ``neuronN/neuron_coreM/info/efa_device`` link to the paired EFA device.
+* Added per-NeuronCore hardware throttle telemetry on TRN2 and TRN3 at ``/sys/class/neuron_device/neuronN/neuron_coreM/stats/hardware/ham_throttle/throttle``: reading it returns the mean, maximum, and minimum throttle level (0 = fully throttled, 255 = unthrottled, also shown as a percentage) and the first and last timestamps over the most recent N notifications, and writing a value from 1 to 128 sets N (default 1).
+
+Improvements
+^^^^^^^^^^^^
+
+.. Improvements changes are small, user-facing changes that you may notice after upgrading to this version.
+
+* HBM scrubbing on TRN3 now uses 32 DMA engines per HBM instead of 16, improving scrub time by up to 2x.
+* Device information queries now return the physical BAR address instead of a kernel virtual address, so kernel address space layout randomization (KASLR) is not weakened.
+* DMA engines now abort and report an error instead of hanging silently when a transfer stalls.
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+
+.. Sometimes we have to break something now to make the experience better in the longer term. Breaking changes are changes that may require you to update your own code, tools, and configurations.*
+
+* The sysfs tree under ``/sys/class/neuron_device/neuronN/`` has been reorganized, and most nodes other than ``core_count`` have moved to new paths. Tools that read these paths directly must be updated. For the full list of moved nodes, see :ref:`neuron-sysfs-migration`.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Fixed an invalid memory access when querying the state of a DMA engine that was not initialized; the driver now returns an error.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For the operating system, Linux kernel, and GLIBC versions tested with the Neuron Driver 2.31, see :ref:`neuron-runtime-compatibility`.
+
+Neuron Collectives
+~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.35
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* AllToAllV and other variable-size collectives are now supported at LNC=1 on TRN3.
+* Added AllToAllV support for replica groups that span both racks of a TRN3 Ultraserver (up to 256 ranks).
+* Added single-device AllGatherV and ReduceScatterV support for 8 ranks at LNC=1 on TRN2 and TRN3 (previously 4 ranks at LNC=2), with message sizes up to just under 128 MB for AllGatherV and up to 16 KB for ReduceScatterV.
+
+Improvements
+^^^^^^^^^^^^
+
+.. Improvements changes are small, user-facing changes that you may notice after upgrading to this version.
+
+* AllGather within a single Neuron device is about 2 µs faster.
+* Host-initiated collectives and in-NEFF collectives now share one network proxy thread per rank reducing thread contention on the host.
+* The default socket timeout used during collectives bootstrap was raised from 120 seconds to 240 seconds to reduce timeout failures in large jobs where ranks reach initialization at different times; ``NEURON_CCOM_SOCK_TIMEOUT`` (in seconds, minimum 10) still overrides it.
+* Neuron Collectives now obtains platform details such as the TRN3 Ultraserver type and switch type from the Neuron Runtime instead of inferring them from the instance type.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Fixed bootstrap network interface selection on hosts whose addresses use /32 (IPv4) or /128 (IPv6) netmasks, such as Kubernetes pods on Amazon EKS with the VPC CNI, by choosing the interface from the kernel routing table.
+* Fixed collective execution failing with an "already has pending block id" error when a model switches between code blocks and some blocks contain no collective operations.
+* Fixed a DMA misalignment in single-device collectives when the payload has an odd number of elements.
+* Fixed the grouped mesh AllGather on TRN3 leaving ranks with mismatched synchronization state, which could hang or break the next collective.
+* Fixed a single-tile AllToAll on TRN2 skipping a required synchronization step when double buffering is not enabled.
+* Fixed detection of overlapping collective output buffers, which could let a collective skip a required handshake.
+* Fixed a segmentation fault at model load when no collective ring can be built for a replica group; the runtime now returns an error.
+* Fixed DMA descriptor ring sizing and alignment for variable-size collectives on TRN2 and TRN3, and descriptor prefetch when variable-size collectives run alongside host-initiated collectives.
+* Fixed a race in the collectives network proxy that could hang runtime shutdown.
+
+Known Issues
+^^^^^^^^^^^^
+
+.. Something doesn't work. Check here to find out if we already knew about it. We hope to fix these soon!
+
+* AllGatherV at LNC=2 is limited to messages just under 64 MB.
+* Replica groups that contain one chip from each of several nodes are not supported at LNC=1 with ring algorithms, and model load returns an error.
+* A single replica group cannot mix racks that contain multiple servers with racks that contain a single server.
+
 .. _runtime-2-32-0-rn:
 
 Neuron Runtime (Neuron 2.32.0 Release)
 ------------------------------------------------------------------------
 
 **Date of release**: 08/17/2026
+
+Neuron Runtime Library
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.34.10
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* Added variable-size collectives — ``AllGatherV``, ``ReduceScatterV``, and multi-device ``AllToAllV`` — on TRN2 and TRN3, letting each rank contribute or receive a different number of elements based on dynamic send-count/displacement metadata.
+* Added one-rank-per-die ring and barrier support on the TRN3 Gen2 Ultraserver switch topology, so workloads placing two ranks per MLA now use the optimized MLA-cycle collective path end-to-end.
+* Enabled the Mesh collective algorithm in multi-stream mode on TRN3 Gen2 Ultraserver platforms so multi-stream workloads can now use Mesh alongside Ring.
+
+Improvements
+^^^^^^^^^^^^
+
+.. Improvements changes are small, user-facing changes that you may notice after upgrading to this version.
+
+* Raised the maximum number of NCCL communicators (replica groups) per NEFF from 12 to 16, so NEFFs that come with more than 12 replica groups now load and run.
+* Improved trn3 NEFF start overhead by 20us by skipping fp8 configuration reprogrammingwhen the configuration does not change between NEFFs.
+* Improved ``nrta_execute_schedule`` overhead by creating a reusable pool of device memory buffers to avoid per-schedule kernel allocation calls.
+* Lifted the AllToAllV channel-buffer size limit by tiling large ops into channel-buffer-sized iterations and increased DMA fold counts and round-robin DMA descriptor distribution, improving AllToAllV throughput and enabling larger AllToAllV payloads.
+* Added residue-descriptor support so TRN2 collectives can now handle reduce and transfer sizes that are not evenly divisible by the DMA alignment (previously required per-DMA equal reduce size / 8K alignment).
+* Added variable-size ``ReduceScatterV`` on the top_sp path, broadening the shapes that Reduce Scatter accepts.
+* Profile artifacts now preserve the relative path of NEFFs in the cache and filter saved NEFFs to those matching the current run's UUIDs, avoiding filename collisions and wasted disk space.
+* On DGE scatter/gather OOB, the summary line now surfaces the faulting device IP and a "no debug info" hint pointing at the recompile env vars, giving operators actionable output on cached-NEFF cases.
+* Added exception handlers for the Q7 cores on TRN2 and TRN3 and wired up assert reporting from Q7 kernels, so failures are surfaced instead of being silently dropped.
+* Improved HBM scrub failure reporting: runtime now distinguishes ``scrub_start`` vs. ``scrub_wait`` errors via ``neuron_strerror`` and invokes ``neuron-dump`` to capture DMA engine state on failure.
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+
+.. Sometimes we have to break something now to make the experience better in the longer term. Breaking changes are changes that may require you to update your own code, tools, and configurations.*
+
+* Implicit async execution mode (``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS``) has been removed this release. A warning is now emitted when used. Users should migrate to the explicit async APIs.
+* ``nrt_inspect_export()`` is now a public API and its signature takes a bitmask selecting which profile types to export. Callers of the previous parameterless signature must update.
+* Removed ``nrt_inspect_config_set_capture_enabled_for_event_type`` from the public ABI; use the paired ``nrt_inspect_config_set_capture_enabled_for_event_type_string`` with ``nrt_sys_trace_get_event_types()`` instead.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Fixed silent data corruption when the same participant set is reused across NEFFs with different orderings; the NCCL comm pool is now keyed by unsorted participants so a NEFF cannot reuse another's comm and get the wrong rank id.
+* Fixed hangs and data corruption in PDS RDH/RD AllGather double-buffering (proxy-buffer offset was not alternated between odd/even ops; the global-handshake skip now correctly requires ``mesh_double_buffer``).
+* Fixed a 2-node ReduceScatter hang caused by a leaked A2Av dynamic-mesh subtype on shared stream TOP_SP engines.
+* Fixed several PDS multi-node collective bugs including proxy-inc destination lookup, POD mesh neighbor matching, and hierarchical-algorithm selection for DP replica groups with 4-rank sub-RGs on 4 nodes.
+* Fixed a PDS barrier-table construction bug for sub-communicators built from custom ``src_target_pairs`` or ``sendrecv`` patterns.
+* Fixed a hierarchical-algorithm hang where the collective firmware reported the wrong ``op_idx`` in the ``cc_end`` notification.
+* Fixed dynamic ``AllToAllV`` to honor caller-supplied receive displacements instead of placing every received block at a fixed stride.
+* Fixed a shared-ownership race in ``kmgr`` under concurrent NEFF loads where all but the first worker read ``nullptr`` for the debug-info graph.
+* Fixed missing per-lane out-of-bounds handling and reduced descriptor pressure for the indirect DMA transpose (``DmaGatherTranspose``) on TRN3.
+* Fixed a DGE HbmToHbm data-corruption/``DMA_ABORT`` on TRN2/TRN3 when indirect transfers hit the port-swap perf path; indirect HbmToHbm copies now fall back to the Straight reshape.
+* Fixed a TRN1 DGE copy performance regression of 31-38% caused by a routing-bit predicate that only matched TRN2/TRN3 SBUF addresses.
+* Fixed negative-stride handling in DGE instructions.
+* Fixed a TopK hang on TRN2/TRN3 caused by relying on the ``rsp_not_reqd`` hardware flag; TopK now uses the arbitrary-write workaround.
+* Fixed the ``Sort`` instruction, which was not asserting writes to the destination because the placement info only set the read-enable flag.
+* Fixed truncation of large multi-line diagnostic dumps (e.g. DGE OOB reports) through the console/coalescing logging paths.
+
+Known Issues
+^^^^^^^^^^^^
+
+.. Something doesn't work. Check here to find out if we already knew about it. We hope to fix these soon!
+
+* Mesh and RDH collective algorithms are disabled when running with host-based collectives (host-CC); host-CC workloads fall back to Ring until Mesh/RDH are optimized for that context.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron runtime was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.18              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.18              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.18              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+=========================== ============= ============== ================= ===============
+
+Neuron Driver
+~~~~~~~~~~~~~
+
+**Version:** 2.30.2
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* Added new sysfs nodes under ``stats/hardware/health_status/``: ``unhealthy_components`` (comma-separated failing subsystems from the firmware health bitmap: ``hbm``, ``sram``, ``firmware_service_api``, ``firmware_service_processor``, ``link_intraserver``, ``link_host``, ``link_efa``, ``link_interserver``, ``link_switch``, ``axi_fabric``) and ``healthcheck_heartbeat``; enabled on both TRN2 and TRN3.
+* Added ``sram_ecc_corrected`` and ``mem_ecc_corrected`` sysfs nodes so fleet monitoring can surface correctable ECC error rates for SRAM and HBM.
+
+Improvements
+^^^^^^^^^^^^
+
+.. Improvements changes are small, user-facing changes that you may notice after upgrading to this version.
+
+* Sysfs counters for ``inference_count``, ``nc_time_in_use``, ``flop_count``, and status counters now produce the live value enabling live monitoring.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Shipped a fallback ``/usr/share/aws-neuronx-dkms/postinst`` script inside the ``.deb`` so installation succeeds on AMIs whose bundled DKMS is too old to provide ``/usr/lib/dkms/common.postinst``.
+* Fixed a memory leak in the default H2D queues that occurred on every driver load, device reset, and TPB reset (``ndmar_h2t_ring_free_all`` had stopped freeing default-queue resources).
+* Fixed an infinite loop in the driver log-dump path after roughly 2^31 IOCTL log entries caused by signed modulo on an ``atomic_t``.
+
+Compatibility Support Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Neuron driver was tested for the following EC2 instances and configurations:
+
+=========================== ============= ============== ================= ===============
+Instance Family               OS Type       OS Version     Kernel Version    GLIBC Version
+=========================== ============= ============== ================= ===============
+``Inf2``                    Ubuntu        U24            6.17              2.39
+``Inf2``                    Ubuntu        U22            6.8               2.35
+``Inf2``                    Rocky Linux   RL9            5.14              2.34
+``Inf2``                    Red Hat       RHEL10         6.12              2.39
+``Inf2``                    Debian        D12            6.1               2.36
+``Inf2``                    Amazon Linux  AL2023         6.18              2.34
+``Inf2``                    Amazon Linux  AL2023         6.1               2.34
+``Inf2``                    Amazon Linux  AL2            5.10              2.26
+``Trn1``                    Ubuntu        U24            6.17              2.39
+``Trn1``                    Ubuntu        U22            6.8               2.35
+``Trn1``                    Rocky Linux   RL9            5.14              2.34
+``Trn1``                    Red Hat       RHEL10         6.12              2.39
+``Trn1``                    Debian        D12            6.1               2.36
+``Trn1``                    Amazon Linux  AL2023         6.18              2.34
+``Trn1``                    Amazon Linux  AL2023         6.1               2.34
+``Trn1``                    Amazon Linux  AL2            5.10              2.26
+``Trn2``                    Ubuntu        U24            6.17              2.39
+``Trn2``                    Ubuntu        U22            6.8               2.35
+``Trn2``                    Red Hat       RHEL10         6.12              2.39
+``Trn2``                    Debian        D12            6.1               2.36
+``Trn2``                    Amazon Linux  AL2023         6.18              2.34
+``Trn2``                    Amazon Linux  AL2023         6.1               2.34
+``Trn2``                    Amazon Linux  AL2            5.10              2.26
+=========================== ============= ============== ================= ===============
+
+Neuron Collectives
+~~~~~~~~~~~~~~~~~~
+
+**Version:** 2.34.10
+
+New Features
+^^^^^^^^^^^^
+
+.. New Features are significant new or improved features and solutions introduced this release of the AWS Neuron SDK. Read on to learn about them!
+
+* Added one-rank-per-die communicator support on the TRN3 Gen2 Ultraserver: communicators with two ranks per MLA (one per die) now form the MLA-cycle graph and use the optimized MLA-cycle collective path.
+
+Bug Fixes
+^^^^^^^^^
+
+.. What has been fixed compared to the previous releases
+
+* Fixed a bootstrap hang after an ``nrt_close`` / ``nrt_init`` cycle that changed the LNC (logical NeuronCore) setting: the static device-info cache is now reset when the per-device NeuronCore layout changes.
+* Fixed a crash in ``finiPlugin()`` where ``ncclNet`` was left ``NULL`` after tearing down the OFI plugin; it is now restored to the ``ncclNetSocket`` stub so subsequent code paths have a valid pointer until the plugin re-loads.
+* Fixed a bug where ``bootstrapClose`` / ``bootstrapAbort`` could call ``close(0)`` on unassigned bootstrap fd fields, closing stdin for the whole process; the fields are now initialized to ``-1`` and guarded.
+* The OFI plugin is now loaded lazily on first use rather than during ``ncclInit()``, so single-node or single-rack workloads on instances without EFA no longer see spurious EFA plugin warnings at init time.
+* RPMs are now built with xz compression so they can be unpacked on AL2 hosts (the AL2023 default of zstd was not readable on AL2).
 
 Neuron Runtime Library
 ~~~~~~~~~~~~~~~~~~~~~~

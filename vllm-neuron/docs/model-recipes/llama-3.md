@@ -7,7 +7,7 @@ deployment tutorial for Llama 3.3 70B on Trn2/Trn3. -->
 <!-- meta: keywords: vLLM, Neuron, Llama 3, Llama-3.2-1B, Llama-3.1-8B,
 Llama-3.3-70B, FP8, ModelOpt, EAGLE3, speculative decoding, model recipe,
 model card, LLM serving, Trn2, Trn3, Trainium -->
-<!-- meta: date_updated: 2026-08-17 -->
+<!-- meta: date_updated: 2026-10-06 -->
 <!-- Content type: model-card -->
 <!-- Jira: NDOC-184 -->
 
@@ -67,28 +67,29 @@ for an end-to-end walkthrough and acceptance-rate tuning.
 ## Features
 
 Per-model feature availability for Llama 3. See the
-[features guide](../guides/features-guide.md) for configuration details and the
-[cross-model feature compatibility matrix](../guides/reference-feature-model-compatibility.md).
+[features guide](../guides/features-guide.md) for configuration details.
 
-| Category | Feature | Status |
-|---|---|---|
-| **Inputs** | Text | ✅ |
-| **Quantization** | BF16 weights | ✅ |
-| | FP8 static (per-tensor, ModelOpt) | ✅ |
-| | KV cache FP8 | ✅ |
-| **Parallelism** | Tensor parallelism (TP) | ✅ |
-| | Data parallelism (DP) | ✅ (see [Known issues](#known-issues)) |
-| | Expert parallelism (EP) | N/A |
-| | Pipeline parallelism (PP) | ❌ |
-| **Performance** | Continuous batching | ✅ |
-| | Segmented prefill | ✅ |
-| | Prefix caching (APC) | ✅ |
-| | Speculative decoding (EAGLE3) | ✅ |
-| | Disaggregated inference (1P1D / xPyD) | ✅ |
-| | On-device sampling (greedy, top-k, top-p) | ✅ |
-| **Serving** | Structured outputs / tool calling | ✅ |
-| **Compilation** | torch.compile (XLA backend) | ✅ |
-| | CPU mode (testing) | ✅ |
+| Category | Feature | Status | Runner |
+|---|---|---|---|
+| **Inputs** | Text | ✅ | MRv2 |
+| **Quantization** | BF16 weights | ✅ | MRv2 |
+| | FP8 static (per-tensor, ModelOpt) | ✅ | MRv2 |
+| | KV cache FP8 | ✅ | MRv2 |
+| **Parallelism** | Tensor parallelism (TP) | ✅ | MRv2 |
+| | Data parallelism (DP) | ✅ (see [Known issues](#known-issues)) | MRv2 |
+| | Expert parallelism (EP) | N/A | n/a |
+| | Pipeline parallelism (PP) | ❌ | n/a |
+| **Performance** | Continuous batching | ✅ | MRv2 |
+| | Segmented prefill | ✅ | MRv2 |
+| | Prefix caching (APC) | ✅ | MRv2 |
+| | Speculative decoding (EAGLE3) | ✅ | MRv1 |
+| | Speculative decoding (DFlash) | ✅ | MRv1 |
+| | Disaggregated inference (1P1D / xPyD) | ✅ | MRv2 |
+| | On-device sampling (greedy, top-k, top-p) | ✅ | MRv2 |
+| | Async scheduling | ✅ | MRv2 |
+| **Serving** | Structured outputs / tool calling | ✅ | MRv1 |
+| **Compilation** | torch.compile (XLA backend) | ✅ | MRv2 |
+| | CPU mode (testing) | ✅ | MRv2 (MRv1 with `enforce_eager`) |
 
 **Status legend:**
 
@@ -96,9 +97,16 @@ Per-model feature availability for Llama 3. See the
 - ❌ Not supported: may be considered for future releases
 - N/A Not applicable to this (dense) architecture
 
+**Runner** is the model runner that the plugin selects by default: Model Runner
+V2 (MRv2) or Model Runner V1 (MRv1).
+
 The [deployment tutorial](../tutorials/tutorial-llama3-70b.md) walks through
 deploying Llama 3.3 70B in static FP8 on a single Trn2 or Trn3 instance with
 tensor parallelism.
+
+Decode context-length bucketing and component data parallelism also select
+MRv1. See [Model Runner V2](../guides/features-guide.md#model-runner-v2) for
+details.
 
 ## Known issues
 

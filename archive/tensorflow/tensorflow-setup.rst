@@ -13,7 +13,7 @@ Tensorflow Neuron Setup
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 .. include:: tensorflow-setup.txt

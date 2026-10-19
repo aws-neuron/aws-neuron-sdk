@@ -12,5 +12,5 @@ Consider applying model parallelism as partitioning the model will help break la
         
 For more information: 
 
-- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#api-guide
-- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-training/app_notes/nxd-training-pp-appnote.html
+- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#api-guide
+- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/nxd-training/nxd-training-pp-appnote.html

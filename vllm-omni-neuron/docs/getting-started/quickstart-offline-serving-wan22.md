@@ -8,7 +8,6 @@ text-to-video, video generation, offline, diffusion, AWS Trainium, trn2, trn3,
 NeuronCores, quickstart -->
 <!-- meta: date_updated: 2026-09-04 -->
 <!-- meta: content_type: procedural-quickstart -->
-<!-- Jira: NMI-414 -->
 
 This quickstart shows you how to generate a video from a text prompt on AWS
 Trainium with the vLLM Omni Neuron plugin. When you finish, you have an MP4 clip
@@ -94,7 +93,7 @@ the [feature and configuration guide](../guides/features-guide.md#generation-con
 for the complete control and trade-off table.
 
 The run uses `/workspace/plugin/examples/wan22/wan22_stage.yaml` by default and
-the [720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml)
+the [720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml)
 for the 720P command above. For parallelism, 720P, and
 quality tuning, see
 [Optimizing offline video generation](../model-dev/optimizing-offline-video-generation.md).
@@ -137,7 +136,7 @@ sudo docker rm vllm-omni-neuron
   parallelism selection, 720p and VAE tiling, and quality tuning.
 - [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) — architecture, feature
   support, and [VBench](https://arxiv.org/abs/2311.17982) accuracy.
-- [Entrypoint script (`run.py`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/run.py) — the offline
+- [Entrypoint script (`run.py`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/run.py) — the offline
   entrypoint and its flags.
-- [Stage config (`wan22_stage.yaml`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml) — the
+- [Stage config (`wan22_stage.yaml`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml) — the
   configuration the run reads.

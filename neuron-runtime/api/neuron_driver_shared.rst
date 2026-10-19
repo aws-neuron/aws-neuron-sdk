@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the neuron_driver_shared.h header in the AWS Neuron Runtime: Shared definitions between the Neuron driver and the Neuron Runtime.
+   :date-modified: 2026-10-13
+
 .. _api_neuron_driver_shared_h:
 
 neuron_driver_shared.h

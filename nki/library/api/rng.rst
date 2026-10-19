@@ -1,6 +1,6 @@
 .. meta::
     :description: Retrieve the current RNG state from the GPSIMD engine.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.rng
 
@@ -19,7 +19,7 @@ The ``get_rng_state_gpsimd`` kernel retrieves the current random number generato
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `rng.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/rng/rng.py>`_
+**Source code for this kernel API can be found at**: `rng.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/rng/rng.py>`_
 
 get_rng_state_gpsimd
 ^^^^^^^^^^^^^^^^^^^^

@@ -1,6 +1,6 @@
 .. meta::
     :description: Blockwise MM Backward kernel computes backward pass for blockwise Mixture of Experts layers.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.moe.bwd
 
@@ -35,7 +35,7 @@ The kernel uses activation checkpoints saved during the forward pass (``gate_up_
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `blockwise_mm_backward.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe/bwd/blockwise_mm_backward.py>`_
+**Source code for this kernel API can be found at**: `blockwise_mm_backward.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/moe/bwd/blockwise_mm_backward.py>`_
 
 blockwise_mm_bwd
 ^^^^^^^^^^^^^^^^^

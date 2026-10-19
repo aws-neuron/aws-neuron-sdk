@@ -12,7 +12,7 @@ Apache MXNet Neuron — Archived
 .. warning::
 
    This document is archived. Apache MXNet is no longer officially supported by the AWS Neuron SDK.
-   It is provided for reference only. For current framework support, see :doc:`/frameworks/index`.
+   It is provided for reference only. For current framework support, see :doc:`/archive/frameworks/index`.
 
 Apache MXNet Neuron (``mxnet-neuron``) was the MXNet integration for AWS Inferentia (Inf1) instances.
 These pages are preserved for historical reference.

@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 Integrating a New Model
 ==========================
@@ -28,7 +28,7 @@ Model Building (torch.nn.Module)
 --------------------------------
 
 Users can create a torch.nn.Module using the tensor-parallel APIs provided by the
-`NeuronxDistributed <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/index.html>`_
+`NeuronxDistributed <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/index.html>`_
 library. Let’s take an example of the
 `GPT-NeoX model built inside NxD examples <https://github.com/aws-neuron/neuronx-distributed/blob/main/examples/training/tp_dp_gpt_neox_hf_pretrain/tp_dp_gpt_neox_20b_hf_pretrain/modeling_gpt_neox_nxd.py>`_.
 We can copy the model file and treat it as a new model to onboard using the framework.
@@ -36,7 +36,7 @@ We can copy the model file and treat it as a new model to onboard using the fram
 .. note::
 
     To understand more about how to build models using Tensor-parallel APIs check the
-    `Developer guide here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tp_developer_guide.html#creating-model>`_.
+    `Developer guide here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/tp_developer_guide.html#creating-model>`_.
 
 
 Model Integration
@@ -93,7 +93,7 @@ setup the GPT-NeoX model example. Create a new file called ``new_model_module.py
                 self.nxd_config["activation_checkpoint_config"] = "full"
 
             # Read more about configuring pipeline parallel config here:
-            # https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/pp_developer_guide.html#pp-developer-guide
+            # https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/pp_developer_guide.html#pp-developer-guide
             self.nxd_config["pipeline_config"].update(
                 {
                     "transformer_layer_cls": GPTNeoXLayerNxD,

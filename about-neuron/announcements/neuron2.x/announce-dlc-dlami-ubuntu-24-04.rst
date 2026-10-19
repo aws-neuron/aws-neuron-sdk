@@ -13,7 +13,7 @@ The following DLCs are now based on Ubuntu 24.04:
 
 * Neuron DLC Ubuntu PyTorch Training
 * Neuron DLC Ubuntu PyTorch Inference (vLLM-NxDI)
-* Neuron DLC Ubuntu PyTorch Inference (vLLM-Neuron)
+* Neuron DLC Ubuntu PyTorch Inference (vLLM Neuron)
 * Neuron DLC Ubuntu JAX
 
 The following DLAMIs are now based on Ubuntu 24.04:

@@ -1,6 +1,6 @@
 .. meta::
     :description: Transformer token generation forward pass megakernel.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.transformer
 
@@ -27,7 +27,7 @@ The ``transformer_tkg`` kernel performs multiple transformer layers in a single 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `transformer_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/transformer/transformer_tkg.py>`_
+**Source code for this kernel API can be found at**: `transformer_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/transformer/transformer_tkg.py>`_
 
 transformer_tkg
 ^^^^^^^^^^^^^^^

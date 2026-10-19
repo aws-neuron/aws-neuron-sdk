@@ -13,5 +13,5 @@ Customers using PyTorch/XLA for training should migrate to native PyTorch on Neu
 
 Native PyTorch on Neuron is currently available as a Private Beta. To request access, contact your AWS account manager.
 
-For migration guidance, see :doc:`/frameworks/torch/index`.
+For migration guidance, see :doc:`/torch/index`.
 

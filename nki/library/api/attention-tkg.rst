@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention TKG kernel implements attention optimized for Token Generation (decode) use cases.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.attention_tkg
 
@@ -30,7 +30,7 @@ The kernel employs efficient tiling strategies and memory access patterns to max
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `attention_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/attention/attention_tkg.py>`_
+**Source code for this kernel API can be found at**: `attention_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/attention/attention_tkg.py>`_
 
 AttnTKGConfig
 ^^^^^^^^^^^^^^^

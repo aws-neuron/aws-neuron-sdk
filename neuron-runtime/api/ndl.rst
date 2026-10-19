@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the ndl.h header in the AWS Neuron Runtime: Neuron Driver Library (NDL) low-level interface to Neuron devices.
+   :date-modified: 2026-10-13
+
 .. _api_ndl_h:
 
 ndl.h

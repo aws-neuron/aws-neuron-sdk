@@ -147,11 +147,12 @@ Required Arguments:
 
             - ``all_reduce`` / ``allr``: All-Reduce
             - ``all_gather`` / ``allg``: All-Gather
-            - ``all_gatherv`` / ``allgv``: All-Gatherv (Currently only supported for single Trainium device replica groups)
+            - ``all_gather_v`` / ``allgv``: All-GatherV (Currently only supported for single Trainium device replica groups)
             - ``reduce_scatter`` / ``redsct``: Reduce-Scatter
+            - ``reduce_scatter_v`` / ``redsctv``: Reduce-ScatterV (Currently only supported for single Trainium device replica groups)
             - ``sendrecv``: Send-Receive
             - ``alltoall``: All-to-All
-            - ``alltoallv``: All-to-Allv
+            - ``alltoallv``: All-to-AllV (currently supported only with one rank per node)
             - ``permute``: Permute
     * - ``-r, --nworkers``
       - N/A, required argument
@@ -276,14 +277,36 @@ Input/Output Data:
       - For the CC operation, use a single, shared, HBM output buffer between 2 neuron cores in the same HBM domain.
     * - ``--variable-size-op-metadata``
       - N/A
-      - For ``alltoallv`` and ``all_gatherv`` collective operations, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation.
-        Counts specify number of elements to send/receive between ranks, displacements specify where in buffer to send/receive data.
+      - For ``alltoallv``, ``all_gather_v``, and ``reduce_scatter_v`` collective operations, a ``json`` file containing send counts, send displacements, receive counts, and receive displacements for the collective operation.
+        Counts specify the number of elements to send or receive, and displacements specify element offsets within the input or output buffer.
         If one metadata entry is provided, it applies to all ranks, otherwise, specify one entry per rank.
-        Receive metadata is optional. However, if it is provided, it needs to match the corresponding send metadata. (e.g. For ``alltoallv``, send count for rank 0 to rank 1 needs to match receive count for rank 1 from rank 0).
 
-        For ``alltoallv``, length of count and displacement arrays should equal the size of replica group over which collective operation is performed. `AlltoAllV Example`_.
+        ``alltoallv`` (replica group size N):
 
-        For ``all_gatherv``, since the same count is sent to all ranks, send metadata (counts/displs) arrays should have only 1 entry, but receive metadata arrays should have length equal to the size of the replica group. `AllGatherV Example`_.
+        * ``send_counts`` contains N values specifying the number of elements to send to each rank.
+        * ``send_displs`` contains N values specifying the input-buffer offset of each chunk.
+        * ``recv_counts`` is optional and, when provided, contains N values that must match the corresponding ranks' ``send_counts``. When omitted, it is populated by the operation.
+        * ``recv_displs`` is optional and, when provided, contains N output-buffer offsets. When omitted, received chunks use N equally sized slots in the output buffer.
+
+        `AlltoAllV Example`_.
+
+        ``all_gather_v`` (replica group size N):
+
+        * ``send_counts`` contains one value specifying the number of elements in the chunk broadcast to every rank.
+        * ``send_displs`` contains one value specifying the input-buffer offset where that chunk begins. Nonzero offsets are supported.
+        * ``recv_counts`` is optional and, when provided, contains N values that must match the corresponding source ranks' ``send_counts``. When omitted, it is populated by the operation.
+        * ``recv_displs`` values are not supported; ``nccom-test`` overwrites them with N equally sized output-buffer slots.
+
+        `AllGatherV Example`_.
+
+        ``reduce_scatter_v`` (replica group size N):
+
+        * ``send_counts`` contains N values specifying the size of the output chunk assigned to each rank.
+        * ``send_displs`` contains N values specifying each output chunk's offset within the fully reduced tensor.
+        * ``recv_counts`` are unused.
+        * ``recv_displs`` are unused.
+
+        `ReduceScatterV Example`_.
 
 
 .. _Data Integrity:
@@ -438,6 +461,10 @@ SBUF Collectives:
     * - ``--cc-dim``
       - 1
       - Control dimensions of tensor concatenation. Either concatenate tensor in free dimension (``cc-dim = 0``) or concatenate in partition dimension first and wrap around in free dimension second (``cc-dim = 1``)
+    * - ``--sweep-dim``
+      - 0
+      - Choose which dimension ``nccom-test`` increases as it sweeps over sizes. ``sweep-dim = 0`` keeps ``num_elem1`` fixed and increases ``num_elem0`` from the initial SBUF tensor shape.
+        ``sweep-dim = 1`` keeps ``num_elem0`` fixed and increases ``num_elem1`` from the initial SBUF tensor shape.
 
 
 Replica Group:
@@ -765,7 +792,7 @@ Single Instance Examples
 
 .. _AllGatherV Example:
 
-- Specify variable-size-op-metadata as JSON for ``all_gatherv`` operation.
+- Specify variable-size-op-metadata as JSON for ``all_gather_v`` operation.
 
 .. code-block::
 
@@ -782,7 +809,31 @@ Single Instance Examples
           "send_counts": [256],
           "send_displs": [0],
           "recv_counts": [256, 256, 256, 256],
-          "recv_displs": [0, 256, 512, 768]
+          "recv_displs": []
+        }
+      ]
+    }
+
+.. _ReduceScatterV Example:
+
+- Specify variable-size-op-metadata as JSON for ``reduce_scatter_v`` operation.
+
+.. code-block::
+
+    nccom-test redsctv -r 4 -N 1 -b 1KB -e 1KB -c --variable-size-op-metadata redsctv_md.json
+    size(B)    count(elems)     type    time:avg(us)    algbw(GB/s)    busbw(GB/s)
+       1024            1024    uint8           14.96           0.07           0.05
+    Avg bus bandwidth:	0.0514GB/s
+
+
+    cat redsctv_md.json
+    {
+      "metadata": [
+        {
+          "send_counts": [2, 1, 1, 2],
+          "send_displs": [0, 2, 3, 4],
+          "recv_counts": [],
+          "recv_displs": []
         }
       ]
     }

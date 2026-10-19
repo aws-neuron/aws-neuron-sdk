@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nec.h header in the AWS Neuron Runtime: Neuron Elastic Collectives (NEC) collective operations for distributed computing on Neuron devices.
+   :date-modified: 2026-10-13
+
 .. _api_nec_h:
 
 nec.h

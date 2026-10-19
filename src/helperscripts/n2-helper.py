@@ -245,7 +245,7 @@ class manifest:
         else:
             target_python_version = max(packages_supporting_python_versions)
 
-        framework_name = self.get_package_names(category=args.framework, instance=args.instance)[0]
+        framework_name = self.get_package_names(category=args.framework, instance=args.instance, neuron_version=args.neuron_version)[0]
 
         str_jupiter = '\n# Install Jupyter notebook kernel\n'
         str_jupiter += 'pip install ipykernel ' + '\n'
@@ -282,12 +282,13 @@ class manifest:
             # Neuron repository needs when mode is 'develop' or 'deploy'
             if args.install_type == 'install':
                 str += '\n# Configure Linux for Neuron repository updates' + '\n'
-                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                     str += '. /etc/os-release' + '\n'
+                    str += 'sudo install -m 0755 -d /etc/apt/keyrings' + '\n'
+                    str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg' + '\n'
                     str += 'sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF' + '\n'
-                    str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
+                    str += 'deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
                     str += 'EOF' + '\n'
-                    str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
                 elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                     str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
                     str += '[neuron]' + '\n'
@@ -302,12 +303,13 @@ class manifest:
 
     def get_repo(self):
         str = '\n# Configure Linux for Neuron repository updates' + '\n'
-        if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+        if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
             str += '. /etc/os-release' + '\n'
+            str += 'sudo install -m 0755 -d /etc/apt/keyrings' + '\n'
+            str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg' + '\n'
             str += 'sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF' + '\n'
-            str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
+            str += 'deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
             str += 'EOF' + '\n'
-            str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
         elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
             str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
             str += '[neuron]' + '\n'
@@ -327,7 +329,7 @@ class manifest:
         if args.mode != 'compile':
             # OS packages need to be updated in "develop" or "deploy" mode
             str += '\n# Update OS packages \n'
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 str += 'sudo apt-get update -y' + '\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += 'sudo dnf update -y' + '\n'
@@ -347,7 +349,7 @@ class manifest:
                 str += '\n# Install OS headers \n'
             elif args.install_type == 'update':
                 str += '\n# Update OS headers \n'
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22'or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22'or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 str += 'sudo apt-get install linux-headers-$(uname -r) -y' + '\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
                 str += 'sudo dnf install -y "kernel-devel-uname-r = $(uname -r)"' + '\n'
@@ -357,7 +359,7 @@ class manifest:
     def install_git(self, args):
 
         str = '\n# Install git \n'
-        if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+        if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
             str += 'sudo apt-get install git -y\n'
         elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
             str += 'sudo dnf install git -y\n'
@@ -378,14 +380,14 @@ class manifest:
 
         # get driver package names for release version, instance
         # we take only the first element in the list since there should be ond driver package.
-        driver_package = self.get_package_names(category='driver', instance=args.instance)[0]
+        driver_package = self.get_package_names(category='driver', instance=args.instance, neuron_version=args.neuron_version)[0]
 
         if args.mode != 'compile':
             # if args.ami != 'dlami-base':
             install = 'install' if args.install_type == 'install' else 'upgrade'
             str += f'\n# {install} Neuron Driver\n'
 
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 if args.neuron_version == None:
                     if self.df_package_properties.loc[self.df_package_properties['name'] == driver_package][
                         'pin_major'].values[0] == 'true':
@@ -453,7 +455,7 @@ class manifest:
 
                 for runtime_package in runtime_packages:
                     # if args.ami != 'dlami-base':
-                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                         str += (f'sudo apt-get {install} ' + runtime_package)
                         if args.neuron_version == None:
                             if self.df_package_properties.loc[self.df_package_properties['name'] == runtime_package][
@@ -513,7 +515,7 @@ class manifest:
         if args.mode == 'develop':
             # get runtime package names for release verion, instance
             install = 'install' if args.install_type == 'install' else 'upgrade'
-            system_tool_packages = self.get_package_names(category='system-tools', instance=args.instance)
+            system_tool_packages = self.get_package_names(category='system-tools', instance=args.instance, neuron_version=args.neuron_version)
             if len(system_tool_packages) != 0:
                 if args.install_type == 'install':
                     str += '\n# Install Neuron Tools \n'
@@ -521,7 +523,7 @@ class manifest:
                     str += '\n# Update Neuron Tools\n'
 
                 for system_tool in system_tool_packages:
-                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                         str += (f'sudo apt-get {install} ' + system_tool)
                         if args.neuron_version == None:
                             if self.df_package_properties.loc[self.df_package_properties['name'] == system_tool][
@@ -591,7 +593,7 @@ class manifest:
             # Install Python: if the default Python version of OS does not support Neuron packages, we install the supporting version
             if os_default_python_version not in packages_supporting_python_versions:
                 str += '\n# Install Python \n'
-                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                     str += 'sudo add-apt-repository ppa:deadsnakes/ppa\n'
                     str += 'sudo apt-get install python' + target_python_version + '\n'
                 elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
@@ -606,7 +608,7 @@ class manifest:
                 str +='python'+target_python_version+' -m venv '+args.framework+'_venv \n'
             else:
             """
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 str += '\n# Install Python venv \n'
                 str += 'sudo apt-get install -y python' + target_python_version + '-venv g++ \n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023' or args.os == 'rockylinux9':
@@ -618,7 +620,7 @@ class manifest:
 
             # when venv_install_type is parellel cluster, we need to change the directory
             if args.venv_install_type == 'parallel-cluster':
-                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                     str += '\ncd /home/ubuntu\n'
                 elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                     str += '\ncd /home/ec2-user\n'
@@ -695,8 +697,8 @@ class manifest:
     def install_neuron_compiler_and_framework(self, args):
         str = ''
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
-        compiler_package = self.get_package_names(category='compiler', instance=args.instance)[0]
-        framework_name = self.get_package_names(category=args.framework, instance=args.instance)[0]
+        compiler_package = self.get_package_names(category='compiler', instance=args.instance, neuron_version=args.neuron_version)[0]
+        framework_name = self.get_package_names(category=args.framework, instance=args.instance, neuron_version=args.neuron_version)[0]
         # if args.instance == 'inf1':
         #     return ''
 
@@ -803,7 +805,7 @@ class manifest:
 
                 if args.mode != 'compile':
                     str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
-                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += f'sudo dnf install tensorflow-model-server-neuronx{ms_version} -y\n'
@@ -825,7 +827,7 @@ class manifest:
                 str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc{neuron_cc_version}\n'
 
         if args.venv_install_type == 'parallel-cluster':
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 str += f'\n\n{indentation}chown ubuntu:ubuntu -R {args.framework}_venv\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += f'\n\n{indentation}chown ec2-user:ec2-user -R {args.framework}_venv\n'
@@ -842,7 +844,7 @@ class manifest:
 
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
-        compiler_package = self.get_package_names(category='compiler', instance=args.instance)[0]
+        compiler_package = self.get_package_names(category='compiler', instance=args.instance, neuron_version=args.neuron_version)[0]
 
         if args.instance == 'inf1':
             return ''
@@ -882,7 +884,7 @@ class manifest:
         str = ''
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
 
-        framework_name = self.get_package_names(category=args.framework, instance=args.instance)[0]
+        framework_name = self.get_package_names(category=args.framework, instance=args.instance, neuron_version=args.neuron_version)[0]
 
         if args.install_type == 'install':
             str += f'\n{indentation}# Install Neuron Framework\n'
@@ -950,7 +952,7 @@ class manifest:
 
                 if args.mode != 'compile':
                     str += f'\n# Optional: {install} Tensorflow Neuron model server\n'
-                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+                    if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                         str += f'sudo apt-get install tensorflow-model-server-neuronx{ms_version} -y\n'
                     elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                         str += f'sudo dnf install tensorflow-model-server-neuronx{ms_version} -y\n'
@@ -970,7 +972,7 @@ class manifest:
                 str += f'python -m pip install {upgrade}{mxnet_framework}{version} neuron-cc\n'
 
         if args.venv_install_type == 'parallel-cluster':
-            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24':
+            if args.os == 'ubuntu18' or args.os == 'ubuntu20' or args.os == 'ubuntu22' or args.os == 'ubuntu24' or args.os == 'ubuntu26':
                 str += f'\n\n{indentation}chown ubuntu:ubuntu -R {args.framework}_venv\n'
             elif args.os == 'amazonlinux2' or args.os == 'amazonlinux2023':
                 str += f'\n\n{indentation}chown ec2-user:ec2-user -R {args.framework}_venv\n'
@@ -1119,7 +1121,7 @@ def cli_parse_arguments():
                                            + 'python3 %(prog)s --list={pyversions} [--neuron-version=X.Y.Z] [--instance=INSTANCE]\n'
                                            + 'python3 %(prog)s --install-type={install,update}\n'
                                            + 'python3 %(prog)s --instance={inf1,trn1,inf2,trn2}\n'
-                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023,rockylinux9,ubuntu24}\n'
+                                           + 'python3 %(prog)s --os={ubuntu18,ubuntu20,ubuntu22,amazonlinux2,amazonlinux2023,rockylinux9,ubuntu24,ubuntu26}\n'
                                            + 'python3 %(prog)s --ami={non-dlami,dlami-base,dlami-conda,dlami-framework,dlami-neuron}\n'
                                            + 'python3 %(prog)s --framework={pytorch,tensorflow,mxnet}\n'
                                            + 'python3 %(prog)s --framework-version=[X.Y.Z] [options]\n'
@@ -1132,8 +1134,8 @@ def cli_parse_arguments():
     parser.add_argument("--neuron-version", metavar='X.Y.Z')
     group.add_argument("--list", choices=['neuron_versions', 'pyversions','packages', 'components', 'frameworks'])
     group.add_argument("--install-type", choices=['install', 'update'])
-    parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2', 'trn2'])
-    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023', 'rockylinux9', 'ubuntu24'], )
+    parser.add_argument("--instance", choices=['inf1', 'trn1', 'inf2', 'trn2', 'trn3'])
+    parser.add_argument("--os", choices=['ubuntu18', 'ubuntu20', 'ubuntu22', 'amazonlinux2', 'amazonlinux2023', 'rockylinux9', 'ubuntu24', 'ubuntu26'], )
     parser.add_argument("--ami", choices=['non-dlami', 'dlami-base', 'dlami-conda', 'dlami-framework', 'dlami-neuron'],
                         default='non-dlami', help='default=non-dlami')
     parser.add_argument("--mode", choices=['develop', 'compile', 'deploy', 'initialize'], default='develop')

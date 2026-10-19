@@ -1,6 +1,6 @@
 .. meta::
     :description: Attention Block TKG kernel implements fused attention block optimized for Token Generation.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.attention_block_tkg.attention_block_tkg
 
@@ -52,12 +52,12 @@ By keeping intermediate tensors in SBUF throughout the computation, this kernel 
 API Reference
 -------------
 
-**Source code for this kernel API can be found at**: `attention_block_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/transformer/attention_block_tkg.py>`_
+**Source code for this kernel API can be found at**: `attention_block_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/transformer/attention_block_tkg.py>`_
 
 attention_block_tkg
 ^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: attention_block_tkg(X: nl.ndarray, X_hidden_dim_actual: Optional[int], rmsnorm_X_enabled: bool, rmsnorm_X_eps: Optional[float], rmsnorm_X_gamma: Optional[nl.ndarray], W_qkv: nl.ndarray, bias_qkv: Optional[nl.ndarray], quantization_type_qkv: QuantizationType, weight_dequant_scale_qkv: Optional[nl.ndarray], input_dequant_scale_qkv: Optional[nl.ndarray], rmsnorm_QK_pre_rope_enabled: bool, rmsnorm_QK_pre_rope_eps: float, rmsnorm_QK_pre_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_pre_rope_W_K: Optional[nl.ndarray], cos: Optional[nl.ndarray], sin: Optional[nl.ndarray], rope_contiguous_layout: bool, rmsnorm_QK_post_rope_enabled: bool, rmsnorm_QK_post_rope_eps: float, rmsnorm_QK_post_rope_W_Q: Optional[nl.ndarray], rmsnorm_QK_post_rope_W_K: Optional[nl.ndarray], K_cache_transposed: bool, active_blocks_table: Optional[nl.ndarray], K_cache: nl.ndarray, V_cache: nl.ndarray, attention_mask: nl.ndarray, sink: Optional[nl.ndarray], update_cache: bool, kv_cache_update_idx: Optional[nl.ndarray], W_out: Optional[nl.ndarray], bias_out: Optional[nl.ndarray], quantization_type_out: QuantizationType, weight_dequant_scale_out: Optional[nl.ndarray], input_dequant_scale_out: Optional[nl.ndarray], transposed_out: bool, out_in_sb: bool, transposed_in: bool = False, softmax_scale: Optional[float] = None, enable_fa_s_prior_tiling: bool = True, fp8_packed: bool = False, k_scale: Optional[nl.ndarray] = None, v_scale: Optional[nl.ndarray] = None, sbm: Optional[SbufManager] = None, skip_attention: bool = False, is_h_transposed_by_4: bool = False, KVDP: int = 1, KVDP_replica_group: Optional[ReplicaGroup] = None, KVDP_collective_mode: Optional[KVDPCollectiveMode] = None, KVDP_rank: Optional[nl.ndarray] = None, pos_ids: Optional[nl.ndarray] = None, swa_start_pos_ids: Optional[nl.ndarray] = None, S_ctx: Optional[int] = None, max_context_len: Optional[nl.ndarray] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP, CP: int = 1, CP_replica_group: Optional[ReplicaGroup] = None, CP_collective_mode: Optional[CPCollectiveMode] = None)
+.. py:function:: attention_block_tkg(X: nl.NkiTensor, X_hidden_dim_actual: Optional[int], rmsnorm_X_enabled: bool, rmsnorm_X_eps: Optional[float], rmsnorm_X_gamma: Optional[nl.NkiTensor], W_qkv: nl.NkiTensor, bias_qkv: Optional[nl.NkiTensor], quantization_type_qkv: QuantizationType, weight_dequant_scale_qkv: Optional[nl.NkiTensor], input_dequant_scale_qkv: Optional[nl.NkiTensor], rmsnorm_QK_pre_rope_enabled: bool, rmsnorm_QK_pre_rope_eps: float, rmsnorm_QK_pre_rope_W_Q: Optional[nl.NkiTensor], rmsnorm_QK_pre_rope_W_K: Optional[nl.NkiTensor], cos: Optional[nl.NkiTensor], sin: Optional[nl.NkiTensor], rope_contiguous_layout: bool, rmsnorm_QK_post_rope_enabled: bool, rmsnorm_QK_post_rope_eps: float, rmsnorm_QK_post_rope_W_Q: Optional[nl.NkiTensor], rmsnorm_QK_post_rope_W_K: Optional[nl.NkiTensor], K_cache_transposed: bool, active_blocks_table: Optional[nl.NkiTensor], K_cache: nl.NkiTensor, V_cache: nl.NkiTensor, attention_mask: Optional[nl.NkiTensor], sink: Optional[nl.NkiTensor], update_cache: bool, kv_cache_update_idx: Optional[nl.NkiTensor], W_out: Optional[nl.NkiTensor], bias_out: Optional[nl.NkiTensor], quantization_type_out: QuantizationType, weight_dequant_scale_out: Optional[nl.NkiTensor], input_dequant_scale_out: Optional[nl.NkiTensor], transposed_out: bool, out_in_sb: bool, transposed_in: bool = False, softmax_scale: Optional[float] = None, enable_fa_s_prior_tiling: bool = True, fp8_packed: bool = False, k_scale: Optional[nl.NkiTensor] = None, v_scale: Optional[nl.NkiTensor] = None, sbm: Optional[SbufManager] = None, skip_attention: bool = False, is_h_transposed_by_4: bool = False, KVDP: int = 1, KVDP_replica_group: Optional[ReplicaGroup] = None, KVDP_collective_mode: Optional[KVDPCollectiveMode] = None, KVDP_rank: Optional[nl.NkiTensor] = None, pos_ids: Optional[nl.NkiTensor] = None, swa_start_pos_ids: Optional[nl.NkiTensor] = None, S_ctx: Optional[int] = None, max_context_len: Optional[nl.NkiTensor] = None, dtype_mode: DtypeMode = DtypeMode.NON_OCP, CP: int = 1, CP_replica_group: Optional[ReplicaGroup] = None, CP_collective_mode: Optional[CPCollectiveMode] = None, seq_packed_attention_mask: Optional[nl.NkiTensor] = None, seq_packed_active_blocks_table: Optional[nl.NkiTensor] = None, seq_packed_q_index_table: Optional[nl.NkiTensor] = None, seq_packed_seq_id_table: Optional[nl.NkiTensor] = None, seq_packed_accumulator_partial_route_table: Optional[nl.NkiTensor] = None, seq_packed_accumulator_group_state_route_table: Optional[nl.NkiTensor] = None)
 
    Fused Attention Block for Token Generation (TKG).
 
@@ -67,92 +67,134 @@ attention_block_tkg
 
    All intermediate tensors remain in SBUF to minimize HBM traffic.
 
-   :param X: Input hidden states ``[B, S_tkg, H]`` @ HBM or ``[pmax, B*S_tkg, H//pmax]`` @ SBUF
-   :type X: ``nl.ndarray``
+   :param X: Input hidden states
+   :type X: ``nl.NkiTensor``
    :param X_hidden_dim_actual: Actual hidden dim if X is padded
-   :type X_hidden_dim_actual: ``int``, optional
+   :type X_hidden_dim_actual: ``Optional[int]``
    :param rmsnorm_X_enabled: Apply RMSNorm to X before QKV projection
    :type rmsnorm_X_enabled: ``bool``
    :param rmsnorm_X_eps: RMSNorm epsilon (default 1e-3)
-   :type rmsnorm_X_eps: ``float``, optional
-   :param rmsnorm_X_gamma: RMSNorm weights ``[1, H]`` @ HBM
-   :type rmsnorm_X_gamma: ``nl.ndarray``, optional
-   :param W_qkv: QKV projection weights ``[H, d_head*(q_heads+2)]`` @ HBM
-   :type W_qkv: ``nl.ndarray``
-   :param bias_qkv: QKV bias ``[1, d_head*(q_heads+2)]`` @ HBM
-   :type bias_qkv: ``nl.ndarray``, optional
-   :param quantization_type_qkv: Quantization type for QKV projection
+   :type rmsnorm_X_eps: ``Optional[float]``
+   :param rmsnorm_X_gamma: [1, H] @ HBM, RMSNorm weights
+   :type rmsnorm_X_gamma: ``Optional[nl.NkiTensor]``
+   :param W_qkv: [H, d_head*(q_heads + 2*kv_heads)] @ HBM, QKV projection weights. Packs Q (q_heads heads), K (kv_heads heads), V (kv_heads heads) per token.
+   :type W_qkv: ``nl.NkiTensor``
+   :param bias_qkv: [1, d_head*(q_heads + 2*kv_heads)] @ HBM, QKV bias.
+   :type bias_qkv: ``Optional[nl.NkiTensor]``
+   :param quantization_type_qkv: Type of quantization for QKV projection (NONE, STATIC, ROW).
    :type quantization_type_qkv: ``QuantizationType``
-   :param weight_dequant_scale_qkv: Weight dequantization scale for QKV projection
-   :type weight_dequant_scale_qkv: ``nl.ndarray``, optional
-   :param input_dequant_scale_qkv: Input dequantization scale for QKV projection
-   :type input_dequant_scale_qkv: ``nl.ndarray``, optional
+   :param weight_dequant_scale_qkv: Weight dequantization scale for QKV projection.
+   :type weight_dequant_scale_qkv: ``Optional[nl.NkiTensor]``
+   :param input_dequant_scale_qkv: Input dequantization scale for QKV projection.
+   :type input_dequant_scale_qkv: ``Optional[nl.NkiTensor]``
    :param rmsnorm_QK_pre_rope_enabled: Apply RMSNorm to Q/K before RoPE
    :type rmsnorm_QK_pre_rope_enabled: ``bool``
    :param rmsnorm_QK_pre_rope_eps: Pre-RoPE RMSNorm epsilon
    :type rmsnorm_QK_pre_rope_eps: ``float``
-   :param cos: RoPE cosine embeddings ``[d_head//2, B, S_tkg]`` @ HBM (None = skip RoPE)
-   :type cos: ``nl.ndarray``, optional
-   :param sin: RoPE sine embeddings ``[d_head//2, B, S_tkg]`` @ HBM (None = skip RoPE)
-   :type sin: ``nl.ndarray``, optional
+   :param rmsnorm_QK_pre_rope_W_Q: [1, d_head] @ HBM, Pre-RoPE Q gamma weights
+   :type rmsnorm_QK_pre_rope_W_Q: ``Optional[nl.NkiTensor]``
+   :param rmsnorm_QK_pre_rope_W_K: [1, d_head] @ HBM, Pre-RoPE K gamma weights
+   :type rmsnorm_QK_pre_rope_W_K: ``Optional[nl.NkiTensor]``
+   :param cos: [d_head//2, B, S_tkg] @ HBM, RoPE cosine embeddings (None = skip RoPE)
+   :type cos: ``Optional[nl.NkiTensor]``
+   :param sin: [d_head//2, B, S_tkg] @ HBM, RoPE sine embeddings (None = skip RoPE)
+   :type sin: ``Optional[nl.NkiTensor]``
    :param rope_contiguous_layout: True for contiguous halves, False for interleaved
    :type rope_contiguous_layout: ``bool``
    :param rmsnorm_QK_post_rope_enabled: Apply RMSNorm to Q/K after RoPE
    :type rmsnorm_QK_post_rope_enabled: ``bool``
    :param rmsnorm_QK_post_rope_eps: Post-RoPE RMSNorm epsilon
    :type rmsnorm_QK_post_rope_eps: ``float``
-   :param rmsnorm_QK_post_rope_W_Q: Post-RoPE Q weights ``[1, d_head]`` @ HBM
-   :type rmsnorm_QK_post_rope_W_Q: ``nl.ndarray``, optional
-   :param rmsnorm_QK_post_rope_W_K: Post-RoPE K weights ``[1, d_head]`` @ HBM
-   :type rmsnorm_QK_post_rope_W_K: ``nl.ndarray``, optional
-   :param K_cache_transposed: K cache layout flag
+   :param rmsnorm_QK_post_rope_W_Q: [1, d_head] @ HBM, Post-RoPE Q weights
+   :type rmsnorm_QK_post_rope_W_Q: ``Optional[nl.NkiTensor]``
+   :param rmsnorm_QK_post_rope_W_K: [1, d_head] @ HBM, Post-RoPE K weights
+   :type rmsnorm_QK_post_rope_W_K: ``Optional[nl.NkiTensor]``
+   :param K_cache_transposed: Whether K cache is stored transposed in HBM. If True: K cache is [B, d_head, S_max_ctx]. If False: K cache is [B, S_max_ctx, d_head]. Must be False for block KV cache.
    :type K_cache_transposed: ``bool``
-   :param active_blocks_table: Block indices for block KV cache ``[B, num_blocks]`` @ HBM
-   :type active_blocks_table: ``nl.ndarray``, optional
-   :param K_cache: Key cache @ HBM
-   :type K_cache: ``nl.ndarray``
-   :param V_cache: Value cache @ HBM
-   :type V_cache: ``nl.ndarray``
-   :param attention_mask: Attention mask ``[S_ctx, B, q_heads, S_tkg]`` @ HBM
-   :type attention_mask: ``nl.ndarray``
-   :param sink: Attention sink tokens ``[H, 1]`` @ HBM
-   :type sink: ``nl.ndarray``, optional
-   :param softmax_scale: Scaling factor for attention scores (``Q @ K^T * softmax_scale``). If ``None``, defaults to ``1.0 / sqrt(d_head)``.
-   :type softmax_scale: ``float``, optional
+   :param active_blocks_table: @ HBM, Block indices for block KV cache. kv_heads == 1: [B, num_blocks]. kv_heads >  1: [B, kv_heads, num_blocks] (per-head block tables; each (batch, head) pair owns its own slot range so writes never collide). Block indices must use ``num_blocks * kv_heads`` addressing.
+   :type active_blocks_table: ``Optional[nl.NkiTensor]``
+   :param K_cache: Key cache @ HBM. Flat KV: [B, kv_heads, d_head, S_max_ctx] if K_cache_transposed else [B, kv_heads, S_max_ctx, d_head]. Block KV: kv_heads == 1: [num_blocks, block_len, d_head] or [num_blocks, 1, block_len, d_head]. kv_heads >  1: [num_blocks, kv_heads, block_len, d_head]. Block KV with fp8_packed: kv_heads == 1: [num_blocks, block_len // 2, d_head, 2] or [num_blocks, 1, block_len // 2, d_head, 2]. kv_heads >  1: [num_blocks, kv_heads, block_len // 2, d_head, 2].
+   :type K_cache: ``nl.NkiTensor``
+   :param V_cache: Value cache @ HBM. Flat KV: [B, kv_heads, S_max_ctx, d_head]. Block KV: kv_heads == 1: [num_blocks, block_len, d_head] or [num_blocks, 1, block_len, d_head]. kv_heads >  1: [num_blocks, kv_heads, block_len, d_head].
+   :type V_cache: ``nl.NkiTensor``
+   :param attention_mask: Attention mask @ HBM. Required for ordinary attention. Sequence-packed attention uses ``seq_packed_attention_mask`` instead, so this may be None. When pos_ids is provided: [S_tkg, B, q_heads_attn, S_tkg], active-only portion of the mask (the prior mask is generated in-kernel; layout is the same for swap and default). When pos_ids is None (full pre-generated mask): the layout MUST match the QK-swap decision. Determine it with is_qk_swapped(...) first (see attention_tkg / attention_tkg_utils for the full mask-shape guidance), then supply the matching layout: - default (K-stationary): [S_ctx, B, q_heads_attn, S_tkg] - QK-swap (Q-stationary): [B, q_heads_attn, S_tkg, S_ctx] gen_mask_tkg_hbm produces the correct layout when given the same transposed_out flag.
+   :type attention_mask: ``Optional[nl.NkiTensor]``
+   :param sink: [q_heads_attn, 1] @ HBM, one value per attention (Q) head. ``q_heads_attn = q_heads * KVDP`` (= ``kv_heads * q_per_group``).
+   :type sink: ``Optional[nl.NkiTensor]``
    :param update_cache: Update KV cache with new tokens
    :type update_cache: ``bool``
-   :param kv_cache_update_idx: Cache write positions ``[B, 1]`` (uint32_max = skip)
-   :type kv_cache_update_idx: ``nl.ndarray``, optional
-   :param k_scale: Key quantization scale for FP8 KV cache. Enables FP8 quantization of K values written to cache.
-   :type k_scale: ``nl.ndarray``, optional
-   :param v_scale: Value quantization scale for FP8 KV cache. Enables FP8 quantization of V values written to cache.
-   :type v_scale: ``nl.ndarray``, optional
-   :param W_out: Output projection weights ``[q_heads*d_head, H]`` @ HBM
-   :type W_out: ``nl.ndarray``, optional
-   :param bias_out: Output projection bias ``[1, H]`` @ HBM
-   :type bias_out: ``nl.ndarray``, optional
-   :param quantization_type_out: Quantization type for output projection
+   :param kv_cache_update_idx: Cache write positions (uint32_max = skip). Flat KV: [B, 1] — the shared start position; consecutive tokens are assumed. Block KV: per-token physical slots. kv_heads == 1: [B, S_tkg]. kv_heads >  1: [B, kv_heads, S_tkg].
+   :type kv_cache_update_idx: ``Optional[nl.NkiTensor]``
+   :param W_out: [q_heads*d_head, H] @ HBM, Output projection weights. When using FP8 KV cache (k_scale/v_scale provided), the attention output has magnitude scaled by v_scale. The caller must absorb v_scale into W_out or its dequant scale to compensate: ``W_out = W_out_original / v_scale`` (for NONE quantization) or ``weight_dequant_scale_out = scale / v_scale`` (for ROW/STATIC).
+   :type W_out: ``Optional[nl.NkiTensor]``
+   :param bias_out: [1, H] @ HBM, Output projection bias
+   :type bias_out: ``Optional[nl.NkiTensor]``
+   :param quantization_type_out: Type of quantization for output projection (NONE, STATIC, ROW).
    :type quantization_type_out: ``QuantizationType``
-   :param weight_dequant_scale_out: Weight dequantization scale for output projection
-   :type weight_dequant_scale_out: ``nl.ndarray``, optional
-   :param input_dequant_scale_out: Input dequantization scale for output projection
-   :type input_dequant_scale_out: ``nl.ndarray``, optional
+   :param weight_dequant_scale_out: Weight dequantization scale for output projection.
+   :type weight_dequant_scale_out: ``Optional[nl.NkiTensor]``
+   :param input_dequant_scale_out: Input dequantization scale for output projection.
+   :type input_dequant_scale_out: ``Optional[nl.NkiTensor]``
    :param transposed_out: Transpose output layout (requires W_out)
    :type transposed_out: ``bool``
    :param out_in_sb: Return output in SBUF instead of HBM
    :type out_in_sb: ``bool``
+   :param transposed_in: When True, X is in transposed HBM layout [H0=pmax, n_prgs, H1_shard, BxS] from a preceding layer's transposed_out. (Note that using [H0, n_prgs, BxS, H1_shard] instead would require an extra tensor_copy upstream so all-in-all it doesn't save us from doing the equivalent in attention.) Requires B*S_tkg <= pmax (small batch path). Default: False.
+   :type transposed_in: ``bool``
+   :param softmax_scale: Scaling factor for attention scores. If None, defaults to (1/√D) / k_scale. When using FP8 KV cache (k_scale/v_scale provided) and softmax_scale is None, the kernel automatically divides by k_scale to dequantize the KV cache values in the QK matmul, effectively setting ``softmax_scale = (1/√D) / k_scale``. When softmax_scale is explicitly provided, the caller is responsible for incorporating k_scale (e.g., ``softmax_scale = scaling / k_scale``).
+   :type softmax_scale: ``Optional[float]``
+   :param enable_fa_s_prior_tiling: bool: Whether to enable flash attention (FA) for attention computation. When enabled, the attention computation is tiled along the context (s_prior) to reduce peak memory usage.
+   :type enable_fa_s_prior_tiling: ``bool``
+   :param fp8_packed: When True with block KV, K_cache is fp8 [num_blocks, block_len // 2, d_head, 2] where the last dimension packs two consecutive sequence positions. Enables DMA transpose for FP8 block KV, avoiding the slower PE transpose fallback.
+   :type fp8_packed: ``bool``
+   :param k_scale: Scale for K quantization to FP8. Shape (PMAX, 1) or (1, 1) @ HBM. Must contain a single scalar value (replicated or scalar). When provided with v_scale, enables FP8 KV cache quantization. Supported dtypes: float32, float16, bfloat16.
+   :type k_scale: ``Optional[nl.NkiTensor]``
+   :param v_scale: Scale for V quantization to FP8. Shape (PMAX, 1) or (1, 1) @ HBM. Must contain a single scalar value (replicated or scalar). When provided with k_scale, enables FP8 KV cache quantization. Supported dtypes: float32, float16, bfloat16.
+   :type v_scale: ``Optional[nl.NkiTensor]``
    :param sbm: SBUF memory manager (otherwise auto-allocated)
-   :type sbm: ``SbufManager``, optional
-   :param skip_attention: Skip attention computation (for testing). Default: False.
-
-   :param CP: Context-parallelism degree - number of ranks that shard the KV cache along the sequence dimension (``1`` = disabled). Each rank holds an ``S_ctx/CP`` slice of the prior KV cache and runs local flash attention; results are combined across ranks by the CP collectives.
-
-   :param CP_replica_group: Replica group for CP collective ops. Required when ``CP > 1``.
-
-   :param CP_collective_mode: Collective mode for CP output redistribution (``ALL_TO_ALL`` or ``REDUCE_SCATTER``). Defaults to ``ALL_TO_ALL`` when ``None``.
+   :type sbm: ``Optional[SbufManager]``
+   :param skip_attention: Skip attention computation (for testing)
    :type skip_attention: ``bool``
-   :return: Tuple of (out, K_out, V_out) - Output tensor, updated K cache or new K tokens, updated V cache or new V tokens
-   :rtype: ``tuple``
+   :param is_h_transposed_by_4: Whether input X and RMSNorm gamma have been pre-shuffled along the H dimension for MXFP quantization. Required to be True when quantization_type_qkv is MX, STATIC_MX, or ROW_MX. The pre-shuffle reorders [B, S, H//512, 128, 4] → [B, S, 4, H//512, 128] so the data matches the layout expected by the hardware quantize_mx instruction. Default: False.
+   :type is_h_transposed_by_4: ``bool``
+   :param KVDP: KV cache data parallelism degree - number of ranks that shard the KV cache across the batch dimension (1 = disabled). Each rank processes B/KVDP batches.
+   :type KVDP: ``int``
+   :param KVDP_replica_group: Replica group for collective ops
+   :type KVDP_replica_group: ``Optional[ReplicaGroup]``
+   :param KVDP_rank: [1] @ HBM, uint32. This rank's position within its KVDP replica group (0 to KVDP-1). Used for batch/head slicing. Required when KVDP > 1.
+   :type KVDP_rank: ``Optional[nl.NkiTensor]``
+   :param pos_ids: [B, S_tkg] @ HBM, Absolute sequence position of each active token. When provided, the kernel generates the prior causal mask on-chip (attending to KV positions < pos_id) instead of loading a full pre-generated mask from HBM. In this mode, attention_mask carries only the active portion.
+   :type pos_ids: ``Optional[nl.NkiTensor]``
+   :param swa_start_pos_ids: [B, S_tkg] @ HBM, Per-query SWA window start positions. When provided together with pos_ids, generates a banded sliding window attention mask where each token attends to positions in [start_pos, pos_id). When None, standard causal attention mask is generated (token attends to all positions < pos_id).
+   :type swa_start_pos_ids: ``Optional[nl.NkiTensor]``
+   :param S_ctx: Explicit context length for flat KV with pos_ids. Required when pos_ids is provided and block KV is not used, since S_ctx cannot be derived from the attention mask. Must be None otherwise.
+   :type S_ctx: ``Optional[int]``
+   :param max_context_len: [1] @ HBM, int32 scalar for dynamic FA early exit. When provided, the FA loop exits early after processing ceil(max_context_len / tile_size) tiles. Requires block KV cache and pos_ids.
+   :type max_context_len: ``Optional[nl.NkiTensor]``
+   :param dtype_mode: Quantization dtype policy forwarded to all FP8-aware subkernels and to the FP8 KV cache when ``K_cache`` / ``V_cache`` are allocated with the opaque ``"float8e4"`` sentinel. Concrete dtypes are honored as-is. - ``DtypeMode.NON_OCP`` (default): ``nl.float8_e4m3`` (max=240). - ``DtypeMode.OCP``: ``nl.float8_e4m3fn`` (max=448). TRN3 only. - ``DtypeMode.AUTO``: ``nl.float8_e4m3fn`` on TRN3, else ``nl.float8_e4m3``.
+   :type dtype_mode: ``DtypeMode``
+   :param CP: Context parallelism degree - number of ranks that shard the KV cache along the sequence (context) dimension (1 = disabled). Each rank holds an S_ctx/CP slice of the prior KV cache and runs local flash attention; the distributed softmax results are combined across ranks by the CP collectives.
+   :type CP: ``int``
+   :param CP_replica_group: Replica group for CP collective ops. Required when CP > 1.
+   :type CP_replica_group: ``Optional[ReplicaGroup]``
+   :param CP_collective_mode: Collective mode for CP output redistribution (ALL_TO_ALL or REDUCE_SCATTER). Defaults to ALL_TO_ALL when None. KV Data Parallelism (KVDP > 1): KV-DP partitions the KV cache across ranks along the batch dimension. Each rank holds B/KVDP batches of the KV cache. Before attention: all_gather Q heads, slice Q/K/V batch. After attention: all_gather output batch, slice heads. When KV data parallelism is enabled, input/output shapes change: - B_attn = B / KVDP (batches per rank for attention) - q_heads_attn = q_heads * KVDP (query heads per rank after gather) Input shape changes: - K_cache, V_cache: [B_attn, ...] instead of [B, ...] - attention_mask: [S_ctx, B_attn, q_heads_attn, S_tkg] - pos_ids: [B_attn, S_tkg] instead of [B, S_tkg] - swa_start_pos_ids: [B_attn, S_tkg] instead of [B, S_tkg] - kv_cache_update_idx: [B_attn, 1] (caller must slice per rank) Output shape changes (when update_cache=False): - K_out: kv_heads == 1: [d_head, B_attn, S_tkg] kv_heads >  1: [d_head, B_attn, kv_heads, S_tkg] - V_out: [B_attn, kv_heads, S_tkg, d_head] Context Parallelism (CP > 1): CP partitions the prior KV cache across ranks along the sequence (context) dimension. Each rank holds an S_ctx/CP slice and runs local flash attention, returning unnormalized output plus per-rank softmax stats (running max/sum). Before attention: all_gather Q heads (q_heads -> q_heads*CP, no K/V slicing since each rank owns its context shard). After
+   :type CP_collective_mode: ``Optional[CPCollectiveMode]``
+   :param seq_packed_attention_mask: Packed schedule-row mask. When provided, the active-block, Q-index, and sequence-ID tables are required and the kernel dispatches to attention_tkg_seq_packed. The two accumulator route tables are an optional all-or-none pair. This is the only attention mask consumed on the packed path. See attention_tkg_sequence_packing_design_spec.md in core/attention for the schedule contract.
+   :type seq_packed_attention_mask: ``Optional[nl.NkiTensor]``
+   :param seq_packed_active_blocks_table: Packed physical block routes.
+   :type seq_packed_active_blocks_table: ``Optional[nl.NkiTensor]``
+   :param seq_packed_q_index_table: Packed Q tensor-indirection routes.
+   :type seq_packed_q_index_table: ``Optional[nl.NkiTensor]``
+   :param seq_packed_seq_id_table: Packed absolute sequence IDs.
+   :type seq_packed_seq_id_table: ``Optional[nl.NkiTensor]``
+   :param seq_packed_accumulator_partial_route_table: Tensor Indirection routes that scatter each row's slot partials into sequence groups. Must be supplied with the group-state route.
+   :type seq_packed_accumulator_partial_route_table: ``Optional[nl.NkiTensor]``
+   :param seq_packed_accumulator_group_state_route_table: Tensor Indirection routes that gather and scatter each group's persistent sequence state. Must be supplied with the partial route.
+   :type seq_packed_accumulator_group_state_route_table: ``Optional[nl.NkiTensor]``
+   :return: Output tensor with shape depending on projection and output location: - Without projection (W_out=None): - out_in_sb=False: [B, q_heads, d_head, S_tkg] @ HBM - out_in_sb=True: [d_head, B*q_heads*S_tkg] @ SBUF - With projection (W_out provided): - transposed_out=False, out_in_sb=False: [B*S_tkg, H] @ HBM - transposed_out=False, out_in_sb=True: [B*S_tkg, H//lnc] @ SBUF - transposed_out=True, out_in_sb=False: [128, lnc, H//lnc//128, B*S_tkg] @ HBM - transposed_out=True, out_in_sb=True: [128, H//lnc//128, B*S_tkg] @ SBUF
+   :return: - If update_cache=True: Updated K cache (shape matches K_cache input) - If update_cache=False: New K tokens @ HBM with shape: kv_heads == 1: [d_head, B_attn, S_tkg] kv_heads >  1: [d_head, B_attn, kv_heads, S_tkg]
+   :return: - If update_cache=True: Updated V cache (shape matches V_cache input) - If update_cache=False: New V tokens [B_attn, kv_heads, S_tkg, d_head] @ HBM
+   :rtype: ``nl.NkiTensor``
 
    **Dimensions**:
 

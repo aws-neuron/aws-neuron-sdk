@@ -13,7 +13,7 @@ Troubleshooting Guide for PyTorch Neuron (``torch-neuron``)
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 Patching PyTorch version 1.13 for CVEs

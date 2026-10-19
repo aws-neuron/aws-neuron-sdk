@@ -22,5 +22,5 @@ Customers using PyTorch/XLA-based training should migrate to native PyTorch with
 * ``torch.compile`` support
 * Compatibility with frameworks like TorchTitan (PyTorch Training Library)
 
-For more information about native PyTorch on Neuron and migration guidance, see :doc:`Native PyTorch for AWS Trainium </frameworks/torch/pytorch-native-overview>`.
+For more information about native PyTorch on Neuron and migration guidance, see :doc:`Native PyTorch for AWS Trainium </torch/about-pytorch-neuron>`.
 

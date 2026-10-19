@@ -4,11 +4,11 @@
    :framework: jax
    :installation-method: dlami
    :instance-types: inf2, trn1, trn2, trn3
-   :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.11, 3.12
+   :os: ubuntu-26.04, ubuntu-24.04, al2023
+   :python-versions: 3.11, 3.12, 3.13, 3.14
    :content-type: installation-guide
    :estimated-time: 5 minutes
-   :date-modified: 2026-03-03
+   :date-modified: 2026-07-27
 
 Install JAX via Deep Learning AMI
 ===================================
@@ -115,7 +115,7 @@ Installation Steps
       
       .. code-block:: text
          
-         JAX version: 0.7.0
+         JAX version: 0.10.0
          Devices: [NeuronDevice(id=0), NeuronDevice(id=1)]
          
          +--------+--------+--------+-----------+
@@ -178,25 +178,24 @@ Installation Steps
                sudo systemctl restart neuron-monitor
                neuron-ls
 
-   .. tab-item:: Ubuntu 22.04
-      :sync: ubuntu-22-04
+   .. tab-item:: Ubuntu 26.04
+      :sync: ubuntu-26-04
       
       **Step 1: Find the Latest AMI**
-
-      .. important::
-         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
-      Get the latest JAX DLAMI for Ubuntu 22.04:
+      Get the latest JAX DLAMI for Ubuntu 26.04:
       
       .. code-block:: bash
          
          aws ec2 describe-images \
            --owners amazon \
-           --filters "Name=name,Values=Deep Learning AMI Neuron JAX * (Ubuntu 22.04)*" \
+           --filters "Name=name,Values=Deep Learning AMI Neuron JAX * (Ubuntu 26.04)*" \
            --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
            --output text
       
       **Step 2: Launch Instance**
+      
+      Launch a Trn1 or Inf2 instance with the AMI:
       
       .. code-block:: bash
          
@@ -207,6 +206,13 @@ Installation Steps
            --security-group-ids sg-xxxxxxxxx \
            --subnet-id subnet-xxxxxxxxx
       
+      Replace:
+      
+      - ``ami-xxxxxxxxxxxxxxxxx`` with AMI ID from Step 1
+      - ``your-key-pair`` with your SSH key pair name
+      - ``sg-xxxxxxxxx`` with your security group ID
+      - ``subnet-xxxxxxxxx`` with your subnet ID
+      
       **Step 3: Connect to Instance**
       
       .. code-block:: bash
@@ -214,6 +220,8 @@ Installation Steps
          ssh -i your-key-pair.pem ubuntu@<instance-public-ip>
       
       **Step 4: Activate Environment**
+      
+      The DLAMI includes a pre-configured virtual environment:
       
       .. code-block:: bash
          
@@ -355,12 +363,12 @@ Now that JAX is installed:
 
 2. **Read Documentation**:
    
-   - :doc:`/frameworks/jax/index`
-   - :doc:`/frameworks/jax/api-reference-guide/index`
+   - :doc:`/jax/index`
+   - :doc:`/jax/api-reference-guide/index`
 
 3. **Explore Setup Guide**:
    
-   - :doc:`/frameworks/jax/setup/jax-setup`
+   - :doc:`/setup/jax/index`
 
 Additional Resources
 --------------------

@@ -1,6 +1,6 @@
 .. meta::
     :description: DeepSeek MLA QKV projection (MX), emitting absorbed latents.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.mla.deepseek
 
@@ -19,12 +19,12 @@ The ``mla_qkv_cte_kernel`` kernel performs DeepSeek MLA QKV projection (MX), emi
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mla_qkv_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_qkv_cte.py>`_
+**Source code for this kernel API can be found at**: `mla_qkv_cte.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_qkv_cte.py>`_
 
 mla_qkv_cte_kernel
 ^^^^^^^^^^^^^^^^^^
 
-.. py:function:: mla_qkv_cte_kernel(x_hbm_mx: nl.NkiTensor, wqkv_a_hbm: nl.NkiTensor, wqkv_a_scale_hbm: nl.NkiTensor, wq_b_hbm: nl.NkiTensor, wq_b_scale_hbm: nl.NkiTensor, q_norm_gamma_hbm: nl.NkiTensor, kv_norm_gamma_hbm: nl.NkiTensor, wuk_hbm: nl.NkiTensor, cos_cache_hbm: nl.NkiTensor, sin_cache_hbm: nl.NkiTensor, n_heads: int, qk_nope_head_dim: int, qk_rope_head_dim: int, kv_lora_rank: int, qk_lora_rank: int, norm_eps: float = 1e-06, qr_qtz_hbm: nl.NkiTensor = None, qr_scale_hbm: nl.NkiTensor = None) -> Tuple[nl.NkiTensor, nl.NkiTensor, nl.NkiTensor, nl.NkiTensor]
+.. py:function:: mla_qkv_cte_kernel(x_hbm_mx: nl.NkiTensor, wqkv_a_hbm: nl.NkiTensor, wqkv_a_scale_hbm: nl.NkiTensor, wq_b_hbm: nl.NkiTensor, wq_b_scale_hbm: nl.NkiTensor, q_norm_gamma_hbm: nl.NkiTensor, kv_norm_gamma_hbm: nl.NkiTensor, wuk_hbm: nl.NkiTensor, cos_cache_hbm: nl.NkiTensor, sin_cache_hbm: nl.NkiTensor, n_heads: int, qk_nope_head_dim: int, qk_rope_head_dim: int, kv_lora_rank: int, qk_lora_rank: int, norm_eps: float = 1e-06, compact_scales: bool = True, precision: MlaPrecision = MlaPrecision.MX) -> Tuple[nl.NkiTensor, ...]
 
    DeepSeek MLA QKV projection (MX), emitting absorbed latents.
 
@@ -32,11 +32,11 @@ mla_qkv_cte_kernel
    :type x_hbm_mx: ``nl.NkiTensor``
    :param wqkv_a_hbm: ``[H // 4, qk_lora_rank + kv_lora_rank + qk_rope_head_dim]`` fp8x4.
    :type wqkv_a_hbm: ``nl.NkiTensor``
-   :param wqkv_a_scale_hbm: compact block-128 scales for ``wqkv_a``.
+   :param wqkv_a_scale_hbm: compact block-128 scales for ``wqkv_a``. BF16: ignored, pass ``None``.
    :type wqkv_a_scale_hbm: ``nl.NkiTensor``
    :param wq_b_hbm: ``[qk_lora_rank // 4, n_heads * (qk_nope_head_dim + qk_rope_head_dim)]`` fp8x4.
    :type wq_b_hbm: ``nl.NkiTensor``
-   :param wq_b_scale_hbm: compact block-128 scales for ``wq_b``.
+   :param wq_b_scale_hbm: compact block-128 scales for ``wq_b``. BF16: ignored, pass ``None``.
    :type wq_b_scale_hbm: ``nl.NkiTensor``
    :param q_norm_gamma_hbm: ``[1, qk_lora_rank]`` bf16 RMSNorm gamma for the Q intermediate.
    :type q_norm_gamma_hbm: ``nl.NkiTensor``
@@ -60,18 +60,17 @@ mla_qkv_cte_kernel
    :type qk_lora_rank: ``int``
    :param norm_eps: RMSNorm epsilon (default 1e-6).
    :type norm_eps: ``float``
-   :param qr_qtz_hbm: Optional pre-allocated buffer for the exported MX-quantized qr latent (SAI indexer fast path). None (default) means no qr export.
-   :type qr_qtz_hbm: ``nl.NkiTensor``
-   :param qr_scale_hbm: Optional pre-allocated scale buffer paired with ``qr_qtz_hbm``.
-   :type qr_scale_hbm: ``nl.NkiTensor``
+   :param compact_scales: MX only -- see ``wqkv_a_scale_hbm``.
+   :type compact_scales: ``bool``
+   :param precision: ``MX`` (default) or ``BF16``. BF16 takes unquantized bf16 activations and weights in natural column order and issues plain ``nisa.nc_matmul``: no 4-packing, no MLA output-column swizzle, no scale broadcast, no ``quantize_mx``, no un-swizzle. It also lifts the MX path's ``qk_nope_head_dim == 128`` restriction (the absorption contraction is tiled at 128 rows, so GLM's 192 runs as 128 + 64) and relaxes the LoRA-rank multiple from 512 to 128. Pass ``None`` for both scale tensors.
+   :type precision: ``MlaPrecision``
    :return: ``[B, S, n_heads, kv_lora_rank]`` bf16, per-head absorbed Q latent.
-   :rtype: ``nl.ndarray``
    :return: ``[B, S, n_heads, qk_rope_head_dim]`` bf16, per-head RoPE queries.
-   :rtype: ``nl.ndarray``
    :return: ``[B, S, kv_lora_rank]`` bf16, shared latent KV (RMSNorm(kv) * gamma).
-   :rtype: ``nl.ndarray``
-   :return: ``[B, S, qk_rope_head_dim]`` bf16, shared RoPE key.
-   :rtype: ``nl.ndarray``
+   :return: ``[B, S, qk_rope_head_dim]`` bf16, shared RoPE key. Then, for the SAI indexer's wq_b projection, the q-normed qr latent -- MX emits it pre-transposed and pre-quantized so the indexer skips that work, BF16 emits it plain:
+   :return: ``qr_qtz`` ``[num_s_tiles, P_MAX, qk_lora_rank // 512, P_MAX]`` uint32 (fp8x4) plus ``qr_scale``, the paired block-32 MX scales, same shape uint8.
+   :return: ``qr`` ``[B, S, qk_lora_rank]`` bf16.
+   :rtype: ``Tuple[nl.NkiTensor, ...]``
 
    **Notes**:
 

@@ -843,7 +843,10 @@ if len(self.running) >= self._max_kv_concurrent:
 
 The capacity check uses a worst-case assumption: every running request may grow to `max_model_len` tokens. This is deliberately conservative because decode requests continuously generate tokens, consuming more KV cache blocks over time. If we admitted prefills based on *current* KV usage, running decode requests could still exhaust KV cache mid-generation, which would trigger request preemption. **Preemption is not supported on Neuron**, so this must be prevented at admission time rather than handled at runtime.
 
-The tradeoff is reduced concurrency — some KV capacity may go unused when requests finish well before `max_model_len`. To increase concurrency, raise `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` or reduce `max_model_len`.
+The check can leave KV capacity unused when requests finish before
+`max_model_len`. Default sizing can increase memory utilization or the fractional
+cap after validation. In headroom mode, decrease the active reserve.
+Reducing `max_model_len` also increases the concurrency limit.
 
 ### Admission Control Flow
 

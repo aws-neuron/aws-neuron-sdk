@@ -23,10 +23,85 @@ What's New in the AWS Neuron SDK
         :link-type: doc
         :class-header: sd-bg-primary sd-text-white
 
-        **Latest release**: 2.32.0 (08/17/2026)
+        **Latest release**: 2.33.0 (10/19/2026)
 
 ----
 
+.. _whats-new-2026-10-19-v2_33:
+
+Neuron Release 2.33.0: native PyTorch on AWS Trainium, node and device health monitoring, and NKI kernel metaprogramming in standard Python
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+**Posted on**: October 19, 2026
+
+Today we are releasing Neuron 2.33.0. This release introduces :ref:`TorchNeuron <torch-neuron-home>`, the native PyTorch backend for AWS Trainium, now in public beta. The model code, libraries, and tools you already use run on Amazon EC2 Trn2 and Trn3 instances, in eager mode or with ``torch.compile``. :ref:`Neuron Observer <observer-2-33-0-rn>`, also now in public beta, detects issues in under a second and identifies the affected node or device.
+
+In :ref:`Neuron Kernel Interface (NKI) 0.7.0 <nki-2-33-0-rn>`, kernel metaprogramming uses standard Python. The :ref:`NKI Library <nki-lib-2-33-0-rn>` adds 25 new experimental kernels for DeepSeek-V3.2, Qwen3.5, and Kimi Delta Attention. :ref:`vLLM Neuron <whats-new-2026-07-20-vllm-neuron-beta>`, launched in July 2026, is upgraded to vLLM 0.29.0 and uses native PyTorch compilation by default. :ref:`vLLM Omni Neuron <whats-new-vllm-omni-neuron-beta>`, launched in September 2026, is part of a Neuron release for the first time.
+
+What's in this release
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* **TorchNeuron (Public Beta)** – Registers Trainium through PrivateUse1, PyTorch's extension point for custom hardware, so the standard PyTorch APIs work as written on the ``neuron`` device. Both PyTorch execution modes run natively: eager for research and debugging, and ``torch.compile`` for production performance. The libraries you already use also run on Trainium, including TorchTitan, the Hugging Face libraries, and vLLM Neuron. Write custom kernels with NKI, and view ``torch.profiler`` traces in Neuron Explorer. See :ref:`TorchNeuron: Native PyTorch on AWS Neuron <torch-neuron-home>`.
+
+* **Neuron Observer (Public Beta)** – Monitors Trainium health from a single host to a cluster with a per-node daemon, the ``nobs`` command line client, and an on-demand health check. Collect metrics in Prometheus, Amazon CloudWatch, or Amazon Managed Service for Prometheus, and deploy the daemon on Amazon Elastic Kubernetes Service with a Helm chart. See :ref:`observer-2-33-0-rn`.
+
+* **NKI 0.7.0** – Specializes kernels by tracing them with Python, so generators, class inheritance, and the rest of the language work in kernel metaprogramming. Tiled and blocked layouts address tensors by tile coordinate, and the CPU simulator runs fixed-size collective kernels across multiple ranks without Neuron hardware. See :ref:`nki-2-33-0-rn`.
+
+* **NKI Library** – Adds 25 new experimental kernels, including DeepSeek-V3.2 decode and prefill, Gated DeltaNet for Qwen3.5, Kimi Delta Attention, and a FlashAttention-2 forward kernel on Trn3. Each new kernel ships with a PyTorch reference implementation, and a new ``models/`` folder holds kernels tuned for Gemma4 and GPT-OSS. See :ref:`nki-lib-2-33-0-rn`.
+
+* **Graph Compiler** – Reduces compile time for ``torch.compile`` models with heterogeneous architectures, such as vision-language, encoder-decoder, and mixture-of-experts models, with no code or flag changes. Rewritten backend analyses speed up large-graph compilation. On Trn3 under LNC=2 sharding, MXFP8 models keep quantized weights and MX matrix-multiplication outputs in on-chip memory, which lowers latency. See :ref:`compiler-2-33-0-rn`.
+
+* **Runtime and Driver** – New tensor cast and compute APIs run data-type conversion on the Neuron device, and element-wise addition, minimum, and maximum on Trn2 and Trn3. Large NEFFs load up to 6.7 times faster. Host-to-device and device-to-host transfers appear in profiles, variable-size all-to-all collectives span both racks of a Trn3 UltraServer, and the driver reports per-NeuronCore throttle levels. See :ref:`runtime-2-33-0-rn`.
+
+* **Neuron Explorer** – New HBM and PyTorch Allocator tabs in the Memory Viewer show device memory and PyTorch allocator timelines for system profiles. With a memory snapshot, the Memory Viewer attributes allocations to the Python source lines that made them, which helps debug out-of-memory errors in eager mode. Profiles also add host-to-device and device-to-host transfer tracks, each linked to the framework operation that triggered it, plus NKI call stacks and user-defined NKI regions. See :ref:`dev-tools-2-33-0-rn`.
+
+* **Neuron Agentic Development** – The new ``neuron-parallelism-planner`` skill plans parallelism and batch size for large language model inference against latency targets, before you run on hardware. New skills also find the operator that limits a configuration, and localize bottlenecks in prefill and decode profiles captured from a running vLLM Neuron server. See :ref:`agentic-development-2-33-0-rn`.
+
+* **vLLM Neuron** – Moves to native PyTorch ``torch.compile`` as the default compilation path and improves inference performance: GPT-OSS-120B serves up to 2.5x more throughput than Neuron 2.32, and Qwen3-VL-32B up to 38% more, with faster server startup. Model Runner V2 is now the default for supported dense models. Adds Qwen3-32B dense model support and Qwen3-ASR-1.7B for speech-to-text. See :ref:`vllm-neuron-2-33-0-rn`.
+
+* **vLLM Omni Neuron** – Moves to native PyTorch ``torch.compile`` and improves Wan2.2 text-to-video and image-to-video generation performance on Trn2 and Trn3. See :ref:`vllm-omni-neuron-2-33-0-rn`.
+
+* **JAX NeuronX** – Updated for Neuron 2.33.0, with continued support for JAX 0.7.0–0.10.0. See :ref:`jax-2-33-0-rn`.
+
+* **DLAMIs and DLCs** – Neuron Deep Learning AMIs (DLAMIs) add Ubuntu 26.04 in addition to Ubuntu 24.04, except the new vLLM Omni DLAMI, which is Ubuntu 24.04 only. Neuron Deep Learning Containers (DLCs) are published on Ubuntu 26.04 only. New torch-neuronx images provide PyTorch 2.14 with TorchTitan, and the DRA driver can add device taints that mark an individual Neuron device unavailable or degraded. See :ref:`dlami-2-33-0-rn` and :ref:`containers-2-33-0-rn`.
+
+Software lifecycle updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* NeuronX Distributed (NxD) Inference and NxD Core inference APIs – Support on Trn2 and Trn3 ends in Neuron 2.34. Migrate inference to vLLM Neuron, and model build and trace code to ``torch.compile`` with TorchNeuron (:ref:`announce-eos-nxdi-nxd-core-inference`).
+* PyTorch/XLA inference – Support on Trn2 and Trn3 ends in Neuron 2.34. Use TorchNeuron (:ref:`announce-eos-torch-xla-inference-trn`).
+* PyTorch/XLA path in vLLM Neuron – Support on Trn2 and Trn3 ends in Neuron 2.34. Use the native PyTorch path, which is the default (:ref:`announce-eos-vllm-neuron-torch-xla`).
+* PyTorch NeuronX – ``torch-neuronx`` for PyTorch 2.13 and 2.14 is TorchNeuron, and PyTorch 2.9 is the last version on PyTorch/XLA. Migrate PyTorch/XLA training code to TorchNeuron (:ref:`announce-transition-pytorch-trainium`).
+* NKI – The next Neuron release removes ``NKI_COMPILER_FRONTEND=custom``, which selects the previous specialization (:ref:`announce-nki-specialization-change`).
+* NKI – Move kernels that use ``nl.dynamic_range`` or ``while`` loops with a virtual register to ``nl.fori_loop`` and ``nl.while_loop``. The ``==`` operator on user-defined classes now follows standard Python semantics (:ref:`nki-migrate-0-6-to-0-7`).
+* NKI and Neuron Compiler – Each NKI kernel's Logical NeuronCore (LNC) degree must match the compiler's ``--lnc`` setting, or compilation fails with ``NCC_EVRF066``. Set ``NEURON_LOGICAL_NC_CONFIG`` to the required degree (:ref:`compiler-2-33-0-rn`).
+* NKI – A future release changes the default kernel LNC degree from 1 to 2 on Trn2 and later, and ``rank_id`` returns an ``NkiScalar``. To keep the current LNC behavior, set ``NEURON_LOGICAL_NC_CONFIG=1`` (:ref:`nki-2-33-0-rn`).
+* Neuron Compiler – Integer narrowing conversions, such as ``int32`` to ``int8``, now wrap around instead of saturating, matching PyTorch and CPU behavior (:ref:`compiler-2-33-0-rn`).
+* Neuron Compiler – The default change to native int64 execution, planned for this release, is postponed to the next release. To keep the current downcast behavior, pin ``--native-int64=disabled --implicit-integer-downcast=all`` (:ref:`compiler-2-33-0-rn`).
+* NKI Library – ``matmul_mxfp8`` and ``matmul_mxfp8_backward`` now default to ``float8_e4m3fn``. The change alters numerics without raising an error. To keep the previous numerics, pass ``float8_dtype="float8_e5m2"`` (:ref:`nki-lib-2-33-0-rn`).
+* NKI Library – The ``TensorView`` utility is removed. Use the ``nl.NkiTensor`` view methods. Several other kernels change signatures, tensor layouts, or outputs (:ref:`nki-lib-2-33-0-rn`).
+* Neuron Driver – The sysfs tree under ``/sys/class/neuron_device/neuronN/`` is reorganized, and most nodes have moved. Update tools that read these paths (:ref:`neuron-sysfs-migration`).
+* Neuron Runtime – Elastic Fabric Adapter device memory registration uses dma-buf by default. To keep the previous peer-to-peer path, set ``NEURON_RT_ENABLE_P2P=1`` (:ref:`runtime-2-33-0-rn`).
+* Neuron Runtime – A future release rejects models that use vector DMA instructions whose source and destination element sizes differ. Recompile affected models with a newer compiler (:ref:`runtime-2-33-0-rn`).
+* Neuron Explorer – Neuron 2.33.0 is the last release to support the full-profile JSON output (``--output-format json``). Migrate to the Parquet output (:ref:`announce-intent-eos-explorer-json`).
+* ``neuron-ls`` – Neuron 2.34 replaces the current JSON output (``--json-output``) with an updated format that you select with ``--output-format json``. Update scripts that parse the current format (:ref:`announce-intent-eos-neuron-ls-json`).
+* ``aws-neuronx-gpsimd-customop-lib`` – Now in maintenance mode, with critical security and bug fixes only. Use NKI for custom operators (:ref:`announce-maintenance-gpsimd-customop-lib-2-33`).
+* Neuron DLCs – Images are published on Ubuntu 26.04 only. For an Ubuntu 24.04 DLC, use an image from Neuron 2.32.0 or earlier (:ref:`containers-2-33-0-rn`).
+
+Software dependency changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Update your environment before you upgrade to Neuron 2.33.0.
+
+* PyTorch 2.13 and 2.14 – TorchNeuron (``torch-neuronx`` 2.13.3.0 and 2.14.3.0) supports PyTorch 2.13 and 2.14 on Python 3.12, 3.13, and 3.14.
+* vLLM 0.24 – The vLLM Neuron plugin (``vllm-neuron`` 0.29.0.1.2.0) is updated to vLLM 0.29.0. Migrate to vLLM 0.29.0.
+* Amazon Linux 2 – Neuron no longer supports Amazon Linux 2, which reached end of life on June 30, 2026. Migrate to Amazon Linux 2023 (:ref:`announce-no-support-al2-driver`).
+* Linux kernel 7.0 – The Neuron Driver supports Linux kernel 7.0, the default kernel in Ubuntu 26.04 (:ref:`neuron-runtime-compatibility`).
+* Neuron Driver 2.31 – The new runtime tensor cast and compute APIs, asynchronous tensor I/O, and host-to-device and device-to-host transfer profiling require Neuron Driver 2.31 or later. Upgrade the driver with the runtime.
+
+For details, see the :ref:`Neuron 2.33.0 release notes <neuron-2-33-0-whatsnew>`.
+
+----
 
 .. _whats-new-vllm-omni-neuron-beta:
 
@@ -424,7 +499,7 @@ For more details, see :ref:`containers-2-28-0-rn`.
 PyTorch Framework (torch-neuronx)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Transition to Native PyTorch Support** - Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will transition from PyTorch/XLA to native PyTorch support via TorchNeuron. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`native-pytorch-trainium` for migration guidance.
+**Transition to Native PyTorch Support** - Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will transition from PyTorch/XLA to native PyTorch support via TorchNeuron. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`TorchNeuron overview <about-pytorch-neuron>` for migration guidance.
 
 For more details, see :ref:`pytorch-2-28-0-rn`.
 
@@ -437,7 +512,7 @@ AWS Neuron SDK 2.27.0: Trainium3 Support, Enhanced NKI, and Unified Profiling wi
 
 **Posted on**: December 19, 2025
 
-Today we are releasing AWS Neuron SDK 2.27.0. This release adds support for Trainium3 (``Trn3``) instances. Enhanced NKI with new NKI Compiler introduces the ``nki.*`` namespace with updated APIs and language constructs. The NKI Library provides pre-optimized kernels for common model operations including attention, MLP, and normalization. Neuron Explorer delivers a unified profiling suite with AI-driven optimization recommendations. vLLM V1 integration is now available through the vLLM-Neuron Plugin. Deep Learning Containers and AMIs are updated with vLLM V1, PyTorch 2.9, JAX 0.7, Ubuntu 24.04, and Python 3.12.
+Today we are releasing AWS Neuron SDK 2.27.0. This release adds support for Trainium3 (``Trn3``) instances. Enhanced NKI with new NKI Compiler introduces the ``nki.*`` namespace with updated APIs and language constructs. The NKI Library provides pre-optimized kernels for common model operations including attention, MLP, and normalization. Neuron Explorer delivers a unified profiling suite with AI-driven optimization recommendations. vLLM V1 integration is now available through the vLLM Neuron Plugin. Deep Learning Containers and AMIs are updated with vLLM V1, PyTorch 2.9, JAX 0.7, Ubuntu 24.04, and Python 3.12.
 
 In addition to this release, we are introducing new capabilities and features in private beta access (see Private Beta Access section). We are also announcing our transition to PyTorch native support starting with PyTorch 2.10 in Neuron 2.28, plans to simplify NxDI in upcoming releases, and other important updates.
 
@@ -474,7 +549,7 @@ For more details, see :ref:`neuron-2-27-0-tools`.
 Inference Updates
 ^^^^^^^^^^^^^^^^^
 
-**vLLM V1** - The vLLM-Neuron Plugin enables vLLM V1 integration for inference workloads. vLLM V0 support ends in Neuron 2.28.
+**vLLM V1** - The vLLM Neuron Plugin enables vLLM V1 integration for inference workloads. vLLM V0 support ends in Neuron 2.28.
 
 **NxD Inference** - Model support expands with beta releases of Qwen3 MoE (Qwen3-235B-A22B) for multilingual text and Pixtral (Pixtral-Large-Instruct-2411) for image understanding. Both models use HuggingFace checkpoints and are supported on ``Trn2`` and ``Trn3`` instances.
 
@@ -565,8 +640,8 @@ At re:Invent 2025, AWS Neuron introduces support for `Trainium3 UltraServer <htt
 **Expanded capabilities and enhancements include**:
 
 * :doc:`Trainium3 UltraServer support </about-neuron/arch/neuron-hardware/trn3-arch>`: Enabling customers to scale AI workloads with improved performance
-* :doc:`Native PyTorch support </frameworks/torch/pytorch-native-overview>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
-* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
+* :doc:`Native PyTorch support </torch/about-pytorch-neuron>`: Standard PyTorch runs unchanged on Trainium without platform-specific modifications
+* :doc:`Enhanced Neuron Kernel Interface (NKI) </nki/get-started/about/index>` with open source :doc:`NKI Compiler </nki/deep-dives/nki-compiler>`: Improved programming capabilities with direct access to Trainium hardware instructions and fine-grained optimization control, compiler built on MLIR
 * :doc:`NKI Library </nki/library/index>`: Open source collection of optimized, ready-to-use kernels for common ML operations
 * :doc:`Neuron Explorer </tools/neuron-explorer/index>`: Tools suite to support developers and performance engineers in their performance optimization journey from framework operations to hardware instructions
 * :doc:`Neuron DRA for Kubernetes </deploy/eks/dra>`: Kubernetes-native resource management eliminating custom scheduler extensions
@@ -586,7 +661,7 @@ TorchNeuron provides eager mode execution for interactive development and debugg
 
 Use TorchNeuron to run your PyTorch research and training workloads on Trainium without platform-specific code changes.
 
-**Learn more**: :doc:`documentation </frameworks/torch/pytorch-native-overview>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`__.
+**Learn more**: :doc:`documentation </torch/about-pytorch-neuron>`, and `TorchNeuron GitHub repository <https://github.com/aws-neuron/torch-neuronx>`__.
 
 **Access**: Contact your AWS account team for access.
 

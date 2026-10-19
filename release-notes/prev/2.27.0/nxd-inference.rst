@@ -21,13 +21,13 @@ What's New
 
 **vLLM V1 support** - This release adds support for vLLM V1 through  `vllm-neuron <https://github.com/vllm-project/vllm-neuron>`_ plugin. You can use the vLLM V1 by using the new vLLM V1 based Neuron DLC or using the vLLM virtual environment in Neuron DLAMIs. See :ref:`vLLM V1 guide <nxdi-vllm-user-guide-v1>` for more information.
 
-**Qwen3 MoE Model Support (Beta)** — NxD Inference supports Qwen3 MoE language model which supports multilingual text inputs. You can use HuggingFace checkpoint. For more information about how to run Qwen3 MoE inference, see :doc:`Tutorial: Qwen3 MoE Inference </libraries/nxd-inference/tutorials/qwen3-moe-tutorial>`.
+**Qwen3 MoE Model Support (Beta)** — NxD Inference supports Qwen3 MoE language model which supports multilingual text inputs. You can use HuggingFace checkpoint. For more information about how to run Qwen3 MoE inference, see :doc:`Tutorial: Qwen3 MoE Inference </inference-legacy/nxd-inference/tutorials/qwen3-moe-tutorial>`.
 
 Compatible models include:
 
 * `Qwen3-235B-A22B <https://huggingface.co/Qwen/Qwen3-235B-A22B>`_
 
-**Pixtral Model Support (Beta)** — NxD Inference supports Pixtral image understanding model which processes text and image inputs. You can use HuggingFace checkpoint. For more information about how to run Pixtral inference, see :doc:`Tutorial: Deploy Pixtral Large on Trn2 instances </libraries/nxd-inference/tutorials/pixtral-tutorial>`.
+**Pixtral Model Support (Beta)** — NxD Inference supports Pixtral image understanding model which processes text and image inputs. You can use HuggingFace checkpoint. For more information about how to run Pixtral inference, see :doc:`Tutorial: Deploy Pixtral Large on Trn2 instances </inference-legacy/nxd-inference/tutorials/pixtral-tutorial>`.
 
 Compatible models include:
 

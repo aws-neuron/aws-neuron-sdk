@@ -13,7 +13,7 @@ Inference with ``torch-neuron`` (Inf1)
 
    This document is archived. torch-neuron (Inf1) is no longer actively developed.
    For new workloads, use TorchNeuron Native or torch-neuronx.
-   See :doc:`/frameworks/torch/index` for current PyTorch support.
+   See :doc:`/archive/frameworks/torch/index` for current PyTorch support.
 
 .. toctree::
     :maxdepth: 1

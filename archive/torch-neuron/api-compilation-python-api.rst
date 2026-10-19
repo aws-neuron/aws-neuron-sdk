@@ -13,7 +13,7 @@ PyTorch-Neuron trace python API
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The PyTorch-Neuron trace Python API provides a method to generate

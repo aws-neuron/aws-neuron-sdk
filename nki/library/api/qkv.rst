@@ -1,6 +1,6 @@
 .. meta::
     :description: QKV kernel performs Query-Key-Value projection with optional normalization and RoPE fusion.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.qkv
 
@@ -31,7 +31,7 @@ The ``QKV`` kernel is a critical component in transformer architectures, respons
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `qkv.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/qkv/qkv.py>`_
+**Source code for this kernel API can be found at**: `qkv.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/qkv/qkv.py>`_
 
 qkv
 ^^^

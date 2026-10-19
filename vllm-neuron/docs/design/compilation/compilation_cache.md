@@ -11,7 +11,7 @@ vLLM Neuron provides a two-tier compilation cache that eliminates redundant `neu
 1. **Local cache** — coordinates parallel processes on the same node so that each unique graph is compiled exactly once.
 2. **Remote cache** (optional) — an NFS or FSx mount that shares compiled artifacts across nodes and survives restarts.
 
-The cache is **enabled by default**. When a model is compiled with `torch.compile(model, backend="vllm_neuron")`, the resulting NEFF artifacts are stored locally and can optionally be promoted to a shared remote store for other nodes to consume.
+The cache is **enabled by default**. When a model is compiled with `torch.compile(model, backend=envs.get_compile_backend_name())`, the resulting NEFF artifacts are stored locally and can optionally be promoted to a shared remote store for other nodes to consume.
 
 ### Why a Compilation Cache?
 

@@ -14,7 +14,7 @@ Update to latest TensorFlow Neuron  (``tensorflow-neuronx``)
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.
@@ -24,7 +24,7 @@ If you already have a previous Neuron release installed, this section provide li
 
     .. tab-item:: Tensorflow 2.10.1
 
-        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /archive/frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
         .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 122
@@ -33,7 +33,7 @@ If you already have a previous Neuron release installed, this section provide li
 
     .. tab-item:: Tensorflow 2.9.3
 
-        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /archive/frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
         .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 125
@@ -42,7 +42,7 @@ If you already have a previous Neuron release installed, this section provide li
 
     .. tab-item:: Tensorflow 2.8.4
 
-        .. include:: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+        .. include:: /archive/frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
         .. include:: /src/helperscripts/installationScripts/python_instructions.txt
             :start-line: 128

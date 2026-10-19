@@ -1,7 +1,7 @@
 .. meta::
     :description: Index of Neuron SDK component release notes with latest versions
     :keywords: neuron, release notes, components, versions, aws neuron sdk
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 Neuron Component Release Notes
 ===============================
@@ -16,48 +16,60 @@ This page provides an index of all Neuron SDK component release notes. Each comp
    * - Component
      - Updated in Neuron Version
      - Latest Component Version
-   * - :doc:`Neuron Compiler </release-notes/components/compiler>`
-     - **2.32.0**
-     - 2.27.5334.0
-   * - :doc:`Neuron Agentic Development </release-notes/components/agentic-development>`
-     - **2.32.0**
-     - 1.3
-   * - :doc:`Neuron Containers </release-notes/components/containers>`
-     - **2.32.0**
-     - 2.32.0
-   * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
-     - **2.32.0**
-     - 2.32.28.0
-   * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
-     - **2.32.0**
-     - 2.32.0
+   * - :doc:`TorchNeuron (Beta) </release-notes/components/torchneuron>`
+     - **2.33.0**
+     - 2.14.3.0 and 2.13.3.0
+   * - :doc:`TorchTitan Neuron (Beta) </release-notes/components/torchtitan-neuron>`
+     - **2.33.0**
+     - 0.2.2+neuron.1
+   * - :doc:`PyTorch NeuronX </release-notes/components/pytorch>`
+     - **2.33.0**
+     - 2.9.0.2.15.32035
    * - :doc:`JAX NeuronX </release-notes/components/jax>`
-     - **2.32.0**
-     - 0.10.0.* (supports up to JAX 0.9.0)
-   * - :doc:`NKI Library </release-notes/components/nki-lib>`
-     - **2.32.0**
-     - 2.32.0
-   * - :doc:`Neuron Kernel Interface </release-notes/components/nki>` 
-     - **2.32.0**
-     - 0.6.0
-   * - :doc:`NxD Inference </release-notes/components/nxd-inference>`
-     - **2.32.0**
-     - 0.10.18399
-   * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10.0
-   * - :doc:`Neuron Driver </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.30.2.0
-   * - :doc:`Neuron Collectives </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10.0
-   * - :doc:`nrtpy (Beta) </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10
+     - **2.33.0**
+     - 0.10.0.1.0.14198 (supports JAX 0.7.0 to 0.10.0)
    * - :doc:`vLLM Neuron (Beta) </release-notes/components/vllm-neuron>`
-     - **2.32.0**
-     - 0.24.0.1.1.0
+     - **2.33.0**
+     - 0.29.0.1.2.0
+   * - :doc:`vLLM Omni Neuron (Beta) </release-notes/components/vllm-omni-neuron>`
+     - **2.33.0**
+     - 0.29.0.0.2.0
+   * - :doc:`Neuron Kernel Interface </release-notes/components/nki>` 
+     - **2.33.0**
+     - 0.7.0
+   * - :doc:`NKI Library </release-notes/components/nki-lib>`
+     - **2.33.0**
+     - 2.33.0
+   * - :doc:`Neuron Compiler </release-notes/components/compiler>`
+     - **2.33.0**
+     - 2.28.7631.0
+   * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.30.0
+   * - :doc:`Neuron Driver </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.31.7.0
+   * - :doc:`Neuron Collectives </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.43.0
+   * - :doc:`nrtpy (Beta) </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.30
+   * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
+     - **2.33.0**
+     - 2.33.38.0
+   * - :doc:`Neuron Observer (Beta) </release-notes/components/observer>`
+     - **2.33.0**
+     - 0.2.0
+   * - :doc:`Neuron Agentic Development </release-notes/components/agentic-development>`
+     - **2.33.0**
+     - 1.4
+   * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
+     - **2.33.0**
+     - 2.33.0
+   * - :doc:`Neuron Containers </release-notes/components/containers>`
+     - **2.33.0**
+     - 2.33.0
 
 * For older components and features that have not been updated recently or are out of support, see :doc:`../archive/index`.
 
@@ -65,18 +77,19 @@ This page provides an index of all Neuron SDK component release notes. Each comp
    :maxdepth: 1
    :hidden:
 
-   Neuron Compiler <compiler>
-   Neuron Agentic Development <agentic-development>
-   Neuron Containers <containers>
-   Neuron Developer Tools <dev-tools>
-   Neuron DLAMI <dlamis>
+   TorchNeuron <torchneuron>
+   TorchTitan Neuron <torchtitan-neuron>
+   PyTorch NeuronX <pytorch>
    JAX NeuronX <jax>
-   NKI Library <nki-lib>
-   Neuron Kernel Interface <nki>
-   NxD Core <nxd-core>
-   NxD Inference <nxd-inference>
-   NxD Training <nxd-training>
    vLLM Neuron <vllm-neuron>
-   PyTorch Neuron Framework <pytorch>
+   vLLM Omni Neuron <vllm-omni-neuron>
+   Neuron Kernel Interface <nki>
+   NKI Library <nki-lib>
+   Neuron Compiler <compiler>
    Neuron Runtime <runtime>
+   Neuron Developer Tools <dev-tools>
+   Neuron Observer <observer>
+   Neuron Agentic Development <agentic-development>
+   Neuron DLAMI <dlamis>
+   Neuron Containers <containers>
    Older components and features <../archive/index>

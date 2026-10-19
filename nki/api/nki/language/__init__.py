@@ -1,7 +1,13 @@
+# AUTO GENERATED FILE - DO NOT MANUALLY MODIFY.
+
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
+
+if TYPE_CHECKING:
+    from nki.isa import NkiScalar
+    from nki.isa import VirtualRegister
 
 DType = str
 
@@ -17,6 +23,9 @@ r"""16-bit signed integer number"""
 int32: DType = ...
 r"""32-bit signed integer number"""
 
+int64: DType = ...
+r"""64-bit signed integer number"""
+
 uint8: DType = ...
 r"""8-bit unsigned integer number"""
 
@@ -25,6 +34,9 @@ r"""16-bit unsigned integer number"""
 
 uint32: DType = ...
 r"""32-bit unsigned integer number"""
+
+uint64: DType = ...
+r"""64-bit unsigned integer number"""
 
 float16: DType = ...
 r"""16-bit floating-point number"""
@@ -77,12 +89,10 @@ r"""Shared HBM - Visible to all kernel instances in the SPMD grid"""
 tile_size: _TileSize = ...
 r"""Hardware tile size constants (pmax, psum_bank_fmax, gemm_stationary_fmax, etc.)"""
 
-average = ...
-
-prelu = ...
+prelu: Op = ...
 r"""Parametric ReLU activation function. Used as the ``op`` parameter in activation ISA instructions such as :doc:`nki.isa.activation </nki/api/generated/nki.isa.activation>`. The slope for negative inputs is controlled by the ``relu_param`` argument (see :ref:`nki-act-func`)."""
 
-bypass = ...
+bypass: Op = ...
 r"""No-op operator that passes data through unchanged. Used as the ``op0`` or ``op1`` parameter in tensor-scalar ISA instructions (e.g., :doc:`nki.isa.activation </nki/api/generated/nki.isa.activation>`) to skip a computation stage."""
 
 class MemoryRegion(Enum):
@@ -96,12 +106,271 @@ class MemoryRegion(Enum):
 
     shared_hbm = 'shared_hbm'
 
+    def __eq__(self, other):
+        ...
+
     ...
 
 class NKIObject():
     r"""Base class for NKI kernel dataclasses and configuration objects."""
 
     def __init__(self, **kwargs: Any) -> None:
+        ...
+
+    ...
+
+class Op(NKIObject):
+    r"""A lightweight wrapper for NKI operator constants.
+
+    Use for type annotations for NKI operators."""
+
+    def __init__(self, name):
+        ...
+
+    def __call__(self, x, y=None, dtype=None):
+        ...
+
+    ...
+
+class NkiGrid(NKIObject):
+    r"""Base class for tensor views organized into tiles or blocks.
+
+    ``NkiGrid`` is the common interface for :class:`NkiTileGrid` and
+    :class:`NkiBlockGrid`. A grid describes an existing tensor region through
+    logical tile or block coordinates while retaining its dtype, buffer, and
+    underlying storage.
+
+    Users do not construct ``NkiGrid`` directly. Grid views are created via
+    :func:`nki.language.tiles` and :func:`nki.language.blocks`:
+
+    .. code-block:: python
+
+        tile_grid = nl.tiles(src, tile_shape=(128, 256))
+        block_grid = nl.blocks(
+            src,
+            tile_shape=(128, 256),
+            block_shape=(2, 2),
+        )
+
+    :func:`nki.language.tiles` returns an :class:`NkiTileGrid`, and
+    :func:`nki.language.blocks` returns an :class:`NkiBlockGrid`. Both concrete
+    objects are instances of ``NkiGrid``. Refer to those factory functions for
+    the tiling, block-grouping, and boundary behavior of the returned view.
+
+    See Also:
+        :func:`nki.language.tiles`: Create a tile-coordinate view.
+        :func:`nki.language.blocks`: Group tiles into block coordinates."""
+
+    @property
+    def shape(self) -> tuple[int, ...]:
+        r"""Return the extents of the grid coordinates available for indexing.
+
+        Tile-grid dimensions count tiles and block-grid dimensions count
+        blocks. Untiled leading HBM dimensions appear first. Counts include
+        partial boundary cells. Integer indexing consumes a coordinate level;
+        slicing preserves it with the selected count.
+
+        :return: One positive count per currently indexable grid dimension."""
+        ...
+
+    @property
+    def tile_shape(self) -> tuple[int, ...]:
+        r"""Return the nominal source-element shape of one tile.
+
+        :return: The configured per-tile shape in source-element units."""
+        ...
+
+    @property
+    def element_shape(self) -> tuple[int, ...]:
+        r"""Return the number of selected elements along each source dimension.
+
+        :return: The selected element counts in source-dimension order."""
+        ...
+
+    @property
+    def dtype(self) -> DType:
+        r"""Return the element dtype of the backing tensor.
+
+        :return: The grid's NKI element dtype."""
+        ...
+
+    @property
+    def buffer(self) -> MemoryRegion:
+        r"""Return the memory region containing the backing tensor.
+
+        :return: The :class:`MemoryRegion` backing the view."""
+        ...
+
+    @property
+    def is_remainder(self) -> bool:
+        r"""Return whether this selection contains a partial boundary tile.
+
+        :return: ``True`` when at least one selected tile extent is partial."""
+        ...
+
+    @property
+    def is_data_representable(self) -> bool:
+        r"""Return whether :attr:`data` can represent this selection exactly.
+
+        :return: ``True`` when one native tensor operand can describe the
+            complete selection."""
+        ...
+
+    @property
+    def index_step_elements(self) -> tuple[int, ...]:
+        r"""Return each grid-coordinate step in source-element units.
+
+        :return: The source-element stride of each current grid coordinate."""
+        ...
+
+    @property
+    def data(self) -> NkiTensor:
+        r"""Expose the complete grid selection as one native tensor operand.
+
+        Grid navigation retains tile or block coordinates. ``data`` is the
+        explicit transition to the :class:`NkiTensor` accepted by NKI
+        instructions. The returned tensor preserves the selection's offsets,
+        strides, and physical gaps.
+
+        :return: An exact native tensor operand over the current grid region.
+        :raises ValueError: if one native access pattern cannot represent the
+            selected region, for example across an unsupported nonuniform
+            partition remainder or an overly complex access pattern. Split the
+            grid into representable regions in that case. Use
+            :attr:`is_data_representable` to test this before accessing
+            ``data``.
+
+        .. note::
+
+            ``data.shape`` describes the native access-pattern traversal. It may
+            differ from :attr:`element_shape` and from the private backing
+            allocation shape. For example, a complete two-dimensional tile grid can
+            expose ``(P, tile_rows, tile_columns, F)``, while a contiguous
+            free-dimension tail can compact to ``(P, valid_free_elements)``.
+            Capacity reserved behind an SBUF or PSUM remainder is never exposed.
+
+        Examples:
+
+        .. code-block:: python
+
+            import nki
+            import nki.isa as nisa
+            import nki.language as nl
+
+            @nki.jit
+            def copy_grid_as_one_operand(src):
+                # src is tile-aligned 2D, for example (256, 512).
+                src_tiles = nl.tiles(src, tile_shape=(128, 128))
+                staging_tiles = nl.tiles(
+                    nl.ndarray(
+                        src_tiles.element_shape,
+                        dtype=src.dtype,
+                        buffer=nl.sbuf,
+                    ),
+                    tile_shape=src_tiles.tile_shape,
+                )
+                dst = nl.ndarray(
+                    src.shape, dtype=src.dtype, buffer=nl.shared_hbm
+                )
+                dst_tiles = nl.tiles(dst, tile_shape=(128, 128))
+
+                nisa.dma_copy(dst=staging_tiles.data, src=src_tiles.data)
+                nisa.dma_copy(dst=dst_tiles.data, src=staging_tiles.data)
+                return dst"""
+        ...
+
+    def __getitem__(self, key: int | slice | tuple[int | slice, ...]) -> Self:
+        r"""Select tile or block coordinates while preserving the grid type.
+
+        Supported key forms:
+
+        * An ``int`` selects and consumes one grid coordinate. Negative
+          coordinates are resolved relative to the current grid extent.
+        * A ``slice`` selects a static positive-step coordinate range and
+          preserves that navigation level with its selected count.
+        * A ``tuple[GridIndex, ...]`` applies one key to each successive grid
+          dimension. Omitted trailing dimensions remain available for later
+          indexing.
+
+        :param key: One supported per-dimension key or a tuple of such keys.
+        :return: The same concrete grid type as ``self``, sharing the source
+            storage.
+        :raises TypeError: if a key or slice boundary has an unsupported type.
+        :raises IndexError: if an integer is outside the selected grid extent,
+            too many keys are supplied, or the grid has no remaining
+            coordinates at its current level.
+        :raises ValueError: if a slice is empty, has a nonpositive step, or
+            uses a non-static boundary."""
+        ...
+
+    ...
+
+class NkiBlockGrid(NkiGrid):
+    r"""A tensor view navigated in block coordinates.
+
+    A block groups a fixed number of tiles along every tiled dimension.
+    :attr:`NkiGrid.shape` counts blocks, :attr:`block_shape` gives tiles per
+    block, and :attr:`NkiGrid.tile_shape` gives source elements per tile. This
+    separates a coarser transfer or reuse grain from the tile grain consumed by
+    compute instructions.
+
+    Partial final blocks and tiles are retained and clamped to the exact source
+    extent. Creating and indexing a block view allocates no storage and moves
+    no data.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def copy_block_grid(src):
+            tile_shape = (128, 256)
+            block_shape = (2, 2)
+            src_blocks = nl.blocks(
+                src, tile_shape=tile_shape, block_shape=block_shape
+            )
+            dst = nl.ndarray(
+                src.shape, dtype=src.dtype, buffer=nl.shared_hbm
+            )
+            dst_blocks = nl.blocks(
+                dst, tile_shape=tile_shape, block_shape=block_shape
+            )
+
+            for i in range(src_blocks.shape[0]):
+                for j in range(src_blocks.shape[1]):
+                    src_block = src_blocks[i, j]
+                    block = nl.blocks(
+                        nl.ndarray(
+                            src_block.element_shape,
+                            dtype=src.dtype,
+                            buffer=nl.sbuf,
+                        ),
+                        tile_shape=src_block.tile_shape,
+                        block_shape=src_block.block_shape,
+                    )
+                    nisa.dma_copy(dst=block.data, src=src_block.data)
+                    nisa.dma_copy(
+                        dst=dst_blocks[i, j].data,
+                        src=block.data,
+                    )
+            return dst
+
+    See Also:
+        :func:`nki.language.blocks`: Create or regroup a block grid."""
+
+    @property
+    def block_shape(self) -> tuple[int, ...]:
+        r"""Return the nominal number of tiles grouped along each block axis.
+
+        A boundary block may contain fewer tiles. Use
+        :func:`nki.language.tiles` on a selected block to inspect its exact
+        interior tile counts.
+
+        :return: The configured tile count per block dimension."""
         ...
 
     ...
@@ -130,22 +399,39 @@ class NkiTensor(NKIObject):
     dimension — see individual method docs for constraints."""
 
     shape: tuple[int, ...] = ...
+    r"""Tuple giving the count of each dimension of the view. Each element is
+    an integer, or a :class:`~nki.isa.VirtualRegister` for dynamic-access
+    views constructed via :meth:`ap`."""
 
     strides: tuple[int, ...] = ...
+    r"""Tuple with stride per dimension. Each stride is the element step between
+    consecutive indices along that dimension in the underlying storage.
+    Each entry is an integer, or a :class:`~nki.isa.VirtualRegister` for
+    dynamic-access views constructed via :meth:`ap`.
+    A stride of ``0`` means the dimension is broadcast."""
 
     offset: int = ...
+    r"""Element offset (not byte offset) from the start of the underlying
+    storage at which this view begins."""
 
     name: str = ...
+    r"""Optional debug label, used in compiler diagnostics and the profiler."""
 
     dtype: DType = ...
+    r"""Element type, e.g. ``nl.float32`` or ``nl.bfloat16``."""
 
     buffer: MemoryRegion | str = ...
+    r"""The memory region the storage lives in. One of ``nl.sbuf``,
+    ``nl.psum``, ``nl.hbm``, ``nl.private_hbm``, or ``nl.shared_hbm``."""
 
     ndim: int = ...
+    r"""Number of dimensions (``len(shape)``)."""
 
     size: int = ...
+    r"""Total number of elements (``prod(shape)``). ``None`` when any element
+    of ``shape`` is a :class:`~nki.isa.VirtualRegister`."""
 
-    def __init__(self, shape: tuple[int, ...], dtype: DType, storage: Any, buffer: MemoryRegion | str=sbuf, name: str=''):
+    def __init__(self, shape: tuple[int, ...], dtype: DType, storage: Any, buffer: MemoryRegion | str=sbuf, name: str='', address=None):
         r"""Create an ``NkiTensor`` bound to an existing storage handle.
 
         Most code should use :func:`nl.ndarray` instead — it allocates fresh
@@ -153,14 +439,17 @@ class NkiTensor(NKIObject):
         need to re-bind a storage handle you already have (e.g. from a
         framework integration or test fixture).
 
-        :param shape: tuple of positive integers.
+        :param shape: tuple of positive integers. Register-bound (dynamic) dims
+            are not accepted here — construct dynamic-access views via :meth:`ap`.
         :param dtype: NKI dtype string (e.g. ``nl.float32``).
         :param storage: backend-specific storage handle. May be ``None`` when
             the tensor is used as a signature placeholder and never materialized.
         :param buffer: memory region (``nl.sbuf``, ``nl.psum``, ``nl.hbm``,
             ``nl.shared_hbm``). Defaults to ``nl.sbuf``.
         :param name: optional debug name, used in compiler diagnostics and
-            :ref:`scheduling <how-to-scheduling-apis>`."""
+            :ref:`scheduling <how-to-scheduling-apis>`.
+        :param address: fixed address the storage is pinned to, or ``None`` to
+            let the compiler choose one."""
         ...
 
     def is_contiguous(self) -> bool:
@@ -175,7 +464,7 @@ class NkiTensor(NKIObject):
         per-partition over the free dims only."""
         ...
 
-    def get_pattern(self) -> list[list[int]]:
+    def get_pattern(self) -> list[list[int | VirtualRegister]]:
         r"""Return the view's access pattern as ``[[stride, count], ...]``.
 
         Useful as a starting point when constructing a new ``.ap()`` that
@@ -208,6 +497,20 @@ class NkiTensor(NKIObject):
             c = sb[..., 0]           # select last dim
             d = sb[nl.ds(i, 8), :]   # dynamic slice on partition dim
 
+        **Runtime indices.** An index may also be a runtime value (see
+        :meth:`select`), either on its own — selecting one element and removing
+        the dim — or as the ``start`` of :func:`nl.ds`, which keeps the dim and
+        slides a fixed-size window:
+
+        .. code-block:: python
+
+            idx = nl.ndarray((1, 1), dtype=nl.uint32, buffer=nl.sbuf)
+            t = nl.ndarray((128, 8, 64), dtype=nl.float32, buffer=nl.sbuf)
+            t[:, idx, :]                 # shape (128, 64) — dim 1 removed
+            t[:, nl.ds(idx, 2), :]       # shape (128, 2, 64) — window of 2
+
+        See :meth:`select` for the constraints on runtime indices.
+
         **On-chip tensors** (SBUF, PSUM): integer indexing on dim 0 produces a
         size-1 slice (partition dim is preserved, not removed). Result is always
         at least 2D.
@@ -215,7 +518,8 @@ class NkiTensor(NKIObject):
         **HBM tensors**: integer indexing removes the dimension. Result is at
         least 1D.
 
-        :param key: index expression (int, slice, Ellipsis, tuple, or DynamicSlice)
+        :param key: index expression (int, slice, Ellipsis, tuple, DynamicSlice,
+            or a runtime ``NkiTensor`` / ``VirtualRegister`` / ``NkiScalar``)
         :return: new ``NkiTensor`` view"""
         ...
 
@@ -419,13 +723,13 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with the sliced dimension"""
         ...
 
-    def select(self, dim: int, index: Union[int, NkiTensor]) -> NkiTensor:
+    def select(self, dim: int, index: Union[int, NkiTensor, VirtualRegister, NkiScalar]) -> NkiTensor:
         r"""Select a single element along a dimension, removing it.
 
-        When ``index`` is an integer, performs static selection (equivalent to
-        ``t[:, index, :]`` when ``dim=1``). When ``index`` is an ``NkiTensor``
-        (e.g., a scalar loaded into SBUF), performs dynamic indirect selection
-        where the index is resolved at runtime.
+        The index is either a compile-time ``int`` (equivalent to
+        ``t[:, index, :]`` when ``dim=1``) or a runtime value resolved on
+        device: an ``NkiTensor`` 1-element tile, a ``VirtualRegister``, or an
+        ``NkiScalar``.
 
         .. code-block:: python
 
@@ -433,21 +737,26 @@ class NkiTensor(NKIObject):
             t.select(1, 3)          # static: shape becomes (128, 64)
 
             # Dynamic select (HBM tensor, index resolved at runtime):
-            idx = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+            idx = nl.ndarray((1, 1), dtype=nl.uint32, buffer=nl.sbuf)
             hbm_t = nl.ndarray((4, 128, 8), dtype=nl.float32, buffer=nl.shared_hbm)
             hbm_t.select(0, idx)    # shape becomes (128, 8)
 
+            # Same thing driven by a register:
+            reg = nisa.register_alloc()
+            nisa.register_load(reg, idx)
+            hbm_t.select(0, reg)
+
         **Constraints.**
 
-        - Static: ``0 <= index < t.shape[dim]``
-        - Dynamic: only one dynamic select per tensor (no chaining);
-          check :meth:`is_indirect` to guard
-        - Dynamic on-chip: ``dim`` must not be 0 (partition dim)
-        - On an indirect view (see :meth:`is_indirect`), static selection
-          cannot target a dimension that participates in the indirection.
+        - Static: ``0 <= index < t.shape[dim]``; runtime indices are not
+          bounds-checked, and out-of-range is undefined behaviour
+        - One runtime index per view (no chaining) — see :meth:`is_indirect`
+        - Runtime on-chip: ``dim`` must not be 0 (partition dim)
+        - Static selection cannot target a dimension already indirected
 
         :param dim: dimension to select from
-        :param index: integer index (static) or ``NkiTensor`` scalar (dynamic)
+        :param index: compile-time ``int``, or a runtime ``NkiTensor`` /
+            ``VirtualRegister`` / ``NkiScalar``
         :return: new ``NkiTensor`` view with the dimension removed"""
         ...
 
@@ -483,12 +792,17 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with dim 0 size set to ``vector_offset.shape[0]``"""
         ...
 
-    def ap(self, pattern: list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype: DType | None=None) -> NkiTensor:
+    def ap(self, pattern: list[list[int | VirtualRegister]] | list[list[int]], offset: int | None=None, scalar_offset: NkiTensor | None=None, vector_offset: NkiTensor | None=None, indirect_dim: int=0, dtype: DType | None=None) -> NkiTensor:
         r"""Low-level access pattern override (escape hatch).
 
         Replaces shape and strides with an explicit
         ``[[stride, count], ...]`` pattern addressing the underlying
         storage directly. Analogous to ``torch.as_strided``.
+
+        Each ``stride`` and ``count`` slot may be a Python ``int`` or dynamic
+        value only known at runtime — :class:`nki.isa.VirtualRegister`. Note
+        that when any slot is dynamic, ``scalar_offset`` /
+        ``vector_offset`` / non-zero ``indirect_dim`` are not supported.
 
         .. code-block:: python
 
@@ -500,12 +814,21 @@ class NkiTensor(NKIObject):
             sb.ap(pattern=[[64, 128], [1, 16]], dtype=nl.bfloat16,
                   scalar_offset=idx, indirect_dim=1)
 
-        :param pattern: list of ``[stride, count]`` pairs defining the access pattern
+            # Register-bound stride (dynamic access pattern):
+            stride0 = nisa.register_alloc(...)
+            count1 = nisa.register_alloc(...)
+            sb.ap(pattern=[[stride0, 128], [1, count1]])
+
+        :param pattern: list of ``[stride, count]`` pairs defining the access
+            pattern. Each entry may be ``int`` or ``VirtualRegister``.
         :param offset: element offset added to the view's base storage offset.
             When ``None`` (default), inherits the current view's storage offset
             unchanged. Pass an explicit integer to compose with the base offset
             (e.g. offset=0 keeps the base, offset=N shifts by N additional elements).
-        :param scalar_offset: dynamic scalar index tensor for indirect access
+        :param scalar_offset: dynamic scalar index for indirect access, as a
+            1x1 index tensor or an :class:`~nki.isa.NkiScalar`. Must be
+            32-bit when ``self`` is in SBUF or PSUM; a 64-bit offset is
+            only valid on an HBM operand, where it reaches past 4GB
         :param vector_offset: per-partition index tensor for indirect access
         :param indirect_dim: dimension in ``self.shape`` whose stride scales
             the indirect scalar/vector offset (default 0)
@@ -541,7 +864,12 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with the adjusted dtype and shape"""
         ...
 
-    reinterpret_cast = ...
+    def reinterpret_cast(self, dtype: DType) -> NkiTensor:
+        r"""Alias for :meth:`view`.
+
+        :param dtype: target NKI dtype to reinterpret as
+        :return: new ``NkiTensor`` view with the adjusted dtype and shape"""
+        ...
 
     def indirect(self, index: NkiTensor, num_elem: int | None=None) -> NkiTensor:
         r"""Create an indirect tensor view for Tensor Indirection (TI).
@@ -562,6 +890,60 @@ class NkiTensor(NKIObject):
         :return: new ``NkiTensor`` view with TI attached. Output shape is
             ``(P, num_elem)``."""
         ...
+
+    ...
+
+class NkiTileGrid(NkiGrid):
+    r"""A tensor view navigated in tile coordinates.
+
+    Each tiled entry in :attr:`NkiGrid.shape` counts tiles, while
+    :attr:`NkiGrid.tile_shape` gives the nominal source-element shape of one
+    tile. Untiled HBM dimensions form a leading prefix and are indexed one slab
+    at a time.
+
+    Integer indexing consumes coordinates but retains ``NkiTileGrid``.
+    :attr:`NkiGrid.data` exposes the exact :class:`NkiTensor` operand for the
+    selected view.
+
+    Instances come from :func:`nki.language.tiles` or a block-to-tile
+    transition. Creating and indexing the view allocates no storage and moves
+    no data.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def copy_tile_grid(src):
+            tile_shape = (128, 256)
+            src_tiles = nl.tiles(src, tile_shape=tile_shape)
+            dst = nl.ndarray(
+                src.shape, dtype=src.dtype, buffer=nl.shared_hbm
+            )
+            dst_tiles = nl.tiles(dst, tile_shape=tile_shape)
+
+            for i in range(src_tiles.shape[0]):
+                for j in range(src_tiles.shape[1]):
+                    src_tile = src_tiles[i, j]
+                    tile = nl.ndarray(
+                        src_tile.element_shape,
+                        dtype=src.dtype,
+                        buffer=nl.sbuf,
+                    )
+                    nisa.dma_copy(dst=tile.data, src=src_tile.data)
+                    nisa.dma_copy(
+                        dst=dst_tiles[i, j].data,
+                        src=tile.data,
+                    )
+            return dst
+
+    See Also:
+        :class:`NkiBlockGrid`: A grid whose cells group multiple tiles.
+        :func:`nki.language.tiles`: Create or retile a tile grid."""
 
     ...
 
@@ -1433,6 +1815,12 @@ def softplus(x, dtype=None):
     r"""Softplus activation, element-wise."""
     ...
 
+def log1p(x, dtype=None):
+    r"""``ln(1 + x)`` activation, element-wise.
+
+    Requires NeuronCore-v4 or later."""
+    ...
+
 def mish(x, dtype=None):
     r"""Mish activation, element-wise."""
     ...
@@ -1562,6 +1950,10 @@ def tan(x, dtype=None):
     .. warning::
 
        This API is experimental and may change in future releases.
+
+    There is no ``tan`` operator on the Scalar Engine. It is computed as
+    ``sin(x) / cos(x)`` from the ``sin`` activation, so the result can diverge
+    from the true tangent near its poles (odd multiples of ``pi/2``).
 
     :param x: a tile.
     :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
@@ -1875,11 +2267,14 @@ def mean(x, axis, dtype=None, keepdims=False):
        This API is experimental and may change in future releases.
 
     :param x: a tile.
-    :param axis: int or tuple/list of ints. The axis (or axes) along which to operate;
-        must be free dimensions, not partition dimension (0); can only be the
-        last contiguous dim(s) of the tile: [1], [1,2], [1,2,3], [1,2,3,4].
+    :param axis: int or tuple/list of ints. Free dimensions can only be the last
+        contiguous dim(s) of the tile: [1], [1,2], [1,2,3], [1,2,3,4]. The partition
+        dimension (0) is also supported on its own, reducing across partitions; it
+        cannot be mixed with free dimensions in one call.
     :param dtype: (optional) data type to cast the output type to (see :ref:`nki-dtype` for more information); if not specified, it will default to be the same as the data type of the input tile.
-    :param keepdims: if True, the reduced axes are kept as size-one dimensions.
+    :param keepdims: if True, the reduced axes are kept as size-one dimensions. It
+        has no effect for ``axis=0``: dimension 0 is structurally the partition
+        dimension of a tile, so it is always retained as size one rather than dropped.
     :return: a tile with the average of elements along the provided axis. Float32
         intermediate values are used for the computation."""
     ...
@@ -2050,6 +2445,286 @@ def dropout(x, rate, dtype=None):
     :return: a tile with randomly zeroed elements of ``x``."""
     ...
 
+def alloc_blocks(*, tile_shape: tuple[int, ...], block_shape: tuple[int, ...], element_shape: tuple[int, ...], buffer: MemoryRegion, dtype: DType, address: tuple | None=None, name: str='') -> NkiBlockGrid:
+    r"""Allocate new storage organized as a grid of tile blocks.
+
+    ``alloc_blocks`` creates the same tile geometry as
+    :func:`nki.language.alloc_tiles`, then adds a block-coordinate level above
+    it. ``tile_shape`` defines the compute grain, ``block_shape`` defines the
+    number of tiles in one transfer or reuse grain, and ``element_shape``
+    remains the exact logical tensor extent.
+
+    Block grouping does not change physical tile order or add per-block
+    allocations. HBM uses the compact logical extent as backing storage; SBUF
+    and PSUM use the same dense rank-two capacity layout as
+    :func:`nki.language.alloc_tiles`.
+
+    The returned :class:`NkiBlockGrid` owns one independent uninitialized allocation.
+
+    :param tile_shape: The positive source-element shape of one compute tile. It
+        must have at least two dimensions and applies to the trailing
+        dimensions of ``element_shape``.
+    :param block_shape: The positive tile counts grouped along each block
+        dimension. Its rank must equal ``tile_shape``.
+    :param element_shape: The exact positive logical element extent. Any
+        dimensions preceding ``tile_shape`` remain untiled.
+    :param buffer: Destination :class:`MemoryRegion`, such as
+        ``nl.shared_hbm``, ``nl.sbuf``, or ``nl.psum``.
+    :param dtype: Destination NKI element dtype.
+    :param address: Optional manual address
+        ``(partition_offset, free_offset)`` with the same contract as
+        :func:`nki.language.ndarray`.
+    :param name: the name of the tensor, used in :ref:`scheduling <how-to-scheduling-apis>`.
+    :return: A new :class:`NkiBlockGrid` over independent, uninitialized
+        storage. Partial boundary blocks and tiles retain exact logical extents;
+        aggregate ``data`` access requires one exact native access pattern.
+    :raises TypeError: if a shape is not a tuple of exact Python integers or
+        ``buffer`` is not an NKI :class:`MemoryRegion`.
+    :raises ValueError: if a shape entry is nonpositive, ``tile_shape`` has fewer
+        than two dimensions or greater rank than ``element_shape``,
+        ``block_shape`` and ``tile_shape`` ranks differ, or ``buffer`` is
+        unsupported.
+    :raises AssertionError: if the native allocation violates a
+        :func:`nki.language.ndarray` constraint, including PSUM address
+        alignment.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def initialize_block_grid():
+            staging = nl.alloc_blocks(
+                tile_shape=(128, 128),
+                block_shape=(2, 2),
+                element_shape=(512, 512),
+                buffer=nl.sbuf,
+                dtype=nl.bfloat16,
+            )
+            dst = nl.ndarray(
+                (512, 512), dtype=nl.bfloat16, buffer=nl.shared_hbm
+            )
+            dst_blocks = nl.blocks(
+                dst,
+                tile_shape=(128, 128),
+                block_shape=(2, 2),
+            )
+
+            nisa.memset(dst=staging.data, value=0.0)
+            nisa.dma_copy(dst=dst_blocks.data, src=staging.data)
+            return dst
+
+    See Also:
+        :func:`nki.language.blocks`: Group tiles in existing storage.
+        :func:`nki.language.alloc_tiles`: Allocate a tile grid without blocks."""
+    ...
+
+def alloc_tiles(*, tile_shape: tuple[int, ...], element_shape: tuple[int, ...], buffer: MemoryRegion, dtype: DType, address: tuple | None=None, name: str='') -> NkiTileGrid:
+    r"""Allocate independent, uninitialized storage organized as a grid of tiles.
+
+    The returned :class:`NkiTileGrid` owns one backing allocation and provides
+    both tile navigation and an aggregate :attr:`NkiGrid.data` operand.
+
+    :param tile_shape: The positive source-element shape of one tile. It must be
+        a tuple containing at least two exact Python integers and applies to
+        the trailing dimensions of ``element_shape``.
+    :param element_shape: The exact positive logical element extent.
+    :param buffer: Destination :class:`MemoryRegion`, such as
+        ``nl.shared_hbm``, ``nl.sbuf``, or ``nl.psum``.
+    :param dtype: Destination NKI element dtype.
+    :param address: Optional manual address
+        ``(partition_offset, free_offset)`` with the same contract as
+        :func:`nki.language.ndarray`.
+    :param name: the name of the tensor, used in :ref:`scheduling <how-to-scheduling-apis>`.
+    :return: A new :class:`NkiTileGrid` over independent, uninitialized
+        storage. Its ``shape`` counts tiles and its boundary selections expose
+        their exact clamped extents.
+    :raises TypeError: if a shape is not a tuple of exact Python integers or
+        ``buffer`` is not an NKI :class:`MemoryRegion`.
+    :raises ValueError: if a shape entry is nonpositive, ``tile_shape`` has fewer
+        than two dimensions or greater rank than ``element_shape``, or
+        ``buffer`` is unsupported.
+    :raises AssertionError: if the native allocation violates a
+        :func:`nki.language.ndarray` constraint, including PSUM address
+        alignment.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def initialize_tile_grid():
+            staging = nl.alloc_tiles(
+                tile_shape=(128, 256),
+                element_shape=(256, 512),
+                buffer=nl.sbuf,
+                dtype=nl.bfloat16,
+            )
+            dst = nl.ndarray(
+                (256, 512), dtype=nl.bfloat16, buffer=nl.shared_hbm
+            )
+            dst_tiles = nl.tiles(dst, tile_shape=(128, 256))
+
+            nisa.memset(dst=staging.data, value=0.0)
+            nisa.dma_copy(dst=dst_tiles.data, src=staging.data)
+            return dst
+
+    See Also:
+        :func:`nki.language.tiles`: View existing storage as a tile grid.
+        :func:`nki.language.alloc_blocks`: Allocate tiles grouped into blocks."""
+    ...
+
+def blocks(source: NkiTensor | NkiTileGrid | NkiBlockGrid, *, tile_shape: tuple[int, ...] | None=None, block_shape: tuple[int, ...]) -> NkiBlockGrid:
+    r"""Create a block view over a tensor where each block contains multiple tiles.
+
+    ``blocks()`` adds a second level of grouping above the tile grid. A block is
+    a rectangular group of tiles intended as a coarser transfer or reuse grain,
+    while ``tile_shape`` remains the compute grain presented to ``nisa.*``
+    operations. When one native access pattern can represent the complete
+    block, ``block.data`` allows it to participate in one aggregate operation.
+
+    ``block_shape`` is expressed in tile counts. For a ``4 x 4`` tile grid,
+    ``block_shape=(2, 2)`` creates a ``2 x 2`` block grid:
+
+    .. code-block:: text
+
+        block grid: 2 x 2
+        +-------------------+-------------------+
+        | tile (0,0) (0,1)  | tile (0,2) (0,3)  |
+        | tile (1,0) (1,1)  | tile (1,2) (1,3)  |
+        +-------------------+-------------------+
+        | tile (2,0) (2,1)  | tile (2,2) (2,3)  |
+        | tile (3,0) (3,1)  | tile (3,2) (3,3)  |
+        +-------------------+-------------------+
+
+    Blocks are logical views over the source. Creating, regrouping, slicing,
+    or indexing a block grid allocates no storage, copies no data, and emits no
+    instruction.
+
+    .. note::
+
+        Indexing preserves :class:`NkiBlockGrid`. Call
+        :func:`nki.language.tiles` on a selected block to expose its interior
+        tile coordinates, then use :attr:`NkiGrid.data` when an instruction
+        requires one native tensor operand.
+
+        A block containing nonuniform boundary tiles may need to be split into
+        uniform tile regions first.
+
+    :param source: A direct :class:`NkiTensor`, :class:`NkiTileGrid`, or
+        :class:`NkiBlockGrid` whose storage and selected addresses are shared by
+        the returned view.
+    :param tile_shape: The nominal source-element shape of one compute tile.
+        Required for an :class:`NkiTensor`; optional for an existing grid.
+    :param block_shape: The positive tile counts grouped along each block
+        dimension. It must be a tuple with the same rank as the effective
+        ``tile_shape``.
+    :return: An :class:`NkiBlockGrid` over the same storage. Its ``shape``
+        counts blocks, while ``tile_shape`` and ``block_shape`` preserve both
+        levels of the hierarchy. Partial boundary blocks and tiles are retained
+        at their exact logical extents; aggregate ``data`` access still requires
+        one exact native access pattern.
+    :raises TypeError: if ``source`` is unsupported, ``tile_shape`` is omitted
+        for an :class:`NkiTensor`, or a shape is not a tuple of exact Python
+        integers.
+    :raises ValueError: if a shape entry is nonpositive, ``block_shape`` and
+        ``tile_shape`` have different ranks, the source cannot be tiled, or
+        retiling or grouping cannot preserve the selected addresses.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def scale_by_block(src):
+            dst = nl.ndarray(
+                src.shape, dtype=src.dtype, buffer=nl.shared_hbm
+            )
+            src_blocks = nl.blocks(
+                src,
+                tile_shape=(128, 256),
+                block_shape=(2, 2),
+            )
+            dst_blocks = nl.blocks(
+                dst,
+                tile_shape=(128, 256),
+                block_shape=(2, 2),
+            )
+
+            for i in range(src_blocks.shape[0]):
+                for j in range(src_blocks.shape[1]):
+                    src_block = src_blocks[i, j]
+                    dst_block = dst_blocks[i, j]
+                    block = nl.blocks(
+                        nl.ndarray(
+                            src_block.element_shape,
+                            dtype=src.dtype,
+                            buffer=nl.sbuf,
+                        ),
+                        tile_shape=src_block.tile_shape,
+                        block_shape=src_block.block_shape,
+                    )
+
+                    # copy entire block in single instruction
+                    nisa.dma_copy(dst=block.data, src=src_block.data)
+
+                    # demote to tile-grid to access individual tiles
+                    block_tiles = nl.tiles(block)
+                    for k in range(block_tiles.shape[0]):
+                        for p in range(block_tiles.shape[1]):
+                            tile = block_tiles[k, p].data
+                            nisa.tensor_scalar(
+                                dst=tile,
+                                data=tile,
+                                op0=nl.multiply,
+                                operand0=2.0,
+                            )
+
+                    nisa.dma_copy(
+                        dst=dst_block.data,
+                        src=block.data,
+                    )
+
+            return dst
+
+    **Source kinds.**
+
+    The source can be ``NkiTensor`` or ``NkiTileGrid`` or ``NkiBlockGrid``.
+
+    .. code-block:: text
+
+        source              tile_shape          behavior
+        ------------------  -----------------  ------------------------------
+        NkiTensor           required           tile, then group
+        NkiTileGrid         omitted            group existing tiles
+        NkiTileGrid         supplied           retile, then group
+        NkiBlockGrid        omitted            remove old groups, regroup
+        NkiBlockGrid        supplied           remove groups, retile, regroup
+
+    **Remainder blocks.**
+
+    Tile counts are ceiling-divided from the source extent, and block counts
+    are ceiling-divided from the tile counts. A final block can therefore
+    contain fewer tiles, and its final tile can contain fewer source elements.
+    Both levels are clamped to the exact source extent.
+
+    See Also:
+        :func:`nki.language.tiles`: Create a tile grid or expose block tiles.
+        :class:`NkiBlockGrid`: Block-grid metadata and indexing behavior."""
+    ...
+
 def ones(shape, dtype, buffer=sbuf, name=''):
     r"""Create a new tensor of given shape and dtype on the specified buffer, filled with ones.
 
@@ -2081,6 +2756,158 @@ def full(shape, fill_value, dtype, buffer=sbuf, name=''):
     :return: a new :class:`NkiTensor` allocated on the buffer."""
     ...
 
+def tiles(source: NkiTensor | NkiTileGrid | NkiBlockGrid, *, tile_shape: tuple[int, ...] | None=None) -> NkiTileGrid:
+    r"""Decompose a tensor into a logical grid of fixed-size tiles.
+
+    The returned grid is a view over ``source``, indexed by
+    tile coordinate rather than by manually calculated element offsets and
+    strides. A kernel can select ``src_tiles[i, j]`` to address one tile,
+    ``src_tiles[i, :]`` to address a row of tiles, or ``src_tiles[:, j]`` to
+    address a column.
+
+    For example, ``tile_shape=(128, 256)`` over a ``(512, 1024)`` tensor
+    produces a ``4 x 4`` grid:
+
+    .. code-block:: text
+
+                                      F (free dimension)
+                           256       256       256       256
+                      +---------+---------+---------+---------+
+        P         128 |  (0,0)  |  (0,1)  |  (0,2)  |  (0,3)  |
+        (partition)    +---------+---------+---------+---------+
+                  128 |  (1,0)  |  (1,1)  |  (1,2)  |  (1,3)  |
+                      +---------+---------+---------+---------+
+                  128 |  (2,0)  |  (2,1)  |  (2,2)  |  (2,3)  |
+                      +---------+---------+---------+---------+
+                  128 |  (3,0)  |  (3,1)  |  (3,2)  |  (3,3)  |
+                      +---------+---------+---------+---------+
+
+    .. note::
+
+        Grid indexing preserves the grid abstraction. ``src_tiles[i, j]``
+        returns a one-tile :class:`NkiTileGrid`, not an :class:`NkiTensor`.
+        Use ``src_tiles[i, j].data`` when an NKI instruction requires the
+        underlying tensor operand. Accessing ``data`` is also a view operation.
+
+    :param source: The tensor region to tile. It may be a direct
+        :class:`NkiTensor`, an existing :class:`NkiTileGrid`, or an
+        :class:`NkiBlockGrid`. The returned grid shares its storage, dtype,
+        buffer, offsets, and physical strides.
+    :param tile_shape: The nominal shape of one tile in source-element units,
+        with at least two dimensions. Every entry must be a positive, exact
+        Python integer. It is required when ``source`` is an
+        :class:`NkiTensor` and optional when ``source`` is already a grid.
+        For an HBM tensor, fewer dimensions than ``source`` leaves the leading
+        dimensions as batch coordinates. A tile extent may be larger than its
+        source extent, producing one partial tile.
+    :return: An :class:`NkiTileGrid` over ``source``. Its ``shape`` counts
+        addressable tiles, its ``tile_shape`` records the nominal
+        ``tile_shape``, and its ``element_shape`` records the number of selected
+        elements in each source dimension. Partial boundary tiles expose only
+        valid elements, although independently allocated on-chip storage may
+        reserve nominal tile capacity behind them.
+    :raises TypeError: if ``source`` is unsupported, ``tile_shape`` is omitted
+        for an :class:`NkiTensor`, a shape is not a tuple of exact Python
+        integers, or the source buffer is not an NKI :class:`MemoryRegion`.
+    :raises ValueError: if ``tile_shape`` has fewer than two dimensions,
+        contains a nonpositive extent, has a rank incompatible with the source,
+        the source is an indirect :class:`NkiTensor`, the source buffer is
+        unsupported, or an existing grid cannot be retiled while preserving
+        its selected addresses.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki
+        import nki.isa as nisa
+        import nki.language as nl
+
+        @nki.jit
+        def scale_by_tile(src):
+            dst = nl.ndarray(
+                src.shape, dtype=src.dtype, buffer=nl.shared_hbm
+            )
+
+            src_tiles = nl.tiles(src, tile_shape=(128, 256))
+            dst_tiles = nl.tiles(dst, tile_shape=(128, 256))
+
+            for i in range(src_tiles.shape[0]):
+                for j in range(src_tiles.shape[1]):
+                    src_tile = src_tiles[i, j]
+                    dst_tile = dst_tiles[i, j]
+                    tile = nl.ndarray(
+                        src_tile.element_shape,
+                        dtype=src.dtype,
+                        buffer=nl.sbuf,
+                    )
+
+                    nisa.dma_copy(dst=tile.data, src=src_tile.data)
+                    nisa.tensor_scalar(
+                        dst=tile.data, data=tile.data, op0=nl.multiply, operand0=2.0
+                    )
+                    nisa.dma_copy(dst=dst_tile.data, src=tile.data)
+
+            return dst
+
+    **Source kinds.**
+
+    The source can be ``NkiTensor`` or ``NkiTileGrid`` or ``NkiBlockGrid``.
+
+    .. code-block:: text
+
+        source              tile_shape          result
+        ------------------  -----------------  ------------------------------
+        HBM NkiTensor       required           tile grid over HBM
+        SBUF NkiTensor      required           tile grid over SBUF
+        PSUM NkiTensor      required           tile grid over PSUM
+        NkiTileGrid         omitted            same tile-grid view
+        NkiTileGrid         supplied           address-preserving retile
+        NkiBlockGrid        omitted            remove block grouping
+        NkiBlockGrid        supplied           remove blocks, then retile
+
+    Both :class:`NkiBlockGrid` forms remove the block-coordinate level.
+    Omitting ``tile_shape`` preserves the existing tile structure. Supplying it
+    rebuilds the tile grid at the requested compute grain. See **Retiling** section
+    below.
+
+    **Remainder tiles.**
+
+    Grid dimensions use ceiling division. When a source extent is not an exact
+    multiple of its tile extent, the final tile is clamped to the remaining
+    elements. For ``source.shape == (300, 600)`` and
+    ``tile_shape == (128, 256)``:
+
+    .. code-block:: text
+
+                                  column 0       column 1      column 2
+                                  256 elements   256 elements   88 elements
+                                +--------------+--------------+-----------+
+            row 0: 128 elements |  128 x 256   |  128 x 256   | 128 x 88 |
+                                +--------------+--------------+-----------+
+            row 1: 128 elements |  128 x 256   |  128 x 256   | 128 x 88 |
+                                +--------------+--------------+-----------+
+            row 2:  44 elements |   44 x 256   |   44 x 256   |  44 x 88 |
+                                +--------------+--------------+-----------+
+
+    The nominal ``tile_shape`` remains ``(128, 256)``, while
+    ``src_tiles[-1, -1].data.shape`` is ``(44, 88)``. The selected boundary
+    tile reports ``is_remainder == True``. Its logical extent and ``data``
+    operand contain no padding.
+
+    .. code-block:: python
+
+        # check if last row/col tiles are partials
+        src_tiles[-1].is_remainder
+        src_tiles[:, -1].is_remainder
+        src_tiles[-1, -1].is_remainder
+
+    See Also:
+        :func:`nki.language.blocks`: Group tiles into blocks.
+        :class:`NkiTileGrid`: Tile-grid metadata and indexing.
+        :attr:`NkiGrid.data`: Access a selected region as an NKI tensor."""
+    ...
+
 def zeros_like(x, dtype=None, buffer=None, name=''):
     r"""Create a new tensor of zeros with the same shape and type as a given tensor.
 
@@ -2097,20 +2924,46 @@ def zeros_like(x, dtype=None, buffer=None, name=''):
     :return: a new :class:`NkiTensor` of zeros with the same shape as ``x``."""
     ...
 
-def empty_like(x: NkiTensor, dtype=None, buffer=None, name=''):
-    r"""Create a new tensor with the same shape and type as a given tensor.
+def empty_like(x: NkiTensor | NkiTileGrid | NkiBlockGrid, dtype: DType | None=None, buffer: MemoryRegion | None=None, name: str='', *, transpose_axes: tuple[int, ...] | None=None, address: tuple | None=None) -> NkiTensor | NkiTileGrid | NkiBlockGrid:
+    r"""Allocate independent, uninitialized storage with matching geometry.
 
-    ((Similar to `numpy.empty_like <https://numpy.org/doc/stable/reference/generated/numpy.empty_like.html>`_))
+    The destination uses the source dtype and buffer unless either is
+    specified explicitly. Tensor inputs preserve the source shape. Grid inputs
+    preserve the concrete grid type, navigation shape, tile shape, block
+    grouping, and exact remainder extents.
 
-    .. warning::
+    A positive-step grid slice can select cells separated by physical gaps.
+    The destination packs those cells densely while preserving their logical
+    hierarchy and boundary extents.
 
-       This API is experimental and may change in future releases.
+    ``transpose_axes`` prepares an SBUF destination for a later
+    :func:`nki.isa.dma_transpose`; allocation does not issue the instruction.
+    Supported tiled-dimension orders are ``(1, 0)``, ``(2, 1, 0)``, and
+    ``(3, 1, 2, 0)`` for ranks two through four. The source free extent that
+    becomes the destination partition extent must not exceed 128.
 
-    :param x: the tensor.
-    :param dtype: the data type of the tensor (default: same as ``x``).
-    :param buffer: the specific buffer (ie, sbuf, psum, hbm), (default: same as ``x``).
+    :param x: The :class:`NkiTensor`, :class:`NkiTileGrid`, or
+        :class:`NkiBlockGrid` whose geometry defines the allocation.
+    :param dtype: Destination element dtype. Defaults to ``x.dtype``.
+    :param buffer: Destination :class:`MemoryRegion`. Defaults to ``x.buffer``.
     :param name: the name of the tensor, used in :ref:`scheduling <how-to-scheduling-apis>`.
-    :return: a new :class:`NkiTensor` with the same shape and type as ``x``."""
+    :param transpose_axes: Optional tiled-dimension order for a native
+        :func:`nki.isa.dma_transpose` destination.
+    :param address: Optional manual address
+        ``(partition_offset, free_offset)`` with the same contract as
+        :func:`nki.language.ndarray`.
+    :return: New uninitialized storage with the matching tensor or grid
+        abstraction. Transpose allocation permutes the tiled dimensions.
+    :raises TypeError: if ``x`` is unsupported, ``buffer`` is not an NKI
+        :class:`MemoryRegion`, or ``transpose_axes`` is not a tuple.
+    :raises ValueError: if transpose rank, order, destination buffer, or
+        partition extent is unsupported.
+    :raises AssertionError: if manual ``address`` validation in
+        :func:`nki.language.ndarray` fails.
+
+    See Also:
+        :func:`nki.language.alloc_tiles`: Allocate from explicit tile geometry.
+        :func:`nki.language.alloc_blocks`: Allocate from explicit block geometry."""
     ...
 
 def random_seed(seed):
@@ -2311,7 +3164,31 @@ def gather_flattened(data: NkiTensor, indices: NkiTensor, axis=0, dtype=None):
         nl.store(actual_tensor[0:128, 0:512], result)"""
     ...
 
-def ds(start, size):
+def ds(start: Union[int, NkiTensor, VirtualRegister, NkiScalar], size: int):
+    r"""A ``size``-element window starting at ``start``.
+
+    Used inside an index expression: ``t[nl.ds(start, size), :]`` is equivalent
+    to ``t[start:start + size, :]`` for a compile-time ``start``. ``size`` must
+    be a compile-time integer (the access pattern needs a static element count);
+    ``start`` may be an ``int`` or a runtime index (see
+    :meth:`NkiTensor.select`). A runtime ``start`` is only spelled this way,
+    because a slice needs both bounds while the kernel is built.
+
+    .. code-block:: python
+
+        t = nl.ndarray((128, 64), dtype=nl.float32, buffer=nl.sbuf)
+        t[:, nl.ds(8, 16)]        # static: columns 8..23
+
+        idx = nl.ndarray((1, 1), dtype=nl.uint32, buffer=nl.sbuf)
+        t[:, nl.ds(idx, 16)]      # runtime: 16 columns starting at idx
+
+    With a runtime ``start`` the window slides at execution time and the
+    resulting view is indirect (see :meth:`NkiTensor.is_indirect`).
+
+    :param start: window start — compile-time ``int`` or a runtime
+        ``NkiTensor`` / ``VirtualRegister`` / ``NkiScalar``
+    :param size: window length, must be a compile-time integer
+    :return: a ``DynamicSlice`` to use inside an index expression"""
     ...
 
 def affine_range(start, stop=None, step=1):
@@ -2442,18 +3319,24 @@ def fori_loop(lower, upper, body_fun, step=1):
         for i in range(lower, upper, step):
             body_fun(i)
 
-    The body receives the current iteration value ``i`` as a VirtualRegister,
+    The body receives the current iteration value ``i`` as a VirtualRegister or NkiScalar,
     passed by value. Read it inside the body (for example, as a ``scalar_offset``
     into a tensor). The loop controls iteration via ``lower``/``upper``/``step``,
     so writing to ``i`` has no effect on the loop; carry any other loop state
     through SBUF/HBM.
 
-    :param lower: start value (int or VirtualRegister).
-    :param upper: end value (exclusive) (int or VirtualRegister).
-    :param body_fun: function ``(i: VirtualRegister) -> None`` called each
-                    iteration with the current iteration value.
+    :param lower: start value (int, VirtualRegister, or NkiScalar).
+    :param upper: end value (exclusive) (int, VirtualRegister, or NkiScalar).
+    :param body_fun: function ``(i) -> None`` called each iteration with the
+                    current iteration value. ``i`` is a ``NkiScalar`` unless
+                    either ``lower`` or ``upper`` is a  ``VirtualRegister``,
+                    then it will be a ``VirtualRegister``
     :param step: step size, must be a compile-time positive integer.
     :return: None. Side effects in ``body_fun`` persist after the loop.
+
+    A bound must be 32-bit: the loop compiles into a compare-and-branch that has
+    no 64-bit form, so an ``nl.int64`` scalar cannot bound it. A 64-bit scalar can
+    still be computed inside the body and used as an offset there.
 
     Examples:
 
@@ -2549,7 +3432,9 @@ def ndarray(shape, dtype, buffer=sbuf, name='', address=None):
     :param dtype: the data type of the tensor.
     :param buffer: the specific buffer (ie, sbuf, psum, hbm), defaults to sbuf.
     :param name: the name of the tensor, used in :ref:`scheduling <how-to-scheduling-apis>`.
-    :param address: optional memory address ``(partition_offset, free_offset)``.
+    :param address: optional memory address. For SBUF/PSUM this is a 2-tuple
+        ``(partition_offset, free_offset)``; for HBM it is a 1-tuple
+        ``(free_offset,)``.
     :return: a new :class:`NkiTensor` allocated on the buffer."""
     ...
 
@@ -2695,4 +3580,57 @@ def rand(shape, dtype, buffer=sbuf, name=''):
 
         # nki.language.rand -- generate random values in [0, 1)
         a = nl.rand((128, 512), dtype=nl.float32)"""
+    ...
+
+def profiler_region_open(label, color=''):
+    r"""Mark the start of a named annotation region.
+
+    Annotates all instructions between :py:func:`profiler_region_open` and
+    :py:func:`profiler_region_close` with the given label. These annotations
+    appear in Neuron Explorer as named regions on the execution timeline.
+
+    This API has no execution time cost — it only adds debug metadata during
+    compilation.
+
+    All instructions within a profiler region are associated with that region,
+    even if the compiler instruction scheduler reorders them to execute before
+    an instruction that appears in program order prior to
+    ``profiler_region_open()``. The start of a region in the timeline is set
+    to the execution time of the first instruction associated with the region,
+    and therefore may cover instructions that were not associated with the
+    region.
+
+    Nested regions are supported: opening a region inside another region
+    associates instructions with both the inner and outer labels.
+
+    Opening a region without closing it is a compilation error.
+
+    :param label: name of the annotation region. Must not contain ``,``, ``@``,
+        ``#``, or ``|`` characters.
+    :param color: optional CSS color string (e.g., ``"#4CAF50"``) for the region
+        in Neuron Explorer.
+
+    Examples:
+
+    .. code-block:: python
+
+        import nki.language as nl
+
+        # nki.language.profiler_region_open -- annotate regions for Neuron Explorer
+        nl.profiler_region_open("load_phase", color="#4CAF50")
+        tile = nl.ndarray((128, 128), dtype=nl.float16, buffer=nl.sbuf)
+        nisa.dma_copy(tile, a[0:128, 0:128])
+        nl.profiler_region_close()
+
+        nl.profiler_region_open("compute_phase", color="#2196F3")
+        dst = nl.ndarray((128, 128), dtype=nl.float16, buffer=nl.sbuf)
+        nisa.tensor_tensor(dst, tile, tile, op=nl.add)
+        nl.profiler_region_close()"""
+    ...
+
+def profiler_region_close():
+    r"""Mark the end of the most recently opened annotation region.
+
+    Must be paired with a preceding :py:func:`profiler_region_open` call.
+    Failing to close a region will result in a compilation error."""
     ...

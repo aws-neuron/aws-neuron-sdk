@@ -28,7 +28,7 @@ Advanced NKI Programming
    :gutter: 3
 
    .. grid-item-card:: MXFP4/8 Matrix Multiplication Guide
-      :link: mxfp-matmul 
+      :link: mxfp-matmul
       :link-type: doc
       :class-body: sphinx-design-class-title-small
 
@@ -41,12 +41,12 @@ Advanced NKI Programming
 
       Learn about the NKI Compiler.
 
-   .. grid-item-card:: NKI Dynamic Loops
-      :link: nki-dynamic-loops
+   .. grid-item-card:: NKI Loops
+      :link: nki-loops
       :link-type: ref
       :class-body: sphinx-design-class-title-small
 
-      Use dynamic loops with runtime-determined trip counts via hardware loop instructions.
+      Learn about different types of loop constructs in NKI.
 
    .. grid-item-card:: Descriptor Generation Engine (DGE)
       :link: dge-documentation
@@ -61,6 +61,13 @@ Advanced NKI Programming
       :class-body: sphinx-design-class-title-small
 
       Guidelines for maximizing DMA bandwidth with large contiguous payloads.
+
+   .. grid-item-card:: NKI Scalar Values
+      :link: nki-scalar
+      :link-type: ref
+      :class-body: sphinx-design-class-title-small
+
+      Read integers on device with nki.isa.scalar_load, and use them as dynamic offsets and loop bounds.
 
    .. grid-item-card:: NKI Access Patterns
       :link: nki-aps
@@ -80,7 +87,8 @@ Additional NKI Information
     Performance Optimizations <nki_perf_guide>
     MXFP8/4 Matrix Multiplication <mxfp-matmul>
     NKI Access Patterns <nki-aps>
-    NKI Dynamic Loops <nki-dynamic-loops>
+    NKI Loops <nki-loops>
+    NKI Scalar Values <nki-scalar>
     Descriptor Generation Engine (DGE) <nki-dge>
     DMA Bandwidth Guide <nki-dma-bandwidth-guide>
     nki-compiler

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron DLAMI component across all AWS Neuron SDK versions.
     :keywords: neuron dlami, deep learning ami, release notes, aws neuron sdk
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. _dlamis_rn:
 .. _dlami-rn-known-issues:
@@ -11,12 +11,35 @@ Component Release Notes for Neuron DLAMI
 
 The release notes for the Neuron DLAMI component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _dlami-2-33-0-rn:
+
+Neuron DLAMIs (Neuron 2.33.0 Release)
+------------------------------------------------------------------------
+
+Date of Release: 10/19/2026
+
+Updates
+~~~~~~~~
+
+* Added Ubuntu 26.04 support. The multi-framework DLAMI, the single-framework JAX, vLLM, and torch-neuronx DLAMIs, and the base DLAMI are now published on Ubuntu 26.04 in addition to Ubuntu 24.04. For the full list of DLAMIs and their virtual environments, see :ref:`neuron-dlami-overview`.
+* The single-framework vLLM AMI and multi-framework DLAMIs have been upgraded to vLLM 0.29.0 and ``vllm-neuron 0.29.0.1.2.0``, with related dependencies.
+* The single-framework JAX AMI and multi-framework DLAMIs remain on JAX 0.10.0 with upgraded dependencies.
+* Added a new vLLM Omni single-framework DLAMI and multi-framework virtual environment (``vllm-omni-neuron 0.29.0.0.2.0``, Beta) for diffusion and multimodal inference on Trn2 and Trn3. See :doc:`vLLM Omni Neuron documentation </vllm-omni-neuron/docs/index>`.
+* Added a new torch-neuronx single-framework DLAMI and multi-framework virtual environment with ``torch-neuronx 2.14.3.0``, including TorchTitan for native PyTorch distributed training. See :ref:`TorchNeuron overview <about-pytorch-neuron>`.
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.33.0.
+
+Callouts
+~~~~~~~~~
+
+.. note::
+    The vLLM Omni single-framework DLAMI and multi-framework virtual environment are available on Ubuntu 24.04 only. Ubuntu 26.04 uses Python 3.14 as its default system Python, and the upstream vLLM Omni project (distinct from the vLLM Omni Neuron plugin) does not yet support Python 3.14.
+
 .. _dlami-2-32-0-rn:
 
 Neuron DLAMIs (Neuron 2.32.0 Release)
 ------------------------------------------------------------------------
 
-Date of Release: 08/17/2026
+Date of Release: 8/13/2026
 
 Updates
 ~~~~~~~~
@@ -104,7 +127,7 @@ Callouts
 
     Existing NxDT/NxD Core users should stay on Neuron 2.28 and PyTorch 2.9 until ready to migrate to native PyTorch on Neuron (starting PyTorch 2.10). Customers are recommended to use native PyTorch with standard distributed primitives (DTensor, FSDP, DDP) and TorchTitan starting with Neuron 2.30.0 and PyTorch 2.10. A migration guide will be published in a coming release.
 
-    For more information, see :doc:`/frameworks/torch/pytorch-native-overview`.
+    For more information, see :doc:`/torch/about-pytorch-neuron`.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
@@ -153,7 +176,7 @@ Improvements
 ~~~~~~~~~~~~~~~
 
 * Ubuntu 24.04 Support: This release adds support for Ubuntu 24.04 base, single framework, and multi-framework DLAMIs with Python 3.12, providing customers with the latest Ubuntu LTS version for their machine learning workloads.
-* vLLM V1 with vLLM-Neuron Plugin: Published new vLLM V1 with the vLLM-Neuron Plugin single framework DLAMI and added virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
+* vLLM V1 with vLLM Neuron Plugin: Published new vLLM V1 with the vLLM Neuron Plugin single framework DLAMI and added virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
 * PyTorch 2.9 Support: Added PyTorch 2.9 support for single framework DLAMIs and virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
 * JAX 0.7 Support: Published JAX 0.7 single framework DLAMI and updated multi-framework DLAMI virtual environments to JAX 0.7 (Amazon Linux 2023, Ubuntu 24.04).
 * Neuron SDK Updates: Upgraded all Neuron packages and dependencies to support AWS Neuron SDK version 2.27.

@@ -359,7 +359,7 @@ New in this release
          migrate your application.
 
 -  Introducing PyTorch 1.9.1 support (support for ``torch==1.9.1)``
--  Added ``torch_neuron.DataParallel``, see ResNet-50 tutorial :ref:`[html] </src/examples/pytorch/resnet50.ipynb>` and
+-  Added ``torch_neuron.DataParallel``, see ResNet-50 tutorial :doc:`[html] </src/examples/pytorch/resnet50>` and
    :ref:`torch-neuron-dataparallel-app-note` application note.
 -  Added support for tracing on GPUs
 -  Added support for ``ConvTranspose1d``
@@ -430,12 +430,12 @@ Summary
 ~~~~~~~
 
 - Added support for dictionary outputs using ``strict=False`` flag. See
-  :ref:`/archive/torch-neuron/troubleshooting-guide.rst`.
+  :doc:`/archive/torch-neuron/troubleshooting-guide`.
 - Updated ``aten::batch_norm`` to correctly implement the ``affine`` flag.
 - Added support for ``aten::erf`` and ``prim::DictConstruct``. See
   :ref:`neuron-cc-ops-pytorch`.
 - Added dynamic batch support. See
-  :ref:`/archive/torch-neuron/api-compilation-python-api.rst`.
+  :doc:`/archive/torch-neuron/api-compilation-python-api`.
 
 
 .. _neuron-torch-1410:
@@ -861,7 +861,7 @@ Trace behavior
 ~~~~~~~~~~~~~~
 
 In order to trace a model it must be in evaluation mode. For examples
-please see :ref:`/src/examples/pytorch/resnet50.ipynb`
+please see :doc:`/src/examples/pytorch/resnet50`
 
 Six pip package is required
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -143,7 +143,7 @@ For applications with varying load:
 
 **Description:**
 
-When set, the decode worker compiles one NEFF per `(num_seqs_bucket, ctx_bucket)` pair, plus an implicit `max_model_len` fallback NEFF (always compiled). At runtime each decode step picks the smallest context-length bucket that fits `max(num_computed_tokens) + 1 + num_speculative_tokens` and head-trims the block table to that many blocks; otherwise dispatches to the fallback. Per-step bucket switching is automatic — `torch.compile` routes to the cached NEFF for the chosen shape.
+When set, the decode worker compiles one NEFF for each `(num_seqs_bucket, ctx_bucket)` pair. It also compiles a `max_model_len` fallback NEFF. Each decode step selects the smallest context bucket that fits all positions used by the target and drafter: one position without speculation, `2k` positions for Eagle, or `2(k + 1)` positions for DFlash, where `k` is the number of speculative tokens. The worker head-trims the block table to the selected bucket. `torch.compile` automatically selects the cached NEFF for this shape.
 
 **Validation:** Each value must be (1) strictly ascending, (2) strictly less than `max_model_len`, and (3) divisible by `P_MAX = 128` (NKI attention tile constraint).
 
@@ -210,6 +210,43 @@ llm = LLM(
 # Use temperature=0 in SamplingParams to match on-device config
 sampling_params = SamplingParams(max_tokens=50, temperature=0.0)
 ```
+
+### max_jump_forward_tokens
+
+**Purpose:** Enables jump-forward (JF) decoding for structured-output requests. When there is a deterministic string that can be used to advance a request, we tokenize this string to skip forward passes.
+
+**Type:** `int`
+
+**Default:** `0` (disabled)
+
+**Description:**
+
+Jump-forward decoding is disabled by default, only compatible with structured output requests, and mutually exclusive with speculative decoding.
+Setting a value `> 0` requires `enable_structured_outputs=true`. If structured outputs are not enabled, `max_jump_forward_tokens` is forced back to `0` (JF only applies to grammar-constrained requests).
+
+``` python
+llm = LLM(
+    model="meta-llama/Meta-Llama-3-8B-Instruct",
+    additional_config={
+        "neuron_config": {
+            "enable_structured_outputs": True,
+            "max_jump_forward_tokens": 3,
+        }
+    },
+    # JF decoding requires the xgrammar backend.
+    structured_outputs_config={"backend": "xgrammar"},
+)
+```
+
+**Considerations:**
+
+- **Disabled by Default** The default is `0`.
+- **Extra NEFF.** If JF decoding is enabled, we must compile the JF NEFF, which adds to compile time.
+- **Mutually exclusive with speculative decoding.** JF decoding and spec-decoding are mutually exclusive. If both are turned on, we default to spec-decoding only.
+- **Supported with data parallelism (DP > 1).** We support DP > 1 with jump forward decoding by using the JF NEFF on the entire DP group if any rank has JF tokens.
+- **Incompatible with logprobs.** Taking inspiration from the original jump-forward implementation in SGLang, we disable proper logprobs for JF decoding.
+
+See `structured-outputs-and-tool-calling` for the design details.
 
 ## Complete Configuration Example
 

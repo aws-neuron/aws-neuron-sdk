@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the NKI Library component across all AWS Neuron SDK versions.
     :keywords: nki library, nki-lib, release notes, aws neuron sdk
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. _nki-lib_rn:
 
@@ -9,6 +9,149 @@ Release Notes for Neuron Component: NKI Library
 ================================================
 
 The release notes for the NKI Library Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-lib-2-33-0-rn:
+
+NKI Library (NKI-Lib) (Neuron 2.33.0 Release)
+--------------------------------------------------------------------
+
+Date of Release: 10/19/2026
+
+What's New
+~~~~~~~~~~
+
+This release adds 25 new experimental kernels. Highlights include a DeepSeek-V3.2 decode path (MLA QKV projection, sparse-gather MLA attention and its fused attention block, the sparse indexer, the group-limited router), a DeepSeek-V3.2 blockwise MXFP MoE and MX MLP for prefill, Gated DeltaNet (GDN) kernels for Qwen3.5 prefill and decode, Kimi Delta Attention (KDA) token-generation kernels, a FlashAttention-2 forward kernel and a constant-max attention kernel, 3D convolution backward, batch normalization backward, 3D max/average pooling (forward and backward), a chunked top-K for vocabularies wider than ``nisa.topk`` supports, and a GPT-OSS decode sampling-tail megakernel. Existing kernels gain sequence-packed attention in ``attention_block_tkg``, speculative decoding in ``attention_mxfp8_tkg``, fused batch norm and residual add in ``conv3d``, BF16 precision paths and compact scales in the DeepSeek MLA and sparse-indexer kernels, caller-provided outputs in ``output_projection_cte``, and expert-parallel offsets in the MX blockwise MoE kernels. A new ``models/`` folder holds model-specific kernels whose tuning only pays off for one model's geometry: Gemma4 (``attention_tkg`` with a partitioned block-K load) and GPT-OSS (self-contained C128/C512 decode GIGA kernel packages). This release also removes the deprecated ``TensorView`` module, makes packed routing required in the all-to-all-v MoE training kernels, and moves the MXFP8 MoE kernel options into config objects — see Breaking Changes.
+
+New Experimental Kernels
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`Attention Const-Max </nki/library/api/attention-const-max>` — Attention with a caller-supplied global softmax maximum, ``softmax(Q @ K.T * softmax_scale - softmax_max) @ V``, with sequence-major Q/K layouts and arbitrary sequence lengths.
+* :doc:`Flash Attention 2 </nki/library/api/flash-attention-2>` — FlashAttention-2 forward for unmasked bidirectional attention over long key sequences (Trainium 3).
+* :doc:`KDA TKG </nki/library/api/kda-tkg>` — Kimi Delta Attention token generation: advances the KDA recurrence by one token per request.
+* :doc:`KDA Block TKG </nki/library/api/kda-block-tkg>` — Full Kimi Delta Attention block for token generation (input RMSNorm, projections, short convolutions, forget gate, recurrence, gated output RMSNorm, output projection) with all intermediates kept in SBUF.
+* :doc:`GDN CTE </nki/library/api/gdn-cte>` — Chunked gated delta-rule (GDN) prefill with a selectable intra-chunk inverse algorithm (Schur complement by default, or Neumann series).
+* :doc:`GDN TKG </nki/library/api/gdn-tkg>` — Fused single-token gated delta-rule decode step.
+* :doc:`GDN Block TKG </nki/library/api/gdn-block-tkg>` — Fused Qwen3.5 GDN decode layer (input projections, conv1d, GQA expansion, gated delta-rule) in one kernel.
+* :doc:`GDN Conv1D </nki/library/api/gdn-conv1d>` — Depthwise causal conv1d + SiLU + ``conv_state`` update for GDN, with prefill and decode variants.
+* :doc:`MLA Decode QKV </nki/library/api/mla-decode-qkv>` — DeepSeek-V3.2 MLA query and key/value projections for one decode step, with interleaved RoPE, query absorption, and paged KV-cache write.
+* :doc:`MLA Decode Attention </nki/library/api/mla-decode-attention>` — DeepSeek-V3.2 MLA decode attention over indexer-selected prior keys, followed by V up-projection and output projection.
+* :doc:`MLA Attention Block Gather Decode </nki/library/api/mla-attention-block-gather-decode>` — End-to-end DeepSeek-V3.2 MLA decode attention block composing ``mla_decode_qkv`` and ``mla_decode_attention`` with the query tiles kept in SBUF.
+* :doc:`DeepSeek-V3.2 Sparse Indexer </nki/library/api/deepseek-v32-sparse-indexer>` — DeepSeek Sparse Attention lightning indexer for decode (Trainium 3).
+* :doc:`DeepSeek-V3 Router </nki/library/api/deepseek-v3-router>` — DeepSeek-V3.2 group-limited ``noaux_tc`` routing for one decode step.
+* :doc:`Blockwise MM Block MX </nki/library/api/bwmm-block-mx>` — DeepSeek-V3.2 blockwise MXFP4/MXFP8 MoE for context encoding on a single logical core (LNC1).
+* :doc:`MLP DeepSeek MX </nki/library/api/mlp-deepseek-mx>` — DeepSeek-V3.2 shared-experts and first dense MLP layers for prefill, consuming the packed MX input from ``rmsnorm_mx_prefill``.
+* :doc:`Conv3D Backward </nki/library/api/conv3d-bwd>` — Any subset of the input, weight, and bias gradients of a 3D convolution, with a planner that selects the strategy from the problem geometry.
+* :doc:`Batch Norm Backward </nki/library/api/batch-norm-bwd>` — Batch normalization backward over the channel dimension, with optional fused ReLU.
+* :doc:`Max Pooling 3D </nki/library/api/max-pooling-3d>` and :doc:`Max Pooling 3D Backward </nki/library/api/max-pooling-3d-backward>` — 3D max pooling forward and backward (NCDHW and NDHWC layouts).
+* :doc:`Average Pooling 3D </nki/library/api/avg-pooling-3d>` and :doc:`Average Pooling 3D Backward </nki/library/api/avg-pooling-3d-backward>` — 3D average pooling forward and backward (NCDHW and NDHWC layouts).
+* :doc:`RMSNorm Residual Prefill </nki/library/api/rmsnorm-residual-prefill>` — Pre-norm residual add followed by RMSNorm for prefill, with the residual add performed on the DMA engines during the load.
+* :doc:`Chunked Top-K </nki/library/api/chunked-topk>` — Single-core top-K over a vocabulary wider than the 65,535-element limit of ``nisa.topk``, with no collective.
+* :doc:`GPT-OSS Tail Chunked Megakernel </nki/library/api/gpt-oss-tail-chunked-megakernel>` — GPT-OSS decode sampling tail (final RMSNorm, ``lm_head``, top-K, sampler) with a single all-to-all collective.
+* :doc:`Build Packed Routing </nki/library/api/build-packed-routing>` — Builds the destination-major ``packed_source_indices`` consumed by ``permute_a2av`` and ``unpermute_a2av``.
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* :doc:`Attention CTE </nki/library/api/attention-cte>`: Added ``d_v`` support (a value head dimension that differs from the query/key head dimension, for MLA).
+* :doc:`Attention KV-Parallel Segmented CTE </nki/library/api/attention-kv-parallel-segmented-cte>`: Added packed-FP8 KV support (``fp8_packed``, ``k_scale``, ``v_scale``).
+* :doc:`Attention Block TKG </nki/library/api/attention-block-tkg>`: Added sequence-packed token-generation attention for mixed-context batches through the ``seq_packed_attention_mask``, ``seq_packed_active_blocks_table``, ``seq_packed_q_index_table``, ``seq_packed_seq_id_table``, ``seq_packed_accumulator_partial_route_table``, and ``seq_packed_accumulator_group_state_route_table`` parameters, with KV-cache block resizing.
+* :doc:`QKV </nki/library/api/qkv>` (``qkv_cte``): Added ``head_split_kv_cache`` (head-major block K/V cache layout) and ``hbm_name_prefix`` (for multiple calls in one trace); added packed-FP8 KV writes in the MX path; the normalization beta bias is now supported with fused ``RMS_NORM``.
+* :doc:`MLP </nki/library/api/mlp>`: Added ``use_folded_mx_scales`` so CTE MX weight scales can be supplied pre-folded into the kernel's SBUF layout and loaded with one DMA per operand.
+* :doc:`Output Projection CTE </nki/library/api/output-projection-cte>`: Added ``attention_layout`` to declare the input dimension order, and ``out`` / ``out_s_offset`` to write multiple S chunks into one caller-allocated output.
+* :doc:`RMSNorm MX Prefill </nki/library/api/rmsnorm-mx-prefill>`: Added ``hidden_interleaved`` for hidden states in the model's 4-way interleaved H order.
+* :doc:`Router Top-K </nki/library/api/router-topk>`: Added ``expert_affinities_eager_out`` (dense ``[T, k]`` eager-affinity output) and ``skip_store_expert_affinities``.
+* :doc:`MoE CTE </nki/library/api/moe-cte>`: Added ``ep_rank`` for expert-parallel slicing of packed affinities (also added to ``bwmm_shard_on_block_mx``).
+* :doc:`Attention MXFP8 TKG </nki/library/api/attention-mxfp8-tkg>`: Added speculative decoding (``s_active`` in {1, 2, 4, 8}) and support for ``q_head=32``.
+* :doc:`RMSNorm Router Top-K TKG </nki/library/api/rmsnorm-router-topk-tkg>`: Added ``store_eager_affi_only``.
+* :doc:`Conv3D </nki/library/api/conv3d>`: Added fused batch normalization (``batch_norm_mode``, ``gamma``, ``beta``, ``momentum``, ``running_means``, ``running_variances``, ``batch_norm_eps``, ``output_pre_norm``), fused residual add (``residual_add_loc``, ``residuals_in``), and caller-provided SBUF management (``sbm``, ``use_auto_allocation``).
+* :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>`: Added ``output_padding``, asymmetric 6-value ``padding``, and ``flip_filter_taps_in_kernel`` (pass filters in forward orientation and let the kernel reverse the taps).
+* :doc:`MS Deformable Attention </nki/library/api/ms-deformable-attention>`: Added ``gather_method`` and ``max_indices_per_indirect`` for batched indirect gathers.
+* :doc:`MS Deformable Attention Backward </nki/library/api/ms-deformable-attention-bwd>`: Added batched indirect gather/scatter controls (``gather_method``, ``max_gather_indices_per_indirect``, ``max_scatter_indices_per_indirect``, ``num_scatter_buffers``), per-gradient selection (``compute_grad_value``, ``compute_grad_sampling_locations``, ``compute_grad_attention_weights``), and optional intermediate inputs and dumps.
+* :doc:`Scatter-Add </nki/library/api/scatter-add>`: Added ``unique_indices`` to skip duplicate-index accumulation when indices are known to be unique.
+* :doc:`MLA QKV CTE </nki/library/api/mla-qkv-cte>`, :doc:`MLA Sparse Attention CTE </nki/library/api/mla-sparse-attention-cte>`, and :doc:`MLA V-Up O-Proj CTE </nki/library/api/mla-vup-oproj-cte>`: Added a ``precision`` selector (MX or BF16) and ``compact_scales``; added GLM configurations. ``mla_sparse_attention_cte`` adds a ``dense`` attention path, ``q_pos_offset_hbm``, ``use_sbuf_indirect``, and 1M-token context support. ``mla_vupmx_oproj_cte_kernel`` adds ``kv_lora_rank`` and supports S < 128.
+* :doc:`Sparse Attention Indexer (MX + BF16 Score) </nki/library/api/sparse-attention-indexer-mx-bf16score>`: Added ``precision``, ``compact_scales``, ``rope_layout``, and ``qr_bf16_hbm``; added chunking for long context.
+* :doc:`Blockwise MM Forward MXFP8 </nki/library/api/blockwise-mm-forward-mxfp8>`: Added ``num_valid_tokens`` to schedule blocks from a runtime token count; added pre-quantized weights, backward-natural weight layouts, a 1x32 PE-swizzle load mode, and a ``TRANSPOSED`` checkpoint store layout.
+* :doc:`Blockwise MM Backward MXFP8 </nki/library/api/blockwise-mm-backward-mxfp8>`: Added ``num_valid_tokens``, 1x32 swizzle support, and a single-expert dense path.
+* :doc:`Matmul MXFP8 </nki/library/api/matmul-mxfp8-generic-kernel>`: Added ``disable_dma_transpose``, K-slicing, flexible K (``K % 512 != 0``), and K-by-F inputs in the 1x32 PE-swizzle loader. :doc:`Matmul MXFP8 Backward </nki/library/api/matmul-mxfp8-generic-backward-kernel>` adds ``fast_dma_transpose``, ``quant_scheme``, ``disable_dma_transpose``, ``weights_is_f_by_k``, and ``input_is_f_by_k``.
+* Each new kernel ships with a PyTorch reference implementation for testing and validation.
+
+Optimizations
+~~~~~~~~~~~~~
+
+* **d_head=64 prefill**: Optimized :doc:`Attention CTE </nki/library/api/attention-cte>`, :doc:`Attention Segmented CTE </nki/library/api/attention-segmented-cte>`, :doc:`QKV </nki/library/api/qkv>`, and :doc:`Output Projection CTE </nki/library/api/output-projection-cte>` on the d_head=64 prefill path.
+* :doc:`Attention CTE </nki/library/api/attention-cte>`: Chained the softmax reduce accumulators; enabled compiler buffer transforms in seven-bank PSUM mode.
+* :doc:`Attention Segmented CTE </nki/library/api/attention-segmented-cte>`: Nested the ``q_head`` loop inside the dynamic loop; removed a Vector copy and balanced the V-load DMA in the K/V load.
+* :doc:`Attention TKG </nki/library/api/attention-tkg>`: Increased the V-load DMA batching cap; stores the output with unit stride when ``H * s_active == 1``.
+* **Gen Mask TKG**: Pooled scratch buffers so consecutive batches no longer serialize.
+* :doc:`RMSNorm-Quant </nki/library/api/rmsnorm-quant>`: Shares the squared-value scratch across tiles when a core processes 8 or more tiles.
+* :doc:`MLP </nki/library/api/mlp>`: Widened MLP CTE weight DMAs and decoupled prefetch depth from DMA width; I-sharded the Llama3-70B high-batch MLP TKG dispatch.
+* :doc:`MoE TKG </nki/library/api/moe-tkg>`: Reduced Vector Engine work in the all-expert software quantization.
+* :doc:`Cumsum </nki/library/api/cumsum>`: Uses ``tensor_scalar_cumulative`` for supported dtypes, with an int32/uint32 fallback.
+* **Rotational Top-K**: Removed inter-engine stalls in the schedule.
+* :doc:`RNG </nki/library/api/rng>`: Uses all RNG lanes for remainder tiles.
+* :doc:`Permute A2AV </nki/library/api/permute-a2av>` and :doc:`Unpermute A2AV </nki/library/api/unpermute-a2av>`: Partitioned gather and receive work across LNC cores, gather rows from packed source indices, size the receive storage by routed rows, and optimized the receive copies.
+* :doc:`MS Deformable Attention </nki/library/api/ms-deformable-attention>`: Optimized index calculation, reduced memsets, and batched indirect DMAs.
+* :doc:`Blockwise MM Forward MXFP8 </nki/library/api/blockwise-mm-forward-mxfp8>`: Reuse spilled weights across blocks, store checkpoints per block, fuse the SwiGLU affinity fold, speed up the output store, split odd-N tail blocks across LNC cores, and allocate accumulators in bf16 when there is a single K block.
+* :doc:`Matmul MXFP8 </nki/library/api/matmul-mxfp8-generic-kernel>`: Shards the non-pre-quantized operand for asymmetric inputs, stops reloading loop-invariant operands, uses a single bulk DMA for 1x32 PE-swizzle loads, balances PSUM drain across Vector and Scalar engines, and re-tunes autotune cache entries.
+* :doc:`Quantize MXFP8 </nki/library/api/quantize-mxfp8>`: Removed a redundant bf16 buffer and DMA copy.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* **TensorView removed**: The ``TensorView`` utility (``core/utils/tensor_view.py``) has been deleted because its view operations (slicing, permuting, reshaping, broadcasting) have been migrated upstream into ``nl.NkiTensor``. All NKI Library kernels now use the native ``nl.NkiTensor`` view methods. Callers that imported ``TensorView`` must switch to the equivalent ``nl.NkiTensor`` methods.
+* :doc:`Permute A2AV </nki/library/api/permute-a2av>` and :doc:`Unpermute A2AV </nki/library/api/unpermute-a2av>`: Packed routing is now required. The ``send_indices`` parameter has been removed and replaced by the required ``packed_source_indices`` (destination-major source indices, built with :doc:`Build Packed Routing </nki/library/api/build-packed-routing>`). ``permute_a2av`` adds ``recv_capacity`` and ``unpermute_a2av`` adds ``send_counts``; both are inserted before existing parameters, so callers must switch to keyword arguments. Receive buffers are now sized by capacity (``[C, H]``) instead of ``[EP*T, H]``.
+* :doc:`Blockwise MM Forward MXFP8 </nki/library/api/blockwise-mm-forward-mxfp8>` and :doc:`Blockwise MM Backward MXFP8 </nki/library/api/blockwise-mm-backward-mxfp8>`:
+
+  * The tuning keyword arguments (including ``gate_up_weight_is_swizzled``, ``down_weight_is_swizzled``, ``gate_up_config``/``down_config``, ``phase1_config``–``phase4_config``, ``fp8_x4_dtype``, ``spill_reload``, ``use_scale_packing``, ``run_with_lnc2``, ``shard_option``, ``affinity_option``, ``compute_dtype``, ``skip_dma``, ``is_tensor_update_accumulating``, ``no_indirect_load``, ``clamp_limits``, ``activation_type``, ``bias``, ``checkpoint_config``, and ``skip_grad_initialization``) have been removed from ``blockwise_mm_fwd_mxfp8`` and ``blockwise_mm_bwd_mxfp8``. Pass them through the new ``config`` parameter (``MXFP8MOEFwdConfig`` / ``MXFP8MOEBwdConfig``) instead. ``config`` is inserted before the weight-scale parameters, so positional callers must switch to keyword arguments.
+  * The config modules moved: import ``MXFP8MOEFwdConfig`` from ``experimental/moe_mxfp8/fwd/config.py`` (was ``moe_fwd_mxfp8_config.py``) and ``MXFP8MOEBwdConfig`` from ``experimental/moe_mxfp8/bwd/config.py`` (was ``moe_bwd_mxfp8_config.py``).
+  * The forward ``gate_up_proj_weight`` layout changed from ``[E, 2, I_TP, H]`` to ``[E, I_TP, 2, H]`` (per intermediate channel, ``[gate(H), up(H)]`` contiguous). Callers must re-layout the weight.
+  * ``MXFP8MOECheckpointConfig.save_scaled_intermediate`` and the ``scaled_intermediate_checkpoint_T`` parameter of ``blockwise_mm_fwd_dropless_mxfp8`` have been removed.
+* :doc:`Matmul MXFP8 </nki/library/api/matmul-mxfp8-generic-kernel>`:
+
+  * The ``lhs_is_f_by_k`` and ``rhs_is_f_by_k`` parameters have been replaced by ``lhs_orientation`` and ``rhs_orientation`` (``TensorOrientation``).
+  * The default ``float8_dtype`` changed from ``"float8_e5m2"`` to ``"float8_e4m3fn"`` in both ``matmul_mxfp8`` and ``matmul_mxfp8_backward``. Callers relying on the old default get different numerics with no error; pass ``float8_dtype="float8_e5m2"`` to keep the previous behavior.
+  * In ``MatmulMxfp8KernelConfig``, ``run_with_lnc2`` and ``lnc_2_shard_rhs`` have been replaced by ``lnc_sharding``, and ``lhs_is_swizzled``, ``rhs_is_swizzled``, and ``load_with_PE_swizzle`` have been removed. In ``TensorDescriptor``, ``is_f_by_k``, ``load_with_PE_swizzle``, and ``fast_dma_transpose`` have been replaced by ``orientation`` and ``swizzle_mode``.
+* :doc:`MLA QKV CTE </nki/library/api/mla-qkv-cte>`: The ``qr_qtz_hbm`` and ``qr_scale_hbm`` parameters have been removed. The kernel now allocates and returns the qr intermediate itself, so the number of outputs changed from 4 to 6 (MX: ``qr_qtz``, ``qr_scale``) or 5 (BF16: ``qr``). Callers must update how they unpack the outputs.
+* :doc:`Attention MXFP8 TKG </nki/library/api/attention-mxfp8-tkg>`: The ``mask`` input changed from the kernel's internal eviction layout ``[B * num_chunks, 128, score_free]`` to a token-sequential ``[B, H, s_active, s_prior + s_active]`` tensor. ``q``, ``k_active``, ``v_active``, and ``out_hbm`` gained an ``s_active`` axis (``[B, H, s_active, d]``, ``[B, s_active, d]``). Callers must pass the new shapes.
+* :doc:`SWA Fused CTE </nki/library/api/swa-fused-cte>`: ``k_scale`` and ``v_scale`` changed from ``[1, 1]`` to ``[128, 1]`` (the per-tensor scale replicated across partitions, matching ``qkv``). Callers must replicate the scale.
+* :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>`: ``padding`` is now an asymmetric 6-value tuple ``(pad_d_lo, pad_d_hi, pad_h_lo, pad_h_hi, pad_w_lo, pad_w_hi)``; 3-value tuples are no longer accepted. ``output_padding`` is inserted before ``activation_fn``, so positional callers must switch to keyword arguments.
+* **Positional-argument shifts (use keyword arguments)**: These kernels inserted new parameters in the middle of their signatures. Callers passing later arguments positionally must switch to keyword arguments:
+
+  * :doc:`MoE CTE </nki/library/api/moe-cte>`: ``ep_rank`` inserted before ``accumulation_dtype``.
+  * **Blockwise MM Shard-on-Block MX** (``bwmm_shard_on_block_mx``): ``ep_rank`` inserted before ``block_size``.
+  * :doc:`QKV </nki/library/api/qkv>` (``qkv_cte``): ``head_split_kv_cache`` inserted before ``block_size``.
+  * **Blockwise MM Backward Dropless MXFP8** (``blockwise_mm_bwd_dropless_mxfp8``): ``output_grad_swizzle_mode``, ``d_gate_up_swizzle_mode``, ``d_gate_up_t_swizzle_mode``, ``hidden_states_t_swizzle_mode``, ``output_grad_t_swizzle_mode``, and ``scaled_intermediate_t_swizzle_mode`` inserted before ``config``.
+
+* **Deprecation**: The ``lnc_shard`` parameter of :doc:`Conv3D </nki/library/api/conv3d>` and :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>` no longer has any effect and emits a warning when set. It will be removed in a future release.
+
+Bug Fixes
+~~~~~~~~~
+
+* **Attention TKG**: Re-enabled the QK-swapped decode path (disabled in 2.32 as an out-of-bounds workaround) with the missing index clamp.
+* **Attention Block TKG**: Corrected the Q/K transpose layout in multi-batch decode; removed an underflow in the K-cache update.
+* **Attention Segmented CTE**: Guarded the indirect-DGE gathers with ``oob_mode.skip`` to prevent out-of-bounds reads.
+* **Fused Segmented Attention**: Fixed an SBUF clobber of the saved prior offset.
+* **Attention KV-Parallel Segmented CTE**: Fixed collective operand placement for LNC1 and LNC>1.
+* **Attention Backward**: Halved the fp32 KV section length so the kernel fits in SBUF.
+* **SWA Fused CTE**: Passes the Q scale as an SBUF pointer to work around a Scalar Engine erratum.
+* **Ring Attention Forward**: Fixed compilation for ``bs * nheads == 1`` on LNC2, and fixed ``cp_offset_hbm`` handling.
+* **QKV**: Corrected the QKV TKG SBUF reservation; fixed the QKV CTE multi-buffer degree collapsing to 0 at large H.
+* **Output Projection TKG**: Corrected perf-mode access.
+* **MLP**: Fixed the MLP CTE 2x-row remainder tile and skipped empty subtiles in row quantization; corrected the Llama3-70B high-batch MLP TKG gate/up weight-ring prefetch, restored static quantization, and set ``reduce_cmd`` on its activation reductions.
+* **RMSNorm MX Prefill**: The kernel now works without shuffled input.
+* **MoE CTE**: Fixed dynamic-block clamping and expert-parallel slicing with packed affinities in ``bwmm_shard_on_block_mx``, skipped the dummy-block output write, vectorized the token-position-to-id load, and capped ``bwmm_shard_on_I`` PSUM usage only when the grid exceeds the available banks.
+* **Scatter-Add**: Duplicate indices within a tile are now accumulated instead of overwritten.
+* **Unpermute A2AV**: Fixed the tail tile when the token count is not a multiple of the tile size.
+* **Foreach Norm**: Guarded the cross-core reduce so the kernel supports LNC1.
+* **GPSIMD Top-K**: Bounded the gather indices and folded unmatchable sort keys.
+* **SSD**: Eliminated an uninitialized SBUF read in the transpose helper.
+* **MLA (DeepSeek)**: Made BF16 V-up allocation names unique across S-batches; fixed PSUM allocation in ``mla_sparse_attention_cte`` and the weighted reduce in the sparse attention indexer; added native and swizzled compact scales; fixed scale-swizzle group loops.
+* **MXFP8 kernels**: Fixed MXFP8 matmul autotune cache lookups and the swizzle layout for ``K % tile_k == 384``; clamped the K-by-F PE-swizzle load to the F extent; sliced the DGT vector offset for F-remainder tiles; guarded against loading 0-sized tiles; gated ``MxMatmulScalePidx`` to Trainium 3; fixed an SbufManager leak in the MXFP8 MoE forward.
+* **NeuroTile**: Fixed unaligned tile extents in block grids, partial last blocks in ``BlockStream``, true extents in the remainder flow, and oversized SBUF slots in ``HBMLayout`` transpose loads.
+
+Known Issues
+~~~~~~~~~~~~
+
 
 .. _nki-lib-2-32-0-rn:
 
@@ -433,7 +576,7 @@ Kernel Utilities
 
 See :doc:`Kernel Utilities Reference </nki/library/kernel-utils/index>` for full documentation.
 
-* :doc:`TensorView </nki/library/kernel-utils/tensor-view>`: Added ``rearrange`` method for flexible dimension reordering, ``has_dynamic_access`` for checking whether a view requires runtime-dependent addressing, and ``key_in_dict`` helper. The ``slice`` method now clamps the end index to dimension bounds instead of asserting.
+* **TensorView**: Added ``rearrange`` method for flexible dimension reordering, ``has_dynamic_access`` for checking whether a view requires runtime-dependent addressing, and ``key_in_dict`` helper. The ``slice`` method now clamps the end index to dimension bounds instead of asserting.
 * :doc:`TiledRange </nki/library/kernel-utils/tiled-range>`: ``TiledRangeIterator`` now exposes an ``end_offset`` attribute, enabling kernels to determine the end position of each tile without manual calculation.
 * :doc:`SbufManager (Allocator) </nki/library/kernel-utils/allocator>`: Added ``get_total_space`` and ``get_used_space`` for querying SBUF utilization, ``set_name_prefix`` / ``get_name_prefix`` for scoped naming, and ``flush_logs`` to emit buffered allocation logs. SbufManager now uses ``TreeLogger`` to provide hierarchical, tree-formatted logs of SBUF allocation and deallocation events, making it easier to debug memory usage across nested scopes.
 * **QuantizationType**: Added ``MX`` enum value for microscaling quantization (MxFP4/MxFP8).

@@ -58,11 +58,16 @@ The runtime needs to answer one question every decode step: "what is the smalles
 
 The answer is a function of the largest *future* KV position any request in the batch will reference *during this step*:
 
-```{math}
-\text{needed_seq} = \max(\text{num_computed_tokens}) + 1 + \text{num_speculative_tokens}
-```
+`needed_seq = max(num_computed_tokens) + headroom(k)`, where `k` is the number
+of speculative tokens:
 
-The `+1` covers the new token being generated this step (non-spec decode) or the bonus token (spec decode). The `+num_speculative_tokens` covers the draft tokens the target model will verify in this same step. Picking the smallest bucket `>= needed_seq` from `decode_context_length_buckets ∪ {max_model_len}` guarantees correctness.
+| Decode mode | `headroom(k)` |
+| --- | --- |
+| No speculation (`k = 0`) | `1` |
+| Eagle (`k > 0`) | `2 * k` |
+| DFlash (`k > 0`) | `2 * (k + 1)` |
+
+Non-speculative decode writes one token. Eagle uses `1 + k` target positions followed by `k - 1` recurrent draft positions, for `2k` positions total. DFlash follows the `1 + k` target positions with a fixed `k + 1` query block. Picking the smallest bucket `>= needed_seq` from `decode_context_length_buckets ∪ {max_model_len}` guarantees correctness.
 
 Per-step selection means a request that grows past one bucket boundary smoothly transitions to the next-larger NEFF on the subsequent step. Same mechanism that handles `num_seqs_buckets` today: `torch.compile` shape-specializes on the block-table tensor's shape and dispatches to the correct cached NEFF.
 
@@ -101,7 +106,7 @@ EAGLE3 multiplies the decode NEFF count by a factor of three because the target 
   1. *Near max_model_len.* If the post-step position would exceed `max_model_len - 1`, the proposer is skipped to avoid overflowing the KV slot mapping. The target falls back to a plain 1-token decode.
   2. *DI first decode step.* In disaggregated inference, prefill runs on a different worker. The decode worker receives the KV cache via the connector but does not receive the auxiliary hidden states EAGLE3 needs for proposing drafts. The first decode step therefore runs without-spec; once the target's own forward populates the aux hidden state buffer, subsequent steps use the draft.
 
-Both target families share the same bucket grid and the same runtime trim (the draft tokens are accounted for in `needed_seq`). The draft model warmup runs separately and inherits the same per-pair shape grid, so each draft NEFF is also parameterized by `ctx_bucket`.
+Both target families share the same bucket grid and the same runtime trim. `needed_seq` includes the target tokens and the method-specific draft positions. The draft model warmup runs separately and inherits the same per-pair shape grid, so each draft NEFF is also parameterized by `ctx_bucket`.
 
 ### NEFF count
 

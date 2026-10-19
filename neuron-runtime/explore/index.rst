@@ -3,6 +3,7 @@
 .. meta::
    :description: Topics that explore the AWS Neuron Runtime and tools in-depth, written by the AWS engineers who developed them.
    :keywords: AWS Neuron, deep dives, whitepapers, engineering
+   :date-modified: 2026-10-13
 
 Neuron Runtime Deep Dives
 ==========================
@@ -30,10 +31,6 @@ NeuronX Runtime Deep Dives
         .. grid-item-card:: Compute-Communication Overlap
 
                 * :ref:`neuron-runtime-explore-compute-comm`
-  
-        .. grid-item-card:: Neuron Device Memory
-
-                * :ref:`neuron-device-memory-deep-dive`
 
                 Learn how the Neuron Runtime overlaps computation and communication to maximize performance on AWS Inferentia and Trainium chips.
   

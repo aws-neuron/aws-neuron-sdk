@@ -12,7 +12,7 @@ Transformers NeuronX API Reference Guide — Archived
 
    This document is archived. Transformers NeuronX (``transformers-neuronx``) is
    no longer actively developed. For current large-model inference support, see
-   :doc:`NxD Inference </libraries/nxd-inference/index>`.
+   :doc:`NxD Inference </inference-legacy/nxd-inference/index>`.
 
 The API reference for the archived Transformers NeuronX library is no longer
 published here. For the final supported API surface, refer to the

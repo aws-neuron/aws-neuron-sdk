@@ -5,7 +5,7 @@
 `vllm-omni-neuron` is the AWS Neuron backend plugin for running
 [vLLM-Omni](https://docs.vllm.ai/projects/vllm-omni/en/latest/) diffusion models on AWS
 Trainium. It registers through vLLM-Omni's
-[plugin entry points](https://github.com/vllm-project/vllm-omni/blob/v0.24.0/vllm_omni/plugins/__init__.py).
+[plugin entry points](https://github.com/vllm-project/vllm-omni/blob/v0.29.0rc1/vllm_omni/plugins/__init__.py).
 vLLM-Omni keeps
 ownership of input processing, scheduling, and output processing. The plugin owns only the
 Neuron-specific parts: device and distributed setup, model loading, compilation, and
@@ -244,7 +244,7 @@ not use sequence parallelism.
 ### Startup / model load (once per core)
 
 ```
-Omni(model=..., stage_configs_path=...)
+Omni(model=..., deploy_config=...)
  └─ DiffusionEngine
      └─ MultiprocExecutor  (spawns one worker process per core)
          └─ NeuronDiffusionWorker.init_device()
@@ -355,5 +355,5 @@ through the Lite mesh registry, keyed by each c10d process group's `group_name`.
 - [Setup guide](../getting-started/setup-guide.md) — manual and DLC installation on Trainium.
 - [Feature and configuration guide](../guides/features-guide.md) — generation, compilation, and parallelism controls.
 - [Offline quickstart](../getting-started/quickstart-offline-serving-wan22.md) — runnable Wan2.2 example.
-- [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/release-0.24.0.0.1.0/examples/wan22) — entrypoints and stage configs.
+- [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/main/examples/wan22) — entrypoints and stage configs.
 - vLLM-Omni architecture: <https://docs.vllm.ai/projects/vllm-omni/en/latest/design/architecture_overview/>

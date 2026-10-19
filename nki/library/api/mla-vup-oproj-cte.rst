@@ -1,6 +1,6 @@
 .. meta::
     :description: Standalone MX V-up + MX output projection (S-sharded across cores).
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.mla.deepseek
 
@@ -19,12 +19,12 @@ The ``mla_vupmx_oproj_cte_kernel`` kernel performs standalone MX V-up + MX outpu
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `mla_vup_oproj_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_vup_oproj_cte.py>`_
+**Source code for this kernel API can be found at**: `mla_vup_oproj_cte.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/mla/deepseek/mla_vup_oproj_cte.py>`_
 
 mla_vupmx_oproj_cte_kernel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: mla_vupmx_oproj_cte_kernel(out_attn_hbm: nl.NkiTensor, wuv_qtz_hbm: nl.NkiTensor, wuv_scale_hbm: nl.NkiTensor, wo_qtz_hbm: nl.NkiTensor, wo_scale_hbm: nl.NkiTensor) -> nl.NkiTensor
+.. py:function:: mla_vupmx_oproj_cte_kernel(out_attn_hbm: nl.NkiTensor, wuv_qtz_hbm: nl.NkiTensor, wuv_scale_hbm: nl.NkiTensor, wo_qtz_hbm: nl.NkiTensor, wo_scale_hbm: nl.NkiTensor, compact_scales: bool = True, precision: MlaPrecision = MlaPrecision.MX, kv_lora_rank: int = _P_MAX * _H_PACK) -> nl.NkiTensor
 
    Standalone MX V-up + MX output projection (S-sharded across cores).
 
@@ -38,8 +38,14 @@ mla_vupmx_oproj_cte_kernel
    :type wo_qtz_hbm: ``nl.NkiTensor``
    :param wo_scale_hbm: [H*d_v // 128, ceil(HID / 128)] uint8 compact block-128 scales.
    :type wo_scale_hbm: ``nl.NkiTensor``
+   :param compact_scales: MX only — see ``wuv_scale_hbm``.
+   :type compact_scales: ``bool``
+   :param precision: ``MX`` (default) or ``BF16``. BF16 drops the 4-packing, the Hdv output-column swizzle and both ``quantize_mx`` passes, and lifts the MX path's ``d_v == 128`` and ``H % 4 == 0`` restrictions (GLM needs d_v=256). Pass ``None`` for both scale tensors.
+   :type precision: ``MlaPrecision``
+   :param kv_lora_rank: L, the latent dimension. Only read on the BF16 path; the MX path pins L to 512 (one MX 512-tile per head) and ignores this. Defaults to 512, which is what both DeepSeek-V3.2 and GLM-MoE-DSA use.
+   :type kv_lora_rank: ``int``
    :return: [B, S, HID] bf16 output projection result.
-   :rtype: ``nl.ndarray``
+   :rtype: ``nl.NkiTensor``
 
    **Notes**:
 

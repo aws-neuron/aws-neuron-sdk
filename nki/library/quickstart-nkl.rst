@@ -1,7 +1,7 @@
 .. meta::
    :description: Get started with the NKI Library - install the pre-built NKI kernel package and use it with the Neuron compiler (neuronx-cc) in your model development.
    :keywords: NKI Library, nkilib, NKI, AWS Neuron, neuronx-cc, prebuilt kernels, quickstart
-   :date-modified: 2026-06-15
+   :date-modified: 2026-10-13
 
 .. _nki-library-quickstart:
 
@@ -45,7 +45,7 @@ Prerequisites
 
 * The Neuron SDK installed, including the Neuron compiler (``neuronx-cc``).
   If you haven't set this up, see the :doc:`Neuron Quick Start Guide
-  </about-neuron/quick-start/index>`.
+  </quickstarts>`.
 * A Python virtual environment for your project.
 * Basic familiarity with NKI. If you're new, start with
   :ref:`Get started with NKI <nki-get-started>`.
@@ -63,7 +63,7 @@ Verify it is importable:
    python -c "import neuronxcc; print('neuronx-cc OK')"
 
 If this fails, install the Neuron SDK first using the
-:doc:`Neuron Quick Start Guide </about-neuron/quick-start/index>`.
+:doc:`Neuron Quick Start Guide </quickstarts>`.
 
 Step 2: Install the NKI Library package
 ---------------------------------------

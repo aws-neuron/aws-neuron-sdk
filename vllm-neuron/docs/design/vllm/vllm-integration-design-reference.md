@@ -44,8 +44,8 @@ This document provides a comprehensive design reference for the vLLM Neuron inte
 │                   Hardware Layer                                │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
 │  │      CUDA       │  │   TPU Cores     │  │ Neuron Cores    │ │
-│  │     Devices     │  │                 │  │ (Inferentia/    │ │
-│  │                 │  │                 │  │  Trainium)      │ │
+│  │     Devices     │  │                 │  │ (Trn2/Trn3)     │ │
+│  │                 │  │                 │  │                 │ │
 │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```

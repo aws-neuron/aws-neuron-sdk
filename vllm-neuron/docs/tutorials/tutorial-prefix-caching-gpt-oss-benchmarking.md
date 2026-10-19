@@ -59,7 +59,9 @@ Server settings for this tutorial:
 
 ## Prerequisites
 
-- **Instance**: A Trn2 or Trn3 instance.
+- **Instance**: A Trn3 instance. The TP8 commands use the Native MXFP4 model route.
+  For Trn2, use the model format and shard count in the
+  [gpt-oss deployment tutorial](tutorial-gpt-oss.md).
 - **Software**: Neuron SDK 2.31 or later, vLLM on Neuron plugin (shipped with
   Neuron 2.31).
 - **Model access**: Access to `openai/gpt-oss-120b` on Hugging Face.
@@ -73,6 +75,8 @@ Server settings for this tutorial:
 Set environment variables required for gpt-oss compilation:
 
 ```bash
+export VLLM_NEURON_BACKEND=neuron_native
+export NEURON_LOGICAL_NC_CONFIG=2
 export NEURON_LIBTORCH_COMPILATION_TIMEOUT=1200
 export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1200
 export NEURON_RT_ALLOW_LEGACY_NEFF=1  # Trn3 only
@@ -432,6 +436,19 @@ Prefix caching is working effectively when:
 The main dial for prefix caching is `kv_segment_size_buckets`, which sets the
 compiled segment sizes for segmented attention — how the kernel reads cached KV.
 
+For example, 4 GiB is a tested reserve for GPT-OSS 120B on Trn3
+with the Native backend and MXFP4 weights. Enable it with:
+
+```bash
+export VLLM_NEURON_RESERVED_HEADROOM_GIB=4
+```
+
+Without an explicit reserve, the worker uses memory utilization and the
+default 30% fractional cap. Headroom mode bypasses that cap and sets
+`gpu_memory_utilization` to `1.0`. Validate the reserve for each deployment.
+See the [memory configuration reference](../guides/reference-configuration.md#memory-management)
+for tuning instructions.
+
 Tune it when you change `max_num_batched_tokens`: the segment size must match the
 prefill bucket size (constraint: `num_batched_tokens_buckets` must equal
 `kv_segment_size_buckets`).
@@ -452,9 +469,8 @@ Supported values: `[512]`, `[1024]`, `[2048]`, `[4096]`.
   entries before they can be reused. Reduce `max_num_seqs` or `max_model_len`
   to free memory for the prefix cache.
 
-- **Server fails to start with OOM.** The KV cache does not fit in HBM. Decrease
-  `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` (the fraction of the memory budget
-  allocated to the KV cache) so the cache is sized smaller at startup.
+- **Server fails to start with OOM.** In headroom mode, increase the active
+  reserve to reduce KV capacity. In default mode, reduce the fractional cap.
 
 ## Next steps
 

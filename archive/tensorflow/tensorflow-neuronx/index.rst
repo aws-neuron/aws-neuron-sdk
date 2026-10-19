@@ -13,7 +13,7 @@ TensorFlow NeuronX (Inf2 & Trn1) — Archived
 
    This document is archived. TensorFlow NeuronX (``tensorflow-neuronx``) is no
    longer officially supported by the AWS Neuron SDK. It is provided for
-   reference only. For current framework support, see :doc:`/frameworks/index`.
+   reference only. For current framework support, see :doc:`/archive/frameworks/index`.
 
 TensorFlow NeuronX (``tensorflow-neuronx``) was the TensorFlow integration for AWS Inferentia2 (Inf2)
 and Trainium (Trn1) instances. These pages are preserved for historical reference alongside the

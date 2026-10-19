@@ -1,27 +1,21 @@
 .. meta::
-   :description: Install PyTorch for AWS Neuron on Inf2, Trn1, Trn2, Trn3 instances
-   :keywords: pytorch, neuron, installation, trn1, trn2, trn3, inf2
+   :description: Install TorchNeuron, the native PyTorch backend for AWS Trainium, on Trn2 and Trn3 instances
+   :keywords: pytorch, torchneuron, torch-neuronx, neuron, installation, trn2, trn3
    :framework: pytorch
-   :instance-types: inf2, trn1, trn2, trn3
+   :instance-types: trn2, trn3
    :content-type: framework-setup-hub
-   :date-modified: 2026-03-03
+   :date-modified: 2026-10-13
 
 .. _pytorch-setup:
 
 Install PyTorch for Neuron
 ===========================
 
-Install PyTorch with AWS Neuron support for training and inference on Inferentia and Trainium instances.
+Install TorchNeuron, the native PyTorch backend for AWS Trainium, for training and inference on Trn2 and Trn3 instances.
 
-**Supported Instances**: Inf2, Trn1, Trn2, Trn3
+**Supported Instances**: Trn2, Trn3
 
-**PyTorch Version**: 2.9+ with Native Neuron backend
-
-.. warning::
-
-   The ``torch-neuronx`` library is no longer included on Neuron DLAMIs and DLCs starting with Neuron release v2.32.0. The setup instructions in this document assume your environment uses Neuron v2.31.0 or earlier. If you are using ``torch-neuronx`` for training your models, pin your environment to Neuron v2.31.0. 
-
-   The NeuronX Distributed (NxD) library for training (``neuronx_distributed_training``) is no longer included on Neuron DLAMIs and DLCs as of release v2.31.0. To manually configure your environment to use ``neuronx_distributed_training``, see :doc:`Install PyTorch via manual installation </setup/pytorch/manual>`.
+**PyTorch Version**: 2.13 or 2.14 (``torch-neuronx`` 2.13.3.0 or 2.14.3.0)
 
 Choose installation method
 ---------------------------
@@ -109,11 +103,12 @@ Before installing, ensure you have:
    * - Requirement
      - Details
    * - Instance Type
-     - Inf2, Trn1, Trn2, or Trn3 instance
+     - Trn2 or Trn3 instance
    * - Operating System
-     - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
+     - Ubuntu 26.04, Ubuntu 24.04, or Amazon Linux 2023. For the tested Linux kernel and
+       GLIBC versions, see :ref:`neuron-runtime-compatibility`.
    * - Python Version
-     - Python 3.11, 3.12 or 3.13
+     - Python 3.12, 3.13, or 3.14
    * - AWS Account
      - With EC2 launch permissions
    * - SSH Access
@@ -124,8 +119,8 @@ What You'll Get
 
 After installation, you'll have:
 
-- **PyTorch 2.9+** with Native Neuron backend
-- **torch-neuronx** package for Neuron-specific operations
+- **PyTorch 2.13 or 2.14** with the TorchNeuron native backend
+- **torch-neuronx** package (TorchNeuron) for Neuron-specific operations
 - **neuronx-cc** compiler for model optimization
 - **Neuron Runtime** for model execution
 - **Neuron Tools** for profiling and debugging
@@ -140,13 +135,13 @@ Version Information
    * - Component
      - Version
    * - PyTorch
-     - 2.9.0+
+     - 2.13.0 or 2.14.0
    * - torch-neuronx
-     - 2.9.0+
+     - 2.13.3.0 or 2.14.3.0
    * - neuronx-cc
-     - 2.15.0+
+     - 2.28.0+
    * - Python
-     - 3.11, 3.12, 3.13
+     - 3.12, 3.13, 3.14
 
 Next Steps
 ----------
@@ -156,11 +151,11 @@ After installation:
 1. **Verify Installation**: Run verification commands in the installation guide
 2. **Try a Tutorial**: 
    
-   * **Inference**: :doc:`/vllm-neuron/docs/getting-started/quickstart-online-serving`
-   * **Training**: :doc:`MLP training tutorial [archived content] </archive/nxd-training/mlp>`
-  
-3. **Read the torch-neuronx Programming Guide**: :doc:`Training developer guide [archived content] </archive/nxd-training/index>`
-4. **Explore Examples**: :doc:`/frameworks/torch/index`
+   * **Build your first model**: :doc:`TorchNeuron quickstart </torch/get-started/quickstart-build-first-model>`
+   * **Inference**: :doc:`vLLM Neuron online serving quickstart </vllm-neuron/docs/getting-started/quickstart-online-serving>`
+
+3. **Read the TorchNeuron documentation**: :doc:`/torch/index`
+4. **Explore tutorials**: :doc:`/torch/tutorials/index`
 
 Update an existing installation
 --------------------------------

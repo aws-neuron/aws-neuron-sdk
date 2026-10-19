@@ -7,13 +7,13 @@
    :date-modified: 2026-03-11
 
 [Broken] Running TensorFlow BERT-Large with AWS Neuron
-=============================================
+======================================================
 
 .. warning::
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 This example shows a Neuron compatible BERT-Large implementation that is

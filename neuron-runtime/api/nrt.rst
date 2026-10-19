@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt.h header in the AWS Neuron Runtime: Main Neuron Runtime (NRT) interface for loading and executing models on Neuron devices.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_h:
 
 nrt.h

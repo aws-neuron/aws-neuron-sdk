@@ -4,11 +4,11 @@
    :framework: jax
    :installation-method: manual
    :instance-types: inf2, trn1, trn2, trn3
-   :os: ubuntu-24.04, ubuntu-22.04, al2023
-   :python-versions: 3.11, 3.12
+   :os: ubuntu-26.04, ubuntu-24.04, al2023
+   :python-versions: 3.11, 3.12, 3.13, 3.14
    :content-type: installation-guide
    :estimated-time: 15 minutes
-   :date-modified: 2026-03-03
+   :date-modified: 2026-10-08
 
 Install JAX Manually
 =====================
@@ -29,9 +29,10 @@ Prerequisites
    * - Instance Type
      - Inf2, Trn1, Trn2, or Trn3
    * - Operating System
-     - Ubuntu 24.04, Ubuntu 22.04, or Amazon Linux 2023
+     - Ubuntu 26.04, Ubuntu 24.04, or Amazon Linux 2023. For the tested Linux kernel and
+       GLIBC versions, see :ref:`neuron-runtime-compatibility`.
    * - Python
-     - Python 3.11, 3.12, or 3.13
+     - Python 3.11, 3.12, 3.13, or 3.14
    * - Sudo Access
      - Required for driver installation
    * - Internet Access
@@ -58,12 +59,13 @@ Installation Steps
          
          # Add Neuron repository
          . /etc/os-release
+         sudo install -m 0755 -d /etc/apt/keyrings
          sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
          EOF
          
          # Add repository key
-         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
          
          # Update package list
          sudo apt-get update
@@ -115,7 +117,8 @@ Installation Steps
          
          .. code-block:: bash
             
-            wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+            sudo install -m 0755 -d /etc/apt/keyrings
+            wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
             sudo apt-get update -y
       
       .. dropdown:: ⚠️ Troubleshooting: Driver installation failed
@@ -136,13 +139,10 @@ Installation Steps
                
                sudo apt-get install --reinstall aws-neuronx-dkms
 
-   .. tab-item:: Ubuntu 22.04
-      :sync: ubuntu-22-04
+   .. tab-item:: Ubuntu 26.04
+      :sync: ubuntu-26-04
       
       **Step 1: Update System Packages**
-
-      .. important::
-         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       .. code-block:: bash
          
@@ -155,12 +155,13 @@ Installation Steps
          
          # Add Neuron repository
          . /etc/os-release
+         sudo install -m 0755 -d /etc/apt/keyrings
          sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
          EOF
          
          # Add repository key
-         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
          
          # Update package list
          sudo apt-get update
@@ -177,7 +178,7 @@ Installation Steps
       
       .. code-block:: bash
          
-         python -m venv ~/neuron_venv_jax 
+         python3.14 -m venv ~/neuron_venv_jax
          source ~/neuron_venv_jax/bin/activate
       
       **Step 5: Install JAX and Neuron Packages**
@@ -208,13 +209,31 @@ Installation Steps
          :color: warning
          :animate: fade-in
          
-         If you see "EXPKEYSIG" error, update the GPG key and retry.
+         If you see "EXPKEYSIG" error during apt-get update:
+         
+         .. code-block:: bash
+            
+            sudo install -m 0755 -d /etc/apt/keyrings
+            wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
+            sudo apt-get update -y
       
       .. dropdown:: ⚠️ Troubleshooting: Driver installation failed
          :color: warning
          :animate: fade-in
          
-         Ensure kernel headers are installed before retrying driver installation.
+         If driver installation fails:
+         
+         1. Check kernel headers are installed:
+            
+            .. code-block:: bash
+               
+               sudo apt-get install -y linux-headers-$(uname -r)
+         
+         2. Retry driver installation:
+            
+            .. code-block:: bash
+               
+               sudo apt-get install --reinstall aws-neuronx-dkms
 
    .. tab-item:: Amazon Linux 2023
       :sync: al2023
@@ -321,12 +340,12 @@ Now that JAX is installed:
 
 2. **Read Documentation**:
    
-   - :doc:`/frameworks/jax/index`
-   - :doc:`/frameworks/jax/api-reference-guide/index`
+   - :doc:`/jax/index`
+   - :doc:`/jax/api-reference-guide/index`
 
 3. **Explore Setup Guide**:
    
-   - :doc:`/frameworks/jax/setup/jax-setup`
+   - :doc:`/setup/jax/index`
 
 Additional Resources
 --------------------

@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the neuron_driver_shared_tensor_batch_op.h header in the AWS Neuron Runtime: Shared tensor batch operation structures between the Neuron Runtime and the Neuron driver.
+   :date-modified: 2026-10-13
+
 .. _api_neuron_driver_shared_tensor_batch_op_h:
 
 neuron_driver_shared_tensor_batch_op.h

@@ -1,6 +1,6 @@
 .. meta::
     :description: Build metadata buffer for all_to_all_v collective from MoE routing decisions.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.subkernels
 
@@ -19,7 +19,7 @@ The ``build_all_to_all_v_metadata`` kernel builds the metadata buffer required b
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `build_all_to_all_v_metadata.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/subkernels/build_all_to_all_v_metadata.py>`_
+**Source code for this kernel API can be found at**: `build_all_to_all_v_metadata.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/subkernels/build_all_to_all_v_metadata.py>`_
 
 build_all_to_all_v_metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

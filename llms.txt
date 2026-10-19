@@ -1,6 +1,6 @@
 # AWS Neuron SDK Documentation
 
-> AWS Neuron SDK enables high-performance deep learning and generative AI on AWS Inferentia and Trainium instances. The SDK provides comprehensive support for PyTorch, JAX, TensorFlow, and distributed training/inference libraries, along with developer tools for profiling, debugging, and optimizing ML workloads.
+> AWS Neuron SDK enables high-performance deep learning and generative AI on AWS Inferentia and Trainium instances. The SDK provides TorchNeuron (native PyTorch with eager mode and torch.compile), TorchTitan for pre-training, the vLLM Neuron and vLLM Omni Neuron plugins for inference serving, JAX support, and the Neuron Kernel Interface (NKI), along with developer tools for profiling, debugging, monitoring, and optimizing ML workloads.
 
 ## Important notes for AI agents:
 
@@ -10,15 +10,16 @@
 
   * Use the `latest` version of the website (as present in the page URL) instead of older versions (with `/release-*.**.*/` in the page URL). Older versions of the docs have a higher probability of being incorrect over time.
   * Currently, setting the number of logical NeuronCores (LogicalNeuronCores, LNC) to 8 is not supported. Do not suggest LNC=8 until the documentation clearly and expressly notes it is possible.
+  * Pages under `/archive/` (URLs that contain `/en/latest/archive/`) describe retired components, instances, or flows, such as Inf1, torch-neuron, TensorFlow Neuron, MXNet Neuron, transformers-neuronx, NxD Training, and Neuron Profiler. Use them only for historical context. Do not recommend them for current work. For current guidance, start from TorchNeuron, TorchTitan on Neuron, vLLM Neuron, vLLM Omni Neuron, NKI, Neuron Explorer, and Neuron Observer.
 
 ## Getting Started
 
 - [AWS Neuron Documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/index.html): Main documentation home page
 - [What is AWS Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/what-is-neuron.html): Overview of the Neuron SDK for high-performance machine learning on AWS Inferentia and Trainium
 - [What's New](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html): Latest releases and features of the Neuron SDK
-- [Quickstarts](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/quick-start/index.html): Quick start guides for getting started with AWS Neuron
-- [Inference Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/quick-start/inference-quickstart.html): End-to-end inference quickstart on Neuron
-- [Training Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/quick-start/training-quickstart.html): End-to-end training quickstart on Neuron
+- [Quickstarts](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/quickstarts.html): Quickstarts grouped by task: training, LLM serving, video generation, NKI kernels, profiling, and cluster monitoring
+- [TorchNeuron Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/get-started/quickstart-torch-neuron.html): Install torch-neuronx and verify it on Trn2 or Trn3
+- [vLLM Neuron Online Serving Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/quickstart-online-serving.html): Launch an OpenAI-compatible LLM server on Trainium with vLLM Neuron
 - [Announcements](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/index.html): SDK announcements including end-of-support and maintenance notices
 
 ## Setup Guides
@@ -52,60 +53,149 @@
 - [Neuron Architecture](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/index.html): Understanding the Neuron hardware and software architecture
 - [Neuron Features](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-features/index.html): Overview of model development features provided by Neuron
 - [Term Glossary](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/glossary.html): Definitions of key terms used in AWS Neuron documentation
-- [Model Samples](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/models/index.html): Pre-tested model samples and implementations
-- [Benchmarks](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/benchmarks/index.html): Training and inference performance benchmarks
 - [SDK Maintenance Policy](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/sdk-policy.html): AWS Neuron SDK maintenance, support lifecycle, and versioning policy
-- [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq/index.html): Frequently asked questions about AWS Neuron
-- [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Solutions for common issues with AWS Neuron
+- [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq.html): Frequently asked questions about AWS Neuron, organized by component
+- [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Hub of troubleshooting guides for TorchNeuron, TorchTitan, vLLM Neuron, vLLM Omni Neuron, NKI, the Neuron compiler and runtime, Neuron Explorer, Neuron Observer, and containers
 - [News and Blogs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/news-and-blogs/index.html): AWS Neuron news articles and blog posts
 
-## ML Frameworks
+## PyTorch on Neuron (TorchNeuron)
 
-- [ML Frameworks Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/index.html): PyTorch and JAX integration for high-performance machine learning on Neuron
+- [TorchNeuron: Native PyTorch on AWS Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/index.html): TorchNeuron (torch-neuronx) is the native PyTorch backend for AWS Trainium (Trn2 and Trn3), with eager mode, torch.compile, and standard distributed APIs
+- [What is TorchNeuron?](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/about-pytorch-neuron.html): Overview of eager mode, Adaptive Eager Execution, torch.compile, distributed training, and NKI integration
+- [Get Started with TorchNeuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/get-started/index.html): Quickstart guides for eager mode and torch.compile
+- [Quickstart: Install and Verify torch-neuronx](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/get-started/quickstart-torch-neuron.html): Install torch-neuronx and verify it on AWS Trainium
+- [Quickstart: Build Your First Model](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/get-started/quickstart-build-first-model.html): Run a first PyTorch model on Trainium in eager mode and with torch.compile using the neuron backend
+- [Quickstart: Run an NKI Kernel from torch-neuronx](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/get-started/quickstart-nki-kernel.html): Minimal path to run an NKI kernel in a PyTorch model with nki_op, in eager mode and with torch.compile
+- [TorchNeuron Guides](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/guides/index.html): How-to guides for distributed training, NKI kernels, memory profiling, and other common tasks
+- [How to Use torch.distributed on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/guides/torch-distributed.html): Launch Neuron workers and use collectives, DDP, FSDP2, DTensor, and pipeline parallelism
+- [How to Work with NKI Kernels from torch-neuronx](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/guides/how-to-work-with-nki.html): Call NKI kernels on Neuron tensors and register them as PyTorch custom operators with nki_op
+- [How to Profile Memory Usage in torch-neuronx](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/guides/memory-profiling-guide.html): Use the torch_neuronx.memory_* APIs, segment-pool analysis, and memory snapshots
+- [torch.compile on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/compile/index.html): Overview, how-to guides, and reference for JIT-compiling PyTorch models on Trainium with backend="neuron"
+- [How torch.compile Works on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/compile/about-torch-compile.html): Deep dive into the TorchNeuron TorchDynamo backend, from FX capture through StableHLO lowering, neuronx-cc, and NEFF caching
+- [How to Optimize a Model with torch.compile](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/compile/how-to-optimize-with-torch-compile.html): Full-graph compilation, graph breaks, and recompilation for higher throughput on Trainium
+- [torch.compile Backend Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/compile/reference-torch-compile.html): Parameter and torch.compiler API support, environment variables, and the neuron backend helpers
+- [TorchNeuron Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/tutorials/index.html): End-to-end tutorials for simple training, distributed training, and Hugging Face inference with torch.compile
+- [Tutorial: Train a Simple Model on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/tutorials/tutorial-simple-training.html): Eager-mode training loop for a small GPT-2 model with torch-neuronx
+- [Tutorial: Train with DDP, FSDP2, and DTensor on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/tutorials/tutorial-torch-distributed.html): Distributed PyTorch training on Trainium2 with DDP, FSDP2, tensor parallelism, and compiled SimpleFSDP
+- [Tutorial: Run a Hugging Face Model for Inference with torch.compile](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/tutorials/tutorial-hf-inference-torch-compile.html): Compile a Hugging Face Transformers model with the neuron backend and generate text
+- [TorchNeuron Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/index.html): Reference materials for torch.compile configuration, supported operations, and resources
+- [TorchNeuron API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/api/index.html): Operator compatibility table and torch.compile reference for torch-neuronx
+- [TorchNeuron Environment Variables](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/env-vars.html): Environment variables for the neuron backend, caching, eager execution, and distributed training
+- [Best Practices for TorchNeuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/best-practices-pytorch-neuron.html): Recommended patterns for eager mode, torch.compile, distributed training, mixed precision, and NKI
+- [Guidelines for Memory Management](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/guidelines-memory-management.html): Neuron caching allocator, NUMA CPU affinity, 64-bit dtype behavior, and cache placement
+- [TorchNeuron Resources](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/reference/torchneuron-resources.html): Links to the TorchNeuron source repository, examples, profiling tools, and support channels
+- [Troubleshooting: TorchNeuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/troubleshooting.html): Common issues with installation, eager mode, torch.compile, TorchTitan, and distributed training
 
-### PyTorch on Neuron
+## JAX on Neuron
 
-- [PyTorch on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/index.html): Complete PyTorch integration for both inference and training on Neuron hardware
-- [About PyTorch on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/about/index.html): History and evolution of PyTorch support (torch-neuron, torch-neuronx, TorchNeuron Native)
-- [Native PyTorch for Trainium](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/pytorch-native-overview.html): TorchNeuron native backend with eager mode and torch.compile for Trn2/Trn3
-- [Inference with PyTorch NeuronX](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/inference-torch-neuronx.html): Inference guides for Inf2 and Trn1/Trn2/Trn3
-- [torch-neuron vs torch-neuronx Comparison](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/guide-torch-neuron-vs-torch-neuronx-inference.html): Detailed comparison for inference workloads across Inf1 and Inf2/Trn1
-- [Supported Operators](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/pytorch-neuron-supported-operators.html): List of PyTorch operators supported on Neuron
-- [Multi-Node Training Setup](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution.html): Configure multi-node distributed training on Trn1
+- [JAX on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/jax/index.html): JAX support with PJRT plugin and NKI integration
+- [JAX API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/jax/api-reference-guide/index.html): API reference for JAX NeuronX features
+- [JAX Environment Variables](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/jax/api-reference-guide/neuron-envvars.html): JAX NeuronX environment variables reference
+- [JAX Known Issues](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/jax/jax-neuronx-known-issues.html): Known issues and limitations in JAX NeuronX
 
-### JAX on Neuron
-
-- [JAX on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/index.html): JAX support with PJRT plugin and NKI integration
-- [JAX NeuronX Setup](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/setup/jax-setup.html): Install and configure the JAX NeuronX plugin
-- [JAX API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/api-reference-guide/index.html): API reference for JAX NeuronX features
-- [JAX Environment Variables](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/api-reference-guide/neuron-envvars.html): JAX NeuronX environment variables reference
-- [JAX Known Issues](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/jax/setup/jax-neuronx-known-issues.html): Known issues and limitations in JAX NeuronX
-
-### TensorFlow (Archived)
+## TensorFlow (Archived)
 
 - [TensorFlow on Neuron (Archived)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/tensorflow/index.html): Archived TensorFlow support documentation
 
-## Distributed Libraries & Inference
+## Training
 
-- [NeuronX Distributed Libraries](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/index.html): High-performance distributed training and inference libraries
-- [NxD Inference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/index.html): PyTorch-based inference library for deploying large models
-- [NxD Inference Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/index.html): Comprehensive tutorials for deploying LLMs and vision models
-- [Llama 3.3 70B Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html): Deploy Llama 3.3 70B on Trn2
-- [Llama 3.1 405B Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-tutorial.html): Deploy Llama 3.1 405B on Trn2
-- [Llama 4 Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/llama4-tutorial.html): Deploy Llama 4 models on Neuron
-- [Multi-LoRA Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial.html): Serve multiple LoRA adapters with Llama 3.1 8B
-- [Qwen2 VL Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/qwen2-vl-tutorial.html): Deploy Qwen2 VL vision language model
-- [Qwen3 VL Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/qwen3-vl-tutorial.html): Deploy Qwen3 VL vision language model
-- [Flux Inference Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/flux-inference-tutorial.html): Deploy Flux.1 image generation model
-- [Flux Inpainting Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/flux-inpainting-inference-tutorial.html): Image inpainting with Flux.1
-- [Pixtral Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/pixtral-tutorial.html): Deploy Pixtral vision language model
-- [Disaggregated Inference Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/disaggregated-inference-tutorial.html): Separate prefill and decode for improved performance
-- [vLLM on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/index.html): High-performance inference serving for large language models with OpenAI-compatible APIs
-- [vLLM Offline Serving Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/quickstart-vllm-offline-serving.html): Run batch inference with vLLM on Neuron
-- [vLLM Online Serving Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/vllm/quickstart-vllm-online-serving.html): Launch an OpenAI-compatible API server with vLLM on Neuron
+- [Train Models on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training.html): Train models on Trainium with native PyTorch (TorchNeuron), TorchTitan Neuron, and Hugging Face training libraries
+- [Training Paths](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/index.html): Choose the native PyTorch (TorchNeuron) path for new work or the legacy PyTorch/XLA path for existing workloads
+- [Best Practices for Training on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/best-practices.html): Choose FSDP, tensor, pipeline, and hybrid parallel layouts for training on Trainium2
+- [Legacy Training Frameworks](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/legacy-frameworks.html): Reference documentation for legacy PyTorch/XLA training, NxD Training, and NxD Core training
+
+### TorchTitan on Neuron
+
+- [TorchTitan on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/index.html): Run TorchTitan pre-training on Trainium with TorchNeuron
+- [What is TorchTitan on Neuron?](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/about-torchtitan-neuron.html): Support matrix, architecture, supported models, and distributed strategies
+- [Get Started with TorchTitan on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/get-started/index.html): Setup and initial verification for TorchTitan on Trainium
+- [How to Set Up TorchTitan on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/get-started/setup-torchtitan-neuron.html): Install and configure TorchTitan for pre-training on Trainium
+- [TorchTitan Training Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/tutorials/index.html): End-to-end tutorials for basic training, SimpleFSDP, and GPT-OSS
+- [Tutorial: Run a Basic TorchTitan Training on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/tutorials/tutorial-basic-training.html): A first complete pre-training run on Trainium with TorchNeuron
+- [Tutorial: Train Llama and DeepSeek with SimpleFSDP](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/tutorials/tutorial-simple-fsdp-training.html): Compiler-based sharding on Trainium with SimpleFSDP
+- [Tutorial: Pre-train GPT-OSS with TorchTitan](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/tutorials/tutorial-gpt-oss-training.html): Mixture-of-experts pre-training on Trainium with NKI attention and MoE kernels
+- [Best Practices for TorchTitan on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/best-practices.html): Eager vs. compile mode, correctness-first validation, FSDP tuning, and scale-out
+- [Troubleshooting: TorchTitan on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/training/torchtitan/troubleshooting.html): Common errors and symptoms, including the TorchTitan profiler interface
+
+## Inference
+
+- [Inference on AWS Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference.html): Entry point for inference on Neuron with the vLLM Neuron and vLLM Omni Neuron plugins or native PyTorch
+- [Native PyTorch Inference on Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-native-pytorch.html): Run native PyTorch models for inference on Trainium and how the vLLM plugins build on TorchNeuron
 - [vLLM DLC Deployment](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/quickstart-deploy-dlc.html): Deploy a vLLM server using a pre-configured Neuron Deep Learning Container
-- [vLLM V1 User Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/vllm-user-guide-v1.html): Complete guide for vLLM V1 with vLLM-Neuron Plugin
-- [vLLM User Guide (Legacy)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/vllm-user-guide.html): User guide for earlier vLLM versions
+
+### vLLM Neuron (Beta)
+
+- [vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/index.html): Recommended path for serving LLMs on Trainium (Trn2 and Trn3) with the standard vllm serve command and an OpenAI-compatible API
+- [Get Started with vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/index.html): Setup, quickstarts, and migration from NxD Inference
+- [How to Set Up vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/setup-guide.html): Install and configure the vLLM Neuron plugin
+- [Quickstart: Online Serving with vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/quickstart-online-serving.html): Launch an OpenAI-compatible API server and serve a first LLM request
+- [Quickstart: Offline Batch Inference with vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/quickstart-offline-serving.html): Run high-throughput offline batch inference
+- [Migrate from NxD Inference to vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/getting-started/migration-nxdi-to-vllm-neuron.html): Move existing NxD Inference deployments to vLLM Neuron
+- [Deploy and Serve with vLLM Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/index.html): Feature, configuration, compilation, caching, and profiling guides
+- [vLLM Neuron Features Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/features-guide.html): Significant features and configuration options for vLLM Neuron deployments
+- [vLLM Neuron Configuration Options](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/reference-configuration.html): Neuron-specific parameters available through additional_config and environment variables
+- [How to Choose a Compilation Route](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/how-to-choose-compilation-route.html): Keep the default native route, switch back to the XLA route, and confirm which route runs
+- [How to Use the Precompile Cache](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/how-to-precompile-cache.html): Use and confirm the torch caching-precompile cache on the native route
+- [How to Profile vLLM Neuron Workloads](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/guides/how-to-profile-workloads.html): Capture NRT device and system profiles on a live vLLM Neuron server
+- [vLLM Neuron Model Recipes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/index.html): Supported checkpoints, feature support, and accuracy results per model
+- [Llama 3 Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/llama-3.html): Llama 3 family (1B, 8B, 70B) with static FP8 and EAGLE3 support
+- [GPT-OSS Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/gpt-oss.html): Deploy gpt-oss with vLLM Neuron
+- [Qwen3-32B Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/qwen3-32b.html): Deploy dense Qwen3-32B, including native MXFP8 limitations
+- [Qwen3-VL Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/qwen3-vl.html): Deploy the Qwen3-VL dense vision language model
+- [Qwen3-ASR Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/qwen3-asr.html): Deploy Qwen3-ASR-1.7B speech recognition, with word error rate results
+- [Qwen3-Embedding Model Recipe](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/model-recipes/qwen3-embedding-8b.html): Deploy the Qwen3-Embedding model
+- [vLLM Neuron Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/index.html): End-to-end deployment tutorials for vLLM Neuron
+- [Tutorial: Deploy gpt-oss](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-gpt-oss.html): Single-instance TP8 deployment and a disaggregated-inference deployment
+- [Tutorial: GPT-OSS 120B 8K/1K Serving on Trn3](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-gpt-oss-120b-8k1k-trn3.html): High-performance disaggregated-inference configuration for GPT-OSS 120B on Trn3
+- [Tutorial: Deploy Llama 3.3 70B (FP8)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-llama3-70b.html): Static FP8 Llama 3.3 70B on a single Trn2 or Trn3 instance with tensor parallelism
+- [Tutorial: Deploy Dense Qwen3-32B](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-qwen3-32b.html): Prepare BF16 and MXFP8 checkpoints and validate Qwen3-32B serving
+- [Tutorial: Deploy Qwen3-VL-32B](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-qwen3-vl-32b.html): Environment setup, optional MXFP8 quantization, and online serving for Qwen3-VL-32B
+- [Tutorial: Deploy Qwen3-ASR-1.7B](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-qwen3-asr-1-7b.html): Online and offline speech transcription on Trainium2
+- [Tutorial: Deploy Qwen3-Embedding](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-qwen3-embedding-8b.html): Online /v1/embeddings server and offline batch embedding with Qwen3-Embedding-8B
+- [Tutorial: EAGLE3 Speculative Decoding with Llama 3.1 8B](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.html): Deploy EAGLE3 speculative decoding with Llama 3.1 8B Instruct
+- [Tutorial: EAGLE3 Speculative Decoding with GPT-OSS-120B](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.html): Deploy EAGLE3 speculative decoding with GPT-OSS-120B
+- [Tutorial: DFlash Speculative Decoding](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-dflash-speculative-decoding.html): Deploy DFlash speculative decoding with Llama 3.1 8B Instruct
+- [Tutorial: Disaggregated Inference with 1P1D and xPyD](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-di-1p1d-xpyd.html): Separate prefill and decode across instances
+- [Tutorial: Disaggregated Encoder Inference with 1E1PD and xEyPD](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-epd-1e-1pd-xeypd.html): Encoder-disaggregated multimodal inference on Trainium
+- [Tutorial: Benchmark Prefix Caching with gpt-oss](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-neuron/docs/tutorials/tutorial-prefix-caching-gpt-oss-benchmarking.html): Measure TTFT reduction, throughput, and cache hit rate with prefix caching
+
+### vLLM Omni Neuron (Beta)
+
+- [vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/index.html): Diffusion-based image and video generation on Trainium with vLLM Omni
+- [Get Started with vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/getting-started/index.html): Setup and quickstarts for video generation
+- [How to Set Up vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/getting-started/setup-guide.html): Manual installation or an AWS Neuron Deep Learning Container
+- [Quickstart: Offline Video Generation with Wan2.2](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/getting-started/quickstart-offline-serving-wan22.html): Generate a video clip offline from a text prompt with Wan2.2-T2V-A14B
+- [Quickstart: Online Video Generation with Wan2.2](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/getting-started/quickstart-online-serving-wan22.html): Serve Wan2.2-T2V-A14B with the vLLM Omni OpenAI-compatible video API
+- [vLLM Omni Neuron Features Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/guides/features-guide.html): Generation, compilation, parallelism, quantization, memory, caching, and latency measurement for diffusion inference
+- [vLLM Omni Neuron Model Recipes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/models/index.html): Model cards for supported diffusion models
+- [Wan2.2-T2V-A14B Model Card](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/models/wan22-t2v-14b.html): Text-to-video features, resolutions, frame counts, and parallelism support
+- [Wan2.2-I2V-A14B Model Card](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/models/wan22-i2v-14b.html): Image-to-video and first-last-frame conditioning support
+- [Tutorial: Deploy Wan2.2-A14B with vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/tutorials/tutorial-wan22-14b.html): End-to-end deployment of the Wan2.2-A14B video models
+- [vLLM Omni Neuron Concepts and Architecture](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/design/index.html): Design documents for the plugin
+- [Architecture: Engine, Worker, and Model Integration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/design/vllm_omni_neuron_overview.html): How the vLLM Omni Neuron engine, worker, and model components fit together
+- [Context Parallelism in vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/design/context_parallelism.html): Sequence sharding and the ring-attention context parallelism path
+- [vLLM Omni Neuron Model Development](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/model-dev/index.html): Onboard, evaluate, and optimize diffusion models
+- [How to Onboard a Model to vLLM Omni Neuron](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/model-dev/onboarding-models.html): Implement the Neuron pipeline and model components for a new diffusion model
+- [Accuracy Evaluation and Debugging](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/model-dev/accuracy-evaluation-debugging.html): Evaluate output quality and isolate accuracy issues in Wan2.2
+- [Optimizing Offline Video Generation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/vllm-omni-neuron/docs/model-dev/optimizing-offline-video-generation.html): Cost model and optimization approach for high-quality offline text-to-video generation
+
+### Legacy Inference (NxD Inference)
+
+- [Legacy Inference Frameworks](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/index.html): Legacy NxD Inference and NxD Core documentation for existing Trn1/Inf2 workloads and custom NxDI-API serving. For new LLM serving, use vLLM Neuron.
+- [NxD Inference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/index.html): PyTorch-based inference library for deploying large models (legacy)
+- [NxD Inference Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/index.html): Tutorials for deploying LLMs and vision models with NxD Inference
+- [Llama 3.3 70B Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html): Deploy Llama 3.3 70B on Trn2
+- [Llama 3.1 405B Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/trn2-llama3.1-405b-tutorial.html): Deploy Llama 3.1 405B on Trn2
+- [Llama 4 Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/llama4-tutorial.html): Deploy Llama 4 models on Neuron
+- [Multi-LoRA Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/trn2-llama3.1-8b-multi-lora-tutorial.html): Serve multiple LoRA adapters with Llama 3.1 8B
+- [Qwen2 VL Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/qwen2-vl-tutorial.html): Deploy Qwen2 VL vision language model
+- [Qwen3 VL Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/qwen3-vl-tutorial.html): Deploy Qwen3 VL vision language model
+- [Flux Inference Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/flux-inference-tutorial.html): Deploy Flux.1 image generation model
+- [Flux Inpainting Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/flux-inpainting-inference-tutorial.html): Image inpainting with Flux.1
+- [Pixtral Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/pixtral-tutorial.html): Deploy Pixtral vision language model
+- [Disaggregated Inference Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/tutorials/disaggregated-inference-tutorial.html): Separate prefill and decode with NxD Inference
+- [vLLM on Neuron (NxD Inference)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/vllm/index.html): Earlier vLLM integration built on NxD Inference. For new deployments, use vLLM Neuron.
+- [vLLM V1 User Guide (NxD Inference)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/inference-legacy/nxd-inference/developer_guides/vllm-user-guide-v1.html): User guide for vLLM V1 with the NxD Inference vLLM-Neuron plugin
 
 ## Developer Tools
 
@@ -139,14 +229,33 @@
 - [Neuron Top](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-top-user-guide.html): Real-time monitoring of Neuron device utilization
 - [Neuron Monitor](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-sys-tools/neuron-monitor-user-guide.html): Collect metrics for monitoring and alerting
 
+### Neuron Observer (Beta)
+
+- [Neuron Observer Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/index.html): Cluster health and observability for AWS Trainium accelerators. Detects hardware faults and localizes issues to the exact node and device. Public beta on Trn2/Trn3.
+- [Get Started with Neuron Observer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/get-started.html): Install Neuron Observer on Amazon EKS, verify it with the nobs CLI, view metrics, and stream them to CloudWatch or Prometheus and Grafana.
+- [Install and Configure Neuron Observer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/install-configure.html): Deploy Neuron Observer on Amazon EKS with the Helm chart, choose an export pipeline (Prometheus, AMP, or CloudWatch), and configure the daemon.
+- [Neuron Observer Configuration Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/configuration-reference.html): Reference for the Neuron Observer Helm chart configuration values under observer.* — daemon image and scheduling, daemon runtime config, cluster server, OTel export pipelines, and namespace.
+- [Neuron Observer Metrics and Faults](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/metrics-fault-reference.html): Reference for the metrics and device health signals Neuron Observer reports, organized by use case, with metric names, units, and sources.
+- [Neuron Observer Troubleshooting and FAQs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-observer/troubleshooting-faq.html): Common installation and export issues, frequently asked questions, public beta limitations, and the feedback channel.
+
 ### Agentic Development
 
 - [Neuron Agentic Development Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/index.html): Open-source AI agents and skills for authoring, debugging, profiling, and analyzing NKI kernels, plus model porting and equivalence validation, inside agentic IDEs such as Claude Code and Kiro. Covers how skills chain together, supported IDEs, hardware requirements, and limitations.
 - [Getting Started with Neuron Agentic Development](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/getting-started.html): Installation, environment setup, and first agent invocation.
 - [Autoport Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-autoport.html): How the ``neuron-framework-autoport`` skill ports HuggingFace transformer models to NxD Inference end to end (architecture analysis, implementation, compilation, inference testing, greedy-token-match validation).
 - [Equivalence Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-equivalence.html): How the ``neuron-framework-equivalence`` skill validates numerical equivalence between a HuggingFace reference model and its NxD Inference port using progressive 3-tensor R-ratio analysis, component-level testing, fault localization, and end-to-end accuracy verification.
+- [Autoport vLLM Neuron Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-autoport-vllm-neuron.html): How the ``neuron-framework-autoport-vllm-neuron`` skill ports GPU-compatible transformer models to the vLLM Neuron backend on Trainium.
+- [Profiling vLLM Neuron Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-profiling-vllm-neuron.html): How the ``neuron-framework-profiling-vllm-neuron`` skill captures prefill and decode device and system profiles from a running vLLM Neuron server on Trainium, isolating each phase into separate traces and recording a reproducible input and output contract.
+- [Profile Analysis vLLM Neuron Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-framework-profile-analysis-vllm-neuron.html): How the ``neuron-framework-profile-analysis-vllm-neuron`` skill localizes performance bottlenecks in a capture, covering session workload timing, roofline bounds, collective partitioning, and per-component attribution.
+- [Parallelism Planner Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-parallelism-planner.html): How the ``neuron-parallelism-planner`` skill chooses tensor, context, and data parallelism and batch size for transformer LLM inference on AWS Trainium before running on hardware, reporting predicted ITL, TTFT, throughput, per-device HBM, and the binding constraint.
+- [Hardware Entitlement Developer Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/developer_guides/neuron-hardware-entitlement.html): How the ``neuron-hardware-entitlement`` skill computes per-operator compute and HBM floors for a chosen parallelism config, identifies the binding operator, and attributes a deployed graph's resident HBM back to those floors.
 - [Autoport Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/autoport-tutorial.html): Step-by-step walkthrough of porting a HuggingFace model with the Autoport agent.
 - [Equivalence Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/equivalence-tutorial.html): Step-by-step walkthrough of validating a ported model with the Equivalence agent.
+- [Autoport vLLM Neuron Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/autoport-vllm-neuron-tutorial.html): Step-by-step walkthrough of porting a GPU-compatible model to the vLLM Neuron backend on Trainium.
+- [Profiling vLLM Neuron Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/profiling-vllm-neuron-tutorial.html): Step-by-step walkthrough of capturing separate prefill and decode device profiles from a vLLM Neuron server on Trainium.
+- [Profile Analysis vLLM Neuron Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/profile-analysis-vllm-neuron-tutorial.html): Step-by-step walkthrough of analyzing a capture, producing session workload timing, roofline bounds, a collective breakdown, and a per-component attribution.
+- [Parallelism Planner Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/parallelism-planner-tutorial.html): Step-by-step walkthrough of planning tensor, context, and data parallelism for LLM inference on Trainium.
+- [Hardware Entitlement Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuron-agentic-development/tutorials/hardware-entitlement-tutorial.html): Step-by-step walkthrough of computing per-operator compute and HBM floors for an LLM inference config and finding the binding operator.
 - [Neuron Agentic Development on GitHub](https://github.com/aws-neuron/neuron-agentic-development): Open-source repository with installation steps, the current agent and skill catalog, and agent-ready code samples.
 
 ## Neuron Runtime & Compiler
@@ -154,6 +263,14 @@
 - [NeuronX Runtime](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/index.html): High-performance execution engine for running models on AWS Inferentia and Trainium
 - [Runtime Configuration](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/guides/configuration-guide.html): Learn how to configure the Neuron Runtime using environment variables
 - [Runtime API Reference](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/index.html): Comprehensive guide to the Neuron Runtime API
+- [Neuron Runtime Environment Variables](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/nrt-env-var-reference.html): Reference for Neuron Runtime environment variables for NeuronCore allocation, collectives, memory, logging, profiling, and debugging
+- [Neuron Runtime Async APIs Overview](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/nrt-async-api-overview.html): Why and when to use the explicit Neuron Runtime async APIs (nrta_*) to keep Neuron device execution units busy
+- [Neuron Runtime Async APIs Core Concepts](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/nrt-async-api-core-concepts.html): How the nrta_* async APIs queue requests, track completion, and report errors, and what your application must synchronize
+- [Neuron Runtime Async APIs Best Practices](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/nrt-async-api-best-practices.html): Choose between sync and async APIs, keep execution queues full, and handle execution errors
+- [Neuron Runtime Async API Examples](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/api/nrt-async-api-examples.html): C code examples that schedule execution and wait for completion with the nrta_* APIs
+- [Migrate to Explicit Async APIs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/guides/how-to-migrate-async-apis.html): Migrate from implicit async mode (NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS) to the explicit nrta_* async APIs
+- [Neuron Runtime and Driver Compatibility](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/compatibility.html): Operating system, Linux kernel, and GLIBC versions tested with the Neuron Runtime and Neuron Driver on Inf2, Trn1, Trn2, and Trn3
+- [Neuron Runtime Core Dump Quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/about/core-dump.html): Generate and inspect a Neuron Runtime core dump when a model fails on the device
 - [nrtpy (Beta)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrtpy/index.html): Pythonic runtime layer for loading, executing, and benchmarking compiled NEFFs directly on NeuronCores (public beta)
 - [nrtpy Getting Started](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrtpy/nrtpy-getting-started.html): Install nrtpy and run your first NEFF with the NrtpyModel and NrtpyTensor APIs
 - [nrtpy Validate and Benchmark Tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrtpy/tutorial-validate-benchmark.html): Validate outputs and benchmark a compiled NEFF with nrtpy
@@ -209,9 +326,10 @@
 - [NKI Compiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-compiler.html): Documentation for the NKI compiler
 - [NKI Access Patterns](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-aps.html): Use Access Patterns (AP) to specify how Trainium hardware accesses tensors
 - [Descriptor Generation Engine (DGE)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dge.html): Control how DMA descriptors are generated (pre-computed, software GpSimd, or hardware DGE)
-- [NKI Dynamic Loops](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dynamic-loops.html): Dynamic loops with runtime-determined trip counts via hardware loop instructions
 - [DMA Bandwidth Guide](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-dma-bandwidth-guide.html): Guidelines for maximizing DMA bandwidth with large contiguous payloads
 - [MXFP4/8 MatMul Deep Dive](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/mxfp-matmul.html): Matrix multiplication with MXFP8 data types, including layout, quantization, and tiling
+- [NKI Loops](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-loops.html): NKI loop constructs with specialization-time or runtime bounds
+- [NKI Scalar Values](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/deep-dives/nki-scalar.html): Scalar values in NKI: nki.isa.scalar_load and scalar_store, arithmetic, dtype width, and dynamic addressing with scalar_offset and loop bounds
 
 ### NKI Migration
 
@@ -226,6 +344,7 @@
 - [nki.language.tile_size](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.language.tile_size.html): Tile size constants for NKI programming
 - [nki.isa](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.isa.html): Instruction Set Architecture APIs for low-level operations
 - [nki.collectives](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.collectives.html): Collective communication operations across NeuronCores
+- [nki.compiler](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.compiler.html): Per-kernel compile and specialization configuration (CompileConfig, SpecializationConfig) passed to nki.jit
 - [nki.simulate](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/generated/nki.simulate.html): NKI kernel simulation for CPU-based testing
 - [nki.api.shared](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/api/nki.api.shared.html): Shared API utilities and types
 
@@ -295,11 +414,48 @@
 - [Blockwise MM Backward MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/blockwise-mm-backward-mxfp8.html): MXFP8-quantized backward pass for blockwise Mixture of Experts, computing gradients per expert-assigned block
 - [QKV CTE MLA](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/qkv-cte-mla.html): DeepSeek Multi-head Latent Attention (MLA) QKV projection with MX (fp8) quantization for context encoding
 - [Blockwise MM Shard-on-Block](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/bwmm-shard-on-block-v2.html): Block-sharded blockwise matrix multiplication for context-encoding MoE layers with a hybrid static/dynamic loop structure
+- [Attention Const-Max](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-const-max.html): Constant-max attention: softmax(Q@K.T * softmax_scale - softmax_max) @ V
+- [Attention MXFP8 TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/attention-mxfp8-tkg.html): MXFP8 flash-decode attention with separate KV blocks and packed-Q eviction
+- [Average Pooling 3D](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/avg-pooling-3d.html): 3D average pooling over the (D, H, W) axes, run independently per (batch, channel)
+- [Average Pooling 3D Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/avg-pooling-3d-backward.html): Backward pass of separable 3D average pooling
+- [Batch Norm Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/batch-norm-bwd.html): Backward pass of batch normalization over the channel dimension
+- [Blockwise MM Forward MXFP8](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/blockwise-mm-forward-mxfp8.html): MXFP8 forward pass for blockwise (dropless) Mixture of Experts
+- [Build All2All Dispatch Metadata](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/build-all2all-dispatch-metadata.html): Per-rank send counts (with token deduplication) and send displacements for all-to-all MoE dispatch
+- [Build Packed Routing](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/build-packed-routing.html): Stable destination-major source indices for MoE routing without an [N, EP] HBM table
+- [Blockwise MM Block MX](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/bwmm-block-mx.html): Blockwise MXFP MoE kernel for a single logical core (LNC1)
+- [Chunked Top-K](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/chunked-topk.html): Top-k over a vocabulary wider than the nisa.topk limit
+- [Conv3D Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/conv3d-bwd.html): Backward pass of 3D convolution
+- [Conv3D Temporal Unroll](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/conv3d-temporal-unroll.html): 3D convolution with temporal unrolling and column tiling for small C_out
+- [Conv3D Transpose](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/conv3d-transpose.html): 3D transposed convolution
+- [DeepSeek-V3 Router](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/deepseek-v3-router.html): DeepSeek-V3.2 group-limited noaux_tc routing decision for one decode step
+- [DeepSeek-V3.2 Sparse Indexer](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/deepseek-v32-sparse-indexer.html): Scores cached key slots against the current query and selects the highest-scoring ones
+- [Flash Attention 2](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/flash-attention-2.html): FlashAttention-2 forward pass: O = softmax(Q @ K^T * scale) @ V
+- [GDN Block TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gdn-block-tkg.html): Fused gated delta-rule (GDN) decode block: in_proj, conv1d, GQA, and the gated delta rule in one kernel
+- [GDN Conv1D](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gdn-conv1d.html): Prefill depthwise causal conv1d with SiLU and conv_state update for GDN models
+- [GDN CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gdn-cte.html): Chunked gated delta-rule (GDN) prefill
+- [GDN TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gdn-tkg.html): Fused single-token gated delta-rule (GDN) decode step
+- [GPSIMD Top-K](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gpsimd-topk.html): Top-k over the last dimension using the GpSIMD nisa.topk instruction
+- [GPT-OSS Tail Chunked Megakernel](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/gpt-oss-tail-chunked-megakernel.html): GPT-OSS decode sampling tail (RMSNorm, lm_head, top-k, sampler) with a single collective
+- [KDA Block TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/kda-block-tkg.html): Kimi Delta Attention (KDA) block for token generation, from hidden states to attention output
+- [KDA TKG](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/kda-tkg.html): Kimi Delta Attention (KDA) token generation: output and new state
+- [Matmul MXFP8 Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/matmul-mxfp8-generic-backward-kernel.html): Backward pass for matrix multiplication with MXFP8 quantization
+- [Max Pooling 3D](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/max-pooling-3d.html): 3D max pooling over the (D, H, W) axes, run independently per (batch, channel)
+- [Max Pooling 3D Backward](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/max-pooling-3d-backward.html): Backward pass of separable 3D max pooling
+- [MLA Attention Block Gather Decode](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-attention-block-gather-decode.html): One DeepSeek-V3.2 MLA decode step from the residual stream to the attention-block output
+- [MLA Decode Attention](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-decode-attention.html): DeepSeek-V3.2 MLA decode attention over indexer-selected keys, with output projection
+- [MLA Decode QKV](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-decode-qkv.html): DeepSeek-V3.2 MLA query and key/value projections for one decode step, with interleaved RoPE
+- [MLA QKV CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-qkv-cte.html): DeepSeek MLA QKV projection (MX) for context encoding, emitting absorbed latents
+- [MLA Sparse Attention CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-sparse-attention-cte.html): Sparse latent and RoPE attention for context encoding, sharded on S across cores
+- [MLA V-Up O-Proj CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mla-vup-oproj-cte.html): MX V-up and MX output projection for context encoding, sharded on S across cores
+- [MLP DeepSeek MX](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/mlp-deepseek-mx.html): DeepSeek-V3.2 MLP with MX prequantized, packed block-scale input
+- [RMSNorm MX Prefill](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rmsnorm-mx-prefill.html): Fused RMSNorm and MX quantization (with optional router top-K) for prefill
+- [RMSNorm Residual Prefill](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/rmsnorm-residual-prefill.html): Pre-norm residual add followed by RMSNorm for prefill-shaped inputs (T >= 128)
+- [Sparse Attention Indexer MX BF16Score](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/sparse-attention-indexer-mx-bf16score.html): DeepSeek sparse attention indexer with MX projections and BF16 scores
+- [SWA Fused CTE](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/api/swa-fused-cte.html): Fused GPT-OSS sliding-window attention block with in-place KV cache updates
 
 ### NKI Library Kernel Utilities
 
 - [Kernel Utilities](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/kernel-utils/index.html): Shared utilities for NKI Library kernels
-- [TensorView](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/kernel-utils/tensor-view.html): Tensor view abstraction with rearrange and dynamic access
 - [SbufManager / Allocator](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/kernel-utils/allocator.html): SBUF memory allocation management
 - [TiledRange](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/kernel-utils/tiled-range.html): Tiled range iteration utilities
 - [Stream Shuffle Broadcast](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/nki/library/kernel-utils/stream-shuffle-broadcast.html): Stream shuffle and broadcast utilities
@@ -314,6 +470,7 @@
 - [Getting Started with Containers](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/docker-setup.html): Step-by-step guide for building Neuron containers using Docker
 - [Kubernetes Getting Started](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/setup.html): Deploy Neuron workloads on Kubernetes
 - [Neuron DRA](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/dra.html): Dynamic Resource Allocation for Kubernetes
+- [Isolate Faulty Neuron Devices with Device Taints (EKS)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/neuron-device-taints-guide.html): Use Neuron device taints on Amazon EKS to keep the Kubernetes scheduler away from faulty Neuron devices and nodes
 - [Neuron UltraServer Operator (Beta)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/ultraserver-operator.html): Topology-aware provisioning and lifecycle management of Trn2 and Trn3 UltraServer workloads on Amazon EKS via the ``NeuronUltraServerWorkload`` custom resource.
 - [Schedule MPI Jobs on UltraServer (EKS)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/eks/ultraserver.html): How-to for running MPI jobs on Trn2 or Trn3 UltraServers with the included init script.
 - [Container Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/tutorials/index.html): Hands-on tutorials for deploying containers on EC2, EKS, ECS
@@ -322,28 +479,27 @@
 
 - [Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html): Official home page for AWS Neuron SDK release notes
 - [What's New](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html): Latest releases and features of the Neuron SDK
-- [Latest Release (2.32.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.32.0.html): Release notes for Neuron SDK version 2.32.0
+- [Latest Release (2.33.0)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/2.33.0.html): Release notes for Neuron SDK version 2.33.0 (released 10/19/2026)
 - [Component Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/index.html): Release notes for individual Neuron components
-- [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Solutions for common issues with AWS Neuron
-- [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq/index.html): Frequently asked questions about AWS Neuron
+- [TorchNeuron Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/torchneuron.html): Release notes for torch-neuronx, the native PyTorch backend for AWS Trainium
+- [TorchTitan Neuron Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/torchtitan-neuron.html): Release notes for TorchTitan Neuron, large-model pre-training on Trainium with TorchNeuron
+- [vLLM Neuron Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/vllm-neuron.html): Release notes for the vLLM Neuron plugin for LLM inference serving on Trainium
+- [vLLM Omni Neuron Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/vllm-omni-neuron.html): Release notes for the vLLM Omni Neuron plugin for image and video generation on Trainium
+- [Neuron Observer Release Notes](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/components/observer.html): Release notes for Neuron Observer across Neuron SDK versions
+- [Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/troubleshooting.html): Hub of troubleshooting guides for TorchNeuron, TorchTitan, vLLM Neuron, vLLM Omni Neuron, NKI, the Neuron compiler and runtime, Neuron Explorer, Neuron Observer, and containers
+- [FAQ](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/faq.html): Frequently asked questions about AWS Neuron, organized by component
 
 ## Optional
 
-- [Model Samples](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/models/index.html): Sample models and implementations for AWS Neuron
-- [Benchmarks](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/benchmarks/index.html): Training performance benchmarks for Trn1 instances with distributed training metrics
-- [Open Source](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/oss/index.html): Neuron Open Source GitHub Repos and contribution guidelines
-- [Native PyTorch Support](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/pytorch-native-overview.html): Learn about native PyTorch support for inference and training
-- [TensorFlow Neuron Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/tensorflow/tensorflow-neuron/tutorials/index.html): Tutorials for TensorFlow Neuron
-- [TensorFlow NeuronX Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/tensorflow/tensorflow-neuronx/tutorials/tutorials-tensorflow-neuronx.html): Tutorials for TensorFlow NeuronX
+- [Open Source](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/oss/index.html): Public GitHub repositories for TorchNeuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, Neuron Explorer CDK, and Neuron agentic development, with contribution guidelines
+- [Native PyTorch Support](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/index.html): TorchNeuron, the native PyTorch backend for training and inference on Trainium
 - [Third-party Tools](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/third-party-solutions.html): Third-party tools and integrations that support the AWS Neuron development experience
 - [Tool Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/tutorials/index.html): Tutorials for how to utilize all Neuron Tools
-- [Setup Troubleshooting (legacy)](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/setup-troubleshooting.html): Solutions for common setup issues (legacy page)
 - [Amazon ECS](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/ecs/index.html): Run containerized Neuron applications using Amazon Elastic Container Service
 - [AWS ParallelCluster](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/parallelcluster/index.html): Set up HPC clusters for distributed training and inference workloads
 - [AWS Batch](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/batch/index.html): Execute batch ML jobs with automatic scaling and resource management
 - [Container FAQ & Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/faq.html): Frequently asked questions and solutions for common issues with Neuron containers
 - [Runtime Troubleshooting](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/nrt-troubleshoot.html): Solutions for common issues with the Neuron Runtime
-- [Neuron C++ Custom Operators](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-customops/index.html): Documentation for creating custom operators in C++ for Neuron
 - [AWS Neuron DLAMIs](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/dlami.html): Pre-configured Amazon Machine Images with Neuron SDK
 - [Security](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/security.html): Security disclosures and notification for the AWS Neuron SDK
 - [SDK Maintenance Policy](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/sdk-policy.html): AWS Neuron SDK maintenance and support policy

@@ -1,6 +1,6 @@
 .. meta::
     :description: Perform unstable argsort on 1D input buffer. Elements with equal values may appear in any order relative to their origin
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.subkernels
 
@@ -19,7 +19,7 @@ The ``argsort_unstable`` kernel performs an unstable argsort on a 1D input buffe
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `argsort_unstable.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/subkernels/argsort_unstable.py>`_
+**Source code for this kernel API can be found at**: `argsort_unstable.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/subkernels/argsort_unstable.py>`_
 
 argsort_unstable
 ^^^^^^^^^^^^^^^^

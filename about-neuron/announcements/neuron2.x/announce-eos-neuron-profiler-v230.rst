@@ -44,4 +44,4 @@ After Neuron 2.30.0, Neuron Profiler will:
 * **No longer receive** bug fixes, feature updates, or technical support.
 * **No longer be distributed** as part of the Neuron SDK.
 
-If you need to continue using Neuron Profiler temporarily, you must pin your environment to Neuron 2.28 or earlier. This is **not recommended**, as you will not receive any SDK updates or security fixes.
+If you need to continue using Neuron Profiler temporarily, you must pin your environment to Neuron 2.29 or earlier. This is **not recommended**, as you will not receive any SDK updates or security fixes.

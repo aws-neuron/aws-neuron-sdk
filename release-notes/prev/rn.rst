@@ -7,6 +7,8 @@ Previous release notes (Neuron 2.x)
    :maxdepth: 1
    :hidden:
 
+   Neuron 2.32.0 </release-notes/prev/2.32.0>
+   Neuron 2.31.1 </release-notes/prev/2.31.1>
    Neuron 2.31.0 </release-notes/prev/2.31.0>
    Neuron 2.30.0 </release-notes/prev/2.30.0>
    Neuron 2.29.1 </release-notes/prev/2.29.1>
@@ -20,7 +22,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
 
-* **The latest Neuron release is 2.32.0, released on 08/17/2026.** Read the :doc:`2.32.0 release notes </release-notes/2.32.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+* **The latest Neuron release is 2.33.0, released on 10/19/2026.** Read the :doc:`2.33.0 release notes </release-notes/2.33.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
 
 ----
   
@@ -40,7 +42,17 @@ Previous release notes (Neuron 2.x)
                 ^^^
                 Release notes by component for prior Neuron SDK versions.
 
-Neuron 2.31.0 (05/21/2026)
+Neuron 2.32.0 (08/17/2026)
+--------------------------
+
+See :ref:`neuron-2-32-0-whatsnew` for the full Neuron 2.32.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
+
+Neuron 2.31.1 (08/12/2026)
+--------------------------
+
+* Neuron 2.31.1 was released as a patch for 2.31.0 on 8/12/2026. See the :doc:`2.31.1 (patch) release notes <2.31.1>` for details.
+
+Neuron 2.31.0 (07/07/2026)
 --------------------------
 
 See :ref:`neuron-2-31-0-whatsnew` for the full Neuron 2.31.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
@@ -62,7 +74,7 @@ Neuron 2.28.0 (02/26/2026)
 
 See :ref:`neuron-2-28-0-whatsnew` for the full Neuron 2.28.0 release notes or :doc:`the individual Neuron component release notes </release-notes/components/index>`.
 
-* Neuron 2.28.0 was released as a patch for 2.28.0 on 3/13/2026. See the :doc:`2.28.1 (patch) release notes <2.28.1>` for details.
+* Neuron 2.28.1 was released as a patch for 2.28.0 on 3/13/2026. See the :doc:`2.28.1 (patch) release notes <2.28.1>` for details.
 
 Neuron 2.27.0 (12/19/2025)
 --------------------------
@@ -475,7 +487,7 @@ instance.
 **NxD Inference**: :ref:`NxD Inference (beta) <nxdi-overview>` is a new PyTorch-based inference library for
 deploying large-scale models on AWS Inferentia and Trainium instances.
 It enables PyTorch model onboarding with minimal code changes and
-integrates with :doc:`vLLM </libraries/nxd-inference/developer_guides/vllm-user-guide>`. NxDI supports various model architectures,
+integrates with :doc:`vLLM </inference-legacy/nxd-inference/developer_guides/vllm-user-guide>`. NxDI supports various model architectures,
 including Llama versions for text processing (Llama 2, Llama 3, Llama
 3.1, Llama 3.2, and Llama 3.3), and Mixture-of-Experts (MoE) model architectures including
 Mixtral and DBRX. The library supports quantization methods, includes
@@ -554,7 +566,7 @@ UltraServer.
 -  Announcing end of support for Python 3.8 in future releases
 -  Announcing end of support for Ubuntu20 DLCs and DLAMIs
 
-**Amazon Q**: `Use Q Developer <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/amazonq-getstarted.html#amazon-q-dev>`__
+**Amazon Q**: :ref:`Use Q Developer <amazon-q-dev>`
 as your Neuron Expert for general technical guidance and to jumpstart your NKI kernel development.
 
 
@@ -1915,7 +1927,6 @@ This release introduces the following:
    
    * - Neuron Distributed (neuronx-distributed) for Training
      - * Now Stable, removed beta support
-       * ZeRO-1 Optimizer support with tensor parallel. (:ref:`tutorial <gpt_neox_tp_zero1_tutorial>`)
        * Sequence Parallel support. (:ref:`api guide <api_guide>`)
        * See more at :ref:`nxd-core_rn` and  :ref:`api_guide`
      - Trn1/Trn1n
@@ -2145,7 +2156,7 @@ performance optimizations, minor enhancements and bug fixes. This release introd
    * - Neuron Distributed Library [Beta]
      - * New Python Library based on PyTorch enabling distributed training and inference of large models.
        * Initial support for tensor-parallelism.
-       * See more at :doc:`NeuronX Distributed </libraries/neuronx-distributed/index-training>`
+       * See more at :doc:`NeuronX Distributed </archive/libraries/neuronx-distributed/index-training>`
      - Inf2, Trn1/Trn1n
 
    * - Neuron Calculator and Documentation Updates  

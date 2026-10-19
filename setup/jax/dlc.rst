@@ -4,10 +4,10 @@
    :framework: jax
    :installation-method: container
    :instance-types: inf2, trn1, trn2, trn3
-   :os: ubuntu-24.04, ubuntu-22.04, al2023
+   :os: ubuntu-26.04, ubuntu-24.04, al2023
    :content-type: installation-guide
    :estimated-time: 10 minutes
-   :date-modified: 2026-03-03
+   :date-modified: 2026-07-27
 
 Install JAX via Deep Learning Container
 =========================================
@@ -67,10 +67,11 @@ Installation steps
       .. code-block:: bash
          
          . /etc/os-release
+         sudo install -m 0755 -d /etc/apt/keyrings
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
          sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
          EOF
-         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
          sudo apt-get update
          sudo apt-get install -y aws-neuronx-dkms
       
@@ -138,7 +139,7 @@ Installation steps
          | 0      | 2      | 32 GB  | Yes       |
          +--------+--------+--------+-----------+
          
-         JAX version: 0.7.0
+         JAX version: 0.10.0
          Devices: [NeuronDevice(id=0), NeuronDevice(id=1)]
       
       .. dropdown:: ⚠️ Troubleshooting: Device not found in container
@@ -223,23 +224,21 @@ Installation steps
                sudo systemctl daemon-reload
                sudo systemctl restart docker
 
-   .. tab-item:: Ubuntu 22.04
-      :sync: ubuntu-22-04
+   .. tab-item:: Ubuntu 26.04
+      :sync: ubuntu-26-04
       
       **Step 1: Install Neuron driver on host**
-
-      .. important::
-         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
       
       Configure the Neuron repository and install the driver:
       
       .. code-block:: bash
          
          . /etc/os-release
+         sudo install -m 0755 -d /etc/apt/keyrings
+         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
          sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-         deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+         deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
          EOF
-         wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
          sudo apt-get update
          sudo apt-get install -y aws-neuronx-dkms
       
@@ -441,7 +440,7 @@ Now that JAX is running in a container:
 
 2. **Customize your container**: Learn how to extend a DLC with additional packages at :ref:`containers-dlc-then-customize-devflow`.
 
-3. **Read the JAX documentation**: Explore the :doc:`/frameworks/jax/index` for JAX framework documentation and tutorials.
+3. **Read the JAX documentation**: Explore the :doc:`/jax/index` for JAX framework documentation and tutorials.
 
 Additional resources
 --------------------

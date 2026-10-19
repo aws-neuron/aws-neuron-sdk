@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 Neuronx Distributed Training Library Features
 =============================================
@@ -38,19 +38,19 @@ Distributed Techniques
 -----------------------
 
 1. Data-parallelism
-2. `Tensor-parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tensor_parallelism_overview.html#tensor-parallelism-overview>`_
-3. `Sequence-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/activation_memory_reduction.html#sequence-parallelism>`_
-4. `Pipeline-parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/pipeline_parallelism_overview.html>`_
+2. `Tensor-parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/tensor_parallelism_overview.html#tensor-parallelism-overview>`_
+3. `Sequence-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/activation_memory_reduction.html#sequence-parallelism>`_
+4. `Pipeline-parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/pipeline_parallelism_overview.html>`_
     1. 1F1B pipeline schedule
     2. Interleave pipeline schedule (or virtual pipeline parallel)
-5. `Zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2.html#what-is-zero-1>`_
+5. `Zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/frameworks/torch/torch-neuronx/tutorials/training/zero1_gpt2.html#what-is-zero-1>`_
 6. Expert-parallelism
-7. `Context-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/context_parallelism_overview.html>`_
+7. `Context-Parallelism <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/context_parallelism_overview.html>`_
 
 Modules
 --------
 
-1. `Grouped Query Attention layer <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`_
+1. `Grouped Query Attention layer <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`_
 2. Mixture of Experts (MoE)
 
 Model/Optimizer Precision

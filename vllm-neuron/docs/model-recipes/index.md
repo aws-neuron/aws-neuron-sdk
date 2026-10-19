@@ -1,6 +1,6 @@
 # Model Recipes
 
-Production-ready deployment recipes for specific models on AWS Trainium and Inferentia. Each recipe includes instance sizing, configuration, and performance guidance.
+Production-ready deployment recipes for specific models on AWS Trn2 and Trn3. Each recipe includes instance sizing, configuration, and performance guidance.
 
 ::::{grid} 1 1 2 2
 :gutter: 3
@@ -19,6 +19,13 @@ Model recipe for the Llama 3 family (1B, 8B, 70B) on Trn2/Trn3.
 Model recipe for GPT-OSS 20B and 120B (MoE) on Trn2/Trn3.
 :::
 
+:::{grid-item-card} Deploy Qwen3-32B
+:link: qwen3-32b
+:link-type: doc
+
+Model recipe for Qwen3-32B (dense) on Trn2/Trn3.
+:::
+
 :::{grid-item-card} Deploy Qwen3-VL 32B
 :link: qwen3-vl
 :link-type: doc
@@ -33,6 +40,13 @@ Model recipe for Qwen3-VL 32B (multimodal) on Trn2/Trn3.
 Model recipe for Qwen3-Embedding 8B (pooling / embeddings) on Trn2/Trn3.
 :::
 
+:::{grid-item-card} Deploy Qwen3-ASR 1.7B
+:link: qwen3-asr
+:link-type: doc
+
+Model recipe for Qwen3-ASR 1.7B speech recognition on Trn2.
+:::
+
 ::::
 
 :::{toctree}
@@ -41,6 +55,8 @@ Model recipe for Qwen3-Embedding 8B (pooling / embeddings) on Trn2/Trn3.
 
 Llama 3 <llama-3>
 GPT-OSS <gpt-oss>
+Qwen3-32B <qwen3-32b>
 Qwen3-VL <qwen3-vl>
 Qwen3-Embedding <qwen3-embedding-8b>
+Qwen3-ASR <qwen3-asr>
 :::

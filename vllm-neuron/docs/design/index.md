@@ -10,22 +10,24 @@ How vLLM Neuron works under the hood — parallelism strategies, plugin integrat
 | [Component DP sharding](parallelism/component_dp_sharding.md) | Per-component independent sharding |
 | [Data parallelism](parallelism/data_parallelism.md) | Data parallelism overview |
 | [Decode Context Parallelism](parallelism/dcp.md) | KV cache sequence sharding for long contexts |
+| [Encoder parallelism](parallelism/encoder_parallelism.md) | Independent TP/DP for multimodal encoders |
 | [Expert parallelism](parallelism/expert_parallelism.md) | Expert parallelism for MoE |
 | [Tensor parallelism](parallelism/tensor_parallelism.md) | Tensor parallelism overview |
-| [Vision encoder parallelism](parallelism/vision_encoder_parallelism.md) | Independent TP/DP for vision encoders |
 
 ## Speculation
 
 | Topic | Description |
 | --- | --- |
-| [Speculative decoding](speculation/speculative_decoding_design.md) | EAGLE3 internals on Neuron |
+| [Speculative decoding (EAGLE3)](speculation/speculative_decoding_design.md) | EAGLE3 autoregressive drafter internals on Neuron |
+| [Speculative decoding (DFlash)](speculation/dflash_speculative_decoding_design.md) | DFlash block-parallel drafter internals on Neuron |
 
 ## Multimodal
 
 | Topic | Description |
 | --- | --- |
 | [Block Packing Attention](multimodal/block_packing_attention.md) | FFD block packing for multi-image attention efficiency |
-| [On-Device Encoder Cache](multimodal/on_device_encoder_cache.md) | Block-based on-device cache for vision encoder outputs |
+| [On-Device Encoder Cache](multimodal/on_device_encoder_cache.md) | Block-based on-device cache for encoder outputs |
+| [Encoder Cache Metrics](multimodal/encoder_cache_metrics.md) | mm / prefix / encoder cache layers and their Prometheus metrics |
 | [M-RoPE](multimodal/mrope.md) | Spatial position embeddings for VLMs |
 
 ## vLLM integration
@@ -43,7 +45,7 @@ How vLLM Neuron works under the hood — parallelism strategies, plugin integrat
 | [Neuron profiling](vllm/neuron-profiling.md) | Profiling integration |
 | [Neuron scheduler](vllm/neuron-scheduler.md) | Holdback queue and admission control |
 | [Block KV batching and padding](vllm/padding-batching-block-kv.md) | Block KV cache architecture |
-| [Prefix caching](vllm/prefix-caching.md) | Prefill segmentation and KV reuse |
+| [Prefill processing and prefix caching](vllm/prefix-caching.md) | Prefill segmentation and KV reuse |
 | [Pooling models](vllm/pooling-models.md) | Pooling model execution on Neuron |
 | [Prompt embeddings](vllm/prompt-embeddings.md) | Prompt embedding support |
 | [Structured outputs and tool calling](vllm/structured-outputs-and-tool-calling.md) | JSON, regex, grammar-constrained generation |
@@ -54,19 +56,20 @@ How vLLM Neuron works under the hood — parallelism strategies, plugin integrat
 | Topic | Description |
 | --- | --- |
 | [Async execution](framework/async_execution.md) | Async execution double buffering |
-| [Model bringup](framework/model_bringup.md) | Model bringup workflow |
 | [Model factory](framework/model_factory_design.md) | Model registry and factory pattern |
 
 ## Compilation
 
 | Topic | Description |
 | --- | --- |
+| [How vLLM is integrated with TorchNeuron](compilation/how_vllm_is_integrated_with_torchneuron.md) | How vLLM Neuron uses the TorchNeuron `torch.compile` lowering |
 | [Compilation cache](compilation/compilation_cache.md) | Compilation cache (hit/miss, remote store) |
 | [CPU compilation](compilation/cpu_compilation.md) | Ahead-of-time CPU compilation (NEFF extraction) |
 | [FX passes architecture](compilation/fx_passes_design.md) | FX passes architecture |
 | [Aliasing output rewrite pass](compilation/aliasing_output_rewrite_pass.md) | Aliasing output rewrite pass |
 | [Device rewriting FX pass](compilation/device_rewriting_fx_pass.md) | Device rewriting FX pass |
 | [Inplace to out-of-place pass](compilation/inplace_to_outofplace_pass.md) | Inplace to out-of-place rewrite |
+| [SPMD compilation](compilation/spmd_compilation.md) | Collapse per-rank compiles into a single shared NEFF |
 
 ## Accuracy
 

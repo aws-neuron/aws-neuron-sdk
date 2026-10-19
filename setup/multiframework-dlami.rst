@@ -3,7 +3,7 @@
    :keywords: neuron, dlami, multi-framework, pytorch, jax, vllm, installation
    :instance-types: inf2, trn1, trn2, trn3
    :content-type: installation-guide
-   :date-modified: 2026-03-30
+   :date-modified: 2026-07-27
 
 .. _setup-multiframework-dlami:
 
@@ -25,7 +25,7 @@ Step 1: Launch the instance
 ----------------------------
 
 .. important::
-   Currently, only Ubuntu 24.04 is supported for multi-framework DLAMIs.
+   The multi-framework DLAMI is available on Ubuntu 24.04 and Ubuntu 26.04.
 
 .. tab-set::
 
@@ -39,6 +39,16 @@ Step 1: Launch the instance
       .. image:: /images/neuron-multi-framework-dlami-U24-quick-start.png
          :scale: 20%
          :align: center
+
+      Select your desired Neuron instance type (Inf2, Trn1, Trn1n, Trn2, or Trn3),
+      configure disk size (minimum 512 GB for Trn instances), and launch the instance.
+
+   .. tab-item:: Ubuntu 26.04
+      :sync: ubuntu-26-04
+
+      Open the `EC2 Console <https://console.aws.amazon.com/ec2>`_, select your desired
+      AWS region, and choose "Launch Instance". Under AMI selection, choose "Quick Start"
+      then "Ubuntu", and select **Deep Learning AMI Neuron (Ubuntu 26.04)**.
 
       Select your desired Neuron instance type (Inf2, Trn1, Trn1n, Trn2, or Trn3),
       configure disk size (minimum 512 GB for Trn instances), and launch the instance.
@@ -72,8 +82,8 @@ Common virtual environments include:
    * - Framework
      - Virtual environment
      - Use case
-   * - vLLM 0.24.0
-     - ``aws_neuronx_venv_pytorch_inference_vllm_0_24_0_1_1_0``
+   * - vLLM 0.29.0
+     - ``aws_neuronx_venv_pytorch_inference_vllm_0_29_0_1_2_0``
      - LLM inference serving
    * - JAX 0.10
      - ``aws_neuronx_venv_jax_0_10``
@@ -102,9 +112,9 @@ After activating a virtual environment, verify the installation:
 
       .. code-block::
 
-         vllm                          0.24.0
-         vllm-neuron                   0.24.0.1.1.0
-         torch                         2.11.0
+         vllm                          0.29.0
+         vllm-neuron                   0.29.0.1.2.0
+         torch                         2.13.0
          $ neuron-ls
          instance-type: trn2.48xlarge
          instance-id: i-0bea223b1afb7e159
@@ -147,7 +157,7 @@ Next steps
 
 After setup, explore the framework documentation:
 
-- :doc:`/frameworks/torch/index` - PyTorch on Neuron
-- :doc:`/frameworks/jax/index` - JAX on Neuron
-- :doc:`/libraries/nxd-inference/vllm/index` - vLLM on Neuron
+- :doc:`/torch/index` - TorchNeuron
+- :doc:`/jax/index` - JAX on Neuron
+- :doc:`/inference-legacy/nxd-inference/vllm/index` - vLLM on Neuron
 - :doc:`/deploy/environments/dlami` - Full DLAMI documentation and SSM parameters

@@ -14,7 +14,7 @@ Multi-layer Perceptron MNIST Model
 ----------------------------------
 
 This tutorial is based on the MNIST example for PyTorch Neuron on Trainium.
-For the full tutorial, please see :ref:`Multi-Layer Perceptron Training Tutorial <neuronx-mlp-training-tutorial>`.
+For the full tutorial, please see :ref:`Multi-Layer Perceptron Training Tutorial <neuronx-mlp-training-tutorial>` (archived torch-neuronx content).
 
 The Training Job
 ----------------
@@ -22,7 +22,7 @@ The Training Job
 For this tutorial, we will make the original script do more work thus giving us more system utilization data to observe. The training
 loop is simply repeated 1000 times:
 
-.. code:: python
+.. code-block:: python
 
     for run in range(0, 1000):
         print(f'Run {run}')
@@ -49,7 +49,7 @@ For a more detailed guide on how to install **Prometheus** visit their official 
 
 Download and unzip a prebuilt **Prometheus** binary on your Trn1 instance:
 
-.. code:: bash
+.. code-block:: bash
 
     wget https://github.com/prometheus/prometheus/releases/download/v2.38.0/prometheus-2.38.0.linux-amd64.tar.gz
     tar -xzvf prometheus-2.38.0.linux-amd64.tar.gz
@@ -57,11 +57,11 @@ Download and unzip a prebuilt **Prometheus** binary on your Trn1 instance:
 
 Create a config and add a scrape target:
 
-.. code:: bash
+.. code-block:: bash
 
     vim prometheus.yml
 
-.. code:: yml
+.. code-block::
 
     scrape_configs:
     - job_name:       'neuron'
@@ -74,7 +74,7 @@ Create a config and add a scrape target:
 
 Finally, start **Prometheus**:
 
-.. code:: bash
+.. code-block:: bash
 
     ./prometheus --config.file=prometheus.yml
 
@@ -85,7 +85,7 @@ For a more detailed guide on how to install **Grafana** visit their official gui
 
 Add the Grafana repo to dnf:
 
-.. code:: bash
+.. code-block:: bash
 
     sudo vim /etc/yum.repos.d/grafana.repo
 
@@ -101,14 +101,14 @@ Add the Grafana repo to dnf:
 
 Install and start **Grafana**:
 
-.. code:: bash
+.. code-block:: bash
 
     sudo dnf install -y grafana
     sudo /bin/systemctl start grafana-server.service
 
 By default, **Grafana** will run a HTTP server on port 3000. If you need to change that, update its config and restart the service:
 
-.. code:: bash
+.. code-block:: bash
 
     sudo vim /etc/grafana/grafana.ini
     ...
@@ -142,13 +142,13 @@ Monitoring the Training Workload
 
 Start the training job which, due to the artificially added complexity, will take more than 15 minutes:
 
-.. code:: bash
+.. code-block:: bash
 
    python train_monitor.py
 
 On the same instance, start ``neuron-monitor`` and its companion script, ``neuron-monitor-prometheus.py``:
 
-.. code:: bash
+.. code-block:: bash
 
    neuron-monitor | neuron-monitor-prometheus.py
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn about the System Profile in Neuron Explorer for analyzing system-level execution across instances and workers with runtime and hardware events.
-    :date-modified: 01/30/2026
+    :date-modified: 10/19/2026
 
 System Profile
 ================
@@ -22,6 +22,25 @@ You can also see the device memory (HBM) allocations for each Neuron device over
 
 .. image:: /tools/images/system-timeline-widget-hbm-usage.png
 
+.. _system-timeline-memory-viewer:
+
+Memory Viewer Integration
+-------------------------
+
+The System Trace Viewer is linked to the :doc:`Memory Viewer <overview-memory-viewer>` widget, so you can move between runtime events and the memory they allocate:
+
+* **From the timeline to the Memory Viewer** — click an HBM allocation event (``nrt_dma_mem_alloc`` or ``nrt_dma_mem_dealloc``) to open the Memory Viewer. The HBM tab switches to the Snapshot view at that timestamp, with the allocation selected.
+
+  .. image:: /tools/images/system-timeline-memory-viewer-hbm-link.png
+     :alt: Clicking an nrt_dma_mem_alloc event in the System Trace Viewer opens the Memory Viewer HBM Snapshot view with the allocation selected
+
+* **From the Memory Viewer to the timeline** — click an allocation in the PyTorch Allocator tab to highlight the runtime events in the System Trace Viewer that share its trace ID. To clear the highlight, click an empty area of the timeline or press Escape.
+
+  .. image:: /tools/images/system-timeline-memory-viewer-trace-highlight.png
+     :alt: Clicking an allocation in the PyTorch Allocator tab highlights the runtime allocate and free events that share its trace ID
+
+The PyTorch Allocator tab and the call stacks on HBM allocations require a PyTorch memory snapshot captured with the profile. See :ref:`capture-pytorch-memory-snapshot`.
+
 Visualizing Host Device Transfers
 -----------------------------------
 
@@ -35,6 +54,15 @@ The System Trace Viewer includes tracks for host-device data transfers, which ar
 For distributed workloads, transfer tracks are aggregated by Instance ID and NeuronCore. For example, ``i-046decdee2ea88e5a/NC:0/host_to_device_transfers`` shows transfers from host to device on instance ``i-046decdee2ea88e5a`` that are required for model execution on NeuronCore 0 of that instance.
 
 Other grouping options are available in the System Timeline settings. The default ``Instance + NeuronCore`` grouping renders one set of transfer tracks per NeuronCore on each instance in the workload, which is useful for pinpointing per-core behavior. The ``Instance`` grouping aggregates transfers across all NeuronCores on a given instance, producing a single set of tracks per instance, which is useful for comparing total host-device traffic between instances.
+
+To see host-device DMA engine activity on the same timeline as a NeuronCore's instructions, open a device profile. See :ref:`Host-device DMA tracks <neuron-explorer-host-device-dma>`.
+
+Linking Transfers to Framework Operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Host-to-device and device-to-host transfers triggered by the ML framework are now linked to the framework operation that triggered them through dependency linking. When you click a transfer event, the System Trace Viewer draws an arrow back to the originating framework op (for example, a PyTorch tensor copy such as ``aten::to`` or ``aten::copy_``), and clicking a framework op shows the transfers it initiated. This makes it easier to attribute PCIe traffic to specific lines of model code and to identify unexpected or redundant transfers. To navigate these relationships, use the :ref:`Dependency Chain Viewer <neuron-explorer-dependency-chain-viewer>`.
+
+.. image:: /tools/images/h2d_frmw_link.gif
 
 
 Visualizing Host CPU Utilization
@@ -125,11 +153,19 @@ Clicking on trace events in the timeline populates the Event Details widget with
 
 .. image:: /tools/images/system-event-details.png
 
+Search
+-------
+
+The Search widget is also available in the System Trace Viewer, allowing you to search for events across all visible tracks.
+For system profiles, search results from multiple tracks accumulate in the Search Results Table as responses arrive.
+
+For full usage details including navigation and clearing results, see :ref:`Search in the Device Trace Viewer <neuron-explorer-search>`.
+
 Source Code Linking
 -------------------
 
 When capturing profiles through the native PyTorch profiling API, using ``with_stack=True`` will record source information in the framework events.
-If the source code is uploaded alongside the profile, for any framework event with ``<source_file>(<line_number>)`` in the name, you can (Ctrl/Cmd) + click on the event to scroll to the corresponding
+If the source code is uploaded in the **Source Code** section of the upload dialog, for any framework event with ``<source_file>(<line_number>)`` in the name, you can Cmd+click (macOS) or Ctrl+click (Windows/Linux) on the event to scroll to the corresponding
 source code line in the Code Viewer.
 
 .. image:: /tools/neuron-explorer/images/system-source-linking.png
@@ -164,6 +200,8 @@ This will open a new Device Trace Viewer with the selected device profile showin
 
 .. image:: /tools/images/system-timeline-hardware-event-linking.gif
 
+.. _neuron-explorer-dependency-chain-viewer:
+
 Dependency Chain Viewer
 -----------------------
 
@@ -173,8 +211,7 @@ For example, you can click a runtime event and navigate to its related hardware 
 .. note::
 
    The Dependency Chain Viewer currently displays the dependency chain between framework events (from PyTorch profiler), ``neuron_rt``, and ``neuron_hw`` events. 
-   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/frameworks/torch/pytorch-native-overview` to sign up. For more information, see :doc:`/tools/neuron-explorer/how-to-profile-workload`. 
-
+   Native PyTorch profiling is in beta. For more information, see :doc:`TorchNeuron </torch/index>` and :doc:`/tools/neuron-explorer/how-to-profile-workload`.
 
 Clicking on an event with dependencies populates the UI with the following elements:
 

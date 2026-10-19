@@ -1,6 +1,6 @@
 .. meta::
     :description: Compute first-order linear recurrence along the last dimension.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.scan
 
@@ -19,7 +19,7 @@ The ``linear_scan`` kernel computes a first-order linear recurrence along the la
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `linear_scan.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/scan/linear_scan.py>`_
+**Source code for this kernel API can be found at**: `linear_scan.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/scan/linear_scan.py>`_
 
 linear_scan
 ^^^^^^^^^^^

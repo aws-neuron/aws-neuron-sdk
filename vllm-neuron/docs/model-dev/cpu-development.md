@@ -15,9 +15,8 @@ hardware.
 
 ## Prerequisites
 
-- Python 3.10+
+- Python 3.11+
 - Git access to the `vllm-neuron` repository
-- Docker (optional, for the dev container workflow)
 - No Neuron hardware required
 
 ## When to use each mode
@@ -176,22 +175,6 @@ a fatal `RuntimeError`, ensuring production never silently compiles.
 - Cannot validate numerical outputs — only confirms compilation
   succeeds
 
-### 7. Use the dev container (alternative)
-
-For flows that require `torch_neuronx` import paths (XLA tracing,
-specific backend code):
-
-```bash
-ci/dev-container.sh login          # One-time: refresh ECR creds
-ci/dev-container.sh pull           # Pull latest postmerge image
-ci/dev-container.sh shell          # Interactive shell
-ci/dev-container.sh exec pytest test/unit/ -x -q --no-cov
-ci/dev-container.sh stop           # Remove container
-```
-
-The container bind-mounts the host repo — edits on your host appear
-immediately inside the container.
-
 ## Debugging techniques
 
 ### Debugging with torch eager on CPU mode
@@ -298,9 +281,10 @@ Your CPU development environment is working when:
 
 ### "No module named torch_neuronx"
 
-- **Possible solution**: Use the dev container
-  (`ci/dev-container.sh shell`) which has it pre-installed. In pure
-  CPU mode, most tests skip these paths automatically.
+- **Possible solution**: In pure CPU mode, most tests skip these
+  paths automatically. If you need them, install the Neuron SDK, which
+  provides `torch_neuronx`. See the installation instructions in
+  `README.md`.
 
 ### Tests hang indefinitely
 

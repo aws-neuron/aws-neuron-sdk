@@ -188,7 +188,7 @@ initial_latents = torch.randn(
 torch.save(initial_latents, "/tmp/wan22_initial_latents.pt")
 ```
 
-Start with [`examples/wan22/run.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/run.py), retain its setup,
+Start with [`examples/wan22/run.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/run.py), retain its setup,
 and replace its sampling-parameter block with this excerpt:
 
 ```python
@@ -355,8 +355,8 @@ bf16_reference = run_cpu_reference(torch.bfloat16)
 ```
 
 Create `hidden_states`, `timestep`, and `encoder_hidden_states` once on CPU. Do
-not regenerate them between calls. The exact arguments differ by component.
-
+not regenerate them between calls. The exact arguments differ by component;
+match its input and output contracts before comparing the tensors.
 
 After producing all three tensors, use the assertion provided by `vllm_neuron`.
 This numerical comparison helper is shared with the LLM accuracy tooling; the

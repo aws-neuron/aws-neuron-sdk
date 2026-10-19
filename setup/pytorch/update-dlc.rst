@@ -3,10 +3,10 @@
    :keywords: pytorch, neuron, dlc, container, docker, update, upgrade, driver
    :framework: pytorch
    :installation-method: container
-   :instance-types: inf2, trn1, trn2, trn3
-   :os: ubuntu-24.04, ubuntu-22.04, al2023
+   :instance-types: trn2, trn3
+   :os: ubuntu-24.04, ubuntu-26.04, al2023
    :content-type: installation-guide
-   :date-modified: 2026-03-30
+   :date-modified: 2026-10-16
 
 Update PyTorch in a Deep Learning Container
 =============================================
@@ -29,8 +29,15 @@ latest image tag from ECR:
    # vLLM Inference
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<new_image_tag>
 
-Replace ``<new_image_tag>`` with the tag for the desired SDK version (e.g.,
-``0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04``).
+Replace ``<new_image_tag>`` with the tag for the desired SDK version (for example,
+``0.29.0.1.2.0-neuronx-py314-sdk2.33.0-ubuntu26.04``).
+
+.. important::
+   Starting with Neuron 2.33.0, Neuron DLC images are published on Ubuntu 26.04 only, and
+   their tags end in ``-ubuntu26.04``. If you update from a 2.32.0 or earlier image, the new
+   image uses a different base OS and Python version (Python 3.14), so rebuild any custom
+   images that you derived from the earlier image. To stay on an Ubuntu 24.04 image, use a
+   tag from Neuron 2.32.0 or earlier. The host OS does not need to match the container OS.
 
 Check available tags at the ECR Public Gallery:
 
@@ -47,17 +54,14 @@ when moving to a new Neuron SDK release.
 
 .. tab-set::
 
-   .. tab-item:: Ubuntu 24.04
+   .. tab-item:: Ubuntu 26.04
 
       .. code-block:: bash
 
          sudo apt-get update
          sudo apt-get install -y aws-neuronx-dkms
 
-   .. tab-item:: Ubuntu 22.04
-
-      .. important::
-         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
+   .. tab-item:: Ubuntu 24.04
 
       .. code-block:: bash
 

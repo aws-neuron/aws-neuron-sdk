@@ -1,23 +1,20 @@
 .. _neuron_release_notes:
 
 .. meta::
-   :description: The AWS Neuron SDK release notes home page. Current release version: 2.32.0.
+   :description: The AWS Neuron SDK release notes home page. Current release version: 2.33.0.
    :keywords: aws, neuron, what's new, release notes
-   :date-modified: 08/17/2026
+   :date-modified: 10/19/2026
 
 AWS Neuron SDK Release Notes
 ============================
 
-**Last updated**:  August 17, 2026
+**Last updated**:  October 19, 2026
 
 .. toctree::
     :maxdepth: 1
     :hidden:
 
-    Neuron 2.32.0 </release-notes/2.32.0>
-    Neuron 2.31.1 </release-notes/2.31.1>
-    Neuron 2.31.0 </release-notes/prev/2.31.0>
-    Neuron 2.30.0 </release-notes/prev/2.30.0>
+    Neuron 2.33.0 </release-notes/2.33.0>
     Previous Neuron versions </release-notes/prev/rn>
     Component release notes </release-notes/components/index>
     Release artifacts </release-notes/releasecontent>
@@ -32,12 +29,12 @@ This is the official home page for the AWS Neuron SDK release notes. Release not
 
    .. grid-item-card:: 
       :class-card: sd-border-2
-      :link: /release-notes/2.32.0
+      :link: /release-notes/2.33.0
       :link-type: doc
 
-      **Latest AWS Neuron SDK release: 2.32.0**
+      **Latest AWS Neuron SDK release: 2.33.0**
       ^^^
-      On **08/17/2026**, AWS released version **2.32.0** of the Neuron SDK.
+      On **10/19/2026**, AWS released version **2.33.0** of the Neuron SDK.
 
       For more details, select this card and browse the release notes. 
 
@@ -56,48 +53,60 @@ Each Neuron component has specific release notes across Neuron versions.
    * - Component
      - Updated in Neuron Version
      - Latest Component Version
-   * - :doc:`Neuron Compiler </release-notes/components/compiler>`
-     - **2.32.0**
-     - 2.27.5334.0
-   * - :doc:`Neuron Agentic Development </release-notes/components/agentic-development>`
-     - **2.32.0**
-     - 1.3
-   * - :doc:`Neuron Containers </release-notes/components/containers>`
-     - **2.32.0**
-     - 2.32.0
-   * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
-     - **2.32.0**
-     - 2.32.28.0
-   * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
-     - **2.32.0**
-     - 2.32.0
+   * - :doc:`TorchNeuron (Beta) </release-notes/components/torchneuron>`
+     - **2.33.0**
+     - 2.14.3.0 and 2.13.3.0
+   * - :doc:`TorchTitan Neuron (Beta) </release-notes/components/torchtitan-neuron>`
+     - **2.33.0**
+     - 0.2.2+neuron.1
+   * - :doc:`PyTorch NeuronX </release-notes/components/pytorch>`
+     - **2.33.0**
+     - 2.9.0.2.15.32035
    * - :doc:`JAX NeuronX </release-notes/components/jax>`
-     - **2.32.0**
-     - 0.10.0.* (supports up to JAX 0.9.0)
-   * - :doc:`NKI Library </release-notes/components/nki-lib>`
-     - **2.32.0**
-     - 2.32.0
-   * - :doc:`Neuron Kernel Interface </release-notes/components/nki>` 
-     - **2.32.0**
-     - 0.6.0
-   * - :doc:`NxD Inference </release-notes/components/nxd-inference>`
-     - **2.32.0**
-     - 0.10.18399
-   * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10.0
-   * - :doc:`Neuron Driver </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.30.2.0
-   * - :doc:`Neuron Collectives </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10.0
-   * - :doc:`nrtpy (Beta) </release-notes/components/runtime>`
-     - **2.32.0**
-     - 2.34.10
+     - **2.33.0**
+     - 0.10.0.1.0.14198 (supports JAX 0.7.0 to 0.10.0)
    * - :doc:`vLLM Neuron (Beta) </release-notes/components/vllm-neuron>`
-     - **2.32.0**
-     - 0.24.0.1.1.0
+     - **2.33.0**
+     - 0.29.0.1.2.0
+   * - :doc:`vLLM Omni Neuron (Beta) </release-notes/components/vllm-omni-neuron>`
+     - **2.33.0**
+     - 0.29.0.0.2.0
+   * - :doc:`Neuron Kernel Interface </release-notes/components/nki>` 
+     - **2.33.0**
+     - 0.7.0
+   * - :doc:`NKI Library </release-notes/components/nki-lib>`
+     - **2.33.0**
+     - 2.33.0
+   * - :doc:`Neuron Compiler </release-notes/components/compiler>`
+     - **2.33.0**
+     - 2.28.7631.0
+   * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.30.0
+   * - :doc:`Neuron Driver </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.31.7.0
+   * - :doc:`Neuron Collectives </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.43.0
+   * - :doc:`nrtpy (Beta) </release-notes/components/runtime>`
+     - **2.33.0**
+     - 2.35.30
+   * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
+     - **2.33.0**
+     - 2.33.38.0
+   * - :doc:`Neuron Observer (Beta) </release-notes/components/observer>`
+     - **2.33.0**
+     - 0.2.0
+   * - :doc:`Neuron Agentic Development </release-notes/components/agentic-development>`
+     - **2.33.0**
+     - 1.4
+   * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
+     - **2.33.0**
+     - 2.33.0
+   * - :doc:`Neuron Containers </release-notes/components/containers>`
+     - **2.33.0**
+     - 2.33.0
   
 ----
 
@@ -112,11 +121,11 @@ Current Release Package Versions
                 :link-type: ref
                 :class-card: sd-border-1
         
-                **Neuron 2.32.0 release artifacts**
+                **Neuron 2.33.0 release artifacts**
                 ^^^
                 The libraries and packages updated in the latest Neuron release.
 
---
+----
 
 .. _previous-neuron-releases:
 
@@ -132,14 +141,16 @@ Release notes for prior versions from the past 12 months.
 
    * - Neuron version
      - Date released
-   * - :doc:`2.31.1 <2.31.1>`
+   * - :doc:`2.32.0 <prev/2.32.0>`
+     - 08/17/26
+   * - :doc:`2.31.1 <prev/2.31.1>`
      - 08/12/26
    * - :doc:`2.31.0 <prev/2.31.0>`
      - 07/07/26
    * - :doc:`2.30.0 <prev/2.30.0>`
      - 05/21/26
    * - :doc:`2.29.1 <prev/2.29.1>`
-     - 04/09/26
+     - 05/01/26
    * - :doc:`2.29.0 <prev/2.29.0>`
      - 04/09/26
    * - :doc:`2.28.1 <prev/2.28.1>`

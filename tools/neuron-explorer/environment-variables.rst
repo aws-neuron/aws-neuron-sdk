@@ -1,6 +1,6 @@
 .. meta::
     :description: Complete reference of environment variables for Neuron Explorer profiling, capture, and configuration.
-    :date-modified: 06/25/2026
+    :date-modified: 10/19/2026
 
 .. _neuron-explorer-env-vars:
 
@@ -45,12 +45,33 @@ These variables enable and configure profiling at runtime.
      - Capture device-level hardware traces.
      - ``0`` (off)
      - ``0``, ``1``/``model``, ``session``
+   * - ``NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP``
+     - Number of executions to skip before device profiling begins. When set
+       to N, the first N executions of each model are skipped and only the
+       (N+1)-th execution is profiled. Only supported with model mode
+       (``NEURON_RT_INSPECT_DEVICE_PROFILE=1``). Ignored for other modes.
+     - ``0``
+     - ``0`` – ``4294967295``
 
 **NEURON_RT_INSPECT_DEVICE_PROFILE modes:**
 
 - ``0`` — Disabled (system profile only)
 - ``1`` or ``model`` — Captures first execution per NEFF per core (synchronous). Best for compiled-graph workloads.
 - ``session`` — Captures all device activity in a single NTFF file. Use for async workloads, continuous traces, or inference serving (e.g., vLLM).
+
+**NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP usage:**
+
+Use this variable to bypass warmup noise and profile steady-state behavior.
+For example, setting ``NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP=5`` skips the
+first 5 executions of each model and profiles the 6th. Each model's execution
+count is tracked independently — if two different models are loaded, their
+warmup counters are separate.
+
+.. note::
+
+   This variable is only effective when ``NEURON_RT_INSPECT_DEVICE_PROFILE=1``
+   (model mode). If used with session mode or when device profiling is disabled,
+   a warning is logged and the value is ignored.
 
 
 Source code and debug info
@@ -67,13 +88,15 @@ mapping in the profiler.
      - Description
      - Default
    * - ``NEURON_FRAMEWORK_DEBUG``
-     - Enables HLO-level stack trace capture. Required for the Source Code
-       Viewer to map hardware instructions to Python model code.
+     - Also writes the compiled NEFF and the HLO module to the working
+       directory. Applies to XLA-based workloads. Does not affect what the
+       profile contains.
      - ``0`` (off)
    * - ``NKI_DEBUG_INFO``
-     - Enables NKI kernel source location capture. Produces
-       ``kernel_debug_info.json`` in the NEFF for instruction-to-NKI-source
-       mapping.
+     - Enables NKI kernel debug info capture. Produces
+       ``kernel_debug_info.json`` in the NEFF. This file provides both the
+       instruction-to-NKI-source mapping and the kernel-level NKI Call Stack
+       shown in Event Details.
      - ``False``
    * - ``XLA_IR_DEBUG``
      - Enables XLA IR debug info for richer operation names in profiles.
@@ -87,7 +110,7 @@ mapping in the profiler.
 
    ``NKI_DEBUG_INFO=True`` is not enabled by default because it increases
    compile time and memory consumption. Only enable when you need NKI
-   source code linking in the profiler.
+   source code linking or the NKI Call Stack in the profiler.
 
 .. warning::
 
@@ -109,6 +132,12 @@ DGE and DMA configuration
      - Enables Descriptor Generation Engine notifications so DMA transfers are labeled
        with their tensor variable name (instead of ``unknown``).
      - ``0`` (off)
+   * - ``NEURON_RT_PROFILE_BUF_H2D_DMA_MB``
+     - Device memory, in MB, reserved for recording host-device DMA events
+       in device profiles. Events after the buffer fills are dropped. Set to
+       ``0`` to turn off host-device DMA capture. See
+       :ref:`Host-device DMA tracks <neuron-explorer-host-device-dma>`.
+     - ``64``
 
 .. warning::
 

@@ -24,6 +24,10 @@ Neuron DRA driver implements the kubelet plugin for DRA for AWS Trainium instanc
 
 For more information on DRA, refer to `Kubernetes Dynamic Resource Allocation <https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/>`_.
 
+.. seealso::
+
+   The Neuron DRA driver also provides per-device health monitoring and isolation. See :ref:`How to isolate faulty Neuron devices on Amazon EKS with device taints <neuron-device-taints>`.
+
 Where can I get the Neuron DRA driver and resource templates?
 -------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Performs matrix multiplication with MXFP8 quantization.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.matmul_mxfp8
 
@@ -19,12 +19,12 @@ The ``matmul_mxfp8`` kernel implements efficient matrix multiplication using MXF
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `matmul_mxfp8_generic_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/matmul_mxfp8/matmul_mxfp8_generic_kernel.py>`_
+**Source code for this kernel API can be found at**: `matmul_mxfp8_generic_kernel.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/matmul_mxfp8/matmul_mxfp8_generic_kernel.py>`_
 
 matmul_mxfp8
 ^^^^^^^^^^^^
 
-.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e5m2', output_dtype = nl.bfloat16, run_with_lnc2: bool = True, lnc_2_shard_rhs = None, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True, load_with_PE_swizzle: bool = False, lhs_is_f_by_k: bool = True, rhs_is_f_by_k: bool = True, fast_dma_transpose: bool = False, enable_psum_copy_in=None, quant_scheme: str = 'wrapX') -> nl.ndarray
+.. py:function:: matmul_mxfp8(lhs, rhs, TILES_IN_BLOCK_M: int = None, TILES_IN_BLOCK_N: int = None, TILES_IN_BLOCK_K: int = None, TILES_IN_LOAD_M: int = None, TILES_IN_LOAD_N: int = None, lhs_matmul_tile_shape_logical: tuple = None, rhs_matmul_tile_shape_logical: tuple = None, block_loop_order: str = 'mnk', tile_loop_order: str = 'mnk', float8_dtype: str = 'float8_e4m3fn', output_dtype = nl.bfloat16, run_with_lnc2: bool = True, lnc_2_shard_rhs = None, lhs_scales = None, rhs_scales = None, use_scale_packing: bool = False, spill_reload: bool = False, lhs_is_swizzled: bool = True, rhs_is_swizzled: bool = True, load_with_PE_swizzle: bool = False, lhs_orientation: Optional[TensorOrientation] = None, rhs_orientation: Optional[TensorOrientation] = None, fast_dma_transpose: bool = False, enable_psum_copy_in = None, quant_scheme: str = 'wrapX', disable_dma_transpose: bool = False) -> nl.NkiTensor
 
    Performs matrix multiplication with MXFP8 quantization.
 
@@ -48,13 +48,12 @@ matmul_mxfp8
    :type block_loop_order: ``str``
    :param tile_loop_order: Tile processing order within blocks, default 'mnk'
    :type tile_loop_order: ``str``
-   :param float8_dtype: FP8 dtype for quantization, default "float8_e5m2"
+   :param float8_dtype: FP8 dtype for quantization, default "float8_e4m3fn"
    :type float8_dtype: ``str``
    :param output_dtype: Output data type, default nl.float32
    :param run_with_lnc2: Enable LNC2 parallelization across 2 cores, default True
    :type run_with_lnc2: ``bool``
    :param lnc_2_shard_rhs: When run_with_lnc2=True, shard on N dimension (RHS) if True, or shard on M dimension (LHS) if False. Default True.
-   :type lnc_2_shard_rhs: ``bool``
    :param lhs_scales: Optional pre-computed scales for LHS
    :param rhs_scales: Optional pre-computed scales for RHS
    :param use_scale_packing: If True and inputs are pre-quantized, assert that scales are packed, default False
@@ -64,13 +63,18 @@ matmul_mxfp8
    :param lhs_is_swizzled: Whether LHS BF16 tensor is pre-swizzled [K/4, M*4], default True. If False, expects [M, K] layout.
    :type lhs_is_swizzled: ``bool``
    :param rhs_is_swizzled: Whether RHS BF16 tensor is pre-swizzled [K/4, N*4], default True. If False, expects [N, K] layout.
-
-   :param fast_dma_transpose: When ``True``, use a direct 4D access pattern on the source tensor for the DMA gather-transpose instead of flattening + vector offsets, avoiding ``vector_offset_pattern`` SBUF buffers. Only applies to unswizzled inputs. Default ``False``.
-
-   :param enable_psum_copy_in: Optional control for the PSUM copy-in path. Default ``None``.
-
-   :param quant_scheme: MXFP8 quantization scheme, ``'wrapX'`` (default) or ``'1x32'``.
    :type rhs_is_swizzled: ``bool``
+   :param lhs_orientation: Logical orientation of the LHS operand relative to the contraction dim K. None (default) auto-resolves in TensorDescriptor (F_BY_K for unswizzled BF16, K_BY_F for swizzled/quantized). An explicit K_BY_F on an unswizzled BF16 operand selects PE swizzle.
+   :type lhs_orientation: ``Optional[TensorOrientation]``
+   :param rhs_orientation: Logical orientation of the RHS operand relative to the contraction dim K. Same semantics as lhs_orientation.
+   :type rhs_orientation: ``Optional[TensorOrientation]``
+   :param fast_dma_transpose: When True, use a direct 4D access pattern on the source tensor for DMA gather-transpose instead of flattening + vector offsets. Avoids allocating vector_offset_pattern buffers in SBUF. Only applies to unswizzled inputs. Default False.
+   :type fast_dma_transpose: ``bool``
+   :param enable_psum_copy_in: Optional control for the PSUM copy-in path. Default ``None``.
+   :param quant_scheme: MXFP8 quantization scheme, ``'wrapX'`` (default) or ``'1x32'``.
+   :type quant_scheme: ``str``
+   :param disable_dma_transpose: When True, the 1x32 loader transposes unswizzled K-by-F operands with dma_copy + nc_transpose instead of a DMA transpose. Default False.
+   :type disable_dma_transpose: ``bool``
 
    **Notes**:
 
@@ -79,7 +83,7 @@ matmul_mxfp8
    * LNC2 mode requires at least 2 blocks in N dimension
    * Pre-quantized inputs must be in MXFP8 format (data, scales) tuple
    * When use_scale_packing=True, pre-quantized inputs must have packed scales
-   * TODO: Specify intended usage range for optimal performance Physical vs Logical Dimensions:
+   * Physical vs Logical Dimensions:
    * Logical: Theoretical tensor dimensions [M, K] @ [K, N] for the matmul operation
    * Physical: Hardware storage format (depends on quantization and swizzling) * Pre-swizzled: [K//4, M*4] or [K//4, N*4] * Quantized: [K//4, M] or [K//4, N] Tiles (smallest processing unit):
    * Matmul Tile: Hardware matmul operation shape * LHS: [128, 128] physical, [512, 128] logical * RHS: [128, 512] physical, [512, 512] logical

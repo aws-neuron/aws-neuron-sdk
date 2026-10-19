@@ -5,7 +5,7 @@ including supported checkpoints, feature support, accuracy results, and a link t
 the end-to-end deployment tutorial for Qwen3-VL 32B (multimodal) on Trn2/Trn3. -->
 <!-- meta: keywords: vLLM, Neuron, Qwen3-VL, Qwen3-VL-32B, multimodal, VLM,
 vision-language, model recipe, model card, LLM serving, Trn2, Trn3, Trainium -->
-<!-- meta: date_updated: 2026-08-13 -->
+<!-- meta: date_updated: 2026-10-06 -->
 <!-- Content type: model-card -->
 <!-- Jira: NDOC-183 -->
 
@@ -43,30 +43,30 @@ Per-model feature availability for Qwen3-VL. See the [features guide](../guides/
 | **Quantization** | BF16 | ✅ |
 | | MXFP8 (Trn3 only) | ✅ |
 | **Parallelism** | Tensor parallelism (TP) | ✅ |
-| | Vision encoder parallelism | ✅ |
+| | Encoder parallelism | ✅ |
 | | Pipeline parallelism (PP) | ❌ |
 | | Context parallelism (CP) | ❌ |
 | **Performance** | On-device sampling (greedy, top-k, top-p) | ✅ |
 | | Disaggregated encoder (EPD) (1E1PD / xEyPD) | ✅ |
-| | Segmented prefill | ❌ |
+| | Segmented prefill | ✅ |
+| | Prefix caching (APC) | ✅ |
 | | Chunked prefill (mixed batching) | ❌ |
 | **Compilation** | torch.compile (XLA backend) | ✅ |
 | | CPU mode (testing) | ✅ |
+| **Runtime** | Model Runner V2 | ❌ (runs on MRv1) |
 
 **Status legend:**
 
 - ✅ Supported: integrated and tested for Qwen3-VL
 - ❌ Not supported: may be considered for future releases
 
+This model runs on Model Runner V1 (MRv1) because it is a multimodal model. [Model Runner V2](../guides/features-guide.md#model-runner-v2) supports dense text-generation models only.
+
 Tensor parallelism is recommended at `tensor_parallel_size=16` on a `trn2.48xlarge` (16 NeuronCores), matching the configuration used throughout the [tutorial](../tutorials/tutorial-qwen3-vl-32b.md).
 
 Multi-image input is validated up to 30 images at 512x512 resolution.
 
-Vision encoder parallelism shards the encoder by the `num_blocks` dimension of the block-packed images (unlike text DP, which shards by request batch), configurable via `vision_neuron_config`. See [vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md) for details.
-
-## Known limitations
-
-- **Segmented prefill and prefix caching are not supported yet.** The validated workload (30 images at 512x512, 8K sequence length) is served without segmented prefill enabled. Prefix caching requires segmented prefill, so it is unavailable here as well.
+Encoder parallelism shards the encoder by the `num_blocks` dimension of the block-packed images (unlike text DP, which shards by request batch), configurable via `encoder_neuron_config`. See [encoder parallelism](../design/parallelism/encoder_parallelism.md) for details.
 
 ## Accuracy Evaluation
 

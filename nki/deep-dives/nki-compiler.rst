@@ -15,38 +15,38 @@ Overview
 
 The NKI language allows kernel writers to have direct, fine grained control over Neuron devices. Through low level APIs that reflect the Neuron instruction set architecture (ISA), NKI empowers developers to take direct control over critical performance optimizations during kernel development. This approach requires a dedicated NKI Compiler, separate from :doc:`the existing Neuron Graph Compiler </compiler/index>`, which compiles kernel code while preserving the developer's optimization choices. To seamlessly integrate NKI into model architectures defined in machine learning frameworks like JAX and PyTorch, the NKI Compiler also works in conjunction with the Neuron Graph compiler.
 
-The diagram below shows the detailed compilation flow inside the Neuron compilers and how they work together to build the overall binary that is executable on Neuron hardware. The NKI Compiler first parses the kernel code into an AST representation for semantic analysis. It then performs a small number of middle end and back end transformations on the AST, optimizing resource allocations and instruction scheduling, producing optimized NKI IR that gets integrated back into the overall model.
+The diagram below shows the detailed compilation flow inside the Neuron compilers and how they work together to build the overall binary that is executable on Neuron hardware. The NKI Compiler first specializes the kernel by tracing the kernel code with Python. During tracing, NKI ISA API calls emit NKI IR. It then performs a small number of back end transformations on the NKI IR, optimizing resource allocations and instruction scheduling, producing optimized NKI IR that gets integrated back into the overall model.
 
-.. image:: /nki/img/compiler/nki-compiler-1.jpg
+.. image:: /nki/img/overviews/about-nki-3.png
 
 .. important::
-    While the NKI meta-programming language looks and feels like Python, it is not actually Python code. When the Python interpreter encounters a top level function decorated with ``@nki.jit``, it invokes the NKI Compiler to handle compilation of that function.
+    When the Python interpreter encounters a top-level function that has the ``@nki.jit`` decorator, NKI specializes the function by tracing it with Python. Because the trace runs in Python, the code that runs during the trace can use all of the Python language.
 
 .. code-block:: python
-    
+
     # this is a Python function that calls 'kernel', which is a NKI kernel
     def a_function(x,y,z):
         kernel(x, y, z)
 
-    # this is a NKI kernel that will be compiled by the NKI Compiler and 
+    # this is a NKI kernel that will be compiled by the NKI Compiler and
     # integrated back into the overall model by the Neuron Graph compiler
     @nki.jit
     def kernel(x,y,z):
         # this is kernel code
 
 
-Using Python features within NKI kernels that are not supported will result in useful errors from the NKI Compiler indicating that the feature is not a valid NKI feature. Neuron has intentionally constrained the NKI meta-programming language to be as minimal as possible while serving the needs of building high performance kernels for today's popular models and will continue to grow and evolve the language over time. 
+If you set ``NKI_COMPILER_FRONTEND=custom``, NKI uses the NKI meta-programming language from releases before 0.7. This language is a limited subset of Python. Using a Python feature that this language does not support will result in a compile error. This will be removed in a future version of NKI. For more information, see :ref:`nki-migrate-0-6-to-0-7`.
 
 How the NKI Compiler Works with the Graph Compiler
 --------------------------------------------------
 
-For each kernel function, Neuron runs the NKI Compiler to produce an artifact 
-for that kernel function. This is similar to compiling a single file with a 
+For each kernel function, Neuron runs the NKI Compiler to produce an artifact
+for that kernel function. This is similar to compiling a single file with a
 traditional compiler, such as a C++ compiler.
 
-All of the kernel artifacts are managed by the Neuron SDK. Programmers do not 
-need to manage these files themselves. Similar to prior versions of NKI, 
-programmers mark kernel functions with ``nki.jit``---the NKI Compiler will be 
+All of the kernel artifacts are managed by the Neuron SDK. Programmers do not
+need to manage these files themselves. Similar to prior versions of NKI,
+programmers mark kernel functions with ``nki.jit``---the NKI Compiler will be
 invoked automatically when this decorator is encountered during compilation.
 
 The Neuron Graph Compiler (or just the Neuron Compiler) handles the rest of the
@@ -77,4 +77,3 @@ Further reading
 
 - :doc:`/compiler/index`
 - :doc:`/nki/get-started/about/index`
-

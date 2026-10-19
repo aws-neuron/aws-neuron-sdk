@@ -56,10 +56,10 @@ To send us a pull request, please:
     python3.10 -m venv venv && . venv/bin/activate
     pip install -U pip
     cd private-aws-neuron-sdk-staging
-    pip install -r requirements.txt
+    pip install -r requirements.txt --extra-index-url=https://pypi.org/simple
     ```
 
-3. Build the documentation into HTML. This command will allow you to view the
+3. Build the documentation into HTML. This command will allow you to build and view the
    rendered documentation by opening the generated `_build/html/index.html`. On first run, this will take about 15 mins. Subsequent html generations are incremental and will take less time.
 
    Run:
@@ -82,7 +82,7 @@ To send us a pull request, please:
 
    For speedier builds in multiprocessor environments, run:
 
-     ```bash
+   ```bash
    sphinx-build -b html . _build/html -j auto
    ```
 
@@ -92,11 +92,113 @@ To send us a pull request, please:
 5. Rebuild the documentation with `sphinx-build -b html . _build/html`. Always ensure that the docs build without errors and that your changes look correct before pushing your changes to remote.
     * If you encounter errors that are unclear, run the build in verbose mode with `sphinx-build -vv -b html . _build/html`.
 6. Commit your changes to your branch with a clear, scoped commit messages. Bad: "fixed stuff". Good: "Updated ref IDs in all containers topics".
-7. Push your changes to remote (`git push origin`) and create a PR from your branch into `master` or the standing release branch (example: `release-2.27.0`). Answer any default questions in the pull request interface.
+7. Push your changes to remote (`git push origin`) and create a PR from your branch into `master` or the standing release branch (example: `release-2.27.0`). Answer any default questions in the pull request interface. Before you push, check your branch name against the protected-name rule below.
     * See: [pull request guide](https://help.github.com/articles/creating-a-pull-request/)).
 8. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
+> [!IMPORTANT]
+> **Do not use protected words in your branch name.** An aws-neuron organization ruleset (`neuron-ip-scan-all-private-repos-active-mode`) requires the `internal-scanner/scan` status check on every branch whose name matches a protected pattern. The rule also applies when you create a new branch. If your branch name matches, the push fails with this error:
+>
+> ```
+> Required status check "internal-scanner/scan" is expected.
+> ```
+>
+> The patterns match **anywhere in the branch name**, in these forms:
+>
+> * `release`, `Release`, or `RELEASE` (for example, `fix-release-notes` or `2.33-release-docs`)
+> * `staging` (for example, `staging-cleanup`)
+> * Names that start with `prod`
+> * The exact names `main`, `mainline`, `master`, `dev`, `develop`, `development`, and `neuron-staging`
+>
+> To fix the error, push under a different branch name. You do not have to rename your local branch:
+>
+> ```bash
+> git push -u origin HEAD:<your-alias>/<short-topic>
+> ```
+>
+> Standing release branches such as `release-2.33.0` are created by repository admins, who can bypass the rule. Do not push to those branches directly. Open a PR into them instead.
+
 Internal Amazon contributors: see the internal authoring runbook ("Runbook: Authoring a topic for the Neuron documentation") for updated process documentation.
+
+## Build the NKI docs
+
+The NKI documentation under `/nki` is sourced from the private
+`private-nki-staging` repo, pinned here as a git submodule at `docs-src/nki`
+(all content pinned from other repos lives under `/docs-src`). The submodule is
+sparse-checked-out to `docs/public/nki`, and `/docs-src` is **excluded** from
+the Sphinx build. The site builds `/nki`, so before building you copy the
+pinned content into `/nki` with a manual step. This copy is intentionally
+**not** run from `conf.py`, so a build can never fail on it — in particular the
+public repo has no `/docs-src` submodule.
+
+One tool drives all of this: `_utilities/nki_docs.py`, with three subcommands
+(`sync`, `advance`, `refresh`). The tracked branch lives only in `.gitmodules`
+(`submodule.docs-src/nki.branch`) — there is no separate pin file.
+
+### One-time, after cloning
+
+Initialize the submodule (a fresh clone can instead use
+`git clone --recurse-submodules`):
+
+```bash
+git submodule update --init docs-src/nki
+```
+
+`git submodule update --init` does **not** by itself apply the sparse-checkout,
+so on a fresh clone the mount contains the whole provider repo until it is
+scoped. You don't need to run the sparse commands by hand: the `sync` step below
+initializes the submodule (if needed) and re-applies the `docs/public/nki`
+sparse scope every time before copying.
+
+### Refresh `/nki` from the pinned content, then build
+
+From the repo root, with the Python 3.10 venv active:
+
+```bash
+python _utilities/nki_docs.py sync     # copy docs-src/nki/docs/public/nki -> /nki
+make html                              # or: sphinx-build -b html . _build/html
+```
+
+`sync` copies `docs-src/nki/docs/public/nki/**` into `/nki`, leaves
+`/nki/library/` untouched, and never writes into `/docs-src`. It is
+**delete-aware**: a git-tracked file under `/nki` that no longer exists in the
+pinned source is removed, so an upstream delete or rename doesn't leave a stale
+page behind. Untracked files (gitignored build output such as
+`nki/api/generated`, or `__pycache__`) and `/nki/library` are never deleted. It
+is safe to re-run; add `-v` for a per-file report of what was added, updated, or
+removed (and any untracked drift), or `--dry-run` to preview without writing.
+The copied files land in your working tree — commit them when you intend to
+publish (see below).
+
+### Change which NKI commit is pinned
+
+To move the pin to the latest commit of the tracked branch and materialize it
+into `/nki` in one step:
+
+```bash
+python _utilities/nki_docs.py refresh                      # tracked branch (.gitmodules)
+python _utilities/nki_docs.py refresh --branch release/0.8.0   # switch branches
+```
+
+`refresh` advances the pin and then runs `sync`, so you can't advance the pin
+but forget to copy the new content. Passing `--branch` updates the tracked
+branch in `.gitmodules` (the single source of truth). It validates the branch
+on the remote, advances the pin, re-applies the sparse-checkout, and **stages**
+the new gitlink + `.gitmodules` (it does not commit). Use `advance` if you ever
+need to move the pin without copying:
+
+```bash
+python _utilities/nki_docs.py advance                      # pin only, no /nki copy
+```
+
+### Publishing (cherry-pick) — keep the pin out of public
+
+Publishing to the public `aws-neuron-sdk` repo stays a cherry-pick. Cherry-pick
+the commit(s) that change the materialized `/nki` files. **Never** cherry-pick
+the submodule machinery — the `docs-src/nki` gitlink, `.gitmodules`, or the
+`.readthedocs.yml` `submodules:` block (all fenced with `# publish:staging-only`
+markers). The public repo has no `/docs-src` and no access to the private
+provider, so carrying any of those over would break the public build.
 
 ## Updating the sitemap
 
@@ -168,4 +270,3 @@ If you can't seem to launch a build, chances are your venv is not using Python 3
 `pip install -r requirements.txt`
 
 5. Build the docs with `make html` or `sphinx-build -b html . _build/html -j auto`
-

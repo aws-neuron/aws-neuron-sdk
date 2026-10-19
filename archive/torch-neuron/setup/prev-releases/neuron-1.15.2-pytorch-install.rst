@@ -13,7 +13,7 @@ Install PyTorch Neuron (Neuron 1.15.2)
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 .. contents:: Table of contents

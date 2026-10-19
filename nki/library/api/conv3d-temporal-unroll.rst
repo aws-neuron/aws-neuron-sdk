@@ -1,6 +1,6 @@
 .. meta::
     :description: 3D convolution with temporal unrolling and column tiling for small C_out.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.conv
 
@@ -19,7 +19,7 @@ The ``conv3d_temporal_unroll`` kernel performs 3D convolution with temporal unro
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `conv3d_temporal_unroll.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/conv3d_temporal_unroll.py>`_
+**Source code for this kernel API can be found at**: `conv3d_temporal_unroll.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/conv/conv3d_temporal_unroll.py>`_
 
 should_use_temporal_unroll
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

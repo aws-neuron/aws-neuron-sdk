@@ -1,3 +1,8 @@
+.. meta::
+   :description: AWS Neuron SDK software maintenance policy, covering component definitions, the software life cycle (Beta, RC, GA, maintenance, end of support), update types, versioning, and software classification.
+   :keywords: AWS Neuron, maintenance policy, support lifecycle, end of support, versioning, Beta, General Availability, TorchNeuron, vLLM Neuron
+   :date-modified: 2026-10-13
+
 .. _sdk-maintenance-policy:
 .. _neuron-maintenance-policy:
 
@@ -19,9 +24,9 @@ and DLCs, and dependency software. AWS Neuron is the SDK for Amazon EC2
 Amazon EC2
 `Trainium <https://aws.amazon.com/machine-learning/trainium/>`__ based
 instances purpose-built for deep learning. Neuron integrates with
-popular Machine Learning (ML) frameworks like PyTorch, JAX, and
-TensorFlow and includes a compiler, runtime, driver, profiling tools,
-and libraries to support high performance training of generative AI
+popular Machine Learning (ML) frameworks like PyTorch and JAX, and
+includes a compiler, runtime, driver, profiling tools, and libraries
+to support high performance training and inference of generative AI
 models on Trainium and Inferentia powered instances.
 
 This document addresses Neuron Software life-cycle and the Neuron SDK
@@ -67,9 +72,10 @@ extended by Neuron is managed and maintained by their respective
 communities or the vendors responsible for those specific components.
 Examples for Neuron extension components are:
 
--  **Third party ML Library**: Examples include Neuron Nemo Megatron.
--  **Third party ML Framework**: Examples include PyTorch NeuronX and
-   TensorFlow Neuron.
+-  **Third party ML Library**: Examples include vLLM Neuron and vLLM
+   Omni Neuron.
+-  **Third party ML Framework**: Examples include TorchNeuron
+   (``torch-neuronx``) and JAX NeuronX.
 
 Neuron standalone components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -82,10 +88,9 @@ Neuron Model Classes
 ~~~~~~~~~~~~~~~~~~~~
 
 A Neuron supported model class is tightly coupled with a specific Neuron
-extension component (e.g. PyTorch NeuronX) or Neuron library (e.g.
-NeuronX Distributed) and the workload type (e.g. Training or Inference).
-For example a model can be supported at Beta level in PyTorch NeuronX
-for training and Stable level in PyTorch NeuronX for inference.
+extension component (e.g. TorchNeuron or vLLM Neuron) and the workload
+type (e.g. Training or Inference). For example, a model can be supported
+at Beta level for inference and at Stable level for training.
 
 Neuron features
 ~~~~~~~~~~~~~~~
@@ -102,7 +107,7 @@ belong to to the entire Neuron SDK or to one the Neuron components. A
 Neuron API allows developers to interact with and leverage the
 capabilities of the Neuron SDK and its components.
 
-Examples include :ref:`Neuron Trace API <torch_neuron_trace_api>` and :ref:`Neuron Compiler flags <neuron-compiler-cli-reference-guide>`
+Examples include the :ref:`TorchNeuron torch.compile backend <torch-compile-ref>`, :ref:`TorchNeuron environment variables <torchneuron-env-vars>`, and :ref:`Neuron Compiler flags <neuron-compiler-cli-reference-guide>`.
 
 Dependency software components
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,9 +122,9 @@ responsible for those specific dependency software components. The
 following terms are examples of underlying dependency software
 components:
 
--  **Operating System (OS)**: Examples include Ubuntu 22 and Amazon
+-  **Operating System (OS)**: Examples include Ubuntu 24.04 and Amazon
    Linux 2023
--  **Language Runtime**: Examples include Python 3.10
+-  **Language Runtime**: Examples include Python 3.12
 
 Neuron Deep Learning AMIs and Deep Learning Containers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,7 +132,7 @@ Neuron Deep Learning AMIs and Deep Learning Containers
 :ref:`Neuron Deep Learning AMIs
 (DLAMIs) <neuron-dlami-overview>`
 and :ref:`Neuron Deep Learning Containers
-(DLCs) <neuron_containers>` are pre-configured Amazon Machine Images and Docket container that
+(DLCs) <neuron_containers>` are pre-configured Amazon Machine Images and Docker containers that
 come with the Neuron SDK and necessary dependencies pre-installed,
 providing a ready-to-use environment for machine learning development.
 
@@ -214,8 +219,8 @@ For more information see:
 To install and update to the latest Neuron packages, customers need to pin the major
 version of the Neuron package. For example, to install latest Neuron
 tools package, call ``sudo apt-get install aws-neuronx-tools=2.*`` and
-to install latest PyTorch Neuron package for Trn1, call
-``pip install torch-neuronx==2.1.0.1.*``. This is done to future-proof
+to install the latest TorchNeuron package for PyTorch 2.14, call
+``pip install torch-neuronx==2.14.*``. This is done to future-proof
 instructions for new, backwards-incompatible major version releases.
 
 .. _neuron-maintenance-updates:
@@ -251,7 +256,7 @@ updates, and security issues related to any third-party software
 included in the Neuron DLAMI or DLCs by releasing new versions of the
 Neuron DLAMI or DLCs. However, updates won't be applied retroactively to
 older versions of the Neuron DLAMI or DLCs. Instead, users will need to
-use the new versions to get the latest updates. Generally, Neuron DLAMIs and Deep Learning Containers (DLCs) will support one latest LTS Linux Distribution version (Ubuntu, Amazon Linux, and Rocky9), with exceptions. Neuron Base DLAMIs (which come pre-installed with Neuron driver, EFA, and Neuron tools) will support the two latest versions of LTS Linux Distributions.
+use the new versions to get the latest updates. Generally, Neuron DLAMIs and Deep Learning Containers (DLCs) will support one latest LTS Linux Distribution version (Ubuntu and Amazon Linux), with exceptions. Neuron Base DLAMIs (which come pre-installed with Neuron driver, EFA, and Neuron tools) will support the two latest versions of LTS Linux Distributions.
 
 
 For more information see:
@@ -289,15 +294,14 @@ Neuron software classification and lifecycle announcements are
 communicated as follows:
 
 -  Neuron SDK documentation under
-   `Announcements <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/announcements/index.html>`__
+   :doc:`Announcements </about-neuron/announcements/index>`
 
 To see the list of available Neuron SDK versions and supported
 dependency software components versions:
 
--  Neuron SDK documentation under `Release
-   Content <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/releasecontent.html#latest-neuron-release-artifacts>`__
--  Neuron SDK documentation under `What’s
-   New <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html#neuron-whatsnew>`__
+-  Neuron SDK documentation under :ref:`Release
+   Content <latest-neuron-release-artifacts>`
+-  Neuron SDK documentation under :ref:`What's New <main_whats-new>`
 
 .. _neuron-software-versioning:
 

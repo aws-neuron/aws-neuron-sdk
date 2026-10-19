@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_profile.h header in the AWS Neuron Runtime: Neuron Runtime profiling API for model execution and device performance.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_profile_h:
 
 nrt_profile.h

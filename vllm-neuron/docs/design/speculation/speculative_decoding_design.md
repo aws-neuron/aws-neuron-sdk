@@ -221,7 +221,7 @@ The `EagleProposer` class (`eagle.py`) is the central orchestrator for draft tok
 - Handles **hidden dimension padding**: if the target model's padded hidden size differs from the draft config's hidden size, sets `draft_hf_config.unpadded_hidden_size` and updates `hidden_size` to match.
 - Applies the same TP group sharding as the target model.
 - Forces greedy sampling for the draft model (`OnDeviceSamplingConfig(all_greedy=True)`).
-- Compiles with `torch.compile(model, backend="vllm_neuron", fullgraph=True)`.
+- Compiles with `torch.compile(model, backend=envs.get_compile_backend_name(), fullgraph=True)`.
 
 **Layer Indexing**:
 

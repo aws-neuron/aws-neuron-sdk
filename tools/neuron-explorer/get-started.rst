@@ -1,6 +1,6 @@
 .. meta::
    :description: Getting started guide for Neuron Explorer — capture profiles, launch the UI, start performance investigation, organize profiles into folders, and delete profiles.
-   :date_updated: 07/31/2026
+   :date_updated: 10/19/2026
 
 .. _new-neuron-profiler-setup:
 
@@ -233,7 +233,7 @@ Option B: Web UI upload
 
 4. Choose your upload method based on profile type:
 
-   * **For system profiles (or system + device):** click **Upload Profile** and select **Directory Upload For System Profile**. Then select the directory containing your ``.pb`` files (must include ``trace_info.pb``).
+   * **For system profiles (or system + device):** click **Upload Profile** and select **Directory Upload**. Then select the directory containing your ``.pb`` files (must include ``trace_info.pb``).
 
    .. image:: /tools/images/system-only-profile.png
       :width: 65%
@@ -243,55 +243,37 @@ Option B: Web UI upload
    .. image:: /tools/images/device-only-profile.png
       :width: 65%
 
+5. (Optional) To use the Source Code Viewer, add your source files or folders in the **Source Code** section below the profile section. This section appears for both upload methods and is separate from the profile upload: source files inside the profile directory are **not** picked up by **Directory Upload**. See :ref:`neuron-explorer-source-code`.
+
 **Expected outcome:** The profile appears on the **My Uploads** tab. Click **Refresh** to check processing status. Once complete, click the profile name to open the interactive timeline.
 
    .. image:: /tools/images/profile-expected-outcome.png
 
 .. note::
-   **Why two upload methods?** Directory Upload requires a system profile (``ntrace.pb`` + ``trace_info.pb``). It does not work with device-only profiles. For device-only profiles (just ``.neff`` + ``.ntff``), use **Individual Files**. If you have both system + device files, use **Directory Upload** as it picks up everything.
+   **Why two upload methods?** Directory Upload requires a system profile (``ntrace.pb`` + ``trace_info.pb``). It does not work with device-only profiles. For device-only profiles (just ``.neff`` + ``.ntff``), use **Individual Files**. If you have both system + device files, use **Directory Upload** as it picks up everything. In both cases, source code goes in the separate **Source Code** section, not in the profile directory.
 
-Option C: Export to JSON
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Option C: Export for programmatic analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For programmatic analysis (custom scripts, coding agents), export to JSON. This generates ``system_profile.json`` and ``device_profile_model_<model_id>.json`` per compiled model.
+For programmatic analysis (custom scripts, coding agents), export the profile as Parquet tables. Parquet is the default output format and holds the complete profile data, and the UI reads the same tables, so what you query matches what you see on screen. With ``--output-file``, the Parquet files are written to the directory you name.
 
 .. code-block:: bash
 
    neuron-explorer view \
        --session-dir ./profile_output \
-       --output-format json \
-       --output-file ./integrated_trace.json
+       --output-format parquet \
+       --output-file ./profile_parquet
+
+For the table layout and Python examples, see :doc:`how-to-analyze-profile-output`. For the fields in each table, see :doc:`profile-schema-reference`.
+
+.. note::
+   We intend to end support for the full-profile JSON output (``--output-format json``) in Neuron 2.34. Use the Parquet output instead.
 
 **Quick text summary (no UI needed):**
 
 .. code-block:: bash
 
    neuron-explorer view -d ./profile_output --output-format summary-text
-
-**JSON schema (system_profile.json):**
-
-The file contains event objects. It also includes ``mem_usage`` (sampled host memory) and ``cpu_util`` (CPU utilization per core).
-
-.. code-block:: json
-
-   {
-       "Neuron_Runtime_API_Event": {
-           "duration": 27094,
-           "group": "nrt-nc-000",
-           "id": 1,
-           "instance_id": "i-0f207fb2a99bd2d08",
-           "name": "nrt_tensor_write",
-           "timestamp": 1729888371056597613,
-           "type": 11
-       },
-       "Framework_Event": {
-           "duration": 3758079,
-           "group": "framework-80375131",
-           "instance_id": "i-0f207fb2a99bd2d08",
-           "name": "PjitFunction(matmul_allgather)",
-           "timestamp": 1729888382798557372
-       }
-   }
 
 
 .. note::

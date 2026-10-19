@@ -18,6 +18,8 @@ Transformers NeuronX (``transformers-neuronx``)
     Tutorials  </archive/transformers-neuronx/transformers-neuronx-tutorials>
     Misc  </archive/transformers-neuronx/transformers-neuronx-misc>
     API Reference Guide </archive/transformers-neuronx/api-reference-guide>
+    Generative LLM Inference with Neuron </archive/transformers-neuronx/generative-llm-inference-with-neuron>
+    Neuron Calculator </archive/transformers-neuronx/neuron-calculator>
 
 
 .. include:: /archive/transformers-neuronx/transformers-neuronx.txt

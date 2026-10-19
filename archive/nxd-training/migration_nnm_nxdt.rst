@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 Migrating from Neuron-NeMo-Megatron to Neuronx Distributed Training
 ====================================================================
@@ -29,7 +29,7 @@ Config migration
 ----------------
 
 NxDT is a framework built on top of `NeMo <https://github.com/NVIDIA/NeMo>`_ and
-`NeuronxDistributed (NxD) <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/index.html>`_
+`NeuronxDistributed (NxD) <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/index.html>`_
 and supports megatron-style model. The megatron model implementation is ported over from NNM.
 Hence, most of the config YAMLs from NNM can be migrated to use NxDT.
 
@@ -109,16 +109,16 @@ There are the following differences in the model code:
 #.
     NNM used `Apex <https://github.com/NVIDIA/apex/tree/master>`_ to get all the distributed parallel layers and schedules.
     Since NxDT uses NxD as the base library, all the
-    `parallel layers/parallel state <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#parallel-layers>`_
+    `parallel layers/parallel state <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#parallel-layers>`_
     are coming from NxD. Eg. `apex.parallel_state <https://github.com/NVIDIA/apex/blob/master/apex/transformer/parallel_state.py>`_
     is replaced with
-    `nxd.parallel_layers.parallel_state <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#parallel-model-state>`_.
+    `nxd.parallel_layers.parallel_state <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#parallel-model-state>`_.
 
 #.
     NNM explicitly creates a module for each pipeline-parallel (PP) rank, however, NxDT uses NxD which does the
     partitioning under the hood. Hence, users no longer have to worry about creating a rank specific module.
     They can create one single model and
-    `NxD’s PP wrapper <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#neuron-distributed-pipeline-model>`_
+    `NxD’s PP wrapper <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#neuron-distributed-pipeline-model>`_
     takes care of sharding for each PP rank. Hence, all the code related to pipeline parallelism inside model
     code is removed. The model code assumes there is no PP and just uses TP layers from NxD.
 
@@ -136,7 +136,7 @@ There are the following differences in the model code:
     With NxDT, `NxD’s Activation Checkpoint wrapper <https://github.com/aws-neuron/neuronx-distributed/blob/main/src/neuronx_distributed/utils/activation_checkpoint.py>`_
     handles the recompute of the modules. Users just have to configure the ``activation_checkpoint_config`` inside
     ``nxd_config``
-    `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#initialize-nxd-config>`__.
+    `here <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#initialize-nxd-config>`__.
 
 
 Checkpointing Save/Load
@@ -144,7 +144,7 @@ Checkpointing Save/Load
 
 NxDT supports all the checkpointing features which NNM supports. This includes async checkpointing, auto-resume, etc.
 There are some differences in the format of the checkpoint. This is because NxDT uses
-`NxD’s checkpoint api <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#save-checkpoint>`_.
+`NxD’s checkpoint api <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#save-checkpoint>`_.
 The key differences are listed below:
 
 #.
@@ -153,7 +153,7 @@ The key differences are listed below:
     and the optimizer separately. The model ``statedict`` is saved in a folder of the form:
     ``model/dp_rank_00_tp_rank_00_pp_rank_00.pt`` and the optimizer is saved into a separate folder as:
     ``optim/dp_rank_00_tp_rank_00_pp_rank_00.pt``. This is mainly done so that when we use
-    `zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html?highlight=zero1#neuron-zero1-optimizer>`_,
+    `zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html?highlight=zero1#neuron-zero1-optimizer>`_,
     each DP rank can save its own optimizer shard.
 
 #.

@@ -3,7 +3,7 @@
 <!-- meta: description: Complete reference for all Neuron-specific
 configuration parameters available through additional_config and environment
 variables. -->
-<!-- meta: date_updated: 2026-08-13 -->
+<!-- meta: date_updated: 2026-10-16 -->
 <!-- Content type: reference-general -->
 
 ## Overview
@@ -13,7 +13,7 @@ two config namespaces:
 
 - **`neuron_config`** — text model settings (compilation, sampling,
   quantization, KV cache, scheduling)
-- **`vision_neuron_config`** — vision encoder settings (multimodal models only)
+- **`encoder_neuron_config`** — multimodal encoder settings (multimodal models only)
 
 ```python
 from vllm import LLM
@@ -60,6 +60,7 @@ directly to `LLM(...)` or on the CLI.
 
 | Option | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
+| `gpu_memory_utilization` (vLLM parameter) | float | vLLM default | Applies to default fractional-cap sizing. Explicit headroom mode sets this value to 1.0. |
 | `enable_prefix_caching` (vLLM parameter) | bool | true | Reuse KV cache from shared prompt prefixes. On by default; pass `--no-enable-prefix-caching` to disable. |
 | `num_gpu_blocks_override` (vLLM parameter) | int | -- | Number of KV cache blocks. More blocks retain more prefixes for reuse. Not nested under `neuron_config`. |
 | `block_size` (vLLM parameter) | int | 32 | KV cache block size in tokens. Not nested under `neuron_config`. |
@@ -120,36 +121,44 @@ unset and configure Neuron-specific quantization through `neuron_config`,
 or supply a calibrated checkpoint for FP8 static weight quantization.
 :::
 
-## Vision encoder options (vision_neuron_config)
+## Multimodal encoder options (encoder_neuron_config)
 
-For multimodal models (e.g., Qwen3-VL). See [Multimodal support](features-guide.md#multimodal-support).
+For multimodal models, for example Qwen3-VL and Qwen3-ASR, see
+[Multimodal support](features-guide.md#multimodal-support).
 
 | Option | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
-| `num_vision_tokens_buckets` | list[int] | auto | Vision encoder buckets over the number of vision patches per encoder forward pass. Scales with image count and resolution. |
-| `vision_attention_block_size` | int | 2048 | Attention block size for the vision encoder. Must be large enough to hold the largest single image; if `mm_processor_kwargs.max_pixels` implies more tokens, it is auto-raised to fit (with a warning). |
-| `max_vision_seq_len` | int | -- | Caps the largest auto-generated bucket, limiting how many buckets compile. Use it to bound compile time/memory when your workload won't need the full token ceiling. Ignored if `num_vision_tokens_buckets` is set explicitly. |
-| `tp_size` | int | 1 | Tensor parallel degree for the vision encoder. Whichever of `tp_size`/`dp_size` is left at 1 is inferred from `world_size`; if both are set, `tp_size * dp_size` must equal `world_size`. |
-| `dp_size` | int | 1 | Data parallel degree for the vision encoder — vision blocks are scattered across `dp_size` ranks. Same inference rule as `tp_size`. |
+| `num_encoder_input_buckets` | list[int] | auto | Compiled input-size buckets for one encoder forward pass. The model sets the unit: a vision encoder counts pre-merge tokens, and an audio encoder counts blocks. Scales with the item count and the size of each item. |
+| `encoder_attention_block_size` | int | 2048 | Attention block size for the encoder. For vision, it must hold the largest image. For audio, it must hold one inference window. See the sizing instructions below. |
+| `max_encoder_seq_len` | int | -- | Caps the largest auto-generated bucket, limiting how many buckets compile. Use it to bound compile time/memory when your workload won't need the full token ceiling. Ignored if `num_encoder_input_buckets` is set explicitly. |
+| `tp_size` | int | 1 | Tensor parallel degree for the encoder. Whichever of `tp_size`/`dp_size` is left at 1 is inferred from `world_size`; if both are set, `tp_size * dp_size` must equal `world_size`. |
+| `dp_size` | int | 1 | Data parallel degree for the encoder — encoder blocks are scattered across `dp_size` ranks. Same inference rule as `tp_size`. |
 | `encoder_cache_num_blocks` | int or null | null (auto) | Block count for the on-device encoder cache. Auto-derived from the scheduler's `encoder_cache_size` budget. Acts as a floor, not an override: a value below the derived minimum is raised to it (logged). Set it above that minimum for workloads with many small images — the scheduler sizes by token count and is unaware of per-block padding waste, so each small item still consumes a whole block. |
 | `encoder_cache_min_hold_time_ms` | float or null | null (auto: 0 monolithic, 100 EPD) | Minimum time a written cache block stays allocated before it can be freed. Guards against reuse while a remote reader is still pulling the data, which is why EPD defaults to 100 ms and a single-server deployment to 0. |
 
-If `num_vision_tokens_buckets` is omitted, buckets are auto-generated at
-startup as a power-of-2 progression from `vision_attention_block_size` up to a
-token ceiling derived from the serving config, so multimodal models serve with
-no vision config; an explicit list always takes precedence. Set
-`max_vision_seq_len` to cap that ceiling and compile fewer buckets.
+For vision models, buckets are auto-generated when
+`num_encoder_input_buckets` is omitted. The buckets use a power-of-2 progression
+from `encoder_attention_block_size` to a token ceiling from the serving
+configuration. An explicit list always takes precedence. Set
+`max_encoder_seq_len` to cap the ceiling and compile fewer buckets.
+
+(audio-encoder-sizing)=
+For Qwen3-ASR, `num_encoder_input_buckets` contains encoder block counts. Use
+`encoder_attention_block_size: 128`, which holds one 104-token window
+produced from 800 mel frames. At batch size 1, `[4]` fits one 30-second clip.
+The transcription endpoint chunks longer audio automatically. Increase the
+bucket for larger batches or longer offline input.
 
 The scheduler may batch images from multiple requests into one encoder
 forward pass, so size buckets for total images processed together:
 
-| `num_vision_tokens_buckets` | Approximate capacity |
+| `num_encoder_input_buckets` | Approximate capacity |
 |----|---|
 | `[2048]` | 1–2 images at 448×448 px |
 | `[2048, 8192]` | Up to ~8 images |
 | `[2048, 8192, 20480]` | Up to ~20 images |
 
-For details, see [Vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md).
+For details, see [Encoder parallelism](../design/parallelism/encoder_parallelism.md).
 
 ### EPD construction roles
 
@@ -165,14 +174,14 @@ prefill+decode pool. See
 
 :::{important}
 `mm_language_model_only` sits at the **top level** of `additional_config`, not
-inside `vision_neuron_config` or `neuron_config`, and there is no
+inside `encoder_neuron_config` or `neuron_config`, and there is no
 `--mm-language-model-only` CLI flag. Nesting it produces no error — the flag is
 silently ignored and the engine builds both towers, wasting device memory on a
 vision tower it never runs.
 
 ```bash
-# Correct — top level, sibling of neuron_config / vision_neuron_config.
---additional-config '{"neuron_config": {...}, "vision_neuron_config": {...}, "mm_language_model_only": true}'
+# Correct — top level, sibling of neuron_config / encoder_neuron_config.
+--additional-config '{"neuron_config": {...}, "encoder_neuron_config": {...}, "mm_language_model_only": true}'
 ```
 
 :::
@@ -189,6 +198,7 @@ For conceptual overview, see [Compilation](features-guide.md#compilation).
 
 | Variable | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
+| `VLLM_NEURON_BACKEND` | str | -- | Compilation route. Unset or `neuron_native` selects the native route. `vllm_neuron` selects the deprecated XLA route. An invalid value logs a warning and selects the native route. See [How to choose a compilation route](how-to-choose-compilation-route.md). |
 | `NEURON_COMPILED_ARTIFACTS` | str | -- | Path to cache/load compiled models. Skips recompilation when valid artifacts exist. |
 | `VLLM_NEURON_CPU_COMPILE` | bool | 0 | Enable CPU-only compilation mode (compile NEFFs without Neuron hardware). |
 | `NEURON_PLATFORM_TARGET_OVERRIDE` | str | -- | Target platform for CPU compile mode (e.g., `trn2`). Required when `VLLM_NEURON_CPU_COMPILE=1`. |
@@ -221,6 +231,8 @@ For full details on cache key composition, see [Compilation cache design](../des
 | `VLLM_NEURON_CPU_MODE` | bool | 0 | Enable CPU fallback mode (no Neuron hardware needed). For development/testing only. |
 | `VLLM_NEURON_LOG_LEVEL` | str | INFO | Logging level for vLLM Neuron components. |
 | `VLLM_NEURON_DISABLE_NKI_KERNELS` | bool | 0 | Disable all NKI kernels, forcing torch fallback paths. |
+| `VLLM_NEURON_ATTN_MASK_TORCH` | bool | 0 | Build the decode attention mask in PyTorch, in place of the `gen_mask_tkg_hbm` NKI kernel. |
+| `VLLM_USE_V2_MODEL_RUNNER` | bool | unset | Select the Neuron model runner. Unset uses Model Runner V2 (MRv2) for supported dense configurations and Model Runner V1 (MRv1) otherwise. `0` forces MRv1. `1` forces MRv2 with no fallback and logs a warning for most unsupported features. The resolved value is `VllmConfig.use_v2_model_runner`. See [Model Runner V2](features-guide.md#model-runner-v2). |
 
 ### Memory management
 
@@ -228,8 +240,22 @@ For conceptual overview, see [Memory management](features-guide.md#memory-manage
 
 | Variable | Type | Default | Description |
 | ---- | ---- | ---- | ---- |
-| `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` | float | 0.30 | Fraction of total GMU budget to cap KV cache allocation. |
+| `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` | float | 0.30 | Fractional cap for default KV sizing. Explicit headroom bypasses this cap. |
+| `VLLM_NEURON_RESERVED_HEADROOM_GIB` | float | unset | Explicit reserve per worker. Enables headroom sizing on both routes. |
 | `VLLM_NEURON_MIN_KV_BUDGET_GIB` | float | 1.0 | Minimum KV budget in GiB. Server fails fast if below. |
+
+When headroom is unset, the worker respects memory
+utilization and the fractional cap. An explicit reserve, including zero,
+enables headroom sizing. This mode sets `gpu_memory_utilization` to `1.0`
+and bypasses the fractional cap.
+
+For example, 4 GiB is a tested reserve for GPT-OSS 120B on Trn3
+with the Native backend and MXFP4 weights.
+Validate the reserve for your model and configuration.
+
+Both backends use `VLLM_NEURON_RESERVED_HEADROOM_GIB`.
+Each deployment can select a different reserve.
+Use the smallest value that passes the validated workload.
 
 ### Metrics
 
@@ -277,7 +303,6 @@ Equivalent CLI:
 ```bash
 export NEURON_COMPILED_ARTIFACTS=/opt/neuron-cache/llama-70b
 export NEURON_LIBTORCH_PARALLEL_COMPILE_WORKERS=4
-export VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION=0.35
 
 vllm serve meta-llama/Llama-3.3-70B-Instruct \
     --max-model-len 4096 \
@@ -316,8 +341,9 @@ vllm serve meta-llama/Llama-3.3-70B-Instruct \
 - Each compiled bucket consumes device memory
 - Monitor memory usage when adding many buckets
 - KV cache FP8 halves cache footprint but requires calibrated scales
-- The `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` default (0.30) is
-  conservative; increase it for models with lower non-KV overhead
+- Default sizing respects memory utilization and a 30% fractional cap
+- An explicit headroom value enables the reserve policy
+- In headroom mode, increase the reserve after an HBM allocation failure
 
 ### Async scheduling guidance
 
@@ -352,19 +378,57 @@ Currently, on-device sampling only supports `temperature=0`. For
 non-greedy sampling, remove `on_device_sampling_config` to use CPU
 sampling.
 
-### NCC_EVRF009 compiler error
+### HBM allocation errors during load or compilation
 
-KV cache allocation exceeds compile-safe limits. Solutions:
+Check the active budget policy when logs contain an HBM allocation signature:
 
-- Reduce `gpu_memory_utilization`
-- Lower `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION`
-- Reduce `max_model_len` or `max_num_seqs`
+- `NCC_EOOM002` or `Maximum peak HBM usage`
+- `NRT_RESOURCE` in `nrt_load_util`
+- `nrt_tensor_allocate status=4`
+- `Allocation Failure` while loading a model
+
+The KV cache can leave too little HBM for code, scratch, internal tensors,
+or communication buffers. In default mode, reduce
+`VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` to reduce the KV budget.
+
+In explicit headroom mode, increase the active reserve from its logged value.
+For a deployment that currently reserves 4 GiB, the next step is:
+
+```bash
+export VLLM_NEURON_RESERVED_HEADROOM_GIB=5
+```
+
+Start with 1 GiB increments and rerun the same model, sharding, backend, and
+hardware configuration. Each additional 1 GiB of headroom reduces the KV cache
+budget by 1 GiB. Keep the smallest value that passes. If more headroom would
+leave too little KV cache, reduce `max_model_len` or `max_num_seqs`.
 
 ### "KV cache budget below minimum threshold" error
 
-Computed KV budget is less than `VLLM_NEURON_MIN_KV_BUDGET_GIB`
-(default 1.0 GiB). Increase `gpu_memory_utilization` or reduce
-model/batch parameters.
+The computed KV budget is less than `VLLM_NEURON_MIN_KV_BUDGET_GIB`
+(default 1.0 GiB). In default mode, increase `gpu_memory_utilization` or
+`VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` and validate the configuration.
+
+In explicit headroom mode, the worker computes:
+
+```text
+CPU:
+available = max(host_available / local_workers - headroom_bytes, 0)
+
+Neuron:
+available = max(total_hbm - model_weight_bytes - headroom_bytes, 0)
+```
+
+CPU host available memory already reflects loaded weights and current allocations.
+
+`headroom_bytes` comes from `VLLM_NEURON_RESERVED_HEADROOM_GIB`.
+The error reports this variable and the maximum headroom that
+satisfies the configured minimum.
+
+Do not increase headroom for this error: increasing it makes the KV cache
+budget smaller. Decrease the active headroom variable, or lower
+`VLLM_NEURON_MIN_KV_BUDGET_GIB` only when a smaller KV cache is valid for the
+workload.
 
 ### Async scheduling not engaging
 

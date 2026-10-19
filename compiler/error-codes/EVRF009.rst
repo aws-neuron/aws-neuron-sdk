@@ -40,5 +40,5 @@ Short snippet of tensor parallelism:
 
 For more information: 
 
-- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/activation_memory_reduction.html
-- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-training/app_notes/nxd-training-pp-appnote.html
+- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/activation_memory_reduction.html
+- https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/nxd-training/nxd-training-pp-appnote.html

@@ -18,11 +18,12 @@ framework. For user-facing configuration, see the
 | [Neuron profiling](neuron-profiling.md) | Profiling integration |
 | [Neuron scheduler](neuron-scheduler.md) | Holdback queue and admission control |
 | [Block KV batching and padding](padding-batching-block-kv.md) | Block KV cache architecture |
-| [Prefix caching](prefix-caching.md) | Prefill segmentation and KV reuse |
+| [Prefill processing and prefix caching](prefix-caching.md) | Prefill segmentation and KV reuse |
 | [Pooling models](pooling-models.md) | Pooling model execution on Neuron |
 | [Prompt embeddings](prompt-embeddings.md) | Prompt embedding support |
 | [Structured outputs and tool calling](structured-outputs-and-tool-calling.md) | JSON, regex, grammar-constrained generation |
 | [Disaggregated inference](disaggregated-inference.md) | DI architecture, NIXL transport, hybrid TP, DCP |
+| [GPT-OSS-120B giga-kernel decode](gpt-oss-gk-decode.md) | Fused single-NEFF decode for GPT-OSS-120B |
 
 :::{toctree}
 :maxdepth: 1
@@ -44,4 +45,5 @@ pooling-models
 prompt-embeddings
 structured-outputs-and-tool-calling
 disaggregated-inference
+gpt-oss-gk-decode
 :::

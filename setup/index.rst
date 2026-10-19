@@ -3,7 +3,7 @@
    :keywords: neuron, installation, setup, pytorch, jax, inferentia, trainium, inf2, trn1, trn2, trn3
    :instance-types: inf2, trn1, trn2, trn3, inf1
    :content-type: navigation-hub
-   :date-modified: 2026-03-03
+   :date-modified: 2026-10-13
 
 .. _setup-guide-index:
 
@@ -14,7 +14,7 @@ Install the AWS Neuron SDK to enable deep learning acceleration on Inferentia an
 
 .. note::
    
-   **New to Neuron?** Start with the :doc:`quickstart guide </about-neuron/quick-start/index>` 
+   **New to Neuron?** Start with the :doc:`quickstart guide </quickstarts>` 
    for a complete end-to-end tutorial.
 
 Quick Start Decision Tree
@@ -22,18 +22,12 @@ Quick Start Decision Tree
 
 Answer these questions to find your installation path:
 
-**1. What's your use case?**
-
-- **Training ML models** → Use Trn1, Trn2, or Trn3
-- **Running inference** → Use Inf2, Trn1, Trn2, or Trn3
-- **Legacy Inf1 support** → See :ref:`legacy-inf1-support`
-
-**2. Which framework?**
+**1. Which framework?**
 
 - :ref:`PyTorch <pytorch-setup>` (recommended for most users)
 - :ref:`JAX <jax-setup>`
 
-**3. Installation method?**
+**2. Installation method?**
 
 - **AWS Deep Learning AMI** — fastest setup, pre-configured with all dependencies. Best for getting started and single-user development.
 - **Deep Learning Container** — Docker-based, portable across EC2, ECS, EKS. Best for production deployments and CI/CD pipelines.
@@ -84,9 +78,9 @@ Installation by Framework
       
       **Recommended for most users**
       
-      - PyTorch 2.9+ with Native Neuron support
+      - PyTorch 2.13 or 2.14 with TorchNeuron, the native Neuron backend
       - Eager mode and torch.compile
-      - Supports: Inf2, Trn1, Trn2, Trn3
+      - Supports: Trn2, Trn3
       
       :bdg-success:`Most Popular`
 
@@ -124,7 +118,7 @@ Common Issues
    If you see "No module named 'torch_neuronx'" or similar:
    
    1. Verify virtual environment is activated
-   2. Check Python version: ``python --version`` (should be 3.11+)
+   2. Check Python version: ``python --version`` (3.12 or later for TorchNeuron)
    3. Reinstall: ``pip install --force-reinstall torch-neuronx``
    
    See :doc:`troubleshooting` for more details.
@@ -146,8 +140,8 @@ Common Issues
    
    Check version compatibility:
    
-   - PyTorch 2.9+ requires neuronx-cc 2.15+
-   - See :doc:`/release-notes/index` for compatibility matrix
+   - TorchNeuron requires PyTorch 2.13 or 2.14 and Python 3.12 to 3.14; see the :doc:`TorchNeuron release notes </release-notes/components/torchneuron>` for the support matrix
+   - See :doc:`/release-notes/index` for other components
    
    See :doc:`troubleshooting` for more details.
 
@@ -158,10 +152,10 @@ Legacy Inf1 Support
 
 .. warning::
    
-   **Inf1 uses legacy NeuronCore v1 architecture.** For new projects, use Inf2, Trn1, Trn2, or Trn3 with NeuronCore v2.
+   **Inf1 uses the legacy NeuronCore v1 architecture.** For new projects, use Trn2 or Trn3.
    
-   - Inf2 offers 3x better price-performance than Inf1
-   - Broader framework support (PyTorch 2.x, JAX)
+   - Current-generation NeuronCores (v3 on Trn2, v4 on Trn3)
+   - Broader framework support (TorchNeuron, JAX, vLLM Neuron)
    - Active development and feature updates
 
 .. grid:: 1

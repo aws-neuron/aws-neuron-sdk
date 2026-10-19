@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 YAML Configuration Settings
 ===========================
@@ -327,7 +327,7 @@ with ``xser``, vice versa.
 
 Set this if you want to use async checkpointing. Under the hood the library uses the async checkpointing
 feature provided by NeuronxDistributed's
-`save API <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#id3>`_.
+`save API <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#id3>`_.
 
     * **Type**: bool
     * **Default**: False
@@ -369,7 +369,7 @@ workers.
 
 **tensor_model_parallel_size**
 
-`Tensor parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#initialize-model-parallelism>`_
+`Tensor parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#initialize-model-parallelism>`_
 to be used for sharding models.
 
     * **Type**: int
@@ -377,7 +377,7 @@ to be used for sharding models.
 
 **pipeline_model_parallel_size**
 
-`Pipeline parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#initialize-model-parallelism>`_
+`Pipeline parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#initialize-model-parallelism>`_
 to be used for sharding models.
 
     * **Type**: int
@@ -385,7 +385,7 @@ to be used for sharding models.
 
 **virtual_pipeline_model_parallel_size**
 
-`Interleaved pipeline parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#neuron-distributed-pipeline-model>`_.
+`Interleaved pipeline parallel degree <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#neuron-distributed-pipeline-model>`_.
 Use a value of 1 if no pipeline parallelism is used.
 
     * **Type**: int
@@ -419,7 +419,7 @@ The sequence dimension will be sharded with the same degree as the ``tensor_mode
 **kv_replicator**
 
 This parameter is used together with ``qkv_linear`` parameter. It is used to configure the
-`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`__
+`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`__
 
     * **Type**: bool
     * **Required**: True
@@ -544,7 +544,7 @@ is common for all models supported in the library.
 **qkv_linear**
 
 This needs to be set if users want to use the
-`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`__
+`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html#gqa-qkv-linear-module>`__
 
     * **Type**: bool
     * **Required**: True
@@ -552,7 +552,7 @@ This needs to be set if users want to use the
 **fuse_qkv**
 
 This is set if users want to use fused q, k and v tensors in
-`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api-reference-guide-training.html#gqa-qkv-linear-module>`__ Using fuse_qkv can improve throughput. 
+`GQAQKVLinear module <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api-reference-guide-training.html#gqa-qkv-linear-module>`__ Using fuse_qkv can improve throughput. 
 This parameter is True by default.
 
     * **Type**: bool
@@ -598,7 +598,7 @@ Values:
 - ``null`` - Disables activation checkpointing.
 
 More information on activation recompute can be found
-`in this link <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/activation_memory_reduction.html#activation-recomputation>`_.
+`in this link <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/activation_memory_reduction.html#activation-recomputation>`_.
 This parameter is common for all models supported in the library.
 
     * **Type**: str

@@ -1,3 +1,9 @@
+.. meta::
+   :description: C code examples for the Neuron Runtime async APIs (nrta_*), including how to schedule execution and wait for completion.
+   :date-modified: 2026-10-13
+
+.. _nrt-async-api-examples:
+
 Async API Usage Examples
 ========================
 

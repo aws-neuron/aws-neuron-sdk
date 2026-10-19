@@ -62,7 +62,7 @@ Neuron 1.18.0 (03/25/2022)
 
 This release also introduces additional ``torch-neuron`` packages that support C++11 ABI, updates TensorFlow-Neuron 2.5 to 2.5.3, adds support for TensorFlow-Neuron 2.6 and 2.7, and introduces Runtime NEURON_RT_NUM_CORES :ref:`environment variable <nrt-configuration>`. In addition this release include minor enhancements and bug fixes in Compiler, Neuron Framework Extensions, Runtime 2.x library and tools. See below detailed release notes.
 
-Starting with this release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will :ref:`no longer be supported <eol-tf-21-24>` . We will also :ref:`stop supporting PyTorch Neuron version 1.5 <announce-eol-pt-1-5>` starting with Neuron 1.19.0 release, and :ref:`will stop supporting <eol-ncgs-env_2>`  ``NEURONCORE_GROUP_SIZES`` environment variable starting with Neuron 1.20.0 release.
+Starting with this release, *TensorFlow Neuron versions 2.1, 2.2, 2.3 and 2.4* will :ref:`no longer be supported <eol-tf-21-24>` . We will also :ref:`stop supporting PyTorch Neuron version 1.5 <announce-eol-pt-1-5>` starting with Neuron 1.19.0 release, and :doc:`will stop supporting </about-neuron/announcements/neuron1.x/eol-ncgs-env_2>`  ``NEURONCORE_GROUP_SIZES`` environment variable starting with Neuron 1.20.0 release.
 
 Neuron 1.17.2 (02/18/2022)
 --------------------------
@@ -203,7 +203,7 @@ and announcements of software :ref:`end-of-support <software-end-of-support>` an
    -  New :ref:`flexeg` application note.
    -  New :ref:`parallel-exec-ncgs` application note.
    -  New :ref:`Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving <tensorflow-serving-neuronrt-visible-cores>` tutorial.
-   -  Updated :ref:`ResNet50 model for Inferentia </src/examples/pytorch/resnet50.ipynb>` tutorial to use :func:`torch.neuron.DataParallel`.
+   -  Updated :doc:`ResNet50 model for Inferentia </src/examples/pytorch/resnet50>` tutorial to use :func:`torch.neuron.DataParallel`.
 
 -  **PyTorch**
 
@@ -310,7 +310,7 @@ Neuron 1.15.0 is the first release to support TensorFlow 2. In this release Tens
 
 * **TensorFlow 2.x** - To get started with TensorFlow 2.x:
 
-  *  Run the TensorFlow 2  :ref:`HuggingFace distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`.
+  *  Run the TensorFlow 2  :doc:`HuggingFace distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert>`.
   *  Read :ref:`tf2_faq`
   *  See newly introduced TensorFlow 2.x (``tensorflow-neuron``) Tracing API.
   *  See :ref:`tensorflow-ref-neuron-accelerated-ops`.
@@ -320,8 +320,8 @@ Neuron 1.15.0 is the first release to support TensorFlow 2. In this release Tens
 
   *  **New** :ref:`models-inferentia` application note added in this release. This application note describes what types of deep learning model architectures perform well out of the box and provides guidance on techniques you can use to optimize your deep learning models for Inferentia.
   *  **New** :ref:`Neuron inference performance page <appnote-performance-benchmark>` provides performance information for popular models and links to test these models in your own environment. The data includes throughout and latency numbers, cost per inference, for both realtime and offline applications.
-  *  **New** :ref:`TensorFlow 2 HuggingFace distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert.ipynb>`.
-  *  **New** :ref:`Bring your own HuggingFace pretrained BERT container to Sagemaker Tutorial </src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron.ipynb>`.
+  *  **New** :doc:`TensorFlow 2 HuggingFace distilBERT Tutorial </src/examples/tensorflow/huggingface_bert/huggingface_bert>`.
+  *  **New** :doc:`Bring your own HuggingFace pretrained BERT container to Sagemaker Tutorial </src/examples/pytorch/byoc_sm_bert_tutorial/sagemaker_container_neuron>`.
 
 
 
@@ -550,7 +550,7 @@ July 16, 2020 Release
 
 This release of Neuron SDK adds support for the OpenPose (posenet)
 Neural Network. An example of using Openpose for end to end inference is
-available :ref:`/src/examples/tensorflow/openpose_demo/openpose.ipynb`.
+available :doc:`/src/examples/tensorflow/openpose_demo/openpose`.
 
 A new PyTorch auto-partitioner feature now automatically builds a Neuron
 specific graph representation of PyTorch models. The key benefit of this
@@ -606,8 +606,6 @@ artifacts, called "NEFF", to version 1.0. Neuron Runtime versions
 earlier than the 1.0.6905.0 release in May 2020 will not be able to
 execute NEFFs compiled from this release forward. Please see :ref:`neff-support-table` for
 compatibility.
-
-Stay up to date on future improvements and new features by following the :ref:`neuron_roadmap`.
 
 Refer to the detailed release notes for more information on each Neuron
 component.
@@ -665,9 +663,6 @@ peak thoughput of 360 seq/second on inf1.xlarge (more details :ref:`tensorflow-b
 In addition to the performance boost, this release adds PyTorch, and
 MXNet framework support for BERT models, as well as expands container
 support in preparation to an upcoming EKS launch.
-
-We continue to work on new features and improving performance further,
-to stay up to date follow this repository and our :ref:`neuron_roadmap`.
 
 Refer to the detailed release notes for more information for each Neuron
 component.

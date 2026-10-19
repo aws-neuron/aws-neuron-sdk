@@ -1,7 +1,7 @@
 .. meta::
    :description: Neuron Agentic Development is a package of AI agents and skills for developing on AWS Trainium, including NKI kernel development and model porting to NxD Inference.
    :keywords: Neuron Agentic Development, AI agents, skills, NKI, model porting, autoport, Claude Code, Kiro, Trainium
-   :date-modified: 2026-08-13
+   :date-modified: 2026-10-07
 
 .. _neuron-agentic-development:
 .. _neuron-agentic-development-overview:
@@ -15,7 +15,7 @@ on AWS Trainium. The agents and skills run inside agentic coding environments
 like Claude Code and Kiro. You drive development with natural language, and the agent
 coordinates the technical workflow for you.
 
-The package covers two areas today.
+The package covers three areas today.
 
 1. **NKI kernel development.** Write, debug, profile, and analyze Neuron Kernel Interface
    kernels. Translate from PyTorch, NumPy, or plain language descriptions into NKI code
@@ -24,6 +24,10 @@ The package covers two areas today.
 2. **Model porting to NxD Inference.** Port HuggingFace transformer models to run on
    Trainium through NxD Inference. The agent handles architecture analysis,
    implementation, compilation, inference testing, and accuracy validation.
+
+3. **Inference performance planning.** Choose tensor, context, and data parallelism and batch
+   size for serving an LLM before running on hardware, and find which operator binds on compute
+   or memory within the chosen config.
 
 .. note::
    Source code, installation, and the full catalog of agents and skills live in the
@@ -121,6 +125,18 @@ The package provides specialized skills that follow natural development pipeline
    * - ``neuron-framework-equivalence``
      - Validation
      - Validates numerical equivalence between a reference model and its port, for both NxD Inference and vLLM Neuron targets.
+   * - ``neuron-framework-profiling-vllm-neuron``
+     - Performance profiling
+     - Captures device and system profiles from a running vLLM Neuron server, isolating prefill and steady-state decode into separate traces.
+   * - ``neuron-framework-profile-analysis-vllm-neuron``
+     - Performance analysis
+     - Localizes a bottleneck in a capture: roofline floors, collective partitioning, and per-component attribution.
+   * - ``neuron-parallelism-planner``
+     - Performance planning
+     - Recommends TP, CP, and DP degrees and batch size for single-node LLM serving, with predicted ITL, TTFT, throughput, and HBM.
+   * - ``neuron-hardware-entitlement``
+     - Performance analysis
+     - Computes per-operator compute and HBM floors for a chosen config and identifies the binding operator.
 
 Agents
 ------
@@ -144,6 +160,14 @@ development scenarios end to end.
      - Captures execution profiles on hardware and identifies inefficiencies.
    * - ``neuron-framework-autoport-agent``
      - Accepts model parameters and runs the full porting workflow from analysis through validation.
+   * - ``neuron-framework-profiling-vllm-neuron-agent``
+     - Captures prefill and decode profiles of a vLLM Neuron model and hands the manifest to the analysis skill.
+   * - ``neuron-framework-profile-analysis-vllm-neuron-agent``
+     - Analyzes a capture interactively, driven by the question you want answered.
+   * - ``neuron-parallelism-planner-agent``
+     - Reconciles a latency and throughput SLA into a single-node DP × TP config and reports the binding constraint.
+   * - ``neuron-hardware-entitlement-agent``
+     - Computes per-operator floors for a chosen config and routes optimization effort to the operator with real headroom.
 
 Supported environments
 ----------------------
@@ -153,8 +177,9 @@ The agents and skills run in these agentic coding environments.
 - **Claude Code.** Install as a plugin from the Neuron Agentic Development repository.
 - **Kiro.** Deploy using the provided setup script.
 
-Writing and documentation skills work anywhere without hardware. Debugging, profiling,
-analysis, and model porting skills require Trainium access.
+Writing, documentation, parallelism planning, and hardware entitlement skills work anywhere
+without hardware. Debugging, profiling, analysis, and model porting skills require Trainium
+access.
 
 Hardware and environment requirements
 --------------------------------------

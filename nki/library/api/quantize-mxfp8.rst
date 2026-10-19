@@ -1,6 +1,6 @@
 .. meta::
     :description: Determine if packed scales should be stored for the current tile.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.quantize_mxfp8
 
@@ -17,7 +17,7 @@ The ``should_store_packed_scales`` kernel determines whether packed scales shoul
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `quantize_mxfp8.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/quantize_mxfp8/quantize_mxfp8.py>`_
+**Source code for this kernel API can be found at**: `quantize_mxfp8.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/quantize_mxfp8/quantize_mxfp8.py>`_
 
 should_store_packed_scales
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 PyTorch Neuron (``torch-neuronx``) for Training Troubleshooting Guide
 =====================================================================
@@ -636,4 +636,3 @@ The `01_efa.conf` file is created as part of the EFA installation and needs to b
 To maintain compatibility with the packages vended publicly in Pypi, AWS Neuron python packages contain binary extensions that are compiled with the pre-2011 libstdc++ application binary interface (ABI). If a custom version of a package - such as `torch` - is compiled using a modern compiler, it can result in "undefined symbol" errors due to mismatches between the package and AWS Neuron package. 
 
 To support this situation, we provide alternative versions of AWS Neuron packages that are compiled according to the newer 2011 ABI. For information on how to use these packages, see :ref:`pytorch-install-cxx11`.
-

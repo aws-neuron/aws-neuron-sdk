@@ -13,7 +13,7 @@ Using NEURON_RT_VISIBLE_CORES with TensorFlow Serving
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 TensorFlow serving allows customers to scale-up inference workloads

@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron PyTorch framework component across all AWS Neuron SDK versions.
     :keywords: pytorch, torch-neuronx, torch-neuron, transformers-neuronx, release notes, aws neuron sdk
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. _pytorch_rn:
 
@@ -9,9 +9,22 @@ Component Release Notes for Neuron PyTorch Framework
 =====================================================
 
 
-**Latest version (in 2.31.0)**: 2.9.0.2.15.32035
+**Latest version (in 2.33.0)**: ``torch-neuronx`` 2.9.0.2.15.32035
 
-The release notes for the Neuron PyTorch framework component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+.. _pytorch-2-33-0-rn:
+
+PyTorch Framework (Neuron 2.33.0 Release)
+-----------------------------------------
+
+**Date of Release**: 10/19/2026
+
+This release includes ``torch-neuronx`` 2.9.0.2.15.32035, the XLA-based PyTorch NeuronX build, on Trn1, Inf2, Trn2, and Trn3 with Python 3.11, 3.12, and 3.13. It pairs with ``torch-xla`` 2.11.0, 2.12.0, or 2.13.0.
+
+.. note::
+   The ``torch-neuronx`` package name covers two products. This page tracks the XLA-based
+   PyTorch NeuronX build, which is deprecated. Neuron 2.33.0 also ships ``torch-neuronx``
+   2.14.3.0 and 2.13.3.0, the native TorchNeuron backend for Trn2 and Trn3. For those
+   release notes, see :doc:`/release-notes/components/torchneuron`.
 
 .. _pytorch-2-29-0-rn:   
 
@@ -30,7 +43,7 @@ Updates
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-* **PyTorch/XLA replaced by TorchNeuron in PyTorch 2.10**: Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will use PyTorch support via TorchNeuron instead of PyTorch/XLA. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`native-pytorch-trainium` for complete details.
+* **PyTorch/XLA replaced by TorchNeuron in PyTorch 2.10**: Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will use PyTorch support via TorchNeuron instead of PyTorch/XLA. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`TorchNeuron overview <about-pytorch-neuron>` for complete details.
 
 
 Bug Fixes
@@ -67,7 +80,7 @@ Improvements
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
-* **PyTorch/XLA replaced by TorchNeuron in PyTorch 2.10**: Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will use PyTorch support via TorchNeuron instead of PyTorch/XLA. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`native-pytorch-trainium` for complete details.
+* **PyTorch/XLA replaced by TorchNeuron in PyTorch 2.10**: Starting with PyTorch 2.10 support (planned for a future Neuron release), AWS Neuron will use PyTorch support via TorchNeuron instead of PyTorch/XLA. PyTorch 2.9 is the last version using PyTorch/XLA. Users will need to update their scripts when upgrading to PyTorch 2.10 or later. See :ref:`TorchNeuron overview <about-pytorch-neuron>` for complete details.
 
 Bug Fixes
 ^^^^^^^^^

@@ -20,7 +20,7 @@ registered before warmup are traced into the compiled NEFF.
 
 ``` text
 ┌─────────────────────────────────────────────────────────────────┐
-│ 1. torch.compile(model, backend="vllm_neuron", fullgraph=True)  │
+│ 1. torch.compile(model, backend=envs.get_compile_backend_name(), fullgraph=True)  │
 │    - Returns OptimizedModule wrapper (NO tracing/compilation)   │
 │    - Original model stored as wrapper._orig_mod                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -54,7 +54,7 @@ registered before warmup are traced into the compiled NEFF.
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-`ModelCapture` is used uniformly for target, draft, and vision encoder models.
+`ModelCapture` is used uniformly for target, draft, and encoder models.
 Each model gets its own instance with an isolated `TensorRegistry`.
 
 ## API
@@ -83,7 +83,7 @@ llm = LLM(
 
 - **Range**: `model.layers.0-31` expands to individual patterns before matching
 - **Regex**: All patterns use Python regex (e.g., `model\.layers\.\d+`, `.*self_attn$`)
-- **Vision prefix**: `visual.blocks.0` routes to vision encoder capture
+- **Encoder prefix**: a `visual.` prefix (for example `visual.blocks.0`) routes a module to the encoder capture. The runner strips the prefix. Then it selects the model's encoder tower — `visual` for Qwen3-VL, `audio_tower` for Qwen3-ASR.
 
 ### Programmatic Usage
 
@@ -91,7 +91,7 @@ llm = LLM(
 from vllm_neuron.accuracy import ModelCapture
 
 # After compile — no wrapping needed
-compiled = torch.compile(model, backend="vllm_neuron", fullgraph=True)
+compiled = torch.compile(model, backend=envs.get_compile_backend_name(), fullgraph=True)
 raw_model = compiled._orig_mod
 
 capture = ModelCapture(
@@ -145,8 +145,8 @@ When running multiple prompts, the capture system automatically organizes captur
 ├── draft/
 │   └── dp0/                            # Draft model captures
 │       └── decode_b4_0/
-└── vision/
-    └── dp0/                            # Vision encoder captures
+└── vision/                            # Encoder captures (subdirectory is "vision")
+    └── dp0/
         └── prefill_s4096_0/
 ```
 
@@ -212,10 +212,11 @@ def init_tensor_capture(self):
     )
     TensorRegistry._instance = self._target_tensor_capture._registry
 
-    # Vision encoder
-    if vision_modules:
-        self._vision_tensor_capture = self._setup_capture(
-            inner_model.visual, vision_modules, subdirectory="vision"
+    # Multimodal encoder — encoder_tower is inner_model.visual for VL,
+    # inner_model.audio_tower for ASR. subdirectory stays "vision".
+    if encoder_modules:
+        self._encoder_tensor_capture = self._setup_capture(
+            encoder_tower, encoder_modules, subdirectory="vision"
         )
 
     # Draft model
@@ -239,7 +240,7 @@ Each model's forward is bracketed with `setup_tensor_capture()` / `save_tensor_c
 - `setup_tensor_capture()` — saves the current global `TensorRegistry._instance`
   and replaces it with this model's registry. This ensures inline
   `capture_tensor()` calls route to the correct registry when multiple
-  models (target, draft, vision) each have their own capture instance.
+  models (target, draft, encoder) each have their own capture instance.
 
 - `save_tensor_captures()` — writes captured tensors to disk with scheduler metadata
   (request IDs, positions, phase) and restores the previous global registry.
@@ -269,10 +270,10 @@ self._draft_tensor_capture.setup_tensor_capture()
 draft_output = self.drafter.propose(...)
 self._draft_tensor_capture.save_tensor_captures(positions, is_prefill, req_ids)
 
-# Vision encoder (in _execute_mm_encoder)
-self._vision_tensor_capture.setup_tensor_capture()
+# Multimodal encoder (in _execute_mm_encoder)
+self._encoder_tensor_capture.setup_tensor_capture()
 encoder_outputs = self.model.embed_multimodal(...)
-self._vision_tensor_capture.save_tensor_captures(positions, is_prefill, req_ids)
+self._encoder_tensor_capture.save_tensor_captures(positions, is_prefill, req_ids)
 ```
 
 ### Multi-Model Support
@@ -291,11 +292,12 @@ Configuration:
 }
 ```
 
-For vision models, use the `visual.` prefix:
+For multimodal models, use the `visual.` prefix. The prefix marks an encoder
+module for both Qwen3-VL and Qwen3-ASR:
 
 ``` python
 "modules": [
-    "visual.blocks.0",              # vision encoder
+    "visual.blocks.0",              # encoder module (VL visual / ASR audio_tower)
     "language_model.layers.0",      # text decoder
 ]
 ```

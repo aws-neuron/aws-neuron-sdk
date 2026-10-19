@@ -2,184 +2,170 @@
 
 <!-- meta: description: Available memory determination design -->
 <!-- meta: content_type: conceptual-deep-dive -->
-<!-- meta: date_updated: 2026-06-23 -->
+<!-- meta: date_updated: 2026-10-07 -->
 
-## 1) How GMU works
+## 1) KV cache budget
 
-`gpu_memory_utilization` (GMU) is a vLLM configuration parameter that defines
-the fraction of total device memory to budget for model execution.
+By default, vLLM Neuron uses the memory-utilization and fractional-cap policy:
 
 ```text
-total_budget = total_hbm * gmu
-kv_cache_budget = total_budget - bytes_used
+logical_core_hbm = hbm_stack_bytes / logical_cores_per_hbm_stack
+total_budget = int(logical_core_hbm * gpu_memory_utilization)
+user_budget = max(total_budget - model_weight_bytes, 0)
+heuristic_cap = int(total_budget * cap_fraction)
+available = max(min(user_budget, heuristic_cap), 0)
 ```
 
-Interpretation:
+The default `cap_fraction` is `0.30`. The worker respects
+`gpu_memory_utilization` and `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION`.
+This conservative policy limits the KV cache to a fraction of the memory-utilization budget.
 
-- `total_budget` is the memory budget requested by GMU.
-- `kv_cache_budget` is what remains for KV after resident memory (`bytes_used`)
-  is already on device.
+An explicit headroom value enables the reserve policy:
 
-GMU semantics are platform-agnostic in vLLM: apply GMU to total device memory
-first, then subtract non-KV resident memory.
-
-## 2) Why we needed the heuristic
-
-### The problem
-
-On Neuron, KV cache size is baked into the compiled program (NEFF) shape. During
-warmup, each NEFF is compiled with KV tensors sized by the allocated token
-count. The Neuron compiler validates that all tensors referenced by a NEFF fit
-within the per-HBM-bank limit. If the KV allocation is too large, the total
-tensor footprint exceeds this limit and the compiler rejects the program
-(`NCC_EVRF009`).
-
-This creates a constraint that doesn't exist on platforms where KV capacity is
-only a post-compile allocator/runtime decision: the KV sizing decision directly
-affects whether the model can compile at all.
-
-Terminology used in this doc:
-
-- compile-time fit: whether NCC can materialize a valid NEFF within HBM limits
-- post-compile runtime/allocator fit: whether already-compiled KV blocks fit in
-  the runtime memory allocator during execution
-
-### The chicken-and-egg constraint
-
-This is a compile-time chicken-and-egg problem:
-
-- We need a KV budget to decide tensor shapes for compilation.
-- But whether that KV budget is safe is only known after compilation checks the
-  full tensor footprint.
-
-In short: KV budget determines compile footprint, and compile footprint
-determines safe KV budget.
-
-Current implementation note:
-
-- The current cap-based control safely increases KV while reducing compile-fit
-  failures.
-
-### Why GMU alone is not enough
-
-Applying `gpu_memory_utilization` to compute a KV budget works when the only
-constraint is post-compile allocator/runtime fit. On Neuron, the compile-time
-tensor footprint includes model weights, KV tensors, intermediate activations,
-and outputs — all of which must fit simultaneously. The non-KV portion of this
-footprint varies by model architecture and cannot be precisely known before
-compilation. This means the GMU-derived budget can exceed the compile-safe
-limit for models with large non-KV tensor overhead.
-
-A fixed GiB reserve also doesn't work because the compile overhead scales with
-the model — it's not a stable constant across architectures.
-
-### How we selected the current cap policy
-
-We ran `gpu_memory_utilization` sweeps across multiple models and found there is
-no single global compile-safe formula that generalizes cleanly across model
-families and hardware generations. As an interim safety policy, we cap KV to a
-fraction of GMU total budget (`0.30` by default), using GPT-OSS worst-case
-behavior as the primary guardrail.
-
-This cap is intentionally conservative. It safely allows more KV than legacy
-clamp behavior in many cases, while reducing NCC compile-fit failures.
-
-## 3) What the heuristic is and how we derived it
-
-### Heuristic formula
-
-Constants (defaults):
-
-```python
-VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION = 0.30
+```text
+available = max(logical_core_hbm - model_weight_bytes - headroom_bytes, 0)
 ```
 
-Computation:
+- `hbm_stack_bytes` is the HBM capacity reported for one physical stack.
+- `logical_cores_per_hbm_stack` is 1 at LNC 2 and 2 at LNC 1.
+- `model_weight_bytes` includes model parameters and buffers.
+- `headroom_bytes` reserves HBM per logical core for all other allocations.
 
-`bytes_used` and `bytes_free` are obtained from Neuron runtime memory stats
-(`Runtime().get_vnc_memory_stats()`).
+The headroom includes internal tensors, scratchpad, DMA rings, runtime data,
+compiled code, and a safety margin.
 
-```python
-total_budget = int((bytes_used + bytes_free) * gpu_memory_utilization)
-kv_cache_budget = max(total_budget - bytes_used, 0)
+Only headroom mode sets `gpu_memory_utilization` to `1.0` and bypasses the
+fractional cap. An explicit zero also enables headroom mode.
 
-heuristic_cap = int(total_budget * VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION)
+## 2) Why headroom is necessary
 
-available = max(min(kv_cache_budget, heuristic_cap), 0)
+The compiler includes the KV cache shape in each compiled program. A larger KV
+cache changes the graph and its memory requirements.
+
+The compiler gives the best estimate of non-KV memory after it receives a KV
+shape. However, the worker must select the KV shape before compilation. The
+worker therefore uses a configurable estimate for non-weight and non-KV memory.
+
+In CPU inference, the default policy uses:
+
+```text
+total_budget = int(host_available / local_workers * gpu_memory_utilization)
+available = int(total_budget * cap_fraction)
 ```
 
-### Why `0.30` by default
+Explicit headroom uses:
 
-The default is a safety-first value derived from worst-case compile behavior
-observed on GPT-OSS family runs. It can be overridden with
-`VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` when more aggressive KV is desired.
+```text
+available = max(host_available / local_workers - headroom_bytes, 0)
+```
 
-> **Limitation:** The global `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` is an interim
-> policy for safe KV enablement. The `0.30` cap is conservative and not optimal
-> for all architectures, TP sizes, and hardware generations.
+Host available memory already excludes loaded weights and current allocations,
+so CPU mode does not subtract model weights again.
 
-### Minimum KV guard
+The reserve has no default. For example, 4 GiB is a tested reserve for
+GPT-OSS 120B on Trn3 with the Native backend and MXFP4 weights.
+Validate the reserve for your model and configuration.
 
-Env knob:
+## 3) Configuration
 
-- `VLLM_NEURON_MIN_KV_BUDGET_GIB` (default `1.0`)
+| Variable | Default | Description |
+| --- | --- | --- |
+| `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` | `0.30` | Fractional cap for default sizing. Headroom mode bypasses this value. |
+| `VLLM_NEURON_RESERVED_HEADROOM_GIB` | unset | Explicit reserve per worker. Enables headroom sizing on both routes. |
+| `VLLM_NEURON_MIN_KV_BUDGET_GIB` | `1.0` | Minimum KV budget. The server stops if the budget is smaller. |
 
-If `available` is below this threshold, worker raises:
+In headroom mode, increase the active reserve if model loading or compilation reports
+`NCC_EOOM002`, `Maximum peak HBM usage`, `NRT_RESOURCE` in `nrt_load_util`, or
+`Allocation Failure`. First confirm that the same configuration passes with a
+smaller KV cache or with the default policy. Start with 1 GiB increments.
+Each additional 1 GiB of headroom reduces the KV cache budget by 1 GiB. Rerun
+the same model, sharding, backend, LNC degree, and hardware configuration, and
+keep the smallest value that passes. Each backend deployment can use a
+different value for the same headroom variable.
 
-- `RuntimeError: Computed KV cache budget is below minimum threshold...`
+Do not increase headroom when the worker reports that the KV cache budget is
+below its minimum threshold. Decrease the active headroom variable for that
+error. A validated configuration can also decrease headroom to use a larger KV
+cache. At LNC 1, calculate the limit from half of the HBM stack:
 
-This fails fast on configurations that are too constrained to serve reliably.
+```text
+maximum_headroom =
+    hbm_stack_bytes / 2 - model_weight_bytes - minimum_kv_budget
+```
 
-## 4) How this is implemented (flow)
+The startup log reports the logical-core HBM, model weights, active headroom,
+and resulting KV budget. An override at or above the logical-core HBM share
+leaves no usable KV cache.
 
-Code path:
+Both backends and CPU use `VLLM_NEURON_RESERVED_HEADROOM_GIB`.
+When this variable is unset, they use default fractional-cap sizing.
+CPU compilation and device execution select the same budget policy.
 
-- `vllm_neuron/vllm/worker/neuron_worker.py`
+In default mode, reduce the fractional cap to reduce KV capacity after an
+HBM allocation failure. An explicit headroom value changes the budget policy;
+validate the resulting KV capacity before deployment.
 
-Runtime flow:
+## 4) Implementation flow
+
+The implementation is in
+`vllm_neuron/vllm/worker/neuron_worker.py`.
 
 ```text
 determine_available_memory()
   |
-  +-- VLLM_NEURON_CPU_COMPILE == 1 ?
-  |      |
-  |      +-- yes: _estimate_available_memory_neuron()
-  |           total_hbm_bytes = get_total_available_memory()  (static HBM size from platform)
-  |           bytes_used = _get_byte_used_from_model()
-  |                        (sum of model parameter + buffer sizes)
-  |           return _compute_kv_budget(total_hbm_bytes, bytes_used, gmu)
+  +-- VLLM_NEURON_CPU_COMPILE == 1
+  |      total_hbm = get_total_available_memory()
+  |      model_weight_bytes = _get_byte_used_from_model()
+  |      return _compute_kv_budget(total_hbm, model_weight_bytes)
   |
-  +-- VLLM_NEURON_CPU_MODE == 1 ?
-  |      |
-  |      +-- yes: _determine_available_memory_cpu()
-  |           bytes_free = _query_host_runtime_memory()  (fair-share host memory)
-  |           total_budget = int(bytes_free * gmu)
-  |           cap_fraction = _get_kv_cap_fraction()
-  |           available = int(total_budget * cap_fraction)
-  |           return available
+  +-- VLLM_NEURON_CPU_MODE == 1
+  |      use the selected policy with the host memory fair share
   |
-  +-- no (Neuron mode): _determine_available_memory_neuron()
-         bytes_used, bytes_free = _query_runtime_memory_stats()
-         total_hbm_bytes = bytes_used + bytes_free
-         bytes_used = _get_byte_used_from_model()
-                      (sum of model parameter + buffer sizes after loading)
-         return _compute_kv_budget(total_hbm_bytes, bytes_used, gmu)
+  +-- Neuron device
+         total_hbm = runtime_bytes_used + runtime_bytes_free
+         model_weight_bytes = _get_byte_used_from_model()
+         return _compute_kv_budget(total_hbm, model_weight_bytes)
 ```
 
-Shared KV budget logic (`_compute_kv_budget`):
+CPU compilation and device execution use the same model weight calculation.
+This keeps the KV block count equal and permits compilation cache hits.
 
 ```text
-_compute_kv_budget(total_hbm_bytes, bytes_used, gmu):
-    total_budget = int(total_hbm_bytes * gmu)
-    user_budget = max(total_budget - bytes_used, 0)
-    heuristic_cap = int(total_budget * VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION)
-    available = max(min(user_budget, heuristic_cap), 0)
+_compute_kv_budget(hbm_stack_bytes, model_weight_bytes):
+    logical_core_hbm = (
+        hbm_stack_bytes // get_logical_cores_per_hbm_stack()
+    )
+    if headroom is explicit:
+        available = max(
+            logical_core_hbm - model_weight_bytes - headroom_bytes, 0
+        )
+    else:
+        total_budget = int(logical_core_hbm * gpu_memory_utilization)
+        available = max(min(
+            max(total_budget - model_weight_bytes, 0),
+            int(total_budget * cap_fraction),
+        ), 0)
     if available < VLLM_NEURON_MIN_KV_BUDGET_GIB: raise RuntimeError
     return available
 ```
 
-Key points:
+The device path uses runtime statistics only to get total HBM. It does not use
+runtime memory usage as the model weight size.
 
+The CPU inference path uses current available host memory, which already
+reflects model weights and other allocations. Neither CPU inference policy
+subtracts model weights again.
+
+- **HBM stack sharing (LNC 1)** scales the total first. One HBM stack serves 2
+  physical NeuronCores. At LNC 2 a logical core owns the stack. At LNC 1 two
+  logical cores share it. Both inputs still report the whole stack. The runtime
+  reports the stack to each core that holds a part of it, and the static table is
+  per stack. `get_logical_cores_per_hbm_stack()` gives the divisor,
+  which is 1 at LNC 2 and 2 at LNC 1. Without it, two siblings each size a KV
+  cache against the same memory, and the allocation fails at load
+  (`nrt_tensor_allocate status=4`). The scaling is in `_compute_kv_budget`, so
+  both paths that call it get the same budget. This keeps the KV block count
+  equal, which the compile cache needs.
 - **CPU Compile only mode** uses the static HBM size for the target platform
   (looked up via `NEURON_PLATFORM_TARGET_OVERRIDE`) and computes `bytes_used`
   from model parameter and buffer sizes. No device is present — the goal is to
@@ -192,6 +178,18 @@ Key points:
   stats are only used to derive `total_hbm_bytes`.
 - **CPU mode (no compilation)** is a separate path that uses host memory fair-share — it does not
   go through `_compute_kv_budget` and is unrelated to the compile/execute flow.
-- GMU sets the total budget.
-- Heuristic cap keeps budget inside compile-safe limits.
+- An explicit headroom value reserves non-KV memory after the LNC share is known.
 - Minimum-KV guard fails fast for unusable configs.
+
+## 5) Minimum budget check
+
+The worker compares both CPU and Neuron results with
+`VLLM_NEURON_MIN_KV_BUDGET_GIB`. It stops early if the result is too small.
+
+In default mode, the error names memory utilization and the fractional cap.
+In headroom mode, it names the active reserve and reports its maximum value.
+Increasing headroom makes a minimum-KV-budget error worse.
+
+Known HBM allocation exceptions raised while loading, initializing the KV
+cache, compiling, or warming up retain their original exception and add a note
+with the active reserve and the 1 GiB tuning procedure in headroom mode.

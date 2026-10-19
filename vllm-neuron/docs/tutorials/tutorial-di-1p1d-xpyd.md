@@ -132,10 +132,8 @@ MODEL="openai/gpt-oss-20b"
 The `NEURON_VISIBLE_DEVICES` ranges in this tutorial assume direct host
 execution and host-level NeuronCore numbering. With EKS and Kubernetes Dynamic
 Resource Allocation (DRA), a pod can expose its allocation under different,
-pod-local NeuronCore IDs. Run `neuron-ls` inside each prefill and decode pod,
-then adjust `NEURON_VISIBLE_DEVICES` to the IDs visible in that pod instead of
-copying the host ranges verbatim. Ensure the DRA allocations give each engine
-enough NeuronCores and keep the prefill and decode allocations disjoint.
+pod-local NeuronCore IDs. Under DRA, leave `NEURON_VISIBLE_DEVICES` unset and
+size the DRA resource claim to cover the NeuronCores each engine needs instead.
 :::
 
 ## Step 1: Launch the prefill server

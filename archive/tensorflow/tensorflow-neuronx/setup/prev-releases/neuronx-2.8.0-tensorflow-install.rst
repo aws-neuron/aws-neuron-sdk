@@ -13,7 +13,7 @@ Install Tensorflow Neuron (Neuron 2.8.0)
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 .. tab-set::
@@ -24,8 +24,62 @@ Install Tensorflow Neuron (Neuron 2.8.0)
 
             .. tab-item:: Amazon Linux 2 AMI
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.0 --neuron-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=amazonlinux2 --instance=trn1 --ami=non-dlami
+                .. code-block:: bash
+
+
+                   # Install Python venv 
+                   sudo dnf install -y python3.8-venv gcc-c++ 
+
+                   # Create Python venv
+                   python3.8 -m venv aws_neuron_venv_tensorflow 
+
+                   # Activate Python venv 
+                   source aws_neuron_venv_tensorflow/bin/activate 
+                   python -m pip install -U pip 
+
+                   # Install Jupyter notebook kernel
+                   pip install ipykernel 
+                   python3.8 -m ipykernel install --user --name aws_neuron_venv_tensorflow --display-name "Python (tensorflow-neuronx)"
+                   pip install jupyter notebook
+                   pip install environment_kernels
+
+                   # Set pip repository pointing to the Neuron repository 
+                   python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+                   # Install wget, awscli 
+                   python -m pip install wget 
+                   python -m pip install awscli 
+
+                   # Install Neuron Compiler and Framework
+                   python -m pip install neuronx-cc==2.4.0.21 tensorflow-neuronx==2.10.1.1.0.0
 
             .. tab-item:: Ubuntu 20 AMI
 
-                .. program-output:: python3 src/helperscripts/n2-helper.py --install-type=install --category=compiler_framework --framework=tensorflow --framework-version=2.10.0 --neuron-version=2.8.0 --file=src/helperscripts/n2-manifest.json --os=ubuntu20 --instance=trn1 --ami=non-dlami
+                .. code-block:: bash
+
+
+                   # Install Python venv 
+                   sudo apt-get install -y python3.8-venv g++ 
+
+                   # Create Python venv
+                   python3.8 -m venv aws_neuron_venv_tensorflow 
+
+                   # Activate Python venv 
+                   source aws_neuron_venv_tensorflow/bin/activate 
+                   python -m pip install -U pip 
+
+                   # Install Jupyter notebook kernel
+                   pip install ipykernel 
+                   python3.8 -m ipykernel install --user --name aws_neuron_venv_tensorflow --display-name "Python (tensorflow-neuronx)"
+                   pip install jupyter notebook
+                   pip install environment_kernels
+
+                   # Set pip repository pointing to the Neuron repository 
+                   python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+
+                   # Install wget, awscli 
+                   python -m pip install wget 
+                   python -m pip install awscli 
+
+                   # Install Neuron Compiler and Framework
+                   python -m pip install neuronx-cc==2.4.0.21 tensorflow-neuronx==2.10.1.1.0.0

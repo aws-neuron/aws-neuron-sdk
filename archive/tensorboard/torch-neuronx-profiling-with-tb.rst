@@ -40,7 +40,7 @@ Prerequisites
 ~~~~~~~~~~~~~
 
 1. Initial `Trn1 setup for PyTorch
-   (torch-neuronx) <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html>`__
+   (torch-neuronx) <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/frameworks/torch/torch-neuronx/setup/pytorch-install.html>`__
    has been done
 
 Environment

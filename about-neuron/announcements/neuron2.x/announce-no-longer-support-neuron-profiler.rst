@@ -7,7 +7,7 @@
 Neuron Explorer replaces Neuron Profiler, starting with Neuron 2.30
 --------------------------------------------------------------------
 
-SNeuron Profiler and Profiler 2.0 (UI and CLI) are no longer supported. Neuron Profiler will no longer receive bug fixes, feature updates, or technical support. It will no longer be distributed as part of the Neuron SDK. If you are currently using the Neuron Profiler, migrate to Neuron Explorer.
+Neuron Profiler and Profiler 2.0 (UI and CLI) are no longer supported. Neuron Profiler will no longer receive bug fixes, feature updates, or technical support. It will no longer be distributed as part of the Neuron SDK. If you are currently using the Neuron Profiler, migrate to Neuron Explorer.
 
 For migration guidance, see the :doc:`/tools/neuron-explorer/migration-faq`.
 

@@ -140,10 +140,11 @@ launches reuse cached NEFFs. See the
   packed FP8 KV path used here (`fp8_packed_kv: true` with segmented prefill).
   `kv_segment_size_buckets` must stay divisible by `block_size`, so 128 divides the
   8192-token segment bucket cleanly.
-- `--optimization-level 2` — raises the compiler optimization level from Neuron's
-  O1 default to O2 for better serving performance on the 70B graphs. Neuron
-  defaults to O1 (vLLM's own default is O2); passing this flag opts back into the
-  higher optimization level. Expect a somewhat longer first compile in exchange.
+- `--optimization-level 2` — sets the compiler optimization level to O2 for better
+  serving performance on the 70B graphs. The default level depends on the route:
+  the native route keeps O2, and the XLA route lowers it to O1. This flag makes the
+  level O2 on each route, so the command gives the same level after a route change.
+  Expect a longer first compile at O2.
 
 ### Validate the server
 

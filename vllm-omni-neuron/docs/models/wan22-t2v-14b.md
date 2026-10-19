@@ -28,7 +28,7 @@ Wan2.2-T2V-A14B is now supported for inference serving with [vLLM Omni](https://
 
 ## Features
 
-Per-model feature availability for Wan2.2-T2V-A14B. See the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md) for configuration details.
+Per-model feature availability for Wan2.2-T2V-A14B. See the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md) for configuration details.
 
 | Category | Feature | Status |
 |---|---|---|
@@ -56,13 +56,13 @@ Per-model feature availability for Wan2.2-T2V-A14B. See the [README](https://git
 
 ### Recommended configuration
 
-The recommended configuration runs on 64 NeuronCores (e.g., `trn3`), matching the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml): `tensor_parallel_size=4` × `ring_degree=8` (context parallelism) × `cfg_parallel_size=2` = 64.
+The recommended configuration runs on 64 NeuronCores (e.g., `trn3`), matching the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml): `tensor_parallel_size=4` × `ring_degree=8` (context parallelism) × `cfg_parallel_size=2` = 64.
 
 CFG parallelism (size=2) runs the conditional and unconditional denoising passes across separate replicas in parallel, reducing wall-clock time per diffusion step.
 
 Context parallelism shards the sequence dimension (temporal-spatial latent tokens) across up to 8 ranks, enabling generation of longer videos within per-device HBM limits. The CP degree is configured with **`ring_degree`, not `sequence_parallel_size`**: vLLM Omni enforces `sequence_parallel_size = ulysses_degree * ring_degree`, so the stage config sets `ring_degree` and leaves `ulysses_degree` (default 1) and `sequence_parallel_size` unset — vLLM Omni then derives `sequence_parallel_size = 1 * ring_degree`. `ring_degree` sizes the sequence-parallel group; the CP self-attention itself runs ring attention (K/V stay sharded and are streamed around the CP group), falling back to all-gather + flash only where the ring kernel cannot run. See the [context parallelism design doc](../design/context_parallelism.md#configuration) for details.
 
-Megatron sequence parallelism (SP) is layered **within** the TP group (orthogonal to CP): the normalization and MLP regions that TP would otherwise replicate are instead sharded along the sequence dimension across the TP ranks, cutting activation memory at large resolutions. It is enabled with `model_config.tp_sequence_parallel: true` (see the 720P config [`wan22_stage_tp4cp8cfg2_720p.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml)) and requires `tensor_parallel_size > 1`. Leave it unset (the default) at 480P, where activations already fit.
+Megatron sequence parallelism (SP) is layered **within** the TP group (orthogonal to CP): the normalization and MLP regions that TP would otherwise replicate are instead sharded along the sequence dimension across the TP ranks, cutting activation memory at large resolutions. It is enabled with `model_config.tp_sequence_parallel: true` (see the 720P config [`wan22_stage_tp4cp8cfg2_720p.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml)) and requires `tensor_parallel_size > 1`. Leave it unset (the default) at 480P, where activations already fit.
 
 ## Quantization
 
@@ -77,7 +77,7 @@ python examples/wan22/run.py \
   --comfyui-fp8-model-path Comfy-Org/Wan_2.2_ComfyUI_Repackaged
 ```
 
-or in the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml) under `engine_args.model_config`:
+or in the [stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml) under `engine_args.model_config`:
 
 ```yaml
     engine_args:

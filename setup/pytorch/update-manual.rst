@@ -3,10 +3,10 @@
    :keywords: pytorch, neuron, manual, update, upgrade, driver, pip
    :framework: pytorch
    :installation-method: manual
-   :instance-types: inf2, trn1, trn2, trn3
-   :os: ubuntu-24.04, ubuntu-22.04, al2023
+   :instance-types: trn2, trn3
+   :os: ubuntu-26.04, ubuntu-24.04, al2023
    :content-type: installation-guide
-   :date-modified: 2026-03-30
+   :date-modified: 2026-10-18
 
 Update a manual PyTorch installation
 ======================================
@@ -21,24 +21,52 @@ Update PyTorch and Neuron components on an existing manual installation to the l
 Update PyTorch on Ubuntu 24.04
 -------------------------------
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-u24.rst
-   :start-after: _pytorch-neuronx-ubuntu24-update:
+Select the PyTorch version that your existing installation uses.
+
+.. tab-set::
+
+   .. tab-item:: PyTorch 2.14
+
+      TorchNeuron (``torch-neuronx``) for PyTorch 2.14 supports Trn2 and Trn3 instances.
+      Activate your existing virtual environment, then update TorchNeuron, the Neuron
+      Compiler, and NKI:
+
+      .. code-block:: bash
+
+         source aws_neuron_venv_pytorch_2_14/bin/activate
+
+         python -m pip install --upgrade "torch-neuronx==2.14.*" \
+           "neuronx-cc==2.*" nki \
+           --extra-index-url https://pip.repos.neuron.amazonaws.com \
+           --extra-index-url https://download.pytorch.org/whl/cpu
+
+   .. tab-item:: PyTorch 2.9 (PyTorch/XLA)
+
+      .. include:: /archive/frameworks/torch/torch-neuronx/setup/pytorch-update-u24.rst
+         :start-after: _pytorch-neuronx-ubuntu24-update:
 
 
-Update PyTorch on Ubuntu 22.04
+Update PyTorch on Ubuntu 26.04
 -------------------------------
 
-.. important::
-   Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
+On Ubuntu 26.04, Neuron supports TorchNeuron (``torch-neuronx``) for PyTorch 2.14 on Trn2 and
+Trn3 instances. Activate your existing virtual environment, then update TorchNeuron, the Neuron
+Compiler, and NKI:
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-u22.rst
-   :start-after: _pytorch-neuronx-ubuntu22-update:
+.. code-block:: bash
+
+   source aws_neuron_venv_pytorch_2_14/bin/activate
+
+   python -m pip install --upgrade "torch-neuronx==2.14.*" \
+     "neuronx-cc==2.*" nki \
+     --extra-index-url https://pip.repos.neuron.amazonaws.com \
+     --extra-index-url https://download.pytorch.org/whl/cpu
 
 
 Update PyTorch on Amazon Linux 2023
 -------------------------------------
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-update-al2023.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/setup/pytorch-update-al2023.rst
    :start-after: _pytorch-neuronx-al2023-update:
 
 
@@ -60,10 +88,7 @@ when updating to a new Neuron SDK release.
          sudo apt-get install -y aws-neuronx-collectives
          sudo apt-get install -y aws-neuronx-tools
 
-   .. tab-item:: Ubuntu 22.04
-
-      .. important::
-         Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
+   .. tab-item:: Ubuntu 26.04
 
       .. code-block:: bash
 
@@ -93,7 +118,7 @@ After updating, activate your virtual environment and verify:
 
 .. code-block:: bash
 
-   source ~/neuron_venv/bin/activate
+   source aws_neuron_venv_pytorch_2_14/bin/activate
 
 .. code-block:: python
 
@@ -109,20 +134,23 @@ After updating, activate your virtual environment and verify:
    print(result.stdout)
    EOF
 
-You should see output similar to this (the instance IDS and details should match your expected ones, not the ones in this example):
+You should see output similar to the following example from a ``trn2.48xlarge`` instance. Your
+versions, instance type, and device details depend on your installation and instance.
 
-.. code-block::
+.. code-block:: text
 
-   PyTorch version: 2.9.1+cu128, torch-neuronx version: 2.9.0.2.13.23887+8e870898
-   $ neuron-ls
-   instance-type: trn1.2xlarge
-   instance-id: i-0bea223b1afb7e159
-   +--------+--------+----------+--------+--------------+----------+------+
-   | NEURON | NEURON |  NEURON  | NEURON |     PCI      |   CPU    | NUMA |
-   | DEVICE | CORES  | CORE IDS | MEMORY |     BDF      | AFFINITY | NODE |
-   +--------+--------+----------+--------+--------------+----------+------+
-   | 0      | 2      | 0-1      | 32 GB  | 0000:00:1e.0 | 0-7      | -1   |
-   +--------+--------+----------+--------+--------------+----------+------+
+   PyTorch version: 2.14.0+cpu
+   torch-neuronx version: 2.14.3.0
+   instance-type: trn2.48xlarge
+   logical-neuroncore-config: 2
+   +--------+--------+----------+--------+------+
+   | NEURON | NEURON |  NEURON  | NEURON | NUMA |
+   | DEVICE | CORES  | CORE IDS | MEMORY | NODE |
+   +--------+--------+----------+--------+------+
+   | 0      | 4      | 0-3      | 96 GB  | 1    |
+   | ...    | ...    | ...      | ...    | ...  |
+   | 15     | 4      | 60-63    | 96 GB  | 1    |
+   +--------+--------+----------+--------+------+
 
 ----
 
@@ -132,11 +160,13 @@ Install previous releases
 -------------------------
 
 If you need to install older Neuron releases on your instance, follow the instructions below.
+Neuron supports Ubuntu 26.04 starting with Neuron 2.33.0, so there are no previous releases for
+Ubuntu 26.04.
 
 Install previous releases on Ubuntu 24.04
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-u24.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/setup/pytorch-install-prev-u24.rst
    :start-after: _pytorch-neuronx-install-prev-u24:
 
 
@@ -146,12 +176,12 @@ Install previous releases on Ubuntu 22.04
 .. important::
    Ubuntu 22.04 has reached end-of-support on Neuron. Neuron no longer provides Ubuntu 22.04 DLAMIs or container images. New deployments should use Ubuntu 24.04. See :ref:`announce-eos-ubuntu-22-04-dlami-dlc`.
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-u22.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/setup/pytorch-install-prev-u22.rst
    :start-after: _pytorch-neuronx-install-prev-u22:
 
 
 Install previous releases on Amazon Linux 2023
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2023.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/setup/pytorch-install-prev-al2023.rst
    :start-after: _pytorch-neuronx-install-prev-al2023:

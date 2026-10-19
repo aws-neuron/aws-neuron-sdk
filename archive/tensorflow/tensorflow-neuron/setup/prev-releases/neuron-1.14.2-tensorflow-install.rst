@@ -7,13 +7,13 @@
    :date-modified: 2026-03-11
 
 Install TensorFlow Neuron (Neuron 1.14.2)
-======================================
+=========================================
 
 .. warning::
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 .. contents:: Table of contents

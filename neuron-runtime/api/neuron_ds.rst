@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the neuron_ds.h header in the AWS Neuron Runtime: Neuron Datastore (NDS) shared memory datastore for runtime metrics and model information.
+   :date-modified: 2026-10-13
+
 .. _api_neuron_ds_h:
 
 neuron_ds.h

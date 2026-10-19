@@ -19,6 +19,12 @@ while taking advantage of the portability and reproducibility benefits of contai
 AWS Neuron DLCs are a set of Docker images for training and serving models on AWS Trainium and Inferentia instances using AWS Neuron SDK.
 The sections below list all of the AWS Neuron DLCs, as well as the AWS DLCs that come pre-installed with the Neuron SDK.
 
+.. note::
+   Starting with Neuron 2.33.0, Neuron DLC images are published on Ubuntu 26.04 only.
+   Ubuntu 26.04 image tags carry a ``-ubuntu26.04`` suffix.
+   For the exact published tags, see the
+   `Neuron DLC repository <https://github.com/aws-neuron/deep-learning-containers>`_.
+
 
 Inference Containers
 --------------------

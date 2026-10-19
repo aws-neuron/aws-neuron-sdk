@@ -12,7 +12,7 @@ Compile with SageMaker Neo and Deploy on SageMaker Hosting (Inf1) — Archived (
 
    This document is archived. MXNet is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 The MXNet variant of this developer flow followed the same steps as the core
 SageMaker Neo to SageMaker Hosting flow.

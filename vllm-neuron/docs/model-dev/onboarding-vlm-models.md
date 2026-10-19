@@ -81,8 +81,9 @@ vllm_neuron/model/your_vlm/
 └── utils/
     ├── block_packing.py    # FFD packing of images into fixed-size attention blocks
     ├── preprocessing.py    # CPU: vision RoPE, position embeddings, attention bounds
-    ├── mrope.py            # 3D (M-RoPE) position-id computation
-    └── merge_vision_embeds.py  # Scatter vision embeddings into the text sequence
+    └── mrope.py            # 3D (M-RoPE) position-id computation
+# Note: the embedding-merge scatter is shared, not per-model:
+#   vllm_neuron/functional/merge_multimodal_embeddings.py (merge_multimodal_embeddings)
 ```
 
 #### 1a. Define the model config (`config.py`)
@@ -98,7 +99,7 @@ different parallelism degree than the text decoder:
 ```python
 from dataclasses import dataclass
 from transformers import PretrainedConfig
-from vllm_neuron.model.neuron_config import NeuronConfig, VisionNeuronConfig
+from vllm_neuron.model.neuron_config import NeuronConfig, EncoderNeuronConfig
 
 @dataclass
 class YourVLMTextConfig:
@@ -119,7 +120,7 @@ class YourVLMVisionConfig:
     spatial_merge_size: int = 2
     out_hidden_size: int = 5120           # must match text hidden_size after merge
     deepstack_visual_indexes: list | None = None
-    vision_neuron_config: VisionNeuronConfig | None = None
+    encoder_neuron_config: EncoderNeuronConfig | None = None
 
 @dataclass
 class YourVLMConfig:
@@ -133,20 +134,21 @@ class YourVLMConfig:
     @classmethod
     def from_configs(cls, hf_config: PretrainedConfig,
                      neuron_config: NeuronConfig = None,
-                     vision_neuron_config: VisionNeuronConfig = None):
+                     encoder_neuron_config: EncoderNeuronConfig = None):
         # Parse hf_config.text_config / hf_config.vision_config into the two
-        # sub-configs, attaching neuron_config and vision_neuron_config.
+        # sub-configs, attaching neuron_config and encoder_neuron_config.
         ...
 ```
 
-The `VisionNeuronConfig` dataclass (provided by the plugin at
-`vllm_neuron.model.neuron_config`) is the vision-encoder counterpart to
-`NeuronConfig`. It carries vision-specific settings: parallelism degrees
-(`tp_size`, `dp_size`), vision bucket configurations
-(`num_vision_tokens_buckets`), block-packed attention (`vision_attention_block_size`),
+The `EncoderNeuronConfig` dataclass (provided by the plugin at
+`vllm_neuron.model.neuron_config`) is the encoder counterpart to
+`NeuronConfig`. One config class serves every encoder modality. It carries
+encoder settings: parallelism degrees
+(`tp_size`, `dp_size`), encoder bucket configurations
+(`num_encoder_input_buckets`), block-packed attention (`encoder_attention_block_size`),
 on-device encoder cache sizing (`encoder_cache_num_blocks`,
 `encoder_cache_min_hold_time_ms`). See the
-[configuration reference](../guides/reference-configuration.md#vision-encoder-options-vision_neuron_config)
+[configuration reference](../guides/reference-configuration.md#multimodal-encoder-options-encoder_neuron_config)
 for details. See [`vllm_neuron/model/qwen3_vl/config.py`](https://github.com/vllm-project/vllm-neuron/blob/HEAD/vllm_neuron/model/qwen3_vl/config.py) for a concrete example.
 
 #### 1b. Implement model components (`model.py`)
@@ -175,11 +177,11 @@ pixel_values [num_blocks, block_size, patch_dim]
 Key differences from the text decoder's attention/MLP patterns:
 
 - **Independent parallelism.** The vision encoder uses its own TP/DP process
-  group (e.g. `get_neuron_vision_tp_group()`), decoupled from the text decoder's
+  group (e.g. `get_neuron_encoder_tp_group()`), decoupled from the text decoder's
   TP. Block-level DP scatters image blocks across ranks and `all_gather`s the
   merged output. There is no sequence parallelism — every rank sees the full
   sequence. See
-  [vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md).
+  [encoder parallelism](../design/parallelism/encoder_parallelism.md).
 - **Bidirectional attention with bounds masking.** Vision attention is full
   (non-GQA) and non-causal. Instead of a causal mask it uses per-image/frame
   `bound_min`/`bound_max` to isolate attention within each image or video frame.
@@ -195,7 +197,7 @@ size (batch packing) or computing a full `seq_len × seq_len` attention matrix
 First-Fit-Decreasing (FFD) bin packing and processes each block as an
 independent batch element with no cross-block attention. This yields 2×–2.5×
 efficiency on heterogeneous workloads. The block size is a compile-time constant
-(`vision_attention_block_size`, a multiple of 128) that must be ≥ the largest
+(`encoder_attention_block_size`, a multiple of 128) that must be ≥ the largest
 single image's token count. FFD packing, position shuffling, and
 `bound_min`/`bound_max` computation happen on CPU in preprocessing before kernel
 dispatch. For the algorithm, block-size tuning, and efficiency analysis, see
@@ -243,11 +245,11 @@ class YourVLModelForConditionalGeneration(nn.Module):
         ...
 
     def forward(self, input_ids, positions, attn_metadata, sampling_positions,
-                sampling_params, *, vision_embedding_blocks=None,
-                vision_positions=None, ...):
+                sampling_params, *, encoder_embedding_buffer=None,
+                encoder_block_ids=None, encoder_positions=None, ...):
         """Text decoder forward, extended to merge vision embeddings.
 
-        During prefill, `merge_vision_embeddings` scatters the cached vision
+        During prefill, `merge_multimodal_embeddings` scatters the cached vision
         embedding blocks into the token hidden states at the vision-token
         positions. Deepstack features (if any) are added to the hidden states
         after the corresponding early decoder layers.
@@ -265,7 +267,7 @@ Compared to `YourModelForCausalLM`, the additions are:
 | Method / behavior | Purpose |
 | --- | --- |
 | `embed_multimodal()` | Run the vision encoder, pack images, write embeddings to the encoder cache. Not present in text-only models. |
-| Vision-aware `forward()` | Accepts vision embedding blocks + positions; calls `merge_vision_embeddings`; injects deepstack features into early decoder layers. |
+| Vision-aware `forward()` | Accepts vision embedding blocks + positions; calls `merge_multimodal_embeddings`; injects deepstack features into early decoder layers. |
 | Two-tower composition | `self.visual` + `self.language_model` instead of a single backbone. |
 | `load_weights()` delegation | Loads the vision tower via its own loader on the independent vision TP group, in addition to the text decoder. |
 
@@ -276,8 +278,9 @@ and lets repeated media (e.g. the same image across multi-turn chat) skip
 re-encoding. It is a pre-allocated HBM buffer of fixed-size blocks
 (`[num_blocks, block_size, fat_dim]`) keyed by a per-item content hash
 (`mm_hash`). The vision encoder writes its output directly into cache blocks; at
-prefill, the runner passes zero-copy block views into the graph, which scatters
-them into the token sequence via a fixed-shape position map. Keeping the cache
+prefill, the runner passes the whole buffer plus a block-id index tensor into the
+graph, which gathers the blocks and scatters them into the token sequence via a
+fixed-shape position map. Keeping the cache
 outside the compiled graph (a runner-managed device tensor) avoids the CPU↔device
 round-trip that would otherwise gate the async dispatch pipeline.
 
@@ -289,7 +292,9 @@ contract:
 2. **`NeuronModelRunner`** — owns the buffer and slot allocator; on the
    scheduler's encode signal it calls `embed_multimodal`, and on the evict signal
    it frees blocks back to the free queue. Before prefill it gathers the block
-   views and builds the position map consumed inside the graph.
+   views and builds the position map consumed inside the graph; a scheduled item
+   whose slot is missing or incorrectly sized fails loud here (`EncoderCacheReadError`, or
+   `ECLoadFailure` under EPD) rather than silently producing a wrong result.
 
 Eviction is driven by vLLM's upstream `EncoderCacheManager` (unchanged), which
 ref-counts items and signals which `mm_hash`es to evict. For the buffer layout,
@@ -348,7 +353,7 @@ The [warmup, compilation, and runtime-padding](onboarding-models.md#3-compile-an
 mechanics are unchanged, with one addition: a VLM compiles **two sets of NEFFs** —
 the text decoder (bucketed over `num_batched_tokens_buckets` /
 `num_seqs_buckets`) and the vision encoder (bucketed over
-`num_vision_tokens_buckets`). Each vision bucket is a discrete padded shape over
+`num_encoder_input_buckets`). Each vision bucket is a discrete padded shape over
 the number of vision patches per encoder forward pass; more buckets mean longer
 warmup but less padding waste. Start with a single vision bucket sized for your
 target workload and add more as needed.
@@ -356,7 +361,7 @@ target workload and add more as needed.
 A minimal multimodal smoke test passes both text and an image through the
 offline `LLM` API to trigger compilation of both towers. For a runnable
 deployment walkthrough (online serving, offline inference, and the full
-`additional_config` with `neuron_config` + `vision_neuron_config`), follow the
+`additional_config` with `neuron_config` + `encoder_neuron_config`), follow the
 [Deploy Qwen3-VL-32B tutorial](../tutorials/tutorial-qwen3-vl-32b.md) rather than
 duplicating it here.
 
@@ -395,7 +400,7 @@ isolating drift. VLM-specific additions:
   )
 
   # 2. vLLM Neuron generate fn (raw_logits mode), then three-way compare
-  llm = LLM(model=checkpoint, **vllm_args)          # vision_neuron_config in additional_config
+  llm = LLM(model=checkpoint, **vllm_args)          # encoder_neuron_config in additional_config
   result = multi_prompt_logit_validation(
       prompts_input_ids=goldens["input_ids"],
       generate_fn=create_multimodal_vllm_generate_fn(llm, OUTPUT_LEN),
@@ -455,22 +460,22 @@ vllm bench serve \
 - `--random-mm-bucket-config` — a `{(H, W, T): probability}` map that sets the
   sampled media resolutions (`T=1` is an image; `T>1` is a video with that many
   frames). Match these to your target workload — resolution drives the vision
-  token count, and therefore which `num_vision_tokens_buckets` and
-  `vision_attention_block_size` you should compile for.
+  token count, and therefore which `num_encoder_input_buckets` and
+  `encoder_attention_block_size` you should compile for.
 
 VLM-specific optimization options:
 
-- **`vision_attention_block_size`** — trade intra-block padding against
+- **`encoder_attention_block_size`** — trade intra-block padding against
   fully-padded trailing blocks; see the block-size guidance in
   [block packing vision attention](../design/multimodal/block_packing_attention.md).
-- **`num_vision_tokens_buckets`** — size for the most images a **single request**
+- **`num_encoder_input_buckets`** — size for the most images a **single request**
   carries. The Neuron scheduler admits one request into prefill per step (batch
   size 1) and schedules its vision-encoder inputs with that prefill, so the encoder
   processes one request's images per forward pass (a request may still contain many
   images or video frames).
 - **Vision `tp_size` / `dp_size`** — full-DP favors multi-image throughput;
   higher vision TP favors single-large-image latency. See
-  [vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md).
+  [encoder parallelism](../design/parallelism/encoder_parallelism.md).
 - **Encoder cache sizing** (`encoder_cache_num_blocks`) — larger caches raise the
   cross-request/multi-turn hit rate at the cost of HBM shared with the KV cache.
 
@@ -539,7 +544,7 @@ towers. VLM-specific:
   and their runner/model integration.
 - [On-device encoder cache](../design/multimodal/on_device_encoder_cache.md) — Buffer layout,
   gather/merge, sizing, and eviction.
-- [Vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md)
+- [Encoder parallelism](../design/parallelism/encoder_parallelism.md)
   — Vision TP/DP, independent of text TP.
 - [Deploy Qwen3-VL-32B tutorial](../tutorials/tutorial-qwen3-vl-32b.md) — Runnable
   deployment walkthrough for the reference VLM.

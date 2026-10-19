@@ -11,7 +11,7 @@
    This document is archived. NxD Training (NeuronX Distributed Training) and
    the XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron
    2.32 and no longer actively maintained. For current PyTorch training on
-   Trainium, see :doc:`/frameworks/torch/index`.
+   Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 NxD Training Compatibility with NeMo
 ====================================
@@ -68,7 +68,7 @@ Optimal Partitioning
 --------------------
 
 NxDT is built on top of
-`NxD Core <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/index.html>`_
+`NxD Core <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/index.html>`_
 primitives and exposes different model parallelism techniques. All of them can be configured using
 the ``distributed_strategy`` config.
 
@@ -89,7 +89,7 @@ Checkpoint Saving/loading
    save the model ``state_dict`` and the optimizer separately. The model statedict is saved in a folder
    of the form: ``model/dp_rank_00_tp_rank_00_pp_rank_00.pt`` and the optimizer is saved into a separate folder
    as: ``optim/dp_rank_00_tp_rank_00_pp_rank_00.pt``. This is mainly done so that when we use
-   `zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/api_guide.html?highlight=zero1#neuron-zero1-optimizer>`_,
+   `zero1 <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/libraries/neuronx-distributed/api_guide.html?highlight=zero1#neuron-zero1-optimizer>`_,
    each DP rank can save its own optimizer shard.
 
 #.

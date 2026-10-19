@@ -1,6 +1,6 @@
 .. meta::
     :description: Elementwise add scalar to tensor.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.foreach
 
@@ -19,7 +19,7 @@ The ``add_scalar_kernel`` kernel performs elementwise arithmetic operations (add
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `foreach_elementwise.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/foreach/foreach_elementwise.py>`_
+**Source code for this kernel API can be found at**: `foreach_elementwise.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/foreach/foreach_elementwise.py>`_
 
 add_scalar_kernel
 ^^^^^^^^^^^^^^^^^

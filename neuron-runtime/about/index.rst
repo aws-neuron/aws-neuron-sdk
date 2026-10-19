@@ -2,7 +2,7 @@
 
 .. meta::
    :description: Learn about the AWS NeuronX Runtime, its features, and capabilities.
-   :date-modified: 11/03/2025
+   :date-modified: 2026-10-14
 
 About the NeuronX Runtime
 ==========================
@@ -36,3 +36,21 @@ Neuron Runtime Collectives
    
 
 
+Neuron Runtime core dumps
+--------------------------
+
+.. grid:: 1
+   :gutter: 2
+
+   .. grid-item-card:: Quickstart: Generating a Neuron runtime core dump
+      :link: runtime-core-dump-quickstart
+      :link-type: ref
+      :class-header: sd-bg-primary sd-text-white
+
+      Generate your first core dump by running a NKI kernel that faults, then find the dump on disk. To interpret the contents, see the :ref:`core dump deep dive <runtime-core-dump-deep-dive>`.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   Quickstart: Generating a core dump <core-dump>

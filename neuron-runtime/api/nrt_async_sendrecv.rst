@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_async_sendrecv.h header in the AWS Neuron Runtime: Neuron Runtime asynchronous send and receive API for communication between logical NeuronCores.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_async_sendrecv_h:
 
 nrt_async_sendrecv.h

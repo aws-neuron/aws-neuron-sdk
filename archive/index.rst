@@ -1,7 +1,7 @@
 .. meta::
    :description: Archived AWS Neuron SDK documentation
    :keywords: AWS Neuron SDK, archived tutorials, legacy documentation
-   :date-modified: 2026-05-11
+   :date-modified: 2026-10-13
 
 =====================================
 Archived AWS Neuron SDK documentation
@@ -94,6 +94,57 @@ The following deployment flow pages were archived during the consolidation of ``
      - Archived on: 4/20/2026
 
 
+Archived quickstarts and getting-started pages
+----------------------------------------------
+
+The following pages were archived when the quickstarts moved to the TorchNeuron, vLLM Neuron, vLLM Omni Neuron, NKI, Neuron Explorer, and Neuron Observer stack in Neuron 2.33.0. For current quickstarts, see :ref:`neuron-quickstart`.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Page
+     - Reason archived
+     - Date archived
+   * - :doc:`quick-start/training-quickstart`
+     - Uses Trn1. TorchNeuron supports only Trn2 and Trn3.
+     - Archived on: 10/13/2026
+   * - :doc:`quick-start/inference-quickstart`
+     - Uses the legacy PyTorch/XLA ``torch_neuronx.trace`` flow on Inf2
+     - Archived on: 10/13/2026
+   * - :doc:`amazonq-getstarted`
+     - Superseded by Neuron agentic development
+     - Archived on: 10/13/2026
+
+Archived samples, benchmarks, FAQs, and tools from About Neuron
+---------------------------------------------------------------
+
+The following pages were moved from the About Neuron section because they describe retired instances, frameworks, or flows.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Page
+     - Reason archived
+     - Date archived
+   * - :doc:`Model samples and tutorials <models/index>`
+     - Lists samples for transformers-neuronx, NxD Training, NeMo, torch-neuron, TensorFlow Neuron, and MXNet Neuron
+     - Archived on: 10/13/2026
+   * - :doc:`Neuron performance benchmarks <benchmarks/index>`
+     - Inf1, Inf2, and Trn1 benchmarks measured with retired or legacy components (TensorFlow Neuron, torch-neuron, transformers-neuronx, PyTorch/XLA, NxD Core, and NxD Training)
+     - Archived on: 10/13/2026
+   * - :doc:`Other Neuron FAQs <faq/index>`
+     - ONNX (torch-neuron), Inf1 inference, Inf1 troubleshooting, and Trn1 training FAQs
+     - Archived on: 10/13/2026
+   * - :doc:`Neuron Calculator <transformers-neuronx/neuron-calculator>`
+     - transformers-neuronx tensor parallel calculator for Inf2 and Trn1
+     - Archived on: 10/13/2026
+   * - :doc:`Neuron Custom C++ operators feature overview <neuron-features/custom-c++-operators>`
+     - Applies only to Inf2 and Trn1; NKI is the custom kernel path on Trn2 and Trn3
+     - Archived on: 10/13/2026
+   * - :doc:`Neuron Custom C++ Operators <neuron-customops/index>`
+     - ``aws-neuronx-gpsimd-customop-lib`` is in maintenance mode starting with Neuron 2.33 (Inf2 and Trn1 only, PyTorch/XLA path); use NKI for new custom operators
+     - Archived on: 10/18/2026
+
 Legacy setup
 ------------
 
@@ -176,6 +227,18 @@ Archived tutorials
     containers/tutorial-docker-runtime1.0
     setup/index
     nxd-training/index
+    frameworks/index
+    frameworks/torch/index
+    libraries/index
+    libraries/neuronx-distributed/index-training
+    quick-start/training-quickstart
+    quick-start/inference-quickstart
+    amazonq-getstarted
+    models/index
+    benchmarks/index
+    faq/index
+    neuron-features/custom-c++-operators
+    neuron-customops/index
 
 Accessing Archived Content
 --------------------------

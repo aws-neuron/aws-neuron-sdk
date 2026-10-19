@@ -1,5 +1,4 @@
 # Feature and model compatibility
-
 <!-- meta: description: Redirect to per-model feature support in model recipe pages. -->
 <!-- meta: date_updated: 2026-08-06 -->
 

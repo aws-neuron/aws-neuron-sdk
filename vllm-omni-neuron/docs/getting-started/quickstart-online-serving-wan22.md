@@ -8,7 +8,6 @@ Wan2.2-T2V-A14B, text-to-video, video generation, online serving, OpenAI API,
 AWS Trainium, trn2, NeuronCores, quickstart -->
 <!-- meta: date_updated: 2026-09-14 -->
 <!-- meta: content_type: procedural-quickstart -->
-<!-- Jira: NMI-413 -->
 
 This quickstart shows you how to serve
 [Wan2.2-T2V-A14B](../models/wan22-t2v-14b.md) on a `trn2.48xlarge` instance with
@@ -57,14 +56,14 @@ sudo docker exec -it \
     --omni \
     --host 0.0.0.0 \
     --port 8091 \
-    --stage-configs-path /workspace/plugin/examples/wan22/wan22_stage.yaml \
+    --deploy-config /workspace/plugin/examples/wan22/wan22_stage.yaml \
     --stage-init-timeout 3600 \
     --init-timeout 3600
 ```
 
-For 720P serving, replace `--stage-configs-path` with
+For 720P serving, replace `--deploy-config` with
 `/workspace/plugin/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml`
-([720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml))
+([720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml))
 and request `width=1280` and `height=720`. This config enables VAE tiling and
 32-way VAE patch parallelism; the 480P examples below use `wan22_stage.yaml`.
 
@@ -189,7 +188,7 @@ By default, the asynchronous API stores generated files in `/tmp/storage`
 inside the container. To use another local or mounted directory, add
 `-e VLLM_OMNI_SERVER_STORAGE__PATH=/path/to/videos` to the `docker exec` command
 that starts the server. Delete a job and its stored output with the `DELETE`
-endpoint in [Clean up](#clean-up). vLLM Omni 0.24.0 has no S3 storage backend;
+endpoint in [Clean up](#clean-up). vLLM Omni 0.29.0 has no S3 storage backend;
 upload the downloaded MP4 separately if you need remote storage.
 
 ## Common issues
@@ -232,5 +231,5 @@ docker rm vllm-omni-neuron
   parallelism selection, 720p and VAE tiling, and quality tuning.
 - [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) — architecture, feature
   support, and [VBench](https://arxiv.org/abs/2311.17982) accuracy.
-- [Stage config (`wan22_stage.yaml`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml) —
+- [Stage config (`wan22_stage.yaml`)](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml) —
   the parallelism and model configuration used by the server.

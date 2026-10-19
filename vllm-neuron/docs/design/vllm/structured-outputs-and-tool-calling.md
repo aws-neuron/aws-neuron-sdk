@@ -308,6 +308,56 @@ For SO-off-only deployments, this no-op mask is skipped by default, or can be ma
 
 This is a performance mode for servers that will not accept structured-output requests. If a request does include `structured_outputs` while this mode is enabled, vLLM Neuron rejects it with an actionable error asking the user to restart the server with `enable_structured_outputs=true`. It does not silently ignore the schema request, because returning an unconstrained answer would violate the client's requested contract.
 
+## Jump-Forward Decoding
+
+Disabled by default. Enable via `max_jump_forward_tokens` (requires `enable_structured_outputs=true` and `{"backend": "xgrammar"}` in
+`structured_outputs_config`):
+
+``` json
+{
+  "additional_config": {
+    "neuron_config": {
+      "enable_structured_outputs": true,
+      "max_jump_forward_tokens": 3
+    }
+  },
+  "structured_outputs_config": {"backend": "xgrammar"}
+}
+```
+
+Currently, jump-forward decoding in vLLM Neuron is supported only with xgrammar.
+
+### Motivation
+
+Since many structured output requests can be advanced with deterministic strings (say, JSON keys or parentheses in generally), we can skip forward passes and just tokenize that deterministic string instead.
+
+### How Jump-Forward Works
+
+``` text
+Scheduler (scheduler.py)
+  1. After the normal grammar bitmask advancement, check if we can advance the request with a deterministic string.
+  2. Tokenize it via _compute_jump_forward_tokens
+  3. Advance the grammar FSM over those tokens via grammar.accept_tokens(),
+     and attach them to scheduler_output._jf_decode_tokens.
+                    ↓
+Model Runner (neuron_model_runner.py)
+  4. When _jf_decode_tokens is present for a decode step, use the JF NEFF to compute KV tensors
+  and sample the next token.
+```
+
+### Grammar Rollback Patch
+
+We apply a monkey-patch that wraps `StructuredOutputManager.grammar_init` so we don't double accept jump-forward tokens.
+This patch lives in `vllm_neuron/vllm/patches/jf_grammar_patch.py` (`apply_jf_grammar_rollback_patch`), and is applied when `max_jump_forward_tokens > 0`.
+
+### Mutual Exclusivity with Speculative Decoding
+
+JF and speculative decoding are mutually exclusive. If both are enabled, we default to spec-decoding.
+
+### Data Parallelism (DP > 1)
+
+We support DP > 1 with jump forward decoding by using the JF NEFF on the entire DP group if any have JF tokens.
+
 ## Limitations
 
 1. **On-device sampling required** Structured outputs are only supported with on-device sampling enabled. Attempting to use them with CPU sampling raises `NotImplementedError`.

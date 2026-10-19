@@ -1,6 +1,6 @@
 .. meta::
    :description: Configure the Neuron Runtime on AWS Trainium and Inferentia through environment variables that control NeuronCore allocation, execution timeouts, logging, checksum validation, shared weights, and async execution.
-   :date-modified: 2026-05-11
+   :date-modified: 2026-09-10
    :keywords: Neuron, Neuron Runtime, NRT, configuration, environment variables, NEURON_RT_VISIBLE_CORES, NEURON_RT_NUM_CORES, NEURON_RT_LOG_LEVEL
 
 .. _nrt-configuration:
@@ -11,90 +11,7 @@ Neuron Runtime configuration
 
 Neuron Runtime is responsible for executing ML models on Neuron devices. Neuron Runtime determines which NeuronCore will execute which model and how to execute it. Configuration of Neuron Runtime is controlled through environment variables at the process level. By default, Neuron framework extensions take care of Neuron Runtime configuration on the user's behalf. Explicit configuration is also possible when attempting to achieve a desired behavior.
 
-This guide provides an overview of the environment variables available to configure Neuron Runtime behavior.
-
-.. list-table:: Environment variables
-   :widths: 25 60 20 50 20 50
-   :header-rows: 1
-
-
-   * - Name
-     - Description
-     - Type
-     - Expected values
-     - Default value
-     - RT version
-   * - ``NEURON_RT_VISIBLE_CORES``
-     - Range of specific NeuronCores needed by the process
-     - Integer range (like 1-3)
-     - Any value or range between 0 to Max NeuronCore in the system.
-     - None
-     - 2.0+
-   * - ``NEURON_RT_NUM_CORES``
-     - Number of NeuronCores required by the process.
-     - Integer
-     - A value from 1 to Max NeuronCore in the system.
-     - 0, which is interpreted as "all"
-     - 2.0+
-   * - ``NEURON_RT_LOG_LOCATION``
-     - Runtime log location
-     - string
-     - console or syslog
-     - console
-     - 2.0+
-   * - ``NEURON_RT_LOG_LEVEL``
-     - Runtime log verbose level
-     - string
-     - ERROR, WARNING, INFO, DEBUG, TRACE
-     - ERROR
-     - 2.0+
-   * - ``NEURON_RT_EXEC_TIMEOUT``
-     - Timeout for execution in seconds
-     - Integer
-     - 0 to INT_MAX
-     - 30
-     - 2.0+
-   * - ``NEURON_RT_VALIDATE_HASH``
-     - Validate NEFF contents before loading into accelerator
-     - Boolean
-     - TRUE or FALSE
-     - FALSE
-     - 2.0+
-   * - ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS``
-     - Share weights when loading multiple instance versions of the same model on different NeuronCores
-     - Boolean
-     - TRUE or FALSE
-     - FALSE
-     - 2.11+
-   * - ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS``
-     - Controls number of asynchronous execution requests to be supported.
-     - Integer
-     - 0 to INT_MAX; 0 is disabled.
-     - 0
-     - 2.15+
-   * - ``NEURON_RT_ALLOW_LEGACY_NEFF``
-     - Allow a NEFF compiled for an older arch to execute on a newer one. For example, executing a NEFF originally compiled for ``Trn1`` architecture on ``Trn2``. **Caution**: Do not use this flag in production environments -- it is strictly for testing. See the warning below.
-     - Boolean
-     - TRUE or FALSE
-     - FALSE
-     - 2.25+
-   * - ``NEURON_RT_NUMERICAL_ERRORS_VERBOSITY``
-     - Controls which classes of numerical error notifications the runtime
-       collects and reports during execution. Each level is cumulative:
-       ``none`` disables all numerical error reporting, ``critical`` reports
-       NaNs only, ``debug`` adds overflows and underflows, and ``verbose``
-       additionally reports infinities.
-     - string
-     - ``none``, ``critical``, ``debug``, ``verbose`` (case-insensitive). Any
-       other value causes ``nrt_init()`` to fail with ``NRT_INVALID``.
-     - ``none``
-     - 2.24+
-
-.. warning::
-  ``NEURON_RT_ALLOW_LEGACY_NEFF`` is intended for testing only and should not be used in production. Running a NEFF that was compiled for a different target architecture (such as running a NEFF targeting ``Trn2`` on a ``Trn3`` instance) can cause silent data corruption in model outputs or hangs at runtime, among other unexpected failure conditions.
-
-.. warning::
-  When enabling ``NEURON_RT_NUMERICAL_ERRORS_VERBOSITY``, there is a hardware limitation that can cause numerical errors to be sticky and falsely reported. Once a numerical condition is flagged on an engine, the hardware status can remain set, so the same error may be reported again for subsequent operations that did not actually produce it. Treat the reports at any verbosity level as an indication that a numerical condition occurred somewhere in the execution, not as exact per-operation attribution, and expect possible false positives after a first genuine occurrence. This sticky hardware state is cleared when restarting the application.
+This guide walks through the most common configuration tasks with worked examples. For the complete, categorized list of runtime environment variables — including their types, defaults, and use classes — see :ref:`nrt-env-var-reference`.
 
 NeuronCore allocation
 ---------------------
@@ -167,18 +84,19 @@ Notes
 Logging and debugging
 ---------------------
 
-By default, Neuron Runtime logs to syslog with verbose level of *INFO*, and only *ERROR* entries are logged to the console. The following code snippet shows ways to increase or decrease the log level.
+By default, Neuron Runtime logs to both console and syslog at level ``WARN`` for every submodule except ``HAL``, which logs at ``ERROR``. Use ``NEURON_RT_LOG_LEVEL`` to raise or lower the global verbosity, and ``NEURON_RT_LOG_LOCATION`` to choose where logs go.
+
+Setting only ``NEURON_RT_LOG_LEVEL`` sends logs to the console alone and stops syslog output, and setting only ``NEURON_RT_LOG_LOCATION`` lowers the level to ``ERROR``, so warnings are no longer logged.
 
 ::
 
- NEURON_RT_LOG_LEVEL=INFO myapp.py         # Sets the log level for syslog and console to INFO
- NEURON_RT_LOG_LOCATION=console NEURON_RT_LOG_LEVEL=QUIET myapp.py    # Completely disables console logging.
+ NEURON_RT_LOG_LEVEL=INFO myapp.py       # raises console verbosity to INFO
 
-By default, Neuron Runtime expects the NeuronCore to complete execution of any model within 2 seconds. If the NeuronCore doesn't complete execution within 2 seconds, runtime fails the execution with a timeout error. Most models take a few milliseconds to complete, so 2 seconds (2000 milliseconds) is more than adequate. However, if your model is expected to run more than 2 seconds, you can increase the timeout with ``NEURON_RT_EXEC_TIMEOUT``.
+By default, Neuron Runtime allows each model execution 30 seconds to complete. If the NeuronCore doesn't complete execution within that window, the runtime fails the execution with a timeout error. Most models take a few milliseconds, so 30 seconds is more than adequate. However, distributed workloads can legitimately need longer — network interruptions are the usual cause of spurious timeouts — so you can increase the timeout with ``NEURON_RT_EXEC_TIMEOUT``.
 
 ::
 
- NEURON_RT_EXEC_TIMEOUT=5 myapp.py       # increases the timeout to 5 seconds
+ NEURON_RT_EXEC_TIMEOUT=120 myapp.py       # increases the timeout to 120 seconds
 
 
 Additional logging controls
@@ -191,13 +109,15 @@ Neuron Runtime enables detailed control over logging behaviors, including the ab
   2023-Jan-09 20:27:41.0593 15042:15042 ERROR  TDRV:exec_consume_infer_status_notifications (FATAL-RT-UNDEFINED-STATE) inference timeout (600000 ms) on Neuron Device 0 NC 0, waiting for execution completion notification
   2023-Jan-09 20:27:41.0600 15042:15042 ERROR  NMGR:dlr_infer
 
-However, it is possible to adjust the log level for individual components to capture more or less detail as required for specific debugging contexts. The components are:
+However, it is possible to adjust the log level for individual submodules to capture more or less detail as required for specific debugging contexts. Commonly used submodules include:
 
 - ``TDRV``: the low-level driver library
-- ``KMGR``: the higher-level manager library bridging the driver and runtime
+- ``NMGR``: the higher-level manager library bridging the driver and runtime
 - ``NRT``: the Neuron Runtime library responsible for loading and executing models that is exposed to end users and frameworks
 
-To adjust the log level for individual components, use the environment variable ``NEURON_RT_LOG_LEVEL_<component>``, where ``<component>`` is the identifier of the component (``TDRV``, ``NMGR``, or ``NRT``). This allows for precise control over the verbosity of logs generated by each component, facilitating more targeted debugging. For example, the following sets different log levels for the ``TDRV`` and ``NMGR`` components:
+For the complete list of loggable submodules, see :ref:`nrt-env-var-reference`.
+
+To adjust the log level for an individual submodule, use the environment variable ``NEURON_RT_LOG_LEVEL_<submodule>``, where ``<submodule>`` is the submodule identifier (for example ``TDRV``, ``NMGR``, or ``NRT``). This allows for precise control over the verbosity of logs generated by each submodule, facilitating more targeted debugging. For example, the following sets different log levels for the ``TDRV`` and ``NMGR`` submodules:
 
 ::
 
@@ -205,7 +125,7 @@ To adjust the log level for individual components, use the environment variable 
   export NEURON_RT_LOG_LEVEL_NMGR=ERROR
 
 
-Similarly, to specify separate log locations for individual components, use the environment variable ``NEURON_RT_LOG_LOCATION_<component>``, following the same naming convention as for log levels. This feature enables logs from different components to be directed to separate files or destinations, making it easier to organize and analyze the log output. For example, the following sets different log locations for the ``TDRV`` and ``NMGR`` components:
+Similarly, to specify separate log locations for individual submodules, use the environment variable ``NEURON_RT_LOG_LOCATION_<submodule>``, following the same naming convention as for log levels. As with the global controls, selecting one sink for a submodule disables the other for that submodule. This feature enables logs from different submodules to be directed to separate destinations, making it easier to organize and analyze the log output. For example, the following sets different log locations for the ``TDRV`` and ``NMGR`` submodules:
 
 ::
 
@@ -225,34 +145,10 @@ To execute a model (NEFF), Neuron Runtime needs to load the NEFF file into the N
  NEURON_RT_VALIDATE_HASH=false myapp2.py    # disables (default) model checksum validation while loading
 
 
-Shared weights (NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS)
---------------------------------------------------------
-
-By default, Neuron Runtime makes copies of model weights when loading the same instance of a model to multiple NeuronCores. Changing this default to a weight-sharing mechanism is possible with Neuron Runtime 2.11 or higher by setting ``NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE``. Use of this flag allows more models to be loaded by reducing the memory requirements, but potentially comes at the cost of throughput by forcing execution across cores to compete for memory bandwidth.
-
-Note: using this flag requires the model to be loaded with the multi-instance feature (see :ref:`torch_core_placement_api`).
-
-See the :pytorch-neuron-src:`[BERT tutorial with shared weights notebook] <bert_tutorial/tutorial_pretrained_bert_shared_weights.ipynb>` for an example of how this is used in ``Torch-Neuron``.
-
-::
-
- NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=TRUE myapp1.py     # enables model weight sharing
- NEURON_RT_MULTI_INSTANCE_SHARED_WEIGHTS=FALSE myapp2.py    # disables (default) model weight sharing
-
-
-Asynchronous execution (NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS)
--------------------------------------------------------------------
-
-A beta asynchronous execution feature that can reduce latency by roughly 12% for training workloads. Starting in Neuron Runtime 2.15, the feature is available but disabled. To enable the feature for possible improvement, the recommendation is to set ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS`` to 3. Setting the number of inflight requests above 3 may lead to out-of-memory (OOM) errors during execution. For developers using ``libnrt.so`` directly, use ``nrt_register_async_exec_callback`` to register a callback for the Neuron Runtime execution thread to post the execution status to. A default callback will be registered if one is not set by the developer.
-
-::
-
- NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS=3 myapp.py     # Up to 3 async exec requests at once.
- NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS=0 myapp.py     # disables async execution (default behavior)
-
 Related topics
 --------------
 
+* :ref:`nrt-env-var-reference` — complete reference for all runtime environment variables, grouped by use class
 * :ref:`neuron-runtime-guides` — all Neuron Runtime how-to guides
 * :ref:`nrt-api-guide` — Neuron Runtime developer guide for C/C++ applications
 * :ref:`nrt-migrate-to-explicit-async` — migrate to the explicit async APIs

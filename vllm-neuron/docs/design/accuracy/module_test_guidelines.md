@@ -270,7 +270,7 @@ Use real checkpoint weights. Compare vLLM Neuron output against HuggingFace refe
 Each test combines per-sample two-way validation (informational, logged but not gating) with aggregated three-way validation (the real accuracy gate) across N=10 inputs:
 
 ``` text
-1. Resolve checkpoint (get_model_checkpoint)
+1. Resolve checkpoint to a local safetensors path
 2. Load HF reference module with real weights (BF16 + FP32 copy)
 3. Create vLLM Neuron executor with model_load closure
 4. For each of N_SAMPLES inputs:
@@ -323,17 +323,12 @@ def load_hf_attention_from_safetensors(checkpoint_path, layer_idx):
 
 ### Checkpoint Resolution
 
-Use `get_model_checkpoint()` for portable checkpoint resolution (local cache → S3 → HuggingFace):
+Resolve the module under test to a local checkpoint directory (real safetensors
+weights). Point `model_checkpoint` at a pre-downloaded checkpoint, or at the
+path returned by your own resolver:
 
 ``` python
-from test.vllm_neuron.utils.logit_test_utils import get_model_checkpoint
-model_checkpoint = get_model_checkpoint(model_id)
-```
-
-Or use a local path directly when the checkpoint is pre-downloaded:
-
-``` python
-MODEL_PATH = "/path/to/your/model/checkpoint"
+model_checkpoint = "/path/to/your/model/checkpoint"
 ```
 
 ### vLLM Neuron Weight Loading

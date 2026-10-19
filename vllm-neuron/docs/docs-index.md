@@ -8,7 +8,7 @@ OpenAI-compatible API.
 
 For a high-level overview of inference on Neuron and help choosing the right
 inference solution, see
-[Inference on Neuron](/libraries/vllm-neuron/neuron-inference-overview). The
+[Inference on Neuron](/inference). The
 source code for the vLLM Neuron plugin is hosted in the
 [vLLM Neuron GitHub repository](https://github.com/vllm-project/vllm-neuron).
 
@@ -75,6 +75,20 @@ All Neuron-specific options in `additional_config` and environment variables.
 Capture Neuron Runtime profiles via built-in profiler endpoints.
 :::
 
+:::{grid-item-card} Precompile cache
+:link: guides/how-to-precompile-cache
+:link-type: doc
+
+Understand the Precompile Cache, confirm a warm hit, and know what invalidates it.
+:::
+
+:::{grid-item-card} Compilation route
+:link: guides/how-to-choose-compilation-route
+:link-type: doc
+
+Keep the default native route, go back to the XLA route, and confirm which route runs.
+:::
+
 :::{grid-item-card} Model recipes
 :link: model-recipes/index
 :link-type: doc
@@ -103,6 +117,13 @@ Model recipe for the Llama 3 family (1B, 8B, 70B) on Trn2/Trn3.
 Model recipe for GPT-OSS 20B and 120B (MoE) on Trn2/Trn3.
 :::
 
+:::{grid-item-card} Deploy Qwen3-32B
+:link: model-recipes/qwen3-32b
+:link-type: doc
+
+Model recipe for Qwen3-32B (dense) on Trn2/Trn3.
+:::
+
 :::{grid-item-card} Deploy Qwen3-VL
 :link: model-recipes/qwen3-vl
 :link-type: doc
@@ -115,6 +136,13 @@ Model recipe for Qwen3-VL 32B (multimodal) on Trn2/Trn3.
 :link-type: doc
 
 Model recipe for Qwen3-Embedding 8B (pooling / embeddings) on Trn2/Trn3.
+:::
+
+:::{grid-item-card} Deploy Qwen3-ASR 1.7B
+:link: model-recipes/qwen3-asr
+:link-type: doc
+
+Model recipe for Qwen3-ASR 1.7B speech recognition on Trn2.
 :::
 
 ::::
@@ -143,6 +171,13 @@ Run GPT-OSS-120B with an EAGLE3 draft model for higher throughput.
 :link-type: doc
 
 End-to-end deployment of GPT-OSS on Trn2/Trn3.
+:::
+
+:::{grid-item-card} High-performance GPT-OSS 120B 8K/1K deployment
+:link: tutorials/tutorial-gpt-oss-120b-8k1k-trn3
+:link-type: doc
+
+Serve GPT-OSS 120B at 8K/1K on two Trn3 instances, with the decode megakernel.
 :::
 
 :::{grid-item-card} Qwen3-VL multimodal tutorial
@@ -178,6 +213,13 @@ Measure TTFT improvement from prefix caching with GPT-OSS.
 :link-type: doc
 
 Serve embeddings via `/v1/embeddings` with a pooling model.
+:::
+
+:::{grid-item-card} Qwen3-ASR transcription tutorial
+:link: tutorials/tutorial-qwen3-asr-1-7b
+:link-type: doc
+
+Deploy Qwen3-ASR-1.7B for online and offline transcription.
 :::
 
 ::::
@@ -255,9 +297,9 @@ Run the automated debugger pipeline and interpret results.
 | [Component DP sharding](design/parallelism/component_dp_sharding.md) | Per-component independent sharding |
 | [Data parallelism](design/parallelism/data_parallelism.md) | Data parallelism overview |
 | [Decode Context Parallelism](design/parallelism/dcp.md) | KV cache sequence sharding for long contexts |
+| [Encoder parallelism](design/parallelism/encoder_parallelism.md) | Independent TP/DP for multimodal encoders |
 | [Expert parallelism](design/parallelism/expert_parallelism.md) | Expert parallelism for MoE |
 | [Tensor parallelism](design/parallelism/tensor_parallelism.md) | Tensor parallelism overview |
-| [Vision encoder parallelism](design/parallelism/vision_encoder_parallelism.md) | Independent TP/DP for vision encoders |
 
 ### Speculation
 
@@ -270,7 +312,8 @@ Run the automated debugger pipeline and interpret results.
 | Topic | Description |
 |---|---|
 | [Block packing attention](design/multimodal/block_packing_attention.md) | FFD block packing for multi-image attention efficiency |
-| [On-Device Encoder Cache](design/multimodal/on_device_encoder_cache.md) | Block-based on-device cache for vision encoder outputs |
+| [On-Device Encoder Cache](design/multimodal/on_device_encoder_cache.md) | Block-based on-device cache for encoder outputs |
+| [Encoder Cache Metrics](design/multimodal/encoder_cache_metrics.md) | mm / prefix / encoder cache layers and their Prometheus metrics |
 | [M-RoPE](design/multimodal/mrope.md) | Spatial position embeddings for VLMs |
 
 ### vLLM integration
@@ -288,7 +331,7 @@ Run the automated debugger pipeline and interpret results.
 | [Neuron profiling](design/vllm/neuron-profiling.md) | Profiling integration |
 | [Neuron scheduler](design/vllm/neuron-scheduler.md) | Holdback queue and admission control |
 | [Block KV batching and padding](design/vllm/padding-batching-block-kv.md) | Block KV cache architecture |
-| [Prefix caching](design/vllm/prefix-caching.md) | Prefill segmentation and KV reuse |
+| [Prefill processing and prefix caching](design/vllm/prefix-caching.md) | Prefill segmentation and KV reuse |
 | [Pooling models](design/vllm/pooling-models.md) | Pooling model execution on Neuron |
 | [Prompt embeddings](design/vllm/prompt-embeddings.md) | Prompt embedding support |
 | [Structured outputs and tool calling](design/vllm/structured-outputs-and-tool-calling.md) | JSON, regex, grammar-constrained generation |
@@ -300,13 +343,13 @@ Run the automated debugger pipeline and interpret results.
 |---|---|
 | [Async execution](design/framework/async_execution.md) | Async execution double buffering |
 | [Checkpoint loading](design/framework/checkpoint_loading.md) | Weight loading with parallelism |
-| [Model bringup](design/framework/model_bringup.md) | Model bringup workflow |
 | [Model factory](design/framework/model_factory_design.md) | Model registry and factory pattern |
 
 ### Compilation
 
 | Topic | Description |
 |---|---|
+| [How vLLM is integrated with TorchNeuron](design/compilation/how_vllm_is_integrated_with_torchneuron.md) | How vLLM Neuron uses the TorchNeuron `torch.compile` lowering |
 | [Compilation cache](design/compilation/compilation_cache.md) | Compilation cache (hit/miss, remote store) |
 | [CPU compilation](design/compilation/cpu_compilation.md) | Ahead-of-time CPU compilation (NEFF extraction) |
 | [FX passes architecture](design/compilation/fx_passes_design.md) | FX passes architecture |

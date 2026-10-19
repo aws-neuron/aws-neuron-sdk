@@ -1,6 +1,6 @@
 .. meta::
    :description: Migrate from implicit async execution mode (NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS) to the explicit nrta_* async APIs in Neuron Runtime
-   :date_updated: 2026-05-15
+   :date-modified: 2026-10-13
 
 .. _nrt-migrate-to-explicit-async:
 
@@ -21,7 +21,7 @@ Prerequisites
 -------------
 
 - **Neuron SDK version:** Neuron SDK 2.29 or later with explicit async API support.
-- **Familiarity with the synchronous NRT APIs:** You should already have a working application using ``nrt_execute``.
+- **Familiarity with the synchronous NRT APIs:** You should already have a working application using ``nrt_execute``. For more details, see 
 - **Header inclusion:** Ensure your project includes ``nrt/nrt_async.h``.
 
 .. note::
@@ -214,6 +214,9 @@ Uh oh! Did you encounter an error or other issue while working through this task
 Related information
 -------------------
 
-- `Neuron Runtime Async API Overview <nrt_async_api_overview.md>`_ - Motivation and design of the explicit async APIs
-- `Async API Best Practices <nrt_async_api_best_practices.md>`_ - Guidelines for maximizing device utilization
-- `Async API Usage Examples <nrt_async_api_examples.md>`_ - Code examples for scheduling, polling, events, and error handling
+- :ref:`nrt-env-var-reference` - Runtime environment variable reference, including the deprecated ``NEURON_RT_ASYNC_EXEC_MAX_INFLIGHT_REQUESTS`` variable
+- :ref:`Neuron Runtime Asynchronous Execution API <api_nrt_async_h>` - Reference for the ``nrta_*`` scheduling, polling, and event functions
+- :ref:`Neuron Runtime Asynchronous Send/Receive API <api_nrt_async_sendrecv_h>` - Reference for asynchronous communication between logical NeuronCores
+- :ref:`Neuron Runtime Async APIs: Motivation and Overview <nrt-async-api-overview>` - Why and when to use the explicit ``nrta_*`` async APIs
+- :ref:`Neuron Runtime Async APIs: Best Practices <nrt-async-api-best-practices>` - How to choose between sync and async APIs, keep execution queues full, and handle execution errors
+- :ref:`Neuron Runtime Async API Usage Examples <nrt-async-api-examples>` - C code examples that schedule execution and wait for completion

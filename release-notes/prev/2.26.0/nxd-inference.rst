@@ -37,7 +37,7 @@ In this beta release, Llama 4 model support has the following limitations:
 
 These limitations will be addressed in a future release.
 
-For more information, see :ref:`/libraries/nxd-inference/tutorials/llama4-tutorial.ipynb`
+For more information, see :ref:`/inference-legacy/nxd-inference/tutorials/llama4-tutorial.ipynb`
 and :ref:`nxdi-model-reference`.
 
 FLUX.1 model support (beta)
@@ -50,7 +50,7 @@ by Black Forest Labs. Flux.1-dev is tested on Trn2. Compatible models include:
 
 In this beta release, the model's performance isn't optimized.
 
-For more information, see :ref:`/libraries/nxd-inference/tutorials/flux-inference-tutorial.ipynb`
+For more information, see :ref:`/inference-legacy/nxd-inference/tutorials/flux-inference-tutorial.ipynb`
 and :ref:`nxdi-model-reference`.
 
 Expert parallelism support (beta)

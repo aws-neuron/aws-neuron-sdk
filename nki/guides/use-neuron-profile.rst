@@ -431,6 +431,103 @@ You can optionally include your NKI source code files for display in Neuron Prof
       :align: center
       :width: 750
 
+.. _nki-define-regions:
+
+Define NKI Regions in Your Kernel
+---------------------------------
+
+You can mark sections of your NKI kernel as NKI Regions to isolate areas of interest for performance analysis. These NKI Regions appear as named regions in Neuron Explorer's Region Highlighter, making it easy to measure and compare the performance of different phases of your kernel.
+
+Enable Region Highlighter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``nki.language.profiler_region_open`` and ``nki.language.profiler_region_close`` to bracket the code you want to mark as an NKI Region::
+
+    import nki
+    import nki.language as nl
+    import nki.isa as nisa
+
+    @nki.jit
+    def my_kernel(input_tensor):
+        nl.profiler_region_open("load")
+        tile = nl.ndarray((128, 128), dtype=nl.float16, buffer=nl.sbuf)
+        nisa.dma_copy(tile, input_tensor[0:128, 0:128])
+        nl.profiler_region_close()
+
+        nl.profiler_region_open("compute", color="#4CAF50")
+        result = nl.ndarray((128, 128), dtype=nl.float16, buffer=nl.sbuf)
+        nisa.tensor_tensor(result, tile, tile, op=nl.add)
+        nl.profiler_region_close()
+
+        nl.profiler_region_open("store")
+        out = nl.ndarray((128, 128), dtype=input_tensor.dtype, buffer=nl.shared_hbm)
+        nl.store(out, result)
+        nl.profiler_region_close()
+
+        return out
+
+All hardware instructions compiled from code between ``profiler_region_open`` and ``profiler_region_close`` are associated with that region, even if the compiler reorders them.
+
+.. important::
+
+    You must set the environment variable ``NKI_DEBUG_INFO=True`` for NKI Regions to be emitted in the compiled NEFF. Without this, region metadata is not included and NKI Regions will not appear in Neuron Explorer::
+
+        import os
+        os.environ["NKI_DEBUG_INFO"] = "True"
+
+Nested regions
+~~~~~~~~~~~~~~
+
+Regions can be nested. Instructions inside an inner region are associated with both the inner and outer labels::
+
+    nl.profiler_region_open("outer")
+    # ... instructions here are labeled "outer" ...
+
+    nl.profiler_region_open("inner")
+    # ... instructions here are labeled "outer" AND "inner" ...
+    nl.profiler_region_close()
+
+    # ... back to just "outer" ...
+    nl.profiler_region_close()
+
+Regions inside loops
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When ``profiler_region_open`` is called inside a loop, each iteration is tracked separately::
+
+    for i in range(4):
+        nl.profiler_region_open("iteration_work")
+        # ... per-iteration work ...
+        nl.profiler_region_close()
+
+Neuron Explorer lists the region once under its own name and gives it an Iteration box, so you can narrow the region to the loop passes you want to look at.
+
+Custom colors
+~~~~~~~~~~~~~
+
+Pass an optional ``color`` parameter to control the region's color in the timeline::
+
+    nl.profiler_region_open("phase_a", color="#FF5733")
+    # ...
+    nl.profiler_region_close()
+
+The color must be a hex color string, such as ``"#4CAF50"``.
+
+Label restrictions
+~~~~~~~~~~~~~~~~~~
+
+Region labels must not contain ``,``, ``@``, ``#``, or ``|`` characters.
+
+Balanced regions
+~~~~~~~~~~~~~~~~
+
+Every ``profiler_region_open`` must have a matching ``profiler_region_close``. An unbalanced region raises a compilation error.
+
+NKI Regions carry no runtime cost. They are compile-time metadata only, and do not add hardware instructions or affect kernel execution time.
+
+For how these regions appear in the Region Highlighter panel, and how to narrow one to a specific call or loop pass, see :ref:`neuron-explorer-nki-regions`.
+
+
 Next Steps
 ----------
 

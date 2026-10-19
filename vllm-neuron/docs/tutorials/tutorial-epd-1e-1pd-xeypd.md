@@ -6,7 +6,7 @@ Trainium. -->
 <!-- meta: keywords: disaggregated encoder, EPD, 1E1PD, xEyPD, vision encoder,
 prefill, decode, encoder cache, NIXL, EC connector, Qwen3-VL, vLLM, Neuron,
 Trainium -->
-<!-- meta: date_updated: 2026-08-13 -->
+<!-- meta: date_updated: 2026-10-14 -->
 <!-- Content type: procedural-tutorial -->
 
 This topic guides you through configuring encoder-disaggregated inference (EPD)
@@ -186,6 +186,16 @@ multimodal request is where it breaks, because the READ of the VE's on-device
 encoder cache never completes and PD raises `ECLoadFailure`. Verify with
 `env | grep FI_EFA` in each engine's terminal before launching it.
 
+Turn off precompile cache in every VE and PD terminal:
+
+```bash
+export TORCH_CACHING_PRECOMPILE=0
+```
+
+On the native route, `libtorch-neuronx-lite` turns this cache on by default. For
+EPD, the time to first token is lower with the cache off. The reference launcher
+(`epd_common.py`) sets this value on each engine.
+
 First-time Neuron compilation of a 32B engine can take several minutes. If your
 servers time out during compilation, raise the compile timeout:
 
@@ -255,15 +265,22 @@ only fails later, during prefill warmup, when the TP group's `reduce_scatter`
 cannot be mapped onto the hardware collective — see
 [Common issues](#common-issues).
 
+:::{note}
+The `NEURON_VISIBLE_DEVICES` slices above (`0-7`, `8-11`) assume direct host
+execution and host-level NeuronCore numbering. With EKS and Kubernetes Dynamic
+Resource Allocation (DRA), a pod can expose its allocation under different,
+pod-local NeuronCore IDs. Under DRA, leave `NEURON_VISIBLE_DEVICES` unset and
+size the DRA resource claim to cover the NeuronCores each engine needs instead.
+:::
+
 Each of the three commands below runs in the foreground, so run each one in its
 own terminal (or under `tmux`) — and re-run "Prepare your environment" in each of
 those terminals first, so the venv, the EFA variables, and `MODEL` are all set.
 
-:::{important}
-**Prefix caching must be off on every engine in both pools.** Each command below
-passes `--no-enable-prefix-caching`; do not drop it. Prefix caching is enabled by
-default upstream, so this is an opt-out, and the failure it causes is silent —
-wrong or empty output rather than an error. Step 2 explains why.
+:::{note}
+**Prefix caching has not been validated in EPD set up.** Therefore each command below
+passes `--no-enable-prefix-caching`. Prefix caching is on by default upstream, so
+this is an opt-out.
 :::
 
 :::{tip}
@@ -302,7 +319,7 @@ NEURON_VISIBLE_DEVICES=8,9,10,11 vllm serve "$MODEL" \
     --no-enable-prefix-caching \
     --mm-encoder-only \
     --no-async-scheduling \
-    --additional-config '{"neuron_config": {"quantization": "bf16", "num_batched_tokens_buckets": [8192], "on_device_sampling_config": {"all_greedy": true}, "num_seqs_buckets": [1]}, "vision_neuron_config": {"num_vision_tokens_buckets": [30720], "vision_attention_block_size": 1024, "dp_size": 4, "encoder_cache_num_blocks": 128}}' \
+    --additional-config '{"neuron_config": {"quantization": "bf16", "num_batched_tokens_buckets": [8192], "on_device_sampling_config": {"all_greedy": true}, "num_seqs_buckets": [1]}, "encoder_neuron_config": {"num_encoder_input_buckets": [30720], "encoder_attention_block_size": 1024, "dp_size": 4, "encoder_cache_num_blocks": 128}}' \
     --ec-transfer-config '{"ec_connector": "NeuronNixlECConnector", "ec_role": "ec_producer", "engine_id": "epd-ve-0", "ec_connector_extra_config": {"backends": ["LIBFABRIC"], "side_channel_host": "127.0.0.1", "side_channel_port": 14600}}'
 ```
 
@@ -314,7 +331,7 @@ Key parameters:
   model is dropped, so no prefill/decode warmup runs on this engine. This one is
   an upstream vLLM CLI flag, so it is passed directly (unlike PD's
   `mm_language_model_only`, which goes inside `--additional-config`).
-- `vision_neuron_config.dp_size: 4` — the vision encoder runs data-parallel
+- `encoder_neuron_config.dp_size: 4` — the vision encoder runs data-parallel
   across its 4 cores for encoder throughput. DP replicas favor multi-image
   throughput; shard the encoder weights instead (raise `tp_size`, which derives
   DP as `world_size / tp_size`) when single-image latency matters more — see
@@ -322,7 +339,7 @@ Key parameters:
 - `--ec-transfer-config` with `ec_role: "ec_producer"` — this engine produces
   embeddings. `engine_id` **must be unique per VE**; `side_channel_host` /
   `side_channel_port` is where PD engines fetch NIXL transfer metadata.
-- `num_vision_tokens_buckets: [30720]` — the vision-token bucket, sized to the
+- `num_encoder_input_buckets: [30720]` — the vision-token bucket, sized to the
   example workload as
   `num_images × (resolution / patch_size)²` = `30 × (512 / 16)²` = `30 × 1024` =
   `30720`. Recompute it for your own images: `resolution` is the (square) input
@@ -350,7 +367,7 @@ NEURON_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 vllm serve "$MODEL" \
     --limit-mm-per-prompt '{"image": 30}' \
     --no-enable-prefix-caching \
     --mm-processor-cache-gb 0 \
-    --additional-config '{"neuron_config": {"quantization": "bf16", "num_batched_tokens_buckets": [8192], "on_device_sampling_config": {"all_greedy": true}}, "vision_neuron_config": {"num_vision_tokens_buckets": [30720], "vision_attention_block_size": 1024, "dp_size": 1, "encoder_cache_num_blocks": 128}, "mm_language_model_only": true}' \
+    --additional-config '{"neuron_config": {"quantization": "bf16", "num_batched_tokens_buckets": [8192], "on_device_sampling_config": {"all_greedy": true}}, "encoder_neuron_config": {"num_encoder_input_buckets": [30720], "encoder_attention_block_size": 1024, "dp_size": 1, "encoder_cache_num_blocks": 128}, "mm_language_model_only": true}' \
     --ec-transfer-config '{"ec_connector": "NeuronNixlECConnector", "ec_role": "ec_consumer", "engine_id": "epd-pd-0", "ec_connector_extra_config": {"backends": ["LIBFABRIC"]}}'
 ```
 
@@ -372,10 +389,11 @@ Key parameters:
   because images never reach it (the VE encodes them).
 
 :::{note}
-Prefix caching is disabled (`--no-enable-prefix-caching`) on both pools. A KV
-prefix hit on tokens whose vision embedding has not been resolved would
-short-circuit encoder-input scheduling, and the EC connector would never fire —
-PD would run the language model on stale blocks.
+Prefix caching is disabled (`--no-enable-prefix-caching`) on both pools because it
+has not been validated in an EPD set up yet. Prefix cache is stored on the PD pool
+so the VE pool doesn't need it. On a PD node, a KV prefix hit will skip firing the
+EC connector to pull the embedding because it has already been pulled and merged
+when generating the prefix cache in a previous prefill run.
 :::
 
 Wait for the server to print `Uvicorn running on http://127.0.0.1:18100`.
@@ -474,7 +492,7 @@ it completes end-to-end. The router speaks the OpenAI chat-completions protocol,
 so any OpenAI client works against it.
 
 The one thing to get right is image size. Both pools above set
-`vision_attention_block_size: 1024`, which bounds a single image to 1024 patches
+`encoder_attention_block_size: 1024`, which bounds a single image to 1024 patches
 — at Qwen3-VL's patch size of 16, a 512×512 budget. An oversized image is
 rejected in the encoder, so the script below downscales before sending and
 inlines the result as base64 rather than depending on the server being able to
@@ -494,7 +512,7 @@ IMAGE_URL = (
     "vision_model_images/cherry_blossom.jpg"
 )
 
-# vision_attention_block_size=1024 bounds one image to 1024 patches; at
+# encoder_attention_block_size=1024 bounds one image to 1024 patches; at
 # Qwen3-VL's patch size of 16 that is a 512x512 budget.
 PATCH_SIZE = 16
 MAX_PATCHES = 1024
@@ -554,7 +572,7 @@ The image shows a tall tower ... with cherry blossoms in the foreground ...
 
 :::{tip}
 To use a larger image at full resolution instead of downscaling, raise
-`vision_attention_block_size` on **both** the VE and PD so the block covers your
+`encoder_attention_block_size` on **both** the VE and PD so the block covers your
 largest input. It must match across the two pools.
 :::
 
@@ -631,7 +649,7 @@ topo = EPDTopology.build(
     num_pd=7, pd_tp=8,      # 7 prefill+decode engines, TP=8 each
     max_model_len=8192,
     max_num_seqs=8,
-    vision_seq_len=30720,   # num_images × (resolution/patch_size)² = 30 × (512/16)²
+    encoder_seq_len=30720,   # num_images × (resolution/patch_size)² = 30 × (512/16)²
     num_images=30,
     quantization="bf16",
 )
@@ -710,7 +728,7 @@ You have a working EPD deployment that:
 
 - **`TypeError: Qwen3ForCausalLM.from_configs() got an unexpected keyword
   argument 'text_neuron_config'`**: The server is loading a **text-only** model
-  while `vision_neuron_config` is set, so the runner builds a multimodal model
+  while `encoder_neuron_config` is set, so the runner builds a multimodal model
   from a text-only architecture. The usual cause is an empty or unset `MODEL`:
   `vllm serve`'s model argument is positional and optional, so an unquoted empty
   `$MODEL` disappears from the command line and vLLM falls back to its default
@@ -752,7 +770,7 @@ You have a working EPD deployment that:
 - **`TP != len(NEURON_VISIBLE_DEVICES)` assertion**: The tensor-parallel size
   must equal the number of cores in that engine's `NEURON_VISIBLE_DEVICES`
   slice. For a VE, `--tensor-parallel-size` is the core count; `dp_size` is a
-  separate vision data-parallel degree inside `vision_neuron_config`.
+  separate vision data-parallel degree inside `encoder_neuron_config`.
 
 - **`Collective operation REDUCE_SCATTER ... is currently not supported`,
   followed by `Failed to schedule neff execution. status=2 message=Invalid` and
@@ -800,13 +818,24 @@ You have a working EPD deployment that:
      its own shell, and because nothing complains until the first request. If the
      PD log shows `EC wait_for_load timed out after ...`, the READ was issued and
      never landed, which points here.
-  2. **An oversized image.** One image exceeding `vision_attention_block_size`
+  2. **An oversized image.** One image exceeding `encoder_attention_block_size`
      patches (1024 in this tutorial, a 512×512 budget at patch size 16) fails to
      encode on the VE, so there is nothing for PD to read. Check the VE's log for
      the encode error, then downscale the image (see
      [Step 4](#step-4-validate-the-1e1pd-deployment)) or raise
-     `vision_attention_block_size` on **both** pools.
-  3. **A genuinely broken transport** — see the embedding-transfer entry above.
+     `encoder_attention_block_size` on **both** pools.
+  3. **A VE↔PD `(model_id, dtype)` mismatch.** The NIXL handshake rejects a PD
+     pool pointed at a VE serving a different model or dtype, before any bytes
+     move — look for a `ValueError` naming `model_id` or `dtype` in the log. Launch
+     both pools from the **same checkpoint** (see the `--model` note) with matching
+     dtype.
+  4. **A per-embedding content-validation failure.** Each block carries an
+     `mm_hash` fingerprint. The VE writes the tag before the embedding. The PD
+     reads the embedding first, then reads the tag on a second RDMA READ, and
+     compares it to the fingerprint it expects. A mismatch
+     (`EC receipt validation failed for mm_hash ...`) means the block PD read no
+     longer held the item it expected — a stale, reused, or wrong block. The PD
+     reports it as a load failure, not a wrong answer.
 
 - **One engine hangs for minutes, then `TDRV:tdrv_init_wait_ncs_ready Failed to
   reset nd <N> nc_map 0x… timeout (result=-110)` → `RuntimeError: Engine core
@@ -817,10 +846,11 @@ You have a working EPD deployment that:
 
   ```bash
   B=/sys/devices/virtual/neuron_device
+  # Neuron Driver 2.31+. On earlier drivers, replace stats/application/other_info with stats/other_info
   for d in $(seq 0 15); do for c in 0 1 2 3; do
     printf "nd%s nc%s req=%s fail=%s\n" $d $c \
-      "$(cat $B/neuron$d/neuron_core$c/stats/other_info/reset_req_count/total 2>/dev/null)" \
-      "$(cat $B/neuron$d/neuron_core$c/stats/other_info/reset_fail_count/total 2>/dev/null)"
+      "$(cat $B/neuron$d/neuron_core$c/stats/application/other_info/reset_req_count/total 2>/dev/null)" \
+      "$(cat $B/neuron$d/neuron_core$c/stats/application/other_info/reset_fail_count/total 2>/dev/null)"
   done; done
   ```
 
@@ -837,10 +867,6 @@ You have a working EPD deployment that:
 - **Core-slice binding race on single node**: Launch engines a few seconds apart
   (the `run_epd_single_node` launcher staggers Popens by 10 s) so they don't race
   on `NEURON_VISIBLE_DEVICES` binding and the shared compile cache.
-
-- **Wrong or empty output on repeated images**: Keep prefix caching **off** on
-  both pools (`--no-enable-prefix-caching`). With APC on, a KV prefix hit can
-  bypass encoder-input scheduling so the embedding is never pulled.
 
 ## Clean up
 

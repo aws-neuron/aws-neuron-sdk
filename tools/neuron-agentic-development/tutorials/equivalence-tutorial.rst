@@ -17,10 +17,6 @@ By the end of this tutorial you will have a validated model port with R-ratio me
 confirming numerical equivalence between the Neuron implementation and the HuggingFace
 reference.
 
-.. contents:: Table of contents
-   :local:
-   :depth: 2
-
 Prerequisites
 -------------
 
@@ -362,6 +358,14 @@ but complex NKI kernels may need manual inspection.
 either does not have Neuron hardware or the driver is not loaded. Check that
 ``aws-neuronx-dkms`` is installed. Note that Stages 0, 2, 3, and 4 do not need hardware,
 but Stages 1, 5, 6, and 7 do.
+
+**vLLM Neuron port crashes with a SIGSEGV and no error.** One common cause is running with
+a TP degree that is too low for the model's memory requirements (for example, TP=1 for a
+model that needs multi-core sharding). Other possible causes include mismatched Neuron SDK
+versions, incorrect ``NEURON_SKIP_EFA_AFFINITY`` settings, or a corrupted compiled model
+artifact. Start by checking the tensor parallel size in the model's example ``run.py`` and
+verifying it matches your invocation. If the TP size is correct, verify the Neuron SDK
+version matches the version the model was compiled against.
 
 **vLLM Neuron port crashes with a SIGSEGV and no error.** One common cause is running with
 a TP degree that is too low for the model's memory requirements (for example, TP=1 for a

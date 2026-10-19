@@ -64,6 +64,13 @@ Advanced topics
 
       Use Kubernetes DRA for attribute-based device selection and topology-aware allocation on K8s 1.34+.
 
+   .. grid-item-card:: Isolate faulty devices with device taints
+      :link: /deploy/eks/neuron-device-taints-guide
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Use Neuron device taints to isolate a faulty device or node so the scheduler keeps new work off it while healthy devices keep serving. Built on the Neuron DRA driver.
+
    .. grid-item-card:: Neuron UltraServer Operator (Beta)
       :link: /deploy/eks/ultraserver-operator
       :link-type: doc
@@ -94,6 +101,7 @@ Advanced topics
    Inference on EKS </deploy/eks/inference>
    Training on EKS </deploy/eks/training>
    Dynamic Resource Allocation </deploy/eks/dra>
+   Device Taints </deploy/eks/neuron-device-taints-guide>
    Neuron UltraServer Operator </deploy/eks/ultraserver-operator>
    UltraServer MPI Jobs </deploy/eks/ultraserver>
    EKS Prerequisites </deploy/eks/prerequisites>

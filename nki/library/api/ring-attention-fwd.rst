@@ -1,6 +1,6 @@
 .. meta::
     :description: Ring attention forward using attention_cte with HBM I/O.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.attention
 
@@ -19,7 +19,7 @@ The ``ring_attention_spmd_fwd`` kernel implements ring attention for context par
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ring_attention_fwd.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention/ring_attention_fwd.py>`_
+**Source code for this kernel API can be found at**: `ring_attention_fwd.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/attention/ring_attention_fwd.py>`_
 
 ring_attention_spmd_fwd
 ^^^^^^^^^^^^^^^^^^^^^^^

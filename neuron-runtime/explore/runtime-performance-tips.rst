@@ -1,6 +1,7 @@
 .. meta::
    :description: Performance optimization tips for AWS Neuron Runtime
    :keywords: AWS Neuron, performance, optimization, runtime, asynchronous execution, NUMA, CPU affinity
+   :date-modified: 2026-10-13
 
 .. _runtime-performance-tips:
 

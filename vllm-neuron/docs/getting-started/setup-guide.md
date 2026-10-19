@@ -11,7 +11,7 @@ Trainium, Inferentia, DLAMI -->
 ## Overview
 
 This topic discusses how to install and configure the vLLM Neuron plugin on AWS
-Trainium or Inferentia so you can serve large language models with vLLM on
+Trn2 or Trn3 instances so you can serve large language models with vLLM on
 Neuron. When you have completed it, you will have a working environment ready for
 the online or offline serving quickstarts.
 
@@ -28,7 +28,8 @@ For migration guidance from NxD Inference to vLLM Neuron, see
 - **Instance**: A supported Trainium EC2 instance (for example,
   `trn2.48xlarge`).
 - **Neuron SDK version**: Neuron 2.31 or later.
-- **Python**: Python 3.11 or later.
+- **Python**: Python 3.11 or later. The Neuron 2.33 DLAMI and the vLLM Inference
+  DLC ship Python 3.14 on Ubuntu 26.04.
 - **Hugging Face access (optional)**: An accepted model license and a Hugging
   Face token if you plan to pull gated models such as Llama.
 
@@ -60,13 +61,36 @@ Launch an instance with the DLAMI by following the
 After you connect, activate the vLLM virtual environment:
 
 ```bash
-source /opt/aws_neuronx_venv_pytorch_inference_vllm_0_21_0_1_0_0/bin/activate
+source /opt/aws_neuronx_venv_pytorch_inference_vllm_*/bin/activate
 ```
+
+:::{note}
+The `*` wildcard avoids a pinned vLLM version, because the directory name embeds
+one that changes between DLAMI releases. It assumes exactly one such environment.
+Run `ls -d /opt/aws_neuronx_venv*` to list the available environments. If
+there are several, activate the one you want by its full path.
+:::
 
 ### Option C: Use a container
 
 Use the [vLLM Inference NeuronX DLC](https://github.com/aws-neuron/deep-learning-containers#vllm-inference-neuronx)
 which bundles the SDK and all dependencies.
+
+### Use vLLM Neuron with torch-neuronx installed
+
+vLLM Neuron compiles through `libtorch-neuronx-lite` and does not use an
+installed `torch-neuronx`. If `torch-neuronx` is present in the same environment
+(for example on the Neuron DLAMI), set `TORCH_DEVICE_BACKEND_AUTOLOAD=0` in the
+shell before you start the vLLM Neuron server:
+
+```bash
+export TORCH_DEVICE_BACKEND_AUTOLOAD=0
+```
+
+Without it, `torch-neuronx` loads when Python imports `torch`, and the server
+stops at startup with `Tried to register multiple backend fallbacks for the same
+dispatch key PrivateUse1`. For details, see
+[How vLLM is integrated with TorchNeuron](../design/compilation/how_vllm_is_integrated_with_torchneuron.md).
 
 ### Verify the installation
 
@@ -279,10 +303,12 @@ runtime, and model compilation are all working. Stop the server with `Ctrl+C`.
 
 ### Plugin fails to load the Neuron platform
 
-- **Possible solution**: Confirm you activated the correct virtual environment and
-  that `pip show vllm-neuron` reports version 0.21.0.1.0.0 or later. If you installed
-  vLLM separately before the plugin, reinstall the plugin to ensure version
-  alignment.
+- **Possible solution**: Confirm you activated the correct virtual environment.
+  Then confirm the vLLM version embedded in the `pip show vllm-neuron` version
+  string matches your installed `vllm` version. The plugin pins an exact vLLM
+  version; for Neuron 2.33 the plugin version string begins with `0.29.0`. If you
+  installed vLLM separately before the plugin, reinstall the plugin to realign
+  them.
 
 ### `neuron-ls` shows no devices
 

@@ -33,7 +33,7 @@ Before you start, make sure you understand the following topics.
 - **Neuron compilation model.** How ``torch-neuronx`` traces Python code into
   HLO and compiles it to NEFF for NeuronCores. See :ref:`nxdi-feature-guide`.
 - **Tensor parallelism concepts.** How models get sharded across NeuronCores.
-  See :doc:`/libraries/nxd-inference/app-notes/parallelism`.
+  See :doc:`/inference-legacy/nxd-inference/app-notes/parallelism`.
 
 Overview
 --------
@@ -62,7 +62,7 @@ The workflow has six stages.
 
 ..
    TODO: Add autoport-workflow.png diagram showing six stages from analysis to validation.
-   Place in /libraries/nxd-inference/developer_guides/images/autoport-workflow.png
+   Place in /inference-legacy/nxd-inference/developer_guides/images/autoport-workflow.png
 
 
 .. _autoport-prerequisites:

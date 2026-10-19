@@ -13,7 +13,7 @@ TensorFlow Neuron (Inf1) — Archived
 
    This document is archived. TensorFlow Neuron (``tensorflow-neuron``) for Inf1 is
    no longer officially supported by the AWS Neuron SDK. It is provided for
-   reference only. For current framework support, see :doc:`/frameworks/index`.
+   reference only. For current framework support, see :doc:`/archive/frameworks/index`.
 
 TensorFlow Neuron (``tensorflow-neuron``) was the TensorFlow integration for AWS Inferentia (Inf1)
 instances. These pages are preserved for historical reference alongside the

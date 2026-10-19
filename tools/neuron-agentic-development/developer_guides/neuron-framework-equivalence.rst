@@ -38,7 +38,7 @@ Before you start, you must be familiar with the following:
 - **Neuron compilation model:** How ``torch-neuronx`` traces Python code into
   HLO and compiles it to NEFF for NeuronCores. See :ref:`nxdi-feature-guide`.
 - **Tensor parallelism concepts:** How models are sharded across NeuronCores.
-  See :doc:`/libraries/nxd-inference/app-notes/parallelism`.
+  See :doc:`/inference-legacy/nxd-inference/app-notes/parallelism`.
 - **Model porting workflow:** How models are ported to NxD Inference.
   See :ref:`neuron-framework-autoport`.
 
@@ -1103,6 +1103,22 @@ additions:
    └── stage7/
        └── prompt_diagnosis/              # Stage 7 per-prompt diagnosis (--diagnose-failures)
 
+For a vLLM Neuron target (see :ref:`equiv-vllm-neuron`), the layout is the same with two
+additions:
+
+* ``tests/conftest.py`` is created from ``conftest_vllm_template.py`` instead of the default
+  ``conftest_template.py`` — the file name is the same, but it initializes the vLLM
+  distributed environment.
+* When the failure diagnostics run, the ``accuracy_debugger`` reports are written under
+  ``results/``:
+
+.. code-block:: text
+
+   ${EXP_DIR}/results/
+   ├── kv_analysis/                       # Stage 5 KV cache analysis (--kv-analysis-on-fail)
+   └── stage7/
+       └── prompt_diagnosis/              # Stage 7 per-prompt diagnosis (--diagnose-failures)
+
 .. _equiv-tools-reference:
 
 Tools reference
@@ -1323,6 +1339,14 @@ Reporting
 
 - ``report-template.md`` — ``EQUIVALENCE_REPORT.md`` structure and the completion gate that
   must be satisfied before a report is generated.
+
+Multi-stack support
+^^^^^^^^^^^^^^^^^^^
+
+- ``adapter-contract.md`` — the five-method adapter interface for adding a serving stack,
+  plus the optional diagnostic methods.
+- ``vllm-neuron-adaptation.md`` — vLLM Neuron weight transpositions, forward signature, TP
+  detection, KV cache shapes, and BC / σ-ratio metrics.
 
 Multi-stack support
 ^^^^^^^^^^^^^^^^^^^

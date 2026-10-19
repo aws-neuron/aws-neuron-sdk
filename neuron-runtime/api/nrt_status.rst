@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_status.h header in the AWS Neuron Runtime: Neuron Runtime status codes and error handling.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_status_h:
 
 nrt_status.h

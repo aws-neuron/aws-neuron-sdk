@@ -13,7 +13,7 @@ TensorFlow 2.x (``tensorflow-neuron``) Auto Multicore Replication (Beta)
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The Neuron auto multicore replication Python API enables modifying TensorFlow 2.x

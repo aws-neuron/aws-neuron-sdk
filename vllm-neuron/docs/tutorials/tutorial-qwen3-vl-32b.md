@@ -30,7 +30,7 @@ BF16 is the main path throughout; each step calls out the MXFP8 differences wher
 - A `trn2.48xlarge` instance with Neuron SDK `2.31.0` or later. See
   [setup guide](../getting-started/setup-guide.md). MXFP8 requires a **Trn3** instance (the native MXFP8 kernels are Trn3-only) with Neuron SDK `2.32` or later.
 - vLLM Neuron plugin `0.21.0` or above installed.
-- Python 3.10+
+- Python 3.11+
 - For MXFP8, [LLM-Compressor](https://github.com/vllm-project/llm-compressor) to quantize the checkpoint: `pip install llmcompressor compressed-tensors`
 
 ## Step 1: Set up your environment
@@ -66,7 +66,7 @@ huggingface-cli download \
 
 ## Step 3: Quantize the text model to MXFP8 (MXFP8 only)
 
-**Skip this step for BF16.** Qwen3-VL is not published with MXFP8 weights, so you must quantize the BF16 checkpoint offline. This uses [LLM-Compressor](https://github.com/vllm-project/llm-compressor) and [compressed-tensors](https://github.com/vllm-project/compressed-tensors) to apply weight-only, data-free post-training quantization (PTQ) and save a checkpoint in the compressed-tensors format. For background on the quantization workflow, see [Quantize using external libraries](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/custom-quantization.html#quantize-using-external-libraries) in the quantization guide.
+**Skip this step for BF16.** Qwen3-VL is not published with MXFP8 weights, so you quantize the BF16 checkpoint offline. This uses [LLM-Compressor](https://github.com/vllm-project/llm-compressor) and [compressed-tensors](https://github.com/vllm-project/compressed-tensors) to apply weight-only, data-free post-training quantization (PTQ) and save a checkpoint in the compressed-tensors format. For background on the quantization workflow, see [Quantize using external libraries](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/developer_guides/custom-quantization.html#quantize-using-external-libraries) in the quantization guide.
 
 This is weight-only, data-free PTQ. **Run this step on CPU, not on Trainium**. Use a machine with enough memory to load the ~64 GB BF16 model, plus disk for both the base and quantized checkpoints. You can quantize once and reuse the checkpoint across Trn3 instances.
 
@@ -146,9 +146,9 @@ vllm serve /path/to/Qwen3-VL-32B-Instruct \
             "num_seqs_buckets": [4],
             "on_device_sampling_config": {"all_greedy": true}
         },
-        "vision_neuron_config": {
-            "num_vision_tokens_buckets": [2048],
-            "vision_attention_block_size": 2048
+        "encoder_neuron_config": {
+            "num_encoder_input_buckets": [2048],
+            "encoder_attention_block_size": 2048
         }
     }'
 ```
@@ -175,9 +175,9 @@ vllm serve /path/to/Qwen3-VL-32B-Instruct-MXFP8-text-only \
             "num_seqs_buckets": [4],
             "on_device_sampling_config": {"all_greedy": true}
         },
-        "vision_neuron_config": {
-            "num_vision_tokens_buckets": [2048, 4096],
-            "vision_attention_block_size": 2048
+        "encoder_neuron_config": {
+            "num_encoder_input_buckets": [2048, 4096],
+            "encoder_attention_block_size": 2048
         }
     }'
 ```
@@ -188,8 +188,6 @@ The MXFP8-specific settings, compared to the BF16 command:
 - **`modules_to_not_convert: []`** — an empty list runs the whole text transformer (attention **and** MLP) in MXFP8. The vision encoder stays BF16 regardless, because its weights were left unquantized in Step 3.
 - **`--hf-overrides '{"quantization_config": {}}'`** — clears the checkpoint's compressed-tensors `quantization_config` so the Neuron loader owns the MXFP8 path.
 - **`--tokenizer-mode slow`**, **`--no-enable-chunked-prefill`**, **`--no-enable-prefix-caching`**, **`--block-size 16`** — pin the deployment to the validated MXFP8 configuration.
-
-**Current limitation:** at `tensor-parallel-size >= 32`, change `"modules_to_not_convert"` to `["mlp"]` (keeps the MLP layers in BF16); full MXFP8 (`[]`) is supported at `tensor-parallel-size <= 16`.
 
 Once the server is up, send requests using the OpenAI Python SDK (use the `--served-model-name` you launched with):
 
@@ -231,14 +229,14 @@ vLLM-Neuron compiles the model on the first run and caches the artifacts to `~/.
 The model has two components, each with its own config object passed via `additional_config` (see the [configuration options reference](../guides/reference-configuration.md)):
 
 - **`neuron_config`**: text decoder settings (token/sequence bucket sizes, sampling, quantization).
-- **`vision_neuron_config`**: vision encoder settings (vision token buckets, attention block size, and optional vision TP/DP split).
+- **`encoder_neuron_config`**: vision encoder settings (vision token buckets, attention block size, and optional vision TP/DP split).
 
 **Bucket sizes** control the discrete padded shapes compiled into each NEFF. Each bucket adds compile time; start with one and add more as needed. The two components bucket along different dimensions, so their buckets are configured separately:
 
 - `num_batched_tokens_buckets` (in `neuron_config`): text-decoder buckets over the number of batched **text** tokens per forward pass. See [compilation options](../guides/reference-configuration.md#compilation-options).
-- `num_vision_tokens_buckets` (in `vision_neuron_config`): vision-encoder buckets over the number of **vision** patches per encoder forward pass (raw `T*H*W` patches from `image_grid_thw`, before the 2x2 spatial merge; this is the count `select_vision_bucket` matches against). The scheduler may batch images from multiple requests into one forward pass, so size the buckets for the total images processed together, not a single request. These scale with image count and resolution:
+- `num_encoder_input_buckets` (in `encoder_neuron_config`): vision-encoder buckets over the number of **vision** patches per encoder forward pass (raw `T*H*W` patches from `image_grid_thw`, before the 2x2 spatial merge; this is the count `select_vision_bucket` matches against). The scheduler may batch images from multiple requests into one forward pass, so size the buckets for the total images processed together, not a single request. These scale with image count and resolution:
 
-| `num_vision_tokens_buckets` | Approximate capacity |
+| `num_encoder_input_buckets` | Approximate capacity |
 |-----------------------------|----------------------|
 | `[2048]` | 1–2 images at 448×448 px |
 | `[2048, 8192]` | Up to ~8 images |
@@ -274,9 +272,9 @@ llm = LLM(
             "num_seqs_buckets": [4],
             "on_device_sampling_config": {"all_greedy": True},
         },
-        "vision_neuron_config": {
-            "num_vision_tokens_buckets": [2048],
-            "vision_attention_block_size": 2048,
+        "encoder_neuron_config": {
+            "num_encoder_input_buckets": [2048],
+            "encoder_attention_block_size": 2048,
         },
     },
 )
@@ -337,9 +335,9 @@ llm = LLM(
             "num_seqs_buckets": [4],
             "on_device_sampling_config": {"all_greedy": True},
         },
-        "vision_neuron_config": {
-            "num_vision_tokens_buckets": [2048, 4096],
-            "vision_attention_block_size": 2048,
+        "encoder_neuron_config": {
+            "num_encoder_input_buckets": [2048, 4096],
+            "encoder_attention_block_size": 2048,
         },
     },
 )
@@ -349,7 +347,7 @@ llm = LLM(
 
 By default the vision encoder runs as one DP replica per NeuronCore (TP1), the recommended layout for high-throughput multi-image workloads. To shard the encoder weights across cores for a single large image instead, increase `tp_size`.
 
-Set `tp_size` inside `vision_neuron_config` to change the split. DP is derived automatically as `world_size / tp_size`, where `world_size` is your `tensor_parallel_size`. The commands above use `tensor_parallel_size=4`, so:
+Set `tp_size` inside `encoder_neuron_config` to change the split. DP is derived automatically as `world_size / tp_size`, where `world_size` is your `tensor_parallel_size`. The commands above use `tensor_parallel_size=4`, so:
 
 | `tp_size` | Vision TP | Vision DP | Best for |
 |-----------|-----------|-----------|----------|
@@ -359,9 +357,9 @@ Set `tp_size` inside `vision_neuron_config` to change the split. DP is derived a
 The same applies at a larger `tensor_parallel_size` (e.g. `16`), which raises the default vision DP accordingly. Example — TP1, full DP:
 
 ```python
-"vision_neuron_config": {
-    "num_vision_tokens_buckets": [2048],
-    "vision_attention_block_size": 2048,
+"encoder_neuron_config": {
+    "num_encoder_input_buckets": [2048],
+    "encoder_attention_block_size": 2048,
     "tp_size": 1,  # DP = world_size / tp_size
 }
 ```

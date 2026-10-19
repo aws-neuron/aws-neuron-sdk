@@ -3,9 +3,9 @@
 <!-- meta: description: Detailed reference companion to the quickstarts,
 covering every significant feature and configuration option for vLLM on
 Neuron. -->
-<!-- meta: date_updated: 2026-08-13 -->
+<!-- meta: date_updated: 2026-10-06 -->
 <!-- Content type: procedural-how-to -->
-<!-- Jira: NDOC-182 -->
+<!-- Jira: NDOC-182, NPR-2811 -->
 
 This guide covers every significant feature the vLLM Neuron plugin
 exposes, organized by feature. For each feature: what it is, when to
@@ -20,20 +20,29 @@ section in the README.
 
 - Completed [Set up vLLM Neuron](../getting-started/setup-guide.md) and one of the
   quickstarts
-- A running vLLM server or `LLM` instance on a Trainium/Inferentia
+- A running vLLM server or `LLM` instance on a Trn2 or Trn3
   instance
 
 ## Compilation
 
-vLLM Neuron uses PyTorch's `torch.compile` API with the `vllm_neuron`
-backend — the same `torch.compile` compilation pattern used in vLLM
-upstream. Under the hood, the `vllm_neuron` backend lowers FX graphs
-through XLA and HLO to the Neuron Compiler (`neuronx-cc`), which
-produces optimized NEFF binaries for Trainium/Inferentia hardware.
+vLLM Neuron uses the PyTorch `torch.compile` API, with the same compilation
+pattern as vLLM upstream. The Neuron Compiler (`neuronx-cc`) then produces NEFF
+binaries for Trn2 and Trn3 hardware.
+
+The native route is the default compilation route. It lowers FX graphs through
+PyTorch native compilation to StableHLO. The XLA route lowers FX graphs through
+PyTorch/XLA to HLO. The XLA route is deprecated. To change the route, set
+`VLLM_NEURON_BACKEND`. See
+[How to choose a compilation route](how-to-choose-compilation-route.md).
 
 Compilation happens automatically during server warmup — one NEFF per
 bucket (sequence length × batch size combination). Compiled NEFFs are
 cached on disk and reused on subsequent restarts.
+
+On the native route, the Precompile Cache also saves the trace of each graph.
+A warm start reuses the trace, so the server starts faster. The cache is on
+when `VLLM_NEURON_BACKEND` is `neuron_native` or `neuron`. See
+[How to use the Precompile Cache](how-to-precompile-cache.md).
 
 For production, you can pre-compile on a Neuron instance or a CPU
 instance and distribute artifacts via a shared filesystem so production
@@ -54,6 +63,109 @@ vllm serve meta-llama/Llama-3.3-70B-Instruct --tensor-parallel-size 32
 If the path contains valid artifacts, they are loaded directly with no
 recompilation. If the path is empty, the model is compiled and saved
 there for future use.
+
+## Model Runner V2
+
+vLLM Model Runner V2 (MRv2) is a re-implementation of the vLLM model runner,
+the component that prepares the inputs, runs the model forward pass, and
+samples tokens for each step. For background, see the vLLM
+[Model Runner V2 design document](https://docs.vllm.ai/en/stable/design/model_runner_v2/)
+and the [Model Runner V2 announcement](https://vllm.ai/blog/2026-03-24-mrv2).
+
+In vLLM Neuron, Model Runner V2 is enabled by default for dense
+text-generation models starting in Neuron 2.33 (vLLM Neuron 0.29.0.1.2.0).
+Configurations that MRv2 does not yet support run on the original Neuron model
+runner (Model Runner V1, MRv1), so existing deployments keep working without
+changes. Both runners run inside the vLLM V1 engine.
+
+Compared with MRv1, MRv2 keeps per-request state on the device and runs input
+preparation, the model forward pass, sampling, and the state update in one
+compiled graph. MRv1 builds the inputs on the host for every step. With
+[async scheduling](#async-scheduling), finished requests and reordered batches
+do not break the async flow on MRv2, because the batch state does not need a
+host round trip. When new requests join the batch, MRv2 waits for the previous
+step's output before it admits them, and then continues asynchronously.
+
+### How the runner is selected
+
+The plugin resolves the runner once per server, when the configuration is
+built, and every engine and worker process uses the same decision. The
+resolved decision is exposed as the `VllmConfig.use_v2_model_runner`
+property. You control it with the `VLLM_USE_V2_MODEL_RUNNER` environment
+variable:
+
+| `VLLM_USE_V2_MODEL_RUNNER` | Behavior |
+|---|---|
+| Unset (default) | MRv2 for supported dense configurations, MRv1 otherwise. See [Configurations that use MRv1](#configurations-that-use-mrv1). |
+| `0` | Always use MRv1. |
+| `1` | Always use MRv2, with no fallback to MRv1. For most unsupported features, the server logs `VLLM_USE_V2_MODEL_RUNNER=1 forces Neuron Model Runner V2 with unsupported features (<features>); execution may fail.` and may fail at startup or at runtime. MoE and expert-parallel models without DP, and sliding-window models, also start on MRv2 without this warning. MRv2 support for them is still in bring-up and not fully tested. |
+
+```bash
+# Default: MRv2 when the configuration is supported
+vllm serve meta-llama/Llama-3.1-8B-Instruct --tensor-parallel-size 8
+
+# Force MRv1
+VLLM_USE_V2_MODEL_RUNNER=0 vllm serve meta-llama/Llama-3.1-8B-Instruct \
+    --tensor-parallel-size 8
+```
+
+To confirm which runner is active, check the worker log. MRv2 logs
+`Using the standalone V2 Neuron model runner.` at startup. If the line is
+absent, the server is running MRv1. Use this line to confirm the runner:
+not every MRv1 selection is logged.
+
+### Supported dense features
+
+| Feature | MRv2 | Notes |
+|---|---|---|
+| Tensor parallelism (TP) | ✅ | |
+| Asynchronous scheduling | ✅ | On by default. Requires on-device sampling. See [Async scheduling](#async-scheduling). |
+| Data parallelism (DP) | ✅ | Replica DP with `--data-parallel-size`. Each replica is an independent engine. See [Tensor, data, and expert parallelism](#tensor-data-and-expert-parallelism). |
+| Disaggregated inference (1P1D / xPyD) | ✅ | Dense, non-speculative prefill and decode servers with TP. See [Disaggregated inference](#disaggregated-inference). |
+| Continuous batching | ✅ | |
+| Prefix caching and segmented prefill | ✅ | |
+| On-device sampling (greedy, top-k, top-p) | ✅ | Required. CPU sampling selects MRv1. |
+| KV cache FP8 | ✅ | Unpacked layout. The packed FP8 KV layout (`fp8_packed_kv`) selects MRv1. |
+
+### Configurations that use MRv1
+
+When `VLLM_USE_V2_MODEL_RUNNER` is unset, the plugin selects MRv1
+automatically for the configurations below.
+
+The following model and parallelism types are not eligible for MRv2. They
+select MRv1 without a log message:
+
+- Mixture-of-Experts models and expert parallelism (for example, gpt-oss)
+- Sliding-window attention models
+- Multimodal, pooling (embedding), encoder-decoder, hybrid,
+  attention-free, and diffusion models
+
+For a dense model, the following features select MRv1. For most of them, the
+server logs `Neuron Model Runner V2 does not yet support <features>; using V1.`
+with the list of features:
+
+- Speculative decoding (EAGLE3, P-EAGLE, DFlash)
+- Structured outputs and tool-calling enforcement
+  (`enable_structured_outputs`)
+- LoRA, prompt embeddings, custom logits processors, and logprobs modes
+  other than `raw_logprobs` and `raw_logits`
+- Decode context-length bucketing (`decode_context_length_buckets`)
+- Component data parallelism (`attention_dp_size`, `embedding_dp_size`,
+  `mlp_dp_size`, or `lm_head_dp_size` greater than 1)
+- CPU sampling (`on_device_sampling_config` set to `null`)
+- Packed FP8 KV cache (`fp8_packed_kv`) and the GPT-OSS GK decode kernel
+  (`gk_decode`)
+- Pipeline, decode-context, and prefill-context parallelism
+- Eager execution (`enforce_eager`)
+- KV cache offloading, EPD encoder-cache transfer, tensor capture, and
+  tensor replacement
+
+These lists cover the common cases. The `Using the standalone V2 Neuron model
+runner.` log line and the `VllmConfig.use_v2_model_runner` value are
+authoritative.
+
+For per-model runner support, see the feature table on each
+[model recipe](../model-recipes/index.md) page.
 
 ## Bucketing and dynamic shapes
 
@@ -271,12 +383,12 @@ parallelism to your bottleneck.
 - Component-level data parallelism (per-layer DP for attention, MLP, embedding, or
   LM head) requires disaggregated inference — the worker rejects component DP
   without a `--kv-transfer-config`.
-- **Vision encoder parallelism** — For multimodal models, all ranks run both the text model and the vision encoder — ranks
-  are not partitioned between them. The vision encoder has its own TP and DP
+- **Encoder parallelism** — For multimodal models, all ranks run both the text model and the encoder — ranks
+  are not partitioned between them. The encoder has its own TP and DP
   degrees, decoupled from the text model's parallelism, and only runs during
   prefill. EP does not apply (no MoE component). By default the encoder uses
   full DP (`tp_size=1, dp_size=world_size`) with no additional configuration.
-  To override, pass `vision_neuron_config` in `--additional-config`:
+  To override, pass `encoder_neuron_config` in `--additional-config`:
 
   ```bash
   vllm serve Qwen/Qwen3-VL-32B-Instruct \
@@ -284,7 +396,7 @@ parallelism to your bottleneck.
       --max-model-len 8192 \
       --max-num-batched-tokens 8192 \
       --additional-config '{
-          "vision_neuron_config": {
+          "encoder_neuron_config": {
               "tp_size": 1,
               "dp_size": 8
           }
@@ -292,7 +404,7 @@ parallelism to your bottleneck.
   ```
 
   Constraint: `tp_size * dp_size` must equal `world_size`. See
-  [Vision encoder parallelism design](../design/parallelism/vision_encoder_parallelism.md)
+  [Encoder parallelism design](../design/parallelism/encoder_parallelism.md)
   for block-level DP semantics, process groups, and configuration details.
 
 ## Disaggregated inference
@@ -366,7 +478,7 @@ vllm serve openai/gpt-oss-120b \
 ```
 
 MXFP4 is supported only for gpt-oss on Trn3. The worker rejects `mxfp4` on Trn2
-(gpt-oss falls back to BF16 there) — this fails at startup with a clear error.
+(gpt-oss falls back to BF16 there), failing at startup with a clear error.
 
 ### KV cache FP8 quantization
 
@@ -483,6 +595,9 @@ path, batch state is updated, and CPU-built `input_ids` are used for
 that step. The async flow automatically reinstates on the next
 steady-state decode step.
 
+The list above describes MRv1. For MRv2, see
+[Model Runner V2](#model-runner-v2).
+
 ### Configuration
 
 Async scheduling is **on by default** and requires on-device sampling.
@@ -512,7 +627,7 @@ python3 -m vllm.entrypoints.openai.api_server \
   means the async path is active for a larger fraction of total
   generation
 
-## Speculative decoding (EAGLE3)
+## Speculative decoding
 
 Speculative decoding accelerates autoregressive inference without
 changing the output distribution. A lightweight draft model predicts
@@ -520,16 +635,14 @@ several tokens ahead, and the target model verifies them in a single
 forward pass.
 
 :::{note}
-**Mutually exclusive with async scheduling.** Setting `--speculative-config`
-disables async scheduling automatically with a startup warning.
-
 EAGLE3 and DFlash are supported speculative methods. The examples below use
 EAGLE3. For per-model compatibility, see the
 [model recipes](../model-recipes/index.md).
 For compatible target/draft pairings and worked examples, see the EAGLE3
 speculative decoding tutorials for
 [Llama 3.1](../tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.md) and
-[GPT-OSS](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md).
+[GPT-OSS](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md), or the
+[DFlash speculative decoding tutorial](../tutorials/tutorial-dflash-speculative-decoding.md).
 :::
 
 ### How it works
@@ -589,10 +702,10 @@ outputs = llm.generate(["Explain quantum computing"], sampling_params)
 
 | Parameter                   | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| `--speculative-config`      | JSON config selecting the speculative method (`eagle3`), the draft `model`, and `num_speculative_tokens` |
-| `method`                    | Speculative method; `eagle3` is supported in 2.31            |
-| `model`                     | Path or name of the EAGLE3 draft model                       |
-| `num_speculative_tokens`    | Number of tokens the draft proposes per step (typically 3-7) |
+| `--speculative-config`      | JSON config selecting the speculative method (`eagle3` or `dflash`), the draft `model`, and `num_speculative_tokens` |
+| `method`                    | Speculative method; `eagle3` and `dflash` are supported      |
+| `model`                     | Path or name of a compatible draft model                     |
+| `num_speculative_tokens`    | Number of tokens the draft proposes per step; this must match the selected method and draft checkpoint |
 | `on_device_sampling_config` | Required for on-device rejection sampling                    |
 
 ### On-device vs CPU sampling
@@ -709,16 +822,23 @@ model may produce tokens that violate the grammar FSM.
 
 ## Multimodal support
 
-vLLM Neuron supports multimodal inference on vision-language models,
-accepting image, video, and text inputs.
+vLLM Neuron supports vision-language models and audio transcription models.
+They accept image, video, audio, and text inputs.
 
 For the supported models, feature matrix, and accuracy results, see the
-[model cards](../model-recipes/index.md). For an end-to-end deployment walkthrough of a
-multimodal model, see the [Qwen3-VL deployment tutorial](../tutorials/tutorial-qwen3-vl-32b.md).
+[model cards](../model-recipes/index.md). See the
+[Qwen3-VL deployment tutorial](../tutorials/tutorial-qwen3-vl-32b.md) for
+vision input and
+[Qwen3-ASR deployment tutorial](../tutorials/tutorial-qwen3-asr-1-7b.md) for
+audio input.
 
 ### Multimodal Input
 
 Multimodal requests use the standard vLLM interfaces.
+
+**Audio transcription.** Pass audio through `multi_modal_data` with the offline
+`LLM.generate()` interface. Use the OpenAI-compatible
+`/v1/audio/transcriptions` endpoint for online requests.
 
 **Offline (`LLM.generate`).** Build the prompt with the model's chat template
 and pass the images and/or videos under `multi_modal_data`:
@@ -741,8 +861,8 @@ llm = LLM(
     max_num_seqs=8,
     additional_config={
         "neuron_config": {"quantization": "bf16"},
-        # Vision encoder buckets are auto-generated; see the reference config
-        # to tune num_vision_tokens_buckets / vision_attention_block_size.
+        # Encoder buckets are auto-generated; see the reference config
+        # to tune num_encoder_input_buckets / encoder_attention_block_size.
     },
 )
 sampling_params = SamplingParams(max_tokens=256, temperature=0.0)
@@ -823,7 +943,7 @@ response = client.chat.completions.create(
 :::
 
 Refer to the vLLM [docs](https://docs.vllm.ai/en/stable/features/multimodal_inputs/) for more detailed examples.
-For more details on how to configure the vision encoder, refer to the [vision encoder options](reference-configuration.md#vision-encoder-options-vision_neuron_config).
+For more details on how to configure the encoder, refer to the [multimodal encoder options](reference-configuration.md#multimodal-encoder-options-encoder_neuron_config).
 
 ## Encoder-disaggregated inference (EPD)
 
@@ -969,8 +1089,8 @@ device utilization, see
 
 ## Memory management
 
-vLLM Neuron uses a heuristic to determine how much HBM to allocate
-for the KV cache, balancing throughput against compile-time constraints.
+vLLM Neuron uses memory utilization and a fractional KV cap by default.
+An explicit headroom value enables reserve sizing.
 
 ### How memory management works
 
@@ -979,34 +1099,55 @@ shape. The KV sizing decision directly affects whether the model can
 compile at all -- if KV allocation is too large, the compiler rejects
 the program.
 
-The memory budget is computed as:
+The default Neuron budget is:
 
 ```text
-total_budget = total_hbm * gpu_memory_utilization
-kv_cache_budget = max(total_budget - bytes_used, 0)
-heuristic_cap = total_budget * KV_GMU_BUDGET_CAP_FRACTION
-available = min(kv_cache_budget, heuristic_cap)
+total_budget = int(logical_core_hbm * gpu_memory_utilization)
+available = max(min(
+    max(total_budget - model_weight_bytes, 0),
+    int(total_budget * cap_fraction),
+), 0)
+```
+
+The default fractional cap is `0.30`. An explicit headroom value selects:
+
+```text
+available = max(logical_core_hbm - model_weight_bytes - headroom_bytes, 0)
+```
+
+CPU inference already accounts for weights in host available memory.
+Default sizing applies memory utilization and the cap to each worker's share.
+Explicit headroom uses:
+
+```text
+available = max(host_available / local_workers - headroom_bytes, 0)
 ```
 
 ### Key environment variables
 
-| Variable                                 | Default | Description                                       |
-| ---------------------------------------- | ------- | ------------------------------------------------- |
-| `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` | 0.30    | Fraction of total GMU budget to cap KV allocation |
-| `VLLM_NEURON_MIN_KV_BUDGET_GIB`          | 1.0     | Minimum KV budget in GiB (fails fast if below)    |
+| Variable | Default | Description |
+| --- | --- | --- |
+| `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` | 0.30 | Fractional cap for default sizing. Headroom mode bypasses this value. |
+| `VLLM_NEURON_RESERVED_HEADROOM_GIB` | unset | Explicit reserve per worker. Enables headroom sizing. |
+| `VLLM_NEURON_MIN_KV_BUDGET_GIB` | 1.0 | Minimum KV budget in GiB. The server stops if the budget is smaller. |
 
-The default cap of 0.30 is conservative, derived from worst-case
-compile behavior on GPT-OSS family models. Override it when more
-aggressive KV allocation is desired and compile-fit has been validated.
+A validated GPT-OSS 120B configuration can explicitly select 4 GiB.
+Other configurations must validate the reserve.
+
+Only explicit headroom mode sets `gpu_memory_utilization` to `1.0`.
+This mode bypasses the fractional cap. Zero is an explicit headroom value.
 
 ### When to tune memory settings
 
-- If you see `NCC_EVRF009` compiler errors, reduce
-  `gpu_memory_utilization` or lower the cap fraction
-- If you need more concurrent requests, increase the cap fraction
-  (validate that compilation succeeds)
-- If startup fails with "KV cache budget below minimum threshold",
-  your configuration is too memory-constrained
+- In default mode, reduce the fractional cap after an HBM allocation failure
+- In headroom mode, if logs contain `NCC_EOOM002`, `Maximum peak HBM usage`, `NRT_RESOURCE` in
+  `nrt_load_util`, or `Allocation Failure`, increase the active headroom
+  variable in 1 GiB increments
+- Each additional 1 GiB of headroom reduces the KV cache budget by 1 GiB; keep
+  the smallest value that passes the same model, sharding, backend, and hardware
+- If you need more concurrent requests, decrease the headroom after validation
+- In headroom mode, if startup fails with "KV cache budget below minimum threshold",
+  decrease headroom; do not increase it for that error
 
 ## Neuron-specific configuration
 
@@ -1054,15 +1195,27 @@ reference, see [Configuration options](reference-configuration.md).
 
 ### KV cache budget too low
 
-- Increase `gpu_memory_utilization` (default 0.9)
-- Increase `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` above 0.30
-- Reduce `max_model_len` or `max_num_seqs` to lower KV requirements
+- In default mode, increase memory utilization or the fractional cap after validation
+- In headroom mode, decrease `VLLM_NEURON_RESERVED_HEADROOM_GIB`
+- Lower `VLLM_NEURON_MIN_KV_BUDGET_GIB` only if a smaller KV cache is valid
 
 ### Async scheduling sync fallbacks
 
 - Check logs for frequent "batch composition changed" messages
 - This is normal for workloads with many short responses; async
   benefits scale with response length
+
+### Server runs MRv1 when you expect Model Runner V2
+
+- Search the worker log for `Using the standalone V2 Neuron model runner.`
+  If the line is absent, the server runs MRv1.
+- Search the log for `Neuron Model Runner V2 does not yet support`. The
+  message lists the features that selected MRv1. Remove them, or keep MRv1.
+- MoE, sliding-window, multimodal, pooling, encoder-decoder, hybrid,
+  attention-free, and diffusion models use MRv1 without a log message. See
+  [Configurations that use MRv1](#configurations-that-use-mrv1).
+- Check that `VLLM_USE_V2_MODEL_RUNNER` is not set to `0` in the server
+  environment.
 
 ## Related information
 
@@ -1080,6 +1233,8 @@ reference, see [Configuration options](reference-configuration.md).
 - [EAGLE3 speculative decoding tutorial (Llama 3.1)](../tutorials/tutorial-eagle3-speculative-decoding-llama-3-1.md)
 - [EAGLE3 speculative decoding tutorial (GPT-OSS)](../tutorials/tutorial-eagle3-speculative-decoding-gpt-oss.md)
   — Worked Eagle3 deployment.
+- [DFlash speculative decoding tutorial](../tutorials/tutorial-dflash-speculative-decoding.md)
+  — Worked DFlash deployment.
 - [Disaggregated inference (1P1D / xPyD) tutorial](../tutorials/tutorial-di-1p1d-xpyd.md)
   — Worked disaggregated inference deployment.
 - [Encoder-disaggregated inference (1E1PD / xEyPD) tutorial](../tutorials/tutorial-epd-1e-1pd-xeypd.md)

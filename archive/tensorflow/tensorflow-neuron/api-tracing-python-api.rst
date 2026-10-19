@@ -13,7 +13,7 @@ TensorFlow 2.x (``tensorflow-neuron``) Tracing API
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The Neuron tracing API enables tracing TensorFlow 2.x models for deployment

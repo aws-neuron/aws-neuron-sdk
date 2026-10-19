@@ -39,8 +39,8 @@ Prepare your environment
 
 Launch an AWS Trainium or Inferentia instance with sufficient resources for your model requirements. We recommend using one of the base DLAMIs to launch your instance - `Neuron Base DLAMI <#>`.
 
-Step 1: Pull the vLLM Docker image
------------------------------------
+Step 1: Pull the Docker image
+-----------------------------
 
 In this step, you will download the pre-configured vLLM DLC from AWS ECR. This image comes with the vLLM Neuron plugin already installed.
 
@@ -50,7 +50,7 @@ Get the latest vLLM Docker image from Neuron's ECR public gallery `pytorch-infer
 
    docker pull public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:<image_tag>
 
-For example, replace ``<image_tag>`` with an SDK 2.32.0 released DLC image tag such as ``0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04``
+For example, replace ``<image_tag>`` with an SDK 2.33.0 released DLC image tag such as ``0.29.0.1.2.0-neuronx-py314-sdk2.33.0-ubuntu26.04``
 
 .. _quickstart_vllm_dlc_step2:
 

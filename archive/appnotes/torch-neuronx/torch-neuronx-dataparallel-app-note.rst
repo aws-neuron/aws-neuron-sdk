@@ -158,14 +158,14 @@ The following sections provide example usages of the
 Default usage
 ^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-default.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-default.rst
 
 .. _dataparallel_example_specify_ncs_torch_neuronx:
 
 Specifying NeuronCores
 ^^^^^^^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-specify-ncs.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-specify-ncs.rst
 
 
 .. _dataparallel_example_dim_neq_zero_torch_neuronx:
@@ -173,7 +173,7 @@ Specifying NeuronCores
 DataParallel with dim != 0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-dim-neq-zero.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-dim-neq-zero.rst
 
 
 .. _dataparallel_example_dynamic_batching_torch_neuronx:
@@ -181,7 +181,7 @@ DataParallel with dim != 0
 Dynamic batching
 ^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-dynamic-batching.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-dynamic-batching.rst
 
 
 .. _dataparallel_example_disable_dynamic_batching_torch_neuronx:
@@ -189,5 +189,5 @@ Dynamic batching
 Dynamic batching disabled
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. include:: /frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-disable-dynamic-batching.rst
+.. include:: /archive/frameworks/torch/torch-neuronx/torch-neuronx-dataparallel-example-disable-dynamic-batching.rst
 

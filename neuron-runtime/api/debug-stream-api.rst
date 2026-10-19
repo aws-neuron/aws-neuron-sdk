@@ -1,3 +1,7 @@
+.. meta::
+   :description: Use the Neuron Runtime ndebug_stream APIs to consume debug events, such as device prints and breakpoints, that the runtime emits per Logical NeuronCore.
+   :date-modified: 2026-10-13
+
 .. _nrt-debug-stream-api:
 
 ========================================

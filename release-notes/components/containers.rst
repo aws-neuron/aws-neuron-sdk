@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Containers component across all AWS Neuron SDK versions.
     :keywords: neuron containers, dlc, kubernetes, k8s, release notes, aws neuron sdk
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. _containers_rn:
 
@@ -10,12 +10,39 @@ Component Release Notes for Neuron Containers
 
 The release notes for the Neuron Containers component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+.. _containers-2-33-0-rn:
+
+Neuron Containers (Neuron 2.33.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 10/19/2026
+
+Improvements
+~~~~~~~~~~~~
+
+* Added support for device taints as Neuron Device Taints. Neuron Device Taints allow the Neuron DRA driver to mark individual Neuron devices as unavailable or degraded. For more details, see :ref:`neuron-device-taints`.
+
+Updates
+~~~~~~~~
+
+* Added a new ``torch-neuronx`` DLC with ``torch-neuronx 2.14.0``, including TorchTitan for native PyTorch distributed training. See :ref:`native-pytorch-trainium`.
+* Added a new ``pytorch-inference-vllm-omni-neuronx`` DLC (``vllm-omni-neuron 0.29.0.0.2.0``, Beta) for diffusion and multimodal inference on Trn2 and Trn3. See :doc:`vLLM Omni Neuron documentation </vllm-omni-neuron/docs/index>`.
+* The ``pytorch-inference-vllm-neuronx`` DLC has been upgraded to vLLM 0.29.0 and ``vllm-neuron 0.29.0.1.2.0``, with related dependencies.
+* The ``jax-training-neuronx`` DLC remains on JAX 0.10.0 with upgraded dependencies.
+* All Neuron packages and their dependencies have been upgraded to support AWS Neuron SDK version 2.33.0.
+
+Callouts
+~~~~~~~~~
+
+.. important::
+    Starting with Neuron SDK 2.33.0, Neuron DLC images are published on Ubuntu 26.04 only. If you require an Ubuntu 24.04 DLC, use an image associated with a previous Neuron SDK release (2.32.0 or earlier). The SDK version is included in each image tag.
+
 .. _containers-2-32-0-rn:
 
 Neuron Containers (Neuron 2.32.0 Release)
 --------------------------------------------------------------------------------------
 
-Date of Release: 08/17/2026
+Date of Release: 8/13/2026
 
 Updates
 ~~~~~~~~
@@ -100,7 +127,7 @@ Callouts
 
    Existing NxDT/NxD Core users should stay on Neuron 2.28 and PyTorch 2.9 until ready to migrate to native PyTorch on Neuron (starting PyTorch 2.10). Customers are recommended to use native PyTorch with standard distributed primitives (DTensor, FSDP, DDP) and TorchTitan starting with Neuron 2.30.0 and PyTorch 2.10. A migration guide will be published in a coming release.
 
-   For more information, see :doc:`/frameworks/torch/pytorch-native-overview`.
+   For more information, see :doc:`/torch/about-pytorch-neuron`.
 
 
 .. _containers-2-28-0-rn:   
@@ -130,7 +157,7 @@ Improvements
 
 **DLC Support**
 
-* Added new pytorch-inference-vllm-neuronx 0.11.0 DLC with PyTorch 2.8, vLLM V1 with the vLLM-Neuron Plugin, tools, NxDI and all dependencies to run vLLM out of the box.
+* Added new pytorch-inference-vllm-neuronx 0.11.0 DLC with PyTorch 2.8, vLLM V1 with the vLLM Neuron Plugin, tools, NxDI and all dependencies to run vLLM out of the box.
 * Upgraded pytorch-training-neuronx and pytorch-inference-neuronx DLCs to PyTorch 2.9.0 with related dependencies.
 * Upgraded jax-training-neuronx DLC to JAX 0.7.0 with related dependencies.
 * Upgraded base image to Ubuntu 24.04 and Python 3.12 in all DLCs.

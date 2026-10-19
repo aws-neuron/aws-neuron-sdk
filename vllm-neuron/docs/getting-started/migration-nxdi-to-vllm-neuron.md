@@ -27,7 +27,7 @@ supports. Use the custom-model guide if you maintain your own modeling code.
 
 - Existing NxD Inference deployment (using `neuronx-distributed-inference`
   with the legacy vLLM Neuron component)
-- A new Trainium/Inferentia instance with the vLLM Neuron plugin installed (see
+- A new Trn2 or Trn3 instance with the vLLM Neuron plugin installed (see
   [setup guide](setup-guide.md))
 - Access to the same model weights for comparison testing
 
@@ -161,11 +161,11 @@ Deployment migration is successful when:
 
 #### Out-of-memory at startup
 
-- **Possible solution**: The plugin sizes the KV cache automatically from
-  available HBM and `--gpu-memory-utilization`; you do not set
-  `--num-gpu-blocks-override` as in some NxDI flows. If the server runs out of
-  memory, reduce `--gpu-memory-utilization`, `--max-num-seqs`, or
-  `--max-model-len`.
+- **Possible solution**: Default KV sizing respects memory utilization and a
+  fractional cap. Reduce `VLLM_NEURON_KV_GMU_BUDGET_CAP_FRACTION` after an HBM
+  allocation failure. If you explicitly enable headroom sizing, increase
+  the active reserve instead. You can also reduce
+  `--max-num-seqs` or `--max-model-len`.
 
 #### Performance regression after migration
 

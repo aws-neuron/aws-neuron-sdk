@@ -29,13 +29,13 @@ copy from; read those files rather than a prose description of them.
 
 ## Prerequisites
 
-- A Trainium instance with the plugin installed editable (`pip install -e .`) — see
-  the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md) for setup and usage. `Dockerfile.plugin` is the
+- A Trainium instance with the plugin installed editable (`pip install -e ".[test]"`) — see
+  the [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md) for setup and usage. `Dockerfile.plugin` is the
   source of truth for the runtime image.
 - Ideally, an upstream `vllm_omni.diffusion` pipeline for your model to subclass; note the
   architecture key it registers under. If there is none, contribute one upstream or carry
   standalone modeling code in the plugin (Step 1).
-- The runnable reference: [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/release-0.24.0.0.1.0/examples/wan22) and
+- The runnable reference: [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/main/examples/wan22) and
   `vllm_omni_neuron/diffusion/models/wan2_2/`.
 
 ## Onboarding flow
@@ -60,7 +60,7 @@ Neuron-specific parts — device handling, TP/CP weight loading, compilation. Th
 aligned with upstream fixes. If a model genuinely cannot subclass the upstream contract, you
 can instead carry its standalone modeling code inside the plugin behind a thin delegation
 pipeline: keep it in its own subpackage, record the upstream revision and any local patches
-alongside it, and add an entry to [`NOTICE`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/NOTICE). You then own its
+alongside it, and add an entry to [`NOTICE`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/NOTICE). You then own its
 maintenance, so prefer the subclass. Steps 2–6 apply to either path.
 
 Model implementations follow the upstream package layout, with one subpackage per model and
@@ -105,7 +105,7 @@ Subsections 1a–1f walk the Wan2.2 text-to-video reference component by compone
 #### 1a. Pipeline class
 
 Reference:
-[`pipeline_wan2_2.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/models/wan2_2/pipeline_wan2_2.py).
+[`pipeline_wan2_2.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/models/wan2_2/pipeline_wan2_2.py).
 Subclass the upstream pipeline and add one override at a time. Start by inheriting everything:
 
 ```python
@@ -173,7 +173,7 @@ trajectory for a seed, then cast. Inherit everything else.
 `vllm_omni_neuron/diffusion/distributed/cfg_parallel.py`.
 
 For the same overrides at minimum size, read
-[`pipeline_wan2_2_i2v.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/models/wan2_2/pipeline_wan2_2_i2v.py):
+[`pipeline_wan2_2_i2v.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/models/wan2_2/pipeline_wan2_2_i2v.py):
 it adds image-to-video by subclassing a *different* upstream pipeline while reusing the same
 DiT, VAE, and text encoder, and reuses the T2V pipeline's Neuron work by assignment rather than
 copying it:
@@ -187,7 +187,7 @@ copying it:
 #### 1b. Transformer / DiT
 
 Reference:
-[`wan2_2_transformer.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/models/wan2_2/wan2_2_transformer.py).
+[`wan2_2_transformer.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/models/wan2_2/wan2_2_transformer.py).
 Implement the transformer as raw `nn.Parameter` tensors with the weight loaders in
 `vllm_neuron.utils.weight_loader`, following the vLLM Neuron LLaMA3 pattern (no
 `ColumnParallelLinear` / `RowParallelLinear` module wrappers in the DiT itself), and import
@@ -247,7 +247,7 @@ contract — `load_weights(model_path)`, `compile(...)`, and
 Usually no new code — the platform already returns `NeuronSDPABackend` from
 `NeuronOmniPlatform.get_diffusion_attn_backend_cls()`. Only if your model needs a different
 attention path, subclass `SDPABackend` / `SDPAImpl`
-([`sdpa.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/attention/backends/sdpa.py), ~30 lines) and
+([`sdpa.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/attention/backends/sdpa.py), ~30 lines) and
 wire it through that method.
 
 #### 1f. Scheduler patch
@@ -284,7 +284,7 @@ __all__ = [
 
 If the package contains multiple pipelines, import each registry under a private name and expose
 one combined list. See
-[`vllm_omni_neuron/diffusion/models/wan2_2/__init__.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/models/wan2_2/__init__.py),
+[`vllm_omni_neuron/diffusion/models/wan2_2/__init__.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/models/wan2_2/__init__.py),
 which combines the T2V and I2V registries and re-exports both pipeline classes and their processing
 functions.
 
@@ -297,12 +297,12 @@ resolves to upstream. Wan2.2 sets `model_class_name: Wan22Pipeline` and register
 
 ### Step 3 — Add the stage config and runner, then smoke-test
 
-Copy [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/release-0.24.0.0.1.0/examples/wan22) to `examples/<model>/` and adapt:
+Copy [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/main/examples/wan22) to `examples/<model>/` and adapt:
 
 - **`<model>_stage.yaml`** — the stage, runtime, and engine args, including
   `model_class_name`, `dtype`, any model-specific fields, and the `parallel_config` mesh.
 - **`run.py`** — must `import vllm_omni_neuron.bootstrap` **first** (before any vllm
-  import), set the Neuron env vars, construct `Omni(model=..., stage_configs_path=...)`,
+  import), set the Neuron env vars, construct `Omni(model=..., deploy_config=...)`,
   call `omni.generate(...)`, and export the output.
 
 > **Note:** Context parallelism is sized with **`ring_degree`, not
@@ -320,25 +320,19 @@ python examples/<model>/run.py --dev
 
 ### Step 4 — Validate accuracy
 
-Add hardware tests under `test/neuron/` (auto-skipped off-device by the
-`require_neuron_device` fixture in `test/neuron/conftest.py`), in three tiers, cheapest
-first. Reference the Wan2.2 suite: `test/neuron/test_wan22_*.py` and
-`test/neuron/test_wanpipeline_accuracy.py`, plus the per-config YAMLs in
-`test/neuron/configs/`.
+Validate on Neuron hardware in three tiers, cheapest first. Keep the stage configs
+used for validation in `examples/<model>/` so users can reproduce the same setup.
 
-1. **Component tests** (`test_wan22_*_modules.py` and `test_wan22_*_accuracy.py`) — each
-   module and component against its diffusers CPU counterpart via `assert_close_three_way`
-   from `vllm_neuron.accuracy.testing`: FP32 CPU baseline, BF16 CPU expected (isolates dtype
-   quantization error), BF16 Neuron actual (isolates Neuron-specific error).
-2. **Single-step tests** (`test_wanpipeline_accuracy.py`,
-   `test_wan_i2v_pipeline_accuracy.py`) — the whole pipeline for one denoising step
-   (`num_steps = 1`) against the diffusers CPU denoised latent, excluding only VAE decode.
-   These use the same three-way comparison as tier 1; what separates the tiers is scope, not
-   method.
-3. **End-to-end output** (`test_wan22_e2e_accuracy.py`) — a full generation scored against a
-   cached golden video with `compute_ssim_per_frame` from `test/utils/accuracy`. This is a
-   regression check against a previous Neuron output, not a comparison with the reference
-   implementation.
+1. **Component tests** — each module and component against its diffusers CPU counterpart
+   via `assert_close_three_way` from `vllm_neuron.accuracy.testing`: FP32 CPU baseline,
+   BF16 CPU expected (isolates dtype quantization error), BF16 Neuron actual (isolates
+   Neuron-specific error).
+2. **Single-step tests** — the whole pipeline for one denoising step against the diffusers
+   CPU denoised latent, excluding only VAE decode. These use the same three-way comparison
+   as tier 1; what separates the tiers is scope, not method.
+3. **End-to-end output** — a full generation compared against a versioned golden video
+   using per-frame SSIM. This is a regression check against a previous Neuron output,
+   not a comparison with the reference implementation.
 
 Tier 3 is not optional — a per-step error too small for tier 2 to catch can still compound into
 a collapsed video (see [Common issues](#common-issues)). When a tier fails, the methodology for
@@ -347,7 +341,7 @@ stage/module/step bisection — is in
 [Evaluating and debugging model accuracy](./accuracy-evaluation-debugging.md).
 
 `VLLM_NEURON_CPU_MODE=1` runs the init/model path on CPU without a device — useful for
-tracing checks and for the CPU-only unit tests under `test/unit/`.
+tracing checks and CPU-only unit tests.
 
 ### Step 5 — Benchmark and tune performance
 
@@ -366,21 +360,18 @@ tracing checks and for the CPU-only unit tests under `test/unit/`.
   + flash only where the kernel cannot run (CPU mode, fake-tensor tracing); set `false` to
   always take all-gather + flash; set `true` to require ring and raise instead of falling
   back. See the commented block in
-  [`wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml).
+  [`wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml).
 
-### Step 6 — Wire up CI and docs
+### Step 6 — Add the docs
 
-- **CI** — add correctness and latency coverage to the development repository's
-  test manifest; the release checkout does not include CI infrastructure.
-- **Model card** — add `docs/models/<model>.md`; use the
-  [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) as an example. A
-  [model tutorial](../tutorials/tutorial-wan22-14b.md) is optional.
+- **Model card** — add `docs/models/<model>.md`; see the
+  [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) as a filled example. A tutorial is optional.
 - **README** — add the model to the Supported Models section of the
-  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md).
+  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md).
 
 The model is onboarded when it compiles and cache-hits on a second run, all three accuracy
 tiers are within tolerance, its benchmark score and per-video latency match the targets
-recorded in its model card, and the development CI suite is green.
+recorded in its model card.
 
 ## Common issues
 
@@ -408,11 +399,10 @@ recorded in its model card, and the development CI suite is green.
 
 - **Possible solution**: A stale NKI compile cache can replay a path from a previous session and
   surface as what looks like a kernel bug. Its location is set by `NKI_COMPILE_CACHE_URL` —
-  clear that directory and retry. `test/neuron/conftest.py` treats this as a real corruption
-  hazard, giving each pytest-xdist worker its own cache under `/tmp/vllm_wan_<worker>/nki`. Do
-  not confuse it with the NEFF cache under `/root/.cache/vllm/<hash>/`, or with the `neuronx-cc`
-  scratch directories written into the working directory — both are described in the
-  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md). `VLLM_CACHE_ROOT` is a third thing again: in this plugin
+  clear that directory and retry. Use a separate NKI cache directory for each concurrent
+  worker. Do not confuse it with the NEFF cache under `/root/.cache/vllm/<hash>/`, or with
+  the `neuronx-cc` scratch directories written into the working directory — both are described in the
+  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md). `VLLM_CACHE_ROOT` is a third thing again: in this plugin
   it only supplies the compiler's `compiler_workdir`.
 
 ### Cold-compile timeout
@@ -422,7 +412,7 @@ recorded in its model card, and the development CI suite is green.
   on the `Omni(...)` call and sets `VLLM_NEURON_COMPILATION_TIMEOUT`; carry those settings into
   your runner. Persisting compiled graphs across runs is a separate concern that `run.py` does
   **not** handle: either mount the cache directory into the container, as the
-  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md) setup does, or point `TORCH_NEURONX_NEFF_CACHE_DIR` at a
+  [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md) setup does, or point `TORCH_NEURONX_NEFF_CACHE_DIR` at a
   directory that outlives the container, as the
   [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) recommends.
 
@@ -448,7 +438,7 @@ recorded in its model card, and the development CI suite is green.
   — allocating a fixed core budget across CFG/TP/CP, and the per-core HBM budget.
 - [Wan2.2-T2V-A14B model card](../models/wan22-t2v-14b.md) — a filled model card and
   the reference blueprint's feature/accuracy status.
-- [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/release-0.24.0.0.1.0/examples/wan22) — the runnable reference: `run.py` and
+- [`examples/wan22/`](https://github.com/aws-neuron/vllm-omni-neuron/tree/main/examples/wan22) — the runnable reference: `run.py` and
   `wan22_stage.yaml`.
-- [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md) — setup, usage, and supported models.
+- [README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md) — setup, usage, and supported models.
 - [vLLM-Omni architecture](https://docs.vllm.ai/projects/vllm-omni/en/latest/design/architecture_overview/)

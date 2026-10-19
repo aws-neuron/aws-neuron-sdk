@@ -89,7 +89,7 @@ Choose where to run your workload. EC2 pairs with a DLAMI; every other service c
       :link-type: doc
       :class-card: sd-border-1
 
-      Kubernetes orchestration with Neuron device plugins, topology-aware scheduling, and :doc:`Dynamic Resource Allocation (DRA) </deploy/eks/dra>` for Trn2. Includes :doc:`Helm chart </deploy/eks/helm-chart>` for one-command infrastructure setup and :doc:`UltraServer support </deploy/eks/ultraserver>`.
+      Kubernetes orchestration with Neuron device plugins, topology-aware scheduling, and :doc:`Dynamic Resource Allocation (DRA) </deploy/eks/dra>` for Trn2. Includes :doc:`Helm chart </deploy/eks/helm-chart>` for one-command infrastructure setup, :doc:`UltraServer support </deploy/eks/ultraserver>`, and :doc:`device taints </deploy/eks/neuron-device-taints-guide>` for per-device health isolation.
 
       +++
       *Use for: Production inference services, distributed training, auto-scaling*

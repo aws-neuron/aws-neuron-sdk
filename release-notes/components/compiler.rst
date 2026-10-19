@@ -1,19 +1,140 @@
 .. meta::
     :description: Complete release notes for the Neuron Compiler component across all AWS Neuron SDK versions.
     :keywords: neuron compiler, neuronx-cc, release notes, aws neuron sdk
-    :date-modified: 08/04/2026
+    :date-modified: 10/19/2026
 
 .. _compiler_rn:
 
 Component Release Notes for Neuron Graph Compiler
 ==================================================
 
-**Latest version (in 2.32.0)**: 2.27.4747.0
+**Latest version (in 2.33.0)**: 2.28.7631.0
 
 The release notes for the Neuron Graph Compiler (``neuronx-cc``) Neuron component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
 .. note::
     For older Neuron Compiler (neuron-cc) release notes, see :doc:`the archived Neuron Compiler release notes </release-notes/archive/neuron-cc/neuron-cc>` and :doc:`Neuron Compiler operations release notes </release-notes/archive/neuron-cc/neuron-cc-ops/index>`.
+
+.. _compiler-2-33-0-rn:
+
+Neuron Compiler [2.28.7631.0] (Neuron 2.33.0 Release)
+-----------------------------------------------------
+
+Date of Release: 10/19/2026
+
+Changes
+~~~~~~~
+
+* **Faster compilation for models captured through torch.compile**: Compile time is substantially reduced for ``torch.compile`` models with heterogeneous architectures, such as vision-language, encoder-decoder, and mixture-of-experts models. For example, compile time for a large MoE backward graph improved by more than 20x in Neuron internal benchmarks. No changes to user code or compiler flags are required.
+
+* **LNC consistency check for NKI kernels enabled by default**: The compiler now verifies that every NKI kernel in a graph is configured for the same logical NeuronCore (LNC) count as the compiler's ``--lnc`` setting, and fails with :doc:`NCC_EVRF066 </compiler/error-codes/EVRF066>` on a mismatch. Previously, a mismatch could compile successfully but produce incorrect results. To restore the previous behavior, set the environment variable ``NEURON_ENFORCE_NKI_LNC_CONSISTENCY=0``.
+
+* **Integer narrowing conversions now wrap instead of saturating**: Conversions from a wider integer type to a narrower one (for example, ``int32`` to ``int8``) now truncate using two's-complement wrap-around, matching the behavior of StableHLO, PyTorch, and CPU execution. Previously, out-of-range values were saturated to the minimum or maximum of the destination type.
+
+* **Clearer errors for invalid input HLO**: Input graphs that fail HLO shape or structural verification now report :doc:`NCC_EVRF064 </compiler/error-codes/EVRF064>` and identify the offending instruction, instead of producing an internal compiler error.
+
+* **64-bit integer flag defaults unchanged (default change postponed)**: The default values of ``--native-int64`` (``disabled``) and ``--implicit-integer-downcast`` (``all``) introduced in the previous release remain unchanged in this release. The planned default change has been postponed: **in the next SDK release, native int64 execution will be enabled by default (--native-int64=enabled and --implicit-integer-downcast=none).** Users who depend on the current downcast behavior should pin --native-int64=disabled and --implicit-integer-downcast=all explicitly. This release includes additional correctness fixes for ``--native-int64=enabled``.
+
+Performance and Compile Time Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Faster MXFP8 models on trn3**: Quantized weights and MX matrix multiplication outputs now stay in on-chip memory under LNC=2 sharding instead of being routed through HBM, reducing latency by about 7x on an MXFP8 training workload. For MXFP8 models that take externally supplied scale tensors, scales are now laid out for wide, contiguous prefetch, reducing latency by up to 30x on affected workloads, without changing the expected input layout.
+
+* **Large backend compile time reductions**: Several backend analyses have been rewritten to scale better on large graphs. Instruction scheduling on graphs with many dynamic loops is up to 67x faster on a large MoE decode graph, loop-carried dependency analysis is up to 72x faster on very large graphs, and memory lifetime analysis for graphs with many basic blocks is up to 9x faster. Faster anti-dependency analysis alone reduces aggregate compile time by about 12% across Neuron internal benchmarks (up to 22% on individual models), and scheduler setup, DMA lowering, and loop unrolling are each 40-65% faster on large language models.
+
+* **Faster compilation for graphs with aliased inputs and outputs**: Alias analysis results are now cached correctly, reducing graph compiler time by about 80x on an affected video-generation model.
+
+* **Faster compilation for models with custom kernels**: Built-in kernel binaries are now reused across subgraphs, and kernel hashing is skipped when it is not needed, reducing the time spent on these phases by about 50-60% on large language models.
+
+* **Reduced memory usage for integer scatter with unique indices**: Integer scatter operations with unique indices (for example, ``uint8`` or FP8 KV-cache updates) no longer create a full-size FP32 copy of the destination tensor. This sharply reduces peak device memory and enables longer context lengths with FP8 KV caches.
+
+* **Reduced memory usage for batched linear layers**: Batched matrix multiplications whose weight operand is only broadcast across the batch dimension (common for ``nn.Linear`` applied to 3-D or higher-rank activations) are now converted to a single 2-D matrix multiplication, avoiding large replicated weight copies at large batch sizes.
+
+* **More efficient slices, concatenations, and contiguous gathers**: Constant-offset slices that narrow the innermost dimension, and contiguous concatenations of inputs or constants, are now lowered to direct DRAM-to-DRAM copies. Gather and scatter operations indexed by a contiguous range known at compile time are lowered to slice and concatenate operations. For innermost-dimension slices, this reduces NEFF size by up to 375x and improves runtime performance by up to 5x on affected models.
+
+* **Fewer DMA operations for strided and high-rank tensor accesses**: Strided DMA vectorization is now enabled by default, merging large numbers of small DMAs into a single scatter DMA (for example, 524,288 small DMAs into one). Strided accesses on tensors with 8 or more dimensions now use a supported transpose, reducing DMA count by up to 3x on affected models.
+
+Bug Fixes
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Area
+     - Fix
+   * - Compilation error
+     - Fixed out-of-memory compilation failures for cumulative sums over broadcast tensors, such as those generated by ``masked_scatter`` and its backward pass, which previously required more than 24 GB of intermediate memory (:doc:`NCC_EOOM002 </compiler/error-codes/EOOM002>`, :doc:`NCC_EVRF007 </compiler/error-codes/EVRF007>`)
+   * - Compilation error
+     - Fixed verifier failures for scatter operations whose update values have a different floating-point type than the destination tensor, such as ``index_add`` with FP32 updates into a BF16 tensor (NCC_IVRF100)
+   * - Compilation error
+     - Fixed several compilation failures for MXFP8 models on ``trn3``, including quantization following RMSNorm (NCC_IISA901), quantization in scaled matrix multiplication training graphs (NCC_ILTO901), mismatched data and scale store layouts (NCC_IRAC902), row-tiled MX matrix multiplications (NCC_IGCA043), E8M0 scale transposes (NCC_IBCG901), and factorized MX layouts
+   * - Compilation error
+     - Fixed on-chip memory allocation failures on large MoE training graphs, fragmented state buffers, and loops that read the same tensor multiple times concurrently (NCC_IGCA030, NCC_IGCA113, NCC_IBIR228, NCC_IBIR229)
+   * - Compilation error
+     - Fixed a crash during state buffer spill insertion when a memory location is read before it is first written (for example, Mamba models compiled with ``torch.compile``)
+   * - Compilation error
+     - Fixed an ISA validation failure for TopK on ``trn3`` by placing its value and index outputs on the same base partition (NCC_IINAR001)
+   * - Compilation error
+     - Fixed an internal error for TopK over large, unevenly divisible axes (NCC_IXCG856)
+   * - Compilation error
+     - Fixed a topological order violation when DMA prefetching reordered writes ahead of reads on reused buffers (NCC_ISCH719)
+   * - Compilation error
+     - Fixed compilation failures for transposed convolutions compiled with LNC=2 (NCC_ILSM901)
+   * - Compilation error
+     - Fixed a type legalization crash when a collective's producer operation was folded into the collective, affecting large MoE decoders at LNC=2 (NCC_ILTY902)
+   * - Compilation error
+     - Fixed a false verifier error on collectives with 2\ :sup:`32` or more elements caused by a 32-bit overflow (NCC_INLA001)
+   * - Compilation error
+     - Fixed an out-of-bounds memory error where partition-axis tiling produced state buffer tiles with more than 128 partitions (NCC_INLA001)
+   * - Compilation error
+     - Fixed an out-of-bounds access pattern error in depthwise convolution when the DMA tile size is not a multiple of the compute tile size (NCC_IBIR243)
+   * - Compilation error
+     - Fixed crashes in loop fusion, dead store elimination, broadcast store conflict resolution, tensor initialization, mask propagation, and partition vectorization (NCC_ILFU901, NCC_IDSE902, NCC_IIOT902, NCC_ITIN902, NCC_IMPR902)
+   * - Compilation error
+     - Fixed compilation failures after folding back-to-back transposes and for integer transposes after copy folding (NCC_ILLP901, NCC_IBCG901)
+   * - Compilation error
+     - Fixed a crash when activation operations with a partial sum buffer input execute over multiple loop iterations
+   * - Compilation error
+     - Fixed a compiler assertion when a compute instruction's free-dimension step exceeds the range supported by hardware
+   * - Compilation error
+     - Fixed false verifier errors on empty tensor slices and zero-element access patterns
+   * - Compilation error
+     - Fixed intermittent ``neuronx-cc terminated abnormally`` failures at process exit after a successful compilation, most often seen when running many compilations in parallel
+   * - Compilation error
+     - Fixed compilation failures when ISLpy 2026.2 is installed (NCC_ISMP902)
+   * - Compilation error
+     - Fixed ``neuronx-cc --help`` failing to display
+   * - Compiler bug
+     - Fixed NaN outputs in masked softmax (for example, scaled dot-product attention with fully masked rows) caused by incorrect initialization of tiled max and min reductions
+   * - Compiler bug
+     - Fixed FP32 sum reductions returning NaN instead of ±infinity when the input contains infinite values
+   * - Compiler bug
+     - Fixed incorrect results from product reductions (for example, ``torch.prod``) over broadcast tensors
+   * - Compiler bug
+     - Fixed incorrect results from reverse arithmetic right shifts (scalar shifted by a tensor) and from right shifts folded into memory initialization
+   * - Compiler bug
+     - Fixed in-place copies within an aliased input/output buffer (for example, KV-cache shifts) being incorrectly removed, and fixed stale reads of aliased inputs accessed through reshape, transpose, or convert after an in-place update
+   * - Compiler bug
+     - Fixed non-deterministic results in multi-subgraph models with collective operations caused by collective handshakes being skipped incorrectly
+   * - Compiler bug
+     - Fixed silently truncated results for switch-accelerated collectives on ``trn3`` by aligning collective output buffers of 64 MB or smaller
+   * - Compiler bug
+     - Fixed a data race where a register load could execute before an in-flight DMA completed, causing incorrect results in models that use indirect DMA offsets
+   * - Compiler bug
+     - Fixed missing loop-carried dependencies in dynamic loops that reuse the same state buffer memory for different tensors
+   * - Compiler bug
+     - Fixed incorrect results from operations placed on engines that cannot execute them correctly, including certain tensor-scalar and mixed integer/floating-point operations
+   * - Compiler bug
+     - Fixed incorrect results when sharding a scatter whose dimension is also a softmax reduction dimension
+   * - Compiler bug
+     - Fixed incorrect MXFP8 quantization output ordering with factorized MX layouts on ``trn3``
+   * - Compiler bug
+     - Fixed potential stale reads when loads of a tensor surround an in-place write and share a transpose
+   * - Compiler bug
+     - Fixed dynamic-offset DMAs into DRAM tensors larger than 4 GiB
+
+* Other minor bug fixes and performance enhancements for ``trn1``, ``trn2``, and ``trn3`` platforms.
 
 .. _compiler-2-32-0-rn:
 

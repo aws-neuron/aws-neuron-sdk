@@ -37,7 +37,8 @@ To solve this issue, you need to run the following commands to fetch the new key
 
 .. code::
 
-   wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+   sudo install -m 0755 -d /etc/apt/keyrings
+   wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
 
    # Update OS packages
    sudo apt-get update -y

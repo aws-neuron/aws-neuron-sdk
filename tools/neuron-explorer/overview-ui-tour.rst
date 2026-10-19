@@ -107,9 +107,10 @@ Region Highlighter
 ~~~~~~~~~~~~~~~~~~
 
 Automatically identifies and marks time regions in your profile based on collective
-operations, operation hierarchy, or kernel stack frames. The Summary Viewer then
-shows comparative metrics for each region so you can compare layers or kernels
-without placing manual annotations.
+operations, operation hierarchy, or kernel stack frames. Also displays NKI Regions
+defined in your kernel source code via ``profiler_region_open`` / ``profiler_region_close``.
+The Summary Viewer then shows comparative metrics for each region so you can compare
+layers or kernels without placing manual annotations.
 
 .. image:: /tools/neuron-explorer/images/region-highlighter-fast-region-perf.png
    :target: ../../_images/region-highlighter-fast-region-perf.png

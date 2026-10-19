@@ -17,7 +17,7 @@ AWS Neuron SDK 2.27.0: Neuron Deep Learning Containers release notes
 What's New
 ----------
 
-**PyTorch Inference vLLM-Neuronx 0.11.0 DLC** — Added new ``pytorch-inference-vllm-neuronx`` 0.11.0 DLC with PyTorch 2.8, vLLM V1 with the `vLLM-Neuron Plugin <https://github.com/vllm-project/vllm-neuron>`_, tools, NxDI and all dependencies to run :ref:`nxdi-vllm-user-guide-v1` out of the box.
+**PyTorch Inference vLLM Neuronx 0.11.0 DLC** — Added new ``pytorch-inference-vllm-neuronx`` 0.11.0 DLC with PyTorch 2.8, vLLM V1 with the `vLLM Neuron Plugin <https://github.com/vllm-project/vllm-neuron>`_, tools, NxDI and all dependencies to run :ref:`nxdi-vllm-user-guide-v1` out of the box.
 
 **PyTorch 2.9.0 Support** — Upgraded ``pytorch-training-neuronx`` and ``pytorch-inference-neuronx`` DLCs to PyTorch 2.9.0 with related dependencies.
 

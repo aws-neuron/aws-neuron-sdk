@@ -51,7 +51,6 @@ Model Support (NxDI)
 Neuron 2.25.0 expands model support to include:
 
 * Qwen3 dense models (0.6B to 32B parameters)
-* Flux.1-dev model for text-to-image generation (Beta)
 
 Monitoring and Observability
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -229,7 +228,7 @@ End-of-support announcements
 
   **Note:** This change will not affect Neuron NxDI, NxDT, and TNx Frameworks as these are set to ``--auto-cast=none`` by default. However, Torch-Neuronx users may experience an impact and must adjust their settings if they rely on the previous auto-casting behavior.
 
-* Starting from Neuron Release 2.24, the Hugging Face Transformers NeuronX library is deprecated and in maintenance mode. ``transformers-neuronx`` releases will now only address critical security issues. In Neuron Release 2.26, Neuron will end support for transformers-neuronx. Current users of ``transformers-neuronx`` are advised to migrate to :doc:`NeuronX Distributed Inference </libraries/nxd-inference/index>`.
+* Starting from Neuron Release 2.24, the Hugging Face Transformers NeuronX library is deprecated and in maintenance mode. ``transformers-neuronx`` releases will now only address critical security issues. In Neuron Release 2.26, Neuron will end support for transformers-neuronx. Current users of ``transformers-neuronx`` are advised to migrate to :doc:`NeuronX Distributed Inference </inference-legacy/nxd-inference/index>`.
 
 * PyTorch version 2.6 will no longer be supported in a coming release.  Current users of PyTorch 2.6 are advised to upgrade to PyTorch 2.7, which is supported in this release.
 

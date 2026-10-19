@@ -71,7 +71,7 @@ ImportError: cannot import name 'neuron' from 'torch'
    import torch
    device = torch.device('neuron')
 
-See :doc:`/frameworks/torch/index` for complete migration guide.
+See :doc:`/torch/index` for complete migration guide.
 
 Device and Runtime Errors
 --------------------------
@@ -226,7 +226,8 @@ GPG key expired
 
 .. code-block:: bash
    
-   wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+   sudo install -m 0755 -d /etc/apt/keyrings
+   wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg
    sudo apt-get update -y
 
 Getting Help
@@ -235,7 +236,7 @@ Getting Help
 If issues persist:
 
 1. **Check release notes**: :doc:`/release-notes/index`
-2. **Review documentation**: :doc:`/frameworks/torch/index`
+2. **Review documentation**: :doc:`/torch/index`
 3. **GitHub Issues**: `aws-neuron-sdk/aws-neuron-sdk <https://github.com/aws-neuron/aws-neuron-sdk/issues>`_
 4. **AWS Support**: Open support case if you have AWS Support plan
 

@@ -13,7 +13,7 @@ Update to latest PyTorch Neuron  (``torch-neuron``)
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 If you already have a previous Neuron release installed, this section provide links that will assist you to update to latest Neuron release.

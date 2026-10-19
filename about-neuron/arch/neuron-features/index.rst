@@ -7,13 +7,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
 .. grid:: 2
       :gutter: 2
 
-      .. grid-item-card:: Custom C++ operators
-            :link: custom-c++-operators
-            :link-type: doc
-            :class-body: sphinx-design-class-title-small
-
-            Framework for implementing custom operators in C++ to extend Neuron's built-in operation support.
-
       .. grid-item-card:: Data types
             :link: data-types
             :link-type: doc
@@ -60,7 +53,6 @@ Neuron features provide insights into Neuron capabilities that enable high-perfo
     :maxdepth: 1
     :hidden:
 
-    Custom C++ operators <custom-c++-operators>
     Data types <data-types>
     Logical NeuronCore configuration <logical-neuroncore-config>
     Neuron persistent cache <neuron-caching>

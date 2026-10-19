@@ -15,7 +15,7 @@ Explorer for device-level performance analysis.
 
 ## Prerequisites
 
-- A running vLLM server on a Neuron instance (Trn2 or Inf2)
+- A running vLLM server on a Neuron instance (Trn2 or Trn3)
 - The `neuron-explorer` tool for viewing `.ntff` files
 - `curl` or equivalent HTTP client
 

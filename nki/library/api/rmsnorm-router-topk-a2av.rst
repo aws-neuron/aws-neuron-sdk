@@ -1,6 +1,6 @@
 .. meta::
     :description: Fused RMSNorm + Router TopK for MoE token generation (small T).
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.moe_block
 
@@ -19,7 +19,7 @@ The ``rmsnorm_router_topk_a2av`` kernel fuses RMSNorm and router top-K expert se
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `rmsnorm_router_topk_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/moe_block/rmsnorm_router_topk_a2av.py>`_
+**Source code for this kernel API can be found at**: `rmsnorm_router_topk_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/moe_block/rmsnorm_router_topk_a2av.py>`_
 
 rmsnorm_router_topk_a2av
 ^^^^^^^^^^^^^^^^^^^^^^^^

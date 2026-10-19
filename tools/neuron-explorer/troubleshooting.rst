@@ -1,6 +1,6 @@
 .. meta::
     :description: Troubleshooting guide, FAQ, and error code reference for Neuron Explorer.
-    :date-modified: 06/18/2026
+    :date-modified: 10/02/2026
 
 .. _neuron-explorer-troubleshooting:
 
@@ -196,11 +196,14 @@ Missing data in profiles
        ``NEURON_RT_ENABLE_DGE_NOTIFICATIONS=1`` and recapture.
        Note: collective DMAs may still show ``unknown`` even with DGE.
    * - Source Code Viewer widget is empty
-     - Source code was not uploaded alongside the profile. Upload source
-       as a ``.tar.gz`` with the profile.
+     - Source code was not added in the **Source Code** section of the
+       upload dialog. Source files inside the profile directory are not
+       picked up by **Directory Upload**. Re-upload the profile and add your
+       source files, folders, or a ``.tar.gz`` of them in the **Source Code**
+       section.
    * - Device Trace events missing source code information
-     - Debug info not captured. Set ``NEURON_FRAMEWORK_DEBUG=1`` (for model
-       code) or ``NKI_DEBUG_INFO=True`` (for NKI kernels) **before
+     - Debug info not captured. Set ``XLA_IR_DEBUG=1`` and ``XLA_HLO_DEBUG=1``
+       (for model code) or ``NKI_DEBUG_INFO=True`` (for NKI kernels) **before
        recompilation**. Existing cached NEFFs won't have debug info.
    * - NKI source location points to non-existent files
      - Source paths in debug info are absolute from the compilation host.
@@ -290,7 +293,7 @@ Performance issues
        reduces MFU/HFU. Throttling protects the hardware against power,
        current, and thermal limits. On Trn2 and Trn3, a common cause is bursty
        Tensor Engine activity: when utilization drops below 50% over any ~3 µs
-       window, the dI/dt current limit re-engages, so the next burst again runs
+       window on Trn2 (~1.6 µs on Trn3), the dI/dt current limit re-engages, so the next burst again runs
        at roughly 50% of maximum utilization until it ramps back up.
 
        **Fix:** Keep the Tensor Engine at or above 50% utilization —
@@ -387,8 +390,9 @@ Capture and setup
    - DGE notifications: adds DMA traffic proportional to transfer count
 
 **Why do I need to recompile after setting debug environment variables?**
-   ``NEURON_FRAMEWORK_DEBUG``, ``NKI_DEBUG_INFO``, ``XLA_IR_DEBUG``, and
-   ``XLA_HLO_DEBUG`` affect what metadata the compiler embeds in NEFFs.
+   ``NKI_DEBUG_INFO``, ``XLA_IR_DEBUG``, and ``XLA_HLO_DEBUG`` affect what
+   metadata the compiler embeds in NEFFs, and ``NEURON_FRAMEWORK_DEBUG``
+   only writes the NEFF out when a compilation actually runs.
    Previously-cached NEFFs don't have this metadata. Delete the compiler
    cache or set a new ``neff_cache_dir`` to force recompilation.
 
@@ -455,6 +459,11 @@ Viewing and analysis
    Yes. Use ``neuron-explorer view -d <dir> --output-format summary-json``
    to get machine-readable summary metrics. The output schema may change
    between versions — pin to a specific Explorer version for automation.
+   With a few exceptions, fields ending in ``_percent`` are fractions
+   between 0 and 1, not percentages: ``0.45`` means 45%. For every field's
+   definition, unit and range, including the exceptions, see the
+   :ref:`Profile Parquet Schema Reference <neuron-explorer-profile-schema-reference>`;
+   the ``Summary`` table there documents the same fields.
 
 **How do I see PSUM and SB usage in profiles?**
    SBUF and PSUM buffer usage data is included by default. If it appears

@@ -301,7 +301,7 @@ vllm serve $MODEL \
 | `VLLM_NEURON_SKIP_PREFILL_WARMUP` | `0` | Skip prefill NEFF compilation (decode-only) |
 | `VLLM_NEURON_SKIP_DECODE_WARMUP` | `0` | Skip decode NEFF compilation (prefill-only) |
 | `VLLM_NEURON_BIDIRECTIONAL_KV` | `0` | Enable D→P KV transfer for multi-turn |
-| `NEURON_VISIBLE_DEVICES` | all | Core partitioning for single-node DI |
+| `NEURON_VISIBLE_DEVICES` | all | Core partitioning for single-node DI (assumes host-level NeuronCore numbering; under Kubernetes DRA a pod may see pod-local IDs). |
 
 ### Proxy Server
 

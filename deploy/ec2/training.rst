@@ -33,7 +33,7 @@ Setup Environment
 Enable PyTorch-Neuron
 ~~~~~~~~~~~~~~~~~~~~~
 
-    .. include:: /frameworks/torch/torch-neuronx/setup/install-templates/pytorch-dev-install.txt
+    .. include:: /archive/frameworks/torch/torch-neuronx/setup/install-templates/pytorch-dev-install.txt
 
 3. Set up Jupyter notebook
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

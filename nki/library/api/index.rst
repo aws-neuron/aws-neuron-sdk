@@ -1,6 +1,6 @@
 .. meta::
     :description: Reference for the pre-built NKI Library kernels included with the AWS Neuron SDK.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. _nkl_api_ref_home:
 
@@ -152,6 +152,37 @@ Attention Kernels
      - Standalone sparse latent + RoPE attention (kernel A of the split DeepSeek-V3.2 sparse-MLA forward).
    * - :doc:`MLA V-Up O-Proj CTE </nki/library/api/mla-vup-oproj-cte>`
      - Standalone MX V-up + MX output projection (kernel B of the split DeepSeek-V3.2 sparse-MLA forward).
+   * - :doc:`Attention Const-Max </nki/library/api/attention-const-max>`
+     - Attention with a caller-supplied global softmax maximum, supporting sequence-major Q/K layouts.
+   * - :doc:`Flash Attention 2 </nki/library/api/flash-attention-2>`
+     - FlashAttention-2 forward for unmasked bidirectional attention over long key sequences (Trainium 3).
+   * - :doc:`MLA Decode QKV </nki/library/api/mla-decode-qkv>`
+     - DeepSeek-V3.2 MLA query and key/value projections for decode, with RoPE, query absorption, and paged KV-cache write.
+   * - :doc:`MLA Decode Attention </nki/library/api/mla-decode-attention>`
+     - DeepSeek-V3.2 MLA decode attention over indexer-selected keys, with V up-projection and output projection.
+   * - :doc:`MLA Attention Block Gather Decode </nki/library/api/mla-attention-block-gather-decode>`
+     - End-to-end DeepSeek-V3.2 MLA decode attention block (``mla_decode_qkv`` + ``mla_decode_attention``).
+   * - :doc:`DeepSeek-V3.2 Sparse Indexer </nki/library/api/deepseek-v32-sparse-indexer>`
+     - DeepSeek Sparse Attention lightning indexer for decode (Trainium 3).
+
+Linear Attention Kernels
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`KDA TKG </nki/library/api/kda-tkg>`
+     - Kimi Delta Attention token generation: advances the KDA recurrence by one token per request.
+   * - :doc:`KDA Block TKG </nki/library/api/kda-block-tkg>`
+     - Full Kimi Delta Attention block for token generation with all intermediates kept in SBUF.
+   * - :doc:`GDN CTE </nki/library/api/gdn-cte>`
+     - Chunked gated delta-rule (GDN) prefill with a selectable intra-chunk inverse algorithm.
+   * - :doc:`GDN TKG </nki/library/api/gdn-tkg>`
+     - Fused single-token gated delta-rule decode step.
+   * - :doc:`GDN Block TKG </nki/library/api/gdn-block-tkg>`
+     - Fused Qwen3.5 GDN decode layer (input projections, conv1d, GQA, gated delta-rule).
+   * - :doc:`GDN Conv1D </nki/library/api/gdn-conv1d>`
+     - Depthwise causal conv1d + SiLU + ``conv_state`` update for GDN prefill and decode.
 
 Deformable Attention Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,6 +203,8 @@ Transformer Kernels
 
    * - :doc:`Transformer TKG </nki/library/api/transformer-tkg>`
      - Multi-layer transformer forward pass megakernel for token generation.
+   * - :doc:`GPT-OSS Tail Chunked Megakernel </nki/library/api/gpt-oss-tail-chunked-megakernel>`
+     - GPT-OSS decode sampling tail (RMSNorm, ``lm_head``, top-K, sampler) with a single all-to-all collective.
 
 Convolution Kernels
 ~~~~~~~~~~~~~~~~~~~~
@@ -189,6 +222,34 @@ Convolution Kernels
      - 3D convolution with temporal unrolling and column tiling for small ``C_out``.
    * - :doc:`Conv3D Transpose </nki/library/api/conv3d-transpose>`
      - 3D transposed convolution (ConvTranspose3d) via an embedded 3D convolution core with remapped parameters.
+   * - :doc:`Conv3D Backward </nki/library/api/conv3d-bwd>`
+     - Input, weight, and bias gradients of a 3D convolution with a geometry-driven planner.
+
+Normalization Kernels
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`Batch Norm Backward </nki/library/api/batch-norm-bwd>`
+     - Batch normalization backward over the channel dimension, with optional fused ReLU.
+   * - :doc:`RMSNorm Residual Prefill </nki/library/api/rmsnorm-residual-prefill>`
+     - Pre-norm residual add followed by RMSNorm for prefill, with the add performed during the DMA load.
+
+Pooling Kernels
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`Max Pooling 3D </nki/library/api/max-pooling-3d>`
+     - 3D max pooling over (D, H, W) in NCDHW or NDHWC layout.
+   * - :doc:`Max Pooling 3D Backward </nki/library/api/max-pooling-3d-backward>`
+     - Backward pass of 3D max pooling.
+   * - :doc:`Average Pooling 3D </nki/library/api/avg-pooling-3d>`
+     - 3D average pooling over (D, H, W) in NCDHW or NDHWC layout.
+   * - :doc:`Average Pooling 3D Backward </nki/library/api/avg-pooling-3d-backward>`
+     - Backward pass of 3D average pooling.
 
 Collective Communication Kernels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -208,6 +269,8 @@ Collective Communication Kernels
      - MoE training dispatch: permute tokens by destination EP rank and exchange via all-to-all-v.
    * - :doc:`Unpermute A2AV </nki/library/api/unpermute-a2av>`
      - MoE training combine: all-to-all-v exchange and unpermute to original token order.
+   * - :doc:`Build Packed Routing </nki/library/api/build-packed-routing>`
+     - Builds the destination-major ``packed_source_indices`` consumed by ``permute_a2av`` and ``unpermute_a2av``.
    * - :doc:`QKV Batch Shard </nki/library/api/batch-shard>`
      - Q projection transition from tensor-parallel to tensor-and-data-parallel layout for batch-sharded attention.
 
@@ -236,6 +299,8 @@ Matmul and MLP MXFP8 Kernels
      - MXFP8 SwiGLU MLP backward pass with 4-phase gradient computation.
    * - :doc:`Matmul MXFP8 Backward </nki/library/api/matmul-mxfp8-generic-backward-kernel>`
      - Backward pass for a linear layer with MXFP8 quantization, computing both input (dX) and weight (dW) gradients.
+   * - :doc:`MLP DeepSeek MX </nki/library/api/mlp-deepseek-mx>`
+     - DeepSeek-V3.2 shared-experts and first dense MLP layers for prefill with MXFP8 weights and packed MX input.
 
 MoE Kernels
 ~~~~~~~~~~~~~
@@ -255,6 +320,10 @@ MoE Kernels
      - MXFP8 forward pass for blockwise (dropless) MoE; emits activation checkpoints for the MXFP8 MoE backward.
    * - :doc:`Build All2All Dispatch Metadata </nki/library/api/build-all2all-dispatch-metadata>`
      - Builds per-rank send counts (with token deduplication) and displacements from ``expert_index`` for MoE all-to-all dispatch.
+   * - :doc:`DeepSeek-V3 Router </nki/library/api/deepseek-v3-router>`
+     - DeepSeek-V3.2 group-limited ``noaux_tc`` routing for one decode step.
+   * - :doc:`Blockwise MM Block MX </nki/library/api/bwmm-block-mx>`
+     - DeepSeek-V3.2 blockwise MXFP4/MXFP8 MoE for context encoding on a single logical core (LNC1).
 
 Indexing Kernels
 ~~~~~~~~~~~~~~~~~
@@ -275,6 +344,8 @@ Top-K Kernels
 
    * - :doc:`GPSIMD Top-K </nki/library/api/gpsimd-topk>`
      - Top-k over the last dimension using the GpSIMD ``nisa.topk`` instruction.
+   * - :doc:`Chunked Top-K </nki/library/api/chunked-topk>`
+     - Single-core top-K over a vocabulary wider than the ``nisa.topk`` limit, with no collective.
 
 Optimizer Kernels
 ~~~~~~~~~~~~~~~~~~
@@ -375,43 +446,67 @@ MoE Backward Kernels
 
     Argsort Unstable <argsort-unstable>
     Attention Block TKG <attention-block-tkg>
+    Attention Const-Max <attention-const-max>
     Attention CTE <attention-cte>
     Attention KV-Parallel Segmented CTE <attention-kv-parallel-segmented-cte>
     Attention MXFP8 TKG <attention-mxfp8-tkg>
     Attention Segmented CTE <attention-segmented-cte>
     Attention TKG <attention-tkg>
+    Average Pooling 3D <avg-pooling-3d>
+    Average Pooling 3D Backward <avg-pooling-3d-backward>
+    Batch Norm Backward <batch-norm-bwd>
     Blockwise MM Backward <blockwise-mm-backward>
     Blockwise MM Backward MXFP8 <blockwise-mm-backward-mxfp8>
+    Blockwise MM Block MX <bwmm-block-mx>
     Blockwise MM Forward MXFP8 <blockwise-mm-forward-mxfp8>
     Blockwise MM Shard-on-Block <bwmm-shard-on-block-v2>
     Build All-to-All-V Metadata <build-all-to-all-v-metadata>
     Build All2All Dispatch Metadata <build-all2all-dispatch-metadata>
+    Build Packed Routing <build-packed-routing>
+    Chunked Top-K <chunked-topk>
     Collective Communication Kernels <collectives>
     Conv1D <conv1d>
     Conv3D <conv3d>
+    Conv3D Backward <conv3d-bwd>
     Conv3D Temporal Unroll <conv3d-temporal-unroll>
     Conv3D Transpose <conv3d-transpose>
     Cross Entropy <cross-entropy>
     Cumsum <cumsum>
+    DeepSeek-V3 Router <deepseek-v3-router>
+    DeepSeek-V3.2 Sparse Indexer <deepseek-v32-sparse-indexer>
     Depthwise Conv1D <depthwise-conv1d>
     Dynamic Elementwise Add <dynamic-elementwise-add>
     FGCC <fgcc>
     Find Nonzero Indices <find-nonzero-indices>
     Fine-Grained All-Gather <fg-allgather>
+    Flash Attention 2 <flash-attention-2>
     Foreach Elementwise <foreach-elementwise>
     Foreach Norm <foreach-norm>
     FP8 Quantize <fp8-quantize>
     Fused Adam <fused-adam>
     Gather <gather>
+    GDN Block TKG <gdn-block-tkg>
+    GDN Conv1D <gdn-conv1d>
+    GDN CTE <gdn-cte>
+    GDN TKG <gdn-tkg>
     GPSIMD Top-K <gpsimd-topk>
+    GPT-OSS Tail Chunked Megakernel <gpt-oss-tail-chunked-megakernel>
+    KDA Block TKG <kda-block-tkg>
+    KDA TKG <kda-tkg>
     Linear Scan <linear-scan>
     Matmul MXFP8 <matmul-mxfp8-generic-kernel>
     Matmul MXFP8 Backward <matmul-mxfp8-generic-backward-kernel>
+    Max Pooling 3D <max-pooling-3d>
+    Max Pooling 3D Backward <max-pooling-3d-backward>
+    MLA Attention Block Gather Decode <mla-attention-block-gather-decode>
+    MLA Decode Attention <mla-decode-attention>
+    MLA Decode QKV <mla-decode-qkv>
     MLA QKV CTE <mla-qkv-cte>
     MLA Sparse Attention CTE <mla-sparse-attention-cte>
     MLA V-Up O-Proj CTE <mla-vup-oproj-cte>
     MLP <mlp>
     MLP Backward MXFP8 <mlp-bwd-mxfp8-kernel>
+    MLP DeepSeek MX <mlp-deepseek-mx>
     MLP Forward MXFP8 <mlp-fwd-mxfp8-kernel>
     MoE CTE <moe-cte>
     MoE TKG <moe-tkg>
@@ -430,10 +525,11 @@ MoE Backward Kernels
     Ring Attention Backward <ring-attention-bwd>
     Ring Attention Forward <ring-attention-fwd>
     Ring Attention Unpermute <ring-attention-unpermute>
-    RMSNorm-Quant <rmsnorm-quant>
     RMSNorm MX Prefill <rmsnorm-mx-prefill>
+    RMSNorm Residual Prefill <rmsnorm-residual-prefill>
     RMSNorm Router Top-K A2AV <rmsnorm-router-topk-a2av>
     RMSNorm Router Top-K TKG <rmsnorm-router-topk-tkg>
+    RMSNorm-Quant <rmsnorm-quant>
     RNG <rng>
     RoPE <rope>
     Router Top-K <router-topk>

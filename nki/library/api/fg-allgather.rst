@@ -1,6 +1,6 @@
 .. meta::
     :description: Fine-grained ring-based all-gather kernel for TRN2.
-    :date-modified: 04/09/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.collectives
 
@@ -23,7 +23,7 @@ The ``fine_grained_allgather`` kernel performs all-gather on the input tensor ac
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fg_allgather.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/fg_allgather.py>`_
+**Source code for this kernel API can be found at**: `fg_allgather.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/collectives/fg_allgather.py>`_
 
 fine_grained_allgather
 ^^^^^^^^^^^^^^^^^^^^^^

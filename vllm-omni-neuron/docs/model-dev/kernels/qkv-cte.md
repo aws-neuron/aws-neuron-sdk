@@ -319,10 +319,9 @@ Returns the projected activation in the requested layout, BF16.
   reads a whole S-tile's output width inline must either force `num_i_groups == 1` when the degree
   is chosen, or be rewritten to work per I-group. Trace-time assertions in the PSUM→SBUF copy catch
   the mismatch.
-- **Validation:** the ROW_MX device tests in
-  [`test_wan22_dit_row_mx_fp8.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/test/neuron/test_wan22_dit_row_mx_fp8.py)
-  cover both call shapes against torch references. For a change that should not alter numerics, A/B
-  the generated video end to end — the fused norm/RoPE ordering and the FP8 rounding are not
+- **Validation:** compare both the fused self-attention and separate cross-attention call
+  shapes against torch references on Neuron hardware. For a change that should not alter numerics,
+  A/B the generated video end to end — the fused norm/RoPE ordering and the FP8 rounding are not
   visible in a single-tile comparison.
 
 ## Related reference

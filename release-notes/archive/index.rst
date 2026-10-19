@@ -1,7 +1,7 @@
 .. meta::
     :description: Archived release notes for deprecated Neuron SDK components
     :keywords: neuron, release notes, archive, deprecated, legacy
-    :date-modified: 02/26/2026
+    :date-modified: 10/19/2026
 
 Archived Neuron Component Release Notes
 =======================================
@@ -15,6 +15,12 @@ This page contains links to release notes for Neuron components that are no long
 
    * - Component
      - Description
+   * - :doc:`NxD Inference <nxd-inference>`
+     - NxD Inference (neuronx-distributed-inference). In maintenance mode since Neuron 2.32.0; superseded by :doc:`vLLM Neuron </release-notes/components/vllm-neuron>`
+   * - :doc:`NxD Training <nxd-training>`
+     - NxD Training (neuronx-distributed-training). Last supported in Neuron 2.31.0; see :ref:`Native PyTorch for AWS Trainium <native-pytorch-trainium>` for information on using TorchNeuron for training instead.
+   * - :doc:`NxD Core <nxd-core>`
+     - NxD Core (neuronx-distributed) distributed primitives library. Last updated in Neuron 2.31.0
    * - :doc:`Neuron XLA Pluggable Device <libneuronxla>`
      - Neuron XLA pluggable device (libneuronxla) - PJRT runtime integration
    * - :doc:`Apache MXNet Neuron <mxnet-neuron>`
@@ -59,6 +65,9 @@ This page contains links to release notes for Neuron components that are no long
    :maxdepth: 1
    :hidden:
 
+   NxD Inference <nxd-inference>
+   NxD Training <nxd-training>
+   NxD Core <nxd-core>
    Neuron XLA Pluggable Device <libneuronxla>
    Apache MXNet Neuron <mxnet-neuron>
    TensorBoard Neuron Plugin <tensorboard-neuron>

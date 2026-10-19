@@ -172,6 +172,13 @@ Tutorials
 
       Capture and analyze system-level and device-level profiles for vLLM inference workloads on Trainium.
 
+   .. grid-item-card:: Profile Memory in torch-neuronx
+      :link: /torch/guides/memory-profiling-guide
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Read memory statistics, inspect fragmentation, and record a memory snapshot in torch-neuronx, then open it in the Memory Viewer.
+
 
 Additional Resources
 --------------------
@@ -202,14 +209,12 @@ Additional Resources
 
 .. _download-neuron-explorer-vscode:
 
-Neuron Explorer for Visual Studio Code
+Download Neuron Explorer for Visual Studio Code
 ------------------------------------------------
 
 The Neuron Explorer VSCode extension is available on the Visual Studio Code Extension Marketplace.
 
-To install the extension, open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer`` or ``amazonwebservices.neuron-explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
-
-You can also install the extension directly from the `Visual Studio Code Marketplace <https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.neuron-explorer>`_.
+To install the extension, open the Extensions view in VSCode by pressing **Ctrl+Shift+X** (Windows/Linux) or **CMD+Shift+X** (MacOS), and search for ``AWS Neuron Explorer``. Select the extension published by **Amazon Web Services** in the sidebar, then click the blue **Install** button.
 
 .. _neuron-explorer-faq:
 

@@ -1,7 +1,7 @@
 .. meta::
     :description: Release notes for the Neuron Kernel Interface (NKI) component across all Neuron SDK versions
     :keywords: NKI, Neuron Kernel Interface, release notes, nki.language, nki.isa, kernels
-    :date-modified: 06/26/2026
+    :date-modified: 10/19/2026
 
 .. _nki_rn:
 
@@ -9,6 +9,211 @@ Release Notes for Neuron Component: Neuron Kernel Interface (NKI)
 ==================================================================
 
 The release notes for the Neuron Kernel Interface (NKI) component. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
+
+.. _nki-2-33-0-rn:
+
+Neuron Kernel Interface (NKI) [0.7.0] (Neuron 2.33.0 Release)
+----------------------------------------------------------------------------
+
+Date of Release: 10/19/2026
+
+AWS Neuron SDK 2.33.0 introduces NKI 0.7.0. In this release, NKI specializes
+kernels by tracing them with Python, so kernel authors can use the full Python
+language for meta-programming. This release also adds tiled/blocked
+on-chip memory layout APIs and prepare/trigger splits for variable-length
+collectives.
+
+New Features
+~~~~~~~~~~~~
+
+* **Specialization by Python tracing**: NKI processes a kernel in three stages:
+  specialization, compilation, and graph-compiler linking (see the compilation
+  model in :ref:`nki-language-guide`). In previous NKI versions, specialization ran as
+  dedicated compiler lowering passes over the kernel code, producing the IR to
+  be compiled. In NKI 0.7.0, specialization traces the kernel code with Python,
+  and the NKI ISA APIs emit the IR to be compiled. Kernels can use all of Python
+  for meta-programming, including constructs the previous specialization did not
+  support, such as generators and class inheritance. Because specialization
+  follows Python semantics, the behavior of NKI meta-programming code is easier
+  to reason about. Most kernels need no changes. Kernels using a dynamic loop
+  construct should move to :func:`~nki.language.fori_loop` or
+  :func:`~nki.language.while_loop`. To continue using kernels without updating,
+  set ``NKI_COMPILER_FRONTEND=custom``.
+
+* **Tiled and blocked memory layouts**: :func:`~nki.language.tiles` decomposes a
+  tensor into a logical grid of fixed-size tiles addressed by tile coordinate
+  rather than by manual element offsets and strides, and
+  :func:`~nki.language.blocks` groups tiles into a coarser transfer or reuse
+  grain above the compute grain. :func:`~nki.language.alloc_tiles` and
+  :func:`~nki.language.alloc_blocks` allocate storage organized the same way.
+  Grid views (:class:`~nki.language.NkiTileGrid`,
+  :class:`~nki.language.NkiBlockGrid`) allocate no storage and move no data.
+
+* **nl.log1p**: New :func:`~nki.language.log1p` computes the natural log of
+  ``1 + x`` on the GpSimd Engine on NeuronCore-v4+, available as an activation
+  function through :func:`~nki.isa.activation` and :func:`~nki.isa.activate2`.
+  See the supported activation functions table in
+  :doc:`nki.api.shared </nki/api/nki.api.shared>`.
+
+* **Profiler annotation regions**: :func:`~nki.language.profiler_region_open`
+  and :func:`~nki.language.profiler_region_close` mark a named region; every
+  instruction between them appears as a named region on the Neuron Explorer
+  timeline. The annotation adds only compile-time metadata and has no
+  execution-time cost. Regions nest, and leaving one open is a compilation
+  error. To see the regions in Neuron Explorer, set ``NKI_DEBUG_INFO=True``
+  when you compile. See
+  :ref:`Define NKI Regions in Your Kernel <nki-define-regions>`.
+
+* **Collectives**:
+
+  * **Variable-length prepare/trigger split**:
+    :func:`~nki.collectives.all_to_all_v` and
+    :func:`~nki.collectives.all_gather_v` can be split into a ``prepare`` and a
+    ``trigger``. The ``prepare`` sets up the collective's metadata and can be
+    issued before ``srcs`` are filled, so the setup runs ahead of the
+    instruction that fills ``srcs`` and overlaps with unrelated compute. The
+    ``trigger`` runs the phase that reads ``srcs`` and writes ``dsts``, and takes
+    only the paired ``prepare`` instruction; each ``prepare`` pairs with exactly
+    one ``trigger``. This helps when the per-rank counts are known before the
+    data, as in a mixture-of-experts layer. The Trn3 Ultraserver does not support
+    the split; use plain :func:`~nki.collectives.all_to_all_v` there.
+
+  * **ReplicaGroup.from_partition_op**: Build a
+    :class:`~nki.collectives.ReplicaGroup` by partitioning ranks
+    ``[0, world_size)`` with :class:`~nki.collectives.rg_partition_op`, where
+    ranks sharing the same ``op(rank, operand)`` form one rank-list: ``div`` for
+    contiguous rank-lists, ``mod`` for strided, ``bitwise_and`` for a bitmask.
+    This replaces spelling out the full list of rank-lists.
+
+  * **nki.isa.sendrecv_compute**: Point-to-point communication between
+    NeuronCores that reduces the local and received tiles into a single result
+    using the DMA engine. The current NeuronCore sends its ``src`` to
+    ``send_to_rank``, receives the peer tile from ``recv_from_rank``, and writes
+    ``reduce_op(src, peer)`` to ``dst``. Available only at LNC degree greater
+    than 1; ``reduce_op`` is ``nl.add``, ``nl.maximum``, or ``nl.minimum``.
+
+  * **Multi-rank CPU simulation for fixed-size collectives**:
+    :func:`~nki.simulate` runs a kernel's fixed-size
+    :func:`~nki.collectives.all_reduce`, :func:`~nki.collectives.all_gather`,
+    :func:`~nki.collectives.reduce_scatter`, and
+    :func:`~nki.collectives.all_to_all`, along with
+    :func:`~nki.collectives.rank_id`, across multiple ranks on CPU, so you can
+    validate a collective kernel's numerics without hardware. Ranks exchange
+    data through a communicator: in a ``torch.distributed`` world the simulator
+    uses the framework's ranks, and it reduces to a single rank otherwise.
+    Supported at LNC1 and LNC2. Variable-length and permute collectives remain
+    hardware-only.
+
+* **NKI kernel LNC configuration**: The Logical NeuronCore (LNC) degree for a
+  NKI kernel can now be set using the ``NEURON_LOGICAL_NC_CONFIG`` environment
+  variable, which is the preferred way to explicitly configure the kernel LNC
+  degree. The existing launch-grid bracket syntax, such as ``kernel[1](...)`` or
+  ``kernel[2](...)``, remains supported for backward compatibility. If both are
+  specified, bracket syntax takes precedence over the environment variable.
+  For more information, see :doc:`LNC Overview </nki/get-started/about/lnc>`.
+
+* **nki.isa.topk sorted option**: :func:`~nki.isa.topk` accepts
+  ``sorted=True`` to order each 16-partition group's results descending by
+  value, keeping ``idx_dst[j]`` the source index of ``val_dst[j]``. The default
+  leaves the order unspecified.
+
+* **Scalar values**: New :class:`~nki.isa.NkiScalar` holds one integer
+  computed on device, loaded from an ``nl.int32`` or ``nl.int64`` tile with
+  :func:`~nki.isa.scalar_load` and written back with :func:`~nki.isa.scalar_store`.
+  A scalar can be used as an operand of arithmetic, as the ``scalar_offset`` of
+  an access pattern, and as a bound of :func:`~nki.language.fori_loop`. An
+  ``nl.int64`` scalar carries 64-bit range, supporting HBM offsets beyond 4 GB.
+
+* **GpSimd Engine for activation and activate2**: :func:`~nki.isa.activation`
+  and :func:`~nki.isa.activate2` accept an ``engine`` argument to run on the
+  Scalar Engine, the default, or the GpSimd Engine on NeuronCore-v4+, where a
+  limited set of activation functions is available. ``engine.unknown`` is not
+  accepted. On the GpSimd Engine, ``data`` and ``dst`` must be in SBUF.
+
+* **Dynamic indexing with runtime offsets**:
+  :meth:`~nki.language.NkiTensor.__getitem__`,
+  :meth:`~nki.language.NkiTensor.select`, and :func:`~nki.language.ds` accept a
+  runtime index: a ``NkiTensor`` 1-element tile, a ``VirtualRegister``, or a
+  :class:`~nki.isa.NkiScalar`. A runtime index either selects a single element
+  and removes the dimension (via :meth:`~nki.language.NkiTensor.__getitem__` or
+  :meth:`~nki.language.NkiTensor.select`), or serves as the ``start`` of
+  ``nl.ds``, which keeps the dimension and slides a fixed-size window. The
+  result is an indirect view (see :meth:`~nki.language.NkiTensor.is_indirect`).
+  A runtime index cannot target the partition dimension for on-chip tensors.
+
+* **New parameters for fused reductions**:
+  :func:`~nki.isa.tensor_scalar_reduce` adds ``reduce_res_negate`` to negate the
+  reduction result before it is written to ``reduce_res``.
+  :func:`~nki.isa.scalar_tensor_tensor` adds an optional Vector Engine reduction
+  along the free dimension via ``reduce_cmd``, ``reduce_op`` (``nl.add`` only),
+  and ``reduce_res``.
+
+* **empty_like transpose and placement**: :func:`~nki.language.empty_like` adds
+  ``transpose_axes`` to prepare an SBUF destination for a later
+  :func:`~nki.isa.dma_transpose`, and ``address`` for manual placement with the
+  same contract as :func:`~nki.language.ndarray`.
+
+* **DMA batching**: :func:`~nki.isa.dma_copy` now supports a 2D
+  ``vector_offset`` (shape ``[P, M]``) on the source tensor, enabling the
+  pattern where indices are read in a snake pattern and batched into the free
+  dimension of the destination.
+
+Deprecated and Removed APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Custom Pythonic language**: Now that specialization by Python tracing is the
+  default (see New Features), the custom Pythonic language NKI previously
+  required is deprecated.
+  Select it with ``NKI_COMPILER_FRONTEND=custom`` through the deprecation window;
+  a later train removes it.
+
+* **Default NKI kernel LNC degree change (future notice)**: Currently, a NKI
+  kernel's LNC degree defaults to LNC=1 when it is not explicitly configured
+  through ``NEURON_LOGICAL_NC_CONFIG`` or launch-grid bracket syntax. In a
+  future release, the default will change to LNC=2 when targeting ``trn2`` or
+  later, including in the CPU simulator. Set
+  ``NEURON_LOGICAL_NC_CONFIG=1`` to preserve the existing behavior. NKI emits
+  a warning if the kernel LNC degree is not explicitly specified.
+
+* **rank_id return type (deprecation notice)**:
+  :func:`~nki.collectives.rank_id` and
+  ``collective_permute_implicit_current_processing_rank_id`` will return an
+  :class:`~nki.isa.NkiScalar` instead of a ``VirtualRegister`` in a future
+  release, so that offset arithmetic (e.g. ``rank * chunk_size``) works. NKI
+  emits a deprecation warning ahead of the change.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+* **Dynamic loop constructs**: On the default frontend, ``nl.dynamic_range``
+  for-loops and the ``while reg:`` form are no longer supported. Use
+  :func:`~nki.language.fori_loop` and :func:`~nki.language.while_loop` instead,
+  or set ``NKI_COMPILER_FRONTEND=custom`` to continue using kernels without
+  updating during the deprecation window.
+
+* **NKI kernel and compiler LNC degrees must match**: The LNC degree configured
+  for a NKI kernel must now match the LNC degree used by ``neuronx-cc`` for the
+  surrounding compute graph. A mismatch raises the compile-time error
+  :doc:`NCC_EVRF066 </compiler/error-codes/EVRF066>`. If encountered, set
+  ``NEURON_LOGICAL_NC_CONFIG`` to the desired LNC degree and remove any
+  conflicting launch-grid bracket syntax or compiler ``--lnc`` overrides.
+
+* **Object equality on user classes**: Equality on user-defined objects follows
+  standard Python reference equality.
+
+Bug Fixes
+~~~~~~~~~
+
+* :func:`~nki.simulate` corrects bitwise partition reductions in
+  :func:`~nki.isa.tensor_partition_reduce`: ``bitwise_xor`` was missing its
+  simulator reducer, and ``keepdims`` handling for bitwise reductions is fixed,
+  so ``bitwise_or``, ``bitwise_and``, and ``bitwise_xor`` match hardware.
+
+Known Issues
+~~~~~~~~~~~~
+
+* Known issues carried forward from NKI 0.6.0 still apply unless noted above.
+  See the NKI 0.6.0 release notes below.
 
 .. _nki-2-32-0-rn:
 
@@ -954,8 +1159,3 @@ Improvements
   for developers. Additionally, to enable bare-metal access precisely programming the instructions
   used by the chip, this release includes a set of NKI APIs (``nki.isa``) that directly emit
   Neuron Instruction Set Architecture (ISA) instructions in NKI kernels.
-
-
-
-
-    

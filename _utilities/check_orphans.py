@@ -33,12 +33,6 @@ INCLUDE_EXTS = {".rst", ".ipynb", ".py", ".txt", ".md"}
 ANCHOR_RE = re.compile(r"^\.\. _([A-Za-z0-9_\-\.]+):\s*$", re.MULTILINE)
 
 ORPHANS = [
-    "about-neuron/calculator/neuron-calculator.rst",
-    "about-neuron/monitoring-tools.rst",
-    "about-neuron/profiling-tools.rst",
-    "about-neuron/quick-start/tab-inference-tensorflow-neuron.rst",
-    "about-neuron/quick-start/torch-neuron-tab-training.rst",
-    "about-neuron/quick-start/user-guide-quickstart.rst",
     "archive/profiler/index.rst",
     "archive/transformers-neuronx/transformers-neuronx-api-reference.rst",
     "archive/tutorials/gpt3_neuronx_nemo_megatron_pretraining.rst",

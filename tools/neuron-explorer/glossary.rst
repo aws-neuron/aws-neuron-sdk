@@ -1,6 +1,6 @@
 .. meta::
     :description: Glossary of terms used in Neuron Explorer profiling, hardware, metrics, and UI.
-    :date-modified: 06/18/2026
+    :date-modified: 10/19/2026
 
 .. _neuron-explorer-glossary:
 
@@ -71,6 +71,13 @@ DMA Engine
    Operates independently of compute, enabling data movement to overlap
    with computation (pipelining).
 
+Host-device DMA engine
+   DMA engine that moves data between host memory and device HBM, also
+   known as a top-level DMA engine. Also fetches instructions and carries
+   traffic for some collective operations. Shown in device profiles as the
+   ``Host-device DMA-E<N>`` track. See
+   :ref:`Host-device DMA tracks <neuron-explorer-host-device-dma>`.
+
 Tensor Engine (TE)
    Systolic array for matrix multiplication. Executes ``MATMUL`` and
    ``LDWEIGHTS`` instructions. Performance depends on tile size alignment
@@ -120,8 +127,8 @@ Partition (P)
 
 PCIe
    Host-to-device interconnect. Used for Host-to-Device (H2D) and
-   Device-to-Host (D2H) data transfers. Appears as an engine track in
-   system profiles.
+   Device-to-Host (D2H) data transfers. Appears as transfer tracks in
+   system profiles and as host-device DMA tracks in device profiles.
 
 EFA (Elastic Fabric Adapter)
    High-performance network interface for inter-node communication in
@@ -165,8 +172,66 @@ raw_flops
    executed by hardware.
 
 total_time
-   Total on-device execution time in seconds. Excludes host-device data
-   movement and framework overhead.
+   Backend Summary-table field for the duration of device execution, in
+   seconds. The profiler compares the runtime-reported duration from explicit
+   TPB start/stop notifications in the NTFF with the span of parsed device
+   trace notifications and uses the longer duration. If the runtime duration
+   is unavailable, it uses the observed trace span. This duration includes
+   idle gaps within the measured execution and excludes host-side overhead
+   such as host-device data movement and framework processing.
+
+   The device profile Summary Viewer's **Total Runtime** card is calculated
+   from the selected timeline region instead of reading this field directly.
+   Do not confuse either value with **System Profile Time** or **Total Device
+   Runtime** (see below).
+
+
+.. _neuron-explorer-time-metrics:
+
+Time metrics (understanding the difference)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Neuron Explorer displays several time-related metrics across system and device
+profile views. These measure different things and are not directly comparable:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 30 45
+
+   * - Metric
+     - Where it appears
+     - What it measures
+   * - **Total Runtime** card
+     - Device profile Summary Viewer
+     - Elapsed time in the selected timeline region (region end minus start),
+       in seconds. For the full timeline, the region spans the profile's
+       reported hardware timeline. For a full timeline that begins at zero,
+       the card normally has the same value as ``total_time`` because both use
+       the same duration rule. The card does not read that field directly, and
+       its value changes with the selection.
+   * - **System Profile Time**
+     - System Profile Summary → System Overview Card
+     - Elapsed span across system trace events, CPU-utilization samples,
+       host-memory samples, and framework events. The UI computes
+       ``last_ts_ns - first_ts_ns`` from system profile metadata. For profiles
+       processed by the current backend, ``first_ts_ns`` is zero and
+       ``last_ts_ns`` is already the elapsed span.
+   * - **Total Device Runtime**
+     - System Profile Summary → System Overview Card
+     - Sum of ``duration_ns`` from all ``nc_exec_running`` system profile
+       events. Each ``nc_exec_running`` event's ``duration_ns`` is computed
+       as ``CPUDurationNs()`` (end timestamp minus start timestamp, after
+       device-clock-to-CPU-clock alignment). This is an
+       additive sum across all events — overlapping executions on different
+       NeuronCores are each counted independently.
+
+**Key difference:** System Profile Time is a single time span (last minus
+first timestamp across the session). Total Device Runtime is an additive sum
+of individual ``nc_exec_running`` event durations. These two computations
+produce different results because they measure different things.
+
+Bandwidth and DMA metrics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 useful_read_percent
    Fraction of HBM reads that are "useful":
@@ -203,8 +268,9 @@ dI/dt (delta current) throttling
    On Trn2 and Trn3, a peak-current protection mechanism that limits the maximum utilization of the Tensor
    Engine when ramping up from low utilization. After work begins the engine starts
    at roughly 50% utilization and ramps to full over the first ~3
-   microseconds. If utilization drops below 50% over any ~3 microsecond
-   window — for example during an idle gap — the limit re-engages, so the next
+   microseconds on Trn2 (~1.6 microseconds on Trn3). If utilization drops
+   below 50% over any such window (~3 microseconds on Trn2, ~1.6 microseconds
+   on Trn3) — for example during an idle gap — the limit re-engages, so the next
    burst again runs at roughly 50% until it ramps back up. Bursty workloads that
    repeatedly leave the Tensor Engine below 50% utilization can therefore be
    dI/dt-throttled.
@@ -336,8 +402,9 @@ Hierarchy Viewer
 Source Code Viewer
    Bidirectional linking between hardware instructions and source code.
    Click an instruction → see the source line. Click a source line →
-   highlight all associated instructions. Requires ``NEURON_FRAMEWORK_DEBUG=1``
-   (for model code) or ``NKI_DEBUG_INFO=True`` (for NKI kernels).
+   highlight all associated instructions. Requires ``XLA_IR_DEBUG=1`` and
+   ``XLA_HLO_DEBUG=1`` (for model code) or ``NKI_DEBUG_INFO=True`` (for NKI
+   kernels).
 
 Summary Viewer
    Single-page performance overview showing key metrics, FLOPs breakdown,
@@ -382,6 +449,14 @@ Annotations
    created manually by right-clicking in the Device Trace Viewer. Support
    saving, loading, renaming, and time-difference calculation between markers.
 
+NKI Regions
+   Named regions defined in NKI kernel source code with
+   ``nki.language.profiler_region_open`` and
+   ``nki.language.profiler_region_close``, rather than placed by hand on the
+   timeline. They appear in the Region Highlighter alongside automatically
+   generated regions, and can be narrowed to a specific call to the kernel or
+   to specific loop passes. Requires ``NKI_DEBUG_INFO`` at compile time.
+
 CC box (Collective Communication box)
    Visual marker showing boundaries of a collective operation (AllReduce,
    AllGather, etc.).
@@ -403,6 +478,12 @@ Box Selection Summary
 Event Details
    Panel showing full metadata for a selected instruction (opcode,
    operands, timing, source location, dependencies).
+
+NKI Call Stack
+   The chain of NKI function calls from the kernel entry point down to a
+   selected instruction, shown in Event Details. When the same helper
+   function is called from multiple sites, the call stack identifies which
+   call site invoked it. Requires ``NKI_DEBUG_INFO`` at compile time.
 
 Profile Manager
    Landing page for uploading, browsing, and managing profiles.
@@ -432,7 +513,9 @@ Host-to-Device / Device-to-Host transfers
    PCIe data transfer events visible in the System Trace Viewer. Each
    direction shows a transfer events track (individual transfers) and a
    transfer bandwidth track (throughput over time). Useful for identifying
-   PCIe bottlenecks.
+   PCIe bottlenecks. Device profiles also show host-device DMA
+   engine activity; see
+   :ref:`Host-device DMA tracks <neuron-explorer-host-device-dma>`.
 
 NKI instruction coverage
    Percentage of instructions on each engine (tensor, vector, scalar)
@@ -547,13 +630,6 @@ Profiler overhead
    adds CPU overhead for event recording. Designed to be <2% for
    system-only profiles.
 
-NKI source location depth
-   The Source Code Viewer currently maps instructions to a single NKI
-   source file and line — not a full call stack within the kernel. If
-   the same helper function is called from multiple sites, the profiler
-   shows the helper's line but not which call site invoked it. Full
-   intra-kernel stack trace is a planned feature.
-
 
 Common instruction opcodes
 --------------------------
@@ -598,8 +674,10 @@ DMA packet fields
 ^^^^^^^^^^^^^^^^^
 
 variable
-   Tensor name associated with a DMA transfer. Shows ``unknown`` when DGE
-   notifications are not enabled or for collective DMAs.
+   Tensor name associated with a DMA transfer. For collective DMAs, shows the
+   collective operation the DMA belongs to (for example, ``all_gather.12`` or
+   ``reduce_scatter.5``). Shows ``unknown`` when DGE notifications are not
+   enabled.
 
 queue_type
    DMA queue classification. ``instruction`` often indicates a collective DMA.

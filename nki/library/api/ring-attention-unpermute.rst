@@ -1,6 +1,6 @@
 .. meta::
     :description: Unpermute striped ring attention output to contiguous sequence order.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.attention
 
@@ -19,7 +19,7 @@ The ``ring_attention_unpermute`` kernel reorders striped ring-attention output b
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ring_attention_unpermute.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention/ring_attention_unpermute.py>`_
+**Source code for this kernel API can be found at**: `ring_attention_unpermute.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/attention/ring_attention_unpermute.py>`_
 
 ring_attention_unpermute
 ^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,6 +1,6 @@
 .. meta::
     :description: Adam optimizer kernel with L2 regularization.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.optimizer
 
@@ -19,7 +19,7 @@ The ``adam_kernel`` and ``adamw_kernel`` implement fused Adam and AdamW optimize
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `fused_adam.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/optimizer/fused_adam.py>`_
+**Source code for this kernel API can be found at**: `fused_adam.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/optimizer/fused_adam.py>`_
 
 adam_kernel
 ^^^^^^^^^^^

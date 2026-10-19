@@ -12,7 +12,7 @@ Deploy Neuron Container on ECS — Archived (TensorFlow)
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 The TensorFlow Neuron variant of this developer flow followed the same steps
 as the core Neuron Container on ECS flow. For the general procedure and

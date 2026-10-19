@@ -42,7 +42,7 @@ Before you start, make sure you understand the following topics.
   embeddings, normalization) and how source repositories organize model code.
 - **Tensor parallelism concepts.** How models shard across NeuronCores, and the
   constraints that head counts and intermediate sizes place on the tensor parallel
-  degree. See :doc:`/libraries/nxd-inference/app-notes/parallelism`.
+  degree. See :doc:`/inference-legacy/nxd-inference/app-notes/parallelism`.
 - **Expert parallelism.** For Mixture of Experts (MoE) models, how experts
   distribute across parallel groups. See :ref:`moe-inference-deep-dive`.
 

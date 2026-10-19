@@ -1138,7 +1138,7 @@ To set context encoding and token generation buckets manually:
 Multi-node inference support (TP/PP)
 ---------------------------------------
 
-Prerequisite: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution.html
+Prerequisite: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/frameworks/torch/torch-neuronx/setup-trn1-multi-node-execution.html
 
 When models are too large to fit on single node, Transformers NeuronX multi-node inference (tensor parallel and pipeline parallel) can be used to shard model weights across multiple Neuron instances (only supported on Trn1 and Trn1n). Single node inference code can easily be extended to multi-node inference.
 
@@ -1247,7 +1247,7 @@ Node 2 command line (same as Node 1 but set ``NEURON_RANK_ID`` as 1):
     NEURON_PP_STAGES=2 CPU_COMM_ID=10.1.201.64:8989 NEURON_RT_ROOT_COMM_ID=10.1.201.64:63423 NEURON_RANK_ID=1 python3 multi_node_dev_example.py
 
 
-Long Sequence length support up to 128k
+Long Sequence length support up to 32k
 ---------------------------------------
 **Flash Attention**
 

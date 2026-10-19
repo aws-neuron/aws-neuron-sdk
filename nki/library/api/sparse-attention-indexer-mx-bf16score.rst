@@ -1,6 +1,6 @@
 .. meta::
     :description: DeepSeek Sparse Attention Indexer — MX projections + BF16 score.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.sparse_attention_indexer
 
@@ -19,41 +19,41 @@ The ``sparse_attention_indexer_mx_bf16score`` kernel implements the DeepSeek Spa
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `sparse_attention_indexer_mx_bf16score.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/sparse_attention_indexer/sparse_attention_indexer_mx_bf16score.py>`_
+**Source code for this kernel API can be found at**: `sparse_attention_indexer_mx_bf16score.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/sparse_attention_indexer/sparse_attention_indexer_mx_bf16score.py>`_
 
 sparse_attention_indexer_mx_bf16score
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: sparse_attention_indexer_mx_bf16score(x: nl.NkiTensor, wq_b: nl.NkiTensor, wk: nl.NkiTensor, k_norm_gamma: nl.NkiTensor, k_norm_beta: nl.NkiTensor, weights_proj: nl.NkiTensor, cos: nl.NkiTensor, sin: nl.NkiTensor, k_cache: nl.NkiTensor, mask: nl.NkiTensor, n_heads: int, head_dim: int, rope_head_dim: int, index_topk: int, start_pos: int, use_hadamard: bool = False, batch_size: int = 1, wq_b_scale: Optional[nl.NkiTensor] = None, wk_scale: Optional[nl.NkiTensor] = None, k_scale_cache: Optional[nl.NkiTensor] = None, x_non_mx: Optional[nl.NkiTensor] = None, x_mx_data: Optional[nl.NkiTensor] = None, x_mx_scale: Optional[nl.NkiTensor] = None, qr_qtz_hbm: Optional[nl.NkiTensor] = None, qr_scale_hbm: Optional[nl.NkiTensor] = None, phase: str = 'all', k_seq_out_hbm: Optional[nl.NkiTensor] = None, end_pos_arg: Optional[int] = None, emit_flat_topk: bool = False, emit_tiled_topk: bool = False) -> tuple[nl.NkiTensor, nl.NkiTensor]
+.. py:function:: sparse_attention_indexer_mx_bf16score(x: nl.NkiTensor, wq_b: nl.NkiTensor, wk: nl.NkiTensor, k_norm_gamma: nl.NkiTensor, k_norm_beta: nl.NkiTensor, weights_proj: nl.NkiTensor, cos: nl.NkiTensor, sin: nl.NkiTensor, k_cache: nl.NkiTensor, mask: nl.NkiTensor, n_heads: int, head_dim: int, rope_head_dim: int, index_topk: int, start_pos: int, use_hadamard: bool = False, batch_size: int = 1, wq_b_scale: Optional[nl.NkiTensor] = None, wk_scale: Optional[nl.NkiTensor] = None, k_scale_cache: Optional[nl.NkiTensor] = None, x_non_mx: Optional[nl.NkiTensor] = None, x_mx_data: Optional[nl.NkiTensor] = None, x_mx_scale: Optional[nl.NkiTensor] = None, qr_qtz_hbm: Optional[nl.NkiTensor] = None, qr_scale_hbm: Optional[nl.NkiTensor] = None, phase: str = 'all', k_seq_out_hbm: Optional[nl.NkiTensor] = None, end_pos_arg: Optional[int] = None, emit_flat_topk: bool = False, emit_tiled_topk: bool = False, compact_scales: bool = False, precision: MlaPrecision = MlaPrecision.MX, rope_layout: RopeLayout = RopeLayout.HALF_SPLIT, qr_bf16_hbm: Optional[nl.NkiTensor] = None) -> tuple[nl.NkiTensor, nl.NkiTensor]
 
    DeepSeek Sparse Attention Indexer — MX projections + BF16 score.
 
    :param x: [B*S, dim] hidden states.
    :type x: ``nl.NkiTensor``
-   :param qr_qtz_hbm: [num_s_tiles, P_MAX, q_lora_rank // (P_MAX*H_PACK), P_MAX] uint32 — pre-quantized (fp8x4-as-uint32) compressed query from the upstream QKV kernel.
-   :type qr_qtz_hbm: ``Optional[nl.NkiTensor]``
-   :param qr_scale_hbm: matching uint8 block-32 e8m0 scales for qr_qtz_hbm.
-   :type qr_scale_hbm: ``Optional[nl.NkiTensor]``
    :param wq_b: [q_lora_rank // 4, n_heads * head_dim] fp8_e4m3fn_x4.
    :type wq_b: ``nl.NkiTensor``
-   :param wq_b_scale: [q_lora_rank // 32, n_heads * head_dim] uint8 e8m0.
-   :type wq_b_scale: ``Optional[nl.NkiTensor]``
    :param wk: [dim // 4, head_dim] fp8_e4m3fn_x4 (contraction dim on partition).
    :type wk: ``nl.NkiTensor``
-   :param wk_scale: [dim // 32, head_dim] uint8 e8m0. k_norm_gamma, k_norm_beta: [head_dim] LayerNorm gamma/beta.
-   :type wk_scale: ``Optional[nl.NkiTensor]``
    :param weights_proj: [n_heads, dim] per-head weights projection (always bf16). cos, sin: [S, rope_head_dim // 2] RoPE caches.
    :type weights_proj: ``nl.NkiTensor``
    :param k_cache: [B, head_dim, max_seq_len] bf16 (mutable).
    :type k_cache: ``nl.NkiTensor``
-   :param k_scale_cache: ignored (no MX scales in bf16 path).
-   :type k_scale_cache: ``Optional[nl.NkiTensor]``
    :param mask: [B*S, end_pos] attention mask.
    :type mask: ``nl.NkiTensor``
    :param index_topk: number of top positions to select per query (topk k).
    :type index_topk: ``int``
+   :param wq_b_scale: uint8 e8m0 weight scale; layout selected by compact_scales -- [q_lora_rank // 32, n_heads * head_dim] native block-32, or [q_lora_rank // 128, ceil(n_heads * head_dim / 128)] compact block-128.
+   :type wq_b_scale: ``Optional[nl.NkiTensor]``
+   :param wk_scale: uint8 e8m0 weight scale; layout selected by compact_scales -- [dim // 32, head_dim] native block-32, or [dim // 128, ceil(head_dim / 128)] compact block-128. k_norm_gamma, k_norm_beta: [head_dim] LayerNorm gamma/beta.
+   :type wk_scale: ``Optional[nl.NkiTensor]``
+   :param k_scale_cache: ignored (no MX scales in bf16 path).
+   :type k_scale_cache: ``Optional[nl.NkiTensor]``
    :param x_non_mx: pre-cast bf16 view of x for W-projection (skips the f32->bf16 cast). x_mx_data, x_mx_scale: pre-quantized x for K-projection (skips the in-kernel swizzle + quantize_mx). qr_qtz_hbm, qr_scale_hbm: pre-quantized qr latent from an upstream QKV kernel (indexer skips its own qr transpose+norm+quantize). This is the only Q input path — qr is never quantized in-kernel.
    :type x_non_mx: ``Optional[nl.NkiTensor]``
+   :param qr_qtz_hbm: [num_s_tiles, P_MAX, q_lora_rank // (P_MAX*H_PACK), P_MAX] uint32 — pre-quantized (fp8x4-as-uint32) compressed query from the upstream QKV kernel.
+   :type qr_qtz_hbm: ``Optional[nl.NkiTensor]``
+   :param qr_scale_hbm: matching uint8 block-32 e8m0 scales for qr_qtz_hbm.
+   :type qr_scale_hbm: ``Optional[nl.NkiTensor]``
    :param phase: context-parallel phased split. "all" (default): fused self-attention (queries == keys == S). "kproj": project K for this rank's S shard only; write seq-major [S, head_dim] to k_seq_out_hbm, return (that, None), no score. "score": skip K-proj; score this rank's S queries vs the pre-gathered full k_cache [B, head_dim, end_pos_arg=S_kv] over [0, S_kv).
    :type phase: ``str``
    :param k_seq_out_hbm: [S, head_dim] bf16 K output for phase="kproj".
@@ -64,10 +64,17 @@ sparse_attention_indexer_mx_bf16score
    :type emit_flat_topk: ``bool``
    :param emit_tiled_topk: split-fix output — skip the per-query scatter and return positions in the natural partition-tiled layout [num_s_tiles, NUM_TOPK_BATCHES, P_MAX, index_topk // 16] int32, read per-query by the paired attention kernel. Mutually exclusive with emit_flat_topk; both default False (snake output, decoded by the consumer, e.g. the fused mega kernel).
    :type emit_tiled_topk: ``bool``
+   :param compact_scales: select the wq_b_scale / wk_scale layout. False (default) is the NATIVE block-32 MX layout (one e8m0 byte per 32-K x 1-N group), already at hardware granularity. True is the DeepSeek ``scale_fmt=ue8m0`` checkpoint layout -- ONE byte per 128-K x 128-N weight block -- broadcast to the native granularity in-kernel, so callers can feed checkpoint scales directly instead of pre-expanding them (128x smaller scale tensors in HBM). Applies to the WEIGHT scales only; qr_scale_hbm / x_mx_scale stay native block-32 since they come from an upstream quantizer, not a checkpoint.
+   :type compact_scales: ``bool``
+   :param precision: arithmetic format of the Q and K PROJECTIONS. ``MX`` (default) or ``BF16``. The score matmul and the W projection are bf16 in both — the W projection was always bf16 despite ``w_projection_mx_batch``'s name, and the score path already dropped MX (see Notes). BF16 additionally drops the ``dim``/``q_lora_rank`` multiple-of-512 requirement down to 128. Required for GLM-MoE-DSA, whose checkpoints are bf16; pass ``qr_bf16_hbm`` instead of ``qr_qtz_hbm``/``qr_scale_hbm``.
+   :type precision: ``MlaPrecision``
+   :param rope_layout: element pairing for the Q and K RoPE. ``HALF_SPLIT`` (default) is what DeepSeek-V3.2's indexer uses; ``INTERLEAVED`` is what GLM-MoE-DSA's indexer uses. This is the ONE place the two models' RoPE genuinely differs — their main-attention RoPE is identical (both interleaved). Applied to Q and K together; they are contracted against each other, so a mismatch silently corrupts the scores rather than failing.
+   :type rope_layout: ``RopeLayout``
+   :param qr_bf16_hbm: [B*S, q_lora_rank] bf16 q-normed compressed query — the BF16 Q-path input, replacing the MX ``qr_qtz_hbm``/``qr_scale_hbm`` pair. This is what the bf16 MLA QKV kernel exports (it has no MX-quantized qr to hand over). Already gamma-normed.
+   :type qr_bf16_hbm: ``Optional[nl.NkiTensor]``
    :return: [B*S, end_pos] f32 — pre-topk per-position scores.
-   :rtype: ``nl.ndarray``
    :return: [num_S_tiles_total, NUM_TOPK_BATCHES, P_MAX, index_topk] uint32 — hardware-topk output. ``topk_idx[s_tile, t, 16g + j%16, j//16]`` holds the position (0-based in ``[0, end_pos)``) of query ``8t + g``'s j-th largest score (ascending). ``num_S_tiles_total = batch_size * ceil(S / P_MAX)``.
-   :rtype: ``nl.ndarray``
+   :rtype: ``tuple[nl.NkiTensor, nl.NkiTensor]``
 
    **Notes**:
 

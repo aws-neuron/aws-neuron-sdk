@@ -34,15 +34,15 @@ For models deployed through NxD Inference directly (without vLLM), see the legac
 
 ## Prerequisites
 
-- **vLLM Neuron environment**: A working vLLM Neuron setup on a Trainium or
-  Inferentia instance. See [setup guide](../getting-started/setup-guide.md).
+- **vLLM Neuron environment**: A working vLLM Neuron setup on a Trn2 or
+  Trn3 instance. See [setup guide](../getting-started/setup-guide.md).
 - **A model you want to onboard**: You may be porting from an existing
   implementation (e.g., Hugging Face Transformers), writing from scratch, or
   adapting from another framework. Any approach works as long as the result
   satisfies the runner interface described below.
 - **Familiarity with the plugin codebase**: The
   [vLLM Neuron plugin source](https://github.com/vllm-project/vllm-neuron) contains
-  annotated reference implementations (Llama, GPT-OSS, Qwen3 MoE) that demonstrate
+  annotated reference implementations (Llama, GPT-OSS) that demonstrate
   common patterns. These are useful as examples, not mandatory templates.
 
 ## End-to-end onboarding flow

@@ -61,12 +61,16 @@ Multi Framework DLAMIs supported
     :class: table-smaller-font-size
 
     * - Operating System
-      - Neuron Instances Supported
+      - Neuron Instances Supported 
       - DLAMI Name
 
     * - Ubuntu 24.04
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning AMI Neuron (Ubuntu 24.04)
+
+    * - Ubuntu 26.04
+      - Inf2, Trn1, Trn1n, Trn2, Trn3
+      - Deep Learning AMI Neuron (Ubuntu 26.04)
 
 .. _neuron-dlami-multifw-venvs:
 
@@ -83,11 +87,21 @@ Virtual Environments pre-installed
     * - Neuron Framework/Libraries supported
       - Virtual Environment
 
-    * - JAX 0.10 NeuronX (Ubuntu 24.04)
+    * - JAX 0.10 NeuronX (Ubuntu 24.04, 26.04)
       - /opt/aws_neuronx_venv_jax_0_10
 
-    * - vLLM 0.24.0, vllm-neuron 0.24.0.1.1.0 (Ubuntu 24.04)
-      - /opt/aws_neuronx_venv_pytorch_inference_vllm_0_24_0_1_1_0
+    * - vLLM 0.29.0, vllm-neuron 0.29.0.1.2.0 (Ubuntu 24.04, 26.04)
+      - /opt/aws_neuronx_venv_pytorch_inference_vllm_0_29_0_1_2_0
+
+    * - vLLM Omni 0.29.0, vllm-omni-neuron 0.29.0.0.2.0 (Ubuntu 24.04)
+      - /opt/aws_neuronx_venv_pytorch_inference_vllm_omni_0_29_0_0_2_0
+
+    * - PyTorch 2.14.0, torch-neuronx 2.14.0 (Ubuntu 24.04, 26.04)
+      - /opt/aws_neuronx_venv_torch_neuronx_2_14_0
+
+
+.. note::
+   The vLLM Omni virtual environment is available only on Ubuntu 24.04, and vLLM Omni has no Ubuntu 26.04 single-framework DLAMI. Ubuntu 26.04 uses Python 3.14 as its default system Python, and the upstream vLLM Omni project (distinct from the vLLM Omni Neuron plugin) does not yet support Python 3.14.
 
 
 You can easily get started with the multi-framework DLAMI through AWS console by following this :doc:`setup guide </setup/multiframework-dlami>`. If you are looking to 
@@ -110,7 +124,7 @@ Single Framework DLAMIs supported
     :class: table-smaller-font-size
 
     * - Framework
-      - Operating System
+      - Operating System 
       - Neuron Instances Supported
       - DLAMI Name
 
@@ -124,10 +138,35 @@ Single Framework DLAMIs supported
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 24.04)
 
-    * - vLLM 0.24.0
+    * - JAX 0.10
+      - Ubuntu 26.04
+      - Inf2, Trn1, Trn1n, Trn2, Trn3
+      - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 26.04)
+
+    * - vLLM 0.29.0.1.2.0
       - Ubuntu 24.04
       - Trn2, Trn3
-      - Deep Learning AMI Neuron PyTorch Inference vLLM 0.24.0.1.1.0 (Ubuntu 24.04)
+      - Deep Learning AMI Neuron PyTorch Inference vLLM 0.29.0.1.2.0 (Ubuntu 24.04)
+
+    * - vLLM 0.29.0.1.2.0
+      - Ubuntu 26.04
+      - Trn2, Trn3
+      - Deep Learning AMI Neuron PyTorch Inference vLLM 0.29.0.1.2.0 (Ubuntu 26.04)
+
+    * - vLLM Omni 0.29.0.0.2.0
+      - Ubuntu 24.04
+      - Trn2, Trn3
+      - Deep Learning AMI Neuron PyTorch Inference vLLM Omni 0.29.0.0.2.0 (Ubuntu 24.04)
+
+    * - torch-neuronx 2.14.0
+      - Ubuntu 24.04
+      - Trn2, Trn3
+      - Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 24.04)
+
+    * - torch-neuronx 2.14.0
+      - Ubuntu 26.04
+      - Trn2, Trn3
+      - Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 26.04)
 
 
 Virtual Environments pre-installed
@@ -143,13 +182,21 @@ Virtual Environments pre-installed
       - Neuron Libraries supported
       - Virtual Environment
   
-    * - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 24.04, Amazon Linux 2023) 
+    * - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 24.04, Ubuntu 26.04, Amazon Linux 2023)
       - JAX NeuronX 0.10
       - /opt/aws_neuronx_venv_jax_0_10
 
-    * - Deep Learning AMI Neuron PyTorch Inference vLLM 0.24.0.1.1.0 (Ubuntu 24.04) 
-      - vLLM 0.24.0, vllm-neuron 0.24.0.1.1.0
-      - /opt/aws_neuronx_venv_pytorch_inference_vllm_0_24_0_1_1_0
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM 0.29.0.1.2.0 (Ubuntu 24.04, Ubuntu 26.04)
+      - vLLM 0.29.0, vllm-neuron 0.29.0.1.2.0
+      - /opt/aws_neuronx_venv_pytorch_inference_vllm_0_29_0_1_2_0
+
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM Omni 0.29.0.0.2.0 (Ubuntu 24.04)
+      - vLLM Omni 0.29.0, vllm-omni-neuron 0.29.0.0.2.0
+      - /opt/aws_neuronx_venv_pytorch_inference_vllm_omni_0_29_0_0_2_0
+
+    * - Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 24.04, Ubuntu 26.04)
+      - PyTorch 2.14.0, torch-neuronx 2.14.0, TorchTitan
+      - /opt/aws_neuronx_venv_torch_neuronx_2_14_0
 
 
 Get started with the single framework DLAMI through AWS console by following one of the corresponding setup guides. If you want to
@@ -173,7 +220,7 @@ Base DLAMIs supported
     :class: table-smaller-font-size
 
     * - Operating System
-      - Neuron Instances Supported
+      - Neuron Instances Supported 
       - DLAMI Name
 
     * - Amazon Linux 2023
@@ -183,6 +230,10 @@ Base DLAMIs supported
     * - Ubuntu 24.04
       - Inf2, Trn1, Trn1n, Trn2, Trn3
       - Deep Learning Base Neuron AMI (Ubuntu 24.04)
+
+    * - Ubuntu 26.04
+      - Inf2, Trn1, Trn1n, Trn2, Trn3
+      - Deep Learning Base Neuron AMI (Ubuntu 26.04)
 
 
 .. important::
@@ -209,9 +260,9 @@ Currently, SSM parameters support finding the latest DLAMI ID for each DLAMI typ
 
 
 Finding specific DLAMI image id with the latest neuron release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
-You can find the DLAMI that supports latest Neuron SDK by using the SSM get-parameter.
+You can find the DLAMI that supports latest Neuron SDK by using the SSM get-parameter. 
 
 
 .. code-block::
@@ -240,7 +291,7 @@ The SSM parameter prefix for each currently supported DLAMI can be seen below. T
 SSM Parameter Prefix
 """"""""""""""""""""
 .. list-table::
-    :widths: 20 39
+    :widths: 20 39 
     :header-rows: 1
     :align: left
     :class: table-smaller-font-size
@@ -251,20 +302,41 @@ SSM Parameter Prefix
     * - Deep Learning AMI Neuron (Ubuntu 24.04)
       - /aws/service/neuron/dlami/multi-framework/ubuntu-24.04
 
+    * - Deep Learning AMI Neuron (Ubuntu 26.04)
+      - /aws/service/neuron/dlami/multi-framework/ubuntu-26.04
+
     * - Deep Learning AMI Neuron JAX 0.10 (Amazon Linux 2023)
       - /aws/service/neuron/dlami/jax-0.10/amazon-linux-2023
 
     * - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 24.04)
       - /aws/service/neuron/dlami/jax-0.10/ubuntu-24.04
 
-    * - Deep Learning AMI Neuron PyTorch Inference vLLM 0.24.0.1.1.0 (Ubuntu 24.04)
-      - /aws/service/neuron/dlami/pytorch-inference-vllm-0.24.0.1.1.0/ubuntu-24.04
+    * - Deep Learning AMI Neuron JAX 0.10 (Ubuntu 26.04)
+      - /aws/service/neuron/dlami/jax-0.10/ubuntu-26.04
+
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM 0.29.0.1.2.0 (Ubuntu 24.04)
+      - /aws/service/neuron/dlami/pytorch-inference-vllm-0.29.0.1.2.0/ubuntu-24.04
+
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM 0.29.0.1.2.0 (Ubuntu 26.04)
+      - /aws/service/neuron/dlami/pytorch-inference-vllm-0.29.0.1.2.0/ubuntu-26.04
+
+    * - Deep Learning AMI Neuron PyTorch Inference vLLM Omni 0.29.0.0.2.0 (Ubuntu 24.04)
+      - /aws/service/neuron/dlami/pytorch-inference-vllm-omni-0.29.0.0.2.0/ubuntu-24.04
+
+    * - Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 24.04)
+      - /aws/service/neuron/dlami/torch-neuronx-2.14.0/ubuntu-24.04
+
+    * - Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 26.04)
+      - /aws/service/neuron/dlami/torch-neuronx-2.14.0/ubuntu-26.04
 
     * - Deep Learning Base Neuron AMI (Amazon Linux 2023)
       - /aws/service/neuron/dlami/base/amazon-linux-2023
 
     * - Deep Learning Base Neuron AMI (Ubuntu 24.04)
       - /aws/service/neuron/dlami/base/ubuntu-24.04
+
+    * - Deep Learning Base Neuron AMI (Ubuntu 26.04)
+      - /aws/service/neuron/dlami/base/ubuntu-26.04
 
 
 For example to find the latest DLAMI id for Multi-Framework DLAMI (Ubuntu 24.04) you can use the following:
@@ -281,7 +353,7 @@ For example to find the latest DLAMI id for Multi-Framework DLAMI (Ubuntu 24.04)
 You can find all available parameters supported in Neuron DLAMis via CLI
 
 .. code-block::
-
+    
     aws ssm get-parameters-by-path \
     --region us-east-1 \
     --path /aws/service/neuron \
@@ -297,14 +369,14 @@ Use SSM Parameter to launch instance directly via CLI
 
 You can use the AWS CLI to resolve the latest DLAMI ID and launch an instance in a single command. This is particularly useful for scripting and automation workflows.
 
-Below is an example of launching a Trn2 instance using the vLLM 0.24.0.1.1.0 single-framework DLAMI: 
+Below is an example of launching a Trn2 instance using the vLLM 0.29.0.1.2.0 single-framework DLAMI: 
 
 
 .. code-block::
 
     aws ec2 run-instances \
     --region us-east-1 \
-    --image-id resolve:ssm:/aws/service/neuron/dlami/pytorch-inference-vllm-0.24.0.1.1.0/ubuntu-24.04/latest/image_id \
+    --image-id resolve:ssm:/aws/service/neuron/dlami/pytorch-inference-vllm-0.29.0.1.2.0/ubuntu-24.04/latest/image_id \
     --count 1 \
     --instance-type trn2.48xlarge \
     --key-name <my-key-pair> \
@@ -329,13 +401,24 @@ Each Neuron DLAMI includes the SDK version in its description. To find DLAMIs as
 
     aws ec2 describe-images \
       --owners amazon \
-      --filters "Name=name,Values=Deep Learning AMI Neuron*" \
-                "Name=description,Values=*Neuron SDK 2.32.0*" \
+      --filters "Name=name,Values=Deep Learning *Neuron*" \
+                "Name=description,Values=*Neuron SDK 2.33.0*" \
       --query 'Images[].{Name:Name, ImageId:ImageId}' \
       --output table \
       --region us-east-1
 
-Replace ``2.32.0`` with the desired SDK version. This is useful for finding DLAMIs from previous releases when a specific DLAMI type is no longer published in newer releases.
+Replace ``2.33.0`` with the desired SDK version. This is useful for finding DLAMIs from previous releases when a specific DLAMI type is no longer published in newer releases.
+
+The SDK version also appears in each DLAMI's name (format: ``<DLAMI name> (<OS>) SDK <version> <build-date>``), so you can filter on ``Name=name`` instead if you prefer:
+
+.. code-block::
+
+    aws ec2 describe-images \
+      --owners amazon \
+      --filters "Name=name,Values=Deep Learning *Neuron* SDK 2.33.0 *" \
+      --query 'Images[].{Name:Name, ImageId:ImageId}' \
+      --output table \
+      --region us-east-1
 
 ----
 

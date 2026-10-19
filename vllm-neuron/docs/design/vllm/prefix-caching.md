@@ -1,4 +1,4 @@
-# Prefill Processing
+# Prefill Processing and Prefix Caching
 
 <!-- meta: description: Prefix caching design -->
 <!-- meta: content_type: conceptual-deep-dive -->
@@ -251,42 +251,70 @@ Step 3: Computing SEG 3 (tokens 8192-10239)
 The segmented attention kernel (`segmented_attention` in `functional/attention/attention_segmented_cte.py`) receives two key parameters that control how it processes cached KV:
 
 - **prior_tokens** (`cached_seq_len`): A tensor of shape `[B, 1]` containing the actual number of valid cached tokens. The kernel uses this to determine how many segments of prior KV to iterate over.
-- **kv_segment_size**: The fixed segment size for iterating over prior KV. Must be one of {512, 1024, 2048, 4096}.
+- **kv_segment_size**: The fixed segment size for iterating over prior KV. Must be one of {512, 1024, 2048, 4096, 8192}.
 
 The kernel internally computes the number of segments as `prior_tokens / kv_segment_size` and iterates accordingly. There is no explicit `num_kv_segments` parameter — it is derived.
 
-**Current Kernel Constraints:**
+**Kernel Constraints:**
 
-- `kv_segment_size` must be one of {512, 1024, 2048, 4096}
+- `kv_segment_size` must be one of {512, 1024, 2048, 4096, 8192}
 - `kv_segment_size` must be divisible by `block_size`
-- Query sequence length must equal `kv_segment_size` (current constraint)
 - `prior_tokens` must be a multiple of `block_size`
+
+Query sequence length and `kv_segment_size` are independent — the kernel no
+longer requires them to match.
 
 **kv_segment_size_buckets Configuration:**
 
-The `kv_segment_size_buckets` parameter in `neuron_config` controls which segment sizes are compiled. Currently only a single segment size is supported:
+The `kv_segment_size_buckets` parameter in `neuron_config` controls which
+segment sizes are compiled. `num_batched_tokens_buckets` (the compiled Q
+bucket grid) is independent and can be set separately.
 
 ``` python
+# Single segment size, default Q buckets
 neuron_config = {
-    "kv_segment_size_buckets": [2048],  # Single segment size
-}
-```
-
-When `kv_segment_size_buckets` is set, the current constraint requires `num_batched_tokens_buckets` to match, because the kernel requires the prefill bucket length to equal the segment size.
-
-``` python
-# Valid: buckets match
-neuron_config = {
-    "num_batched_tokens_buckets": [2048],
     "kv_segment_size_buckets": [2048],
 }
 
-# Invalid: buckets don't match
+# Multiple segment sizes, explicit Q buckets
 neuron_config = {
-    "num_batched_tokens_buckets": [1024, 2048],
-    "kv_segment_size_buckets": [2048],
-}  # Error: num_batched_tokens_buckets must equal kv_segment_size_buckets
+    "num_batched_tokens_buckets": [512, 1024, 2048],
+    "kv_segment_size_buckets": [1024, 2048, 4096],
+}
 ```
+
+The warmup loop compiles every `(num_batched_tokens, kv_segment_size)` pair in
+the Cartesian product of the two bucket lists.
+
+**Choosing Buckets at Runtime:**
+
+The Q and KV dimensions are picked independently:
+
+- `num_batched_tokens` (Q): chosen by the scheduler — the smallest bucket that
+  fits the tokens scheduled this step.
+- `kv_segment_size` (KV): chosen by `pick_kv_segment_size(cached_seq_len,
+  kv_segment_size_buckets)`, which scores candidates by segment count, then
+  tail waste, then prefers the larger segment.
+
+When `max_model_len` is smaller than the smallest supported segment size (512),
+no segment size fits and segmented prefill is disabled entirely
+(`kv_segment_size_buckets` resolves to `None`, and `kv_segment_size = 0` selects
+the non-segmented path).
+
+**Non-packed FP8 KV caches:** the segmented kernel cannot read an FP8 K cache in
+the standard 4-D layout — only the packed 5-D one (see
+`validate_fp8_segmented_supported` in `utils/dtype_utils.py`). So with
+`--kv-cache-dtype fp8` and no `neuron_config.fp8_packed_kv`:
+
+- **Explicit `kv_segment_size_buckets`** → startup fails with a `ValueError`.
+  The request is unsatisfiable, and quietly serving full prefill instead would
+  let a config named "segmented prefill" measure the non-segmented path.
+- **Defaulted buckets** → segmented prefill is not enabled; the model runs full
+  prefill, which reads dense BF16 K/V.
+
+Set `"fp8_packed_kv": true` in `neuron_config` to use segmented prefill with an
+FP8 KV cache. Because APC requires segmented prefill, enabling APC with a
+non-packed FP8 cache is rejected at startup.
 
 ### Attention Metadata
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Compute L2 norm (Euclidean norm) of input tensor.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.foreach
 
@@ -19,7 +19,7 @@ The ``l2_norm_kernel`` kernel computes the L2 norm (Euclidean norm) of an input 
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `foreach_norm.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/foreach/foreach_norm.py>`_
+**Source code for this kernel API can be found at**: `foreach_norm.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/foreach/foreach_norm.py>`_
 
 l2_norm_kernel
 ^^^^^^^^^^^^^^

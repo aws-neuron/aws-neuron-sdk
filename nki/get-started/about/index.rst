@@ -1,7 +1,7 @@
 .. meta::
    :description: Learn about Neuron Kernel Interface (NKI) and core concepts essential for working with it.
    :keywords: NKI, AWS Neuron, Core Concepts, Programming Model, Architecture
-   :date-modified: 12/01/2025
+   :date-modified: 10/07/2026
 
 .. _nki_about_home:
 
@@ -10,14 +10,14 @@ About Neuron Kernel Interface (NKI)
 
 This section covers core concepts Neuron Kernel Interface (NKI) within the AWS Neuron SDK. Whether you're developing custom kernels or optimizing machine learning workloads, this documentation will help you leverage the full capabilities of AWS Neuron accelerators.
 
-Introducing NKI: Complete Kernel Development Solution 
+Introducing NKI: Complete Kernel Development Solution
 -------------------------------------------------------
 
 Neuron Kernel Interface (NKI) is a tool for developing kernels for Trainium hardware. It has three main parts:
 
 * The first part is the NKI Programming Interface, which offers two APIs: ``nki.language`` for high-level tile programming (similar to numpy and Triton), and ``nki.isa`` for direct access to hardware instructions.
 
-* The second part is the NKI Compiler, built on MLIR, which turns NKI kernel code into optimized hardware instructions. It keeps the execution order and memory allocation that developers specify. 
+* The second part is the NKI Compiler, built on MLIR, which turns NKI kernel code into optimized hardware instructions. It keeps the execution order and memory allocation that developers specify.
 
 * The third part is the NKI Library (``NKI-Lib``), which provides ready-to-use optimized kernels that developers can use directly or learn from.
 
@@ -25,7 +25,7 @@ To start using NKI, see the tutorials at https://github.com/aws-neuron/nki-sampl
 
 For more details on open source Neuron libraries and samples, see :doc:`/about-neuron/oss/index`.
 
-NKI and Neuron Hardware 
+NKI and Neuron Hardware
 ------------------------
 
 Before learning about NKI, it's important to understand the hardware where NKI kernels run. NKI is made specifically for AWS Trainium, so let's look at the architecture your NKI code will use.
@@ -43,9 +43,9 @@ Trainium devices also have dedicated **Collective Communication Engines** (**CC-
 
 The memory system has three levels:
 
-* **HBM** (High Bandwidth Memory): Provides device working memory.  
-* **SBUF** (State Buffer): On-chip scratchpad SRAM that serves as a software-managed cache. Holds active tensors locally and acts as a landing buffer for DMA transfers.  
-* **PSUM** (Partial Sum Buffer): Stores and accumulates matrix operations results.  
+* **HBM** (High Bandwidth Memory): Provides device working memory.
+* **SBUF** (State Buffer): On-chip scratchpad SRAM that serves as a software-managed cache. Holds active tensors locally and acts as a landing buffer for DMA transfers.
+* **PSUM** (Partial Sum Buffer): Stores and accumulates matrix operations results.
 
 Unlike traditional CPUs and GPUs which adopt hardware managed caches, Trainium software (NKI and the Neuron Graph Compiler) explicitly manages the allocation and data movment within the entire memory hierarchy. This architecture allows developers to optimize hardware usage directly, resulting in more consistent and predictable performance. NKI exposes all NISA primitives needed to manage the memory hierarchy.
 
@@ -66,7 +66,7 @@ with a focus on areas that NKI developers can directly control through kernel im
 * :doc:`Trainium/Inferentia2 Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>` serves as a foundational architecture guide for understanding the basics of any NeuronDevice generation.
 * :doc:`Trainium2 Architecture Guide </nki/guides/architecture/trainium2_arch>` walks through the architecture enhancements when compared to the previous generation.
 * :doc:`Trainium3 Architecture Guide </nki/guides/architecture/trainium3_arch>` covers the enhancements for the next-generation Trainium ML accelerators.
-  
+
 Neuron recommends new NKI developers start with :doc:`Trainium/Inferentia2 Architecture Guide </nki/guides/architecture/trainium_inferentia2_arch>` before exploring newer NeuronDevice architecture.
 
 .. grid:: 1
@@ -108,7 +108,7 @@ These two APIs are designed to work together: ``nki.language`` makes indexing an
 
 In the next section, we provide broad view of key concepts for NKI programming, starting with how tensors are allocated, how loop performance is controlled, and memory movement APIs.
 
-Tensor management and indexing 
+Tensor management and indexing
 ------------------------------
 
 The ``nki.language`` APIs provide tools for memory allocation, execution scheduling, tensor indexing, and tensor manipulation. The next two examples demonstrate memory allocation and scheduling APIs.
@@ -120,7 +120,7 @@ For memory allocation, developers can explicitly control tensor placement in the
     import nki.language as nl
 
     # Allocate tensor of FP32 elements in SBUF (on-chip scratchpad memory)
-    # using ndarray call similar to numpy 
+    # using ndarray call similar to numpy
     # like numpy, nl supports ndarray(), zeros() and ones() functions
     x_on_chip = nl.ndarray((128, 32, 512), dtype=nl.float32, buffer=nl.sbuf)
 
@@ -150,10 +150,10 @@ NKI meta-programming primitives like ``for`` loops over ``range()`` are fully un
         result = nl.multiply(tile, tile)
         nl.store(out_tensor[0:128, offset:offset+512], result)
 
-On-device dynamic loops
-^^^^^^^^^^^^^^^^^^^^^^^^
+Compiled loops
+^^^^^^^^^^^^^^
 
-``nl.dynamic_range`` produces a loop that runs on the device at runtime. The compiler does not unroll dynamic loops. Use it when:
+``nl.fori_loop`` produces a loop that runs on the device at runtime. The compiler does not unroll it. Use it when:
 
 * The number of iterations is not known at specialization time, or it depends on runtime values stored in virtual registers.
 * The number of iterations is large enough that unrolling would generate too many instructions to compile. This is common when iterating over tiles of a large activation tensor.
@@ -163,12 +163,18 @@ On-device dynamic loops
     import nki.language as nl
     import nki.isa as nisa
 
-    # Dynamic range -- compiled once, executed on device.
+    # fori_loop -- compiled once, executed on device.
     # Bounds are resolved at runtime from virtual registers.
     lower_bound = nisa.register_alloc(0)
     upper_bound = nisa.register_alloc(10)
-    for i in nl.dynamic_range(lower_bound, upper_bound):
+
+    def body(i):
         process_tensor(t[i])
+
+    nl.fori_loop(lower_bound, upper_bound, body)
+
+For data-dependent loops, ``nl.while_loop`` runs while a condition register is non-zero. See
+:ref:`nki-loops` for both APIs.
 
 .. note::
 
@@ -191,7 +197,7 @@ Matrix operations execute on the Tensor Engine. For instance:
     # Matrix multiplication on Tensor Engine using nc_matmul
     # nc stands for NeuronCore, and matmul is the instruction name
     # stationary: [128, 128], moving: [128, 512], output: [128, 512]
-    # The input arguments must meet NISA requirements as defined 
+    # The input arguments must meet NISA requirements as defined
     # in the Trainium architecture, such as data types, layout, tile sizes
     # and buffer memory types (SBUF or PSUM)
     # dst is explicitly defined as the first instruction parameter
@@ -211,7 +217,7 @@ Dynamic control flow uses register-based operations to enable runtime control de
     import nki.isa as nisa
     import nki.language as nl
 
-    # this is used to load the scalar register used in the dynamic loop
+    # this is used to load the scalar register used in the compiled loop
     # memory allocation does NOT perform initialization
     cond = nl.ndarray((1, 1), buffer=nl.shared_hbm, dtype=nl.int32)
     zero = nl.zeros((1, 1), dtype=nl.int32, buffer=nl.sbuf)
@@ -223,12 +229,15 @@ Dynamic control flow uses register-based operations to enable runtime control de
     # initialize register to 1
     reg = nisa.register_alloc(1)
 
-    # Dynamic while-loop with runtime condition
-    # while condition will check for non-zero integer in register as true condition
-    while reg:  
+    # Compiled while-loop with runtime condition
+    # the loop runs while the register holds a non-zero integer
+    def body(r):
         # Perform some calculation on device, which updates tensor cond
         # update loop condition from cond
-        nisa.register_load(reg, cond)  # Re-evaluate condition
+        nisa.register_load(r, cond)  # Re-evaluate condition
+        return r
+
+    nl.while_loop(reg, body)
 
 
 Collective communication primitives enable kernels to coordinate and exchange data across multiple NeuronCores. For example:
@@ -332,7 +341,7 @@ Core Concepts
 
 For details on specific NKI concepts, jump to one of these topics:
 
-.. grid:: 1 
+.. grid:: 1
    :gutter: 3
 
    .. grid-item-card:: Introduction to Direct Memory Access (DMA)
@@ -496,36 +505,36 @@ Static control flow includes standard if statements, for loops, and while loops 
 
 Python ``for`` loops over ``range()`` are unrolled at specialization time. The legacy NKI range helpers — ``static_range()``, ``sequential_range()``, and ``affine_range()`` — are deprecated and behave as aliases of ``range()``.
 
-**Dynamic control flow** runs on the Trainium device using register values and a special range function:
+**Dynamic control flow** runs on the Trainium device using register values and the ``nl.fori_loop`` and ``nl.while_loop`` APIs:
 
 .. code-block:: python
 
-    # Dynamic loop with static bounds
-    for i in nl.dynamic_range(10):
+    def body(i):
         process_tensor(t[i])
 
-    # Dynamic loop with register-based bounds.
+    # Compiled loop with static bounds
+    nl.fori_loop(0, 10, body)
+
+    # Compiled loop with register-based bounds.
     # register_alloc takes an optional immediate int, not a tensor; to use a
     # runtime value from a tensor, allocate a register then load into it.
     count = nki.isa.register_alloc()
     nki.isa.register_load(count, count_tensor)
-    for i in nl.dynamic_range(count):
-        process_tensor(t[i])
+    nl.fori_loop(0, count, body)
 
 
-Dynamic while loops use register conditions and four register management APIs: register_alloc(), register_move(), register_load(), and register_store().
+Compiled while loops (``nl.while_loop``) use register conditions and four register management APIs: register_alloc(), register_move(), register_load(), and register_store(). See :ref:`nki-loops`.
 
 
 Class Support and Interoperability
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-NKI provides basic support for user-defined classes, which must inherit from NKIObject. These classes work similarly to Python dataclasses and can be created with or without the @dataclass decorator:
-
+NKI supports user-defined classes. Classes follow standard Python rules, including inheritance from other user-defined classes. These classes work similarly to Python dataclasses and can be created with or without the @dataclass decorator:
 
 .. code-block:: python
 
     @dataclass
-    class C(NKIObject):
+    class C:
         x: int
         y: bool = False
 
@@ -544,7 +553,7 @@ NKI Compiler Architecture and Development
 
 The NKI language gives kernel writers detailed control over Neuron hardware. By offering low-level APIs that match the hardware instructions, the compiler steps back and lets developers take control. This needs a separate compiler that processes the kernel code and works together with the Neuron Graph compiler to fit kernels into the overall model.
 
-The NKI compiler runs when Python is tracing the code. When the interpreter finds a top-level function with the ``@nki.jit`` decorator, it calls the NKI compiler. The compiler reads the function, creates an Abstract Syntax Tree (AST) of the user's code, and makes a few low-level changes to:
+The NKI compiler runs when Python calls a top-level function with the ``@nki.jit`` decorator. NKI first specializes the kernel by tracing the kernel code with Python. During tracing, NKI ISA API calls emit the NKI IR. The compiler then makes a few low-level changes to the NKI IR to:
 
 * Optimize the code
 * Allocate memory
@@ -552,7 +561,7 @@ The NKI compiler runs when Python is tracing the code. When the interpreter find
 
 It then sends the optimized code to the Neuron Graph compiler, which adds it to the overall model and creates the NEFF executable.
 
-The diagram below shows the detailed compilation process inside the Neuron compilers and how they work together to create the final program that runs on Neuron hardware. The NKI Compiler first converts the kernel code into an AST representation for analysis. It then makes a few middle-end and back-end changes to the AST, improving resource allocation and instruction scheduling. This creates optimized NKI IR that gets added back into the overall model.
+The diagram below shows the detailed compilation process inside the Neuron compilers and how they work together to create the final program that runs on Neuron hardware. The specialized NKI IR goes through the NKI back-end, and the resulting optimized NKI IR is added back into the overall model.
 
 .. image:: /nki/img/overviews/about-nki-3.png
 

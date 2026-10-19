@@ -1,6 +1,6 @@
 .. meta::
     :description: State Space Duality (SSD) scan for Mamba-2 models.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.scan
 
@@ -19,7 +19,7 @@ The ``ssd`` kernel implements the State Space Duality (SSD) scan for Mamba-2 mod
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ssd.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/scan/ssd.py>`_
+**Source code for this kernel API can be found at**: `ssd.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/scan/ssd.py>`_
 
 ssd
 ^^^

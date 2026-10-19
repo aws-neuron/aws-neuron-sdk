@@ -13,7 +13,7 @@ torch.neuron.DataParallel API
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The :func:`torch.neuron.DataParallel` Python API implements data parallelism on
@@ -76,6 +76,7 @@ the performance of inference workloads on Inferentia.
 
 
 .. py:function:: torch.neuron.DataParallel.disable_dynamic_batching()
+    :noindex:
 
     Disables automatic dynamic batching on the DataParallel module. See
     :ref:`Dynamic batching disabled <dataparallel_example_disable_dynamic_batching_api>`

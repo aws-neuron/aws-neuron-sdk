@@ -1,6 +1,6 @@
 .. meta::
     :description: Cumsum kernel computes cumulative sum along the last dimension.
-    :date-modified: 01/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.cumsum
 
@@ -31,7 +31,7 @@ The implementation uses ``tensor_tensor_scan`` operations with float32 accumulat
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `cumsum.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/cumsum/cumsum.py>`_
+**Source code for this kernel API can be found at**: `cumsum.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/cumsum/cumsum.py>`_
 
 cumsum
 ^^^^^^^^^^^^^^^

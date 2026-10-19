@@ -3,34 +3,48 @@
 <!-- meta: description: Set up vLLM Omni Neuron on AWS Trainium with manual
 installation or an AWS Neuron Deep Learning Container. -->
 <!-- meta: keywords: vLLM Omni, Neuron, setup, manual installation, DLC, Trainium, Wan2.2 -->
-<!-- meta: date_updated: 2026-09-23 -->
+<!-- meta: date_updated: 2026-10-13 -->
 <!-- Content type: procedural-how-to -->
 
 ## Overview
 
 This guide assumes you already have one SSH-accessible `trn2.48xlarge` or
 `trn3` instance. Choose **manual installation** on that host or
-**DLC** for a container on the same host. Both flows use Neuron SDK 2.32.0,
-vLLM Neuron 0.24.0.1.1.0, and vLLM Omni 0.24.0. No additional nodes are required.
+**DLC** for a container on the same host. This branch targets Neuron SDK 2.33
+with vLLM 0.29.0, vLLM Neuron 0.29.0.1.x, and vLLM Omni 0.29.0rc1.
+The exact vLLM package requirements are in
+[`requirements/core.txt`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/requirements/core.txt).
 
-Installing this plugin with pip also installs vLLM Neuron, vLLM, vLLM Omni,
-PyTorch, the Neuron compiler, and NKI.
+Both flows start from a compatible Neuron SDK environment that already contains
+the compiler, NKI, `libtorch-neuronx-lite`, PyTorch, vLLM, and vLLM-Neuron.
+The commands below install this plugin, Omni, and their remaining dependencies.
+
+Pass the local `stubs/cosmos-guardrail` package on the same pip command as the
+plugin. It satisfies Omni's Cosmos requirement without installing the Cosmos
+implementation or its dependency chain, which conflicts with the current
+compiler's NetworkX requirement. This uses normal pip dependency resolution;
+neither uv nor a modified Omni wheel is required. Neuron Wan does not use
+Cosmos3 guardrails, and this installation does not provide them.
 
 ## Prerequisites
 
 - One `trn2.48xlarge` or `trn3` instance with SSH access and
   permission to install host packages and run Docker. The recommended Wan2.2
   configuration uses 64 NeuronCores on that instance.
-- A host prepared for Neuron SDK 2.32.0. For bare Ubuntu 24.04, complete
+- A host driver and runtime compatible with the selected Neuron SDK. A matching
+  [Neuron DLAMI](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/dlami.html)
+  provides the driver and tools. For a bare Ubuntu 24.04 host, complete
   **Step 2: Install drivers and tools** in the
   [Neuron host setup instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/setup/pytorch/manual.html).
-  Manual installation also requires the runtime and collectives libraries from
-  that step. The DLC supplies these libraries inside the container. Pip cannot
-  install the kernel driver or system libraries.
-- **Manual installation:** Python 3.13 with `venv` support on Ubuntu 24.04.
-  **DLC flow:** Docker installed and running.
+  Manual installation also requires the host runtime and collectives libraries from
+  that step; the DLC supplies those libraries inside the container. Pip cannot
+  install the kernel driver. Do not follow the legacy `torch-neuronx` framework
+  installation steps.
+- **Manual installation:** an existing Python 3.13 Neuron SDK environment
+  containing the packages listed above. **DLC flow:** Docker installed and
+  running, and a compatible SDK image.
 - Git and access to the source repository, Neuron package index, PyPI, and
-  Hugging Face. The DLC flow also needs access to Public ECR.
+  Hugging Face. The DLC flow also needs access to the selected image registry.
 - Storage for approximately 116 GB of Wan2.2 weights, plus compilation caches
   and generated videos. Accept any required model license before downloading.
 
@@ -49,32 +63,36 @@ which also provides the examples and stage configurations:
 ```bash
 export VLLM_OMNI_HOME="$HOME/vllm-omni-neuron"
 mkdir -p "$VLLM_OMNI_HOME"/{huggingface,vllm-cache,nki-cache,output}
-git clone -b release-0.24.0.0.1.0 https://github.com/aws-neuron/vllm-omni-neuron.git "$VLLM_OMNI_HOME/plugin"
+git clone https://github.com/aws-neuron/vllm-omni-neuron.git "$VLLM_OMNI_HOME/plugin"
 ```
 
 If you already have the release checkout, use it at that path instead of cloning
-again.
+again. The commands below install the plugin and stub from this source checkout.
 
 ## Option A: Manual installation
 
-On bare Ubuntu 24.04, install the compiler's host library on the instance:
+Activate your prepared Neuron SDK Python environment, then install the plugin
+and local stub together:
 
 ```bash
-sudo apt-get install -y --no-install-recommends libarchive13t64
+python -m pip install --extra-index-url https://pip.repos.neuron.amazonaws.com \
+  "$VLLM_OMNI_HOME/plugin" \
+  "$VLLM_OMNI_HOME/plugin/stubs/cosmos-guardrail"
 ```
 
-Create and activate a Python 3.13 environment, then install the plugin and its
-declared dependencies in one command:
+The local distribution reports `cosmos-guardrail==0.3.1+stub` and contains no
+Python modules or runtime dependencies. Pip resolves all other dependencies
+from the original package metadata. Include the stub path on the same command
+when upgrading or reinstalling; see the
+[stub documentation](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/stubs/cosmos-guardrail/README.md).
 
-```bash
-python3.13 -m venv "$VLLM_OMNI_HOME/venv"
-source "$VLLM_OMNI_HOME/venv/bin/activate"
-python -m pip install --upgrade pip
-python -m pip install --extra-index-url=https://pip.repos.neuron.amazonaws.com \
-  -e "$VLLM_OMNI_HOME/plugin"
-```
+Start from a clean compatible SDK environment. Installing the stub does not
+remove dependencies left behind by an earlier installation of the real Cosmos
+package. For development tests, use `"$VLLM_OMNI_HOME/plugin[test]"` in the
+command above. Rerun the installation command after editing the plugin source.
 
-In each new shell, run this block and activate the manual venv before inference:
+In each new shell, activate the same SDK environment and set these variables
+before inference:
 
 ```bash
 export VLLM_OMNI_HOME="$HOME/vllm-omni-neuron"
@@ -83,6 +101,7 @@ export LD_LIBRARY_PATH="/opt/aws/neuron/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export VLLM_NEURON_BACKEND=neuron_native
 export VLLM_NEURON_LIBTORCH_NEURONX_LITE=1
 export VLLM_NEURON_DISABLE_GRAPH_CAPTURE_BACKEND=1
+export TORCH_CACHING_PRECOMPILE=0
 export HF_HOME="$VLLM_OMNI_HOME/huggingface"
 export VLLM_CACHE_ROOT="$VLLM_OMNI_HOME/vllm-cache"
 export NKI_COMPILE_CACHE_URL="$VLLM_OMNI_HOME/nki-cache"
@@ -92,12 +111,16 @@ Continue to [Verify the installation](#verify-the-installation).
 
 ## Option B: Install with the Neuron DLC
 
-The published vLLM Neuron DLC contains vLLM, the compiler, NKI, and
-Neuron runtime libraries. Pull it and start a container, mounting the source,
-caches, and output directory created above:
+Use the `pytorch-inference-vllm-omni-neuronx` Neuron Deep Learning Container
+(DLC). It ships vLLM Omni Neuron with the compatible vLLM, compiler, NKI, and
+runtime libraries described above. Copy the image URI for your Neuron SDK
+version from the
+[Neuron DLC image list](https://github.com/aws-neuron/deep-learning-containers#vllm-omni-inference-neuronx)
+into `IMAGE` below. Pull it and start a container, mounting the source, caches,
+and output directory:
 
 ```bash
-export IMAGE="public.ecr.aws/neuron/pytorch-inference-vllm-neuronx:0.24.0.1.1.0-neuronx-py313-sdk2.32.0-ubuntu24.04"
+export IMAGE="public.ecr.aws/neuron/pytorch-inference-vllm-omni-neuronx:<tag-from-image-list>"
 docker pull "$IMAGE"
 docker run -d --name vllm-omni-neuron \
   --device=/dev/neuron0 --device=/dev/neuron1 \
@@ -114,20 +137,22 @@ docker run -d --name vllm-omni-neuron \
   -e VLLM_NEURON_BACKEND=neuron_native \
   -e VLLM_NEURON_LIBTORCH_NEURONX_LITE=1 \
   -e VLLM_NEURON_DISABLE_GRAPH_CAPTURE_BACKEND=1 \
+  -e TORCH_CACHING_PRECOMPILE=0 \
   -e HF_HOME=/workspace/huggingface \
   -e VLLM_CACHE_ROOT=/workspace/vllm-cache \
   -e NKI_COMPILE_CACHE_URL=/workspace/nki-cache \
   -v "$VLLM_OMNI_HOME:/workspace" \
   "$IMAGE" -c 'sleep infinity'
 docker exec vllm-omni-neuron python -m pip install \
-  --extra-index-url=https://pip.repos.neuron.amazonaws.com -e /workspace/plugin
+  --extra-index-url https://pip.repos.neuron.amazonaws.com \
+  /workspace/plugin /workspace/plugin/stubs/cosmos-guardrail
 ```
 
-The last command installs the plugin and its Python dependencies in the
-container. Public ECR does not require authentication for this image. Use
-`sudo docker` if your host requires it. For online serving, add
-`-p 127.0.0.1:8091:8091` when creating the container and use SSH port
-forwarding as described in the online quickstart.
+The last command installs this plugin, vLLM Omni, and the local Cosmos stub,
+using the SDK packages already in the image.
+Use `sudo docker` if your host requires it. For online serving, add
+`-p 127.0.0.1:8091:8091` when creating the container and use SSH port forwarding
+for access from your local machine, as described in the online quickstart.
 
 The device mappings and capabilities follow the
 [Neuron DLC quickstart](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/environments/quickstart-deploy-dlc.html#quickstart-vllm-dlc-step2).
@@ -151,20 +176,24 @@ or inside the DLC container:
 neuron-ls
 python - <<'PY'
 from importlib.metadata import version
-import torch, torch_xla, libtorch_neuronx_lite, vllm, vllm_neuron, vllm_omni
+
+import vllm_omni  # Load Omni before importing the Neuron platform module.
 from vllm_omni_neuron import neuron_omni_platform_plugin
 from vllm_omni_neuron.platform import NeuronOmniPlatform
 
 assert neuron_omni_platform_plugin() is not None, "Neuron platform not detected"
 assert NeuronOmniPlatform.get_device_count() > 0, "No Neuron devices available"
-for package in ("vllm-neuron", "vllm-omni", "vllm-omni-neuron"):
+for package in ("vllm-neuron", "vllm-omni", "vllm-omni-neuron", "cosmos-guardrail"):
     print(package, version(package))
+assert version("cosmos-guardrail") == "0.3.1+stub"
 PY
 ```
 
 `neuron-ls` must list the expected devices and the Python check must print the
-installed package versions without an assertion or import error. If a model
-requires authentication, run `hf auth login` in the same environment.
+installed package versions without an assertion or import error. The stub
+satisfies package metadata only; it does not supply Cosmos guardrail
+functionality. If a model requires authentication, run `hf auth login` in the
+same environment.
 
 Run a short text-to-video generation through the Omni engine:
 
@@ -183,9 +212,11 @@ using the same SSH connection details and the absolute path on the instance.
 - **No devices:** check the host driver and `/dev/neuron*`; for Docker, also
   check device exposure. Follow the host setup instructions above rather than
   installing a driver inside the container.
-- **Missing compiler or NKI:** activate the correct environment and reinstall
-  the plugin with dependencies. Installing `vllm-neuron` alone does not install
-  these packages.
+- **Missing compiler or NKI:** activate the prepared SDK environment or use a
+  compatible SDK image. The plugin installation assumes those packages exist.
+- **Cosmos/NetworkX dependency conflict:** include the local stub path on the same
+  pip command as the plugin. If real Cosmos dependencies were installed earlier,
+  restart from a clean compatible SDK environment.
 - **Imports fail after an upgrade:** recreate the matching environment. Do not
   mix this stack with a standalone `torch-neuronx` installation.
 - **Worker exits with `SIGBUS`:** use `--shm-size=2g` for Docker; for manual

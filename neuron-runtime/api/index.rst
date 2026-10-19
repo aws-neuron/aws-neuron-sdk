@@ -1,3 +1,7 @@
+.. meta::
+   :description: API reference for the AWS Neuron Runtime (NRT) and the Neuron Driver Library (NDL), covering model loading, execution, memory management, and collective operations.
+   :date-modified: 2026-10-13
+
 .. _nrt_api_reference:
 
 Neuron Runtime API Reference
@@ -84,6 +88,15 @@ Experimental APIs
    * - :doc:`NRT Experimental </neuron-runtime/api/nrt_experimental>`
      - Experimental features and APIs (subject to change)
 
+Configuration Reference
+------------------------
+
+.. list-table::
+   :widths: 40 60
+
+   * - :doc:`Environment Variables </neuron-runtime/api/nrt-env-var-reference>`
+     - Reference for the Neuron Runtime environment variables that configure core allocation, collectives, memory, logging, profiling, and debugging
+
 .. toctree::
    :maxdepth: 5
    :hidden:
@@ -107,6 +120,7 @@ Experimental APIs
    :caption: Asynchronous Execution APIs
 
    NRT Async APIs Overview <nrt-async-api-overview>
+   NRT Async APIs Core Concepts <nrt-async-api-core-concepts>
    NRT Async APIs Best Practices <nrt-async-api-best-practices>
    NRT Async APIs Examples <nrt-async-api-examples>
    NRT Async <nrt_async>
@@ -150,3 +164,10 @@ Experimental APIs
    :caption: Experimental APIs
 
    NRT Experimental <nrt_experimental>
+
+.. toctree::
+   :maxdepth: 5
+   :hidden:
+   :caption: Configuration Reference
+
+   Environment Variables <nrt-env-var-reference>

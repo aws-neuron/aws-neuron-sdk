@@ -10,9 +10,9 @@ in the features guide.
 | [Component DP sharding](component_dp_sharding.md) | Per-component independent sharding |
 | [Data parallelism](data_parallelism.md) | Data parallelism overview |
 | [Decode Context Parallelism](dcp.md) | KV cache sequence sharding for long contexts |
+| [Encoder parallelism](encoder_parallelism.md) | Independent TP/DP for multimodal encoders |
 | [Expert parallelism](expert_parallelism.md) | Expert parallelism for MoE |
 | [Tensor parallelism](tensor_parallelism.md) | Tensor parallelism overview |
-| [Vision encoder parallelism](vision_encoder_parallelism.md) | Independent TP/DP for vision encoders |
 
 :::{toctree}
 :maxdepth: 1
@@ -22,7 +22,7 @@ attention_dp
 component_dp_sharding
 data_parallelism
 dcp
+encoder_parallelism
 expert_parallelism
 tensor_parallelism
-vision_encoder_parallelism
 :::

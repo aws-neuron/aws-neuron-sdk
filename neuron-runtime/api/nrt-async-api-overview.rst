@@ -1,3 +1,9 @@
+.. meta::
+   :description: Why and when to use the AWS Neuron Runtime explicit async APIs (nrta_*) to keep Neuron device execution units busy.
+   :date-modified: 2026-10-13
+
+.. _nrt-async-api-overview:
+
 ====================================================
 Neuron Runtime Async APIs: Motivation and Overview
 ====================================================

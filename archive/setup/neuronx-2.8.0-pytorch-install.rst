@@ -24,7 +24,7 @@ Install PyTorch NeuronX (Neuron 2.8.0) — Archived
 
             .. tab-item:: Amazon Linux 2 AMI
 
-                .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+                .. include :: /archive/frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
                 .. code-block:: bash
 
@@ -56,7 +56,7 @@ Install PyTorch NeuronX (Neuron 2.8.0) — Archived
 
             .. tab-item:: Ubuntu 20 AMI
 
-                .. include :: /frameworks/torch/torch-neuronx/setup/note-setup-general.rst
+                .. include :: /archive/frameworks/torch/torch-neuronx/setup/note-setup-general.rst
 
                 .. code-block:: bash
 

@@ -51,6 +51,12 @@ def get_env_vars():
 
 project_name, branch_name = get_env_vars()
 
+# NOTE: NKI docs pinned from the private-nki-staging submodule (docs-src/nki)
+# are copied into /nki by a MANUAL step, not from conf.py -- see the "Build the
+# NKI docs" section of CONTRIBUTING.md. Keeping the copy out of conf.py ensures
+# a build can never fail on it (e.g. when the submodule is absent, as on the
+# public repo). The mount itself is excluded from discovery (exclude_patterns).
+
 
 # -- NKI Library source-link pinning -----------------------------------------
 #
@@ -179,7 +185,7 @@ templates_path = [
     "_templates",
     "nki/_templates/",
     "_content-types/",
-    "libraries/nxd-inference/_templates",
+    "inference-legacy/nxd-inference/_templates",
 ]
 
 # List of patterns, relative to source directory, that match files and
@@ -196,7 +202,16 @@ exclude_patterns = [
     'nki/_templates',
     'neuron-runtime/explore/work-with-neff-files.rst',
     '.kiro', 
-    '.git'
+    '.git',
+    # Content pinned from other repos is mounted under /docs-src (e.g. the
+    # private-nki-staging submodule at docs-src/nki, sparse-checked-out to
+    # docs/public/nki). These mounts are NOT built directly; their content is
+    # copied to the site tree by a MANUAL pre-build step (e.g.
+    # `python _utilities/nki_docs.py sync` copies docs-src/nki/docs/public/nki/**
+    # -> nki/**; see CONTRIBUTING.md). Exclude /docs-src so Sphinx doesn't
+    # discover the pinned trees twice (which would collide on labels/anchors).
+    'docs-src',
+    'docs-src/**',
 ]
 html_extra_path = ['static']
 
@@ -228,57 +243,57 @@ projecttree = project_name + "/tree/" + branch_name
 extlinks = {
     "mxnet-neuron": (
         "https://github.com/aws-neuron/" + projectblob + "/neuron-guide/neuron-frameworks/mxnet-neuron/%s",
-        "",
+        None,
     ),
     "pytorch-neuron": (
         "https://github.com/aws-neuron/" + projectblob + "/neuron-guide/neuron-frameworks/pytorch-neuron/%s",
-        "",
+        None,
     ),
     "tensorflow-neuron": (
         "https://github.com/aws-neuron/" + projectblob + "/neuron-guide/neuron-frameworks/tensorflow-neuron/%s",
-        "",
+        None,
     ),
     "neuron-deploy": (
         "https://github.com/aws-neuron/" + projectblob + "/neuron-deploy/%s",
-        "",
+        None,
     ),
     "neuron-tools-tree": (
         "https://github.com/aws-neuron/" + projecttree + "/neuron-guide/neuron-tools/%s",
-        "",
+        None,
     ),
     "mxnet-neuron-src": (
         "https://github.com/aws-neuron/" + projectblob + "/src/examples/mxnet/%s",
-        "",
+        None,
     ),
     "pytorch-neuron-src": (
         "https://github.com/aws-neuron/" + projectblob + "/src/examples/pytorch/%s",
-        "",
+        None,
     ),
     "tensorflow-neuron-src": (
         "https://github.com/aws-neuron/" + projectblob + "/src/examples/tensorflow/%s",
-        "",
+        None,
     ),
     "neuron-gatherinfor-src": (
         "https://github.com/aws-neuron/" + projectblob + "/src/examples/neuron-gatherinfo/%s",
-        "",
+        None,
     ),
     "neuron-monitor-src": (
         "https://github.com/aws-neuron/" + projectblob + "/src/examples/neuron-monitor/%s",
-        "",
+        None,
     ),
     "compile-pt": (
         "https://github.com/aws-neuron/" + projectblob + "/archive/src/benchmark/pytorch/%s_compile.py",
-        "",
+        None,
     ),
     "benchmark-pt": (
         "https://github.com/aws-neuron/" + projectblob + "/archive/src/benchmark/pytorch/%s_benchmark.py",
-        "",
+        None,
     ),
     "llama-sample": (
         "https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/transformers-neuronx/inference/%s.ipynb",
-        "",
+        None,
     ),
-    'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', '')
+    'github':(f'https://github.com/aws-neuron/{project_name}/blob/{branch_name}/%s', None)
 }
 
 
@@ -289,9 +304,20 @@ intersphinx_mapping = {
     "transformers": ("https://huggingface.co/docs/transformers/master/en/", None),
 }
 
+# -- sphinxcontrib.spelling options  --------------------------------------
+
+spelling_lang='en_US'
+tokenizer_lang='en_US'
+spelling_word_list_filename='spelling_wordlist.txt' # acceptable dictionary words
+
+# to run the spellcheck: sphinx-build -b spelling . _build/html 2>&1 | tee result_spelling.log
+# and search for "Spell check:" in the result_spelling.log
+# or search per sub-project ex: ".*nki.*Spell check:"
+# keep adding known words into spelling_wordlist.txt
+
 # -- Options for Theme  -------------------------------------------------
 
-top_banner_message = "<b>Neuron 2.32.0 is released!</b> Check the <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html'>What's New</a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>Release Notes</a> for more details."
+top_banner_message = "<b>Neuron 2.33.0 is released!</b> Check the <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html'>What's New</a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>Release Notes</a> for more details."
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {

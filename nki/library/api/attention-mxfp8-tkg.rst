@@ -1,6 +1,6 @@
 .. meta::
     :description: MXFP8 flash decode attention with separate KV blocks and packed-Q eviction.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.attention_mxfp8
 
@@ -19,7 +19,7 @@ The ``attention_mxfp8_tkg`` kernel performs MXFP8 flash decode attention with se
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `attention_mxfp8_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention_mxfp8/attention_mxfp8_tkg.py>`_
+**Source code for this kernel API can be found at**: `attention_mxfp8_tkg.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/attention_mxfp8/attention_mxfp8_tkg.py>`_
 
 attention_mxfp8_tkg
 ^^^^^^^^^^^^^^^^^^^
@@ -28,17 +28,17 @@ attention_mxfp8_tkg
 
    MXFP8 flash decode attention with separate KV blocks and packed-Q eviction.
 
-   :param q: Query tensor [B, H, 1, d] bfloat16.
+   :param q: Query tensor [B, H, s_active, d] bfloat16.
    :type q: ``nl.NkiTensor``
-   :param k_active: Active key [B, d] bfloat16.
+   :param k_active: Active key [B, s_active, d] bfloat16.
    :type k_active: ``nl.NkiTensor``
-   :param v_active: Active value [B, d] bfloat16.
+   :param v_active: Active value [B, s_active, d] bfloat16.
    :type v_active: ``nl.NkiTensor``
    :param k_prior: MXFP8 K cache [num_blocks, 32, 160] float32. Each block = 128 tokens.
    :type k_prior: ``nl.NkiTensor``
    :param v_prior: MXFP8 V cache [num_blocks, 32, 160] float32. Each block = 128 tokens.
    :type v_prior: ``nl.NkiTensor``
-   :param mask: Pre-computed chunk masks [B * num_chunks, 128, score_free] uint8.
+   :param mask: Unified per-head token mask [B, H, s_active, s_prior + s_active] uint8. The s_prior prefix masks the prior context; the trailing s_active columns mask the active tokens (the caller encodes intra-active causality here).
    :type mask: ``nl.NkiTensor``
    :param identity_hbm: [128, 128] bfloat16 identity matrix for PE reduction.
    :type identity_hbm: ``Optional[nl.NkiTensor]``
@@ -46,8 +46,8 @@ attention_mxfp8_tkg
    :type active_blocks_table: ``Optional[nl.NkiTensor]``
    :param sbm: Optional SbufManager for SBUF allocation. None = auto-alloc mode.
    :type sbm: ``Optional[SbufManager]``
-   :return: [B, H, d] bfloat16 attention output.
-   :rtype: ``nl.ndarray``
+   :return: [B, H, s_active, d] bfloat16 attention output.
+   :rtype: ``nl.NkiTensor``
 
    **Dimensions**:
 

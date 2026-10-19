@@ -19,7 +19,7 @@ What's New
 
 **Ubuntu 24.04 Support** — This release adds support for Ubuntu 24.04 base, single framework, and multi-framework DLAMIs with Python 3.12, providing customers with the latest Ubuntu LTS version for their machine learning workloads.
 
-**vLLM V1 with vLLM-Neuron Plugin** — Published new vLLM V1 with the `vLLM-Neuron Plugin <https://github.com/vllm-project/vllm-neuron>`_ single framework DLAMI and added virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
+**vLLM V1 with vLLM Neuron Plugin** — Published new vLLM V1 with the `vLLM Neuron Plugin <https://github.com/vllm-project/vllm-neuron>`_ single framework DLAMI and added virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
 
 **PyTorch 2.9 Support** — Added PyTorch 2.9 support for single framework DLAMIs and virtual environment to multi-framework DLAMIs (Amazon Linux 2023, Ubuntu 24.04).
 

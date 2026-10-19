@@ -54,6 +54,7 @@ Common parameters for the Neuron CLI:
      [--model-type <model>]
      [--auto-cast <cast_mode>]
      [--auto-cast-type <data_type>]
+     [--activation-funcs-on-gpsimd <func_list>]
      [--native-int64 <mode>]
      [--implicit-integer-downcast <mode>]
      [--distribution-strategy <distribution_type>]
@@ -90,6 +91,7 @@ Common parameters for the Neuron CLI:
     - ``trn1``
     - ``trn1n``
     - ``trn2``
+    - ``trn3``
 
   - ``--model-type <model>``: Permit the compiler to attempt model-specific optimizations based upon type of model being compiled. (Default: ``generic``)
 
@@ -122,6 +124,29 @@ Common parameters for the Neuron CLI:
 
 
     .. note:: If multiple competing options are specified then the option right-most on the command line will supercede previous options.
+
+  - ``--activation-funcs-on-gpsimd <func_list>``: Move the listed activation functions from the Scalar Engine to the GPSIMD Engine to improve numerical accuracy, at the cost of higher latency. (Only available on ``trn3``.)
+
+    By default, these activation functions run on the Scalar Engine, which evaluates them using piecewise-polynomial (PWP) approximations. The approximations are fast but introduce some inaccuracy. Evaluating a function on the GPSIMD Engine is more accurate but has higher latency, so move only the functions whose accuracy matters for your model.
+
+    Specify either ``All`` to move every supported function, or a space-separated subset of the supported function names.
+
+    Valid values:
+
+    - ``All``: Move every supported activation function to the GPSIMD Engine.
+    - A space-separated subset of: ``Silu``, ``Sqrt``, ``Rsqrt``, ``Sigmoid``, ``Exp``, ``Ln``, ``Ln1p``, ``Softplus``.
+
+    *Examples*:
+
+    .. code-block:: shell
+
+      # Move all supported activation functions to the GPSIMD Engine
+      neuronx-cc compile model.hlo --framework XLA --target trn3 --activation-funcs-on-gpsimd All
+
+      # Move only a specific subset
+      neuronx-cc compile model.hlo --framework XLA --target trn3 --activation-funcs-on-gpsimd Exp Silu
+
+    .. note:: This option is supported only on ``trn3``. On other targets, these activation functions always run on the Scalar Engine.
 
   - ``--native-int64 <mode>``: Controls whether 64-bit integer (``int64``) operations are executed natively or downcast to ``int32``. (Only available on ``trn2`` and later; Default: ``default``)
 

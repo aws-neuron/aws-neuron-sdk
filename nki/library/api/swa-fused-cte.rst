@@ -1,6 +1,6 @@
 .. meta::
     :description: Fused GPT-OSS SWA block. Returns (out [B,S,H], k_cache, v_cache) with caches updated in place.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.attention
 
@@ -19,7 +19,7 @@ The ``swa_fused_cte`` kernel is a fused GPT-OSS sliding-window-attention (SWA) b
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `swa_fused_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/attention/swa_fused_cte.py>`_
+**Source code for this kernel API can be found at**: `swa_fused_cte.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/attention/swa_fused_cte.py>`_
 
 swa_fused_cte
 ^^^^^^^^^^^^^

@@ -13,7 +13,7 @@ PyTorch Neuron (torch-neuron) — Archived
 
    This document is archived. torch-neuron (Inf1) is no longer actively developed.
    For new workloads, use TorchNeuron Native or torch-neuronx.
-   See :doc:`/frameworks/torch/index` for current PyTorch support.
+   See :doc:`/archive/frameworks/torch/index` for current PyTorch support.
 
 PyTorch Neuron (``torch-neuron``) was the original PyTorch integration for AWS Inferentia (Inf1) instances.
 This package supported inference workloads on NeuronCores v1 architecture.

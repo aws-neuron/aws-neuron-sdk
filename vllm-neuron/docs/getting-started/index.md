@@ -9,7 +9,7 @@ Set up vLLM Neuron and run your first inference — from install through your fi
 :link: setup-guide
 :link-type: doc
 
-Install and configure vLLM Neuron on Trainium or Inferentia.
+Install and configure vLLM Neuron on Trn2 or Trn3.
 :::
 
 :::{grid-item-card} Online serving quickstart

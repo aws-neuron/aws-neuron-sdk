@@ -3,6 +3,7 @@
 .. meta::
    :description: How AWS Neuron's architecture enables compute-communication overlap to improve performance in distributed training workloads.
    :keywords: AWS Neuron, collective communocation, compute-communication overlap, distributed training, FSDP, TP, Neuron Runtime, Neuron Compiler
+   :date-modified: 2026-10-13
 
 =========================================
 Compute-Communication Overlap in Neuron
@@ -198,5 +199,5 @@ Read More
 ---------
 
 - `AWS Neuron SDK Documentation Home <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/>`_
-- `Neuron Distributed Training Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-training/index.html>`_
+- `Neuron Distributed Training Guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/nxd-training/index.html>`_
 - `Neuron Runtime Documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-runtime/index.html>`_

@@ -1,5 +1,6 @@
 .. meta::
   :description: Learn about NEFF (Neuron Executable File Format) architecture, structure, and components
+  :date-modified: 2026-10-13
 
 .. _work-with-neff-files:
 

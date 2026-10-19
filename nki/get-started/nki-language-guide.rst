@@ -1,7 +1,7 @@
 .. meta::
     :description: Comprehensive guide to the NKI language for AWS Neuron SDK, covering tensor operations, control flow, memory management, and programming patterns for Trainium accelerators.
     :keywords: NKI, AWS Neuron, Language Guide, Tensor Operations, Trainium
-    :date-modified: 04/08/2026
+    :date-modified: 10/07/2026
 
 .. _nki-language-guide:
 
@@ -50,19 +50,16 @@ Let us start by looking at a simple NKI function.
 
         # Return kernel output as function output.
         return c_output
-        
-.. important::
-   The first thing you may notice about this NKI function is that it looks very much like a Python function. In fact, all NKI functions are syntactically valid Python functions. However, it is important to understand that NKI functions are not Python functions: they will be compiled by the NKI compiler and run on the Trainium accelerator. Because of this, not all Python constructs and libraries are supported within a NKI function.
 
-The second thing to notice is that NKI has a sequential programming model. This means that the logical order of operations follows the syntactic order of the statements in the function. As you learn more about the Trainium hardware, you will see that the hardware can often do many things at the same time across the different compute engines on the Trainium devices. When we compile NKI functions, we will respect the sequential order of operations written by the programmer. The compiler may reorder operations that have no data dependencies, but this is functionally transparent to NKI programmers. Later you will see how to control which engines operations run on and even how to influence the ordering of operations with no data dependencies for better performance, but all of this is done in the context of the sequential ordering of the code.
+The first thing to notice is that NKI has a sequential programming model. This means that the logical order of operations follows the syntactic order of the statements in the function. As you learn more about the Trainium hardware, you will see that the hardware can often do many things at the same time across the different compute engines on the Trainium devices. When we compile NKI functions, we will respect the sequential order of operations written by the programmer. The compiler may reorder operations that have no data dependencies, but this is functionally transparent to NKI programmers. Later you will see how to control which engines operations run on and even how to influence the ordering of operations with no data dependencies for better performance, but all of this is done in the context of the sequential ordering of the code.
 
-The third thing to notice about this simple function is that is has a print statement. You may be wondering: When does this print happen? Does the Trainium hardware output a string, where does it go? What about all those different engines we just talked about and the sequential ordering? The answer to these questions reveal a very important aspect of NKI programming. The answer is that the print is evaluated by the compiler at compile time, not at runtime. So, when you compile this NKI function, the NKI compiler will output a string like:
+The second thing to notice about this simple function is that it has a print statement. You may be wondering: When does this print happen? Does the Trainium hardware output a string, where does it go? What about all those different engines we just talked about and the sequential ordering? The answer to these questions reveal a very important aspect of NKI programming. The answer is that the print is evaluated by the compiler at compile time, not at runtime. So, when you compile this NKI function, the NKI compiler will output a string like:
 
 .. code-block:: text
 
    adding tensors of type float16 and shape (128, 512)
 
-However, when we run this compiled function on Trainium devices they will not output anything. This is usually what you want. The compiler gives important debugging information during compilation, but when you deploy your function across 1000 Trainium devices, they will not waste any time generating debug output. 
+However, when we run this compiled function on Trainium devices they will not output anything. This is usually what you want. The compiler gives important debugging information during compilation, but when you deploy your function across 1000 Trainium devices, they will not waste any time generating debug output.
 
 **Note**: There is a special print function that does run on the Trainium devices, called ``device_print``, that can be used if this is really what you need, see the API references for more information.
 
@@ -77,24 +74,24 @@ Compilation Model
 
 When you decorate a function with ``@nki.jit`` and call it, the NKI compiler processes your kernel in three stages:
 
-1. **Specialization**: The compiler takes your Python function and evaluates all meta-programming constructs. This includes resolving tensor shapes, unrolling loops, inlining function calls, and evaluating if-statements with compile-time conditions. The result is a specialized, flat sequence of ``nki.isa.*`` operations with all compile-time values resolved.
+1. **Specialization**: NKI traces your Python function with Python, and the NKI ISA APIs emit the IR to be compiled. Tracing evaluates all meta-programming constructs. This includes resolving tensor shapes, unrolling loops, inlining function calls, and evaluating if-statements with compile-time conditions. The result is a specialized, flat sequence of ``nki.isa.*`` operations with all compile-time values resolved.
 
 2. **Compilation**: The specialized program is lowered to Trainium machine code. This stage performs instruction scheduling, register allocation, and memory layout.
 
 3. **Graph-compiler linking**: The compiled kernel is linked into the larger computation graph managed by the Neuron graph compiler, which handles data movement between the host and device.
 
-The specialization stage is key to understanding NKI programming. During specialization, the compiler acts as an interpreter for the meta-programming parts of your kernel. Everything that is not a ``nki.isa.*`` call or a ``dynamic_range`` loop is evaluated and resolved at this stage. This means:
+The specialization stage is key to understanding NKI programming. Specialization traces the kernel code with Python, so the meta-programming parts of your kernel can use all of Python, including generators and class inheritance, and follow Python semantics. (Earlier NKI releases specialized kernels with dedicated compiler lowering passes that accepted only a subset of Python; see :ref:`nki-migrate-0-6-to-0-7`.) Everything that is not a ``nki.isa.*`` call or a compiled loop (``nl.fori_loop``, ``nl.while_loop``) is evaluated and resolved at this stage. This means:
 
-- All ``for`` loops (except ``dynamic_range``) are **unrolled** at specialization time. The compiler expands the loop body once for each iteration.
+- All ``for`` loops are **unrolled** at specialization time. The compiler expands the loop body once for each iteration.
 - All function calls are **inlined** at specialization time. The compiler substitutes the function body at each call site.
 - All ``if`` statements with compile-time conditions are **resolved** at specialization time. Only the taken branch is included in the specialized program.
 - All Python expressions on compile-time values (integers, booleans, strings, shapes) are **evaluated** at specialization time.
 
-The only constructs that survive specialization and become runtime operations are ``nki.isa.*`` calls and ``dynamic_range`` loops. Everything else is part of the meta-programming language that controls how the final sequence of ISA operations is generated.
+The only constructs that survive specialization and become runtime operations are ``nki.isa.*`` instructions, tensor allocations such as ``nl.ndarray``, compiled loops (``nl.fori_loop``, ``nl.while_loop``), and arithmetic on ``NkiScalar`` values. Everything else, including Python control flow, function calls, and arithmetic on Python values, runs only during specialization and controls which NKI IR is emitted.
 
 .. note::
 
-   Throughout this documentation, we use the term **NKI meta-programming language** to refer to the Python subset that is evaluated at specialization time (loops, conditionals, function calls, and expressions on compile-time values), and **NKI language** to refer to the runtime primitives (``nki.isa.*`` operations and ``dynamic_range`` loops) that execute on the device.
+   Throughout this documentation, we use the term **NKI meta-programming language** to refer to the Python subset that is evaluated at specialization time (loops, conditionals, function calls, and expressions on compile-time values), and **NKI language** to refer to the runtime primitives (``nki.isa.*`` operations and compiled loops) that execute on the device.
 
 .. code-block:: python
 
@@ -115,13 +112,35 @@ Kernel Caching
 
 NKI caches compiled kernels based on their input arguments (shapes, dtypes, and compile-time values). This means NKI kernels must be **pure functions** of their arguments — the kernel's output must be determined solely by its input arguments. If a kernel's behavior depends on external state such as global variables, closures over mutable objects, or side effects, the cache may return a stale compiled artifact and produce incorrect results.
 
+By default, this cache lives in memory, so every new Python process traces each kernel again. To keep compiled kernels across processes, set ``NKI_ENABLE_TRACE_CACHE=1`` to turn on the experimental persistent cache. The cache is per user and stored in ``/var/tmp/nki-trace-cache-uid<uid>``. Set ``NKI_TRACE_CACHE_URL`` to use a different directory.
+
+On a cache miss, NKI traces and compiles the kernel as usual and records which source files the kernel used. On a later run, NKI looks up the kernel by its name, static arguments, input shapes and dtypes, and relevant compilation flags. If none of the recorded source files changed and the pinned third-party package versions are still installed, NKI skips both tracing and lowering. Any mismatch triggers a full recompile.
+
+Current limitations of the persistent cache:
+
+- The purity rule matters even more here, because the cache must stay correct across processes. Pass any value that affects code generation as an argument to the kernel. The cache cannot detect a change to a module-level constant, environment variable (``os.getenv``), file contents, random seed, or similar external state.
+- When tracing the kernel with Python, NKI records only the files in which a function actually ran during the trace. For example, if a helper is called only when ``mode == "fast"`` and the trace ran with ``mode == "slow"``, that helper's file is not recorded. This is safe as long as every branch condition depends only on kernel arguments, because a different branch then means a different cache key and a new trace.
+- A file that affects the trace without running any function is not recorded, for example a module whose constant or class attribute the kernel reads. Editing such a file does not invalidate the cache.
+- NKI checks the contents of files in the kernel's own package only. For any other source file the kernel uses, NKI records the version of the installed package (wheel) that provides it. Upgrading or downgrading that package invalidates the cache entry.
+- Files that don't belong to an installed wheel, such as editable installs (``pip install -e``), vendored copies, or other first-party packages on ``PYTHONPATH``, are not tracked at all. To track them, add their directories to ``NKI_TRACE_CACHE_ROOTS`` (separated by ``:``), and NKI checks their contents like the kernel's own files.
+
+.. warning::
+
+   Editing an installed package's files in place does not invalidate cached kernels, because NKI tracks only the package version. To pick up such edits, add the package's directory to ``NKI_TRACE_CACHE_ROOTS`` or turn the persistent cache off.
+
+Additional environment variables for the persistent cache:
+
+- ``NKI_TRACE_CACHE_VERBOSE=1`` to print each cache hit, miss, and store.
+- ``NKI_TRACE_CACHE_DEBUG=1`` to print everything ``NKI_TRACE_CACHE_VERBOSE`` prints, plus why a miss happened and which source files are not tracked.
+- ``NKI_DISABLE_TRACE_CACHE=1`` to turn the persistent cache off.
+
 NKI Namespaces
 ---------------
 
 NKI is organized into several Python namespaces:
 
 - ``nki`` — The top-level package. Provides the ``@nki.jit`` decorator for compiling kernel functions.
-- ``nki.language`` (commonly imported as ``nl``) — The high-level language API. This includes tensor creation (``ndarray``), data types, memory buffers, loop ranges (``affine_range``, ``dynamic_range``), and high-level math operations (``nl.add``, ``nl.matmul``, ``nl.softmax``, etc.). Many of the functions in ``nki.language`` are convenience wrappers around one or more ``nki.isa`` operations.
+- ``nki.language`` (commonly imported as ``nl``) — The high-level language API. This includes tensor creation (``ndarray``), data types, memory buffers, compiled loops (``fori_loop``, ``while_loop``), and high-level math operations (``nl.add``, ``nl.matmul``, ``nl.softmax``, etc.). Many of the functions in ``nki.language`` are convenience wrappers around one or more ``nki.isa`` operations.
 - ``nki.isa`` (commonly imported as ``nisa``) — The low-level instruction set architecture API. Each function in this namespace maps directly to a Trainium hardware operation. These are the only calls that produce runtime operations on the device.
 - ``nki.collectives`` — APIs for multi-device collective communication operations such as ``all_reduce``, ``all_gather``, and ``collective_permute``.
 
@@ -158,7 +177,7 @@ NKI values and containers are very similar to their Python equivalents. For inst
 
 .. code-block:: python
 
-   l = [1,2,3]    # create a list with 3 elements 
+   l = [1,2,3]    # create a list with 3 elements
    l.append(4.1)  # append a value to the list
    l.extend(("Hello", "List")) # extend list with multiple values
    size = len(l) # return number of elements in list
@@ -167,7 +186,7 @@ NKI values and containers are very similar to their Python equivalents. For inst
    # search list for a specific value
    if l.index(2):
      print("list contains 2")
-     
+
    # remove a specific value from a list (if present)
    l.remove(1)
 
@@ -504,32 +523,33 @@ Dynamic Control Flow
 
 In the previous section we looked at control-flow constructs that are ultimately expanded at compile-time. NKI also supports dynamic control-flow, or control-flow that runs on the device. Dynamic control-flow is not expanded by the compiler, but lowered to equivalent Trainium control-flow instructions.
 
-The most basic dynamic loop is a for-loop with static bounds. A dynamic loop with static bounds can be written using the standard for-loop with a dynamic_range hint.
+The most basic compiled loop is a counted loop with static bounds, written with ``nl.fori_loop``. The loop body is a function that receives the current iteration value.
 
 .. code-block:: python
 
-   # create a dynamic loop that runs "on chip"
-   for i in dynamic_range(10):
+   # create a compiled loop that runs "on chip"
+   def body(i):
      process_tensor(t[i])
 
-The for loop above will lower to a loop on the Trainium device. The loop will execute its body (process_tensor), 10 times and then continue. Because this is a dynamic loop, the loop index, i, will be stored in a hardware register during evaluation. Therefore, the type of i is register in NKI. Register values can be used to index tensors, and passed to nki.isa APIs. We can also use registers to create dynamic loops with dynamic bounds.
+   nl.fori_loop(0, 10, body)
+
+The loop above will lower to a loop on the Trainium device. The loop will execute its body (process_tensor) 10 times and then continue. The loop index ``i`` is a runtime value, not a Python ``int``. With ``int`` bounds its type is ``NkiScalar``; with a ``VirtualRegister`` bound its type is ``VirtualRegister``. These values can be used to index tensors and passed to nki.isa APIs. We can also use registers to create compiled loops with dynamic bounds.
 
 .. code-block:: python
 
    count = nki.isa.register_alloc(0)
    nisa.register_load(count, count_tensor)
-   for i in dynamic_range(count):
-     process_tensor(t[i])
+   nl.fori_loop(0, count, body)
 
-The loop above uses a register value as the upper bound. This register is allocated with the ``register_alloc`` function, and then its value is populated from a tensor using ``register_load``. The for loop will then execute ``count`` times.
+The loop above uses a register value as the upper bound. This register is allocated with the ``register_alloc`` function, and then its value is populated from a tensor using ``register_load``. The loop will then execute ``count`` times.
 
 There are four register APIs that can be used to create, and load and store values to and from registers. Each register is 32-bit and supports multiple data types: ``u8``, ``u16``, ``u32``, ``i8``, ``i16``, ``i32``, and ``fp32`` (or a pair of registers for ``u64``/``i64``). Signed integers are supported, so negative values (e.g., ``count=-5``) are valid. The register APIs return and operate on ``VirtualRegister`` objects.
 
-A ``VirtualRegister`` represents a scalar value stored in a hardware register on the Trainium device. Unlike compile-time integer values, a ``VirtualRegister`` holds a value that exists at runtime. You can use a ``VirtualRegister`` as a loop bound for ``dynamic_range``, as a condition for a dynamic ``while`` loop, or as a ``scalar_offset`` in a tensor access pattern for dynamic indexing.
+A ``VirtualRegister`` represents a scalar value stored in a hardware register on the Trainium device. Unlike compile-time integer values, a ``VirtualRegister`` holds a value that exists at runtime. You can use a ``VirtualRegister`` as a loop bound for ``nl.fori_loop``, as a condition for ``nl.while_loop``, or as a ``scalar_offset`` in a tensor access pattern for dynamic indexing.
 
 .. note::
 
-   The induction variable of a ``dynamic_range`` loop is also a ``VirtualRegister``, but it is frozen: you cannot write to it with ``register_move`` or ``register_load``. This prevents ambiguity about whether modifying the induction variable would affect loop termination.
+   The induction variable of a ``nl.fori_loop`` loop is passed to the body by value. Writing to it has no effect on the loop; the loop controls iteration through its ``lower``, ``upper``, and ``step`` arguments.
 
 .. code-block:: python
 
@@ -546,7 +566,7 @@ A ``VirtualRegister`` represents a scalar value stored in a hardware register on
    # store the value of a register into an SBUF tensor
    def register_store(dst: tensor, src: VirtualRegister): ...
 
-Using the APIs above, we can also create dynamic while loops. A dynamic while loop is specified using the standard while-loop with a condition that is a single register value. The NKI compiler will preserve while loops with register conditions, and not unroll them.
+Using the APIs above, we can also create compiled while loops with ``nl.while_loop``. It takes an initial condition register and a body function. The body receives the current condition register and returns the condition register for the next iteration. The loop runs while that register is non-zero, and the compiler does not unroll it.
 
 .. code-block:: python
 
@@ -556,31 +576,33 @@ Using the APIs above, we can also create dynamic while loops. A dynamic while lo
    # allocate a register with initial value 1
    reg = nisa.register_alloc(1)
 
-   # This while loop is dynamic because the condition is a register
-   while reg:
+   def body(r):
       # perform a calculation that updates cond
       nisa.dma_copy(dst=cond, ...)
 
       # update register used in while-loop condition
-      nisa.register_load(reg, cond)
+      nisa.register_load(r, cond)
+      return r
 
-The code above uses a 1x1 SBUF tensor called cond to store the condition. We update this tensor in the body of the loop and then use register_load to update the register. When the register reg holds the value 0 the loop will terminate.
+   nl.while_loop(reg, body)
+
+The code above uses a 1x1 SBUF tensor called cond to store the condition. We update this tensor in the body of the loop and then use register_load to update the register. When the register holds the value 0 the loop will terminate. See :ref:`nki-loops` for the full rules for compiled loops.
 
 Class Support
 --------------
 
-NKI has basic support for user-defined classes. In NKI all classes are similar to Python data classes. When you declare a class for use in a NKI kernel, the class must inherit from NKIObject and no other classes. This restriction is to ensure the NKI compiler only brings in class definitions that are intended for NKI. A simple NKI class can be declared similar to a Python data class:
+NKI supports user-defined classes. Because specialization traces the kernel code with Python, classes used in a kernel follow Python rules: classes can inherit from other user-defined classes and call ``super()``. With ``NKI_COMPILER_FRONTEND=custom``, the NKI meta-programming language of earlier releases applies instead, and classes cannot inherit from other user-defined classes. A simple NKI class can be declared similar to a Python data class:
 
 .. code-block:: python
 
-   @dataclass 
-   class C(NKIObject):
+   @dataclass
+   class C:
      x : int
      y : bool = False
-     
+
      def toggle(self):
        self.y = not self.y
-       
+
    c = C(1)
    c.toggle()
 
@@ -605,7 +627,7 @@ Classes can be declared in Python and passed as arguments to NKI functions. When
 
 .. code-block:: python
 
-   class A(NKIObject):
+   class A:
      x : int = 1
      def __init__(self, x):
        self.x = x
@@ -642,18 +664,18 @@ In addition to the basic data classes described, NKI also supports basic enumera
      if e == E.x: ...
      elif e == E.y: ...
      elif e == E.z: ...
-     
+
    f(E.x)
 
 Similar to Python, the NKI compiler will translate the enumeration class E to the following:
 
 .. code-block:: python
 
-   class E(NKIObject):
+   class E:
      x = E("x", 1)
      y = E("y", 2)
      z = E("z", 3)
-     
+
      def __init__(self, name, value):
        self.name = name
        self.value = value
@@ -696,19 +718,7 @@ For example, consider a generic tiled processing kernel that applies a user-supp
 
 During specialization, the compiler inlines ``tiled_process`` and then inlines the specific ``tile_fn`` (either ``my_activation`` or ``my_scale``) at each call site. The result is a fully specialized kernel with no function call overhead.
 
-This pattern is especially useful for building mega-kernels that compose multiple operations. You can pass function references as hyperparameters when using the kernel builder API:
-
-.. code-block:: python
-
-   from nki.compiler.kernel_builder import compile_kernel
-
-   compile_kernel(
-       tiled_process,
-       inputs={"input_tensor": input_array},
-       outputs={"output_tensor": output_array},
-       compile_opts=opts,
-       tile_fn=my_activation,  # passed as a hyperparameter
-   )
+This pattern is especially useful for building mega-kernels that compose multiple operations.
 
 Functions can also be stored in data structures, returned from other functions, and selected dynamically at specialization time based on compile-time conditions:
 

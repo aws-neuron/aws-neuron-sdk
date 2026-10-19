@@ -603,10 +603,11 @@ def hlpr_os_packages_first_setup(nr_setup):
     str += '\n# Configure Linux for Neuron repository updates' + '\n'
     if nr_setup.os == 'ubuntu':
         str += '. /etc/os-release' + '\n'
+        str += 'sudo install -m 0755 -d /etc/apt/keyrings' + '\n'
+        str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/neuron.gpg' + '\n'
         str += 'sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF' + '\n'
-        str += 'deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
+        str += 'deb [signed-by=/etc/apt/keyrings/neuron.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main' + '\n'
         str += 'EOF' + '\n'
-        str += 'wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -' + '\n'
     elif nr_setup.os == 'amazonlinux':
         str += 'sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF' + '\n'
         str += '[neuron]' + '\n'

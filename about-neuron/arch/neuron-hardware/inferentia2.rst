@@ -37,8 +37,8 @@ Each Inferentia2 chip consists of:
 | Programmability                  | Inferentia2 supports dynamic     |
 |                                  | shapes and control flow, via ISA |
 |                                  | extensions of NeuronCore-v2 and  |
-|                                  | :ref:`custom-operators           |
-|                                  | <feature-custom-c++-operators>`  |
+|                                  | custom operators                 |
+|                                  |                                  |
 |                                  | via the deeply embedded GPSIMD   |
 |                                  | engines.                         |
 +----------------------------------+----------------------------------+

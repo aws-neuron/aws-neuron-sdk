@@ -1,8 +1,8 @@
 # DCP (Decode Context Parallelism)
 
-<!-- meta: description: Decode Context Parallelism design -->
+<!-- meta: description: Design of Decode Context Parallelism (DCP) for Neuron vLLM, which shards the KV cache along the sequence dimension across ranks to reduce per-rank memory for long-context inference. Covers the DCP prefill and decode modes, their process-group topologies, CP-aware slot mapping, LSE-corrected segmented attention, and disaggregated-inference (NIXL) KV transfer between prefill and decode. -->
 <!-- meta: content_type: conceptual-deep-dive -->
-<!-- meta: date_updated: 2026-07-13 -->
+<!-- meta: date_updated: 2026-08-13 -->
 
 ## Overview
 
@@ -19,6 +19,7 @@ DCP shards the KV cache sequence dimension across ranks, reducing per-rank memor
 vllm serve <model> \
     --tensor-parallel-size 8 \
     --decode-context-parallel-size 4 \
+    --block-size 16 \
     --cp-kv-cache-interleave-size 16 \
     --additional-config '{"neuron_config": {"apply_prefill_dcp": true}}'
 ```
@@ -27,7 +28,10 @@ vllm serve <model> \
 
 - `TP % DCP == 0`
 - `apply_prefill_dcp` requires DI (kv_role=kv_producer) and DCP > 1
-- `cp_kv_cache_interleave_size` must equal `block_size` for DI compatibility
+- `cp_kv_cache_interleave_size` must equal `block_size`, and this is now enforced at
+  startup for every DCP config, not only under DI. vLLM defaults the interleave size
+  to 1 while Neuron defaults `block_size` to 32, so DCP runs must set both flags to
+  the same value (as the command above does)
 
 ### Process Groups (TP=8, DCP=4)
 
@@ -78,6 +82,7 @@ cp_rank = tp_rank // (TP/DCP):
 vllm serve <model> \
     --tensor-parallel-size 16 \
     --decode-context-parallel-size 2 \
+    --block-size 16 \
     --cp-kv-cache-interleave-size 16
 ```
 
@@ -87,7 +92,8 @@ vllm serve <model> \
 - `dcp <= tp // num_kv_heads`
 - `(num_q_heads // num_kv_heads) % dcp == 0`
 - `tp % dcp == 0`
-- DCP cannot currently be combined with attention DP
+- `cp_kv_cache_interleave_size == block_size`, enforced at startup (see above)
+- Speculative decoding is rejected: DCP ownership assumes one active token per request
 
 ### Process Groups (TP=16, DCP=2)
 

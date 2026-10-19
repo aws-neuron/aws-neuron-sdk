@@ -67,8 +67,8 @@ downloaded automatically on first run into the mounted cache. For I2V, download
 
 The parallelism layout and diffusion settings live in a stage-config YAML, not on the
 command line. The entry scripts default to
-[`examples/wan22/wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml) (T2V) and
-[`examples/wan22/wan22_i2v_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_i2v_stage.yaml) (I2V);
+[`examples/wan22/wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml) (T2V) and
+[`examples/wan22/wan22_i2v_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_i2v_stage.yaml) (I2V);
 override with `--stage-config`. The default 64-core T2V config is:
 
 ```yaml
@@ -111,7 +111,7 @@ sudo docker exec vllm-omni-neuron python /workspace/plugin/examples/wan22/run.py
   --output 480P.mp4
 ```
 
-720P generation (1280x720) uses the [720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml), with VAE tiling and 32-way VAE patch parallelism:
+720P generation (1280x720) uses the [720P stage config](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage_tp4cp8cfg2_720p.yaml), with VAE tiling and 32-way VAE patch parallelism:
 
 ```bash
 sudo docker exec vllm-omni-neuron python /workspace/plugin/examples/wan22/run.py \
@@ -135,7 +135,7 @@ sudo docker exec vllm-omni-neuron python /workspace/plugin/examples/wan22/run_i2
 
 ```bash
 sudo docker exec vllm-omni-neuron python /workspace/plugin/examples/wan22/run_i2v.py \
-  --stage-config /workspace/plugin/test/neuron/configs/wan22_i2v_stage_tp8cp4cfg1_720p.yaml \
+  --stage-config /workspace/plugin/examples/wan22/wan22_i2v_stage_tp8cp4cfg1_720p.yaml \
   --image /workspace/plugin/examples/wan22/i2v_input.JPG \
   --num-frames 81 --height 720 --width 1280 \
   --output i2v_720P.mp4

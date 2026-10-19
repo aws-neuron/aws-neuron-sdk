@@ -62,7 +62,7 @@ spec](#grounding-in-an-output-spec)**, **[set quality via the denoising
 loop](#the-denoising-loop-low-quality-to-high-quality)**, and **[choose a parallelism
 scheme](#choosing-a-parallelism-scheme)**. It assumes the model is already running —
 see the [model card](../models/wan22-t2v-14b.md),
-[`run.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/run.py), and [`README.md`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/README.md).
+[`run.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/run.py), and [vLLM Omni Neuron README](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/README.md).
 
 ## Grounding in an output spec
 
@@ -299,7 +299,7 @@ speedup = t_seq / t_cfgp = 2 / (1 + ε),   where ε = t_gather / t_dit
 ```
 
 The overhead `ε` is small by construction. The gather-combine
-([`cfg_parallel.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/vllm_omni_neuron/diffusion/distributed/cfg_parallel.py))
+([`cfg_parallel.py`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/vllm_omni_neuron/diffusion/distributed/cfg_parallel.py))
 all-gathers the predicted-noise **latent** — shape `[B, C, T_lat, H_lat, W_lat]`, ≈ 4.2 MB
 at 480P in BF16 — **once per step**, in its own fullgraph NEFF. Compare that to one DiT
 pass: 40 layers, each moving `S · hidden` activations and running the per-layer ring K/V
@@ -336,7 +336,7 @@ Apply the rule to a 64-core budget:
    `S = 32,760` is divisible by 8. ✅
 
 That derivation lands on `TP=4 × CP=8 × CFG=2 = 64` — the base
-[`wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/release-0.24.0.0.1.0/examples/wan22/wan22_stage.yaml):
+[`wan22_stage.yaml`](https://github.com/aws-neuron/vllm-omni-neuron/blob/main/examples/wan22/wan22_stage.yaml):
 
 ```yaml
 parallel_config:

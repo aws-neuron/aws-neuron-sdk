@@ -1,6 +1,6 @@
 .. meta::
     :description: MoE CTE kernel implements Mixture of Experts MLP optimized for Context Encoding.
-    :date-modified: 08/17/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.moe_cte
 
@@ -40,74 +40,75 @@ The unified ``moe_cte`` entry point dispatches to the appropriate implementation
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `moe_cte.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/moe/moe_cte/moe_cte.py>`_
+**Source code for this kernel API can be found at**: `moe_cte.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/moe/moe_cte/moe_cte.py>`_
 
 moe_cte
 ^^^^^^^^
 
-.. py:function:: moe_cte(hidden_states: nl.ndarray, expert_affinities_masked: nl.ndarray, gate_up_proj_weight: nl.ndarray, down_proj_weight: nl.ndarray, token_position_to_id: nl.ndarray, block_to_expert: nl.ndarray, block_size: int, spec: MoECTESpec, conditions: Optional[nl.ndarray] = None, gate_and_up_proj_bias: Optional[nl.ndarray] = None, down_proj_bias: Optional[nl.ndarray] = None, quantization_config: Optional[QuantizationConfig] = None, gate_up_proj_scale: Optional[nl.ndarray] = None, down_proj_scale: Optional[nl.ndarray] = None, gate_up_activations_T: Optional[nl.ndarray] = None, down_activations: Optional[nl.ndarray] = None, activation_function: ActFnType = ActFnType.SiLU, skip_dma: Optional[SkipMode] = None, compute_dtype: Any = nl.bfloat16, is_tensor_update_accumulating: bool = True, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.POST_SCALE, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, gate_up_in_scale: Optional[nl.ndarray] = None, down_in_scale: Optional[nl.ndarray] = None, accumulation_dtype=None, skip_gate_proj: bool = False)
+.. py:function:: moe_cte(hidden_states: nl.NkiTensor, expert_affinities_masked: nl.NkiTensor, gate_up_proj_weight: nl.NkiTensor, down_proj_weight: nl.NkiTensor, token_position_to_id: nl.NkiTensor, block_to_expert: nl.NkiTensor, block_size: int, spec: MoECTESpec, conditions: Optional[nl.NkiTensor] = None, gate_and_up_proj_bias: Optional[nl.NkiTensor] = None, down_proj_bias: Optional[nl.NkiTensor] = None, quantization_config: Optional[QuantizationConfig] = None, gate_up_proj_scale: Optional[nl.NkiTensor] = None, down_proj_scale: Optional[nl.NkiTensor] = None, gate_up_activations_T: Optional[nl.NkiTensor] = None, down_activations: Optional[nl.NkiTensor] = None, activation_function: ActFnType = ActFnType.SiLU, skip_dma: Optional[SkipMode] = None, compute_dtype: Any = nl.bfloat16, is_tensor_update_accumulating: bool = True, expert_affinities_scaling_mode: ExpertAffinityScaleMode = ExpertAffinityScaleMode.POST_SCALE, gate_clamp_upper_limit: Optional[float] = None, gate_clamp_lower_limit: Optional[float] = None, up_clamp_upper_limit: Optional[float] = None, up_clamp_lower_limit: Optional[float] = None, gate_up_in_scale: Optional[nl.NkiTensor] = None, down_in_scale: Optional[nl.NkiTensor] = None, ep_rank: Optional[nl.NkiTensor] = None, accumulation_dtype = None, skip_gate_proj: bool = False)
 
    Unified entry point for MoE CTE blockwise matrix multiplication kernels.
 
    Dispatches to the appropriate implementation based on ``spec.implementation``. Supports multiple
    sharding strategies and quantization modes for different hardware targets.
 
-   :param hidden_states: Input hidden states tensor with shape ``[T+1, H]`` in HBM. T+1 because padding token position is set to T.
-   :type hidden_states: ``nl.ndarray``
-   :param expert_affinities_masked: Expert affinities for each token with shape ``[(T+1) * E, 1]`` in HBM
-   :type expert_affinities_masked: ``nl.ndarray``
-   :param gate_up_proj_weight: Concatenated gate and up projection weights with shape ``[E, H, 2, I_TP]`` in HBM
-   :type gate_up_proj_weight: ``nl.ndarray``
-   :param down_proj_weight: Down projection weights with shape ``[E, I_TP, H]`` in HBM
-   :type down_proj_weight: ``nl.ndarray``
-   :param token_position_to_id: Block index of corresponding tokens with shape ``[N * B]`` in HBM. Includes padding tokens (N * B >= T). Padding token id is set to T.
-   :type token_position_to_id: ``nl.ndarray``
-   :param block_to_expert: Expert indices of corresponding blocks with shape ``[N, 1]`` in HBM
-   :type block_to_expert: ``nl.ndarray``
-   :param block_size: Number of tokens per block (must be multiple of 256)
+   :param hidden_states: [T+1, H], Input token embeddings in HBM
+   :type hidden_states: ``nl.NkiTensor``
+   :param expert_affinities_masked: [(T+1)*E, 1], Expert routing weights in HBM
+   :type expert_affinities_masked: ``nl.NkiTensor``
+   :param gate_up_proj_weight: [E, H, 2, I_TP], Gate and up projection weights in HBM
+   :type gate_up_proj_weight: ``nl.NkiTensor``
+   :param down_proj_weight: [E, I_TP, H], Down projection weights in HBM
+   :type down_proj_weight: ``nl.NkiTensor``
+   :param token_position_to_id: [N*B], Token to block position mapping in HBM
+   :type token_position_to_id: ``nl.NkiTensor``
+   :param block_to_expert: [N, 1], Expert assignment per block in HBM
+   :type block_to_expert: ``nl.NkiTensor``
+   :param block_size: Number of tokens per block
    :type block_size: ``int``
-   :param spec: Implementation selection and configuration. Controls which sharding strategy and implementation variant to use. See ``MoECTESpec`` for details.
+   :param spec: Implementation selection and configuration
    :type spec: ``MoECTESpec``
-   :param conditions: Block padding indicators with shape ``[N+1]``. Used by hybrid and block_mx implementations to distinguish padded vs non-padded blocks.
-   :type conditions: ``nl.ndarray``, optional
-   :param gate_and_up_proj_bias: Gate and up projection bias with shape ``[E, 2, I_TP]``. For SiLU, up_bias = up_bias + 1.
-   :type gate_and_up_proj_bias: ``nl.ndarray``, optional
-   :param down_proj_bias: Down projection bias with shape ``[E, H]``
-   :type down_proj_bias: ``nl.ndarray``, optional
-   :param quantization_config: Quantization scales configuration containing ``gate_up_proj_scale`` and ``down_proj_scale`` for weight dequantization. See ``QuantizationConfig`` for details.
-   :type quantization_config: ``QuantizationConfig``, optional
-   :param gate_up_proj_scale: Direct scale tensor for gate/up weights. Takes precedence over ``quantization_config``. Use for MX quantization to avoid wrapping tensors in dataclass (NKI tracer limitation).
-   :type gate_up_proj_scale: ``nl.ndarray``, optional
-   :param down_proj_scale: Direct scale tensor for down weights. Takes precedence over ``quantization_config``.
-   :type down_proj_scale: ``nl.ndarray``, optional
-   :param gate_up_activations_T: Pre-allocated storage for gate/up activations (for activation checkpointing). Used when ``spec.shard_on_I.checkpoint_activation=True``.
-   :type gate_up_activations_T: ``nl.ndarray``, optional
-   :param down_activations: Pre-allocated storage for down projection activations (for activation checkpointing). Used when ``spec.shard_on_I.checkpoint_activation=True``.
-   :type down_activations: ``nl.ndarray``, optional
-   :param activation_function: Activation function for MLP block. Default is ``SiLU``.
+   :param conditions: [N+1], Block padding indicators (HYBRID, BLOCK_MX)
+   :type conditions: ``Optional[nl.NkiTensor]``
+   :param gate_and_up_proj_bias: Bias for gate/up projections
+   :type gate_and_up_proj_bias: ``Optional[nl.NkiTensor]``
+   :param down_proj_bias: Bias for down projection
+   :type down_proj_bias: ``Optional[nl.NkiTensor]``
+   :param quantization_config: Quantization scales configuration
+   :type quantization_config: ``Optional[QuantizationConfig]``
+   :param gate_up_proj_scale: Direct scale tensor for gate/up weights. Takes precedence over quantization_config. Use for MX quantization to avoid wrapping tensors in dataclass (NKI tracer limitation). Under STATIC_MX this instead carries the per-expert gate/up weight scales as [E, 2, 1].
+   :type gate_up_proj_scale: ``Optional[nl.NkiTensor]``
+   :param down_proj_scale: Direct scale tensor for down weights. Takes precedence over quantization_config. Under STATIC_MX this instead carries the per-expert down weight scale as [E, 1].
+   :type down_proj_scale: ``Optional[nl.NkiTensor]``
+   :param gate_up_activations_T: Storage for gate/up activations
+   :type gate_up_activations_T: ``Optional[nl.NkiTensor]``
+   :param down_activations: Storage for down activations
+   :type down_activations: ``Optional[nl.NkiTensor]``
+   :param activation_function: Activation function type (default: SiLU)
    :type activation_function: ``ActFnType``
-   :param skip_dma: DMA skip mode configuration. Default is ``SkipMode(False, False)``.
-   :type skip_dma: ``SkipMode``
-   :param compute_dtype: Compute data type. Default is ``nl.bfloat16``.
-   :type compute_dtype: ``nl.dtype``
-   :param is_tensor_update_accumulating: Whether to accumulate results over multiple blocks. Default is ``True``.
+   :param skip_dma: DMA skip configuration
+   :type skip_dma: ``Optional[SkipMode]``
+   :param compute_dtype: Data type for computations (default: bfloat16)
+   :type compute_dtype: ``Any``
+   :param is_tensor_update_accumulating: Enable accumulation for TopK > 1
    :type is_tensor_update_accumulating: ``bool``
-   :param expert_affinities_scaling_mode: Post or pre scaling mode. Default is ``POST_SCALE``.
+   :param expert_affinities_scaling_mode: Affinity scaling mode
    :type expert_affinities_scaling_mode: ``ExpertAffinityScaleMode``
-   :param gate_clamp_upper_limit: Upper clamp limit for gate projection
-   :type gate_clamp_upper_limit: ``float``, optional
-   :param gate_clamp_lower_limit: Lower clamp limit for gate projection
-   :type gate_clamp_lower_limit: ``float``, optional
-   :param up_clamp_upper_limit: Upper clamp limit for up projection
-   :type up_clamp_upper_limit: ``float``, optional
-   :param up_clamp_lower_limit: Lower clamp limit for up projection
-
+   :param gate_clamp_upper_limit: Upper clamp for gate projection
+   :type gate_clamp_upper_limit: ``Optional[float]``
+   :param gate_clamp_lower_limit: Lower clamp for gate projection
+   :type gate_clamp_lower_limit: ``Optional[float]``
+   :param up_clamp_upper_limit: Upper clamp for up projection
+   :type up_clamp_upper_limit: ``Optional[float]``
+   :param up_clamp_lower_limit: Lower clamp for up projection gate_up_in_scale, down_in_scale (nl.NkiTensor, optional): Per-expert STATIC_MX input quant scales for the gate/up and down projections respectively. Only used by shard_on_block_mx under STATIC_MX. (The matching weight dequant scales reuse gate_up_proj_scale / down_proj_scale.)
+   :type up_clamp_lower_limit: ``Optional[float]``
+   :param ep_rank: ``[1, 1]`` int32 expert-parallel rank of this instance. Used by the shard-on-block MX path and required with packed affinities; the global expert base is derived as ``ep_rank * E_local``.
+   :type ep_rank: ``Optional[nl.NkiTensor]``
    :param accumulation_dtype: Optional dtype for matmul accumulation. Defaults to ``None`` (use the kernel default).
-
    :param skip_gate_proj: When ``True``, skip the gate projection (up-only MLP). Default: ``False``.
-   :type up_clamp_lower_limit: ``float``, optional
-   :return: Output hidden states with shape ``[T+1, H]``. When activation checkpointing is enabled, may return a tuple including saved activations.
-   :rtype: ``nl.ndarray`` or ``Tuple[nl.ndarray, ...]``
+   :type skip_gate_proj: ``bool``
+   :return: Expert-processed token representations in HBM
+   :rtype: ``nl.NkiTensor``
 
    **Dimensions**:
 

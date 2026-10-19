@@ -16,9 +16,6 @@ and accuracy validation.
 By the end of this tutorial you will have a working NxD Inference implementation of
 your model that passes a 95% greedy token match against the HuggingFace reference.
 
-.. contents:: Table of contents
-   :local:
-   :depth: 2
 
 Prerequisites
 -------------

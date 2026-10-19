@@ -10,7 +10,6 @@
 Profile Parquet Schema Reference
 ================================
 
-All of the available Neuron Explorer metrics are viewable as Parquet files.
 When Neuron Explorer processes a profile it writes the results as a set of
 `Parquet <https://parquet.apache.org/>`_ tables (``Summary.parquet``,
 ``Instruction.parquet``, ``DmaPacket.parquet``, and so on). This page documents
@@ -19,7 +18,7 @@ every table and field in that output to assist in interpreting all the profile d
 The profile schema is defined as an OpenAPI document that is embedded in the
 ``neuron-explorer`` binary. The :ref:`Schema Reference <profile-schema-reference-tables>`
 section below is generated directly from that definition, so it matches exactly
-what ``neuron-explorer view --show-profile-schema`` prints. This page reflects schema version ``7.4.0`` released in version **2.31.0** of the Neuron SDK.
+what ``neuron-explorer view --show-profile-schema`` prints. This page reflects schema version ``12.0.1`` released in version **2.33.0** of the Neuron SDK.
 
 Getting the schema for your installed version
 ---------------------------------------------
@@ -75,13 +74,13 @@ read its rows:
      - Each is a directed edge between rows in timeline tables (e.g. an instruction and the DMA it triggered).
      - ``Flow``
    * - Hierarchical aggregation
-     - Each is a node in the compiler IR hierarchy (Framework → HLO → Penguin → BIR → Instruction), with rolled-up statistics.
+     - Each is a node in the compiler IR hierarchy (Framework → HLO → tensorizer → backend → Instruction), with rolled-up statistics.
      - ``FrameworkInstruction``, ``HloInstruction``, ``PenguinInstruction``, ``BirInstruction``, ``FrameworkNode``
    * - Aggregated summary
      - Each is a summary metric computed across the whole profile (or by some key).
      - ``Summary``, ``OpcodeSummary``, ``ThrottleSummary``, ``HbmUsageSummaryByType``
    * - Reference / lookup
-     - Each is a entity in the model or execution that other tables join to them by id to enrich rows without duplicating the detail.
+     - Each is an entity in the model or execution that other tables join to them by id to enrich rows without duplicating the detail.
      - ``TensorInfo``, ``DmaQueuesInfo``, ``CcStream``, ``StackFrame``, ``KernelInstructions``
    * - Profile metadata
      - Each describes a piece of profile metadata.
@@ -100,6 +99,28 @@ The output Parquet is also self-describing. After a profile is processed, the
 description, unit, and other metadata. This ``SchemaFields`` table contains the same
 information shown on this page, in a queryable format.
 
+Units and value ranges
+----------------------
+
+The **Unit** column gives each field's unit, and the description ends with the
+field's declared range where it has one.
+
+Fields whose names end in ``_percent`` are, with a few exceptions, **fractions
+between 0 and 1**, not percentages: ``0.45`` means 45%, and ``1.0`` means 100%.
+These show **fraction (0-1)** in the Unit column. The Neuron Explorer UI
+multiplies them by 100 for display, but the stored and printed values are the
+fractions. The exceptions are labelled explicitly: **percent (0-100)** is already
+a percentage, and a plain **fraction** has no upper bound and can exceed 1, as
+its description explains.
+
+In the ``SchemaFields`` table, both kinds carry ``field_unit`` ``percent``; read
+``field_maximum`` to tell them apart (``1`` for a fraction, ``100`` for a
+percentage).
+
+The ``Summary`` table holds the same metrics, under the same field names and on
+the same scale, that ``neuron-explorer view --output-format summary-json`` and
+``--output-format summary-text`` print, so this page also documents that output.
+
 .. _profile-schema-reference-tables:
 
 Schema Reference
@@ -107,7 +128,7 @@ Schema Reference
 
 The tables and enums below are generated from the Neuron Explorer's OpenAPI schema definition,
 which describes all profile data.
-For each field, if the **Type** column has references an enum, it will be linked.
+For each field, if the **Type** column references an enum, it will be linked.
 The **Unit** column gives the measurement unit where one applies.
 And the **Required** indicates whether the field is always present.
 
@@ -120,22 +141,28 @@ And the **Required** indicates whether the field is always present.
 * :ref:`CcInstruction <profile-schema-ccinstruction>`
 * :ref:`CcOp <profile-schema-ccop>`
 * :ref:`CcStream <profile-schema-ccstream>`
+* :ref:`CompilerEnvVars <profile-schema-compilerenvvars>`
+* :ref:`CompilerFlags <profile-schema-compilerflags>`
 * :ref:`CoreBarriers <profile-schema-corebarriers>`
 * :ref:`CpuUsage <profile-schema-cpuusage>`
 * :ref:`DeviceProfileList <profile-schema-deviceprofilelist>`
+* :ref:`DgePhaseGroup <profile-schema-dgephasegroup>`
 * :ref:`DmaPacket <profile-schema-dmapacket>`
 * :ref:`DmaPacketAggregated <profile-schema-dmapacketaggregated>`
 * :ref:`DmaQueuesInfo <profile-schema-dmaqueuesinfo>`
 * :ref:`DmaUsage <profile-schema-dmausage>`
 * :ref:`DmaUsageSummary <profile-schema-dmausagesummary>`
+* :ref:`DtypeSummary <profile-schema-dtypesummary>`
 * :ref:`Error <profile-schema-error>`
 * :ref:`ExecutionInfo <profile-schema-executioninfo>`
 * :ref:`Flow <profile-schema-flow>`
 * :ref:`FrameworkInstruction <profile-schema-frameworkinstruction>`
 * :ref:`FrameworkNode <profile-schema-frameworknode>`
+* :ref:`HbmAllocation <profile-schema-hbmallocation>`
 * :ref:`HbmUsage <profile-schema-hbmusage>`
 * :ref:`HbmUsageSummaryByType <profile-schema-hbmusagesummarybytype>`
 * :ref:`HloInstruction <profile-schema-hloinstruction>`
+* :ref:`HostDeviceDmaUsage <profile-schema-hostdevicedmausage>`
 * :ref:`HostMemUsage <profile-schema-hostmemusage>`
 * :ref:`Instruction <profile-schema-instruction>`
 * :ref:`KernelInstructions <profile-schema-kernelinstructions>`
@@ -146,6 +173,7 @@ And the **Required** indicates whether the field is always present.
 * :ref:`MemoryBandwidthSeries <profile-schema-memorybandwidthseries>`
 * :ref:`Metadata <profile-schema-metadata>`
 * :ref:`NeffHeader <profile-schema-neffheader>`
+* :ref:`NkiKernelCallSites <profile-schema-nkikernelcallsites>`
 * :ref:`OpcodeSummary <profile-schema-opcodesummary>`
 * :ref:`PendingDma <profile-schema-pendingdma>`
 * :ref:`PenguinInstruction <profile-schema-penguininstruction>`
@@ -154,6 +182,8 @@ And the **Required** indicates whether the field is always present.
 * :ref:`SbufUsage <profile-schema-sbufusage>`
 * :ref:`SchemaFields <profile-schema-schemafields>`
 * :ref:`SemaphoreUpdate <profile-schema-semaphoreupdate>`
+* :ref:`SnapshotAllocation <profile-schema-snapshotallocation>`
+* :ref:`SnapshotSegment <profile-schema-snapshotsegment>`
 * :ref:`StackFrame <profile-schema-stackframe>`
 * :ref:`StackFrameFileLocation <profile-schema-stackframefilelocation>`
 * :ref:`StackFrameFileName <profile-schema-stackframefilename>`
@@ -165,14 +195,20 @@ And the **Required** indicates whether the field is always present.
 * :ref:`TensorInfo <profile-schema-tensorinfo>`
 * :ref:`Throttle <profile-schema-throttle>`
 * :ref:`ThrottleSummary <profile-schema-throttlesummary>`
+* :ref:`TimelineAnnotation <profile-schema-timelineannotation>`
 * :ref:`Warning <profile-schema-warning>`
 
 **Enums**
 
+* :ref:`CaptureType <profile-schema-capturetype>`
+* :ref:`DataType <profile-schema-datatype>`
+* :ref:`DependencyType <profile-schema-dependencytype>`
 * :ref:`DmaQueueType <profile-schema-dmaqueuetype>`
 * :ref:`ErrorType <profile-schema-errortype>`
+* :ref:`ExecutionUnit <profile-schema-executionunit>`
 * :ref:`MemoryBandwidthDirection <profile-schema-memorybandwidthdirection>`
 * :ref:`PerformanceMode <profile-schema-performancemode>`
+* :ref:`SpillType <profile-schema-spilltype>`
 
 Tables
 ------
@@ -224,7 +260,7 @@ A timeline of when engines are active. Engines are considered active when it is 
 AssemblyInstruction
 ~~~~~~~~~~~~~~~~~~~
 
-Assembly instructions from the NEFF. These are lower level instructions than BIR instructions. Each BIR instruction can map to multiple assembly instructions. This table is only used by perf_sim profiles, which are performance simulations of the NeuronCore at the schedulers level.
+Assembly instructions from the NEFF. These are lower level instructions than backend-level instructions. Each backend-level instruction can map to multiple assembly instructions. This table is only used by perf_sim profiles, which are performance simulations of the NeuronCore at the schedulers level.
 
 .. list-table::
    :header-rows: 1
@@ -239,7 +275,7 @@ Assembly instructions from the NEFF. These are lower level instructions than BIR
      - integer (int64)
      - 
      - Yes
-     - Foreign key reference to the parent Instruction.id. Links this assembly instruction to its parent BIR instruction.
+     - Foreign key reference to the parent Instruction.id. Links this assembly instruction to its parent backend-level instruction.
    * - ``compiler_opcode``
      - string
      - 
@@ -261,7 +297,7 @@ Assembly instructions from the NEFF. These are lower level instructions than BIR
 BirInstruction
 ~~~~~~~~~~~~~~
 
-BIR level instruction information for displaying hierarchy graph. Parent level is penguin level, child level is instruction level.
+Backend-level instruction information for displaying hierarchy graph. Parent level is tensorizer level, child level is instruction level.
 
 .. list-table::
    :header-rows: 1
@@ -281,12 +317,12 @@ BIR level instruction information for displaying hierarchy graph. Parent level i
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for bir level instruction.
+     - Unique identifier for backend-level instruction.
    * - ``raw_penguin_id``
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for penguin level instruction.
+     - Unique identifier for tensorizer-level instruction.
    * - ``raw_hlo_id``
      - integer (int64)
      - 
@@ -301,7 +337,7 @@ BIR level instruction information for displaying hierarchy graph. Parent level i
      - string
      - 
      - Yes
-     - BIR instruction name. Example: ``I-1347-2_sg0000``.
+     - Backend-level instruction name. Example: ``I-1347-2_sg0000``.
    * - ``modular_flow_invocation_idx``
      - integer (int64)
      - 
@@ -346,27 +382,27 @@ BIR level instruction information for displaying hierarchy graph. Parent level i
      - integer (int64)
      - bytes
      - Yes
-     - Total number of bytes read from HBM by all grouped instructions in this BIR instruction.
+     - Total number of bytes read from HBM by all grouped instructions in this backend-level instruction.
    * - ``hbm_write_bytes``
      - integer (int64)
      - bytes
      - Yes
-     - Total number of bytes written to HBM by all grouped instructions in this BIR instruction.
+     - Total number of bytes written to HBM by all grouped instructions in this backend-level instruction.
    * - ``sbuf_read_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes read from SBUF by all grouped instructions in this BIR instruction.
+     - Total number of bytes read from SBUF by all grouped instructions in this backend-level instruction.
    * - ``sbuf_write_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes written to SBUF by all grouped instructions in this BIR instruction.
+     - Total number of bytes written to SBUF by all grouped instructions in this backend-level instruction.
    * - ``load_weight_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes loaded by LDWEIGHTS instructions in this BIR instruction.
+     - Total number of bytes loaded by LDWEIGHTS instructions in this backend-level instruction.
 
 .. _profile-schema-ccinstruction:
 
@@ -384,6 +420,11 @@ Collective Communication (CC) instructions that are executed by the CC-Cores.
      - Unit
      - Required
      - Description
+   * - ``execution_index``
+     - integer (int32)
+     - 
+     - No
+     - Zero-based index of the NEFF execution this instruction belongs to. Matches execution_index in ExecutionInfo, FrameworkNode, NkiKernelCallSites, and Instruction. Use to scope instructions to a specific execution within a multi-execution profile. Null on profiles ingested before this field existed.
    * - ``start_ts``
      - integer (int64)
      - nanoseconds
@@ -425,7 +466,7 @@ Collective Communication (CC) instructions that are executed by the CC-Cores.
 CcOp
 ~~~~
 
-Collective Communication (CC) operations that are executed by the collective engines.
+Collective Commmunication (CC) operations that are executed by the collective engines.
 
 .. list-table::
    :header-rows: 1
@@ -436,6 +477,11 @@ Collective Communication (CC) operations that are executed by the collective eng
      - Unit
      - Required
      - Description
+   * - ``id``
+     - integer (int64)
+     - 
+     - Yes
+     - Unique identifier for this collective operation within the profile. Used as in_id or out_id in the Flow table to link the operation to the instruction that triggered it. Derived from stream_id and start_ts, which together identify one row.
    * - ``start_ts``
      - integer (int64)
      - nanoseconds
@@ -474,8 +520,8 @@ Collective Communication (CC) operations that are executed by the collective eng
    * - ``op_id``
      - integer (int64)
      - 
-     - Yes
-     - ID of the collective operation.
+     - No
+     - ID of the collective operation. Absent on a barrier row, which is a synchronization marker rather than a collective operation and so has no id.
    * - ``stream_id``
      - integer (int64)
      - 
@@ -510,7 +556,7 @@ Collective Communication (CC) operations that are executed by the collective eng
      - number (float)
      - bytes_per_second
      - No
-     - The bus bandwidth of the collective operation. This number is obtained by applying a formula to the algorithm bandwidth to reflect the true speed of the collective communication operation. The formula is dependent on the operation and number of cores.
+     - The bus bandwidth of the collective operation. This number is obtained by applying a formula to the algorithm bandwidth to reflect the true speed of the collective communication operation. The formula is dependant on the operation and number of cores.
    * - ``trigger_start_ts``
      - integer (int64)
      - nanoseconds
@@ -531,6 +577,11 @@ Collective Communication (CC) operations that are executed by the collective eng
      - 
      - No
      - String representation of the participating ranks/devices in this collective operation, formatted as nested arrays showing the communication topology (e.g., "[[0, 1, 2, 3], [4, 5, 6, 7]]" for two groups of 4 devices each). Example: ``[[0, 1, 2, 3]]``.
+   * - ``src_target_pairs``
+     - string
+     - 
+     - No
+     - For explicit permute collectives, the directed source-to-target rank routing as a list of [source_rank, target_rank] pairs (e.g., "[[0, 1], [1, 0]]" means rank 0 sends to rank 1 and rank 1 sends to rank 0). Permute collectives set this instead of replica_group because they route between specific ranks rather than communicating over a symmetric group. Example: ``[[0, 1], [1, 0]]``.
 
 .. _profile-schema-ccstream:
 
@@ -563,6 +614,75 @@ Information about Collective Communication (CC) streams.
      - 
      - Yes
      - The CC-Core ids assigned to this stream. Example: ``[8,9,10,11]``.
+
+.. _profile-schema-compilerenvvars:
+
+CompilerEnvVars
+~~~~~~~~~~~~~~~
+
+Environment variables captured during NEFF compilation. Each row represents a single environment variable with its name, value, and whether it was explicitly set by the user.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``name``
+     - string
+     - 
+     - Yes
+     - The name of the environment variable. Example: ``NEURON_CC_FLAGS``.
+   * - ``value``
+     - string
+     - 
+     - Yes
+     - The current value of the environment variable. Example: ``--retry_failed_compilation``.
+   * - ``set``
+     - boolean
+     - 
+     - Yes
+     - Whether the environment variable was explicitly set by the user (true) or is using a system/default value (false). Example: ``true``.
+
+.. _profile-schema-compilerflags:
+
+CompilerFlags
+~~~~~~~~~~~~~
+
+Compiler flags used during NEFF compilation. Each row represents a single compiler flag with its name, value, default, and whether it was explicitly set by the user.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``name``
+     - string
+     - 
+     - Yes
+     - The name of the compiler flag. Example: ``optimize_level``.
+   * - ``value``
+     - string
+     - 
+     - Yes
+     - The current value of the compiler flag. Example: ``2``.
+   * - ``default``
+     - string
+     - 
+     - Yes
+     - The default value of the compiler flag. Example: ``1``.
+   * - ``set``
+     - boolean
+     - 
+     - Yes
+     - Whether the flag was explicitly set by the user (true) or is using its default value (false). Example: ``true``.
 
 .. _profile-schema-corebarriers:
 
@@ -600,6 +720,11 @@ Core barrier operations will synchronize a single compute engine across all phys
      - 
      - Yes
      - The compute engine that this core barrier operation corresponds to. Example: ``GpSimd``.
+   * - ``engine_instance_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - The compute engine index that this core barrier operation corresponds to. Default: ``0``.
    * - ``id``
      - integer (int64)
      - 
@@ -654,9 +779,9 @@ Host CPU utilization time-series metrics. Each row represents a CPU utilization 
      - Timestamp for this CPU utilization measurement.
    * - ``util_percent``
      - number (float)
-     - percent
+     - percent (0-100)
      - Yes
-     - CPU utilization percentage at this timestamp. Each CPU utilization value represents the average CPU utilization over the previous 1 second time period.
+     - CPU utilization percentage at this timestamp. Each CPU utilization value represents the average CPU utilization over the previous 1 second time period. Range: 0 to 100.
    * - ``cpu_id``
      - string
      - 
@@ -725,12 +850,64 @@ This table contains device profile information including device profile names, i
      - No
      - Unique model identifier for this profile. Present for model-based profiling.
 
+.. _profile-schema-dgephasegroup:
+
+DgePhaseGroup
+~~~~~~~~~~~~~
+
+A wrapping span that groups the GpSimd phase sub-bars (DGE_ALLGATHER, DGE_DESCS_BUILD) of a single indirect-DGE operation into one box. It spans from the first GpSimd phase entry to the parent indirect-DMA instruction's end, so the related GpSimd timeline spans render inside one box.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``start_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp the indirect-DGE phase group started (first GpSimd phase entry).
+   * - ``end_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp the indirect-DGE phase group completed (parent indirect-DMA instruction end).
+   * - ``duration_ns``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Duration of the indirect-DGE phase group.
+   * - ``engine_name``
+     - string
+     - 
+     - Yes
+     - The compute engine the phase group renders on. Always GpSimd for indirect-DGE. Example: ``GpSimd``.
+   * - ``id``
+     - integer (int64)
+     - 
+     - Yes
+     - Unique identifier for this phase group.
+   * - ``opcode``
+     - string
+     - 
+     - Yes
+     - Opcode of the parent indirect-DMA instruction this phase group wraps. Example: ``DMA_INDIRECT``.
+   * - ``pcore_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - Index of the physical NeuronCore within a Logical NeuronCore (LNC). A Logical NeuronCore is a group of physical NeuronCores. For LNC2 this field can have a value of either 0 or 1.
+
 .. _profile-schema-dmapacket:
 
 DmaPacket
 ~~~~~~~~~
 
-A DMA packet transfers data within a Neuron Device. A DMA packet typically transfers a portion of a tensor. Source and destination locations can be HBM, SBUF, or PSUM. The DMA packet traverses from the source location, over the AXI bus, to a DMA engine, over the AXI bus, and to the destination location. DMA packets correspond to an aggregated DMA via the packet_aggregation_id field in the DmaPacket table which corresponds to an id the DmaPacketAggregated table. The corresponding row in the DmaPacketAggregated table contains more information about a packet such as the source, destination, variable name, and other values that are the same for all packets in the aggregated set of DMA packets.
+A DMA packet represents a NeuronCore DMA transfer or a host-device DMA transfer, called H2D DMA by the runtime and driver. A NeuronCore DMA packet typically transfers a portion of a tensor. Its source and destination can be HBM or SBUF. The packet traverses from the source location, over the AXI bus, to a DMA engine, over the AXI bus, and to the destination location. A host-device DMA transfers data between host memory and device HBM accessible to a NeuronCore, in either direction. Common uses include transferring application data between host memory and HBM, fetching instructions, and handling work independently of NeuronCore DMA activity. Host-device DMA uses the same packet representation as NeuronCore DMA. When a matching DmaPacketAggregated row exists, packet_aggregation_id associates the packet with the aggregated transfer. The DmaPacketAggregated row records metadata shared by the packet set, including the source, destination, and variable name. Some DMA packets have no additional metadata in the DmaPacketAggregated table.
 
 .. list-table::
    :header-rows: 1
@@ -770,12 +947,17 @@ A DMA packet transfers data within a Neuron Device. A DMA packet typically trans
      - integer (int32)
      - 
      - Yes
-     - Index of the DMA packet within the set of DMA packets which fulfill a transfer of one or more tensors.
+     - Index of the DMA packet within the set of DMA packets which fulfill a transfer of one or more tensors. For host-device DMA, this is the packet's ordinal within its queue.
    * - ``packet_aggregation_id``
      - integer (int64)
      - 
+     - No
+     - Unique identifier of the corresponding row in the DmaPacketAggregated table. Each aggregated DMA represents the transfer of one or more tensors fulfilled on a Neuron Device by a set of DMA packets. The corresponding DmaPacketAggregated row contains more information about the packet, including the source, destination, variable name, and other values shared by the aggregated packet set. See the DmaPacketAggregated table for more details. This field is null when the packet has no aggregated DMA, which is the case for host-device DMA packets, packets on a DMA queue the NEFF does not describe, and packets the profiler could not attribute to a specific DGE instruction.
+   * - ``is_host_device_dma``
+     - boolean
+     - 
      - Yes
-     - Unique identifier of the row in the DmaPacketAggregated table that this packet is aggregated in. Each aggregated DMA represents the transfer of one or more tensors. The transfer is fulfilled on a Neuron Device by a set of DMA packets. See the DmaPacketAggregated table for more details. The row in the DmaPacketAggregated table with this packet_aggregation_id has more information about this packet such as the source, destination, variable name, and other values that are the same for all packets in the aggregated set of DMA packets.
+     - Whether this packet uses host-device DMA, called H2D DMA by the runtime and driver. Host-device DMA can transfer application data between host memory and NeuronCore-accessible HBM in either direction, fetch instructions, or handle work independently of NeuronCore DMA activity. Example: ``false``.
    * - ``engine_idx``
      - integer (int64)
      - 
@@ -804,13 +986,18 @@ A DMA packet transfers data within a Neuron Device. A DMA packet typically trans
    * - ``queue_type``
      - string (:ref:`DmaQueueType <profile-schema-dmaqueuetype>`)
      - 
-     - Yes
-     - The type of the DMA queue that this packet belongs to. Used to identify the origin, and contents of the DMA packet. 'software_dynamic' packets are generated by the Gpsimd cores. 'hardware_dynamic' packets are generated by dedicated DGE hardware. 'instruction', 'input', 'output', and 'data' packets are generated by the compiler. Allowed values: ``instruction``, ``input``, ``output``, ``data``, ``software_dynamic``, ``hardware_dynamic``, ``unknown``.
+     - No
+     - The type of the NeuronCore DMA queue that this packet belongs to. Used to identify the origin, and contents of the DMA packet. ``software_dynamic`` packets are generated by the Gpsimd cores. ``hardware_dynamic`` packets are generated by dedicated DGE hardware. ``instruction``, ``input``, ``output``, and ``data`` packets are generated by the compiler. Host-device DMA packets omit this field because they do not use a NeuronCore DMA queue. Allowed values: ``instruction``, ``input``, ``output``, ``data``, ``software_dynamic``, ``hardware_dynamic``, ``collectives``, ``unknown``.
    * - ``variable``
      - string
      - 
      - No
-     - Variable or tensor name associated with the data being transferred. Example: ``input_tensor``.
+     - Variable or tensor name. For a collectives DMA, this is the collective label '<operation>.<op_id>', or the queue name when no collective matches. Example: ``input_tensor``.
+   * - ``spill_type``
+     - string (:ref:`SpillType <profile-schema-spilltype>`)
+     - 
+     - No
+     - Set when this DMA packet is part of a compiler spill or reload, to 'save' (State Buffer -> HBM temp) or 'reload' (HBM temp -> State Buffer). Inherited from the packet's DMA, derived from source and dest. Allowed values: ``save``, ``reload``.
    * - ``queue_name``
      - string
      - 
@@ -826,13 +1013,23 @@ A DMA packet transfers data within a Neuron Device. A DMA packet typically trans
      - 
      - Yes
      - Cyclic Redundancy Check value for data integrity verification. Example: ``2847562039``.
+   * - ``packet_id``
+     - integer (int64)
+     - 
+     - No
+     - Hardware-assigned sequence number of this packet within its DMA queue, taken from the DMA engine's start notification. Present only when the hardware reports one.
+   * - ``seq_id``
+     - integer (int64)
+     - 
+     - No
+     - Identifier of the sequencer that issued this DMA, taken from the DMA engine's start notification. Present only when the hardware reports one.
 
 .. _profile-schema-dmapacketaggregated:
 
 DmaPacketAggregated
 ~~~~~~~~~~~~~~~~~~~
 
-Each row in this table represents an aggregation of a set DMA packets which together fulfil a transfer of one or more tensors. The duration of an aggregated DMA spans from the first start to the last end of the DMA packets in the set. The byte quantities of an aggregated DMA are the sum of the DMA packets in the set. An aggregated DMA has a unique id and a block_id that is only unique per combination of dma_engine, dma_queue, modular_flow_function, and pcore_idx. The id field in the DmaPacketAggregated table corresponds to the packet_aggregation_id field in the DmaPacket table, linking each DMA packet to its corresponding aggregated DMA.
+Each row in this table represents an aggregation of a set DMA packets which together fulfil a transfer of one or more tensors. The duration of an aggregated DMA spans from the first start to the last end of the DMA packets in the set. The byte quantities of an aggregated DMA are the sum of the DMA packets in the set. An aggregated DMA has a unique id and a block_id that is only unique per combination of dma_engine, dma_queue, modular_flow_function, and pcore_idx. The id field in the DmaPacketAggregated table corrosponds to the packet_aggregation_id field in the DmaPacket table, linking each DMA packet to its corresponding aggregated DMA.
 
 .. list-table::
    :header-rows: 1
@@ -862,7 +1059,7 @@ Each row in this table represents an aggregation of a set DMA packets which toge
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for this aggregated set of DMA packets.
+     - Unique identifier for this aggeregated set of DMA packets.
    * - ``pcore_idx``
      - integer (int64)
      - 
@@ -887,11 +1084,11 @@ Each row in this table represents an aggregation of a set DMA packets which toge
      - string (:ref:`DmaQueueType <profile-schema-dmaqueuetype>`)
      - 
      - No
-     - The type of the DMA queue that this packet belongs to. Used to identify the origin, and contents of the DMA packet. 'software_dynamic' packets are generated by the Gpsimd cores. 'hardware_dynamic' packets are generated by dedicated DGE hardware. 'instruction', 'input', 'output', and 'data' packets are generated by the compiler. Allowed values: ``instruction``, ``input``, ``output``, ``data``, ``software_dynamic``, ``hardware_dynamic``, ``unknown``.
+     - The type of the DMA queue that this packet belongs to. Used to identify the origin, and contents of the DMA packet. ``software_dynamic`` packets are generated by the Gpsimd cores. ``hardware_dynamic`` packets are generated by dedicated DGE hardware. ``instruction``, ``input``, ``output``, and ``data`` packets are generated by the compiler. Allowed values: ``instruction``, ``input``, ``output``, ``data``, ``software_dynamic``, ``hardware_dynamic``, ``collectives``, ``unknown``.
    * - ``op``
      - string
      - 
-     - Yes
+     - No
      - DMA operation type. Example: ``read``.
    * - ``variable``
      - string
@@ -928,6 +1125,11 @@ Each row in this table represents an aggregation of a set DMA packets which toge
      - 
      - Yes
      - Destination memory location(s) for the DMA transfer. Example: ``[OUTPUT]``.
+   * - ``spill_type``
+     - string (:ref:`SpillType <profile-schema-spilltype>`)
+     - 
+     - No
+     - Set when this DMA is a compiler spill or reload, to 'save' (State Buffer -> HBM temp) or 'reload' (HBM temp -> State Buffer). Derived from source and dest. Allowed values: ``save``, ``reload``.
    * - ``semaphore_id``
      - string
      - 
@@ -941,7 +1143,7 @@ Each row in this table represents an aggregation of a set DMA packets which toge
    * - ``read_sbuf_partitions``
      - string
      - 
-     - Yes
+     - No
      - State Buffer partitions read from during this DMA operation. Example: ``0,1``.
    * - ``read_num_sbuf_partitions``
      - integer (int32)
@@ -966,7 +1168,7 @@ Each row in this table represents an aggregation of a set DMA packets which toge
    * - ``write_sbuf_partitions``
      - string
      - 
-     - Yes
+     - No
      - State Buffer partitions written to during this DMA operation. Example: ``0-15``.
    * - ``write_num_sbuf_partitions``
      - integer (int32)
@@ -1163,12 +1365,69 @@ Pre-bucketed DMA usage metrics for fast query-time aggregation. Written during i
      - integer (int64)
      - 
      - Yes
-     - Number of raw rows aggregated into this bucket.
+     - Number of raw rows aggregated into this bucket. Minimum: 1.
    * - ``bucket_resolution_ns``
      - integer (int64)
      - nanoseconds
      - Yes
-     - The bucket resolution in nanoseconds used during ingestion.
+     - The bucket resolution in nanoseconds used during ingestion. Minimum: 1.
+
+.. _profile-schema-dtypesummary:
+
+DtypeSummary
+~~~~~~~~~~~~
+
+Summary of instruction counts and execution time grouped by compute engine and the data types of an instruction's operands. Each row represents one (engine, src1_dtype, src2_dtype, dst_dtype) combination. Source data types are stored positionally (src1 = first input operand, src2 = second input operand); single-input instructions leave src2_dtype unset. Consumers derive higher-level views from these rows, such as the source/destination data type pair and the marginal distributions per source and per destination data type.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``engine``
+     - string
+     - 
+     - Yes
+     - Compute engine that executed the instructions. Example: ``tensor``.
+   * - ``src1_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of the first input operand for instructions in this group. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``bf16``.
+   * - ``src2_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of the second input operand for instructions in this group. Unset for single-input instructions. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``bf16``.
+   * - ``dst_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of the output operand for instructions in this group. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``fp32``.
+   * - ``instruction_count``
+     - integer (int64)
+     - 
+     - Yes
+     - Total number of instructions with this engine and data type combination.
+   * - ``instruction_time_ns``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Total cumulative execution time of all instructions with this engine and data type combination. Overlapping instructions on the same engine are added together (not merged).
+   * - ``active_time_ns``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Duration of time when at least one instruction with this engine and data type combination is executing. Overlapping instructions are merged so that concurrent execution is counted only once.
+   * - ``active_time_percent``
+     - number (float)
+     - 
+     - Yes
+     - Percentage of total execution time when at least one instruction with this engine and data type combination is executing. Range: 0 to 1.
 
 .. _profile-schema-error:
 
@@ -1306,10 +1565,10 @@ Storing dependency information for rows in different or same table (such as betw
      - Yes
      - Table name for the output flow. Example: ``dma_block``.
    * - ``dependency_type``
-     - string
+     - string (:ref:`DependencyType <profile-schema-dependencytype>`)
      - 
      - No
-     - Type of dependency from the predecessor instruction. Example: ``FLOW_DEPENDENCE``.
+     - Kind of dependency edge from the input row to the output row. Absent when the kind is unknown. Allowed values: ``ORDERED``, ``ANTI_DEPENDENCE``, ``OUTPUT_DEPENDENCE``, ``FLOW_DEPENDENCE``, ``trigger``, ``completion``, ``DGE_TRIGGER``, ``SAME_PSUM_BANK``, ``INVALID``.
    * - ``gap_time``
      - integer (int64)
      - nanoseconds
@@ -1341,12 +1600,12 @@ Framework level instruction information. Instruction in this table has same form
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for bir level instruction.
+     - Unique identifier for backend-level instruction.
    * - ``raw_penguin_id``
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for penguin level instruction.
+     - Unique identifier for tensorizer-level instruction.
    * - ``raw_hlo_id``
      - integer (int64)
      - 
@@ -1380,7 +1639,7 @@ Framework level instruction information. Instruction in this table has same form
    * - ``time_intervals``
      - string
      - 
-     - Yes
+     - No
      - A list of timestamp intervals after merging all corresponding instruction timestamps from the lower hierarchy level. Each interval is represented as [start, end]. Example: ``[[1, 10], [20, 50]]``.
    * - ``element_count_per_interval``
      - array of integer (int64)
@@ -1464,6 +1723,11 @@ Framework hierarchy node information for displaying hierarchical structure of fr
      - Unit
      - Required
      - Description
+   * - ``execution_index``
+     - integer (int32)
+     - 
+     - Yes
+     - Zero-based index of the NEFF execution this node belongs to. Matches execution_index in ExecutionInfo and NkiKernelCallSites. Use to scope framework nodes to a specific execution within a multi-execution profile.
    * - ``node_name``
      - string
      - 
@@ -1477,7 +1741,7 @@ Framework hierarchy node information for displaying hierarchical structure of fr
    * - ``parent_name``
      - string
      - 
-     - Yes
+     - No
      - Name of the parent node in the hierarchy. Example: ``parent_node``.
    * - ``children_ids``
      - string
@@ -1516,14 +1780,14 @@ Framework hierarchy node information for displaying hierarchical structure of fr
      - Comma separated list where each item corresponds to the total number of HBM bytes transferred by a group of instructions from the lower hierarchy level. Each corresponds to the time interval in the same position in the time_intervals field. Example: ``[16384, 32768, 8192]``.
    * - ``hfu``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Hardware FLOPs Utilization (HFU) percentage calculated once for a single operator, as (total element counts including transposes / (TENSOR_NUM_ROWS \* TENSOR_NUM_COLS \* total duration in cycles)).
+     - Hardware FLOPs Utilization (HFU) percentage calculated once for a single operator, as (total element counts including transposes / (TENSOR_NUM_ROWS \* TENSOR_NUM_COLS \* total duration in cycles)). Range: 0 to 1.
    * - ``mfu``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Model FLOPs Utilization (MFU) percentage calculated once for a single operator, as (total element counts excluding transposes / (TENSOR_NUM_ROWS \* TENSOR_NUM_COLS \* total duration in cycles)).
+     - Model FLOPs Utilization (MFU) percentage calculated once for a single operator, as (total element counts excluding transposes / (TENSOR_NUM_ROWS \* TENSOR_NUM_COLS \* total duration in cycles)). Range: 0 to 1.
    * - ``hfu_per_interval``
      - string
      - 
@@ -1625,6 +1889,98 @@ Framework hierarchy node information for displaying hierarchical structure of fr
      - No
      - Total number of channels processed by DVE (Vector) engine instructions in this framework node.
 
+.. _profile-schema-hbmallocation:
+
+HbmAllocation
+~~~~~~~~~~~~~
+
+HBM (High Bandwidth Memory) allocation periods showing which physical address ranges are occupied over time. Built from nrt_dma_mem_alloc and nrt_dma_mem_dealloc system trace events to track per-allocation occupancy.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``start_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp when the HBM address range becomes allocated.
+   * - ``end_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp when the HBM address range becomes freed. Set to profile end timestamp if the allocation is never freed.
+   * - ``start_address``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Starting physical memory address of the allocated region (inclusive - first byte of allocation).
+   * - ``end_address``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Ending physical memory address of the allocated region (exclusive - start_address + size).
+   * - ``usage_type``
+     - string
+     - 
+     - Yes
+     - Category of memory usage for this allocation. Examples include Tensors, Weights, Scratchpad, Code, Collectives, DMA Rings. Example: ``Tensors``.
+   * - ``device_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - Neuron device index (MLA index) that this allocation belongs to.
+   * - ``hbm_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - HBM channel index within the device.
+   * - ``nc_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - NeuronCore index within the device.
+   * - ``tensor_name``
+     - string
+     - 
+     - No
+     - Name of the tensor or variable associated with this allocation (if available from debug info). Example: ``hidden_states``.
+   * - ``model_id``
+     - integer (int64)
+     - 
+     - No
+     - Model ID that owns this allocation (if available).
+   * - ``neff_name``
+     - string
+     - 
+     - No
+     - NEFF or operation name associated with this allocation (if available). Example: ``forward_pass``.
+   * - ``pcore_idx``
+     - integer (int64)
+     - 
+     - No
+     - Index of the physical NeuronCore within a Logical NeuronCore (LNC). For LNC2 this field can have a value of either 0 or 1.
+   * - ``trace_id``
+     - integer (int64)
+     - 
+     - No
+     - Systrace tracking_id correlation key. Matches the trace_id emitted in a PyTorch memory snapshot, linking this physical HBM allocation to a framework allocation. 0 when no correlation key was captured.
+   * - ``source_frames``
+     - string
+     - 
+     - No
+     - Newline-joined source call stack (innermost first) for the allocation, sourced from a correlated PyTorch memory snapshot. Empty when no snapshot correlation exists. Example: ``rms_norm_neuron (rms_norm.py:18)``.
+   * - ``virtual_address``
+     - integer (int64)
+     - bytes
+     - No
+     - Framework-visible virtual address of the allocation from a correlated PyTorch memory snapshot. 0 when unavailable (runtime-internal allocations only have a physical address).
+
 .. _profile-schema-hbmusage:
 
 HbmUsage
@@ -1655,7 +2011,7 @@ HBM time-series usage metrics such as throughput over time.
      - integer (int64)
      - bytes
      - Yes
-     - Total bytes transferred to/from HBM. This total is cumulative from the start of profiling to this timestamp.
+     - Total bytes transferred to/from HBM, cumulative from the start of profiling to this timestamp. Each DMA transfer contributes the bytes it read when its source was in HBM plus the bytes it wrote when its destination was in HBM, so a transfer from HBM to HBM contributes both and one from SBUF to SBUF contributes neither. Summary.hbm_read_bytes and Summary.hbm_write_bytes count those same bytes, so the last point of this curve summed over pcore_idx equals Summary.hbm_read_bytes + Summary.hbm_write_bytes when every transfer's endpoints are known.
    * - ``pcore_idx``
      - integer (int64)
      - 
@@ -1704,7 +2060,7 @@ HBM memory usage information summarized by type.
 HloInstruction
 ~~~~~~~~~~~~~~
 
-HLO level instruction information for displaying hierarchy graph. Parent level is framework level, child level is penguin level.
+HLO level instruction information for displaying hierarchy graph. Parent level is framework level, child level is tensorizer level.
 
 .. list-table::
    :header-rows: 1
@@ -1724,12 +2080,12 @@ HLO level instruction information for displaying hierarchy graph. Parent level i
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for bir level instruction.
+     - Unique identifier for backend-level instruction.
    * - ``raw_penguin_id``
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for penguin level instruction.
+     - Unique identifier for tensorizer-level instruction.
    * - ``raw_hlo_id``
      - integer (int64)
      - 
@@ -1806,6 +2162,38 @@ HLO level instruction information for displaying hierarchy graph. Parent level i
      - No
      - Total number of bytes loaded by LDWEIGHTS instructions in this HLO instruction.
 
+.. _profile-schema-hostdevicedmausage:
+
+HostDeviceDmaUsage
+~~~~~~~~~~~~~~~~~~
+
+Host-device (top-level) DMA time-series usage metrics such as throughput over time. These DMAs move data between the host and the device as a whole and are not attributed to any single NeuronCore, so unlike DmaUsage there is no pcore_idx.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``timestamp``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp for this measurement.
+   * - ``current_throughput``
+     - number (float)
+     - bytes_per_second
+     - Yes
+     - Rate of host-device data transfer in bytes per second at this timestamp.
+   * - ``total_transfer_bytes``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Total bytes transferred over host-device DMA. This total is cumulative from the start of profiling to this timestamp.
+
 .. _profile-schema-hostmemusage:
 
 HostMemUsage
@@ -1834,9 +2222,9 @@ Host memory utilization time-series metrics. Each row represents a memory usage 
      - Amount of host memory currently in use.
    * - ``used_percent``
      - number (float)
-     - percent
+     - percent (0-100)
      - Yes
-     - Host memory utilization percentage at this timestamp. Calculated as (used_bytes / memory_capacity) \* 100.
+     - Host memory utilization percentage at this timestamp. Calculated as (used_bytes / memory_capacity) \* 100. Range: 0 to 100.
    * - ``instance_id``
      - string
      - 
@@ -1869,6 +2257,11 @@ Instructions executed on NeuronCore compute engines.
      - Unit
      - Required
      - Description
+   * - ``execution_index``
+     - integer (int32)
+     - 
+     - No
+     - Zero-based index of the NEFF execution this instruction belongs to. Matches execution_index in ExecutionInfo, FrameworkNode, and NkiKernelCallSites. Use to scope instructions to a specific execution within a multi-execution profile. Null on profiles ingested before this field existed.
    * - ``start_ts``
      - integer (int64)
      - nanoseconds
@@ -1894,11 +2287,26 @@ Instructions executed on NeuronCore compute engines.
      - 
      - No
      - The name of the timeline track that this instruction appears on in the Neuron Explorer web UI. Example: ``TensorMatrix``.
+   * - ``execution_unit``
+     - string (:ref:`ExecutionUnit <profile-schema-executionunit>`)
+     - 
+     - No
+     - Whether this instruction was executed by the sequencer (control plane) or dispatched to the compute engine (data plane). Sequencer instructions handle flow control, synchronization, and register manipulation. Compute instructions perform the actual data processing on the hardware engine. Allowed values: ``compute``, ``sequencer``. Example: ``compute``.
+   * - ``sub_row``
+     - integer (int64)
+     - 
+     - No
+     - Logical partition used by timeline quantization. Instructions with different values are sampled independently within the same track, physical NeuronCore, and time bucket. Synthetic DGE phase spans use 1 so they do not compete with normal instructions; null is treated as 0. This field does not control UI row placement.
    * - ``pcore_idx``
      - integer (int64)
      - 
      - No
      - Index of the physical NeuronCore within a Logical NeuronCore (LNC). A Logical NeuronCore is a group of physical NeuronCores. For LNC2 this field can have a value of either 0 or 1.
+   * - ``engine_instance_idx``
+     - integer (int64)
+     - 
+     - Yes
+     - The compute engine index that this instruction ran on. Default: ``0``.
    * - ``opcode``
      - string
      - 
@@ -1908,12 +2316,17 @@ Instructions executed on NeuronCore compute engines.
      - string
      - 
      - Yes
-     - Input operands for the instruction. Example: ``data=0xd,0xd size=4,4 dst=0xffff026f038,0xffff024f038``.
+     - Input operands for the instruction. Example: ``src0=bfloat16@0x2003000[1,1,1][1024,1,1] dst=bfloat16@0x3ef20[1,1,1][1024,1,1]``.
+   * - ``symbolic_operands``
+     - string
+     - 
+     - No
+     - Contains the same value as the raw "operands" field, but with each device address replaced by the on-chip buffer that address refers to. Reading "operands" otherwise requires knowing the architecture's address map. Example: ``src0=bfloat16@PSUM(partition=0,bank=6,offset=0)[1,1,1][1024,1,1] dst=bfloat16@SBUF(partition=0)[1,1,1][1024,1,1]``.
    * - ``compiler_opcode``
      - string
      - 
      - No
-     - Opcode of the instruction at compile time. The "compiler_opcode" and the runtime "opcode" can be different because certain missing or dynamic information is filled in at runtime. For example, the "comiler_opcode: PSEUDO_DMA_TRIGGER" may change to "opcode: WRITE" at runtime because that is when the write address is known. Example: ``PSEUDO_DMA_TRIGGER``.
+     - Opcode of the instruction at compile time. The "compiler_opcode" and the runtime "opcode" can be different because certain missing or dynamic information is filled in at runtime. For example, the "compiler_opcode: PSEUDO_DMA_TRIGGER" may change to "opcode: WRITE" at runtime because that is when the write address is known. Example: ``PSEUDO_DMA_TRIGGER``.
    * - ``compiler_operands``
      - string
      - 
@@ -1934,36 +2347,46 @@ Instructions executed on NeuronCore compute engines.
      - 
      - No
      - The compiler program counter is this instruction index on the given engine. The "compiler_pc" and the runtime "pc" can be different because the compiler can have instructions that are unrolled at runtime. Or the compiler can have a collective communication operation that is fulfilled by multiple runtime instructions.
+   * - ``cci_slot``
+     - integer (int64)
+     - 
+     - No
+     - Slot of this compact control sub-instruction within the instruction at "compiler_pc". A compact control instruction packs several small control sub-instructions into one instruction word, and each sub-instruction executes as its own instruction with its own timing. Null for an instruction that is not a compact control sub-instruction. Example: ``12``.
    * - ``penguin_id``
      - string
      - 
      - No
-     - Penguin compiler ID containing both raw ID and context information. Example: ``sg0000:83``.
+     - Tensorizer-level compiler ID containing both raw ID and context information. Example: ``sg0000:83``.
    * - ``raw_penguin_id``
      - integer (int64)
      - 
      - No
-     - Raw internal penguin compiler identifier.
+     - Raw internal tensorizer-level compiler identifier.
    * - ``bir_id``
      - string
      - 
-     - Yes
-     - Binary Intermediate Representation instruction identifier. Example: ``sg0000:218805``.
+     - No
+     - Backend-level instruction identifier. Example: ``sg0000:218805``.
    * - ``raw_bir_id``
      - integer (int64)
      - 
      - No
-     - Unprocessed Binary Intermediate Representation ID containing both raw ID and context information. This is a 64-bit integer stored as a string. Bits 63:48 encode the subgraph ID. Bits 47:32 encode the function ID. Bits 31:0 encode the instruction ID within the function.
+     - Unprocessed backend-level instruction ID containing both raw ID and context information. This is a 64-bit integer stored as a string. Bits 63:48 encode the subgraph ID. Bits 47:32 encode the function ID. Bits 31:0 encode the instruction ID within the function.
    * - ``bir_instruction_name``
      - string
      - 
      - No
-     - Name of the BIR instruction from the name in the BIR debug info. Example: ``I-83-1_sg0001``.
+     - Name of the backend-level instruction, taken from the compiler debug info. Example: ``I-83-1_sg0001``.
    * - ``kernel_instruction_name``
      - string
      - 
      - No
-     - Unique kernel instruction identifier formatted as 'bir_instruction_name:parent_tensorizer_id', where parent_tensorizer_id is the parent penguin instruction ID for this instruction. Corresponds to the 'kernel_instruction_name' field in the KernelInstructions table. Example: ``inst.42:67``.
+     - Unique kernel instruction identifier formatted as ``bir_instruction_name:parent_tensorizer_id``, where parent_tensorizer_id is the parent tensorizer-level instruction ID for this instruction. Corresponds to the ``kernel_instruction_name`` field in the KernelInstructions table. Example: ``inst.42:67``.
+   * - ``nki_call_site_id``
+     - integer (int64)
+     - 
+     - No
+     - ID of the NKI kernel call site this instruction belongs to. Null if this instruction is not part of an NKI kernel. Corresponds to the ``nki_call_site_id`` field in the NkiKernelCallSites table.
    * - ``crc_in``
      - integer (int64)
      - 
@@ -2018,17 +2441,17 @@ Instructions executed on NeuronCore compute engines.
      - string
      - 
      - No
-     - Source code location recorded in BIR debug info. This field can reference various source file types including NKI files, non-NKI Python files, and C++ files. Example: ``file.py:42``.
+     - Source code location recorded in compiler debug info. This field can reference various source file types including NKI files, non-NKI Python files, and C++ files. Example: ``file.py:42``.
    * - ``dma_trigger_start_ts``
      - integer (int64)
      - 
      - No
      - Start timestamp of the DMA that this instruction triggered.
-   * - ``dma_trigger_end_ts``
+   * - ``dma_last_trigger_start_ts``
      - integer (int64)
      - 
      - No
-     - End timestamp of the DMA that this instruction triggered.
+     - Start timestamp of the last DMA triggered by this instruction.
    * - ``dma_wait_time_ns``
      - integer (int64)
      - nanoseconds
@@ -2038,7 +2461,7 @@ Instructions executed on NeuronCore compute engines.
      - string
      - 
      - No
-     - List of instructions in this chain. Some instructions must be executed together in a sequential order such as custom operations or pseudo operations. This field lists all instructions in the executed chain in the following format "compiler_opcode compiler_operands\\n". Newline is used to separate instructions in the chain. Example: ``PSEUDO_TRIGGER_COLLECTIVE_2 $S[15]>=1 $S[15]++@complete ctype=ALL_REDUCE op=ADD dtype=bfloat16 cc_dim=0 src0_var_id=1353 src0_var_offset=0 src0_shape_reg=0 src0_pattern=[1,1][8192,1]\n PSEUDO_EXTENSION group_id=0 channel_id=0 stream_id=0 dst_var_id=1354 dst_var_offset=0 dst_shape_reg=0 dst_pattern=[1,1][8192,1]``.
+     - List of instructions in this chain. Some instructions must be executed together in a sequential order such as custom operations or pseuodo operations. This field lists all instructions in the executed chain in the following format "compiler_opcode compiler_operands\\n". Newline is used to separate instructions in the chain. Example: ``PSEUDO_TRIGGER_COLLECTIVE_2 $S[15]>=1 $S[15]++@complete ctype=ALL_REDUCE op=ADD dtype=bfloat16 cc_dim=0 src0_var_id=1353 src0_var_offset=0 src0_shape_reg=0 src0_pattern=[1,1][8192,1]\n PSEUDO_EXTENSION group_id=0 channel_id=0 stream_id=0 dst_var_id=1354 dst_var_offset=0 dst_shape_reg=0 dst_pattern=[1,1][8192,1]``.
    * - ``hbm_read_bytes``
      - integer (int64)
      - 
@@ -2078,12 +2501,62 @@ Instructions executed on NeuronCore compute engines.
      - integer (int64)
      - 
      - No
-     - Number of bytes read from PSUM by this instruction.
+     - Number of bytes written to PSUM by this instruction.
    * - ``psum_read_sbuf_write_bytes``
      - integer (int64)
      - 
      - No
      - Number of bytes read from PSUM into SBUF by this instruction.
+   * - ``sbuf_read_partition_start``
+     - integer (int32)
+     - 
+     - No
+     - Lowest SBUF partition index read by this instruction. A tile can only start at partition 0, 32, 64, or 96. Null when no SBUF read address could be decoded. Null on performance-simulation profiles.
+   * - ``sbuf_read_partition_end``
+     - integer (int32)
+     - 
+     - No
+     - Highest SBUF partition index read by this instruction, inclusive. Equal to sbuf_read_partition_start for a single-partition read. Null when sbuf_read_partition_start is null.
+   * - ``sbuf_write_partition_start``
+     - integer (int32)
+     - 
+     - No
+     - Lowest SBUF partition index written by this instruction. A tile can only start at partition 0, 32, 64, or 96. Null when no SBUF write address could be decoded. Null on performance-simulation profiles.
+   * - ``sbuf_write_partition_end``
+     - integer (int32)
+     - 
+     - No
+     - Highest SBUF partition index written by this instruction, inclusive. Equal to sbuf_write_partition_start for a single-partition write. Null when sbuf_write_partition_start is null.
+   * - ``psum_read_partition_start``
+     - integer (int32)
+     - 
+     - No
+     - Lowest PSUM partition index read by this instruction. A tile can only start at partition 0, 32, 64, or 96. Null when no PSUM read address could be decoded. Null on performance-simulation profiles.
+   * - ``psum_read_partition_end``
+     - integer (int32)
+     - 
+     - No
+     - Highest PSUM partition index read by this instruction, inclusive. Equal to psum_read_partition_start for a single-partition read. Null when psum_read_partition_start is null.
+   * - ``psum_write_partition_start``
+     - integer (int32)
+     - 
+     - No
+     - Lowest PSUM partition index written by this instruction. A tile can only start at partition 0, 32, 64, or 96. Null when no PSUM write address could be decoded. Null on performance-simulation profiles.
+   * - ``psum_write_partition_end``
+     - integer (int32)
+     - 
+     - No
+     - Highest PSUM partition index written by this instruction, inclusive. Equal to psum_write_partition_start for a single-partition write. Null when psum_write_partition_start is null.
+   * - ``psum_read_banks``
+     - array of integer (int64)
+     - 
+     - No
+     - Every PSUM bank this instruction reads, ascending, across all of its read operands. Empty when no PSUM read address could be decoded, and on performance-simulation profiles. Requires the operand's element width, so it is empty for a read operand whose data type is not printed even when the partition range is known. Example: ``[5]``.
+   * - ``psum_write_banks``
+     - array of integer (int64)
+     - 
+     - No
+     - Every PSUM bank this instruction writes, ascending. Empty when no PSUM write address could be decoded, and on performance-simulation profiles. Example: ``[2]``.
    * - ``input_queue_bytes``
      - integer (int64)
      - 
@@ -2123,7 +2596,7 @@ Instructions executed on NeuronCore compute engines.
      - integer (int64)
      - 
      - No
-     - BF16-equivalent FLOPs for this instruction. Scales FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. FP8 uses 1.0x on Trn1/Inf2 and 0.5x on Trn2/Trn3. UINT8 uses 0.5x. MXFP8 and MXFP4 use 0.25x on Trn3.
+     - BF16-equivalent FLOPs for this instruction. Scales FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. On Trn2/Trn3, FP8@FP8 and UINT8@UINT8 matmuls use 0.5x; FP8 or UINT8 mixed with a higher-precision operand uses 1.0x (executes at BF16 throughput). FP8 uses 1.0x on Trn1/Inf2. MXFP8 and MXFP4 use 0.25x on Trn3.
    * - ``tensor_elements_transpose``
      - integer (int64)
      - 
@@ -2138,7 +2611,32 @@ Instructions executed on NeuronCore compute engines.
      - integer (int64)
      - 
      - No
-     - BF16-equivalent transpose FLOPs for this instruction, only set when tensor_instruction_type is TRANSPOSE and 0 otherwise. Uses the same scaling multipliers as adjusted_flops. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. FP8 uses 1.0x on Trn1/Inf2 and 0.5x on Trn2/Trn3. UINT8 uses 0.5x. MXFP8 and MXFP4 use 0.25x on Trn3.
+     - BF16-equivalent transpose FLOPs for this instruction, only set when tensor_instruction_type is TRANSPOSE and 0 otherwise. Uses the same scaling multipliers as adjusted_flops.
+   * - ``partition_dimension``
+     - integer (int64)
+     - 
+     - No
+     - Partition-axis extent of this instruction's tensor access, decoded from the instruction's ISA representation. For MATMUL/LDWEIGHTS this is the number of active PE rows; for channel-oriented ops (activation, tensor-tensor, pooling) it is the number of active channels. Null for instructions whose partition dimension is not applicable or cannot be decoded.
+   * - ``free_dimension``
+     - integer (int64)
+     - 
+     - No
+     - Free-axis extent of this instruction's tensor access, decoded from the instruction's ISA representation. For MATMUL/LDWEIGHTS this is the free-axis extent of the source memory pattern (the moving matrix for MATMUL, the stationary weights for LDWEIGHTS), i.e. the product of its non-partition axis extents; for other ops it is the product of the destination's non-partition (free) axis extents. Null for instructions whose free dimension is not applicable or cannot be decoded.
+   * - ``src1_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of this instruction's first input operand, decoded from the instruction's ISA representation. For MATMUL this is the stationary (weights) operand. Unset for instructions whose input data type is not applicable or cannot be decoded. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``bf16``.
+   * - ``src2_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of this instruction's second input operand, decoded from the instruction's ISA representation. For MATMUL this is the moving (activation) operand; for tensor-tensor ops it is the second input tensor. Unset for single-input instructions or when it cannot be decoded. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``bf16``.
+   * - ``dst_dtype``
+     - string (:ref:`DataType <profile-schema-datatype>`)
+     - 
+     - No
+     - Data type of this instruction's output operand, decoded from the instruction's ISA representation. Unset for instructions whose output data type is not applicable or cannot be decoded. Allowed values: ``fp64``, ``fp32``, ``fp32r``, ``tf32``, ``fp16``, ``bf16``, ``fp8e3``, ``fp8e4``, ``fp8e5``, ``mxfp8``, ``mxfp4``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``, ``uint16``, ``uint32``, ``uint64``, ``unknown``. Example: ``fp32``.
    * - ``scalar_activation_fn``
      - string
      - 
@@ -2165,7 +2663,7 @@ Kernel instructions with references to their call stack and iteration context. E
      - string
      - 
      - Yes
-     - Unique kernel instruction identifier formatted as 'instruction_name:parent_tensorizer_id', where parent_tensorizer_id is the parent penguin instruction ID for this instruction. parent_tensorizer_id refers to the parent. Example: ``inst.72:0``.
+     - Unique kernel instruction identifier formatted as ``instruction_name:parent_tensorizer_id``, where parent_tensorizer_id is the parent tensorizer-level instruction ID for this instruction. parent_tensorizer_id refers to the parent. Example: ``inst.72:0``.
    * - ``stack_frame_id``
      - integer (int64)
      - 
@@ -2201,6 +2699,21 @@ Kernel instructions with references to their call stack and iteration context. E
      - 
      - No
      - Line number in the source file that generates this instruction. Example: ``76``.
+   * - ``annotation_labels``
+     - array of string
+     - 
+     - No
+     - NKI Region labels active when this instruction was emitted. Set by ``nki.language.profiler_region_open`` and ``nki.language.profiler_region_close`` during kernel compilation. Empty or absent when the instruction is not inside any region. Example: ``["compute", "per_iter"]``.
+   * - ``annotation_colors``
+     - array of string
+     - 
+     - No
+     - User-supplied colors for the regions, corresponding 1:1 with ``annotation_labels``. Each color is a hex string, or empty if no color was specified. Example: ``["#A133FF", "#FF5733"]``.
+   * - ``annotation_unbalanced``
+     - array of string
+     - 
+     - No
+     - Region labels on this instruction that are unbalanced, meaning a ``profiler_region_open`` without a matching ``profiler_region_close``. A subset of the ``annotation_labels`` base names. Empty or absent when all regions are balanced. Example: ``["unbalanced_bad"]``.
 
 .. _profile-schema-kerneliterationvariables:
 
@@ -2279,7 +2792,7 @@ Call stack frames for kernel instructions forming a call stack. Each row represe
      - string
      - 
      - No
-     - Fully qualified function name for this stack frame. Example: ``neuronxcc.nki._pre_prod_nkl.output_projection_cte``.
+     - Fully qualified function name for this stack frame. Example: ``nkilib.experimental.conv.conv3d.conv3d``.
    * - ``parent_stack_frame_id``
      - integer (int64)
      - 
@@ -2295,11 +2808,16 @@ Call stack frames for kernel instructions forming a call stack. Each row represe
      - 
      - No
      - Source file path where this function is defined. Example: ``/home/ubuntu/mlp_with_mm_kernel.py``.
+   * - ``function_line_number``
+     - integer (int64)
+     - 
+     - No
+     - The line number of the definition line of this frame's function. Not to be confused with the parent stack frame's ``line_number``, which is one level up in the call stack. Example: ``17``.
    * - ``line_number``
      - integer (int64)
      - 
      - No
-     - Line number in the source file where this function is defined. Example: ``17``.
+     - The line where this function frame of the stack was called, so two calls to the same function from different lines are distinguishable. Null for the outermost function, which nothing called. Example: ``124``.
 
 .. _profile-schema-memorybandwidthpoint:
 
@@ -2458,6 +2976,11 @@ Metadata associated with this profile, including details about the system config
      - 
      - Yes
      - Number of DMA engines per physical NeuronCore.
+   * - ``num_engine_instances``
+     - integer (int32)
+     - 
+     - No
+     - Largest number of instances of a single compute engine type within a physical NeuronCore, as declared by the compiler for the NEFFs in this profile. Minimum: 1. Example: ``4``.
    * - ``hbm_ddr_bandwidth``
      - number (float)
      - bytes_per_second
@@ -2523,6 +3046,11 @@ Metadata associated with this profile, including details about the system config
      - 
      - No
      - The instance type on which this profile was captured. Example: ``trn1.2xlarge``.
+   * - ``neuroncore_version``
+     - string
+     - 
+     - No
+     - The NeuronCore architecture version of the hardware on which this profile was captured, for example v2 for trn1 and inf2, or v3 for trn2. Independent of the Logical NeuronCore configuration. Prefer this over instance_type when keying behavior on the architecture. Example: ``v3``.
    * - ``runtime_version``
      - string
      - 
@@ -2548,6 +3076,11 @@ Metadata associated with this profile, including details about the system config
      - 
      - No
      - The Neuron Compiler version which built the NEFF that was executed during this profile. This is the tool_version field in the NEFF's info.json file. Example: ``2.13.2``.
+   * - ``nki_version``
+     - string
+     - 
+     - No
+     - The Neuron Kernel Interface (NKI) version used to author the kernels executed during this profile. Aids debugging and reproducibility by identifying which NKI version generated the profile. Optional; only present when the profile carries NKI version metadata. Example: ``0.6.0``.
    * - ``neuroncore_idx``
      - integer (int64)
      - 
@@ -2592,12 +3125,12 @@ Metadata associated with this profile, including details about the system config
      - string
      - 
      - No
-     - The date and time when the \`neuron-explorer\` tool was built. Example: ``2025-11-14 15:14:53+00:00``.
-   * - ``is_simulation``
-     - boolean
+     - The date and time when the ``neuron-explorer`` tool was built. Example: ``2025-11-14 15:14:53+00:00``.
+   * - ``capture_type``
+     - string (:ref:`CaptureType <profile-schema-capturetype>`)
      - 
      - No
-     - Whether this profile is a post-scheduler simulation produced by the compiler. Example: ``false``.
+     - Whether the profiled activity ran on a Neuron device or in a simulator. Allowed values: ``hardware``, ``s0``, ``perf-sim``. Example: ``hardware``.
 
 .. _profile-schema-neffheader:
 
@@ -2686,6 +3219,58 @@ Information contained in the NEFF header.
      - No
      - Number of physical NeuronCores per Logical NeuronCore (LNC).
 
+.. _profile-schema-nkikernelcallsites:
+
+NkiKernelCallSites
+~~~~~~~~~~~~~~~~~~
+
+One row per NKI kernel call site per NEFF execution. Each row represents one place in the compiled graph where an NKI kernel was called. Two calls to the same kernel function within an execution produce two rows with different nki_call_site_id values. Use execution_index to scope rows to a specific NEFF execution within the profile.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``execution_index``
+     - integer (int32)
+     - 
+     - Yes
+     - Zero-based index of the execution this call site belongs to. Matches execution_index in ExecutionInfo. Use with nki_call_site_id to uniquely identify a call site across a multi-NEFF profile.
+   * - ``neff_name``
+     - string
+     - 
+     - No
+     - File name of the NEFF that contains this call site. Matches neff_name in ExecutionInfo. Example: ``model.neff``.
+   * - ``nki_call_site_id``
+     - integer (int64)
+     - 
+     - Yes
+     - ID of the NKI kernel call site this instruction belongs to. Unique within a single NEFF execution; use with execution_index to scope across executions.
+   * - ``kernel_name``
+     - string
+     - 
+     - No
+     - Name of the NKI kernel. Null when kernel_debug_info.json is absent from the NEFF. Example: ``nki_matmul``.
+   * - ``parent_framework_ids``
+     - array of string
+     - 
+     - No
+     - Raw framework IDs of the parent framework-level nodes whose instructions this kernel ran within. Each ID corresponds to a raw_framework_id in the FrameworkNode table. Empty when the profile has no framework-level debug info. Example: ``["42", "57"]``.
+   * - ``start_ts``
+     - integer (int64)
+     - nanoseconds
+     - No
+     - Earliest start time among all instructions belonging to this call site. Unit is nanoseconds. Null when the call site has no timed instructions.
+   * - ``end_ts``
+     - integer (int64)
+     - nanoseconds
+     - No
+     - Latest end time among all instructions belonging to this call site. Unit is nanoseconds. Null when the call site has no timed instructions.
+
 .. _profile-schema-opcodesummary:
 
 OpcodeSummary
@@ -2731,7 +3316,7 @@ Summary of instruction counts and total execution time grouped by compute engine
      - number (float)
      - 
      - Yes
-     - Percentage of total execution time when at least one instruction with this engine and opcode combination is executing.
+     - Percentage of total execution time when at least one instruction with this engine and opcode combination is executing. Range: 0 to 1.
 
 .. _profile-schema-pendingdma:
 
@@ -2770,7 +3355,7 @@ Outstanding DMA operations that are queued.
 PenguinInstruction
 ~~~~~~~~~~~~~~~~~~
 
-Penguin level instruction information for displaying hierarchy graph. Parent level is hlo level, child level is bir level.
+Tensorizer-level instruction information for displaying hierarchy graph. Parent level is hlo level, child level is backend level.
 
 .. list-table::
    :header-rows: 1
@@ -2790,12 +3375,12 @@ Penguin level instruction information for displaying hierarchy graph. Parent lev
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for bir level instruction.
+     - Unique identifier for backend-level instruction.
    * - ``raw_penguin_id``
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for penguin level instruction.
+     - Unique identifier for tensorizer-level instruction.
    * - ``raw_hlo_id``
      - integer (int64)
      - 
@@ -2810,7 +3395,7 @@ Penguin level instruction information for displaying hierarchy graph. Parent lev
      - string
      - 
      - Yes
-     - Penguin operation name. Example: ``float32<1 x 2048> $1345[i1_94_0, i1_94_1_0_0_0, i1_94_1_0_0_1]``.
+     - Tensorizer-level operation name. Example: ``float32<1 x 2048> $1345[i1_94_0, i1_94_1_0_0_0, i1_94_1_0_0_1]``.
    * - ``modular_flow_invocation_idx``
      - integer (int64)
      - 
@@ -2850,27 +3435,27 @@ Penguin level instruction information for displaying hierarchy graph. Parent lev
      - integer (int64)
      - bytes
      - Yes
-     - Total number of bytes read from HBM by all grouped instructions in this Penguin instruction.
+     - Total number of bytes read from HBM by all grouped instructions in this tensorizer-level instruction.
    * - ``hbm_write_bytes``
      - integer (int64)
      - bytes
      - Yes
-     - Total number of bytes written to HBM by all grouped instructions in this Penguin instruction.
+     - Total number of bytes written to HBM by all grouped instructions in this tensorizer-level instruction.
    * - ``sbuf_read_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes read from SBUF by all grouped instructions in this Penguin instruction.
+     - Total number of bytes read from SBUF by all grouped instructions in this tensorizer-level instruction.
    * - ``sbuf_write_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes written to SBUF by all grouped instructions in this Penguin instruction.
+     - Total number of bytes written to SBUF by all grouped instructions in this tensorizer-level instruction.
    * - ``load_weight_bytes``
      - integer (int64)
      - bytes
      - No
-     - Total number of bytes loaded by LDWEIGHTS instructions in this Penguin instruction.
+     - Total number of bytes loaded by LDWEIGHTS instructions in this tensorizer-level instruction.
 
 .. _profile-schema-psumusage:
 
@@ -2895,49 +3480,49 @@ PSUM memory bank utilization metrics during execution.
      - Timestamp for this usage measurement.
    * - ``avg_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Average fullness across all PSUM memory banks.
+     - Average fullness across all PSUM memory banks. Range: 0 to 1.
    * - ``bank_0_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 0.
+     - Fullness percentage of PSUM memory bank 0. Range: 0 to 1.
    * - ``bank_1_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 1.
+     - Fullness percentage of PSUM memory bank 1. Range: 0 to 1.
    * - ``bank_2_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 2.
+     - Fullness percentage of PSUM memory bank 2. Range: 0 to 1.
    * - ``bank_3_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 3.
+     - Fullness percentage of PSUM memory bank 3. Range: 0 to 1.
    * - ``bank_4_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 4.
+     - Fullness percentage of PSUM memory bank 4. Range: 0 to 1.
    * - ``bank_5_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 5.
+     - Fullness percentage of PSUM memory bank 5. Range: 0 to 1.
    * - ``bank_6_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 6.
+     - Fullness percentage of PSUM memory bank 6. Range: 0 to 1.
    * - ``bank_7_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of PSUM memory bank 7.
+     - Fullness percentage of PSUM memory bank 7. Range: 0 to 1.
    * - ``pcore_idx``
      - integer (int64)
      - 
@@ -3049,29 +3634,29 @@ State Buffer (SB) memory partition utilization metrics during execution.
      - Timestamp for this usage measurement.
    * - ``avg_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Average utilization across all State Buffer partitions.
+     - Average utilization across all State Buffer partitions. Range: 0 to 1.
    * - ``partition_0_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of State Buffer partition 0.
+     - Fullness percentage of State Buffer partition 0. Range: 0 to 1.
    * - ``partition_32_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of State Buffer partition 32.
+     - Fullness percentage of State Buffer partition 32. Range: 0 to 1.
    * - ``partition_64_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of State Buffer partition 64.
+     - Fullness percentage of State Buffer partition 64. Range: 0 to 1.
    * - ``partition_96_util_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Fullness percentage of State Buffer partition 96.
+     - Fullness percentage of State Buffer partition 96. Range: 0 to 1.
    * - ``pcore_idx``
      - integer (int64)
      - 
@@ -3180,7 +3765,7 @@ Semaphore state changes used for synchronization between operations.
      - string
      - 
      - Yes
-     - Unique identifier of the semaphore being updated. Example: ``TODO``.
+     - Unique identifier of the semaphore being updated.
    * - ``value``
      - integer (int32)
      - 
@@ -3217,6 +3802,180 @@ Semaphore state changes used for synchronization between operations.
      - No
      - Index of the physical NeuronCore within a Logical NeuronCore (LNC). A Logical NeuronCore is a group of physical NeuronCores. For LNC2 this field can have a value of either 0 or 1.
 
+.. _profile-schema-snapshotallocation:
+
+SnapshotAllocation
+~~~~~~~~~~~~~~~~~~
+
+Framework-level (PyTorch) tensor allocations captured by a memory snapshot (torch_neuronx record_memory_history). Each row is one allocation reconstructed by pairing an "alloc" trace event with its matching "free_completed" event by virtual address, in trace (ring-buffer) order. These represent the caching allocator's user-visible allocations in virtual address space. Recent runtime/torch changes put the snapshot timestamps into the system_clock domain, the SAME domain as the runtime ntrace.pb event timestamps, so alloc_ts/free_ts are the wall-clock x-axis for the Active Memory Timeline and align 1:1 with the system timeline. NOTE - this is distinct from the runtime-derived HbmAllocation table (physical HBM occupancy from the system trace) and from the runtime memory snapshot view. Use this table for the PyTorch "Active Memory Timeline".
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``alloc_ts``
+     - integer (int64)
+     - microseconds
+     - Yes
+     - Timestamp (system_clock, ns-since-epoch / 1000) when the allocation occurred (alloc event). This is the timeline x-axis and aligns directly with ntrace.pb timestamp_ns / 1000. Pre-existing allocations (live before the trace window) are anchored to the window's first observed timestamp so their bands span the visible window.
+   * - ``free_ts``
+     - integer (int64)
+     - microseconds
+     - Yes
+     - Timestamp (system_clock, µs) when the allocation was freed (free_completed event). Set to the snapshot's last observed timestamp if never freed within the capture.
+   * - ``alloc_index``
+     - integer (int64)
+     - 
+     - No
+     - Event-ordinal (0-based) of the alloc event in trace order. Retained as a stable secondary key: it encodes the ring-buffer replay order the stack topology depends on, breaks ties when two events share a timestamp, and serves as a fallback x-axis for older captures that predate the unified system_clock domain. Pre-existing allocations use 0 (window start).
+   * - ``free_index``
+     - integer (int64)
+     - 
+     - No
+     - Event-ordinal of the free event. Equals the last event index when the allocation is never freed within the capture, so bands extend to the timeline end and no further.
+   * - ``address``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Framework-visible virtual address of the allocation.
+   * - ``size``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Requested allocation size in bytes.
+   * - ``block_size``
+     - integer (int64)
+     - bytes
+     - No
+     - Size of the underlying allocator block serving this allocation (may exceed size due to rounding).
+   * - ``stream``
+     - integer (int64)
+     - 
+     - No
+     - Stream identifier associated with the allocation.
+   * - ``device_idx``
+     - integer (int64)
+     - 
+     - No
+     - Device index the allocation belongs to (from the snapshot device_traces index).
+   * - ``rank``
+     - integer (int64)
+     - 
+     - Yes
+     - Distributed rank of the process that produced this snapshot (parsed from memory_snapshot_rank<N>.pickle).
+   * - ``trace_id``
+     - integer (int64)
+     - 
+     - No
+     - Systrace correlation key linking this framework allocation to runtime system trace events. Correlation has three levels, all keyed on this id: (1) a snapshot alloc / segment_alloc trace_id=X matches the ntrace TENSOR_ALLOC event with tracking_id=X (already surfaced on HbmAllocation.trace_id); (2) ntrace TENSOR_READ / TENSOR_WRITE events carry a tensor_trace_id attribute that matches the same X, linking a framework tensor allocation to the runtime data transfers that touched it. 0 when not captured.
+   * - ``clock_domain_offset_us``
+     - integer (int64)
+     - 
+     - No
+     - system_clock - steady_clock offset in microseconds, from the snapshot's clock_domain_offset_us field. alloc_ts/free_ts are already system_clock and need no conversion to align with ntrace.pb. This offset converts the framework profiler (profiler_trace.json Chrome-trace ts, which is steady_clock µs) into system_clock: profiler_ts + clock_domain_offset_us = system_clock_us. 0 for older captures that did not emit the field. Note - can be negative. Example: ``1710000000000000``.
+   * - ``never_freed``
+     - boolean
+     - 
+     - No
+     - True when no matching free_completed event was observed within the capture (free_ts was set to the last observed timestamp). Example: ``false``.
+   * - ``pre_existing``
+     - boolean
+     - 
+     - No
+     - True when this allocation was made before the trace ring-buffer window (either an unmatched free_completed, or an active_allocated segment block with no trace alloc). These form the timeline's baseline memory and are required for the peak to match PyTorch memory_viz. Example: ``false``.
+   * - ``source_frames``
+     - string
+     - 
+     - No
+     - Newline-joined source call stack (innermost first) for the allocation. Example: ``rms_norm_neuron (rms_norm.py:18)``.
+
+.. _profile-schema-snapshotsegment:
+
+SnapshotSegment
+~~~~~~~~~~~~~~~
+
+Point-in-time view of the framework (PyTorch) caching allocator's internal state at the moment a memory snapshot was taken. Each row is one block within a segment (super-tensor allocated from NRT). Segments are cached and sub-divided into blocks; block state reveals which memory is actively used vs cached-but-idle (fragmentation). Segment-level fields are repeated on each of its block rows. NOTE - this is distinct from the runtime-derived HbmAllocation table and the SnapshotAllocation temporal table; it captures allocator caching state, not a timeline.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``segment_address``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Base virtual address of the segment (super-tensor).
+   * - ``segment_total_size``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Total reserved size of the segment in bytes (cached from NRT, may exceed the sum of active blocks).
+   * - ``segment_allocated_size``
+     - integer (int64)
+     - bytes
+     - No
+     - Sum of currently-allocated block sizes within the segment.
+   * - ``segment_active_size``
+     - integer (int64)
+     - bytes
+     - No
+     - Sum of currently-active block sizes within the segment.
+   * - ``is_small``
+     - boolean
+     - 
+     - No
+     - True if the segment belongs to the small-allocation pool (allocations below the small/large boundary), false for the large pool. Example: ``false``.
+   * - ``stream``
+     - integer (int64)
+     - 
+     - No
+     - Stream identifier associated with the segment.
+   * - ``device_idx``
+     - integer (int64)
+     - 
+     - No
+     - Device index the segment belongs to.
+   * - ``rank``
+     - integer (int64)
+     - 
+     - Yes
+     - Distributed rank of the process that produced this snapshot (parsed from memory_snapshot_rank<N>.pickle).
+   * - ``block_address``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Virtual address of this block within the segment.
+   * - ``block_size``
+     - integer (int64)
+     - bytes
+     - Yes
+     - Size of this block in bytes (as carved by the allocator).
+   * - ``block_requested_size``
+     - integer (int64)
+     - bytes
+     - No
+     - Originally requested size for this block (may be smaller than block_size due to rounding).
+   * - ``block_state``
+     - string
+     - 
+     - Yes
+     - Block state — active_allocated (in use), active_awaiting_free (freed by user, pending), or inactive (cached and free). Example: ``active_allocated``.
+   * - ``source_frames``
+     - string
+     - 
+     - No
+     - Newline-joined source call stack (innermost first) of what last lived in this block, if available. Example: ``rms_norm_neuron (rms_norm.py:18)``.
+
 .. _profile-schema-stackframe:
 
 StackFrame
@@ -3237,7 +3996,7 @@ Individual stack frames representing the call stack hierarchy for debugging and 
      - string
      - 
      - Yes
-     - Unique identifier for this stack frame (one-based index converted to string). Example: ``TODO``.
+     - Unique identifier for this stack frame (one-based index converted to string).
    * - ``file_location_id``
      - integer (int32)
      - 
@@ -3247,7 +4006,7 @@ Individual stack frames representing the call stack hierarchy for debugging and 
      - string
      - 
      - Yes
-     - Reference to the parent stack frame ID, or 0 if this is the root frame. Example: ``TODO``.
+     - Reference to the parent stack frame ID, or 0 if this is the root frame.
 
 .. _profile-schema-stackframefilelocation:
 
@@ -3269,7 +4028,7 @@ File location information combining file names, function names, and line numbers
      - string
      - 
      - Yes
-     - Unique identifier for this file location (one-based index converted to string). Example: ``TODO``.
+     - Unique identifier for this file location (one-based index converted to string).
    * - ``file_name_id``
      - integer (int32)
      - 
@@ -3306,7 +4065,7 @@ Source code file names referenced in the stack frames for debugging and tracing 
      - string
      - 
      - Yes
-     - Unique identifier for this file name (one-based index converted to string). Example: ``TODO``.
+     - Unique identifier for this file name (one-based index converted to string).
    * - ``name``
      - string
      - 
@@ -3333,12 +4092,12 @@ Function names referenced in the stack frames for debugging and tracing executio
      - string
      - 
      - Yes
-     - Unique identifier for this function name (one-based index converted to string). Example: ``TODO``.
+     - Unique identifier for this function name (one-based index converted to string).
    * - ``name``
      - string
      - 
      - Yes
-     - Function or method name. Example: ``TODO``.
+     - Function or method name.
 
 .. _profile-schema-summary:
 
@@ -3385,12 +4144,12 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - integer (int64)
      - flops
      - No
-     - BF16-equivalent hardware FLOPs. Scales FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. FP8 uses 1.0x on Trn1/Inf2 and 0.5x on Trn2/Trn3. UINT8 uses 0.5x. MXFP8 and MXFP4 use 0.25x on Trn3.
+     - BF16-equivalent hardware FLOPs. Scales FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. On Trn2/Trn3, FP8@FP8 and UINT8@UINT8 matmuls use 0.5x; FP8 or UINT8 mixed with a higher-precision operand uses 1.0x (executes at BF16 throughput). FP8 uses 1.0x on Trn1/Inf2. MXFP8 and MXFP4 use 0.25x on Trn3.
    * - ``adjusted_transpose_flops``
      - integer (int64)
      - flops
      - No
-     - BF16-equivalent transpose FLOPs. Scales transpose FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. BF16, FP16, and TF32 use a 1.0x multiplier. FP32 uses 4.0x. FP8 uses 1.0x on Trn1/Inf2 and 0.5x on Trn2/Trn3. UINT8 uses 0.5x. MXFP8 and MXFP4 use 0.25x on Trn3.
+     - BF16-equivalent transpose FLOPs. Scales transpose FLOPs to the BF16 throughput equivalent so the result can be used with BF16 peak throughput as the denominator for PE utilization calculations. Uses the same scaling multipliers as adjusted_hardware_flops.
    * - ``mm_arithmetic_intensity``
      - number (float)
      - 
@@ -3425,27 +4184,47 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - number (float)
      - seconds
      - No
-     - Duration of time when at least one DMA packet is transferring.
+     - Duration of time when at least one DMA packet is transfering.
    * - ``dma_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one DMA packet is transferring.
+     - Percentage of time when at least one DMA packet is transfering. Range: 0 to 1.
+   * - ``host_device_dma_packet_count``
+     - integer (int64)
+     - 
+     - No
+     - Number of host-device DMA packets during the profiled execution window. The runtime and driver call this H2D DMA.
+   * - ``host_device_dma_transfer_bytes``
+     - integer (int64)
+     - bytes
+     - No
+     - Total bytes transferred by host-device DMA packets in either direction during the profiled execution window.
+   * - ``host_device_dma_active_time``
+     - number (float)
+     - seconds
+     - No
+     - Duration when at least one host-device DMA engine was transferring data during the profiled execution window.
+   * - ``host_device_dma_bandwidth``
+     - number (float)
+     - bytes_per_second
+     - No
+     - Host-device DMA transfer bytes divided by the duration of the profiled execution window.
    * - ``static_dma_active_time``
      - number (float)
      - seconds
      - No
-     - Duration of time when at least one statically generated DMA packet is transferring.
+     - Duration of time when at least one statically generated DMA packet is transfering.
    * - ``dynamic_dma_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one dynamically generated DMA packet is transferring.
+     - Percentage of time when at least one dynamically generated DMA packet is transfering. Range: 0 to 1.
    * - ``static_dma_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one statically generated DMA packet is transferring.
+     - Percentage of time when at least one statically generated DMA packet is transfering. Range: 0 to 1.
    * - ``dma_transfer_average_bytes``
      - number (float)
      - bytes
@@ -3475,7 +4254,7 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - integer (int64)
      - 
      - No
-     - Total number of DMA queues specified in the NEFF including all input, output, and weight DMA queues for different DMA engines.
+     - Total number of DMA queues the profile reports, including all input, output, and weight DMA queues for different DMA engines, and the collectives queues.
    * - ``inputs_and_weights_size_bytes``
      - integer (int64)
      - bytes
@@ -3503,34 +4282,34 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Total transfer size of DMA packets that are statically generated.
    * - ``dynamic_dma_packet_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of DMA packets that are dynamically generated during execution (generally higher means better performance).
+     - Percentage of DMA packets that are dynamically generated during execution (generally higher means better performance). Range: 0 to 1.
    * - ``static_dma_packet_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of DMA packets that are statically generated.
+     - Percentage of DMA packets that are statically generated. Range: 0 to 1.
    * - ``dynamic_dma_size_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of total transfer size for DMA packets that are dynamically generated during execution.
+     - Percentage of total transfer size for DMA packets that are dynamically generated during execution. Range: 0 to 1.
    * - ``static_dma_size_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of total transfer size for DMA packets that are statically generated.
+     - Percentage of total transfer size for DMA packets that are statically generated. Range: 0 to 1.
    * - ``mbu_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Memory Bandwidth Utilization (MBU) is the achieved HBM bandwidth utilization. It is estimated as a ratio of achieved_hbm_bandwidth over hbm_max_bandwidth, where achieved_hbm_bandwidth is total bytes read/written from/to HBM divided by total_time and hbm_max_bandwidth. Calculated as (hbm_write_bytes + hbm_read_bytes) / total_time / hbm_max_bandwidth. The hbm_max_bandwidth is the maximum HBM bandwidth of a HBM stack. For LNC1 and LNC2, the hbm_max_bandwidth is the same.
+     - Memory Bandwidth Utilization (MBU) is the achieved HBM bandwidth utilization. It is estimated as a ratio of achieved_hbm_bandwidth over hbm_max_bandwidth, where achieved_hbm_bandwidth is total bytes read/written from/to HBM divided by total_time and hbm_max_bandwidth. Calculated as (hbm_write_bytes + hbm_read_bytes) / total_time / hbm_max_bandwidth. The hbm_max_bandwidth is the maximum HBM bandwidth of a HBM stack. For LNC1 and LNC2, the hbm_max_bandwidth is the same. Range: 0 to 1.
    * - ``mbu_min_read_util_percent``
      - number (float)
-     - percent
+     - fraction
      - No
-     - Estimated minimum possible Memory Bandwidth Utilization (MBU) utilization assuming inputs and weights are read from HBM a single time (no repeat loads). Calculated as inputs_and_weights_size_bytes / total_time / hbm_max_bandwidth.
+     - Estimated minimum possible Memory Bandwidth Utilization (MBU) utilization assuming inputs and weights are read from HBM a single time (no repeat loads). Calculated as inputs_and_weights_size_bytes / total_time / hbm_max_bandwidth. This value can exceed 1.0, because inputs_and_weights_size_bytes is the declared size of the NEFF's inputs and weights, which can be more data than could possibly be read in the elapsed time of the profile. Use mbu_estimated_percent for utilization based only on bytes observed on the HBM bus. mbu_min_read_util_percent may not be valid if not all inputs and weights in the NEFF are loaded, so the value can be misleading below 1.0 as well.
    * - ``hbm_write_bytes``
      - integer (int64)
      - bytes
@@ -3600,12 +4379,12 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - number (float)
      - seconds
      - No
-     - Duration of time when at least one software generated DMA packet is transferring.
+     - Duration of time when at least one software generated DMA packet is transfering.
    * - ``software_dynamic_dma_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one software generated DMA packet is transferring.
+     - Percentage of time when at least one software generated DMA packet is transfering. Range: 0 to 1.
    * - ``software_dynamic_dma_packet_count``
      - integer (int64)
      - 
@@ -3618,24 +4397,24 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Total transfer size of DMA packets that are dynamically generated during execution via software backend.
    * - ``software_dynamic_dma_packet_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of DMA packets that are dynamically generated during execution via software backend.
+     - Percentage of DMA packets that are dynamically generated during execution via software backend. Range: 0 to 1.
    * - ``software_dynamic_dma_size_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of total transfer size for DMA packets that are dynamically generated via software backend.
+     - Percentage of total transfer size for DMA packets that are dynamically generated via software backend. Range: 0 to 1.
    * - ``hardware_dynamic_dma_active_time``
      - number (float)
      - seconds
      - No
-     - Duration of time when at least one hardware generated DMA packet is transferring.
+     - Duration of time when at least one hardware generated DMA packet is transfering.
    * - ``hardware_dynamic_dma_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one hardware generated DMA packet is transferring.
+     - Percentage of time when at least one hardware generated DMA packet is transfering. Range: 0 to 1.
    * - ``hardware_dynamic_dma_packet_count``
      - integer (int64)
      - 
@@ -3648,14 +4427,14 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Total transfer size of DMA packets that are dynamically generated during execution via dedicated hardware.
    * - ``hardware_dynamic_dma_packet_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of DMA packets that are dynamically generated during execution via dedicated hardware.
+     - Percentage of DMA packets that are dynamically generated during execution via dedicated hardware. Range: 0 to 1.
    * - ``hardware_dynamic_dma_size_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of total transfer size for DMA packets that are dynamically generated via dedicated hardware.
+     - Percentage of total transfer size for DMA packets that are dynamically generated via dedicated hardware. Range: 0 to 1.
    * - ``tensor_engine_instruction_time``
      - number (float)
      - seconds
@@ -3668,9 +4447,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when Tensor engine is processing at least one instruction (excluding semaphore waits). Units are in seconds.
    * - ``tensor_engine_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when Tensor engine is processing at least one instruction (excluding semaphore waits).
+     - Percentage of time when Tensor engine is processing at least one instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``tensor_engine_instruction_count``
      - integer (int64)
      - 
@@ -3683,39 +4462,39 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Total number of MATMUL instructions.
    * - ``mfu_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - MFU is Model FLOPs Utilization. This reflects the Tensor Engine utilization for useful compute i.e. the matrix multiplications from the HLO model definition, and excludes other instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as 2 \* MAC_count / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed.
+     - MFU is Model FLOPs Utilization. This reflects the Tensor Engine utilization for useful compute i.e. the matrix multiplications from the HLO model definition, and excludes other instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as 2 \* MAC_count / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed. Range: 0 to 1.
    * - ``mfu_max_achievable_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - The best Tensor Engine Utilization you can achieve for this workload. Calculated as (model_flops / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency introduced by compilation or kernel implementation for NKI. If mfu_estimated_percent is close to this value and the mfu_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access.
+     - The best Tensor Engine Utilization you can achieve for this workload. Calculated as (model_flops / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency introduced by compilation or kernel implementation for NKI. If mfu_estimated_percent is close to this value and the mfu_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access. Range: 0 to 1.
    * - ``mfu_hlo_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - MFU (HLO) is Model FLOPs Utilization based on HLO stats. This reflects the Tensor Engine utilization for useful compute i.e. the matrix multiplications from the HLO model definition, and excludes other instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as model_flops / (tensor_engine_max_ops_per_sec \* total_time) where model_flops is 2 \* MAC_count from HLO stats and tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed. Note this will be 0 if HLO stats are missing, which is the case for NKI kernels.
+     - MFU (HLO) is Model FLOPs Utilization based on HLO stats. This reflects the Tensor Engine utilization for useful compute i.e. the matrix multiplications from the HLO model definition, and excludes other instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as model_flops / (tensor_engine_max_ops_per_sec \* total_time) where model_flops is 2 \* MAC_count from HLO stats and tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed. Note this will be 0 if HLO stats are missing, which is the case for NKI kernels. Range: 0 to 1.
    * - ``mfu_hlo_max_achievable_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - The best Tensor Engine Utilization you can achieve for this workload based on HLO model FLOPs. Calculated as (model_flops / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_hlo_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency introduced by compilation or kernel implementation for NKI. If mfu_hlo_estimated_percent is close to this value and the mfu_hlo_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_hlo_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access. Note this will be 0 if HLO stats are missing, which is the case for NKI kernels.
+     - The best Tensor Engine Utilization you can achieve for this workload based on HLO model FLOPs. Calculated as (model_flops / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_hlo_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency introduced by compilation or kernel implementation for NKI. If mfu_hlo_estimated_percent is close to this value and the mfu_hlo_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_hlo_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access. Note this will be 0 if HLO stats are missing, which is the case for NKI kernels. Range: 0 to 1.
    * - ``mfu_inst_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - MFU (Instruction) is Model FLOPs Utilization based on instruction trace. This reflects the Tensor Engine utilization for useful compute calculated from executed instructions, excluding transposes. Unlike mfu_hlo_estimated_percent which uses HLO model stats, this metric uses (hardware_flops - transpose_flops) from the actual instruction trace. Note, each floating point multiply-add is counted as two FLOPs. Calculated as (hardware_flops - transpose_flops) / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed.
+     - MFU (Instruction) is Model FLOPs Utilization based on instruction trace. This reflects the Tensor Engine utilization for useful compute calculated from executed instructions, excluding transposes. Unlike mfu_hlo_estimated_percent which uses HLO model stats, this metric uses (hardware_flops - transpose_flops) from the actual instruction trace. Note, each floating point multiply-add is counted as two FLOPs. Calculated as (hardware_flops - transpose_flops) / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed. Range: 0 to 1.
    * - ``mfu_inst_max_achievable_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - The best Tensor Engine Utilization you can achieve for this workload based on instruction trace FLOPs (excluding transposes). Calculated as ((hardware_flops - transpose_flops) / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_inst_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency. If mfu_inst_estimated_percent is close to this value and the mfu_inst_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_inst_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access.
+     - The best Tensor Engine Utilization you can achieve for this workload based on instruction trace FLOPs (excluding transposes). Calculated as ((hardware_flops - transpose_flops) / (hbm_write_bytes + hbm_read_bytes)) / (max_ops_per_sec / max_hbm_bandwidth). If mfu_inst_estimated_percent is much smaller than this value, then this likely indicates a major data movement inefficiency. If mfu_inst_estimated_percent is close to this value and the mfu_inst_estimated_percent value is also very high, then there's no point reducing HBM traffic. But if the values are close and mfu_inst_estimated_percent is lower than you want, consider improving the arithmetic intensity of your workload by performing more computation on every data access. Range: 0 to 1.
    * - ``hfu_estimated_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - HFU is Hardware FLOPs Utilization. This reflects the Tensor Engine utilization calculated from all Tensor Engine instructions that Neuron Compiler emits for execution. This metric is typically higher than mfu_estimated_percent because it includes matmul instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as hardware_flops / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed.
+     - HFU is Hardware FLOPs Utilization. This reflects the Tensor Engine utilization calculated from all Tensor Engine instructions that Neuron Compiler emits for execution. This metric is typically higher than mfu_estimated_percent because it includes matmul instructions for data movement (i.e. transposes and partition broadcasts) inserted by the compiler to resolve memory layout conflicts. Note, each floating point multiply-add is counted as two FLOPs. Calculated as hardware_flops / (tensor_engine_max_ops_per_sec \* total_time) where tensor_engine_max_ops_per_sec is 2 times the number of Tensor Engine elements times the clock speed. Range: 0 to 1.
    * - ``vector_engine_instruction_time``
      - number (float)
      - seconds
@@ -3728,9 +4507,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when Vector engine is processing at least one instruction (excluding semaphore waits). Units are in seconds.
    * - ``vector_engine_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when Vector engine is processing at least one instruction (excluding semaphore waits).
+     - Percentage of time when Vector engine is processing at least one instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``vector_engine_instruction_count``
      - integer (int64)
      - 
@@ -3748,9 +4527,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when Scalar engine is processing at least one instruction (excluding semaphore waits). Units are in seconds.
    * - ``scalar_engine_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when Scalar engine is processing at least one instruction (excluding semaphore waits).
+     - Percentage of time when Scalar engine is processing at least one instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``scalar_engine_instruction_count``
      - integer (int64)
      - 
@@ -3778,9 +4557,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when Sync engine is processing at least one instruction (excluding semaphore waits). Units are in seconds.
    * - ``sync_engine_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when Sync engine is processing at least one instruction (excluding semaphore waits).
+     - Percentage of time when Sync engine is processing at least one instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``sync_engine_instruction_count``
      - integer (int64)
      - 
@@ -3798,9 +4577,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when GpSimd engine is processing at least one instruction (excluding semaphore waits). Units are in seconds.
    * - ``gpsimd_engine_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when GpSimd engine is processing at least one instruction (excluding semaphore waits).
+     - Percentage of time when GpSimd engine is processing at least one instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``gpsimd_engine_instruction_count``
      - integer (int64)
      - 
@@ -3818,9 +4597,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when at least one Collective Communication (CC) operation is active. Units are in seconds.
    * - ``cc_op_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one Collective Communication (CC) operation is active.
+     - Percentage of time when at least one Collective Communication (CC) operation is active. Range: 0 to 1.
    * - ``cc_op_count``
      - integer (int64)
      - 
@@ -3838,9 +4617,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Duration of time when at least one Collective Communication (CC) core is processing an instruction (excluding semaphore waits).
    * - ``cc_cores_instruction_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of time when at least one Collective Communication (CC) core is processing an instruction (excluding semaphore waits).
+     - Percentage of time when at least one Collective Communication (CC) core is processing an instruction (excluding semaphore waits). Range: 0 to 1.
    * - ``cc_cores_instruction_count``
      - integer (int64)
      - 
@@ -3858,9 +4637,9 @@ Profile performance metrics which summarize execution. For profile metadata and 
      - Total duration of time when at least one engine, DMA, or CC operation is active. Computed as the union of all active intervals. Units are in seconds.
    * - ``total_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percentage of total execution time when at least one engine, DMA, or CC operation is active.
+     - Percentage of total execution time when at least one engine, DMA, or CC operation is active. Range: 0 to 1.
 
 .. _profile-schema-systemprofileevents:
 
@@ -3882,7 +4661,7 @@ This table contains system profile events, which are generated from the Neuron R
      - integer (int64)
      - 
      - Yes
-     - Unique identifier for this event. Stored as int64 in Parquet. The API returns this as a string via SQL CAST to prevent JavaScript Number precision loss for values > 2^53. generate_schema.sh post-processes the TypeScript output to emit string instead of number for this field.
+     - Unique identifier for this event (framework event ids are uint64 with bit 62 set, so they exceed JavaScript's safe-integer range). Served as native int64 over Arrow and read in the UI as BigInt, preserving full precision — no VARCHAR cast. generate-schema.py emits this field as bigint in the TypeScript schema.
    * - ``name``
      - string
      - 
@@ -4136,12 +4915,12 @@ Metadata for a system profile.
      - string
      - 
      - Yes
-     - First timestamp in the system profile trace, in Unix nanoseconds format. Example: ``1766072156592459482``.
+     - First timestamp of the system profile trace, in nanoseconds, relative to the zeroed timeline origin. Always 0 for profiles processed by the current backend; older profiles carry an absolute Unix-nanosecond value that the UI rebases. Example: ``0``.
    * - ``last_ts_ns``
      - string
      - 
      - Yes
-     - Last timestamp in the system profile trace, in Unix nanoseconds format. Example: ``1766072157340255583``.
+     - Last timestamp of the system profile trace, in nanoseconds, relative to the zeroed timeline origin (i.e. the trace duration). Older profiles carry an absolute Unix-nanosecond value. Example: ``747796101``.
    * - ``ntff_version``
      - integer (int64)
      - 
@@ -4152,6 +4931,11 @@ Metadata for a system profile.
      - bytes
      - Yes
      - Total HBM capacity in bytes for a single NeuronCore.
+   * - ``instance_type``
+     - string
+     - 
+     - Yes
+     - The instance type on which this profile was captured. Example: ``trn1.32xlarge``.
 
 .. _profile-schema-tensorinfo:
 
@@ -4174,6 +4958,11 @@ Information about tensors used in the NEFF.
      - 
      - No
      - The name of the tensor. Example: ``input0``.
+   * - ``kernel_param_name``
+     - string
+     - 
+     - No
+     - The NKI kernel parameter name for this tensor, if available. Provides a human-readable name that describes the tensor's role within the kernel (e.g. "expert_gate_up_weights" instead of the generic "input17"). Example: ``expert_gate_up_weights``.
    * - ``type``
      - string
      - 
@@ -4265,7 +5054,7 @@ Hardware throttling notification events that track thermal or power throttling o
      - string
      - 
      - Yes
-     - Type of throttling (e.g., "activity_0", "activity_1", "unknown"). Example: ``activity_0``.
+     - Type of throttling (e.g., "activity_0", "power_0", "temp_0"). A type prefixed with "unknown" means the throttle cause was not identified and its magnitude could not be measured; k and n are both reported as 1 in that case, making the utilization limit they imply incomplete. Example: ``power_0``.
    * - ``pcore_idx``
      - integer (int64)
      - 
@@ -4296,8 +5085,8 @@ Summary statistics for hardware throttling on each NeuronCore and for each type 
    * - ``throttle_type``
      - string
      - 
-     - No
-     - Type of throttling (e.g., "activity_0", "activity_1", "unknown"). The value "all" means the metric aggregates across all throttle types. Example: ``activity_0``.
+     - Yes
+     - Type of throttling (e.g., "activity_0", "power_0", "temp_0"). The value "all" means the metric aggregates across all throttle types. A type prefixed with "unknown" means the throttle cause was not identified and its magnitude could not be measured. Example: ``power_0``.
    * - ``throttle_active_time_ns``
      - integer (int64)
      - nanoseconds
@@ -4305,14 +5094,66 @@ Summary statistics for hardware throttling on each NeuronCore and for each type 
      - Total time in nanoseconds when throttling was active.
    * - ``throttle_active_time_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Percent of total time when throttling was active.
+     - Percent of total time when throttling was active. Range: 0 to 1.
    * - ``max_achievable_util_with_throttling_percent``
      - number (float)
-     - percent
+     - fraction (0-1)
      - No
-     - Time-weighted average of the maximum achievable utilization with throttling, representing what fraction of compute capacity was permitted during throttled periods. A value of 1.0 means no throttling occurred, while 0.5 means the hardware was limited to 50% utilization. Calculated as the average of K/N ratios from HAM notifications weighted by the duration each limit was active.
+     - Time-weighted average of the maximum achievable utilization with throttling, representing what fraction of compute capacity was permitted during throttled periods. A value of 1.0 normally means no throttling occurred, while 0.5 means the hardware was limited to 50% utilization. Calculated as the average of K/N ratios from HAM notifications weighted by the duration each limit was active. Throttling whose magnitude could not be measured has K and N both reported as 1, which also yields 1.0 here, making this average incomplete when throttle_active_time_percent is non-zero. Range: 0 to 1.
+
+.. _profile-schema-timelineannotation:
+
+TimelineAnnotation
+~~~~~~~~~~~~~~~~~~
+
+A time region flagged during profile processing as a potential performance or data-quality concern, rendered as a full-width highlight band across the timeline. Unlike the profile-level Warning table (which is non-positional), each row has a start/end and a type that the UI maps to a color and label.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 16 10 8 44
+
+   * - Field
+     - Type
+     - Unit
+     - Required
+     - Description
+   * - ``start_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp the flagged region started.
+   * - ``end_ts``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Timestamp the flagged region ended.
+   * - ``duration_ns``
+     - integer (int64)
+     - nanoseconds
+     - Yes
+     - Duration of the flagged region.
+   * - ``type``
+     - string
+     - 
+     - Yes
+     - Machine-readable discriminator for the kind of region, used by the UI to pick a color and label. Extend as new region types are added. Example: ``small_dge_dma``.
+   * - ``name``
+     - string
+     - 
+     - Yes
+     - Short human-readable label shown on the region. Example: ``Small DMA transfers``.
+   * - ``description``
+     - string
+     - 
+     - No
+     - Longer explanation of the region and any remediation guidance, shown on hover. Example: ``Excessive small DMA transfers make instruction timing in this region unreliable.``.
+   * - ``instruction_count``
+     - integer (int64)
+     - 
+     - No
+     - Number of contributing instructions merged into this region, when applicable.
 
 .. _profile-schema-warning:
 
@@ -4344,12 +5185,74 @@ Warnings produced during profile processing. Used to communicate the possibility
 Enums
 -----
 
+.. _profile-schema-capturetype:
+
+CaptureType
+~~~~~~~~~~~
+
+Where the profiled activity actually ran. 'hardware' is a capture from a Neuron device. 's0' and 'perf-sim' are simulated: 's0' is the instruction set simulator, 'perf-sim' is the compiler's post-scheduler performance simulation. Timings from a simulated capture are modeled, not measured, so they are not comparable to a hardware capture of the same model.
+
+Allowed values:
+
+* ``hardware``
+* ``s0``
+* ``perf-sim``
+
+.. _profile-schema-datatype:
+
+DataType
+~~~~~~~~
+
+Canonical numeric data type of an instruction operand, normalized from the hardware ISA dtype enum (and, on the microscaling / compiler paths, from compiler-reported dtype strings). "unknown" is a fallback for any ISA code or dtype spelling that is not yet mapped to a canonical member; it makes newly introduced data types easy to detect so this enum can be extended. Operands with no applicable data type are omitted (null) rather than given a sentinel.
+
+Allowed values:
+
+* ``fp64``
+* ``fp32``
+* ``fp32r``
+* ``tf32``
+* ``fp16``
+* ``bf16``
+* ``fp8e3``
+* ``fp8e4``
+* ``fp8e5``
+* ``mxfp8``
+* ``mxfp4``
+* ``int8``
+* ``int16``
+* ``int32``
+* ``int64``
+* ``uint8``
+* ``uint16``
+* ``uint32``
+* ``uint64``
+* ``unknown``
+
+.. _profile-schema-dependencytype:
+
+DependencyType
+~~~~~~~~~~~~~~
+
+Kind of dependency edge in the Flow table. 'ORDERED', 'ANTI_DEPENDENCE', 'OUTPUT_DEPENDENCE' and 'FLOW_DEPENDENCE' come from the compiler's instruction debug info and describe a register or memory relationship between two instructions. The profiler adds three DMA kinds: 'trigger' is a PDMAT instruction that starts a DMA, 'completion' is an EVSEM instruction that waits for one, and 'DGE_TRIGGER' is a DGE instruction that starts a dynamic DMA. 'SAME_PSUM_BANK' links two instructions that used one PSUM bank on one core with no other access to that bank between them, where at least one of the two wrote the bank. The profiler derives 'SAME_PSUM_BANK' from decoded operand addresses and execution order rather than from a compiler or runtime record, so a pair of instructions can carry both a 'SAME_PSUM_BANK' edge and a compiler edge. 'INVALID' is the compiler's unset edge kind. A row whose dependency kind is unknown omits the field instead of naming a sentinel.
+
+Allowed values:
+
+* ``ORDERED``
+* ``ANTI_DEPENDENCE``
+* ``OUTPUT_DEPENDENCE``
+* ``FLOW_DEPENDENCE``
+* ``trigger``
+* ``completion``
+* ``DGE_TRIGGER``
+* ``SAME_PSUM_BANK``
+* ``INVALID``
+
 .. _profile-schema-dmaqueuetype:
 
 DmaQueueType
 ~~~~~~~~~~~~
 
-The type of a DMA queue. Identifies the origin and contents of DMA packets. 'software_dynamic' packets are generated by the Gpsimd cores. 'hardware_dynamic' packets are generated by dedicated DGE hardware. 'instruction', 'input', 'output', and 'data' packets are generated by the compiler.
+The type of a DMA queue. Identifies the origin and contents of DMA packets. ``software_dynamic`` packets are generated by the Gpsimd cores. ``hardware_dynamic`` packets are generated by dedicated DGE hardware. ``instruction``, ``input``, ``output``, and ``data`` packets are generated by the compiler. ``collectives`` packets move data for collective operations.
 
 Allowed values:
 
@@ -4359,6 +5262,7 @@ Allowed values:
 * ``data``
 * ``software_dynamic``
 * ``hardware_dynamic``
+* ``collectives``
 * ``unknown``
 
 .. _profile-schema-errortype:
@@ -4366,13 +5270,25 @@ Allowed values:
 ErrorType
 ~~~~~~~~~
 
-Category or type of error in the Error table. 'Errors' are hardware error events. 'Warnings' are hardware warning events. 'Custom Notification' are custom notification events from the NeuronCore.
+Category or type of error in the Error table. ``Errors`` are hardware error events. ``Warnings`` are hardware warning events. ``Custom Notification`` are custom notification events from the NeuronCore.
 
 Allowed values:
 
 * ``Custom Notification``
 * ``Errors``
 * ``Warnings``
+
+.. _profile-schema-executionunit:
+
+ExecutionUnit
+~~~~~~~~~~~~~
+
+Classification of whether an instruction is executed by the sequencer (control plane) or dispatched to the compute engine (data plane).
+
+Allowed values:
+
+* ``compute``
+* ``sequencer``
 
 .. _profile-schema-memorybandwidthdirection:
 
@@ -4398,3 +5314,15 @@ Allowed values:
 
 * ``2x``
 * ``4x``
+
+.. _profile-schema-spilltype:
+
+SpillType
+~~~~~~~~~
+
+The spill/reload role of a DMA, when it is one. The compiler spills an intermediate tensor by saving it from State Buffer to an HBM scratch (temp) buffer and later reloading it back. 'save' is a State Buffer -> HBM temp transfer, 'reload' is HBM temp -> State Buffer. Derived from the DMA's source and destination memory-region types.
+
+Allowed values:
+
+* ``save``
+* ``reload``

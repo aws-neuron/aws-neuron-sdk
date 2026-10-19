@@ -13,7 +13,7 @@ Install MXNet Neuron
 
    This document is archived. MXNet is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 .. include:: /setup/install-templates/inf1/note-setup-cntr.rst

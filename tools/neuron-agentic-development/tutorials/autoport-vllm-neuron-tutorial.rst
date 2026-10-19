@@ -23,10 +23,6 @@ validation against the GPU-compatible reference implementation.
    :ref:`autoport-tutorial`. For background on the two skills, see the
    :ref:`Autoport vLLM Neuron deep dive <neuron-framework-autoport-vllm-neuron>`.
 
-.. contents:: Table of contents
-   :local:
-   :depth: 2
-
 Prerequisites
 -------------
 

@@ -1,6 +1,6 @@
 .. meta::
    :description: Frequently Asked Questions (FAQ) about the AWS Neuron SDK, including topics on Neuron 2.x, training, inference, runtime, compiler, containers, and ONNX support.
-   :date-modified: 2025-10-03
+   :date-modified: 2026-10-13
 
 .. _neuron_faq:
 
@@ -8,50 +8,6 @@ Neuron FAQ
 ==========
 
 This topic provides links to frequently asked questions (FAQs) about the AWS Neuron SDK, organized by Neuron component.
-
-Training-specific FAQ
----------------------
-
-.. grid:: 1
-   :gutter: 2
-
-   .. grid-item-card::
-      :link: neuron-training-faq
-      :link-type: ref
-
-      **Neuron Training FAQ**
-      ^^^
-      Frequently asked questions about training models on Neuron
-
-Inference-specific FAQ
-----------------------
-
-.. grid:: 1 1 2 2
-   :gutter: 2
-
-   .. grid-item-card::
-      :link: neuron-f1-faq
-      :link-type: ref
-
-      **Neuron F1 FAQ**
-      ^^^
-      Questions about F1 instance inference capabilities
-
-   .. grid-item-card::
-      :link: trouble-shooting-inf1-faq
-      :link-type: ref
-
-      **Inf1 Troubleshooting FAQ**
-      ^^^
-      Common ``Inf1`` instance issues and solutions
-
-   .. grid-item-card::
-      :link: neuronperf_faq
-      :link-type: ref
-
-      **NeuronPerf FAQ**
-      ^^^
-      Performance benchmarking tool questions
 
 Neuron Runtime FAQ
 ------------------

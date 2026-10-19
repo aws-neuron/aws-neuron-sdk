@@ -1,6 +1,6 @@
 .. meta::
     :description: Sort tokens by expert and pack hidden states, affinities, and token indices into a [T*K, n_output_cols] buffer.
-    :date-modified: 05/21/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.subkernels
 
@@ -17,7 +17,7 @@ The ``permute_routed_tokens`` kernel sorts tokens by their assigned expert and p
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `permute_routed_tokens.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/subkernels/permute_routed_tokens.py>`_
+**Source code for this kernel API can be found at**: `permute_routed_tokens.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/subkernels/permute_routed_tokens.py>`_
 
 permute_routed_tokens
 ^^^^^^^^^^^^^^^^^^^^^

@@ -1,3 +1,7 @@
+.. meta::
+   :description: Developer guide for building custom ML frameworks and C/C++ applications that call the AWS Neuron Runtime (libnrt) APIs directly.
+   :date-modified: 2026-10-13
+
 .. _nrt-api-guide:
 
 Developer Guide - NeuronX Runtime
@@ -747,7 +751,7 @@ using it. For more details on these functions, go to the :ref:`api_init` section
 Loading the NEFF
 ~~~~~~~~~~~~~~~~
 
-Once the contents of a NEFF file have been mapped to virtual memory using ``mmap``,  load the NEFF with ``nrt_load``.
+Once the contents of a NEFF file have been mapped to virtual memory using ``mmap``,  load the NEFF with ``nrt_load``. 
 
 .. code-block:: c
 
@@ -777,7 +781,7 @@ The runtime will decide the optimal placement for the model. Specifically, it ch
 
 The call to ``nrt_load`` returns a valid model handle of type ``nrt_model_t*``, which you can use for other calls to the Runtime API (such as ``nrt_execute``).
 
-For more details on the model API (including ``nrt_load``), see :ref:`api_model`.
+For more details on the model API (including ``nrt_load``), see :ref:`api_model`. 
 
 
 Creating input/output tensors
@@ -1213,7 +1217,7 @@ The Tensor API
 
     Allocates a new tensor, placing it in either host virtual memory or device memory (based on the ``tensor_placement`` argument), on the specified NeuronCore index, of a given size, and attaches the given name to it - the name is only used for log messages.
     For applications running on Inferentia, ``tensor_placement`` should always be ``NRT_TENSOR_PLACEMENT_VIRTUAL``. For all other cases, ``NRT_TENSOR_PLACEMENT_DEVICE`` should be used. If successful, the ``tensor`` address will contain a valid pointer to the newly allocated ``nrt_tensor_t``.
-    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.
+    (depricated) ``tensor_placement`` set to ``NRT_TENSOR_PLACEMENT_HOST`` will allocate tensors in physical host memory. Tensors allocated with ``NRT_TENSOR_PLACEMENT_HOST`` cannot be larger than 4MB, the Kernel physical page size limit. We restrict tensors to a single page of host memory to simplify the generation of DMA descriptors during pre-execution setup.  
 
     :param tensor_placement: Controls where the tensor will be placed, the definition of the ``nrt_tensor_placement_t`` enum is as follows:
 
@@ -1221,7 +1225,7 @@ The Tensor API
 
             typedef enum {
                 NRT_TENSOR_PLACEMENT_DEVICE,    // the tensor is allocated directly in device memory
-                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB)
+                NRT_TENSOR_PLACEMENT_HOST,      // (depricated) the tensor is allocated in DMAable host memory (only for sizes < 4MB) 
                 NRT_TENSOR_PLACEMENT_VIRTUAL    // the tensor is allocated in host memory
             } nrt_tensor_placement_t;
 
@@ -1321,12 +1325,12 @@ The Tensor API
 
 .. c:function:: NRT_STATUS nrt_tensor_check_output_completion(const nrt_tensor_t *output_tensor, int64_t timeout, uint64_t expected_completion_count)
 
-    Checks if the output tensor has been completely written to by the Neuron Runtime.
-    It waits for up to ``timeout`` microseconds, or unlimited if ``timeout`` is negative, until the tensor reaches the expected completion count.
-    If the ``timeout`` is given as unbounded, it emits a warning at the first 30 seconds.
-    The caller is in charge of handling the timeout behavior.
-    If the tensor is complete, it returns ``NRT_SUCCESS``;
-    if the output tensor is given as NULL, it returns ``NRT_INVALID``;
+    Checks if the output tensor has been completely written to by the Neuron Runtime. 
+    It waits for up to ``timeout`` microseconds, or unlimited if ``timeout`` is negative, until the tensor reaches the expected completion count. 
+    If the ``timeout`` is given as unbounded, it emits a warning at the first 30 seconds. 
+    The caller is in charge of handling the timeout behavior. 
+    If the tensor is complete, it returns ``NRT_SUCCESS``; 
+    if the output tensor is given as NULL, it returns ``NRT_INVALID``; 
     if the tensor does not reach the ``expected_completion_count`` within the timeout, it returns ``NRT_TIMEOUT``.
 
     :param output_tensor: Valid pointer to an ``nrt_tensor_t``, which is expected to be an output tensor.

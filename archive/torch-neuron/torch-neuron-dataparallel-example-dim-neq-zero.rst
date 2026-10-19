@@ -9,7 +9,7 @@
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 In this example we run DataParallel inference using four NeuronCores and
 ``dim = 2``. Because ``dim != 0``, dynamic batching is not enabled.

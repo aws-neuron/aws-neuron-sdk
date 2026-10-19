@@ -162,7 +162,7 @@ Expected output:
 ```text
 Neuron cores are custom-designed machine learning accelerators built by AWS,
 optimized for high-throughput inference and training workloads. They are the
-processing units inside AWS Inferentia and Trainium chips.
+processing units inside AWS Trainium chips.
 ```
 
 If the script prints a coherent completion, you have confirmed end-to-end OpenAI

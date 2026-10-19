@@ -9,7 +9,7 @@
 
    This document is archived. torch-neuron (Inf1) is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 In the following example, we use the :func:`torch.neuron.DataParallel` module
 to run inference using several different batch sizes without recompiling the

@@ -13,7 +13,7 @@ TensorFlow 1.x (``tensorflow-neuron``) Compilation API
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The Neuron compilation API for TensorFlow 1.x enables compilation of saved

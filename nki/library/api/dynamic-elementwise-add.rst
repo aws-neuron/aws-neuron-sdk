@@ -1,6 +1,6 @@
 .. meta::
     :description: Elementwise addition with dynamic partition dimension tiling.
-    :date-modified: 04/09/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.dynamic_shapes
 
@@ -19,7 +19,7 @@ The ``dynamic_elementwise_add`` kernel computes elementwise addition where the n
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `dynamic_elementwise_add.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/dynamic_shapes/dynamic_elementwise_add.py>`_
+**Source code for this kernel API can be found at**: `dynamic_elementwise_add.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/dynamic_shapes/dynamic_elementwise_add.py>`_
 
 dynamic_elementwise_add
 ^^^^^^^^^^^^^^^^^^^^^^^

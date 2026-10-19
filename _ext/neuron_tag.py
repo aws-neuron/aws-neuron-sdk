@@ -24,8 +24,6 @@ add_inf1_tag = [
 ]
 
 add_trn1_tag = [
-    'frameworks/neuron-customops/',
-    'neuron-customops/',
     'frameworks/torch/inference-torch-neuronx',
     'libraries/nemo-megatron/',
     'libraries/nxd-training/',
@@ -33,7 +31,6 @@ add_trn1_tag = [
 
 add_trn2_tag = [
     'libraries/nxd-training/',
-    'about-neuron/models/',
 ]
 
 add_trn3_tag = [
@@ -56,7 +53,6 @@ clear_inf1_tag = [
     'about-neuron/arch/neuron-features/collective-communication-operations',
     'about-neuron/arch/neuron-features/dynamic-shapes',
     'about-neuron/arch/neuron-features/control-flow',
-    'about-neuron/arch/neuron-features/custom-c++-operators',
     'about-neuron/arch/neuron-features/collective-communication',
     'about-neuron/arch/neuron-features/rounding-modes',
     'about-neuron/arch/neuron-hardware/trn1-arch',
@@ -68,24 +64,12 @@ clear_inf1_tag = [
     'about-neuron/arch/neuron-hardware/trn3-arch',
     'about-neuron/arch/neuron-hardware/neuron-core-v3',
     'about-neuron/arch/neuron-hardware/neuron-core-v4',
-    'about-neuron/benchmarks/trn1-performance',
-    'about-neuron/benchmarks/trn1/',
-    'about-neuron/benchmarks/inf2/inf2-performance',
-    'about-neuron/faq/training/',
-    'about-neuron/models/inference-inf2-trn1-samples',
-    'about-neuron/models/training-trn1-samples',
-    'about-neuron/models/training-inference-trn2-samples',
-    'about-neuron/appnotes/neuronx-cc/neuronx-cc-training-mixed-precision',
-    'about-neuron/appnotes/transformers-neuronx/generative-llm-inference-with-neuron',
-    'about-neuron/appnotes/torch-neuronx/torch-neuronx-dataparallel-app-note',
-    'about-neuron/calculator/neuron-calculator',
     'about-neuron/announcements/neuron2.x/dlami-pytorch-introduce',
     'about-neuron/announcements/neuron2.x/sm-training-trn1-introduce',
     'about-neuron/announcements/neuron2.x/sm-training-dlc-2.9.1',
     'devflows/training',
     'devflows/inference/byoc-hosting-devflow-inf2',
     'compiler/neuronx-cc/',
-    'about-neuron/appnotes/perf/neuronx-cc/',
     'frameworks/torch/torch-neuronx/',
     'frameworks/torch/training',
     'frameworks/torch/inference-torch-neuronx',
@@ -127,11 +111,6 @@ clear_inf2_tag = [
     'about-neuron/arch/neuron-hardware/neuron-core-v3',
     'about-neuron/arch/neuron-hardware/neuron-core-v4',
     'about-neuron/arch/neuron-features/logical-neuroncore-config',
-    'about-neuron/benchmarks/trn1/trn1-inference-performance',
-    'about-neuron/benchmarks/trn1/trn1-training-performance',
-    'about-neuron/models/training-trn1-samples',
-    'about-neuron/models/training-inference-trn2-samples',
-    'about-neuron/announcements/neuron2.x/announce-neuron-trn2',
     'neuronx-distributed/nxd-training',
     'libraries/nxd-training/',
     'tools/neuron-sys-tools/nccom-test',
@@ -146,8 +125,6 @@ clear_trn1_tag = [
     'about-neuron/arch/neuron-hardware/trainium2',
     'about-neuron/arch/neuron-hardware/neuron-core-v3',
     'about-neuron/arch/neuron-hardware/neuron-core-v4',
-    'about-neuron/benchmarks/inf2/inf2-performance',
-    'about-neuron/models/training-inference-trn2-samples',
 ]
 
 clear_trn2_tag = [
@@ -158,12 +135,6 @@ clear_trn2_tag = [
     'about-neuron/arch/neuron-hardware/neuron-core-v2',
     'about-neuron/arch/neuron-hardware/neuron-core-v4',
     'about-neuron/arch/neuron-hardware/trn3-arch',
-    'about-neuron/benchmarks/',
-    'about-neuron/benchmarks/trn1/',
-    'about-neuron/benchmarks/inf2/inf2-performance',
-    'about-neuron/models/inference-inf2-trn1-samples',
-    'about-neuron/models/training-trn1-samples',
-    'neuron-customops/programming-guide/custom-c++-operators-devguide'
 ]
 
 clear_trn3_tag = [
@@ -173,14 +144,7 @@ clear_trn3_tag = [
     'about-neuron/arch/neuron-hardware/trainium',
     'about-neuron/arch/neuron-hardware/neuron-core-v2',
     'about-neuron/arch/neuron-hardware/neuron-core-v3',
-    'about-neuron/benchmarks/',
-    'about-neuron/benchmarks/trn1/',
-    'about-neuron/benchmarks/inf2/inf2-performance',
-    'about-neuron/models/inference-inf2-trn1-samples',
-    'about-neuron/models/training-trn1-samples',
     'libraries/neuronx-distributed/context_parallelism_overview',
-    'about-neuron/appnotes/',
-    'neuron-customops/programming-guide/custom-c++-operators-devguide'
 ]
 
 # Neuron 1.x / NeuronCore v1 era content — clear all non-Inf1 tags
@@ -191,19 +155,11 @@ clear_nc_v2_tag = [
     'archive/tensorboard/getting-started-tensorboard-neuron-plugin',
     'tools/helper-tools/tutorial-neuron-check-model',
     'tools/helper-tools/tutorial-neuron-gatherinfo',
-    'about-neuron/appnotes/neuron-cc/mixed-precision',
-    'about-neuron/appnotes/perf/neuron-cc/',
-    'about-neuron/appnotes/neuron1x/',
-    'about-neuron/appnotes/torch-neuron/',
     'about-neuron/arch/neuron-hardware/inf1-arch',
     'about-neuron/arch/neuron-hardware/inferentia',
     'about-neuron/arch/neuron-hardware/neuron-core-v1',
     'about-neuron/arch/neuron-features/neuroncore-pipeline',
     'about-neuron/announcements/neuron1.x/',
-    'about-neuron/quick-start/mxnet-neuron',
-    'about-neuron/benchmarks/inf1/',
-    'about-neuron/faq/inference/',
-    'about-neuron/models/inference-inf1-samples',
     'containers/dlc-then-ec2-devflow',
     'containers/dlc-then-ecs-devflow',
     'containers/dlc-then-eks-devflow',
@@ -338,7 +294,14 @@ def _get_explicit_override(cur_file):
     if cur_file == 'libraries/vllm-neuron/neuron-inference-overview':
         return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
 
-    if cur_file == 'release-notes/components/vllm-neuron':
+    if cur_file in ('release-notes/components/vllm-neuron',
+                    'release-notes/components/vllm-omni-neuron'):
+        return ['Trn2', 'Trn3'], True
+
+    if cur_file == 'release-notes/components/observer':
+        return ['Trn2', 'Trn3'], True
+
+    if cur_file == 'release-notes/components/torchneuron':
         return ['Trn2', 'Trn3'], True
 
     # vLLM Omni Neuron (Beta) — Trn2/Trn3 only. Covers the docs landing
@@ -346,16 +309,23 @@ def _get_explicit_override(cur_file):
     if cur_file.startswith('vllm-omni-neuron/docs/'):
         return ['Trn2', 'Trn3'], True
 
+    if cur_file == 'release-notes/components/torchneuron':
+        return ['Trn2', 'Trn3'], True
+
     if cur_file.startswith('libraries/nxd-inference/'):
         return ['Inf2', 'Trn1', 'Trn2'], True
 
-    if cur_file.startswith('libraries/nemo-megatron/'):
-        return ['Trn1', 'Trn2'], True
+    if cur_file.startswith('nki/deep-dives/mxfp-matmul'):
+        return ['Trn3'], True
 
     # --- Tools ---------------------------------------------------------
 
     if cur_file == 'release-notes/components/dev-tools':
         return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
+
+    # Neuron Observer public beta — Trn2/Trn3 only
+    if cur_file.startswith('tools/neuron-observer/'):
+        return ['Trn2', 'Trn3'], True
 
     # --- NKI -----------------------------------------------------------------
 
@@ -364,7 +334,9 @@ def _get_explicit_override(cur_file):
 
     # --- CustomOps -----------------------------------------------------------
 
-    if cur_file.startswith('neuron-customops/'):
+    # Archived in Neuron 2.33 (aws-neuronx-gpsimd-customop-lib is in maintenance
+    # mode). NeuronCore-v2 only, so keep the Inf2/Trn1 tags.
+    if cur_file.startswith('archive/neuron-customops/'):
         return ['Inf2', 'Trn1'], True
 
     # --- Frameworks ----------------------------------------------------------
@@ -379,6 +351,45 @@ def _get_explicit_override(cur_file):
     # TensorFlow Neuron (Inf1)
     if 'tensorflow/tensorflow-neuron' in cur_file and 'neuronx' not in cur_file:
         return ['Inf1'], True
+
+    # Training-only TorchNeuron pages drop Inf2 (no training on Inf2). These
+    # must come before the general torch/ rule below (first match wins). Trn1
+    # is dropped (EOL).
+    if cur_file in ['torch/tutorials/tutorial-simple-training',
+                    'torch/tutorials/tutorial-torch-distributed',
+                    'torch/guides/torch-distributed']:
+        return ['Trn2', 'Trn3'], True
+
+    # TorchNeuron native PyTorch docs live at the top-level torch/ tree
+    # (Neuron 2.33+). Trn2/Trn3 only. Trn1 is dropped (EOL). Inf2 is dropped
+    # per Cyril Bortolato's content-plan review: Inf2 users should stay on the
+    # older SDK + PyTorch/torch-xla 2.9 (frameworks/torch/ XLA docs), not the
+    # native TorchNeuron stack. startswith('torch/') matches only these
+    # top-level pages, not frameworks/torch/... below.
+    if cur_file.startswith('torch/'):
+        return ['Trn2', 'Trn3'], True
+
+    # TorchTitan on Neuron docs live at the top-level training/torchtitan/ tree
+    # (Neuron 2.33+). Training-only, so no Inf2; Trn1 is dropped (EOL), leaving
+    # Trn2/Trn3.
+    if cur_file.startswith('training/torchtitan/'):
+        return ['Trn2', 'Trn3'], True
+
+    # Top-level task landing page training.rst and the native-vs-legacy
+    # comparison page training/index. These cover the legacy XLA training path
+    # as well as native TorchNeuron, and legacy XLA still supports Trn1, so
+    # keep Trn1 alongside Trn2/Trn3. Training-only, so no Inf badges.
+    if cur_file in ['training', 'training/index']:
+        return ['Trn1', 'Trn2', 'Trn3'], True
+
+    # New native training tree at the top-level training/ (Neuron 2.33+),
+    # e.g. training/best-practices (training/index is handled above). Training-only (no Inf2);
+    # Trn1 is dropped (EOL), leaving Trn2/Trn3. Scoped to the top-level
+    # training/ tree only. Legacy XLA training docs under libraries/ (e.g.
+    # libraries/neuronx-distributed/) match their own earlier rules and are
+    # unaffected.
+    if cur_file.startswith('training/'):
+        return ['Trn2', 'Trn3'], True
 
     # TorchNeuron native PyTorch (must come before torch-neuronx check)
     if 'torch/pytorch-native' in cur_file:
@@ -429,9 +440,6 @@ def _get_explicit_override(cur_file):
     if cur_file == 'compiler/neuronx-cc' or cur_file.startswith('compiler/neuronx-cc/'):
         return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
 
-    if cur_file == 'neuron-customops/programming-guide' or cur_file.startswith('neuron-customops/programming-guide'):
-        return ['Inf2', 'Trn1'], True
-
     # --- Setup ---------------------------------------------------------------
 
     if cur_file.startswith('setup/install-templates/inf1/'):
@@ -453,6 +461,12 @@ def _get_explicit_override(cur_file):
         return ['Inf1'], True
     if cur_file.startswith('setup/neuron-setup/tensorflow/neuron/'):
         return ['Inf1'], True
+
+    # TorchNeuron install hub and its DLAMI/DLC/manual pages (setup/pytorch/,
+    # Neuron 2.33+). TorchNeuron supports Trn2/Trn3 only; Trn1 is dropped (EOL)
+    # and Inf2 stays on the legacy torch-xla path.
+    if cur_file.startswith('setup/pytorch/'):
+        return ['Trn2', 'Trn3'], True
 
     if cur_file == 'setup/jax-neuronx':
         return ['Trn2', 'Trn3'], True
@@ -539,6 +553,18 @@ def _get_page_override(cur_file):
     if cur_file == 'tools/tutorials/performance-profiling-vllm':
         return ['Trn2', 'Trn3'], True
 
+    # Neuron Agentic Development: the vLLM Neuron profiling and profile-analysis
+    # pages target the vLLM Neuron backend, which is Trainium2 and later. Without
+    # this, 'tools' in COMMON_DIRS tags them Inf1/Inf2/Trn1 as well. Matches the
+    # scope _inject_vllm_neuron_myst_tags() applies to vllm-neuron/docs/.
+    if cur_file in (
+        'tools/neuron-agentic-development/developer_guides/neuron-framework-profiling-vllm-neuron',
+        'tools/neuron-agentic-development/developer_guides/neuron-framework-profile-analysis-vllm-neuron',
+        'tools/neuron-agentic-development/tutorials/profiling-vllm-neuron-tutorial',
+        'tools/neuron-agentic-development/tutorials/profile-analysis-vllm-neuron-tutorial',
+    ):
+        return ['Trn2', 'Trn3'], True
+
     # Neuron Explorer (not supported on Inf1)
     if cur_file.startswith('tools/neuron-explorer/'):
         return ['Inf2', 'Trn1', 'Trn2', 'Trn3'], True
@@ -561,47 +587,61 @@ def _get_page_override(cur_file):
 
     # --- Arch features -------------------------------------------------------
 
-    if cur_file == 'about-neuron/arch/neuron-features/custom-c++-operators':
+    if cur_file == 'archive/neuron-features/custom-c++-operators':
         return ['Inf2', 'Trn1'], True
     if cur_file == 'about-neuron/arch/neuron-features/logical-neuroncore-config':
         return ['Trn2', 'Trn3'], True
 
-    # --- Appnotes ------------------------------------------------------------
+    # --- Quickstarts landing page (Neuron 2.33+) -----------------------------
 
-    if cur_file == 'about-neuron/appnotes/neuronx-distributed/introducing-nxd-inference':
-        return ['Inf2', 'Trn1', 'Trn2'], True
-    if cur_file == 'about-neuron/appnotes/neuronx-distributed/introducing-nxdt-training':
-        return ['Trn1', 'Trn2'], True
-    if cur_file.startswith('about-neuron/appnotes/torch-neuronx/'):
-        return ['Inf2', 'Trn1', 'Trn2'], True
-    if cur_file.startswith('about-neuron/appnotes/transformers-neuronx/'):
+    # Root quickstarts.rst groups TorchNeuron, vLLM Neuron, vLLM Omni Neuron,
+    # NKI, Neuron Explorer, and Neuron Observer quickstarts. All target Trn2/Trn3.
+    if cur_file == 'quickstarts':
+        return ['Trn2', 'Trn3'], True
+
+    # --- Archived About Neuron pages (moved to archive/ in Neuron 2.33) -------
+
+    # Keep the instance tags these pages carried before they moved, so the
+    # "relevant for" line still tells readers which retired hardware they cover.
+
+    # Model samples
+    if cur_file == 'archive/models/index':
+        return ['Inf1', 'Inf2', 'Trn1'], True
+    if cur_file == 'archive/models/training-trn1-samples':
+        return ['Trn1'], True
+    if cur_file == 'archive/models/inference-inf1-samples':
+        return ['Inf1'], True
+    if cur_file == 'archive/models/inference-inf2-trn1-samples':
         return ['Inf2', 'Trn1'], True
-    if cur_file == 'about-neuron/appnotes/neuronx-cc/neuronx-cc-training-mixed-precision':
-        return ['Trn1', 'Trn2', 'Trn3'], True
-    if cur_file.startswith('about-neuron/appnotes/neuron1x/'):
+
+    # Benchmarks
+    if cur_file == 'archive/benchmarks/index':
+        return ['Inf1', 'Inf2', 'Trn1'], True
+    if cur_file.startswith('archive/benchmarks/inf1/'):
         return ['Inf1'], True
+    if cur_file.startswith('archive/benchmarks/inf2/'):
+        return ['Inf2'], True
+    if cur_file.startswith('archive/benchmarks/trn1/'):
+        return ['Trn1'], True
 
-    # --- Benchmarks ----------------------------------------------------------
-
-    if cur_file == 'about-neuron/benchmarks/index':
-        return ['Inf1', 'Inf2', 'Trn1', 'Trn2', 'Trn3'], True
-
-    # --- Quick-start ---------------------------------------------------------
-
-    if cur_file == 'about-neuron/quick-start/tensorflow-neuron':
+    # Older FAQs
+    if cur_file == 'archive/faq/index':
+        return ['Inf1', 'Trn1'], True
+    if cur_file.startswith('archive/faq/inference/') or cur_file == 'archive/faq/onnx-faq':
         return ['Inf1'], True
-    if cur_file in ['about-neuron/quick-start/torch-neuron',
-                     'about-neuron/quick-start/torch-neuron-tab-training']:
-        return ['Inf1'], True
+    if cur_file.startswith('archive/faq/training/'):
+        return ['Trn1'], True
 
-    if cur_file.startswith('about-neuron/quick-start/tab-inference-torch-neuronx'):
-        return ['Inf2', 'Trn1', 'Trn2'], True
-    if cur_file.startswith('about-neuron/quick-start/tab-inference-torch-neuron') and 'neuronx' not in cur_file:
-        return ['Inf1'], True
-    if cur_file.startswith('about-neuron/quick-start/tab-inference-tensorflow-neuronx'):
+    # transformers-neuronx app note and calculator
+    if cur_file in ['archive/transformers-neuronx/generative-llm-inference-with-neuron',
+                    'archive/transformers-neuronx/neuron-calculator']:
         return ['Inf2', 'Trn1'], True
-    if cur_file.startswith('about-neuron/quick-start/tab-inference-tensorflow-neuron') and 'neuronx' not in cur_file:
-        return ['Inf1'], True
+
+    # Archived quickstarts
+    if cur_file == 'archive/quick-start/training-quickstart':
+        return ['Trn1'], True
+    if cur_file == 'archive/quick-start/inference-quickstart':
+        return ['Inf2'], True
 
     return None, False
 

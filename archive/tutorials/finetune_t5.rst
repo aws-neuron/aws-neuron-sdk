@@ -20,7 +20,7 @@ a text-summarization <https://github.com/huggingface/transformers/tree/master/ex
    :local:
    :depth: 2
 
-.. include:: /frameworks/torch/torch-neuronx/tutorials/note-performance.txt
+.. include:: /archive/frameworks/torch/torch-neuronx/tutorials/note-performance.txt
 
 Setup and compilation
 ---------------------
@@ -59,7 +59,7 @@ create a “run.sh” file and change it to executable:
    :lines: 7-46
 
 We optionally precompile the model and training script using
-`neuron\_parallel\_compile <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/api-reference-guide/training/pytorch-neuron-parallel-compile.html?highlight=neuron_parallel_compile>`__ to warm up the persistent graph cache (Neuron
+`neuron\_parallel\_compile <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/archive/frameworks/torch/torch-neuronx/api-reference-guide/training/pytorch-neuron-parallel-compile.html?highlight=neuron_parallel_compile>`__ to warm up the persistent graph cache (Neuron
 Cache) such that the actual run has fewer compilations (faster run
 time):
 

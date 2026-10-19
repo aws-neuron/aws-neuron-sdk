@@ -1,6 +1,6 @@
 .. meta::
     :description: 1D Convolution operation using tensor engine with replication strategy.
-    :date-modified: 04/09/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.conv
 
@@ -32,7 +32,7 @@ The ``conv1d`` kernel applies 1D convolution filters across the input sequence d
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `conv1d.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/conv/conv1d.py>`_
+**Source code for this kernel API can be found at**: `conv1d.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/conv/conv1d.py>`_
 
 conv1d
 ^^^^^^

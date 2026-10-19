@@ -1,6 +1,6 @@
 .. meta::
     :description: All-to-all-v combine and unpermute to original token order.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.collectives.a2av_train
 
@@ -19,25 +19,27 @@ The ``unpermute_a2av`` kernel is the MoE training combine step: it exchanges exp
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `unpermute_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/collectives/a2av_train/unpermute_a2av.py>`_
+**Source code for this kernel API can be found at**: `unpermute_a2av.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/collectives/a2av_train/unpermute_a2av.py>`_
 
 unpermute_a2av
 ^^^^^^^^^^^^^^
 
-.. py:function:: unpermute_a2av(output: nl.ndarray, send_indices: nl.ndarray, recv_counts: nl.ndarray, replica_group: ReplicaGroup) -> nl.ndarray
+.. py:function:: unpermute_a2av(output: nl.NkiTensor, packed_source_indices: nl.NkiTensor, send_counts: nl.NkiTensor, recv_counts: nl.NkiTensor, replica_group: ReplicaGroup) -> nl.NkiTensor
 
    All-to-all-v combine and unpermute to original token order.
 
-   :param output: [EP*T, H]@HBM. Expert output in fixed-stride layout: source ``s`` contributes at rows ``[s*T, s*T + recv_counts[s])``.
-   :type output: ``nl.ndarray``
-   :param send_indices: [T, EP]@HBM, int32. MoE routing table shared with dispatch: ``send_indices[t, d]`` is the original local-token row that source rank ``d`` produces the ``t``-th contribution for. On combine we scatter-add the received rows into those original positions. Entries with value = T are skipped (via ``oob_mode.skip``).
-   :type send_indices: ``nl.ndarray``
-   :param recv_counts: [1, EP]@HBM, int32/uint32. Original dispatch ``recv_counts`` — used as combine's send-counts (metadata row 0).
-   :type recv_counts: ``nl.ndarray``
+   :param output: [C, H]@HBM packed expert output.
+   :type output: ``nl.NkiTensor``
+   :param packed_source_indices: [N]@HBM, int32 permutation mapping packed return rows to original routed-row indices, in the same destination-major order used for dispatch.
+   :type packed_source_indices: ``nl.NkiTensor``
+   :param send_counts: [1, EP]@HBM original dispatch send counts.
+   :type send_counts: ``nl.NkiTensor``
+   :param recv_counts: [1, EP]@HBM original dispatch receive counts.
+   :type recv_counts: ``nl.NkiTensor``
    :param replica_group: EP replica group.
    :type replica_group: ``ReplicaGroup``
-   :return: [T, H]@HBM. Output in original token order.
-   :rtype: ``nl.ndarray``
+   :return: [N, H]@HBM in original routed-row order.
+   :rtype: ``nl.NkiTensor``
 
    **Notes**:
 

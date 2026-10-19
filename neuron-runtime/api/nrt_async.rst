@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_async.h header in the AWS Neuron Runtime: Neuron Runtime asynchronous execution API for non-blocking tensor I/O and model execution.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_async_h:
 
 nrt_async.h
@@ -6,10 +10,6 @@ nrt_async.h
 Neuron Runtime Asynchronous Execution API - Non-blocking operations for tensor I/O and model execution.
 
 **Source**: `src/libnrt/include/nrt/nrt_async.h <https://github.com/aws-neuron/aws-neuron-sdk/blob/master/src/libnrt/include/nrt/nrt_async.h>`__
-
-.. note::
-
-   The Neuron Runtime Async APIs are currently in early release and may change across Neuron versions.
 
 Enumerations
 ------------

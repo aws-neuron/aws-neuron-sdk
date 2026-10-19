@@ -14,7 +14,7 @@ Get Started with TensorFlow Neuron (Archived)
 
    This document is archived. TensorFlow is no longer supported by the AWS
    Neuron SDK (end of support as of Neuron 2.31). It is provided for reference
-   only. For current framework support, see :doc:`/frameworks/index`.
+   only. For current framework support, see :doc:`/archive/frameworks/index`.
 
 TensorFlow Neuron has reached end of support and is no longer part of the
 Neuron SDK. Historical setup and inference references are preserved under

@@ -39,7 +39,7 @@ configuration interfaces (see
 and can capture profiles (see
 [how to profile workloads](../guides/how-to-profile-workloads.md)). The design docs
 referenced throughout are the reference for *why* each configuration behaves as it does:
-[vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md),
+[encoder parallelism](../design/parallelism/encoder_parallelism.md),
 [block packing vision attention](../design/multimodal/block_packing_attention.md),
 [M-RoPE](../design/multimodal/mrope.md), and the
 [on-device encoder cache](../design/multimodal/on_device_encoder_cache.md).
@@ -90,7 +90,7 @@ scheduler admits **one request into prefill per step** (batch size 1), and a
 request's vision-encoder inputs are scheduled together with that prefill — so the
 vision encoder processes **one request's** images (which may still be many
 images or video frames) per forward pass, not images batched across concurrent
-requests. Size `num_vision_tokens_buckets` for the most images a single request
+requests. Size `num_encoder_input_buckets` for the most images a single request
 carries. Concurrency still affects decode batching and overall throughput, so
 measure at your target concurrency. Second, keep the workload **fixed** while
 comparing options — a latency change only means something when the input shape
@@ -244,7 +244,7 @@ directions.
 
 Each image attends only within itself, so the encoder can process different images
 (blocks) independently and gather once at the end.
-**Block-level [data parallelism](../design/parallelism/vision_encoder_parallelism.md)**
+**Block-level [data parallelism](../design/parallelism/encoder_parallelism.md)**
 scatters blocks across ranks, cutting the per-rank sequence length — which helps
 the `S²` attention term most — and avoiding
 [tensor-parallel](../design/parallelism/tensor_parallelism.md) collectives.
@@ -257,13 +257,13 @@ the `S²` attention term most — and avoiding
 The trade-off is that DP pads all images in a call to the largest image's length
 (data skew hurts) and replicates encoder weights per rank. For the block
 scatter/gather mechanics and the DP-vs-TP roofline, see
-[vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md).
-The split lives in `vision_neuron_config`:
+[encoder parallelism](../design/parallelism/encoder_parallelism.md).
+The split lives in `encoder_neuron_config`:
 
 ```python
-"vision_neuron_config": {
-    "num_vision_tokens_buckets": [30720],
-    "vision_attention_block_size": 1024,
+"encoder_neuron_config": {
+    "num_encoder_input_buckets": [30720],
+    "encoder_attention_block_size": 1024,
     "tp_size": 1,        # no weight sharding (recommended: full DP)
     "dp_size": 16,       # scatter blocks across 16 replicas (tp_size * dp_size == world_size)
 }
@@ -279,16 +279,16 @@ These values are model- and workload-specific — the numbers above are for the
 `patch_size` differ) or a different resolution needs different numbers. Compute
 them from your workload:
 
-- **`num_vision_tokens_buckets`** — the vision token count one request produces
+- **`num_encoder_input_buckets`** — the vision token count one request produces
   (prefill is batch size 1, so the encoder processes one request's images per
   step), from the [formula above](#grounding-in-a-representative-workload)
   (`vision_seq_len_per_image × num_images`). Add more entries if request sizes
   vary. Omit it entirely to let the buckets auto-generate from the serving config.
-- **`vision_attention_block_size`** — must be **≥ the largest single image's token
+- **`encoder_attention_block_size`** — must be **≥ the largest single image's token
   count** (`vision_seq_len_per_image`), rounded to a multiple of 128.
 
 See the
-[configuration reference](../guides/reference-configuration.md#vision-encoder-options-vision_neuron_config)
+[configuration reference](../guides/reference-configuration.md#multimodal-encoder-options-encoder_neuron_config)
 for the auto-generation rules and a capacity table.
 
 ### Prefill (text) — tensor parallelism, plus sequence parallelism
@@ -433,7 +433,7 @@ that apply to any decoder, and kernels.
 
 - **Block-packed vision attention** packs variable-size images into fixed blocks
   and computes attention per block with no cross-block work, giving 2×–2.5× encoder
-  efficiency on heterogeneous images; `vision_attention_block_size` tunes it to the
+  efficiency on heterogeneous images; `encoder_attention_block_size` tunes it to the
   resolution mix. See
   [block packing vision attention](../design/multimodal/block_packing_attention.md#choosing-the-right-block-size).
 - **On-device encoder cache** keeps vision embeddings in an HBM buffer so repeated
@@ -522,7 +522,7 @@ the largest gap to the roofline isn't worth closing:
   serving first; this analysis optimizes that deployment.
 - [How to onboard a Vision-Language Model](onboarding-vlm-models.md) — Full VLM-specific
   configuration API and summary.
-- [Vision encoder parallelism](../design/parallelism/vision_encoder_parallelism.md)
+- [Encoder parallelism](../design/parallelism/encoder_parallelism.md)
   — TP/DP design, block scatter, and the DP-vs-TP roofline.
 - [DCP (Decode Context Parallelism)](../design/parallelism/dcp.md) — KV-cache
   sequence sharding at decode; shrinks the per-rank KV read for the text decoder.

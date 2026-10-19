@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_sys_trace.h header in the AWS Neuron Runtime: Neuron Runtime system trace API to capture and fetch system trace events from Neuron devices.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_sys_trace_h:
 
 nrt_sys_trace.h

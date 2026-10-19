@@ -13,7 +13,7 @@ Neuron Apache MXNet Compilation Python API
 
    This document is archived. MXNet is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 The MXNet-Neuron compilation Python API provides a method to compile

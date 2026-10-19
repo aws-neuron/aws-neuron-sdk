@@ -27,6 +27,13 @@ AWS Neuron provides a comprehensive suite of developer tools for optimizing, mon
 
       Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium, from model development through debugging, profiling, analysis, and optimization.
 
+   .. grid-item-card:: Neuron Observer (Beta)
+      :link: /tools/neuron-observer/index
+      :link-type: doc
+      :class-header: sd-bg-primary sd-text-white
+
+      Cluster health and observability for AWS Trainium accelerators. Detect hardware faults, view device health and metrics on Amazon EKS, and export to Prometheus, CloudWatch, or OpenTelemetry. Public beta on Trn2/Trn3.
+
    .. grid-item-card:: System Tools
       :link: /tools/neuron-sys-tools/index
       :link-type: doc

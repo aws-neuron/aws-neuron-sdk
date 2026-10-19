@@ -1,3 +1,7 @@
+.. meta::
+   :description: Reference for the nrt_version.h header in the AWS Neuron Runtime: Neuron Runtime version information API.
+   :date-modified: 2026-10-13
+
 .. _api_nrt_version_h:
 
 nrt_version.h

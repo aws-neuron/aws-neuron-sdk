@@ -12,7 +12,7 @@ Compile with Framework API and Deploy on EC2 Inf1 — Archived (MXNet)
 
    This document is archived. MXNet is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 For the current EC2 Inf1 compile-and-deploy flow, see
 :ref:`ec2-then-ec2-devflow`.

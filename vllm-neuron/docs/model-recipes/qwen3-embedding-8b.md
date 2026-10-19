@@ -9,7 +9,7 @@ Trn3. -->
 embeddings, pooling, retrieval, RAG, MTEB, Matryoshka, model recipe, model card,
 embedding serving, Trn2, Trn3, Trainium -->
 
-<!-- meta: date_updated: 2026-08-04 -->
+<!-- meta: date_updated: 2026-10-06 -->
 
 <!-- Content type: model-card -->
 
@@ -67,11 +67,14 @@ cross-model feature compatibility matrix.
 |                        | Disaggregated inference (1P1D / xPyD)            | ❌     |
 | **Compilation**  | torch.compile (XLA backend)                      | ✅     |
 |                        | CPU mode (testing)                               | ✅     |
+| **Runtime** | Model Runner V2 | ❌ (runs on MRv1) |
 
 **Status legend:**
 
 - ✅ Supported: integrated and tested for Qwen3-Embedding
 - ❌ Not supported: may be considered for future releases
+
+This model runs on Model Runner V1 (MRv1) because it is a pooling (embedding) model. [Model Runner V2](../guides/features-guide.md#model-runner-v2) supports dense text-generation models only.
 
 The [deployment tutorial](../tutorials/tutorial-qwen3-embedding-8b.md) walks
 through deploying Qwen3-Embedding-8B via two paths: an online OpenAI-compatible

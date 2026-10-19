@@ -1,6 +1,6 @@
 .. meta::
     :description: RMSNorm-Quant kernel performs optional RMS normalization followed by fp8 quantization.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.core.rmsnorm_quant.rmsnorm_quant
 
@@ -28,7 +28,7 @@ For detailed information about the mathematical operations and implementation de
 API Reference
 ----------------
 
-**Source code for this kernel API can be found at**: `rmsnorm_quant.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/core/rmsnorm/rmsnorm_quant.py>`_
+**Source code for this kernel API can be found at**: `rmsnorm_quant.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/core/rmsnorm/rmsnorm_quant.py>`_
 
 rmsnorm_quant_kernel
 ^^^^^^^^^^^^^^^^^^^^^

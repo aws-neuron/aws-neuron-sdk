@@ -1,6 +1,6 @@
 .. meta::
     :description: Multi-scale deformable attention kernel that uses indirect DMA transpose.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.deformable_attention
 
@@ -17,25 +17,25 @@ The ``ms_deformable_attention`` kernel computes multi-scale deformable attention
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `ms_deformable_attention.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/deformable_attention/ms_deformable_attention.py>`_
+**Source code for this kernel API can be found at**: `ms_deformable_attention.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/deformable_attention/ms_deformable_attention.py>`_
 
 ms_deformable_attention
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. py:function:: ms_deformable_attention(value: nl.ndarray, spatial_shapes: tuple, level_start_index: tuple, sampling_locations: nl.ndarray, attention_weights: nl.ndarray, value_layout: str = 'BLNC', sampling_locations_layout: str = 'BQHLP2', align_corners: bool = False, padding_mode: str = 'zeros') -> nl.ndarray
+.. py:function:: ms_deformable_attention(value: nl.NkiTensor, spatial_shapes: tuple, level_start_index: tuple, sampling_locations: nl.NkiTensor, attention_weights: nl.NkiTensor, value_layout: str = 'BLNC', sampling_locations_layout: str = 'BQHLP2', align_corners: bool = False, padding_mode: str = 'zeros', max_indices_per_indirect: Optional[int] = None, gather_method: str = 'transpose') -> nl.NkiTensor
 
    Multi-scale deformable attention kernel that uses indirect DMA transpose.
 
    :param value: Value tensor in HBM. Shape depends on value_layout: - If value_layout="BLNC": (B, L, N_h, C_h) - If value_layout="BNLC": (B, N_h, L, C_h)
-   :type value: ``nl.ndarray``
+   :type value: ``nl.NkiTensor``
    :param spatial_shapes: Tuple of (H_i, W_i) tuples specifying spatial dimensions for each level
    :type spatial_shapes: ``tuple``
    :param level_start_index: Tuple of start indices for each level in the flattened L dimension
    :type level_start_index: ``tuple``
    :param sampling_locations: Normalized sampling coordinates in HBM. Shape depends on layout: - If sampling_locations_layout="BQHLP2": (B, N_q, N_h, N_l, N_p, 2) - If sampling_locations_layout="B2QHLP": (B, 2, N_q, N_h, N_l, N_p)
-   :type sampling_locations: ``nl.ndarray``
+   :type sampling_locations: ``nl.NkiTensor``
    :param attention_weights: Attention weights in HBM, shape (B, N_q, N_h, N_l, N_p)
-   :type attention_weights: ``nl.ndarray``
+   :type attention_weights: ``nl.NkiTensor``
    :param value_layout: Layout of value tensor, either "BLNC" or "BNLC". Default: "BLNC"
    :type value_layout: ``str``
    :param sampling_locations_layout: Layout of sampling_locations, either "BQHLP2" or "B2QHLP". Default: "BQHLP2"
@@ -44,8 +44,12 @@ ms_deformable_attention
    :type align_corners: ``bool``
    :param padding_mode: Padding mode for out-of-bounds coordinates, either "zeros" or "border". Default: "zeros"
    :type padding_mode: ``str``
+   :param max_indices_per_indirect: Cap on gather indices (P_MAX * M_batch) per batched gather. Setting this enables the batched indirect gather path (M_batch = cap // P_MAX); None disables it (each (head, level) gathered separately). Default: None
+   :type max_indices_per_indirect: ``Optional[int]``
+   :param gather_method: How values are gathered: "transpose" (dma_transpose to [channel, query] then nc_transpose to [query, channel]) or "copy" (indirect dma_copy to [query, channel]).
+   :type gather_method: ``str``
    :return: Attention output in HBM, shape (B, N_q, N_h * C_h)
-   :rtype: ``nl.ndarray``
+   :rtype: ``nl.NkiTensor``
 
    **Dimensions**:
 

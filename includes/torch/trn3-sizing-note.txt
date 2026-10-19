@@ -1,0 +1,11 @@
+.. note::
+
+   **Running on Trn3:** The instance-dependent values on this page, such as the
+   number of ranks per node, the device memory (HBM) per rank,
+   ``NEURON_RT_NUM_CORES``, and the device mesh shapes, are for Trn2
+   (``trn2.48xlarge``). Trn3 servers have a different number of Trainium chips, so
+   these values do not apply to Trn3 without change. Before you run on Trn3,
+   calculate them again from the :ref:`Amazon EC2 Trn3 architecture
+   <aws-trn3-arch>` and :ref:`Trainium3 architecture <trainium3-arch>`
+   specifications. For the effect of the LNC setting on the number of visible
+   cores, see :ref:`Logical NeuronCore configuration <logical-neuroncore-config>`.

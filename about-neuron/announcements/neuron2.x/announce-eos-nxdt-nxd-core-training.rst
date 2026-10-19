@@ -14,4 +14,4 @@ How does this impact you?
 
 Existing NxDT/NxD Core users should stay on Neuron SDK 2.28 (PyTorch 2.9) until ready to migrate to native PyTorch on Neuron. Native PyTorch on Neuron uses standard distributed primitives (DTensor, FSDP, DDP). A migration guide will be published in a coming release.
 
-See :doc:`Native PyTorch on Neuron Overview </frameworks/torch/pytorch-native-overview>` for more information.
+See :doc:`Native PyTorch on Neuron Overview </torch/about-pytorch-neuron>` for more information.

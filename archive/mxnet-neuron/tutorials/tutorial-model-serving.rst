@@ -13,7 +13,7 @@ Tutorial: Neuron Apache MXNet Model Serving
 
    This document is archived. MXNet is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 This MXNet Neuron Model Serving (MMS) example is adapted from the MXNet

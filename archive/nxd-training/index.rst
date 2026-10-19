@@ -24,7 +24,7 @@ NxD Training (archived)
    XLA-based ``torch-neuronx`` training flow have reached end-of-support as of Neuron 2.32 and are no
    longer actively maintained. The content below is preserved for historical reference and
    may describe features, APIs, or workflows that no longer work with current Neuron
-   releases. For current PyTorch training on Trainium, see :doc:`/frameworks/torch/index`.
+   releases. For current PyTorch training on Trainium, see :doc:`/archive/frameworks/torch/index`.
 
 This page consolidates the archived documentation for NxD Training and the XLA-based
 ``torch-neuronx`` training experience — the library overview, setup and configuration,

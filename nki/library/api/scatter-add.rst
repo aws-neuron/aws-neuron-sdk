@@ -1,6 +1,6 @@
 .. meta::
     :description: Scatter-add from src into input based on indices using gather-accumulate-scatter pattern.
-    :date-modified: 06/11/2026
+    :date-modified: 10/19/2026
 
 .. currentmodule:: nkilib.experimental.misc
 
@@ -19,25 +19,27 @@ The ``scatter_add`` kernel scatter-adds rows from ``src`` into a 2D input tensor
 API Reference
 --------------
 
-**Source code for this kernel API can be found at**: `scatter_add.py <https://github.com/aws-neuron/nki-library/blob/2.32/src/nkilib_src/nkilib/experimental/misc/scatter_add.py>`_
+**Source code for this kernel API can be found at**: `scatter_add.py <https://github.com/aws-neuron/nki-library/blob/2.33/src/nkilib_src/nkilib/experimental/misc/scatter_add.py>`_
 
 scatter_add
 ^^^^^^^^^^^
 
-.. py:function:: scatter_add(input: nl.ndarray, dim: int, index: nl.ndarray, src: nl.ndarray) -> nl.ndarray
+.. py:function:: scatter_add(input: nl.NkiTensor, dim: int, index: nl.NkiTensor, src: nl.NkiTensor, unique_indices: bool = True) -> nl.NkiTensor
 
    Scatter-add from src into input based on indices using gather-accumulate-scatter pattern.
 
    :param input: [N, D], Destination tensor to accumulate into (modified in-place)
-   :type input: ``nl.ndarray``
+   :type input: ``nl.NkiTensor``
    :param dim: Dimension along which to scatter (must be 0)
    :type dim: ``int``
    :param index: [K], 1D tensor of row indices into input
-   :type index: ``nl.ndarray``
+   :type index: ``nl.NkiTensor``
    :param src: [K, D], Source values to scatter-add
-   :type src: ``nl.ndarray``
+   :type src: ``nl.NkiTensor``
+   :param unique_indices: If True (default), assume destination indices are unique within each 128-row tile and use the plain tile-wide gather/scatter path. If False, duplicate rows within a tile are pre-combined on the Tensor Engine so repeated indices accumulate correctly, which embedding-gradient scatters need. Costs one extra 128x128 matmul per PSUM-wide column chunk.
+   :type unique_indices: ``bool``
    :return: [N, D], The input tensor with scattered values added
-   :rtype: ``nl.ndarray``
+   :rtype: ``nl.NkiTensor``
 
    **Notes**:
 

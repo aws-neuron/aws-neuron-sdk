@@ -13,7 +13,7 @@ TensorFlow 2.x (``tensorflow-neuron``) analyze_model API
 
    This document is archived. TensorFlow is no longer officially supported
    by the AWS Neuron SDK. It is provided for reference only. For current
-   framework support, see :doc:`/frameworks/index`.
+   framework support, see :doc:`/archive/frameworks/index`.
 
 
 Method
@@ -46,9 +46,9 @@ Arguments
 Returns
 -------
 
--  A results ``dict`` with these keys: ``'percent_supported', 'supported_count', 
-  'total_count', 'supported_operators', 'unsupported_operators', 'operators', 
-  'operator_count'``.
+-  A results ``dict`` with these keys: ``'percent_supported'``, ``'supported_count'``,
+   ``'total_count'``, ``'supported_operators'``, ``'unsupported_operators'``,
+   ``'operators'``, ``'operator_count'``.
 
 Example Usage
 -------------

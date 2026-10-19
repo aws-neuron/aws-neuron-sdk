@@ -1,7 +1,7 @@
 .. meta::
     :description: Complete release notes for the Neuron Developer Tools component across all AWS Neuron SDK versions.
     :keywords: neuron tools, developer tools, profiler, release notes, neuron explorer, aws neuron sdk
-    :date-modified: 08/10/2026
+    :date-modified: 10/19/2026
 
 .. _dev-tools_rn:
 
@@ -10,6 +10,46 @@ Component Release Notes for Neuron Developer Tools
 
 The release notes for the Neuron Developer Tools. Read them for the details about the changes, improvements, and bug fixes for all release versions of the AWS Neuron SDK.
 
+
+.. _dev-tools-2-33-0-rn:
+
+Neuron Developer Tools & Neuron Explorer (Neuron 2.33.0 Release)
+--------------------------------------------------------------------------------------
+
+Date of Release: 10/19/2026
+
+Improvements
+~~~~~~~~~~~~~~~
+
+* Added HBM and PyTorch Allocator views to the Memory Viewer for system profiles. The HBM tab shows device memory allocations over time on each HBM and NeuronCore, and the PyTorch Allocator tab shows the PyTorch caching allocator's active memory timeline from a memory snapshot. When a snapshot is included, allocations are attributed to the Python source lines that made them, to support out-of-memory debugging, memory-leak investigation, and device-memory optimization in eager mode. See :ref:`memory-viewer-hbm-pytorch` and :ref:`capture-pytorch-memory-snapshot`.
+* Added host-to-device (H2D) and device-to-host (D2H) DMA engine tracks and bidirectional bandwidth plots to device profiles, shown on the same timeline as the compute-engine and DMA-queue tracks so you can correlate host-device transfer traffic with kernel execution. Each transfer event reports its timing, duration, transfer size, and direction. See :doc:`/tools/neuron-explorer/overview-device-profiles`.
+* Linked host-to-device and device-to-host transfers to the framework operation that triggered them. In the System Trace Viewer, clicking a transfer draws an arrow back to the originating framework op (for example, ``aten::to``), and clicking a framework op shows the transfers it initiated. See :doc:`/tools/neuron-explorer/overview-system-profiles`.
+* Added the full NKI kernel-level call stack to Event Details: selecting a NKI instruction now shows the complete call chain from the NKI kernel function down to that instruction. See :doc:`/tools/neuron-explorer/how-to-link-view-source-code`.
+* Added user-defined NKI region annotations: wrap NKI code in ``nl.profiler_region_open(label)`` and ``nl.profiler_region_close()`` to mark a named, nestable region on the device timeline, then choose which regions to highlight in the Region Highlighter. See :doc:`/tools/neuron-explorer/overview-region-highlighter`.
+* Added PSUM bank reuse dependency highlighting to the Device Trace Viewer: clicking a matmul instruction now highlights the previous and next instructions that reuse the same PSUM bank, making memory-driven execution dependencies easier to trace. The PSUM bank number is shown in Event Details. See :doc:`/tools/neuron-explorer/overview-device-profiles`.
+* Added a ``spill_type`` schema field and coloring option that identify spill save/reload DMAs, the transfers the compiler inserts to move data between on-chip memory (SBUF/PSUM) and HBM when on-chip memory is exhausted. Spill DMAs are now searchable and can be colored separately from regular data-transfer DMAs in the device timeline, making memory-pressure hotspots easier to spot.
+* Added per-instruction PSUM and SBUF source and destination information to the On-Chip Memory Viewer. See :doc:`/tools/neuron-explorer/overview-memory-viewer`.
+* Added tensor names to DMA events in the SBUF Memory Viewer, so you can see which tensor each transfer moves. See :doc:`/tools/neuron-explorer/overview-memory-viewer`.
+* Search in the Device and System Trace Viewers now lets you step through every matching event: use the navigation buttons in Event Details to move between results, and the timeline focuses and highlights each one in turn. See :doc:`/tools/neuron-explorer/overview-device-profiles`.
+* Added search and filtering of DMA events by semaphore ID (for example, ``S34``) in device profiles, making it easier to locate the DMAs tied to a given semaphore.
+* Collective DMAs now display a descriptive variable value tied to their collective operation (for example, ``all_gather.12`` or ``reduce_scatter.5``) instead of ``unknown``, making collective traffic easier to identify in device profiles. See :doc:`/tools/neuron-explorer/glossary`.
+* Added DMA source and destination addresses to the DMA and instruction details in device profiles.
+* Added the ``NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP`` environment variable to skip warmup executions before device profiling. Set it to N to skip the first N executions of each model and profile the (N+1)-th, so you can profile steady-state behavior without warmup noise. See :doc:`/tools/neuron-explorer/environment-variables`.
+
+Software Maintenance Updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* We intend to end support for the full-profile JSON output (``--output-format json``) in Neuron 2.34. Users are advised to migrate to the Parquet output for programmatic analysis of full profiles. See :doc:`/tools/neuron-explorer/how-to-analyze-profile-output` and :doc:`/tools/neuron-explorer/profile-schema-reference`, and the Parquet export steps in :doc:`/tools/neuron-explorer/get-started`.
+
+Bug Fixes
+~~~~~~~~~
+
+* Fixed LoadWeight highlighting for transpose matmul operations in the Device Trace Viewer, which previously highlighted incorrectly.
+
+Known Issues
+~~~~~~~~~~~~
+
+* None reported for this release.
 
 .. _dev-tools-2-32-0-rn:
 

@@ -1,3 +1,8 @@
+.. meta::
+   :description: How to report bugs, request features, and contribute pull requests to AWS Neuron open source repositories, including the code of conduct, security reporting, and licensing.
+   :keywords: AWS Neuron, contribute, GitHub, pull request, bug report, feature request, open source
+   :date-modified: 2026-10-13
+
 .. _contribute-faq:
 
 Contributing Guidelines FAQs
@@ -13,10 +18,11 @@ greatly value feedback and contributions from our community.
 
 Please read through this document before submitting any issues or pull
 requests to ensure we have all the necessary information to effectively
-respond to your bug report or contribution.
+respond to your bug report or contribution. For the list of Neuron open
+source repositories, see :ref:`Neuron open source repositories <neuron-oss>`.
 
-How to reporting Bugs/Feature Requests
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How to report bugs and request features
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We welcome you to use the GitHub issue tracker to report bugs or suggest
 features.
@@ -37,7 +43,7 @@ Contributing via Pull Requests
 Contributions via pull requests are much appreciated. Before sending us
 a pull request, please ensure that:
 
-1. You are working against the latest source on the *master* branch.
+1. You are working against the latest source on the repository's default branch.
 2. You check existing open, and recently merged, pull requests to make
    sure someone else hasn't addressed the problem already.
 3. You open an issue to discuss any significant work - we would hate for
@@ -90,9 +96,10 @@ Please do **not** create a public github issue.
 What is the licensing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-See the `link <https://github.com/aws/aws-neuron-sdk/blob/master/LICENSE-DOCUMENTATION>`_ 
-and `link <https://github.com/aws/aws-neuron-sdk/blob/master/LICENSE-SUMMARY-DOCS-SAMPLES>`_ files
-for our project's licensing. We will ask you to confirm the licensing of
+See the `LICENSE-DOCUMENTATION <https://github.com/aws-neuron/aws-neuron-sdk/blob/master/LICENSE-DOCUMENTATION>`__
+and `LICENSE-SUMMARY-DOCS-SAMPLES <https://github.com/aws-neuron/aws-neuron-sdk/blob/master/LICENSE-SUMMARY-DOCS-SAMPLES>`__ files
+for the Neuron documentation licensing. Each Neuron open source repository
+has its own license file. We will ask you to confirm the licensing of
 your contribution.
 
 We may ask you to sign a `Contributor License Agreement
