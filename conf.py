@@ -76,7 +76,7 @@ project_name, branch_name = get_env_vars()
 # "Neuron X.YY.0 is released!" banner); release-* branches need no change.
 #
 # nki-library tags are "X.YY" (e.g. "2.32"); verified against the repo.
-NKILIB_LATEST_RELEASE = "2.32"
+NKILIB_LATEST_RELEASE = "2.33"
 
 
 def get_nkilib_ref():
