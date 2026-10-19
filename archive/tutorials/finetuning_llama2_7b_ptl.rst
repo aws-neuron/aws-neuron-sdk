@@ -13,7 +13,7 @@ and :ref:`Neuron PT-Lightning Developer Guide <ptl_developer_guide>`.
 
 
 Setting up the environment
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For this experiment, we will use AWS ParallelCluster with at least four trn1.32xlarge compute nodes.
 To set up a cluster and prepare it for use, see `Train your model on ParallelCluster <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/deploy/parallelcluster/training.html>`__.
