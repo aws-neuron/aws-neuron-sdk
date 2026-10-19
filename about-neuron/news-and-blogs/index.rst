@@ -1,6 +1,6 @@
 .. meta::
     :description: Links to external news and blog articles about AWS Neuron and Trainium/Inferentia ML accelerators.
-    :date-modified: 02/26/2026
+    :date-modified: 10/19/2026
 
 .. _neuron-news:
 
