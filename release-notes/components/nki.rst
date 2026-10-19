@@ -33,21 +33,20 @@ New Features
   be compiled. In NKI 0.7.0, specialization traces the kernel code with Python,
   and the NKI ISA APIs emit the IR to be compiled. Kernels can use all of Python
   for meta-programming, including constructs the previous specialization did not
-  support, such as generators and class inheritance. Because specialization
-  follows Python semantics, the behavior of NKI meta-programming code is easier
-  to reason about. Most kernels need no changes. Kernels using a dynamic loop
-  construct should move to :func:`~nki.language.fori_loop` or
+  support, such as generators and class inheritance. Meta-programming code
+  follows standard Python semantics. Kernels using a dynamic loop construct
+  should move to :func:`~nki.language.fori_loop` or
   :func:`~nki.language.while_loop`. To continue using kernels without updating,
-  set ``NKI_COMPILER_FRONTEND=custom``.
+  set ``NKI_COMPILER_FRONTEND=custom``. To update kernels, see
+  :ref:`nki-migrate-0-6-to-0-7`.
 
 * **Tiled and blocked memory layouts**: :func:`~nki.language.tiles` decomposes a
-  tensor into a logical grid of fixed-size tiles addressed by tile coordinate
-  rather than by manual element offsets and strides, and
-  :func:`~nki.language.blocks` groups tiles into a coarser transfer or reuse
-  grain above the compute grain. :func:`~nki.language.alloc_tiles` and
+  tensor into a logical grid of fixed-size tiles addressed by tile coordinate,
+  and :func:`~nki.language.blocks` groups tiles into a coarser transfer or
+  reuse grain above the compute grain. :func:`~nki.language.alloc_tiles` and
   :func:`~nki.language.alloc_blocks` allocate storage organized the same way.
-  Grid views (:class:`~nki.language.NkiTileGrid`,
-  :class:`~nki.language.NkiBlockGrid`) allocate no storage and move no data.
+  Creating or indexing a grid view (:class:`~nki.language.NkiTileGrid`,
+  :class:`~nki.language.NkiBlockGrid`) allocates no storage and moves no data.
 
 * **nl.log1p**: New :func:`~nki.language.log1p` computes the natural log of
   ``1 + x`` on the GpSimd Engine on NeuronCore-v4+, available as an activation
@@ -55,13 +54,13 @@ New Features
   See the supported activation functions table in
   :doc:`nki.api.shared </nki/api/nki.api.shared>`.
 
-* **Profiler annotation regions**: :func:`~nki.language.profiler_region_open`
-  and :func:`~nki.language.profiler_region_close` mark a named region; every
+* **Profiler annotation regions**: ``nki.language.profiler_region_open``
+  and ``nki.language.profiler_region_close`` mark a named region; every
   instruction between them appears as a named region on the Neuron Explorer
   timeline. The annotation adds only compile-time metadata and has no
   execution-time cost. Regions nest, and leaving one open is a compilation
   error. To see the regions in Neuron Explorer, set ``NKI_DEBUG_INFO=True``
-  when you compile. See
+  at compile time. See
   :ref:`Define NKI Regions in Your Kernel <nki-define-regions>`.
 
 * **Collectives**:
@@ -69,36 +68,40 @@ New Features
   * **Variable-length prepare/trigger split**:
     :func:`~nki.collectives.all_to_all_v` and
     :func:`~nki.collectives.all_gather_v` can be split into a ``prepare`` and a
-    ``trigger``. The ``prepare`` sets up the collective's metadata and can be
-    issued before ``srcs`` are filled, so the setup runs ahead of the
-    instruction that fills ``srcs`` and overlaps with unrelated compute. The
+    ``trigger`` with :func:`~nki.collectives.all_to_all_v_prepare` and
+    :func:`~nki.collectives.all_to_all_v_trigger`, or
+    :func:`~nki.collectives.all_gather_v_prepare` and
+    :func:`~nki.collectives.all_gather_v_trigger`. The ``prepare`` sets up the
+    collective's metadata and can be issued before ``srcs`` are filled, so the
+    setup runs ahead of the instruction that fills ``srcs`` and overlaps with
+    unrelated compute. The
     ``trigger`` runs the phase that reads ``srcs`` and writes ``dsts``, and takes
     only the paired ``prepare`` instruction; each ``prepare`` pairs with exactly
-    one ``trigger``. This helps when the per-rank counts are known before the
-    data, as in a mixture-of-experts layer. The Trn3 Ultraserver does not support
-    the split; use plain :func:`~nki.collectives.all_to_all_v` there.
+    one ``trigger``, with no other ``prepare`` in between. This helps when the
+    per-rank counts are known before the data, as in a mixture-of-experts layer.
 
   * **ReplicaGroup.from_partition_op**: Build a
     :class:`~nki.collectives.ReplicaGroup` by partitioning ranks
-    ``[0, world_size)`` with :class:`~nki.collectives.rg_partition_op`, where
+    ``[0, world_size)`` with ``nki.collectives.rg_partition_op``, where
     ranks sharing the same ``op(rank, operand)`` form one rank-list: ``div`` for
     contiguous rank-lists, ``mod`` for strided, ``bitwise_and`` for a bitmask.
     This replaces spelling out the full list of rank-lists.
 
-  * **nki.isa.sendrecv_compute**: Point-to-point communication between
-    NeuronCores that reduces the local and received tiles into a single result
-    using the DMA engine. The current NeuronCore sends its ``src`` to
-    ``send_to_rank``, receives the peer tile from ``recv_from_rank``, and writes
-    ``reduce_op(src, peer)`` to ``dst``. Available only at LNC degree greater
-    than 1; ``reduce_op`` is ``nl.add``, ``nl.maximum``, or ``nl.minimum``.
+  * **nki.isa.sendrecv_compute**: :func:`~nki.isa.sendrecv_compute` performs
+    point-to-point communication between NeuronCores that reduces the local
+    and received tiles into a single result using the DMA engine. The current
+    NeuronCore sends its ``src`` to ``send_to_rank``, receives the peer tile
+    from ``recv_from_rank``, and writes ``reduce_op(src, peer)`` to ``dst``.
+    Available only at LNC degree greater than 1; ``reduce_op`` is ``nl.add``,
+    ``nl.maximum``, or ``nl.minimum``.
 
   * **Multi-rank CPU simulation for fixed-size collectives**:
     :func:`~nki.simulate` runs a kernel's fixed-size
     :func:`~nki.collectives.all_reduce`, :func:`~nki.collectives.all_gather`,
     :func:`~nki.collectives.reduce_scatter`, and
     :func:`~nki.collectives.all_to_all`, along with
-    :func:`~nki.collectives.rank_id`, across multiple ranks on CPU, so you can
-    validate a collective kernel's numerics without hardware. Ranks exchange
+    :func:`~nki.collectives.rank_id`, across multiple ranks on CPU, which
+    validates a collective kernel's numerics without hardware. Ranks exchange
     data through a communicator: in a ``torch.distributed`` world the simulator
     uses the framework's ranks, and it reduces to a single rank otherwise.
     Supported at LNC1 and LNC2. Variable-length and permute collectives remain
@@ -115,14 +118,16 @@ New Features
 * **nki.isa.topk sorted option**: :func:`~nki.isa.topk` accepts
   ``sorted=True`` to order each 16-partition group's results descending by
   value, keeping ``idx_dst[j]`` the source index of ``val_dst[j]``. The default
-  leaves the order unspecified.
+  leaves the order unspecified. With ``sorted=True``, ``k`` must be at most
+  8192, and ties between equal values may resolve in any order.
 
 * **Scalar values**: New :class:`~nki.isa.NkiScalar` holds one integer
   computed on device, loaded from an ``nl.int32`` or ``nl.int64`` tile with
   :func:`~nki.isa.scalar_load` and written back with :func:`~nki.isa.scalar_store`.
   A scalar can be used as an operand of arithmetic, as the ``scalar_offset`` of
-  an access pattern, and as a bound of :func:`~nki.language.fori_loop`. An
-  ``nl.int64`` scalar carries 64-bit range, supporting HBM offsets beyond 4 GB.
+  an access pattern, and, as an ``nl.int32`` scalar, as a bound of
+  :func:`~nki.language.fori_loop`. An ``nl.int64`` scalar carries 64-bit range,
+  supporting HBM offsets beyond 4 GB, but cannot bound a loop.
 
 * **GpSimd Engine for activation and activate2**: :func:`~nki.isa.activation`
   and :func:`~nki.isa.activate2` accept an ``engine`` argument to run on the
@@ -131,15 +136,16 @@ New Features
   accepted. On the GpSimd Engine, ``data`` and ``dst`` must be in SBUF.
 
 * **Dynamic indexing with runtime offsets**:
-  :meth:`~nki.language.NkiTensor.__getitem__`,
+  ``NkiTensor.__getitem__``,
   :meth:`~nki.language.NkiTensor.select`, and :func:`~nki.language.ds` accept a
   runtime index: a ``NkiTensor`` 1-element tile, a ``VirtualRegister``, or a
   :class:`~nki.isa.NkiScalar`. A runtime index either selects a single element
-  and removes the dimension (via :meth:`~nki.language.NkiTensor.__getitem__` or
+  and removes the dimension (via ``NkiTensor.__getitem__`` or
   :meth:`~nki.language.NkiTensor.select`), or serves as the ``start`` of
   ``nl.ds``, which keeps the dimension and slides a fixed-size window. The
   result is an indirect view (see :meth:`~nki.language.NkiTensor.is_indirect`).
-  A runtime index cannot target the partition dimension for on-chip tensors.
+  A runtime index cannot target the partition dimension for on-chip tensors,
+  and a view accepts one runtime index.
 
 * **New parameters for fused reductions**:
   :func:`~nki.isa.tensor_scalar_reduce` adds ``reduce_res_negate`` to negate the
@@ -164,8 +170,7 @@ Deprecated and Removed APIs
 * **Custom Pythonic language**: Now that specialization by Python tracing is the
   default (see New Features), the custom Pythonic language NKI previously
   required is deprecated.
-  Select it with ``NKI_COMPILER_FRONTEND=custom`` through the deprecation window;
-  a later train removes it.
+  Use ``NKI_COMPILER_FRONTEND=custom`` to fall back during the deprecation window.
 
 * **Default NKI kernel LNC degree change (future notice)**: Currently, a NKI
   kernel's LNC degree defaults to LNC=1 when it is not explicitly configured
@@ -177,10 +182,10 @@ Deprecated and Removed APIs
 
 * **rank_id return type (deprecation notice)**:
   :func:`~nki.collectives.rank_id` and
-  ``collective_permute_implicit_current_processing_rank_id`` will return an
-  :class:`~nki.isa.NkiScalar` instead of a ``VirtualRegister`` in a future
-  release, so that offset arithmetic (e.g. ``rank * chunk_size``) works. NKI
-  emits a deprecation warning ahead of the change.
+  :func:`~nki.collectives.collective_permute_implicit_current_processing_rank_id`
+  will return an :class:`~nki.isa.NkiScalar` instead of a ``VirtualRegister`` in
+  a future release, so that offset arithmetic (e.g. ``rank * chunk_size``)
+  works. NKI emits a deprecation warning ahead of the change.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
@@ -198,8 +203,10 @@ Breaking Changes
   ``NEURON_LOGICAL_NC_CONFIG`` to the desired LNC degree and remove any
   conflicting launch-grid bracket syntax or compiler ``--lnc`` overrides.
 
-* **Object equality on user classes**: Equality on user-defined objects follows
-  standard Python reference equality.
+* **Object equality on user classes**: ``==`` on instances of user-defined
+  classes follows standard Python: two distinct instances are equal only if the
+  class defines ``__eq__``. To compare by value, define ``__eq__`` or declare
+  the class as a ``dataclasses.dataclass``.
 
 Bug Fixes
 ~~~~~~~~~
