@@ -117,6 +117,17 @@ featured_articles:
     icon: "📊"
 
 all_articles:
+  # English Community Articles
+  - title: "Celebrating the release of TorchNeuron"
+    url: "https://lokahq.github.io/tech-blog/celebrating-the-release-of-torchneuron/"
+    description: "Loka describes its path from porting BEVFusion with NKI and custom C++ operators to running native PyTorch on AWS Trainium with TorchNeuron, including ESMC-300M protein-variant scoring on Trainium2 with torch.compile and no model rewrite."
+    author: "Bojan Jakimovski (Loka)"
+    date: "2026-10-13"
+    category: "case-study"
+    locale: "en-US"
+    keywords: ["torchneuron", "pytorch", "trainium2", "torch-compile", "eager-mode", "esmc", "case-study", "loka"]
+    featured: false
+
   # Japanese Articles
   - title: "AWS Neuron 関連記事まとめ"
     url: "https://zenn.dev/tosshi/articles/36f3615e26c323"
