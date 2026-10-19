@@ -28,6 +28,13 @@ Compile and run kernels
       Top-level entry points for compiling and running NKI kernels, including the
       ``jit`` decorator and the ``simulate`` CPU simulator for debugging.
 
+   .. grid-item-card:: nki.compiler
+      :link: /nki/api/nki.compiler
+      :link-type: doc
+
+      Per-kernel compiler configuration passed to ``nki.jit`` — ``CompileConfig``
+      and ``SpecializationConfig`` for tuning compilation and specialization.
+
 Write kernels
 -------------
 
@@ -82,4 +89,5 @@ Multi-core communication
     nki.isa
     nki.language
     nki.collectives
+    nki.compiler
     nki.api.shared

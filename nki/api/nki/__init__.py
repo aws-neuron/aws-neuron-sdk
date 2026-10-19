@@ -1,9 +1,11 @@
+# AUTO GENERATED FILE - DO NOT MANUALLY MODIFY.
+
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import *
 
-def jit(fn=None, **kwargs):
+def jit(fn=None, *, compile_config=None, specialization_config=None, **kwargs):
     r"""Just-in-time compile a top-level NKI function to run on NeuronDevices.
 
     The returned callable detects the current framework and compiles the function as a
@@ -20,12 +22,32 @@ def jit(fn=None, **kwargs):
     - ``trn2|gen3``
     - ``trn3|gen4``
 
-    The LNC (Logical NeuronCore) degree can be set at the callsite using bracket syntax:
-    ``kernel[lnc](args)``. The default is LNC=1. The LNC value must match the
-    ``NEURON_LOGICAL_NC_CONFIG`` environment variable set for the Neuron Runtime.
-    Mismatching the two will cause a runtime error. For example, if
-    ``NEURON_LOGICAL_NC_CONFIG=1``, the kernel must be launched with ``kernel[1](...)``
-    or ``kernel(...)``.
+    Configure the LNC (Logical NeuronCore) degree by setting the
+    ``NEURON_LOGICAL_NC_CONFIG`` environment variable to 1 or 2 before invoking
+    the kernel. If the LNC degree is not explicitly set, the default is LNC=1.
+
+    Per-kernel config is passed through two typed objects:
+
+    - ``compile_config`` -- a :class:`nki.compiler.CompileConfig` of options that
+      impact downstream compiler behavior (``address_rotation``,
+      ``non_ssa_legalization``, ``dead_code_elim``, ``barrier_check``).
+    - ``specialization_config`` -- a :class:`nki.compiler.SpecializationConfig` of
+      options that tune the specialization phase (``allow_nested_config_override``).
+
+    e.g.::
+
+        from nki.compiler import CompileConfig, SpecializationConfig
+
+        @nki.jit(compile_config=CompileConfig(non_ssa_legalization=True))
+        def my_kernel(...): ...
+
+    ``SpecializationConfig.allow_nested_config_override`` -- when this kernel is used as the
+    top-level compiled kernel:
+
+    * default (``False``): a nested sub-kernel whose config disagrees raises an error.
+    * ``True``: warn instead, and inline the sub-kernel under this kernel's config.
+
+    Useful for composing @nki.jit kernels whose config you cannot edit.
 
     Returns a :class:`Kernel` instance wrapping the decorated function."""
     ...
@@ -42,6 +64,8 @@ def simulate(kernel):
 
     Example::
 
+        import os
+
         @nki.jit
         def my_kernel(a, b): ...
 
@@ -49,7 +73,8 @@ def simulate(kernel):
         result = nki.simulate(my_kernel)(a_np, b_np)
 
         # With LNC2
-        result = nki.simulate(my_kernel[2])(a_np, b_np)
+        os.environ["NEURON_LOGICAL_NC_CONFIG"] = "2"
+        result = nki.simulate(my_kernel)(a_np, b_np)
 
     Args:
       kernel: NKI kernel function, typically decorated with ``@nki.jit``.

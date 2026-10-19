@@ -21,9 +21,13 @@ Collective operations for multi-rank communication.
    all_reduce
    all_gather
    all_gather_v
+   all_gather_v_prepare
+   all_gather_v_trigger
    reduce_scatter
    all_to_all
    all_to_all_v
+   all_to_all_v_prepare
+   all_to_all_v_trigger
    collective_permute
    collective_permute_implicit
    collective_permute_implicit_reduce
