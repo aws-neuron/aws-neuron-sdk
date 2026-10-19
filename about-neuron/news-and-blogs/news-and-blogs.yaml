@@ -20,6 +20,18 @@
 #     featured: true|false  # Set to true for featured articles section
 
 featured_articles:
+  - title: "Introducing TorchNeuron: Native PyTorch backend for AWS Trainium"
+    url: "https://pytorch.org/blog/introducing-torchneuron-native-pytorch-backend-for-aws-trainium/"
+    description: "AWS announces TorchNeuron, an open source native PyTorch backend that registers Trainium as a standard PyTorch device. It supports eager mode, torch.compile, NKI custom kernels, and torch.profiler on Trainium2 and Trainium3, and runs TorchTitan and Hugging Face Transformers workloads with a device change to 'neuron'."
+    author: "AWS"
+    author_url: "https://pytorch.org/blog/"
+    date: "2026-10-19"
+    category: "blog"
+    locale: "en-US"
+    keywords: ["torchneuron", "pytorch", "trainium", "trainium3", "torch-compile", "eager-mode", "torchtitan", "hugging-face", "nki"]
+    featured: true
+    icon: "🔥"
+
   - title: "AWS Neuron 2.31.0 now available with NKI 0.5.0 and UltraServer Operator"
     url: "https://aws.amazon.com/about-aws/whats-new/2026/07/aws-announce-neuron-2-31-0/"
     description: "Neuron SDK 2.31.0 introduces NKI 0.5.0 with MX FP8 scale dtype support, tensor indirection, and new NkiTensor view APIs, plus the Neuron UltraServer Operator for Amazon EKS in public beta for Trainium UltraServer workloads."
