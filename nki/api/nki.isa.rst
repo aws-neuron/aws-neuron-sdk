@@ -57,8 +57,11 @@ NKI ISA
    register_load
    register_move
    register_store
+   scalar_load
+   scalar_store
    core_barrier
    sendrecv
+   sendrecv_compute
    rng
    rand2
    rand_set_state
@@ -79,6 +82,7 @@ NKI ISA Config Enums
    engine
    dma_engine
    reduce_cmd
+   dependency
    dge_mode
    oob_mode
    matmul_perf_mode
@@ -103,5 +107,6 @@ Constants
    :template: nki-custom-class-template.rst
    :nosignatures:
 
+   NkiScalar
    VirtualRegister
    NkiInstruction

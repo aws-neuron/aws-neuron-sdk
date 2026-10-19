@@ -1,7 +1,7 @@
 .. meta::
     :description: Documentation for the nki.simulate API in the Neuron SDK
     :keywords: nki, simulate, nki.simulate, test, kernels, aws neuron sdk
-    :date-modified: 05/11/2026
+    :date-modified: 10/02/2026
 
 .. _nki-simulator:
 
@@ -187,6 +187,99 @@ Set breakpoints in your kernel code and run your script normally. The simulator 
 kernel code in-process, so IDE debuggers work without any special configuration.
 
 
+.. _nki-simulator-collectives:
+
+Simulating collectives
+----------------------
+
+The simulator runs supported :ref:`nki.collectives <nki-collectives>` operations across multiple
+ranks on the CPU. Each rank runs the kernel in its own process. The simulator exchanges tensor
+data between ranks to compute each operation's result, but it does not model communication
+algorithms, latency, or bandwidth.
+
+Supported operations
+^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - API
+     - Simulated result
+   * - ``nki.collectives.all_reduce``
+     - Applies ``op`` to corresponding elements from every rank. Every rank receives the result.
+   * - ``nki.collectives.all_gather``
+     - Concatenates source tensors from every rank along ``collective_dim``, in rank order.
+   * - ``nki.collectives.reduce_scatter``
+     - Applies ``op`` to corresponding elements from every rank, splits the result along
+       ``collective_dim``, and gives each rank the chunk at its position in the rank list.
+   * - ``nki.collectives.all_to_all``
+     - Splits each source tensor along ``collective_dim`` into one chunk per rank. Each destination
+       rank receives its corresponding chunk from every source rank, concatenated in rank order.
+   * - ``nki.collectives.rank_id``
+     - Returns the global rank ID of the calling rank.
+
+The simulator supports LNC degree 1 and LNC degree 2. A collective executes independently within
+each rank list in the ``ReplicaGroup``. If the calling rank is not in any rank list, the simulator
+raises an error.
+
+Running a collective kernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Start one process per rank with ``torchrun`` and initialize a ``torch.distributed`` process group
+before you call the kernel. The simulator uses this process group to exchange data between ranks.
+The ``gloo`` backend runs on the CPU. Without an initialized process group, the simulator runs the
+kernel as a single rank.
+
+.. nki_example:: /nki/examples/simulate/nki_simulate_collectives_example.py
+   :language: python
+   :marker: NKI_EXAMPLE_SIMULATE_COLLECTIVES
+
+.. nki_example:: /nki/examples/simulate/nki_simulate_collectives_example.py
+   :language: python
+   :marker: NKI_EXAMPLE_SIMULATE_COLLECTIVES_RUN
+
+Run the script with two ranks:
+
+.. code-block:: bash
+
+   NEURON_LOGICAL_NC_CONFIG=1 torchrun --nproc-per-node 2 \
+     nki_simulate_collectives_example.py
+
+``NEURON_LOGICAL_NC_CONFIG=1`` selects LNC degree 1 so the kernel can return ``private_hbm``
+tensors. The script exits successfully after both ranks verify the reduced and gathered values.
+
+.. tip::
+
+   If one rank raises an exception, other ranks can remain blocked waiting for data from it.
+   If a run stops responding, check each rank's output for an error.
+
+Shared HBM at LNC degree 1
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+At LNC degree 1, the two ranks that share an HBM stack each keep a separate copy of each
+``shared_hbm`` tensor. The simulator merges the two copies at ``nki.isa.core_barrier`` and when a
+collective writes a ``shared_hbm`` destination. If both ranks write different values to the same
+element between two merges, the simulator raises an error. On hardware, an LNC degree 1 kernel
+shares these tensors only when ``NKI_LNC1_SHARED_HBM=1`` is set.
+
+Before a merge, each rank reads only its own copy. The simulator does not detect a kernel that
+reads the write of the other rank without a ``core_barrier``. Such a kernel can give the same
+result on every simulator run but different results on hardware.
+
+Unsupported collectives
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The simulator does not implement every ``nki.collectives`` API. The following APIs raise
+``NotImplementedError``. Run kernels that use them on Trainium hardware.
+
+- Variable-sized APIs: ``all_gather_v``, ``all_gather_v_prepare``, ``all_gather_v_trigger``,
+  ``all_to_all_v``, ``all_to_all_v_prepare``, ``all_to_all_v_trigger``, and ``reduce_scatter_v``.
+- Other unsupported APIs: ``collective_permute``, ``collective_permute_implicit``,
+  ``collective_permute_implicit_reduce``, and
+  ``collective_permute_implicit_current_processing_rank_id``.
+
+
 How It Works
 ------------
 
@@ -204,10 +297,12 @@ When you call ``nki.simulate(kernel)(a, b)``:
 4. On return, ``NkiTensor`` results are converted back to NumPy arrays. Input arrays are
    updated in-place if the kernel modified the corresponding HBM tensors.
 
-For **LNC2 kernels** (``kernel[2]``), the simulator spawns two Python threads that execute the
-kernel concurrently, each with its own ``program_id``. Input arrays use ``shared_hbm`` buffers,
-so both threads can access shared memory. ``nki.isa.sendrecv`` and ``nki.isa.core_barrier``
-use thread-safe synchronization primitives.
+For **LNC2 kernels** (configured with ``NEURON_LOGICAL_NC_CONFIG=2``), the
+simulator spawns two Python threads that execute the kernel concurrently, each
+with its own ``program_id``. Input arrays use ``shared_hbm`` buffers, so both
+threads can access shared memory. ``nki.isa.sendrecv`` and
+``nki.isa.core_barrier`` use thread-safe synchronization primitives (see
+:ref:`nki-about-lnc`).
 
 Uninitialized Memory Detection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -319,4 +414,4 @@ Known Gaps
 ^^^^^^^^^^
 
 - Some hardware constraint checks are missing — see `Hardware Constraint Validation`_ for details.
-- ``nki.collectives`` APIs are not implemented in the simulator.
+- Only a subset of ``nki.collectives`` APIs is supported. See :ref:`nki-simulator-collectives`.

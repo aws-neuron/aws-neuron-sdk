@@ -41,20 +41,20 @@ Below is an example showing how to specify the scheduling metadata for NKI kerne
        return out
 
    # The named statements "recip" and "plus1" could execute in any order.
-   # We can fix the order with a dependency by setting the "schedule" property.
+   # We can fix the order with a runtime dependency.
    # This property can be a list of pairs of instruction names.
    # Each pair is a set of dependency edges.
    # In this case "plus1" depends on "recip", and so will execute second.
    scheduled = kernel.with_schedule([
        ("plus1", "recip")
-   ])
+   ], kind=nisa.dependency.runtime)
 
    # The second component of each pair can be a single name or a list of names
    # This is equivalent to above. Using a list is convenient
    # for declaring multiple dependency edges.
    scheduled = kernel.with_schedule([
        ("plus1", ["recip"])
-   ])
+   ], kind=nisa.dependency.runtime)
 
 The NKI compiler will collect the data from the ``with_schedule`` call, check that it makes sense, and propagate it to the scheduling pass of the compiler. Below is a more complicated example with programmatic meta-data generation. In this example, we will enforce a sequential order for all of the activation operations.
 
@@ -93,7 +93,27 @@ The NKI compiler will collect the data from the ``with_schedule`` call, check th
        l.append((f"act{i}", f"act{i-1}"))
    
    # attach the dependencies to the kernel by calling with_schedule
-   scheduled = kernel.with_schedule(l)
+   scheduled = kernel.with_schedule(l, kind=nisa.dependency.runtime)
+
+Choosing a dependency kind
+--------------------------
+
+Both ``with_schedule()`` and ``NkiInstruction.depends_on()`` take a ``kind`` argument that decides how the edge is enforced. The two kinds cost different amounts and guarantee different things, so pick the weakest one that expresses what your kernel needs.
+
+``nisa.dependency.runtime`` lowers to a hardware semaphore wait. The consumer does not begin until the producer has finished, which holds across engines. Because that wait fires unconditionally, the producer and the consumer must sit at the same dynamic-loop nesting, or the producer in an enclosing scope. Use it when the consumer genuinely must observe the producer's results.
+
+``nisa.dependency.schedule`` emits no hardware synchronization at all. It only constrains the compiler's schedulers: the producer is issued before the consumer, but the consumer may start on the same cycle, so instructions on different engines can still overlap. The producer must appear before the consumer in the program. Use it to steer instruction order for performance, when no data actually flows between the two instructions.
+
+``kind`` sets the default for the whole call. To mix kinds in one schedule, add the kind as a third element on the edges that need a different one:
+
+.. code-block:: python
+
+   scheduled = kernel.with_schedule([
+       ("plus1", "recip", nisa.dependency.runtime),
+       ("plus2", "recip2", nisa.dependency.schedule),
+   ])
+
+An edge that ends up with no kind, from neither its own third element nor ``kind``, preserves the previous release's behavior and is deprecated; a future release will require one.
 
 Using no_reorder
 ----------------

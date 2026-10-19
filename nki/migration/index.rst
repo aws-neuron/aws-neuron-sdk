@@ -2,7 +2,7 @@
 
 .. meta::
     :description: NKI Migration Guides for upgrading NKI kernels between versions, newest release on top.
-    :keywords: NKI, AWS Neuron, Migration, Upgrade, Update Guide, 0.5.0, 0.4.0, 0.3.0, 0.2.0
+    :keywords: NKI, AWS Neuron, Migration, Upgrade, Update Guide, 0.7.0, 0.6.0, 0.5.0, 0.4.0, 0.3.0, 0.2.0
 
 ====================
 NKI Migration Guides
@@ -19,6 +19,9 @@ each subsequent section until you reach your target version.
    * - NKI version
      - Neuron SDK
      - Migration section
+   * - 0.7.0
+     - 2.33.0
+     - :ref:`nki-migrate-0-6-to-0-7`
    * - 0.6.0
      - 2.32.0
      - :ref:`nki-migrate-0-5-to-0-6`
@@ -45,6 +48,183 @@ each subsequent section until you reach your target version.
 .. contents:: On this page
    :local:
    :depth: 2
+
+
+.. _nki-migrate-0-6-to-0-7:
+
+Migrating from NKI 0.6.0 to NKI 0.7.0
+=====================================
+
+NKI 0.7.0 ships in AWS Neuron SDK 2.33.0. This release updates kernel specialization and removes the
+dynamic loop constructs deprecated in NKI 0.6.0. Additionally, the compiler now validates that the
+kernel and compiler LNC degrees match, rejecting a previously unchecked invalid configuration. NKI
+0.7.0 also introduces :class:`~nki.isa.NkiScalar` as the future replacement for
+:class:`~nki.isa.VirtualRegister`. The items below could require action from users:
+
+Updated Kernel Specialization
+-----------------------------
+
+Previous NKI versions performed specialization with dedicated compiler lowering passes. Those
+passes resolved the NKI meta-programming constructs and produced kernel IR for the compilation
+stage. For more about the separation between specialization and compilation, see the
+:ref:`NKI Language Guide <nki-language-guide>`. NKI 0.7.0 instead specializes a kernel by tracing
+the kernel code with Python. During tracing, NKI ISA API calls emit the IR that is then compiled.
+This change allows specialization-time code to use the full Python language, including features
+the previous NKI meta-programming language did not support, such as generators and class
+inheritance.
+
+Most kernels need no changes. If a kernel fails to compile or behaves differently, set
+``NKI_COMPILER_FRONTEND=custom`` to fall back to the previous NKI meta-programming language while
+you migrate it. That feature is deprecated and will be removed in a future release, so treat the
+fallback as temporary.
+
+Dynamic loop constructs removed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``for i in nl.dynamic_range(...)`` and ``while reg:`` no longer compile. Kernels that use them
+fail with errors such as:
+
+.. code-block:: text
+
+   TypeError: Tracer frontend does not support dynamic_range, use fori_loop instead.
+   TypeError: Cannot use a register in ...: a register's value is only known at runtime, not
+   while the kernel is being built.
+
+Replace ``nl.dynamic_range`` with :func:`~nki.language.fori_loop` and ``while reg:`` with
+:func:`~nki.language.while_loop`. The patterns and rules are in
+:ref:`nki-migrate-0-5-to-0-6`. Converting a register with ``int()``, using it in an ``if``, or
+passing it to ``range()`` fails the same way, because a register's value exists only when the
+kernel runs.
+
+Equality on your own classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``==`` on instances of classes you define now follows standard Python: two distinct instances are
+equal only if the class defines ``__eq__``. If a kernel compares configuration or helper objects by
+value, define ``__eq__`` on the class or declare it as a :func:`dataclasses.dataclass`.
+
+Kernel LNC configuration
+------------------------
+
+The LNC degree of a NKI kernel must now match the LNC degree ``neuronx-cc`` uses for the
+surrounding compute graph. A mismatch will fail to compile with
+:ref:`NCC_EVRF066 <error-code-evrf066>`:
+
+.. code-block:: text
+
+   NKI kernel '<kernel-name>' is configured with LNC=<kernel-lnc>, but neuronx-cc is using
+   LNC=<compiler-lnc>.
+
+To fix it, set ``NEURON_LOGICAL_NC_CONFIG`` to the LNC degree you want, remove any launch-grid
+bracket syntax such as ``kernel[1](...)`` from the call site, and remove any conflicting ``--lnc``
+override, such as one set through ``NEURON_CC_FLAGS``. ``NEURON_LOGICAL_NC_CONFIG`` is now the
+preferred way to set a kernel's LNC degree. Bracket syntax will continue to work and will take
+precedence when both are set.
+
+``NEURON_LOGICAL_NC_CONFIG`` sets the kernel's LNC degree, not the compiler's. ML frameworks
+generally pass the environment variable's value to ``neuronx-cc`` through the ``--lnc`` flag,
+which keeps the two in sync
+in the examples below.
+
+Before (Mismatch):
+
+.. code-block:: python
+
+   kernel(...)  # Kernel implicitly uses LNC=1; neuronx-cc defaults to LNC=2 on trn2 and later.
+
+After:
+
+.. code-block:: bash
+
+   export NEURON_LOGICAL_NC_CONFIG=1
+   kernel(...)  # Kernel and neuronx-cc both use LNC=1.
+
+Before (Mismatch):
+
+.. code-block:: bash
+
+   export NEURON_CC_FLAGS="--lnc=1"
+   kernel[2](...)  # Kernel uses LNC=2; neuronx-cc is overridden to LNC=1.
+
+After:
+
+.. code-block:: bash
+
+   export NEURON_LOGICAL_NC_CONFIG=2
+   kernel(...)  # Kernel and neuronx-cc both use LNC=2.
+
+Advance notice: default LNC changes to 2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**The default does not change in NKI 0.7.0.** A kernel with no explicit LNC setting currently
+defaults to LNC=1. In a future release, the default will be LNC=2 when targeting ``trn2`` or later,
+including in the CPU simulator. NKI now warns about this upcoming change:
+
+.. code-block:: text
+
+   FutureWarning: NKI kernels without an explicit LNC setting currently default to LNC=1. In the next release, the default will change to LNC=2 on trn2+. Set NEURON_LOGICAL_NC_CONFIG=1 to preserve the existing behavior if necessary.
+
+To keep the existing behavior and silence the warning, set ``NEURON_LOGICAL_NC_CONFIG=1``.
+
+Deprecation notice: ``VirtualRegister``
+---------------------------------------
+
+**Nothing breaks in NKI 0.7.0.** :class:`~nki.isa.VirtualRegister` will be deprecated in a future
+release in favor of :class:`~nki.isa.NkiScalar`, a new class representing a scalar value. Unlike
+:class:`~nki.isa.VirtualRegister`, :class:`~nki.isa.NkiScalar` supports arithmetic operations with
+other :class:`~nki.isa.NkiScalar` objects of the same width or with Python ``int`` values.
+:class:`~nki.isa.NkiScalar` is now also the default induction variable for
+:func:`~nki.language.fori_loop`, meaning that you can now use the induction variable to calculate
+addresses at runtime.
+
+You can load one from a 1x1 ``nl.int32`` or ``nl.int64`` tile with
+:func:`~nki.isa.scalar_load` and write it back with :func:`~nki.isa.scalar_store`. For more
+information, see :ref:`NKI Scalar Values <nki-scalar>`.
+
+:func:`~nki.collectives.rank_id` and
+:func:`~nki.collectives.collective_permute_implicit_current_processing_rank_id` still return a
+:class:`~nki.isa.VirtualRegister` and now warn:
+
+.. code-block:: text
+
+   DeprecationWarning: nki.collectives.rank_id currently returns a VirtualRegister. In a future
+   release it will return a NkiScalar.
+
+You can use :class:`~nki.isa.NkiScalar` in place of :class:`~nki.isa.VirtualRegister` in these
+places today:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Where
+     - Notes
+   * - ``scalar_offset`` of :meth:`~nki.language.NkiTensor.ap`
+     - Cannot be the result of a comparison.
+   * - Runtime index in ``tensor[...]``, :meth:`~nki.language.NkiTensor.select`, and the
+       ``start`` of :func:`~nki.language.ds`
+     - An on-chip runtime index cannot target the partition dimension.
+   * - ``lower`` and ``upper`` of :func:`~nki.language.fori_loop`
+     - The loop variable is a :class:`~nki.isa.NkiScalar` when neither bound is a
+       :class:`~nki.isa.VirtualRegister`.
+
+Before:
+
+.. code-block:: python
+
+   ub_reg = nisa.register_alloc()
+   nisa.register_load(ub_reg, ub_sb)
+   nl.fori_loop(0, ub_reg, body)
+
+After:
+
+.. code-block:: python
+
+   ub = nisa.scalar_load(ub_sb)
+   nl.fori_loop(0, ub, body)
+
+For the full list of changes in NKI 0.7.0, see the
+:ref:`NKI 0.7.0 release notes <nki-2-33-0-rn>`.
 
 
 .. _nki-migrate-0-5-to-0-6:

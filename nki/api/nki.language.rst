@@ -46,6 +46,32 @@ underlying storage, without copying data.
 
    NkiTensor
 
+.. _nl_tiled_grids:
+
+Tiled grids
+-----------
+
+Tiled grids organize an existing tensor into logical tile or block coordinates
+without copying its data.
+
+.. autosummary::
+   :toctree: generated
+   :nosignatures:
+
+   tiles
+   blocks
+   alloc_tiles
+   alloc_blocks
+
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-template.rst
+   :nosignatures:
+
+   NkiGrid
+   NkiTileGrid
+   NkiBlockGrid
+
 .. _nl_tensor_ops:
 
 Tensor operations
@@ -61,6 +87,18 @@ Tensor operations
    copy
    matmul
    transpose
+
+.. _nl_operators:
+
+Operators
+---------
+
+.. autosummary::
+   :toctree: generated
+   :template: nki-custom-class-template.rst
+   :nosignatures:
+
+   Op
 
 .. _nl_math:
 
@@ -120,6 +158,7 @@ Activation and Backpropagation functions
    gelu_apprx_tanh
    mish
    softplus
+   log1p
    softmax
    erf
    erf_dx

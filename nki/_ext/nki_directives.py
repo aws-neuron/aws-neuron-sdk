@@ -9,15 +9,15 @@ from __future__ import annotations
 
 import importlib
 import os
-from typing import TYPE_CHECKING, ClassVar, Any, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Union
 
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.statemachine import ViewList
 from sphinx.directives.code import (
     LiteralInclude,
-    container_wrapper,
     LiteralIncludeReader,
+    container_wrapper,
 )
 from sphinx.locale import __
 from sphinx.util import logging, parselinenos
@@ -26,7 +26,6 @@ from sphinx.util.nodes import nested_parse_with_titles
 
 if TYPE_CHECKING:
     from docutils.nodes import Element, Node
-
     from sphinx.application import Sphinx
     from sphinx.config import Config
     from sphinx.util.typing import ExtensionMetadata, OptionSpec
@@ -35,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 class NKIExampleReader(LiteralIncludeReader):
-
     def __init__(self, filename: str, options: dict[str, Any], config: Config) -> None:
         if "diff" in options:
             raise ValueError(__("`diff` mode is not supported"))
@@ -126,7 +124,7 @@ class NKIExample(LiteralInclude):
 
         try:
             location = self.state_machine.get_source_and_line(self.lineno)
-            nki_root = self.config.nki_example_root
+            nki_root = self.config.nki_src_root
             if nki_root and not os.path.isabs(self.arguments[0]):
                 filename = os.path.join(nki_root, self.arguments[0])
                 rel_filename = self.arguments[0]
@@ -178,7 +176,7 @@ class NKIExample(LiteralInclude):
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
-    app.add_config_value("nki_example_root", None, "env")
+    app.add_config_value("nki_src_root", None, "env")
     app.add_directive("nki_example", NKIExample)
 
     return {

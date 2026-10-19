@@ -1,148 +1,206 @@
 .. meta::
-   :description: Overview of Neuron Logical Cores
-   :date_updated: 12/12/2025
+   :description: Overview of using Logical NeuronCores with NKI
+   :date_updated: 09/25/2026
 
 .. _nki-about-lnc:
 
-Using Logical Neuron Cores (LNC)
-================================
+Using Logical NeuronCores (LNC) with NKI
+========================================
 
-This topic covers how to use multiple neuron cores by launching your NKI kernel
-on multiple cores at the same time. This overview will cover how to launch
-kernels, and the basic methods for writing a kernel to run on multiple cores.
+Logical NeuronCore (LNC)
+------------------------
 
-Logical Neuron Cores (LNC)
---------------------------
+The Neuron SDK supports grouping multiple physical NeuronCores (PNCs) into a
+single logical NeuronCore (LNC). The number of PNCs grouped into an LNC is configured
+both when compiling the NEFF and when loading and executing the NEFF via the
+Neuron Runtime. For the corresponding compiler and runtime settings, see
+:doc:`Logical NeuronCore configuration
+</about-neuron/arch/neuron-features/logical-neuroncore-config>`. The Neuron SDK
+currently supports an LNC degree (the number of physical NeuronCores grouped
+into an LNC) of either 1 or 2.
 
-The Neuron SDK supports running NKI kernels on multiple logical cores. When
-launching a kernel, you can opt to run the kernel on 1 or 2 logical cores. If
-you choose to run on 2 logical cores, at runtime, your kernel will be run on
-two physical cores (if available) that have shared HBM memory (see Trainium3
-Architrecture <trainium3_arch> for more details on NeuronCores). These two
-version can operate on different parts of the input data, increasing overall
-performance of your kernel.
+A NEFF compiled for LNC=2 contains PNC-specific instructions for each of the
+two PNCs. At runtime, the two PNCs have access to shared HBM memory (see the
+:ref:`Trainium2 Architecture Guide for NKI <trainium2_arch>` for more details
+on NeuronCores).
 
-NKI gives you a few mechanisms to for using Logical Neuron Cores (LNC). We will
-look briefly at each of these, specifically we will describe:
+This topic explains how to use NKI with Logical NeuronCore (LNC)
+configurations. The following sections describe:
 
-1. How to launch a kernel on multiple cores
-2. How to tell if a kernel is running on multiple cores
-3. How to tell which core a kernel is running on
+1. How to configure a kernel's LNC degree
+2. How to write NKI kernels with LNC-specific APIs
 
-Launching a kernel on multiple cores
-------------------------------------
+Configuring the LNC degree of kernels
+-------------------------------------
 
-To launch a NKI kernel on multiple cores, you specify the number of cores to
-use, in square brackets, when calling the kernel. For example, suppose we have
-a kernel called `lnc_test`, and we want to launch this kernel on two cores.
+There are several ways to explicitly specify the LNC degree for a NKI kernel.
+It can be specified using the ``NEURON_LOGICAL_NC_CONFIG`` environment variable
+or via bracket syntax at the kernel call site.
 
-.. code-block::
+.. note::
 
-   # Launch lnc_test on 2 cores
-   lnc_test[2](input)
+   When a NKI kernel is compiled as part of a compute graph, its LNC degree
+   must match the global graph compilation ``--lnc`` degree used by ``neuronx-cc``.
 
-The bracket syntax must contain only one number, the number of cores to use.
-If no brackets are given the number of cores defaults to 1. If the number is
-too large for the current architecture, then you will receive an error.
+Environment variable
+~~~~~~~~~~~~~~~~~~~~
 
-.. code-block::
+Suppose you have a kernel called ``lnc_test()``. You can specify
+its LNC degree by setting ``NEURON_LOGICAL_NC_CONFIG`` to 1 or 2.
 
-   # Launch lnc_test on 1 core
+.. code-block:: bash
+
+   # Configure kernels to use LNC=1
+   export NEURON_LOGICAL_NC_CONFIG=1
+
+   # Launch lnc_test with LNC=1
    lnc_test(input)
 
-   # Launch lnc_test on 1 core
+Launch grid/bracket syntax
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For backwards-compatibility, the LNC degree may also be specified with bracket
+syntax such as ``lnc_test[<degree>](...)``.
+
+.. code-block:: python
+
+   # Launch lnc_test with LNC=1
    lnc_test[1](input)
 
-   # Launch lnc_test on 2 cores
+   # Launch lnc_test with LNC=2
    lnc_test[2](input)
 
-   # Launch lnc_test on 8 cores (ERROR on current architecture)
-   lnc_test[8](input)
+If both the environment variable and bracket syntax are provided, bracket syntax takes precedence.
 
-Programming for multiple cores
-------------------------------
+.. note::
 
-When writing a NKI kernel for multiple cores, there are two important APIs that
-can be used to tell how many cores are being used and which core the current
-instance is running on. These APIs are called `num_programs` and `program_id`.
+   If neither ``NEURON_LOGICAL_NC_CONFIG`` nor bracket syntax specifies an
+   LNC degree, the kernel implicitly defaults to LNC=1.
 
-The `num_programs` API will return the total number of cores the current kernel
-is running on. If LNC is not being used, this API will return 1. So, we can
-tell if we are running on multiple cores by inspecting the result of this
-variable:
+.. code-block:: python
 
-.. code-block::
-
-   @nki.jit
-   def lnc_test(input):
-     if nl.num_programs() > 1:
-       print("Running on multiple cores")
-     else:
-       print("Running on one core - no LNC")
-
-   # Launch lnc_test on 1 core
-   # prints "Running on one core - no LNC"
+   # Launch lnc_test with LNC=1 (implicit default)
    lnc_test(input)
 
-   # Launch lnc_test on 2 cores
-   # prints "Running on multiple cores"
-   lnc_test[2](input)
+Writing NKI kernels with LNC-specific APIs
+------------------------------------------
 
-The `program_id` API will return the logical core id that the current
-instance is running on. In the case of LNC=2, this API will return either 0
-or 1. When not using LNC, this API will return 0. This API can be used to
-programmatically divide work between multiple cores.
+A NKI kernel defines the instruction stream for each physical NeuronCore within an LNC.
+NKI provides two main LNC-specific APIs:
 
-For example, suppose we have a tensor with shape `2x128x128` and we want to
-compute the reciprocal of all of the elements of this tensor. We can write a
-kernel function that is LNC-aware and can make use of extra cores when
-available.
+* :func:`nl.num_programs() <nki.language.num_programs>` returns the number of
+  program instances, identifying the LNC degree
+* :func:`nl.program_id() <nki.language.program_id>` returns the current
+  program's index, identifying the corresponding PNC within the LNC
 
-.. code-block::
+For LNC=1, there is one program with index 0. For LNC=2, there are two
+programs with indices 0 and 1. A kernel can assert its required LNC
+degree:
 
-   def lnc_test(input):
-    # Check the first dimension is 2 for this example
-    assert input.shape[0] == 2
+.. code-block:: python
 
-    # create temporary storage on SBUF for comptation
-    in_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
-    out_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
+   @nki.jit
+   def lnc2_kernel(input):
+       assert nl.num_programs() == 2
+       ...
 
-    # create output tensor
-    output = nl.ndarray(input.shape, input.dtype, buffer=nl.shared_hbm)
+With LNC=2, branching on ``nl.program_id()`` allows the PNC-specific
+instruction streams to differ. The branch is evaluated separately for each
+PNC at compile time, so it is not present in the final device instruction
+streams.
 
-    if nl.num_programs() == 1:
-      # Not using multiple cores, process two tiles
-      for i in range(2):
-        nisa.dma_copy(in_tile, input[i])
-        nisa.reciprocal(out_tile, in_tile)
-        nisa.dma_copy(output[i], out_tile)
-    else:
-      # Using multiple cores, process tiles in parallel, one per core
-      i = nl.program_id(0)
-      nisa.dma_copy(in_tile, input[i])
-      nisa.reciprocal(out_tile, in_tile)
-      nisa.dma_copy(output[i], out_tile)
-    return output
+In the following example, program 0 adds 1 to its input tile, while program 1
+copies its input tile unchanged:
 
-The code above has two cases, one for when we are not using LNC
-(`num_programs` returns 1), and one for when we are using LNC=2
-(`num_programs` returns 2). In the non-LNC case, there is a for loop that
-processes each input tiles one after the other. However, in the LNC=2 case,
-we can use the `program_id` API to query which core we are on. This API will
-return either `0` or `1`. The code uses the `program_id` to have each core
-process one of the two tiles, in parallel.
+.. code-block:: python
+
+   @nki.jit
+   def different_instruction_streams(input):
+       assert nl.num_programs() == 2
+       assert input.shape[0] == 2
+
+       pid = nl.program_id()
+       in_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
+       out_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
+       output = nl.ndarray(input.shape, input.dtype, buffer=nl.shared_hbm)
+
+       nisa.dma_copy(dst=in_tile, src=input[pid])
+       if pid == 0:
+           nisa.tensor_scalar(
+               dst=out_tile,
+               data=in_tile,
+               op0=nl.add,
+               operand0=1.0,
+           )
+       else:
+           nisa.tensor_copy(dst=out_tile, src=in_tile)
+       nisa.dma_copy(dst=output[pid], src=out_tile)
+       return output
+
+The program ID can also select a slice of a tensor in shared HBM for each
+program. For example, suppose you have a tensor with shape ``2x128x128`` and
+want to compute the reciprocal of all of its elements:
+
+.. code-block:: python
+
+   @nki.jit
+   def reciprocal_kernel(input):
+       assert nl.num_programs() == 2
+
+       # Check that the first dimension is 2 for this example
+       assert input.shape[0] == 2
+
+       # create temporary storage on SBUF for computation
+       in_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
+       out_tile = nl.ndarray(input.shape[1:], input.dtype, buffer=nl.sbuf)
+
+       # create output tensor in shared HBM
+       output = nl.ndarray(input.shape, input.dtype, buffer=nl.shared_hbm)
+
+       shard_id = nl.program_id()
+       nisa.dma_copy(in_tile, input[shard_id])
+       nisa.reciprocal(out_tile, in_tile)
+       nisa.dma_copy(output[shard_id], out_tile)
+       return output
 
 Final Notes
----
+-----------
 
-Using LNC can improve the performance of NKI kernels by leveraging multiple
-NeuronCores. However, there are two things to be mindful of when using LNC.
-First, the inputs and outputs of the kernel should be stored in the Shared HBM
-that all of the cores can access. Second, the Neuron SDK assumes that when
-running a kernel on multiple cores, the program on each core is "the same".
-This means that each core is executing the same basic control flow as the other
-cores. Most of the time, this requirement will be automatically satisfied by
-the NKI compiler. However, if you use dynamic control flow, and this
-control-flow is different on the different cores, then the behavior is
-undefined, and you will likely receive an error at runtime.
+There are two things to be mindful of when using LNC=2.
+First, the inputs and outputs of the kernel should be stored in the shared HBM
+that all of the cores can access. Second, device-side control flow that
+diverges across PNCs is not currently supported; such kernels may deadlock or
+produce incorrect results.
+
+.. warning::
+
+   The following LNC=2 kernel is invalid. PNC 0 executes four loop iterations,
+   while PNC 1 executes three.
+
+   .. code-block:: python
+
+      @nki.jit
+      def divergent_control_flow():
+          assert nl.num_programs() == 2
+          pid = nl.program_id()
+
+          result = nl.ndarray((1, 1), dtype=nl.int32, buffer=nl.sbuf)
+          output = nl.ndarray(
+              (2, 1, 1),
+              dtype=nl.int32,
+              buffer=nl.shared_hbm,
+          )
+
+          nisa.memset(dst=result, value=0)
+
+          def loop_body(_):
+              nisa.memset(dst=result, value=1)
+
+          # Illegal: each PNC executes a different number of loop iterations.
+          if pid == 0:
+              nl.fori_loop(0, 4, loop_body)
+          else:
+              nl.fori_loop(0, 3, loop_body)
+
+          nisa.dma_copy(dst=output[pid], src=result)
+          return output

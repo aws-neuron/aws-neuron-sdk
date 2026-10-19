@@ -55,6 +55,68 @@ which must be a `nki.language` data type.
   | Boolean                | boolean stored as uint8      | ``nki.language.bool_``                          |
   +------------------------+------------------------------+-------------------------------------------------+
 
+.. _nki-type-casting:
+
+Type Casting
+============
+
+Several NKI ISA operations convert input values through an intermediate ``float32`` representation before writing them in the destination data type.
+Whether this conversion occurs generally depends on the specific combination of opcode, source and destination data types, and, in some cases, the selected engine.
+See individual NKI ISA API documentation for details on whether this conversion occurs.
+
+Integer-to-Integer Conversion Through FP32
+------------------------------------------
+
+The source integer is first converted to ``float32``, and the resulting intermediate value is then converted to the destination integer data type.
+As a result, consider the potential precision loss and saturation behavior described below.
+
+Integer-to-FP32 Conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For this conversion, integer values that can be exactly represented by ``float32`` are preserved, while other
+values are rounded to the nearest representable ``float32`` value, with ties
+rounded to even (RNE).
+
+.. list-table::
+   :header-rows: 1
+
+   * - Source data type
+     - Conversion behavior
+   * - ``int8``, ``uint8``, ``int16``, ``uint16``
+     - All values are represented exactly.
+   * - ``int32``, ``uint32``
+     - Values may lose precision. Every integer with magnitude at most
+       :math:`2^{24}` is represented exactly, but not every larger integer is.
+
+For example, :math:`2^{24} + 1` lies halfway between the representable values
+:math:`2^{24}` and :math:`2^{24} + 2`, so RNE converts it to :math:`2^{24}`.
+
+FP32-to-Integer Conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``float32`` intermediate produced from the source integer is integer-valued. Values within the
+destination data type's range are preserved, while out-of-range values are
+saturated to the destination minimum or maximum.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Intermediate ``float32`` value
+     - Destination data type
+     - Result
+   * - ``42.0``
+     - ``int32``
+     - ``42`` (preserved)
+   * - ``2147483648.0``
+     - ``uint8``
+     - ``255`` (destination maximum)
+   * - ``-300.0``
+     - ``int8``
+     - ``-128`` (destination minimum)
+   * - ``-1.0``
+     - ``uint32``
+     - ``0`` (destination minimum)
+
 .. _nki-aluop:
 
 Supported Math Operators for NKI ISA
@@ -138,87 +200,101 @@ into float32 before performing the operators.
 
 Supported Activation Functions for NKI ISA
 ==========================================
-:ref:`tbl-act-func` below lists all the activation function supported by the ``nki.isa.activation``
-and ``nki.isa.activate2`` APIs. These
-activation functions are approximated with piece-wise polynomials on Scalar Engine.
-*NOTE*: if input values fall outside the supported **Valid Input Range** listed below,
-the Scalar Engine will generate invalid output results.
+:ref:`tbl-act-func` below lists all the activation functions supported by the
+:func:`nki.isa.activation` and :func:`nki.isa.activate2` APIs, along with the
+valid input range and ULP on each engine that implements them.
+
+On the **Scalar Engine** (default), activation functions are approximated with
+piece-wise polynomials from an on-engine table. If an input falls outside the
+**Scalar Engine Valid Range** listed below, the Scalar Engine will generate
+invalid output results.
+
+On the **GpSIMD Engine** (available on NeuronCore-v4+), activation functions
+are computed accurately over the full FP32 domain.
 
 .. _tbl-act-func:
 .. table:: Supported Activation Functions by NKI ISA
-   :widths: 25 25 25
+   :widths: 24 20 18 8 15 8
 
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Function Name                              | Accepted ``op`` by Scalar Engine                    | Valid Input Range   |
-   +============================================+=====================================================+=====================+
-   | Identity                                   | ``nki.language.copy``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Square                                     | ``nki.language.square``                             | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Sigmoid                                    | ``nki.language.sigmoid``                            | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Relu                                       | ``nki.language.relu``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | PReLU                                      | ``nki.language.prelu``                              | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Gelu                                       | ``nki.language.gelu``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Gelu Derivative                            | ``nki.language.gelu_dx``                            | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Gelu with Tanh Approximation               | ``nki.language.gelu_apprx_tanh``                    | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Gelu with Sigmoid Approximation            | ``nki.language.gelu_apprx_sigmoid``                 | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Gelu with Sigmoid Approximation Derivative | ``nki.language.gelu_apprx_sigmoid_dx``              | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Silu                                       | ``nki.language.silu``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Silu Derivative                            | ``nki.language.silu_dx``                            | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Tanh                                       | ``nki.language.tanh``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Softplus                                   | ``nki.language.softplus``                           | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Mish                                       | ``nki.language.mish``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Erf                                        | ``nki.language.erf``                                | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Erf Derivative                             | ``nki.language.erf_dx``                             | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Exponential                                | ``nki.language.exp``                                | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Natural Log                                | ``nki.language.log``                                | ``[2^-64, 2^64]``   |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Sine                                       | ``nki.language.sin``                                | ``[-PI, PI]``       |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Arctan                                     | ``nki.language.arctan``                             | ``[-PI/2, PI/2]``   |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Square Root                                | ``nki.language.sqrt``                               | ``[2^-116, 2^118]`` |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Reverse Square Root                        | ``nki.language.rsqrt``                              | ``[2^-87, 2^97]``   |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Reciprocal                                 | ``nki.language.reciprocal``                         | ``±[2^-42, 2^42]``  |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Sign                                       | ``nki.language.sign``                               | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
-   | Absolute                                   | ``nki.language.abs``                                | ``[-inf, inf]``     |
-   +--------------------------------------------+-----------------------------------------------------+---------------------+
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Function Name                              | Accepted ``op`` by           | | ScalarE:          | | ScalarE: | | GpSimdE:          | | GpSimdE: |
+   |                                            | activation instructions      | | Valid Range       | | ULP      | | Valid Range       | | ULP      |
+   +============================================+==============================+=====================+============+=====================+============+
+   | Identity                                   | ``nl.copy``                  | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Square                                     | ``nl.square``                | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Sigmoid                                    | ``nl.sigmoid``               | ``[-inf, inf]``     | ``40``     | ``[-inf, inf]``     | ``3``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Relu                                       | ``nl.relu``                  | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | PReLU                                      | ``nl.prelu``                 | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Gelu                                       | ``nl.gelu``                  | ``[-inf, inf]``     | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Gelu Derivative                            | ``nl.gelu_dx``               | ``[-inf, inf]``     | ``40``     | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Gelu with Tanh Approximation               | ``nl.gelu_apprx_tanh``       | ``[-inf, inf]``     | ``40``     | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Gelu with Sigmoid Approximation            | ``nl.gelu_apprx_sigmoid``    | ``[-inf, inf]``     | ``40``     | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Gelu with Sigmoid Approximation Derivative | ``nl.gelu_apprx_sigmoid_dx`` | ``[-inf, inf]``     | ``4096``   | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Silu                                       | ``nl.silu``                  | ``[-inf, inf]``     | ``32``     | ``[-inf, inf]``     | ``4``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Silu Derivative                            | ``nl.silu_dx``               | ``[-inf, inf]``     | ``32``     | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Tanh                                       | ``nl.tanh``                  | ``[-inf, inf]``     | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Softplus                                   | ``nl.softplus``              | ``[-inf, inf]``     | ``40``     | ``[-inf, inf]``     | ``3``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Mish                                       | ``nl.mish``                  | ``[-inf, inf]``     | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Erf                                        | ``nl.erf``                   | ``[-inf, inf]``     | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Erf Derivative                             | ``nl.erf_dx``                | ``[-inf, inf]``     | ``400``    | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Exponential                                | ``nl.exp``                   | ``[-inf, inf]``     | ``400``    | ``[-inf, inf]``     | ``1``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Natural Log                                | ``nl.log``                   | ``[2^-64, 2^64]``   | ``40``     | ``[-inf, inf]``     | ``2``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Natural Log (1+x)                          | ``nl.log1p``                 | ``-``               | ``-``      | ``[-inf, inf]``     | ``2``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Sine                                       | ``nl.sin``                   | ``[-PI, PI]``       | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Arctan                                     | ``nl.arctan``                | ``[-PI/2, PI/2]``   | ``4``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Square Root                                | ``nl.sqrt``                  | ``[2^-116, 2^118]`` | ``65536``  | ``[-inf, inf]``     | ``0``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Reverse Square Root                        | ``nl.rsqrt``                 | ``[2^-87, 2^97]``   | ``40000``  | ``[-inf, inf]``     | ``1``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Reciprocal                                 | ``nl.reciprocal``            | ``±[2^-42, 2^42]``  | ``400``    | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Sign                                       | ``nl.sign``                  | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+   | Absolute                                   | ``nl.abs``                   | ``[-inf, inf]``     | ``1``      | ``-``               | ``-``      |
+   +--------------------------------------------+------------------------------+---------------------+------------+---------------------+------------+
+
+A dash (``-``) means the function is not supported on that engine.
 
 .. note::
 
-   Functions whose **Valid Input Range** is narrower than ``[-inf, inf]``
-   (``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``, ``reciprocal``) may
-   produce invalid results outside that range. For ``sin`` specifically, the
-   Scalar Engine performs **no argument range reduction or clamping**. It
-   evaluates the fitting polynomial directly, so ``nki.isa.activation(op=nl.sin)``
-   extrapolates a cubic outside ``[-PI, PI]`` and ``sin(9.0)`` returns ~27.65
-   (not ~0.41). The Python simulator (``nki.simulate``) reproduces this hardware
-   behavior for ``sin`` only.
+   **Scalar Engine.** Functions whose Scalar Engine range is narrower than
+   ``[-inf, inf]`` (``sin``, ``arctan``, ``log``, ``sqrt``, ``rsqrt``,
+   ``reciprocal``) may produce invalid results outside that range. For
+   ``sin`` specifically, the Scalar Engine performs **no argument range
+   reduction or clamping**: it evaluates the fitting polynomial directly, so
+   ``nki.isa.activation(op=nl.sin)`` extrapolates a cubic outside
+   ``[-PI, PI]`` and ``sin(9.0)`` returns ~27.65 (not ~0.41). The Python
+   simulator (``nki.simulate``) reproduces this hardware behavior for
+   ``sin`` only.
 
-   ``nki.language.sin`` applies additional instructions to perform range
+   :func:`nki.language.sin` high-level API applies additional instructions to perform range
    reduction *before* the activation, so it stays accurate over the full input
-   domain. Call ``nki.language.sin`` instead of the ``nki.isa`` activation
+   domain at a performance cost. Call :func:`nki.language.sin` instead of
+   :func:`nki.isa.activation` / :func:`nki.isa.activate2`
    instructions when you need correct results for inputs outside ``[-PI, PI]``.
+
 
 .. _nki-engine-sel:
 

@@ -42,7 +42,15 @@ A logical NeuronCore (LNC) can consist of multiple physical NeuronCores. In the 
 For more details on NeuronCore configurations, see
 `Logical NeuronCore configurations <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-features/logical-neuroncore-config.html#logical-neuroncore-config>`__.
 
-In NKI, users can launch a NKI kernel onto multiple physical NeuronCores within a logical NeuronCore using ``kernel[2]`` to set LNC=2. Each core receives a different ``nl.program_id(0)`` value (0 or 1).
+To configure the LNC degree for a NKI kernel, set the
+``NEURON_LOGICAL_NC_CONFIG`` environment variable. For example, to use LNC=2:
+
+.. code-block:: bash
+
+   export NEURON_LOGICAL_NC_CONFIG=2
+
+You can call the kernel normally with ``kernel(...)``. See
+:ref:`nki-about-lnc` for details.
 
 What ML Frameworks support NKI kernels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
