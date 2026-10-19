@@ -1,4 +1,0 @@
-[submodule "docs-src/nki"]
-	path = docs-src/nki
-	url = git@github.com:aws-neuron/private-nki-staging.git
-	branch = release/0.7.0
