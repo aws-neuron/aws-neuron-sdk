@@ -10,7 +10,9 @@ locality and optimize data prefetch. The following diagram shows a high-level ov
 .. image:: /images/architecture/NeuronCore/nc-v3.png
     :align: center
     :width: 250
+
 |
+
 NeuronCore-v3 is made up of the following components:
 
 On-chip SRAM 

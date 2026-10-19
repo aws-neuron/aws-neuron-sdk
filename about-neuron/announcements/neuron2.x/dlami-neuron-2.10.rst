@@ -2,7 +2,7 @@
     :language: en
     :tags: dlami, pytorch, trn1, inf2, inf1
 
-.. _announce-dlc-sm-neuron-2.9.1:
+.. _announce-dlami-neuron-2.10:
 
 AWS Deep Learning AMIs now available with Neuron 2.10 version
 -------------------------------------------------------------

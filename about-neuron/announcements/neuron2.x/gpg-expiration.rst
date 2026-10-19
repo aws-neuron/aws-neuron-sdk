@@ -2,7 +2,7 @@
     :language: en
     :tags: dlami, pytorch
 
-.. _announce-dlami-neuron-pytorch:
+.. _announce-gpg-expiration:
 
 Neuron GPG key for Ubuntu installation has expired
 --------------------------------------------------

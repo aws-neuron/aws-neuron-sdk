@@ -2,7 +2,7 @@
     :language: en
     :tags: announce-u20-dlami-dlc-no-longer-support
 
-.. _announce-u20-dlami-dlc-eos:
+.. _announce-u20-dlami-dlc-no-longer-support:
 
 Neuron no longer includes support for Ubuntu20 DLCs and DLAMIs starting this release
 -------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
     :language: en
     :tags: sagemaker, pytorch, trn1
 
-.. _announce-dlami-neuron-pytorch:
+.. _announce-sm-training-trn1:
 
 Amazon SageMaker now supports Trn1 training jobs
 ------------------------------------------------

@@ -118,7 +118,7 @@ To run the training, we just run the above command but without ``neuron_parallel
 
 .. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
    :language: shell
-   :lines: 22-25
+   :lines: 20-23
 
 Training Llama2-13B/70B with Tensor Parallelism and Pipeline Parallelism
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -138,7 +138,7 @@ To run the training, we just use the above command but without ``neuron_parallel
 
 .. literalinclude:: nxd-source-code/llama_tp_pp_ptl/llama_2_7b.sh
    :language: shell
-   :lines: 22-25
+   :lines: 20-23
 
 
 Checkpointing:

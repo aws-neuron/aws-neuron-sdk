@@ -167,7 +167,7 @@ repository https://github.com/aws-neuron/upstreaming-to-vllm/tree/v0.6.x-neuron.
 
 Sequence Bucketing
 ^^^^^^^^^^^^^^^^^^
-To configure buckets, set the following environment variables. Refer to the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#bucketing>`_
+To configure buckets, set the following environment variables. Refer to the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#bucketing>`__
 for details on how to configure the values. These environment variables need to be set before starting the vLLM server or instantiating the ``LLM`` object.
 
 - ``NEURON_CONTEXT_LENGTH_BUCKETS``:  Bucket sizes for context encoding.
@@ -180,7 +180,7 @@ For example: ``export NEURON_CONTEXT_LENGTH_BUCKETS="128,512,1024"``
 
 NeuronConfig Override
 ^^^^^^^^^^^^^^^^^^^^^
-The default ``NeuronConfig`` in vLLM uses the latest optimizations from the Neuron SDK. However, you can override the default values or add a new configuration from the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#>`_ by setting the ``override_neuron_config`` parameter while creating the ``LLM`` object.
+The default ``NeuronConfig`` in vLLM uses the latest optimizations from the Neuron SDK. However, you can override the default values or add a new configuration from the `developer guide <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#>`__ by setting the ``override_neuron_config`` parameter while creating the ``LLM`` object.
 
 .. code-block:: python
 
