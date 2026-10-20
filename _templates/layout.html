@@ -1,0 +1,14 @@
+{% extends "!layout.html" %}
+
+{#
+  Agent-facing pointer to llms.txt. The element is visually hidden but stays in
+  the HTML, so AI agents and crawlers that read the page source can find the
+  documentation index. llms.txt is copied into the build by html_extra_path in
+  conf.py, and Read the Docs serves it at the project root.
+#}
+{% block docs_body %}
+<div class="llms-txt-directive" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+  For the complete AWS Neuron documentation index for AI agents, see <a href="/llms.txt">llms.txt</a>.
+</div>
+{{ super() }}
+{% endblock %}
