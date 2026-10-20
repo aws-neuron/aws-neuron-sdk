@@ -1,8 +1,8 @@
 .. meta::
-   :description: Public GitHub repositories for AWS Neuron open source components, including TorchNeuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, Neuron Explorer CDK, and Neuron agentic development, with contribution guidelines.
-   :keywords: AWS Neuron, open source, GitHub, contribute, TorchNeuron, torch-neuronx, vLLM Neuron, vLLM Omni Neuron, NKI Library, NKI samples, Neuron Explorer, agentic development, Apache 2.0
+   :description: Public GitHub repositories for AWS Neuron open source components, including TorchNeuron, TorchTitan Neuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, Neuron Explorer CDK, and Neuron agentic development, with contribution guidelines.
+   :keywords: AWS Neuron, open source, GitHub, contribute, TorchNeuron, torch-neuronx, TorchTitan Neuron, torchtitan-neuron, vLLM Neuron, vLLM Omni Neuron, NKI Library, NKI samples, Neuron Explorer, agentic development, Apache 2.0
    :content-type: reference
-   :date-modified: 2026-10-13
+   :date-modified: 2026-10-19
 
 .. _neuron-oss:
 
@@ -25,6 +25,16 @@ Neuron Open Source GitHub Repositories
       Source code for the Neuron Native PyTorch extension and the TorchNeuron library that implements it for AWS Trainium.
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/torch-neuronx
+
+   .. grid-item-card::
+      :class-body: sphinx-design-class-title-small
+
+      **TorchTitan Neuron Open Source**
+      ^^^
+      Source code for TorchTitan Neuron, the Neuron fork of PyTorch TorchTitan that adds AWS Trainium support through TorchNeuron.
+
+      * Neuron GitHub source repository: https://github.com/aws-neuron/torchtitan-neuron
+      * **Note**: Released under the PyTorch TorchTitan BSD 3-Clause license (`LICENSE <https://github.com/aws-neuron/torchtitan-neuron/blob/release_2.33.0/LICENSE>`__).
 
    .. grid-item-card:: 
       :class-body: sphinx-design-class-title-small
@@ -104,6 +114,7 @@ GitHub provides documentation on `forking a repository <https://help.github.com/
 For the specific details on licenses and contributing to each OSS repo, review the ``CONTRIBUTING.md`` pages linked below:
 
 * Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md
+* Contribute to TorchTitan Neuron: https://github.com/aws-neuron/torchtitan-neuron/blob/main/CONTRIBUTING.md
 * Contribute to Neuron Agentic Development: https://github.com/aws-neuron/neuron-agentic-development/blob/main/CONTRIBUTING.md
 * Contribute to Neuron Explorer CDK: https://github.com/aws-neuron/neuron-explorer-cdk/blob/main/CONTRIBUTING.md
 * Contribute to the NKI Library: https://github.com/aws-neuron/nki-library/blob/main/CONTRIBUTING.md

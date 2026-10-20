@@ -3,7 +3,7 @@
 .. meta::
    :description: Release notes for TorchNeuron (torch-neuronx), the native PyTorch backend for AWS Trainium, in AWS Neuron SDK 2.33.0.
    :keywords: TorchNeuron, torch-neuronx, PyTorch 2.13, PyTorch 2.14, release notes, Trainium, torch.compile, torch.distributed, NKI
-   :date-modified: 10/19/2026
+   :date-modified: 10/20/2026
 
 Release Notes for Neuron Component: TorchNeuron
 ===============================================
@@ -34,23 +34,34 @@ TorchNeuron supports the following operating systems on Linux x86_64.
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 30 40
+   :widths: 20 20 25 35
 
    * - Ubuntu version
      - Support status
      - Supported instances
+     - Wheel support
    * - Ubuntu 22.04
-     - End of support
-     - Not applicable
+     - Supported
+     - Trn2 and Trn3
+     - Planned for the next release
    * - Ubuntu 24.04
      - Supported
      - Trn2 and Trn3
+     - Planned for the next release
    * - Ubuntu 26.04
      - Supported
      - Trn2 and Trn3
+     - Supported
 
 Neuron no longer publishes new Ubuntu 22.04 DLAMIs or container images.
 Use Ubuntu 24.04 or Ubuntu 26.04 for a new environment.
+
+The standalone wheels in this release support Ubuntu 26.04 only.
+On Ubuntu 24.04, use the :doc:`single-framework DLAMI </setup/pytorch/dlami>`
+with ``torch-neuronx`` installed.
+For a manual setup on Ubuntu 22.04 or Ubuntu 24.04, `build torch-neuronx from
+source
+<https://github.com/aws-neuron/torch-neuronx?tab=contributing-ov-file#setup-development-environment>`_.
 
 Each package family supports all Python versions in its row.
 
@@ -68,7 +79,7 @@ Each package family supports all Python versions in its row.
      - 2.14.0
      - 3.12, 3.13, and 3.14
 
-Each PyTorch and Python combination has a release wheel.
+Each PyTorch and Python combination has an Ubuntu 26.04 release wheel.
 
 To install ``torch-neuronx`` and the matching dependencies, see
 :doc:`Install and verify torch-neuronx

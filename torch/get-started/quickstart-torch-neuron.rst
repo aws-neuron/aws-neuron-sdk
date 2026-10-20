@@ -1,7 +1,7 @@
 .. meta::
    :description: Install torch-neuronx and verify it on AWS Trainium.
    :keywords: TorchNeuron, torch-neuronx, install, verify, quickstart, Trainium, PyTorch, Neuron
-   :date-modified: 2026-10-19
+   :date-modified: 2026-10-20
 
 .. _torchneuron-quickstart-install-verify:
 
@@ -14,7 +14,8 @@ it, you will have a working ``torch-neuronx`` installation confirmed end-to-end.
 
 **This quickstart is for**: ML engineers setting up TorchNeuron for the first time
 
-**Time to complete**: 10 minutes with a Base DLAMI or 15 minutes with an Ubuntu AMI
+**Time to complete**: 5 minutes with a single-framework DLAMI or 15 minutes with
+an Ubuntu 26.04 AMI. A source build takes longer.
 
 Prerequisites
 -------------
@@ -23,12 +24,19 @@ TorchNeuron supports the Trn2 and Trn3 instance families. You need these resourc
 
 * An instance from the Trn2 or Trn3 family, for example ``trn2.3xlarge`` or
   ``trn2.48xlarge``
-* A :doc:`Neuron Base DLAMI </deploy/environments/dlami>` for Ubuntu 24.04 or
-  Ubuntu 26.04, or an Ubuntu 24.04 or Ubuntu 26.04 AMI
+* A :doc:`TorchNeuron single-framework DLAMI </setup/pytorch/dlami>` for
+  Ubuntu 24.04 or Ubuntu 26.04, or an Ubuntu 22.04, 24.04, or 26.04 AMI
 * SSH access to the system
 
-Use a Base DLAMI for a custom environment or container application. This quickstart
-creates a custom Python environment. For a container setup, see
+Use the single-framework DLAMI for the fastest setup. It includes ``torch-neuronx``
+and the required Neuron packages.
+
+The standalone wheels in this release support Ubuntu 26.04 only. On Ubuntu 24.04,
+use the single-framework DLAMI for the fastest setup. For a manual setup on Ubuntu
+22.04 or Ubuntu 24.04, `build torch-neuronx from source
+<https://github.com/aws-neuron/torch-neuronx?tab=contributing-ov-file#setup-development-environment>`_.
+
+For a container setup, see
 :doc:`Install PyTorch via Deep Learning Container </setup/pytorch/dlc>`.
 
 Step 1: Install the Neuron system packages
@@ -36,14 +44,20 @@ Step 1: Install the Neuron system packages
 
 Choose the instructions for your system.
 
-Use the Neuron Base DLAMI
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Use the TorchNeuron single-framework DLAMI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Neuron Base DLAMIs include the Neuron driver, EFA, and Neuron tools. Continue to
-Step 2.
+The Ubuntu 24.04 and Ubuntu 26.04 single-framework DLAMIs include
+``torch-neuronx`` and the required Neuron packages. Activate the environment:
 
-Use an Ubuntu 24.04 or Ubuntu 26.04 AMI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: bash
+
+   source /opt/aws_neuronx_venv_torch_neuronx_2_14_0/bin/activate
+
+Continue to Step 2.
+
+Use an Ubuntu 26.04 AMI
+~~~~~~~~~~~~~~~~~~~~~~~
 
 An Ubuntu AMI does not include Neuron packages. Configure the Neuron repository:
 
@@ -54,8 +68,8 @@ An Ubuntu AMI does not include Neuron packages. Configure the Neuron repository:
    curl -fsSL https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB \
      | sudo gpg --dearmor --yes -o /usr/share/keyrings/neuron-archive-keyring.gpg
    . /etc/os-release
-   printf 'deb [signed-by=/usr/share/keyrings/neuron-archive-keyring.gpg] \
-   https://apt.repos.neuron.amazonaws.com %s main\n' "${VERSION_CODENAME}" \
+   printf 'deb [signed-by=/usr/share/keyrings/neuron-archive-keyring.gpg] https://apt.repos.neuron.amazonaws.com %s main\n' \
+     "${VERSION_CODENAME}" \
      | sudo tee /etc/apt/sources.list.d/neuron.list
 
 Install the Neuron driver and tools:
@@ -68,10 +82,13 @@ Install the Neuron driver and tools:
        aws-neuronx-dkms=2.* \
        aws-neuronx-tools=2.*
 
-Step 2: Install the common system packages
-------------------------------------------
+Add the Neuron tools to the current shell:
 
-Run these commands on the system that you use:
+.. code-block:: bash
+
+   export PATH=/opt/aws/neuron/bin:$PATH
+
+Install the common packages:
 
 .. code-block:: bash
 
@@ -81,7 +98,15 @@ Run these commands on the system that you use:
        aws-neuronx-runtime-lib=2.* \
        aws-neuronx-collectives=2.*
 
-Step 3: Check the Neuron devices
+Use an Ubuntu 22.04 or Ubuntu 24.04 AMI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The standalone wheels in this release do not support Ubuntu 22.04 or Ubuntu 24.04.
+`Build torch-neuronx from source
+<https://github.com/aws-neuron/torch-neuronx?tab=contributing-ov-file#setup-development-environment>`_
+for a manual setup.
+
+Step 2: Check the Neuron devices
 --------------------------------
 
 Connect to the system. Then run this command:
@@ -108,8 +133,13 @@ For example, a ``trn2.48xlarge`` instance returns output similar to this:
 You should see output that lists the available Neuron devices. If no devices appear,
 check the instance type and Neuron driver.
 
-Step 4: Install torch-neuronx
+Step 3: Install torch-neuronx
 -----------------------------
+
+Skip this step on a single-framework DLAMI. It already includes ``torch-neuronx``.
+Also skip this step after you build ``torch-neuronx`` from source.
+
+Run this step only on an Ubuntu 26.04 AMI.
 
 Check the Python version. Then create a virtual environment:
 
@@ -133,7 +163,7 @@ This command installs the PyTorch 2.14 CPU wheel and its matching ``torch-neuron
 package. This release also supports PyTorch 2.13. Both package families support
 Python 3.12, 3.13, and 3.14 on Linux x86_64.
 
-Step 5: Verify the installation
+Step 4: Verify the installation
 -------------------------------
 
 Create a file named ``verify_torch_neuronx.py``:
@@ -192,7 +222,7 @@ Common issues
 
 Package installation fails
    Run ``python --version``. Use Python 3.12, 3.13, or 3.14. Use both package
-   repository options from Step 4.
+   repository options from Step 3.
 
 .. include:: /includes/torch/trn3-sizing-note.txt
 
@@ -203,6 +233,7 @@ Next steps
   mode or with ``torch.compile``.
 * :doc:`/torch/get-started/quickstart-nki-kernel` - Run an NKI kernel from
   ``torch-neuronx``.
+* :doc:`/setup/pytorch/index` - Choose a DLAMI, a DLC, or a manual installation.
 * :doc:`/torch/about-pytorch-neuron` - Learn how TorchNeuron works.
 * :doc:`/torch/troubleshooting` - Find solutions for installation and execution
   problems.
