@@ -213,7 +213,10 @@ exclude_patterns = [
     'docs-src',
     'docs-src/**',
 ]
-html_extra_path = ['static']
+# llms.txt lives at the repo root and must be copied into the HTML output so
+# Read the Docs serves it at /en/latest/llms.txt and, for the default version,
+# at the project root (/llms.txt). Without this entry the file is never built.
+html_extra_path = ['static', 'llms.txt']
 
 # remove bash/python/ipython/jupyter prompts and continuations
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
