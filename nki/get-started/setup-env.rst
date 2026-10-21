@@ -1,6 +1,6 @@
 .. meta::
     :description: How to set up your environment for NKI development with AWS Neuron SDK
-    :date-modified: 04/12/2026
+    :date-modified: 10/19/2026
 
 
 .. _how-to-set-up-nki-env:
@@ -27,7 +27,7 @@ Instructions
 
    .. tab:: Amazon Linux 2023
 
-      You can set up an environment to use NKI in several ways. The easiest method uses the Neuron Multi-framework Deep Learning AMI (DLAMI). The DLAMI provides Python virtual environments (using venv) for frameworks like PyTorch and JAX. AWS updates the DLAMI with each new Neuron SDK release. If you prefer to manage the environment directly, you can start with a standard Amazon Linux 2023 (AL2023) AMI and install the Neuron SDK and NKI library directly. If you already have a configured environment, follow the upgrade tab instructions to upgrade to the latest SDK.
+      You can set up an environment to use NKI with JAX on Amazon Linux 2023 in several ways. Amazon Linux 2023 does not support PyTorch 2.9 or later, so to use NKI with PyTorch, use the Ubuntu tab. The easiest method uses the Neuron JAX Deep Learning AMI (DLAMI), which provides a Python virtual environment (using venv) for JAX. AWS updates the DLAMI with each new Neuron SDK release. If you prefer to manage the environment directly, you can start with a standard Amazon Linux 2023 (AL2023) AMI and install the Neuron SDK and NKI library directly. If you already have a configured environment, follow the upgrade tab instructions to upgrade to the latest SDK.
 
       .. tabs::
 
@@ -37,7 +37,7 @@ Instructions
    
                .. image:: /nki/img/get-started/nki-setup-1.png
 
-               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Amazon Linux", then in the AMI dropdown search for "neuron". The "Deep Learning AMI Neuron (Amazon Linux 2023)" should be the only option. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages.
+               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Amazon Linux", then in the AMI dropdown search for "neuron". Select "Deep Learning AMI Neuron JAX 0.10 (Amazon Linux 2023)". Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages.
 
                Once the instance is launched, an environment can be activated with the NKI library and Neuron SDK already installed.
 
@@ -85,45 +85,13 @@ Instructions
                   # Add PATH
                   export PATH=/opt/aws/neuron/bin:$PATH
 
-            3. Set up either a PyTorch or JAX environment to use with NKI
+            3. Set up a JAX environment to use with NKI
 
                .. tabs::
 
                   .. tab:: PyTorch
 
-                     .. code-block:: bash
-
-                        # Install External Dependency
-                        sudo dnf install -y libxcrypt-compat
-
-                        # Install Python 
-                        sudo dnf install -y python3.11
-
-                        # Install GCC
-                        sudo dnf install -y gcc-c++ 
-
-                        # Create Python venv
-                        python3.11 -m venv aws_neuron_venv_pytorch 
-
-                        # Activate Python venv 
-                        source aws_neuron_venv_pytorch/bin/activate 
-                        pip install -U pip 
-
-                        # Install Jupyter notebook kernel
-                        pip install ipykernel 
-                        python3.11 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
-                        pip install jupyter notebook
-                        pip install environment_kernels
-
-                        # Set pip repository pointing to the Neuron repository 
-                        pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-
-                        # Install wget, awscli 
-                        pip install wget 
-                        pip install awscli 
-
-                        # Install Neuron Compiler and Framework
-                        pip install neuronx-cc==2.* torch-neuronx==2.9.* torchvision nki
+                     TorchNeuron requires Ubuntu 24.04 or 26.04. To use NKI with PyTorch, use the Ubuntu tab.
 
                   .. tab:: JAX
 
@@ -133,13 +101,13 @@ Instructions
                         sudo dnf install -y libxcrypt-compat
 
                         # Install Python 
-                        sudo dnf install -y python3.11
+                        sudo dnf install -y python3.12
 
                         # Install GCC 
                         sudo dnf install -y gcc-c++ 
 
                         # Create Python venv
-                        python3.11 -m venv aws_neuron_venv_jax
+                        python3.12 -m venv aws_neuron_venv_jax
 
                         # Activate Python venv 
                         source aws_neuron_venv_jax/bin/activate 
@@ -149,46 +117,28 @@ Instructions
 
                      .. code-block:: bash
 
-                        pip install jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
+                        pip install "jax-neuronx[stable]" --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                     This installs JAX 0.9 (0.9.2 or later).
 
                      Alternatively, jax, jaxlib, libneuronxla, neuronx-cc, and nki can be installed separately, with jax-neuronx being an optional addition. This version can be installed as follows.
 
                      .. code-block:: bash
 
-                        pip install jax==0.7.0 jaxlib==0.7.0
+                        pip install jax==0.10.0 jaxlib==0.10.0
                         pip install jax-neuronx libneuronxla neuronx-cc==2.* nki --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                     This installs JAX 0.10.0.
 
          .. tab:: Upgrade
 
-            Upgrading an existing AL2023 install of the Neuron SDK with NKI can be done for PyTorch or JAX.
+            Upgrading an existing AL2023 install of the Neuron SDK with NKI can be done for JAX.
 
             .. tabs::
 
                .. tab:: PyTorch
 
-                  .. code-block:: bash
-
-                     # Install External Dependency
-                     sudo dnf install -y libxcrypt-compat
-
-                     # Activate Python venv 
-                     source aws_neuron_venv_pytorch/bin/activate 
-
-                     # Install Jupyter notebook kernel
-                     pip install ipykernel 
-                     python3.11 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
-                     pip install jupyter notebook
-                     pip install environment_kernels
-
-                     # Set pip repository pointing to the Neuron repository 
-                     pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-
-                     # Install wget, awscli 
-                     pip install wget 
-                     pip install awscli 
-
-                     # Update Neuron Compiler and Framework
-                     pip install --upgrade neuronx-cc==2.* torch-neuronx==2.9.* torchvision nki
+                  TorchNeuron requires Ubuntu 24.04 or 26.04. To use NKI with PyTorch, use the Ubuntu tab.
 
                .. tab:: JAX
 
@@ -208,18 +158,22 @@ Instructions
 
                   .. code-block:: bash
 
-                     pip install --upgrade jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
+                     pip install --upgrade "jax-neuronx[stable]" --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                  This installs JAX 0.9 (0.9.2 or later).
 
                   Alternatively, jax, jaxlib, libneuronxla, neuronx-cc, and nki can be upgraded separately, with jax-neuronx being an optional addition. This version can be installed as follows.
 
                   .. code-block:: bash
 
-                     pip install jax==0.7.0 jaxlib==0.7.0
+                     pip install jax==0.10.0 jaxlib==0.10.0
                      pip install --upgrade jax-neuronx libneuronxla neuronx-cc==2.* nki --extra-index-url=https://pip.repos.neuron.amazonaws.com
 
-   .. tab:: Ubuntu 24
+                  This installs JAX 0.10.0.
 
-      The easiest way to set up an environment to use NKI is by using the Neuron Multi-framework Deep Learning AMI (DLAMI). The DLAMI provides Python virtual environments (using venv) for a variety of frameworks including PyTorch and JAX and is updated with each new release of the Neuron SDK. For customers that prefer to manage the environment directly, it is also possible to start with an standard Ubuntu 24 AMI and install the Neuron SDK and NKI library directly. Customers who already have an environment configured can follow the instructions in the upgrade tab to upgrade to the latest SDK.
+   .. tab:: Ubuntu
+
+      The easiest way to set up an environment to use NKI is by using the Neuron Multi-framework Deep Learning AMI (DLAMI). The DLAMI provides Python virtual environments (using venv) for a variety of frameworks including PyTorch and JAX and is updated with each new release of the Neuron SDK. For customers that prefer to manage the environment directly, it is also possible to start with a standard Ubuntu 24.04 or 26.04 AMI and install the Neuron SDK and NKI library directly. Customers who already have an environment configured can follow the instructions in the upgrade tab to upgrade to the latest SDK.
 
       .. tabs::
 
@@ -229,7 +183,7 @@ Instructions
    
                .. image:: /nki/img/get-started/nki-setup-2.png
 
-               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then in the AMI dropdown search for "neuron". The "Deep Learning AMI Neuron (Ubuntu 24.04)" should be the only option. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages.
+               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then in the AMI dropdown search for "neuron". Select "Deep Learning AMI Neuron (Ubuntu 24.04)" or "Deep Learning AMI Neuron (Ubuntu 26.04)". Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages.
 
                Once the instance is launched, an environment can be activated with the NKI library and Neuron SDK already installed.
 
@@ -237,20 +191,20 @@ Instructions
 
          .. tab:: Standard AMI
 
-            1. Launch the instance using the Ubuntu 24
+            1. Launch the instance using Ubuntu 24.04 or 26.04
                
-               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then select the Ubuntu Server 24.04 AMI. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages. Note: You will need to allocate at least 50 GB of storage.
+               Select the desired region from the EC2 Console and choose "Launch Instance". In the "Quick Start" tab, select "Ubuntu", then select the Ubuntu Server 24.04 or 26.04 AMI. Select an Trn2 / Trn3 instance type. For more details see the Trn2 or Trn3 EC2 pages. Note: You will need to allocate at least 50 GB of storage.
             
             2. Install Drivers and Tools
 
                .. code-block:: bash
 
                   # Configure Linux for Neuron repository updates
+                  sudo apt-get update -y
+                  sudo apt-get install -y curl gnupg
+                  curl -fsSL https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo gpg --dearmor --yes -o /usr/share/keyrings/neuron-archive-keyring.gpg
                   . /etc/os-release
-                  sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-                  deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
-                  EOF
-                  wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+                  echo "deb [signed-by=/usr/share/keyrings/neuron-archive-keyring.gpg] https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/neuron.list
 
                   # Update OS packages 
                   sudo apt-get update -y
@@ -283,61 +237,65 @@ Instructions
                      .. code-block:: bash
 
                         # Install Python venv 
-                        sudo apt-get install -y python3.12-venv g++ 
+                        sudo apt-get install -y python3-venv g++ 
 
                         # Create Python venv
-                        python3.12 -m venv aws_neuron_venv_pytorch 
+                        python3 -m venv aws_neuron_venv_pytorch 
 
                         # Activate Python venv 
                         source aws_neuron_venv_pytorch/bin/activate 
-                        python -m pip install -U pip 
+                        pip install -U pip 
 
                         # Install Jupyter notebook kernel
                         pip install ipykernel 
-                        python3.12 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+                        python -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
                         pip install jupyter notebook
                         pip install environment_kernels
 
                         # Set pip repository pointing to the Neuron repository 
-                        python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+                        pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
 
                         # Install wget, awscli 
-                        python -m pip install wget 
-                        python -m pip install awscli 
+                        pip install wget 
+                        pip install awscli 
 
                         # Install Neuron Compiler and Framework
-                        python -m pip install neuronx-cc==2.* torch-neuronx==2.9.* torchvision nki
+                        pip install "torch-neuronx==2.14.*" "neuronx-cc==2.*" nki --extra-index-url https://download.pytorch.org/whl/cpu
 
                   .. tab:: JAX
 
                      .. code-block:: bash
 
                         # Install Python venv 
-                        sudo apt-get install -y python3.12-venv g++ 
+                        sudo apt-get install -y python3-venv g++ 
 
                         # Create Python venv
-                        python3.12 -m venv aws_neuron_venv_jax
+                        python3 -m venv aws_neuron_venv_jax
 
                         # Activate Python venv 
                         source aws_neuron_venv_jax/bin/activate 
-                        python -m pip install -U pip 
+                        pip install -U pip 
 
                      Neuron provides two different ways to install the JAX package. The first is a common package with jax-neuronx packaged together and tested with all the necessary dependencies including jax, jaxlib, libneuronxla, neuronx-cc, and nki. This package can be installed as follows.
 
                      .. code-block:: bash
 
-                        pip install jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
+                        pip install "jax-neuronx[stable]" --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                     This installs JAX 0.9 (0.9.2 or later).
 
                      Alternatively, jax, jaxlib, libneuronxla, neuronx-cc, and nki can be installed separately, with jax-neuronx being an optional addition. This version can be installed as follows.
 
                      .. code-block:: bash
 
-                        pip install jax==0.7.0 jaxlib==0.7.0
+                        pip install jax==0.10.0 jaxlib==0.10.0
                         pip install jax-neuronx libneuronxla neuronx-cc==2.* nki --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                     This installs JAX 0.10.0.
 
          .. tab:: Upgrade
 
-            Upgrading an existing Ubuntu 24 install of the Neuron SDK with NKI can be done for PyTorch or JAX.
+            Upgrading an existing Ubuntu 24.04 or 26.04 install of the Neuron SDK with NKI can be done for PyTorch or JAX.
 
             .. tabs::
 
@@ -345,19 +303,13 @@ Instructions
 
                   .. code-block:: bash
 
-                     # Install Python venv 
-                     sudo apt-get install -y python3.12-venv g++ 
-
-                     # Create Python venv
-                     python3.12 -m venv aws_neuron_venv_pytorch 
-
                      # Activate Python venv 
                      source aws_neuron_venv_pytorch/bin/activate 
                      pip install -U pip 
 
                      # Install Jupyter notebook kernel
                      pip install ipykernel 
-                     python3.12 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
+                     python -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (torch-neuronx)"
                      pip install jupyter notebook
                      pip install environment_kernels
 
@@ -368,15 +320,15 @@ Instructions
                      pip install wget 
                      pip install awscli 
 
-                     # Install Neuron Compiler and Framework
-                     pip install neuronx-cc==2.* torch-neuronx==2.9.* torchvision nki
+                     # Update Neuron Compiler and Framework
+                     pip install --upgrade "torch-neuronx==2.14.*" "neuronx-cc==2.*" nki --extra-index-url https://download.pytorch.org/whl/cpu
 
                .. tab:: JAX
 
                   .. code-block:: bash
 
                      # Update Python venv 
-                     sudo apt-get install -y python3.12-venv g++ 
+                     sudo apt-get install -y python3-venv g++ 
 
                      # Activate Python venv 
                      source aws_neuron_venv_jax/bin/activate 
@@ -386,14 +338,18 @@ Instructions
 
                   .. code-block:: bash
 
-                     pip install --upgrade jax-neuronx[stable] --extra-index-url=https://pip.repos.neuron.amazonaws.com
+                     pip install --upgrade "jax-neuronx[stable]" --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                  This installs JAX 0.9 (0.9.2 or later).
 
                   Alternatively, jax, jaxlib, libneuronxla, neuronx-cc, and nki can be installed separately, with jax-neuronx being an optional addition. This version can be installed as follows.
 
                   .. code-block:: bash
 
-                     pip install jax==0.7.0 jaxlib==0.7.0
+                     pip install jax==0.10.0 jaxlib==0.10.0
                      pip install --upgrade jax-neuronx libneuronxla neuronx-cc==2.* nki --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+                  This installs JAX 0.10.0.
 
 Confirm your work
 ------------------
@@ -412,17 +368,23 @@ To test the NKI environment is set up and ready to use, a ``venv`` that contains
 
             .. code-block:: bash
 
-               source /opt/aws_neuronx_venv_pytorch_2_9/bin/activate
+               source /opt/aws_neuronx_venv_torch_neuronx_2_14_0/bin/activate
+
+               # Explicitly set the NKI kernel LNC degree to 1
+               export NEURON_LOGICAL_NC_CONFIG=1
 
          .. tab:: JAX
 
             .. code-block:: bash
 
-               source /opt/aws_neuronx_venv_jax_0_7/bin/activate
+               source /opt/aws_neuronx_venv_jax_0_10/bin/activate
+
+               # Explicitly set the NKI kernel LNC degree to 1
+               export NEURON_LOGICAL_NC_CONFIG=1
 
    .. tab:: Standard AMI
       
-      The venv created in the setup step above can be activate as follows.
+      The venv created in the setup step above can be activated as follows.
 
       .. tabs::
 
@@ -430,13 +392,19 @@ To test the NKI environment is set up and ready to use, a ``venv`` that contains
 
             .. code-block:: bash
 
-               source aws_neuronx_venv_pytorch/bin/activate
+               source aws_neuron_venv_pytorch/bin/activate
+
+               # Explicitly set the NKI kernel LNC degree to 1
+               export NEURON_LOGICAL_NC_CONFIG=1
 
          .. tab:: JAX
 
             .. code-block:: bash
 
-               source aws_neuronx_venv_jax/bin/activate
+               source aws_neuron_venv_jax/bin/activate
+
+               # Explicitly set the NKI kernel LNC degree to 1
+               export NEURON_LOGICAL_NC_CONFIG=1
 
 Once the ``venv`` is activated, confirm that NKI is available.
 
@@ -461,19 +429,9 @@ load and run them directly from Python with :ref:`nrtpy <nrtpy-guide>`, the Neur
 Runtime Python layer. This is useful for benchmarking a compiled kernel or building
 test harnesses without going through PyTorch or JAX.
 
-.. important::
-
-   ``nrtpy`` and ``nki`` currently (as of Neuron release 2.32.0) cannot be installed in the same Python environment because
-   of a namespace conflict. Keep using the NKI environment above to compile kernels
-   to NEFFs, and create a **separate** ``nrtpy`` environment to load and run them.
-
-Create a dedicated ``nrtpy`` environment, separate from the NKI ``venv`` above:
+Install ``nrtpy`` in the NKI ``venv`` above:
 
 .. code-block:: bash
-
-   # Create and activate a separate venv for nrtpy
-   python3 -m venv ~/nrtpy_venv
-   source ~/nrtpy_venv/bin/activate
 
    # Let nrtpy find the Neuron Runtime library (libnrt)
    export LD_LIBRARY_PATH=/opt/aws/neuron/lib:$LD_LIBRARY_PATH
