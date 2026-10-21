@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn how to implement and run your first NKI kernel on AWS Neuron accelerators
-    :date-modified: 03/30/2026
+    :date-modified: 10/19/2026
 
 .. _quickstart-run-nki-kernel:
 
@@ -191,23 +191,19 @@ In this step, you create a test program as a Python script using either PyTorch 
       .. code-block:: python
 
           import torch
-          import torch_neuronx
           from add_kernel import nki_tensor_add_kernel
 
-          # Generate input tensors.
-          a = torch.ones((4, 3), dtype=torch.float16)
-          b = torch.ones((4, 3), dtype=torch.float16)
+          # Generate the input tensors on the Neuron device.
+          a = torch.ones((4, 3), dtype=torch.float16, device="neuron")
+          b = torch.ones((4, 3), dtype=torch.float16, device="neuron")
 
-          # Trace the kernel for Neuron.
-          trace = torch_neuronx.trace(nki_tensor_add_kernel, (a, b))
+          # Invoke the kernel to add the results.
+          c = nki_tensor_add_kernel(a, b)
 
-          # Run the traced kernel.
-          c = trace(a, b)
-
-          # Print the result.
+          # Print the result tensor.
           print(c)
 
-      You create input tensors using PyTorch. You use ``torch_neuronx.trace`` to compile the kernel for the Neuron device, then call the traced function to run it. The ``print`` function prints the result to the console.
+      You create input tensors on the Neuron device using PyTorch. You call the ``nki_tensor_add_kernel`` function to invoke the kernel. The ``print`` function prints the result to the console.
 
    .. tab:: JAX
 
@@ -237,6 +233,14 @@ Confirmation
 
 You can confirm the success of the kernel by running the driver you created in step 8.
 
+First explicitly set the kernel LNC degree to 1:
+
+.. code-block:: bash
+
+    export NEURON_LOGICAL_NC_CONFIG=1
+
+Run the driver:
+
 .. code-block:: bash
 
     NEURON_PLATFORM_TARGET_OVERRIDE=trn3 python test_program.py
@@ -260,21 +264,10 @@ You will also see some additional output depending on whether you used PyTorch o
 
       .. code-block:: text
 
-            2026-Apr-13 01:46:31.0675 837617:837663 [2] int nccl_net_ofi_create_plugin(nccl_net_ofi_plugin_t**):219 CCOM WARN NET/OFI Failed to initialize rdma protocol
-            2026-Apr-13 01:46:31.0678 837617:837663 [2] int nccl_net_ofi_create_plugin(nccl_net_ofi_plugin_t**):354 CCOM WARN NET/OFI aws-ofi-nccl initialization failed
-            2026-Apr-13 01:46:31.0681 837617:837663 [2] ncclResult_t nccl_net_ofi_init_no_atexit_fini_v6(ncclDebugLogger_t):183 CCOM WARN NET/OFI Initializing plugin failed
-            2026-Apr-13 01:46:31.0683 837617:837663 [2] net_plugin.cc:97 CCOM WARN OFI plugin initNet() failed is EFA enabled?
-            .
-            Compiler status PASS
-            2026-04-13 01:46:33.000003: 837617 [INFO]: Compilation Successfully Completed for model.MODULE_9886333626096130500+70e3f644.hlo_module.pb
             tensor([[2., 2., 2.],
-             [2., 2., 2.],
-             [2., 2., 2.],
-             [2., 2., 2.]], device='xla:0', dtype=torch.float16)
-
-      .. note::
-
-         The CCOM warnings about OFI/EFA initialization are harmless on single-node instances without EFA networking and can be safely ignored.
+                    [2., 2., 2.],
+                    [2., 2., 2.],
+                    [2., 2., 2.]], device='neuron:0', dtype=torch.float16)
 
    .. tab:: JAX
 
@@ -303,6 +296,9 @@ Uh oh! Did you encounter an error or other issue while working through this quic
 
 * ``nki``, ``jax``, ``torch``, etc. library not found: You may need to activate the PyTorch or JAX environment.
 * No neuron device available: You may not have the ``neuron`` kernel module loaded. Make sure the ``neuron`` module is loaded with ``sudo modprobe neuron``.
+* ``NCC_EVRF066`` error such as ``NKI kernel 'nki_tensor_add_kernel' is configured with LNC=1, but neuronx-cc is using LNC=2``:
+
+  - Set ``NEURON_LOGICAL_NC_CONFIG`` explicitly so the kernel and ``neuronx-cc`` use the same LNC degree, for example ``export NEURON_LOGICAL_NC_CONFIG=1``.
 
 Clean up
 ---------
