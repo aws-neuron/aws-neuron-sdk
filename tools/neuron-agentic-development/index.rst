@@ -1,7 +1,7 @@
 .. meta::
-   :description: Neuron Agentic Development is a package of AI agents and skills for developing on AWS Trainium, including NKI kernel development and model porting to NxD Inference.
+   :description: Neuron Agentic Development is a package of AI agents and skills for developing on AWS Trainium, including NKI kernel development, model porting to vLLM Neuron, and inference performance planning.
    :keywords: Neuron Agentic Development, AI agents, skills, NKI, model porting, autoport, Claude Code, Kiro, Trainium
-   :date-modified: 2026-10-07
+   :date-modified: 2026-10-22
 
 .. _neuron-agentic-development:
 .. _neuron-agentic-development-overview:
@@ -21,9 +21,9 @@ The package covers three areas today.
    kernels. Translate from PyTorch, NumPy, or plain language descriptions into NKI code
    that runs on NeuronCores.
 
-2. **Model porting to NxD Inference.** Port HuggingFace transformer models to run on
-   Trainium through NxD Inference. The agent handles architecture analysis,
-   implementation, compilation, inference testing, and accuracy validation.
+2. **Model porting to vLLM Neuron.** Port GPU-compatible HuggingFace transformer models to
+   run on Trn2 and Trn3 through :doc:`vLLM Neuron </vllm-neuron/docs/index>`. The agent handles
+   architecture analysis, implementation, registration, inference testing, and accuracy validation.
 
 3. **Inference performance planning.** Choose tensor, context, and data parallelism and batch
    size for serving an LLM before running on hardware, and find which operator binds on compute
@@ -42,7 +42,7 @@ Neuron Agentic Development applies to:
 - Debugging NKI kernel compilation errors.
 - Capturing and querying on-device execution profiles.
 - Identifying kernel inefficiencies such as intermediate-data spilling and redundant TensorEngine transposes.
-- Porting HuggingFace transformer models to run on Trainium through NxD Inference.
+- Porting GPU-compatible HuggingFace transformer models to run on Trn2 and Trn3 through vLLM Neuron.
 - Looking up NKI documentation, API references, tutorials, and error codes from within an agent conversation.
 
 What problem does it solve?
@@ -51,8 +51,8 @@ What problem does it solve?
 NKI is the programming interface for writing custom compute kernels that run directly on
 Trainium and Inferentia NeuronCores. It gives you fine-grained control over the hardware's
 tensor engines, vector engines, and DMA subsystem, so you can reach performance beyond what
-framework-level compilation alone achieves. Model porting to NxD Inference lets you bring
-new HuggingFace architectures to Trainium without manually implementing each layer.
+framework-level compilation alone achieves. Model porting to vLLM Neuron lets you bring
+new HuggingFace architectures to Trn2 and Trn3 without manually implementing each layer.
 
 Both workflows involve multi-step technical processes — compilation, validation, profiling,
 debugging — that an agent can coordinate for you. You describe the goal in natural language,
@@ -216,4 +216,4 @@ Related resources
 - :doc:`/nki/index` for Neuron Kernel Interface documentation.
 - :doc:`/tools/neuron-explorer/index` for the profiling and analysis tool that agents invoke for profile capture.
 - `Kiro documentation <https://kiro.dev/docs/>`__ for learning about Kiro.
-- :ref:`nxdi-dev-ref-index` for NxD Inference developer guides.
+- :doc:`/vllm-neuron/docs/index` for vLLM Neuron documentation.
