@@ -224,8 +224,11 @@ jobs:
         if: steps.analyze_content.outputs.has_labels == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS: ${{ steps.analyze_content.outputs.labels }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
         run: |
-          IFS=',' read -ra LABELS <<< "${{ steps.analyze_content.outputs.labels }}"
-          for label in "${LABELS[@]}"; do
-            gh issue edit ${{ github.event.issue.number }} --add-label "$label" -R ${{ github.repository }}
+          IFS=',' read -ra LABEL_LIST <<< "$LABELS"
+          for label in "${LABEL_LIST[@]}"; do
+            gh issue edit "$ISSUE_NUMBER" --add-label "$label" -R "$REPO"
           done
