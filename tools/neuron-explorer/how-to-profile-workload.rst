@@ -107,7 +107,7 @@ PyTorch profiling
 
 .. note::
 
-   Native PyTorch profiling is in private beta. You must be enrolled in Native PyTorch private beta 3. Contact the Neuron Product team or see :doc:`/torch/about-pytorch-neuron` to sign up.
+   Native PyTorch profiling is in beta. For more information, see :doc:`/torch/about-pytorch-neuron`.
 
 PyTorch profiling uses the standard ``torch.profiler.profile`` API extended with a ``NeuronConfig`` object that controls Neuron-specific data collection. For related Explorer viewers, see :doc:`System Trace Viewer </tools/neuron-explorer/overview-system-profiles>`.
 
