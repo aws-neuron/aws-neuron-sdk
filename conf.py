@@ -137,6 +137,7 @@ extensions = [
     "sphinxcontrib.spelling",
     "sphinx_tabs.tabs",
     "myst_parser",
+    "sphinxext.opengraph",
 ]
 
 # MyST (Markdown) support for vLLM Neuron docs (vllm-neuron/docs/).
@@ -226,6 +227,40 @@ copybutton_prompt_is_regexp = True
 nbsphinx_execute = "never"
 
 html_logo = "images/Site-Merch_Neuron-ML-SDK_Editorial.png"
+
+# Site icon for browser tabs, bookmarks, search results, and link unfurls
+# (Slack, Teams, and similar). Generated from images/NeuronStandalone.png at
+# 48x48, the minimum size Google Search uses for result favicons.
+html_favicon = "_static/favicon.ico"
+
+# -- Open Graph (link preview cards) -----------------------------------------
+# sphinxext-opengraph adds og:* tags to every page so Slack, Teams, LinkedIn,
+# and similar apps show a preview card with the page title, a description from
+# the page text, and the image below.
+#
+# On Read the Docs, READTHEDOCS_CANONICAL_URL is the URL of the version being
+# built, so the staging project points at staging and public at public. Local
+# builds fall back to the public "latest" URL.
+ogp_site_url = os.environ.get(
+    "READTHEDOCS_CANONICAL_URL",
+    "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/",
+)
+ogp_site_name = "AWS Neuron Documentation"
+# 1200x630 card generated from images/NeuronStandalone.png. Relative paths are
+# resolved against ogp_site_url.
+ogp_image = "_static/neuron-social-card.jpg"
+ogp_image_alt = "AWS Neuron logo"
+# Use the single site card, not per-page auto-generated cards (which need
+# matplotlib and would replace ogp_image).
+ogp_social_cards = {"enable": False}
+# Keep each page's existing ".. meta:: :description:" as the only
+# <meta name="description"> tag.
+ogp_enable_meta_description = False
+ogp_custom_meta_tags = [
+    '<meta property="og:image:width" content="1200" />',
+    '<meta property="og:image:height" content="630" />',
+    '<meta name="twitter:card" content="summary_large_image" />',
+]
 
 napoleon_google_docstring = True
 

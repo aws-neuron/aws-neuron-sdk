@@ -529,6 +529,95 @@ Example yaml for 4-node inference on trn2u.48xlarge:
            - name: one-node-from-ultraserver
              resourceClaimTemplateName: us-4-node-config
 
+.. _neuron-dra-ultraserver-device-allocation:
+
+Per-device allocation on UltraServer nodes
+-------------------------------------------
+
+By default, the Neuron DRA driver publishes each UltraServer node (trn2u.48xlarge and Trn3 UltraServer instance types) as a single
+``neuron_node`` resource, and workloads allocate the whole node. Starting with Neuron DRA driver version 1.4.0, you can allocate individual
+Neuron devices on an UltraServer node instead. To do this, label the node with ``neuron.amazonaws.com/ultraserver-device-allocation=true``. The driver then publishes one ``neuron_device``
+resource per Neuron device on that node, the same way it does for non-UltraServer instances, and you can use device-level
+``ResourceClaimTemplate`` definitions such as the ones in Example 1 and Example 2.
+
+Use this mode when you want to run several smaller workloads on an UltraServer node, or when a workload does not need the
+UltraServer interconnect across nodes.
+
+The label is ignored on instance types that are not UltraServers. A value that is not a boolean is also ignored, and the node stays in
+the default mode.
+
+In per-device allocation mode:
+
+* ``resourceType`` is ``neuron_device`` for every device on the node.
+* ``UltraServerConfig`` and the UltraServer operator do not apply to the node. If the UltraServer operator is installed, it removes
+  the node from its ``NeuronUltraServer``. See :ref:`AWS Neuron UltraServer Operator<neuron-ultraserver-operator>`.
+* Each device publishes ``capacityBlockId``, so you can still select devices from nodes in the same capacity block.
+* On Trn3 UltraServer instances, ``topology_x`` and ``topology_y`` describe pairs of devices instead of grid rows and columns.
+  ``topology_x`` is the pair index (``deviceId / 2``) and ``topology_y`` is the device's position in the pair (``deviceId % 2``), so
+  devices 0 and 1 have ``topology_x`` 0, devices 2 and 3 have ``topology_x`` 1, and so on. ``topology4_id`` and ``topology8_id`` are
+  published as on other instances.
+* On trn2u.48xlarge, the driver removes the UltraServer node labels (``neuron.amazonaws.com/ultraserver-modes``,
+  ``neuron.amazonaws.com/ultraserver-server-id-4``, ``neuron.amazonaws.com/ultraserver-server-id-2``,
+  ``neuron.amazonaws.com/ultraserver-node-id-4``, and ``neuron.amazonaws.com/ultraserver-node-id-2``) left from an earlier run in
+  UltraServer mode, so node selectors that match on these labels no longer select the node.
+
+**Label nodes when you create a managed node group**
+
+To start nodes in per-device allocation mode, add the label when you create the EKS managed node group. The label is on each node before
+the driver starts, so you don't need to restart the driver. For example, with eksctl:
+
+.. code-block:: yaml
+
+   managedNodeGroups:
+     - name: <nodegroup-name>
+       instanceType: <ultraserver-instance-type>
+       labels:
+         neuron.amazonaws.com/ultraserver-device-allocation: "true"
+
+Or with the AWS CLI:
+
+.. code-block:: bash
+
+   aws eks create-nodegroup \
+     --cluster-name <cluster-name> \
+     --nodegroup-name <nodegroup-name> \
+     --labels neuron.amazonaws.com/ultraserver-device-allocation=true \
+     ...
+
+For more information, see `Kubernetes labels for managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/create-managed-node-group.html>`_.
+
+**Switch an existing node to per-device allocation**
+
+The driver reads the label only when it starts, so you must restart the driver pod on the node after you change the label.
+
+1. Delete the pods that use Neuron resource claims on the node.
+
+2. Label the node:
+
+   .. code-block:: bash
+
+      kubectl label node <node-name> neuron.amazonaws.com/ultraserver-device-allocation=true
+
+3. Restart the Neuron DRA driver pod on the node:
+
+   .. code-block:: bash
+
+      kubectl delete pod -n neuron-dra-driver -l app=neuron-dra-driver-kubelet-plugin \
+        --field-selector spec.nodeName=<node-name>
+
+4. Confirm that the node's ``ResourceSlice`` lists ``neuron_device`` resources:
+
+   .. code-block:: bash
+
+      kubectl get resourceslice --field-selector spec.nodeName=<node-name> -o yaml
+
+To switch the node back to UltraServer allocation, remove the label with
+``kubectl label node <node-name> neuron.amazonaws.com/ultraserver-device-allocation-`` and repeat steps 1 and 3.
+
+.. note::
+   If claims prepared in the previous mode are still in use when the driver restarts, the driver rejects new claims on the node until those
+   pods are deleted. This prevents the same Neuron devices from being allocated twice. The rejected pods report an error similar to
+   ``node allocation mode changed while claims [...] were still prepared; delete the pods using them before preparing new claims``.
 
 Neuron DRA Driver Attributes Reference
 ---------------------------------------
@@ -545,7 +634,8 @@ These attributes are common to all Neuron instances and their devices:
 * ``instanceType`` - A string value representing the EC2 instance type of the Neuron device. Used to specify devices of which instance(s) to choose for allocation.
 * ``neuronDriverVersion`` - A string value representing the Neuron driver version running on the instance. Used to claim instances with the same driver version for allocation.
 * ``draDriverVersion`` - A version value of the Neuron DRA driver version. Provides visibility on which Neuron DRA driver version published the resource slice.
-* ``resourceType`` - A string value to distinguish between devices and UltraServer nodes. For devices, this value is ``neuron_device``. For UltraServers, this value is ``neuron_node``.
+* ``resourceType`` - A string value to distinguish between devices and UltraServer nodes. For devices, this value is ``neuron_device``. For UltraServers, this value is ``neuron_node``, unless the node is labeled for :ref:`per-device allocation<neuron-dra-ultraserver-device-allocation>`, in which case it is ``neuron_device``.
+* ``resourceType`` - A string value to distinguish between devices and UltraServer nodes. For devices, this value is ``neuron_device``. For UltraServers, this value is ``neuron_node``, unless the node is labeled for :ref:`per-device allocation<neuron-dra-ultraserver-device-allocation>`, in which case it is ``neuron_device``.
 * ``networkNodeLayer1`` - A string value representing network node layer 1. Can be used during topology-aware scheduling to minimize network latency and optimize instance placement. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
 * ``networkNodeLayer2`` - A string value representing network node layer 2. Can be used to allocate workloads to nodes on the same spine. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
 * ``networkNodeLayer3`` - A string value representing network node layer 3. Can be used during topology-aware scheduling to minimize network latency and optimize instance placement. See `EC2 Instance Topology <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-ec2-instance-topology-works.html>`_.
@@ -553,10 +643,12 @@ These attributes are common to all Neuron instances and their devices:
 Trn Non-UltraServer Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-These attributes are only populated for Neuron instances that have grid topology (trn) and are not UltraServers:
+These attributes are only populated for Neuron instances that have grid topology (trn) and are not UltraServers. They are also populated
+for UltraServer nodes labeled for :ref:`per-device allocation<neuron-dra-ultraserver-device-allocation>`. On Trn3 UltraServer instances,
+``topology_x`` and ``topology_y`` describe pairs of devices instead of grid rows and columns:
 
-* ``topology_x`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same row.
-* ``topology_y`` - An integer value representing the column of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same column.
+* ``topology_x`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same row. On Trn3 UltraServer instances, the index of the device pair (``deviceId / 2``).
+* ``topology_y`` - An integer value representing the column of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select a specific device or devices that belong to the same column. On Trn3 UltraServer instances, the position of the device within its pair (``deviceId % 2``).
 * ``topology4_id`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than 1. Can be used to select devices that belong to the same row.
 * ``topology8_id`` - An integer value representing the row of the device in a grid topology. Only populated when the number of devices in the instance is greater than or equal to 8. Can be used to select devices that belong to the same two rows.
 
@@ -565,7 +657,8 @@ Trn UltraServer Attributes
 
 These attributes are only populated for Neuron instances that have grid topology (trn) and are UltraServers:
 
-* ``capacityBlockId`` - A string value representing the ID of the capacity block that the UltraServer instance is in. See `Instance Topology API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceTopology.html>`_.
+* ``capacityBlockId`` - A string value representing the ID of the capacity block that the UltraServer instance is in. Also published on each device of an UltraServer node labeled for per-device allocation. See `Instance Topology API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceTopology.html>`_.
+* ``capacityBlockId`` - A string value representing the ID of the capacity block that the UltraServer instance is in. Also published on each device of an UltraServer node labeled for per-device allocation. See `Instance Topology API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceTopology.html>`_.
 
 EFA-Enabled Instance Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
