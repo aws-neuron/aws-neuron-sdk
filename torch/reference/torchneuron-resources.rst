@@ -32,7 +32,7 @@ Profile with Neuron Explorer
 ----------------------------
 
 - :doc:`/tools/neuron-explorer/index`: what Neuron Explorer shows about a TorchNeuron workload.
-- :doc:`/tools/neuron-explorer/how-to-profile-workload`: capture a profile from a PyTorch workload,
+- :doc:`/tools/neuron-explorer/how-to-profile-pytorch`: capture a profile from a PyTorch workload,
   including ``torch.compile`` versus eager mode.
 
 Libraries built on TorchNeuron

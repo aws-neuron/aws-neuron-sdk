@@ -1,6 +1,6 @@
 .. meta::
     :description: Complete reference of environment variables for Neuron Explorer profiling, capture, and configuration.
-    :date-modified: 10/19/2026
+    :date-modified: 10/26/2026
 
 .. _neuron-explorer-env-vars:
 
@@ -8,17 +8,63 @@ Neuron Explorer Environment Variables
 =====================================
 
 This page documents all environment variables that affect Neuron Explorer
-profiling, profile capture, and profile processing.
+profiling, profile capture, and profile processing. For the full list of Neuron
+Runtime variables, see :ref:`nrt-env-profiling` in the Neuron Runtime reference.
 
 .. contents:: On this page
    :local:
    :depth: 2
 
+Environment variables are read at two different times:
+
+* **Compile time.** ``NKI_DEBUG_INFO``, ``XLA_IR_DEBUG``, and ``XLA_HLO_DEBUG`` change what
+  the compiler writes into the NEFF. See :ref:`neuron-explorer-env-vars-debug-info`.
+* **Run time.** ``NEURON_RT_*`` variables control whether the Neuron Runtime captures a
+  profile and what it captures. Set them before the workload starts.
+
+.. _neuron-explorer-env-vars-two-mechanisms:
+
+Which mechanism turns profiling on
+----------------------------------
+
+Each capture method turns profiling on in a different way.
+
+.. warning::
+
+   Set ``NEURON_RT_INSPECT_ENABLE=1`` only for environment-variable capture. Don't combine it
+   with ``torch.profiler`` or ``jax.profiler.trace``. The two mechanisms conflict.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Capture method
+     - What turns profiling on
+     - Run-time variables to set
+   * - Environment variables (any framework, containers, EKS)
+     - ``NEURON_RT_INSPECT_ENABLE=1``
+     - ``NEURON_RT_INSPECT_ENABLE=1``. Add ``NEURON_RT_INSPECT_DEVICE_PROFILE=1`` or
+       ``NEURON_RT_INSPECT_DEVICE_PROFILE=session`` for device traces, and
+       ``NEURON_RT_INSPECT_OUTPUT_DIR=<dir>`` to choose the output directory.
+   * - PyTorch (``torch.profiler`` with ``NeuronConfig``)
+     - ``torch.profiler.profile``
+     - None required. Configure capture through ``NeuronConfig``.
+   * - JAX (``jax.profiler.trace``)
+     - ``jax.profiler.trace``
+     - ``NEURON_RT_INSPECT_DEVICE_PROFILE=1`` for device traces, and
+       ``NEURON_RT_INSPECT_OUTPUT_DIR=<dir>``.
+   * - ``neuron-explorer capture``
+     - The ``capture`` command (device profile by default)
+     - None. Configure capture with command-line flags.
+   * - ``neuron-explorer inspect``
+     - The ``inspect`` command
+     - None. Configure capture with command-line flags.
 
 Profiling control
 -----------------
 
-These variables enable and configure profiling at runtime.
+These run-time variables enable and configure environment-variable capture. Except where
+noted, they have no effect unless ``NEURON_RT_INSPECT_ENABLE=1``.
 
 .. list-table::
    :header-rows: 1
@@ -29,8 +75,8 @@ These variables enable and configure profiling at runtime.
      - Default
      - Values
    * - ``NEURON_RT_INSPECT_ENABLE``
-     - Master switch to enable runtime profiling. Required for all
-       environment-variable-based capture.
+     - Master switch for environment-variable capture. Required when you
+       capture with environment variables alone.
      - ``0`` (off)
      - ``0``, ``1``
    * - ``NEURON_RT_INSPECT_OUTPUT_DIR``
@@ -42,9 +88,25 @@ These variables enable and configure profiling at runtime.
      - ``1`` (on when INSPECT_ENABLE=1)
      - ``0``, ``1``
    * - ``NEURON_RT_INSPECT_DEVICE_PROFILE``
-     - Capture device-level hardware traces.
+     - Capture device-level hardware traces (``.ntff`` files). Without it,
+       you get a system profile only. With ``jax.profiler.trace``, set this
+       variable without ``NEURON_RT_INSPECT_ENABLE``.
+
+       * ``1`` or ``model``: one NTFF for the first execution of each NEFF,
+         per core (synchronous). Best for compiled-graph workloads.
+       * ``session``: one NTFF for the entire capture, per core. Use for
+         async workloads, continuous traces, or inference serving (for
+         example, vLLM).
      - ``0`` (off)
      - ``0``, ``1``/``model``, ``session``
+   * - ``NEURON_RT_INSPECT_CPU_UTIL``
+     - Add host CPU utilization sampling (``cpu_util.pb``) to the profile.
+     - ``0`` (off)
+     - ``0``, ``1``
+   * - ``NEURON_RT_INSPECT_HOST_MEMORY``
+     - Add host memory usage sampling (``host_mem.pb``) to the profile.
+     - ``0`` (off)
+     - ``0``, ``1``
    * - ``NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP``
      - Number of executions to skip before device profiling begins. When set
        to N, the first N executions of each model are skipped and only the
@@ -52,12 +114,6 @@ These variables enable and configure profiling at runtime.
        (``NEURON_RT_INSPECT_DEVICE_PROFILE=1``). Ignored for other modes.
      - ``0``
      - ``0`` – ``4294967295``
-
-**NEURON_RT_INSPECT_DEVICE_PROFILE modes:**
-
-- ``0`` — Disabled (system profile only)
-- ``1`` or ``model`` — Captures first execution per NEFF per core (synchronous). Best for compiled-graph workloads.
-- ``session`` — Captures all device activity in a single NTFF file. Use for async workloads, continuous traces, or inference serving (e.g., vLLM).
 
 **NEURON_RT_INSPECT_DEVICE_PROFILE_NUM_WARMUP usage:**
 
@@ -67,18 +123,15 @@ first 5 executions of each model and profiles the 6th. Each model's execution
 count is tracked independently — if two different models are loaded, their
 warmup counters are separate.
 
-.. note::
 
-   This variable is only effective when ``NEURON_RT_INSPECT_DEVICE_PROFILE=1``
-   (model mode). If used with session mode or when device profiling is disabled,
-   a warning is logged and the value is ignored.
-
+.. _neuron-explorer-env-vars-debug-info:
 
 Source code and debug info
 --------------------------
 
-These variables must be set **before compilation** to enable source-level
-mapping in the profiler.
+Set these variables **before compiling**. They change what the compiler writes into
+the NEFF, so recompile after setting them. A NEFF loaded from the compilation cache
+doesn't have the debug info.
 
 .. list-table::
    :header-rows: 1
@@ -90,13 +143,16 @@ mapping in the profiler.
    * - ``NEURON_FRAMEWORK_DEBUG``
      - Also writes the compiled NEFF and the HLO module to the working
        directory. Applies to XLA-based workloads. Does not affect what the
-       profile contains.
+       profile contains. Use it to get a NEFF file to pass to
+       ``neuron-explorer capture``.
      - ``0`` (off)
    * - ``NKI_DEBUG_INFO``
      - Enables NKI kernel debug info capture. Produces
        ``kernel_debug_info.json`` in the NEFF. This file provides both the
        instruction-to-NKI-source mapping and the kernel-level NKI Call Stack
-       shown in Event Details.
+       shown in Event Details. Without it, the Source Code Viewer, NKI Call
+       Stack, and NKI regions show nothing for your kernels. Off by default
+       because it increases compile time and memory consumption.
      - ``False``
    * - ``XLA_IR_DEBUG``
      - Enables XLA IR debug info for richer operation names in profiles.
@@ -105,17 +161,6 @@ mapping in the profiler.
      - Enables XLA HLO debug info for descriptive layer names in the
        hierarchy view.
      - ``0`` (off)
-
-.. note::
-
-   ``NKI_DEBUG_INFO=True`` is not enabled by default because it increases
-   compile time and memory consumption. Only enable when you need NKI
-   source code linking or the NKI Call Stack in the profiler.
-
-.. warning::
-
-   These variables affect compilation output. You must **recompile** after
-   setting them — existing cached NEFFs won't have the debug info.
 
 
 DGE and DMA configuration
@@ -172,39 +217,7 @@ Data not captured is permanently lost.
        overwrites oldest. Increase if you see dropped events.
      - 1,000,000
 
-**NeuronCore filter examples:**
-
-.. code-block:: bash
-
-   # Only NeuronCore 0
-   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0
-
-   # NeuronCores 0, 2, and 4
-   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0,2,4
-
-   # Range: NeuronCores 0 through 3
-   export NEURON_RT_INSPECT_EVENT_FILTER_NC=0-3
-
-**Event type filter examples:**
-
-.. code-block:: bash
-
-   # Only hardware events
-   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware
-
-   # Only software events
-   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=software
-
-   # Hardware events except cc_exec
-   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=hardware,^cc_exec
-
-   # Specific event types
-   export NEURON_RT_INSPECT_EVENT_FILTER_TYPE=model_load,nrt_execute,runtime_execute
-
-**Event type groups:**
-
-- ``hardware``: ``nc_exec_running``, ``cc_running``, ``cc_exec_barrier``, ``numerical_err``, ``nrt_model_switch``, ``timestamp_sync_point``, ``hw_notify``
-- ``software``: All other events
+For examples and the C API, see :ref:`Capture-time filtering <capture-filtering>`.
 
 
 NEFF cache and artifact control
@@ -246,32 +259,6 @@ PyTorch-specific
        communication.
      - ``0`` (off)
 
-.. warning::
-
-   Do not set ``NEURON_RT_INSPECT_ENABLE=1`` and use the PyTorch profiling APIs
-   (for example, ``torch.profiler``) simultaneously. They conflict. Use one or the other.
-
-
-JAX-specific
-------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 45 15
-
-   * - Variable
-     - Description
-     - Default
-   * - ``NEURON_RT_INSPECT_DEVICE_PROFILE``
-     - For JAX, set to ``1`` with ``jax.profiler.trace`` for device captures.
-       Do **not** combine with ``NEURON_RT_INSPECT_ENABLE=1``.
-     - ``0`` (off)
-
-.. warning::
-
-   Do not set both ``NEURON_RT_INSPECT_ENABLE=1`` and use ``jax.profiler.trace``
-   simultaneously. They conflict. Use one or the other.
-
 
 Runtime configuration
 ---------------------
@@ -291,8 +278,22 @@ Runtime configuration
      - 1
 
 
+.. _neuron-explorer-env-vars-quick-reference:
+
 Quick reference: recommended combinations
 -----------------------------------------
+
+**NKI kernel (compile-time only):**
+
+.. code-block:: bash
+
+   # Set BEFORE compiling the kernel. Capturing with neuron-explorer capture
+   # afterward needs no run-time variables.
+   export NKI_DEBUG_INFO=True
+   export XLA_IR_DEBUG=1
+   export XLA_HLO_DEBUG=1
+
+For the full workflow, see :doc:`/nki/guides/use-neuron-profile`.
 
 **System profile only (lightweight):**
 

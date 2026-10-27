@@ -1,18 +1,12 @@
 .. meta::
    :description: Neuron Explorer documentation for performance profiling, debugging, and optimization of ML workloads on AWS Trainium and Inferentia.
-   :date-modified: 12/02/2025
+   :date-modified: 10/26/2026
 
 .. _neuron-explorer-home:
 
 Neuron Explorer
 =================
 
-.. important::
-
-    Neuron Explorer is the recommended profiling tool for AWS Neuron workloads. It provides end-to-end profiling support along with the latest features and an improved user experience. 
-    
-    **Note:** Neuron ended support for the earlier :ref:`Neuron Profiler 2.0 <neuron-profiler-2-0-guide>` and :ref:`Neuron Profiler <neuron-profile-ug>` in the Neuron 2.29 release. Their user guides are preserved under :ref:`archived-neuron-profiler`. Migrate to Neuron Explorer using :doc:`migration-faq` and :ref:`neuron-explorer-faq`.
-    
 Neuron Explorer is a suite of tools designed to support ML engineers throughout their development journey on AWS Trainium. Neuron Explorer helps developers maintain context, iterate efficiently, and focus on building and optimizing high-performance models. Developers can access Neuron Explorer from CLI, UI, or inside their IDE through VSCode integration.
 
 Supported hardware
@@ -42,7 +36,7 @@ When to use Neuron Explorer
    * - "My NKI kernel is underperforming"
      - Device profile with source code linking — correlate instructions to kernel code
    * - "I need to compare before/after an optimization"
-     - Capture both, view side-by-side in the database or summary viewer
+     - Capture both, view side-by-side in the summary viewer
 
 Profiling Viewers
 --------------------
@@ -67,7 +61,14 @@ Getting Started
       :link-type: doc
       :class-card: sd-border-1
 
-      Learn how to capture profiles using PyTorch, JAX, environment variables, or the CLI.
+      Learn how to capture profiles using JAX, environment variables, or the CLI.
+
+   .. grid-item-card:: Capture PyTorch Profiles
+      :link: how-to-profile-pytorch
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Capture profiles from PyTorch workloads with ``torch.profiler`` and ``NeuronConfig``.
 
    .. grid-item-card:: UI Overview
       :link: overview-ui-tour
@@ -142,13 +143,6 @@ Visualization and Analysis
 
       Automatically identify optimization regions in your profiles based on collective operations, hierarchy data, and kernel stack frames.
 
-   .. grid-item-card:: AI Recommendation Viewer
-      :link: overview-ai-recommendations
-      :link-type: doc
-      :class-card: sd-border-1
-
-      Get AI powered bottleneck analysis and optimization recommendations for NKI profiles.
-
 Tutorials
 ----------
 
@@ -186,6 +180,20 @@ Additional Resources
 .. grid:: 1 2 2 2
    :gutter: 3
 
+   .. grid-item-card:: Profile Files
+      :link: profile-artifacts
+      :link-type: doc
+      :class-card: sd-border-1
+
+      What each captured file (NEFF, NTFF, ``.pb``) contains, which files each profile type needs, and how files are named and paired.
+
+   .. grid-item-card:: Environment Variables
+      :link: environment-variables
+      :link-type: doc
+      :class-card: sd-border-1
+
+      Which variables each capture method needs, what each variable does, and recommended combinations.
+
    .. grid-item-card:: Profile Parquet Schema Reference
       :link: profile-schema-reference
       :link-type: doc
@@ -199,13 +207,6 @@ Additional Resources
       :class-card: sd-border-1
 
       Query the Parquet tables or export a timeline region to CSV.
-
-   .. grid-item-card:: Viewing Profiles with Perfetto
-      :link: view-perfetto
-      :link-type: doc
-      :class-card: sd-border-1
-
-      Learn how to view Neuron Explorer profiles using the Perfetto UI for trace analysis.
 
 .. _download-neuron-explorer-vscode:
 
@@ -224,7 +225,7 @@ Neuron Explorer FAQ
 What can I expect from the Neuron Explorer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Neuron Explorer provides a comprehensive profiling experience with both device-level and system-level profiling support. Neuron Explorer features an enhanced profiling experience with hierarchical profiling, bidirectional code linking, AI-powered recommendations, IDE integration, and more. In future releases, Neuron Explorer will continue to expand with additional profiling viewers and features, debugging capabilities, and enhanced recommendation and analysis tools to support the entire ML development journey on Trainium.
+Neuron Explorer provides a comprehensive profiling experience with both device-level and system-level profiling support. Neuron Explorer features an enhanced profiling experience with hierarchical profiling, bidirectional code linking, IDE integration, and more. In future releases, Neuron Explorer will continue to expand with additional profiling viewers and features, debugging capabilities, and enhanced recommendation and analysis tools to support the entire ML development journey on Trainium.
 
 What is the difference between device-level and system-level profiling?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -238,7 +239,7 @@ Is Neuron Explorer going to replace Neuron Profiler and Neuron Profiler 2.0?
 
 Yes. Neuron Explorer is the recommended profiling tool and replaces both Neuron Profiler and Profiler 2.0.
 
-Neuron Profiler and Profiler 2.0 are supported for one final release. In Neuron 2.29 release, they will enter end-of-support and will no longer receive updates or technical support, though they will remain accessible through the ``neuron-profile`` package in previous releases. Users should migrate to Neuron Explorer now.
+Neuron Profiler and Profiler 2.0 reached end of support in the Neuron 2.29 release. They no longer receive updates or technical support, though they remain accessible through the ``neuron-profile`` package in earlier releases. Their user guides are preserved under :ref:`archived-neuron-profiler`. Migrate to Neuron Explorer.
 
 Are my existing profiles compatible with Neuron Explorer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -254,6 +255,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
 
    Get Started <get-started>
    Capture Profiles <how-to-profile-workload>
+   Capture PyTorch Profiles <how-to-profile-pytorch>
    UI Overview <overview-ui-tour>
    Device Trace Viewer <overview-device-profiles>
    System Trace Viewer <overview-system-profiles>
@@ -269,6 +271,7 @@ For detailed migration guidance, including CLI command mappings and feature comp
    View Profiles with Perfetto <view-perfetto>
    Neuron Profiler to Neuron Explorer Migration Guide <migration-faq>
    Troubleshooting & FAQs <troubleshooting>
+   Profile Files <profile-artifacts>
    Environment Variables <environment-variables>
    Glossary <glossary>
    

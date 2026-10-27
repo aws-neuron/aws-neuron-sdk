@@ -36,6 +36,17 @@ a specific task with step-by-step instructions.
       Configure FSDP, DTensor, DDP, and functional collectives on Neuron.
 
    .. grid-item-card::
+      :link: /tools/neuron-explorer/how-to-profile-pytorch
+      :link-type: doc
+      :class-card: sd-border-2
+
+      **Capture PyTorch profiles with Neuron Explorer**
+      :bdg-primary:`how-to`
+      ^^^
+      Profile a model with ``torch.profiler`` and view the PyTorch calls, ATen operators, and
+      device activity in Neuron Explorer.
+
+   .. grid-item-card::
       :link: /torch/guides/memory-profiling-guide
       :link-type: doc
       :class-card: sd-border-2

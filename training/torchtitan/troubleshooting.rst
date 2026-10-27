@@ -171,7 +171,7 @@ Analyze a captured profile with **Neuron Explorer**, which ingests native
 PyTorch profiles and renders an interactive timeline. The Neuron Explorer docs
 cover the end-to-end flow:
 
-- :doc:`/tools/neuron-explorer/how-to-profile-workload` — how to capture a
+- :doc:`/tools/neuron-explorer/how-to-profile-pytorch` — how to capture a
   native PyTorch profile from a Neuron workload.
 - :doc:`/tools/neuron-explorer/get-started` — how to launch Neuron Explorer and
   upload the captured profile for interactive analysis.

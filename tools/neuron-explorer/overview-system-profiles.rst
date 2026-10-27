@@ -211,7 +211,6 @@ For example, you can click a runtime event and navigate to its related hardware 
 .. note::
 
    The Dependency Chain Viewer currently displays the dependency chain between framework events (from PyTorch profiler), ``neuron_rt``, and ``neuron_hw`` events. 
-   Native PyTorch profiling is in beta. For more information, see :doc:`TorchNeuron </torch/index>` and :doc:`/tools/neuron-explorer/how-to-profile-workload`.
 
 Clicking on an event with dependencies populates the UI with the following elements:
 

@@ -1,6 +1,6 @@
 .. meta::
     :description: Troubleshooting guide, FAQ, and error code reference for Neuron Explorer.
-    :date-modified: 10/02/2026
+    :date-modified: 10/26/2026
 
 .. _neuron-explorer-troubleshooting:
 
@@ -125,6 +125,18 @@ UI and connection errors
      - Profile processed on a different Explorer version than the one
        serving it. Re-process: upload again or re-run
        ``neuron-explorer view -d <dir> --ingest-only``.
+   * - ``Attempting to process with --data-path ... but the running server uses ...``
+     - ``neuron-explorer view`` was run with a different ``--data-path`` than
+       the server that is already running. Re-run with the ``--data-path``
+       shown in the message. See
+       :ref:`Step 5 of Get Started <neuron-explorer-step5-upload-profile>`.
+   * - ``Missing --display-name``
+     - Processing a profile with ``neuron-explorer view -d`` or ``-s``
+       requires a unique profile name. Add ``--display-name <name>``.
+   * - Server stops when the SSH session closes
+     - ``neuron-explorer view`` runs in the foreground. Run it in a terminal
+       multiplexer such as ``tmux`` or ``screen`` to keep it running. See
+       :ref:`neuron-explorer-step4-launch-server`.
    * - Browser tab freezes/crashes on profile open
      - Profile has too many instructions for the browser to render.
        Try filtering to specific NeuronCores, or use
@@ -152,9 +164,9 @@ No output / empty profiles
        Verify ``NEURON_RT_INSPECT_ENABLE=1`` is set. Verify the model
        is running on NeuronCores (not CPU fallback).
    * - "No profiling data" in viewer
-     - Viewer pointed at the wrong directory. Use
-       ``neuron-explorer view`` without ``--data-path``. Use ``-d <dir>``
-       for profile output directory.
+     - Viewer pointed at the wrong directory. Pass your capture output
+       directory with ``-d <dir>``. ``--data-path`` is where the server
+       stores processed profiles, not your capture output.
    * - ``.ntff`` files appear empty or contain no meaningful data
      - In PyTorch, this is expected when the process initializes more
        NeuronCores than it executes on. For example, if the process

@@ -1,6 +1,6 @@
 .. meta::
     :description: Learn how to profile Neuron Kernel Interface (NKI) kernels using Neuron Explorer to analyze hardware-level performance characteristics on Trainium and Inferentia devices.
-    :date-modified: 12/02/2025
+    :date-modified: 10/26/2026
 
 .. _use-neuron-profile:
 
@@ -30,9 +30,9 @@ You can profile NKI kernels using several approaches. In this guide, you'll lear
 How to profile using neuron-explorer capture
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To profile an NKI kernel using neuron-explorer capture, follow these three steps:
+To profile an NKI kernel using neuron-explorer capture, follow these steps:
 
-1. Set the environment variable ``NEURON_FRAMEWORK_DEBUG=1`` to instruct the compiler to save the NEFF (Neuron Executable File Format) file.
+1. Set environment variables so the compiler saves the NEFF (Neuron Executable File Format) file with the debug info that Neuron Explorer uses.
 2. Execute the NKI kernel to generate the NEFF file.
 3. Run ``neuron-explorer capture`` to create an Neuron Trace File Format (NTFF) file for performance analysis.
 
@@ -59,6 +59,7 @@ We will profile a 3-layer MLP model that fuses matrix multiplications with ReLU 
     os.environ["NEURON_LOGICAL_NC_CONFIG"] = "1"
 
     os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
+    os.environ["NKI_DEBUG_INFO"] = "True"  # Embed NKI debug info for source linking, the NKI call stack, and NKI regions
     os.environ["XLA_IR_DEBUG"] = "1"       # Preserve source-level IR names in the compiled graph for profiler source mapping
     os.environ["XLA_HLO_DEBUG"] = "1"      # Preserve HLO operation names and metadata for profiler attribution
 
@@ -275,14 +276,18 @@ We will profile a 3-layer MLP model that fuses matrix multiplications with ReLU 
 As you can see, at the very top we have added the following environment variables::
 
     os.environ["NEURON_FRAMEWORK_DEBUG"] = "1"
+    os.environ["NKI_DEBUG_INFO"] = "True"
     os.environ["XLA_IR_DEBUG"] = "1"
     os.environ["XLA_HLO_DEBUG"] = "1"
 
 These environment variables serve the following purposes:
 
 * ``NEURON_FRAMEWORK_DEBUG=1``: Enables Neuron debug output. This triggers the Neuron compiler to save the Neuron Executable File Format (NEFF) artifact to the current directory after compilation of your NKI kernel. The NEFF contains all hardware instructions required to execute your NKI kernel on a NeuronDevice, as well as metadata and debug info needed for profiling.
+* ``NKI_DEBUG_INFO=True``: Embeds NKI debug info (``kernel_debug_info.json``) in the NEFF. The Source Code Viewer, the NKI call stack, and :ref:`NKI regions <nki-define-regions>` read it. Without it, they show no data for your kernel. It increases compile time and memory use, so enable it only when you need these features.
 * ``XLA_IR_DEBUG=1``: Preserves the mapping between high-level framework operations (e.g., PyTorch operators) and the intermediate representation (IR) passed to the compiler. This enables source code linking from device instructions back to framework-level code in the profiler.
 * ``XLA_HLO_DEBUG=1``: Preserves the mapping between the HLO (High Level Operation) graph and the original framework operations. This enables the profiler to display descriptive operator names and stack frame information, making it easier to identify which part of your model corresponds to each device instruction.
+
+These variables take effect at compile time, so set them before you compile. You don't need any ``NEURON_RT_INSPECT_*`` variables in this guide, because ``neuron-explorer capture`` turns on profiling itself. For all variables, see :doc:`Neuron Explorer environment variables </tools/neuron-explorer/environment-variables>`.
 
 Step 2: Compile Your NKI Kernel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -311,7 +316,7 @@ This will save your NTFF profile to ``profile_exec_2.ntff``.
 View the Neuron Explorer UI
 ----------------------------
 
-This section assumes you've completed the previous step and have already generated both the NEFF and NTFF files, and downloaded them on your local machine.
+This section assumes you've completed the previous step and have both ``./compiler_workdir/graph.neff`` and ``profile_exec_2.ntff`` on the instance.
 
 Neuron Explorer includes an interactive, web-based UI for exploring execution traces in detail. In this section, we'll open the Neuron Explorer UI to examine NKI-specific profiling information. These details can be found in multiple areas of the interface — including instruction hover tooltips, instruction click panels, search results, and box select results. For a comprehensive overview of all available viewers, see the :doc:`Neuron Explorer documentation </tools/neuron-explorer/index>`.
 
@@ -324,6 +329,8 @@ To view the Neuron Profile Web UI, execute the view command to start Web UI, rep
 The above command should print a URL that you can click to open the web UI::
 
     View a list of profiles at http://localhost:3001/
+
+For other ways to start the server and add profiles, see :ref:`Steps 3 and 5 of Get Started <neuron-explorer-step4-launch-server>`.
 
 Port Forwarding for Remote Instances
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

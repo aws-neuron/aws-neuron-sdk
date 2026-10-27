@@ -123,7 +123,7 @@ Profiling
 
 Profile a model with the standard ``torch.profiler`` API. Neuron Explorer reads the capture and
 shows the PyTorch calls with the underlying ATen operators and the corresponding device activity.
-See :doc:`/tools/neuron-explorer/how-to-profile-workload`.
+See :doc:`/tools/neuron-explorer/how-to-profile-pytorch`.
 
 Eager mode execution
 ---------------------
