@@ -34,3 +34,5 @@ sphinxcontrib.datatemplates
 sphinxcontrib.spelling
 sphinx-tabs
 exhale
+# 0.9.1 is the latest release verified against Sphinx 5.3 (requires sphinx>=4).
+sphinxext-opengraph==0.9.1

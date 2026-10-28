@@ -51,6 +51,12 @@ The operator consists of two main components:
 * Watches ``NeuronUltraServer`` CRD updates and tags devices with ``workloadId`` in ResourceSlices
 * Validates workloadId during ``NodePrepareResources`` before binding devices to pods
 
+.. note::
+   The operator manages only nodes that the DRA driver publishes in UltraServer mode. A node labeled
+   ``neuron.amazonaws.com/ultraserver-device-allocation=true`` publishes per-device resources and no UltraServer topology, so the
+   operator removes it from its ``NeuronUltraServer`` and does not allocate it to workloads. See
+   :ref:`Per-device allocation on UltraServer nodes<neuron-dra-ultraserver-device-allocation>`.
+
 
 Custom Resource Definitions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -350,6 +356,13 @@ FAQs
 Can the UltraServer Operator coexist with the Neuron Device Plugin?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 No. The operator requires the Neuron DRA driver, which cannot coexist with the device plugin on the same node.
+
+Can I use some UltraServer nodes for per-device allocation?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Yes, starting with Neuron DRA driver version 1.4.0. Add the ``neuron.amazonaws.com/ultraserver-device-allocation=true`` label when you create the managed node group, or label existing
+nodes and restart the DRA driver pod on each one. The
+operator stops managing those nodes, and workloads can request their Neuron devices individually. See
+:ref:`Per-device allocation on UltraServer nodes<neuron-dra-ultraserver-device-allocation>`.
 
 What instance types are supported?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
