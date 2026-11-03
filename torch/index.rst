@@ -42,7 +42,7 @@ What changes are needed?
 No ``import torch_neuronx`` is needed: PyTorch autoloads TorchNeuron on ``import torch`` through
 the ``torch.backends`` entry point that the ``torch-neuronx`` package registers. This includes
 ``@nki.jit`` kernels, which run without the import. Import ``torch_neuronx`` only to call its own
-APIs, such as ``nki_op`` or ``wrap_nki`` (see :doc:`/torch/guides/how-to-work-with-nki`).
+APIs, such as ``nki_op`` (see :doc:`/torch/guides/how-to-work-with-nki`).
 
 .. grid:: 1 2 2 2
    :gutter: 3

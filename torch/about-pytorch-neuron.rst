@@ -311,10 +311,9 @@ function.
 .. note::
 
    ``@nki.jit`` kernels run without ``import torch_neuronx``, because ``import torch`` autoloads
-   TorchNeuron. Import ``torch_neuronx`` only to call its own APIs, such as ``nki_op`` or
-   ``wrap_nki``.
+   TorchNeuron. Import ``torch_neuronx`` only to call its own APIs, such as ``nki_op``.
 
-For the ``@nki_op`` and ``wrap_nki`` patterns, see :doc:`/torch/guides/how-to-work-with-nki`. For
+For the ``@nki_op`` pattern, see :doc:`/torch/guides/how-to-work-with-nki`. For
 details on NKI, see the :doc:`NKI documentation </nki/index>`.
 
 MoE support
