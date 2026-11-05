@@ -24,63 +24,120 @@
 
 
 <script>
-  const form = document.getElementById('search-form');
-  const searchType = document.getElementById('search-type');
-  const searchInput = form.querySelector('input[type="search"]');
+  const searchForm = document.getElementById('search-form');
+  const searchFormType = document.getElementById('search-type');
+  const searchFormInput = searchForm.querySelector('input[type="search"]');
   const defaultOption = document.getElementById('default-option');
   const googleOption = document.getElementById('google-option');
 
+
+
+  // Add the submit event listener for Default search
+  searchForm.addEventListener('submit', handleFormSubmit1);
+
   // Load the saved state from localStorage
-  const savedState = localStorage.getItem('searchType');
+  const savedState = localStorage.getItem('searchFormType');
+
+
   if (savedState === 'google') {
-    searchType.checked = true;
-    form.action = "{{ pathto('search-results') }}";
+    searchFormType.checked = true;
+    searchForm.action = "{{ pathto('search-google') }}";
     defaultOption.style.fontWeight = 'normal';
     defaultOption.style.color = 'initial';
     googleOption.style.fontWeight = 'bold';
     googleOption.style.color = '#2196F3';
-    searchInput.placeholder = "Google Search";
-    searchInput.setAttribute("aria-label", "Google Search");
+    searchFormInput.placeholder = "Google Search";
+    searchFormInput.setAttribute("aria-label", "Google Search");
+
+    //lastSearchEngine = 'google';
+
+
   } else {
     // Default state (or if savedState is null)
-    searchType.checked = false; 
-    form.action = "{{ pathto('search') }}";
+    searchFormType.checked = false; 
+    searchForm.action = "{{ pathto('search') }}";
     defaultOption.style.fontWeight = 'bold';
     defaultOption.style.color = '#3cba54';
     googleOption.style.fontWeight = 'normal';
     googleOption.style.color = 'initial';
-    searchInput.placeholder = "Default Search";
-    searchInput.setAttribute("aria-label", "Default Search"); 
+    searchFormInput.placeholder = "Default Search";
+    searchFormInput.setAttribute("aria-label", "Default Search"); 
+
+    //lastSearchEngine = 'default';
   }
 
-  searchType.addEventListener('change', () => {
-    if (searchType.checked) {
-      const query = form.elements['q'].value; 
-      form.action = "{{ pathto('search-results') }}";
 
-      // Bold "Google" in blue, unbold "Default" in default color
+  searchFormType.addEventListener('change', () => {
+    if (searchFormType.checked) {
+      searchForm.action = "{{ pathto('search-google') }}";
+
       defaultOption.style.fontWeight = 'normal'; 
       defaultOption.style.color = 'initial'; 
       googleOption.style.fontWeight = 'bold'; 
       googleOption.style.color = '#2196F3'; 
 
-      searchInput.placeholder = "Google Search";
-      searchInput.setAttribute("aria-label", "Google Search");
-      localStorage.setItem('searchType', 'google');
+      searchFormInput.placeholder = "Google Search";
+      searchFormInput.setAttribute("aria-label", "Google Search");
+      localStorage.setItem('searchFormType', 'google');
     } else {
-      form.action = "{{ pathto('search') }}"; 
+      searchForm.action = "{{ pathto('search') }}"; 
 
-      // Bold "Default" in green, unbold "Google" in default color
       defaultOption.style.fontWeight = 'bold'; 
       defaultOption.style.color = '#3cba54'; 
       googleOption.style.fontWeight = 'normal';
       googleOption.style.color = 'initial';
 
-      searchInput.placeholder = "Default Search";
-      searchInput.setAttribute("aria-label", "Default Search"); 
-      localStorage.setItem('searchType', 'default');
+      searchFormInput.placeholder = "Default Search";
+      searchFormInput.setAttribute("aria-label", "Default Search"); 
+      localStorage.setItem('searchFormType', 'default');
     }
+
+    // Update lastSearchEngine when switching search engines
+    lastSearchEngine = searchFormType.checked ? 'google' : 'default';
+
+    // Focus on the search input and set its value to the last query
+    //searchFormInput.focus();
+    //searchFormInput.value = localStorage.getItem('lastSearchQuery');
   });
+
+
+
+   // Function to handle form submission for Default search
+   function handleFormSubmit1(event) {
+
+    const lastSearchEngine = localStorage.getItem('lastSearchEngine');
+    const lastSearchQuery = localStorage.getItem('lastSearchQuery');
+    const currrentQuery = searchFormInput.value;
+    const currentSearchEngine = searchFormType.checked ? 'google' : 'default';
+
+    console.log("[PST]: Form submitted");
+    // Check if the current URL is the search page
+
+    // If in search result pages, somehow pathto is equal to #
+    if (("{{ pathto('search') }}" === '#') || ("{{ pathto('search-google') }}" === '#')) {
+        if (
+          lastSearchQuery === currrentQuery &&
+          lastSearchEngine === currentSearchEngine
+        ) {
+          event.preventDefault();
+          console.log("[PST]: Form - preventing submission, query and engine are the same");
+    
+        }    else {
+        console.log("[PST]: Form - allowing submission, query or engine is different");
+        const url = `${searchForm.action}?q=${encodeURIComponent(currrentQuery)}`;
+        window.location.href = url;
+
+        } 
+    }
+
+    localStorage.setItem('lastSearchQuery', currrentQuery);
+    localStorage.setItem('lastSearchEngine', currentSearchEngine);
+    // Focus on the search input and set its value to the last query
+    searchFormInput.focus();
+    searchFormInput.value = currrentQuery;    
+}
+
+
 </script>
 
 <style>
