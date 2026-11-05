@@ -413,6 +413,11 @@ def nki_matmul_fully_optimized_(
     # reshaping to (TILE_M, BLOCK_N) for SBUF->HBM DMA to operate on a
     # large payload, enabling good DMA efficiency.
     #
+    # The M-tiles accumulate the partial sums of every K-block, so they are
+    # kept in float32: an accumulator in the output dtype (e.g. bfloat16)
+    # would round every output once per K-block. The SBUF->HBM DMA converts
+    # to the output dtype, so each output is rounded once.
+    #
     # We split the N-block into individual M-tiles so the compiler can
     # pipeline memset(0), matmul, tensor_tensor, and SBUF->HBM DMA
     # on M-tile granularity.
@@ -421,7 +426,7 @@ def nki_matmul_fully_optimized_(
       for m_tile in nl.affine_range(TILES_IN_BLOCK_M):
         result_m_tile = nl.ndarray(
           shape=(TILE_M, TILES_IN_BLOCK_N, TILE_N),
-          dtype=result.dtype,
+          dtype=nl.float32,
           buffer=nl.sbuf,
         )
         nisa.memset(dst=result_m_tile, value=0.0)
@@ -493,7 +498,8 @@ def nki_matmul_fully_optimized_(
               op=nl.add,
             )
 
-    # Evict the result M-tiles from SBUF to HBM.
+    # Evict the result M-tiles from SBUF to HBM, converting the float32
+    # accumulators to the output dtype.
     # Copy on N-blocks granularity for good DMA efficiency.
     for m in nl.affine_range(NUM_BLOCK_M):
       m_block_tile_start = m * TILES_IN_BLOCK_M
