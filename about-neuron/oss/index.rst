@@ -1,6 +1,6 @@
 .. meta::
-   :description: Public GitHub repositories for AWS Neuron open source components, including TorchNeuron, TorchTitan Neuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, Neuron Explorer CDK, and Neuron agentic development, with contribution guidelines.
-   :keywords: AWS Neuron, open source, GitHub, contribute, TorchNeuron, torch-neuronx, TorchTitan Neuron, torchtitan-neuron, vLLM Neuron, vLLM Omni Neuron, NKI Library, NKI samples, Neuron Explorer, agentic development, Apache 2.0
+   :description: Public GitHub repositories for AWS Neuron open source components, including TorchNeuron, TorchTitan Neuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, and Neuron agentic development, with contribution guidelines.
+   :keywords: AWS Neuron, open source, GitHub, contribute, TorchNeuron, torch-neuronx, TorchTitan Neuron, torchtitan-neuron, vLLM Neuron, vLLM Omni Neuron, NKI Library, NKI samples, agentic development, Apache 2.0
    :content-type: reference
    :date-modified: 2026-10-19
 
@@ -44,15 +44,6 @@ Neuron Open Source GitHub Repositories
       AI agents, skills, and agent-ready code samples for authoring, debugging, profiling, and analyzing NKI kernels inside agentic IDEs such as Claude Code and Kiro. See :ref:`neuron-agentic-development` for the full feature overview.
 
       * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-agentic-development
-
-   .. grid-item-card::
-      :class-body: sphinx-design-class-title-small
-
-      **Neuron Explorer CDK Open Source**
-      ^^^
-      AWS Cloud Development Kit (CDK) app (TypeScript, CDK v2) that deploys a self-hosted Neuron Explorer stack in your AWS account. Provisions the full profiling service: CloudFront + S3 frontend, IAM-authenticated API Gateway with Lambda handlers, Fargate metadata and analysis engines on shared EFS, and an event-driven Fargate or EC2 profile processing pipeline with Bedrock-backed AI recommendations.
-
-      * Neuron GitHub source repository: https://github.com/aws-neuron/neuron-explorer-cdk
 
    .. grid-item-card:: 
       :class-body: sphinx-design-class-title-small
@@ -116,7 +107,6 @@ For the specific details on licenses and contributing to each OSS repo, review t
 * Contribute to TorchNeuron: https://github.com/aws-neuron/torch-neuronx/blob/main/CONTRIBUTING.md
 * Contribute to TorchTitan Neuron: https://github.com/aws-neuron/torchtitan-neuron/blob/main/CONTRIBUTING.md
 * Contribute to Neuron Agentic Development: https://github.com/aws-neuron/neuron-agentic-development/blob/main/CONTRIBUTING.md
-* Contribute to Neuron Explorer CDK: https://github.com/aws-neuron/neuron-explorer-cdk/blob/main/CONTRIBUTING.md
 * Contribute to the NKI Library: https://github.com/aws-neuron/nki-library/blob/main/CONTRIBUTING.md
 * Contribute to vLLM Neuron: https://github.com/vllm-project/vllm-neuron/blob/HEAD/CONTRIBUTING.md
 * Contribute to vLLM Omni Neuron: https://github.com/aws-neuron/vllm-omni-neuron/blob/main/CONTRIBUTING.md
