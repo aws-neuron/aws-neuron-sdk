@@ -493,7 +493,7 @@
 
 ## Optional
 
-- [Open Source](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/oss/index.html): Public GitHub repositories for TorchNeuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, Neuron Explorer CDK, and Neuron agentic development, with contribution guidelines
+- [Open Source](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/oss/index.html): Public GitHub repositories for TorchNeuron, vLLM Neuron, vLLM Omni Neuron, the NKI Library, NKI samples, and Neuron agentic development, with contribution guidelines
 - [Native PyTorch Support](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/torch/index.html): TorchNeuron, the native PyTorch backend for training and inference on Trainium
 - [Third-party Tools](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/third-party-solutions.html): Third-party tools and integrations that support the AWS Neuron development experience
 - [Tool Tutorials](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/tutorials/index.html): Tutorials for how to utilize all Neuron Tools
