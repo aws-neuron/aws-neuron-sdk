@@ -26,8 +26,8 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - **2.33.0**
      - 2.9.0.2.15.32035
    * - :doc:`JAX NeuronX </release-notes/components/jax>`
-     - **2.33.0**
-     - 0.10.0.1.0.14198 (supports JAX 0.7.0 to 0.10.0)
+     - **2.33.1**
+     - 0.10.0.1.0.15472 (supports JAX 0.7.0 to 0.10.0)
    * - :doc:`vLLM Neuron (Beta) </release-notes/components/vllm-neuron>`
      - **2.33.0**
      - 0.29.0.1.2.0
@@ -44,17 +44,17 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - **2.33.0**
      - 2.28.7631.0
    * - :doc:`Neuron Runtime Library </release-notes/components/runtime>`
-     - **2.33.0**
-     - 2.35.30.0
+     - **2.33.1**
+     - 2.35.33.0
    * - :doc:`Neuron Driver </release-notes/components/runtime>`
-     - **2.33.0**
-     - 2.31.7.0
+     - **2.33.1**
+     - 2.31.8.0
    * - :doc:`Neuron Collectives </release-notes/components/runtime>`
-     - **2.33.0**
-     - 2.35.43.0
+     - **2.33.1**
+     - 2.35.49.0
    * - :doc:`nrtpy (Beta) </release-notes/components/runtime>`
-     - **2.33.0**
-     - 2.35.30
+     - **2.33.1**
+     - 2.35.33
    * - :doc:`Neuron Developer Tools </release-notes/components/dev-tools>`
      - **2.33.0**
      - 2.33.38.0
@@ -65,11 +65,11 @@ This page provides an index of all Neuron SDK component release notes. Each comp
      - **2.33.0**
      - 1.4
    * - :doc:`Neuron DLAMI </release-notes/components/dlamis>`
-     - **2.33.0**
-     - 2.33.0
+     - **2.33.1**
+     - 2.33.1
    * - :doc:`Neuron Containers </release-notes/components/containers>`
-     - **2.33.0**
-     - 2.33.0
+     - **2.33.1**
+     - 2.33.1
 
 * For older components and features that have not been updated recently or are out of support, see :doc:`../archive/index`.
 

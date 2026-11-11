@@ -84,6 +84,34 @@ class manifest:
             'supported_python_versions'].values[0]
         return list(set(compiler_python_versions) & set(framework_python_versions))
 
+    def is_torchneuron(self, args):
+        '''
+        True for TorchNeuron (native PyTorch, torch-neuronx 2.13 and later) fresh installs and
+        updates. TorchNeuron installs differently from the PyTorch/XLA-based torch-neuronx 2.9:
+        it pins torch-neuronx, adds nki, and needs the PyTorch CPU index. libtorch_neuronx_lite
+        is one of its dependencies, not the package users install. (NDOC-408)
+        '''
+        if args.framework != 'pytorch' or args.instance == 'inf1' or args.neuron_version is not None:
+            return False
+        if not getattr(args, 'framework_version', None):
+            return False
+        version = Version(args.framework_version)
+        return (version.major, version.minor) >= (2, 13)
+
+    def install_torchneuron(self, args):
+        indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
+        major_minor = self.extract_major_minor_version(Version(args.framework_version))
+        compiler_major = self.get_major_version('neuronx-cc', args.instance)
+        action = 'Update' if args.install_type == 'update' else 'Install'
+        upgrade = '--upgrade ' if args.install_type == 'update' else ''
+
+        str = f'\n{indentation}# {action} TorchNeuron for PyTorch {major_minor}, the Neuron Compiler, and NKI\n'
+        str += f'{indentation}python -m pip install {upgrade}"torch-neuronx=={major_minor}.*" \\\n'
+        str += f'{indentation}  "neuronx-cc=={compiler_major}.*" nki \\\n'
+        str += f'{indentation}  --extra-index-url https://pip.repos.neuron.amazonaws.com \\\n'
+        str += f'{indentation}  --extra-index-url https://download.pytorch.org/whl/cpu\n'
+        return str
+
     def get_major_version(self, package_name, instance):
         return self.df_major_version_properties.loc[(self.df_major_version_properties['name'] == package_name)][
             args.instance].values[0]
@@ -245,7 +273,10 @@ class manifest:
         else:
             target_python_version = max(packages_supporting_python_versions)
 
-        framework_name = self.get_package_names(category=args.framework, instance=args.instance, neuron_version=args.neuron_version)[0]
+        if self.is_torchneuron(args):
+            framework_name = 'torch-neuronx'
+        else:
+            framework_name = self.get_package_names(category=args.framework, instance=args.instance, neuron_version=args.neuron_version)[0]
 
         str_jupiter = '\n# Install Jupyter notebook kernel\n'
         str_jupiter += 'pip install ipykernel ' + '\n'
@@ -695,6 +726,9 @@ class manifest:
         return str
 
     def install_neuron_compiler_and_framework(self, args):
+        if self.is_torchneuron(args) and args.mode != 'deploy':
+            return self.install_torchneuron(args)
+
         str = ''
         indentation = '\t' if args.venv_install_type == 'parallel-cluster' else ''
         compiler_package = self.get_package_names(category='compiler', instance=args.instance, neuron_version=args.neuron_version)[0]

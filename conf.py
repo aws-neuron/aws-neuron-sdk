@@ -355,7 +355,7 @@ spelling_word_list_filename='spelling_wordlist.txt' # acceptable dictionary word
 
 # -- Options for Theme  -------------------------------------------------
 
-top_banner_message = "<b>Neuron 2.33.0 is released!</b> Check the <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html'>What's New</a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>Release Notes</a> for more details."
+top_banner_message = "<b>Neuron 2.33.1 is released!</b> Check the <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/whats-new.html'>What's New</a> and <a class='reference internal' style='color:white;' href='https://awsdocs-neuron.readthedocs-hosted.com/en/latest/release-notes/index.html'>Release Notes</a> for more details."
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
