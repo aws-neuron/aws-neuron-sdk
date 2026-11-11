@@ -1,59 +1,165 @@
+.. meta::
+   :description: Architecture of Amazon EC2 Trn3 UltraServers powered by AWS Trainium3 chips, including Gen1 and Gen2 NeuronLink-v4 and NeuronSwitch-v1 connectivity, per-chip bandwidth, and specifications for AWS Neuron.
+   :keywords: Trn3, Trainium3, UltraServer, NeuronLink-v4, NeuronSwitch-v1, AWS Neuron, architecture
+   :date-modified: 2026-11-04
+
 .. _aws-trn3-arch:
 
 ###############################
 Amazon EC2 Trn3 Architecture
 ###############################
 
-Amazon EC2 **Trn3** instances are accelerated computing instances powered by Trainium3 AI chips, purpose-built for high-performance deep learning training and inference. Trn3 is available in two UltraServer scale-up configurations: Gen1 with 64 Trainium3 chips per UltraServer, and Gen2 with 144 chips per UltraServer. Both configurations use NeuronSwitch-v1 interconnect technology to enable all-to-all connectivity between chips, especially optimized for workloads that leverage all-to-all communication patterns, such as Mixture of Experts models and autoregressive inference serving.
+Amazon EC2 **Trn3** instances are powered by Trainium3 AI chips, purpose-built for high-performance deep learning training and inference. Trn3 is available in two UltraServer scale-up configurations: Gen1 with 64 Trainium3 chips per UltraServer, and Gen2 with 144 chips per UltraServer.
+
+Both configurations use NeuronSwitch-v1 interconnect technology to connect chips all-to-all, replacing the 2D-torus topology of previous generations. All chips in an UltraServer form a single unified memory space, and each chip occupies its own range in this space. To access the memory of another chip in the same UltraServer, a DMA operation uses an address in that chip's range. The switches automatically use the address to forward each data transfer to its destination chip.
+
+Together, the switched topology and the unified memory space make Trn3 UltraServers well suited to workloads that need efficient all-to-all communication or ultra-low latency collectives, such as Mixture of Experts models and autoregressive inference serving.
 
 =====================
 Trn3 Gen1 UltraServer
 =====================
 
-The EC2 Trn3 Gen1 UltraServers deliver 161 PetaFLOPS of dense MXFP8 compute, 314 TB/s of HBM bandwidth, and 9TB of HBM capacity. Each UltraServer consists of four servers with 16 Trainium3 devices per server. Therefore, the UltraServer integrates a total of 64 Trainium3 devices into a single scale-up domain, interconnected via our latest-generation NeuronLink-v4 and the newly introduced NeuronSwitch-v1. The chip-to-chip topology features an all-to-all connectivity design, replacing the previous 2D-torus architecture. This all-to-all topology is optimized for workloads that require efficient all-to-all communication patterns or ultra-low latency collectives, including Mixture of Experts models and autoregressive inference serving. The following diagram illustrates the Trn3 Gen1 UltraServer connectivity.
+The EC2 Trn3 Gen1 UltraServers deliver 161 PetaFLOPS of dense MXFP8 compute, 314 TB/s of HBM bandwidth, and 9TB of HBM capacity. Each UltraServer consists of four servers with 16 Trainium3 chips per server. Therefore, the UltraServer integrates a total of 64 Trainium3 chips into a single scale-up domain, interconnected via our latest-generation NeuronLink-v4 and the newly introduced NeuronSwitch-v1. The following diagram illustrates the Trn3 Gen1 UltraServer connectivity.
 
-.. image:: /images/architecture/trn3/trn3-ultraserver-gen1.png
+.. image:: /images/architecture/trn3/trn3-ultraserver-gen1.svg
     :align: center
+    :alt: Trn3 Gen1 UltraServer connectivity: four Trn3 servers with 16 Trainium3 chips each, paired chips linked within each server, two inter-server NeuronSwitch-v1 switches, and peer-to-peer links between Server 0 and Server 2 and between Server 1 and Server 3.
 
+Connectivity
+------------
+
+All chip-to-chip communication in the Gen1 UltraServer uses NeuronLink-v4, either through NeuronSwitch-v1 switches or over direct chip-to-chip links.
+
+Intra-server connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each server contains 16 Trainium3 chips, grouped in pairs: Trainium3 [0] and [1], [2] and [3], and so on up to [14] and [15]. The two chips of a pair are connected by a direct NeuronLink-v4 link. Each chip has 1,024 GB/s [#nl-bw]_ of bandwidth to its paired chip.
+
+Inter-server connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Trn3 Gen1 UltraServer has two racks, each with two servers and one inter-server NeuronSwitch-v1 (radix-32):
+
+* Server [0] and Server [1] share one rack. All 32 Trainium3 chips of these two servers connect to the rack's switch.
+* Server [2] and Server [3] share the other rack. All 32 Trainium3 chips of these two servers connect to the rack's switch.
+
+Each chip has 1,024 GB/s of NeuronLink-v4 bandwidth to its inter-server switch.
+
+Peer-to-peer connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each Trainium3 chip has a direct peer-to-peer NeuronLink-v4 link to the chip in the same position in the other rack: Server [0] with Server [2], and Server [1] with Server [3]. For example, Trainium3 [0] of Server [0] connects to Trainium3 [0] of Server [2]. Each chip has 512 GB/s of bandwidth on this link.
+
+Bandwidth summary
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 30 40
+
+   * - Connectivity level
+     - Bandwidth per chip
+     - Link configuration
+   * - Intra-server
+     - 1,024 GB/s
+     - NeuronLink-v4 direct link to the paired chip
+   * - Inter-server (within rack)
+     - 1,024 GB/s
+     - NeuronLink-v4 via inter-server NeuronSwitch-v1 (radix-32)
+   * - Peer-to-peer (across racks)
+     - 512 GB/s
+     - NeuronLink-v4 direct link
+   * - **Total**
+     - **2,560 GB/s**
+     -
 
 =====================
 Trn3 Gen2 UltraServer
 =====================
 
-The EC2 Trn3 Gen2 UltraServers deliver 362 PetaFLOPS of dense MXFP8 compute, 706 TB/s of HBM bandwidth, and 20TB of HBM capacity. Each UltraServer consists of 36 servers with 4 Trainium3 devices per server. Trainium3 devices within the same server are connected via a first-level NeuronSwitch-v1, while devices across servers are connected via two second-level NeuronSwitch-v1 and NeuronLink-v4. Therefore, the UltraServer integrates 144 Trainium3 devices into a single scale-up domain. Like Gen1, the chip-to-chip topology features an all-to-all connectivity design optimized for Mixture of Experts models and autoregressive inference serving. The following diagram illustrates the Trn3 Gen2 UltraServer connectivity.
+The EC2 Trn3 Gen2 UltraServers deliver 362 PetaFLOPS of dense MXFP8 compute, 706 TB/s of HBM bandwidth, and 20TB of HBM capacity. Each UltraServer consists of 36 servers with 4 Trainium3 chips per server. Therefore, the UltraServer integrates 144 Trainium3 chips into a single scale-up domain. The following diagram illustrates the Trn3 Gen2 UltraServer connectivity.
 
-.. image:: /images/architecture/trn3/trn3-ultraserver-gen2.png
+.. image:: /images/architecture/trn3/trn3-ultraserver-gen2.svg
     :align: center
+    :alt: Trn3 Gen2 UltraServer connectivity: two racks of 18 Trn3 servers, each server with four Trainium3 chips on an intra-server NeuronSwitch-v1, two inter-server NeuronSwitch-v1 switches per rack, and peer-to-peer links between chips in the same position in the two racks.
+
+Connectivity
+------------
+
+All chip-to-chip communication in the Gen2 UltraServer uses NeuronLink-v4, either through NeuronSwitch-v1 switches or over direct peer-to-peer links.
+
+Intra-server connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each server contains 4 Trainium3 chips connected through an intra-server NeuronSwitch-v1 (radix-4). Each chip has 1,024 GB/s of NeuronLink-v4 bandwidth to this switch.
+
+Inter-server connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each rack holds 18 servers and two inter-server NeuronSwitch-v1 (radix-36):
+
+* Trainium3 [0] and [1] of every server in the rack connect to NeuronSwitch-v1 [0].
+* Trainium3 [2] and [3] of every server in the rack connect to NeuronSwitch-v1 [1].
+
+Each chip has 1,280 GB/s of NeuronLink-v4 bandwidth to its inter-server switch.
+
+Peer-to-peer connectivity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Trn3 Gen2 UltraServer has two racks. Each Trainium3 chip has a direct peer-to-peer NeuronLink-v4 link to the chip in the same position in the other rack, for example Trainium3 [0] of Server [0] and Trainium3 [0] of Server [18]. Each chip has 256 GB/s of bandwidth on this link. The direct link avoids switch hops for cross-rack traffic.
+
+Bandwidth summary
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 30 40
+
+   * - Connectivity level
+     - Bandwidth per chip
+     - Link configuration
+   * - Intra-server
+     - 1,024 GB/s
+     - NeuronLink-v4 via intra-server NeuronSwitch-v1 (radix-4)
+   * - Inter-server (within rack)
+     - 1,280 GB/s
+     - NeuronLink-v4 via inter-server NeuronSwitch-v1 (radix-36)
+   * - Peer-to-peer (across racks)
+     - 256 GB/s
+     - NeuronLink-v4 direct link
+   * - **Total**
+     - **2,560 GB/s**
+     -
 
 ==========================================
 Trn3 Gen1/Gen2 UltraServer specifications
 ==========================================
 
-The following table shows the performance metrics for Tranium3 based instances.
+The following table shows the performance metrics for Trainium3-based instances.
 
 .. list-table::
    :header-rows: 2
    :stub-columns: 1
    :widths: 30 20 20
 
-   * - 
+   * -
      - Trn3 Gen1 UltraServer
      - Trn3 Gen2 UltraServer
    * - Configuration
-     - 
-     - 
-   * - # of Trainium3 devices
+     -
+     -
+   * - # of Trainium3 chips
      - 64
      - 144
    * - Host vCPUs
      - 768
-     - 2304
+     - 3,456
    * - Host Memory (GiB)
      - 8,192
      - 27,648
    * - **Compute**
-     - 
-     - 
+     -
+     -
    * - MXFP8/MXFP4 TFLOPS
      - 161,088
      - 362,448
@@ -64,8 +170,8 @@ The following table shows the performance metrics for Tranium3 based instances.
      - 11,712
      - 26,352
    * - **Memory**
-     - 
-     - 
+     -
+     -
    * - Device Memory (GiB)
      - 9,216
      - 20,736
@@ -73,64 +179,15 @@ The following table shows the performance metrics for Tranium3 based instances.
      - 313.6
      - 705.6
    * - **Interconnect**
-     - 
-     - 
-   * - NeuronLink-v4 bandwidth (GiB/sec/device)
-     - 2,048
-     - 2,048
+     -
+     -
+   * - NeuronLink-v4 bandwidth (GB/sec/chip)
+     - 2,560
+     - 2,560
    * - EFA bandwidth (Gbps)
      - 12,800
-     - 28,800
-  
-============================================
-Trn3 UltraServer Connectivity and Networking
-============================================
+     - 57,600
 
-Trn3 UltraServers use a PCIe switch-based interconnect architecture for all chip-to-chip communication, both within and across servers. This replaces the point-to-point NeuronLink topology used in previous generations (Trn1, Trn2) with a switched fabric that enables flexible, all-to-all connectivity across the entire UltraServer domain.
+.. rubric:: Footnotes
 
-Intra-server connectivity
--------------------------
-
-Each server (sled) contains 4 Trainium3 chips connected through an intra-server PCIe switch. Each chip provides four PCIe Gen6 x8 links to this switch, delivering a total of 256 GB/s of bidirectional bandwidth between chips within the same server. This local switch enables low-latency communication for operations like tensor parallelism and data-parallel gradient synchronization within a server.
-
-Inter-server connectivity
--------------------------
-
-All servers within a rack are connected through inter-server PCIe switches. Each Trainium3 chip provides five PCIe Gen6 x8 links to the inter-server switch, delivering 320 GB/s of bidirectional bandwidth per chip for cross-server communication. This enables collective operations such as all-reduce and all-gather to span all servers in a rack without requiring host CPU involvement.
-
-Inter-rack connectivity
------------------------
-
-For multi-rack configurations, Trainium3 chips in corresponding positions across racks are connected via dedicated direct PCIe links. Each chip provides two PCIe Gen6 x8 links for inter-rack communication, delivering 128 GB/s of bidirectional bandwidth per chip between racks. This direct-link design avoids additional switch hops for cross-rack traffic.
-
-Bandwidth summary
------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 30 40
-
-   * - Connectivity level
-     - Bandwidth per chip
-     - Link configuration
-   * - Intra-server (within sled)
-     - 256 GB/s
-     - 4 × PCIe Gen6 x8 via intra-server switch
-   * - Inter-server (within rack)
-     - 320 GB/s
-     - 5 × PCIe Gen6 x8 via inter-server switch
-   * - Inter-rack
-     - 128 GB/s
-     - 2 × PCIe Gen6 x8 direct links
-
-Routing and address-based switching
-------------------------------------
-
-Unlike Trn1 and Trn2, where NeuronLink connections are point-to-point and require no intermediate routing, Trn3's PCIe switch fabric uses address-based routing to direct transactions to the correct destination chip. Each Trainium3 chip in the system is identified by a tuple of (rack, server, chip), and this identity is encoded in the upper bits of the PCIe address used for outbound transactions. The PCIe switches use BAR (Base Address Register) address matching to determine the correct output port for each transaction.
-
-This routing is transparent to ML workloads. The Neuron Runtime and compiler handle all address encoding and switch configuration automatically. From the developer's perspective, collective operations and direct memory access between chips work the same way as on previous Trainium generations.
-
-Semaphore-based synchronization
--------------------------------
-
-Trn3 uses hardware semaphores to synchronize data transfers across the switched fabric. When a chip writes data to a remote chip's HBM, a follow-up semaphore write signals completion to the receiving chip. The system guarantees that data and its associated semaphore always traverse the same physical path through the switch fabric, ensuring correct ordering without additional software synchronization overhead.
+.. [#nl-bw] All NeuronLink-v4 bandwidth numbers on this page are the sum of both directions.
