@@ -1,0 +1,60 @@
+.. _neuron-2-33-1-whatsnew:
+
+.. meta::
+    :description: Release notes for AWS Neuron SDK release v2.33.1, a patch release with bug fixes for Neuron 2.33.0.
+    :date-modified: 11/11/2026
+
+
+AWS Neuron SDK Release Notes - v2.33.1
+=======================================
+
+**Release Date**: November 11, 2026   
+
+Release **2.33.1** of the AWS Neuron SDK includes bug fixes applied to the AWS Neuron SDK v2.33.0. See :doc:`the Neuron SDK v2.33.0 release notes </release-notes/2.33.0>` for the full set of changes that shipped with the 2.33.0 release.
+
+Changes in 2.33.1
+-----------------
+
+Neuron Runtime
+^^^^^^^^^^^^^^
+
+* Corrects the internal execution order that triggers DMA engines in HWDGE (``DmaDirect2d`` and ``DmaTranspose`` on non-GPSIMD engines) to remove a race condition between HWDGE and other transpose DMA (like collectives) that can hang the TPB AXI fabric.
+* Adds a check that halts GPSIMD with an error message when it encounters ``DmaGatherTranspose`` indices whose validity is not strictly in groups of 16 (instead of causing an xbar AXI hang).
+
+Framework packages
+^^^^^^^^^^^^^^^^^^
+
+* ``libtorch_neuronx_lite``, ``libneuronxla``, and ``jax_neuronx`` are rebuilt against the updated Neuron Runtime and dependencies. They contain no functional changes.
+
+Package updates
+---------------
+
+Neuron 2.33.1 updates the following packages. All other packages are the same as in Neuron 2.33.0.
+
+* ``aws-neuronx-collectives``: 2.35.49.0
+* ``aws-neuronx-dkms``: 2.31.8.0
+* ``aws-neuronx-oci-hook``: 2.19.74.0
+* ``aws-neuronx-runtime-lib``: 2.35.33.0
+* ``jax_neuronx``: 0.10.0.1.0.15472
+* ``libneuronxla``: 3.0.12293.0
+* ``libtorch_neuronx_lite``: 2.11.0.1.0.4089, 2.12.0.1.0.4089, and 2.13.0.1.0.4089
+* ``nrtpy``: 2.35.33
+
+----
+
+.. grid:: 1 
+        :gutter: 2
+
+        .. grid-item-card::
+                :link: latest-neuron-release-artifacts
+                :link-type: ref
+                :class-card: sd-border-1
+        
+                **Neuron 2.33.1 release artifacts**
+                ^^^
+                The libraries and packages updated in this Neuron release.
+
+Previous releases
+-----------------
+
+* :doc:`Neuron 2.33.0 </release-notes/2.33.0>`

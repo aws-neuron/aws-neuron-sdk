@@ -1,6 +1,6 @@
 .. meta::
    :description: AWS Neuron SDK enables high-performance deep learning and generative AI on AWS Inferentia and Trainium instances. Get started with native PyTorch, vLLM, NKI kernels, and AI-driven optimization with Neuron Explorer.
-   :date-modified: 2026-10-13
+   :date-modified: 2026-11-11
 
 .. _neuron_home:
 
@@ -12,13 +12,13 @@ AWS Neuron Documentation
 .. grid:: 1
    :gutter: 2
 
-   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.33.0
-      :link: /release-notes/2.33.0
+   .. grid-item-card:: :octicon:`tag;1em;sd-text-primary` Current release: Neuron 2.33.1
+      :link: /release-notes/2.33.1
       :link-type: doc
       :class-card: sd-border-2
       :class-title: sd-fs-6
 
-      **Released October 19, 2026**. Select this card for the details!
+      **Released November 11, 2026**. Select this card for the details!
 
 ----
 

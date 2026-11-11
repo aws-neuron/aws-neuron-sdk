@@ -8,7 +8,7 @@
    :python-versions: 3.12, 3.13, 3.14
    :content-type: installation-guide
    :estimated-time: 15 minutes
-   :date-modified: 2026-10-18
+   :date-modified: 2026-11-11
 
 Install PyTorch via manual installation
 ========================================
@@ -224,21 +224,9 @@ Installation steps
       On Ubuntu 26.04, install TorchNeuron (``torch-neuronx``) for PyTorch 2.14. TorchNeuron
       supports Trn2 and Trn3 instances.
 
-      .. code-block:: bash
-
-         # Install Python venv (Python 3.14 is the default on Ubuntu 26.04)
-         sudo apt-get install -y python3-venv g++
-
-         # Create and activate a Python venv
-         python3 -m venv aws_neuron_venv_pytorch_2_14
-         source aws_neuron_venv_pytorch_2_14/bin/activate
-         python -m pip install --upgrade pip
-
-         # Install TorchNeuron for PyTorch 2.14, the Neuron Compiler, and NKI
-         python -m pip install "torch-neuronx==2.14.*" \
-           "neuronx-cc==2.*" nki \
-           --extra-index-url https://pip.repos.neuron.amazonaws.com \
-           --extra-index-url https://download.pytorch.org/whl/cpu
+      .. include:: /src/helperscripts/installationScripts/python_instructions.txt
+          :start-line: 317
+          :end-line: 318
 
       **Step 5: Verify installation**
 

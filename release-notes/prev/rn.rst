@@ -1,3 +1,8 @@
+.. meta::
+   :description: Index page for Neuron release versions shipped in previous AWS Neuron 2.x SDK releases for Trainium and Inferentia instances.
+   :date-modified: 2026-11-11
+   :keywords: AWS Neuron, previous releases, release artifacts, packages, versions, Trainium, Inferentia
+
 .. _prev-rn:
 
 Previous release notes (Neuron 2.x)
@@ -7,6 +12,7 @@ Previous release notes (Neuron 2.x)
    :maxdepth: 1
    :hidden:
 
+   Neuron 2.33.0 </release-notes/2.33.0>
    Neuron 2.32.0 </release-notes/prev/2.32.0>
    Neuron 2.31.1 </release-notes/prev/2.31.1>
    Neuron 2.31.0 </release-notes/prev/2.31.0>
@@ -22,7 +28,7 @@ Previous release notes (Neuron 2.x)
    Neuron 2.25.0 </release-notes/prev/2.25.0/index>
 
 
-* **The latest Neuron release is 2.33.0, released on 10/19/2026.** Read the :doc:`2.33.0 release notes </release-notes/2.33.0>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
+* **The latest Neuron release is 2.33.1, released on 11/11/2026.** Read the :doc:`2.33.1 release notes </release-notes/2.33.1>` or :doc:`the individual Neuron component release notes </release-notes/components/index>` for more details.
 
 ----
   

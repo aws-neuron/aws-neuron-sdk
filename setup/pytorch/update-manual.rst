@@ -6,7 +6,7 @@
    :instance-types: trn2, trn3
    :os: ubuntu-26.04, ubuntu-24.04, al2023
    :content-type: installation-guide
-   :date-modified: 2026-10-18
+   :date-modified: 2026-11-11
 
 Update a manual PyTorch installation
 ======================================
@@ -53,14 +53,9 @@ On Ubuntu 26.04, Neuron supports TorchNeuron (``torch-neuronx``) for PyTorch 2.1
 Trn3 instances. Activate your existing virtual environment, then update TorchNeuron, the Neuron
 Compiler, and NKI:
 
-.. code-block:: bash
-
-   source aws_neuron_venv_pytorch_2_14/bin/activate
-
-   python -m pip install --upgrade "torch-neuronx==2.14.*" \
-     "neuronx-cc==2.*" nki \
-     --extra-index-url https://pip.repos.neuron.amazonaws.com \
-     --extra-index-url https://download.pytorch.org/whl/cpu
+.. include:: /src/helperscripts/installationScripts/python_instructions.txt
+   :start-line: 314
+   :end-line: 315
 
 
 Update PyTorch on Amazon Linux 2023

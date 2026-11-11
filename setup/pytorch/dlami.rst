@@ -8,7 +8,7 @@
    :python-versions: 3.12, 3.13, 3.14
    :content-type: installation-guide
    :estimated-time: 5 minutes
-   :date-modified: 2026-10-16
+   :date-modified: 2026-11-11
 
 Install PyTorch via Deep Learning AMI
 ======================================
@@ -202,19 +202,29 @@ To use a single-framework PyTorch DLAMI instead of the multi-framework DLAMI, fo
       
       **Step 1: Find the latest AMI**
       
-      List the Neuron DLAMIs for Neuron SDK 2.33.0 with the AWS CLI. In the output, find the torch-neuronx 2.14.0 DLAMI for Ubuntu 26.04 and record its ``ImageId``:
+      Use the AWS CLI to find the **Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 26.04)** DLAMI for Neuron SDK 2.33.0. Record its ``ImageId``:
       
       .. code-block:: bash
          
          aws ec2 describe-images \
            --owners amazon \
-           --filters "Name=name,Values=Deep Learning *Neuron*" \
+           --filters "Name=name,Values=Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 26.04)*" \
                      "Name=description,Values=*Neuron SDK 2.33.0*" \
            --query 'Images[].{Name:Name, ImageId:ImageId}' \
            --output table \
            --region us-east-1
 
-      You can also use the AWS EC2 parameter store to find the ID of a DLAMI. See `Find a DLAMI ID <https://docs.aws.amazon.com/dlami/latest/devguide/find-dlami-id.html>`__ for details. Record the ID (``image-id``) for the next step.
+      Or use the SSM parameter to get the ID of the latest image directly:
+      
+      .. code-block:: bash
+         
+         aws ssm get-parameter \
+           --region us-east-1 \
+           --name /aws/service/neuron/dlami/torch-neuronx-2.14.0/ubuntu-26.04/latest/image_id \
+           --query "Parameter.Value" \
+           --output text
+
+      For more information about DLAMI SSM parameters, see :ref:`SSM parameters for Neuron DLAMIs <ssm-parameter-neuron-dlami>`. Record the ID (``image-id``) for the next step.
       
       **Step 2: Launch instance**
       
@@ -297,19 +307,29 @@ To use a single-framework PyTorch DLAMI instead of the multi-framework DLAMI, fo
       
       **Step 1: Find the latest AMI**
       
-      List the Neuron DLAMIs for Neuron SDK 2.33.0 with the AWS CLI. In the output, find the torch-neuronx 2.14.0 DLAMI for Ubuntu 24.04 and record its ``ImageId``:
+      Use the AWS CLI to find the **Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 24.04)** DLAMI for Neuron SDK 2.33.0. Record its ``ImageId``:
       
       .. code-block:: bash
          
          aws ec2 describe-images \
            --owners amazon \
-           --filters "Name=name,Values=Deep Learning *Neuron*" \
+           --filters "Name=name,Values=Deep Learning AMI Neuron torch-neuronx 2.14.0 (Ubuntu 24.04)*" \
                      "Name=description,Values=*Neuron SDK 2.33.0*" \
            --query 'Images[].{Name:Name, ImageId:ImageId}' \
            --output table \
            --region us-east-1
 
-      You can also use the AWS EC2 parameter store to find the ID of a DLAMI. See `Find a DLAMI ID <https://docs.aws.amazon.com/dlami/latest/devguide/find-dlami-id.html>`__ for details. Record the ID (``image-id``) for the next step.
+      Or use the SSM parameter to get the ID of the latest image directly:
+      
+      .. code-block:: bash
+         
+         aws ssm get-parameter \
+           --region us-east-1 \
+           --name /aws/service/neuron/dlami/torch-neuronx-2.14.0/ubuntu-24.04/latest/image_id \
+           --query "Parameter.Value" \
+           --output text
+
+      For more information about DLAMI SSM parameters, see :ref:`SSM parameters for Neuron DLAMIs <ssm-parameter-neuron-dlami>`. Record the ID (``image-id``) for the next step.
       
       **Step 2: Launch instance**
       
