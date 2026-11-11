@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 1060" width="1320" height="1060" font-family="Helvetica, Arial, sans-serif" fill="#111">
+<defs><marker id="g2a-sw0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6a2bb0"/></marker><marker id="g2a-sw1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f6fd1"/></marker><marker id="g2a-intra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e8b3e"/></marker><marker id="g2a-p2p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0262d"/></marker></defs>
+<rect width="1320" height="1060" fill="#fff"/>
+<rect x="10" y="40" width="40" height="920" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.5"/>
+<text x="30.0" y="500.0" font-size="20" text-anchor="middle" font-weight="normal" dominant-baseline="central" transform="rotate(-90 30.0 500.0)">NeuronSwitch-v1 [0]</text>
+<rect x="75" y="40" width="40" height="920" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.5"/>
+<text x="95.0" y="500.0" font-size="20" text-anchor="middle" font-weight="normal" dominant-baseline="central" transform="rotate(-90 95.0 500.0)">NeuronSwitch-v1 [1]</text>
+<rect x="1185" y="40" width="40" height="920" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.5"/>
+<text x="1205.0" y="500.0" font-size="20" text-anchor="middle" font-weight="normal" dominant-baseline="central" transform="rotate(90 1205.0 500.0)">NeuronSwitch-v1 [1]</text>
+<rect x="1250" y="40" width="40" height="920" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.5"/>
+<text x="1270.0" y="500.0" font-size="20" text-anchor="middle" font-weight="normal" dominant-baseline="central" transform="rotate(90 1270.0 500.0)">NeuronSwitch-v1 [0]</text>
+<rect x="150" y="60" width="470" height="400" rx="12" fill="#cfe0ee" stroke="#777" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="385.0" y="90" font-size="26" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trn3 Server [0]</text>
+<rect x="180" y="112" width="410" height="34" rx="6" fill="#ececec" stroke="#555" stroke-width="1.2"/>
+<text x="385.0" y="129" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Graviton host</text>
+<rect x="255" y="286" width="260" height="30" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.2"/>
+<text x="385.0" y="301.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">NeuronSwitch-v1</text>
+<rect x="390" y="162" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="490.0" y="184.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [1]</text>
+<rect x="180" y="210" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="280.0" y="232.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [0]</text>
+<rect x="180" y="350" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="280.0" y="372.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [2]</text>
+<rect x="390" y="400" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="490.0" y="422.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [3]</text>
+<line x1="280.0" y1="254" x2="280.0" y2="286" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="490.0" y1="206" x2="490.0" y2="286" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="280.0" y1="350" x2="280.0" y2="316" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="490.0" y1="400" x2="490.0" y2="316" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<rect x="700" y="60" width="470" height="400" rx="12" fill="#cfe0ee" stroke="#777" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="935.0" y="90" font-size="26" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trn3 Server [18]</text>
+<rect x="730" y="112" width="410" height="34" rx="6" fill="#ececec" stroke="#555" stroke-width="1.2"/>
+<text x="935.0" y="129" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Graviton host</text>
+<rect x="805" y="286" width="260" height="30" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.2"/>
+<text x="935.0" y="301.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">NeuronSwitch-v1</text>
+<rect x="730" y="162" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="830.0" y="184.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [1]</text>
+<rect x="940" y="210" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="1040.0" y="232.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [0]</text>
+<rect x="940" y="350" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="1040.0" y="372.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [2]</text>
+<rect x="730" y="400" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="830.0" y="422.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [3]</text>
+<line x1="1040.0" y1="254" x2="1040.0" y2="286" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="830.0" y1="206" x2="830.0" y2="286" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="1040.0" y1="350" x2="1040.0" y2="316" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="830.0" y1="400" x2="830.0" y2="316" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="380" y1="232.0" x2="940" y2="232.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="73" y1="232.0" x2="117" y2="232.0" stroke="#fff" stroke-width="8"/>
+<line x1="1183" y1="232.0" x2="1227" y2="232.0" stroke="#fff" stroke-width="8"/>
+<line x1="50" y1="232.0" x2="180" y2="232.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="1140" y1="232.0" x2="1250" y2="232.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="590" y1="184.0" x2="730" y2="184.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="73" y1="184.0" x2="117" y2="184.0" stroke="#fff" stroke-width="8"/>
+<line x1="1183" y1="184.0" x2="1227" y2="184.0" stroke="#fff" stroke-width="8"/>
+<line x1="50" y1="184.0" x2="390" y2="184.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="930" y1="184.0" x2="1250" y2="184.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="380" y1="372.0" x2="940" y2="372.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="115" y1="372.0" x2="180" y2="372.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="1140" y1="372.0" x2="1185" y2="372.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="590" y1="422.0" x2="730" y2="422.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="115" y1="422.0" x2="390" y2="422.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="930" y1="422.0" x2="1185" y2="422.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<rect x="150" y="560" width="470" height="400" rx="12" fill="#cfe0ee" stroke="#777" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="385.0" y="590" font-size="26" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trn3 Server [17]</text>
+<rect x="180" y="612" width="410" height="34" rx="6" fill="#ececec" stroke="#555" stroke-width="1.2"/>
+<text x="385.0" y="629" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Graviton host</text>
+<rect x="255" y="786" width="260" height="30" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.2"/>
+<text x="385.0" y="801.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">NeuronSwitch-v1</text>
+<rect x="390" y="662" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="490.0" y="684.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [1]</text>
+<rect x="180" y="710" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="280.0" y="732.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [0]</text>
+<rect x="180" y="850" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="280.0" y="872.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [2]</text>
+<rect x="390" y="900" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="490.0" y="922.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [3]</text>
+<line x1="280.0" y1="754" x2="280.0" y2="786" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="490.0" y1="706" x2="490.0" y2="786" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="280.0" y1="850" x2="280.0" y2="816" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="490.0" y1="900" x2="490.0" y2="816" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<rect x="700" y="560" width="470" height="400" rx="12" fill="#cfe0ee" stroke="#777" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="935.0" y="590" font-size="26" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trn3 Server [35]</text>
+<rect x="730" y="612" width="410" height="34" rx="6" fill="#ececec" stroke="#555" stroke-width="1.2"/>
+<text x="935.0" y="629" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Graviton host</text>
+<rect x="805" y="786" width="260" height="30" rx="2" fill="#fdd18a" stroke="#c98a1a" stroke-width="1.2"/>
+<text x="935.0" y="801.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">NeuronSwitch-v1</text>
+<rect x="730" y="662" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="830.0" y="684.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [1]</text>
+<rect x="940" y="710" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="1040.0" y="732.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [0]</text>
+<rect x="940" y="850" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="1040.0" y="872.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [2]</text>
+<rect x="730" y="900" width="200" height="44" rx="8" fill="#fff" stroke="#333" stroke-width="1.2"/>
+<text x="830.0" y="922.0" font-size="17" text-anchor="middle" font-weight="normal" dominant-baseline="central">Trainium3 [3]</text>
+<line x1="1040.0" y1="754" x2="1040.0" y2="786" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="830.0" y1="706" x2="830.0" y2="786" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="1040.0" y1="850" x2="1040.0" y2="816" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="830.0" y1="900" x2="830.0" y2="816" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<line x1="380" y1="732.0" x2="940" y2="732.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="73" y1="732.0" x2="117" y2="732.0" stroke="#fff" stroke-width="8"/>
+<line x1="1183" y1="732.0" x2="1227" y2="732.0" stroke="#fff" stroke-width="8"/>
+<line x1="50" y1="732.0" x2="180" y2="732.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="1140" y1="732.0" x2="1250" y2="732.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="590" y1="684.0" x2="730" y2="684.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="73" y1="684.0" x2="117" y2="684.0" stroke="#fff" stroke-width="8"/>
+<line x1="1183" y1="684.0" x2="1227" y2="684.0" stroke="#fff" stroke-width="8"/>
+<line x1="50" y1="684.0" x2="390" y2="684.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="930" y1="684.0" x2="1250" y2="684.0" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<line x1="380" y1="872.0" x2="940" y2="872.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="115" y1="872.0" x2="180" y2="872.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="1140" y1="872.0" x2="1185" y2="872.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="590" y1="922.0" x2="730" y2="922.0" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<line x1="115" y1="922.0" x2="390" y2="922.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<line x1="930" y1="922.0" x2="1185" y2="922.0" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<text x="385.0" y="510" font-size="30" text-anchor="middle" font-weight="bold" dominant-baseline="central">•••</text>
+<text x="935.0" y="510" font-size="30" text-anchor="middle" font-weight="bold" dominant-baseline="central">•••</text>
+<text x="385.0" y="22" font-size="20" text-anchor="middle" font-weight="bold" dominant-baseline="central">Rack [0]</text>
+<text x="935.0" y="22" font-size="20" text-anchor="middle" font-weight="bold" dominant-baseline="central">Rack [1]</text>
+<text x="150" y="1000" font-size="22" text-anchor="start" font-weight="bold" dominant-baseline="central">NeuronLink-v4:</text>
+<line x1="340" y1="1000" x2="430" y2="1000" stroke="#6a2bb0" stroke-width="2" marker-start="url(#g2a-sw0)" marker-end="url(#g2a-sw0)"/>
+<text x="444" y="1000" font-size="20" text-anchor="start" font-weight="normal" dominant-baseline="central">Inter-server switch [0]</text>
+<line x1="760" y1="1000" x2="850" y2="1000" stroke="#1f6fd1" stroke-width="2" marker-start="url(#g2a-sw1)" marker-end="url(#g2a-sw1)"/>
+<text x="864" y="1000" font-size="20" text-anchor="start" font-weight="normal" dominant-baseline="central">Inter-server switch [1]</text>
+<line x1="340" y1="1036" x2="430" y2="1036" stroke="#2e8b3e" stroke-width="2" marker-start="url(#g2a-intra)" marker-end="url(#g2a-intra)"/>
+<text x="444" y="1036" font-size="20" text-anchor="start" font-weight="normal" dominant-baseline="central">Intra-server switch</text>
+<line x1="760" y1="1036" x2="850" y2="1036" stroke="#c0262d" stroke-width="2" marker-start="url(#g2a-p2p)" marker-end="url(#g2a-p2p)"/>
+<text x="864" y="1036" font-size="20" text-anchor="start" font-weight="normal" dominant-baseline="central">Peer-to-peer</text>
+</svg>
