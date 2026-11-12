@@ -1,7 +1,7 @@
 .. meta::
     :description: Index of Neuron SDK component release notes with latest versions
     :keywords: neuron, release notes, components, versions, aws neuron sdk
-    :date-modified: 10/19/2026
+    :date-modified: 11/12/2026
 
 Neuron Component Release Notes
 ===============================
@@ -61,6 +61,9 @@ This page provides an index of all Neuron SDK component release notes. Each comp
    * - :doc:`Neuron Observer (Beta) </release-notes/components/observer>`
      - **2.33.0**
      - 0.2.0
+   * - :doc:`SGLang-Neuron (Public Preview) </release-notes/components/sglang-plugin>`
+     - **2.33.0**
+     - 0.1.0
    * - :doc:`Neuron Agentic Development </release-notes/components/agentic-development>`
      - **2.33.0**
      - 1.4
@@ -89,6 +92,7 @@ This page provides an index of all Neuron SDK component release notes. Each comp
    Neuron Runtime <runtime>
    Neuron Developer Tools <dev-tools>
    Neuron Observer <observer>
+   SGLang-Neuron <sglang-plugin>
    Neuron Agentic Development <agentic-development>
    Neuron DLAMI <dlamis>
    Neuron Containers <containers>

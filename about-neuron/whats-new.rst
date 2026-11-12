@@ -2,7 +2,7 @@
 
 .. meta::
     :description: Blog posts for the latest features and updates for the AWS Neuron SDK
-    :date-modified: 09/30/2026
+    :date-modified: 11/11/2026
 
 What's New in the AWS Neuron SDK
 ================================
@@ -24,6 +24,19 @@ What's New in the AWS Neuron SDK
         :class-header: sd-bg-primary sd-text-white
 
         **Latest release**: 2.33.1 (11/11/2026)
+
+----
+
+.. _whats-new-2026-11-12-sglang-plugin-preview:
+
+SGLang-Neuron plug-in now available in public preview
+-----------------------------------------------------
+
+**Posted on**: November 12, 2026
+
+We are releasing **SGLang-Neuron** as a public preview. The plug-in brings the SGLang serving stack to AWS Trainium as a native PyTorch plug-in on TorchNeuron. Large language models run on Trn3 instances on one fully asynchronous runtime with prefill-decode disaggregation. Multimodal diffusion models run on Trn2 instances through SGLang Diffusion. Supported models include GPT-OSS-120B, Kimi-K3, GLM-5.2, Qwen3, FLUX.1-dev, and Wan2.2 A14B.
+
+For the highlights, supported models, dependencies, and container image, see the :ref:`SGLang-Neuron release notes <sglang-public-preview-release>`.
 
 ----
 
