@@ -272,9 +272,6 @@ Changes in this release
 * Diffusion models in the container image.
 * Model recipes for all five diffusion models.
 
-.. TODO(11/12): The source doc lists "[Feat] Trainium2 serving" under Scheduler & Runtime.
-   It is left out because LLMs are Trn3 only in this preview. Confirm with the plug-in team.
-
 For more information, see the `sglang-neuron releases on GitHub <https://github.com/sgl-project/sglang-neuron/releases>`__.
 
 Acknowledgments
