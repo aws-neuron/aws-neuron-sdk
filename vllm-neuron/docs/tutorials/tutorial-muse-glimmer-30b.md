@@ -7,7 +7,7 @@ serving with the reasoning parser, offline inference, and POPE accuracy. -->
 <!-- meta: keywords: vLLM, Neuron, Muse-Glimmer, Muse-Glimmer-30B, multimodal,
 VLM, vision-language, video, contrib model, reasoning parser, POPE, tutorial,
 LLM serving, Trn3, Trainium -->
-<!-- meta: date_updated: 2026-11-12 -->
+<!-- meta: date_updated: 2026-11-13 -->
 <!-- Content type: procedural-tutorial -->
 
 This tutorial walks through deploying
@@ -172,8 +172,8 @@ minutes. The Muse-Glimmer-specific settings:
   4 x 64 blocks of 32 tokens.
 
 Once the server is up, send requests using the OpenAI Python SDK. Images and
-videos go in as `image_url` and `video_url` content parts, as URLs or base64
-data URLs:
+videos go in as `image_url` and `video_url` content parts, as base64 data
+URLs:
 
 ```python
 import base64
@@ -319,7 +319,6 @@ print(final_answer(outputs[0]))
 | Image and video in one prompt | Not supported (stops the engine; see the warning in [Online serving](#online-serving)) |
 | BF16 | Supported |
 | Tensor parallelism | TP=2 validated. Above 2, the 2 KV heads are replicated; not validated |
-| On-device greedy sampling | Supported |
 | Multi-image + text | Not supported |
 | MXFP8 | Not supported |
 | Encoder parallelism, EPD, segmented prefill, speculative decoding | Not supported |
