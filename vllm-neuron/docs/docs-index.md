@@ -187,6 +187,13 @@ Serve GPT-OSS 120B at 8K/1K on two Trn3 instances, with the decode megakernel.
 Deploy Qwen3-VL 32B for multimodal inference.
 :::
 
+:::{grid-item-card} Muse-Glimmer-30B multimodal tutorial
+:link: tutorials/tutorial-muse-glimmer-30b
+:link-type: doc
+
+Deploy the Muse-Glimmer-30B contrib model for text, image, and video inference on Trn3.
+:::
+
 :::{grid-item-card} Disaggregated inference: 1P1D and xPyD
 :link: tutorials/tutorial-di-1p1d-xpyd
 :link-type: doc
