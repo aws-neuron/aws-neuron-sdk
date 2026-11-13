@@ -231,8 +231,11 @@ restarted.
 
 ### Offline inference
 
-vLLM Neuron compiles the model on the first run and caches the artifacts to
-`~/.cache/vllm/neuron/compile_cache`. Later runs load from the cache.
+vLLM Neuron compiles the model on the first run and caches the artifacts in
+`~/.cache/neuron_libtorch/neuron/compile_cache` and
+`~/.cache/vllm/neuron/torch_compile`. Later runs with the same configuration
+load from the cache, so after the server in Step 4 has compiled once, the
+offline engine starts in seconds.
 
 The model has two components, each with its own config object passed through
 `additional_config` (see the
