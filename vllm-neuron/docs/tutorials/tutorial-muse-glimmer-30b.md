@@ -155,8 +155,7 @@ minutes. The Muse-Glimmer-specific settings:
 - **`encoder_cache_num_blocks: 16`**: encoder-cache blocks hold 256 tokens
   (`encoder_attention_block_size` / 4), and each item pads its last block. A
   520-token video takes 3 blocks and a 391-token image takes 2. The default
-  size counts tokens only, so a video and an image together can fill it; 16
-  blocks leave room.
+  size counts tokens only, without that padding; 16 blocks leave room.
 - **`--no-enable-prefix-caching`**: in vLLM Neuron 0.29.0.1.2.0, a prefix-cache
   hit can leave only an image's end marker to prefill. The runner then requires
   the image in the encoder cache and stops the engine.
@@ -164,7 +163,7 @@ minutes. The Muse-Glimmer-specific settings:
   decoded frames and their timestamps. The model's processor picks 8 frames and
   writes the real timestamps into the prompt.
 - **`--reasoning-parser muse_glimmer`**: puts the `to=self` reasoning in
-  `reasoning_content`, so `content` holds only the final answer.
+  `reasoning`, so `content` holds only the final answer.
 - **`--default-chat-template-kwargs '{"reasoning_strength": "low"}'`**: the chat
   template defaults to `high`. A request can set its own strength with a system
   message such as `Reasoning strength: high`.
@@ -220,7 +219,15 @@ print(response.choices[0].message.content)
 ```
 
 The model's reasoning for each answer is in
-`response.choices[0].message.reasoning_content`.
+`response.choices[0].message.reasoning`.
+
+:::{warning}
+Send one image **or** one video per prompt, not both. A prompt with an image
+and a video stops the engine (`Encoder block truncation: request has more
+cached blocks than max_encoder_blocks_per_request=3`): the video alone takes 3
+encoder-cache blocks. The server then fails every later request and must be
+restarted.
+:::
 
 ### Offline inference
 
@@ -305,7 +312,8 @@ print(final_answer(outputs[0]))
 
 | Feature | Status |
 |---------|--------|
-| Text; single image + text; video + text; image + video + text in one prompt | Supported |
+| Text; single image + text; video + text | Supported |
+| Image and video in one prompt | Not supported (stops the engine; see the warning in [Online serving](#online-serving)) |
 | BF16 | Supported |
 | Tensor parallelism | TP=2 validated. Above 2, the 2 KV heads are replicated; not validated |
 | On-device greedy sampling | Supported |
