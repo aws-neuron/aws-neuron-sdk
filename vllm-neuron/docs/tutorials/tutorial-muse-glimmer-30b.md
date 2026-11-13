@@ -139,7 +139,7 @@ vllm serve /path/to/Muse-Glimmer-30B \
     }'
 ```
 
-The first start compiles the text and vision graphs, which takes about 15
+The first start compiles the text and vision graphs, which takes about 13
 minutes. The Muse-Glimmer-specific settings:
 
 - **`num_encoder_input_buckets`**: one vision graph per fixed shape, counted in
