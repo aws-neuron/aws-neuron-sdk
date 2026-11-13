@@ -301,6 +301,10 @@ def _get_explicit_override(cur_file):
     if cur_file == 'release-notes/components/observer':
         return ['Trn2', 'Trn3'], True
 
+    # SGLang-Neuron public preview: LLMs on Trn3, diffusion models on Trn2
+    if cur_file == 'release-notes/components/sglang-plugin':
+        return ['Trn2', 'Trn3'], True
+
     if cur_file == 'release-notes/components/torchneuron':
         return ['Trn2', 'Trn3'], True
 
