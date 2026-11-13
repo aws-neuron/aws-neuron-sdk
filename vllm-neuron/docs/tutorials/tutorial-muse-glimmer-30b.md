@@ -69,6 +69,12 @@ Set environment variables before running any inference script:
 # the 30B weights.
 export NEURON_LOGICAL_NC_CONFIG=2
 
+# Select the native compile route explicitly. vLLM Neuron uses it when the
+# variable is unset, but libtorch-neuronx-lite reads the variable itself: unset,
+# it replaces torch.nn.functional.gelu with a wrapper that torch.compile cannot
+# trace, and the vision encoder fails to compile.
+export VLLM_NEURON_BACKEND=neuron_native
+
 # The checkpoint is gated.
 export HF_TOKEN=<your Hugging Face token>
 ```
@@ -237,6 +243,7 @@ import base64
 import os
 
 os.environ["NEURON_LOGICAL_NC_CONFIG"] = "2"
+os.environ["VLLM_NEURON_BACKEND"] = "neuron_native"
 
 from vllm import LLM, SamplingParams
 
