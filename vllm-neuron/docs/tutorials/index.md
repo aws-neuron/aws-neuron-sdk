@@ -75,6 +75,13 @@ Prepare BF16 and MXFP8 checkpoints and validate serving on Trn2/Trn3.
 Serve the multimodal Qwen3-VL-32B model (BF16 or MXFP8).
 :::
 
+:::{grid-item-card} Deploy Muse-Glimmer-30B
+:link: tutorial-muse-glimmer-30b
+:link-type: doc
+
+Serve the Muse-Glimmer-30B contrib model (text, image, and video) on Trn3.
+:::
+
 :::{grid-item-card} Disaggregated encoder: 1E1PD and xEyPD
 :link: tutorial-epd-1e-1pd-xeypd
 :link-type: doc
@@ -112,6 +119,7 @@ High-performance GPT-OSS 120B 8K/1K deployment <tutorial-gpt-oss-120b-8k1k-trn3>
 Benchmarking prefix caching (GPT-OSS) <tutorial-prefix-caching-gpt-oss-benchmarking>
 Deploying dense Qwen3-32B <tutorial-qwen3-32b>
 Deploying Qwen3-VL-32B <tutorial-qwen3-vl-32b>
+Deploying Muse-Glimmer-30B <tutorial-muse-glimmer-30b>
 Disaggregated encoder (1E1PD and xEyPD) <tutorial-epd-1e-1pd-xeypd>
 Deploying Qwen3-Embedding-8B <tutorial-qwen3-embedding-8b>
 Deploying Qwen3-ASR-1.7B <tutorial-qwen3-asr-1-7b>
