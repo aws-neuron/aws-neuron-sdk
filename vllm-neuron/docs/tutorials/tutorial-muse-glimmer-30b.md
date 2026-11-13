@@ -88,17 +88,16 @@ Muse-Glimmer in every vLLM process, including the tensor-parallel workers. After
 the install, `vllm serve` and `LLM(...)` find the model with no other setup.
 Nothing else in vLLM Neuron changes.
 
-## Step 3: Download the model (optional)
+## Step 3: Download the model
+
+Download the weights once. The server, the offline script, and the
+integration test below all read this directory:
 
 ```bash
-huggingface-cli download \
+hf download \
     meta-models/Muse-Glimmer-30B \
     --local-dir /path/to/Muse-Glimmer-30B
 ```
-
-> **Note:** This step is optional. You can pass the Hugging Face model ID
-> (`meta-models/Muse-Glimmer-30B`) directly to `vllm serve`, and the weights are
-> downloaded on the first run.
 
 ## Step 4: Run inference
 
@@ -109,7 +108,7 @@ Run the model through the online serving endpoint or the offline `LLM` API.
 Start a vLLM OpenAI-compatible server:
 
 ```bash
-vllm serve meta-models/Muse-Glimmer-30B \
+vllm serve /path/to/Muse-Glimmer-30B \
     --served-model-name Muse-Glimmer-30B \
     --tensor-parallel-size 2 \
     --max-model-len 2048 \
@@ -154,8 +153,7 @@ minutes. The Muse-Glimmer-specific settings:
   blocks leave room.
 - **`--no-enable-prefix-caching`**: in vLLM Neuron 0.29.0.1.2.0, a prefix-cache
   hit can leave only an image's end marker to prefill. The runner then requires
-  the image in the encoder cache and stops the engine. This is fixed in later
-  vLLM Neuron releases.
+  the image in the encoder cache and stops the engine.
 - **`--media-io-kwargs '{"video": {"num_frames": -1}}'`**: vLLM passes all
   decoded frames and their timestamps. The model's processor picks 8 frames and
   writes the real timestamps into the prompt.
@@ -231,10 +229,11 @@ The model has two components, each with its own config object passed through
 - **`encoder_neuron_config`**: vision encoder settings (vision patch buckets,
   attention block size, and encoder-cache size).
 
-The following script runs a text-only request. Use the same `LLM(...)`
-configuration as the server:
+The following script runs a text-only request and an image request, with the
+same configuration as the server. It reads `image.jpg` from the current directory:
 
 ```python
+import base64
 import os
 
 os.environ["NEURON_LOGICAL_NC_CONFIG"] = "2"
@@ -242,7 +241,7 @@ os.environ["NEURON_LOGICAL_NC_CONFIG"] = "2"
 from vllm import LLM, SamplingParams
 
 llm = LLM(
-    model="meta-models/Muse-Glimmer-30B",
+    model="/path/to/Muse-Glimmer-30B",
     tensor_parallel_size=2,
     max_model_len=2048,
     max_num_seqs=1,
@@ -264,17 +263,36 @@ llm = LLM(
     },
 )
 
+sampling_params = SamplingParams(temperature=0.0, max_tokens=256)
+
+
+def final_answer(output):
+    # Offline output holds both channels; the final answer follows "to=user".
+    return output.outputs[0].text.rsplit("to=user", 1)[-1].strip()
+
+
+# --- Text-only ---
 outputs = llm.chat(
     [[{"role": "user", "content": "What is the capital of France?"}]],
-    SamplingParams(temperature=0.0, max_tokens=128),
+    sampling_params,
     chat_template_kwargs={"reasoning_strength": "low"},
 )
-# Offline output holds both channels; the final answer follows "to=user".
-print(outputs[0].outputs[0].text.rsplit("to=user", 1)[-1].strip())
-```
+print(final_answer(outputs[0]))
 
-For an image or a video, pass the same `image_url` or `video_url` content parts
-as in the online example in the message content of `llm.chat(...)`.
+# --- Image + text ---
+with open("image.jpg", "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode()
+
+outputs = llm.chat(
+    [[{"role": "user", "content": [
+        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
+        {"type": "text", "text": "Describe this image."},
+    ]}]],
+    sampling_params,
+    chat_template_kwargs={"reasoning_strength": "low"},
+)
+print(final_answer(outputs[0]))
+```
 
 ## Supported features
 
@@ -311,27 +329,22 @@ subset: the 400 "yes" questions, which are the same in all three subsets, and
 
 All 800 answers were parsed as Yes or No.
 
-To run the full POPE benchmark (5,000 questions) against the server from
-[Online serving](#online-serving):
-
-```bash
-git clone https://github.com/open-compass/VLMEvalKit.git
-cd VLMEvalKit && git checkout fd3884b && pip install . && cd ..
-python VLMEvalKit/run.py --data POPE --model Muse-Glimmer-30B \
-    --base-url http://localhost:8000/v1 --max-tokens 256 --judge exact_matching
-```
-
-With `--max-num-seqs 1`, the 5,000 questions take about 9 hours.
-
 ## Test the deployment
 
-The contrib package includes an integration test that serves the checkpoint on
-Trn3 and checks text, image, and video answers. Run it from the vLLM Neuron
-clone after Step 2:
+The contrib package includes unit tests and an integration test. Run them from
+the vLLM Neuron clone from Step 2. Install the test tools first:
 
 ```bash
-NEURON_LOGICAL_NC_CONFIG=2 pytest contrib/models/muse_glimmer/test/integration/test_model.py \
-    -v -s --timeout=3600
+pip install pytest pytest-forked pytest-timeout
+```
+
+The integration test serves the checkpoint from Step 3 on Trn3 and checks text,
+image, and video answers. Stop the server from Step 4 first, so the
+NeuronCores are free:
+
+```bash
+MUSE_GLIMMER_MODEL_PATH=/path/to/Muse-Glimmer-30B NEURON_LOGICAL_NC_CONFIG=2 \
+    pytest contrib/models/muse_glimmer/test/integration/test_model.py -v -s --timeout=3600
 ```
 
 The unit tests run in CPU mode, with no Neuron hardware. They compare a tiny
@@ -343,10 +356,10 @@ VLLM_NEURON_CPU_MODE=1 pytest contrib/models/muse_glimmer/test/unit/ -v --forked
 
 ## Conclusion
 
-You have deployed Muse-Glimmer-30B on Trn3 in BF16 with vLLM Neuron. The model
-answers text, single-image, and video prompts through both the OpenAI-compatible
-server and the offline `LLM` API, with its reasoning separated from the final
-answer by the `muse_glimmer` reasoning parser.
+You have deployed Muse-Glimmer-30B on Trn3 in BF16 with vLLM Neuron. The
+OpenAI-compatible server answers text, image, and video prompts, with the
+reasoning separated from the final answer by the `muse_glimmer` reasoning
+parser. The offline `LLM` API answers text and image prompts.
 
 ## Next steps
 
