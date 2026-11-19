@@ -24,6 +24,12 @@ This page lists the error codes you can encounter while developing with the Neur
    * - :ref:`NCC_EBVF030 <error-code-ebvf030>`
      - The number of instructions generated exceeds the limit.
      - Consider applying model parallelism as partitioning the model will help break large computational graphs into smaller subgraphs.
+   * - :ref:`NCC_EDVR003 <error-code-edvr003>`
+     - Linking subgraphs without a call graph is not supported.
+     - Remove ``--disable-internal-call-graph`` from your compiler flags. Linking through a call graph is the default.
+   * - :ref:`NCC_EDVR004 <error-code-edvr004>`
+     - Linking subgraphs without DRAM allocation is not supported.
+     - Remove ``--internal-disable-dram-allocation`` from your compiler flags. DRAM allocation is on by default.
    * - :ref:`NCC_EHCA005 <error-code-ehca005>`
      - The compiler encountered a custom call instruction with a target name that is not recognized.
      - Use a supported custom call target from the list of recognized targets.
@@ -209,6 +215,8 @@ This page lists the error codes you can encounter while developing with the Neur
     EARG001
     EBIR023
     EBVF030
+    EDVR003
+    EDVR004
     EHCA005
     EMOD025
     ENKI003
